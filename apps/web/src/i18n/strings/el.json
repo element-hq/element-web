@@ -11,8 +11,7 @@
         },
         "recent_rooms": "Πρόσφατες αίθουσες",
         "room_name": "Αίθουσα %(name)s",
-        "unread_messages": "Μη αναγνωσμένα μηνύματα.",
-        "user_menu": "Μενού χρήστη"
+        "unread_messages": "Μη αναγνωσμένα μηνύματα."
     },
     "a11y_jump_first_unread_room": "Μετάβαση στην πρώτη μη αναγνωσμένη αίθουσα.",
     "action": {
@@ -300,7 +299,6 @@
         "sign_in_instead_prompt": "Έχετε ήδη λογαριασμό; <a>Συνδεθείτε εδώ</a>",
         "sign_in_or_register": "Συνδεθείτε ή Δημιουργήστε Λογαριασμό",
         "sign_in_or_register_description": "Χρησιμοποιήστε τον λογαριασμό σας ή δημιουργήστε νέο για να συνεχίσετε.",
-        "sign_in_prompt": "Έχετε λογαριασμό; <a>Συνδεθείτε</a>",
         "sign_in_with_sso": "Συνδεθείτε με απλή σύνδεση",
         "signing_in": "Σύνδεση...",
         "soft_logout": {
@@ -722,7 +720,6 @@
         "thread_root_id": "Thread Root ID: %(threadRootId)s",
         "threads_timeline": "Χρονολόγιο νημάτων",
         "title": "Εργαλεία προγραμματιστή",
-        "toggle_event": "μεταβολή συμβάντος",
         "toolbox": "Εργαλειοθήκη",
         "use_at_own_risk": "Αυτό το UI ΔΕΝ ελέγχει τους τύπους των τιμών. Χρησιμοποιήστε το με δική σας ευθύνη.",
         "user_read_up_to": "Ο χρήστης διάβασε μέχρι: ",
@@ -2679,9 +2676,7 @@
         "m.poll.start": "%(senderName)s ξεκίνησε μια δημοσκόπηση - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "Ο %(senderDisplayName)s άλλαξε την εικόνα του δωματίου.",
-            "changed_img": "Ο %(senderDisplayName)s άλλαξε την εικόνα του δωματίου σε <img/>",
-            "lightbox_title": "Ο %(senderDisplayName)s άλλαξε την προσωπική εικόνα του %(roomName)s",
-            "removed": "Ο %(senderDisplayName)s διέγραψε την προσωπική εικόνα του δωματίου."
+            "lightbox_title": "Ο %(senderDisplayName)s άλλαξε την προσωπική εικόνα του %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2798,7 +2793,6 @@
             "created_rule_rooms": "%(senderName)s δημιούργησε έναν κανόνα που απαγορεύει την αντιστοίχιση δωματίων %(glob)s για %(reason)s",
             "created_rule_servers": "%(senderName)s δημιούργησε έναν κανόνα που απαγορεύει την αντιστοίχιση διακομιστών %(glob)s για %(reason)s",
             "created_rule_users": "%(senderName)s δημιούργησε έναν κανόνα που απαγορεύει την αντιστοίχιση χρηστών %(glob)s για %(reason)s",
-            "message_hidden": "Έχετε αγνοήσει αυτόν τον χρήστη, επομένως τα μηνύματα του είναι κρυφά. <a>Εμφάνιση ούτως ή άλλως.</a>",
             "removed_rule": "%(senderName)s αφαίρεσε μια απαγόρευση αντιστοίχισης κανόνων %(glob)s",
             "removed_rule_rooms": "%(senderName)s αφαίρεσε τον κανόνα που απαγορεύει την αντιστοίχιση δωματίων %(glob)s",
             "removed_rule_servers": "%(senderName)s αφαίρεσε τον κανόνα που απαγορεύει την αντιστοίχιση διακομιστών %(glob)s",
@@ -3074,11 +3068,6 @@
         "unban_space_warning": "Δε θα μπορούν να έχουν πρόσβαση σε λειτουργίες δεν είστε διαχειριστής.",
         "verify_button": "Επαλήθευση Χρήστη",
         "verify_explainer": "Για επιπλέον ασφάλεια, επαληθεύστε αυτόν τον χρήστη ελέγχοντας έναν κωδικό μίας χρήσης και στις δύο συσκευές σας."
-    },
-    "user_menu": {
-        "settings": "Όλες οι ρυθμίσεις",
-        "switch_theme_dark": "Αλλαγή σε σκοτεινό",
-        "switch_theme_light": "Αλλαγή σε φωτεινό"
     },
     "voip": {
         "already_in_call": "Ήδη σε κλήση",

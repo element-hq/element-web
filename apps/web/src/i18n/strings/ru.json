@@ -15,8 +15,7 @@
         "room_name": "Чат %(name)s",
         "room_status_bar": "Строка состояния чата",
         "seek_bar_label": "Панель поиска аудио",
-        "unread_messages": "Непрочитанные сообщения.",
-        "user_menu": "Меню пользователя"
+        "unread_messages": "Непрочитанные сообщения."
     },
     "a11y_jump_first_unread_room": "Перейти в первый непрочитанный чат.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Уже есть учётная запись? <a>Войдите здесь</a>",
         "sign_in_or_register": "Войдите или создайте учётную запись",
         "sign_in_or_register_description": "Воспользуйтесь своей учётной записью или создайте новую, чтобы продолжить.",
-        "sign_in_prompt": "Есть учётная запись? <a>Войти</a>",
         "sign_in_with_sso": "Войти в систему с помощью единой точки входа",
         "signing_in": "Выполняется вход…",
         "soft_logout": {
@@ -881,7 +879,6 @@
         "thread_root_id": "Идентификатор Root ID: %(threadRootId)s",
         "threads_timeline": "Хронология обсуждений",
         "title": "Инструменты разработчика",
-        "toggle_event": "переключить событие",
         "toolbox": "Панель инструментов",
         "use_at_own_risk": "Этот пользовательский интерфейс НЕ проверяет типы значений. Используйте на свой страх и риск.",
         "user_avatar": "Аватар: %(avatar)s",
@@ -3438,9 +3435,7 @@
         "m.poll.start": "%(senderName)s начал(а) опрос — %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s изменил(а) аватар комнаты.",
-            "changed_img": "%(senderDisplayName)s изменил(а) аватар комнаты на <img/>",
-            "lightbox_title": "%(senderDisplayName)s изменил(а) аватар комнаты %(roomName)s",
-            "removed": "%(senderDisplayName)s удалил(а) аватар комнаты."
+            "lightbox_title": "%(senderDisplayName)s изменил(а) аватар комнаты %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3562,7 +3557,6 @@
             "created_rule_rooms": "%(senderName)s создал(а) правило блокировки комнат по шаблону %(glob)s за %(reason)s",
             "created_rule_servers": "%(senderName)s создал(а) правило блокировки серверов по шаблону %(glob)s за %(reason)s",
             "created_rule_users": "%(senderName)s создал(а) правило блокировки пользователей по шаблону %(glob)s за %(reason)s",
-            "message_hidden": "Вы заигнорировали этого пользователя, сообщение скрыто. <a>Показать</a>",
             "removed_rule": "%(senderName)s удалил(а) правило блокировки по шаблону %(glob)s",
             "removed_rule_rooms": "%(senderName)s удалил правило блокировки комнат по шаблону %(glob)s",
             "removed_rule_servers": "%(senderName)s удалил(а) правило блокировки серверов по шаблону %(glob)s",
@@ -3873,12 +3867,6 @@
         "verification_unavailable": "Проверка пользователя недоступна",
         "verify_button": "Подтвердить пользователя",
         "verify_explainer": "Для дополнительной безопасности подтвердите этого пользователя, сравнив одноразовый код на ваших устройствах."
-    },
-    "user_menu": {
-        "link_new_device": "Привязать новое устройство",
-        "settings": "Все настройки",
-        "switch_theme_dark": "Переключить в тёмный режим",
-        "switch_theme_light": "Переключить в светлый режим"
     },
     "voip": {
         "already_in_call": "Уже в вызове",

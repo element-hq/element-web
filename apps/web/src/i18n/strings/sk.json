@@ -17,8 +17,7 @@
         "room_name": "Miestnosť %(name)s",
         "room_status_bar": "Stavový riadok miestnosti",
         "seek_bar_label": "Panel vyhľadávania zvuku",
-        "unread_messages": "Neprečítané správy.",
-        "user_menu": "Používateľské menu"
+        "unread_messages": "Neprečítané správy."
     },
     "a11y_jump_first_unread_room": "Preskočiť na prvú neprečítanú miestnosť.",
     "action": {
@@ -343,7 +342,6 @@
         "sign_in_instead_prompt": "Už máte účet? <a>Prihláste sa tu</a>",
         "sign_in_or_register": "Prihlásiť sa alebo vytvoriť nový účet",
         "sign_in_or_register_description": "Použite váš existujúci účet alebo si vytvorte nový, aby ste mohli pokračovať.",
-        "sign_in_prompt": "Máte účet? <a>Prihláste sa</a>",
         "sign_in_with_sso": "Prihlásiť sa pomocou jediného prihlasovania",
         "signing_in": "Prihlasovanie…",
         "soft_logout": {
@@ -881,7 +879,6 @@
         "thread_root_id": "ID koreňového vlákna: %(threadRootId)s",
         "threads_timeline": "Časová os vlákien",
         "title": "Vývojárske nástroje",
-        "toggle_event": "prepnúť udalosť",
         "toolbox": "Nástroje",
         "use_at_own_risk": "Toto používateľské rozhranie nekontroluje typy hodnôt. Používajte ho na vlastné riziko.",
         "user_avatar": "Profilový obrázok: %(avatar)s",
@@ -3445,9 +3442,7 @@
         "m.poll.start": "%(senderName)s spustil anketu - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s zmenil obrázok miestnosti.",
-            "changed_img": "%(senderDisplayName)s zmenil obrázok miestnosti <img/>",
-            "lightbox_title": "%(senderDisplayName)s zmenil obrázok miestnosti %(roomName)s",
-            "removed": "%(senderDisplayName)s odstránil obrázok miestnosti."
+            "lightbox_title": "%(senderDisplayName)s zmenil obrázok miestnosti %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3569,7 +3564,6 @@
             "created_rule_rooms": "%(senderName)s vytvoril pravidlo zakázať vstúpiť do miestností zhodujúcich sa s %(glob)s, dôvod: %(reason)s",
             "created_rule_servers": "%(senderName)s vytvoril pravidlo zakázať vstúpiť z domovských serverov zhodujúcich sa s %(glob)s, dôvod: %(reason)s",
             "created_rule_users": "%(senderName)s vytvoril pravidlo zakázať vstúpiť používateľom zhodujúcim sa s %(glob)s, dôvod: %(reason)s",
-            "message_hidden": "Tohto používateľa ste ignorovali, takže jeho správa je skrytá. <a>Ukázať aj tak.</a>",
             "removed_rule": "%(senderName)s odstránil pravidlo zákazu vstupu zhodné s %(glob)s",
             "removed_rule_rooms": "%(senderName)s odstránil pravidlo zákaz vstúpiť do miestností zhodujúcich sa s %(glob)s",
             "removed_rule_servers": "%(senderName)s odstránil pravidlo zakázať vstúpiť z domovského servera zhodnými s %(glob)s",
@@ -3906,12 +3900,6 @@
         "verification_unavailable": "Overenie používateľa nie je k dispozícii",
         "verify_button": "Overiť používateľa",
         "verify_explainer": "V záujme zvýšenia bezpečnosti overte tohto používateľa tak, že na oboch zariadeniach skontrolujete jednorazový kód."
-    },
-    "user_menu": {
-        "link_new_device": "Prepojiť nové zariadenie",
-        "settings": "Všetky nastavenia",
-        "switch_theme_dark": "Prepnúť na tmavý režim",
-        "switch_theme_light": "Prepnúť na svetlý režim"
     },
     "voip": {
         "already_in_call": "Hovor už prebieha",

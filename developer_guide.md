@@ -32,15 +32,12 @@ pnpm install
 popd
 ```
 
-Clone the repo and switch to the `element-web/apps/web` directory:
+Clone the repo and switch to that directory:
 
 ```bash
 git clone https://github.com/element-hq/element-web.git
-cd element-web/apps/web
+cd element-web
 ```
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
 
 Set up your local development link by creating a `.link-config` file with contents like:
 
@@ -48,12 +45,21 @@ Set up your local development link by creating a `.link-config` file with conten
 matrix-js-sdk=/path/to/matrix-js-sdk
 ```
 
+**Note for Windows users**: Your link config path might need escaping. For example, `matrix-js-sdk=C:\\path\\to\\matrix-js-sdk`.
+
+Switch to the `apps/web` directory: `cd apps/web`
+
+Configure the app by copying `config.sample.json` to `config.json` and
+modifying it. See the [configuration docs](docs/config.md) for details.
+
 Finally, build and start Element itself:
 
 ```bash
 pnpm install
 pnpm start
 ```
+
+**Note for Windows users**: `pnpm start` needs to be run from a terminal with bash/shell support.
 
 Wait a few seconds for the initial build to finish; you should see something like:
 

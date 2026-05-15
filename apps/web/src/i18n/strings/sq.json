@@ -10,8 +10,7 @@
             "one": "1 përmendje e palexuar."
         },
         "room_name": "Dhoma %(name)s",
-        "unread_messages": "Mesazhe të palexuar.",
-        "user_menu": "Menu përdoruesi"
+        "unread_messages": "Mesazhe të palexuar."
     },
     "a11y_jump_first_unread_room": "Hidhu te dhoma e parë e palexuar.",
     "action": {
@@ -292,7 +291,6 @@
         "sign_in_instead_prompt": "Në vend të kësaj, hyni",
         "sign_in_or_register": "Hyni ose Krijoni një Llogari",
         "sign_in_or_register_description": "Që të vazhdohet, përdorni llogarinë tuaj të përdoruesit ose krijoni një të re.",
-        "sign_in_prompt": "Keni një llogari? <a>Hyni</a>",
         "sign_in_with_sso": "Bëni hyrjen me hyrje njëshe",
         "signing_in": "Po hyhet…",
         "soft_logout": {
@@ -711,7 +709,6 @@
         "state_key": "Kyç Gjendjesh",
         "threads_timeline": "Rrjedhë kohore rrjedhash",
         "title": "Mjete zhvilluesi",
-        "toggle_event": "shfaqe/fshihe aktin",
         "toolbox": "Grup mjetesh",
         "use_at_own_risk": "Kjo UI NUK kontrollon llojet e vlerave. Përdorini me përgjegjësinë tuaj.",
         "value": "Vlerë",
@@ -2714,9 +2711,7 @@
         "m.poll.start": "%(senderName)s nisi një anketim - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ndryshoi avatarin e dhomës.",
-            "changed_img": "%(senderDisplayName)s ndryshoi avatarin e dhomës në <img/>",
-            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s",
-            "removed": "%(senderDisplayName)s hoqi avatarin e dhomës."
+            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2834,7 +2829,6 @@
             "created_rule_rooms": "%(senderName)s krijoi një rregull mbi dëbim dhomash që kanë përputhje me %(glob)s për %(reason)s",
             "created_rule_servers": "%(senderName)s krijoi një rregull mbi dëbim shërbyesish që kanë përputhje me %(glob)s për %(reason)s",
             "created_rule_users": "%(senderName)s krijoi një rregull mbi dëbim përdoruesish që kanë përputhje me %(glob)s për %(reason)s",
-            "message_hidden": "E keni shpërfillur këtë përdorues, ndaj mesazhi i tij është fshehur. <a>Shfaqe, sido qoftë.</a>",
             "removed_rule": "%(senderName)s hoqi një rregull dëbimi mbi përputhje me %(glob)s",
             "removed_rule_rooms": "%(senderName)s hoqi rregullin që dëbon dhoma që kanë përputhje me %(glob)s",
             "removed_rule_servers": "%(senderName)s hoqi rregullin që dëbon shërbyes që kanë përputhje me %(glob)s",
@@ -3109,11 +3103,6 @@
         "unban_space_warning": "S’do të jenë në gjendje të hyjnë kudo qoftë ku s’jeni përgjegjës.",
         "verify_button": "Verifikoni Përdoruesin",
         "verify_explainer": "Për siguri ekstra, verifikojeni këtë përdorues duke kontrolluar në të dyja pajisjet tuaja një kod njëpërdorimsh."
-    },
-    "user_menu": {
-        "settings": "Krejt rregullimet",
-        "switch_theme_dark": "Kalo nën mënyrën e errët",
-        "switch_theme_light": "Kalo nën mënyrën e çelët"
     },
     "voip": {
         "already_in_call": "Tashmë në thirrje",

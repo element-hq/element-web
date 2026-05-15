@@ -17,8 +17,7 @@
         "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
-        "unread_messages": "Nepročitane poruke.",
-        "user_menu": "Korisnički izbornik"
+        "unread_messages": "Nepročitane poruke."
     },
     "a11y_jump_first_unread_room": "Skoči na prvu sobu s nepročitanim porukama.",
     "action": {
@@ -343,7 +342,6 @@
         "sign_in_instead_prompt": "Već imate račun? <a>Prijavi se ovdje</a>",
         "sign_in_or_register": "Prijavite se ili izradite račun",
         "sign_in_or_register_description": "Za nastavak upotrijebite svoj račun ili izradite novi.",
-        "sign_in_prompt": "Imate li račun? <a>Prijava</a>",
         "sign_in_with_sso": "Prijavite se pomoću jedinstvene prijave (SSO)",
         "signing_in": "U tijeku je prijava…",
         "soft_logout": {
@@ -881,7 +879,6 @@
         "thread_root_id": "ID korijena niti: %(threadRootId)s",
         "threads_timeline": "Vremenska traka niti",
         "title": "Alati za razvojne inženjere",
-        "toggle_event": "uključi/isključi događaj",
         "toolbox": "Alatni okvir",
         "use_at_own_risk": "Ovo korisničko sučelje NE provjerava vrste vrijednosti. Upotrebljavajte na vlastitu odgovornost.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3450,9 +3447,7 @@
         "m.poll.start": "%(senderName)s započeo/la je anketu – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s promijenio/la je avatar sobe.",
-            "changed_img": "%(senderDisplayName)s promijenio/la je avatar sobe u <img/>",
-            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s",
-            "removed": "%(senderDisplayName)s uklonio/la je avatar sobe."
+            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3576,7 +3571,6 @@
             "created_rule_rooms": "%(senderName)s izradio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s za %(reason)s",
             "created_rule_servers": "%(senderName)s izradio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s za %(reason)s",
             "created_rule_users": "%(senderName)s izradio/la je pravilo kojim se zabranjuju korisnici koji odgovaraju %(glob)s za %(reason)s",
-            "message_hidden": "Ignorirali ste ovog korisnika, pa je njegova poruka skrivena. <a>Svejedno prikaži.</a>",
             "removed_rule": "%(senderName)s uklonio/la je pravilo za zabranu koje odgovara %(glob)s",
             "removed_rule_rooms": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s",
             "removed_rule_servers": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s",
@@ -3919,12 +3913,6 @@
         "verification_unavailable": "Provjera korisnika nije dostupna",
         "verify_button": "Potvrdi korisnika",
         "verify_explainer": "Radi dodatne sigurnosti potvrdite ovog korisnika provjerom jednokratnog koda na oba uređaja."
-    },
-    "user_menu": {
-        "link_new_device": "Poveži novi uređaj",
-        "settings": "Sve postavke",
-        "switch_theme_dark": "Prebaci na tamni način rada",
-        "switch_theme_light": "Prebaci na svijetli način rada"
     },
     "voip": {
         "already_in_call": "Već u pozivu",

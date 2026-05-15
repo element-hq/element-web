@@ -15,8 +15,7 @@
         "room_name": "Кімната %(name)s",
         "room_status_bar": "Панель стану кімнати",
         "seek_bar_label": "Панель гортання аудіо",
-        "unread_messages": "Непрочитані повідомлення.",
-        "user_menu": "Користувацьке меню"
+        "unread_messages": "Непрочитані повідомлення."
     },
     "a11y_jump_first_unread_room": "Перейти до першої непрочитаної кімнати.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Натомість увійти",
         "sign_in_or_register": "Увійти або створити обліковий запис",
         "sign_in_or_register_description": "Скористайтесь вашим обліковим записом або створіть новий, щоб продовжити.",
-        "sign_in_prompt": "Маєте обліковий запис? <a>Увійти</a>",
         "sign_in_with_sso": "Увійти за допомогою єдиного входу",
         "signing_in": "Вхід…",
         "soft_logout": {
@@ -873,7 +871,6 @@
         "thread_root_id": "ID кореневої гілки: %(threadRootId)s",
         "threads_timeline": "Стрічка гілок",
         "title": "Інструменти розробника",
-        "toggle_event": "перемкнути подію",
         "toolbox": "Панель інструментів",
         "use_at_own_risk": "Цей інтерфейс НЕ перевіряє типи значень. Користуйтесь на свій ризик.",
         "user_avatar": "Аватар: %(avatar)s",
@@ -3399,9 +3396,7 @@
         "m.poll.start": "%(senderName)s починає опитування - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s змінює аватар кімнати.",
-            "changed_img": "%(senderDisplayName)s змінює аватар кімнати на <img/>",
-            "lightbox_title": "%(senderDisplayName)s змінює аватар %(roomName)s",
-            "removed": "%(senderDisplayName)s вилучає аватар кімнати."
+            "lightbox_title": "%(senderDisplayName)s змінює аватар %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3523,7 +3518,6 @@
             "created_rule_rooms": "%(senderName)s створює правило блокування кімнат зі збігом з %(glob)s через %(reason)s",
             "created_rule_servers": "%(senderName)s створює правило блокування серверів зі збігом з %(glob)s через %(reason)s",
             "created_rule_users": "%(senderName)s створює правило блокування користувачів зі збігом з %(glob)s через %(reason)s",
-            "message_hidden": "Ви ігноруєте цього користувача, тож його повідомлення приховано. <a>Все одно показати.</a>",
             "removed_rule": "%(senderName)s вилучає правило блокування зі збігом з %(glob)s",
             "removed_rule_rooms": "%(senderName)s вилучає правило блокування кімнат зі збігом з %(glob)s",
             "removed_rule_servers": "%(senderName)s вилучає правило блокування серверів зі збігом з %(glob)s",
@@ -3838,12 +3832,6 @@
         "verification_unavailable": "Верифікація користувача недоступна",
         "verify_button": "Звірити користувача",
         "verify_explainer": "Для додаткової безпеки перевірте цього користувача, звіривши одноразовий код на обох своїх пристроях."
-    },
-    "user_menu": {
-        "link_new_device": "Під'єднати новий пристрій",
-        "settings": "Усі налаштування",
-        "switch_theme_dark": "Темна тема",
-        "switch_theme_light": "Світла тема"
     },
     "voip": {
         "already_in_call": "Вже у виклику",

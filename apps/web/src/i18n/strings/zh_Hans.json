@@ -15,8 +15,7 @@
         "room_name": "房间 %(name)s",
         "room_status_bar": "房间状态栏",
         "seek_bar_label": "音频搜索栏",
-        "unread_messages": "未读消息。",
-        "user_menu": "用户菜单"
+        "unread_messages": "未读消息。"
     },
     "a11y_jump_first_unread_room": "跳转到首个未读房间。",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "已有账户？<a>登录</a>",
         "sign_in_or_register": "登录或创建账户",
         "sign_in_or_register_description": "使用你的现有账户或创建一个新账户继续。",
-        "sign_in_prompt": "已有账户？<a>登录</a>",
         "sign_in_with_sso": "以单点模式登录",
         "signing_in": "正在登录…",
         "soft_logout": {
@@ -892,7 +890,6 @@
         "thread_root_id": "消息列根 ID：%(threadRootId)s",
         "threads_timeline": "消息列时间线",
         "title": "开发者工具",
-        "toggle_event": "切换事件",
         "toolbox": "工具箱",
         "use_at_own_risk": "此 UI 不检查值的数据类型。需自行承担使用风险。",
         "user_avatar": "头像：%(avatar)s",
@@ -904,7 +901,7 @@
         "user_read_up_to_ignore_synthetic": "用户阅读到（ignoreSynthetic）： ",
         "user_read_up_to_private": "用户阅读到（m.read.private）： ",
         "user_read_up_to_private_ignore_synthetic": "用户阅读到（m.read.private;ignoreSynthetic）：",
-        "user_room_membership": "成员资格",
+        "user_room_membership": "成员资格：%(membership)s",
         "user_verification_status": {
             "identity_changed": "验证状态：<E2EIcon /> 未验证且已更改数字身份",
             "unverified": "验证状态：<E2EIcon /> 未验证",
@@ -1568,7 +1565,7 @@
         "latex_maths": "在消息中渲染 LaTeX 数学公式",
         "leave_beta": "退出 Beta 测试",
         "leave_beta_reload": "退出 Beta 测试将重载 %(brand)s。",
-        "location_share_live": "分享实时位置",
+        "location_share_live": "正在共享实时位置",
         "location_share_live_description": "临时实现。位置将持续保留于房间历史。",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
@@ -3461,9 +3458,7 @@
         "m.poll.start": "%(senderName)s 发起投票： %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 已更改房间头像。",
-            "changed_img": "%(senderDisplayName)s 已将房间头像更改为 <img/>",
-            "lightbox_title": "%(senderDisplayName)s 已更改房间 %(roomName)s 中的头像",
-            "removed": "%(senderDisplayName)s 已移除房间头像。"
+            "lightbox_title": "%(senderDisplayName)s 已更改房间 %(roomName)s 中的头像"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3587,7 +3582,6 @@
             "created_rule_rooms": "%(senderName)s 已创建一条与 %(glob)s 匹配的房间封禁规则，原因：%(reason)s",
             "created_rule_servers": "%(senderName)s 已创建一条与 %(glob)s 匹配的服务器封禁规则，原因：%(reason)s",
             "created_rule_users": "%(senderName)s 已创建一条与 %(glob)s 匹配的用户封禁规则，原因：%(reason)s",
-            "message_hidden": "你已忽略此用户，因此其消息已被隐藏。<a>仍然显示。</a>",
             "removed_rule": "%(senderName)s 已移除一条与 %(glob)s 匹配的封禁规则",
             "removed_rule_rooms": "%(senderName)s 已移除匹配 %(glob)s 的房间封禁规则。",
             "removed_rule_servers": "%(senderName)s 已移除与 %(glob)s 匹配的服务器封禁规则",
@@ -3888,12 +3882,6 @@
         "verification_unavailable": "用户验证不可用",
         "verify_button": "验证用户",
         "verify_explainer": "为了提高安全性，请通过检查两台设备上的一次性代码来验证此用户。"
-    },
-    "user_menu": {
-        "link_new_device": "关联新设备",
-        "settings": "所有设置",
-        "switch_theme_dark": "切换为深色模式",
-        "switch_theme_light": "切换为浅色模式"
     },
     "voip": {
         "already_in_call": "已在通话中",

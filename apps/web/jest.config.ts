@@ -42,7 +42,6 @@ const config: Config = {
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
-        "counterpart": "<rootDir>/../../node_modules/counterpart",
         "@vector-im/compound-web": "<rootDir>/../../node_modules/@vector-im/compound-web",
     },
     transformIgnorePatterns: [

@@ -10,8 +10,7 @@
             "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
         },
         "room_name": "ຫ້ອງ %(name)s",
-        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-        "user_menu": "ເມນູຜູ້ໃຊ້"
+        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
     },
     "a11y_jump_first_unread_room": "ໄປຫາຫ້ອງທໍາອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
     "action": {
@@ -257,7 +256,6 @@
         "sign_in_instead_prompt": "ມີບັນຊີແລ້ວບໍ? <a>ເຂົ້າສູ່ລະບົບທີ່ນີ້</a>",
         "sign_in_or_register": "ເຂົ້າສູ່ລະບົບ ຫຼື ສ້າງບັນຊີ",
         "sign_in_or_register_description": "ໃຊ້ບັນຊີຂອງທ່ານ ຫຼື ສ້າງອັນໃໝ່ເພື່ອສືບຕໍ່.",
-        "sign_in_prompt": "ມີບັນຊີບໍ? <a>ເຂົ້າສູ່ລະບົບ</a>",
         "sign_in_with_sso": "ເຂົ້າສູ່ລະບົບດ້ວຍການລົງຊື່ເຂົ້າໃຊ້ພຽງຄັ້ງດຽວ",
         "soft_logout": {
             "clear_data_button": "ລຶບລ້າງຂໍ້ມູນທັງໝົດ",
@@ -619,7 +617,6 @@
         "show_hidden_events": "ສະແດງເຫດການທີ່ເຊື່ອງໄວ້ໃນທາມລາຍ",
         "state_key": "ປຸມລັດ",
         "title": "ເຄື່ອງມືພັດທະນາ",
-        "toggle_event": "ສະຫຼັບກິດຈະກຳ",
         "toolbox": "ກ່ອງເຄື່ອງມື",
         "use_at_own_risk": "UI ນີ້ບໍ່ໄດ້ກວດເບິ່ງປະເພດຂອງຄ່າ. ໃຊ້ຢູ່ໃນຄວາມສ່ຽງຂອງທ່ານເອງ.",
         "value": "ຄ່າ",
@@ -2340,9 +2337,7 @@
         "m.poll.start": "%(senderName)s ໄດ້ເລີ່ມສຳຫຼວດ - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນແປງຮູບແທນຕົວຂອງຫ້ອງ.",
-            "changed_img": "%(senderDisplayName)s ໄດ້ປ່ຽນຮູບແທນຕົວຂອງຫ້ອງເປັນ <img/>",
-            "lightbox_title": "%(senderDisplayName)s ໄດ້ປ່ຽນຮູບແທນຕົວຂອງ %(roomName)s",
-            "removed": "%(senderDisplayName)s ເອົາຮູບແທນຕົວຂອງຫ້ອງອອກແລ້ວ."
+            "lightbox_title": "%(senderDisplayName)s ໄດ້ປ່ຽນຮູບແທນຕົວຂອງ %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2457,7 +2452,6 @@
             "created_rule_rooms": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຫ້ອງທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
             "created_rule_servers": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
             "created_rule_users": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຜູ້ໃຊ້ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
-            "message_hidden": "ທ່ານໄດ້ບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້, ດັ່ງນັ້ນຂໍ້ຄວາມຂອງພວກເຂົາຖືກເຊື່ອງໄວ້. <a>ສະແດງຕໍ່ໄປ.</a>",
             "removed_rule": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມທີ່ຄູ່ກັນ%(glob)s",
             "removed_rule_rooms": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຫ້ອງທີ່ກົງກັບ %(glob)s",
             "removed_rule_servers": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມເຊີບເວີຄູ່ກັນ%(glob)s",
@@ -2726,11 +2720,6 @@
         "unban_space_warning": "ເຂົາເຈົ້າຈະບໍ່ສາມາດເຂົ້າເຖິງໄດ້ ຫາກທ່ານບໍ່ແມ່ນຜູ້ຄຸ້ມຄອງລະບົບ.",
         "verify_button": "ຢືນຢັນຜູ້ໃຊ້",
         "verify_explainer": "ເພື່ອຄວາມປອດໄພເພີ່ມເຕີມ, ກະລຸນາຢັ້ງຢືນຜູ້ໃຊ້ນີ້ໂດຍການກວດສອບລະຫັດຄັ້ງດຽວໃນອຸປະກອນຂອງທ່ານທັງສອງ."
-    },
-    "user_menu": {
-        "settings": "ການຕັ້ງຄ່າທັງໝົດ",
-        "switch_theme_dark": "ສະຫຼັບໄປໂໝດມືດ",
-        "switch_theme_light": "ສະຫຼັບໄປໂໝດແສງ"
     },
     "voip": {
         "already_in_call": "ຢູ່ໃນສາຍໂທແລ້ວ",

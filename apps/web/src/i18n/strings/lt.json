@@ -1913,9 +1913,7 @@
         "m.poll.start": "%(senderName)s pradėjo apklausą - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s pakeitė kambario avatarą.",
-            "changed_img": "%(senderDisplayName)s pakeitė kambario pseudoportretą į <img/>",
-            "lightbox_title": "%(senderDisplayName)s pakeitė kambario %(roomName)s pseudoportretą",
-            "removed": "%(senderDisplayName)s pašalino kambario pseudoportretą."
+            "lightbox_title": "%(senderDisplayName)s pakeitė kambario %(roomName)s pseudoportretą"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2032,7 +2030,6 @@
             "created_rule_rooms": "%(senderName)s sukūrė taisyklę, draudžiančią kambarius, sutampančius su %(glob)s dėl %(reason)s",
             "created_rule_servers": "%(senderName)s sukūrė taisyklę, draudžiančią serverius, sutampančius su %(glob)s dėl %(reason)s",
             "created_rule_users": "%(senderName)s sukūrė taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s dėl %(reason)s",
-            "message_hidden": "Jūs ignoravote šį vartotoją, todėl jo žinutė yra paslėpta. <a>Rodyti vistiek.</a>",
             "removed_rule": "%(senderName)s pašalino draudimo taisyklę, sutampančią su %(glob)s",
             "removed_rule_rooms": "%(senderName)s pašalino taisyklę, draudžiančią kambarius, sutampančius su %(glob)s",
             "removed_rule_servers": "%(senderName)s pašalino taisyklę, draudžiančią serverius, sutampančius su %(glob)s",
@@ -2256,9 +2253,6 @@
         "unban_space_warning": "Jie negalės prieiti prie visko, kur esate administratorius.",
         "verify_button": "Patvirtinti Vartotoją",
         "verify_explainer": "Dėl papildomo saugumo patvirtinkite šį vartotoją patikrindami vienkartinį kodą abiejuose jūsų įrenginiuose."
-    },
-    "user_menu": {
-        "settings": "Visi nustatymai"
     },
     "voip": {
         "already_in_call": "Jau pokalbyje",

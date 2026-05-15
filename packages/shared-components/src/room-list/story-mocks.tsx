@@ -13,7 +13,7 @@ import {
     type RoomListItemViewModel,
     type RoomListItemViewSnapshot,
     RoomNotifState,
-} from "./VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+} from "./VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "./VirtualizedRoomListView/RoomListSectionHeaderView";
 import { MockViewModel } from "../core/viewmodel";
 

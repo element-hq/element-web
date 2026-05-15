@@ -12,10 +12,7 @@ import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import {
-    type Room,
-    type RoomListItemViewModel,
-} from "../VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+import { type Room, type RoomListItemViewModel } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
 import { type ToastType, RoomListToast } from "./RoomListToast";
 import styles from "./RoomListView.module.css";
@@ -77,6 +74,8 @@ export interface RoomListViewActions {
     getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
     /** Called to close the toast message */
     closeToast: () => void;
+    /** Called to change the section of a room */
+    changeRoomSection: (roomId: string, tag: string) => void;
 }
 
 /**

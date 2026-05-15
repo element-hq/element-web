@@ -15,8 +15,7 @@
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado de la sala",
         "seek_bar_label": "Barra de búsqueda de audio",
-        "unread_messages": "Mensajes sin leer.",
-        "user_menu": "Menú del Usuario"
+        "unread_messages": "Mensajes sin leer."
     },
     "a11y_jump_first_unread_room": "Saltar a la primera sala sin leer.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "¿Ya tienes una cuenta? <a>Inicia sesión aquí</a>",
         "sign_in_or_register": "Iniciar sesión o Crear una cuenta",
         "sign_in_or_register_description": "Entra con tu cuenta si ya tienes una o crea una nueva para continuar.",
-        "sign_in_prompt": "¿Ya tienes una cuenta? <a>Iniciar sesión</a>",
         "sign_in_with_sso": "Ingresar con un Registro Único",
         "signing_in": "Iniciando sesión…",
         "soft_logout": {
@@ -781,7 +779,6 @@
         },
         "state_key": "Clave de estado",
         "title": "Herramientas de desarrollo",
-        "toggle_event": "activar o desactivar el evento",
         "toolbox": "Caja de herramientas",
         "use_at_own_risk": "Esta interfaz NO comprueba los tipos de dato de los valores. Usar bajo tu responsabilidad.",
         "value": "Valor",
@@ -2768,9 +2765,7 @@
         "m.poll.start": "%(senderName)s ha empezado una encuesta – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s cambió la imagen de la sala.",
-            "changed_img": "%(senderDisplayName)s cambió el avatar de la sala a <img/>",
-            "lightbox_title": "%(senderDisplayName)s cambió el avatar para %(roomName)s",
-            "removed": "%(senderDisplayName)s eliminó el avatar de la sala."
+            "lightbox_title": "%(senderDisplayName)s cambió el avatar para %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2886,7 +2881,6 @@
             "created_rule_rooms": "%(senderName)s creó una regla bloqueando a salas que coinciden con %(glob)s por %(reason)s",
             "created_rule_servers": "%(senderName)s creó una regla bloqueando a servidores que coinciden con %(glob)s por %(reason)s",
             "created_rule_users": "%(senderName)s creó una regla bloqueando a usuarios que coinciden con %(glob)s por %(reason)s",
-            "message_hidden": "Ha ignorado a esta cuenta, así que su mensaje está oculto. <a>Ver de todos modos.</a>",
             "removed_rule": "%(senderName)s eliminó una regla correspondiente a %(glob)s",
             "removed_rule_rooms": "%(senderName)s eliminó la regla que bloquea a salas que coinciden con %(glob)s",
             "removed_rule_servers": "%(senderName)s eliminó la regla que bloquea a servidores que coinciden con %(glob)s",
@@ -3160,12 +3154,6 @@
         "unban_space_warning": "No podrán acceder a donde no tengas permisos de administración.",
         "verify_button": "Verificar usuario",
         "verify_explainer": "Para mayor seguridad, verifica a este usuario comprobando un código temporal vez dos de tus dispositivos."
-    },
-    "user_menu": {
-        "link_new_device": "Vincular un dispositivo nuevo",
-        "settings": "Ajustes",
-        "switch_theme_dark": "Cambiar al tema oscuro",
-        "switch_theme_light": "Cambiar al tema claro"
     },
     "voip": {
         "already_in_call": "Ya en una llamada",

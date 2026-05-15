@@ -10,8 +10,7 @@
             "one": "1 nelegita mencio."
         },
         "room_name": "Ĉambro %(name)s",
-        "unread_messages": "Nelegitaj mesaĝoj.",
-        "user_menu": "Menuo de uzanto"
+        "unread_messages": "Nelegitaj mesaĝoj."
     },
     "a11y_jump_first_unread_room": "Salti al unua nelegita ĉambro.",
     "action": {
@@ -248,7 +247,6 @@
         "sign_in_instead_prompt": "Aliĝu anstataŭe",
         "sign_in_or_register": "Salutu aŭ kreu konton",
         "sign_in_or_register_description": "Por daŭrigi, uzu vian konton aŭ kreu novan.",
-        "sign_in_prompt": "Ĉu vi havas konton? <a>Salutu</a>",
         "sign_in_with_sso": "Saluti per ununura saluto",
         "soft_logout": {
             "clear_data_button": "Vakigi ĉiujn datumojn",
@@ -2097,9 +2095,7 @@
         "m.poll.start": "%(senderName)s komencis balotenketon - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ŝanĝis la profilbildon de ĉambro.",
-            "changed_img": "%(senderDisplayName)s agordis la ĉambran profilbildon al <img/>",
-            "lightbox_title": "%(senderDisplayName)s ŝanĝis la profilbildon de %(roomName)s",
-            "removed": "%(senderDisplayName)s forigis la ĉambran profilbildon."
+            "lightbox_title": "%(senderDisplayName)s ŝanĝis la profilbildon de %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2210,7 +2206,6 @@
             "created_rule_rooms": "%(senderName)s kreis regulon forbarantan ĉambrojn, kiuj akordas kun %(glob)s, pro %(reason)s",
             "created_rule_servers": "%(senderName)s kreis regulon forbarantan servilojn, kiuj akordas kun %(glob)s, pro %(reason)s",
             "created_rule_users": "%(senderName)s kreis regulon forbarantan uzantojn, kiuj akordas kun %(glob)s, pro %(reason)s",
-            "message_hidden": "Vi malatentis ĉi tiun uzanton, ĝia mesaĝo estas do kaŝita. <a>Tamen montri.</a>",
             "removed_rule": "%(senderName)s forigis forbaran regulon, kiu akordas kun %(glob)s",
             "removed_rule_rooms": "%(senderName)s forigis la regulon forbarantan ĉambrojn, kiuj akordas kun %(glob)s",
             "removed_rule_servers": "%(senderName)s forigis la regulon forbarantan servilojn, kiuj akordas kun %(glob)s",
@@ -2408,11 +2403,6 @@
         "share_button": "Kunhavigi ligilon al uzanto",
         "verify_button": "Kontroli uzanton",
         "verify_explainer": "Por plia sekureco, kontrolu ĉi tiun uzanton per unufoja kodo aperonta sur ambaŭ el viaj aparatoj."
-    },
-    "user_menu": {
-        "settings": "Ĉiuj agordoj",
-        "switch_theme_dark": "Ŝalti malhelan reĝimon",
-        "switch_theme_light": "Ŝalti helan reĝimon"
     },
     "voip": {
         "already_in_call": "Jam vokanta",

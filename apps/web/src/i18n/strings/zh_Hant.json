@@ -11,8 +11,7 @@
             "one": "1 則未讀的提及。"
         },
         "room_name": "聊天室 %(name)s",
-        "unread_messages": "未讀的訊息。",
-        "user_menu": "使用者選單"
+        "unread_messages": "未讀的訊息。"
     },
     "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
     "action": {
@@ -301,7 +300,6 @@
         "sign_in_instead_prompt": "改為登入",
         "sign_in_or_register": "登入或建立帳號",
         "sign_in_or_register_description": "使用您的帳號或建立新的以繼續。",
-        "sign_in_prompt": "有帳號了嗎？<a>登入</a>",
         "sign_in_with_sso": "以單一登入來登入",
         "signing_in": "正在登入…",
         "soft_logout": {
@@ -745,7 +743,6 @@
         "thread_root_id": "討論串 Root ID：%(threadRootId)s",
         "threads_timeline": "討論串時間軸",
         "title": "開發者工具",
-        "toggle_event": "切換事件",
         "toolbox": "工具箱",
         "use_at_own_risk": "此使用者介面不會檢查值的類型。使用風險自負。",
         "user_read_up_to": "使用者讀取至： ",
@@ -2903,9 +2900,7 @@
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 變更了聊天室大頭照。",
-            "changed_img": "%(senderDisplayName)s 將聊天室大頭照更改為 <img/>",
-            "lightbox_title": "%(senderDisplayName)s 將聊天室的大頭照改為 %(roomName)s",
-            "removed": "%(senderDisplayName)s 移除了聊天室的大頭照。"
+            "lightbox_title": "%(senderDisplayName)s 將聊天室的大頭照改為 %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3024,7 +3019,6 @@
             "created_rule_rooms": "%(senderName)s 建立了封鎖符合 %(glob)s 聊天室的規則，因為 %(reason)s",
             "created_rule_servers": "%(senderName)s 建立了封鎖符合 %(glob)s 伺服器的規則，因為 %(reason)s",
             "created_rule_users": "%(senderName)s 建立了封鎖符合 %(glob)s 的使用者規則，因為 %(reason)s",
-            "message_hidden": "您已忽略這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>",
             "removed_rule": "%(senderName)s 移除了封鎖符合 %(glob)s 的規則",
             "removed_rule_rooms": "%(senderName)s 移除了封鎖符合 %(glob)s 聊天室的規則",
             "removed_rule_servers": "%(senderName)s 移除了封鎖符合 %(glob)s 伺服器的規則",
@@ -3309,11 +3303,6 @@
         "unban_space_warning": "他們將無法存取您不是管理員的任何地方。",
         "verify_button": "驗證使用者",
         "verify_explainer": "為了提高安全性，請透過檢查您兩個裝置上的一次性代碼來驗證此使用者。"
-    },
-    "user_menu": {
-        "settings": "所有設定",
-        "switch_theme_dark": "切換至深色模式",
-        "switch_theme_light": "切換至淺色模式"
     },
     "voip": {
         "already_in_call": "已在通話中",
