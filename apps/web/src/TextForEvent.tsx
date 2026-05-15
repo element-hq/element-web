@@ -70,7 +70,7 @@ function getCallInviteText(isVoice: boolean, isSupported: boolean, senderName: s
             ? () => _t("timeline|m.call.invite|voice_call", { senderName })
             : () => _t("timeline|m.call.invite|voice_call_unsupported", { senderName });
     }
-    
+
     return isSupported
         ? () => _t("timeline|m.call.invite|video_call", { senderName })
         : () => _t("timeline|m.call.invite|video_call_unsupported", { senderName });
