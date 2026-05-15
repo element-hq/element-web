@@ -64,7 +64,7 @@ describe("RoomUploadViewModel", () => {
             () => {},
             compApi,
         );
-        const onSelected = jest.fn();
+        const onSelected: ComposerF = jest.fn();
         const icon = { myicon: 5 } as any;
         compApi.addFileUploadOption({
             type: "org.example.test",
@@ -74,10 +74,14 @@ describe("RoomUploadViewModel", () => {
         });
         expect(vm.getSnapshot().options).toContainEqual({ type: "org.example.test", label: "My uploader", icon });
         vm.onUploadOptionSelected("org.example.test");
-        expect(onSelected).toHaveBeenCalledWith(room.roomId, {
-            inReplyToEventId: replyEv.getId(),
-            relType: "any_type",
-        });
+        expect(onSelected).toHaveBeenCalledWith(
+            room.roomId,
+            { view: "room" },
+            {
+                inReplyToEventId: replyEv.getId(),
+                relType: "any_type",
+            },
+        );
     });
 
     describe("uploads via input", () => {

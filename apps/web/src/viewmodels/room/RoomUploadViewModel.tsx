@@ -233,9 +233,6 @@ export function RoomUploadContextProvider({
         "timelineRenderingType",
         "replyToEvent",
     );
-    if (!room) {
-        throw new Error("RoomUploadContextProvider must have a room");
-    }
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
@@ -246,19 +243,21 @@ export function RoomUploadContextProvider({
         uploadInput.current.click();
     }, [uploadInput]);
 
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new RoomUploadViewModel(
-                room,
-                client,
-                // Checked earlier
-                timelineRenderingType,
-                defaultDispatcher,
-                replyToEvent,
-                threadRelation,
-                openFilePicker,
-            ),
-    );
+    const vm = useCreateAutoDisposedViewModel(() => {
+        if (!room) {
+            throw new Error("RoomUploadContextProvider must have a room");
+        }
+        return new RoomUploadViewModel(
+            room,
+            client,
+            // Checked earlier
+            timelineRenderingType,
+            defaultDispatcher,
+            replyToEvent,
+            threadRelation,
+            openFilePicker,
+        );
+    });
 
     useEffect(() => {
         vm.setReplyToEvent(replyToEvent);
