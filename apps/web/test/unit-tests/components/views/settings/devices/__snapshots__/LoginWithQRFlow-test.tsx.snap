@@ -1246,54 +1246,6 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 
     <div
       class="mx_LoginWithQR_main"
     >
-      <h1
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-      >
-        Your verification code
-      </h1>
-      <p
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
-      >
-        Your account provider may ask for the following code to verify the sign in.
-      </p>
-      <div
-        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
-      >
-        <input
-          autocomplete="one-time-code"
-          class="_control_17qhw_25"
-          disabled=""
-          inputmode="numeric"
-          maxlength="6"
-          minlength="0"
-          pattern="\\d{6}"
-          type="text"
-        />
-        <div
-          aria-hidden="true"
-          class="_digit_17qhw_49"
-        />
-        <div
-          aria-hidden="true"
-          class="_digit_17qhw_49"
-        />
-        <div
-          aria-hidden="true"
-          class="_digit_17qhw_49"
-        />
-        <div
-          aria-hidden="true"
-          class="_digit_17qhw_49"
-        />
-        <div
-          aria-hidden="true"
-          class="_digit_17qhw_49"
-        />
-        <div
-          aria-hidden="true"
-          class="_digit_17qhw_49"
-        />
-      </div>
       <div
         class="mx_LoginWithQR_spinner"
       >
