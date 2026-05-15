@@ -57,7 +57,6 @@ export class RoomUploadViewModel
     implements UploadButtonViewActions
 {
     private readonly uploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
-    private readonly instanceId = window.crypto.randomUUID();
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -75,7 +74,6 @@ export class RoomUploadViewModel
                 mayDragAndDropFile: false,
             },
         );
-        logger.info(`Creating ${this.instanceId}`);
         // Initial check.
         this.onRoomCurrentStateUpdated();
         // Configure upload functions
@@ -93,11 +91,6 @@ export class RoomUploadViewModel
             // Types issue.
             this.onUploaderOptionsChanged as any,
         );
-    }
-
-    public dispose(): void {
-        logger.info(`Disposing of ${this.instanceId}`);
-        super.dispose();
     }
 
     private onRoomCurrentStateUpdated = (): void => {
