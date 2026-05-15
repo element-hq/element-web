@@ -64,7 +64,7 @@ describe("RoomUploadViewModel", () => {
             () => {},
             compApi,
         );
-        const onSelected: ComposerF = jest.fn();
+        const onSelected = jest.fn();
         const icon = { myicon: 5 } as any;
         compApi.addFileUploadOption({
             type: "org.example.test",
