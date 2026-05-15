@@ -13,7 +13,7 @@ import { ComponentType, SVGAttributes } from "react";
  */
 export type ComposerApiFileUploadOption = {
     /**
-     * An unqiue string to refer to the type of upload
+     * An unique string to refer to the type of upload
      * @example org.example.my_uploader
      */
     type: string;
@@ -22,7 +22,7 @@ export type ComposerApiFileUploadOption = {
      */
     label: string;
     /**
-     * An icon to attach to the option.
+     * An icon to attach to the option. If omitted, no icon is shown.
      */
     icon?: ComponentType<SVGAttributes<SVGElement>>;
     /**
