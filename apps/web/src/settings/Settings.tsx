@@ -208,7 +208,6 @@ export interface Settings {
     "feature_video_rooms": IFeature;
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
-    "feature_report_to_moderators": IFeature;
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
@@ -461,15 +460,6 @@ export const SETTINGS: Settings = {
     "blockInvites": {
         controller: new BlockInvitesConfigController("blockInvites"),
         supportedLevels: [SettingLevel.ACCOUNT],
-        default: false,
-    },
-    "feature_report_to_moderators": {
-        isFeature: true,
-        labsGroup: LabGroup.Moderation,
-        displayName: _td("labs|report_to_moderators"),
-        description: _td("labs|report_to_moderators_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
         default: false,
     },
     "feature_latex_maths": {
