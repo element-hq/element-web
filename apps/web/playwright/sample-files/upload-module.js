@@ -19,15 +19,16 @@ export default class CustomComponentModule {
      */
     constructor(api) {
         this.api = api;
+    }
+    async load() {
         this.api.composer.addFileUploadOption({
             type: "org.example.uploader",
             label: "Example uploader",
-            onSelected: (roomId) => {
+            onSelected: () => {
                 this.api.composer.openFileUploadConfirmation([
                     new File(["test"], "testfile.txt", { type: "text/plain" }),
                 ]);
             },
         });
     }
-    async load() {}
 }
