@@ -35,8 +35,9 @@ import { addTextToComposerRTL } from "../../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import { TimelineRenderingType, type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import { TimelineEventEditor } from "../../../../../src/components/views/dialogs/devtools/Event.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -459,7 +460,8 @@ function wrapAndRender(
         canSendMessages,
         tombstone,
         narrow,
-    } as unknown as RoomContextType;
+        timelineRenderingType: TimelineRenderingType.Room,
+    } satisfies Partial<RoomContextType> as RoomContextType;
 
     const defaultProps = {
         room,

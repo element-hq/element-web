@@ -228,12 +228,12 @@ export function RoomUploadContextProvider({
         "timelineRenderingType",
         "replyToEvent",
     );
-    if (!room) {
-        throw new Error("RoomUploadContextProvider must have a room");
-    }
-    if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(timelineRenderingType)) {
-        throw new Error("TimelineRenderingType must be Room or Thread");
-    }
+    // if (!room) {
+    //     throw new Error("RoomUploadContextProvider must have a room");
+    // }
+    // if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(timelineRenderingType)) {
+    //     throw new Error("TimelineRenderingType must be Room or Thread");
+    // }
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
