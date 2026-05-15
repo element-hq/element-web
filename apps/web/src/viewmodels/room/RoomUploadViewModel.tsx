@@ -60,7 +60,7 @@ export class RoomUploadViewModel
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
-        private readonly timelineRenderingType: TimelineRenderingType.Room | TimelineRenderingType.Thread,
+        private readonly timelineRenderingType: TimelineRenderingType,
         private readonly dispatcher: MatrixDispatcher,
         private replyToEvent: MatrixEvent | undefined,
         private threadRelation: IEventRelation | undefined,
@@ -185,6 +185,11 @@ export class RoomUploadViewModel
         if (!fn) {
             throw new Error("Unexpectedly called onUploadOptionSelected with an unknown type");
         }
+        // At the point of this function being called, we should be in a state that is either rendering a room
+        // or timeline.
+        if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(this.timelineRenderingType)) {
+            throw new Error("TimelineRenderingType must be Room or Thread");
+        }
         fn(
             this.room.roomId,
             {
@@ -228,12 +233,9 @@ export function RoomUploadContextProvider({
         "timelineRenderingType",
         "replyToEvent",
     );
-    // if (!room) {
-    //     throw new Error("RoomUploadContextProvider must have a room");
-    // }
-    // if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(timelineRenderingType)) {
-    //     throw new Error("TimelineRenderingType must be Room or Thread");
-    // }
+    if (!room) {
+        throw new Error("RoomUploadContextProvider must have a room");
+    }
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
@@ -250,7 +252,7 @@ export function RoomUploadContextProvider({
                 room,
                 client,
                 // Checked earlier
-                timelineRenderingType as TimelineRenderingType.Room | TimelineRenderingType.Thread,
+                timelineRenderingType,
                 defaultDispatcher,
                 replyToEvent,
                 threadRelation,
