@@ -624,7 +624,6 @@
         },
         "state_key": "Chave do estado",
         "title": "Ferramentas desenvolvemento",
-        "toggle_event": "activar evento",
         "toolbox": "Ferramentas",
         "use_at_own_risk": "Esta IU non comproba os tipos dos valores. Usa baixo a túa responsabilidade.",
         "value": "Valor",
@@ -2434,9 +2433,7 @@
         "m.poll.start": "%(senderName)s publicou unha enquisa - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s cambiou o avatar da sala.",
-            "changed_img": "%(senderDisplayName)s cambiou o avatar da sala a <img/>",
-            "lightbox_title": "%(senderDisplayName)s cambiou o avatar para %(roomName)s",
-            "removed": "%(senderDisplayName)s eliminou o avatar da sala."
+            "lightbox_title": "%(senderDisplayName)s cambiou o avatar para %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

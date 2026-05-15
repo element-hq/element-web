@@ -1811,9 +1811,7 @@
         "m.poll.start": "%(senderName)s یک نظر سنجی را شروع کرد - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s آواتار اتاق تغییر کرد.",
-            "changed_img": "%(senderDisplayName)s آواتار اتاق را به <img/> تغییر داد",
-            "lightbox_title": "%(senderDisplayName)s آواتار خود را در %(roomName)s تغییر داد",
-            "removed": "%(senderDisplayName)s آواتار اتاق را حذف کرد."
+            "lightbox_title": "%(senderDisplayName)s آواتار خود را در %(roomName)s تغییر داد"
         },
         "m.room.canonical_alias": {
             "alt_added": {
