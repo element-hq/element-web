@@ -614,7 +614,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="_icon-button_1215g_8"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 32px;"
+                style="--cpd-icon-button-size: 26px;"
                 tabindex="0"
               >
                 <div
@@ -995,7 +995,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 class="_icon-button_1215g_8"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 32px;"
+                style="--cpd-icon-button-size: 26px;"
                 tabindex="0"
               >
                 <div
@@ -1621,7 +1621,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
-                  style="--cpd-icon-button-size: 32px;"
+                  style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
@@ -2105,7 +2105,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
-                  style="--cpd-icon-button-size: 32px;"
+                  style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
@@ -2589,7 +2589,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
-                  style="--cpd-icon-button-size: 32px;"
+                  style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
@@ -3321,7 +3321,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
-                  style="--cpd-icon-button-size: 32px;"
+                  style="--cpd-icon-button-size: 26px;"
                   tabindex="0"
                 >
                   <div
@@ -3886,7 +3886,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                       class="_icon-button_1215g_8"
                       data-kind="primary"
                       role="button"
-                      style="--cpd-icon-button-size: 32px;"
+                      style="--cpd-icon-button-size: 26px;"
                       tabindex="0"
                     >
                       <div
