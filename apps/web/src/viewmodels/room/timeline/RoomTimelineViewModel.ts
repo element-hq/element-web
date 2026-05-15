@@ -147,9 +147,31 @@ export class RoomTimelineViewModel
 
     /**
      * The Matrix event ID of the room's "fully read" marker. null when none is set.
-     * Tracked via `RoomEvent.AccountData` / `EventType.FullyRead`.
+     * Tracked via `RoomEvent.AccountData` / `EventType.FullyRead`. Reflects server
+     * state and may change mid-session if another device advances the marker;
+     * used by {@link dispose} and {@link onMarkAllAsRead} but NOT by the UI.
      */
     private readMarkerEventId: string | null = null;
+
+    /**
+     * Snapshot of the read-marker position taken once at the start of the session
+     * by {@link freezeReadMarkerForSession}, and consumed by {@link buildItems},
+     * {@link computeCanJumpToReadMarker} and {@link onJumpToReadMarker}.
+     *
+     * The visibility / position of the read-divider line is determined entirely
+     * at room entry and frozen for the lifetime of this view model:
+     *   - `null` means "no line, ever, this session" — either the room is
+     *     fully-read on entry, or no marker is set at all.
+     *   - A non-null value pins the line at that event for the whole session,
+     *     even as the user scrolls, sends messages, or new events arrive.
+     *
+     * Mirrors Element X iOS, which delegates marker position to the SDK and
+     * does not advance it mid-session. The line stays where the user last saw
+     * it; it only updates when the user leaves and re-enters the room (see
+     * {@link dispose}'s setRoomReadMarkers call). Cleared explicitly by
+     * {@link onMarkAllAsRead}.
+     */
+    private frozenMarkerEventId: string | null = null;
 
     /**
      * Count of new live messages that arrived since the user last reached the
@@ -300,13 +322,42 @@ export class RoomTimelineViewModel
         if (ev.getType() !== EventType.FullyRead) return;
         const newMarker = (ev.getContent()?.event_id as string | undefined) ?? null;
         if (newMarker === this.readMarkerEventId) return;
+        // Track the server-side marker so dispose() can avoid redundant writes,
+        // but don't touch frozenMarkerEventId — the visible divider position is
+        // pinned for the session. If the user wants the marker line to reflect
+        // changes another device made mid-session they can leave and re-enter.
         this.readMarkerEventId = newMarker;
-        // Rebuild items so the read-marker row moves to the new position (or is
-        // stripped by the trailing-strip rule when the marker has advanced to
-        // the last event in the window).
-        const items = this.buildItems();
-        this.snapshot.merge({ items, canJumpToReadMarker: this.computeCanJumpToReadMarker(items) });
     };
+
+    /**
+     * Snapshot the current read-marker position into {@link frozenMarkerEventId}.
+     * Called once per session by {@link load} after the initial window is loaded.
+     *
+     * The frozen value is what the UI consumes for the entire session:
+     *  - `null` when the marker is unset OR on the room's latest known event.
+     *    In that case the divider line is never rendered this session even if
+     *    new events arrive later (matches the iOS "nothing new since last
+     *    visit → no line" behaviour).
+     *  - Otherwise the marker's event id, pinned at that position for the
+     *    session regardless of subsequent sends, scrolls, or new events.
+     */
+    private freezeReadMarkerForSession(): void {
+        if (!this.readMarkerEventId) {
+            this.frozenMarkerEventId = null;
+            logger.debug(`[TimelineVM] freezeReadMarkerForSession — no server marker, frozen=null`);
+            return;
+        }
+        const liveEvents = this.opts.room.getLiveTimeline().getEvents();
+        const lastLiveEventId = liveEvents[liveEvents.length - 1]?.getId();
+        if (lastLiveEventId && lastLiveEventId === this.readMarkerEventId) {
+            // Fully read on entry — no line, ever, this session.
+            this.frozenMarkerEventId = null;
+            logger.debug(`[TimelineVM] freezeReadMarkerForSession — marker is on latest live event, frozen=null`);
+        } else {
+            this.frozenMarkerEventId = this.readMarkerEventId;
+            logger.debug(`[TimelineVM] freezeReadMarkerForSession — frozen=${this.frozenMarkerEventId}`);
+        }
+    }
 
     private async load(target: LoadTarget): Promise<void> {
         logger.debug(`[TimelineVM] load() start — kind=${target.kind}${target.kind !== "live" ? ` eventId=${target.eventId}` : ""}`);
@@ -332,6 +383,9 @@ export class RoomTimelineViewModel
                     `last=${windowEvents[windowEvents.length - 1].getId()} (${windowEvents[windowEvents.length - 1].getType()})`,
                 );
             }
+            // Snapshot the read-marker for the duration of this session. Must run
+            // BEFORE buildItems so it sees the frozen value.
+            this.freezeReadMarkerForSession();
             const items = this.buildItems();
             logger.debug(
                 `[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering`,
@@ -478,6 +532,14 @@ export class RoomTimelineViewModel
     /**
      * Sends a read receipt for the last visible event, debounced from `onVisibleRangeChanged`.
      * Only advances the receipt — never rewinds it. Respects the `sendReadReceipts` setting.
+     *
+     * Read receipts (`m.read`) and the FullyRead marker (`m.fully_read`) serve different
+     * purposes. Read receipts are public — they tell *other* users where this user has
+     * read up to — and should advance freely as the user scrolls. The FullyRead marker is
+     * private and drives the local "unread divider" line; advancing it mid-session causes
+     * the divider to jump (e.g. landing above the user's own outgoing message). So we
+     * only advance the receipt here. The FullyRead marker is advanced once on dispose
+     * (see {@link dispose}), mirroring Element X iOS's behaviour.
      */
     private sendAutoReadReceipt(): void {
         if (this.isDisposed) return;
@@ -503,9 +565,6 @@ export class RoomTimelineViewModel
             this.lastSentReceiptEventId = null; // allow retry
             logger.warn(`[TimelineVM] sendAutoReadReceipt — sendReadReceipt failed`, err);
         });
-        this.opts.client.setRoomReadMarkers(this.opts.room.roomId, eventId).catch((err) => {
-            logger.warn(`[TimelineVM] sendAutoReadReceipt — setRoomReadMarkers failed`, err);
-        });
     }
 
     // ── Overlay button actions ───────────────────────────────────────
@@ -514,32 +573,26 @@ export class RoomTimelineViewModel
         const items = this.snapshot.current.items;
         const rmIdx = items.findIndex((item) => item.kind === "read-marker");
         logger.debug(
-            `[TimelineVM] onJumpToReadMarker — readMarkerEventId=${this.readMarkerEventId}, ` +
+            `[TimelineVM] onJumpToReadMarker — frozenMarkerEventId=${this.frozenMarkerEventId}, ` +
             `rmIdx=${rmIdx}, items=${items.length}, ` +
             `visibleStartArrayIndex=${this.visibleStartArrayIndex}, ` +
             `canPaginate(Backward)=${this.timelineWindow.canPaginate(Direction.Backward)}, ` +
             `canJumpToReadMarker=${this.snapshot.current.canJumpToReadMarker}`,
         );
         if (rmIdx !== -1) {
-            // Marker is in the loaded window — scroll to it imperatively. No data
-            // update is happening, so scrollIntoViewOnChange wouldn't fire reliably
-            // (its downstream scrollIntoView is gated on the next listRefresh).
+            // Marker is in the loaded window — scroll to it imperatively.
             const readMarkerKey = items[rmIdx].key;
             logger.debug(`[TimelineVM] onJumpToReadMarker — marker in window at index ${rmIdx}, scrolling now key=${readMarkerKey}`);
             scrollNow({ targetKey: readMarkerKey, align: "center" });
-        } else if (this.timelineWindow.canPaginate(Direction.Backward)) {
-            // Marker is not in the current window — reload at the marker event.
+        } else if (this.frozenMarkerEventId && this.timelineWindow.canPaginate(Direction.Backward)) {
+            // Frozen marker is not in the current window — reload at it.
             // pendingAnchor gets set inside load() and drives the post-load scroll.
-            if (this.readMarkerEventId) {
-                logger.debug(`[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.readMarkerEventId}`);
-                this.load({ kind: "permalink", eventId: this.readMarkerEventId });
-            } else {
-                logger.warn(`[TimelineVM] onJumpToReadMarker — canPaginate(Backward)=true but readMarkerEventId is null, doing nothing`);
-            }
+            logger.debug(`[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.frozenMarkerEventId}`);
+            this.load({ kind: "permalink", eventId: this.frozenMarkerEventId });
         } else {
             logger.warn(
                 `[TimelineVM] onJumpToReadMarker — no action taken: marker not in window (rmIdx=${rmIdx}) ` +
-                `and canPaginate(Backward)=false`,
+                `and frozenMarkerEventId=${this.frozenMarkerEventId}, canPaginate(Backward)=${this.timelineWindow.canPaginate(Direction.Backward)}`,
             );
         }
     };
@@ -551,8 +604,11 @@ export class RoomTimelineViewModel
         clearRoomNotification(this.opts.room, this.opts.client).catch((err) => {
             logger.warn(`[TimelineVM] onMarkAllAsRead — clearRoomNotification failed`, err);
         });
-        // Immediately clear the read marker bar locally.
+        // Immediately clear the read marker line locally. This is an explicit
+        // user action ("I have read everything"), so we override the per-session
+        // freeze and drop the divider line.
         this.readMarkerEventId = null;
+        this.frozenMarkerEventId = null;
         const newItems = this.buildItems(); // removes the read-marker item
         this.snapshot.merge({ items: newItems, canJumpToReadMarker: false });
     };
@@ -586,43 +642,29 @@ export class RoomTimelineViewModel
      * - `false`   — marker is visible, not set, or unreachable.
      *
      * The marker row may have been stripped from `items` by the trailing-strip
-     * rule in {@link buildItems} when the marker is on the last event of the
-     * window AND we're at the live end (fully read). We detect that case by
-     * consulting the timeline window directly, before falling back to the
-     * "marker is older than oldest loaded event" interpretation.
+     * Driven by `frozenMarkerEventId` (the session-pinned snapshot), not the
+     * live server-side `readMarkerEventId`. If the freeze was `null` (no marker
+     * or fully read on entry) the button is never offered this session.
      */
     private computeCanJumpToReadMarker(items: TimelineItem[]): "above" | "below" | false {
-        if (!this.readMarkerEventId) return false;
-
-        // Source-of-truth check: is the marker on the room's latest known event?
-        // If so, the user has read everything — never show the button, regardless
-        // of whether the marker happens to be in our (possibly trimmed) timeline
-        // window. This covers the case where back-pagination has caused the live
-        // edge to be trimmed off the window so the marker is no longer findable
-        // in our local events but the user is still fully read.
-        const liveEvents = this.opts.room.getLiveTimeline().getEvents();
-        const lastLiveEventId = liveEvents[liveEvents.length - 1]?.getId();
-        if (lastLiveEventId && lastLiveEventId === this.readMarkerEventId) {
-            logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker is on room's latest event → false`);
-            return false;
-        }
+        if (!this.frozenMarkerEventId) return false;
 
         const events = this.timelineWindow.getEvents();
-        const markerInWindow = events.some((e) => e.getId() === this.readMarkerEventId);
+        const markerInWindow = events.some((e) => e.getId() === this.frozenMarkerEventId);
 
         const rmIdx = items.findIndex((item) => item.kind === "read-marker");
         if (rmIdx === -1) {
             if (markerInWindow) {
-                // Marker is in the window but was stripped (trailing without being at
-                // live end). Don't show a misleading "above" button.
-                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker stripped but in window → false`);
+                // Marker event is in the window but didn't make it into the rendered
+                // items — likely a filtered event. Don't show a misleading button.
+                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker event in window but filtered out of items → false`);
                 return false;
             }
             // Marker is genuinely outside the loaded window. Direction depends on
             // which side has unloaded events. If forward pagination is possible,
-            // the marker is newer than our window (the user has back-paginated past
-            // the live edge and the marker fell off via window trimming): "below".
-            // Otherwise the marker is older than our window: "above".
+            // the marker is newer than our window (e.g. the user has back-paginated
+            // past the live edge and the marker fell off via window trimming):
+            // "below". Otherwise the marker is older than our window: "above".
             const canForward = this.timelineWindow.canPaginate(Direction.Forward);
             const canBackward = this.timelineWindow.canPaginate(Direction.Backward);
             if (canForward) {
@@ -654,10 +696,16 @@ export class RoomTimelineViewModel
     }
 
     /**
-     * Save the current scroll position to localStorage before tearing down.
-     * Clears the saved position only when the user is visually at the bottom
-     * of the list (so the next visit starts fresh at the live end).
-     * Preserves any existing saved position when no visible range was recorded.
+     * Tear-down: save scroll position and advance the FullyRead marker.
+     *
+     * - Saves the current scroll position to localStorage so the next visit
+     *   resumes here. Clears the saved position only when the user is at the
+     *   visual bottom (so the next visit starts fresh at the live end).
+     * - Advances the FullyRead marker to the last bottommost event we've seen
+     *   during this session, so the next time the user enters the room the
+     *   "unread divider" reflects what they've actually read. We deliberately
+     *   do this only on dispose, not during scrolling — see
+     *   {@link sendAutoReadReceipt} for the rationale.
      */
     public override dispose(): void {
         if (this.readReceiptDebounceTimer !== null) {
@@ -678,6 +726,16 @@ export class RoomTimelineViewModel
             logger.debug(`[TimelineVM] dispose() — saving scroll position eventId=${this.lastBottomEventId}`);
             RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, this.lastBottomEventId);
         }
+
+        // Advance the FullyRead marker to the last bottommost event we saw.
+        // Skip if it already matches what we last advanced to (avoids redundant network calls).
+        if (this.lastBottomEventId !== this.readMarkerEventId) {
+            logger.debug(`[TimelineVM] dispose() — advancing FullyRead marker to ${this.lastBottomEventId}`);
+            this.opts.client.setRoomReadMarkers(this.opts.room.roomId, this.lastBottomEventId).catch((err) => {
+                logger.warn(`[TimelineVM] dispose() — setRoomReadMarkers failed`, err);
+            });
+        }
+
         super.dispose();
     }
 
@@ -959,18 +1017,13 @@ export class RoomTimelineViewModel
             });
 
             // Insert the read-marker item directly after the event it belongs to.
-            if (this.readMarkerEventId && eventId === this.readMarkerEventId) {
+            // Uses the per-session frozen marker so the divider position never
+            // changes during the session (see {@link freezeReadMarkerForSession}).
+            if (this.frozenMarkerEventId && eventId === this.frozenMarkerEventId) {
                 items.push({ key: "read-marker", kind: "read-marker" });
             }
 
             prevEvent = event;
-        }
-
-        // Strip a trailing read-marker — when it is the last item the timeline is
-        // fully read, so there is nothing "below" to indicate.
-        if (items.length > 0 && items[items.length - 1].kind === "read-marker") {
-            items.pop();
-            logger.debug(`[TimelineVM] buildItems — stripped trailing read-marker`);
         }
 
         if (filteredCount > 0) {
