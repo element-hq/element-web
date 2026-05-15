@@ -48,7 +48,7 @@ export class RoomUploadViewModel
     extends BaseViewModel<UploadButtonViewSnapshot, Record<string, never>>
     implements UploadButtonViewActions
 {
-    private readonly extraUploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
+    private readonly uploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -57,30 +57,23 @@ export class RoomUploadViewModel
         private replyToEvent: MatrixEvent | undefined,
         private threadRelation: IEventRelation | undefined,
         public readonly openUploadDialog: () => void,
-        moduleComposerApi = ModuleApi.instance.composer,
+        private readonly moduleComposerApi = ModuleApi.instance.composer,
     ) {
         super(
             {},
             {
-                mayUpload: room.maySendMessage(),
-                options: [
-                    {
-                        type: "local",
-                        label: _t("common|attachment"),
-                        icon: AttachmentIcon,
-                    },
-                    ...moduleComposerApi.fileUploadOptions.map((option) => ({
-                        type: option.type,
-                        label: option.label,
-                        icon: option.icon,
-                    })),
-                ],
+                options: [],
             },
         );
-        this.extraUploadSelectFns.set("local", this.openUploadDialog);
+        // Initial check.
+        this.onRoomCurrentStateUpdated();
+
+        // Configure upload functions
         for (const option of moduleComposerApi.fileUploadOptions) {
-            this.extraUploadSelectFns.set(option.type, option.onSelected);
+            this.uploadSelectFns.set(option.type, option.onSelected);
         }
+        this.uploadSelectFns.set("local", this.openUploadDialog);
+
         room.on(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
         moduleComposerApi.on(ModuleComposerApiEvents.UploaderOptionsChanged, this.onUploaderOptionsChanged);
         this.disposables.track(() => {
@@ -91,12 +84,25 @@ export class RoomUploadViewModel
 
     private onRoomCurrentStateUpdated = (): void => {
         this.snapshot.merge({
-            mayUpload: this.room.maySendMessage(),
+            options: this.room.maySendMessage()
+                ? [
+                      {
+                          type: "local",
+                          label: _t("common|attachment"),
+                          icon: AttachmentIcon,
+                      },
+                      ...this.moduleComposerApi.fileUploadOptions.map((option) => ({
+                          type: option.type,
+                          label: option.label,
+                          icon: option.icon,
+                      })),
+                  ]
+                : [],
         });
     };
 
     private onUploaderOptionsChanged = (option: ComposerApiFileUploadOption): void => {
-        this.extraUploadSelectFns.set(option.type, option.onSelected);
+        this.uploadSelectFns.set(option.type, option.onSelected);
         this.snapshot.merge({
             options: [
                 ...this.snapshot.current.options,
@@ -162,7 +168,7 @@ export class RoomUploadViewModel
     };
 
     public onUploadOptionSelected = (type: ComposerApiFileUploadOption["type"]): void => {
-        const fn = this.extraUploadSelectFns.get(type);
+        const fn = this.uploadSelectFns.get(type);
         if (!fn) {
             throw new Error("Unexpectedly called onUploadOptionSelected with an unknown type");
         }

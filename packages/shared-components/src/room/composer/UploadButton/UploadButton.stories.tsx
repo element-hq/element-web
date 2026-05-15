@@ -32,7 +32,6 @@ const meta = {
     component: UploadButtonWrapper,
     tags: ["autodocs"],
     args: {
-        mayUpload: true,
         defaultOpen: false,
         onUploadOptionSelected: fn(),
         options: [

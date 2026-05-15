@@ -22,7 +22,6 @@ import { useI18n } from "../../../core/i18n/i18nContext";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 
 export interface UploadButtonViewSnapshot {
-    mayUpload: boolean;
     options: { type: string; label: string; icon?: ComponentType<SVGAttributes<SVGElement>> }[];
 }
 

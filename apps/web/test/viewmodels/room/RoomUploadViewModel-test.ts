@@ -11,8 +11,9 @@ import type { MockedObject } from "jest-mock";
 import { RoomUploadViewModel } from "../../../src/viewmodels/room/RoomUploadViewModel";
 import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import type { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
+import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import ContentMessages from "../../../src/ContentMessages";
+import { ComposerApi } from "../../../src/modules/ComposerApi";
 const sendContentListToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
 
 describe("RoomUploadViewModel", () => {
@@ -31,7 +32,7 @@ describe("RoomUploadViewModel", () => {
         jest.restoreAllMocks();
     });
 
-    it.each([true, false])("handles state of mayUpload when room.maySendMessage = %s", (maySendMessage) => {
+    it.each([true, false])("handles state when room.maySendMessage = %s", (maySendMessage) => {
         room.maySendMessage.mockReturnValue(maySendMessage);
         const vm = new RoomUploadViewModel(
             room,
@@ -42,10 +43,41 @@ describe("RoomUploadViewModel", () => {
             undefined,
             () => {},
         );
-        expect(vm.getSnapshot().mayUpload).toEqual(maySendMessage);
+        expect(vm.getSnapshot().options).toHaveLength(maySendMessage ? 1 : 0);
         room.maySendMessage.mockReturnValue(!maySendMessage);
         room.emit(RoomEvent.CurrentStateUpdated, room, null as any, null as any);
-        expect(vm.getSnapshot().mayUpload).toEqual(!maySendMessage);
+        expect(vm.getSnapshot().options).toHaveLength(maySendMessage ? 0 : 1);
+    });
+
+    it("handles custom upload option", async () => {
+        const compApi = new ComposerApi(new MatrixDispatcher());
+        const replyEv = mkEvent({ type: "fake", content: {}, user: "any", event: true });
+        const vm = new RoomUploadViewModel(
+            room,
+            client,
+            TimelineRenderingType.Room,
+            dis,
+            replyEv,
+            {
+                rel_type: "any_type",
+            },
+            () => {},
+            compApi,
+        );
+        const onSelected = jest.fn();
+        const icon = { myicon: 5 } as any;
+        compApi.addFileUploadOption({
+            type: "org.example.test",
+            label: "My uploader",
+            icon,
+            onSelected,
+        });
+        expect(vm.getSnapshot().options).toContainEqual({ type: "org.example.test", label: "My uploader", icon });
+        vm.onUploadOptionSelected("org.example.test");
+        expect(onSelected).toHaveBeenCalledWith(room.roomId, {
+            inReplyToEventId: replyEv.getId(),
+            relType: "any_type",
+        });
     });
 
     describe("uploads via input", () => {
