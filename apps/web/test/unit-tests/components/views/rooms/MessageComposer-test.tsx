@@ -37,7 +37,6 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { TimelineRenderingType, type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
-import { TimelineEventEditor } from "../../../../../src/components/views/dialogs/devtools/Event.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));

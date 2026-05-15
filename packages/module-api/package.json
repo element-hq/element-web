@@ -26,7 +26,6 @@
     ],
     "scripts": {
         "prepack": "nx build",
-        "start": "nx start",
         "lint:types": "nx lint:types",
         "test:unit": "vitest"
     },
