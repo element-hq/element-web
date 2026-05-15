@@ -301,26 +301,27 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 main = this.simpleSpinner();
                 break;
             case Phase.WaitingForDevice:
-                main = (
-                    <>
-                        {this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE && (
+                main =
+                    this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE ? (
+                        <>
                             <BigIcon>
                                 <LockSolidIcon />
                             </BigIcon>
-                        )}
-                        <Heading as="h1" size="sm" weight="semibold">
-                            {_t("auth|qr_code_login|security_code_title")}
-                        </Heading>
-                        <Text size="md">{_t("auth|qr_code_login|security_code_prompt")}</Text>
-                        <MFAInput
-                            className="mx_LoginWithQR_checkCode_input mx_no_textinput"
-                            length={6}
-                            value={this.props.userCode}
-                            disabled
-                        />
-                        {this.simpleSpinner(_t("auth|qr_code_login|waiting_for_device"))}
-                    </>
-                );
+                            <Heading as="h1" size="sm" weight="semibold">
+                                {_t("auth|qr_code_login|security_code_title")}
+                            </Heading>
+                            <Text size="md">{_t("auth|qr_code_login|security_code_prompt")}</Text>
+                            <MFAInput
+                                className="mx_LoginWithQR_checkCode_input mx_no_textinput"
+                                length={6}
+                                value={this.props.userCode}
+                                disabled
+                            />
+                            {this.simpleSpinner(_t("auth|qr_code_login|waiting_for_device"))}
+                        </>
+                    ) : (
+                        this.simpleSpinner(_t("auth|qr_code_login|waiting_for_device"))
+                    );
                 buttons = this.cancelButton();
                 break;
             case Phase.Verifying:
