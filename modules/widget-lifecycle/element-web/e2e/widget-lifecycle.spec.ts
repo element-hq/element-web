@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../../../playwright/element-web-test.ts";
 
@@ -63,8 +64,8 @@ test.describe("Widget Lifecycle", () => {
             },
         });
 
-        test("auto-approves preload and identity", async ({ page, user, homeserver, toasts }, testInfo) => {
-            toasts.rejectToastIfExists("Verify this device");
+        test("auto-approves preload and identity", async ({ page, user, homeserver }, testInfo) => {
+            rejectToastIfExists(page, "Verify this device");
 
             // A bot creates a room with the widget pinned to the top panel, then invites the test user.
             // Because the widget was added by a different user (the bot), Element would normally show a
@@ -121,8 +122,8 @@ test.describe("Widget Lifecycle", () => {
             ).toBeVisible();
         });
 
-        test("prompts for capabilities not in the allowlist", async ({ page, user, homeserver, toasts }, testInfo) => {
-            toasts.rejectToastIfExists("Verify this device");
+        test("prompts for capabilities not in the allowlist", async ({ page, user, homeserver }, testInfo) => {
+            rejectToastIfExists(page, "Verify this device");
 
             const bot = await homeserver.registerUser(`bot_${testInfo.testId}`, "password", "Bot");
             const { room_id: roomId } = await homeserver.csApi.request<{ room_id: string }>(
@@ -184,9 +185,8 @@ test.describe("Widget Lifecycle", () => {
             page,
             user,
             homeserver,
-            toasts,
         }, testInfo) => {
-            toasts.rejectToastIfExists("Verify this device");
+            rejectToastIfExists(page, "Verify this device");
 
             const bot = await homeserver.registerUser(`bot_${testInfo.testId}`, "password", "Bot");
             const { room_id: roomId } = await homeserver.csApi.request<{ room_id: string }>(
