@@ -2126,7 +2126,8 @@
         "upgrade_error_title": "Error upgrading room",
         "upgrade_warning_bar": "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.",
         "upgrade_warning_bar_admins": "Only room administrators will see this warning",
-        "upgrade_warning_bar_unstable": "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.",
+        "upgrade_warning_bar_unstable": "This room is running room version <roomVersion />, which this homeserver has marked as <kind />.",
+        "upgrade_warning_bar_deprecated": "This room is running an old room version, <roomVersion />.",
         "upgrade_warning_bar_upgraded": "This room has already been upgraded.",
         "upload": {
             "uploading_multiple_file": {

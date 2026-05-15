@@ -14,9 +14,11 @@ import { _t } from "../../../languageHandler";
 import RoomUpgradeDialog from "../dialogs/RoomUpgradeDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import type { IRecommendedVersion } from "matrix-js-sdk/src/matrix.ts";
 
 interface IProps {
     room: Room;
+    recommendation?: IRecommendedVersion;
 }
 
 interface IState {
@@ -100,7 +102,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                             {},
                             {
                                 roomVersion: () => <code>{this.props.room.getVersion()}</code>,
-                                i: (sub) => <i>{sub}</i>,
+                                kind: () => <i>{this.props.recommendation?.deprecated ? "end-of-life" : "unstable"}</i>,
                             },
                         )}
                     </div>
