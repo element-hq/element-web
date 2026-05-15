@@ -43,7 +43,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -91,7 +91,16 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            narrowUploadButtons(roomUploadVM),
+            roomUploadVM
+                .getSnapshot()
+                .options.map(({ type, icon: Icon, label }) => (
+                    <IconizedContextMenuOption
+                        onClick={() => roomUploadVM.onUploadOptionSelected(type)}
+                        icon={Icon && <Icon />}
+                        label={label}
+                        key={type}
+                    />
+                )),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -279,17 +288,4 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
         </CollapsibleButton>
     );
 }
-
-function narrowUploadButtons(vm: RoomUploadViewModel): JSX.Element[] {
-    const snapshot = vm.getSnapshot();
-    return snapshot.options.map(({ type, icon: Icon, label }) => (
-        <IconizedContextMenuOption
-            onClick={() => vm.onUploadOptionSelected(type)}
-            icon={Icon && <Icon />}
-            label={label}
-            key={type}
-        />
-    ));
-}
-
 export default MessageComposerButtons;
