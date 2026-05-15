@@ -1969,7 +1969,7 @@
         "upgrade_error_title": "Oda güncellenirken hata",
         "upgrade_warning_bar": "Bu odayı güncellerseniz bu oda kapanacak ve yerine aynı adlı, güncellenmiş bir oda geçecek.",
         "upgrade_warning_bar_admins": "Bu uyarıyı sadece oda yöneticileri görür",
-        "upgrade_warning_bar_unstable": "Bu oda, <roomVersion /> oda sürümünü kullanmaktadır ve ana sunucunuz tarafından <i>tutarsız</i> olarak işaretlenmiştir.",
+        "upgrade_warning_bar_nonstable": "Bu oda, <roomVersion /> oda sürümünü kullanmaktadır ve ana sunucunuz tarafından <kind /> olarak işaretlenmiştir.",
         "upgrade_warning_bar_upgraded": "Bu oda daha önceden yükseltilmiş.",
         "upload": {
             "uploading_multiple_file": {

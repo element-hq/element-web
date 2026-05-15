@@ -1767,7 +1767,7 @@
         "upgrade_error_title": "升級聊天室時遇到錯誤",
         "upgrade_warning_bar": "升級此聊天室將會關閉聊天室目前的執行個體，並建立一個同名的升級版。",
         "upgrade_warning_bar_admins": "僅聊天室管理員會看到此警告",
-        "upgrade_warning_bar_unstable": "此聊天室正在執行聊天室版本 <roomVersion />，此家伺服器已標記為<i>不穩定</i>。",
+        "upgrade_warning_bar_nonstable": "此聊天室正在執行聊天室版本 <roomVersion />，此家伺服器已標記為<kind />。",
         "upgrade_warning_bar_upgraded": "此聊天室已升級。",
         "upload": {
             "uploading_multiple_file": {

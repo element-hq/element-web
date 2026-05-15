@@ -2098,7 +2098,7 @@
         "upgrade_error_title": "Помилка поліпшення кімнати",
         "upgrade_warning_bar": "Поліпшення цієї кімнати припинить роботу наявного її примірника й створить поліпшену кімнату з такою ж назвою.",
         "upgrade_warning_bar_admins": "Лише адміністратори кімнати бачать це попередження",
-        "upgrade_warning_bar_unstable": "Ця кімната — версії <roomVersion />, позначена цим домашнім сервером <i>нестабільною</i>.",
+        "upgrade_warning_bar_nonstable": "Ця кімната — версії <roomVersion />, позначена цим домашнім сервером <kind />.",
         "upgrade_warning_bar_upgraded": "Ця кімната вже поліпшена.",
         "upload": {
             "uploading_multiple_file": {

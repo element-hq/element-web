@@ -2130,7 +2130,7 @@
         "upgrade_error_title": "Chyba pri aktualizácii miestnosti",
         "upgrade_warning_bar": "Aktualizáciou tejto miestnosti sa vypne aktuálna inštancia miestnosti a vytvorí sa aktualizovaná miestnosť s rovnakým názvom.",
         "upgrade_warning_bar_admins": "Toto upozornenie sa zobrazuje len správcom miestnosti",
-        "upgrade_warning_bar_unstable": "Táto miestnosť používa verziu miestnosti <roomVersion />, ktorú tento domovský server označil ako <i>nestabilnú</i>.",
+        "upgrade_warning_bar_nonstable": "Táto miestnosť používa verziu miestnosti <roomVersion />, ktorú tento domovský server označil ako <kind />.",
         "upgrade_warning_bar_upgraded": "Táto miestnosť už bola aktualizovaná.",
         "upload": {
             "uploading_multiple_file": {

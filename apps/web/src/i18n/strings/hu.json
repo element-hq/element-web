@@ -2129,7 +2129,7 @@
         "upgrade_error_title": "Hiba a szoba verziófrissítésekor",
         "upgrade_warning_bar": "A szoba fejlesztése bezárja ezt a szobát és új, frissített verzióval ugyanezen a néven létrehoz egy újat.",
         "upgrade_warning_bar_admins": "Csak a szoba adminisztrátorai látják ezt a figyelmeztetést",
-        "upgrade_warning_bar_unstable": "A szoba verziója: <roomVersion />, amelyet a Matrix-kiszolgáló <i>instabilnak</i> tekint.",
+        "upgrade_warning_bar_nonstable": "A szoba verziója: <roomVersion />, amelyet a Matrix-kiszolgáló <kind /> tekint.",
         "upgrade_warning_bar_upgraded": "Ez a szoba már fejlesztve van.",
         "upload": {
             "uploading_multiple_file": {

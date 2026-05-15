@@ -2113,7 +2113,7 @@
         "upgrade_error_title": "Ошибка обновления комнаты",
         "upgrade_warning_bar": "Обновление этой комнаты отключит текущий экземпляр комнаты и создаст обновлённую комнату с тем же названием.",
         "upgrade_warning_bar_admins": "Только администраторы комнат увидят это предупреждение",
-        "upgrade_warning_bar_unstable": "Версия этой комнаты — <roomVersion />, этот домашний сервер считает её <i>нестабильной</i>.",
+        "upgrade_warning_bar_nonstable": "Версия этой комнаты — <roomVersion />, этот домашний сервер считает её <kind />.",
         "upgrade_warning_bar_upgraded": "Эта комната уже была обновлена.",
         "upload": {
             "uploading_multiple_file": {

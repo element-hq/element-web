@@ -1634,7 +1634,7 @@
         "upgrade_error_title": "ルームをアップグレードする際にエラーが発生しました",
         "upgrade_warning_bar": "このルームをアップグレードすると、現在のルームの使用を終了し、アップグレードしたルームを同じ名前で作成します。",
         "upgrade_warning_bar_admins": "この警告はルームの管理者にのみ表示されます",
-        "upgrade_warning_bar_unstable": "このルームはホームサーバーが<i>不安定</i>と判断したルームバージョン<roomVersion />で動作しています。",
+        "upgrade_warning_bar_nonstable": "このルームはホームサーバーが<kind />と判断したルームバージョン<roomVersion />で動作しています。",
         "upgrade_warning_bar_upgraded": "このルームは既にアップグレードされています。",
         "upload": {
             "uploading_multiple_file": {

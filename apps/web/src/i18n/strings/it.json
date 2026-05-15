@@ -1800,7 +1800,7 @@
         "upgrade_error_title": "Errore di aggiornamento stanza",
         "upgrade_warning_bar": "Aggiornare questa stanza spegnerà l'istanza attuale della stanza e ne creerà una aggiornata con lo stesso nome.",
         "upgrade_warning_bar_admins": "Solo gli amministratori della stanza vedranno questo avviso",
-        "upgrade_warning_bar_unstable": "La versione di questa stanza è <roomVersion />, che questo homeserver ha segnalato come <i>non stabile</i>.",
+        "upgrade_warning_bar_nonstable": "La versione di questa stanza è <roomVersion />, che questo homeserver ha segnalato come <kind />.",
         "upgrade_warning_bar_upgraded": "Questa stanza è già stata aggiornata.",
         "upload": {
             "uploading_multiple_file": {

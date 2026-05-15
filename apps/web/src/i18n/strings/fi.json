@@ -1733,7 +1733,7 @@
         "upgrade_error_title": "Virhe päivitettäessä huonetta",
         "upgrade_warning_bar": "Huoneen päivittäminen sulkee huoneen nykyisen instanssin ja luo päivitetyn huoneen samalla nimellä.",
         "upgrade_warning_bar_admins": "Vain huoneen ylläpitäjät näkevät tämän varoituksen",
-        "upgrade_warning_bar_unstable": "Tämä huone pyörii versiolla <roomVersion />, jonka tämä kotipalvelin on merkannut <i>epävakaaksi</i>.",
+        "upgrade_warning_bar_nonstable": "Tämä huone pyörii versiolla <roomVersion />, jonka tämä kotipalvelin on merkannut <kind />.",
         "upgrade_warning_bar_upgraded": "Tämä huone on jo päivitetty.",
         "upload": {
             "uploading_multiple_file": {

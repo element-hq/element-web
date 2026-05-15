@@ -1294,7 +1294,7 @@
         "upgrade_error_title": "Eraris ĝisdatigo de la ĉambro",
         "upgrade_warning_bar": "Gradaltigo de la ĉambro forigos la nunan ĉambron kaj kreos novan kun la sama nomo.",
         "upgrade_warning_bar_admins": "Nur administrantoj de ĉambro vidos ĉi tiun averton",
-        "upgrade_warning_bar_unstable": "Ĉi tiu ĉambro uzas ĉambran version <roomVersion />, kiun la hejmservilo markis kiel <i>nestabilan</i>.",
+        "upgrade_warning_bar_nonstable": "Ĉi tiu ĉambro uzas ĉambran version <roomVersion />, kiun la hejmservilo markis kiel <kind />.",
         "upgrade_warning_bar_upgraded": "Ĉi tiu ĉambro jam gradaltiĝis.",
         "upload": {
             "uploading_multiple_file": {

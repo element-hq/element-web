@@ -1785,7 +1785,7 @@
         "upgrade_error_title": "Hadisoana ny fanavaozana ny efitrano",
         "upgrade_warning_bar": "Ny fanavaozana ity efitrano ity dia hanakatona ny efitrano misy ankehitriny ary hamorona efitrano nohavaozina miaraka amin'ny anarana mitovy.",
         "upgrade_warning_bar_admins": "Ny mpitantana ny efitrano ihany no hahita ity fampitandremana ity",
-        "upgrade_warning_bar_unstable": "Ity efitrano ity dia dikan-trano mandeha<roomVersion /> , izay namarihan'ity homeserver ity ho<i> miovaova</i> .",
+        "upgrade_warning_bar_nonstable": "Ity efitrano ity dia dikan-trano mandeha<roomVersion /> , izay namarihan'ity homeserver ity ho <kind /> .",
         "upgrade_warning_bar_upgraded": "Efa nohavaozina ity efitrano ity.",
         "upload": {
             "uploading_multiple_file": {

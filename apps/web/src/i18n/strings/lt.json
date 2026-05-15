@@ -1159,7 +1159,7 @@
         "upgrade_error_title": "Klaida atnaujinant kambarį",
         "upgrade_warning_bar": "Atnaujinimas išjungs dabartinę kambario instanciją ir sukurs atnaujintą kambarį tuo pačiu pavadinimu.",
         "upgrade_warning_bar_admins": "Šį įspėjimą matys tik kambario administratoriai",
-        "upgrade_warning_bar_unstable": "Šiame kambaryje naudojama kambario versija <roomVersion />, kurią šis namų serveris pažymėjo kaip <i>nestabilią</i>.",
+        "upgrade_warning_bar_nonstable": "Šiame kambaryje naudojama kambario versija <roomVersion />, kurią šis namų serveris pažymėjo kaip <kind />.",
         "upgrade_warning_bar_upgraded": "Šis kambarys jau yra atnaujintas.",
         "upload": {
             "uploading_multiple_file": {

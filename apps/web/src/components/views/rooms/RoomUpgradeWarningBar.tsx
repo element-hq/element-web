@@ -98,7 +98,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                 <div className="mx_RoomUpgradeWarningBar_wrapped">
                     <div className="mx_RoomUpgradeWarningBar_header">
                         {_t(
-                            "room|upgrade_warning_bar_unstable",
+                            "room|upgrade_warning_bar_nonstable",
                             {},
                             {
                                 roomVersion: () => <code>{this.props.room.getVersion()}</code>,

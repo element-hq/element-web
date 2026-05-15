@@ -2160,7 +2160,7 @@
         "upgrade_error_title": "Błąd podczas aktualizacji pokoju",
         "upgrade_warning_bar": "Ulepszenie tego pokoju zamknie bieżącą instancję pokoju i utworzy ulepszony pokój z tą samą nazwą.",
         "upgrade_warning_bar_admins": "Tylko administratorzy pokojów widzą to ostrzeżenie",
-        "upgrade_warning_bar_unstable": "Ten pokój działa na wersji <roomVersion />, którą serwer domowy oznaczył jako <i>niestabilną</i>.",
+        "upgrade_warning_bar_nonstable": "Ten pokój działa na wersji <roomVersion />, którą serwer domowy oznaczył jako <kind />.",
         "upgrade_warning_bar_upgraded": "Ten pokój został już ulepszony.",
         "upload": {
             "uploading_multiple_file": {

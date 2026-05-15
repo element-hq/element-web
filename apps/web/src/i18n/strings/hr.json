@@ -2129,7 +2129,7 @@
         "upgrade_error_title": "Pogreška pri nadogradnji sobe",
         "upgrade_warning_bar": "Nadogradnjom ove sobe zatvorit će se trenutačna instanca sobe i izraditi nova, nadograđena soba istog naziva.",
         "upgrade_warning_bar_admins": "Samo će administratori sobe vidjeti ovo upozorenje",
-        "upgrade_warning_bar_unstable": "Ova soba radi na inačici <roomVersion />, koju je ovaj matični poslužitelj označio kao <i>nestabilnu</i>.",
+        "upgrade_warning_bar_nonstable": "Ova soba radi na inačici <roomVersion />, koju je ovaj matični poslužitelj označio kao <kind />.",
         "upgrade_warning_bar_upgraded": "Ova je soba već nadograđena.",
         "upload": {
             "uploading_multiple_file": {

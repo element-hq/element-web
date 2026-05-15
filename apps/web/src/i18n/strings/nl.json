@@ -1516,7 +1516,7 @@
         "upgrade_error_title": "Upgraden van kamer mislukt",
         "upgrade_warning_bar": "Upgraden zal de huidige versie van deze kamer sluiten, en onder dezelfde naam een geüpgraded versie starten.",
         "upgrade_warning_bar_admins": "Enkel kamerbeheerders zullen deze waarschuwing zien",
-        "upgrade_warning_bar_unstable": "Deze kamer draait op kamerversie <roomVersion />, die door deze homeserver als <i>onstabiel</i> is gemarkeerd.",
+        "upgrade_warning_bar_nonstable": "Deze kamer draait op kamerversie <roomVersion />, die door deze homeserver als <kind /> is gemarkeerd.",
         "upgrade_warning_bar_upgraded": "Deze kamer is reeds geüpgraded.",
         "upload": {
             "uploading_multiple_file": {

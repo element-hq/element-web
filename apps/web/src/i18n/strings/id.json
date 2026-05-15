@@ -2091,7 +2091,7 @@
         "upgrade_error_title": "Gagal meningkatkan ruangan",
         "upgrade_warning_bar": "Meningkatkan ruangan ini akan mematikan instansi ruangan saat ini dan membuat ruangan yang ditingkatkan dengan nama yang sama.",
         "upgrade_warning_bar_admins": "Hanya administrator ruangan yang akan melihat peringatan ini",
-        "upgrade_warning_bar_unstable": "Ruangan ini berjalan dengan versi ruangan <roomVersion />, yang homeserver ini menandainya sebagai <i>tidak stabil</i>.",
+        "upgrade_warning_bar_nonstable": "Ruangan ini berjalan dengan versi ruangan <roomVersion />, yang homeserver ini menandainya sebagai <kind />.",
         "upgrade_warning_bar_upgraded": "Ruangan ini telah ditingkatkan.",
         "upload": {
             "uploading_multiple_file": {

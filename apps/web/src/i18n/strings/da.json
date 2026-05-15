@@ -1835,7 +1835,7 @@
         "upgrade_error_title": "Fejl under opgradering af rum",
         "upgrade_warning_bar": "Opgradering af dette rum vil lukke den nuværende instans af rummet ned og oprette et opgraderet rum med samme navn.",
         "upgrade_warning_bar_admins": "Kun rummets administratorer vil se denne advarsel.",
-        "upgrade_warning_bar_unstable": "Dette rum kører version <roomVersion />, som denne hjemmeserver har markeret som <i>ustabil</i>.",
+        "upgrade_warning_bar_nonstable": "Dette rum kører version <roomVersion />, som denne hjemmeserver har markeret som <kind />.",
         "upgrade_warning_bar_upgraded": "Dette rum er allerede blevet opgraderet.",
         "upload": {
             "uploading_multiple_file": {

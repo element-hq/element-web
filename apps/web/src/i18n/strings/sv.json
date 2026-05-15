@@ -2025,7 +2025,7 @@
         "upgrade_error_title": "Fel vid uppgradering av rum",
         "upgrade_warning_bar": "Att uppgradera det här rummet kommer att stänga den nuvarande instansen av rummet och skapa ett uppgraderat rum med samma namn.",
         "upgrade_warning_bar_admins": "Endast rumsadministratörer kommer att se denna varning",
-        "upgrade_warning_bar_unstable": "Det här rummet kör rumsversion <roomVersion />, vilket den här hemservern har markerat som <i>instabil</i>.",
+        "upgrade_warning_bar_nonstable": "Det här rummet kör rumsversion <roomVersion />, vilket den här hemservern har markerat som <kind />.",
         "upgrade_warning_bar_upgraded": "Det här rummet har redan uppgraderats.",
         "upload": {
             "uploading_multiple_file": {

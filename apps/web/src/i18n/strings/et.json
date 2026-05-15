@@ -2112,7 +2112,7 @@
         "upgrade_error_title": "Viga jututoa uuendamisel",
         "upgrade_warning_bar": "Selle jututoa versiooni uuendamine sulgeb tema praeguse instantsi ja loob sama nimega uuendatud jututoa.",
         "upgrade_warning_bar_admins": "Vaid administraatorid näevad seda hoiatust",
-        "upgrade_warning_bar_unstable": "Selle jututoa versioon on <roomVersion /> ning see koduserver on tema märkinud <i>ebastabiilseks</i>.",
+        "upgrade_warning_bar_nonstable": "Selle jututoa versioon on <roomVersion /> ning see koduserver on tema märkinud <kind />.",
         "upgrade_warning_bar_upgraded": "See jututuba on juba uuendatud.",
         "upload": {
             "uploading_multiple_file": {

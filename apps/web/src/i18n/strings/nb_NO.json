@@ -2102,7 +2102,7 @@
         "upgrade_error_title": "Feil ved oppgradering av rom",
         "upgrade_warning_bar": "Oppgradering av dette rommet vil stenge den nåværende forekomsten av rommet og opprette et oppgradert rom med samme navn.",
         "upgrade_warning_bar_admins": "Bare romadministratorer vil se denne advarselen",
-        "upgrade_warning_bar_unstable": "Dette rommet kjører romversjon<roomVersion /> , som denne hjemmetjeneren har merket som<i> ustabil</i> .",
+        "upgrade_warning_bar_nonstable": "Dette rommet kjører romversjon<roomVersion /> , som denne hjemmetjeneren har merket som<kind /> .",
         "upgrade_warning_bar_upgraded": "Dette rommet har allerede blitt oppgradert.",
         "upload": {
             "uploading_multiple_file": {

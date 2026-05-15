@@ -2102,7 +2102,7 @@
         "upgrade_error_title": "Fehler bei Aktualisierung der Chat-Version",
         "upgrade_warning_bar": "Um diesen Chat zu aktualisieren, muss der aktuelle Chat geschlossen werden und ein neuer Chat mit dem gleichen Namen angelegt werden.",
         "upgrade_warning_bar_admins": "Nur Chat Administratoren werden diese Nachricht sehen",
-        "upgrade_warning_bar_unstable": "Dieser Chat läuft mit der Chat-Version <roomVersion />, welche dieser Homeserver als <i>instabil</i> markiert hat.",
+        "upgrade_warning_bar_nonstable": "Dieser Chat läuft mit der Chat-Version <roomVersion />, welche dieser Homeserver als <kind /> markiert hat.",
         "upgrade_warning_bar_upgraded": "Dieser Chat wurde bereits aktualisiert.",
         "upload": {
             "uploading_multiple_file": {

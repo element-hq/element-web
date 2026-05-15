@@ -2114,7 +2114,7 @@
         "upgrade_error_title": "Gwall wrth uwchraddio'r ystafell",
         "upgrade_warning_bar": "Bydd uwchraddio'r ystafell hon yn cau enghraifft bresennol yr ystafell ac yn creu ystafell wedi'i huwchraddio gyda'r un enw.",
         "upgrade_warning_bar_admins": "Dim ond gweinyddwyr ystafell fydd yn gweld y rhybudd hwn",
-        "upgrade_warning_bar_unstable": "Mae'r ystafell hon yn fersiwn ystafell redeg<roomVersion /> , y mae'r gweinydd cartref hwn wedi'i nodi'n <i>ansefydlog</i>.",
+        "upgrade_warning_bar_nonstable": "Mae'r ystafell hon yn fersiwn ystafell redeg<roomVersion /> , y mae'r gweinydd cartref hwn wedi'i nodi'n <kind />.",
         "upgrade_warning_bar_upgraded": "Mae'r ystafell hon eisoes wedi'i huwchraddio.",
         "upload": {
             "uploading_multiple_file": {

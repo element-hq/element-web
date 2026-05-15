@@ -1970,7 +1970,7 @@
         "upgrade_error_title": "Erro ao atualizar o quarto",
         "upgrade_warning_bar": "Ao atualizar este quarto, encerra a instância atual do quarto e cria um quarto atualizado com o mesmo nome.",
         "upgrade_warning_bar_admins": "Apenas os administradores da sala verão este aviso",
-        "upgrade_warning_bar_unstable": "Esta sala está executando a versão da sala<roomVersion /> , que este servidor doméstico marcou como<i> instável</i> .",
+        "upgrade_warning_bar_nonstable": "Esta sala está executando a versão da sala<roomVersion /> , que este servidor doméstico marcou como <kind/> .",
         "upgrade_warning_bar_upgraded": "Este quarto já foi atualizado.",
         "upload": {
             "uploading_multiple_file": {
