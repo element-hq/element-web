@@ -14,17 +14,17 @@ import { RoomUploadContext, type RoomUploadViewModel } from "../../../../src/vie
 
 function FileDropTargetWrapped({
     element,
-    mayUpload = false,
+    mayDragAndDropFile = false,
     onFileDrop,
 }: {
     element: HTMLDivElement;
-    mayUpload?: boolean;
+    mayDragAndDropFile?: boolean;
     onFileDrop: RoomUploadViewModel["initiateViaDataTransfer"];
 }) {
-    const mockVm = useMockedViewModel<{ mayUpload: boolean }, Pick<RoomUploadViewModel, "initiateViaDataTransfer">>(
-        { mayUpload },
-        { initiateViaDataTransfer: onFileDrop },
-    );
+    const mockVm = useMockedViewModel<
+        { mayDragAndDropFile: boolean },
+        Pick<RoomUploadViewModel, "initiateViaDataTransfer">
+    >({ mayDragAndDropFile }, { initiateViaDataTransfer: onFileDrop });
     return (
         <RoomUploadContext.Provider value={mockVm as RoomUploadViewModel}>
             <FileDropTarget parent={element} />
@@ -37,14 +37,18 @@ describe("FileDropTarget", () => {
         const element = document.createElement("div");
         const onFileDrop = jest.fn();
 
-        const { asFragment } = render(<FileDropTargetWrapped element={element} mayUpload onFileDrop={onFileDrop} />);
+        const { asFragment } = render(
+            <FileDropTargetWrapped element={element} mayDragAndDropFile onFileDrop={onFileDrop} />,
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render drop file prompt on mouse over with file if permissions allow", () => {
         const element = document.createElement("div");
         const onFileDrop = jest.fn();
-        const { asFragment } = render(<FileDropTargetWrapped element={element} mayUpload onFileDrop={onFileDrop} />);
+        const { asFragment } = render(
+            <FileDropTargetWrapped element={element} mayDragAndDropFile onFileDrop={onFileDrop} />,
+        );
         fireEvent.dragEnter(element, {
             dataTransfer: {
                 types: ["Files"],
