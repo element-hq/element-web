@@ -24,6 +24,7 @@ import type {
     TimelineViewActions,
     TimelineItem,
     NavigationAnchor,
+    ImmediateScroll,
 } from "@element-hq/web-shared-components";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import shouldHideEvent from "../../../shouldHideEvent";
@@ -509,7 +510,7 @@ export class RoomTimelineViewModel
 
     // ── Overlay button actions ───────────────────────────────────────
 
-    public onJumpToReadMarker = (): void => {
+    public onJumpToReadMarker = (scrollNow: ImmediateScroll): void => {
         const items = this.snapshot.current.items;
         const rmIdx = items.findIndex((item) => item.kind === "read-marker");
         logger.debug(
@@ -520,18 +521,15 @@ export class RoomTimelineViewModel
             `canJumpToReadMarker=${this.snapshot.current.canJumpToReadMarker}`,
         );
         if (rmIdx !== -1) {
+            // Marker is in the loaded window — scroll to it imperatively. No data
+            // update is happening, so scrollIntoViewOnChange wouldn't fire reliably
+            // (its downstream scrollIntoView is gated on the next listRefresh).
             const readMarkerKey = items[rmIdx].key;
-            logger.debug(`[TimelineVM] onJumpToReadMarker — marker in window at index ${rmIdx}, setting pendingAnchor key=${readMarkerKey}`);
-            // Spread items into a new array to force a Virtuoso listRefresh.
-            // scrollIntoViewOnChange only fires when `data` gets a new reference;
-            // changing pendingAnchor alone (no data change) silently no-ops — same
-            // root cause as the onJumpToLive fix.
-            this.snapshot.merge({
-                items: [...items],
-                pendingAnchor: { targetKey: readMarkerKey, align: "center" },
-            });
+            logger.debug(`[TimelineVM] onJumpToReadMarker — marker in window at index ${rmIdx}, scrolling now key=${readMarkerKey}`);
+            scrollNow({ targetKey: readMarkerKey, align: "center" });
         } else if (this.timelineWindow.canPaginate(Direction.Backward)) {
             // Marker is not in the current window — reload at the marker event.
+            // pendingAnchor gets set inside load() and drives the post-load scroll.
             if (this.readMarkerEventId) {
                 logger.debug(`[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.readMarkerEventId}`);
                 this.load({ kind: "permalink", eventId: this.readMarkerEventId });
@@ -559,29 +557,22 @@ export class RoomTimelineViewModel
         this.snapshot.merge({ items: newItems, canJumpToReadMarker: false });
     };
 
-    public onJumpToLive = (): void => {
+    public onJumpToLive = (scrollNow: ImmediateScroll): void => {
         logger.debug(`[TimelineVM] onJumpToLive — atLiveEnd=${this.snapshot.current.atLiveEnd}`);
         this.unreadMessageCount = 0;
         if (!this.snapshot.current.atLiveEnd) {
-            // Need to reload the timeline window at the live end.
+            // Window doesn't reach the live end yet — reload the timeline at
+            // live. pendingAnchor gets set inside load() and drives the
+            // post-load scroll via scrollIntoViewOnChange.
             this.load({ kind: "live" });
         } else {
-            // Already have the latest events — just scroll to the last item.
-            // IMPORTANT: we spread items into a new array even though the content is
-            // unchanged. Virtuoso fires scrollIntoViewOnChange only on a "listRefresh",
-            // which requires a new `data` array reference. Without this, setting
-            // pendingAnchor alone produces no data change and scrollIntoViewOnChange
-            // never fires, so the scroll silently no-ops.
+            // Already have the latest events — scroll to the last item now.
             const items = this.snapshot.current.items;
             if (items.length > 0) {
                 const targetKey = items[items.length - 1].key;
-                logger.debug(`[TimelineVM] onJumpToLive — setting pendingAnchor targetKey=${targetKey}, forcing listRefresh`);
-                this.snapshot.merge({
-                    items: [...items],
-                    pendingAnchor: { targetKey, align: "end" },
-                    numUnreadMessages: 0,
-                    hasHighlights: false,
-                });
+                logger.debug(`[TimelineVM] onJumpToLive — scrolling now to targetKey=${targetKey}`);
+                this.snapshot.merge({ numUnreadMessages: 0, hasHighlights: false });
+                scrollNow({ targetKey, align: "end" });
             } else {
                 this.snapshot.merge({ numUnreadMessages: 0, hasHighlights: false });
             }

@@ -16,4 +16,5 @@ export type {
     NavigationAnchor,
     AnchorAlign,
     PaginationState,
+    ImmediateScroll,
 } from "./types";

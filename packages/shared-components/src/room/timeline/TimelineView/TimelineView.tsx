@@ -9,7 +9,7 @@ import React, { useCallback, useEffect, useMemo, useRef, type JSX, type ReactNod
 import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { TimelineItem, TimelineViewProps } from "./types";
+import type { ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
 import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
 
 
@@ -162,6 +162,18 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         }
     }, [vm]);
 
+    // Imperative scroll capability handed to VM actions that may resolve to an
+    // in-window scroll (jump-to-live when already at live end, jump-to-read-marker
+    // when marker is in the loaded window). Reads from snapshotRef so the lookup
+    // always uses the current items array, not a stale closure.
+    const scrollNow = useCallback<ImmediateScroll>((anchor) => {
+        const arrayIndex = snapshotRef.current.items.findIndex((i) => i.key === anchor.targetKey);
+        if (arrayIndex === -1) return;
+        isAnchorScrollInProgressRef.current = true;
+        virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });
+        requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
+    }, []);
+
     // Track the visible range so the VM can persist the scroll position.
     const onRangeChanged = useCallback(
         (range: { startIndex: number; endIndex: number }) => {
@@ -225,7 +237,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 skipAnimationFrameInResizeObserver={true}
                 // increaseViewportBy={increaseViewportBy}
             />
-            <TimelineOverlayButtons snapshot={snapshot} vm={vm} />
+            <TimelineOverlayButtons snapshot={snapshot} vm={vm} scrollNow={scrollNow} />
         </div>
     );
 }

@@ -67,6 +67,20 @@ export interface NavigationAnchor {
     highlight?: boolean;
 }
 
+/**
+ * An imperative scroll capability provided by the View to ViewModel actions.
+ *
+ * The View closes over its `VirtuosoHandle` ref to scroll to a given anchor
+ * immediately, without depending on a subsequent data update. The ViewModel
+ * invokes it only when the target is already in the loaded window — otherwise
+ * the VM falls back to setting `pendingAnchor` and letting a load() drive the
+ * scroll once new data arrives.
+ *
+ * Must be invoked synchronously inside the action; the View's closure captures
+ * the current items snapshot to resolve the target's array index.
+ */
+export type ImmediateScroll = (anchor: NavigationAnchor) => void;
+
 // ─── Loading & error ───────────────────────────────────────────────
 
 export type PaginationState = "idle" | "loading" | "error";
@@ -156,18 +170,27 @@ export interface TimelineViewActions {
     /** Called by Virtuoso's atBottomStateChange; VM uses this to decide whether to clear the saved scroll position on dispose. */
     onAtBottomStateChange(atBottom: boolean): void;
 
-    /** Scroll to the read-marker item (jump to unread messages). */
-    onJumpToReadMarker(): void;
+    /**
+     * Scroll to the read-marker item (jump to unread messages).
+     *
+     * `scrollNow` is invoked synchronously when the marker is already in the
+     * loaded window (no data update needed). Otherwise the VM triggers a load
+     * at the marker and the scroll happens via `pendingAnchor` after the load.
+     */
+    onJumpToReadMarker(scrollNow: ImmediateScroll): void;
 
     /** Mark all currently-visible messages as read, clearing the read marker. */
     onMarkAllAsRead(): void;
 
     /**
      * Navigate to the live end of the timeline.
-     * If forward pagination is possible, reloads the timeline at the live end;
-     * otherwise scrolls to the last loaded item.
+     *
+     * `scrollNow` is invoked synchronously when the window already reaches
+     * the live end (no data update needed). Otherwise the VM reloads the
+     * timeline window at the live end and the scroll happens via
+     * `pendingAnchor` after the load.
      */
-    onJumpToLive(): void;
+    onJumpToLive(scrollNow: ImmediateScroll): void;
 }
 
 export type TimelineViewModel = ViewModel<TimelineViewSnapshot, TimelineViewActions>;

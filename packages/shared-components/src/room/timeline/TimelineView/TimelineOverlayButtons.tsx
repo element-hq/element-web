@@ -5,18 +5,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useCallback, type JSX } from "react";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 import { ChevronUpIcon, ChevronDownIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useI18n } from "../../../core/i18n/i18nContext";
-import type { TimelineViewActions, TimelineViewSnapshot } from "./types";
+import type { ImmediateScroll, TimelineViewActions, TimelineViewSnapshot } from "./types";
 import styles from "./TimelineOverlayButtons.module.css";
 
 interface TimelineOverlayButtonsProps {
     snapshot: TimelineViewSnapshot;
     vm: TimelineViewActions;
+    /**
+     * Imperative scroll-to-anchor capability provided by the parent View.
+     * The VM invokes it synchronously when the target is already in the
+     * loaded window — otherwise the VM falls back to a load() + pendingAnchor
+     * flow and this callback is not used.
+     */
+    scrollNow: ImmediateScroll;
 }
 
 /**
@@ -30,11 +37,14 @@ interface TimelineOverlayButtonsProps {
  *   live bottom (`!snapshot.atLiveEnd || !snapshot.isAtBottom`). Shows an
  *   optional unread badge and highlight colouring.
  */
-export function TimelineOverlayButtons({ snapshot, vm }: TimelineOverlayButtonsProps): JSX.Element {
+export function TimelineOverlayButtons({ snapshot, vm, scrollNow }: TimelineOverlayButtonsProps): JSX.Element {
     const { translate: _t } = useI18n();
 
     const readMarkerDirection = snapshot.canJumpToReadMarker;
     const showJumpToBottom = !snapshot.atLiveEnd || !snapshot.isAtBottom;
+
+    const onJumpToReadMarkerClick = useCallback(() => vm.onJumpToReadMarker(scrollNow), [vm, scrollNow]);
+    const onJumpToLiveClick = useCallback(() => vm.onJumpToLive(scrollNow), [vm, scrollNow]);
 
     return (
         <div className={styles.overlay} aria-hidden>
@@ -45,7 +55,7 @@ export function TimelineOverlayButtons({ snapshot, vm }: TimelineOverlayButtonsP
                         <button
                             className={styles.topUnreadBarScrollUp}
                             aria-label={_t("room|jump_read_marker")}
-                            onClick={vm.onJumpToReadMarker}
+                            onClick={onJumpToReadMarkerClick}
                             type="button"
                         >
                             <ChevronUpIcon />
@@ -71,7 +81,7 @@ export function TimelineOverlayButtons({ snapshot, vm }: TimelineOverlayButtonsP
                         <button
                             className={styles.belowUnreadBarScrollDown}
                             aria-label={_t("room|jump_read_marker")}
-                            onClick={vm.onJumpToReadMarker}
+                            onClick={onJumpToReadMarkerClick}
                             type="button"
                         >
                             <ChevronDownIcon />
@@ -97,7 +107,7 @@ export function TimelineOverlayButtons({ snapshot, vm }: TimelineOverlayButtonsP
                         <button
                             className={styles.jumpToBottomScrollDown}
                             aria-label={_t("room|jump_to_bottom_button")}
-                            onClick={vm.onJumpToLive}
+                            onClick={onJumpToLiveClick}
                             type="button"
                         >
                             <ChevronDownIcon />
