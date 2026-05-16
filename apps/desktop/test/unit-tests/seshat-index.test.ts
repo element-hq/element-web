@@ -13,6 +13,9 @@ import { TokenizerMode } from "../../src/seshat-config.js";
 import { initEventIndex } from "../../src/seshat-index.js";
 
 const eventStorePath = join(tmpdir(), "element-desktop-seshat-index-test");
+const passphrase = "fixture-value";
+
+class FakeReindexError extends Error {}
 
 describe("initEventIndex", () => {
     it("passes ngram config when opening a new index", async () => {
@@ -21,11 +24,8 @@ describe("initEventIndex", () => {
         const eventIndex = { kind: "index" };
         const Seshat = vi.fn().mockImplementation(() => eventIndex);
         const SeshatRecovery = vi.fn();
-        const fixtureValue = "fixture-value";
 
-        class FakeReindexError extends Error {}
-
-        const result = await initEventIndex(eventStorePath, fixtureValue, TokenizerMode.Ngram, {
+        const result = await initEventIndex(eventStorePath, passphrase, TokenizerMode.Ngram, {
             mkdir,
             deleteContents,
             createSeshat: Seshat,
@@ -35,7 +35,7 @@ describe("initEventIndex", () => {
 
         expect(mkdir).toHaveBeenCalledWith(eventStorePath, { recursive: true });
         expect(Seshat).toHaveBeenCalledWith(eventStorePath, {
-            passphrase: fixtureValue,
+            passphrase,
             tokenizerMode: TokenizerMode.Ngram,
             ngramMinSize: 2,
             ngramMaxSize: 4,
@@ -48,14 +48,11 @@ describe("initEventIndex", () => {
         const mkdir = vi.fn().mockResolvedValue(undefined);
         const deleteContents = vi.fn().mockResolvedValue(undefined);
         const reopenedIndex = { kind: "reopened-index" };
-        const fixtureValue = "fixture-value";
         const recoveryIndex = {
             getUserVersion: vi.fn().mockResolvedValue(1),
             shutdown: vi.fn().mockResolvedValue(undefined),
             reindex: vi.fn().mockResolvedValue(undefined),
         };
-
-        class FakeReindexError extends Error {}
 
         const Seshat = vi
             .fn()
@@ -65,7 +62,7 @@ describe("initEventIndex", () => {
             .mockImplementationOnce(() => reopenedIndex);
         const SeshatRecovery = vi.fn().mockImplementation(() => recoveryIndex);
 
-        const result = await initEventIndex(eventStorePath, fixtureValue, TokenizerMode.Language, {
+        const result = await initEventIndex(eventStorePath, passphrase, TokenizerMode.Language, {
             mkdir,
             deleteContents,
             createSeshat: Seshat,
@@ -74,25 +71,53 @@ describe("initEventIndex", () => {
         });
 
         expect(SeshatRecovery).toHaveBeenCalledWith(eventStorePath, {
-            passphrase: fixtureValue,
+            passphrase,
             tokenizerMode: TokenizerMode.Language,
         });
         expect(recoveryIndex.reindex).toHaveBeenCalledOnce();
         expect(Seshat).toHaveBeenNthCalledWith(2, eventStorePath, {
-            passphrase: fixtureValue,
+            passphrase,
             tokenizerMode: TokenizerMode.Language,
         });
         expect(deleteContents).not.toHaveBeenCalled();
         expect(result).toEqual({ eventIndex: reopenedIndex });
     });
 
+    it("marks the index as recreated when recovery deletes a version 0 database", async () => {
+        const mkdir = vi.fn().mockResolvedValue(undefined);
+        const deleteContents = vi.fn().mockResolvedValue(undefined);
+        const recreatedIndex = { kind: "recreated-index" };
+        const recoveryIndex = {
+            getUserVersion: vi.fn().mockResolvedValue(0),
+            shutdown: vi.fn().mockResolvedValue(undefined),
+            reindex: vi.fn().mockResolvedValue(undefined),
+        };
+        const Seshat = vi
+            .fn()
+            .mockImplementationOnce(() => {
+                throw new FakeReindexError("schema changed");
+            })
+            .mockImplementationOnce(() => recreatedIndex);
+        const SeshatRecovery = vi.fn().mockImplementation(() => recoveryIndex);
+
+        const result = await initEventIndex(eventStorePath, passphrase, TokenizerMode.Language, {
+            mkdir,
+            deleteContents,
+            createSeshat: Seshat,
+            createSeshatRecovery: SeshatRecovery,
+            isReindexError: (error) => error instanceof FakeReindexError,
+        });
+
+        expect(recoveryIndex.shutdown).toHaveBeenCalledOnce();
+        expect(recoveryIndex.reindex).not.toHaveBeenCalled();
+        expect(deleteContents).toHaveBeenCalledWith(eventStorePath);
+        expect(result).toEqual({ eventIndex: recreatedIndex, wasRecreated: true });
+    });
+
     it("propagates non-reindex errors without deleting the database", async () => {
         const mkdir = vi.fn().mockResolvedValue(undefined);
         const deleteContents = vi.fn().mockResolvedValue(undefined);
-        const fixtureValue = "fixture-value";
         const openError = new Error("filesystem lock");
-
-        class FakeReindexError extends Error {}
 
         const Seshat = vi.fn().mockImplementationOnce(() => {
             throw openError;
@@ -100,7 +125,7 @@ describe("initEventIndex", () => {
         const SeshatRecovery = vi.fn();
 
         await expect(
-            initEventIndex(eventStorePath, fixtureValue, TokenizerMode.Ngram, {
+            initEventIndex(eventStorePath, passphrase, TokenizerMode.Ngram, {
                 mkdir,
                 deleteContents,
                 createSeshat: Seshat,

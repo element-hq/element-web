@@ -47,6 +47,7 @@ export async function initEventIndex(
             if (userVersion === 0) {
                 await recoveryIndex.shutdown();
                 await deleteContents(eventStorePath);
+                return { eventIndex: createSeshat(eventStorePath, seshatConfig), wasRecreated: true };
             } else {
                 await recoveryIndex.reindex();
             }

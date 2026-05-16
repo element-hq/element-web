@@ -10,37 +10,19 @@ import { describe, expect, it } from "vitest";
 import { createSeshatConfig, TokenizerMode } from "../../src/seshat-config.js";
 
 describe("createSeshatConfig", () => {
-    it("returns ngram config when tokenizerMode is ngram", () => {
-        const config = createSeshatConfig(TokenizerMode.Ngram);
-
-        expect(config).toEqual({
-            tokenizerMode: TokenizerMode.Ngram,
-            ngramMinSize: 2,
-            ngramMaxSize: 4,
-        });
-    });
-
-    it("returns language config when tokenizerMode is language", () => {
-        const config = createSeshatConfig(TokenizerMode.Language);
-
-        expect(config).toEqual({
-            tokenizerMode: TokenizerMode.Language,
-        });
-    });
-
-    it("defaults to language config when tokenizerMode is undefined", () => {
-        const config = createSeshatConfig(undefined);
-
-        expect(config).toEqual({
-            tokenizerMode: TokenizerMode.Language,
-        });
-    });
-
-    it("defaults to language config when tokenizerMode is unknown", () => {
-        const config = createSeshatConfig("unknown");
-
-        expect(config).toEqual({
-            tokenizerMode: TokenizerMode.Language,
-        });
+    it.each([
+        [
+            TokenizerMode.Ngram,
+            {
+                tokenizerMode: TokenizerMode.Ngram,
+                ngramMinSize: 2,
+                ngramMaxSize: 4,
+            },
+        ],
+        [TokenizerMode.Language, { tokenizerMode: TokenizerMode.Language }],
+        [undefined, { tokenizerMode: TokenizerMode.Language }],
+        ["unknown", { tokenizerMode: TokenizerMode.Language }],
+    ])("returns the expected config for tokenizerMode %s", (tokenizerMode, expectedConfig) => {
+        expect(createSeshatConfig(tokenizerMode)).toEqual(expectedConfig);
     });
 });
