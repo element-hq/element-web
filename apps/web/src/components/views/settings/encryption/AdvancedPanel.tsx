@@ -72,7 +72,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
             </div>
             <div className="mx_EncryptionDetails_buttons">
                 <Button
-                    size="sm"
+                    size="md"
                     kind="secondary"
                     Icon={DownloadIcon}
                     onClick={() =>
@@ -87,7 +87,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
                     {_t("settings|encryption|advanced|export_keys")}
                 </Button>
                 <Button
-                    size="sm"
+                    size="md"
                     kind="secondary"
                     Icon={ShareIcon}
                     onClick={() =>
@@ -102,7 +102,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
                     {_t("settings|encryption|advanced|import_keys")}
                 </Button>
             </div>
-            <Button size="sm" kind="tertiary" destructive={true} onClick={onResetIdentityClick}>
+            <Button size="md" kind="tertiary" destructive={true} onClick={onResetIdentityClick}>
                 {_t("settings|encryption|advanced|reset_identity")}
             </Button>
         </div>

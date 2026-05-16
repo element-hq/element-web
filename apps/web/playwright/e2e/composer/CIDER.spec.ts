@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { getSampleFilePath } from "../../sample-files";
 
 const CtrlOrMeta = process.platform === "darwin" ? "Meta" : "Control";
 
@@ -74,6 +75,12 @@ test.describe("Composer", () => {
             await page.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter"); // Send message
 
             await expect(page.locator(".mx_EventTile_body", { hasText: "😇" })).toBeVisible();
+        });
+
+        test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+            // Shrink the viewport
+            await page.setViewportSize({ width: 500, height: 1080 });
+            await expect(app.getComposer()).toMatchScreenshot("narrow.png");
         });
 
         test.describe("render emoji picker with larger viewport height", async () => {
@@ -197,6 +204,11 @@ test.describe("Composer", () => {
 
             // Take a screenshot of the autocomplete
             await expect(autocomplete).toMatchScreenshot("emoji-autocomplete.png");
+        });
+
+        test("can paste a file", async ({ page, bot, app }) => {
+            await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
+            await expect(page.locator(".mx_ImageBody")).toBeVisible();
         });
     });
 });

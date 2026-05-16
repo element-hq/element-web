@@ -22,7 +22,7 @@
         "about": "关于",
         "brand_help": "%(brand)s帮助",
         "help": "帮助",
-        "no": "不",
+        "no": "否",
         "preferences": "偏好",
         "yes": "是"
     },
@@ -33,9 +33,9 @@
         "speech_stop_speaking": "停止讲话"
     },
     "eol": {
-        "no_more_updates": "您正在使用不受支持的macOS版本。请升级以获取%(brand)s 更新。",
-        "title": "系统不支持",
-        "warning": "您正在使用不受支持的macOS版本。请升级系统以确保%(brand)s 能持续正常运行。"
+        "no_more_updates": "你正在使用的 macOS 版本不受支持。请升级以获取 %(brand)s 更新。",
+        "title": "不受支持的系统",
+        "warning": "你正在使用的 macOS 版本不受支持。请升级系统以确保 %(brand)s 能保持运行。"
     },
     "file_menu": {
         "label": "文件"
@@ -43,7 +43,7 @@
     "icon_overlay": {
         "description_error": "错误",
         "description_notifications": {
-            "other": "您有%(count)s 条未读通知。"
+            "other": "你有 %(count)s 条未读通知。"
         }
     },
     "menu": {
@@ -67,13 +67,13 @@
             "backend_changed": "清除数据并重新加载？",
             "backend_changed_detail": "无法从系统密钥环访问密钥，该密钥似乎已被更改。",
             "backend_changed_title": "数据库加载失败",
-            "backend_no_encryption": "您的系统支持密钥环，但加密功能不可用。",
-            "backend_no_encryption_detail": "Electron检测到您的密钥环%(backend)s 不支持加密功能。请确保已安装该密钥环。若已安装，请重启设备后重试。您也可选择允许%(brand)s 使用较弱的加密方式。",
+            "backend_no_encryption": "你的系统支持密钥环，但加密功能不可用。",
+            "backend_no_encryption_detail": "Electron 检测到你的密钥环 %(backend)s 的加密不可用。请确保已安装该密钥环。若已安装请重启设备后重试。也可选择允许 %(brand)s 使用弱加密方式。",
             "backend_no_encryption_title": "不支持加密",
-            "unsupported_keyring": "您的系统存在未受支持的密钥环，这意味着无法打开数据库。",
-            "unsupported_keyring_detail": "Electron的密钥环检测未找到受支持的后端。您可以尝试通过命令行参数启动%(brand)s 来手动配置后端，此操作仅需执行一次。详情请参阅：%(link)s 。",
-            "unsupported_keyring_title": "系统不支持",
-            "unsupported_keyring_use_basic_text": "使用较弱的加密",
+            "unsupported_keyring": "你的系统存在不受支持的密钥环，这意味着无法打开数据库。",
+            "unsupported_keyring_detail": "Electron 的密钥环检测未找到受支持的后端。你可以尝试通过命令行参数启动 %(brand)s 来手动配置后端，此操作仅需执行一次。详情请参阅：%(link)s。",
+            "unsupported_keyring_title": "不受支持的系统",
+            "unsupported_keyring_use_basic_text": "使用弱加密",
             "unsupported_keyring_use_plaintext": "不使用加密"
         }
     },

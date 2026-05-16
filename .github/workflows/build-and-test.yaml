@@ -64,7 +64,7 @@ jobs:
                   persist-credentials: false
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
@@ -146,7 +146,7 @@ jobs:
                   path: apps/web/webapp
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
                   cache-dependency-path: pnpm-lock.yaml
@@ -206,6 +206,8 @@ jobs:
         needs: prepare_ed
         name: "Desktop Windows"
         uses: ./.github/workflows/build_desktop_windows.yaml
+        # Skip Windows builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
+        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
         strategy:
             matrix:
                 arch: [x64, ia32, arm64]
@@ -223,10 +225,13 @@ jobs:
                 arch: [amd64, arm64]
                 runAllTests:
                     - ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests') }}
-                # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
                 exclude:
+                    # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
                     - runAllTests: false
                       sqlcipher: system
+                    # Additionally skip arm64 system builds on PRs, as the amd64 test is enough for a smoke test and includes the screenshot tests
+                    - runAllTests: false
+                      arch: arm64
         with:
             sqlcipher: ${{ matrix.sqlcipher }}
             arch: ${{ matrix.arch }}
@@ -236,6 +241,9 @@ jobs:
         needs: prepare_ed
         name: "Desktop macOS"
         uses: ./.github/workflows/build_desktop_macos.yaml
+        # Skip macOS builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
+        # and we have a very low limit of concurrent macos runners (5) across the Github org.
+        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
         with:
             blob_report: true
 
@@ -260,7 +268,7 @@ jobs:
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
               if: needs.build_ew.outputs.skip == 'false'
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               if: needs.build_ew.outputs.skip == 'false'
               with:
                   cache: "pnpm"

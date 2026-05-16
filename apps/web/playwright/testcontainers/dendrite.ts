@@ -21,7 +21,7 @@ const DEFAULT_CONFIG = {
     global: {
         server_name: "localhost",
         private_key: "matrix_key.pem",
-        old_private_keys: null,
+        old_private_keys: null as any,
         key_validity_period: "168h0m0s",
         cache: {
             max_size_estimated: "1gb",
@@ -47,7 +47,7 @@ const DEFAULT_CONFIG = {
             room_name: "Server Alerts",
         },
         jetstream: {
-            addresses: null,
+            addresses: null as any,
             disable_tls_validation: false,
             storage_path: "./",
             topic_prefix: "Dendrite",
@@ -67,7 +67,7 @@ const DEFAULT_CONFIG = {
     },
     app_service_api: {
         disable_tls_validation: false,
-        config_files: null,
+        config_files: null as any,
     },
     client_api: {
         registration_disabled: false,
@@ -79,14 +79,14 @@ const DEFAULT_CONFIG = {
         recaptcha_bypass_secret: "",
         turn: {
             turn_user_lifetime: "5m",
-            turn_uris: null,
+            turn_uris: null as any,
             turn_shared_secret: "",
         },
         rate_limiting: {
             enabled: true,
             threshold: 20,
             cooloff_ms: 500,
-            exempt_user_ids: null,
+            exempt_user_ids: null as any,
         },
     },
     federation_api: {
@@ -140,7 +140,7 @@ const DEFAULT_CONFIG = {
         },
     },
     mscs: {
-        mscs: null,
+        mscs: null as any,
         database: {
             connection_string: "file:dendrite-msc.db",
         },
@@ -157,7 +157,7 @@ const DEFAULT_CONFIG = {
     },
     user_api: {
         bcrypt_cost: 10,
-        auto_join_rooms: null,
+        auto_join_rooms: null as any,
         account_database: {
             connection_string: "file:dendrite-userapi.db",
         },
@@ -183,12 +183,12 @@ const DEFAULT_CONFIG = {
             serviceName: "",
             disabled: false,
             rpc_metrics: false,
-            tags: [],
-            sampler: null,
-            reporter: null,
-            headers: null,
-            baggage_restrictions: null,
-            throttler: null,
+            tags: [] as any[],
+            sampler: null as any,
+            reporter: null as any,
+            headers: null as any,
+            baggage_restrictions: null as any,
+            throttler: null as any,
         },
     },
     logging: [

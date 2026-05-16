@@ -12,7 +12,6 @@ import { mocked } from "jest-mock";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import {
-    CHATS_TAG,
     LISTS_UPDATE_EVENT,
     SECTION_CREATED_EVENT,
     RoomListStoreV3Class,
@@ -37,6 +36,7 @@ import * as utils from "../../../../src/utils/notifications";
 import * as utilsRLS from "../../../../src/stores/room-list-v3/utils.ts";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
+import { CHATS_TAG } from "../../../../src/stores/room-list-v3/section";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -833,6 +833,7 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
+                if (setting === "RoomList.CustomSectionData") return {};
                 return false;
             });
         }
@@ -1015,26 +1016,24 @@ describe("RoomListStoreV3", () => {
             it("emits SECTION_CREATED_EVENT and LISTS_UPDATE_EVENT when section is created", async () => {
                 enableSections();
                 getClientAndRooms();
-                jest.spyOn(sectionModule, "createSection").mockResolvedValue(true);
+                jest.spyOn(sectionModule, "createSection").mockResolvedValue("element.io.section.test-tag");
 
                 const store = new RoomListStoreV3Class(dispatcher);
                 await store.start();
 
                 const sectionCreatedListener = jest.fn();
-                const listsUpdateListener = jest.fn();
                 store.on(SECTION_CREATED_EVENT, sectionCreatedListener);
-                store.on(LISTS_UPDATE_EVENT, listsUpdateListener);
 
-                await store.createSection();
+                const tag = await store.createSection();
+                expect(tag).toBe("element.io.section.test-tag");
 
-                expect(sectionCreatedListener).toHaveBeenCalled();
-                expect(listsUpdateListener).toHaveBeenCalled();
+                expect(sectionCreatedListener).toHaveBeenCalledWith("element.io.section.test-tag");
             });
 
             it("does not emit when section creation is cancelled", async () => {
                 enableSections();
                 getClientAndRooms();
-                jest.spyOn(sectionModule, "createSection").mockResolvedValue(false);
+                jest.spyOn(sectionModule, "createSection").mockResolvedValue(undefined);
 
                 const store = new RoomListStoreV3Class(dispatcher);
                 await store.start();
@@ -1045,6 +1044,38 @@ describe("RoomListStoreV3", () => {
                 await store.createSection();
 
                 expect(sectionCreatedListener).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("editSection", () => {
+            it("delegates to the section module", async () => {
+                enableSections();
+                getClientAndRooms();
+                const editSectionSpy = jest.spyOn(sectionModule, "editSection").mockResolvedValue(undefined);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                await store.editSection("element.io.section.test-tag");
+                expect(editSectionSpy).toHaveBeenCalledWith("element.io.section.test-tag");
+            });
+        });
+
+        describe("removeSection", () => {
+            it("delegates to the section module and emits LISTS_UPDATE_EVENT", async () => {
+                enableSections();
+                getClientAndRooms();
+                jest.spyOn(sectionModule, "deleteSection").mockResolvedValue(undefined);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const listsUpdateListener = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, listsUpdateListener);
+
+                await store.removeSection("element.io.section.test-tag", false);
+                expect(sectionModule.deleteSection).toHaveBeenCalledWith("element.io.section.test-tag", false);
+                expect(listsUpdateListener).toHaveBeenCalled();
             });
         });
 
@@ -1063,6 +1094,7 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
+                if (setting === "RoomList.CustomSectionData") return {};
                 return false;
             });
 
@@ -1077,11 +1109,13 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [customTag];
+                if (setting === "RoomList.CustomSectionData")
+                    return { [customTag]: { tag: customTag, name: "Custom" } };
                 return false;
             });
 
             // Trigger the settings watcher
-            settingsWatcher("RoomList.OrderedCustomSections");
+            await Promise.resolve(settingsWatcher("RoomList.OrderedCustomSections"));
 
             // Now there should be 4 sections (Favourite, custom, Chats, LowPriority)
             expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(4);

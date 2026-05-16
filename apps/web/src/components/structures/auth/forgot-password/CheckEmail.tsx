@@ -55,7 +55,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
                 </div>
             </div>
             {errorText && <ErrorMessage message={errorText} />}
-            <Button onClick={onSubmitForm} type="button" className="mx_Login_submit" size="sm">
+            <Button onClick={onSubmitForm} type="button" className="mx_Login_submit" size="md">
                 {_t("action|next")}
             </Button>
             <div className="mx_AuthBody_did-not-receive">

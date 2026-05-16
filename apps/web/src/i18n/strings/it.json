@@ -15,8 +15,7 @@
         "room_name": "Stanza %(name)s",
         "room_status_bar": "Barra di stato della stanza",
         "seek_bar_label": "Barra di ricerca audio",
-        "unread_messages": "Messaggi non letti.",
-        "user_menu": "Menu utente"
+        "unread_messages": "Messaggi non letti."
     },
     "a11y_jump_first_unread_room": "Salta alla prima stanza non letta.",
     "action": {
@@ -306,7 +305,6 @@
         "sign_in_instead_prompt": "Oppure accedi",
         "sign_in_or_register": "Accedi o crea account",
         "sign_in_or_register_description": "Usa il tuo account o creane uno nuovo per continuare.",
-        "sign_in_prompt": "Hai un account? <a>Accedi</a>",
         "sign_in_with_sso": "Accedi con single sign-on",
         "signing_in": "Accesso…",
         "soft_logout": {
@@ -746,7 +744,6 @@
         "thread_root_id": "ID root del thread: %(threadRootId)s",
         "threads_timeline": "Linea temporale conversazioni",
         "title": "Strumenti per sviluppatori",
-        "toggle_event": "commuta evento",
         "toolbox": "Strumenti",
         "use_at_own_risk": "Questa interfaccia NON controlla i tipi dei valori. Usa a tuo rischio.",
         "user_read_up_to": "L'utente ha letto fino: ",
@@ -1538,7 +1535,6 @@
         "restricted": "Limitato"
     },
     "powered_by_matrix": "Offerto da Matrix",
-    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
     "presence": {
         "away": "Assente",
         "busy": "Occupato",
@@ -2909,9 +2905,7 @@
         "m.poll.start": "%(senderName)s ha iniziato un sondaggio - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ha cambiato l'avatar della stanza.",
-            "changed_img": "%(senderDisplayName)s ha cambiato l'avatar della stanza a <img/>",
-            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s",
-            "removed": "%(senderDisplayName)s ha rimosso l'avatar della stanza."
+            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3030,7 +3024,6 @@
             "created_rule_rooms": "%(senderName)s ha creato una regola che bandisce stanze corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_servers": "%(senderName)s ha creato una regola che bandisce server corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_users": "%(senderName)s ha creato una regola che bandisce utenti corrispondenti a %(glob)s perchè %(reason)s",
-            "message_hidden": "Hai ignorato questo utente, perciò il suo messaggio è nascosto. <a>Mostra comunque.</a>",
             "removed_rule": "%(senderName)s ha rimosso una regola di ban corrispondente a %(glob)s",
             "removed_rule_rooms": "%(senderName)s ha rimosso la regola che bandisce stanze corrispondenti a %(glob)s",
             "removed_rule_servers": "%(senderName)s ha rimosso la regola che bandisce server corrispondenti a %(glob)s",
@@ -3318,11 +3311,6 @@
         "verify_button": "Verifica utente",
         "verify_explainer": "Per maggiore sicurezza, verifica questo utente controllando un codice univoco sui vostri dispositivi."
     },
-    "user_menu": {
-        "settings": "Tutte le impostazioni",
-        "switch_theme_dark": "Passa alla modalità scura",
-        "switch_theme_light": "Passa alla modalità chiara"
-    },
     "voip": {
         "already_in_call": "Già in una chiamata",
         "already_in_call_person": "Sei già in una chiamata con questa persona.",
@@ -3413,13 +3401,11 @@
         "user_busy_description": "L'utente che hai chiamato è occupato.",
         "user_is_presenting": "%(sharerName)s sta presentando",
         "video_call": "Videochiamata",
-        "video_call_started": "Videochiamata iniziata",
         "video_call_using": "Videochiamata usando:",
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {

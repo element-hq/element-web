@@ -17,7 +17,7 @@ export enum ComposerType {
 
 interface IBaseComposerInsertPayload extends ActionPayload {
     action: Action.ComposerInsert;
-    timelineRenderingType: TimelineRenderingType;
+    timelineRenderingType?: TimelineRenderingType; // undefined if this should just use the current in-focus type.
     composerType?: ComposerType; // falsy if should be re-dispatched to the correct composer
 }
 

@@ -10,6 +10,7 @@ import {
     RoomNotifState,
     type RoomListItemViewSnapshot,
     type RoomListItemViewActions,
+    type Section,
 } from "@element-hq/web-shared-components";
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
@@ -38,6 +39,8 @@ import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
+import { _t } from "../../languageHandler";
 
 interface RoomItemProps {
     room: Room;
@@ -95,6 +98,13 @@ export class RoomListItemViewModel
         // Subscribe to room-specific events
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
         this.disposables.trackListener(props.room, RoomEvent.Tags, this.onRoomChanged);
+
+        const orderSectionsRef = SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () =>
+            this.onOrderedCustomSectionsChange(),
+        );
+        this.disposables.track(() => {
+            SettingsStore.unwatchSetting(orderSectionsRef);
+        });
 
         // Load message preview asynchronously (sync data is already complete)
         void this.loadAndSetMessagePreview();
@@ -181,6 +191,7 @@ export class RoomListItemViewModel
         this.snapshot.merge({
             ...newItem,
             notification: keepIfSame(this.snapshot.current.notification, newItem.notification),
+            sections: keepIfSame(this.snapshot.current.sections, newItem.sections),
             // Preserve message preview - it's managed separately by loadAndSetMessagePreview
             messagePreview: this.snapshot.current.messagePreview,
         });
@@ -279,6 +290,9 @@ export class RoomListItemViewModel
 
         const canMoveToSection = SettingsStore.getValue("feature_room_list_sections");
 
+        // Build sections list for the "Move to section" submenu
+        const sections: Section[] = canMoveToSection ? RoomListItemViewModel.buildSections(roomTags) : [];
+
         return {
             id: room.roomId,
             room,
@@ -307,6 +321,7 @@ export class RoomListItemViewModel
             canMarkAsUnread,
             roomNotifState,
             canMoveToSection,
+            sections,
         };
     }
 
@@ -386,7 +401,50 @@ export class RoomListItemViewModel
         echoChamber.notificationVolume = elementNotifState;
     };
 
-    public onCreateSection = (): void => {
-        RoomListStoreV3.instance.createSection();
+    public onCreateSection = async (): Promise<void> => {
+        const newTag = await RoomListStoreV3.instance.createSection();
+        // Add the room to the section
+        if (newTag) {
+            tagRoom(this.props.room, newTag);
+        }
     };
+
+    public onToggleSection = (tag: string): void => {
+        tagRoom(this.props.room, tag);
+    };
+
+    private onOrderedCustomSectionsChange = (): void => {
+        // Rebuild sections list to reflect new order
+        const sections = RoomListItemViewModel.buildSections(this.props.room.tags);
+        this.snapshot.merge({ sections: keepIfSame(this.snapshot.current.sections, sections) });
+    };
+
+    /**
+     * Build the list of available sections for the "Move to section" submenu.
+     * Order follows the canonical section order from RoomListStoreV3.
+     */
+    private static buildSections(roomTags: Room["tags"]): Section[] {
+        const customSectionData = getCustomSectionData();
+
+        return (
+            RoomListStoreV3.instance.orderedSectionTags
+                // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
+                // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
+                .filter((tag) => !isDefaultSectionTag(tag))
+                .map((tag) => ({
+                    tag,
+                    name: RoomListItemViewModel.getSectionName(tag, customSectionData),
+                    isSelected: Boolean(roomTags[tag]),
+                }))
+        );
+    }
+
+    /**
+     * Get the display name for a section based on its tag.
+     */
+    private static getSectionName(tag: string, customSectionData: Record<string, { name: string }>): string {
+        if (tag === DefaultTagID.Favourite) return _t("room_list|section|favourites");
+        if (tag === DefaultTagID.LowPriority) return _t("room_list|section|low_priority");
+        return customSectionData[tag]?.name || tag;
+    }
 }

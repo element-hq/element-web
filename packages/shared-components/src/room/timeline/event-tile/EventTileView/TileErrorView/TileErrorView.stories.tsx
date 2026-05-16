@@ -34,7 +34,7 @@ const TileErrorViewWrapperImpl = ({
 const TileErrorViewWrapper = withViewDocs(TileErrorViewWrapperImpl, TileErrorView);
 
 const meta = {
-    title: "MessageBody/TileErrorView",
+    title: "Timeline/Timeline Event/TileErrorView",
     component: TileErrorViewWrapper,
     tags: ["autodocs"],
     decorators: [
@@ -49,7 +49,6 @@ const meta = {
         eventType: "m.room.message",
         bugReportCtaLabel: "Submit debug logs",
         viewSourceCtaLabel: "View source",
-        layout: "group",
     },
 } satisfies Meta<typeof TileErrorViewWrapper>;
 
@@ -59,8 +58,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const BubbleLayout: Story = {
-    args: {
-        layout: "bubble",
+    globals: {
+        eventLayout: "bubble",
     },
 };
 

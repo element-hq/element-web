@@ -131,7 +131,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
 
     private onCrawlerSleepTimeChange = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ crawlerSleepTime: parseInt(e.target.value, 10) });
-        SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
+        SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.valueAsNumber);
     };
 
     private readonly onTokenizerModeChange = (e: ChangeEvent<HTMLSelectElement>): void => {

@@ -53,9 +53,9 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_13vu4_8 _has-icon_13vu4_60"
+      class="_button_1nw83_8 _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -74,9 +74,9 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
       Export keys
     </button>
     <button
-      class="_button_13vu4_8 _has-icon_13vu4_60"
+      class="_button_1nw83_8 _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -96,9 +96,9 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display a spinner when l
     </button>
   </div>
   <button
-    class="_button_13vu4_8 _destructive_13vu4_110"
+    class="_button_1nw83_8 _destructive_1nw83_110"
     data-kind="tertiary"
-    data-size="sm"
+    data-size="md"
     role="button"
     tabindex="0"
   >
@@ -145,9 +145,9 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
     class="mx_EncryptionDetails_buttons"
   >
     <button
-      class="_button_13vu4_8 _has-icon_13vu4_60"
+      class="_button_1nw83_8 _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -166,9 +166,9 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
       Export keys
     </button>
     <button
-      class="_button_13vu4_8 _has-icon_13vu4_60"
+      class="_button_1nw83_8 _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -188,9 +188,9 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
     </button>
   </div>
   <button
-    class="_button_13vu4_8 _destructive_13vu4_110"
+    class="_button_1nw83_8 _destructive_1nw83_110"
     data-kind="tertiary"
-    data-size="sm"
+    data-size="md"
     role="button"
     tabindex="0"
   >

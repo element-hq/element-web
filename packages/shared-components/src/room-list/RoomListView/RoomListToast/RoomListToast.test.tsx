@@ -13,11 +13,16 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./RoomListToast.stories";
 
-const { SectionCreated } = composeStories(stories);
+const { SectionCreated, ChatMoved } = composeStories(stories);
 
 describe("<RoomListToast />", () => {
     it("renders SectionCreated story", () => {
         const { container } = render(<SectionCreated />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders ChatMoved story", () => {
+        const { container } = render(<ChatMoved />);
         expect(container).toMatchSnapshot();
     });
 

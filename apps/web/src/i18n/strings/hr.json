@@ -17,8 +17,7 @@
         "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
-        "unread_messages": "Nepročitane poruke.",
-        "user_menu": "Korisnički izbornik"
+        "unread_messages": "Nepročitane poruke."
     },
     "a11y_jump_first_unread_room": "Skoči na prvu sobu s nepročitanim porukama.",
     "action": {
@@ -343,7 +342,6 @@
         "sign_in_instead_prompt": "Već imate račun? <a>Prijavi se ovdje</a>",
         "sign_in_or_register": "Prijavite se ili izradite račun",
         "sign_in_or_register_description": "Za nastavak upotrijebite svoj račun ili izradite novi.",
-        "sign_in_prompt": "Imate li račun? <a>Prijava</a>",
         "sign_in_with_sso": "Prijavite se pomoću jedinstvene prijave (SSO)",
         "signing_in": "U tijeku je prijava…",
         "soft_logout": {
@@ -593,7 +591,6 @@
         "video": "Videozapis",
         "video_room": "Videosoba",
         "view_message": "Prikaži poruku",
-        "voice": "Glas",
         "warning": "Upozorenje"
     },
     "composer": {
@@ -882,7 +879,6 @@
         "thread_root_id": "ID korijena niti: %(threadRootId)s",
         "threads_timeline": "Vremenska traka niti",
         "title": "Alati za razvojne inženjere",
-        "toggle_event": "uključi/isključi događaj",
         "toolbox": "Alatni okvir",
         "use_at_own_risk": "Ovo korisničko sučelje NE provjerava vrste vrijednosti. Upotrebljavajte na vlastitu odgovornost.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -1564,9 +1560,6 @@
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
         "report_to_moderators": "Prijavi moderatorima",
         "report_to_moderators_description": "U sobama koje podržavaju moderiranje gumb „Prijavi” omogućit će vam da moderatorima sobe prijavite svako neprimjereno ponašanje.",
-        "share_history_on_invite": "Podijeli šifriranu povijest s novim članovima",
-        "share_history_on_invite_description": "Prilikom pozivanja korisnika u šifriranu sobu čija je vidljivost povijesti postavljena na podijeljenu, podijelite šifriranu povijest s tim korisnikom i prihvatite šifriranu povijest kada budete pozvani u takvu sobu.",
-        "share_history_on_invite_warning": "Ova je značajka u EKSPERIMENTALNOJ FAZI i nisu implementirane sve sigurnosne mjere. Ne omogućavajte je na produkcijskim računima.",
         "sliding_sync": "Način rada Sliding Sync",
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
         "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
@@ -1816,7 +1809,6 @@
         "restricted": "Ograničeno"
     },
     "powered_by_matrix": "Pokreće Matrix",
-    "powered_by_matrix_with_logo": "Decentralizirani, šifrirani razgovori i suradnja koje pokreće $matrixLogo",
     "presence": {
         "away": "Odsutan/na",
         "busy": "Zauzeto",
@@ -3455,9 +3447,7 @@
         "m.poll.start": "%(senderName)s započeo/la je anketu – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s promijenio/la je avatar sobe.",
-            "changed_img": "%(senderDisplayName)s promijenio/la je avatar sobe u <img/>",
-            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s",
-            "removed": "%(senderDisplayName)s uklonio/la je avatar sobe."
+            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3581,7 +3571,6 @@
             "created_rule_rooms": "%(senderName)s izradio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s za %(reason)s",
             "created_rule_servers": "%(senderName)s izradio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s za %(reason)s",
             "created_rule_users": "%(senderName)s izradio/la je pravilo kojim se zabranjuju korisnici koji odgovaraju %(glob)s za %(reason)s",
-            "message_hidden": "Ignorirali ste ovog korisnika, pa je njegova poruka skrivena. <a>Svejedno prikaži.</a>",
             "removed_rule": "%(senderName)s uklonio/la je pravilo za zabranu koje odgovara %(glob)s",
             "removed_rule_rooms": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s",
             "removed_rule_servers": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s",
@@ -3925,12 +3914,6 @@
         "verify_button": "Potvrdi korisnika",
         "verify_explainer": "Radi dodatne sigurnosti potvrdite ovog korisnika provjerom jednokratnog koda na oba uređaja."
     },
-    "user_menu": {
-        "link_new_device": "Poveži novi uređaj",
-        "settings": "Sve postavke",
-        "switch_theme_dark": "Prebaci na tamni način rada",
-        "switch_theme_light": "Prebaci na svijetli način rada"
-    },
     "voip": {
         "already_in_call": "Već u pozivu",
         "already_in_call_person": "Već ste u pozivu sa tom osobom.",
@@ -3955,7 +3938,6 @@
         "connection_lost": "Veza s poslužiteljem je prekinuta",
         "connection_lost_description": "Ne možete upućivati ​​pozive ako niste povezani s poslužiteljem.",
         "consulting": "Savjetovanje s %(transferTarget)s. <a>Prijenos na %(transferee)s</a>",
-        "decline_call": "Odbij",
         "default_device": "Zadani uređaj",
         "dial": "Biranje",
         "dialpad": "Brojčanik",
@@ -4007,7 +3989,6 @@
         "show_sidebar_button": "Prikaži bočnu traku",
         "silence": "Utišaj poziv",
         "silenced": "Obavijesti su utišane",
-        "skip_lobby_toggle_option": "Pridruži se odmah",
         "start_screenshare": "Započni dijeljenje zaslona",
         "stop_screenshare": "Zaustavi dijeljenje zaslona",
         "too_many_calls": "Previše poziva",
@@ -4029,7 +4010,6 @@
         "user_is_presenting": "%(sharerName)s dijeli zaslon",
         "video_call": "Videopoziv",
         "video_call_incoming": "Dolazni videopoziv",
-        "video_call_started": "Videopoziv je započeo",
         "video_call_using": "Videopoziv putem:",
         "voice_call": "Glasovni poziv",
         "voice_call_incoming": "Dolazni glasovni poziv",
@@ -4037,7 +4017,6 @@
         "you_are_presenting": "Dijelite zaslon"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Dobro došli u Element",
     "widget": {
         "added_by": "Widget je dodao/la",
         "capabilities_dialog": {

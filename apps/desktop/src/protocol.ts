@@ -97,7 +97,8 @@ export default class ProtocolHandler {
             const s = fs.readFileSync(storePath, { encoding: "utf8" });
             const o = JSON.parse(s);
             return typeof o === "object" ? o : {};
-        } catch {
+        } catch (e) {
+            console.warn("Unable to read protocol store, starting with empty store: ", e);
             return {};
         }
     }
@@ -130,10 +131,26 @@ export default class ProtocolHandler {
                 let sessionId = parsedUrl.searchParams.get(SEARCH_PARAM);
                 if (!sessionId) {
                     // In OIDC, we must shuttle the value in the `state` param rather than `element-desktop-ssoid`
-                    // We encode it as a suffix like `:element-desktop-ssoid:XXYYZZ`
-                    sessionId = parsedUrl.searchParams.get("state")!.split(`:${SEARCH_PARAM}:`)[1];
+                    // We encode it as a suffix like `:element-desktop-ssoid:XXYYZZ`.
+                    // The OIDC flow may have used response_mode=fragment or query, so we need to handle both cases.
+                    let searchParams = parsedUrl.searchParams;
+                    if (parsedUrl.hash.includes("=")) {
+                        const [params] = parsedUrl.hash.substring(1).split("?", 2);
+                        searchParams = new URLSearchParams(params);
+                    }
+
+                    const state = searchParams.get("state");
+                    if (state) {
+                        sessionId = state.split(`:${SEARCH_PARAM}:`)[1];
+                    }
                 }
-                console.log("Forwarding to profile: ", store[sessionId]);
+
+                if (!sessionId) {
+                    console.warn("Unable to read session ID in deeplink url:", deeplinkUrl);
+                    return undefined;
+                }
+
+                console.log("Forwarding to profile:", store[sessionId]);
                 return store[sessionId];
             }
         }

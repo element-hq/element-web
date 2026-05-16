@@ -82,7 +82,7 @@ export function Banner({
             <div className={styles.actions}>
                 {actions}
                 {onClose && (
-                    <Button kind="secondary" size="sm" onClick={onClose}>
+                    <Button kind="secondary" size="md" onClick={onClose}>
                         {_t("action|dismiss")}
                     </Button>
                 )}

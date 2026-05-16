@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import "fake-indexeddb/auto";
 import React, { type ComponentProps } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
-import fetchMock from "@fetch-mock/jest";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
@@ -558,7 +557,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should not persist device language when not available", async () => {
-                await SettingsStore.setValue("language", null, SettingLevel.DEVICE, undefined);
+                await SettingsStore.setValue("language", null, SettingLevel.DEVICE, null);
                 const languageBefore = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
 
                 jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
@@ -589,8 +588,10 @@ describe("<MatrixChat />", () => {
             });
         });
 
-        const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
-            const renderResult = getComponent();
+        const getComponentAndWaitForReady = async (
+            props: Partial<ComponentProps<typeof MatrixChat>> = {},
+        ): Promise<RenderResult> => {
+            const renderResult = getComponent(props);
 
             // we think we are logged in, but are still waiting for the /sync to complete
             await screen.findByText("Logout");
@@ -1022,6 +1023,22 @@ describe("<MatrixChat />", () => {
                     await dispatchLogoutAndWait();
 
                     expect(PlatformPeg.get()!.destroyPickleKey).toHaveBeenCalledWith(userId, deviceId);
+                });
+
+                it("should go to welcome", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+
+                    expect(defaultProps.onNewScreen).toHaveBeenLastCalledWith("welcome", false);
+                });
+
+                it("should go to login if welcome disabled", async () => {
+                    await getComponentAndWaitForReady({
+                        config: { ...defaultProps.config, embedded_pages: { login_for_welcome: true } },
+                    });
+                    await dispatchLogoutAndWait();
+
+                    expect(defaultProps.onNewScreen).toHaveBeenLastCalledWith("login", false);
                 });
 
                 describe("without delegated auth", () => {
@@ -1637,7 +1654,6 @@ describe("<MatrixChat />", () => {
 
         // Flaky test, see https://github.com/element-hq/element-web/issues/30337
         it("waits for other tab to stop during startup", async () => {
-            fetchMock.get("end:/welcome.html", { body: "<h1>Hello</h1>" });
             jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
 
             // simulate an active window
@@ -1668,7 +1684,7 @@ describe("<MatrixChat />", () => {
             expect(Lifecycle.attemptDelegatedAuthLogin).toHaveBeenCalled();
 
             // should just show the welcome screen
-            await rendered.findByText("Hello");
+            await rendered.findByText("Welcome to Test");
             expect(rendered.container).toMatchSnapshot();
         });
 

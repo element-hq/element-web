@@ -50,15 +50,7 @@ export const useParticipantCount = (call: Call | null): number => {
     }, [participants]);
 };
 
-export const useParticipatingMembers = (call: Call): RoomMember[] => {
+export const useParticipatingMembers = (call: Call | null): RoomMember[] => {
     const participants = useParticipants(call);
-
-    return useMemo(() => {
-        const members: RoomMember[] = [];
-        for (const [member, devices] of participants) {
-            // Repeat the member for as many devices as they're using
-            for (let i = 0; i < devices.size; i++) members.push(member);
-        }
-        return members;
-    }, [participants]);
+    return useMemo(() => [...participants.keys()], [participants]);
 };

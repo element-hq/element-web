@@ -419,7 +419,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             </StyledCheckbox>
                         </div>
                         {this.state.errorText && <ErrorMessage message={this.state.errorText} />}
-                        <Button type="submit" className="mx_Login_submit" size="sm">
+                        <Button type="submit" className="mx_Login_submit" size="md">
                             {submitButtonChild}
                         </Button>
                     </fieldset>
@@ -434,7 +434,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 <CheckIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
                 <h1>{_t("auth|reset_password|reset_successful")}</h1>
                 {this.state.logoutDevices ? <p>{_t("auth|reset_password|devices_logout_success")}</p> : null}
-                <Button className="mx_Login_submit" size="sm" type="button" onClick={this.props.onComplete}>
+                <Button className="mx_Login_submit" size="md" type="button" onClick={this.props.onComplete}>
                     {_t("auth|reset_password|return_to_login")}
                 </Button>
             </>

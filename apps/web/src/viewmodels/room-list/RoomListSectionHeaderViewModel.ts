@@ -15,6 +15,9 @@ import {
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
+import SettingsStore from "../../settings/SettingsStore";
+import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -42,7 +45,18 @@ export class RoomListSectionHeaderViewModel
     private readonly expandedBySpace = new Map<string, boolean>();
 
     public constructor(props: RoomListSectionHeaderViewModelProps) {
-        super(props, { id: props.tag, title: props.title, isExpanded: true, isUnread: false });
+        const isDefaultSection = isDefaultSectionTag(props.tag);
+        super(props, {
+            id: props.tag,
+            title: props.title,
+            isExpanded: true,
+            isUnread: false,
+            displaySectionMenu: !isDefaultSection,
+        });
+        const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
+            this.onCustomSectionDataChange(),
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(sectionWatherRef));
     }
 
     public onClick = (): void => {
@@ -120,4 +134,24 @@ export class RoomListSectionHeaderViewModel
         this.roomNotificationStates.clear();
         super.dispose();
     }
+
+    /**
+     * Handle changes to custom section data.
+     */
+    private onCustomSectionDataChange(): void {
+        const sectionData = isCustomSectionTag(this.props.tag) ? getCustomSectionData()[this.props.tag] : undefined;
+        if (sectionData) {
+            this.snapshot.merge({ title: sectionData.name });
+        }
+    }
+
+    public editSection = async (): Promise<void> => {
+        await RoomListStoreV3.instance.editSection(this.props.tag);
+    };
+
+    public removeSection = async (): Promise<void> => {
+        // There is one notification state per room in the section
+        const isEmpty = this.roomNotificationStates.size === 0;
+        await RoomListStoreV3.instance.removeSection(this.props.tag, isEmpty);
+    };
 }

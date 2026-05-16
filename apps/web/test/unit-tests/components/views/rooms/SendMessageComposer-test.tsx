@@ -31,6 +31,7 @@ import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
+import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -187,8 +188,10 @@ describe("<SendMessageComposer/>", () => {
         };
         const getRawComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => (
             <MatrixClientContext.Provider value={client}>
-                <ScopedRoomContextProvider {...roomContext}>
-                    <SendMessageComposer {...defaultProps} {...props} />
+                <ScopedRoomContextProvider room={mockRoom} {...roomContext}>
+                    <RoomUploadContextProvider>
+                        <SendMessageComposer {...defaultProps} {...props} />
+                    </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
@@ -435,7 +438,11 @@ describe("<SendMessageComposer/>", () => {
 
         const { container } = render(
             <MatrixClientContext.Provider value={cli}>
-                <SendMessageComposer room={room} toggleStickerPickerOpen={jest.fn()} />
+                <ScopedRoomContextProvider {...({ room } as unknown as RoomContextType)}>
+                    <RoomUploadContextProvider>
+                        <SendMessageComposer room={room} toggleStickerPickerOpen={jest.fn()} />
+                    </RoomUploadContextProvider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
 

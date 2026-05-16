@@ -9,9 +9,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders the default state 1`
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
+      class="_button_1nw83_8 RoomListSearchView-module_search _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       id="room-list-search-button"
       role="button"
       tabindex="0"
@@ -44,9 +44,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders the default state 1`
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -76,9 +76,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders with all buttons vis
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
+      class="_button_1nw83_8 RoomListSearchView-module_search _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       id="room-list-search-button"
       role="button"
       tabindex="0"
@@ -111,9 +111,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders with all buttons vis
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -132,9 +132,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders with all buttons vis
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -164,9 +164,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders with dial pad button
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
+      class="_button_1nw83_8 RoomListSearchView-module_search _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       id="room-list-search-button"
       role="button"
       tabindex="0"
@@ -199,9 +199,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders with dial pad button
     </button>
     <button
       aria-label="Open dial pad"
-      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -220,9 +220,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders with dial pad button
     </button>
     <button
       aria-label="Explore rooms"
-      class="_button_13vu4_8 _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -252,9 +252,9 @@ exports[`RoomListSearchView > Storybook snapshots > renders without explore butt
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
+      class="_button_1nw83_8 RoomListSearchView-module_search _has-icon_1nw83_60"
       data-kind="secondary"
-      data-size="sm"
+      data-size="md"
       id="room-list-search-button"
       role="button"
       tabindex="0"

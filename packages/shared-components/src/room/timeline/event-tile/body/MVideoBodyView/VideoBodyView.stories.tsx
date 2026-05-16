@@ -17,8 +17,7 @@ import {
 } from "./VideoBodyView";
 import { useMockedViewModel } from "../../../../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
-
-const demoVideo = new URL("../../../../../../static/videoBodyDemo.webm", import.meta.url).href;
+import demoVideo from "../../../../../../static/videoBodyDemo.webm";
 
 type VideoBodyViewProps = VideoBodyViewSnapshot &
     VideoBodyViewActions & {
@@ -45,7 +44,7 @@ const VideoBodyViewWrapperImpl = ({
 const VideoBodyViewWrapper = withViewDocs(VideoBodyViewWrapperImpl, VideoBodyView);
 
 const meta = {
-    title: "MessageBody/VideoBodyView",
+    title: "Timeline/Timeline Body/VideoBodyView",
     component: VideoBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {
