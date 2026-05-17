@@ -358,10 +358,18 @@ export class ElementAppPage {
         }
     }
 
-    async closeToast(title: string, button: string, optional = false): Promise<void> {
+    /**
+     *
+     * @param title The title of the toast to close
+     * @param button The button to click to close the toast
+     * @param optional If true, will continue and return false if the toast is not found, otherwise wil lexpect that the toast is present
+     * @returns true if the toast was found and closed, otherwise false (which can only happen if optional=true)
+     */
+    async closeToast(title: string, button: string, optional = false): Promise<boolean> {
         const locator = this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button });
-        if (optional && !(await locator.isVisible())) return;
+        if (optional && !(await locator.isVisible())) return false;
         await locator.click();
+        return true;
     }
 
     /**
@@ -375,8 +383,10 @@ export class ElementAppPage {
      * Dismiss the "Turn on key storage" toast.
      */
     public async closeKeyStorageToast(optional = false) {
-        await this.closeToast("Turn on key storage", "Dismiss", optional);
-        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+        const toastFound = await this.closeToast("Turn on key storage", "Dismiss", optional);
+        if (toastFound) {
+            await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+        }
     }
 
     /**
