@@ -29,7 +29,7 @@ test.describe("Composer", () => {
     });
 
     test.beforeEach(async ({ app, room /* trigger room fixture */ }) => {
-        await app.closeNotificationToast();
+        await app.closeNotificationToast(true);
     });
 
     test.describe("CIDER", () => {

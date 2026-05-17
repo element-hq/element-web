@@ -46,6 +46,8 @@ test.describe("Mark as Unread", () => {
         // navigate away from the room again
         await page.goto("/#/room/" + dummyRoomId);
 
+        await app.closeVerifyToast(true);
+
         const roomTile = page.getByLabel(TEST_ROOM_NAME);
         await roomTile.click({ button: "right" });
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();

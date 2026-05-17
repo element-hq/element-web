@@ -95,6 +95,10 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
+        // Make sure the room list is actually present before we try closing toasts,
+        // otherwise we may race with page loading
+        await this.page.getByTestId("room-list").waitFor();
+
         await this.closeVerifyToast(true);
         await this.closeKeyStorageToast(true);
         await this.closeNotificationToast(true);
