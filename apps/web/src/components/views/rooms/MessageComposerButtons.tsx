@@ -23,7 +23,7 @@ import {
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { UploadButton } from "@element-hq/web-shared-components";
+import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -68,6 +68,7 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
     const roomUploadVM = useRoomUploadViewModel();
+    const roomUploadSnapshot = useViewModel(roomUploadVM);
     const { room, narrow } = useScopedRoomContext("room", "narrow");
 
     const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
@@ -91,16 +92,14 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            roomUploadVM
-                .getSnapshot()
-                .options.map(({ type, icon: Icon, label }) => (
-                    <IconizedContextMenuOption
-                        onClick={() => roomUploadVM.onUploadOptionSelected(type)}
-                        icon={Icon && <Icon />}
-                        label={label}
-                        key={type}
-                    />
-                )),
+            roomUploadSnapshot.options.map(({ type, icon: Icon, label }) => (
+                <IconizedContextMenuOption
+                    onClick={() => roomUploadVM.onUploadOptionSelected(type)}
+                    icon={Icon && <Icon />}
+                    label={label}
+                    key={type}
+                />
+            )),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
