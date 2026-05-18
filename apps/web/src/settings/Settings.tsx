@@ -744,7 +744,7 @@ export const SETTINGS: Settings = {
     "Notifications.tac_only_notifications": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|tac_only_notifications"),
-        default: true,
+        default: false,
         controller: new AnalyticsController("WebSettingsNotificationsTACOnlyNotificationsToggle"),
     },
     "feature_ask_to_join": {

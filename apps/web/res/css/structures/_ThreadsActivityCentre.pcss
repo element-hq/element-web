@@ -70,33 +70,105 @@
     }
 }
 
+.mx_ThreadsActivityCentre_tabs {
+    /* Override NavBar defaults (margin and padding: 0) to match Figma design */
+    margin: 0 !important;
+    padding: var(--cpd-space-2x) var(--cpd-space-4x) 0 !important;
+}
+
+.mx_ThreadsActivityCentre_menu {
+    /* Override compound's default 320px cap */
+    max-inline-size: 640px !important;
+    inline-size: 640px !important;
+    /* Override compound FloatingMenu's padding-block (20px top, 16px bottom);
+       we handle our own spacing via the tabs + rows containers. */
+    padding-block: 0 !important;
+}
+
 .mx_ThreadsActivityCentre_rows {
-    overflow-y: scroll;
-    /* Let some space at the top and the bottom of the pop-up */
-    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    /* Fixed height: show up to 6 cells (each ~72px = 12px + 40px avatar + ~8px + 12px) */
+    height: 432px;
+    min-height: 432px;
 
-    .mx_ThreadsActivityCentreRow {
-        height: 48px;
+    .mx_ThreadsActivityCentreThreadRow {
+        min-height: 56px;
 
-        /* Make the label of the MenuItem stay on one line and truncate with ellipsis if needed */
-        & > span {
+        /* Override compound's display: grid with a simple left-to-right flex row:
+           [avatar] [gap] [text content] [indicator] */
+        display: flex !important;
+        align-items: center;
+        gap: var(--cpd-space-3x); /* 12px between avatar and text */
+        padding: 12px 16px !important;
+
+        /* Compound's .icon class adds margin-inline-end; zero it since gap handles spacing */
+        & > .mx_DecoratedRoomAvatar {
+            margin-inline-end: 0 !important;
+            flex-shrink: 0;
+        }
+
+        /* Hide compound's nav-hint chevron — design uses only the notification dot */
+        & > svg {
+            display: none !important;
+        }
+
+        /* Notification dot at the trailing edge */
+        & > .mx_NotificationBadge {
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        /* Compound's MenuItem hides siblings of .nav-hint on hover (chevron-replaces-content
+           pattern). Since our design keeps the dot + content visible on hover, restore them. */
+        &:hover > svg ~ * {
+            display: revert !important;
+        }
+        &:hover > svg ~ .mx_ThreadsActivityCentreThreadRow_content {
+            display: flex !important;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: start;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_roomName {
+            flex: 1;
+            min-width: 0;
+            font: var(--cpd-font-body-md-semibold);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            /* Arbitrary size, keep the TAC as the wanted width */
-            width: 202px;
         }
 
-        /* Hide the notification badge on hover — compound's `nav-hint ~ *` rule would normally
-         * do this, but the app-web CSS layer overrides compound-web regardless of specificity. */
-        &:hover .mx_NotificationBadge {
-            display: none;
+        .mx_ThreadsActivityCentreThreadRow_preview {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font: var(--cpd-font-body-sm-regular);
+            color: $secondary-content;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_sender {
+            font: var(--cpd-font-body-sm-medium);
+            color: $primary-content;
         }
     }
 }
 
 .mx_ThreadsActivityCentre_emptyCaption {
-    padding-left: 16px;
-    padding-right: 16px;
-    font-size: 13px;
+    padding: 12px 16px;
+    font: var(--cpd-font-body-sm-regular);
+    color: $secondary-content;
 }

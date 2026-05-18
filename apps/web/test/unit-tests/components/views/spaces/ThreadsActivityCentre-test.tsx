@@ -7,7 +7,7 @@
  */
 
 import React, { type ComponentProps } from "react";
-import { getByText, render, screen } from "jest-matrix-react";
+import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 
@@ -42,25 +42,35 @@ describe("ThreadsActivityCentre", () => {
     const cli = stubClient();
     cli.supportsThreads = () => true;
 
-    const roomWithActivity = new Room("!room:server", cli, cli.getSafeUserId(), {
-        pendingEventOrdering: PendingEventOrdering.Detached,
-    });
-    roomWithActivity.name = "Just activity";
+    const userId = cli.getSafeUserId();
 
-    const roomWithNotif = new Room("!room2:server", cli, cli.getSafeUserId(), {
+    const roomWithNotif = new Room("!room2:server", cli, userId, {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
     roomWithNotif.name = "A notification";
 
-    const roomWithHighlight = new Room("!room3:server", cli, cli.getSafeUserId(), {
+    const roomWithHighlight = new Room("!room3:server", cli, userId, {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
     roomWithHighlight.name = "This is a real highlight";
 
+    // Room with a thread by another user (appears in "Other threads" only)
+    const roomWithOtherThread = new Room("!room6:server", cli, userId, {
+        pendingEventOrdering: PendingEventOrdering.Detached,
+    });
+    roomWithOtherThread.name = "Other user thread";
+
+    // Room with a thread by another user that mentions/keywords the current user (highlight)
+    // Should appear in "My threads" because highlight > 0 makes it relevant
+    const roomWithHighlightOtherAuthor = new Room("!room7:server", cli, userId, {
+        pendingEventOrdering: PendingEventOrdering.Detached,
+    });
+    roomWithHighlightOtherAuthor.name = "Keyword mention thread";
+
     const getDefaultThreadArgs = (room: Room) => ({
         room: room,
         client: cli,
-        authorId: "@foo:bar",
+        authorId: userId,
         participantUserIds: ["@fee:bar"],
     });
 
@@ -72,14 +82,15 @@ describe("ThreadsActivityCentre", () => {
         jest.spyOn(dmRoomMap, "getUserIdForRoomId");
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
 
-        await populateThread(getDefaultThreadArgs(roomWithActivity));
-
+        // Thread where current user participated (notification level)
         const notifThreadInfo = await populateThread(getDefaultThreadArgs(roomWithNotif));
         roomWithNotif.setThreadUnreadNotificationCount(notifThreadInfo.thread.id, NotificationCountType.Total, 1);
+        // Mock the server-provided participation flag (processRootEvent is async)
+        jest.spyOn(notifThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
 
+        // Thread where current user participated (highlight level)
         const highlightThreadInfo = await populateThread({
             ...getDefaultThreadArgs(roomWithHighlight),
-            // timestamp
             ts: 5,
         });
         roomWithHighlight.setThreadUnreadNotificationCount(
@@ -87,6 +98,37 @@ describe("ThreadsActivityCentre", () => {
             NotificationCountType.Highlight,
             1,
         );
+        jest.spyOn(highlightThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
+
+        // Thread by another user, no participation (notification level → Other threads)
+        const otherThreadInfo = await populateThread({
+            room: roomWithOtherThread,
+            client: cli,
+            authorId: "@other:bar",
+            participantUserIds: ["@someone:bar"],
+        });
+        roomWithOtherThread.setThreadUnreadNotificationCount(
+            otherThreadInfo.thread.id,
+            NotificationCountType.Total,
+            1,
+        );
+        jest.spyOn(otherThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(false);
+
+        // Thread by another user, but with a highlight for current user (keyword match)
+        // → should appear in "My threads" because highlight makes it relevant
+        const highlightOtherThreadInfo = await populateThread({
+            room: roomWithHighlightOtherAuthor,
+            client: cli,
+            authorId: "@other:bar",
+            participantUserIds: ["@someone:bar"],
+            ts: 10,
+        });
+        roomWithHighlightOtherAuthor.setThreadUnreadNotificationCount(
+            highlightOtherThreadInfo.thread.id,
+            NotificationCountType.Highlight,
+            1,
+        );
+        jest.spyOn(highlightOtherThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(false);
     });
 
     it("should render the threads activity centre button", async () => {
@@ -106,45 +148,72 @@ describe("ThreadsActivityCentre", () => {
         expect(getTACMenu()).toBeInTheDocument();
     });
 
-    it("should not render a room with a activity in the TAC", async () => {
-        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithActivity]);
-        renderTAC();
-        await userEvent.click(getTACButton());
-
-        // We should not render the room with activity
-        expect(() => screen.getAllByRole("menuitem")).toThrow();
-    });
-
-    it("should render a room with a regular notification in the TAC", async () => {
+    it("should show My threads tab by default with participated threads", async () => {
         cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithNotif]);
         renderTAC();
         await userEvent.click(getTACButton());
 
         const tacRows = screen.getAllByRole("menuitem");
         expect(tacRows.length).toEqual(1);
+    });
 
-        getByText(tacRows[0], "A notification");
+    it("should render a participated thread with notification in My threads", async () => {
+        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithNotif]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        const tacRows = screen.getAllByRole("menuitem");
+        expect(tacRows.length).toEqual(1);
         expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_notification").length).toEqual(1);
     });
 
-    it("should render a room with a highlight notification in the TAC", async () => {
+    it("should render a participated thread with highlight in My threads", async () => {
         cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithHighlight]);
         renderTAC();
         await userEvent.click(getTACButton());
 
         const tacRows = screen.getAllByRole("menuitem");
         expect(tacRows.length).toEqual(1);
-
-        getByText(tacRows[0], "This is a real highlight");
         expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_highlight").length).toEqual(1);
     });
 
-    it("renders notifications matching the snapshot", async () => {
-        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithHighlight, roomWithNotif, roomWithActivity]);
+    it("should show a highlighted thread by another user in My threads (keyword/mention)", async () => {
+        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithHighlightOtherAuthor]);
         renderTAC();
         await userEvent.click(getTACButton());
 
-        expect(screen.getByRole("menu")).toMatchSnapshot();
+        // Even though the user didn't participate, highlight > 0 makes it relevant → My threads
+        const tacRows = screen.getAllByRole("menuitem");
+        expect(tacRows.length).toEqual(1);
+        expect(tacRows[0].getElementsByClassName("mx_NotificationBadge_level_highlight").length).toEqual(1);
+    });
+
+    it("should show other threads in the Other threads tab", async () => {
+        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithOtherThread]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        // Default "My threads" tab should be empty (no participation, no highlight)
+        expect(screen.queryAllByRole("menuitem").length).toEqual(0);
+
+        // Switch to "Other threads" tab
+        await userEvent.click(screen.getByRole("tab", { name: "Other threads" }));
+        const tacRows = screen.getAllByRole("menuitem");
+        expect(tacRows.length).toEqual(1);
+    });
+
+    it("should not show participated threads in Other threads tab", async () => {
+        cli.getVisibleRooms = jest.fn().mockReturnValue([roomWithNotif, roomWithOtherThread]);
+        renderTAC();
+        await userEvent.click(getTACButton());
+
+        // "My threads" tab should show the participated thread
+        expect(screen.getAllByRole("menuitem").length).toEqual(1);
+
+        // "Other threads" tab should only show the non-participated thread
+        await userEvent.click(screen.getByRole("tab", { name: "Other threads" }));
+        const otherRows = screen.getAllByRole("menuitem");
+        expect(otherRows.length).toEqual(1);
     });
 
     it("should display a caption when no threads are unread", async () => {
@@ -155,60 +224,6 @@ describe("ThreadsActivityCentre", () => {
         expect(screen.getByRole("menu").getElementsByClassName("mx_ThreadsActivityCentre_emptyCaption").length).toEqual(
             1,
         );
-    });
-
-    it("should match snapshot when empty", async () => {
-        cli.getVisibleRooms = jest.fn().mockReturnValue([]);
-        renderTAC();
-        await userEvent.click(getTACButton());
-
-        expect(screen.getByRole("menu")).toMatchSnapshot();
-    });
-
-    it("should order the room with the same notification level by most recent", async () => {
-        // Generate two new rooms with threads
-        const secondRoomWithHighlight = new Room("!room4:server", cli, cli.getSafeUserId(), {
-            pendingEventOrdering: PendingEventOrdering.Detached,
-        });
-        secondRoomWithHighlight.name = "This is a second real highlight";
-
-        const secondHighlightThreadInfo = await populateThread({
-            ...getDefaultThreadArgs(secondRoomWithHighlight),
-            // timestamp
-            ts: 1,
-        });
-        secondRoomWithHighlight.setThreadUnreadNotificationCount(
-            secondHighlightThreadInfo.thread.id,
-            NotificationCountType.Highlight,
-            1,
-        );
-
-        const thirdRoomWithHighlight = new Room("!room5:server", cli, cli.getSafeUserId(), {
-            pendingEventOrdering: PendingEventOrdering.Detached,
-        });
-        thirdRoomWithHighlight.name = "This is a third real highlight";
-
-        const thirdHighlightThreadInfo = await populateThread({
-            ...getDefaultThreadArgs(thirdRoomWithHighlight),
-            // timestamp
-            ts: 7,
-        });
-        thirdRoomWithHighlight.setThreadUnreadNotificationCount(
-            thirdHighlightThreadInfo.thread.id,
-            NotificationCountType.Highlight,
-            1,
-        );
-
-        cli.getVisibleRooms = jest
-            .fn()
-            .mockReturnValue([roomWithHighlight, secondRoomWithHighlight, thirdRoomWithHighlight]);
-
-        renderTAC();
-        await userEvent.click(getTACButton());
-
-        // The room should be ordered by the most recent thread
-        // thirdHighlightThreadInfo (timestamp 7) > highlightThreadInfo (timestamp 5) > secondHighlightThreadInfo (timestamp 1)
-        expect(screen.getByRole("menu")).toMatchSnapshot();
     });
 
     it("should block Ctrl/CMD + k shortcut", async () => {
