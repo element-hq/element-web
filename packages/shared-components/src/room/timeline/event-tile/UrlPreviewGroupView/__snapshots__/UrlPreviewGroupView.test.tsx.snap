@@ -342,7 +342,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
 <div>
   <div
     class="UrlPreviewGroupView-module_wrapper"
-    data-event-density="default"
+    data-event-density="compact"
     data-event-layout="group"
   >
     <div
