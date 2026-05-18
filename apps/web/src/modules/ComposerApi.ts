@@ -54,7 +54,7 @@ export class ComposerApi
         this.emit(ModuleComposerApiEvents.UploaderOptionsChanged, option);
     }
 
-    public openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void {
+    public openFileUploadConfirmation(files: File[], view: ComposerApiTarget = { view: "room" }): void {
         if (!["room", "thread"].includes(view.view)) {
             throw new Error(`Invalid view '${view.view}'`);
         }
@@ -65,7 +65,7 @@ export class ComposerApi
         } satisfies ComposerInsertFilesPayload);
     }
 
-    public insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void {
+    public insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget = { view: "room" }): void {
         if (!["room", "thread"].includes(view.view)) {
             throw new Error(`Invalid view '${view.view}'`);
         }

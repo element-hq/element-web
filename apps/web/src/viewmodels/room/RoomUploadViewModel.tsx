@@ -285,7 +285,6 @@ export function RoomUploadContextProvider({
     );
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
-        console.log("Dispatched!", payload.action);
         if (payload.action !== Action.ComposerFileInsert) {
             return;
         }

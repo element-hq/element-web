@@ -92,6 +92,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
+            // This a textual list of buttons, so we can't use the UploadButton here.
             roomUploadSnapshot.options.map(({ type, icon: Icon, label }) => (
                 <IconizedContextMenuOption
                     onClick={() => roomUploadVM.onUploadOptionSelected(type)}

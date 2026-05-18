@@ -62,7 +62,7 @@ export interface ComposerApi {
      * Open the file upload confirmation dialog. This may be used in conjunction
      * with `addFileUploadOption` to support an alternative file upload kind.
      * @param files - The files to prompt for
-     * @param view - The target view to send the file into.
+     * @param view - The target view to send the file into. Defaults to `{ view: "room" }`
      * @returns Returns immediately, does not await action.
      * @alpha Likely to change
      */
@@ -70,7 +70,7 @@ export interface ComposerApi {
     /**
      * Insert plaintext into the current composer.
      * @param plaintext - The plain text to insert
-     * @param view - The target view to insert into
+     * @param view - The target view to insert text into. Defaults to `{ view: "room" }`
      * @returns Returns immediately, does not await action.
      * @alpha Likely to change
      */
