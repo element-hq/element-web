@@ -16,6 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const cssLayerOrder = "@layer compound-tokens, compound-web, shared-components, app-web;";
 const sharedComponentsLayer = "shared-components";
 
+const cssAssetBaseName = "element-web-shared-components";
 const cssAssetFileName = "element-web-shared-components.css";
 
 function layerCssAssets(): Plugin {
@@ -62,6 +63,7 @@ export default defineConfig({
             // to keep the existing package.json `require` paths working.
             formats: ["es", "cjs"],
             fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "umd.cjs"}`,
+            cssFileName: cssAssetBaseName,
         },
         outDir: "dist",
         rolldownOptions: {
