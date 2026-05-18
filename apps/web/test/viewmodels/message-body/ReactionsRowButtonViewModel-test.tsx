@@ -16,6 +16,9 @@ import { createTestClient, mkEvent, mkStubRoom } from "../../test-utils";
 import dis from "../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../src/dispatcher/dispatcher");
+jest.mock("../../../src/customisations/Media", () => ({
+    mediaFromMxc: jest.fn(() => ({ srcHttp: "https://example.org/_matrix/media/reaction.png" })),
+}));
 
 describe("ReactionsRowButtonViewModel", () => {
     let client: MatrixClient;
@@ -89,6 +92,35 @@ describe("ReactionsRowButtonViewModel", () => {
         const vm = new ReactionsRowButtonViewModel(createProps());
 
         expect(getAriaLabel(vm)).toContain("reacted with 👍");
+    });
+
+    it("falls back when no room is available", () => {
+        jest.spyOn(client, "getRoom").mockReturnValue(null);
+
+        const vm = new ReactionsRowButtonViewModel(createProps());
+
+        expect(getAriaLabel(vm)).toBeUndefined();
+        expect(vm.getSnapshot().content).toBe("👍");
+        expect(vm.getSnapshot().count).toBe(2);
+    });
+
+    it("renders custom reaction images with shortcode labels when enabled", () => {
+        const reactionEvent = createReactionEvent("@alice:example.org", "mxc://example.org/reaction");
+        reactionEvent.getContent()["shortcode"] = "party";
+
+        const vm = new ReactionsRowButtonViewModel(
+            createProps({
+                content: "mxc://example.org/reaction",
+                reactionEvents: [reactionEvent],
+                customReactionImagesEnabled: true,
+            }),
+        );
+
+        expect(vm.getSnapshot()).toMatchObject({
+            imageSrc: "https://example.org/_matrix/media/reaction.png",
+            imageAlt: "party",
+        });
+        expect(getAriaLabel(vm)).toContain("reacted with party");
     });
 
     it("updates selected state with myReactionEvent without touching tooltip props", () => {
