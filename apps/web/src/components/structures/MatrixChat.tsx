@@ -2164,11 +2164,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         deviceId,
         ...tokenResponse
     }: QrLoginCredentials): Promise<void> => {
-        // store and use the new credentials
-        const matrixCreds = await configureFromCompletedOAuthLogin(tokenResponse);
-
-        // Create and start the client
-        await Lifecycle.setLoggedIn(matrixCreds);
+        // Persist credentials + OIDC settings, then hydrate the client from storage.
+        // setLoggedIn would clear storage and drop the OIDC settings; see its docstring.
+        await configureFromCompletedOAuthLogin(tokenResponse);
+        await Lifecycle.restoreSessionFromStorage();
 
         if (secrets) {
             const crypto = MatrixClientPeg.safeGet().getCrypto();
