@@ -7,6 +7,6 @@
 
 .content {
     svg {
-        color: var(--cpd-color-text-primary);
+        color: var(--cpd-color-icon-quaternary);
     }
 }

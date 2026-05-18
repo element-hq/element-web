@@ -6,7 +6,7 @@
  */
 
 .content svg[data-state="supported"] {
-    color: inherit;
+    color: var(--cpd-color-icon-quaternary);
 }
 
 .content svg[data-state="unsupported"] {
