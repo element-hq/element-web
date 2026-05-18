@@ -45,10 +45,10 @@ export class ComposerApi
 
     public addFileUploadOption(option: ComposerApiFileUploadOption): void {
         if (this.configuredFileUploadOptions.has(option.type)) {
-            throw new Error(`Option "${option.type}" already exists `);
+            throw new Error(`Option "${option.type}" already exists`);
         }
         if (option.type === "local") {
-            throw new Error(`Option "local" is reserved `);
+            throw new Error(`Option "local" is reserved`);
         }
         this.configuredFileUploadOptions.set(option.type, option);
         this.emit(ModuleComposerApiEvents.UploaderOptionsChanged, option);

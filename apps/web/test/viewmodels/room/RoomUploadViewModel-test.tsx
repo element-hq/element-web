@@ -4,16 +4,21 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
-
+import React from "react";
 import { type IEventRelation, type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { render, waitFor } from "jest-matrix-react";
 
 import type { MockedObject } from "jest-mock";
-import { RoomUploadViewModel } from "../../../src/viewmodels/room/RoomUploadViewModel";
-import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
+import { RoomUploadContextProvider, RoomUploadViewModel } from "../../../src/viewmodels/room/RoomUploadViewModel";
+import { getRoomContext, mkEvent, mkStubRoom, stubClient } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
+import defaultDispatcher, { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import ContentMessages from "../../../src/ContentMessages";
 import { ComposerApi } from "../../../src/modules/ComposerApi";
+import type { ComposerInsertFilesPayload } from "../../../src/dispatcher/payloads/ComposerInsertFilePayload";
+import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomContext";
+import { Action } from "../../../src/dispatcher/actions";
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 const sendContentListToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
 
 describe("RoomUploadViewModel", () => {
@@ -204,6 +209,44 @@ describe("RoomUploadViewModel", () => {
                 replyEvent,
                 client,
                 TimelineRenderingType.Thread,
+            );
+        });
+    });
+
+    describe("RoomUploadContextProvider", () => {
+        it.only("uploads when called via module API", async () => {
+            sendContentListToRoomSpy.mockResolvedValue(undefined);
+            render(
+                <MatrixClientContext.Provider value={client}>
+                    <ScopedRoomContextProvider {...getRoomContext(room, {})}>
+                        <RoomUploadContextProvider>
+                            <p>Any child</p>
+                        </RoomUploadContextProvider>
+                    </ScopedRoomContextProvider>
+                </MatrixClientContext.Provider>,
+            );
+            const files = [
+                {
+                    name: "fake.png",
+                    size: 1024,
+                    type: "image/png",
+                },
+            ] as File[];
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.ComposerFileInsert,
+                    files,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                } satisfies ComposerInsertFilesPayload,
+                true,
+            );
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                files,
+                room.roomId,
+                undefined,
+                undefined,
+                client,
+                TimelineRenderingType.Room,
             );
         });
     });

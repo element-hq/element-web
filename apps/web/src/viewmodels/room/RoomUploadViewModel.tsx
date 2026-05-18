@@ -114,7 +114,7 @@ export class RoomUploadViewModel
         });
     };
 
-    private onUploaderOptionsChanged = (option: ComposerApiFileUploadOption): void => {
+    private readonly onUploaderOptionsChanged = (option: ComposerApiFileUploadOption): void => {
         this.uploadSelectFns.set(option.type, option.onSelected);
         this.snapshot.merge({
             options: [
@@ -285,6 +285,7 @@ export function RoomUploadContextProvider({
     );
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
+        console.log("Dispatched!", payload.action);
         if (payload.action !== Action.ComposerFileInsert) {
             return;
         }
