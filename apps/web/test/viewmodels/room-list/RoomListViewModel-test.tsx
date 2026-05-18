@@ -23,7 +23,8 @@ import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../src/utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
-import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
+import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX } from "../../../src/stores/room-list-v3/section";
+import { MetaSpace } from "../../../src/stores/spaces";
 
 jest.mock("../../../src/utils/room/tagRoom", () => ({
     tagRoom: jest.fn(),
@@ -994,6 +995,73 @@ describe("RoomListViewModel", () => {
                 const snapshot = viewModel.getSnapshot();
                 const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
                 expect(favSection!.roomIds).toEqual(["!fav1:server"]);
+            });
+
+            describe("custom section visibility by originating space", () => {
+                const customTag = `${CUSTOM_SECTION_TAG_PREFIX}test-uuid` as const;
+
+                beforeEach(() => {
+                    jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([MetaSpace.Home]);
+                    jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([
+                        mkStubRoom("!space:server", "My Space", matrixClient),
+                    ]);
+                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                        if (setting === "feature_room_list_sections") return true;
+                        if (setting === "RoomList.CustomSectionData")
+                            return {
+                                [customTag]: { tag: customTag, name: "My Section", spaceId: "!space:server" },
+                            };
+                        return false;
+                    });
+                });
+
+                it("shows an empty custom section when viewing its originating space", () => {
+                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                        if (setting === "feature_room_list_sections") return true;
+                        if (setting === "RoomList.CustomSectionData")
+                            return { [customTag]: { tag: customTag, name: "My Section", spaceId: MetaSpace.Home } };
+                        return false;
+                    });
+                    jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                        spaceId: MetaSpace.Home,
+                        sections: [
+                            { tag: customTag, rooms: [] },
+                            { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        ],
+                    });
+
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    expect(viewModel.getSnapshot().sections.some((s) => s.id === customTag)).toBe(true);
+                });
+
+                it("hides an empty custom section in a different space", () => {
+                    jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                        spaceId: MetaSpace.Home,
+                        sections: [
+                            { tag: customTag, rooms: [] },
+                            { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        ],
+                    });
+
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    expect(viewModel.getSnapshot().sections.some((s) => s.id === customTag)).toBe(false);
+                });
+
+                it("shows a non-empty custom section regardless of originating space", () => {
+                    jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                        spaceId: MetaSpace.Home,
+                        sections: [
+                            { tag: customTag, rooms: [regularRoom1] },
+                            { tag: CHATS_TAG, rooms: [regularRoom2] },
+                        ],
+                    });
+
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    expect(viewModel.getSnapshot().sections.some((s) => s.id === customTag)).toBe(true);
+                });
             });
 
             describe("Collapse/expand all sections", () => {
