@@ -694,9 +694,11 @@ function computeSections(
     const customSections = getCustomSectionData();
 
     const sections = roomsResult.sections
-        // Only include sections that have rooms or are custom sections (which may be empty but should still be shown)
+        // Only include sections that have rooms, or custom sections that were created in the current space.
         .filter(
-            (section) => section.rooms.length > 0 || (isCustomSectionTag(section.tag) && customSections[section.tag]),
+            (section) =>
+                section.rooms.length > 0 ||
+                (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
         )
         // Remove roomIds for sections that are currently collapsed according to their section header view model
         .map((section) => ({
