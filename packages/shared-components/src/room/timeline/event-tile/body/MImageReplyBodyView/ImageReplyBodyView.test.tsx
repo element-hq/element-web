@@ -47,11 +47,7 @@ describe("ImageReplyBodyView", () => {
         const onImageLoad = vi.fn();
 
         const { container } = render(
-            <ImageReplyBodyView
-                src="https://example.org/image.png"
-                alt="Reply preview"
-                onImageLoad={onImageLoad}
-            />,
+            <ImageReplyBodyView src="https://example.org/image.png" alt="Reply preview" onImageLoad={onImageLoad} />,
         );
 
         const image = container.querySelector("img");

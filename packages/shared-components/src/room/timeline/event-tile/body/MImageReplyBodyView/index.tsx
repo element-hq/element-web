@@ -5,8 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export {
-    ImageReplyBodyView,
-    ImageReplyBodyViewPlaceholder,
-    type ImageReplyBodyViewProps,
-} from "./ImageReplyBodyView";
+export { ImageReplyBodyView, ImageReplyBodyViewPlaceholder, type ImageReplyBodyViewProps } from "./ImageReplyBodyView";

@@ -6,13 +6,7 @@
  */
 
 import classNames from "classnames";
-import React, {
-    type CSSProperties,
-    type JSX,
-    type ReactEventHandler,
-    type Ref,
-    useState,
-} from "react";
+import React, { type CSSProperties, type JSX, type ReactEventHandler, type Ref, useState } from "react";
 import { Blurhash } from "react-blurhash";
 import { InlineSpinner } from "@vector-im/compound-web";
 
@@ -116,12 +110,7 @@ function renderPlaceholder({
             }
 
             return (
-                <Blurhash
-                    className={styles.blurhash}
-                    hash={blurhash}
-                    width={maxWidth ?? 58}
-                    height={maxHeight ?? 44}
-                />
+                <Blurhash className={styles.blurhash} hash={blurhash} width={maxWidth ?? 58} height={maxHeight ?? 44} />
             );
 
         case ImageReplyBodyViewPlaceholder.SPINNER:
@@ -216,9 +205,7 @@ export function ImageReplyBodyView({
     return (
         <div className={classNames(styles.root, className)}>
             <div className={styles.thumbnailContainer} style={containerStyle}>
-                {placeholderNode && (
-                    <div className={styles.placeholder}>{placeholderNode}</div>
-                )}
+                {placeholderNode && <div className={styles.placeholder}>{placeholderNode}</div>}
 
                 <div className={styles.mediaContent} style={mediaStyle}>
                     {showImage ? (
