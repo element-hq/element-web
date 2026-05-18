@@ -54,6 +54,7 @@ export function getEventDisplayInfo(
     isLeftAlignedBubbleMessage: boolean;
     noBubbleEvent: boolean;
     isSeeingThroughMessageHiddenForModeration: boolean;
+    isAlignedBetweenBubbles: boolean;
 } {
     const content = mxEvent.getContent();
     const msgtype = content.msgtype;
@@ -109,6 +110,32 @@ export function getEventDisplayInfo(
         }
     }
 
+    /*
+     ┌──────────────────────────────────────────────────────────┐
+     │                                                          │
+     │             TILE ALIGNED BETWEEN BUBBLES                 │
+     │                                                          │
+     └──────────────────────────────────────────────────────────┘
+     ▲                                                          ▲
+     │                                                          │
+     │                                                          │
+     │                                                          │
+┌────┤                                                          │
+│ ┌──┼───────────────────┐                                      │
+│ │  │                   │                                      │
+└─┼──┘  Bubble           │                                      │
+  └──────────────────────┘                                      │
+                                                                │
+                                                                │
+                                                                │
+                                                                ├────┐
+                                            ┌───────────────────┼──┐ │
+                                            │                   │  │ │
+                                            │     Bubble        └──┼─┘
+                                            └──────────────────────┘
+    */
+    const isAlignedBetweenBubbles = eventType === EventType.RTCNotification;
+
     return {
         hasRenderer: !!factory,
         isInfoMessage,
@@ -116,5 +143,6 @@ export function getEventDisplayInfo(
         isLeftAlignedBubbleMessage,
         noBubbleEvent,
         isSeeingThroughMessageHiddenForModeration,
+        isAlignedBetweenBubbles,
     };
 }
