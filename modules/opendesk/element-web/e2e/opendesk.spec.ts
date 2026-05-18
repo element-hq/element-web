@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 import { test, expect } from "../../../../playwright/element-web-test.ts";
@@ -202,6 +203,9 @@ test.describe("Opendesk", () => {
         await homeserver.csApi.request("POST", `/v3/rooms/${encodeURIComponent(roomId)}/invite`, bot.accessToken, {
             user_id: user.userId,
         });
+
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
 
         await page.getByText("Trusted Widget").click();
         await page.getByText("Accept").click();
