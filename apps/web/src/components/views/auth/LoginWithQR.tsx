@@ -233,8 +233,13 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 });
 
                 if (tokenResponse) {
-                    // the 2024 version of the spec only gives the server name, but the 2025 version will give the base URL
-                    // so, we do a discovery for now.
+                    // Whilst the 2024 version of MSC4108 says that we always get a server name, in practise the
+                    // rust-sdk is currently misbehaving and we may receive a base URL instead. Additionally, the 2025
+                    // version of MSC4108  will always give the base URL.
+                    // As such, we should be resilient and support both formats until the spec and implementations have
+                    // stabilised.
+
+                    // TODO: make this resilient and handle either a server name or a base URL (identified by `http[s]://` prefix)
                     const clientConfig = await AutoDiscovery.findClientConfig(this.state.homeserverName);
                     const homeserverUrl = clientConfig?.["m.homeserver"]?.base_url;
 
