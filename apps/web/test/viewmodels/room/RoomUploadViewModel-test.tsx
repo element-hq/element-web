@@ -6,7 +6,7 @@
  */
 import React from "react";
 import { type IEventRelation, type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { render, waitFor } from "jest-matrix-react";
+import { render } from "jest-matrix-react";
 
 import type { MockedObject } from "jest-mock";
 import { RoomUploadContextProvider, RoomUploadViewModel } from "../../../src/viewmodels/room/RoomUploadViewModel";

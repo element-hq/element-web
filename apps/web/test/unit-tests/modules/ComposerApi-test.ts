@@ -5,13 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ComposerApiFileUploadOption } from "@element-hq/element-web-module-api";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Action } from "../../../src/dispatcher/actions";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { type ComposerInsertPayload, ComposerType } from "../../../src/dispatcher/payloads/ComposerInsertPayload";
 import { ComposerApi, ModuleComposerApiEvents } from "../../../src/modules/ComposerApi";
-import { ComposerInsertFilesPayload } from "../../../src/dispatcher/payloads/ComposerInsertFilePayload";
+import type { ComposerInsertFilesPayload } from "../../../src/dispatcher/payloads/ComposerInsertFilePayload";
 
 describe("ComposerApi", () => {
     describe("insertPlaintextIntoComposer()", () => {
