@@ -218,8 +218,8 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     throw new Error("Homeserver name not found in state");
                 }
 
-                // in the 2025 version we would check if the homeserver is on a different base URL, but for the 2024 version
-                // we can't do this as the temporary client doesn't know the server name.
+                // TODO: we need to check if the received homeserver name is different from that which we created the rendezvous with.
+                // If it is different then we need to create a new client to the new homeserver whilst maintaining the rendezvous channel on the existing client
 
                 const metadata = await this.props.client.getAuthMetadata();
                 // Generate our new device ID
