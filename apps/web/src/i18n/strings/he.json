@@ -1977,9 +1977,7 @@
         "m.poll.start": "%(senderName)s התחיל סקר - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s שינה את תמונת החדר.",
-            "changed_img": "%(senderDisplayName)s שינה את האווטאר של החדר ל- <img/>",
-            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s",
-            "removed": "%(senderDisplayName)s הסיר את האווטאר של החדר."
+            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

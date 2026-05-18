@@ -40,7 +40,7 @@ import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { CHATS_TAG, createSection, deleteSection, editSection } from "./section";
+import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedCustomSections } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -522,7 +522,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Load the custom sections from the settings store and update the sorted tags.
      */
     private loadCustomSections(): void {
-        const orderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
+        const orderedCustomSections = getOrderedCustomSections();
         this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
     }
 }

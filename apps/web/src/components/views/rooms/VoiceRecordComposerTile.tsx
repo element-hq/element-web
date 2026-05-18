@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import { MediaBody } from "@element-hq/web-shared-components";
 import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { DeleteIcon, StopSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -239,10 +240,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         // only other UI is the recording-in-progress UI
         return (
-            <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
+            <MediaBody className="mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
                 <LiveRecordingClock recorder={this.state.recorder} />
                 <LiveRecordingWaveform recorder={this.state.recorder} />
-            </div>
+            </MediaBody>
         );
     }
 

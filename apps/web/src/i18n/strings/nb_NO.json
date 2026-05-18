@@ -872,7 +872,6 @@
         "thread_root_id": "Trådens rot-ID: %(threadRootId)s",
         "threads_timeline": "Tidslinje for tråder",
         "title": "Utviklerverktøy",
-        "toggle_event": "slå av/på hendelse",
         "toolbox": "Verktøykasse",
         "use_at_own_risk": "Dette brukergrensesnittet kontrollerer IKKE verditypene. Bruk på egen risiko.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3400,9 +3399,7 @@
         "m.poll.start": "%(senderName)s har startet en avstemning - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s endret rommets avatar.",
-            "changed_img": "%(senderDisplayName)s endret rommets avatar til <img/>",
-            "lightbox_title": "%(senderDisplayName)s endret avataren for %(roomName)s",
-            "removed": "%(senderDisplayName)s fjernet romavataren."
+            "lightbox_title": "%(senderDisplayName)s endret avataren for %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

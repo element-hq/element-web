@@ -879,7 +879,6 @@
         "thread_root_id": "ID korijena niti: %(threadRootId)s",
         "threads_timeline": "Vremenska traka niti",
         "title": "Alati za razvojne inženjere",
-        "toggle_event": "uključi/isključi događaj",
         "toolbox": "Alatni okvir",
         "use_at_own_risk": "Ovo korisničko sučelje NE provjerava vrste vrijednosti. Upotrebljavajte na vlastitu odgovornost.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3448,9 +3447,7 @@
         "m.poll.start": "%(senderName)s započeo/la je anketu – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s promijenio/la je avatar sobe.",
-            "changed_img": "%(senderDisplayName)s promijenio/la je avatar sobe u <img/>",
-            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s",
-            "removed": "%(senderDisplayName)s uklonio/la je avatar sobe."
+            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

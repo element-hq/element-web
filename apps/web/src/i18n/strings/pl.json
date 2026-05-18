@@ -896,7 +896,6 @@
         "thread_root_id": "ID Root Wątku:%(threadRootId)s",
         "threads_timeline": "Oś czasu wątków",
         "title": "Ustawienia deweloperskie",
-        "toggle_event": "przełącz wydarzenie",
         "toolbox": "Przybornik",
         "use_at_own_risk": "Ten interfejs nie sprawdza typów wartości. Używaj na własne ryzyko.",
         "user_avatar": "Awatar: %(avatar)s",
@@ -3486,9 +3485,7 @@
         "m.poll.start": "%(senderName)s utworzył ankietę - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s zmienił awatar pokoju.",
-            "changed_img": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
-            "lightbox_title": "%(senderDisplayName)s zmienił awatar %(roomName)s",
-            "removed": "%(senderDisplayName)s usunął awatar pokoju."
+            "lightbox_title": "%(senderDisplayName)s zmienił awatar %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

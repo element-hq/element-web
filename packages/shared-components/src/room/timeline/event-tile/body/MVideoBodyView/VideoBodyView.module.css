@@ -4,7 +4,7 @@
 
 .container {
     overflow: hidden;
-    border-radius: var(--MBody-border-radius);
+    border-radius: 8px;
 }
 
 .video {
