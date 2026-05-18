@@ -6,7 +6,7 @@ exports[`TileErrorView > renders the bubble layout variant 1`] = `
     <li
       class="TileErrorView-module_tileErrorView"
       data-event-density="default"
-      data-event-layout="group"
+      data-event-layout="bubble"
     >
       <div
         class="TileErrorView-module_line"
