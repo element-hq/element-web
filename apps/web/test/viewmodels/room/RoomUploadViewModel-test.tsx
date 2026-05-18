@@ -214,7 +214,7 @@ describe("RoomUploadViewModel", () => {
     });
 
     describe("RoomUploadContextProvider", () => {
-        it.only("uploads when called via module API", async () => {
+        it("uploads when called via module API", async () => {
             sendContentListToRoomSpy.mockResolvedValue(undefined);
             render(
                 <MatrixClientContext.Provider value={client}>
