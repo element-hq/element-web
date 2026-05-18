@@ -25,7 +25,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
-import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener";
+import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY, RECOVERY_ACCOUNT_DATA_KEY } from "../../src/device-listener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
@@ -301,12 +301,14 @@ describe("DeviceListener", () => {
 
             expect(mockCrypto!.isCrossSigningReady).not.toHaveBeenCalled();
         });
+
         it("does nothing when initial sync is not complete", async () => {
             mockClient!.isInitialSyncComplete.mockReturnValue(false);
             await createAndStart();
 
             expect(mockCrypto!.isCrossSigningReady).not.toHaveBeenCalled();
         });
+
         it("correctly handles the client being stopped", async () => {
             mockCrypto!.isCrossSigningReady.mockImplementation(() => {
                 throw new ClientStoppedError();
@@ -314,6 +316,44 @@ describe("DeviceListener", () => {
             await createAndStart();
             expect(console.error).not.toHaveBeenCalled();
         });
+
+        it("shows no error if key backup is disabled", async () => {
+            // Given backup is disabled but recovery is not disabled
+
+            // @ts-ignore implementing a function with complex return type
+            mockClient!.getAccountDataFromServer.mockImplementation(async (key) => {
+                if (key === BACKUP_DISABLED_ACCOUNT_DATA_KEY) {
+                    return { disabled: true };
+                } else if (key === RECOVERY_ACCOUNT_DATA_KEY) {
+                    return null;
+                } else {
+                    throw new Error(`Unexpected account data query: ${key}`);
+                }
+            });
+
+            // And backup uploads are not active
+            mockCrypto!.getActiveSessionBackupVersion.mockResolvedValue(null);
+
+            // And the current device is trusted
+            mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                new DeviceVerificationStatus({
+                    trustCrossSignedDevices: true,
+                    crossSigningVerified: true,
+                }),
+            );
+
+            // And recovery is not OK (i.e. it is enabled but not ready)
+            mockCrypto!.getSecretStorageStatus.mockResolvedValue(unreadySecretStorageStatus);
+
+            // When we check whether we are in a good state
+            await createAndStart();
+
+            // Then we are fine: no toasts displayed, because recovery being in
+            // a bad state is not important if backups are disabled.
+            expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
+            expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
+        });
+
         it("correctly handles other errors", async () => {
             mockCrypto!.isCrossSigningReady.mockImplementation(() => {
                 throw new Error("blah");
