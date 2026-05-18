@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { getToast } from "@element-hq/element-web-playwright-common";
+import { getToast, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 
@@ -17,12 +17,12 @@ test.describe("Room Status Bar", () => {
             await page.setViewportSize({ width: 1400, height: 768 });
             await use(page);
         },
-        room: async ({ app, user }, use) => {
+        room: async ({ app, user, page }, use) => {
             const roomId = await app.client.createRoom({
                 name: "A room",
             });
-            await app.closeVerifyToast();
-            await app.closeNotificationToast();
+            await rejectToast(page, "Verify this device");
+            await rejectToast(page, "Notifications");
             await app.viewRoomById(roomId);
             await use({ roomId });
         },
@@ -142,7 +142,7 @@ test.describe("Room Status Bar", () => {
             "should show an error when creating a local room fails",
             { tag: "@screenshot" },
             async ({ page, app, user, bot }) => {
-                await app.closeVerifyToast();
+                await rejectToast(page, "Verify this device");
                 await page
                     .getByRole("navigation", { name: "Room list" })
                     .getByRole("button", { name: "New conversation" })

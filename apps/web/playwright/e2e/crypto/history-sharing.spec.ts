@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { createNewInstance } from "@element-hq/element-web-playwright-common";
+import { createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
@@ -37,7 +37,7 @@ test.describe("History sharing", function () {
             await bobElementApp.client.bootstrapCrossSigning(bobCredentials);
             await bobElementApp.closeKeyStorageToast();
 
-            await aliceElementApp.closeNotificationToast();
+            await rejectToast(aliceElementApp.page, "Notifications");
 
             // Create the room and send a message
             await createRoom(alicePage, "TestRoom", true);
