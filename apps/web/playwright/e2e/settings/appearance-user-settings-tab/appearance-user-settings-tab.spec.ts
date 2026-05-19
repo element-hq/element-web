@@ -69,6 +69,7 @@ test.describe("Appearance user settings tab", () => {
         { tag: "@screenshot" },
         async ({ page, app, user, util }) => {
             await rejectToast(page, "Verify this device");
+            await rejectToast(page, "Notifications");
 
             const roomId = await util.createAndDisplayRoom();
 
