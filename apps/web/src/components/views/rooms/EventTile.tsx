@@ -1071,6 +1071,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             isLeftAlignedBubbleMessage,
             noBubbleEvent,
             isSeeingThroughMessageHiddenForModeration,
+            isAlignedBetweenBubbles,
         } = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
@@ -1118,6 +1119,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             getEventTileClassState({
                 isBubbleMessage,
                 isLeftAlignedBubbleMessage,
+                isAlignedBetweenBubbles,
                 isEditing,
                 isInfoMessage,
                 isTwelveHour: this.props.isTwelveHour,
