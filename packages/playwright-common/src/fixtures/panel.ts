@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 import type { Page } from "playwright-core";
-import { test as base } from "./toasts.js";
+import { test as base } from "./services.js";
 
 export const test = base.extend<{
     /**
