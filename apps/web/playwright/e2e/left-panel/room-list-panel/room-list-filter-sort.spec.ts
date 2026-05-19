@@ -7,6 +7,7 @@
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
 import { type Page } from "@playwright/test";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -32,8 +33,8 @@ test.describe("Room list filters and sort", () => {
 
     test.beforeEach(async ({ page, app, bot, user }) => {
         // The toasts are displayed above the search section
-        await app.closeVerifyToast();
-        await app.closeNotificationToast();
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
     });
 
     test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {
