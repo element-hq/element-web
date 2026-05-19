@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -99,9 +100,9 @@ export class ElementAppPage {
         // otherwise we may race with page loading
         await this.page.getByTestId("room-list").waitFor();
 
-        await this.closeVerifyToast(true);
-        await this.closeKeyStorageToast(true);
-        await this.closeNotificationToast(true);
+        await rejectToastIfExists(this.page, "Verify this device");
+        await rejectToastIfExists(this.page, "Turn on key storage");
+        await rejectToastIfExists(this.page, "Notifications");
 
         // We get the room list by test-id which is a listbox and matching title=name
         return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
@@ -362,42 +363,16 @@ export class ElementAppPage {
         }
     }
 
-    /**
-     *
-     * @param title The title of the toast to close
-     * @param button The button to click to close the toast
-     * @param optional If true, will continue and return false if the toast is not found, otherwise wil lexpect that the toast is present
-     * @returns true if the toast was found and closed, otherwise false (which can only happen if optional=true)
-     */
-    async closeToast(title: string, button: string, optional = false): Promise<boolean> {
-        const locator = this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button });
-        if (optional && !(await locator.isVisible())) return false;
-        await locator.click();
-        return true;
-    }
-
-    /**
-     * Dismiss the "Notifications" toast.
-     */
-    public async closeNotificationToast(optional = false): Promise<void> {
-        await this.closeToast("Notifications", "Dismiss", optional);
+    async closeToast(title: string, button: string): Promise<void> {
+        await this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button }).click();
     }
 
     /**
      * Dismiss the "Turn on key storage" toast.
      */
-    public async closeKeyStorageToast(optional = false) {
-        const toastFound = await this.closeToast("Turn on key storage", "Dismiss", optional);
-        if (toastFound) {
-            await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
-        }
-    }
-
-    /**
-     * Dismiss the "Verify this device" toast by clicking "Later".
-     */
-    public async closeVerifyToast(optional = false) {
-        await this.closeToast("Verify this device", "Later", optional);
+    public async closeKeyStorageToast() {
+        await this.closeToast("Turn on key storage", "Dismiss");
+        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
     }
 
     /**

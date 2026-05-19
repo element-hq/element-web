@@ -1299,7 +1299,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 const composerInsertPayload = payload as ComposerInsertPayload;
                 if (composerInsertPayload.composerType) break;
 
-                let timelineRenderingType: TimelineRenderingType | undefined;
+                let timelineRenderingType = composerInsertPayload.timelineRenderingType;
                 // ThreadView handles Action.ComposerInsert itself due to it having its own editState
                 if (composerInsertPayload.timelineRenderingType === TimelineRenderingType.Thread) break;
                 if (
@@ -1310,12 +1310,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     await this.onCancelSearchClick();
                     timelineRenderingType = TimelineRenderingType.Room;
                 }
-
-                // If the dispatchee didn't request a timeline rendering type, use the current one.
-                timelineRenderingType =
-                    timelineRenderingType ??
-                    composerInsertPayload.timelineRenderingType ??
-                    this.state.timelineRenderingType;
 
                 // re-dispatch to the correct composer
                 defaultDispatcher.dispatch<ComposerInsertPayload>({

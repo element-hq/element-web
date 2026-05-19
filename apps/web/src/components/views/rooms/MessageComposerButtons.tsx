@@ -17,13 +17,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext } from "react";
 import {
-    AttachmentIcon,
     MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -34,7 +34,10 @@ import Modal from "../../../Modal";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
@@ -64,6 +67,8 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
+    const roomUploadVM = useRoomUploadViewModel();
+    const roomUploadSnapshot = useViewModel(roomUploadVM);
     const { room, narrow } = useScopedRoomContext("room", "narrow");
 
     const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
@@ -87,7 +92,15 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            uploadButton(), // props passed via UploadButtonContext
+            // This a textual list of buttons, so we can't use the UploadButton here.
+            roomUploadSnapshot.options.map(({ type, icon: Icon, label }) => (
+                <IconizedContextMenuOption
+                    onClick={() => roomUploadVM.onUploadOptionSelected(type)}
+                    icon={Icon && <Icon />}
+                    label={label}
+                    key={type}
+                />
+            )),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -104,7 +117,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
-            uploadButton(), // props passed via UploadButtonContext
+            <UploadButton key="upload" vm={roomUploadVM} />,
         ];
         moreButtons = [
             showStickersButton(props),
@@ -161,27 +174,6 @@ function emojiButton(props: IProps): ReactElement {
         />
     );
 }
-
-function uploadButton(): ReactElement {
-    return <UploadButton key="controls_upload" />;
-}
-
-// Must be rendered within an UploadButtonContextProvider
-const UploadButton: React.FC = () => {
-    const overflowMenuCloser = useContext(OverflowMenuContext);
-    const vm = useRoomUploadViewModel();
-
-    const onClick = (): void => {
-        vm.openUploadDialog();
-        overflowMenuCloser?.(); // close overflow menu
-    };
-
-    return (
-        <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={_t("common|attachment")}>
-            <AttachmentIcon />
-        </CollapsibleButton>
-    );
-};
 
 function showStickersButton(props: IProps): ReactElement | null {
     return props.showStickersButton ? (
@@ -296,5 +288,4 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
         </CollapsibleButton>
     );
 }
-
 export default MessageComposerButtons;
