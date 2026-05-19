@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -359,25 +360,11 @@ export class ElementAppPage {
     }
 
     /**
-     * Dismiss the "Notifications" toast.
-     */
-    public async closeNotificationToast(): Promise<void> {
-        await this.closeToast("Notifications", "Dismiss");
-    }
-
-    /**
      * Dismiss the "Turn on key storage" toast.
      */
     public async closeKeyStorageToast() {
-        await this.closeToast("Turn on key storage", "Dismiss");
+        await rejectToast(this.page, "Turn on key storage");
         await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
-    }
-
-    /**
-     * Dismiss the "Verify this device" toast by clicking "Later".
-     */
-    public async closeVerifyToast() {
-        await this.closeToast("Verify this device", "Later");
     }
 
     /**

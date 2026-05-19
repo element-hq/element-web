@@ -13,6 +13,7 @@ export * from "./audio/SeekBar";
 export * from "./core/AvatarWithDetails";
 export * from "./core/roving";
 export * from "./room/composer/Banner";
+export * from "./room/composer/UploadButton";
 export * from "./crypto/SasEmoji";
 export * from "./menus/UserMenu";
 export * from "./room/timeline/ReadMarker";

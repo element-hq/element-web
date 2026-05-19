@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../../element-web-test";
 import type { Locator, Page } from "playwright-core";
 
@@ -14,8 +16,8 @@ test.describe("Collapsible Room list", () => {
     });
 
     test.beforeEach(async ({ page, app, user }) => {
-        await app.closeVerifyToast();
-        await app.closeNotificationToast();
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
         for (let i = 0; i < 10; i++) {
             await app.client.createRoom({ name: `room${i}` });
         }

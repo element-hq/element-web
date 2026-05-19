@@ -7,6 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import type { Locator, Page } from "@playwright/test";
 import { test, expect, type ExtendedToMatchScreenshotOptions } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -139,7 +141,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     };
 
     test.beforeEach(async ({ page, app, user }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 
