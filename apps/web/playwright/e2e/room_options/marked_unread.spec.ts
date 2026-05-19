@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
@@ -46,7 +48,7 @@ test.describe("Mark as Unread", () => {
         // navigate away from the room again
         await page.goto("/#/room/" + dummyRoomId);
 
-        await app.closeVerifyToast(true);
+        await rejectToastIfExists(page, "Verify this device");
 
         const roomTile = page.getByLabel(TEST_ROOM_NAME);
         await roomTile.click({ button: "right" });
