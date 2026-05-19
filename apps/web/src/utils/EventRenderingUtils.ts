@@ -54,6 +54,7 @@ export function getEventDisplayInfo(
     isLeftAlignedBubbleMessage: boolean;
     noBubbleEvent: boolean;
     isSeeingThroughMessageHiddenForModeration: boolean;
+    isAlignedBetweenBubbles: boolean;
 } {
     const content = mxEvent.getContent();
     const msgtype = content.msgtype;
@@ -77,14 +78,16 @@ export function getEventDisplayInfo(
 
     // Info messages are basically information about commands processed on a room
     let isBubbleMessage =
-        eventType === EventType.RTCNotification ||
         eventType.startsWith("m.key.verification") ||
         (eventType === EventType.RoomMessage && msgtype?.startsWith("m.key.verification")) ||
         eventType === EventType.RoomCreate ||
         eventType === EventType.RoomEncryption ||
         factory === JitsiEventFactory;
     const isLeftAlignedBubbleMessage =
-        !isBubbleMessage && (eventType === EventType.CallInvite || ElementCallEventType.matches(eventType));
+        !isBubbleMessage &&
+        (eventType === EventType.RTCNotification ||
+            eventType === EventType.CallInvite ||
+            ElementCallEventType.matches(eventType));
     let isInfoMessage = calcIsInfoMessage(eventType, content, isBubbleMessage, isLeftAlignedBubbleMessage);
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent =
@@ -107,6 +110,32 @@ export function getEventDisplayInfo(
         }
     }
 
+    /*
+     ┌──────────────────────────────────────────────────────────┐
+     │                                                          │
+     │             TILE ALIGNED BETWEEN BUBBLES                 │
+     │                                                          │
+     └──────────────────────────────────────────────────────────┘
+     ▲                                                          ▲
+     │                                                          │
+     │                                                          │
+     │                                                          │
+┌────┤                                                          │
+│ ┌──┼───────────────────┐                                      │
+│ │  │                   │                                      │
+└─┼──┘  Bubble           │                                      │
+  └──────────────────────┘                                      │
+                                                                │
+                                                                │
+                                                                │
+                                                                ├────┐
+                                            ┌───────────────────┼──┐ │
+                                            │                   │  │ │
+                                            │     Bubble        └──┼─┘
+                                            └──────────────────────┘
+    */
+    const isAlignedBetweenBubbles = eventType === EventType.RTCNotification;
+
     return {
         hasRenderer: !!factory,
         isInfoMessage,
@@ -114,5 +143,6 @@ export function getEventDisplayInfo(
         isLeftAlignedBubbleMessage,
         noBubbleEvent,
         isSeeingThroughMessageHiddenForModeration,
+        isAlignedBetweenBubbles,
     };
 }
