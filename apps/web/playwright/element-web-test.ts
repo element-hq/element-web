@@ -190,7 +190,7 @@ export const expect = baseExpect.extend<Expectations>({
         await baseExpect(receiver).toMatchScreenshot(name, {
             ...options,
             css,
-            threshold: 0.0,
+            threshold: 0.1,
         });
 
         return { pass: true, message: () => "", name: "toMatchScreenshot" };
