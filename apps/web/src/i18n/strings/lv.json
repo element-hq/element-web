@@ -783,7 +783,6 @@
         "thread_root_id": "Pavediena saknes ID: %(threadRootId)s",
         "threads_timeline": "Pavedienu laika skala",
         "title": "Izstrādātāja rīki",
-        "toggle_event": "pārslēgt notikumu",
         "toolbox": "Instrumentārijs",
         "use_at_own_risk": "Šī lietotāja saskarne NEPĀRBAUDA vērtību veidus. Izmantojiet uz savu risku.",
         "user_read_up_to": "Lietotājs izlasījis līdz: ",
@@ -2835,9 +2834,7 @@
         "m.poll.start": "%(senderName)s uzsāka aptauju- %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mainīja istabas avataru.",
-            "changed_img": "%(senderDisplayName)s nomainīja istabas avataru uz <img/>",
-            "lightbox_title": "%(senderDisplayName)s nomainīja %(roomName)s istabas avataru",
-            "removed": "%(senderDisplayName)s dzēsa istabas avataru."
+            "lightbox_title": "%(senderDisplayName)s nomainīja %(roomName)s istabas avataru"
         },
         "m.room.canonical_alias": {
             "alt_added": {

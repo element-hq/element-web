@@ -198,7 +198,7 @@ test.describe("Composer", () => {
 
         test("can paste a file", async ({ page, bot, app }) => {
             await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
-            await expect(page.locator(".mx_MImageBody")).toBeVisible();
+            await expect(page.locator(".mx_ImageBody")).toBeVisible();
         });
 
         test("can paste a file in a thread", async ({ page, app }) => {
@@ -213,7 +213,13 @@ test.describe("Composer", () => {
             await tile.getByRole("button", { name: "Reply in thread" }).click();
 
             await app.composerDragAndPasteFile("thread", getSampleFilePath("riot.png"), "image/png");
-            await expect(page.locator(".mx_MImageBody")).toBeVisible();
+            await expect(page.locator(".mx_ImageBody")).toBeVisible();
+        });
+
+        test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+            // Shrink the viewport
+            await page.setViewportSize({ width: 750, height: 1080 });
+            await expect(page.locator(".mx_MessageComposer_wrapper")).toMatchScreenshot("narrow.png");
         });
 
         test.describe("when Control+Enter is required to send", () => {

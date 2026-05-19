@@ -955,7 +955,7 @@ describe("RoomView", () => {
             expect(searchResultTile).not.toBeNull();
 
             await userEvent.hover(searchResultTile!);
-            await userEvent.click(await findByLabelText("Edit"));
+            await userEvent.click(await findByLabelText("Edit"), { skipHover: true });
 
             await waitFor(() => {
                 expect(container.querySelector(".mx_RoomView_searchResultsPanel")).not.toBeInTheDocument();
@@ -1024,7 +1024,7 @@ describe("RoomView", () => {
             expect(searchResultTile).not.toBeNull();
 
             await userEvent.hover(searchResultTile!);
-            await userEvent.click(await findByLabelText("Edit"));
+            await userEvent.click(await findByLabelText("Edit"), { skipHover: true });
 
             await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
         });
@@ -1079,27 +1079,6 @@ describe("RoomView", () => {
     });
 
     describe("handles Action.ComposerInsert", () => {
-        it("redispatches an empty composerType, timelineRenderingType with the current state", async () => {
-            await mountRoomView();
-            const promise = untilDispatch((payload) => {
-                try {
-                    expect(payload).toEqual({
-                        action: Action.ComposerInsert,
-                        text: "Hello world",
-                        timelineRenderingType: TimelineRenderingType.Room,
-                        composerType: ComposerType.Send,
-                    });
-                } catch {
-                    return false;
-                }
-                return true;
-            }, defaultDispatcher);
-            defaultDispatcher.dispatch({
-                action: Action.ComposerInsert,
-                text: "Hello world",
-            } satisfies ComposerInsertPayload);
-            await promise;
-        });
         it("redispatches an empty composerType with the current state", async () => {
             await mountRoomView();
             const promise = untilDispatch((payload) => {

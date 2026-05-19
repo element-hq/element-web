@@ -854,7 +854,6 @@
         "thread_root_id": "Թեմայի արմատային ID: %(threadRootId)s",
         "threads_timeline": "Թեմաների ժամանակագրություն",
         "title": "Ծրագրավորողի գործիքներ",
-        "toggle_event": "միացնել իրադարձությունը",
         "toolbox": "Գործիքակազմ",
         "use_at_own_risk": "Այս UI-ը(օգտագործողի ինտերֆեյսը) չի ստուգում արժեքների տեսակները: Օգտագործել ձեր սեփական ռիսկով:",
         "user_read_up_to": "Օգտատերը կարդացել է մինչև՝ ",
@@ -3307,9 +3306,7 @@
         "m.poll.start": "%(senderName)s-ը սկսել է հարցում՝ %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s-ը փոխել է սենյակի ավատարը:",
-            "changed_img": "%(senderDisplayName)s-ը փոխել է սենյակի ավատարը <img/>-ով",
-            "lightbox_title": "%(senderDisplayName)s-ը փոխել է %(roomName)s֊ի ավատարը",
-            "removed": "%(senderDisplayName)s-ը հեռացրեց սենյակի ավատարը:"
+            "lightbox_title": "%(senderDisplayName)s-ը փոխել է %(roomName)s֊ի ավատարը"
         },
         "m.room.canonical_alias": {
             "alt_added": {

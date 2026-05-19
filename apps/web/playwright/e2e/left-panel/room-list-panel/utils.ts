@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Locator, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 
 /**
  * Get the room list
@@ -33,6 +33,49 @@ export function getSectionHeader(page: Page, sectionName: string, isUnread = fal
     return getRoomList(page).getByRole("gridcell", {
         name: isUnread ? `Toggle ${sectionName} section with unread room(s)` : `Toggle ${sectionName} section`,
     });
+}
+
+/**
+ * Asserts a room is nested under a specific section using the treegrid aria-level hierarchy.
+ * Section header rows sit at aria-level=1; room rows nested within a section sit at aria-level=2.
+ * Verifies that the closest preceding aria-level=1 row is the expected section header.
+ */
+export async function assertRoomInSection(page: Page, sectionName: string, roomName: string): Promise<void> {
+    const roomList = getRoomList(page);
+    const roomRow = roomList.getByRole("row", { name: `Open room ${roomName}` });
+    // Room row must be at aria-level=2 (i.e. inside a section)
+    await expect(roomRow).toHaveAttribute("aria-level", "2");
+    // The closest preceding aria-level=1 row must be the expected section header.
+    // XPath preceding:: axis returns nodes before the context in document order; [1] picks the nearest one.
+    const closestSectionHeader = roomRow.locator(`xpath=preceding::*[@role="row" and @aria-level="1"][1]`);
+    await expect(closestSectionHeader).toContainText(sectionName);
+}
+
+/**
+ * Drag and drop a room row onto a section header
+ * @param page
+ * @param roomName
+ * @param sectionName
+ */
+export async function dragRoomToSection(page: Page, roomName: string, sectionName: string): Promise<void> {
+    const sourceRow = getRoomList(page).getByRole("row", { name: `Open room ${roomName}` });
+    const source = sourceRow.locator("button").first();
+    const target = getSectionHeader(page, sectionName);
+
+    const sourceBox = await source.boundingBox();
+    const targetBox = await target.boundingBox();
+
+    const sourceX = sourceBox.x + sourceBox.width / 2;
+    const sourceY = sourceBox.y + sourceBox.height / 2;
+    const targetY = targetBox.y + targetBox.height / 2;
+
+    // Grab the room
+    await page.mouse.move(sourceX, sourceY);
+    await page.mouse.down();
+    //  Move the room on the section header
+    await page.mouse.move(sourceX, targetY, { steps: 10 });
+    // Drop the room
+    await page.mouse.up();
 }
 
 /**

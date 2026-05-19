@@ -1913,9 +1913,7 @@
         "m.poll.start": "%(senderName)s pradėjo apklausą - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s pakeitė kambario avatarą.",
-            "changed_img": "%(senderDisplayName)s pakeitė kambario pseudoportretą į <img/>",
-            "lightbox_title": "%(senderDisplayName)s pakeitė kambario %(roomName)s pseudoportretą",
-            "removed": "%(senderDisplayName)s pašalino kambario pseudoportretą."
+            "lightbox_title": "%(senderDisplayName)s pakeitė kambario %(roomName)s pseudoportretą"
         },
         "m.room.canonical_alias": {
             "alt_added": {

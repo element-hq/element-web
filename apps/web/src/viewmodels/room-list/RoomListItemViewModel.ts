@@ -38,7 +38,8 @@ import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
-import RoomListStoreV3, { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
 
 interface RoomItemProps {
@@ -423,15 +424,13 @@ export class RoomListItemViewModel
      * Order follows the canonical section order from RoomListStoreV3.
      */
     private static buildSections(roomTags: Room["tags"]): Section[] {
-        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+        const customSectionData = getCustomSectionData();
 
         return (
             RoomListStoreV3.instance.orderedSectionTags
                 // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
                 // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
-                .filter(
-                    (tag) => tag !== CHATS_TAG && tag !== DefaultTagID.Favourite && tag !== DefaultTagID.LowPriority,
-                )
+                .filter((tag) => !isDefaultSectionTag(tag))
                 .map((tag) => ({
                     tag,
                     name: RoomListItemViewModel.getSectionName(tag, customSectionData),

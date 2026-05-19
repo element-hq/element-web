@@ -6,9 +6,10 @@
  */
 
 import { type Page } from "@playwright/test";
+import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
-import { getRoomList, getRoomListHeader, getSectionHeader } from "./utils";
+import { assertRoomInSection, getRoomList, getRoomListHeader, getSectionHeader } from "./utils";
 
 test.describe("Room list custom sections", () => {
     test.use({
@@ -40,26 +41,10 @@ test.describe("Room list custom sections", () => {
         await expect(dialog).not.toBeVisible();
     }
 
-    /**
-     * Asserts a room is nested under a specific section using the treegrid aria-level hierarchy.
-     * Section header rows sit at aria-level=1; room rows nested within a section sit at aria-level=2.
-     * Verifies that the closest preceding aria-level=1 row is the expected section header.
-     */
-    async function assertRoomInSection(page: Page, sectionName: string, roomName: string): Promise<void> {
-        const roomList = getRoomList(page);
-        const roomRow = roomList.getByRole("row", { name: `Open room ${roomName}` });
-        // Room row must be at aria-level=2 (i.e. inside a section)
-        await expect(roomRow).toHaveAttribute("aria-level", "2");
-        // The closest preceding aria-level=1 row must be the expected section header.
-        // XPath preceding:: axis returns nodes before the context in document order; [1] picks the nearest one.
-        const closestSectionHeader = roomRow.locator(`xpath=preceding::*[@role="row" and @aria-level="1"][1]`);
-        await expect(closestSectionHeader).toContainText(sectionName);
-    }
-
     test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
-        await app.closeVerifyToast();
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Notifications");
+        await rejectToast(page, "Verify this device");
 
         // Focus the user menu to avoid hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();

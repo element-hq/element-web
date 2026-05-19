@@ -709,7 +709,6 @@
         "state_key": "Kyç Gjendjesh",
         "threads_timeline": "Rrjedhë kohore rrjedhash",
         "title": "Mjete zhvilluesi",
-        "toggle_event": "shfaqe/fshihe aktin",
         "toolbox": "Grup mjetesh",
         "use_at_own_risk": "Kjo UI NUK kontrollon llojet e vlerave. Përdorini me përgjegjësinë tuaj.",
         "value": "Vlerë",
@@ -2712,9 +2711,7 @@
         "m.poll.start": "%(senderName)s nisi një anketim - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ndryshoi avatarin e dhomës.",
-            "changed_img": "%(senderDisplayName)s ndryshoi avatarin e dhomës në <img/>",
-            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s",
-            "removed": "%(senderDisplayName)s hoqi avatarin e dhomës."
+            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

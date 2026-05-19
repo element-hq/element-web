@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { createNewInstance } from "@element-hq/element-web-playwright-common";
+import { createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
@@ -37,7 +37,7 @@ test.describe("History sharing", function () {
             await bobElementApp.client.bootstrapCrossSigning(bobCredentials);
             await bobElementApp.closeKeyStorageToast();
 
-            await aliceElementApp.closeNotificationToast();
+            await rejectToast(aliceElementApp.page, "Notifications");
 
             // Create the room and send a message
             await createRoom(alicePage, "TestRoom", true);
@@ -64,14 +64,17 @@ test.describe("History sharing", function () {
             // Mask message timestamps and exclude RR avatars from the screenshot. Bob sometimes sees Alice's RR on the
             // previous event, which is surprising but not what we're testing here.
             const mask = [bobPage.locator(".mx_MessageTimestamp")];
-            await expect(bobPage.locator(".mx_RoomView_body")).toMatchScreenshot("shared-history-invite-accepted.png", {
-                mask,
-                css: `
+            await expect(bobPage.locator(".mx_RoomView_timeline")).toMatchScreenshot(
+                "shared-history-invite-accepted.png",
+                {
+                    mask,
+                    css: `
                     .mx_ReadReceiptGroup_container {
                         display: none !important;
                     }
                 `,
-            });
+                },
+            );
         },
     );
 
