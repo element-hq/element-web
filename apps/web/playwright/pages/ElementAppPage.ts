@@ -100,9 +100,12 @@ export class ElementAppPage {
         // otherwise we may race with page loading
         await this.page.getByTestId("room-list").waitFor();
 
-        await rejectToastIfExists(this.page, "Verify this device");
-        await rejectToastIfExists(this.page, "Turn on key storage");
-        await rejectToastIfExists(this.page, "Notifications");
+        await rejectToastIfExists(this.page, "Verify this device", { timeout: 1 });
+        const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", { timeout: 1 });
+        if (keyStorageToastRejected) {
+            await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+        }
+        await rejectToastIfExists(this.page, "Notifications", { timeout: 1 });
 
         // We get the room list by test-id which is a listbox and matching title=name
         return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();

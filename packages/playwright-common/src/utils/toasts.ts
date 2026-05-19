@@ -104,11 +104,17 @@ export async function rejectToast(page: Page, title: string): Promise<void> {
  * @public
  * @param page - Playwright page we are working with.
  * @param title - Expected title of the toast.
+ * @param options.timeout - Time in ms before we give up and decide the toast does not exist.
  *
  * @returns true if the toast was found and the button was clicked, or false if the toast was not found (always returns true if `required` is true).
  */
-export async function rejectToastIfExists(page: Page, title: string): Promise<boolean> {
-    return await clickToastButton(page, title, "secondary", 2000, false);
+export async function rejectToastIfExists(
+    page: Page,
+    title: string,
+    options: { timeout?: number } = {},
+): Promise<boolean> {
+    const { timeout = 2000 } = options;
+    return await clickToastButton(page, title, "secondary", timeout, false);
 }
 
 /**
