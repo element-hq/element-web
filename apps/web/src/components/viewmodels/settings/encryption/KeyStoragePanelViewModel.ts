@@ -116,7 +116,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                             await resetKeyBackupAndWait(crypto);
                         }
 
-                        // Set the flag so that EX no longer thinks the user wants backup disabled
+                        // Set the flag to say that the user wants backup enabled
                         await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: true });
                         await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, {
                             disabled: false,
@@ -127,9 +127,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                         // server-side crypto data.
                         await crypto.disableKeyStorage();
 
-                        // Set a flag to say that the user doesn't want key backup.
-                        // Element X uses this to determine whether to set up automatically,
-                        // so this will stop EX turning it back on spontaneously.
+                        // Set the flag to say that the user wants backup disabled
                         await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: false });
                         await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, {
                             disabled: true,
