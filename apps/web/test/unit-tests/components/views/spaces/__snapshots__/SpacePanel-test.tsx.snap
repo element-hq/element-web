@@ -6,26 +6,30 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     aria-label="Spaces"
     class="mx_SpacePanel collapsed newUi"
   >
-    <button
-      aria-expanded="false"
-      aria-haspopup="menu"
-      aria-label="User menu"
-      class="_triggerButton_1ejl3_50 mx_UserMenu"
-      data-state="closed"
-      id="radix-_r_0_"
-      type="button"
+    <div
+      class="_wrapper_1yvpq_8"
     >
-      <span
-        aria-label="@test:test"
-        class="_avatar_va14e_8 _avatar-imageless_va14e_55"
-        data-color="5"
-        data-type="round"
-        role="img"
-        style="--cpd-avatar-size: 36px;"
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="_triggerButton_1yvpq_57 mx_UserMenu"
+        data-state="closed"
+        id="radix-_r_0_"
+        type="button"
       >
-        t
-      </span>
-    </button>
+        <span
+          aria-label="@test:test"
+          class="_avatar_va14e_8 _avatar-imageless_va14e_55"
+          data-color="5"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 36px;"
+        >
+          t
+        </span>
+      </button>
+    </div>
     <div
       aria-label="Expand"
       class="mx_AccessibleButton mx_SpacePanel_toggleCollapse"
