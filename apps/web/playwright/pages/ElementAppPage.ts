@@ -100,15 +100,31 @@ export class ElementAppPage {
         // otherwise we may race with page loading
         await this.page.getByTestId("room-list").waitFor();
 
-        await rejectToastIfExists(this.page, "Verify this device", { timeout: 50 });
-        const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", { timeout: 50 });
-        if (keyStorageToastRejected) {
-            await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
-        }
-        await rejectToastIfExists(this.page, "Notifications", { timeout: 50 });
+        const dismissToasts = async (): Promise<void> => {
+            await rejectToastIfExists(this.page, "Verify this device", { timeout: 50 });
+            const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", {
+                timeout: 50,
+            });
+            if (keyStorageToastRejected) {
+                await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+            }
+            await rejectToastIfExists(this.page, "Notifications", { timeout: 50 });
+        };
 
-        // We get the room list by test-id which is a listbox and matching title=name
-        return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
+        await dismissToasts();
+
+        // We get the room list by test-id which is a listbox and matching title=name.
+        // Retry, closing toasts each time, as otherwise it can race and the toast can appear after we try to close them
+        const roomTile = this.page.getByTestId("room-list").locator(`[title="${name}"]`).first();
+        for (let attemptsLeft = 10; attemptsLeft > 0; attemptsLeft--) {
+            try {
+                await roomTile.click({ timeout: 500 });
+                return;
+            } catch (e) {
+                if (attemptsLeft === 1) throw e;
+                await dismissToasts();
+            }
+        }
     }
 
     /**
