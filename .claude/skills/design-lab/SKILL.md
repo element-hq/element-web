@@ -148,12 +148,22 @@ The branching reference is the workhorse — almost every other workflow touches
 
 ## Figma input
 
-This skill assumes the **Figma Dev Mode MCP server** is configured locally so you can pull design data directly from the frame the designer is looking at. At the start of any component workflow, check whether Figma MCP tools are present (look for tool names containing "figma" in your available tools).
+This skill works best with the **Figma Dev Mode MCP server** configured — it lets you pull design tokens, layout, and component details directly from the frame the designer is looking at.
+
+At the start of any component workflow, check whether Figma MCP tools are present (look for tool names containing "figma" in your available tools).
 
 - **If present:** ask the designer to focus the relevant frame in Figma, then pull tokens, structure, and any usable code via the MCP.
-- **If not present:** fall back gracefully — never make the designer feel like setup is blocking them:
+- **If not present:** guide the designer through setup before offering a fallback:
 
-  > Quick note — I don't see the Figma MCP configured here. No problem, we can still work from a URL and a screenshot. Could you paste the Figma link to the frame, and (optionally) drop in a screenshot? I'll work from those.
+  > I don't see the Figma MCP set up yet — it's worth doing because it lets me read your Figma designs directly without you needing to screenshot or copy specs.
+  >
+  > To set it up (takes about a minute):
+  >   1. Open **Claude Desktop**
+  >   2. Go to **Settings → Extensions → Browse Extensions**
+  >   3. Search for **Figma** and follow the installation steps
+  >   4. Come back here and we'll continue
+  >
+  > If you'd rather skip the setup for now, paste the Figma URL and a screenshot of the frame and we'll work from those instead. But the MCP is worth having — it'll make every future session smoother.
 
 ## Default to verbose and kind
 

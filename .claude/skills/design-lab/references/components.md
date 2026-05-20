@@ -79,12 +79,24 @@ If unsure, ask the designer briefly what the component needs to *do*, then sugge
 - Use the MCP to pull the frame's structure, design tokens, layout, and any code snippets.
 - Cross-reference against Compound Design System primitives — **prefer using `@vector-im/compound-web` components and tokens wherever possible** rather than reimplementing them.
 
-**Without the Figma MCP:**
+**Without the Figma MCP — guide through setup first:**
 
-> No problem — could you paste the Figma URL for the frame, and (if easy) drop in a screenshot? I'll work from those.
+Don't immediately ask for a URL and screenshot. The MCP makes every future component session meaningfully better, so it's worth taking the two minutes to set it up now:
+
+> I don't see the Figma MCP configured yet. It's quick to set up and worth doing — it lets me read your designs directly instead of relying on screenshots.
+>
+> To install it:
+>   1. Open **Claude Desktop**
+>   2. Go to **Settings → Extensions → Browse Extensions**
+>   3. Search for **Figma** and install it (follow the prompts — you'll sign into Figma during setup)
+>   4. Come back here once it's done
+>
+> Or if you'd rather move on now, paste the Figma URL and a screenshot of the frame and I'll work from those. But I'd recommend the setup — it only takes a minute.
+
+**If the designer skips setup (fallback):**
 
 Get:
-- The Figma URL (with `node-id` if available — appears in the URL after `?node-id=...`)
+- The Figma URL (with `node-id` if visible — appears in the URL after `?node-id=...`)
 - A screenshot of the frame
 - The states the component should support (default, hover, disabled, loading, error, empty, etc. — ask explicitly)
 
