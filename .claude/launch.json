@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "element-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "element-web", "start"],
+      "port": 8080,
+      "autoPort": true
+    },
+    {
+      "name": "shared-components-storybook",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@element-hq/web-shared-components", "storybook"],
+      "port": 6007
+    }
+  ]
+}
