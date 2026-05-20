@@ -9,6 +9,7 @@ import React, { type JSX, useCallback, useMemo, useRef } from "react";
 import classNames from "classnames";
 import {
     CollapseIcon,
+    CopyIcon,
     DeleteIcon,
     EditIcon,
     ExpandIcon,
@@ -55,6 +56,8 @@ export interface ActionBarViewSnapshot {
     isQuoteExpanded: boolean;
     /** Whether starting or replying in a thread is allowed for this event. */
     isThreadReplyAllowed: boolean;
+    /** Whether shift key modifier is active to show expanded actions. */
+    showShiftActions?: boolean;
 }
 
 /**
@@ -65,6 +68,7 @@ export interface ActionBarViewSnapshot {
  */
 export interface ActionBarViewActions {
     onCancelClick?: (anchor: HTMLElement | null) => void;
+    onCopyClick?: (anchor: HTMLElement | null) => void;
     onCopyLinkClick?: (anchor: HTMLElement | null) => void;
     onDownloadClick?: (anchor: HTMLElement | null) => void;
     onEditClick?: (anchor: HTMLElement | null) => void;
@@ -91,6 +95,7 @@ export type ActionBarViewModel = ViewModel<ActionBarViewSnapshot, ActionBarViewA
  */
 export enum ActionBarAction {
     Cancel = "cancel",
+    Copy = "copy",
     CopyLink = "copyLink",
     Download = "download",
     Edit = "edit",
@@ -203,6 +208,17 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             label={_t("timeline|mab|copy_link_thread")}
             onActivate={vm.onCopyLinkClick}
             icon={LinkIcon}
+        />
+    );
+
+    actionButtons[ActionBarAction.Copy] = (
+        <ActionBarButton
+            key={ActionBarAction.Copy}
+            presentation={presentation}
+            buttonRef={actionButtonRefSetters[ActionBarAction.Copy]}
+            label={_t("action|copy")}
+            onActivate={vm.onCopyClick}
+            icon={CopyIcon}
         />
     );
 

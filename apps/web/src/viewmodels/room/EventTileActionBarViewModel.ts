@@ -44,6 +44,7 @@ import { _t } from "../../languageHandler";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { ModuleApi } from "../../modules/Api";
+import { copyPlaintext } from "../../utils/strings";
 
 /** Props for the event-tile action bar view model. */
 export interface EventTileActionBarViewModelProps {
@@ -61,6 +62,8 @@ export interface EventTileActionBarViewModelProps {
     isCard?: boolean;
     /** Whether the quoted reply chain is currently expanded. */
     isQuoteExpanded?: boolean;
+    /** Whether the shift key modifier is active to show expanded actions. */
+    showShiftActions?: boolean;
     /** Called when the overflow options action is activated. */
     onOptionsClick?: (anchor: HTMLElement | null) => void;
     /** Called when the reactions action is activated. */
@@ -85,6 +88,8 @@ interface DerivedEventState {
     showExpandCollapse: boolean;
     showReplyInThread: boolean;
     showThreadForDeletedMessage: boolean;
+    contentActionable: boolean;
+    canRedact: boolean;
     isFailed: boolean;
     isPinned: boolean;
     isQuoteExpanded: boolean;
@@ -131,17 +136,22 @@ export class EventTileActionBarViewModel
         const mediaState = EventTileActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
 
         return {
-            actions: EventTileActionBarViewModel.resolveActions(eventState, mediaState),
+            actions: EventTileActionBarViewModel.resolveActions(eventState, mediaState, props.showShiftActions),
             presentation: "icon",
             isDownloadEncrypted: mediaState.isDownloadEncrypted,
             isDownloadLoading: mediaState.isDownloadLoading,
             isPinned: eventState.isPinned,
             isQuoteExpanded: eventState.isQuoteExpanded,
             isThreadReplyAllowed: eventState.isThreadReplyAllowed,
+            showShiftActions: props.showShiftActions ?? false,
         };
     }
 
-    private static resolveActions(eventState: DerivedEventState, mediaState: DerivedMediaState): ActionBarAction[] {
+    private static resolveActions(
+        eventState: DerivedEventState,
+        mediaState: DerivedMediaState,
+        showShiftActions?: boolean,
+    ): ActionBarAction[] {
         const actions: ActionBarAction[] = [];
 
         if (eventState.showCancel && eventState.isFailed) {
@@ -179,6 +189,13 @@ export class EventTileActionBarViewModel
             actions.push(ActionBarAction.Expand);
         }
 
+        if (showShiftActions && eventState.contentActionable) {
+            actions.push(ActionBarAction.Copy);
+            if (eventState.canRedact) {
+                actions.push(ActionBarAction.Remove);
+            }
+        }
+
         actions.push(ActionBarAction.Options);
 
         return actions;
@@ -193,6 +210,12 @@ export class EventTileActionBarViewModel
         const editStatus = mxEvent.replacingEvent()?.status;
         const redactStatus = mxEvent.localRedactionEvent()?.status;
         const relationType = mxEvent.getRelation()?.rel_type;
+        const room = mxEvent.getRoomId() ? client.getRoom(mxEvent.getRoomId()) : null;
+
+        const canRedact =
+            !!room?.currentState.maySendRedactionForEvent(mxEvent, client.getSafeUserId()) &&
+            mxEvent.getType() !== EventType.RoomServerAcl &&
+            mxEvent.getType() !== EventType.RoomEncryption;
 
         return {
             showCancel: canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus),
@@ -207,6 +230,8 @@ export class EventTileActionBarViewModel
                 !contentActionable &&
                 props.timelineRenderingType === TimelineRenderingType.Room &&
                 Boolean(mxEvent.getThread()),
+            canRedact,
+            contentActionable,
             isFailed: [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT),
             isPinned: PinningUtils.isPinned(client, mxEvent),
             isQuoteExpanded: props.isQuoteExpanded ?? false,
@@ -500,5 +525,35 @@ export class EventTileActionBarViewModel
             rootEvent: mxEvent,
             push: isCard,
         });
+    };
+
+    /** Copies the plain text content of the current event to the clipboard. */
+    public onCopyClick = async (_anchor: HTMLElement | null): Promise<void> => {
+        const body = this.props.mxEvent.getContent().body;
+        if (body) {
+            await copyPlaintext(body);
+        }
+    };
+
+    /** Directly redacts the current event without showing a confirmation dialog. */
+    public onRemoveClick = async (_anchor: HTMLElement | null): Promise<void> => {
+        const { mxEvent } = this.props;
+        const eventId = mxEvent.getId();
+        const roomId = mxEvent.getRoomId();
+
+        if (!eventId || !roomId) return;
+
+        const cli = MatrixClientPeg.safeGet();
+        try {
+            await cli.redactEvent(roomId, eventId);
+        } catch (e: any) {
+            const code = e.errcode || e.statusCode;
+            if (typeof code !== "undefined") {
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("common|error"),
+                    description: _t("redact|error", { code }),
+                });
+            }
+        }
     };
 }
