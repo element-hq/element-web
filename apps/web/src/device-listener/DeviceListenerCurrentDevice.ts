@@ -129,7 +129,8 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
-     * Set the account data "m.key_backup" to `{ "enabled": false }`.
+     * Set the account data indicate that the user has chosen to disable key
+     * backup.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
         await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: false });
