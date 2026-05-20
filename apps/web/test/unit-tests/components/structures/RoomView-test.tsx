@@ -1079,27 +1079,6 @@ describe("RoomView", () => {
     });
 
     describe("handles Action.ComposerInsert", () => {
-        it("redispatches an empty composerType, timelineRenderingType with the current state", async () => {
-            await mountRoomView();
-            const promise = untilDispatch((payload) => {
-                try {
-                    expect(payload).toEqual({
-                        action: Action.ComposerInsert,
-                        text: "Hello world",
-                        timelineRenderingType: TimelineRenderingType.Room,
-                        composerType: ComposerType.Send,
-                    });
-                } catch {
-                    return false;
-                }
-                return true;
-            }, defaultDispatcher);
-            defaultDispatcher.dispatch({
-                action: Action.ComposerInsert,
-                text: "Hello world",
-            } satisfies ComposerInsertPayload);
-            await promise;
-        });
         it("redispatches an empty composerType with the current state", async () => {
             await mountRoomView();
             const promise = untilDispatch((payload) => {

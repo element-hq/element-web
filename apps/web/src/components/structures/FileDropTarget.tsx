@@ -29,10 +29,10 @@ const FileDropTarget: React.FC<IProps> = ({ parent }) => {
         counter: 0,
     });
     const vm = useRoomUploadViewModel();
-    const { mayUpload } = useViewModel(vm);
+    const { mayDragAndDropFile } = useViewModel(vm);
 
     useEffect(() => {
-        if (!mayUpload || !parent || parent.ondrop) return;
+        if (!mayDragAndDropFile || !parent || parent.ondrop) return;
 
         const onDragEnter = (ev: DragEvent): void => {
             ev.stopPropagation();
@@ -106,9 +106,9 @@ const FileDropTarget: React.FC<IProps> = ({ parent }) => {
             parent?.removeEventListener("dragenter", onDragEnter);
             parent?.removeEventListener("dragleave", onDragLeave);
         };
-    }, [parent, mayUpload, vm]);
+    }, [parent, mayDragAndDropFile, vm]);
 
-    if (mayUpload && state.dragging) {
+    if (mayDragAndDropFile && state.dragging) {
         return (
             <div className="mx_FileDropTarget">
                 <img src={UploadBigSvg} className="mx_FileDropTarget_image" alt="" />
