@@ -20,6 +20,7 @@ test.describe("Composer", () => {
         botCreateOpts: {
             displayName: "Bob",
         },
+        lockLeftPanelWidth: false,
     });
 
     test.use({

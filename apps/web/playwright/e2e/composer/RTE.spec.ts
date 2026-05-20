@@ -216,10 +216,16 @@ test.describe("Composer", () => {
             await expect(page.locator(".mx_ImageBody")).toBeVisible();
         });
 
-        test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
-            // Shrink the viewport
-            await page.setViewportSize({ width: 750, height: 1080 });
-            await expect(page.locator(".mx_MessageComposer_wrapper")).toMatchScreenshot("narrow.png");
+        test.describe(() => {
+            test.use({
+                lockLeftPanelWidth: false,
+            });
+
+            test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+                // Shrink the viewport
+                await page.setViewportSize({ width: 750, height: 1080 });
+                await expect(page.locator(".mx_MessageComposer_wrapper")).toMatchScreenshot("narrow.png");
+            });
         });
 
         test.describe("when Control+Enter is required to send", () => {
