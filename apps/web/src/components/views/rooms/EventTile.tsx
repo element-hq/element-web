@@ -51,6 +51,8 @@ import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-de
 import {
     useCreateAutoDisposedViewModel,
     ActionBarView,
+    E2ePadlock,
+    E2ePadlockIcon,
     MessageTimestampView,
     PinnedMessageBadge,
     ReactionsRowButtonView,
@@ -100,7 +102,6 @@ import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
-import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import {
     getAriaLive,
     getEventTileAvatarMember,
@@ -866,10 +867,28 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
 
             if (this.state.shieldColour === EventShieldColour.GREY) {
-                return <E2ePadlock icon={E2ePadlockIcon.Normal} title={shieldReasonMessage} />;
+                return (
+                    <E2ePadlock
+                        className={
+                            // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                            "mx_EventTile_e2eIcon"
+                        }
+                        icon={E2ePadlockIcon.Normal}
+                        title={shieldReasonMessage}
+                    />
+                );
             } else {
                 // red, by elimination
-                return <E2ePadlock icon={E2ePadlockIcon.Warning} title={shieldReasonMessage} />;
+                return (
+                    <E2ePadlock
+                        className={
+                            // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                            "mx_EventTile_e2eIcon"
+                        }
+                        icon={E2ePadlockIcon.Warning}
+                        title={shieldReasonMessage}
+                    />
+                );
             }
         }
 
@@ -1673,11 +1692,29 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
 export default SafeEventTile;
 
 function E2ePadlockUnencrypted(): JSX.Element {
-    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} />;
+    return (
+        <E2ePadlock
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+            title={_t("common|unencrypted")}
+            icon={E2ePadlockIcon.Warning}
+        />
+    );
 }
 
 function E2ePadlockDecryptionFailure(): JSX.Element {
-    return <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} />;
+    return (
+        <E2ePadlock
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+            title={_t("timeline|undecryptable_tooltip")}
+            icon={E2ePadlockIcon.DecryptionFailure}
+        />
+    );
 }
 
 interface ISentReceiptProps {
