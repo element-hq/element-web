@@ -7,6 +7,13 @@
 import type { Page } from "playwright-core";
 import { test as base } from "./services.js";
 
+/**
+ * This is the width the panel by default.
+ * Rounding this number to a whole number would mean updating a whole
+ * bunch of screenshots.
+ */
+const LEFT_PANEL_WIDTH = "369.6875px";
+
 export const test = base.extend<{
     /**
      * Whether the left panel should have its width fixed.
@@ -22,13 +29,17 @@ export const test = base.extend<{
     lockLeftPanelWidth: true,
     page: async ({ lockLeftPanelWidth, page }, use) => {
         const listener = async (page: Page) => {
-            await page.addStyleTag({
-                content: `
+            try {
+                await page.addStyleTag({
+                    content: `
                         #left-panel {
-                            flex: 0 0 369.6875px !important;
+                            flex: 0 0 ${LEFT_PANEL_WIDTH} !important;
                         }
                 `,
-            });
+                });
+            } catch (e) {
+                console.error("Failed to add style tag to stabilize left panel", e);
+            }
         };
         if (lockLeftPanelWidth) page.on("load", listener);
         await use(page);
