@@ -87,10 +87,7 @@ export function eventTileActionBarFocusChange(
 
 /** Updates interaction state when stale hover is detected. */
 export function eventTileClearHover(state: EventTileInteractionState): EventTileInteractionState {
-    return {
-        ...state,
-        hover: false,
-    };
+    return eventTileMouseLeave(state);
 }
 
 /** Updates interaction state when the EventTile context menu opens. */

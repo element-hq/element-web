@@ -18,14 +18,14 @@ import {
     type EventTileInteractionState,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileInteractionState";
 
-describe("EventTileInteractionState", () => {
-    function makeState(overrides: Partial<EventTileInteractionState> = {}): EventTileInteractionState {
-        return {
-            ...initialEventTileInteractionState,
-            ...overrides,
-        };
-    }
+function makeState(overrides: Partial<EventTileInteractionState> = {}): EventTileInteractionState {
+    return {
+        ...initialEventTileInteractionState,
+        ...overrides,
+    };
+}
 
+describe("EventTileInteractionState", () => {
     it("tracks hover state", () => {
         const hovered = eventTileMouseEnter(makeState());
         const unhovered = eventTileMouseLeave(hovered);
