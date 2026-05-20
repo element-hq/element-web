@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useMemo, type JSX, type ReactNode } from "react";
+import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
 import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions, ReadMarker } from "@element-hq/web-shared-components";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
@@ -39,9 +39,11 @@ interface NewTimelinePanelProps {
 export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelProps): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
 
-    // useCreateAutoDisposedViewModel handles StrictMode's double-invoke correctly
-    // (useState initializer runs only once) and disposes the VM on unmount.
-    // The VM itself persists scroll position to localStorage on each scroll stop.
+    // RoomTimelineViewModel's constructor is intentionally side-effect-free
+    // (no listener registration, no load() call) so that React's StrictMode
+    // double-invoke of the useState initializer doesn't leak subscriptions on
+    // the discarded instance. We wire it up via vm.start() in an effect below,
+    // which React only runs against the retained instance.
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new RoomTimelineViewModel({
@@ -50,6 +52,11 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                 initialEventId: highlightedEventId,
             }),
     );
+
+    useEffect(() => {
+        vm.start();
+        // Disposal is handled by useCreateAutoDisposedViewModel; no cleanup needed here.
+    }, [vm]);
 
     const snapshot = useViewModel(vm);
     const { highlightedEventId: highlightedId } = snapshot;

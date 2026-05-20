@@ -26,7 +26,7 @@ import type {
     NavigationAnchor,
     ImmediateScroll,
 } from "@element-hq/web-shared-components";
-import { haveRendererForEvent } from "../../../events/EventTileFactory";
+import { haveRendererForEvent, pickFactory } from "../../../events/EventTileFactory";
 import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -37,6 +37,15 @@ const READ_RECEIPT_DEBOUNCE_MS = 500;
 
 const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
+
+/**
+ * Maximum time {@link RoomTimelineViewModel.waitForDecryption} blocks the
+ * paginate chain on newly-fetched events. Decryption usually completes in
+ * tens of milliseconds; this cap stops a slow/failed decryption from holding
+ * the loading spinner indefinitely. Stragglers that miss the window get
+ * picked up by the next paginate or live-event rebuild.
+ */
+const PAGINATE_DECRYPT_WAIT_MS = 500;
 
 /**
  * Discriminated union describing the initial scroll target for {@link RoomTimelineViewModel.load}.
@@ -91,6 +100,12 @@ export class RoomTimelineViewModel
      */
     private continuationCache = new Map<string, boolean>();
 
+    /** Number of events filtered by the most recent `buildItems()` call. */
+    private lastBuildFilteredCount = 0;
+
+    /** Set by {@link start} so a double-start (e.g. via StrictMode) is a no-op. */
+    private started = false;
+
     /**
      * Set on `permalink` and `restore` loads; cleared on the first `onEndReached`.
      * Allows that first call to bypass the `pendingAnchor` guard so the initial
@@ -122,6 +137,14 @@ export class RoomTimelineViewModel
 
     /** Debounce timer for auto read receipt sends triggered by scroll. */
     private readReceiptDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+    /**
+     * Debouncer for derived-state refreshes after a burst of Decrypted events.
+     * See {@link onEventDecrypted} / {@link flushDerivedAfterDecrypt}.
+     */
+    private decryptDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+    private pendingDecryptedEventIds: Set<string> = new Set();
+    private static readonly DECRYPT_FLUSH_DEBOUNCE_MS = 200;
 
     /** True when Virtuoso reports the list is scrolled to the bottom. */
     private isAtBottom = false;
@@ -224,25 +247,48 @@ export class RoomTimelineViewModel
         this.readMarkerEventId =
             (opts.room.getAccountData(EventType.FullyRead)?.getContent()?.event_id as string | undefined) ?? null;
 
+        // NOTE: deliberately side-effect-free. React StrictMode (and useState
+        // initializer checks) invoke `vmCreator` twice in dev, constructing
+        // two instances; one is retained, one is discarded. If we registered
+        // listeners or kicked off load() here, the discarded instance would
+        // silently leak its subscriptions. Side effects belong in {@link start}
+        // which the View calls exactly once via useEffect.
+    }
+
+    /**
+     * Wire the VM up to its data sources and kick off the initial load.
+     *
+     * Must be called exactly once per instance, after construction, from a
+     * React effect (so React's lifecycle controls when subscriptions attach).
+     * Calling this from the constructor risks leaking listeners on
+     * StrictMode-discarded instances; see the constructor comment.
+     */
+    public start(): void {
+        // In StrictMode dev, a consumer's useEffect can briefly fire with a
+        // stale `vm` reference between the hook disposing the old VM and
+        // React re-rendering with the new one. That's harmless — we just bail.
+        if (this.started || this.isDisposed) return;
+        this.started = true;
+
         // Determine how to load the timeline.
         let loadTarget: LoadTarget;
-        if (opts.initialEventId) {
-            loadTarget = { kind: "permalink", eventId: opts.initialEventId };
+        if (this.opts.initialEventId) {
+            loadTarget = { kind: "permalink", eventId: this.opts.initialEventId };
         } else {
-            const savedEventId = RoomTimelineViewModel.readScrollTarget(opts.room.roomId);
+            const savedEventId = RoomTimelineViewModel.readScrollTarget(this.opts.room.roomId);
             loadTarget = savedEventId ? { kind: "restore", eventId: savedEventId } : { kind: "live" };
         }
 
         this.load(loadTarget);
 
         // Listen for new events so live messages appear.
-        this.disposables.trackListener(opts.room, RoomEvent.Timeline, this.onRoomTimeline as (...args: unknown[]) => void);
+        this.disposables.trackListener(this.opts.room, RoomEvent.Timeline, this.onRoomTimeline as (...args: unknown[]) => void);
         // Track changes to the room's fully-read marker.
-        this.disposables.trackListener(opts.room, RoomEvent.AccountData, this.onRoomAccountData as (...args: unknown[]) => void);
+        this.disposables.trackListener(this.opts.room, RoomEvent.AccountData, this.onRoomAccountData as (...args: unknown[]) => void);
         // Rebuild items when any event in the window is decrypted (or fails to decrypt).
         // This handles both live events and historical encrypted events (e.g. on a fresh session
         // with no key backup) so they appear as "Unable to decrypt" tiles rather than being invisible.
-        this.disposables.trackListener(opts.client, MatrixEventEvent.Decrypted, this.onEventDecrypted as (...args: unknown[]) => void);
+        this.disposables.trackListener(this.opts.client, MatrixEventEvent.Decrypted, this.onEventDecrypted as (...args: unknown[]) => void);
     }
 
     private onRoomTimeline = (
@@ -295,28 +341,134 @@ export class RoomTimelineViewModel
             if (!this.isAtBottom && event.getSender() !== this.opts.client.getSafeUserId()) {
                 this.unreadMessageCount++;
             }
-            this.snapshot.merge({
-                items,
-                atLiveEnd,
-                numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
-                hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
-                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-            });
+            this.mergeSnapshot(
+                {
+                    items,
+                    atLiveEnd,
+                    numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
+                    hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
+                    canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+                },
+                "live-event",
+            );
         });
     };
 
+    /**
+     * Handle a Decrypted event for an event in the window.
+     *
+     * With the stable-items invariant ({@link buildItems} keeps a slot for
+     * every wire-encrypted event regardless of decryption state), a decrypt
+     * never changes the items array structure. The per-tile content update
+     * is handled by `MessageEvent`'s own listener on the same event.
+     *
+     * The only snapshot fields that *can* change because of decryption are
+     * derived flags (`hasHighlights`, `canJumpToReadMarker`) — and even those
+     * are usually unchanged. We debounce a burst of decrypts so a paginate
+     * cascade collapses into a single derived-state refresh after the burst
+     * settles, instead of one per event.
+     */
     private onEventDecrypted = (event: MatrixEvent): void => {
         if (this.isDisposed) return;
-        // Only rebuild if the decrypted event is actually in our timeline window.
         if (!this.timelineWindow.getEvents().includes(event)) return;
-        logger.debug(`[TimelineVM][onEventDecrypted] event ${event.getId()} decrypted — rebuilding items`);
-        const items = this.buildItems();
-        this.snapshot.merge({
-            items,
-            atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
-            canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-        });
+
+        const eventId = event.getId();
+        if (eventId) this.pendingDecryptedEventIds.add(eventId);
+
+        if (this.decryptDebounceTimer !== null) clearTimeout(this.decryptDebounceTimer);
+        this.decryptDebounceTimer = setTimeout(() => {
+            this.decryptDebounceTimer = null;
+            this.flushDerivedAfterDecrypt();
+        }, RoomTimelineViewModel.DECRYPT_FLUSH_DEBOUNCE_MS);
     };
+
+    /**
+     * Recompute derived snapshot fields after a burst of decryptions. Items
+     * are never rebuilt here — the wire-encrypted slots are stable and the
+     * per-tile renderers handle content updates via their own listeners.
+     */
+    private flushDerivedAfterDecrypt(): void {
+        if (this.isDisposed) return;
+        const batchSize = this.pendingDecryptedEventIds.size;
+        this.pendingDecryptedEventIds.clear();
+        if (batchSize === 0) return;
+
+        const items = this.snapshot.current.items;
+        const newCanJumpToReadMarker = this.computeCanJumpToReadMarker(items);
+        const newHasHighlights =
+            this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0;
+
+        // NOTE: items are intentionally NOT rebuilt here.
+        //
+        // Rebuilding `items` after every decrypt burst (and adjusting
+        // `firstItemIndex` to compensate) churns virtuoso's internal state
+        // enough that mounted tiles unmount and remount — observable as
+        // repeated `[MessageEvent] constructor` lines for the same eventId
+        // even though React keys are stable. Each remount restarts
+        // `MImageBody`/`MVideoBody`'s download (or worse, races with the
+        // previous mount's `setState`), and the cascading layout work shows
+        // up as "timeline jumping" near the user's viewport.
+        //
+        // The cost is that events whose decryption resolved AFTER the
+        // paginate-time `waitForDecryption` deadline stay out of `items`
+        // until the next paginate or live-event rebuild surfaces them. For
+        // a stationary user they remain hidden until they scroll. That's a
+        // known follow-up; the immediate priority is keeping the tiles that
+        // DID make it into items stable.
+        this.mergeSnapshot(
+            {
+                canJumpToReadMarker: newCanJumpToReadMarker,
+                hasHighlights: newHasHighlights,
+            },
+            `decrypt-flush(n=${batchSize})`,
+        );
+    }
+
+    /**
+     * Wait up to `timeoutMs` for the given encrypted-pending events to decrypt.
+     *
+     * Resolves as soon as all the given events have either decrypted (success
+     * or failure) or the timeout fires, whichever comes first. Stragglers that
+     * miss the timeout get picked up by the next paginate or live-event
+     * rebuild.
+     */
+    private async waitForDecryption(events: MatrixEvent[], timeoutMs: number): Promise<void> {
+        const pending = events.filter(
+            (e) => e.isEncrypted() && e.getClearContent() === null && !e.isDecryptionFailure(),
+        );
+        if (pending.length === 0) return;
+
+        const detachers: Array<() => void> = [];
+        const allDecrypted = Promise.all(
+            pending.map(
+                (e) =>
+                    new Promise<void>((resolve) => {
+                        if (e.getClearContent() !== null || e.isDecryptionFailure()) {
+                            resolve();
+                            return;
+                        }
+                        const handler = (): void => {
+                            e.off(MatrixEventEvent.Decrypted, handler);
+                            resolve();
+                        };
+                        e.on(MatrixEventEvent.Decrypted, handler);
+                        detachers.push(() => e.off(MatrixEventEvent.Decrypted, handler));
+                    }),
+            ),
+        );
+
+        let timeoutId: ReturnType<typeof setTimeout> | undefined;
+        const timeout = new Promise<void>((resolve) => {
+            timeoutId = setTimeout(resolve, timeoutMs);
+        });
+
+        try {
+            await Promise.race([allDecrypted, timeout]);
+        } finally {
+            if (timeoutId !== undefined) clearTimeout(timeoutId);
+            for (const detach of detachers) detach();
+        }
+    }
 
     private onRoomAccountData = (ev: MatrixEvent): void => {
         if (ev.getType() !== EventType.FullyRead) return;
@@ -344,7 +496,6 @@ export class RoomTimelineViewModel
     private freezeReadMarkerForSession(): void {
         if (!this.readMarkerEventId) {
             this.frozenMarkerEventId = null;
-            logger.debug(`[TimelineVM] freezeReadMarkerForSession — no server marker, frozen=null`);
             return;
         }
         const liveEvents = this.opts.room.getLiveTimeline().getEvents();
@@ -352,19 +503,21 @@ export class RoomTimelineViewModel
         if (lastLiveEventId && lastLiveEventId === this.readMarkerEventId) {
             // Fully read on entry — no line, ever, this session.
             this.frozenMarkerEventId = null;
-            logger.debug(`[TimelineVM] freezeReadMarkerForSession — marker is on latest live event, frozen=null`);
         } else {
             this.frozenMarkerEventId = this.readMarkerEventId;
-            logger.debug(`[TimelineVM] freezeReadMarkerForSession — frozen=${this.frozenMarkerEventId}`);
         }
+        logger.debug(`[TimelineVM] freezeReadMarkerForSession — frozen=${this.frozenMarkerEventId}`);
     }
 
     private async load(target: LoadTarget): Promise<void> {
         logger.debug(`[TimelineVM] load() start — kind=${target.kind}${target.kind !== "live" ? ` eventId=${target.eventId}` : ""}`);
-        this.snapshot.merge({
-            backwardPagination: "loading",
-            forwardPagination: "loading",
-        });
+        this.mergeSnapshot(
+            {
+                backwardPagination: "loading",
+                forwardPagination: "loading",
+            },
+            `load(${target.kind})-start`,
+        );
 
         const sdkLoadTarget = target.kind !== "live" ? target.eventId : undefined;
 
@@ -423,15 +576,18 @@ export class RoomTimelineViewModel
                 logger.debug(`[TimelineVM] load() — live-end anchor key=${pendingAnchor.targetKey}`);
             }
 
-            this.snapshot.merge({
-                items,
-                backwardPagination: "idle",
-                forwardPagination: "idle",
-                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
-                pendingAnchor,
-                highlightedEventId: target.kind === "permalink" ? target.eventId : null,
-                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-            });
+            this.mergeSnapshot(
+                {
+                    items,
+                    backwardPagination: "idle",
+                    forwardPagination: "idle",
+                    atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+                    pendingAnchor,
+                    highlightedEventId: target.kind === "permalink" ? target.eventId : null,
+                    canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+                },
+                `load(${target.kind})-done`,
+            );
 
             // If all events in the initial window were filtered (items empty) but more
             // content exists ahead, Virtuoso won't fire onEndReached on an empty list.
@@ -442,10 +598,13 @@ export class RoomTimelineViewModel
             }
         } catch (e) {
             logger.error(`[TimelineVM] load() error`, e);
-            this.snapshot.merge({
-                backwardPagination: "error",
-                forwardPagination: "error",
-            });
+            this.mergeSnapshot(
+                {
+                    backwardPagination: "error",
+                    forwardPagination: "error",
+                },
+                `load(${target.kind})-error`,
+            );
         }
     }
 
@@ -469,7 +628,7 @@ export class RoomTimelineViewModel
             `[TimelineVM] onAnchorReached — anchor=${anchor ? `key=${anchor.targetKey} align=${anchor.align}` : "null"}, ` +
             `anchoredLoad=${this.anchoredLoad}`,
         );
-        this.snapshot.merge({ pendingAnchor: null });
+        this.mergeSnapshot({ pendingAnchor: null }, "anchor-reached");
     };
 
     public onAtBottomStateChange = (atBottom: boolean): void => {
@@ -477,10 +636,13 @@ export class RoomTimelineViewModel
         if (atBottom && this.snapshot.current.atLiveEnd) {
             this.unreadMessageCount = 0;
         }
-        this.snapshot.merge({
-            isAtBottom: atBottom,
-            numUnreadMessages: atBottom && this.snapshot.current.atLiveEnd ? 0 : this.unreadMessageCount,
-        });
+        this.mergeSnapshot(
+            {
+                isAtBottom: atBottom,
+                numUnreadMessages: atBottom && this.snapshot.current.atLiveEnd ? 0 : this.unreadMessageCount,
+            },
+            "at-bottom",
+        );
     };
 
     /**
@@ -517,7 +679,7 @@ export class RoomTimelineViewModel
         if (this.visibleStartArrayIndex !== prevStartArrayIndex || this.visibleEndArrayIndex !== prevEndArrayIndex) {
             const canJumpToReadMarker = this.computeCanJumpToReadMarker(items);
             if (canJumpToReadMarker !== this.snapshot.current.canJumpToReadMarker) {
-                this.snapshot.merge({ canJumpToReadMarker });
+                this.mergeSnapshot({ canJumpToReadMarker }, "range-changed");
             }
         }
 
@@ -610,7 +772,10 @@ export class RoomTimelineViewModel
         this.readMarkerEventId = null;
         this.frozenMarkerEventId = null;
         const newItems = this.buildItems(); // removes the read-marker item
-        this.snapshot.merge({ items: newItems, canJumpToReadMarker: false });
+        this.mergeSnapshot(
+            { items: newItems, canJumpToReadMarker: false },
+            "mark-all-as-read",
+        );
     };
 
     public onJumpToLive = (scrollNow: ImmediateScroll): void => {
@@ -627,10 +792,10 @@ export class RoomTimelineViewModel
             if (items.length > 0) {
                 const targetKey = items[items.length - 1].key;
                 logger.debug(`[TimelineVM] onJumpToLive — scrolling now to targetKey=${targetKey}`);
-                this.snapshot.merge({ numUnreadMessages: 0, hasHighlights: false });
+                this.mergeSnapshot({ numUnreadMessages: 0, hasHighlights: false }, "jump-to-live");
                 scrollNow({ targetKey, align: "end" });
             } else {
-                this.snapshot.merge({ numUnreadMessages: 0, hasHighlights: false });
+                this.mergeSnapshot({ numUnreadMessages: 0, hasHighlights: false }, "jump-to-live-empty");
             }
         }
     };
@@ -657,7 +822,6 @@ export class RoomTimelineViewModel
             if (markerInWindow) {
                 // Marker event is in the window but didn't make it into the rendered
                 // items — likely a filtered event. Don't show a misleading button.
-                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker event in window but filtered out of items → false`);
                 return false;
             }
             // Marker is genuinely outside the loaded window. Direction depends on
@@ -665,33 +829,12 @@ export class RoomTimelineViewModel
             // the marker is newer than our window (e.g. the user has back-paginated
             // past the live edge and the marker fell off via window trimming):
             // "below". Otherwise the marker is older than our window: "above".
-            const canForward = this.timelineWindow.canPaginate(Direction.Forward);
-            const canBackward = this.timelineWindow.canPaginate(Direction.Backward);
-            if (canForward) {
-                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker not in window, canPaginate(Forward)=true → below`);
-                return "below";
-            }
-            if (canBackward) {
-                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker not in window, canPaginate(Backward)=true → above`);
-                return "above";
-            }
+            if (this.timelineWindow.canPaginate(Direction.Forward)) return "below";
+            if (this.timelineWindow.canPaginate(Direction.Backward)) return "above";
             return false;
         }
-        if (rmIdx < this.visibleStartArrayIndex) {
-            logger.debug(
-                `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} < visibleStartArrayIndex=${this.visibleStartArrayIndex} → "above"`,
-            );
-            return "above";
-        }
-        if (rmIdx > this.visibleEndArrayIndex) {
-            logger.debug(
-                `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} > visibleEndArrayIndex=${this.visibleEndArrayIndex} → "below"`,
-            );
-            return "below";
-        }
-        logger.debug(
-            `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} in viewport [${this.visibleStartArrayIndex}–${this.visibleEndArrayIndex}] → false`,
-        );
+        if (rmIdx < this.visibleStartArrayIndex) return "above";
+        if (rmIdx > this.visibleEndArrayIndex) return "below";
         return false;
     }
 
@@ -712,7 +855,11 @@ export class RoomTimelineViewModel
             clearTimeout(this.readReceiptDebounceTimer);
             this.readReceiptDebounceTimer = null;
         }
-
+        if (this.decryptDebounceTimer !== null) {
+            clearTimeout(this.decryptDebounceTimer);
+            this.decryptDebounceTimer = null;
+        }
+        this.pendingDecryptedEventIds.clear();
         if (!this.lastBottomEventId) {
             logger.debug(`[TimelineVM] dispose() — no visible range recorded, preserving saved position`);
             super.dispose();
@@ -804,7 +951,7 @@ export class RoomTimelineViewModel
             logger.debug(`[TimelineVM] paginate(forward) skipped — canPaginate=false`);
             if (!this.snapshot.current.atLiveEnd) {
                 logger.debug(`[TimelineVM] paginate(forward) — setting atLiveEnd=true`);
-                this.snapshot.merge({ atLiveEnd: true });
+                this.mergeSnapshot({ atLiveEnd: true }, "paginate(forward)-at-live-end");
             }
             return;
         }
@@ -823,6 +970,11 @@ export class RoomTimelineViewModel
      * duration, giving a single loading→idle transition per logical pagination
      * regardless of how many empty SDK batches are needed.
      *
+     * Items are emitted immediately after each SDK batch — encrypted events
+     * land as UTD-rendered slots and stay at their slot for life (see
+     * {@link buildItems}). Decryption is invisible to this chain: it only
+     * changes a tile's content, never the items array.
+     *
      * Differences between directions handled inline:
      * - **Backward**: uses {@link mergePrepended} and decrements `firstItemIndex`.
      * - **Forward**: rebuilds from the full window; updates `atLiveEnd` on completion.
@@ -836,7 +988,7 @@ export class RoomTimelineViewModel
         const dirLabel = isBackward ? "backward" : "forward";
         const loadingKey = isBackward ? "backwardPagination" : "forwardPagination";
 
-        this.snapshot.merge({ [loadingKey]: "loading" });
+        this.mergeSnapshot({ [loadingKey]: "loading" }, `paginate(${dirLabel})-start`);
 
         try {
             let emptyBatches = 0;
@@ -850,18 +1002,28 @@ export class RoomTimelineViewModel
                 // Re-read snapshot after each async gap: the other direction may
                 // have updated items or firstItemIndex while we were awaiting.
                 const currentItems = this.snapshot.current.items;
-                const currentFirstItemIndex = this.snapshot.current.firstItemIndex;
 
-                logger.debug(
-                    `[TimelineVM] paginate(${dirLabel}) batch — ` +
-                    `emptyBatches=${emptyBatches}, items=${currentItems.length}, ` +
-                    `firstItemIndex=${currentFirstItemIndex}`,
-                );
-
+                const eventsBefore = new Set(this.timelineWindow.getEvents());
+                const windowSizeBefore = eventsBefore.size;
                 const hasMore = await this.timelineWindow.paginate(direction, PAGINATE_SIZE);
                 if (this.isDisposed) return;
+                const eventsAfter = this.timelineWindow.getEvents();
+                const windowSizeAfter = eventsAfter.length;
+                const rawDelta = windowSizeAfter - windowSizeBefore;
+
+                // Wait briefly for newly-fetched encrypted events to decrypt
+                // so buildItems sees them at their final clear type and the
+                // inclusion filter picks the right INCLUDE/EXCLUDE up front.
+                // Stragglers that miss the window are picked up by the next
+                // paginate or live-event rebuild.
+                const newEvents = eventsAfter.filter((e) => !eventsBefore.has(e));
+                if (newEvents.length > 0) {
+                    await this.waitForDecryption(newEvents, PAGINATE_DECRYPT_WAIT_MS);
+                    if (this.isDisposed) return;
+                }
 
                 const rebuilt = this.buildItems();
+                const filteredCount = this.lastBuildFilteredCount;
                 let added: number;
 
                 if (isBackward) {
@@ -877,23 +1039,34 @@ export class RoomTimelineViewModel
                     // whether forward pagination is still possible.
                     const newAtLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
                     logger.debug(
-                        `[TimelineVM] paginate(backward) batch done — ` +
-                        `prepended=${prepended}, hasMore=${hasMore}, emptyBatches=${emptyBatches}, ` +
-                        `firstItemIndex: ${postFirstItemIndex} → ${postFirstItemIndex - prepended}, atLiveEnd=${newAtLiveEnd}`,
+                        `[TimelineVM] paginate(backward) batch — ` +
+                        `rawΔ=${rawDelta} (window: ${windowSizeBefore}→${windowSizeAfter}), ` +
+                        `filtered=${filteredCount}, prepended=${prepended}, hasMore=${hasMore}, ` +
+                        `emptyBatches=${emptyBatches}, ` +
+                        `firstItemIndex: ${postFirstItemIndex}→${postFirstItemIndex - prepended}, ` +
+                        `atLiveEnd=${newAtLiveEnd}`,
                     );
-                    this.snapshot.merge({
-                        items,
-                        firstItemIndex: postFirstItemIndex - prepended,
-                        atLiveEnd: newAtLiveEnd,
-                        canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-                    });
+                    this.mergeSnapshot(
+                        {
+                            items,
+                            firstItemIndex: postFirstItemIndex - prepended,
+                            atLiveEnd: newAtLiveEnd,
+                            canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+                        },
+                        "paginate(backward)-batch",
+                    );
                 } else {
                     added = rebuilt.length - currentItems.length;
                     logger.debug(
-                        `[TimelineVM] paginate(forward) batch done — ` +
-                        `appended=${added}, hasMore=${hasMore}, emptyBatches=${emptyBatches}`,
+                        `[TimelineVM] paginate(forward) batch — ` +
+                        `rawΔ=${rawDelta} (window: ${windowSizeBefore}→${windowSizeAfter}), ` +
+                        `filtered=${filteredCount}, appended=${added}, hasMore=${hasMore}, ` +
+                        `emptyBatches=${emptyBatches}`,
                     );
-                    this.snapshot.merge({ items: rebuilt, canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt) });
+                    this.mergeSnapshot(
+                        { items: rebuilt, canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt) },
+                        "paginate(forward)-batch",
+                    );
                 }
 
                 if (added > 0 || !hasMore) break;
@@ -904,13 +1077,16 @@ export class RoomTimelineViewModel
 
             // Always recompute atLiveEnd at chain completion. Backward chains can
             // cause forward trimming; forward chains can reach (or leave) live end.
-            this.snapshot.merge({
-                [loadingKey]: "idle",
-                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
-            });
+            this.mergeSnapshot(
+                {
+                    [loadingKey]: "idle",
+                    atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+                },
+                `paginate(${dirLabel})-end`,
+            );
         } catch (e) {
             logger.error(`[TimelineVM] paginate(${dirLabel}) error`, e);
-            this.snapshot.merge({ [loadingKey]: "error" });
+            this.mergeSnapshot({ [loadingKey]: "error" }, `paginate(${dirLabel})-error`);
         }
     }
 
@@ -981,18 +1157,21 @@ export class RoomTimelineViewModel
         for (const event of events) {
             const eventId = event.getId();
             if (!eventId) continue;
-            if (!haveRendererForEvent(event, this.opts.client, showHiddenEvents)) {
-                logger.debug(`[TimelineVM] buildItems filtering event ${eventId} (${event.getType()}) — no renderer`);
-                filteredCount++;
-                continue;
-            }
-            if (shouldHideEvent(event)) {
-                logger.debug(`[TimelineVM] buildItems filtering event ${eventId} (${event.getType()}) — shouldHideEvent`);
+
+            // Pending-decryption events are excluded so virtuoso never
+            // measures a UTD placeholder it would later have to swap for a
+            // real body (the resulting size cache churn was the original
+            // "white void" symptom). When decryption completes the next
+            // paginate / live-event rebuild will pick the event up at its
+            // final height.
+            if (!this.shouldIncludeEvent(event, showHiddenEvents)) {
                 filteredCount++;
                 continue;
             }
 
-            // Insert date separator when the day changes
+            // Insert date separator when the day changes. Only reached for
+            // events that pass the inclusion filter, so separators are never
+            // orphaned.
             const eventDate = new Date(event.getTs());
             const dateKey = eventDate.toDateString();
             if (dateKey !== lastDate) {
@@ -1019,6 +1198,8 @@ export class RoomTimelineViewModel
             // Insert the read-marker item directly after the event it belongs to.
             // Uses the per-session frozen marker so the divider position never
             // changes during the session (see {@link freezeReadMarkerForSession}).
+            // Works correctly for wire-encrypted anchors too, because the slot
+            // exists immediately.
             if (this.frozenMarkerEventId && eventId === this.frozenMarkerEventId) {
                 items.push({ key: "read-marker", kind: "read-marker" });
             }
@@ -1026,11 +1207,94 @@ export class RoomTimelineViewModel
             prevEvent = event;
         }
 
-        if (filteredCount > 0) {
-            logger.debug(`[TimelineVM] buildItems — ${filteredCount} events filtered out of ${events.length} total`);
+        // Stash for the caller to log alongside batch/rebuild context.
+        this.lastBuildFilteredCount = filteredCount;
+
+        // Diagnostic: detect adjacent date separators (would indicate a day
+        // with all events filtered) or any structural anomaly in the emitted
+        // items array. Adjacent separators were a visible bug after the
+        // sticky-inclusion refactor; this log lets us confirm whether they
+        // reappear and which days are involved.
+        const counts = { event: 0, separator: 0, readMarker: 0, loading: 0, gap: 0, other: 0 };
+        const adjacentSeparators: Array<{ a: string; b: string; index: number }> = [];
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (item.kind === "date-separator") counts.separator++;
+            else if (item.kind === "event") counts.event++;
+            else if (item.kind === "read-marker") counts.readMarker++;
+            else if (item.kind === "loading") counts.loading++;
+            else if (item.kind === "gap") counts.gap++;
+            else counts.other++;
+
+            if (i > 0 && item.kind === "date-separator" && items[i - 1].kind === "date-separator") {
+                adjacentSeparators.push({ a: items[i - 1].key, b: item.key, index: i });
+            }
         }
+        if (adjacentSeparators.length > 0) {
+            logger.warn(
+                `[TimelineVM][buildItems] adjacent date separators detected (${adjacentSeparators.length}): ` +
+                    adjacentSeparators.map((p) => `${p.a}→${p.b}@${p.index}`).join(", "),
+            );
+        }
+        logger.debug(
+            `[TimelineVM][buildItems] emitted ${items.length} items ` +
+                `(events=${counts.event}, separators=${counts.separator}, ` +
+                `readMarkers=${counts.readMarker}, loading=${counts.loading}, gap=${counts.gap}) ` +
+                `from ${events.length} window events, filtered=${filteredCount}`,
+        );
 
         return items;
+    }
+
+    /**
+     * Decide whether an event gets a slot in the items array. Computed fresh
+     * each {@link buildItems} run.
+     *
+     * Wire-encrypted events that are still decrypting are excluded — we don't
+     * want virtuoso measuring a placeholder it will later have to resize. The
+     * next paginate / live-event rebuild (which is what fires after the
+     * paginate-time decrypt wait, or after stragglers eventually settle)
+     * picks them up at their final height.
+     *
+     * Wire-encrypted events that have decrypted to a renderable type are
+     * included; ones that decrypted to a type with no body
+     * (reactions, edits, custom doc-delta types) are excluded — same effect
+     * as the legacy timeline's `shouldShowEvent` filter.
+     */
+    private shouldIncludeEvent(event: MatrixEvent, showHiddenEvents: boolean): boolean {
+        const eventId = event.getId();
+        if (!eventId) return false;
+
+        // Wire-encrypted + still pending decryption: exclude until the event
+        // resolves. The next paginate / live-event rebuild picks them up.
+        if (
+            event.getWireType() === EventType.RoomMessageEncrypted &&
+            !event.isDecryptionFailure() &&
+            event.getClearContent() === null
+        ) {
+            return false;
+        }
+
+        return this.computeInclusion(event, showHiddenEvents);
+    }
+
+    private computeInclusion(event: MatrixEvent, showHiddenEvents: boolean): boolean {
+        // shouldHideEvent catches edits (m.replace), poll-end events,
+        // redacted-when-hidden, member events filtered by display prefs, etc.
+        if (shouldHideEvent(event)) return false;
+
+        if (!haveRendererForEvent(event, this.opts.client, showHiddenEvents)) return false;
+
+        // Also require a concrete native factory. `haveRendererForEvent`
+        // returns true if a module-registered custom-component hint exists
+        // for the event (see `customComponents.getHintsForMessage`), even
+        // when no native EVENT_TILE_TYPES factory matches. EventTile's
+        // rendering decision uses `!!pickFactory(...)` directly though, so
+        // an event in that "hinted but no factory" gap would slip into items
+        // and then render as the "could not be displayed" fallback tile.
+        // Custom event types like `org.element.doc.delta` fall into this
+        // gap. Filtering them at the VM keeps the timeline clean.
+        return !!pickFactory(event, this.opts.client, showHiddenEvents);
     }
 
     /**
@@ -1050,44 +1314,55 @@ export class RoomTimelineViewModel
     }
 
     private shouldFormContinuation(prev: MatrixEvent | null, cur: MatrixEvent): boolean {
-        if (!prev?.sender || !cur.sender) {
-            logger.debug(
-                `[TimelineVM][continuation] NO — null sender: prev=${prev?.getId()} prevSender=${!!prev?.sender} cur=${cur.getId()} curSender=${!!cur.sender}`,
-            );
-            return false;
-        }
-        if (cur.getTs() - prev.getTs() > RoomTimelineViewModel.CONTINUATION_MAX_INTERVAL) {
-            logger.debug(
-                `[TimelineVM][continuation] NO — time gap: ${prev.getId()} → ${cur.getId()}`,
-            );
-            return false;
-        }
-        if (cur.isRedacted() !== prev.isRedacted()) {
-            logger.debug(
-                `[TimelineVM][continuation] NO — redaction mismatch: ${prev.getId()} → ${cur.getId()}`,
-            );
-            return false;
-        }
+        if (!prev?.sender || !cur.sender) return false;
+        if (cur.getTs() - prev.getTs() > RoomTimelineViewModel.CONTINUATION_MAX_INTERVAL) return false;
+        if (cur.isRedacted() !== prev.isRedacted()) return false;
         const curType = cur.getType();
         const prevType = prev.getType();
         const ct = RoomTimelineViewModel.CONTINUED_TYPES;
-        if (curType !== prevType && !(ct.has(curType) && ct.has(prevType))) {
-            logger.debug(
-                `[TimelineVM][continuation] NO — type mismatch: ${prevType} → ${curType}: ${prev.getId()} → ${cur.getId()}`,
-            );
-            return false;
-        }
+        if (curType !== prevType && !(ct.has(curType) && ct.has(prevType))) return false;
         if (
             cur.sender.userId !== prev.sender.userId ||
             cur.sender.name !== prev.sender.name ||
             cur.sender.getMxcAvatarUrl() !== prev.sender.getMxcAvatarUrl()
         ) {
-            logger.debug(
-                `[TimelineVM][continuation] NO — sender mismatch: userId=${cur.sender.userId !== prev.sender.userId} name=${cur.sender.name !== prev.sender.name} avatar=${cur.sender.getMxcAvatarUrl() !== prev.sender.getMxcAvatarUrl()}: ${prev.getId()} → ${cur.getId()}`,
-            );
             return false;
         }
-        logger.debug(`[TimelineVM][continuation] YES: ${prev.getId()} → ${cur.getId()}`);
         return true;
     }
+
+    /**
+     * Merge `partial` into the snapshot with a single structured log line
+     * naming the trigger (`reason`) and listing the fields that actually
+     * changed. No-op merges are skipped entirely.
+     *
+     * Every snapshot mutation in this class goes through this helper so the
+     * console gives a chronological record of view-observable state
+     * transitions, attributable to the trigger that caused them. To diagnose
+     * a UI jump: filter the console on `[VM-merge]` and find the merge whose
+     * field changes line up with the symptom.
+     */
+    private mergeSnapshot(partial: Partial<TimelineViewSnapshot>, reason: string): void {
+        const before = this.snapshot.current;
+        const changes: string[] = [];
+        for (const [k, v] of Object.entries(partial)) {
+            const oldV = (before as unknown as Record<string, unknown>)[k];
+            if (Object.is(oldV, v)) continue;
+            changes.push(formatSnapshotChange(k, oldV, v));
+        }
+        if (changes.length === 0) return;
+        logger.debug(`[VM-merge] reason=${reason} changes=[${changes.join(", ")}]`);
+        this.snapshot.merge(partial);
+    }
+}
+
+/**
+ * Format a single field change for the structured merge log. Arrays show
+ * only their length delta; other values show JSON before/after.
+ */
+function formatSnapshotChange(key: string, oldV: unknown, newV: unknown): string {
+    if (Array.isArray(oldV) && Array.isArray(newV)) {
+        return `${key}.length: ${oldV.length}→${newV.length}`;
+    }
+    return `${key}: ${JSON.stringify(oldV)}→${JSON.stringify(newV)}`;
 }
