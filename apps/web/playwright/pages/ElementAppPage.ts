@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
-import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -382,15 +382,15 @@ export class ElementAppPage {
         }
     }
 
-    async closeToast(title: string, button: string): Promise<void> {
-        await this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button }).click();
-    }
-
     /**
-     * Dismiss the "Turn on key storage" toast.
+     * Dismiss the "Turn on key storage" toast and dismiss the confirmation
+     * dialog.
+     *
+     * Note: to dismiss normal toasts, use the {@link rejectToast} function
+     * directly.
      */
     public async closeKeyStorageToast() {
-        await this.closeToast("Turn on key storage", "Dismiss");
+        await rejectToast(this.page, "Turn on key storage");
         await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
     }
 
