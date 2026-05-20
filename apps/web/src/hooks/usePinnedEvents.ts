@@ -25,6 +25,7 @@ import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useAsyncMemo } from "./useAsyncMemo";
 import PinningUtils from "../utils/PinningUtils";
 import { batch } from "../utils/promise.ts";
+import { filterBoolean } from "../utils/arrays.ts";
 
 /**
  * Get the pinned event IDs from a room.
@@ -176,18 +177,19 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
  * @param room
  * @param pinnedEventIds
  */
-export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent | null> | null {
+export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent> {
     const cli = useMatrixClientContext();
 
-    return useAsyncMemo(
+    const events = useAsyncMemo(
         () => {
             const fetchPromises = pinnedEventIds.map((eventId) => () => fetchPinnedEvent(room, eventId, cli));
             // Fetch the pinned events in batches of 10
             return batch(fetchPromises, 10);
         },
         [cli, room, pinnedEventIds],
-        null,
+        [],
     );
+    return filterBoolean(events);
 }
 
 /**
@@ -196,15 +198,7 @@ export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Ar
  * @param room
  * @param pinnedEventIds
  */
-export function useSortedFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent | null> {
+export function useSortedFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent> {
     const pinnedEvents = useFetchedPinnedEvents(room, pinnedEventIds);
-    return useMemo(() => {
-        if (!pinnedEvents) return [];
-
-        return pinnedEvents.sort((a, b) => {
-            if (!a) return -1;
-            if (!b) return 1;
-            return a.getTs() - b.getTs();
-        });
-    }, [pinnedEvents]);
+    return useMemo(() => pinnedEvents.sort((a, b) => a.getTs() - b.getTs()), [pinnedEvents]);
 }

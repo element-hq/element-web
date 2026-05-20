@@ -329,7 +329,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="_r_10f_"
+        aria-labelledby="_r_10u_"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -387,13 +387,13 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="_r_10m_"
+                aria-labelledby="_r_115_"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
-                aria-describedby="_r_10l_"
+                aria-describedby="_r_114_"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -401,7 +401,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="_icon-button_1215g_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-_r_10r_"
+                id="radix-_r_11a_"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -427,7 +427,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
-              id="_r_10l_"
+              id="_r_114_"
             >
               <div
                 class="mx_EventTile_body translate"
@@ -468,13 +468,13 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               class="mx_PinnedEventTile_top"
             >
               <span
-                aria-labelledby="_r_10u_"
+                aria-labelledby="_r_11d_"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
                 @alice:example.org
               </span>
               <button
-                aria-describedby="_r_10t_"
+                aria-describedby="_r_11c_"
                 aria-disabled="false"
                 aria-expanded="false"
                 aria-haspopup="menu"
@@ -482,7 +482,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 class="_icon-button_1215g_8"
                 data-kind="primary"
                 data-state="closed"
-                id="radix-_r_113_"
+                id="radix-_r_11i_"
                 role="button"
                 style="--cpd-icon-button-size: 24px;"
                 tabindex="0"
@@ -508,7 +508,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             </div>
             <div
               class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
-              id="_r_10t_"
+              id="_r_11c_"
             >
               <div
                 class="mx_EventTile_body translate"
