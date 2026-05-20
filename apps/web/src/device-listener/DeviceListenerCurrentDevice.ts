@@ -280,9 +280,11 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
-     * Fetch the account data for `backup_disabled`. If this is the first time,
+     * Fetch the account data for `m.key_backup`. If this is the first time,
      * fetch it from the server (in case the initial sync has not finished).
      * Otherwise, fetch it from the store as normal.
+     *
+     * Returns true if `m.key_backup` has `enabled: false`.
      */
     public async recheckBackupDisabled(): Promise<boolean> {
         const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
