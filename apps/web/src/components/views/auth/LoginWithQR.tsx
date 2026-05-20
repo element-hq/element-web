@@ -57,7 +57,7 @@ interface IState {
     userCode?: string;
     checkCode?: string;
     failureReason?: FailureReason;
-    homeserverName?: string;
+    serverNameOrBaseUrl?: string;
     newClient?: MatrixClient;
 }
 
@@ -67,6 +67,29 @@ export enum LoginWithQRFailureReason {
 }
 
 export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
+
+async function resolveServerURLs(serverNameOrBaseUrl: string): Promise<{
+    homeserverUrl?: string;
+    identityServerUrl?: string;
+}> {
+    if (serverNameOrBaseUrl.startsWith("http://") || serverNameOrBaseUrl.startsWith("https://")) {
+        // treat as base URL and skip discovery
+        return {
+            homeserverUrl: serverNameOrBaseUrl,
+        };
+    }
+
+    // treat as server name and do discovery
+    const clientConfig = await AutoDiscovery.findClientConfig(serverNameOrBaseUrl);
+    const homeserverUrl = clientConfig?.["m.homeserver"]?.base_url ?? undefined;
+
+    const identityServerUrl = clientConfig?.["m.identity_server"]?.base_url ?? undefined;
+
+    return {
+        homeserverUrl,
+        identityServerUrl,
+    };
+}
 
 /**
  * A component that allows sign in and E2EE set up with a QR code.
@@ -168,7 +191,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 const { serverName } = await rendezvous.negotiateProtocols();
                 this.setState({
                     phase: Phase.OutOfBandConfirmation,
-                    homeserverName: serverName,
+                    serverNameOrBaseUrl: serverName,
                 });
             }
 
@@ -210,9 +233,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 // done
                 this.onFinished(true);
             } else {
-                if (!this.state.homeserverName) {
+                if (!this.state.serverNameOrBaseUrl) {
                     this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                    throw new Error("Homeserver name not found in state");
+                    throw new Error("Server name/base URL not found in state");
                 }
 
                 // TODO: we need to check if the received homeserver name is different from that which we created the rendezvous with.
@@ -239,17 +262,13 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     // As such, we should be resilient and support both formats until the spec and implementations have
                     // stabilised.
 
-                    // TODO: make this resilient and handle either a server name or a base URL (identified by `http[s]://` prefix)
-                    const clientConfig = await AutoDiscovery.findClientConfig(this.state.homeserverName);
-                    const homeserverUrl = clientConfig?.["m.homeserver"]?.base_url;
+                    const { homeserverUrl, identityServerUrl } = await resolveServerURLs(this.state.serverNameOrBaseUrl);
 
                     if (!homeserverUrl) {
                         this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
                         logger.error("Failed to discover homeserver URL");
                         throw new Error("Failed to discover homeserver URL");
                     }
-
-                    const identityServerUrl = clientConfig["m.identity_server"]?.base_url ?? undefined;
 
                     const { secrets } = await this.state.rendezvous.shareSecrets();
 
