@@ -63,6 +63,7 @@ export function E2ePadlock({ icon, title, className }: Readonly<E2ePadlockProps>
             <div
                 data-testid="e2e-padlock"
                 className={classNames(styles.e2ePadlock, className)}
+                role="img"
                 tabIndex={0}
                 aria-label={_t("timeline|e2e_state")}
             >

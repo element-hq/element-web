@@ -7,6 +7,7 @@ exports[`E2ePadlock > renders a 'DecryptionFailure' icon 1`] = `
     aria-labelledby="_r_c_"
     class="E2ePadlock-module_e2ePadlock"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
@@ -32,6 +33,7 @@ exports[`E2ePadlock > renders a 'Normal' icon 1`] = `
     aria-labelledby="_r_0_"
     class="E2ePadlock-module_e2ePadlock"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
@@ -62,6 +64,7 @@ exports[`E2ePadlock > renders a 'Warning' icon 1`] = `
     aria-labelledby="_r_6_"
     class="E2ePadlock-module_e2ePadlock"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
