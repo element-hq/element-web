@@ -262,7 +262,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     // As such, we should be resilient and support both formats until the spec and implementations have
                     // stabilised.
 
-                    const { homeserverUrl, identityServerUrl } = await resolveServerURLs(this.state.serverNameOrBaseUrl);
+                    const { homeserverUrl, identityServerUrl } = await resolveServerURLs(
+                        this.state.serverNameOrBaseUrl,
+                    );
 
                     if (!homeserverUrl) {
                         this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
