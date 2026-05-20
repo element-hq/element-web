@@ -222,6 +222,7 @@
         "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
         "e2e_state": "State of the end-to-end encryption",
+        "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",

@@ -5,12 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
-import { EventTimeline } from "matrix-js-sdk/src/matrix";
-import { E2ePadlock, E2ePadlockIcon } from "@element-hq/web-shared-components";
+import React, { type JSX, useEffect } from "react";
+import { E2eMessageSharedIconView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
-import { _t } from "../../../../languageHandler.tsx";
+import { E2eMessageSharedIconViewModel } from "../../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel.ts";
 
 /** The React properties of an {@link E2eMessageSharedIcon}. */
 interface E2eMessageSharedIconParams {
@@ -30,25 +29,34 @@ interface E2eMessageSharedIconParams {
 export function E2eMessageSharedIcon(props: E2eMessageSharedIconParams): JSX.Element {
     const { roomId, keyForwardingUserId } = props;
     const client = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new E2eMessageSharedIconViewModel({
+                client,
+                roomId,
+                keyForwardingUserId,
+            }),
+    );
 
-    const roomState = client.getRoom(roomId)?.getLiveTimeline()?.getState(EventTimeline.FORWARDS);
-    const forwardingMember = roomState?.getMember(keyForwardingUserId);
+    useEffect(() => {
+        vm.setClient(client);
+    }, [client, vm]);
 
-    // We always disambiguate the user, since we need to prevent users from forging a disambiguation, and
-    // the ToolTip component doesn't support putting styling inside a label.
-    const tooltip = _t("encryption|message_shared_by", {
-        displayName: forwardingMember?.rawDisplayName ?? keyForwardingUserId,
-        userId: keyForwardingUserId,
-    });
+    useEffect(() => {
+        vm.setRoomId(roomId);
+    }, [roomId, vm]);
+
+    useEffect(() => {
+        vm.setKeyForwardingUserId(keyForwardingUserId);
+    }, [keyForwardingUserId, vm]);
 
     return (
-        <E2ePadlock
+        <E2eMessageSharedIconView
+            vm={vm}
             className={
                 // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
                 "mx_EventTile_e2eIcon"
             }
-            icon={E2ePadlockIcon.Normal}
-            title={tooltip}
         />
     );
 }
