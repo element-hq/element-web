@@ -63,6 +63,7 @@ describe("EventTileViewModel", () => {
                 isProbablyMedia: false,
                 isBubbleMessage: false,
                 isLeftAlignedBubbleMessage: false,
+                isAlignedBetweenBubbles: false,
                 isInfoMessage: false,
                 noBubbleEvent: false,
                 isHighlighted: false,
@@ -155,6 +156,18 @@ describe("EventTileViewModel", () => {
             mx_EventTile_sticker: false,
             mx_EventTile_emote: false,
         });
+    });
+
+    it("derives aligned-between-bubbles root class state", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                display: {
+                    isAlignedBetweenBubbles: true,
+                },
+            }),
+        );
+
+        expect(snapshot.root.classState.mx_EventTile_alignedBetweenBubbles).toBe(true);
     });
 
     it("derives avatar and sender profile state for thread timelines", () => {

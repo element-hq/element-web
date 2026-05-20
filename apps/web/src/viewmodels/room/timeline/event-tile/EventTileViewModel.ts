@@ -60,6 +60,8 @@ export interface EventTileDisplayInput {
     isBubbleMessage: boolean;
     /** Whether the bubble tile is left-aligned. */
     isLeftAlignedBubbleMessage: boolean;
+    /** Whether the event is aligned between bubble columns. */
+    isAlignedBetweenBubbles: boolean;
     /** Whether the event renders as an informational timeline item. */
     isInfoMessage: boolean;
     /** Whether bubble styling should be suppressed for this event. */
@@ -369,6 +371,7 @@ export class EventTileViewModel {
         return getEventTileClassState({
             isBubbleMessage: display.isBubbleMessage,
             isLeftAlignedBubbleMessage: display.isLeftAlignedBubbleMessage,
+            isAlignedBetweenBubbles: display.isAlignedBetweenBubbles,
             isEditing: event.isEditing,
             isInfoMessage: display.isInfoMessage,
             isTwelveHour: display.isTwelveHour,
