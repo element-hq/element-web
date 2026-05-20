@@ -289,7 +289,7 @@ export class DeviceListenerCurrentDevice {
     public async recheckBackupDisabled(): Promise<boolean> {
         const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
         if (keyBackup) {
-            return !keyBackup.enabled;
+            return keyBackup.enabled === false;
         }
 
         const keyBackupDisabledUnstable = await this.client.getAccountDataFromServer(
