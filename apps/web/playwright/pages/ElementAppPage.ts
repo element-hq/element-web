@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -96,6 +96,17 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
+        // Make sure the room list is actually present before we try closing toasts,
+        // otherwise we may race with page loading
+        await this.page.getByTestId("room-list").waitFor();
+
+        await rejectToastIfExists(this.page, "Verify this device", { timeout: 50 });
+        const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", { timeout: 50 });
+        if (keyStorageToastRejected) {
+            await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+        }
+        await rejectToastIfExists(this.page, "Notifications", { timeout: 50 });
+
         // We get the room list by test-id which is a listbox and matching title=name
         return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
     }
@@ -363,7 +374,7 @@ export class ElementAppPage {
      * Dismiss the "Turn on key storage" toast.
      */
     public async closeKeyStorageToast() {
-        await rejectToast(this.page, "Turn on key storage");
+        await this.closeToast("Turn on key storage", "Dismiss");
         await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
     }
 

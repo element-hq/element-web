@@ -110,6 +110,17 @@ export const Condensed: Story = {
     },
 };
 
+export const NoAvatar: Story = {
+    args: {
+        displayName: "Sally Sanderson",
+        userId: "@person-name:homeserver.com",
+        expanded: true,
+        open: true,
+        showAvatar: false,
+    },
+    parameters: Open.parameters,
+};
+
 export const Guest: Story = {
     args: {
         displayName: "Guest",
