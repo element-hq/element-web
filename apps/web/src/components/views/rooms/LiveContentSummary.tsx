@@ -8,13 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type FC } from "react";
 import classNames from "classnames";
-import { GroupIcon, VideoCallSolidIcon, VoiceCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { GroupIcon, VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 
 export enum LiveContentType {
     Video,
-    Voice,
 }
 
 interface Props {
@@ -27,14 +26,14 @@ interface Props {
 /**
  * Summary line used to call out live, interactive content such as calls.
  */
-export const LiveContentSummary: FC<Props> = ({ type, text, active, participantCount }) => (
+export const LiveContentSummary: FC<Props> = ({ text, active, participantCount }) => (
     <span className="mx_LiveContentSummary">
         <span
             className={classNames("mx_LiveContentSummary_text", {
                 mx_LiveContentSummary_text_active: active,
             })}
         >
-            {type === LiveContentType.Video ? <VideoCallSolidIcon /> : <VoiceCallSolidIcon />}
+            <VideoCallSolidIcon />
             {text}
         </span>
         {participantCount > 0 && (

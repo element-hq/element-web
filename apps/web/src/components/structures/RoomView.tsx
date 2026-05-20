@@ -142,6 +142,8 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -301,7 +303,6 @@ interface LocalRoomViewProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement | null>;
-    onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
     mainSplitContentType: MainSplitContentType;
     e2eStatus?: E2EStatus;
 }
@@ -342,17 +343,19 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 <RoomHeader room={room} />
-                <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
-                    <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} room={room} />
-                    <div className="mx_RoomView_timeline">
-                        <ScrollPanel className="mx_RoomView_messagePanel">
-                            {encryptionTile}
-                            <NewRoomIntro />
-                        </ScrollPanel>
-                    </div>
-                    {statusBar}
-                    {composer}
-                </main>
+                <RoomUploadContextProvider>
+                    <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
+                        <FileDropTarget parent={props.roomView.current} />
+                        <div className="mx_RoomView_timeline">
+                            <ScrollPanel className="mx_RoomView_messagePanel">
+                                {encryptionTile}
+                                <NewRoomIntro />
+                            </ScrollPanel>
+                        </div>
+                        {statusBar}
+                        {composer}
+                    </main>
+                </RoomUploadContextProvider>
             </ErrorBoundary>
         </div>
     );
@@ -1293,14 +1296,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
 
             case Action.ComposerInsert: {
-                if (payload.composerType) break;
+                const composerInsertPayload = payload as ComposerInsertPayload;
+                if (composerInsertPayload.composerType) break;
 
-                let timelineRenderingType: TimelineRenderingType = payload.timelineRenderingType;
+                let timelineRenderingType = composerInsertPayload.timelineRenderingType;
                 // ThreadView handles Action.ComposerInsert itself due to it having its own editState
-                if (timelineRenderingType === TimelineRenderingType.Thread) break;
+                if (composerInsertPayload.timelineRenderingType === TimelineRenderingType.Thread) break;
                 if (
                     this.state.timelineRenderingType === TimelineRenderingType.Search &&
-                    payload.timelineRenderingType === TimelineRenderingType.Search
+                    composerInsertPayload.timelineRenderingType === TimelineRenderingType.Search
                 ) {
                     // we don't have the composer rendered in this state, so bring it back first
                     await this.onCancelSearchClick();
@@ -1309,7 +1313,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
                 // re-dispatch to the correct composer
                 defaultDispatcher.dispatch<ComposerInsertPayload>({
-                    ...(payload as ComposerInsertPayload),
+                    ...composerInsertPayload,
                     timelineRenderingType,
                     composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
                 });
@@ -2113,19 +2117,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     }
 
-    private onFileDrop = async (dataTransfer: DataTransfer): Promise<void> => {
-        const roomId = this.getRoomId();
-        if (!roomId || !this.context.client) return;
-        await ContentMessages.sharedInstance().sendContentListToRoom(
-            Array.from(dataTransfer.files),
-            roomId,
-            undefined,
-            this.state.replyToEvent,
-            this.context.client,
-            TimelineRenderingType.Room,
-        );
-    };
-
     private onMeasurement = (narrow: boolean): void => {
         this.setState({ narrow });
     };
@@ -2161,7 +2152,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
-                    onFileDrop={this.onFileDrop}
                     mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
@@ -2576,32 +2566,34 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let messagePanel: JSX.Element | undefined;
         if (!isRoomEncryptionLoading) {
             messagePanel = (
-                <TimelinePanel
-                    ref={this.gatherTimelinePanelRef}
-                    timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                    showReadReceipts={this.state.showReadReceipts}
-                    manageReadReceipts={!this.state.isPeeking}
-                    sendReadReceiptOnLoad={
-                        !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
-                    }
-                    manageReadMarkers={!this.state.isPeeking}
-                    hidden={hideMessagePanel}
-                    highlightedEventId={highlightedEventId}
-                    eventId={this.state.initialEventId}
-                    eventScrollIntoView={this.state.initialEventScrollIntoView}
-                    eventPixelOffset={this.state.initialEventPixelOffset}
-                    onScroll={this.onMessageListScroll}
-                    onEventScrolledIntoView={this.resetJumpToEvent}
-                    onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                    showUrlPreview={this.state.showUrlPreview}
-                    className={this.messagePanelClassNames}
-                    membersLoaded={this.state.membersLoaded}
-                    permalinkCreator={this.permalinkCreator}
-                    showReactions={true}
-                    layout={this.state.layout}
-                    editState={this.state.editState}
-                    enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
-                />
+                <EventPresentationContextProvider layout={this.state.layout}>
+                    <TimelinePanel
+                        ref={this.gatherTimelinePanelRef}
+                        timelineSet={this.state.room.getUnfilteredTimelineSet()}
+                        showReadReceipts={this.state.showReadReceipts}
+                        manageReadReceipts={!this.state.isPeeking}
+                        sendReadReceiptOnLoad={
+                            !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
+                        }
+                        manageReadMarkers={!this.state.isPeeking}
+                        hidden={hideMessagePanel}
+                        highlightedEventId={highlightedEventId}
+                        eventId={this.state.initialEventId}
+                        eventScrollIntoView={this.state.initialEventScrollIntoView}
+                        eventPixelOffset={this.state.initialEventPixelOffset}
+                        onScroll={this.onMessageListScroll}
+                        onEventScrolledIntoView={this.resetJumpToEvent}
+                        onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
+                        showUrlPreview={this.state.showUrlPreview}
+                        className={this.messagePanelClassNames}
+                        membersLoaded={this.state.membersLoaded}
+                        permalinkCreator={this.permalinkCreator}
+                        showReactions={true}
+                        layout={this.state.layout}
+                        editState={this.state.editState}
+                        enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
+                    />
+                </EventPresentationContextProvider>
             );
         }
 
@@ -2663,16 +2655,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case MainSplitContentType.Timeline:
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
-                    <>
+                    <RoomUploadContextProvider>
                         <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses} data-testid="timeline">
-                            <FileDropTarget
-                                parent={this.roomView.current}
-                                onFileDrop={this.onFileDrop}
-                                room={this.state.room}
-                            />
+                            <FileDropTarget parent={this.roomView.current} />
                             {topUnreadMessagesBar}
                             {jumpToBottom}
                             {messagePanel}
@@ -2681,7 +2669,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         {statusBarArea}
                         {previewBar}
                         {messageComposer}
-                    </>
+                    </RoomUploadContextProvider>
                 );
                 break;
             case MainSplitContentType.MaximisedWidget:

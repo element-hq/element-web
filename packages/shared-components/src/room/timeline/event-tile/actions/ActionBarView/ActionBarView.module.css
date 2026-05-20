@@ -14,31 +14,31 @@
     .toolbar_item {
         align-items: center;
         justify-content: center;
-        padding: 0 !important;
-        min-block-size: 0 !important;
+        padding: 0;
+        min-block-size: 0;
 
-        margin: 3px !important;
-        border-radius: 6px !important;
+        margin: 3px;
+        border-radius: 6px;
 
         &:hover {
-            background-color: var(--cpd-color-bg-subtle-secondary) !important;
+            background-color: var(--cpd-color-bg-subtle-secondary);
             z-index: 1;
         }
     }
 
     .toolbar_item[data-presentation="icon"] {
-        block-size: 28px !important;
-        inline-size: 28px !important;
+        block-size: 28px;
+        inline-size: 28px;
 
-        color: var(--cpd-color-icon-secondary) !important;
+        color: var(--cpd-color-icon-secondary);
     }
 
     .toolbar_item[data-presentation="label"] {
-        padding-inline-start: var(--cpd-space-2x) !important;
-        padding-inline-end: var(--cpd-space-2x) !important;
+        padding-inline-start: var(--cpd-space-2x);
+        padding-inline-end: var(--cpd-space-2x);
 
         font: var(--cpd-font-body-md-regular);
-        text-decoration: none !important;
+        text-decoration: none;
         white-space: nowrap;
     }
 }

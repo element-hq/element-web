@@ -40,6 +40,21 @@ or in CSS file:
 @import url("@element-hq/web-shared-components");
 ```
 
+### Sub-path Imports
+
+Callers running outside the browser DOM (e.g. inside an `AudioWorkletGlobalScope`
+or a worker) can pull in the small standalone `numbers` utility bundle without
+loading the rest of the package bundle, which transitively imports React,
+dnd-kit, and other code that touches `window` / `document`:
+
+```javascript
+import { percentageOf, percentageWithin } from "@element-hq/web-shared-components/numbers";
+```
+
+The sub-path exposes the same functions listed under [Formatting](#formatting)
+and ships as its own ES/CJS bundle in `dist/numbers.{js,umd.cjs}`. Prefer the
+main package entry for everything else.
+
 ### Using Components
 
 There are two kinds of components in this library:
@@ -126,6 +141,8 @@ components that don't need a view model.
 ### Write Storybook Stories
 
 All components should have accompanying Storybook stories for documentation and visual testing. Stories are written in TypeScript using the [Component Story Format (CSF)](https://storybook.js.org/docs/api/csf).
+
+Use shallow, browse-oriented story titles such as `RoomList/RoomListSearchView` or `TimelineBody/DecryptionFailureBodyView`. Do not mirror the full source path in the Storybook title.
 
 #### Story File Structure
 
@@ -254,7 +271,7 @@ Example with Figma integration:
 
 ```tsx
 const meta = {
-    title: "Room List/RoomListSearchView",
+    title: "RoomList/RoomListSearchView",
     component: RoomListSearchViewWrapper,
     tags: ["autodocs"],
     args: {
@@ -277,7 +294,7 @@ The Figma design will appear in the "Design" tab in Storybook.
 
 For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
 
-`src/utils/humanize.stories.tsx`
+`src/core/utils/humanize.stories.tsx`
 
 ```tsx
 import React from "react";
@@ -287,7 +304,7 @@ import type { Meta } from "@storybook/react-vite";
 import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
 
 const meta = {
-    title: "utils/humanize",
+    title: "Core/Humanize",
     parameters: {
         docs: {
             page: () => (

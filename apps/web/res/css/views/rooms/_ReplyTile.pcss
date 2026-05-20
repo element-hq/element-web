@@ -66,9 +66,15 @@ Please see LICENSE files in the repository root for full details.
             display: inline;
         }
 
+        // The annotation wrapper is flex in normal timeline messages, but that stops
+        // -webkit-line-clamp from trimming long edited quotes down to two lines.
+        [data-textual-body-annotation-wrapper] {
+            display: contents;
+        }
+
         // Hide line numbers and edited indicator
         .mx_EventTile_lineNumbers,
-        .mx_EventTile_edited {
+        [data-textual-body-edited-marker] {
             display: none;
         }
 

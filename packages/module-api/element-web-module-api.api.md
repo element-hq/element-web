@@ -11,6 +11,7 @@ import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
+import { SVGAttributes } from 'react';
 
 // @public
 export interface AccountAuthApiExtension {
@@ -47,6 +48,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
+    // @alpha
+    readonly composer: ComposerApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
@@ -96,6 +99,31 @@ export interface ClientApi {
 export interface ComponentVisibilityCustomisations {
     shouldShowComponent?(component: "UIComponent.sendInvites" | "UIComponent.roomCreation" | "UIComponent.spaceCreation" | "UIComponent.exploreRooms" | "UIComponent.addIntegrations" | "UIComponent.filterContainer" | "UIComponent.roomOptionsMenu"): boolean;
 }
+
+// @alpha
+export interface ComposerApi {
+    addFileUploadOption(option: ComposerApiFileUploadOption): void;
+    insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void;
+    openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void;
+}
+
+// @alpha
+export type ComposerApiFileUploadOption = {
+    type: string;
+    label: string;
+    icon?: ComponentType<SVGAttributes<SVGElement>>;
+    onSelected: (roomId?: string, view?: ComposerApiTarget, relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    }) => Promise<void> | void;
+};
+
+// @alpha
+export type ComposerApiTarget = {
+    view: "room";
+} | {
+    view: "thread";
+};
 
 // @public
 export interface Config {
@@ -221,7 +249,7 @@ export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
     register(this: void, translations: Partial<Translations>): void;
-    translate(this: void, key: keyof Translations, variables?: Variables): string;
+    translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;
 }
 
@@ -392,6 +420,14 @@ export interface ProfileApiExtension {
 }
 
 // @public
+export interface RichVariables {
+    // (undocumented)
+    [key: string]: SubstitutionValue;
+    // (undocumented)
+    count?: number;
+}
+
+// @public
 export interface Room {
     getLastActiveTimestamp: () => number;
     id: string;
@@ -441,6 +477,14 @@ export interface StoresApi {
 }
 
 // @public
+export interface StringVariables {
+    // (undocumented)
+    [key: string]: number | string | null | undefined;
+    // (undocumented)
+    count?: number;
+}
+
+// @public
 export type SubstitutionValue = number | string | ReactNode | ((sub: string) => ReactNode);
 
 // @public
@@ -474,10 +518,7 @@ export interface UserIdentifierCustomisations {
 export function useWatchable<T>(watchable: Watchable<T>): T;
 
 // @public
-export type Variables = {
-    count?: number;
-    [key: string]: SubstitutionValue;
-};
+export type Variables = StringVariables | RichVariables;
 
 // @public
 export class Watchable<T> {

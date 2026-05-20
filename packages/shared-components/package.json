@@ -21,6 +21,16 @@
                 "default": "./dist/element-web-shared-components.js"
             }
         },
+        "./numbers": {
+            "require": {
+                "types": "./dist/numbers.d.ts",
+                "default": "./dist/numbers.umd.cjs"
+            },
+            "import": {
+                "types": "./dist/numbers.d.ts",
+                "default": "./dist/numbers.js"
+            }
+        },
         "./dist/element-web-shared-components.css": {
             "require": "./dist/element-web-shared-components.css",
             "import": "./dist/element-web-shared-components.css"
@@ -48,9 +58,12 @@
         "build:doc": "nx typedoc",
         "lint": "pnpm lint:types && pnpm lint:js",
         "lint:js": "eslint --max-warnings 0 src",
-        "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
+        "lint:types": "nx lint:types"
     },
     "dependencies": {
+        "@dnd-kit/abstract": "^0.4.0",
+        "@dnd-kit/dom": "^0.4.0",
+        "@dnd-kit/react": "^0.4.0",
         "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "catalog:",
@@ -71,6 +84,7 @@
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "workspace:*",
+        "@element-hq/vite-common": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
         "@fontsource/inter": "catalog:",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
@@ -94,7 +108,7 @@
         "@typescript-eslint/parser": "^8.53.1",
         "@vector-im/compound-web": "catalog:",
         "@vitest/browser-playwright": "^4.0.17",
-        "@vitest/coverage-v8": "^4.0.17",
+        "@vitest/coverage-v8": "catalog:",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^10.1.8",
@@ -114,17 +128,18 @@
         "typedoc-plugin-markdown": "^4.9.0",
         "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "catalog:",
-        "unplugin-dts": "1.0.0-beta.6",
-        "vite": "^8.0.0",
+        "unplugin-dts": "1.0.0",
+        "vite": "catalog:",
         "vite-plugin-node-polyfills": "^0.26.0",
-        "vitest": "^4.0.18",
-        "vitest-sonar-reporter": "^3.0.0"
+        "vitest": "catalog:",
+        "vitest-sonar-reporter": "catalog:"
     },
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+    "packageManager": "pnpm@10.33.3+sha512.a19744364a7e248b92657a4ca5973f9354d21caf982579674b1c539f32c7420c47138ad8b1254df07aba9bc782d9b3029e3db34d5dbff974326eb74dac8ff489",
     "peerDependencies": {
-        "@vector-im/compound-web": "^8.3.5 || ^9.0.0"
+        "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
+        "react": "catalog:"
     }
 }

@@ -5,26 +5,21 @@ Copyright 2023 Suguru Hirahara
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-
-import { type Page } from "@playwright/test";
-
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { getSampleFilePath } from "../../sample-files";
+import type { ElementAppPage } from "../../pages/ElementAppPage";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
 
-async function uploadFile(page: Page, sampleFile: string) {
+async function uploadFile(app: ElementAppPage, sampleFile: string) {
     // Upload a file from the message composer
-    await page.locator(".mx_MessageComposer_actions input[type='file']").setInputFiles(getSampleFilePath(sampleFile));
-
-    await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
-
+    await app.composerUploadFiles("room", getSampleFilePath(sampleFile));
     // Wait until the file is sent
-    await expect(page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
-    await expect(page.locator(".mx_EventTile.mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
+    await expect(app.page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
+    await expect(app.page.locator(".mx_EventTile.mx_EventTile_last").getByRole("status")).toHaveAccessibleName(
         "Your message was sent",
     );
 }
@@ -52,11 +47,11 @@ test.describe("FilePanel", () => {
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");
         });
 
-        test("should list tiles on the panel", { tag: "@screenshot" }, async ({ page }) => {
+        test("should list tiles on the panel", { tag: "@screenshot" }, async ({ page, app }) => {
             // Upload multiple files
-            await uploadFile(page, "riot.png"); // Image
-            await uploadFile(page, "1sec.ogg"); // Audio
-            await uploadFile(page, "matrix-org-client-versions.json"); // JSON
+            await uploadFile(app, "riot.png"); // Image
+            await uploadFile(app, "1sec.ogg"); // Audio
+            await uploadFile(app, "matrix-org-client-versions.json"); // JSON
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             // Assert that all of the file were uploaded and rendered
@@ -92,9 +87,9 @@ test.describe("FilePanel", () => {
             await expect(filePanelMessageList.getByText(NAME)).toHaveCount(3);
 
             // Detect the image file
-            const image = filePanelMessageList.locator(".mx_EventTile_mediaLine.mx_EventTile_image .mx_MImageBody");
+            const image = filePanelMessageList.locator(".mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody");
             // Assert that the image is specified as thumbnail and has the alt string
-            await expect(image.locator("img[class='mx_MImageBody_thumbnail']")).toBeVisible();
+            await expect(image.locator("img.mx_ImageBody_image")).toBeVisible();
             await expect(image.locator("img[alt='riot.png']")).toBeVisible();
 
             // Detect the audio file
@@ -118,7 +113,7 @@ test.describe("FilePanel", () => {
                 "flex-end",
             );
             // Assert that all of the file tiles are visible before taking a snapshot
-            await expect(filePanelMessageList.locator(".mx_MImageBody")).toBeVisible(); // top
+            await expect(filePanelMessageList.locator(".mx_ImageBody")).toBeVisible(); // top
             await expect(filePanelMessageList.locator(".mx_MAudioBody")).toBeVisible(); // middle
             const senderDetails = filePanelMessageList.locator(".mx_EventTile_last .mx_EventTile_senderDetails");
             await expect(senderDetails.locator(".mx_DisambiguatedProfile")).toBeVisible();
@@ -136,9 +131,9 @@ test.describe("FilePanel", () => {
             });
         });
 
-        test("should render the audio player and play the audio file on the panel", async ({ page }) => {
+        test("should render the audio player and play the audio file on the panel", async ({ page, app }) => {
             // Upload an image file
-            await uploadFile(page, "1sec.ogg");
+            await uploadFile(app, "1sec.ogg");
 
             const audioBody = page.getByTestId("right-panel").getByRole("region", { name: "Audio player" });
 
@@ -167,11 +162,11 @@ test.describe("FilePanel", () => {
             await expect(audioBody.getByRole("button", { name: "Play" })).toBeVisible();
         });
 
-        test("should render file size in kibibytes on a file tile", async ({ page }) => {
+        test("should render file size in kibibytes on a file tile", async ({ page, app }) => {
             const size = "1.12 KB"; // actual file size in kibibytes (1024 bytes)
 
             // Upload a file
-            await uploadFile(page, "matrix-org-client-versions.json");
+            await uploadFile(app, "matrix-org-client-versions.json");
 
             const tile = page.locator(".mx_FilePanel .mx_EventTile");
             // Assert that the file size is displayed in kibibytes, not kilobytes (1000 bytes)
@@ -183,13 +178,13 @@ test.describe("FilePanel", () => {
     test.describe("download", () => {
         test.skip(isDendrite, "due to a Dendrite sending Content-Disposition inline");
 
-        test("should download an image via the link on the panel", async ({ page, context }) => {
+        test("should download an image via the link on the panel", async ({ page, app, context }) => {
             // Upload an image file
-            await uploadFile(page, "riot.png");
+            await uploadFile(app, "riot.png");
 
             // Detect the image file on the panel
             const imageBody = page.locator(
-                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_MImageBody",
+                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody",
             );
 
             const link = imageBody.locator(".mx_MFileBody a");

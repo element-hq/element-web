@@ -12,11 +12,16 @@ import { describe, it, expect } from "vitest";
 
 import * as stories from "./TextualEventView.stories.tsx";
 
-const { Default } = composeStories(stories);
+const { Default, WithLink } = composeStories(stories);
 
 describe("TextualEventView", () => {
     it("renders a textual event", () => {
         const { container } = render(<Default />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders a textual event with link", () => {
+        const { container } = render(<WithLink />);
         expect(container).toMatchSnapshot();
     });
 });

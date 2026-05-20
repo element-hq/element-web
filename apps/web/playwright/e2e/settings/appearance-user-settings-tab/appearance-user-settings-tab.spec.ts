@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { expect, test } from ".";
 
 test.describe("Appearance user settings tab", () => {
@@ -14,6 +16,7 @@ test.describe("Appearance user settings tab", () => {
     });
 
     test("should be rendered properly", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
+        await rejectToast(page, "Verify this device");
         const tab = await app.settings.openUserSettings("Appearance");
 
         // Click "Show advanced" link button
@@ -31,6 +34,7 @@ test.describe("Appearance user settings tab", () => {
         "should support changing font size by using the font size dropdown",
         { tag: "@screenshot" },
         async ({ page, app, user }) => {
+            await rejectToast(page, "Verify this device");
             await app.settings.openUserSettings("Appearance");
 
             const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
@@ -46,6 +50,7 @@ test.describe("Appearance user settings tab", () => {
     );
 
     test("should support enabling system font", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
         await app.settings.openUserSettings("Appearance");
         const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
 
@@ -63,7 +68,11 @@ test.describe("Appearance user settings tab", () => {
         "should keep same font and emoji when switching theme",
         { tag: "@screenshot" },
         async ({ page, app, user, util }) => {
+            await rejectToast(page, "Verify this device");
+            await rejectToast(page, "Notifications");
+
             const roomId = await util.createAndDisplayRoom();
+
             await app.client.sendMessage(roomId, { body: "Message with 🦡", msgtype: "m.text" });
 
             await app.settings.openUserSettings("Appearance");

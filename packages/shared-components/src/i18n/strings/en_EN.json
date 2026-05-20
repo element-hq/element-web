@@ -41,12 +41,24 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "devtools": {
+        "toggle_event": "toggle event"
+    },
     "keyboard": {
         "shift": "Shift"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad",
         "separator_label": "Click or drag to expand"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Create an account",
+            "got_an_account": "Got an account?",
+            "manage_account": "Manage account",
+            "sign_in": "Sign in",
+            "title": "User menu"
+        }
     },
     "notifications": {
         "all_messages": "All messages",
@@ -100,6 +112,7 @@
         },
         "appearance": "Appearance",
         "chat_moved": "Chat moved",
+        "collapse_all_sections": "Collapse all sections",
         "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",
@@ -118,6 +131,7 @@
             "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
+        "expand_all_sections": "Expand all sections",
         "expand_filters": "Expand filter list",
         "filters": {
             "favourite": "Favourites",
@@ -147,6 +161,9 @@
         "room_options": "Room Options",
         "section_created": "Section created",
         "section_header": {
+            "edit_section": "Edit section",
+            "more_options": "More options",
+            "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
             "toggle_unread": "Toggle %(section)s section with unread room(s)"
         },
@@ -185,6 +202,14 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Call declined",
+                "call_declined_by_us": "You declined a call"
+            },
+            "video_call_title": "Video call",
+            "voice_call_title": "Voice call"
+        },
         "decryption_failure": {
             "blocked": "The sender has blocked you from receiving this message because your device is unverified",
             "historical_event_no_key_backup": "Historical messages are not available on this device",
@@ -196,6 +221,7 @@
         },
         "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
+        "e2e_state": "State of the end-to-end encryption",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
@@ -203,6 +229,10 @@
         },
         "m.file": {
             "error_invalid": "Invalid file"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s changed the room avatar to<img/>",
+            "removed": "%(senderDisplayName)s removed the room avatar."
         },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
@@ -223,6 +253,11 @@
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "You have ignored this user, so their message is hidden.<a> Show anyways.</a>"
+        },
+        "pending_moderation": "Message pending moderation",
+        "pending_moderation_reason": "Message pending moderation: %(reason)s",
         "url_preview": {
             "close": "Close preview",
             "open_link": "Open link",
@@ -232,6 +267,13 @@
             },
             "view_image": "View image"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Link new device",
+        "open_feedback": "Feedback",
+        "open_home": "Home",
+        "open_security": "Security & Privacy",
+        "open_settings": "All settings"
     },
     "widget": {
         "context_menu": {

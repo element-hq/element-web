@@ -27,6 +27,7 @@ import { type ActionPayload } from "../../../../../../src/dispatcher/payloads";
 import * as EmojiButton from "../../../../../../src/components/views/rooms/EmojiButton";
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
+import { RoomUploadContextProvider } from "../../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 beforeAll(initOnce, 10000);
 
@@ -46,7 +47,9 @@ describe("EditWysiwygComposer", () => {
         return render(
             <MatrixClientContext.Provider value={client}>
                 <ScopedRoomContextProvider {...roomContext}>
-                    <EditWysiwygComposer disabled={disabled} editorStateTransfer={_editorStateTransfer} />
+                    <RoomUploadContextProvider>
+                        <EditWysiwygComposer disabled={disabled} editorStateTransfer={_editorStateTransfer} />
+                    </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
@@ -62,7 +65,9 @@ describe("EditWysiwygComposer", () => {
         rerender(
             <MatrixClientContext.Provider value={mockClient}>
                 <ScopedRoomContextProvider {...defaultRoomContext} room={undefined}>
-                    <EditWysiwygComposer disabled={false} editorStateTransfer={editorStateTransfer} />
+                    <RoomUploadContextProvider>
+                        <EditWysiwygComposer disabled={false} editorStateTransfer={editorStateTransfer} />
+                    </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
@@ -273,7 +278,9 @@ describe("EditWysiwygComposer", () => {
         render(
             <MatrixClientContext.Provider value={mockClient}>
                 <ScopedRoomContextProvider {...defaultRoomContext}>
-                    <EditWysiwygComposer editorStateTransfer={editorStateTransfer} />
+                    <RoomUploadContextProvider>
+                        <EditWysiwygComposer editorStateTransfer={editorStateTransfer} />
+                    </RoomUploadContextProvider>
                     <Emoji menuPosition={{ chevronFace: ChevronFace.Top }} />
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
@@ -283,8 +290,10 @@ describe("EditWysiwygComposer", () => {
         // It adds the composerType fields where the value refers if the composer is in editing or not
         // The listeners in the RTE ignore the message if the composerType is missing in the payload
         const dispatcherRef = defaultDispatcher.register((payload: ActionPayload) => {
+            const insertPayload = payload as ComposerInsertPayload;
             defaultDispatcher.dispatch<ComposerInsertPayload>({
-                ...(payload as ComposerInsertPayload),
+                ...insertPayload,
+                timelineRenderingType: insertPayload.timelineRenderingType!,
                 composerType: ComposerType.Edit,
             });
         });

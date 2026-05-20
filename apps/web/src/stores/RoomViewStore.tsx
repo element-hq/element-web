@@ -544,11 +544,9 @@ export class RoomViewStore extends EventEmitter {
 
         const joinOpts: IJoinRoomOpts = {
             viaServers,
+            acceptSharedHistory: true,
             ...(payload.opts ?? {}),
         };
-        if (SettingsStore.getValue("feature_share_history_on_invite")) {
-            joinOpts.acceptSharedHistory = true;
-        }
         try {
             const cli = MatrixClientPeg.safeGet();
             await retry<Room, MatrixError>(

@@ -45,6 +45,15 @@
         "open_dial_pad": "打开拨号键盘",
         "separator_label": "点击或拖动以展开"
     },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "创建账户",
+            "got_an_account": "已有账户？",
+            "manage_account": "管理账户",
+            "sign_in": "登录",
+            "title": "用户菜单"
+        }
+    },
     "notifications": {
         "all_messages": "所有消息",
         "default_settings": "跟随系统设置",
@@ -81,6 +90,8 @@
     },
     "room_list": {
         "appearance": "外观",
+        "chat_moved": "聊天已移动",
+        "collapse_all_sections": "折叠所有区域",
         "collapse_filters": "折叠过滤器列表",
         "empty": {
             "no_chats": "暂无聊天",
@@ -99,6 +110,7 @@
             "show_activity": "查看所有活动",
             "show_chats": "显示所有聊天"
         },
+        "expand_all_sections": "展开所有区域",
         "expand_filters": "展开过滤器列表",
         "filters": {
             "favourite": "收藏",
@@ -128,6 +140,9 @@
         "room_options": "房间选项",
         "section_created": "区域已创建",
         "section_header": {
+            "edit_section": "编辑区域",
+            "more_options": "更多选项",
+            "remove_section": "移除区域",
             "toggle": "切换区域 %(section)s",
             "toggle_unread": "切换到区域 %(section)s 中的未读房间"
         },
@@ -165,6 +180,10 @@
         "n_minutes_ago": "%(num)s分钟前"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "视频通话",
+            "voice_call_title": "语音通话"
+        },
         "decryption_failure": {
             "blocked": "由于你的设备未经验证，发件人已阻止你接收此消息。",
             "historical_event_no_key_backup": "消息历史在此设备上不可用",
@@ -183,6 +202,10 @@
         },
         "m.file": {
             "error_invalid": "无效文件"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s 将房间头像更改为 <img/>",
+            "removed": "%(senderDisplayName)s 已移除房间头像。"
         },
         "m.room.encryption": {
             "disable_attempt": "已忽略尝试禁用加密",
@@ -203,14 +226,27 @@
         },
         "message_timestamp_received_at": "接收于 %(dateTime)s",
         "message_timestamp_sent_at": "发送于 %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "你已忽略此用户，因此其消息已被隐藏。<a> 仍然显示</a>"
+        },
+        "pending_moderation": "消息等待审核",
+        "pending_moderation_reason": "消息等待审核：%(reason)s",
         "url_preview": {
             "close": "关闭预览",
+            "open_link": "打开链接",
             "show_n_more": {
                 "one": "显示剩余 %(count)s 个预览",
                 "other": "显示剩余 %(count)s 个预览"
             },
             "view_image": "查看图像"
         }
+    },
+    "user_menu": {
+        "link_new_device": "关联新设备",
+        "open_feedback": "反馈",
+        "open_home": "主页",
+        "open_security": "安全与隐私",
+        "open_settings": "所有设置"
     },
     "widget": {
         "context_menu": {

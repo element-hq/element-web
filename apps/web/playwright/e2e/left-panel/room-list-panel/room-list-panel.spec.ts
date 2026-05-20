@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../../element-web-test";
 import { getRoomListView } from "./utils";
 
@@ -14,8 +16,9 @@ test.describe("Room list panel", () => {
     });
 
     test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
 
         // Populate the room list
         for (let i = 0; i < 20; i++) {

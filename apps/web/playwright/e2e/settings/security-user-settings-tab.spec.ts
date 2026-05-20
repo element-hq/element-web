@@ -7,6 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 
 const IntegrationManager = "scalar.vector.im";
@@ -26,8 +28,9 @@ test.describe("Security user settings tab", () => {
         });
 
         test.beforeEach(async ({ page, app, user }) => {
-            // Dismiss "Notification" toast
-            await app.closeNotificationToast();
+            // Dismiss toasts
+            await rejectToast(page, "Verify this device");
+            await rejectToast(page, "Notifications");
             await page.locator(".mx_Toast_buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
         });
 

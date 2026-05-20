@@ -10,8 +10,7 @@
             "other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig."
         },
         "room_name": "Spjallrás %(name)s",
-        "unread_messages": "Ólesin skilaboð.",
-        "user_menu": "Valmynd notandans"
+        "unread_messages": "Ólesin skilaboð."
     },
     "a11y_jump_first_unread_room": "Fara í fyrstu ólesnu spjallrásIna.",
     "action": {
@@ -263,7 +262,6 @@
         "sign_in_instead_prompt": "Skrá inn í staðinn",
         "sign_in_or_register": "Skráðu þig inn eða búðu til aðgang",
         "sign_in_or_register_description": "Notaðu aðganginn þinn eða búðu til nýjan til að halda áfram.",
-        "sign_in_prompt": "Ertu með aðgang? <a>Skráðu þig inn</a>",
         "sign_in_with_sso": "Skrá inn með einfaldri innskráningu (single sign-on)",
         "soft_logout": {
             "clear_data_button": "Hreinsa öll gögn",
@@ -630,7 +628,6 @@
         },
         "state_key": "Stöðulykill",
         "title": "Forritunartól",
-        "toggle_event": "víxla atburði af/á",
         "toolbox": "Verkfærakassi",
         "use_at_own_risk": "Þetta viðmót athugar EKKI tegundir gildanna. Notist á eigin ábyrgð.",
         "value": "Gildi",
@@ -1274,7 +1271,6 @@
         "restricted": "Takmarkað"
     },
     "powered_by_matrix": "Keyrt með Matrix",
-    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "presence": {
         "away": "Fjarverandi",
         "busy": "Upptekinn",
@@ -2375,9 +2371,7 @@
         "m.poll.start": "%(senderName)s hefur sett í gang könnun - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar.",
-            "changed_img": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar í <img/>",
-            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s",
-            "removed": "%(senderDisplayName)s fjarlægði auðkennismynd spjallrásarinnar."
+            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2492,7 +2486,6 @@
             "created_rule_rooms": "%(senderName)s bjó til reglu sem bannar spjallrásir sem samsvara %(glob)s, vegna %(reason)s",
             "created_rule_servers": "%(senderName)s bjó til reglu sem bannar netþjóna sem samsvara %(glob)s, vegna %(reason)s",
             "created_rule_users": "%(senderName)s bjó til reglu sem bannar notendur sem samsvara %(glob)s, vegna %(reason)s",
-            "message_hidden": "Þú hefur hunsað þennan notanda, þannig að skilaboð frá honum eru falin. <a>Birta samts.</a>",
             "removed_rule": "%(senderName)s fjarlægði bannreglu sem samsvarar %(glob)s",
             "removed_rule_rooms": "%(senderName)s fjarlægði regluna sem bannar spjallrásir sem samsvara %(glob)s",
             "removed_rule_servers": "%(senderName)s fjarlægði regluna sem bannar netþjóna sem samsvara %(glob)s",
@@ -2739,11 +2732,6 @@
         "unban_space_warning": "Viðkomandi munu ekki hafa aðgang að því sem þú ert ekki stjórnandi fyrir.",
         "verify_button": "Sannreyna notanda"
     },
-    "user_menu": {
-        "settings": "Allar stillingar",
-        "switch_theme_dark": "Skiptu yfir í dökkan ham",
-        "switch_theme_light": "Skiptu yfir í ljósan ham"
-    },
     "voip": {
         "already_in_call": "Nú þegar í símtali",
         "already_in_call_person": "Þú ert nú þegar í símtali við þennan aðila.",
@@ -2825,12 +2813,10 @@
         "user_busy_description": "Notandinn sem þú hringdir í er upptekinn.",
         "user_is_presenting": "%(sharerName)s er að kynna",
         "video_call": "Myndsímtal",
-        "video_call_started": "Myndsímtal er byrjað",
         "voice_call": "Raddsímtal",
         "you_are_presenting": "Þú ert að kynna"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

@@ -341,7 +341,7 @@ export class DeviceListener {
         });
     }
 
-    private onRecordClientInformationSettingChange: CallbackFn = (
+    private onRecordClientInformationSettingChange: CallbackFn<"deviceClientInformationOptIn"> = (
         _originalSettingName,
         _roomId,
         _level,

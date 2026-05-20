@@ -5,6 +5,7 @@
     "action": {
         "back": "Retour",
         "click": "Clic",
+        "close": "Fermer",
         "collapse": "Réduire",
         "delete": "Supprimer",
         "dismiss": "Ignorer",
@@ -16,6 +17,7 @@
         "invite": "Inviter",
         "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
+        "new_section": "Nouvelle section",
         "new_video_room": "Nouveau salon visio",
         "open_menu": "Ouvrir le menu",
         "pause": "Pause",
@@ -45,6 +47,15 @@
     "left_panel": {
         "open_dial_pad": "Ouvrir le pavé de numérotation",
         "separator_label": "Cliquez ou glissez pour agrandir"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Créer un compte",
+            "got_an_account": "Tu as un compte ?",
+            "manage_account": "Gérer le compte",
+            "sign_in": "Se connecter",
+            "title": "Menu utilisateur"
+        }
     },
     "notifications": {
         "all_messages": "Tous les messages",
@@ -97,6 +108,8 @@
             "voice_call": "Ouvrir le salon %(roomName)s contenant un appel vocal."
         },
         "appearance": "Apparence",
+        "chat_moved": "La conversation a été déplacée",
+        "collapse_all_sections": "Réduire toutes les sections",
         "collapse_filters": "Réduire la liste des filtres",
         "empty": {
             "no_chats": "Pas encore de discussions",
@@ -115,6 +128,7 @@
             "show_activity": "Voir toutes les activités",
             "show_chats": "Afficher toutes les discussions"
         },
+        "expand_all_sections": "Développer toutes les sections",
         "expand_filters": "Développer la liste des filtres",
         "filters": {
             "favourite": "Favoris",
@@ -132,7 +146,8 @@
             "leave_room": "Quitter le salon",
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
-            "mark_unread": "Marquer comme non lu"
+            "mark_unread": "Marquer comme non lu",
+            "move_to_section": "Déplacer vers"
         },
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",
@@ -141,7 +156,11 @@
             "more_options": "Plus d’options"
         },
         "room_options": "Options du salon",
+        "section_created": "Section créée",
         "section_header": {
+            "edit_section": "Modifier la section",
+            "more_options": "Plus d’options",
+            "remove_section": "Supprimer la section",
             "toggle": "Afficher/masquer la section %(section)s",
             "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"
         },
@@ -220,12 +239,20 @@
         "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
         "url_preview": {
             "close": "Fermer l’aperçu",
+            "open_link": "Ouvrir le lien",
             "show_n_more": {
                 "one": "Montrer %(count)s autre preview",
                 "other": "Montrer %(count)s autres previews"
             },
             "view_image": "Afficher l'image"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Associer un nouvel appareil",
+        "open_feedback": "Commentaire",
+        "open_home": "Accueil",
+        "open_security": "Sécurité et confidentialité",
+        "open_settings": "Tous les paramètres"
     },
     "widget": {
         "context_menu": {

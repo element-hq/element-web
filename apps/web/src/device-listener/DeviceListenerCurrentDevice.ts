@@ -24,7 +24,6 @@ import {
     showToast as showSetupEncryptionToast,
 } from "../toasts/SetupEncryptionToast";
 import { isSecretStorageBeingAccessed } from "../SecurityManager";
-import { asyncSomeParallel } from "../utils/arrays";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -215,28 +214,27 @@ export class DeviceListenerCurrentDevice {
             } else if (!keyBackupUploadIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
                 await this.setDeviceState("turn_on_key_storage", logSpan);
-            } else if (secretStorageStatus.defaultKeyId === null) {
-                // The user just hasn't set up 4S yet: if they have key
-                // backup, prompt them to turn on recovery too. (If not, they
-                // have explicitly opted out, so don't hassle them.)
-                if (recoveryDisabled) {
-                    logSpan.info("Recovery disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                } else if (keyBackupUploadActive) {
-                    logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
-                    await this.setDeviceState("set_up_recovery", logSpan);
-                } else {
-                    logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                }
             } else if (!recoveryIsOk) {
-                logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
-                    secretStorageStatus,
-                    allCrossSigningSecretsCached,
-                    isCurrentDeviceTrusted,
-                    keyBackupDownloadIsOk,
-                });
-                await this.setDeviceState("key_storage_out_of_sync", logSpan);
+                if (secretStorageStatus.defaultKeyId === null) {
+                    // The user just hasn't set up 4S yet: if they have key
+                    // backup, prompt them to turn on recovery too. (If not, they
+                    // have explicitly opted out, so don't hassle them.)
+                    if (keyBackupUploadActive) {
+                        logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
+                        await this.setDeviceState("set_up_recovery", logSpan);
+                    } else {
+                        logSpan.info("No default 4S key but backup disabled: no toast needed");
+                        await this.setDeviceState("ok", logSpan);
+                    }
+                } else {
+                    logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
+                        secretStorageStatus,
+                        allCrossSigningSecretsCached,
+                        isCurrentDeviceTrusted,
+                        keyBackupDownloadIsOk,
+                    });
+                    await this.setDeviceState("key_storage_out_of_sync", logSpan);
+                }
             } else if (!keyBackupDownloadIsOk) {
                 logSpan.warn("Backup key is not cached locally: setting state to KEY_STORAGE_OUT_OF_SYNC", {
                     secretStorageStatus,
@@ -272,10 +270,12 @@ export class DeviceListenerCurrentDevice {
 
         if (newState === "ok" || this.dismissedThisDeviceToast) {
             hideSetupEncryptionToast();
-        } else if (await this.shouldShowSetupEncryptionToast()) {
+        } else if (!isSecretStorageBeingAccessed()) {
             showSetupEncryptionToast(newState);
         } else {
-            logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
+            // If we're in the middle of a secret storage operation, we're likely
+            // modifying the state involved here, so don't add new toasts to setup.
+            logSpan.info("Device is not yet ready, but secret storage is being accessed, so not showing toast.");
         }
     }
 
@@ -395,23 +395,6 @@ export class DeviceListenerCurrentDevice {
         }
 
         return this.keyBackupInfo;
-    }
-
-    /**
-     * Is the user in at least one encrypted room?
-     */
-    private async shouldShowSetupEncryptionToast(): Promise<boolean> {
-        // If we're in the middle of a secret storage operation, we're likely
-        // modifying the state involved here, so don't add new toasts to setup.
-        if (isSecretStorageBeingAccessed()) return false;
-
-        // Show setup toasts once the user is in at least one encrypted room.
-        const cryptoApi = this.client.getCrypto();
-        if (!cryptoApi) return false;
-
-        return await asyncSomeParallel(this.client.getRooms(), ({ roomId }) =>
-            cryptoApi.isEncryptionEnabledInRoom(roomId),
-        );
     }
 
     /**

@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import type { Page } from "@playwright/test";
 import { expect, test } from "../../element-web-test";
 import { autoJoin, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
@@ -172,6 +174,7 @@ test.describe("Cryptography", function () {
         "creating a DM should work, being e2e-encrypted / user verification",
         { tag: "@screenshot" },
         async ({ page, app, bot: bob, user: aliceCredentials }) => {
+            await rejectToast(page, "Verify this device");
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await startDMWithBob(page, bob);
             // send first message

@@ -6,6 +6,7 @@
  */
 
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { assertNoToasts, getToast, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, logIntoElementAndVerify } from "./utils";
@@ -31,15 +32,6 @@ test.describe("Key storage out of sync toast", () => {
         await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         await deleteCachedSecrets(page);
-
-        // We won't be prompted for crypto setup unless we have an e2e room, so make one
-        await page
-            .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
-            .click();
-        await page.getByRole("menuitem", { name: "New room" }).click();
-        await page.getByRole("textbox", { name: "Name" }).fill("Test room");
-        await page.getByRole("button", { name: "Create room" }).click();
     });
 
     test("should prompt for recovery key if 'enter recovery key' pressed", { tag: "@screenshot" }, async ({ page }) => {
@@ -72,7 +64,7 @@ test.describe("Key storage out of sync toast", () => {
 test.describe("'Turn on key storage' toast", () => {
     let botClient: Bot | undefined;
 
-    test.beforeEach(async ({ page, homeserver, credentials, toasts }) => {
+    test.beforeEach(async ({ page, homeserver, credentials }) => {
         // Set up all crypto stuff. Key storage defaults to on.
 
         const res = await createBot(page, homeserver, credentials);
@@ -90,13 +82,13 @@ test.describe("'Turn on key storage' toast", () => {
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
         await page.getByRole("button", { name: "Create room" }).click();
 
-        await toasts.rejectToast("Notifications");
+        await rejectToast(page, "Notifications");
     });
 
-    test("should not show toast if key storage is on", async ({ page, toasts }) => {
+    test("should not show toast if key storage is on", async ({ page }) => {
         // Given the default situation after signing in
         // Then no toast is shown (because key storage is on)
-        await toasts.assertNoToasts();
+        await assertNoToasts(page);
 
         // When we reload
         await page.reload();
@@ -105,15 +97,15 @@ test.describe("'Turn on key storage' toast", () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         // Then still no toast is shown
-        await toasts.assertNoToasts();
+        await assertNoToasts(page);
     });
 
-    test("should not show toast if key storage is off because we turned it off", async ({ app, page, toasts }) => {
+    test("should not show toast if key storage is off because we turned it off", async ({ app, page }) => {
         // Given the backup is disabled because we disabled it
         await disableKeyBackup(app);
 
         // Then no toast is shown
-        await toasts.assertNoToasts();
+        await assertNoToasts(page);
 
         // When we reload
         await page.reload();
@@ -122,10 +114,10 @@ test.describe("'Turn on key storage' toast", () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         // Then still no toast is shown
-        await toasts.assertNoToasts();
+        await assertNoToasts(page);
     });
 
-    test("should show toast if key storage is off but account data is missing", async ({ app, page, toasts }) => {
+    test("should show toast if key storage is off but account data is missing", async ({ app, page }) => {
         // Given the backup is disabled but we didn't set account data saying that is expected
         await disableKeyBackup(app);
         await botClient.setAccountData("m.org.matrix.custom.backup_disabled", {} as any as { disabled: boolean });
@@ -138,7 +130,7 @@ test.describe("'Turn on key storage' toast", () => {
         await page.reload();
 
         // Then the toast is displayed
-        let toast = await toasts.getToast("Turn on key storage");
+        let toast = await getToast(page, "Turn on key storage");
 
         // And when we click "Continue"
         await toast.getByRole("button", { name: "Continue" }).click();
@@ -150,7 +142,7 @@ test.describe("'Turn on key storage' toast", () => {
         await page.getByRole("button", { name: "Close dialog" }).click();
 
         // Then we see the toast again
-        toast = await toasts.getToast("Turn on key storage");
+        toast = await getToast(page, "Turn on key storage");
 
         // And when we click "Dismiss"
         await toast.getByRole("button", { name: "Dismiss" }).click();
@@ -164,7 +156,7 @@ test.describe("'Turn on key storage' toast", () => {
         await page.getByTestId("dialog-background").click({ force: true, position: { x: 10, y: 10 } });
 
         // Then we see the toast again
-        toast = await toasts.getToast("Turn on key storage");
+        toast = await getToast(page, "Turn on key storage");
 
         // And when we click Dismiss and then "Go to Settings"
         await toast.getByRole("button", { name: "Dismiss" }).click();
@@ -175,12 +167,12 @@ test.describe("'Turn on key storage' toast", () => {
 
         // And when we close that, see the toast, click Dismiss, and Yes, Dismiss
         await page.getByRole("button", { name: "Close dialog" }).click();
-        toast = await toasts.getToast("Turn on key storage");
+        toast = await getToast(page, "Turn on key storage");
         await toast.getByRole("button", { name: "Dismiss" }).click();
         await page.getByRole("button", { name: "Yes, dismiss" }).click();
 
         // Then the toast is gone
-        await toasts.assertNoToasts();
+        await assertNoToasts(page);
     });
 });
 

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { createNewInstance } from "@element-hq/element-web-playwright-common";
+import { createNewInstance, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
@@ -13,7 +13,6 @@ import { createRoom, sendMessageInCurrentRoom } from "./utils";
 
 test.use({
     displayName: "Alice",
-    labsFlags: ["feature_share_history_on_invite"],
 });
 
 /** Tests for MSC4268: encrypted history sharing */
@@ -29,12 +28,16 @@ test.describe("History sharing", function () {
             // we then invite Bob, and ensure Bob can see the content.
 
             await aliceElementApp.client.bootstrapCrossSigning(aliceCredentials);
+            await aliceElementApp.closeKeyStorageToast();
 
             // Register a second user, and open it in a second instance of the app
             const bobCredentials = await homeserver.registerUser(`user_${testInfo.testId}_bob`, "password", "Bob");
             const bobPage = await createNewInstance(browser, bobCredentials, {}, labsFlags);
             const bobElementApp = new ElementAppPage(bobPage);
             await bobElementApp.client.bootstrapCrossSigning(bobCredentials);
+            await bobElementApp.closeKeyStorageToast();
+
+            await rejectToast(aliceElementApp.page, "Notifications");
 
             // Create the room and send a message
             await createRoom(alicePage, "TestRoom", true);
@@ -61,9 +64,12 @@ test.describe("History sharing", function () {
             // Exclude message timestamps and RR avatars from the screenshot. Bob sometimes sees Alice's RR on the
             // previous event, which is surprising but not what we're testing here.
             const mask = [bobPage.locator(".mx_MessageTimestamp"), bobPage.locator(".mx_ReadReceiptGroup_container")];
-            await expect(bobPage.locator(".mx_RoomView_body")).toMatchScreenshot("shared-history-invite-accepted.png", {
-                mask,
-            });
+            await expect(bobPage.locator(".mx_RoomView_timeline")).toMatchScreenshot(
+                "shared-history-invite-accepted.png",
+                {
+                    mask,
+                },
+            );
         },
     );
 
@@ -85,6 +91,7 @@ test.describe("History sharing", function () {
         //   5. Charlie can't see the message.
 
         await aliceElementApp.client.bootstrapCrossSigning(aliceCredentials);
+        await aliceElementApp.closeKeyStorageToast();
         await createRoom(alicePage, "TestRoom", true);
 
         // Register a second user, and open it in a second instance of the app
@@ -92,6 +99,7 @@ test.describe("History sharing", function () {
         const bobPage = await createNewInstance(browser, bobCredentials, {}, labsFlags);
         const bobElementApp = new ElementAppPage(bobPage);
         await bobElementApp.client.bootstrapCrossSigning(bobCredentials);
+        await bobElementApp.closeKeyStorageToast();
 
         // ... and a third
         const charlieCredentials = await homeserver.registerUser(
@@ -102,6 +110,7 @@ test.describe("History sharing", function () {
         const charliePage = await createNewInstance(browser, charlieCredentials, {}, labsFlags);
         const charlieElementApp = new ElementAppPage(charliePage);
         await charlieElementApp.client.bootstrapCrossSigning(charlieCredentials);
+        await charlieElementApp.closeKeyStorageToast();
 
         // Alice invites Bob, and Bob accepts
         const roomId = await aliceElementApp.getCurrentRoomIdFromUrl();

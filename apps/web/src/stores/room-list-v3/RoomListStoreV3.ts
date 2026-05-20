@@ -40,7 +40,7 @@ import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { createSection } from "./section";
+import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedCustomSections } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -85,12 +85,6 @@ export interface Section {
     /** The ordered list of rooms belonging to this section. */
     rooms: Room[];
 }
-
-/**
- * A synthetic tag used to represent the "Chats" section, which contains
- * every room that does not belong to any other explicit tag section.
- */
-export const CHATS_TAG = "chats";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
@@ -499,6 +493,25 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
+     * Edit a section's name.
+     * @param tag The tag of the section to edit
+     */
+    public async editSection(tag: string): Promise<void> {
+        await editSection(tag);
+    }
+
+    /**
+     * Remove a section
+     * Emits {@link LISTS_UPDATE_EVENT} if the section was successfully removed.
+     * @param tag The tag of the section to remove
+     * @param isEmpty Whether the section is empty
+     */
+    public async removeSection(tag: string, isEmpty: boolean): Promise<void> {
+        await deleteSection(tag, isEmpty);
+        this.scheduleEmit();
+    }
+
+    /**
      * Returns the ordered section tags.
      */
     public get orderedSectionTags(): string[] {
@@ -509,7 +522,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Load the custom sections from the settings store and update the sorted tags.
      */
     private loadCustomSections(): void {
-        const orderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
+        const orderedCustomSections = getOrderedCustomSections();
         this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
     }
 }

@@ -7,6 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 
 /**
@@ -91,6 +93,7 @@ test.describe("Invite dialog", function () {
         "should support inviting a user to Direct Messages",
         { tag: "@screenshot" },
         async ({ page, app, user, bot }) => {
+            await rejectToast(page, "Verify this device");
             await page
                 .getByRole("navigation", { name: "Room list" })
                 .getByRole("button", { name: "New conversation" })

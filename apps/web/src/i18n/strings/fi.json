@@ -15,8 +15,7 @@
         "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
-        "unread_messages": "Lukemattomat viestit.",
-        "user_menu": "Käyttäjän valikko"
+        "unread_messages": "Lukemattomat viestit."
     },
     "a11y_jump_first_unread_room": "Siirry ensimmäiseen lukemattomaan huoneeseen.",
     "action": {
@@ -330,7 +329,6 @@
         "sign_in_instead_prompt": "Onko sinulla jo tili? <a>Kirjaudu tästä</a>",
         "sign_in_or_register": "Kirjaudu sisään tai luo tili",
         "sign_in_or_register_description": "Käytä tiliäsi tai luo uusi jatkaaksesi.",
-        "sign_in_prompt": "Sinulla on jo tili? <a>Kirjaudu sisään</a>",
         "sign_in_with_sso": "Kirjaudu sisään käyttäen kertakirjautumista",
         "signing_in": "Kirjaudutaan…",
         "soft_logout": {
@@ -1478,7 +1476,6 @@
         "restricted": "Rajoitettu"
     },
     "powered_by_matrix": "Moottorina Matrix",
-    "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
     "presence": {
         "away": "Poissa",
         "busy": "Varattu",
@@ -2871,9 +2868,7 @@
         "m.poll.start": "%(senderName)s on aloittanut kyselyn - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s vaihtoi huoneen kuvan.",
-            "changed_img": "%(senderDisplayName)s vaihtoi huoneen kuvaksi <img/>",
-            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan",
-            "removed": "%(senderDisplayName)s poisti huoneen kuvan."
+            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2994,7 +2989,6 @@
             "created_rule_rooms": "%(senderName)s loi huoneita estävän säännön %(glob)s, syy: %(reason)s",
             "created_rule_servers": "%(senderName)s loi palvelimia estävän säännön %(glob)s, syy: %(reason)s",
             "created_rule_users": "%(senderName)s loi porttikiellonsäännön %(glob)s, syy: %(reason)s",
-            "message_hidden": "Olet sivuuttanut tämän käyttäjän, joten hänen viestinsä on piilotettu. <a>Näytä silti.</a>",
             "removed_rule": "%(senderName)s poisti estosäännön %(glob)s",
             "removed_rule_rooms": "%(senderName)s poisti huoneita estävän säännön %(glob)s",
             "removed_rule_servers": "%(senderName)s poisti palvelimia estävän säännön %(glob)s",
@@ -3270,12 +3264,6 @@
         "verify_button": "Varmenna käyttäjä",
         "verify_explainer": "Lisäturvaksi, varmenna tämä käyttäjä tarkistamalla koodin kummankin laitteella."
     },
-    "user_menu": {
-        "link_new_device": "Yhdistä uusi laite",
-        "settings": "Kaikki asetukset",
-        "switch_theme_dark": "Vaihda tummaan teemaan",
-        "switch_theme_light": "Vaihda vaaleaan teemaan"
-    },
     "voip": {
         "already_in_call": "Olet jo puhelussa",
         "already_in_call_person": "Olet jo puhelussa tämän henkilön kanssa.",
@@ -3365,13 +3353,11 @@
         "user_busy_description": "Käyttäjä, jolle soitit, on varattu.",
         "user_is_presenting": "%(sharerName)s esittää",
         "video_call": "Videopuhelu",
-        "video_call_started": "Videopuhelu aloitettu",
         "video_call_using": "Videopuhelu käyttäen:",
         "voice_call": "Äänipuhelu",
         "you_are_presenting": "Esität parhaillaan"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
-    "welcome_to_element": "Tervetuloa Element-sovellukseen",
     "widget": {
         "added_by": "Sovelman lisäsi",
         "capabilities_dialog": {

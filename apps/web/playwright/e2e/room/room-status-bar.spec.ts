@@ -4,6 +4,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { getToast, rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 
 test.describe("Room Status Bar", () => {
@@ -15,11 +17,12 @@ test.describe("Room Status Bar", () => {
             await page.setViewportSize({ width: 1400, height: 768 });
             await use(page);
         },
-        room: async ({ app, user }, use) => {
+        room: async ({ app, user, page }, use) => {
             const roomId = await app.client.createRoom({
                 name: "A room",
             });
-            await app.closeNotificationToast();
+            await rejectToast(page, "Verify this device");
+            await rejectToast(page, "Notifications");
             await app.viewRoomById(roomId);
             await use({ roomId });
         },
@@ -38,7 +41,7 @@ test.describe("Room Status Bar", () => {
         await expect(banner).toBeVisible({ timeout: 15000 });
         await expect(banner).toMatchScreenshot("connectivity_lost.png");
     });
-    test("should NOT an error when a resource limit is hit", async ({ page, user, app, room, axe, toasts }) => {
+    test("should NOT an error when a resource limit is hit", async ({ page, user, app, room, axe }) => {
         await app.viewRoomById(room.roomId);
         await page.route("**/_matrix/client/*/sync*", async (route, req) => {
             await route.fulfill({
@@ -54,7 +57,7 @@ test.describe("Room Status Bar", () => {
         });
         await app.client.sendMessage(room.roomId, "forcing sync to run");
         // Wait for the MAU warning toast to appear so we know this status bar would have appeared.
-        await toasts.getToast("Warning", 15000);
+        await getToast(page, "Warning", 15000);
         await expect(page.getByRole("region", { name: "Room status bar" })).not.toBeVisible();
     });
     test(
@@ -139,6 +142,7 @@ test.describe("Room Status Bar", () => {
             "should show an error when creating a local room fails",
             { tag: "@screenshot" },
             async ({ page, app, user, bot }) => {
+                await rejectToast(page, "Verify this device");
                 await page
                     .getByRole("navigation", { name: "Room list" })
                     .getByRole("button", { name: "New conversation" })

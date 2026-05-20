@@ -58,7 +58,7 @@ const ActionBarViewWrapperImpl = ({ ...snapshotAndActions }: ActionBarProps): JS
 const ActionBarViewWrapper = withViewDocs(ActionBarViewWrapperImpl, ActionBarView);
 
 const meta = {
-    title: "Room/Timeline/EventTile/Actions/ActionBarView",
+    title: "Timeline/Timeline Action/ActionBarView",
     component: ActionBarViewWrapper,
     tags: ["autodocs"],
     argTypes: {

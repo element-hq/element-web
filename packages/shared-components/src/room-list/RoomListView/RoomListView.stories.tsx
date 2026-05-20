@@ -11,7 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { RoomListView, type RoomListViewSnapshot, type RoomListViewActions } from "./RoomListView";
-import type { Room } from "../VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+import type { Room } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
@@ -40,6 +40,7 @@ const RoomListViewWrapperImpl = ({
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
     closeToast,
+    changeRoomSection,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -50,6 +51,7 @@ const RoomListViewWrapperImpl = ({
         getSectionHeaderViewModel,
         updateVisibleRooms,
         closeToast,
+        changeRoomSection,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -102,6 +104,7 @@ const meta = {
         isFlatList: true,
         toast: undefined,
         closeToast: fn(),
+        changeRoomSection: fn(),
     },
     parameters: {
         design: {

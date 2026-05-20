@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { expect, test } from ".";
 
 test.describe("Appearance user settings tab", () => {
@@ -14,9 +16,11 @@ test.describe("Appearance user settings tab", () => {
     });
 
     test.describe("Theme Choice Panel", () => {
-        test.beforeEach(async ({ app, user, util }) => {
+        test.beforeEach(async ({ app, page, user, util }) => {
             // Disable the default theme for consistency in case ThemeWatcher automatically chooses it
             await util.disableSystemTheme();
+            await rejectToast(page, "Verify this device");
+
             await util.openAppearanceTab();
         });
 
@@ -102,6 +106,7 @@ test.describe("Appearance user settings tab", () => {
                     await expect(page).toMatchScreenshot("window-custom-theme.png");
 
                     await page.reload();
+                    await rejectToast(page, "Verify this device");
 
                     await util.openAppearanceTab();
                     // Assert that the custom theme is still selected after reloading the page

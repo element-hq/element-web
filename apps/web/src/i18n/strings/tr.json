@@ -15,8 +15,7 @@
         "room_name": "Oda %(name)s",
         "room_status_bar": "Oda durum çubuğu",
         "seek_bar_label": "Ses arama çubuğu",
-        "unread_messages": "Okunmamış mesajlar.",
-        "user_menu": "Kullanıcı menüsü"
+        "unread_messages": "Okunmamış mesajlar."
     },
     "a11y_jump_first_unread_room": "İlk okunmamış odaya git.",
     "action": {
@@ -337,7 +336,6 @@
         "sign_in_instead_prompt": "Zaten bir hesabınız var mı? <a>Buradan oturum açın</a>",
         "sign_in_or_register": "Giriş Yap veya Hesap Oluştur",
         "sign_in_or_register_description": "Devam etmek için hesabınızı kullanın veya yeni bir hesap oluşturun.",
-        "sign_in_prompt": "Hesabınız var mı? <a>Oturum aç</a>",
         "sign_in_with_sso": "Tek oturum açma ile oturum açın",
         "signing_in": "Oturum açılıyor…",
         "soft_logout": {
@@ -833,7 +831,6 @@
         "thread_root_id": "Konu Kök Kimliği: %(threadRootId)s",
         "threads_timeline": "Dizi mesajlar zaman çizelgesi",
         "title": "Geliştirici araçları",
-        "toggle_event": "etkinliği değiştir",
         "toolbox": "Araç Kutusu",
         "use_at_own_risk": "Bu kullanıcı arayüzü, değerlerin türlerini kontrol ETMEZ. Kendi sorumluluğunuzda kullanın.",
         "user_read_up_to": "Kullanıcı buraya kadar okudu: ",
@@ -1675,7 +1672,6 @@
         "restricted": "Sınırlı"
     },
     "powered_by_matrix": "Matrix tarafından desteklenmektedir",
-    "powered_by_matrix_with_logo": "Merkezi olmayan, şifreli sohbet ve işbirliği $matrixLogo tarafından desteklenmektedir.",
     "presence": {
         "away": "Uzakta",
         "busy": "Meşgul",
@@ -3214,9 +3210,7 @@
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s odanın avatarını değiştirdi.",
-            "changed_img": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi",
-            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi",
-            "removed": "%(senderDisplayName)s odanın avatarını kaldırdı."
+            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3337,7 +3331,6 @@
             "created_rule_rooms": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir oda yasaklama kuralı oluşturdu",
             "created_rule_servers": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
             "created_rule_users": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen kullanıcıları yasaklama kuralı oluşturdu",
-            "message_hidden": "Bu kullanıcıyı yok saydınız, bu yüzden mesajları gizlidir. <a>Yine de göster.</a>",
             "removed_rule": "%(senderName)s %(glob)s ile eşleşen banlama kuralını kaldırdı",
             "removed_rule_rooms": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını kaldırdı",
             "removed_rule_servers": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını kaldırdı",
@@ -3637,12 +3630,6 @@
         "verify_button": "Kullanıcıyı Doğrula",
         "verify_explainer": "Ekstra güvenlik için, her iki cihazınızda da tek seferlik bir kodu kontrol ederek bu kullanıcıyı doğrulayın."
     },
-    "user_menu": {
-        "link_new_device": "Yeni cihaz bağla",
-        "settings": "Tüm ayarlar",
-        "switch_theme_dark": "Karanlık Moda Geç",
-        "switch_theme_light": "Aydınlık Moda Geç"
-    },
     "voip": {
         "already_in_call": "Bu kişi zaten çağrıda",
         "already_in_call_person": "Bu kişi ile halihazırda çağrıdasınız.",
@@ -3737,13 +3724,11 @@
         "user_busy_description": "Aradığınız kullanıcı meşgul.",
         "user_is_presenting": "%(sharerName)s sunum yapıyor",
         "video_call": "Görüntülü arama",
-        "video_call_started": "Görüntülü arama başlatıldı",
         "video_call_using": "Görüntülü arama kullanılıyor:",
         "voice_call": "Sesli arama",
         "you_are_presenting": "Sunum yapıyorsunuz"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s %(osName)s",
-    "welcome_to_element": "Element'e Hoş Geldiniz",
     "widget": {
         "added_by": "Widget ekleyen",
         "capabilities_dialog": {

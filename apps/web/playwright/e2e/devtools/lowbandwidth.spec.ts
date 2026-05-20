@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 import { getSampleFilePath } from "../../sample-files";
 
@@ -19,6 +21,7 @@ test.describe("Devtools", () => {
         const profileSettings = userSettings.locator(".mx_UserProfileSettings");
         await profileSettings.getByAltText("Upload").setInputFiles(getSampleFilePath("riot.png"));
         await app.closeDialog();
+        await rejectToast(page, "Verify this device");
 
         // Create an initial room.
         const createRoomDialog = await app.openCreateRoomDialog();

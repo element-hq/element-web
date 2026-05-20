@@ -141,10 +141,19 @@ function safeCounterpartTranslate(text: string, variables?: IVariables): { trans
  */
 type SubstitutionValue = number | string | React.ReactNode | ((sub: string) => React.ReactNode);
 
-export interface IVariables {
+// Variables that are guaranteed to only contain primitive (string-safe) values
+export interface StringVariables {
+    count?: number;
+    [key: string]: number | string | null | undefined;
+}
+
+// Variables that may contain ReactNodes or functions, requiring a ReactNode return
+export interface RichVariables {
     count?: number;
     [key: string]: SubstitutionValue;
 }
+
+export type IVariables = StringVariables | RichVariables;
 
 export type Tags = Record<string, SubstitutionValue>;
 
@@ -168,13 +177,15 @@ const annotateStrings = (result: TranslatedString, translationKey: TranslationKe
     }
 };
 
-export function _t(text: TranslationKey, variables?: IVariables): string;
-export function _t(text: TranslationKey, variables: IVariables | undefined, tags: Tags): React.ReactNode;
-export function _t(text: TranslationKey, variables?: IVariables, tags?: Tags): TranslatedString {
-    // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
+// Returns string only when variables are primitives and no tags are provided
+export function _t(text: TranslationKey, variables?: StringVariables): string;
+// Returns ReactNode when variables contain ReactNodes (even without tags)
+export function _t(text: TranslationKey, variables: RichVariables): React.ReactNode;
+// Returns ReactNode when tags are provided (regardless of variables)
+export function _t(text: TranslationKey, variables: RichVariables | undefined, tags: Tags): React.ReactNode;
+export function _t(text: TranslationKey, variables?: StringVariables | RichVariables, tags?: Tags): TranslatedString {
     const { translated } = safeCounterpartTranslate(text, variables);
     const substituted = substitute(translated, variables, tags);
-
     return annotateStrings(substituted, text);
 }
 
@@ -197,8 +208,9 @@ export function lookupString(key: TranslationKey): string {
  * or translation used a fallback locale, otherwise a string
  */
 // eslint-next-line @typescript-eslint/naming-convention
-export function _tDom(text: TranslationKey, variables?: IVariables): TranslatedString;
-export function _tDom(text: TranslationKey, variables: IVariables, tags: Tags): React.ReactNode;
+export function _tDom(text: TranslationKey, variables?: StringVariables): string;
+export function _tDom(text: TranslationKey, variables: RichVariables): React.ReactNode;
+export function _tDom(text: TranslationKey, variables: RichVariables, tags: Tags): React.ReactNode;
 export function _tDom(text: TranslationKey, variables?: IVariables, tags?: Tags): TranslatedString {
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const { translated, isFallback } = safeCounterpartTranslate(text, variables);
@@ -233,8 +245,9 @@ export function sanitizeForTranslation(text: string): string {
  *
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
-export function substitute(text: string, variables?: IVariables): string;
-export function substitute(text: string, variables: IVariables | undefined, tags: Tags | undefined): string;
+export function substitute(text: string, variables?: StringVariables): string;
+export function substitute(text: string, variables?: RichVariables): React.ReactNode;
+export function substitute(text: string, variables: RichVariables | undefined, tags: Tags | undefined): string;
 export function substitute(text: string, variables?: IVariables, tags?: Tags): string | React.ReactNode {
     let result: React.ReactNode | string = text;
 
