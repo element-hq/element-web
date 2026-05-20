@@ -1,0 +1,19 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.e2ePadlock {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    display: block;
+
+    svg {
+        height: inherit;
+        width: inherit;
+        display: block;
+    }
+}

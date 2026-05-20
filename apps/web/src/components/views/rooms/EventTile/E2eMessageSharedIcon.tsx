@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { EventTimeline } from "matrix-js-sdk/src/matrix";
+import { E2ePadlock, E2ePadlockIcon } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { _t } from "../../../../languageHandler.tsx";
-import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock.tsx";
 
 /** The React properties of an {@link E2eMessageSharedIcon}. */
 interface E2eMessageSharedIconParams {
@@ -41,5 +41,14 @@ export function E2eMessageSharedIcon(props: E2eMessageSharedIconParams): JSX.Ele
         userId: keyForwardingUserId,
     });
 
-    return <E2ePadlock icon={E2ePadlockIcon.Normal} title={tooltip} />;
+    return (
+        <E2ePadlock
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+            icon={E2ePadlockIcon.Normal}
+            title={tooltip}
+        />
+    );
 }

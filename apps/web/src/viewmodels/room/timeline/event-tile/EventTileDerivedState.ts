@@ -402,6 +402,8 @@ export interface EventTileClassState {
     isBubbleMessage: boolean;
     /** Whether the bubble tile is left-aligned. */
     isLeftAlignedBubbleMessage: boolean;
+    /** Whether the event is aligned between the bubbles */
+    isAlignedBetweenBubbles: boolean;
     /** Whether the event is currently being edited. */
     isEditing: boolean;
     /** Whether the event renders as an informational timeline item. */
@@ -444,6 +446,7 @@ export interface EventTileClassState {
 export function getEventTileClassState({
     isBubbleMessage,
     isLeftAlignedBubbleMessage,
+    isAlignedBetweenBubbles,
     isEditing,
     isInfoMessage,
     isTwelveHour,
@@ -466,6 +469,7 @@ export function getEventTileClassState({
     return {
         mx_EventTile_bubbleContainer: isBubbleMessage,
         mx_EventTile_leftAlignedBubble: isLeftAlignedBubbleMessage,
+        mx_EventTile_alignedBetweenBubbles: isAlignedBetweenBubbles,
         mx_EventTile: true,
         mx_EventTile_isEditing: isEditing,
         mx_EventTile_info: isInfoMessage,
