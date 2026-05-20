@@ -172,80 +172,90 @@ export class DeviceListenerCurrentDevice {
             return;
         }
 
-        const isCurrentDeviceTrusted = Boolean(
-            (await crypto.getDeviceVerificationStatus(this.client.getSafeUserId(), this.client.deviceId!))
-                ?.crossSigningVerified,
-        );
+        {
+            const isCurrentDeviceTrusted = Boolean(
+                (await crypto.getDeviceVerificationStatus(this.client.getSafeUserId(), this.client.deviceId!))
+                    ?.crossSigningVerified,
+            );
 
-        if (!isCurrentDeviceTrusted) {
-            // The current device is not trusted: prompt the user to verify
-            return await this.failedCheck("verify_this_session", logSpan, "info", "Current device not verified");
+            if (!isCurrentDeviceTrusted) {
+                // The current device is not trusted: prompt the user to verify
+                return await this.failedCheck("verify_this_session", logSpan, "info", "Current device not verified");
+            }
         }
 
-        const crossSigningStatus = await crypto.getCrossSigningStatus();
-        const allCrossSigningSecretsCached =
-            crossSigningStatus.privateKeysCachedLocally.masterKey &&
-            crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
-            crossSigningStatus.privateKeysCachedLocally.userSigningKey;
+        {
+            const crossSigningStatus = await crypto.getCrossSigningStatus();
+            const allCrossSigningSecretsCached =
+                crossSigningStatus.privateKeysCachedLocally.masterKey &&
+                crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
+                crossSigningStatus.privateKeysCachedLocally.userSigningKey;
 
-        if (!allCrossSigningSecretsCached) {
-            // cross signing ready & device trusted, but we are missing secrets from our local cache.
-            // prompt the user to enter their recovery key.
-            const newState = crossSigningStatus.privateKeysInSecretStorage
-                ? "key_storage_out_of_sync"
-                : "identity_needs_reset";
+            if (!allCrossSigningSecretsCached) {
+                // cross signing ready & device trusted, but we are missing secrets from our local cache.
+                // prompt the user to enter their recovery key.
+                const newState = crossSigningStatus.privateKeysInSecretStorage
+                    ? "key_storage_out_of_sync"
+                    : "identity_needs_reset";
 
-            return await this.failedCheck(
-                newState,
-                logSpan,
-                "info",
-                "Some secrets not cached",
-                crossSigningStatus.privateKeysCachedLocally,
-                crossSigningStatus.privateKeysInSecretStorage,
-            );
+                return await this.failedCheck(
+                    newState,
+                    logSpan,
+                    "info",
+                    "Some secrets not cached",
+                    crossSigningStatus.privateKeysCachedLocally,
+                    crossSigningStatus.privateKeysInSecretStorage,
+                );
+            }
         }
 
         const keyBackupUploadActive = await this.isKeyBackupUploadActive(logSpan);
         const backupDisabled = await this.recheckBackupDisabled();
-        // We warn if key backup upload is turned off and we have not explicitly
-        // said we are OK with that.
-        const keyBackupUploadIsOk = keyBackupUploadActive || backupDisabled;
+        {
+            // We warn if key backup upload is turned off and we have not explicitly
+            // said we are OK with that.
+            const keyBackupUploadIsOk = keyBackupUploadActive || backupDisabled;
 
-        if (!keyBackupUploadIsOk) {
-            return await this.failedCheck(
-                "turn_on_key_storage",
-                logSpan,
-                "info",
-                "Key backup upload is unexpectedly turned off",
-            );
-        }
-
-        const secretStorageStatus = await crypto.getSecretStorageStatus();
-        const recoveryDisabled = await this.recheckRecoveryDisabled(this.client);
-        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled || backupDisabled;
-
-        if (!recoveryIsOk) {
-            if (secretStorageStatus.defaultKeyId === null) {
-                return await this.failedCheck("set_up_recovery", logSpan, "info", "No default 4S key");
-            } else {
-                return await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "4S is missing secrets", {
-                    secretStorageStatus,
-                });
+            if (!keyBackupUploadIsOk) {
+                return await this.failedCheck(
+                    "turn_on_key_storage",
+                    logSpan,
+                    "info",
+                    "Key backup upload is unexpectedly turned off",
+                );
             }
         }
 
-        // We warn if key backup is set up, but we don't have the decryption
-        // key, so can't fetch keys from backup.
-        const keyBackupDownloadIsOk =
-            !keyBackupUploadActive || backupDisabled || (await crypto.getSessionBackupPrivateKey()) !== null;
+        {
+            const secretStorageStatus = await crypto.getSecretStorageStatus();
+            const recoveryDisabled = await this.recheckRecoveryDisabled(this.client);
+            const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled || backupDisabled;
 
-        if (!keyBackupDownloadIsOk) {
-            return await this.failedCheck(
-                "key_storage_out_of_sync",
-                logSpan,
-                "warn",
-                "Backup key is not cached locally",
-            );
+            if (!recoveryIsOk) {
+                if (secretStorageStatus.defaultKeyId === null) {
+                    return await this.failedCheck("set_up_recovery", logSpan, "info", "No default 4S key");
+                } else {
+                    return await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "4S is missing secrets", {
+                        secretStorageStatus,
+                    });
+                }
+            }
+        }
+
+        {
+            // We warn if key backup is set up, but we don't have the decryption
+            // key, so can't fetch keys from backup.
+            const keyBackupDownloadIsOk =
+                !keyBackupUploadActive || backupDisabled || (await crypto.getSessionBackupPrivateKey()) !== null;
+
+            if (!keyBackupDownloadIsOk) {
+                return await this.failedCheck(
+                    "key_storage_out_of_sync",
+                    logSpan,
+                    "warn",
+                    "Backup key is not cached locally",
+                );
+            }
         }
 
         // Everything is OK - no need to show a toast
