@@ -10,7 +10,7 @@ exports[`<SettingsField /> should render with the default label 1`] = `
     >
       <label
         class="_label_19upo_59"
-        for="radix-_r_0_"
+        for="radix-_r-1_"
       >
         Element Call URL
       </label>
@@ -19,7 +19,7 @@ exports[`<SettingsField /> should render with the default label 1`] = `
       >
         <input
           class="_control_d83jn_10"
-          id="radix-_r_0_"
+          id="radix-_r-1_"
           name="input"
           title=""
           value=""
