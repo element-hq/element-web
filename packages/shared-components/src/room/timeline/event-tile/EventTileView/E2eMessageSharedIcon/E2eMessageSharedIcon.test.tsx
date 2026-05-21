@@ -43,4 +43,12 @@ describe("E2eMessageSharedIconView", () => {
 
         expect(screen.getByTestId("e2e-padlock")).toHaveClass("custom-shared-icon");
     });
+
+    it("uses the shared translation for the icon accessible name", () => {
+        render(<Default />);
+
+        expect(screen.getByTestId("e2e-padlock")).toHaveAccessibleName(
+            "Bob (@bob:example.com) shared this message since you were not in the room when it was sent.",
+        );
+    });
 });
