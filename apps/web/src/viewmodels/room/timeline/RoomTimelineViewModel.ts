@@ -139,11 +139,10 @@ export class RoomTimelineViewModel
     private readReceiptDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
     /**
-     * Debouncer for derived-state refreshes after a burst of Decrypted events.
-     * See {@link onEventDecrypted} / {@link flushDerivedAfterDecrypt}.
+     * Debouncer for items rebuilds after a burst of Decrypted events.
+     * See {@link onEventDecrypted} / {@link flushDecryptRebuild}.
      */
     private decryptDebounceTimer: ReturnType<typeof setTimeout> | null = null;
-    private pendingDecryptedEventIds: Set<string> = new Set();
     private static readonly DECRYPT_FLUSH_DEBOUNCE_MS = 200;
 
     /** True when Virtuoso reports the list is scrolled to the bottom. */
@@ -285,9 +284,12 @@ export class RoomTimelineViewModel
         this.disposables.trackListener(this.opts.room, RoomEvent.Timeline, this.onRoomTimeline as (...args: unknown[]) => void);
         // Track changes to the room's fully-read marker.
         this.disposables.trackListener(this.opts.room, RoomEvent.AccountData, this.onRoomAccountData as (...args: unknown[]) => void);
-        // Rebuild items when any event in the window is decrypted (or fails to decrypt).
-        // This handles both live events and historical encrypted events (e.g. on a fresh session
-        // with no key backup) so they appear as "Unable to decrypt" tiles rather than being invisible.
+        // Decryption arrivals (late key delivery / key backup) need a rebuild
+        // so previously-pending events that we filtered out of items become
+        // visible. RoomEvent.Timeline only fires once per event at arrival
+        // time and is not re-emitted on decryption (see js-sdk
+        // event-timeline-set.js addEventToTimeline → emit Timeline), so this
+        // listener is the only signal we have for that transition.
         this.disposables.trackListener(this.opts.client, MatrixEventEvent.Decrypted, this.onEventDecrypted as (...args: unknown[]) => void);
     }
 
@@ -355,72 +357,85 @@ export class RoomTimelineViewModel
     };
 
     /**
-     * Handle a Decrypted event for an event in the window.
+     * Decryption arrived for an event in our window. Schedule a debounced
+     * rebuild of items so newly-decrypted events that were previously filtered
+     * (wire-encrypted-pending → excluded from items, see
+     * {@link shouldIncludeEvent}) become visible.
      *
-     * With the stable-items invariant ({@link buildItems} keeps a slot for
-     * every wire-encrypted event regardless of decryption state), a decrypt
-     * never changes the items array structure. The per-tile content update
-     * is handled by `MessageEvent`'s own listener on the same event.
-     *
-     * The only snapshot fields that *can* change because of decryption are
-     * derived flags (`hasHighlights`, `canJumpToReadMarker`) — and even those
-     * are usually unchanged. We debounce a burst of decrypts so a paginate
-     * cascade collapses into a single derived-state refresh after the burst
-     * settles, instead of one per event.
+     * Debounced so a paginate-driven cascade of decrypts collapses into a
+     * single rebuild instead of one per event — the per-event variant
+     * remounted virtuoso tiles repeatedly and restarted media downloads.
      */
     private onEventDecrypted = (event: MatrixEvent): void => {
         if (this.isDisposed) return;
         if (!this.timelineWindow.getEvents().includes(event)) return;
 
-        const eventId = event.getId();
-        if (eventId) this.pendingDecryptedEventIds.add(eventId);
-
         if (this.decryptDebounceTimer !== null) clearTimeout(this.decryptDebounceTimer);
         this.decryptDebounceTimer = setTimeout(() => {
             this.decryptDebounceTimer = null;
-            this.flushDerivedAfterDecrypt();
+            this.flushDecryptRebuild();
         }, RoomTimelineViewModel.DECRYPT_FLUSH_DEBOUNCE_MS);
     };
 
     /**
-     * Recompute derived snapshot fields after a burst of decryptions. Items
-     * are never rebuilt here — the wire-encrypted slots are stable and the
-     * per-tile renderers handle content updates via their own listeners.
+     * Rebuild items in response to a settled burst of decryptions, with
+     * firstItemIndex compensation to keep totalCount constant (matches the
+     * back-paginate path; virtuoso's upward scroll compensation is gated on
+     * `prev totalCount === current totalCount`).
+     *
+     * **Gated against in-flight paginate chains.** If a chain is running, we
+     * defer: the chain's terminal {@link buildItems} will pick up everything
+     * these decrypts revealed, and a concurrent rebuild here would race the
+     * chain's `prepended` count computation. We re-arm the debounce timer so
+     * we try again after the chain finishes — that way a decrypt that fires
+     * deep inside a chain doesn't get lost if no further decrypts arrive.
      */
-    private flushDerivedAfterDecrypt(): void {
+    private flushDecryptRebuild(): void {
         if (this.isDisposed) return;
-        const batchSize = this.pendingDecryptedEventIds.size;
-        this.pendingDecryptedEventIds.clear();
-        if (batchSize === 0) return;
 
-        const items = this.snapshot.current.items;
-        const newCanJumpToReadMarker = this.computeCanJumpToReadMarker(items);
+        if (this.backwardPaginateChain !== null || this.forwardPaginateChain !== null) {
+            // Defer until the chain ends.
+            if (this.decryptDebounceTimer === null) {
+                this.decryptDebounceTimer = setTimeout(() => {
+                    this.decryptDebounceTimer = null;
+                    this.flushDecryptRebuild();
+                }, RoomTimelineViewModel.DECRYPT_FLUSH_DEBOUNCE_MS);
+            }
+            return;
+        }
+
+        const itemsBefore = this.snapshot.current.items;
+        const firstItemIndexBefore = this.snapshot.current.firstItemIndex;
+        const itemsNew = this.buildItems();
+        const delta = itemsNew.length - itemsBefore.length;
+
+        const newCanJumpToReadMarker = this.computeCanJumpToReadMarker(itemsNew);
         const newHasHighlights =
             this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0;
 
-        // NOTE: items are intentionally NOT rebuilt here.
-        //
-        // Rebuilding `items` after every decrypt burst (and adjusting
-        // `firstItemIndex` to compensate) churns virtuoso's internal state
-        // enough that mounted tiles unmount and remount — observable as
-        // repeated `[MessageEvent] constructor` lines for the same eventId
-        // even though React keys are stable. Each remount restarts
-        // `MImageBody`/`MVideoBody`'s download (or worse, races with the
-        // previous mount's `setState`), and the cascading layout work shows
-        // up as "timeline jumping" near the user's viewport.
-        //
-        // The cost is that events whose decryption resolved AFTER the
-        // paginate-time `waitForDecryption` deadline stay out of `items`
-        // until the next paginate or live-event rebuild surfaces them. For
-        // a stationary user they remain hidden until they scroll. That's a
-        // known follow-up; the immediate priority is keeping the tiles that
-        // DID make it into items stable.
+        if (delta === 0) {
+            // No structural change (decrypts that resolved to already-filtered
+            // types like reactions/edits, or events whose state didn't move
+            // them in/out of the inclusion set). Refresh derived flags only;
+            // mergeSnapshot drops the merge entirely if nothing actually
+            // changed.
+            this.mergeSnapshot(
+                { canJumpToReadMarker: newCanJumpToReadMarker, hasHighlights: newHasHighlights },
+                "decrypt-flush(Δ=0)",
+            );
+            return;
+        }
+
+        // Items grew (typical: historical encrypted events newly decrypted).
+        // Compensate firstItemIndex by -delta so totalCount stays constant.
         this.mergeSnapshot(
             {
+                items: itemsNew,
+                firstItemIndex: firstItemIndexBefore - delta,
                 canJumpToReadMarker: newCanJumpToReadMarker,
                 hasHighlights: newHasHighlights,
             },
-            `decrypt-flush(n=${batchSize})`,
+            `decrypt-flush(Δ=${delta >= 0 ? "+" : ""}${delta})`,
         );
     }
 
@@ -859,7 +874,6 @@ export class RoomTimelineViewModel
             clearTimeout(this.decryptDebounceTimer);
             this.decryptDebounceTimer = null;
         }
-        this.pendingDecryptedEventIds.clear();
         if (!this.lastBottomEventId) {
             logger.debug(`[TimelineVM] dispose() — no visible range recorded, preserving saved position`);
             super.dispose();
