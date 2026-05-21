@@ -14,18 +14,12 @@ import { E2eMessageSharedIconView, type E2eMessageSharedIconViewSnapshot } from 
 
 type E2eMessageSharedIconProps = E2eMessageSharedIconViewSnapshot & { className?: string };
 
-const E2eMessageSharedIconViewWrapperImpl = ({
-    className,
-    ...rest
-}: E2eMessageSharedIconProps): JSX.Element => {
+const E2eMessageSharedIconViewWrapperImpl = ({ className, ...rest }: E2eMessageSharedIconProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {});
 
     return <E2eMessageSharedIconView vm={vm} className={className} />;
 };
-const E2eMessageSharedIconViewWrapper = withViewDocs(
-    E2eMessageSharedIconViewWrapperImpl,
-    E2eMessageSharedIconView,
-);
+const E2eMessageSharedIconViewWrapper = withViewDocs(E2eMessageSharedIconViewWrapperImpl, E2eMessageSharedIconView);
 
 const meta = {
     title: "Timeline/Timeline Event/E2eMessageSharedIconView",
