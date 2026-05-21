@@ -170,7 +170,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r-1_"
+                      id="radix-react-use-id-1"
                     >
                       All rooms you're in will appear in Home.
                     </span>
@@ -403,7 +403,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r-2_"
+                      id="radix-react-use-id-2"
                     >
                       Requires your server to support MSC4133
                     </span>
@@ -472,7 +472,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r-3_"
+                      id="radix-react-use-id-3"
                     >
                       Your server doesn't support disabling sending read receipts.
                     </span>
@@ -597,7 +597,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r-4_"
+                      id="radix-react-use-id-4"
                     >
                       <span>
                         Start messages with 
@@ -1484,7 +1484,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <input
                         class="_input_udcm8_24"
-                        id="_r-5_"
+                        id="react-use-id-5"
                         role="switch"
                         type="checkbox"
                       />
@@ -1498,7 +1498,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r-5_"
+                      for="react-use-id-5"
                     >
                       Hide avatars of room and inviter
                     </label>
@@ -1512,13 +1512,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_19upo_59"
-                    for="radix-_r-6_"
+                    for="radix-react-use-id-6"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
-                    id="radix-_r-7_"
+                    id="radix-react-use-id-7"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
@@ -1631,7 +1631,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="_r-8_"
+                        id="react-use-id-8"
                         role="switch"
                         type="checkbox"
                       />
@@ -1645,13 +1645,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r-8_"
+                      for="react-use-id-8"
                     >
                       Allow users to invite you to rooms
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r-9_"
+                      id="radix-react-use-id-9"
                     >
                       Your server does not implement this feature.
                     </span>

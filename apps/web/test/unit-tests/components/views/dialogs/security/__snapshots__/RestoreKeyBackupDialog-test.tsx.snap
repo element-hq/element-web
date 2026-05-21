@@ -310,7 +310,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="_r-1_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -545,7 +545,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is ca
       </div>
     </div>
     <div
-      aria-describedby="_r-1_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -624,7 +624,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when the key is in
       </div>
     </div>
     <div
-      aria-describedby="_r-1_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

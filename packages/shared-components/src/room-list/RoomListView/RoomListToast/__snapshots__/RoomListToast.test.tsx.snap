@@ -27,7 +27,7 @@ exports[`<RoomListToast /> > renders ChatMoved story 1`] = `
         Chat moved
       </div>
       <button
-        aria-labelledby="_r-1_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 _close_1ysb3_41 _no-background_1215g_42"
         data-kind="secondary"
         role="button"
@@ -83,7 +83,7 @@ exports[`<RoomListToast /> > renders SectionCreated story 1`] = `
         Section created
       </div>
       <button
-        aria-labelledby="_r-1_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 _close_1ysb3_41 _no-background_1215g_42"
         data-kind="secondary"
         role="button"

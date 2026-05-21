@@ -7,14 +7,14 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
   >
     <div
       data-group="true"
-      data-testid="_r-1_"
-      id="_r-1_"
+      data-testid="react-use-id-1"
+      id="react-use-id-1"
       style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
     >
       <div
         data-panel="true"
-        data-testid="_r-2_"
-        id="_r-2_"
+        data-testid="react-use-id-2"
+        id="react-use-id-2"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 0 1 0px; overflow: visible;"
       >
         <div
@@ -30,7 +30,7 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
         </div>
       </div>
       <div
-        aria-controls="_r-2_"
+        aria-controls="react-use-id-2"
         aria-label="Click or drag to expand"
         aria-orientation="vertical"
         aria-valuemax="99.502"
@@ -38,8 +38,8 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
         aria-valuenow="0"
         class="SeparatorView-module_separator Separator SeparatorView-module_visible"
         data-separator="inactive"
-        data-testid="_r-3_"
-        id="_r-3_"
+        data-testid="react-use-id-3"
+        id="react-use-id-3"
         role="separator"
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
@@ -59,8 +59,8 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
       </div>
       <div
         data-panel="true"
-        data-testid="_r-4_"
-        id="_r-4_"
+        data-testid="react-use-id-4"
+        id="react-use-id-4"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 100 1 0px; overflow: visible;"
       >
         <div
@@ -86,14 +86,14 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
   >
     <div
       data-group="true"
-      data-testid="_r-1_"
-      id="_r-1_"
+      data-testid="react-use-id-1"
+      id="react-use-id-1"
       style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
     >
       <div
         data-panel="true"
-        data-testid="_r-2_"
-        id="_r-2_"
+        data-testid="react-use-id-2"
+        id="react-use-id-2"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 49.751 1 0px; overflow: visible;"
       >
         <div
@@ -109,7 +109,7 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
         </div>
       </div>
       <div
-        aria-controls="_r-2_"
+        aria-controls="react-use-id-2"
         aria-label="Click or drag to expand"
         aria-orientation="vertical"
         aria-valuemax="99.502"
@@ -117,8 +117,8 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
         aria-valuenow="49.751"
         class="SeparatorView-module_separator Separator SeparatorView-module_visible"
         data-separator="inactive"
-        data-testid="_r-3_"
-        id="_r-3_"
+        data-testid="react-use-id-3"
+        id="react-use-id-3"
         role="separator"
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
@@ -138,8 +138,8 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
       </div>
       <div
         data-panel="true"
-        data-testid="_r-4_"
-        id="_r-4_"
+        data-testid="react-use-id-4"
+        id="react-use-id-4"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 50.249 1 0px; overflow: visible;"
       >
         <div
@@ -165,14 +165,14 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
   >
     <div
       data-group="true"
-      data-testid="_r-1_"
-      id="_r-1_"
+      data-testid="react-use-id-1"
+      id="react-use-id-1"
       style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
     >
       <div
         data-panel="true"
-        data-testid="_r-2_"
-        id="_r-2_"
+        data-testid="react-use-id-2"
+        id="react-use-id-2"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 48.309 1 0px; overflow: visible;"
       >
         <div
@@ -192,8 +192,8 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
         aria-orientation="vertical"
         class="SeparatorView-module_separator Separator"
         data-separator="inactive"
-        data-testid="_r-3_"
-        id="_r-3_"
+        data-testid="react-use-id-3"
+        id="react-use-id-3"
         role="separator"
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
@@ -213,8 +213,8 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
       </div>
       <div
         data-panel="true"
-        data-testid="_r-4_"
-        id="_r-4_"
+        data-testid="react-use-id-4"
+        id="react-use-id-4"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 51.691 1 0px; overflow: visible;"
       >
         <div

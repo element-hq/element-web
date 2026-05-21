@@ -100,7 +100,7 @@ exports[`DateSeparatorView > renders with jump to date picker story 1`] = `
       role="none"
     />
     <div
-      aria-controls="radix-_r-1_"
+      aria-controls="radix-react-use-id-1"
       aria-expanded="true"
       aria-haspopup="menu"
       aria-label="Jump to date"
@@ -108,7 +108,7 @@ exports[`DateSeparatorView > renders with jump to date picker story 1`] = `
       class="Flex-module_flex DateSeparatorView-module_content"
       data-state="open"
       data-testid="jump-to-date-separator-button"
-      id="radix-_r-2_"
+      id="radix-react-use-id-2"
       role="button"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       tabindex="0"

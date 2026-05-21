@@ -25,6 +25,9 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 const REACT_USE_ID = /_r_[a-z0-9]+_/g;
 
 function normaliseReactUseIds(snapshot: string): string {
+    // React useId values can vary between runs and make snapshots flaky:
+    // https://github.com/element-hq/element-web/issues/31765
+    // Avoid running the regex for DOM snapshots without React useId output.
     if (!snapshot.includes("_r_")) return snapshot;
 
     const ids = new Map<string, string>();
@@ -33,13 +36,14 @@ function normaliseReactUseIds(snapshot: string): string {
     return snapshot.replace(REACT_USE_ID, (id) => {
         let replacement = ids.get(id);
         if (!replacement) {
-            replacement = `_r-${nextId++}_`;
+            replacement = `react-use-id-${nextId++}`;
             ids.set(id, replacement);
         }
         return replacement;
     });
 }
 
+// Prevent this serializer from recursively matching the same DOM node when it calls serialize().
 let isSerializingDomSnapshot = false;
 
 expect.addSnapshotSerializer({

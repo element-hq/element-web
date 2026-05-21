@@ -15,7 +15,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="_r-1_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -235,7 +235,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             <input
               aria-hidden="true"
               class="_input_udcm8_24"
-              id="_r-2_"
+              id="react-use-id-2"
               role="switch"
               tabindex="-1"
               type="checkbox"
@@ -754,7 +754,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="_r-1_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -932,7 +932,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             <input
               aria-hidden="true"
               class="_input_udcm8_24"
-              id="_r-2_"
+              id="react-use-id-2"
               role="switch"
               tabindex="-1"
               type="checkbox"
@@ -1451,7 +1451,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         class="mx_BaseCard_header_spacer"
       />
       <button
-        aria-labelledby="_r-1_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"
@@ -1671,7 +1671,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             <input
               aria-hidden="true"
               class="_input_udcm8_24"
-              id="_r-2_"
+              id="react-use-id-2"
               role="switch"
               tabindex="-1"
               type="checkbox"

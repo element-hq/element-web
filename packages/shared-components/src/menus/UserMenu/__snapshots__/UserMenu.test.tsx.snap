@@ -11,7 +11,7 @@ exports[`UserMenu > renders a button 1`] = `
       aria-label="User menu"
       class="UserMenu-module_triggerButton"
       data-state="closed"
-      id="radix-_r-1_"
+      id="radix-react-use-id-1"
       type="button"
     >
       <span
@@ -54,7 +54,7 @@ exports[`UserMenu > renders a button with a longer name 1`] = `
       aria-label="User menu"
       class="UserMenu-module_triggerButton"
       data-state="closed"
-      id="radix-_r-1_"
+      id="radix-react-use-id-1"
       type="button"
     >
       <span
@@ -102,7 +102,7 @@ exports[`UserMenu > renders a guest menu 1`] = `
         aria-label="User menu"
         class="UserMenu-module_triggerButton"
         data-state="closed"
-        id="radix-_r-1_"
+        id="radix-react-use-id-1"
         type="button"
       >
         <span
@@ -151,7 +151,7 @@ exports[`UserMenu > renders a menu 1`] = `
         aria-label="User menu"
         class="UserMenu-module_triggerButton"
         data-state="closed"
-        id="radix-_r-1_"
+        id="radix-react-use-id-1"
         type="button"
       >
         <span
@@ -208,13 +208,13 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       class="UserMenu-module_wrapper"
     >
       <button
-        aria-controls="radix-_r-1_"
+        aria-controls="radix-react-use-id-1"
         aria-expanded="true"
         aria-haspopup="menu"
         aria-label="User menu"
         class="UserMenu-module_triggerButton"
         data-state="open"
-        id="radix-_r-2_"
+        id="radix-react-use-id-2"
         type="button"
       >
         <span
@@ -251,7 +251,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
   >
     <div
       aria-label="User menu"
-      aria-labelledby="radix-_r-2_"
+      aria-labelledby="radix-react-use-id-2"
       aria-orientation="vertical"
       class="UserMenu-module_container _menu_1kl3y_8"
       data-align="start"
@@ -260,7 +260,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       data-side="right"
       data-state="open"
       dir="ltr"
-      id="radix-_r-1_"
+      id="radix-react-use-id-1"
       role="menu"
       style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); animation: auto ease 0s 1 normal none running none; pointer-events: auto;"
       tabindex="-1"
@@ -517,13 +517,13 @@ exports[`UserMenu > renders an open menu 1`] = `
       class="UserMenu-module_wrapper"
     >
       <button
-        aria-controls="radix-_r-1_"
+        aria-controls="radix-react-use-id-1"
         aria-expanded="true"
         aria-haspopup="menu"
         aria-label="User menu"
         class="UserMenu-module_triggerButton"
         data-state="open"
-        id="radix-_r-2_"
+        id="radix-react-use-id-2"
         type="button"
       >
         <span
@@ -560,7 +560,7 @@ exports[`UserMenu > renders an open menu 1`] = `
   >
     <div
       aria-label="User menu"
-      aria-labelledby="radix-_r-2_"
+      aria-labelledby="radix-react-use-id-2"
       aria-orientation="vertical"
       class="UserMenu-module_container _menu_1kl3y_8"
       data-align="start"
@@ -569,7 +569,7 @@ exports[`UserMenu > renders an open menu 1`] = `
       data-side="right"
       data-state="open"
       dir="ltr"
-      id="radix-_r-1_"
+      id="radix-react-use-id-1"
       role="menu"
       style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); animation: auto ease 0s 1 normal none running none; pointer-events: auto;"
       tabindex="-1"
@@ -832,7 +832,7 @@ exports[`UserMenu > renders condensed view 1`] = `
       aria-label="User menu"
       class="UserMenu-module_triggerButton"
       data-state="closed"
-      id="radix-_r-1_"
+      id="radix-react-use-id-1"
       type="button"
     >
       <span

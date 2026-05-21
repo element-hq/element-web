@@ -7,8 +7,8 @@ exports[`<LeftResizablePanelView /> > renders Default story 1`] = `
   >
     <div
       data-group="true"
-      data-testid="_r-1_"
-      id="_r-1_"
+      data-testid="react-use-id-1"
+      id="react-use-id-1"
       style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
     >
       <div
@@ -35,16 +35,16 @@ exports[`<LeftResizablePanelView /> > renders Default story 1`] = `
         aria-valuemin="0"
         aria-valuenow="0"
         data-separator="inactive"
-        data-testid="_r-2_"
-        id="_r-2_"
+        data-testid="react-use-id-2"
+        id="react-use-id-2"
         role="separator"
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
       />
       <div
         data-panel="true"
-        data-testid="_r-3_"
-        id="_r-3_"
+        data-testid="react-use-id-3"
+        id="react-use-id-3"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 100 1 0px; overflow: visible;"
       >
         <div
