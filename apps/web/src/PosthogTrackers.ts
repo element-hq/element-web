@@ -12,6 +12,7 @@ import { type WebScreen as ScreenEvent } from "@matrix-org/analytics-events/type
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 import { type RoomListSortingAlgorithmChanged } from "@matrix-org/analytics-events/types/typescript/RoomListSortingAlgorithmChanged";
+import { type RoomFilterChanged } from "@matrix-org/analytics-events/types/typescript/RoomFilterChanged";
 import { type UrlPreviewRendered } from "@matrix-org/analytics-events/types/typescript/UrlPreviewRendered";
 
 import PageType from "./PageTypes";
@@ -139,6 +140,25 @@ export default class PosthogTrackers {
             eventName: "RoomListSortingAlgorithmChanged",
             oldAlgorithm: SortingAlgorithmMap[oldAlgorithm],
             newAlgorithm: SortingAlgorithmMap[newAlgorithm],
+        });
+    }
+
+    /**
+     * Track when the user toggles a room list filter.
+     * @param changedFilter - The filter that was toggled (e.g., "Unreads", "People", etc.).
+     * @param isEnabled - Whether the filter was enabled (true) or disabled (false).
+     * @param activeFilters - Array of currently active filters after the change.
+     */
+    public static trackRoomFilterChanged(
+        changedFilter: RoomFilterChanged["changedFilter"],
+        isEnabled: boolean,
+        activeFilters: string[],
+    ): void {
+        PosthogAnalytics.instance.trackEvent<RoomFilterChanged>({
+            eventName: "RoomFilterChanged",
+            changedFilter,
+            isEnabled,
+            activeFilters,
         });
     }
 

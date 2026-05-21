@@ -40,6 +40,8 @@ import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../store
 import SettingsStore from "../../settings/SettingsStore";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import PosthogTrackers from "../../PosthogTrackers";
+import { type RoomFilterChanged } from "@matrix-org/analytics-events/types/typescript/RoomFilterChanged";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -66,6 +68,19 @@ const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
     [FilterEnum.InvitesFilter, "invites"],
     [FilterEnum.LowPriorityFilter, "low_priority"],
 ]);
+
+// ExcludeTagsFilter is internal and never toggled via the UI, so explicitly excluded here.
+type UserFacingFilter = Exclude<FilterEnum, FilterEnum.ExcludeTagsFilter>;
+
+const filterEnumToAnalyticsNameMap: Record<UserFacingFilter, RoomFilterChanged["changedFilter"]> = {
+    [FilterEnum.UnreadFilter]: "Unreads",
+    [FilterEnum.PeopleFilter]: "People",
+    [FilterEnum.RoomsFilter]: "Rooms",
+    [FilterEnum.FavouriteFilter]: "Favourites",
+    [FilterEnum.MentionsFilter]: "Mentions",
+    [FilterEnum.InvitesFilter]: "Invites",
+    [FilterEnum.LowPriorityFilter]: "LowPriority",
+};
 
 const TAG_TO_TITLE_MAP: Record<string, string> = {
     [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
@@ -216,6 +231,14 @@ export class RoomListViewModel
         }
 
         this.updateRoomListData();
+
+        // Track the filter change for analytics (ExcludeTagsFilter is internal and not tracked)
+        if (filterKey in filterEnumToAnalyticsNameMap) {
+            const changedFilterName = filterEnumToAnalyticsNameMap[filterKey as UserFacingFilter];
+            const isEnabled = newFilter !== undefined;
+            const activeFilters = newFilter !== undefined ? [changedFilterName] : [];
+            PosthogTrackers.trackRoomFilterChanged(changedFilterName, isEnabled, activeFilters);
+        }
     };
 
     /**
