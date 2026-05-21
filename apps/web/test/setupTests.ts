@@ -22,6 +22,39 @@ declare global {
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
+const REACT_USE_ID = /_r_[a-z0-9]+_/g;
+
+function normaliseReactUseIds(snapshot: string): string {
+    if (!snapshot.includes("_r_")) return snapshot;
+
+    const ids = new Map<string, string>();
+    let nextId = 1;
+
+    return snapshot.replace(REACT_USE_ID, (id) => {
+        let replacement = ids.get(id);
+        if (!replacement) {
+            replacement = `_r-${nextId++}_`;
+            ids.set(id, replacement);
+        }
+        return replacement;
+    });
+}
+
+let isSerializingDomSnapshot = false;
+
+expect.addSnapshotSerializer({
+    test: (value: unknown): value is Element | DocumentFragment =>
+        !isSerializingDomSnapshot && (value instanceof Element || value instanceof DocumentFragment),
+    print: (value: unknown, serialize: (value: unknown) => string): string => {
+        isSerializingDomSnapshot = true;
+        try {
+            return normaliseReactUseIds(serialize(value));
+        } finally {
+            isSerializingDomSnapshot = false;
+        }
+    },
+});
+
 // Fake random strings to give a predictable snapshot for IDs
 jest.mock("matrix-js-sdk/src/randomstring");
 beforeEach(() => {
