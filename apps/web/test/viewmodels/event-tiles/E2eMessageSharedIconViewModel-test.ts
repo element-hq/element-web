@@ -26,7 +26,9 @@ const OTHER_USER_ID = "@alice:example.com";
 const ROOM_ID = "!roomId";
 const OTHER_ROOM_ID = "!otherRoomId";
 
-function createGetMember(displayNames: Record<string, string | undefined>): jest.Mock<RoomMember | null, [userId: string]> {
+function createGetMember(
+    displayNames: Record<string, string | undefined>,
+): jest.Mock<RoomMember | null, [userId: string]> {
     const getMember = jest.fn((userId: string): RoomMember | null => {
         const displayName = displayNames[userId];
         if (displayName === undefined) return null;
