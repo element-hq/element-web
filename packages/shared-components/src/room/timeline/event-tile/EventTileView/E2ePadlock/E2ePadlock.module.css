@@ -17,3 +17,12 @@
         display: block;
     }
 }
+
+.normal,
+.decryptionFailure {
+    color: var(--cpd-color-icon-tertiary);
+}
+
+.warning {
+    color: var(--cpd-color-icon-critical-primary);
+}
