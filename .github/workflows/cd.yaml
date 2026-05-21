@@ -56,6 +56,13 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
+            # Fudge and run this separately rather than relying on the dependency, 
+            # otherwise nx does not appear to pick up the .env file that playwright
+            # common's prebuild step creates.
+            - run: pnpm nx run-many --nxBail -t docker:prebuild
+              env:
+                  INPUT_BUILDER: ${{ steps.builder.outputs.name }}
+
             - run: pnpm nx run-many --nxBail -t docker:build
               id: build
               env:
