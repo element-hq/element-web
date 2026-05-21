@@ -6,7 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventEmitter } from "events";
-import { EventTimeline, RoomStateEvent, type MatrixClient, type Room, type RoomMember, type RoomState } from "matrix-js-sdk/src/matrix";
+import {
+    EventTimeline,
+    RoomStateEvent,
+    type MatrixClient,
+    type Room,
+    type RoomMember,
+    type RoomState,
+} from "matrix-js-sdk/src/matrix";
 
 import { E2eMessageSharedIconViewModel } from "../../../src/viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
 
