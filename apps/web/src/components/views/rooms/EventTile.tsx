@@ -51,6 +51,7 @@ import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-de
 import {
     useCreateAutoDisposedViewModel,
     ActionBarView,
+    E2eMessageSharedIconView,
     E2ePadlock,
     E2ePadlockIcon,
     MessageTimestampView,
@@ -101,10 +102,10 @@ import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
-import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
 import { EventTileViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { E2eMessageSharedIconViewModel } from "../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
@@ -317,6 +318,54 @@ export function isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
 
     // Default case
     return true;
+}
+
+interface E2eMessageSharedIconWrapperProps {
+    /**
+     * The ID of the room containing the event whose keys were shared.
+     */
+    roomId: string;
+    /**
+     * The ID of the user who shared the keys.
+     */
+    keyForwardingUserId: string;
+}
+
+function E2eMessageSharedIconWrapper({
+    roomId,
+    keyForwardingUserId,
+}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
+    const client = MatrixClientPeg.safeGet();
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new E2eMessageSharedIconViewModel({
+                client,
+                roomId,
+                keyForwardingUserId,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setClient(client);
+    }, [client, vm]);
+
+    useEffect(() => {
+        vm.setRoomId(roomId);
+    }, [roomId, vm]);
+
+    useEffect(() => {
+        vm.setKeyForwardingUserId(keyForwardingUserId);
+    }, [keyForwardingUserId, vm]);
+
+    return (
+        <E2eMessageSharedIconView
+            vm={vm}
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+        />
+    );
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
@@ -805,7 +854,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             // This may happen if the message was forwarded to us by another user, in which case we can show a better message
             const forwarder = this.props.mxEvent.getKeyForwardingUser();
             if (forwarder) {
-                return <E2eMessageSharedIcon keyForwardingUserId={forwarder} roomId={ev.getRoomId()!} />;
+                return <E2eMessageSharedIconWrapper keyForwardingUserId={forwarder} roomId={ev.getRoomId()!} />;
             }
         }
 
