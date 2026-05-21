@@ -7,13 +7,86 @@
 
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { createSection, editSection, deleteSection } from "../../../../src/stores/room-list-v3/section";
+import {
+    createSection,
+    editSection,
+    deleteSection,
+    getCustomSectionData,
+    getOrderedCustomSections,
+    isDefaultSectionTag,
+    CHATS_TAG,
+    CUSTOM_SECTION_TAG_PREFIX,
+    isSectionTag,
+} from "../../../../src/stores/room-list-v3/section";
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
+import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 
 describe("section", () => {
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    describe("getCustomSectionData", () => {
+        const validTag = "element.io.section.valid";
+        const invalidTag = "element.io.section.invalid";
+        const validEntry = { tag: validTag, name: "Valid" };
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        });
+
+        it.each([null, false, 42, "string", []] as const)("returns an empty object when the raw value is %p", (raw) => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
+            expect(getCustomSectionData()).toEqual({});
+        });
+
+        it("returns valid entries and drops invalid ones", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: validEntry,
+                [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" },
+            });
+            expect(getCustomSectionData()).toEqual({ [validTag]: validEntry });
+        });
+
+        it("drops entries that fail the isValidCustomSection check", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                "element.io.section.null-val": null,
+                "element.io.section.str-val": "not-an-object",
+                "element.io.section.bad-tag": { tag: "not-a-custom-tag", name: "Bad" },
+                "element.io.section.bad-name": { tag: "element.io.section.bad-name", name: 42 },
+            });
+            expect(getCustomSectionData()).toEqual({});
+        });
+    });
+
+    describe("getOrderedCustomSections", () => {
+        const tag = "element.io.section.abc";
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        });
+
+        it("returns an empty array when the raw value is not an array", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.OrderedCustomSections") return "not-an-array";
+                return null;
+            });
+
+            const result = getOrderedCustomSections();
+            expect(result).toEqual([]);
+        });
+
+        it("removes unknown sections and saves the cleaned list", () => {
+            const knownTag = "element.io.section.known";
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.CustomSectionData") return { [knownTag]: { tag: knownTag, name: "Known" } };
+                if (setting === "RoomList.OrderedCustomSections") return [knownTag, tag];
+                return null;
+            });
+
+            expect(getOrderedCustomSections()).toEqual([knownTag]);
+        });
     });
 
     describe("createSection", () => {
@@ -60,6 +133,8 @@ describe("section", () => {
             const existingTag = "element.io.section.existing";
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "RoomList.OrderedCustomSections") return [existingTag];
+                if (setting === "RoomList.CustomSectionData")
+                    return { [existingTag]: { tag: existingTag, name: "Existing" } };
                 return null;
             });
             jest.spyOn(Modal, "createDialog").mockReturnValue({
@@ -70,15 +145,16 @@ describe("section", () => {
 
             await createSection();
 
-            const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
-            const savedSection = Object.values(customDataCall![3] as Record<string, { tag: string; name: string }>)[0];
-            expect(savedSection.name).toBe("My Section");
-            expect(savedSection.tag).toMatch(/^element\.io\.section\./);
-
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
             const savedOrder = orderedCall![3] as string[];
             expect(savedOrder[0]).toBe(existingTag);
             expect(savedOrder[1]).toMatch(/^element\.io\.section\./);
+
+            const newTag = savedOrder[1];
+            const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
+            const savedSection = (customDataCall![3] as Record<string, { tag: string; name: string }>)[newTag];
+            expect(savedSection.name).toBe("My Section");
+            expect(savedSection.tag).toBe(newTag);
         });
     });
 
@@ -89,6 +165,12 @@ describe("section", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(existingSectionData);
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        });
+
+        it("does nothing if the tag is not a custom section tag", async () => {
+            const createDialogSpy = jest.spyOn(Modal, "createDialog");
+            await editSection("m.favourite");
+            expect(createDialogSpy).not.toHaveBeenCalled();
         });
 
         it("does nothing if the section does not exist", async () => {
@@ -148,11 +230,18 @@ describe("section", () => {
 
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "RoomList.CustomSectionData") return { [tag]: { tag, name: "My Section" } };
+                if (setting === "RoomList.CustomSectionData")
+                    return { [tag]: { tag, name: "My Section" }, [otherTag]: { tag: otherTag, name: "Other Section" } };
                 if (setting === "RoomList.OrderedCustomSections") return [otherTag, tag];
                 return null;
             });
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        });
+
+        it("does nothing if the tag is not a custom section tag", async () => {
+            const createDialogSpy = jest.spyOn(Modal, "createDialog");
+            await deleteSection("m.favourite", false);
+            expect(createDialogSpy).not.toHaveBeenCalled();
         });
 
         it("does nothing if the section does not exist", async () => {
@@ -201,6 +290,29 @@ describe("section", () => {
 
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             expect(customDataCall![3]).not.toHaveProperty(tag);
+        });
+    });
+
+    describe("isDefaultSectionTag", () => {
+        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG])("returns true for %s", (tag) => {
+            expect(isDefaultSectionTag(tag)).toBe(true);
+        });
+
+        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+            expect(isDefaultSectionTag(tag)).toBe(false);
+        });
+    });
+
+    describe("isSectionTag", () => {
+        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, `${CUSTOM_SECTION_TAG_PREFIX}some-uuid`])(
+            "returns true for %s",
+            (tag) => {
+                expect(isSectionTag(tag)).toBe(true);
+            },
+        );
+
+        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+            expect(isSectionTag(tag)).toBe(false);
         });
     });
 });

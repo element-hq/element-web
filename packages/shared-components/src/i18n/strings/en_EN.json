@@ -41,6 +41,9 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "devtools": {
+        "toggle_event": "toggle event"
+    },
     "keyboard": {
         "shift": "Shift"
     },
@@ -199,6 +202,14 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Call declined",
+                "call_declined_by_us": "You declined a call"
+            },
+            "video_call_title": "Video call",
+            "voice_call_title": "Voice call"
+        },
         "decryption_failure": {
             "blocked": "The sender has blocked you from receiving this message because your device is unverified",
             "historical_event_no_key_backup": "Historical messages are not available on this device",
@@ -210,6 +221,7 @@
         },
         "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
+        "e2e_state": "State of the end-to-end encryption",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
@@ -217,6 +229,10 @@
         },
         "m.file": {
             "error_invalid": "Invalid file"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s changed the room avatar to<img/>",
+            "removed": "%(senderDisplayName)s removed the room avatar."
         },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",

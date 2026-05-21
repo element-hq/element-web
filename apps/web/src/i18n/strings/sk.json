@@ -879,7 +879,6 @@
         "thread_root_id": "ID koreňového vlákna: %(threadRootId)s",
         "threads_timeline": "Časová os vlákien",
         "title": "Vývojárske nástroje",
-        "toggle_event": "prepnúť udalosť",
         "toolbox": "Nástroje",
         "use_at_own_risk": "Toto používateľské rozhranie nekontroluje typy hodnôt. Používajte ho na vlastné riziko.",
         "user_avatar": "Profilový obrázok: %(avatar)s",
@@ -3443,9 +3442,7 @@
         "m.poll.start": "%(senderName)s spustil anketu - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s zmenil obrázok miestnosti.",
-            "changed_img": "%(senderDisplayName)s zmenil obrázok miestnosti <img/>",
-            "lightbox_title": "%(senderDisplayName)s zmenil obrázok miestnosti %(roomName)s",
-            "removed": "%(senderDisplayName)s odstránil obrázok miestnosti."
+            "lightbox_title": "%(senderDisplayName)s zmenil obrázok miestnosti %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

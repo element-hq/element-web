@@ -706,7 +706,6 @@
         "state_key": "ステートキー",
         "threads_timeline": "スレッドのタイムライン",
         "title": "開発者ツール",
-        "toggle_event": "イベントを切り替える",
         "toolbox": "ツールボックス",
         "use_at_own_risk": "このユーザーインターフェースは、値の種類を確認しません。自己責任で使用してください。",
         "user_read_up_to": "ユーザーの既読状況： ",
@@ -2653,9 +2652,7 @@
         "m.poll.start": "%(senderName)sがアンケートを開始しました - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)sがルームのアバターを変更しました。",
-            "changed_img": "%(senderDisplayName)sはルームのアバターを<img/>に変更しました",
-            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました",
-            "removed": "%(senderDisplayName)sがルームのアバターを削除しました。"
+            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました"
         },
         "m.room.canonical_alias": {
             "alt_added": {

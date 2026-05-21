@@ -3,15 +3,53 @@
         "seek_bar_label": "Pasek wyszukiwania audio"
     },
     "action": {
+        "back": "Wróć",
+        "click": "Kliknij",
+        "close": "Zamknij",
+        "collapse": "Zwiń",
         "delete": "Usuń",
         "dismiss": "Pomiń",
+        "download": "Pobierz",
+        "edit": "Edytuj",
         "explore_rooms": "Przeglądaj pokoje",
+        "go": "Przejdź",
+        "hide": "Ukryj",
+        "invite": "Zaproś",
+        "new_conversation": "Nowa rozmowa",
+        "new_room": "Nowy pokój",
+        "new_section": "Nowa sekcja",
+        "new_video_room": "Nowy pokój wideo",
+        "open_menu": "Otwórz menu",
         "pause": "Wstrzymaj",
+        "pin": "Przypnij",
         "play": "Odtwórz",
-        "search": "Szukaj"
+        "react": "Dodaj reakcję",
+        "remove": "Usuń",
+        "reply": "Odpowiedz",
+        "reply_in_thread": "Odpowiedz w wątku",
+        "retry": "Ponów",
+        "search": "Szukaj",
+        "start_chat": "Rozpocznij czat",
+        "unpin": "Odepnij",
+        "view_source": "Wyświetl źródło"
+    },
+    "common": {
+        "attachment": "Załącznik",
+        "encryption_enabled": "Szyfrowanie włączone",
+        "loading": "Wczytywanie…",
+        "options": "Opcje",
+        "preferences": "Preferencje",
+        "state_encryption_enabled": "Eksperymentalne szyfrowanie włączone"
+    },
+    "devtools": {
+        "toggle_event": "przełącz zdarzenie"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
-        "open_dial_pad": "Otwórz klawiaturę numeryczną"
+        "open_dial_pad": "Otwórz klawiaturę numeryczną",
+        "separator_label": "Kliknij lub przeciągnij, aby rozwinąć"
     },
     "menus": {
         "user_menu": {
@@ -22,15 +60,132 @@
             "title": "Menu użytkownika"
         }
     },
+    "notifications": {
+        "all_messages": "Wszystkie wiadomości",
+        "default_settings": "Dopasuj do ustawień domyślnych",
+        "mentions_keywords": "Wzmianki i słowa kluczowe",
+        "mute_room": "Wycisz pokój"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Ustawienia pokoju"
+        },
+        "history_visibility_badge": {
+            "private": "Nowi członkowie nie widzą historii",
+            "shared": "Nowi członkowie widzą historię",
+            "world_readable": "Każdy może zobaczyć historię"
+        },
+        "jump_to_date": "Przeskocz do daty",
+        "jump_to_date_beginning": "Początek pokoju",
+        "jump_to_date_prompt": "Wybierz datę, do której przeskoczyć",
+        "pinned_message_badge": "Przypięta wiadomość",
+        "status_bar": {
+            "delete_all": "Usuń wszystkie",
+            "exceeded_resource_limit_description": "Skontaktuj się ze swoim administratorem, aby móc dalej korzystać z usługi.",
+            "exceeded_resource_limit_title": "Wiadomość nie została wysłana, ponieważ serwer domowy przekroczył swój limit zasobów.",
+            "failed_to_create_room_title": "Nie udało się rozpocząć czatu z tym użytkownikiem",
+            "homeserver_blocked_title": "Wiadomość nie została wysłana, ponieważ serwer domowy został zablokowany przez swojego administratora.",
+            "monthly_user_limit_reached_title": "Wiadomość nie została wysłana, ponieważ serwer domowy osiągnął miesięczny limit aktywnych użytkowników.",
+            "requires_consent_agreement_title": "Nie możesz wysłać żadnej wiadomości, dopóki nie zapoznasz się oraz nie zaakceptujesz naszych obowiązujących zasad.",
+            "retry_all": "Ponów wszystkie",
+            "select_messages_to_retry": "Zaznacz wszystkie lub pojedyncze wiadomości do ponowienia lub usunięcia",
+            "server_connectivity_lost_description": "Wysłane wiadomości będą przechowywane aż do momentu odzyskania połączenia.",
+            "server_connectivity_lost_title": "Utracono połączenie z serwerem.",
+            "some_messages_not_sent": "Niektóre z Twoich wiadomości nie zostały wysłane"
+        }
+    },
     "room_list": {
+        "a11y": {
+            "default": "Otwórz pokój %(roomName)s",
+            "invitation": "Otwórz zaproszenie pokoju %(roomName)s.",
+            "mention": {
+                "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wzmianką.",
+                "few": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wzmiankami.",
+                "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wzmiankami."
+            },
+            "unread": {
+                "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wiadomością.",
+                "few": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami.",
+                "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami."
+            },
+            "unsent_message": "Otwórz pokój %(roomName)s z niewysłaną wiadomością.",
+            "video_call": "Otwórz pokój %(roomName)s za pomocą połączenia wideo.",
+            "voice_call": "Otwórz pokój %(roomName)s za pomocą połączenia głosowego."
+        },
+        "appearance": "Wygląd",
         "chat_moved": "Czat przeniesiony",
         "collapse_all_sections": "Zwiń wszystkie sekcje",
+        "collapse_filters": "Zwiń listę filtrów",
+        "empty": {
+            "no_chats": "Nie ma jeszcze żadnych czatów",
+            "no_chats_description": "Zacznij od wysłania wiadomości lub utworzenia pokoju",
+            "no_chats_description_no_room_rights": "Zacznij od wysłania komuś wiadomości",
+            "no_favourites": "Nie masz jeszcze żadnych ulubionych czatów",
+            "no_favourites_description": "Możesz dodać czat do ulubionych w ustawieniach czatu",
+            "no_invites": "Nie masz żadnych nieprzeczytanych zaproszeń",
+            "no_lowpriority": "Nie masz żadnych pokoi o niskim priorytecie",
+            "no_mentions": "Nie masz żadnych nieprzeczytanych wzmianek",
+            "no_people": "Nie prowadzisz jeszcze z nikim czatów prywatnych",
+            "no_people_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
+            "no_rooms": "Nie jesteś jeszcze w żadnym pokoju",
+            "no_rooms_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
+            "no_unread": "Gratulacje! Nie masz żadnych nieprzeczytanych wiadomości.",
+            "show_activity": "Zobacz całą aktywność",
+            "show_chats": "Pokaż wszystkie czaty"
+        },
         "expand_all_sections": "Rozwiń wszystkie sekcje",
+        "expand_filters": "Rozwiń listę filtrów",
+        "filters": {
+            "favourite": "Ulubione",
+            "invites": "Zaproszenia",
+            "low_priority": "Niski priorytet",
+            "mentions": "Wzmianki",
+            "people": "Osoby",
+            "rooms": "Pokoje",
+            "unread": "Nieprzeczytane"
+        },
+        "list_title": "Lista pokojów",
+        "more_options": {
+            "copy_link": "Kopiuj link do pokoju",
+            "favourited": "Ulubione",
+            "leave_room": "Opuść pokój",
+            "low_priority": "Niski priorytet",
+            "mark_read": "Oznacz jako przeczytane",
+            "mark_unread": "Oznacz jako nieprzeczytane",
+            "move_to_section": "Przenieś do"
+        },
+        "notification_options": "Opcje powiadomień",
+        "open_space_menu": "Otwórz menu przestrzeni",
+        "primary_filters": "Filtry listy pomieszczeń",
+        "room": {
+            "more_options": "Więcej opcji"
+        },
+        "room_options": "Opcje pokoju",
+        "section_created": "Sekcja utworzona",
         "section_header": {
             "edit_section": "Edytuj sekcję",
             "more_options": "Więcej opcji",
-            "remove_section": "Usuń sekcję"
+            "remove_section": "Usuń sekcję",
+            "toggle": "Przełącz sekcję %(section)s",
+            "toggle_unread": "Wyświetl sekcję %(section)s z nieprzeczytanymi pokojami"
+        },
+        "show_message_previews": "Pokaż podglądy wiadomości",
+        "sort": "Sortuj",
+        "sort_type": {
+            "activity": "Ostatnia aktywność",
+            "atoz": "A-Z",
+            "unread_first": "Najpierw nieprzeczytane"
+        },
+        "space_menu": {
+            "home": "Strona główna przestrzeni",
+            "space_settings": "Ustawienia przestrzeni"
         }
+    },
+    "terms": {
+        "tac_button": "Przejrzyj warunki użytkowania"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją"
     },
     "time": {
         "about_day_ago": "około dzień temu",
@@ -49,18 +204,66 @@
         "n_minutes_ago": "%(num)s minut temu"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "Połączenie wideo",
+            "voice_call_title": "Połączenie głosowe"
+        },
+        "decryption_failure": {
+            "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości, ponieważ Twoje urządzenie nie zostało zweryfikowane",
+            "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
+            "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby uzyskać dostęp do historii wiadomości",
+            "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
+            "sender_identity_previously_verified": "Zweryfikowana tożsamość cyfrowa nadawcy została zresetowana",
+            "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
+            "unable_to_decrypt": "Nie można odszyfrować wiadomości"
+        },
+        "download_action_decrypting": "Rozszyfrowuję",
+        "download_action_downloading": "Pobieranie",
         "m.audio": {
             "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
             "unnamed_audio": "Audio bez nazwy"
         },
+        "m.file": {
+            "error_invalid": "Nieprawidłowy plik"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
+            "removed": "%(senderDisplayName)s usunął awatar pokoju."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Zignorowano próbę wyłączenia szyfrowania",
+            "disabled": "Nie włączono szyfrowania",
+            "enabled": "Wiadomości w tym pokoju są szyfrowane end-to-end. Możesz zweryfikować osoby, które dołączą klikając na ich zdjęcie profilowe.",
+            "enabled_dm": "Wiadomości tutaj są szyfrowane end-to-end. Aby zweryfikować profil %(displayName)s - kliknij na zdjęcie profilowe.",
+            "enabled_local": "Wiadomości na tym czacie będą szyfrowane end-to-end.",
+            "parameters_changed": "Niektóre parametry szyfrowania zostały zmienione.",
+            "state_enabled": "Wiadomości i zdarzenia stanowe w tym pokoju są szyfrowane end-to-end. Gdy ktoś dołączy, możesz go zweryfikować klikając na jego zdjęcie profilowe.",
+            "unsupported": "Szyfrowanie wykorzystywane przez ten pokój nie jest obsługiwane."
+        },
+        "mab": {
+            "collapse_reply_chain": "Zwiń cytaty",
+            "copy_link_thread": "Kopiuj link do wątku",
+            "expand_reply_chain": "Rozwiń cytaty",
+            "label": "Działania na wiadomościach",
+            "view_in_room": "Wyświetl w pokoju"
+        },
+        "message_timestamp_received_at": "Odebrano: %(dateTime)s",
+        "message_timestamp_sent_at": "Wysłano: %(dateTime)s",
         "mjolnir": {
             "message_hidden": "Zignorowałeś tego użytkownika, więc jego wiadomość jest ukryta.<a> Pokaż mimo to.</a>"
         },
         "pending_moderation": "Wiadomość oczekuje na moderację",
         "pending_moderation_reason": "Wiadomość oczekuje na moderację: %(reason)s",
         "url_preview": {
-            "open_link": "Otwórz link"
+            "close": "Zamknij podgląd",
+            "open_link": "Otwórz link",
+            "show_n_more": {
+                "one": "Pokaż %(count)s inny podgląd",
+                "few": "Pokaż %(count)s inne podglądy",
+                "many": "Pokaż %(count)s innych podglądów"
+            },
+            "view_image": "Wyświetl obraz"
         }
     },
     "user_menu": {
@@ -69,5 +272,15 @@
         "open_home": "Strona główna",
         "open_security": "Bezpieczeństwo i prywatność",
         "open_settings": "Wszystkie ustawienia"
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Przenieś w lewo",
+            "move_right": "Przenieś w prawo",
+            "remove": "Usuń dla wszystkich",
+            "revoke": "Odbierz uprawnienia",
+            "screenshot": "Zrób zdjęcie",
+            "start_audio_stream": "Rozpocznij transmisję audio"
+        }
     }
 }

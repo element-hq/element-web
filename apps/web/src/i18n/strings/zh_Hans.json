@@ -890,7 +890,6 @@
         "thread_root_id": "消息列根 ID：%(threadRootId)s",
         "threads_timeline": "消息列时间线",
         "title": "开发者工具",
-        "toggle_event": "切换事件",
         "toolbox": "工具箱",
         "use_at_own_risk": "此 UI 不检查值的数据类型。需自行承担使用风险。",
         "user_avatar": "头像：%(avatar)s",
@@ -1566,7 +1565,7 @@
         "latex_maths": "在消息中渲染 LaTeX 数学公式",
         "leave_beta": "退出 Beta 测试",
         "leave_beta_reload": "退出 Beta 测试将重载 %(brand)s。",
-        "location_share_live": "分享实时位置",
+        "location_share_live": "正在共享实时位置",
         "location_share_live_description": "临时实现。位置将持续保留于房间历史。",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
@@ -3459,9 +3458,7 @@
         "m.poll.start": "%(senderName)s 发起投票： %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 已更改房间头像。",
-            "changed_img": "%(senderDisplayName)s 已将房间头像更改为 <img/>",
-            "lightbox_title": "%(senderDisplayName)s 已更改房间 %(roomName)s 中的头像",
-            "removed": "%(senderDisplayName)s 已移除房间头像。"
+            "lightbox_title": "%(senderDisplayName)s 已更改房间 %(roomName)s 中的头像"
         },
         "m.room.canonical_alias": {
             "alt_added": {

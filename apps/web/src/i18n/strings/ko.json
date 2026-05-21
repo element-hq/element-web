@@ -876,7 +876,6 @@
         "thread_root_id": "스레드 Root ID: %(threadRootId)s",
         "threads_timeline": "스레드 타임라인",
         "title": "개발자 도구",
-        "toggle_event": "이벤트 토글",
         "toolbox": "도구 상자",
         "use_at_own_risk": "이 UI는 값의 유형을 확인하지 않습니다. 사용 시 주의하십시오.",
         "user_avatar": "아바타: %(avatar)s",
@@ -3360,9 +3359,7 @@
         "m.poll.start": "%(senderName)s님이 설문을 시작했습니다 - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 방 아바타를 변경했습니다.",
-            "changed_img": "%(senderDisplayName)s님이 방 아바타를 <img/>(으)로 바꿈",
-            "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈",
-            "removed": "%(senderDisplayName)s님이 방 아바타를 제거했습니다."
+            "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈"
         },
         "m.room.canonical_alias": {
             "alt_added": {

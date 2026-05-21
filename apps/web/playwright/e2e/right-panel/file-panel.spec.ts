@@ -87,9 +87,9 @@ test.describe("FilePanel", () => {
             await expect(filePanelMessageList.getByText(NAME)).toHaveCount(3);
 
             // Detect the image file
-            const image = filePanelMessageList.locator(".mx_EventTile_mediaLine.mx_EventTile_image .mx_MImageBody");
+            const image = filePanelMessageList.locator(".mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody");
             // Assert that the image is specified as thumbnail and has the alt string
-            await expect(image.locator("img[class='mx_MImageBody_thumbnail']")).toBeVisible();
+            await expect(image.locator("img.mx_ImageBody_image")).toBeVisible();
             await expect(image.locator("img[alt='riot.png']")).toBeVisible();
 
             // Detect the audio file
@@ -113,7 +113,7 @@ test.describe("FilePanel", () => {
                 "flex-end",
             );
             // Assert that all of the file tiles are visible before taking a snapshot
-            await expect(filePanelMessageList.locator(".mx_MImageBody")).toBeVisible(); // top
+            await expect(filePanelMessageList.locator(".mx_ImageBody")).toBeVisible(); // top
             await expect(filePanelMessageList.locator(".mx_MAudioBody")).toBeVisible(); // middle
             const senderDetails = filePanelMessageList.locator(".mx_EventTile_last .mx_EventTile_senderDetails");
             await expect(senderDetails.locator(".mx_DisambiguatedProfile")).toBeVisible();
@@ -184,7 +184,7 @@ test.describe("FilePanel", () => {
 
             // Detect the image file on the panel
             const imageBody = page.locator(
-                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_MImageBody",
+                ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_ImageBody",
             );
 
             const link = imageBody.locator(".mx_MFileBody a");

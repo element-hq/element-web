@@ -875,7 +875,6 @@
         "thread_root_id": "Jutulõnga esimese kirje tunnus: %(threadRootId)s",
         "threads_timeline": "Jutulõngade ajajoon",
         "title": "Arendusvahendid",
-        "toggle_event": "lülita sündmus sisse/välja",
         "toolbox": "Töövahendid",
         "use_at_own_risk": "See kasutajaliides ei oska kontrollida väärtuste tüüpi ja vormingut. Muudatusi teed omal vastutusel.",
         "user_avatar": "Tunnuspilt: %(avatar)s",
@@ -3423,9 +3422,7 @@
         "m.poll.start": "%(senderName)s algatas küsitluse - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s muutis jututoa tunnuspilti.",
-            "changed_img": "%(senderDisplayName)s vahetas jututoa avatariks <img/>",
-            "lightbox_title": "%(senderDisplayName)s muutis %(roomName)s jututoa avatari",
-            "removed": "%(senderDisplayName)s eemaldas jututoa avatari."
+            "lightbox_title": "%(senderDisplayName)s muutis %(roomName)s jututoa avatari"
         },
         "m.room.canonical_alias": {
             "alt_added": {

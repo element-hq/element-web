@@ -21,6 +21,16 @@
                 "default": "./dist/element-web-shared-components.js"
             }
         },
+        "./numbers": {
+            "require": {
+                "types": "./dist/numbers.d.ts",
+                "default": "./dist/numbers.umd.cjs"
+            },
+            "import": {
+                "types": "./dist/numbers.d.ts",
+                "default": "./dist/numbers.js"
+            }
+        },
         "./dist/element-web-shared-components.css": {
             "require": "./dist/element-web-shared-components.css",
             "import": "./dist/element-web-shared-components.css"
@@ -51,6 +61,9 @@
         "lint:types": "nx lint:types"
     },
     "dependencies": {
+        "@dnd-kit/abstract": "^0.4.0",
+        "@dnd-kit/dom": "^0.4.0",
+        "@dnd-kit/react": "^0.4.0",
         "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "catalog:",
@@ -65,7 +78,7 @@
         "matrix-web-i18n": "catalog:",
         "react-blurhash": "^0.3.0",
         "react-merge-refs": "^3.0.2",
-        "react-resizable-panels": "4.7.2",
+        "react-resizable-panels": "4.9.0",
         "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^0.3.0"
     },

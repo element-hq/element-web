@@ -12,10 +12,10 @@ import classNames from "classnames";
 
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import { useI18n } from "../../../../core/i18n/i18nContext";
-import { useEventPresentation } from "../../EventPresentation";
 import type { UrlPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
+import { useEventPresentationAttributes } from "../../EventPresentation/EventPresentationContext";
 
 /** Snapshot data for rendering URL previews attached to an event. */
 export interface UrlPreviewGroupViewSnapshot {
@@ -62,7 +62,7 @@ export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, Ur
  */
 export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
-    const { density } = useEventPresentation();
+    const eventPresentationAttributes = useEventPresentationAttributes();
     const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(vm);
     if (previews.length === 0) {
         return null;
@@ -80,8 +80,8 @@ export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps)
     }
 
     return (
-        <div className={classNames(className, styles.wrapper)}>
-            <div className={classNames(styles.previewGroup, density === "compact" && styles.compactLayout)}>
+        <div className={classNames(className, styles.wrapper)} {...eventPresentationAttributes}>
+            <div className={styles.previewGroup}>
                 {previews.map((preview) => (
                     <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
                 ))}

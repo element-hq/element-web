@@ -131,6 +131,9 @@ describe("Notifier", () => {
             decryptEventIfNeeded: jest.fn(),
             getRoom: jest.fn(),
             getPushActionsForEvent: jest.fn(),
+            // Mock required because TextForEvent now evaluates supportsVoip for RTCNotification to trigger OS popups.
+            // The true/false value is arbitrary here, as this test only verifies the in-app toast creation, not the OS text output.
+            supportsVoip: jest.fn().mockReturnValue(true),
             supportsThreads: jest.fn().mockReturnValue(false),
             matrixRTC: {
                 on: jest.fn(),
