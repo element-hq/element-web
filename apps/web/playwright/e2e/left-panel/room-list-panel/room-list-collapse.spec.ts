@@ -13,6 +13,7 @@ import type { Locator, Page } from "playwright-core";
 test.describe("Collapsible Room list", () => {
     test.use({
         displayName: "Alice",
+        lockLeftPanelWidth: false,
     });
 
     test.beforeEach(async ({ page, app, user }) => {
