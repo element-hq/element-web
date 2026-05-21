@@ -106,6 +106,18 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
 import { EventTileViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import {
+    eventTileActionBarFocusChange,
+    eventTileBlurWithin,
+    eventTileClearHover,
+    eventTileCloseContextMenu,
+    eventTileFocusWithin,
+    eventTileMouseEnter,
+    eventTileMouseLeave,
+    eventTileOpenContextMenu,
+    initialEventTileInteractionState,
+    type EventTileInteractionState,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
+import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
@@ -270,9 +282,7 @@ export interface EventTileProps {
 }
 
 interface IState {
-    // Whether the action bar is focused.
-    actionBarFocused: boolean;
-    showActionBarFromFocus: boolean;
+    interaction: EventTileInteractionState;
 
     /**
      * E2EE shield we should show for decryption problems.
@@ -288,15 +298,6 @@ interface IState {
 
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null | undefined;
-
-    hover: boolean;
-    focusWithin: boolean;
-
-    // Position of the context menu
-    contextMenu?: {
-        position: Pick<DOMRect, "top" | "left" | "bottom">;
-        link?: string;
-    };
 
     isQuoteExpanded?: boolean;
 
@@ -346,18 +347,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const thread = this.thread;
 
         this.state = {
-            // Whether the action bar is focused.
-            actionBarFocused: false,
-            showActionBarFromFocus: false,
+            interaction: initialEventTileInteractionState,
 
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
 
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
-
-            hover: false,
-            focusWithin: false,
 
             thread,
         };
@@ -495,9 +491,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
         // Some overlays, such as portalled tooltips, can interrupt the normal mouseleave path.
         // While hover is active, verify it against the browser's real :hover state on mouse movement.
-        if (!prevState.hover && this.state.hover) {
+        if (!prevState.interaction.hover && this.state.interaction.hover) {
             this.startStaleHoverCheck();
-        } else if (prevState.hover && !this.state.hover) {
+        } else if (prevState.interaction.hover && !this.state.interaction.hover) {
             this.stopStaleHoverCheck();
         }
 
@@ -516,12 +512,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Moving between edited messages can remount the editor without a reliable blur event.
         // Clear stale focus-derived action bar state when focus has actually left this tile.
         if (
-            this.state.focusWithin &&
+            this.state.interaction.focusWithin &&
             this.ref.current &&
             document.activeElement instanceof HTMLElement &&
             !this.ref.current.contains(document.activeElement)
         ) {
-            this.setState({ focusWithin: false, showActionBarFromFocus: false });
+            this.setState((prevState) => ({
+                interaction: eventTileBlurWithin(prevState.interaction),
+            }));
         }
     }
 
@@ -902,8 +900,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private readonly onActionBarFocusChange = (actionBarFocused: boolean): void => {
         this.setState((prevState) => ({
-            actionBarFocused,
-            hover: actionBarFocused ? prevState.hover : (this.ref.current?.matches(":hover") ?? false),
+            interaction: eventTileActionBarFocusChange(
+                prevState.interaction,
+                actionBarFocused,
+                this.ref.current?.matches(":hover") ?? false,
+            ),
         }));
     };
 
@@ -920,17 +921,23 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private readonly onDocumentMouseMove = (): void => {
-        if (this.state.hover && !(this.ref.current?.matches(":hover") ?? false)) {
-            this.setState({ hover: false });
+        if (this.state.interaction.hover && !(this.ref.current?.matches(":hover") ?? false)) {
+            this.setState((prevState) => ({
+                interaction: eventTileClearHover(prevState.interaction),
+            }));
         }
     };
 
     private readonly onMouseEnter = (): void => {
-        this.setState({ hover: true });
+        this.setState((prevState) => ({
+            interaction: eventTileMouseEnter(prevState.interaction),
+        }));
     };
 
     private readonly onMouseLeave = (): void => {
-        this.setState({ hover: false });
+        this.setState((prevState) => ({
+            interaction: eventTileMouseLeave(prevState.interaction),
+        }));
     };
 
     private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -938,7 +945,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const target = event.target as HTMLElement;
         const showActionBarFromFocus =
             target.matches(":focus-visible") || document.body.dataset["data-whatinput"] === "keyboard";
-        this.setState({ focusWithin: true, showActionBarFromFocus });
+        this.setState((prevState) => ({
+            interaction: eventTileFocusWithin(prevState.interaction, showActionBarFromFocus),
+        }));
     };
 
     private readonly onBlurWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -946,7 +955,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             return;
         }
 
-        this.setState({ focusWithin: false, showActionBarFromFocus: false });
+        this.setState((prevState) => ({
+            interaction: eventTileBlurWithin(prevState.interaction),
+        }));
     };
 
     private readonly getTile: () => IEventTileType | null = () => this.tile.current;
@@ -997,26 +1008,22 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({
-            contextMenu: {
+        this.setState((prevState) => ({
+            interaction: eventTileOpenContextMenu(prevState.interaction, {
                 position: {
                     left: ev.clientX,
                     top: ev.clientY,
                     bottom: ev.clientY,
                 },
                 link: anchorElement?.href || permalink,
-            },
-            actionBarFocused: true,
-            hover: false,
-        });
+            }),
+        }));
     }
 
     private readonly onCloseMenu = (): void => {
-        this.setState({
-            contextMenu: undefined,
-            actionBarFocused: false,
-            hover: false,
-        });
+        this.setState((prevState) => ({
+            interaction: eventTileCloseContextMenu(prevState.interaction),
+        }));
     };
 
     private readonly setQuoteExpanded = (expanded: boolean): void => {
@@ -1038,7 +1045,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private renderContextMenu(): ReactNode {
-        if (!this.state.contextMenu) return null;
+        if (!this.state.interaction.contextMenu) return null;
 
         const tile = this.getTile();
         const replyChain = this.getReplyChain();
@@ -1047,7 +1054,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return (
             <MessageContextMenu
-                {...aboveRightOf(this.state.contextMenu.position)}
+                {...aboveRightOf(this.state.interaction.contextMenu.position)}
                 mxEvent={this.props.mxEvent}
                 permalinkCreator={this.props.permalinkCreator}
                 eventTileOps={eventTileOps}
@@ -1055,7 +1062,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 onFinished={this.onCloseMenu}
                 rightClick={true}
                 reactions={this.state.reactions}
-                link={this.state.contextMenu.link}
+                link={this.state.interaction.contextMenu.link}
                 getRelationsForEvent={this.props.getRelationsForEvent}
             />
         );
@@ -1122,17 +1129,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
                 isHighlighted: this.shouldHighlight(),
-                isSelected: this.props.isSelectedEvent || !!this.state.contextMenu,
+                isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
                 isLast: this.props.last,
                 isLastInSection: this.props.lastInSection,
                 isContextual: this.props.contextual,
             },
             interaction: {
-                hover: this.state.hover,
-                showActionBarFromFocus: this.state.showActionBarFromFocus,
-                focusWithin: this.state.focusWithin,
-                isActionBarFocused: this.state.actionBarFocused,
-                hasContextMenu: !!this.state.contextMenu,
+                hover: this.state.interaction.hover,
+                showActionBarFromFocus: this.state.interaction.showActionBarFromFocus,
+                focusWithin: this.state.interaction.focusWithin,
+                isActionBarFocused: this.state.interaction.actionBarFocused,
+                hasContextMenu: !!this.state.interaction.contextMenu,
                 inhibitInteraction: this.props.inhibitInteraction,
             },
             sender: {
