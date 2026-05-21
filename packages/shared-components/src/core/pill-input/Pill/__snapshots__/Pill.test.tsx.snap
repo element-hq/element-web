@@ -11,12 +11,12 @@ exports[`Pill > renders the pill 1`] = `
     />
     <span
       class="Pill-module_label"
-      id="_r_0_"
+      id="_r-1_"
     >
       Pill
     </span>
     <button
-      aria-describedby="_r_0_"
+      aria-describedby="_r-1_"
       aria-label="Delete"
       class="_icon-button_1215g_8 mx_Dialog_nonDialogButton"
       data-kind="primary"
@@ -56,7 +56,7 @@ exports[`Pill > renders the pill without close button 1`] = `
     />
     <span
       class="Pill-module_label"
-      id="_r_1_"
+      id="_r-1_"
     >
       Pill
     </span>

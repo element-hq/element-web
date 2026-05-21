@@ -7,10 +7,43 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMock from "@fetch-mock/vitest";
 import { cleanup } from "@test-utils";
-import { afterEach } from "vitest";
+import { afterEach, expect } from "vitest";
 
 import { setLanguage } from "../../src/core/i18n/i18n";
 import en from "../i18n/strings/en_EN.json";
+
+const REACT_USE_ID = /_r_[a-z0-9]+_/g;
+
+function normaliseReactUseIds(snapshot: string): string {
+    if (!snapshot.includes("_r_")) return snapshot;
+
+    const ids = new Map<string, string>();
+    let nextId = 1;
+
+    return snapshot.replace(REACT_USE_ID, (id) => {
+        let replacement = ids.get(id);
+        if (!replacement) {
+            replacement = `_r-${nextId++}_`;
+            ids.set(id, replacement);
+        }
+        return replacement;
+    });
+}
+
+let isSerializingDomSnapshot = false;
+
+expect.addSnapshotSerializer({
+    test: (value: unknown): value is Element | DocumentFragment =>
+        !isSerializingDomSnapshot && (value instanceof Element || value instanceof DocumentFragment),
+    print: (value: unknown, serialize: (value: unknown) => string): string => {
+        isSerializingDomSnapshot = true;
+        try {
+            return normaliseReactUseIds(serialize(value));
+        } finally {
+            isSerializingDomSnapshot = false;
+        }
+    },
+});
 
 function setupLanguageMock(): void {
     fetchMock

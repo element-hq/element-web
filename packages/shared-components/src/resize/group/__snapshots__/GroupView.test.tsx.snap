@@ -7,14 +7,14 @@ exports[`<GroupView /> > renders Default story 1`] = `
   >
     <div
       data-group="true"
-      data-testid="_r_0_"
-      id="_r_0_"
+      data-testid="_r-1_"
+      id="_r-1_"
       style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
     >
       <div
         data-panel="true"
-        data-testid="_r_1_"
-        id="_r_1_"
+        data-testid="_r-2_"
+        id="_r-2_"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 50 1 0px; overflow: visible;"
       >
         <div
@@ -29,22 +29,22 @@ exports[`<GroupView /> > renders Default story 1`] = `
         </div>
       </div>
       <div
-        aria-controls="_r_1_"
+        aria-controls="_r-2_"
         aria-orientation="vertical"
         aria-valuemax="96.618"
         aria-valuemin="48.309"
         aria-valuenow="50"
         data-separator="inactive"
-        data-testid="_r_2_"
-        id="_r_2_"
+        data-testid="_r-3_"
+        id="_r-3_"
         role="separator"
         style="flex: 0 0 auto; touch-action: none;"
         tabindex="0"
       />
       <div
         data-panel="true"
-        data-testid="_r_3_"
-        id="_r_3_"
+        data-testid="_r-4_"
+        id="_r-4_"
         style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 50 1 0px; overflow: visible;"
       >
         <div
