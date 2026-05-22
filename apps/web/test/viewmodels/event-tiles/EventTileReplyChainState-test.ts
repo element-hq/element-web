@@ -8,11 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { mkMessage } from "../../test-utils";
-import {
-    canCollapseReplyChain,
-    getEventTileReplyChainState,
-    type EventTileReplyChainLike,
-} from "../../../src/viewmodels/room/timeline/event-tile/EventTileReplyChainState";
+import { getEventTileReplyChainState } from "../../../src/viewmodels/room/timeline/event-tile/EventTileReplyChainState";
 
 const roomId = "!room:example.org";
 
@@ -79,27 +75,5 @@ describe("EventTileReplyChainState", () => {
         });
 
         expect(state.shouldShowReplyChain).toBe(false);
-    });
-
-    it("identifies when the reply chain can collapse", () => {
-        const replyChain: EventTileReplyChainLike = {
-            canCollapse: () => true,
-            collapse: jest.fn(),
-        };
-
-        expect(canCollapseReplyChain(replyChain)).toBe(true);
-    });
-
-    it("identifies when the reply chain cannot collapse", () => {
-        const replyChain: EventTileReplyChainLike = {
-            canCollapse: () => false,
-            collapse: jest.fn(),
-        };
-
-        expect(canCollapseReplyChain(replyChain)).toBe(false);
-    });
-
-    it("identifies missing reply chains as not collapsible", () => {
-        expect(canCollapseReplyChain(null)).toBe(false);
     });
 });

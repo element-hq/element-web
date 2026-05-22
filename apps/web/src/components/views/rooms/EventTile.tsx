@@ -111,10 +111,7 @@ import {
     getEventTileThreadState,
     type EventTileThreadState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
-import {
-    canCollapseReplyChain,
-    getEventTileReplyChainState,
-} from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
+import { getEventTileReplyChainState } from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -999,7 +996,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const tile = this.getTile();
         const replyChain = this.getReplyChain();
         const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-        const collapseReplyChain = canCollapseReplyChain(replyChain) ? () => replyChain?.collapse() : undefined;
+        const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
 
         return (
             <MessageContextMenu
@@ -2040,7 +2037,7 @@ function ActionBarWrapper({
     const tile = getTile();
     const replyChain = getReplyChain();
     const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-    const collapseReplyChain = canCollapseReplyChain(replyChain) ? () => replyChain?.collapse() : undefined;
+    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
 
     return (
         <>

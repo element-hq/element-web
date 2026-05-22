@@ -9,14 +9,6 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { shouldDisplayReply } from "../../../../utils/Reply";
 
-/** Minimal ReplyChain surface needed for collapse decisions. */
-export interface EventTileReplyChainLike {
-    /** Whether the reply chain can currently be collapsed. */
-    canCollapse(): boolean;
-    /** Collapse the reply chain. */
-    collapse(): void;
-}
-
 /** Inputs for deriving EventTile reply-chain display state. */
 export interface EventTileReplyChainStateInput {
     /** Matrix event rendered by the tile. */
@@ -39,9 +31,4 @@ export function getEventTileReplyChainState({
     return {
         shouldShowReplyChain: hasRenderer && shouldDisplayReply(mxEvent),
     };
-}
-
-/** Whether the current reply chain can collapse. */
-export function canCollapseReplyChain(replyChain: EventTileReplyChainLike | null | undefined): boolean {
-    return !!replyChain?.canCollapse();
 }
