@@ -1167,6 +1167,13 @@ export class RoomTimelineViewModel
         let filteredCount = 0;
 
         const showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
+        // Suppress the leading date separator when more history is available
+        // behind the current window — the backward pagination spinner
+        // visually fills that role, matching the legacy `MessagePanel`
+        // behaviour (see `wantsSeparator` in MessagePanel.tsx). Once we've
+        // hit the start of the timeline we let the leading separator render
+        // so the user sees an explicit "this is the start" marker.
+        const suppressLeadingSeparator = this.timelineWindow.canPaginate(Direction.Backward);
 
         for (const event of events) {
             const eventId = event.getId();
@@ -1183,12 +1190,14 @@ export class RoomTimelineViewModel
                 continue;
             }
 
-            // Insert date separator when the day changes. Only reached for
-            // events that pass the inclusion filter, so separators are never
-            // orphaned.
+            // Insert date separator when the day changes (or for the very
+            // first event when we're at the start of the timeline). Only
+            // reached for events that pass the inclusion filter, so
+            // separators are never orphaned.
             const eventDate = new Date(event.getTs());
             const dateKey = eventDate.toDateString();
-            if (dateKey !== lastDate) {
+            const isLeadingEvent = lastDate === null;
+            if (dateKey !== lastDate && !(isLeadingEvent && suppressLeadingSeparator)) {
                 items.push({
                     key: `date-${dateKey}`,
                     kind: "date-separator",
@@ -1199,9 +1208,11 @@ export class RoomTimelineViewModel
                         year: "numeric",
                     }),
                 });
-                lastDate = dateKey;
                 prevEvent = null; // date separator breaks continuation
             }
+            // Track the most recently seen day even when we suppressed the
+            // separator so we still emit one when the day changes mid-list.
+            lastDate = dateKey;
 
             items.push({
                 key: eventId,
