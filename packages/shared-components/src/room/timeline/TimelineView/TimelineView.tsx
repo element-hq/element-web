@@ -7,10 +7,54 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect, useMemo, useRef, type JSX, type ReactNode, type PropsWithChildren } from "react";
 import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
+import { InlineSpinner } from "@vector-im/compound-web";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
+import type { ImmediateScroll, PaginationState, TimelineItem, TimelineViewProps } from "./types";
 import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
+
+/**
+ * Context surfaced to Virtuoso's Header/Footer components so the pagination
+ * spinners can react to snapshot changes without us giving Virtuoso a new
+ * Header/Footer component identity on every render (which would unmount and
+ * remount the spinner each time).
+ */
+interface TimelineComponentContext {
+    backwardPagination: PaginationState;
+    forwardPagination: PaginationState;
+}
+
+/**
+ * Centered spinner row used at the top (backward pagination) and bottom
+ * (forward pagination) of the virtuoso list. Sized to match legacy
+ * `MessagePanel`'s `<Spinner />` usage (compound-web {@link InlineSpinner}
+ * at 32px, horizontally centred).
+ */
+function PaginationSpinner(): JSX.Element {
+    return (
+        <div
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            <InlineSpinner size={32} />
+        </div>
+    );
+}
+
+function TimelineHeader({ context }: { context?: TimelineComponentContext }): ReactNode {
+    if (context?.backwardPagination !== "loading") return null;
+    return <PaginationSpinner />;
+}
+
+function TimelineFooter({ context }: { context?: TimelineComponentContext }): ReactNode {
+    if (context?.forwardPagination !== "loading") return null;
+    return <PaginationSpinner />;
+}
+
+const VIRTUOSO_COMPONENTS = { Header: TimelineHeader, Footer: TimelineFooter };
 
 
 /**
@@ -211,6 +255,17 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     //     [],
     // );
 
+    // Context for Header/Footer spinners. Recomputed only when the pagination
+    // states actually change so Virtuoso doesn't reconcile the header/footer
+    // tree more often than necessary.
+    const componentContext = useMemo<TimelineComponentContext>(
+        () => ({
+            backwardPagination: snapshot.backwardPagination,
+            forwardPagination: snapshot.forwardPagination,
+        }),
+        [snapshot.backwardPagination, snapshot.forwardPagination],
+    );
+
     // Don't mount Virtuoso until items are ready
     if (snapshot.items.length === 0) {
         return <div style={{ height: "100%", width: "100%" }} />;
@@ -231,6 +286,8 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 scrollIntoViewOnChange={scrollIntoViewOnChange}
                 onScroll={onScroll}
                 rangeChanged={onRangeChanged}
+                components={VIRTUOSO_COMPONENTS}
+                context={componentContext}
                 logLevel={LogLevel.ERROR}
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}
