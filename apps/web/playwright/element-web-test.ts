@@ -16,9 +16,9 @@ import {
 } from "@playwright/test";
 import {
     type TestFixtures as BaseTestFixtures,
-    expect as baseExpect,
     type ToMatchScreenshotOptions,
 } from "@element-hq/element-web-playwright-common";
+import { expect as baseExpect } from "@playwright/test";
 
 import type { IConfigOptions } from "../src/IConfigOptions";
 import { type Credentials } from "./plugins/homeserver";
