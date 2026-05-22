@@ -87,7 +87,6 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { shouldDisplayReply } from "../../../utils/Reply";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
@@ -112,6 +111,10 @@ import {
     getEventTileThreadState,
     type EventTileThreadState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
+import {
+    canCollapseReplyChain,
+    getEventTileReplyChainState,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -996,7 +999,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const tile = this.getTile();
         const replyChain = this.getReplyChain();
         const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-        const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+        const collapseReplyChain = canCollapseReplyChain(replyChain) ? () => replyChain?.collapse() : undefined;
 
         return (
             <MessageContextMenu
@@ -1221,11 +1224,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
+        const replyChainState = getEventTileReplyChainState({
+            mxEvent: this.props.mxEvent,
+            hasRenderer: haveRendererForEvent(
+                this.props.mxEvent,
+                MatrixClientPeg.safeGet(),
+                this.context.showHiddenEvents,
+            ),
+        });
         let replyChain: JSX.Element | undefined;
-        if (
-            haveRendererForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), this.context.showHiddenEvents) &&
-            shouldDisplayReply(this.props.mxEvent)
-        ) {
+        if (replyChainState.shouldShowReplyChain) {
             replyChain = (
                 <ReplyChain
                     parentEv={this.props.mxEvent}
@@ -2032,7 +2040,7 @@ function ActionBarWrapper({
     const tile = getTile();
     const replyChain = getReplyChain();
     const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+    const collapseReplyChain = canCollapseReplyChain(replyChain) ? () => replyChain?.collapse() : undefined;
 
     return (
         <>
