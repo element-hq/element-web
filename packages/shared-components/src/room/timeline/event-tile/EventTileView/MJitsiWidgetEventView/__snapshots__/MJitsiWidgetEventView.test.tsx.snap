@@ -6,7 +6,7 @@ exports[`MJitsiWidgetEventView > renders a timestamp 1`] = `
     class="EventTileBubble-module_container"
   >
     <svg
-      color="var(--cpd-color-text-primary)"
+      color="var(--cpd-color-icon-primary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -42,7 +42,7 @@ exports[`MJitsiWidgetEventView > renders the Ended story without a subtitle 1`] 
     class="EventTileBubble-module_container"
   >
     <svg
-      color="var(--cpd-color-text-primary)"
+      color="var(--cpd-color-icon-primary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ exports[`MJitsiWidgetEventView > renders the Started story 1`] = `
     class="EventTileBubble-module_container"
   >
     <svg
-      color="var(--cpd-color-text-primary)"
+      color="var(--cpd-color-icon-primary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -99,7 +99,7 @@ exports[`MJitsiWidgetEventView > renders the Updated story 1`] = `
     class="EventTileBubble-module_container"
   >
     <svg
-      color="var(--cpd-color-text-primary)"
+      color="var(--cpd-color-icon-primary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"

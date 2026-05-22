@@ -113,11 +113,11 @@ const ThemeSwitcher: React.FC<{
     theme: string;
 }> = ({ theme }) => {
     useLayoutEffect(() => {
-        document.documentElement.classList.remove(...allThemesClasses);
+        document.body.classList.remove(...allThemesClasses);
         if (theme !== "system") {
-            document.documentElement.classList.add(`cpd-theme-${theme}`);
+            document.body.classList.add(`cpd-theme-${theme}`);
         }
-        return () => document.documentElement.classList.remove(...allThemesClasses);
+        return () => document.body.classList.remove(...allThemesClasses);
     }, [theme]);
 
     return null;
