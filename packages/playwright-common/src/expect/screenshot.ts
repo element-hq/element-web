@@ -16,10 +16,14 @@ import {
     type PageAssertionsToHaveScreenshotOptions,
     type MatcherReturnType,
 } from "@playwright/test";
-import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import { extname } from "node:path";
 
 import { ANNOTATION } from "../stale-screenshot-reporter.js";
+
+// Taken from playwright utils, but it's not importable
+function sanitizeForFilePath(s: string): string {
+    return s.replace(/[\x00-\x2C\x2E-\x2F\x3A-\x40\x5B-\x60\x7B-\x7F]+/g, "-");
+}
 
 // Based on https://github.com/microsoft/playwright/blob/2b77ed4d7aafa85a600caa0b0d101b72c8437eeb/packages/playwright/src/util.ts#L206C8-L210C2
 function sanitizeFilePathBeforeExtension(filePath: string): string {
