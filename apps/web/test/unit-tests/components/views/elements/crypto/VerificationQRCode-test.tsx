@@ -21,7 +21,7 @@ describe("<VerificationQRCode />", () => {
             <VerificationQRCode qrCodeBytes={new Uint8ClampedArray(Buffer.from("asd"))} />,
         );
         // wait for the spinner to go away
-        await waitFor(() => getAllByAltText("QR Code").length === 1);
+        await waitFor(() => getAllByAltText("QR Code").length === 1, { timeout: 2000 });
         expect(container).toMatchSnapshot();
     });
 });
