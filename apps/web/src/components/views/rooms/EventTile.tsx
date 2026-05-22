@@ -27,7 +27,6 @@ import {
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
-    type RelationType,
     type Room,
     RelationsEvent,
     RoomEvent,
@@ -134,6 +133,11 @@ import {
     MAX_ITEMS_WHEN_LIMITED,
     ReactionsRowViewModel,
 } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import {
+    getEventTileReactionRelations,
+    isEventTileReactionRelation,
+    type GetRelationsForEvent,
+} from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
 import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
@@ -141,11 +145,8 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 
-export type GetRelationsForEvent = (
-    eventId: string,
-    relationType: RelationType | string,
-    eventType: EventType | string,
-) => Relations | null | undefined;
+/** Relation lookup type retained for EventTile consumers. */
+export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -910,15 +911,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private readonly getReplyChain = (): ReplyChain | null => this.replyChain.current;
 
     private readonly getReactions = (): Relations | null => {
-        if (!this.props.showReactions || !this.props.getRelationsForEvent) {
-            return null;
-        }
-        const eventId = this.props.mxEvent.getId()!;
-        return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
+        return getEventTileReactionRelations({
+            mxEvent: this.props.mxEvent,
+            showReactions: this.props.showReactions,
+            getRelationsForEvent: this.props.getRelationsForEvent,
+        });
     };
 
     private readonly onReactionsCreated = (relationType: string, eventType: string): void => {
-        if (relationType !== "m.annotation" || eventType !== "m.reaction") {
+        if (!isEventTileReactionRelation(relationType, eventType)) {
             return;
         }
         this.setState({
