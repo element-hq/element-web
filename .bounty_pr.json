@@ -1,0 +1,18 @@
+{
+  "status": "ready",
+  "vertical": "translation",
+  "commit_message": "i18n(vi): add missing Vietnamese translations across web, desktop, shared-components",
+  "pr_title": "i18n(vi): add missing Vietnamese translations",
+  "pr_body": "## Summary\n\nFills in missing Vietnamese (`vi`) translations across the three locale files in this repo:\n\n- `apps/desktop/src/i18n/strings/vi.json` — **19 keys added** (now complete coverage vs `en_EN.json`)\n- `packages/shared-components/src/i18n/strings/vi.json` — **179 keys added** (now complete coverage vs `en_EN.json`)\n- `apps/web/src/i18n/strings/vi.json` — **138 high-priority keys added** across `a11y`, `action`, `auth`, `bug_reporting`, `common`, `composer`, `console_*`, `create_room`, `create_section_dialog`, `create_space`, `decline_invitation_dialog`, `error_*`, `event_preview`, `incompatible_browser`, `invite`, `member_list`, `share`, `threads`, `threads_activity_centre`, `spotlight`, `spotlight_dialog`, and more. Remaining ~620 keys (largely deep settings/devtools/voip/labs) will continue to fall back to English until a follow-up pass.\n\n## Translation guidelines applied\n\n- Formal vous-form (`bạn`) used throughout; tonal marks preserved.\n- Placeholders preserved exactly: `%(name)s`, `<a>...</a>`, `<b>...</b>`, `<img/>`, `%(brand)s`, etc.\n- Brand names / proper nouns / technical jargon kept untranslated where there is no clean Vietnamese equivalent: `Matrix`, `Element`, `Space`, `Shift`, `wifi`, `keyring`, `Electron`, `service worker`, `rageshake`, `Linux`, `macOS`, `Windows`, `Chrome`, `Firefox`, `Safari`, `Edge`, etc.\n- JSON files validated with `python -m json.tool`.\n- Key ordering mirrors `en_EN.json` (only for `vi.json`s where new keys were added).\n\nRelates to #32603.\n\n## Notes\n\nThe upstream issue (#32603) is technically about the `lang` attribute on the root `<html>` element, but the orchestrator routed it as a translation bounty for `vi`. This PR therefore focuses on closing the Vietnamese translation gap — by far the largest source of English fallback for vi users — which is the most directly user-helpful action available here. The PR does **not** modify any HTML `lang` attribute logic; that is a separate code change that should target a TypeScript file rather than the locale JSONs.\n",
+  "branch": "i18n-vi/issue-32603-incorrect-lang-attribute-in-root",
+  "files_changed": [
+    "apps/desktop/src/i18n/strings/vi.json",
+    "apps/web/src/i18n/strings/vi.json",
+    "packages/shared-components/src/i18n/strings/vi.json"
+  ],
+  "strings_translated": 336,
+  "target_locale": "vi",
+  "tests_run": [],
+  "tests_passed": null,
+  "notes": "Three locale files share an `en_EN.json` source and a `vi.json` target. Desktop and shared-components were brought to full coverage; web had 762 missing keys, of which 138 (the most user-visible: a11y/action/common/auth/QR login/error dialogs/etc.) were translated in this pass — the remaining keys fall back to English via i18next, which is acceptable and matches Element's existing partial-translation behavior for other locales. Choices: 'phòng' for 'room', 'space' kept as 'Space' (Element domain term), 'mã hoá đầu cuối' for 'end-to-end encrypted', 'khoá khôi phục' for 'recovery key', 'luồng' for 'thread', 'lượt nhắc' for 'mention'. Issue #32603 itself is about an HTML lang-attribute bug, not translations — see PR body for explanation."
+}
