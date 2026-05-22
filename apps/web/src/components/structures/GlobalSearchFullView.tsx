@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "@vector-im/compound-web";
+import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import {
     GlobalSearchFilter,
@@ -16,6 +17,7 @@ import {
     type SpaceResult,
     useGlobalSearch,
 } from "../../hooks/useGlobalSearch";
+import { useMessageSearch, type MessageSearchResult } from "../../hooks/useMessageSearch";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 
@@ -202,6 +204,207 @@ function RoomCard({ result, onClick }: { result: RoomResult | SpaceResult; onCli
     );
 }
 
+// ── Message date formatter ────────────────────────────────────────────────────
+
+function formatMessageDate(date: Date): string {
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yyyy = date.getFullYear();
+    const hh = String(date.getHours()).padStart(2, "0");
+    const min = String(date.getMinutes()).padStart(2, "0");
+    return `${dd}/${mm}/${yyyy} ${hh}:${min}`;
+}
+
+// ── Message result card ───────────────────────────────────────────────────────
+
+function MessageResultCard({
+    result,
+    onClick,
+}: {
+    result: MessageSearchResult;
+    onClick: () => void;
+}): JSX.Element {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--cpd-space-3x)",
+                width: "100%",
+                padding: "var(--cpd-space-3x) var(--cpd-space-4x)",
+                border: "1px solid var(--cpd-color-border-disabled)",
+                borderRadius: "12px",
+                background: "var(--cpd-color-bg-canvas-default)",
+                cursor: "pointer",
+                textAlign: "left",
+                boxSizing: "border-box",
+            }}
+            onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                    "var(--cpd-color-bg-action-secondary-hovered)";
+            }}
+            onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-canvas-default)";
+            }}
+        >
+            <div style={{ flexShrink: 0 }}>
+                {result.member ? (
+                    <MemberAvatar member={result.member} size="40px" hideTitle />
+                ) : (
+                    <div
+                        style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: "50%",
+                            background: "var(--cpd-color-bg-subtle-secondary)",
+                        }}
+                    />
+                )}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
+                    <span
+                        style={{
+                            font: "var(--cpd-font-body-md-regular)",
+                            color: "var(--cpd-color-text-primary)",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            flexShrink: 0,
+                        }}
+                    >
+                        {result.senderName}
+                    </span>
+                    <span
+                        style={{
+                            font: "var(--cpd-font-body-sm-regular)",
+                            color: "var(--cpd-color-text-secondary)",
+                            whiteSpace: "nowrap",
+                            flexShrink: 0,
+                        }}
+                    >
+                        {formatMessageDate(result.timestamp)}
+                    </span>
+                </div>
+                <span
+                    style={{
+                        font: "var(--cpd-font-body-md-regular)",
+                        color: "var(--cpd-color-text-secondary)",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                    }}
+                >
+                    {result.body}
+                </span>
+            </div>
+        </button>
+    );
+}
+
+// ── Message sub-filters ───────────────────────────────────────────────────────
+
+const MESSAGE_SUB_FILTERS = ["Type", "Date", "Person"] as const;
+
+function MessageSubFilters(): JSX.Element {
+    return (
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-1x)" }}>
+            {MESSAGE_SUB_FILTERS.map((label) => (
+                <button
+                    key={label}
+                    type="button"
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        height: "28px",
+                        padding: "0 var(--cpd-space-2x)",
+                        border: "none",
+                        borderRadius: "var(--cpd-radius-pill-effect)",
+                        background: "transparent",
+                        color: "var(--cpd-color-text-secondary)",
+                        font: "var(--cpd-font-body-sm-medium)",
+                        cursor: "pointer",
+                        gap: "2px",
+                    }}
+                >
+                    {label}
+                    <ChevronDownIcon width={20} height={20} style={{ color: "var(--cpd-color-icon-secondary)" }} />
+                </button>
+            ))}
+        </div>
+    );
+}
+
+// ── Messages results content ──────────────────────────────────────────────────
+
+function MessagesResultsContent({
+    query,
+    onRoomClick,
+}: {
+    query: string;
+    onRoomClick: (roomId: string) => void;
+}): JSX.Element {
+    const { results, loading } = useMessageSearch(query);
+
+    return (
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                maxWidth: "760px",
+                width: "100%",
+                margin: "0 auto",
+                padding: "0 var(--cpd-space-4x) var(--cpd-space-8x)",
+            }}
+        >
+            <div style={{ padding: "var(--cpd-space-3x) 0" }}>
+                <MessageSubFilters />
+            </div>
+
+            {loading ? (
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "var(--cpd-space-12x)",
+                        font: "var(--cpd-font-body-md-regular)",
+                        color: "var(--cpd-color-text-secondary)",
+                    }}
+                >
+                    Searching…
+                </div>
+            ) : results.length > 0 ? (
+                <>
+                    <h2
+                        style={{
+                            font: "var(--cpd-font-body-lg-semibold)",
+                            color: "var(--cpd-color-text-primary)",
+                            margin: 0,
+                            padding: "var(--cpd-space-3x) 0 var(--cpd-space-3x)",
+                        }}
+                    >
+                        Results
+                    </h2>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-3x)" }}>
+                        {results.map((result) => (
+                            <MessageResultCard
+                                key={result.eventId}
+                                result={result}
+                                onClick={() => onRoomClick(result.roomId)}
+                            />
+                        ))}
+                    </div>
+                </>
+            ) : (
+                <EmptyState query={query} />
+            )}
+        </div>
+    );
+}
+
 // ── Empty / coming-soon state ─────────────────────────────────────────────────
 
 function EmptyState({ query, label }: { query: string; label?: string }): JSX.Element {
@@ -303,7 +506,11 @@ function ResultsContent({
 }: Pick<GlobalSearchFullViewProps, "query" | "activeFilter" | "onFilterChange" | "onRoomClick" | "onPersonClick">): JSX.Element {
     const { people, rooms, spaces } = useGlobalSearch({ query, filter: activeFilter });
 
-    if (activeFilter === GlobalSearchFilter.Messages || activeFilter === GlobalSearchFilter.Files) {
+    if (activeFilter === GlobalSearchFilter.Messages) {
+        return <MessagesResultsContent query={query} onRoomClick={onRoomClick} />;
+    }
+
+    if (activeFilter === GlobalSearchFilter.Files) {
         return <EmptyState query="" label="Coming soon" />;
     }
 

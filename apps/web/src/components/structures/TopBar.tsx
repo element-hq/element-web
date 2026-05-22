@@ -148,7 +148,7 @@ export function TopBar(): JSX.Element {
                 padding: "0 var(--cpd-space-4x)",
                 boxSizing: "border-box",
                 backgroundColor: "var(--cpd-color-gray-100)",
-                borderBottom: "1px solid var(--cpd-color-border-disabled)",
+                borderBottom: "1px solid var(--cpd-color-gray-400)",
                 width: "100%",
                 flexShrink: 0,
                 position: "relative",
