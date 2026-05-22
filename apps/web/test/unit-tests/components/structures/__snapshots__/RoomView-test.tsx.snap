@@ -750,7 +750,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               style="height: 400px;"
             >
               <div
-                class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent _content_m88ar_8"
+                class="_container_sq5fu_8 mx_EventTileBubble mx_cryptoEvent _content_ufv8a_8"
               >
                 <svg
                   data-state="supported"
