@@ -1,14 +1,189 @@
 {
+    "a11y": {
+        "seek_bar_label": "Thanh trượt âm thanh"
+    },
     "action": {
+        "back": "Quay lại",
+        "click": "Nhấp",
+        "close": "Đóng",
+        "collapse": "Thu gọn",
         "delete": "Xoá",
         "dismiss": "Bỏ qua",
+        "download": "Tải xuống",
+        "edit": "Sửa",
         "explore_rooms": "Khám phá các phòng",
+        "go": "Đi",
+        "hide": "Ẩn",
+        "invite": "Mời",
+        "new_conversation": "Cuộc trò chuyện mới",
+        "new_room": "Phòng mới",
+        "new_section": "Mục mới",
+        "new_video_room": "Phòng video mới",
+        "open_menu": "Mở menu",
         "pause": "Tạm dừng",
+        "pin": "Ghim",
         "play": "Chạy",
-        "search": "Tìm kiếm"
+        "react": "Phản ứng",
+        "remove": "Xoá",
+        "reply": "Trả lời",
+        "reply_in_thread": "Trả lời trong luồng",
+        "retry": "Thử lại",
+        "search": "Tìm kiếm",
+        "start_chat": "Bắt đầu trò chuyện",
+        "unpin": "Bỏ ghim",
+        "view_source": "Xem nguồn"
+    },
+    "common": {
+        "attachment": "Tệp đính kèm",
+        "encryption_enabled": "Đã bật mã hoá",
+        "loading": "Đang tải…",
+        "options": "Tuỳ chọn",
+        "preferences": "Tuỳ chọn",
+        "state_encryption_enabled": "Đã bật mã hoá trạng thái thử nghiệm"
+    },
+    "devtools": {
+        "toggle_event": "bật/tắt sự kiện"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
-        "open_dial_pad": "Mở bàn phím quay số"
+        "open_dial_pad": "Mở bàn phím quay số",
+        "separator_label": "Nhấp hoặc kéo để mở rộng"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Tạo tài khoản",
+            "got_an_account": "Đã có tài khoản?",
+            "manage_account": "Quản lý tài khoản",
+            "sign_in": "Đăng nhập",
+            "title": "Menu người dùng"
+        }
+    },
+    "notifications": {
+        "all_messages": "Tất cả tin nhắn",
+        "default_settings": "Khớp với cài đặt mặc định",
+        "mentions_keywords": "Nhắc đến và từ khoá",
+        "mute_room": "Tắt tiếng phòng"
+    },
+    "room": {
+        "context_menu": {
+            "title": "Tuỳ chọn phòng"
+        },
+        "history_visibility_badge": {
+            "private": "Thành viên mới không thấy lịch sử",
+            "shared": "Thành viên mới thấy lịch sử",
+            "world_readable": "Bất kỳ ai cũng có thể thấy lịch sử"
+        },
+        "jump_to_date": "Nhảy đến ngày",
+        "jump_to_date_beginning": "Phần đầu của phòng",
+        "jump_to_date_prompt": "Chọn một ngày để nhảy đến",
+        "pinned_message_badge": "Tin nhắn đã ghim",
+        "status_bar": {
+            "delete_all": "Xoá tất cả",
+            "exceeded_resource_limit_description": "Vui lòng liên hệ quản trị viên dịch vụ của bạn để tiếp tục sử dụng dịch vụ.",
+            "exceeded_resource_limit_title": "Tin nhắn của bạn không được gửi vì máy chủ này đã vượt quá giới hạn tài nguyên.",
+            "failed_to_create_room_title": "Không thể bắt đầu trò chuyện với người dùng này",
+            "homeserver_blocked_title": "Tin nhắn của bạn không được gửi vì máy chủ này đã bị quản trị viên chặn.",
+            "monthly_user_limit_reached_title": "Tin nhắn của bạn không được gửi vì máy chủ này đã đạt đến Giới hạn Người dùng Hoạt động Hàng tháng.",
+            "requires_consent_agreement_title": "Bạn không thể gửi tin nhắn nào cho đến khi xem xét và đồng ý với các điều khoản và điều kiện của chúng tôi.",
+            "retry_all": "Thử lại tất cả",
+            "select_messages_to_retry": "Bạn có thể chọn tất cả hoặc từng tin nhắn để thử lại hoặc xoá",
+            "server_connectivity_lost_description": "Tin nhắn đã gửi sẽ được lưu trữ cho đến khi kết nối của bạn được khôi phục.",
+            "server_connectivity_lost_title": "Đã mất kết nối tới máy chủ.",
+            "some_messages_not_sent": "Một số tin nhắn của bạn chưa được gửi"
+        }
+    },
+    "room_list": {
+        "a11y": {
+            "default": "Mở phòng %(roomName)s",
+            "invitation": "Mở lời mời phòng %(roomName)s.",
+            "mention": {
+                "one": "Mở phòng %(roomName)s với 1 lượt nhắc chưa đọc.",
+                "other": "Mở phòng %(roomName)s với %(count)s lượt nhắc chưa đọc."
+            },
+            "unread": {
+                "one": "Mở phòng %(roomName)s với 1 tin nhắn chưa đọc.",
+                "other": "Mở phòng %(roomName)s với %(count)s tin nhắn chưa đọc."
+            },
+            "unsent_message": "Mở phòng %(roomName)s với một tin nhắn chưa gửi.",
+            "video_call": "Mở phòng %(roomName)s với một cuộc gọi video.",
+            "voice_call": "Mở phòng %(roomName)s với một cuộc gọi thoại."
+        },
+        "appearance": "Giao diện",
+        "chat_moved": "Đã chuyển trò chuyện",
+        "collapse_all_sections": "Thu gọn tất cả các mục",
+        "collapse_filters": "Thu gọn danh sách bộ lọc",
+        "empty": {
+            "no_chats": "Chưa có cuộc trò chuyện nào",
+            "no_chats_description": "Bắt đầu bằng cách nhắn tin cho ai đó hoặc tạo một phòng",
+            "no_chats_description_no_room_rights": "Bắt đầu bằng cách nhắn tin cho ai đó",
+            "no_favourites": "Bạn chưa có cuộc trò chuyện yêu thích nào",
+            "no_favourites_description": "Bạn có thể thêm một cuộc trò chuyện vào mục yêu thích trong cài đặt của cuộc trò chuyện",
+            "no_invites": "Bạn không có lời mời nào chưa đọc",
+            "no_lowpriority": "Bạn không có phòng ưu tiên thấp nào",
+            "no_mentions": "Bạn không có lượt nhắc chưa đọc nào",
+            "no_people": "Bạn chưa có cuộc trò chuyện trực tiếp với ai",
+            "no_people_description": "Bạn có thể bỏ chọn các bộ lọc để xem các cuộc trò chuyện khác",
+            "no_rooms": "Bạn chưa ở trong bất kỳ phòng nào",
+            "no_rooms_description": "Bạn có thể bỏ chọn các bộ lọc để xem các cuộc trò chuyện khác",
+            "no_unread": "Chúc mừng! Bạn không có tin nhắn nào chưa đọc",
+            "show_activity": "Xem tất cả hoạt động",
+            "show_chats": "Hiển thị tất cả các cuộc trò chuyện"
+        },
+        "expand_all_sections": "Mở rộng tất cả các mục",
+        "expand_filters": "Mở rộng danh sách bộ lọc",
+        "filters": {
+            "favourite": "Yêu thích",
+            "invites": "Lời mời",
+            "low_priority": "Ưu tiên thấp",
+            "mentions": "Lượt nhắc",
+            "people": "Mọi người",
+            "rooms": "Phòng",
+            "unread": "Chưa đọc"
+        },
+        "list_title": "Danh sách phòng",
+        "more_options": {
+            "copy_link": "Sao chép liên kết phòng",
+            "favourited": "Đã yêu thích",
+            "leave_room": "Rời phòng",
+            "low_priority": "Ưu tiên thấp",
+            "mark_read": "Đánh dấu là đã đọc",
+            "mark_unread": "Đánh dấu là chưa đọc",
+            "move_to_section": "Chuyển đến"
+        },
+        "notification_options": "Tuỳ chọn thông báo",
+        "open_space_menu": "Mở menu space",
+        "primary_filters": "Bộ lọc danh sách phòng",
+        "room": {
+            "more_options": "Thêm tuỳ chọn"
+        },
+        "room_options": "Tuỳ chọn phòng",
+        "section_created": "Đã tạo mục",
+        "section_header": {
+            "edit_section": "Sửa mục",
+            "more_options": "Thêm tuỳ chọn",
+            "remove_section": "Xoá mục",
+            "toggle": "Bật/tắt mục %(section)s",
+            "toggle_unread": "Bật/tắt mục %(section)s có phòng chưa đọc"
+        },
+        "show_message_previews": "Hiện xem trước tin nhắn",
+        "sort": "Sắp xếp",
+        "sort_type": {
+            "activity": "Hoạt động gần nhất",
+            "atoz": "A-Z",
+            "unread_first": "Chưa đọc trước"
+        },
+        "space_menu": {
+            "home": "Trang chủ Space",
+            "space_settings": "Cài đặt Space"
+        }
+    },
+    "terms": {
+        "tac_button": "Xem các điều khoản và điều kiện"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Không thể tạo luồng từ một sự kiện đã có quan hệ"
     },
     "time": {
         "about_day_ago": "khoảng một ngày trước",
@@ -27,9 +202,87 @@
         "n_minutes_ago": "%(num)s phút trước"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Cuộc gọi đã bị từ chối",
+                "call_declined_by_us": "Bạn đã từ chối một cuộc gọi"
+            },
+            "video_call_title": "Cuộc gọi video",
+            "voice_call_title": "Cuộc gọi thoại"
+        },
+        "decryption_failure": {
+            "blocked": "Người gửi đã chặn bạn nhận tin nhắn này vì thiết bị của bạn chưa được xác minh",
+            "historical_event_no_key_backup": "Các tin nhắn lịch sử không khả dụng trên thiết bị này",
+            "historical_event_unverified_device": "Bạn cần xác minh thiết bị này để truy cập các tin nhắn lịch sử",
+            "historical_event_user_not_joined": "Bạn không có quyền truy cập vào tin nhắn này",
+            "sender_identity_previously_verified": "Danh tính kỹ thuật số đã được xác minh của người gửi đã bị đặt lại",
+            "sender_unsigned_device": "Được gửi từ một thiết bị không an toàn.",
+            "unable_to_decrypt": "Không thể giải mã tin nhắn"
+        },
+        "download_action_decrypting": "Đang giải mã",
+        "download_action_downloading": "Đang tải xuống",
+        "e2e_state": "Trạng thái mã hoá đầu cuối",
         "m.audio": {
+            "audio_player": "Trình phát âm thanh",
             "error_downloading_audio": "Lỗi khi tải xuống âm thanh",
             "unnamed_audio": "Âm thanh không tên"
+        },
+        "m.file": {
+            "error_invalid": "Tệp không hợp lệ"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s đã thay đổi ảnh đại diện phòng thành<img/>",
+            "removed": "%(senderDisplayName)s đã xoá ảnh đại diện phòng."
+        },
+        "m.room.encryption": {
+            "disable_attempt": "Đã bỏ qua nỗ lực tắt mã hoá",
+            "disabled": "Chưa bật mã hoá",
+            "enabled": "Các tin nhắn trong phòng này được mã hoá đầu cuối. Khi mọi người tham gia, bạn có thể xác minh họ trong hồ sơ của họ, chỉ cần nhấn vào ảnh đại diện của họ.",
+            "enabled_dm": "Các tin nhắn ở đây được mã hoá đầu cuối. Hãy xác minh %(displayName)s trong hồ sơ của họ — nhấn vào ảnh đại diện của họ.",
+            "enabled_local": "Các tin nhắn trong cuộc trò chuyện này sẽ được mã hoá đầu cuối.",
+            "parameters_changed": "Một số tham số mã hoá đã thay đổi.",
+            "state_enabled": "Các tin nhắn và sự kiện trạng thái trong phòng này được mã hoá đầu cuối. Khi mọi người tham gia, bạn có thể xác minh họ trong hồ sơ của họ, chỉ cần nhấn vào ảnh đại diện của họ.",
+            "unsupported": "Phương thức mã hoá được sử dụng bởi phòng này không được hỗ trợ."
+        },
+        "mab": {
+            "collapse_reply_chain": "Thu gọn trích dẫn",
+            "copy_link_thread": "Sao chép liên kết tới luồng",
+            "expand_reply_chain": "Mở rộng trích dẫn",
+            "label": "Thao tác tin nhắn",
+            "view_in_room": "Xem trong phòng"
+        },
+        "message_timestamp_received_at": "Nhận lúc: %(dateTime)s",
+        "message_timestamp_sent_at": "Gửi lúc: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Bạn đã bỏ qua người dùng này, vì vậy tin nhắn của họ bị ẩn.<a> Vẫn hiển thị.</a>"
+        },
+        "pending_moderation": "Tin nhắn đang chờ kiểm duyệt",
+        "pending_moderation_reason": "Tin nhắn đang chờ kiểm duyệt: %(reason)s",
+        "url_preview": {
+            "close": "Đóng xem trước",
+            "open_link": "Mở liên kết",
+            "show_n_more": {
+                "one": "Hiển thị %(count)s xem trước khác",
+                "other": "Hiển thị %(count)s xem trước khác"
+            },
+            "view_image": "Xem ảnh"
+        }
+    },
+    "user_menu": {
+        "link_new_device": "Liên kết thiết bị mới",
+        "open_feedback": "Phản hồi",
+        "open_home": "Trang chủ",
+        "open_security": "Bảo mật & Riêng tư",
+        "open_settings": "Tất cả cài đặt"
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "Di chuyển sang trái",
+            "move_right": "Di chuyển sang phải",
+            "remove": "Xoá cho mọi người",
+            "revoke": "Thu hồi quyền",
+            "screenshot": "Chụp ảnh",
+            "start_audio_stream": "Bắt đầu phát âm thanh"
         }
     }
 }

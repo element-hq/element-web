@@ -22,7 +22,9 @@
         "about": "Giới thiệu",
         "brand_help": "Hỗ trợ %(brand)s",
         "help": "Hỗ trợ",
-        "preferences": "Tùy chọn"
+        "no": "Không",
+        "preferences": "Tùy chọn",
+        "yes": "Có"
     },
     "confirm_quit": "Bạn có chắc chắn muốn thoát?",
     "edit_menu": {
@@ -30,8 +32,20 @@
         "speech_start_speaking": "Bắt đầu nói",
         "speech_stop_speaking": "Dừng nói"
     },
+    "eol": {
+        "no_more_updates": "Bạn đang chạy một phiên bản macOS không được hỗ trợ. Vui lòng nâng cấp để nhận các bản cập nhật của %(brand)s.",
+        "title": "Hệ thống không được hỗ trợ",
+        "warning": "Bạn đang chạy một phiên bản macOS không được hỗ trợ. Vui lòng nâng cấp để đảm bảo %(brand)s tiếp tục hoạt động."
+    },
     "file_menu": {
         "label": "Tệp"
+    },
+    "icon_overlay": {
+        "description_error": "Lỗi",
+        "description_notifications": {
+            "one": "Bạn có %(count)s thông báo chưa đọc.",
+            "other": "Bạn có %(count)s thông báo chưa đọc."
+        }
     },
     "menu": {
         "hide": "Ẩn",
@@ -48,6 +62,21 @@
         "save_image_as": "Lưu ảnh…",
         "save_image_as_error_description": "Ảnh không lưu được",
         "save_image_as_error_title": "Không lưu được ảnh"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Xoá dữ liệu và tải lại?",
+            "backend_changed_detail": "Không thể truy cập khoá bí mật từ keyring hệ thống, có vẻ như nó đã thay đổi.",
+            "backend_changed_title": "Tải cơ sở dữ liệu thất bại",
+            "backend_no_encryption": "Hệ thống của bạn có keyring được hỗ trợ nhưng mã hoá không khả dụng.",
+            "backend_no_encryption_detail": "Electron đã phát hiện rằng mã hoá không khả dụng trên keyring %(backend)s của bạn. Vui lòng đảm bảo rằng bạn đã cài đặt keyring. Nếu bạn đã cài đặt keyring, vui lòng khởi động lại và thử lại. Tuỳ chọn, bạn có thể cho phép %(brand)s sử dụng một hình thức mã hoá yếu hơn.",
+            "backend_no_encryption_title": "Không hỗ trợ mã hoá",
+            "unsupported_keyring": "Hệ thống của bạn có một keyring không được hỗ trợ, nghĩa là cơ sở dữ liệu không thể mở được.",
+            "unsupported_keyring_detail": "Cơ chế phát hiện keyring của Electron không tìm thấy một backend được hỗ trợ. Bạn có thể thử cấu hình thủ công backend bằng cách khởi động %(brand)s với một tham số dòng lệnh, một thao tác chỉ thực hiện một lần. Xem %(link)s.",
+            "unsupported_keyring_title": "Hệ thống không được hỗ trợ",
+            "unsupported_keyring_use_basic_text": "Sử dụng mã hoá yếu hơn",
+            "unsupported_keyring_use_plaintext": "Không sử dụng mã hoá"
+        }
     },
     "view_menu": {
         "actual_size": "Kích thước thực",

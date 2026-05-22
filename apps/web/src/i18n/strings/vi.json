@@ -11,7 +11,10 @@
             "one": "1 đề cập chưa đọc.",
             "other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập."
         },
+        "recent_rooms": "Phòng gần đây",
         "room_name": "Phòng %(name)s",
+        "room_status_bar": "Thanh trạng thái phòng",
+        "seek_bar_label": "Thanh trượt âm thanh",
         "unread_messages": "Các tin nhắn chưa đọc."
     },
     "a11y_jump_first_unread_room": "Chuyển đến phòng chưa đọc đầu tiên.",
@@ -40,6 +43,8 @@
         "create_a_room": "Tạo phòng",
         "create_account": "Tạo tài khoản",
         "decline": "Từ chối",
+        "decline_and_block": "Từ chối và chặn",
+        "decline_invite": "Từ chối lời mời",
         "delete": "Xoá",
         "deny": "Từ chối",
         "disable": "Tắt",
@@ -92,7 +97,7 @@
         "rename": "Đặt lại tên",
         "reply": "Phản hồi",
         "reply_in_thread": "Trả lời theo chủ đề",
-        "report_content": "Báo cáo nội dung",
+        "report_room": "Báo cáo phòng",
         "resend": "Gửi lại",
         "reset": "Cài lại",
         "resume": "Tiếp tục",
@@ -102,6 +107,7 @@
         "save": "Lưu",
         "search": "Tìm kiếm",
         "send_report": "Gửi báo cáo",
+        "set_avatar": "Đặt ảnh đại diện",
         "share": "Chia sẻ",
         "show": "Hiện",
         "show_advanced": "Hiện nâng cao",
@@ -125,12 +131,15 @@
         "update": "Cập nhật",
         "upgrade": "Nâng cấp",
         "upload": "Tải lên",
+        "upload_file": "Tải tệp lên",
         "verify": "Xác thực",
         "view": "Xem",
         "view_all": "Xem tất cả",
+        "view_list": "Xem danh sách",
         "view_message": "Xem tin nhăn",
         "view_source": "Xem nguồn",
         "yes": "Có",
+        "yes_dismiss": "Có, bỏ qua",
         "zoom_in": "Phóng to",
         "zoom_out": "Thu nhỏ"
     },
@@ -152,6 +161,7 @@
         "account_clash_previous_account": "Tiếp tục với tài khoản trước",
         "account_deactivated": "Tài khoản này đã bị vô hiệu hóa.",
         "autodiscovery_generic_failure": "Không lấy được cấu hình tự động phát hiện từ máy chủ",
+        "autodiscovery_hs_incompatible": "Máy chủ của bạn quá cũ và không hỗ trợ phiên bản API tối thiểu yêu cầu. Vui lòng liên hệ chủ sở hữu máy chủ của bạn hoặc nâng cấp máy chủ của bạn.",
         "autodiscovery_invalid": "Phản hồi khám phá homeserver không hợp lệ",
         "autodiscovery_invalid_hs": "URL máy chủ dường như không phải là máy chủ Matrix hợp lệ",
         "autodiscovery_invalid_hs_base_url": "Base_url không hợp lệ cho m.homeserver",
@@ -159,6 +169,7 @@
         "autodiscovery_invalid_is_base_url": "Base_url không hợp lệ cho m.identity_server",
         "autodiscovery_invalid_is_response": "Phản hồi phát hiện máy chủ nhận dạng không hợp lệ",
         "autodiscovery_invalid_json": "JSON không hợp lệ",
+        "autodiscovery_no_well_known": "Không tìm thấy tệp JSON .well-known",
         "autodiscovery_unexpected_error_hs": "Lỗi xảy ra khi xử lý thiết lập máy chủ",
         "autodiscovery_unexpected_error_is": "Lỗi xảy ra khi xử lý thiết lập máy chủ định danh",
         "captcha_description": "Người bảo vệ gia đình này muốn đảm bảo rằng bạn không phải là người máy.",
@@ -170,6 +181,7 @@
         "change_password_error": "Lỗi khi đổi mật khẩu: %(error)s",
         "change_password_mismatch": "Mật khẩu mới không khớp",
         "change_password_new_label": "Mật khẩu mới",
+        "check_email_explainer": "Làm theo các hướng dẫn được gửi tới <b>%(email)s</b>",
         "check_email_resend_prompt": "Không nhận được nó?",
         "check_email_resend_tooltip": "Đã gửi lại liên kết xác nhận địa chỉ thư điện tử!",
         "check_email_wrong_email_button": "Điền lại địa chỉ thư điện tử",
@@ -185,6 +197,7 @@
         "email_field_label_required": "Nhập địa chỉ thư điện tử",
         "email_help_text": "Thêm một địa chỉ thư điện tử để có thể đặt lại mật khẩu của bạn.",
         "email_phone_discovery_text": "Sử dụng địa chỉ thư điện tử hoặc điện thoại để dễ dàng được tìm ra bởi người dùng khác.",
+        "enter_email_explainer": "<b>%(homeserver)s</b> sẽ gửi cho bạn một liên kết xác minh để đặt lại mật khẩu của bạn.",
         "enter_email_heading": "Nhập địa chỉ thư điện tử để đặt lại mật khẩu",
         "failed_connect_identity_server": "Không thể kết nối server định danh",
         "failed_connect_identity_server_other": "Bạn có thể đăng nhập, nhưng một vài chức năng sẽ không sử dụng dược cho đến khi server định danh hoạt động trở lại. Nếu bạn thấy thông báo này, hãy kiểm tra thiết lập hoặc liên hệ quản trị viên.",
@@ -213,6 +226,7 @@
         },
         "misconfigured_body": "Yêu cầu quản trị viên %(brand)s của bạn kiểm tra <a>your config</a> để tìm các mục nhập sai hoặc trùng lặp.",
         "misconfigured_title": "Hệ thống %(brand)s của bạn bị thiết lập sai",
+        "mobile_create_account_title": "Bạn sắp tạo tài khoản trên %(hsName)s",
         "msisdn_field_description": "Những người dùng khác có thể mời bạn vào phòng bằng cách sử dụng chi tiết liên hệ của bạn",
         "msisdn_field_label": "Điện thoại",
         "msisdn_field_number_invalid": "Số điện thoại đó có vẻ không chính xác, vui lòng kiểm tra và thử lại",
@@ -220,13 +234,52 @@
         "no_hs_url_provided": "Không có đường dẫn server",
         "oidc": {
             "error_title": "Chúng tôi không thể đăng nhập cho bạn",
+            "generic_auth_error": "Đã xảy ra sự cố trong quá trình xác thực. Hãy đến trang đăng nhập và thử lại.",
             "missing_or_invalid_stored_state": "Chúng tôi đã yêu cầu trình duyệt ghi nhớ máy chủ bạn đã sử dụng để bạn có thể đăng nhập lại, nhưng có vẻ như trình duyệt của bạn đã quên máy chủ đó :( Truy cập trang đăng nhập và thử lại."
         },
+        "password_field_keep_going_prompt": "Tiếp tục…",
         "password_field_label": "Nhập mật khẩu",
         "password_field_strong_label": "Mật khẩu mạnh, tốt đó!",
         "password_field_weak_label": "Mật khẩu được phép, nhưng không an toàn",
         "phone_label": "Điện thoại",
         "phone_optional_label": "Điện thoại (tùy chọn)",
+        "qr_code_login": {
+            "check_code_explainer": "Việc này sẽ xác minh rằng kết nối tới thiết bị khác của bạn an toàn.",
+            "check_code_heading": "Nhập số được hiển thị trên thiết bị khác của bạn",
+            "check_code_input_label": "Mã 2 chữ số",
+            "check_code_mismatch": "Các số không khớp",
+            "completing_setup": "Đang hoàn tất thiết lập thiết bị mới của bạn",
+            "error_etag_missing": "Đã xảy ra lỗi không mong muốn. Có thể do tiện ích trình duyệt, máy chủ proxy hoặc lỗi cấu hình.",
+            "error_expired": "Đăng nhập đã hết hạn. Vui lòng thử lại.",
+            "error_expired_title": "Đăng nhập không hoàn tất kịp thời",
+            "error_insecure_channel_detected": "Không thể tạo kết nối an toàn tới thiết bị mới. Các thiết bị hiện có của bạn vẫn an toàn và bạn không cần lo lắng về chúng.",
+            "error_insecure_channel_detected_instructions": "Giờ thì sao?",
+            "error_insecure_channel_detected_instructions_1": "Thử đăng nhập lại trên thiết bị khác bằng mã QR phòng trường hợp đây là sự cố mạng.",
+            "error_insecure_channel_detected_instructions_2": "Nếu bạn gặp lại vấn đề tương tự, hãy thử mạng wifi khác hoặc dùng dữ liệu di động.",
+            "error_insecure_channel_detected_instructions_3": "Nếu vẫn không được, hãy đăng nhập thủ công",
+            "error_insecure_channel_detected_title": "Kết nối không an toàn",
+            "error_other_device_already_signed_in": "Bạn không cần làm gì thêm.",
+            "error_other_device_already_signed_in_title": "Thiết bị khác của bạn đã được đăng nhập",
+            "error_rate_limited": "Quá nhiều lần thử trong một khoảng thời gian ngắn. Hãy chờ một thời gian trước khi thử lại.",
+            "error_unexpected": "Đã xảy ra lỗi không mong muốn. Yêu cầu kết nối thiết bị khác của bạn đã bị huỷ.",
+            "error_unsupported_protocol": "Thiết bị này không hỗ trợ đăng nhập vào thiết bị khác bằng mã QR.",
+            "error_unsupported_protocol_title": "Thiết bị khác không tương thích",
+            "error_user_cancelled": "Đăng nhập đã bị huỷ trên thiết bị khác.",
+            "error_user_cancelled_title": "Yêu cầu đăng nhập đã bị huỷ",
+            "error_user_declined": "Bạn hoặc nhà cung cấp tài khoản đã từ chối yêu cầu đăng nhập.",
+            "error_user_declined_title": "Đăng nhập đã bị từ chối",
+            "follow_remaining_instructions": "Làm theo các hướng dẫn còn lại",
+            "open_element_other_device": "Mở %(brand)s trên thiết bị khác của bạn",
+            "point_the_camera": "Quét mã QR được hiển thị ở đây",
+            "scan_code_instruction": "Quét mã QR bằng thiết bị khác",
+            "scan_qr_code": "Đăng nhập bằng mã QR",
+            "security_code": "Mã bảo mật",
+            "security_code_prompt": "Nếu được yêu cầu, nhập mã bên dưới trên thiết bị khác của bạn.",
+            "select_qr_code": "Chọn \"%(scanQRCode)s\"",
+            "unsupported_explainer": "Nhà cung cấp tài khoản của bạn không hỗ trợ đăng nhập vào thiết bị mới bằng mã QR.",
+            "unsupported_heading": "Mã QR không được hỗ trợ",
+            "waiting_for_device": "Đang đợi thiết bị đăng nhập"
+        },
         "register_action": "Tạo tài khoản",
         "registration": {
             "continue_without_email_description": "Lưu ý là nếu bạn không thêm địa chỉ thư điện tử và quên mật khẩu, bạn có thể <b>vĩnh viễn mất quyền truy cập vào tài khoản của mình</b>.",
@@ -237,22 +290,30 @@
         "registration_msisdn_field_required_invalid": "Nhập số điện thoại (bắt buộc trên máy chủ này)",
         "registration_successful": "Đăng ký thành công",
         "registration_username_in_use": "Ai đó đã có username đó. Hãy thử một cái khác hoặc nếu đó là bạn, hay đăng nhập bên dưới.",
+        "registration_username_unable_check": "Không thể kiểm tra tên người dùng đã được sử dụng hay chưa. Vui lòng thử lại sau.",
         "registration_username_validation": "Chỉ sử dụng các chữ cái thường, số, dấu gạch ngang và dấu gạch dưới",
         "reset_password": {
             "confirm_new_password": "Xác nhận mật khẩu mới",
+            "devices_logout_success": "Tất cả thiết bị của bạn đã bị xoá và sẽ không còn nhận được thông báo đẩy. Để bật lại thông báo, đăng nhập lại trên mỗi thiết bị.",
+            "other_devices_logout_warning_1": "Xoá các thiết bị của bạn sẽ xoá các khoá mã hoá tin nhắn được lưu trên chúng, khiến lịch sử trò chuyện được mã hoá không đọc được.",
+            "other_devices_logout_warning_2": "Nếu bạn muốn giữ quyền truy cập vào lịch sử trò chuyện trong các phòng được mã hoá, hãy lấy khoá khôi phục hoặc xác minh phiên này từ một trong các thiết bị khác của bạn trước khi đặt lại mật khẩu.",
             "password_not_entered": "Mật khẩu mới phải được nhập.",
             "passwords_mismatch": "Các mật khẩu mới phải khớp với nhau.",
+            "rate_limit_error": "Quá nhiều lần thử trong một khoảng thời gian ngắn. Hãy chờ một thời gian trước khi thử lại.",
+            "rate_limit_error_with_time": "Quá nhiều lần thử trong một khoảng thời gian ngắn. Thử lại sau %(timeout)s.",
             "reset_successful": "Mật khẩu của bạn đã được đặt lại.",
             "return_to_login": "Quay về màn hình đăng nhập",
             "sign_out_other_devices": "Đăng xuất khỏi mọi thiết bị"
         },
         "reset_password_action": "Đặt lại mật khẩu",
+        "reset_password_button": "Quên mật khẩu?",
         "reset_password_email_field_description": "Sử dụng địa chỉ thư điện tử để khôi phục tài khoản của bạn",
         "reset_password_email_field_required_invalid": "Nhập địa chỉ thư điện tử (bắt buộc trên máy chủ này)",
         "reset_password_email_not_associated": "Địa chỉ thư điện tử của bạn không được liên kết với một định danh Matrix trên máy chủ này.",
         "reset_password_email_not_found_title": "Địa chỉ thư điện tử này không tồn tại trong hệ thống",
         "reset_password_title": "Đặt lại mật khẩu của bạn",
         "server_picker_custom": "Máy chủ khác",
+        "server_picker_description": "Bạn có thể sử dụng các tuỳ chọn máy chủ tuỳ chỉnh để đăng nhập vào các máy chủ Matrix khác bằng cách chỉ định một URL máy chủ khác.",
         "server_picker_description_matrix.org": "Tham gia hàng triệu máy chủ công cộng miễn phí lớn nhất",
         "server_picker_dialog_title": "Quyết định nơi tài khoản của bạn được lưu trữ",
         "server_picker_explainer": "Sử dụng máy chủ Matrix ưa thích của bạn nếu bạn có, hoặc tự tạo máy chủ lưu trữ của riêng bạn.",
@@ -290,6 +351,7 @@
         "soft_logout_intro_sso": "Đăng nhập và lấy lại quyền truy cập vào tài khoản của bạn.",
         "soft_logout_intro_unsupported_auth": "Bạn không thể đăng nhập vào tài khoản của mình. Vui lòng liên hệ với quản trị viên máy chủ của bạn để biết thêm thông tin.",
         "soft_logout_subheading": "Xóa dữ liệu cá nhân",
+        "soft_logout_warning": "Cảnh báo: dữ liệu cá nhân của bạn (bao gồm cả khoá mã hoá) vẫn được lưu trên thiết bị này. Hãy xoá nó nếu bạn không dùng thiết bị này nữa hoặc muốn đăng nhập tài khoản khác.",
         "sso": "Đăng Nhập Một Lần",
         "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập",
         "sso_failed_missing_storage": "Chúng tôi đã yêu cầu trình duyệt ghi nhớ máy chủ bạn đã sử dụng để bạn có thể đăng nhập lại, nhưng có vẻ như trình duyệt của bạn đã quên máy chủ đó :( Truy cập trang đăng nhập và thử lại.",
@@ -298,13 +360,21 @@
         "syncing": "Đang đồng bộ…",
         "uia": {
             "code": "Mã",
+            "email": "Để tạo tài khoản của bạn, hãy mở liên kết trong email chúng tôi vừa gửi tới %(emailAddress)s.",
             "email_auth_header": "Kiểm tra hòm thư để tiếp tục",
+            "email_resend_prompt": "Chưa nhận được? <a>Gửi lại</a>",
+            "email_resent": "Đã gửi lại!",
             "fallback_button": "Bắt đầu xác thực",
+            "mas_cross_signing_reset_cta": "Tiếp tục tới tài khoản",
+            "mas_cross_signing_reset_description": "Bạn sắp đi tới tài khoản %(serverName)s của bạn để đặt lại danh tính kỹ thuật số.",
+            "mas_cross_signing_reset_title": "Đi tới tài khoản của bạn để đặt lại danh tính kỹ thuật số",
             "msisdn": "Một tin nhắn văn bản đã được gửi tới %(msisdn)s",
             "msisdn_token_incorrect": "Mã thông báo không chính xác",
             "msisdn_token_prompt": "Vui lòng nhập mã mà nó chứa:",
             "password_prompt": "Xác nhận danh tính của bạn bằng cách nhập mật khẩu tài khoản của bạn dưới đây.",
             "recaptcha_missing_params": "Thiếu captcha public key trong cấu hình máy chủ. Vui lòng báo cáo điều này cho quản trị viên máy chủ của bạn.",
+            "registration_token_label": "Mã đăng ký",
+            "registration_token_prompt": "Nhập mã đăng ký do quản trị viên máy chủ cung cấp.",
             "sso_body": "Xác nhận việc thêm địa chỉ thư điện tử này bằng cách sử dụng Đăng Nhập Một Lần để chứng minh danh tính của bạn.",
             "sso_failed": "Đã xảy ra sự cố khi xác nhận danh tính của bạn. Hủy và thử lại.",
             "sso_postauth_body": "Nhấp vào nút bên dưới để xác nhận danh tính của bạn.",
@@ -314,10 +384,13 @@
             "terms": "Vui lòng xem xét và chấp nhận chính sách của máy chủ nhà này:",
             "terms_invalid": "Vui lòng xem xét và chấp nhận tất cả các chính sách của chủ nhà"
         },
+        "unsupported_auth": "Máy chủ này không cung cấp bất kỳ phương thức đăng nhập nào được hỗ trợ bởi ứng dụng này.",
         "unsupported_auth_email": "Máy chủ nhà này không hỗ trợ đăng nhập bằng địa chỉ thư điện tử.",
         "unsupported_auth_msisdn": "Máy chủ này không hỗ trợ xác thực bằng số điện thoại.",
         "username_field_required_invalid": "Điền tên đăng nhập",
-        "username_in_use": "Ai đó đã có username đó, vui lòng thử một cái khác."
+        "username_in_use": "Ai đó đã có username đó, vui lòng thử một cái khác.",
+        "verify_email_explainer": "Chúng tôi cần biết đó là bạn trước khi đặt lại mật khẩu của bạn. Nhấp vào liên kết trong email chúng tôi vừa gửi tới <b>%(email)s</b>.",
+        "verify_email_heading": "Xác minh email của bạn để tiếp tục"
     },
     "bug_reporting": {
         "additional_context": "Nếu có ngữ cảnh bổ sung có thể giúp phân tích vấn đề, chẳng hạn như bạn đang làm gì vào thời điểm đó, ID phòng, ID người dùng, v.v., hãy đưa những điều đó vào đây.",
@@ -329,6 +402,15 @@
         "download_logs": "Tải xuống nhật ký",
         "downloading_logs": "Đang tải nhật ký xuống",
         "error_empty": "Vui lòng cho chúng tôi biết điều gì đã xảy ra hoặc tốt hơn là tạo sự cố trên GitHub để mô tả vấn đề.",
+        "failed_download_logs": "Tải nhật ký gỡ lỗi thất bại: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Báo cáo lỗi của bạn đã bị từ chối. Máy chủ rageshake không hỗ trợ ứng dụng này.",
+            "rejected_generic": "Báo cáo lỗi của bạn đã bị từ chối. Máy chủ rageshake đã từ chối nội dung của báo cáo.",
+            "rejected_recovery_key": "Báo cáo lỗi của bạn đã bị từ chối vì lý do an toàn, vì nó chứa khoá khôi phục.",
+            "rejected_version": "Báo cáo lỗi của bạn đã bị từ chối vì phiên bản bạn đang chạy quá cũ.",
+            "server_unknown_error": "Máy chủ rageshake gặp phải lỗi không xác định và không thể xử lý báo cáo.",
+            "unknown_error": "Gửi nhật ký thất bại."
+        },
         "github_issue": "Sự cố GitHub",
         "introduction": "Nếu bạn đã báo cáo lỗi qua GitHub, nhật ký gỡ lỗi có thể giúp chúng tôi theo dõi vấn đề. ",
         "log_request": "Để giúp chúng tôi ngăn chặn điều này trong tương lai, vui lòng gửi nhật ký cho chúng tôi <a>send us logs</a>.",
@@ -368,6 +450,7 @@
         "access_token": "Token truy cập",
         "accessibility": "Trợ năng",
         "advanced": "Nâng cao",
+        "all_chats": "Tất cả cuộc trò chuyện",
         "analytics": "Về dữ liệu phân tích",
         "and_n_others": {
             "one": "và một cái khác…",
@@ -378,9 +461,11 @@
         "are_you_sure": "Bạn có chắc không?",
         "attachment": "Tập tin đính kèm",
         "authentication": "Đăng nhập",
+        "avatar": "Ảnh đại diện",
         "beta": "Thử nghiệm",
         "camera": "Máy ảnh",
         "cameras": "Máy quay",
+        "cancel": "Huỷ bỏ",
         "capabilities": "Khả năng",
         "copied": "Đã sao chép!",
         "credits": "Ghi công",
@@ -388,6 +473,7 @@
         "description": "Sự mô tả",
         "deselect_all": "Bỏ chọn tất cả",
         "device": "Thiết bị",
+        "disabled_by_homeserver": "Bị vô hiệu hoá bởi máy chủ",
         "edited": "đã chỉnh sửa",
         "email_address": "Địa chỉ thư điện tử",
         "emoji": "Biểu tượng cảm xúc",
@@ -418,8 +504,10 @@
         "matrix": "Matrix",
         "message": "Tin nhắn",
         "message_layout": "Bố cục tin nhắn",
+        "message_timestamp_invalid": "Dấu thời gian không hợp lệ",
         "microphone": "Micrô",
         "model": "Mẫu mã",
+        "moderation_and_safety": "Kiểm duyệt và an toàn",
         "modern": "Hiện đại",
         "mute": "Im lặng",
         "n_members": {
@@ -455,10 +543,13 @@
         "qr_code": "Mã QR",
         "random": "Ngẫu nhiên",
         "reactions": "Phản ứng",
+        "recommended": "Khuyến nghị",
         "report_a_bug": "Báo lỗi",
         "room": "Phòng",
         "room_name": "Tên phòng",
         "rooms": "Phòng",
+        "save": "Lưu",
+        "saved": "Đã lưu",
         "saving": "Đang lưu…",
         "secure_backup": "Sao lưu bảo mật",
         "select_all": "Chọn tất cả",
@@ -469,6 +560,7 @@
         "someone": "Ai đó",
         "space": "space",
         "spaces": "Không gian",
+        "state_encryption_enabled": "Đã bật mã hoá trạng thái thử nghiệm",
         "sticker": "Nhãn dán",
         "stickerpack": "Gói nhãn dán",
         "success": "Thành công",
@@ -485,6 +577,7 @@
         "unnamed_room": "Phòng Không tên",
         "unnamed_space": "space không tên",
         "unverified": "Chưa xác thực",
+        "updating": "Đang cập nhật...",
         "user": "Người dùng",
         "user_avatar": "Ảnh đại diện",
         "username": "Tên đăng nhập",
@@ -543,6 +636,7 @@
         "poll_button_no_perms_description": "Bạn không có quyền để bắt đầu các cuộc thăm dò trong phòng này.",
         "poll_button_no_perms_title": "Yêu cầu Cấp quyền",
         "replying_title": "Đang trả lời",
+        "room_unencrypted": "Tin nhắn trong phòng này không được mã hoá đầu cuối",
         "room_upgraded_link": "Cuộc trò chuyện tiếp tục tại đây.",
         "room_upgraded_notice": "Phòng này đã được thay thế và không còn hoạt động nữa.",
         "send_button_title": "Gửi tin nhắn",
@@ -551,9 +645,13 @@
         "stop_voice_message": "Dừng ghi",
         "voice_message_button": "Tin nhắn thoại"
     },
+    "console_dev_note": "Nếu bạn biết mình đang làm gì, Element là mã nguồn mở, hãy ghé thăm GitHub của chúng tôi (https://github.com/vector-im/element-web/) và đóng góp!",
+    "console_scam_warning": "Nếu ai đó bảo bạn sao chép/dán thứ gì đó vào đây, rất có thể bạn đang bị lừa đảo!",
+    "console_wait": "Đợi đã!",
     "create_room": {
         "action_create_room": "Tạo phòng",
         "action_create_video_room": "Tạo phòng truyền hình",
+        "encrypted_video_room_warning": "Bạn không thể tắt tính năng này sau này. Phòng sẽ được mã hoá nhưng cuộc gọi nhúng sẽ không được mã hoá.",
         "encrypted_warning": "Bạn không thể vô hiệu hóa điều này sau này. Các cầu và hầu hết các bot sẽ không hoạt động.",
         "encryption_forced": "Máy chủ của bạn yêu cầu mã hóa được bật trong các phòng riêng.",
         "encryption_label": "Bật mã hóa đầu cuối",
@@ -562,12 +660,15 @@
         "join_rule_change_notice": "Bạn có thể thay đổi điều này bất kỳ lúc nào từ cài đặt phòng.",
         "join_rule_invite": "Phòng riêng (chỉ mời)",
         "join_rule_invite_label": "Chỉ những người được mời mới có thể tìm và tham gia phòng này.",
+        "join_rule_knock_label": "Bất kỳ ai cũng có thể yêu cầu tham gia, nhưng quản trị viên hoặc người kiểm duyệt cần cấp quyền truy cập. Bạn có thể thay đổi điều này sau.",
         "join_rule_public_label": "Bất kỳ ai cũng có thể tìm và tham gia phòng này.",
         "join_rule_public_parent_space_label": "Bất kỳ ai cũng có thể tìm và tham gia phòng này, không chỉ thành viên của <SpaceName/>.",
         "join_rule_restricted": "Hiển thị với các thành viên space",
         "join_rule_restricted_label": "Mọi người trong <SpaceName/> sẽ có thể tìm và tham gia phòng này.",
         "name_validation_required": "Vui lòng nhập tên cho phòng",
         "room_visibility_label": "Khả năng hiển thị phòng",
+        "state_encrypted_warning": "Bật hỗ trợ thử nghiệm cho việc mã hoá các sự kiện trạng thái, ẩn các siêu dữ liệu như tên phòng và chủ đề.",
+        "state_encryption_label": "Mã hoá các sự kiện trạng thái",
         "title_private_room": "Tạo một phòng riêng",
         "title_public_room": "Tạo một phòng công cộng",
         "title_video_room": "Tạo một phòng truyền hình",
@@ -577,6 +678,14 @@
         "unfederated_label_default_on": "Bạn có thể tắt tính năng này nếu phòng sẽ được sử dụng để cộng tác với các nhóm bên ngoài có máy chủ của riêng họ. Điều này không thể được thay đổi sau này.",
         "unsupported_version": "Máy chủ không hỗ trợ phiên bản phòng mà bạn chỉ định."
     },
+    "create_section_dialog": {
+        "create_section": "Tạo mục",
+        "description": "Các mục chỉ dành cho bạn",
+        "edit_section": "Sửa mục",
+        "label": "Tên mục",
+        "title": "Tạo một mục",
+        "title_edition": "Sửa một mục"
+    },
     "create_space": {
         "add_details_prompt": "Thêm một số chi tiết để giúp mọi người nhận ra nó.",
         "add_details_prompt_2": "Bạn có thể thay đổi những điều này bất cứ lúc nào.",
@@ -585,6 +694,7 @@
         "address_label": "Địa chỉ",
         "address_placeholder": "ví dụ như my-space",
         "creating": "Đang tạo…",
+        "creating_rooms": "Đang tạo các phòng…",
         "done_action": "Đi đến space của tôi",
         "done_action_first_room": "Đến phòng đầu tiên của tôi",
         "explainer": "Space là một cách mới để nhóm các phòng và mọi người. Loại space nào bạn muốn tạo? Bạn có thể thay đổi sau.",
@@ -593,21 +703,25 @@
         "invite_teammates_by_username": "Mời theo tên người dùng",
         "invite_teammates_description": "Đảm bảo đúng người có quyền truy cập. Bạn có thể mời thêm sau.",
         "invite_teammates_heading": "Mời đồng đội của bạn",
+        "inviting_users": "Đang mời…",
         "label": "Tạo một Space",
         "name_required": "Vui lòng nhập tên cho Space",
         "personal_space": "Chỉ tôi",
         "personal_space_description": "Một Space riêng tư để sắp xếp các phòng của bạn",
         "private_description": "Chỉ mời, tốt nhất cho bản thân hoặc các đội",
         "private_heading": "Space riêng tư của bạn",
+        "private_only_heading": "Space của bạn",
         "private_personal_description": "Đảm bảo đúng người có quyền truy cập vào %(name)s",
         "private_personal_heading": "Bạn làm việc với ai?",
         "private_space": "Tôi và đồng đội của tôi",
         "private_space_description": "space riêng tư cho bạn và đồng đội của bạn",
         "public_description": "Tạo space cho mọi người, tốt nhất cho cộng đồng",
         "public_heading": "Space công cộng của bạn",
+        "search_public_button": "Tìm kiếm các space công khai",
         "setup_rooms_community_description": "Hãy tạo một phòng cho mỗi người trong số họ.",
         "setup_rooms_community_heading": "Một số điều bạn muốn thảo luận trong %(spaceName)s là gì?",
         "setup_rooms_description": "Bạn cũng có thể thêm nhiều hơn sau, bao gồm cả những cái đã có.",
+        "setup_rooms_private_description": "Hãy tạo một số phòng để bắt đầu.",
         "setup_rooms_private_heading": "Nhóm của bạn đang thực hiện các dự án nào?",
         "share_description": "Chỉ là bạn hiện tại, sẽ càng tốt hơn với người khác.",
         "share_heading": "Chia sẻ %(name)s",
@@ -626,6 +740,13 @@
         "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>.",
         "twemoji": "Bộ <twemoji>Twemoji</twemoji> được © <author>Twitter, Inc and other contributors</author> sử dụng dưới các điều khoản trong giấy phép <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "<colr>twemoji-colr</colr> được Quỹ ©<author>Mozilla Foundation</author> sử dụng dựa trên các điều khoản trong giấy phép <terms>Apache 2.0</terms>."
+    },
+    "decline_invitation_dialog": {
+        "confirm": "Bạn có chắc chắn muốn từ chối lời mời tham gia \"%(roomName)s\"?",
+        "ignore_user_help": "Bạn sẽ không thấy bất kỳ tin nhắn hoặc lời mời phòng nào từ người dùng này.",
+        "reason_description": "Mô tả lý do báo cáo phòng.",
+        "report_room_description": "Báo cáo phòng này cho nhà cung cấp tài khoản của bạn.",
+        "title": "Từ chối lời mời"
     },
     "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "devtools": {
@@ -892,6 +1013,9 @@
         "unknown_error_code": "mã lỗi không xác định",
         "update_power_level": "Không thay đổi được mức công suất"
     },
+    "error_app_open_in_another_tab": "%(brand)s đang mở ở một tab khác và không thể chạy nhiều phiên trong cùng một trình duyệt cùng lúc. Vui lòng đóng tab kia hoặc nhấp vào nút bên dưới để sử dụng %(brand)s trong tab hiện tại.",
+    "error_app_open_in_another_tab_title": "%(brand)s đã mở ở một tab khác",
+    "error_app_opened_in_another_window": "%(brand)s đã được mở ở một cửa sổ khác. Vui lòng đóng cửa sổ kia trước khi tiếp tục.",
     "error_database_closed_title": "Cơ sở dữ liệu đột nhiên bị đóng",
     "error_dialog": {
         "copy_room_link_failed": {
@@ -1046,7 +1170,14 @@
         "other": "Trong %(spaceName)s và %(count)s space khác."
     },
     "incompatible_browser": {
-        "title": "Trình duyệt không được hỗ trợ"
+        "continue": "Tiếp tục",
+        "description": "%(brand)s sử dụng các tính năng trình duyệt nâng cao không được trình duyệt hiện tại của bạn hỗ trợ.",
+        "learn_more": "Tìm hiểu thêm",
+        "linux": "Linux",
+        "macos": "Mac OS X",
+        "title": "Trình duyệt không được hỗ trợ",
+        "use_desktop_heading": "Sử dụng %(brand)s trên máy tính để có trải nghiệm tốt hơn",
+        "use_mobile_heading": "Sử dụng %(brand)s trên di động để có trải nghiệm tốt hơn"
     },
     "info_tooltip_title": "Thông tin",
     "integration_manager": {
@@ -1120,8 +1251,8 @@
         "other": "Đang mời %(user)s và %(count)s người khác"
     },
     "items_and_n_others": {
-        "other": "<Items/> và %(count)s mục khác",
-        "one": "<Items/> và một mục khác"
+        "one": "<Items/> và một mục khác",
+        "other": "<Items/> và %(count)s mục khác"
     },
     "keyboard": {
         "activate_button": "Kích hoạt nút đã chọn",
@@ -1224,8 +1355,6 @@
         "msc3531_hide_messages_pending_moderation": "Cho phép điều phối viên ẩn các tin nhắn đang chờ duyệt.",
         "notification_settings": "Cài đặt thông báo mới",
         "notification_settings_beta_title": "Cài đặt thông báo",
-        "report_to_moderators": "Báo cáo cho điều phối viên",
-        "report_to_moderators_description": "Trong các phòng hỗ trợ điều phối, nút \"Báo cáo\" sẽ giúp bạn báo cáo lạm dụng cho điều phối viên của phòng.",
         "sliding_sync": "Chế độ đồng bộ tối ưu (Sync v3)",
         "sliding_sync_description": "Đang được phát triển tích cực, không thể vô hiệu.",
         "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa",
@@ -1310,15 +1439,18 @@
     },
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
-        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác"
+        "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
+        "no_matches": "Không tìm thấy kết quả"
     },
     "member_list_back_action_label": "Thành viên phòng",
     "message_edit_dialog_title": "Chỉnh sửa tin nhắn",
+    "migrating_crypto": "Đang nâng cấp mã hoá đầu cuối. Việc này có thể mất vài phút...",
     "mobile_guide": {
         "toast_accept": "Sử dụng ứng dụng",
         "toast_description": "%(brand)s đang thử nghiệm trên trình duyệt web di động. Để có trải nghiệm tốt hơn và các tính năng mới nhất, hãy sử dụng ứng dụng gốc miễn phí của chúng tôi.",
         "toast_title": "Sử dụng ứng dụng để có trải nghiệm tốt hơn"
     },
+    "name_and_id": "%(name)s (%(userId)s)",
     "no_more_results": "Không còn kết quả nào nữa",
     "notif_panel": {
         "empty_description": "Bạn không có thông báo nào hiển thị.",
@@ -1436,22 +1568,18 @@
         "ongoing": "Đang xóa…",
         "reason_label": "Lý do (không bắt buộc)"
     },
+    "remove_section_dialog": {
+        "description": "Bạn có chắc chắn muốn xoá mục này không?",
+        "title": "Xoá mục"
+    },
     "report_content": {
         "description": "Báo cáo thông báo này sẽ gửi 'ID sự kiện' duy nhất của nó đến quản trị viên của máy chủ của bạn. Nếu tin nhắn trong phòng này được mã hóa, quản trị viên máy chủ của bạn sẽ không thể đọc nội dung tin nhắn hoặc xem bất kỳ tệp hoặc hình ảnh nào.",
-        "disagree": "Không đồng ý",
         "ignore_user": "Tảng lờ người dùng",
-        "illegal_content": "Nội dung bất hợp pháp",
         "missing_reason": "Vui lòng điền lý do bạn đang báo cáo.",
-        "nature": "Vui lòng chọn một bản chất và mô tả điều gì khiến thông báo này bị lạm dụng.",
-        "nature_disagreement": "Những gì người dùng này đang viết là sai.\nĐiều này sẽ được báo cáo tới các moderator của phòng.",
-        "nature_illegal": "Người dùng này đang hiển thị hành vi bất hợp pháp, ví dụ bằng cách doxing mọi người hoặc đe dọa bạo lực.\nĐiều này sẽ được báo cáo cho những người điều hành phòng có thể leo thang điều này cho các cơ quan pháp lý.",
-        "nature_other": "Bất kỳ lý do nào khác. Xin hãy mô tả vấn đề.\nĐiều này sẽ được báo cáo cho người điều hành phòng.",
-        "nature_spam": "Người dùng này đang spam phòng bằng quảng cáo, liên kết đến quảng cáo hoặc tuyên truyền.\nĐiều này sẽ được báo cáo cho người điều hành phòng.",
-        "other_label": "Khác",
-        "report_content_to_homeserver": "Báo cáo Nội dung cho Quản trị viên Máy chủ Trang chủ của Bạn",
-        "report_entire_room": "Báo cáo toàn bộ phòng",
-        "spam_or_propaganda": "Thư rác hoặc tuyên truyền",
-        "toxic_behaviour": "Hành vi độc hại"
+        "report_content_to_homeserver": "Báo cáo Nội dung cho Quản trị viên Máy chủ Trang chủ của Bạn"
+    },
+    "report_room": {
+        "description": "Báo cáo phòng này cho nhà cung cấp tài khoản của bạn."
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Không giải mã được phiên %(failedCount)s !",
@@ -1921,6 +2049,10 @@
         "recent_changes_heading": "Những thay đổi gần đây chưa được nhận",
         "title": "Máy chủ không phản hồi"
     },
+    "service_worker_error": {
+        "description": "Không thể đăng ký service worker, bạn có thể không nhận được thông báo đẩy.",
+        "title": "Service worker không khả dụng"
+    },
     "seshat": {
         "error_initialising": "Không thể khởi chạy tìm kiếm tin nhắn, hãy kiểm tra cài đặt của bạn <a>your settings</a> để biết thêm thông tin",
         "reset_button": "Đặt lại cửa hàng sự kiện",
@@ -2224,8 +2356,8 @@
             "last_activity": "Hoạt động cuối",
             "mobile_session": "Phiên trên điện thoại",
             "n_sessions_selected": {
-                "other": "%(count)s phiên đã chọn",
-                "one": "%(count)s phiên đã chọn"
+                "one": "%(count)s phiên đã chọn",
+                "other": "%(count)s phiên đã chọn"
             },
             "no_inactive_sessions": "Không thấy phiên không hoạt động nào.",
             "no_sessions": "Không thấy phiên nào.",
@@ -2255,8 +2387,8 @@
                 "other": "Bạn có muốn đăng xuất %(count)s phiên?"
             },
             "sign_out_n_sessions": {
-                "other": "Đăng xuất khỏi %(count)s phiên",
-                "one": "Đăng xuất khỏi %(count)s phiên"
+                "one": "Đăng xuất khỏi %(count)s phiên",
+                "other": "Đăng xuất khỏi %(count)s phiên"
             },
             "title": "Các phiên",
             "unknown_session": "Không rõ loại phiên",
@@ -2416,6 +2548,7 @@
         "view": "Phòng truyền hình với địa chỉ đã cho",
         "whois": "Hiển thị thông tin về người dùng"
     },
+    "sliding_sync_legacy_no_longer_supported": "Phiên bản Sliding Sync cũ không còn được hỗ trợ. Vui lòng đăng xuất và đăng nhập lại để sử dụng phiên bản mới.",
     "space": {
         "add_existing_room_space": {
             "create": "Hay là thêm một phòng mới?",
@@ -2558,6 +2691,9 @@
         "my_threads": "Các chủ đề của tôi",
         "my_threads_description": "Hiển thị tất cả các chủ đề bạn đã tham gia",
         "show_thread_filter": "Hiển thị:"
+    },
+    "threads_activity_centre": {
+        "header": "Hoạt động luồng"
     },
     "time": {
         "date_at_time": "%(date)s lúc %(time)s",
@@ -2841,8 +2977,8 @@
             },
             "format": "%(nameList)s%(transitionList)s",
             "hidden_event": {
-                "other": "%(oneUser)sgửi %(count)s tin nhắn ẩn",
-                "one": "%(oneUser)sgửi một tin nhắn ẩn"
+                "one": "%(oneUser)sgửi một tin nhắn ẩn",
+                "other": "%(oneUser)sgửi %(count)s tin nhắn ẩn"
             },
             "hidden_event_multiple": {
                 "one": "%(severalUsers)sgửi một tin nhắn ẩn",
@@ -2897,16 +3033,16 @@
                 "other": "%(severalUsers)s không thay đổi %(count)s lần"
             },
             "pinned_events": {
-                "other": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần",
-                "one": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng"
+                "one": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
+                "other": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần"
             },
             "pinned_events_multiple": {
                 "one": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
                 "other": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần"
             },
             "redacted": {
-                "other": "%(oneUser)sxóa %(count)s tin nhắn",
-                "one": "%(oneUser)sxóa một tin nhắn"
+                "one": "%(oneUser)sxóa một tin nhắn",
+                "other": "%(oneUser)sxóa %(count)s tin nhắn"
             },
             "redacted_multiple": {
                 "one": "%(severalUsers)sxóa một tin nhắn",
@@ -2939,8 +3075,8 @@
         },
         "typing_indicator": {
             "more_users": {
-                "other": "%(names)s và %(count)s người khác đang gõ …",
-                "one": "%(names)s và một người khác đang gõ …"
+                "one": "%(names)s và một người khác đang gõ …",
+                "other": "%(names)s và %(count)s người khác đang gõ …"
             },
             "one_user": "%(displayName)s đang gõ …",
             "two_users": "%(names)s và %(lastPerson)s đang gõ …"
@@ -2950,6 +3086,12 @@
     "truncated_list_n_more": {
         "other": "Và %(count)s thêm…"
     },
+    "unsupported_browser": {
+        "description": "%(brand)s sử dụng các tính năng trình duyệt nâng cao không được trình duyệt hiện tại của bạn hỗ trợ.",
+        "title": "Trình duyệt của bạn không thể chạy %(brand)s"
+    },
+    "unsupported_server_description": "Bạn đang sử dụng %(brand)s với máy chủ %(serverVersion)s, không tương thích với phiên bản %(brand)s này. Vui lòng nâng cấp máy chủ của bạn.",
+    "unsupported_server_title": "Máy chủ không được hỗ trợ",
     "update": {
         "changelog": "Lịch sử thay đổi",
         "check_action": "Kiểm tra cập nhật",
