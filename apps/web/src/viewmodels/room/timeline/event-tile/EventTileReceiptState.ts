@@ -5,9 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, EventType, M_POLL_END, M_POLL_START, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
+import { isMessageEvent } from "../../../../events/EventTileFactory";
 
 interface ReadReceiptLike {
     userId: string;
@@ -48,15 +49,7 @@ export interface EventTileReceiptState {
  * This excludes state events and other events that are not sent by the composer.
  */
 export function isEligibleForSpecialReceipt(mxEvent: MatrixEvent): boolean {
-    const eventType = mxEvent.getType();
-
-    return (
-        eventType === EventType.RoomMessage ||
-        eventType === EventType.RoomMessageEncrypted ||
-        eventType === EventType.Sticker ||
-        M_POLL_START.matches(eventType) ||
-        M_POLL_END.matches(eventType)
-    );
+    return isMessageEvent(mxEvent) || mxEvent.getType() === EventType.RoomMessageEncrypted;
 }
 
 /** Derives receipt display state for EventTile. */
