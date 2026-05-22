@@ -187,7 +187,7 @@ export const expect = baseExpect.extend<Expectations>({
             css += options.css;
         }
 
-        await baseExpect(receiver).toMatchScreenshot(name, {
+        await baseExpect(receiver).toMatchScreenshotDontOverride(name, {
             ...options,
             css,
         });
