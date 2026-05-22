@@ -37,7 +37,7 @@ exports[`PlayPauseButton > renders the button in disabled state 1`] = `
   <button
     aria-disabled="true"
     aria-label="Play"
-    aria-labelledby="_r_c_"
+    aria-labelledby="react-use-id-1"
     class="_icon-button_1215g_8 PlayPauseButton-module_button"
     data-kind="primary"
     role="button"
