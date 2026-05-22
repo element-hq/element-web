@@ -161,8 +161,6 @@ export class DeviceListenerCurrentDevice {
 
         const recoveryDisabled = await this.recheckRecoveryDisabled(this.client);
 
-        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled;
-
         const isCurrentDeviceTrusted = Boolean(
             (await crypto.getDeviceVerificationStatus(this.client.getSafeUserId(), this.client.deviceId!))
                 ?.crossSigningVerified,
@@ -170,6 +168,8 @@ export class DeviceListenerCurrentDevice {
 
         const keyBackupUploadActive = await this.isKeyBackupUploadActive(logSpan);
         const backupDisabled = await this.recheckBackupDisabled();
+
+        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled || backupDisabled;
 
         // We warn if key backup upload is turned off and we have not explicitly
         // said we are OK with that.
@@ -215,16 +215,8 @@ export class DeviceListenerCurrentDevice {
                 await this.setDeviceState("turn_on_key_storage", logSpan);
             } else if (!recoveryIsOk) {
                 if (secretStorageStatus.defaultKeyId === null) {
-                    // The user just hasn't set up 4S yet: if they have key
-                    // backup, prompt them to turn on recovery too. (If not, they
-                    // have explicitly opted out, so don't hassle them.)
-                    if (keyBackupUploadActive) {
-                        logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
-                        await this.setDeviceState("set_up_recovery", logSpan);
-                    } else {
-                        logSpan.info("No default 4S key but backup disabled: no toast needed");
-                        await this.setDeviceState("ok", logSpan);
-                    }
+                    logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
+                    await this.setDeviceState("set_up_recovery", logSpan);
                 } else {
                     logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
                         secretStorageStatus,

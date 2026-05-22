@@ -4,9 +4,10 @@ exports[`E2eMessageSharedIcon renders correctly for a known user 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_0_"
-    class="mx_EventTile_e2eIcon"
+    aria-labelledby="react-use-id-1"
+    class="_e2ePadlock_ohpuo_8 mx_EventTile_e2eIcon"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
@@ -34,9 +35,10 @@ exports[`E2eMessageSharedIcon renders correctly for an unknown user 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_6_"
-    class="mx_EventTile_e2eIcon"
+    aria-labelledby="react-use-id-1"
+    class="_e2ePadlock_ohpuo_8 mx_EventTile_e2eIcon"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg

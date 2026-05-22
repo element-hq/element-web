@@ -12,7 +12,7 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
-            ignoreBinaries: ["awk"],
+            ignoreBinaries: ["awk", "printf"],
         },
         "packages/module-api": {},
         "apps/web": {

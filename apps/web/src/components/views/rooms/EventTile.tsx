@@ -51,6 +51,8 @@ import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-de
 import {
     useCreateAutoDisposedViewModel,
     ActionBarView,
+    E2ePadlock,
+    E2ePadlockIcon,
     MessageTimestampView,
     PinnedMessageBadge,
     ReactionsRowButtonView,
@@ -100,27 +102,21 @@ import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
-import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
-import {
-    getAriaLive,
-    getEventTileAvatarMember,
-    getEventTileClassState,
-    getEventTileLineClassState,
-    getEventTileSenderProfileState,
-    getEventTileTimestamp,
-    getFooterDisplayState,
-    getIsContinuation,
-    getReplyChainAlwaysShowTimestamps,
-    getScrollToken,
-    getSenderProfileMode,
-    getShouldShowMessageActionBar,
-    getShouldShowTimestamp,
-    getShouldViewUserOnClick,
-    getTimestampDisplayState,
-    isSendingStatus,
-} from "./EventTile/eventTileDerivedState";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
+import { EventTileViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import {
+    eventTileActionBarFocusChange,
+    eventTileBlurWithin,
+    eventTileClearHover,
+    eventTileCloseContextMenu,
+    eventTileFocusWithin,
+    eventTileMouseEnter,
+    eventTileMouseLeave,
+    eventTileOpenContextMenu,
+    initialEventTileInteractionState,
+    type EventTileInteractionState,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
@@ -286,9 +282,7 @@ export interface EventTileProps {
 }
 
 interface IState {
-    // Whether the action bar is focused.
-    actionBarFocused: boolean;
-    showActionBarFromFocus: boolean;
+    interaction: EventTileInteractionState;
 
     /**
      * E2EE shield we should show for decryption problems.
@@ -304,15 +298,6 @@ interface IState {
 
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null | undefined;
-
-    hover: boolean;
-    focusWithin: boolean;
-
-    // Position of the context menu
-    contextMenu?: {
-        position: Pick<DOMRect, "top" | "left" | "bottom">;
-        link?: string;
-    };
 
     isQuoteExpanded?: boolean;
 
@@ -362,18 +347,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const thread = this.thread;
 
         this.state = {
-            // Whether the action bar is focused.
-            actionBarFocused: false,
-            showActionBarFromFocus: false,
+            interaction: initialEventTileInteractionState,
 
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
 
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
-
-            hover: false,
-            focusWithin: false,
 
             thread,
         };
@@ -511,9 +491,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
         // Some overlays, such as portalled tooltips, can interrupt the normal mouseleave path.
         // While hover is active, verify it against the browser's real :hover state on mouse movement.
-        if (!prevState.hover && this.state.hover) {
+        if (!prevState.interaction.hover && this.state.interaction.hover) {
             this.startStaleHoverCheck();
-        } else if (prevState.hover && !this.state.hover) {
+        } else if (prevState.interaction.hover && !this.state.interaction.hover) {
             this.stopStaleHoverCheck();
         }
 
@@ -532,12 +512,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Moving between edited messages can remount the editor without a reliable blur event.
         // Clear stale focus-derived action bar state when focus has actually left this tile.
         if (
-            this.state.focusWithin &&
+            this.state.interaction.focusWithin &&
             this.ref.current &&
             document.activeElement instanceof HTMLElement &&
             !this.ref.current.contains(document.activeElement)
         ) {
-            this.setState({ focusWithin: false, showActionBarFromFocus: false });
+            this.setState((prevState) => ({
+                interaction: eventTileBlurWithin(prevState.interaction),
+            }));
         }
     }
 
@@ -866,10 +848,28 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
 
             if (this.state.shieldColour === EventShieldColour.GREY) {
-                return <E2ePadlock icon={E2ePadlockIcon.Normal} title={shieldReasonMessage} />;
+                return (
+                    <E2ePadlock
+                        className={
+                            // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                            "mx_EventTile_e2eIcon"
+                        }
+                        icon={E2ePadlockIcon.Normal}
+                        title={shieldReasonMessage}
+                    />
+                );
             } else {
                 // red, by elimination
-                return <E2ePadlock icon={E2ePadlockIcon.Warning} title={shieldReasonMessage} />;
+                return (
+                    <E2ePadlock
+                        className={
+                            // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                            "mx_EventTile_e2eIcon"
+                        }
+                        icon={E2ePadlockIcon.Warning}
+                        title={shieldReasonMessage}
+                    />
+                );
             }
         }
 
@@ -900,8 +900,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private readonly onActionBarFocusChange = (actionBarFocused: boolean): void => {
         this.setState((prevState) => ({
-            actionBarFocused,
-            hover: actionBarFocused ? prevState.hover : (this.ref.current?.matches(":hover") ?? false),
+            interaction: eventTileActionBarFocusChange(
+                prevState.interaction,
+                actionBarFocused,
+                this.ref.current?.matches(":hover") ?? false,
+            ),
         }));
     };
 
@@ -918,17 +921,23 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private readonly onDocumentMouseMove = (): void => {
-        if (this.state.hover && !(this.ref.current?.matches(":hover") ?? false)) {
-            this.setState({ hover: false });
+        if (this.state.interaction.hover && !(this.ref.current?.matches(":hover") ?? false)) {
+            this.setState((prevState) => ({
+                interaction: eventTileClearHover(prevState.interaction),
+            }));
         }
     };
 
     private readonly onMouseEnter = (): void => {
-        this.setState({ hover: true });
+        this.setState((prevState) => ({
+            interaction: eventTileMouseEnter(prevState.interaction),
+        }));
     };
 
     private readonly onMouseLeave = (): void => {
-        this.setState({ hover: false });
+        this.setState((prevState) => ({
+            interaction: eventTileMouseLeave(prevState.interaction),
+        }));
     };
 
     private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -936,7 +945,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const target = event.target as HTMLElement;
         const showActionBarFromFocus =
             target.matches(":focus-visible") || document.body.dataset["data-whatinput"] === "keyboard";
-        this.setState({ focusWithin: true, showActionBarFromFocus });
+        this.setState((prevState) => ({
+            interaction: eventTileFocusWithin(prevState.interaction, showActionBarFromFocus),
+        }));
     };
 
     private readonly onBlurWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -944,7 +955,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             return;
         }
 
-        this.setState({ focusWithin: false, showActionBarFromFocus: false });
+        this.setState((prevState) => ({
+            interaction: eventTileBlurWithin(prevState.interaction),
+        }));
     };
 
     private readonly getTile: () => IEventTileType | null = () => this.tile.current;
@@ -995,26 +1008,22 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({
-            contextMenu: {
+        this.setState((prevState) => ({
+            interaction: eventTileOpenContextMenu(prevState.interaction, {
                 position: {
                     left: ev.clientX,
                     top: ev.clientY,
                     bottom: ev.clientY,
                 },
                 link: anchorElement?.href || permalink,
-            },
-            actionBarFocused: true,
-            hover: false,
-        });
+            }),
+        }));
     }
 
     private readonly onCloseMenu = (): void => {
-        this.setState({
-            contextMenu: undefined,
-            actionBarFocused: false,
-            hover: false,
-        });
+        this.setState((prevState) => ({
+            interaction: eventTileCloseContextMenu(prevState.interaction),
+        }));
     };
 
     private readonly setQuoteExpanded = (expanded: boolean): void => {
@@ -1036,7 +1045,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private renderContextMenu(): ReactNode {
-        if (!this.state.contextMenu) return null;
+        if (!this.state.interaction.contextMenu) return null;
 
         const tile = this.getTile();
         const replyChain = this.getReplyChain();
@@ -1045,7 +1054,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         return (
             <MessageContextMenu
-                {...aboveRightOf(this.state.contextMenu.position)}
+                {...aboveRightOf(this.state.interaction.contextMenu.position)}
                 mxEvent={this.props.mxEvent}
                 permalinkCreator={this.props.permalinkCreator}
                 eventTileOps={eventTileOps}
@@ -1053,14 +1062,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 onFinished={this.onCloseMenu}
                 rightClick={true}
                 reactions={this.state.reactions}
-                link={this.state.contextMenu.link}
+                link={this.state.interaction.contextMenu.link}
                 getRelationsForEvent={this.props.getRelationsForEvent}
             />
         );
     }
 
     public render(): ReactNode {
-        const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
         const replacingEventId = this.props.mxEvent.replacingEventId();
 
@@ -1093,56 +1101,67 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
 
-        const lineClasses = classNames(
-            "mx_EventTile_line",
-            getEventTileLineClassState({
-                isProbablyMedia,
-                eventType,
-                msgtype,
-            }),
-        );
-
-        const isSending = isSendingStatus(this.props.eventSendStatus);
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
-
-        const isContinuation = getIsContinuation(
-            this.props.continuation,
-            this.context.timelineRenderingType,
-            this.props.layout,
-        );
-
-        const isRenderingNotification = this.context.timelineRenderingType === TimelineRenderingType.Notification;
-
         const isEditing = !!this.props.editState;
-        const classes = classNames(
-            getEventTileClassState({
+        const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        const hasReactionsRow = !isRedacted;
+        // Use `getSender()` because searched events might not have a proper `sender`.
+        const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
+
+        const eventTileSnapshot = EventTileViewModel.createSnapshot({
+            event: {
+                mxEvent: this.props.mxEvent,
+                eventSendStatus: this.props.eventSendStatus,
+                isEditing,
+                isEncryptionFailure,
+                forExport: this.props.forExport,
+            },
+            display: {
+                timelineRenderingType: this.context.timelineRenderingType,
+                layout: this.props.layout,
+                continuation: this.props.continuation,
+                isProbablyMedia,
                 isBubbleMessage,
                 isLeftAlignedBubbleMessage,
                 isAlignedBetweenBubbles,
-                isEditing,
                 isInfoMessage,
+                noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
-                isSending,
                 isHighlighted: this.shouldHighlight(),
-                isSelected: this.props.isSelectedEvent || !!this.state.contextMenu,
-                isContinuation,
-                eventType,
+                isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
                 isLast: this.props.last,
                 isLastInSection: this.props.lastInSection,
                 isContextual: this.props.contextual,
-                isActionBarFocused: this.state.actionBarFocused,
-                isEncryptionFailure,
-                msgtype,
+            },
+            interaction: {
+                hover: this.state.interaction.hover,
+                showActionBarFromFocus: this.state.interaction.showActionBarFromFocus,
+                focusWithin: this.state.interaction.focusWithin,
+                isActionBarFocused: this.state.interaction.actionBarFocused,
+                hasContextMenu: !!this.state.interaction.contextMenu,
+                inhibitInteraction: this.props.inhibitInteraction,
+            },
+            sender: {
                 hideSender: this.props.hideSender,
-                timelineRenderingType: this.context.timelineRenderingType,
-                isRenderingNotification,
-                noBubbleEvent,
-            }),
-        );
+            },
+            timestamp: {
+                alwaysShowTimestamps: this.props.alwaysShowTimestamps,
+                hideTimestamp: this.props.hideTimestamp,
+                threadReplyEventTs: this.state.thread?.replyToEvent?.getTs(),
+            },
+            footer: {
+                isOwnEvent,
+                hasReactionsRow,
+                hasReactions: !!this.state.reactions,
+                hasPinnedMessageBadge,
+            },
+        });
 
-        // If the tile is in the Sending state, don't speak the message.
-        const ariaLive = getAriaLive(this.props.eventSendStatus);
+        const lineClasses = classNames("mx_EventTile_line", eventTileSnapshot.line.classState);
+        const tileClasses = classNames(eventTileSnapshot.root.classState);
+        const tileAriaLive = eventTileSnapshot.root.ariaLive;
+        const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
@@ -1151,43 +1170,26 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
-        const scrollToken = getScrollToken(this.props.mxEvent);
+        const scrollToken = eventTileSnapshot.root.scrollToken;
 
         let avatar: JSX.Element | null = null;
         let sender: JSX.Element | null = null;
-        const { avatarSize, needsSenderProfile } = getEventTileSenderProfileState({
-            isRenderingNotification,
-            isInfoMessage,
-            timelineRenderingType: this.context.timelineRenderingType,
-            continuation: this.props.continuation,
-            eventType,
-            isBubbleMessage,
-            layout: this.props.layout,
-        });
+        const { avatarSize } = eventTileSnapshot.sender.profileState;
 
         if (this.props.mxEvent.sender && avatarSize !== null) {
-            const member = getEventTileAvatarMember(this.props.mxEvent);
-            const viewUserOnClick = getShouldViewUserOnClick(
-                this.props.inhibitInteraction,
-                this.context.timelineRenderingType,
-            );
             avatar = (
                 <div className="mx_EventTile_avatar">
                     <MemberAvatar
-                        member={member}
+                        member={eventTileSnapshot.sender.avatarMember}
                         size={avatarSize}
-                        viewUserOnClick={viewUserOnClick}
+                        viewUserOnClick={eventTileSnapshot.sender.viewUserOnClick}
                         forceHistorical={this.props.mxEvent.getType() === EventType.RoomMember}
                     />
                 </div>
             );
         }
 
-        const senderProfileMode = getSenderProfileMode({
-            needsSenderProfile,
-            hideSender: this.props.hideSender,
-            timelineRenderingType: this.context.timelineRenderingType,
-        });
+        const senderProfileMode = eventTileSnapshot.sender.profileMode;
         if (senderProfileMode === "clickable") {
             sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
         } else if (senderProfileMode === "tooltip") {
@@ -1196,15 +1198,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             sender = <SenderProfile mxEvent={this.props.mxEvent} />;
         }
 
-        const showMessageActionBar = getShouldShowMessageActionBar({
-            isEditing,
-            forExport: this.props.forExport,
-            hover: this.state.hover,
-            showActionBarFromFocus: this.state.showActionBarFromFocus,
-            actionBarFocused: this.state.actionBarFocused,
-            hasContextMenu: !!this.state.contextMenu,
-        });
-        const actionBar = showMessageActionBar ? (
+        const actionBar = eventTileSnapshot.actionBar.show ? (
             <ActionBarWrapper
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
@@ -1218,24 +1212,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         ) : undefined;
 
-        const showTimestamp = getShouldShowTimestamp({
-            eventTs: this.props.mxEvent.getTs(),
-            eventType,
-            hideTimestamp: this.props.hideTimestamp,
-            alwaysShowTimestamps: this.props.alwaysShowTimestamps,
-            last: this.props.last,
-            hover: this.state.hover,
-            focusWithin: this.state.focusWithin,
-            actionBarFocused: this.state.actionBarFocused,
-            hasContextMenu: Boolean(this.state.contextMenu),
-        });
-
         // Thread panel shows the timestamp of the last reply in that thread
-        const ts = getEventTileTimestamp({
-            timelineRenderingType: this.context.timelineRenderingType,
-            eventTs: this.props.mxEvent.getTs(),
-            threadReplyEventTs: this.state.thread?.replyToEvent?.getTs(),
-        });
+        const ts = eventTileSnapshot.timestamp.value;
 
         const messageTimestampProps: MessageTimestampViewModelProps = {
             showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
@@ -1253,24 +1231,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = getTimestampDisplayState({
-            layout: this.props.layout,
-            showTimestamp,
-            timestamp: ts,
-            hideTimestamp: this.props.hideTimestamp,
-        });
+        const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = eventTileSnapshot.timestamp.displayState;
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
         const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
         const timestamp = showRealTimestamp ? messageTimestamp : dummyTimestamp;
         const linkedTimestamp = showLinkedTimestamp ? linkedMessageTimestamp : dummyTimestamp;
 
         let pinnedMessageBadge: JSX.Element | undefined;
-        if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
+        if (hasPinnedMessageBadge) {
             pinnedMessageBadge = <PinnedMessageBadge aria-describedby={this.id} tabIndex={0} />;
         }
 
         let reactionsRow: JSX.Element | undefined;
-        if (!isRedacted) {
+        if (hasReactionsRow) {
             reactionsRow = (
                 <ReactionsRowWrapper
                     mxEvent={this.props.mxEvent}
@@ -1312,11 +1285,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
                     layout={this.props.layout}
-                    alwaysShowTimestamps={getReplyChainAlwaysShowTimestamps({
-                        alwaysShowTimestamps: this.props.alwaysShowTimestamps,
-                        hover: this.state.hover,
-                        focusWithin: this.state.focusWithin,
-                    })}
+                    alwaysShowTimestamps={eventTileSnapshot.replyChain.alwaysShowTimestamps}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
                     getRelationsForEvent={this.props.getRelationsForEvent}
@@ -1324,16 +1293,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        // Use `getSender()` because searched events might not have a proper `sender`.
-        const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
-
-        const { hasFooter, showMainPinnedMessageBadge, showBubblePinnedMessageBadge } = getFooterDisplayState({
-            hasReactionsRow: !!reactionsRow,
-            hasReactions: !!this.state.reactions,
-            hasPinnedMessageBadge: !!pinnedMessageBadge,
-            layout: this.props.layout,
-            isOwnEvent,
-        });
+        const { hasFooter, showMainPinnedMessageBadge, showBubblePinnedMessageBadge } = eventTileSnapshot.footer;
 
         switch (this.context.timelineRenderingType) {
             case TimelineRenderingType.Thread: {
@@ -1341,8 +1301,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     this.props.as || "li",
                     {
                         "ref": this.ref,
-                        "className": classes,
-                        "aria-live": ariaLive,
+                        "className": tileClasses,
+                        "aria-live": tileAriaLive,
                         "aria-atomic": true,
                         "data-scroll-tokens": scrollToken,
                         "data-has-reply": !!replyChain,
@@ -1403,9 +1363,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     this.props.as || "li",
                     {
                         "ref": this.ref,
-                        "className": classes,
+                        "className": tileClasses,
                         "tabIndex": -1,
-                        "aria-live": ariaLive,
+                        "aria-live": tileAriaLive,
                         "aria-atomic": "true",
                         "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
@@ -1491,8 +1451,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "className": classes,
-                        "aria-live": ariaLive,
+                        "className": tileClasses,
+                        "aria-live": tileAriaLive,
                         "aria-atomic": true,
                         "data-scroll-tokens": scrollToken,
                     },
@@ -1536,9 +1496,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     this.props.as || "li",
                     {
                         "ref": this.ref,
-                        "className": classes,
+                        "className": tileClasses,
                         "tabIndex": -1,
-                        "aria-live": ariaLive,
+                        "aria-live": tileAriaLive,
                         "aria-atomic": "true",
                         "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
@@ -1673,11 +1633,29 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
 export default SafeEventTile;
 
 function E2ePadlockUnencrypted(): JSX.Element {
-    return <E2ePadlock title={_t("common|unencrypted")} icon={E2ePadlockIcon.Warning} />;
+    return (
+        <E2ePadlock
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+            title={_t("common|unencrypted")}
+            icon={E2ePadlockIcon.Warning}
+        />
+    );
 }
 
 function E2ePadlockDecryptionFailure(): JSX.Element {
-    return <E2ePadlock title={_t("timeline|undecryptable_tooltip")} icon={E2ePadlockIcon.DecryptionFailure} />;
+    return (
+        <E2ePadlock
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+            title={_t("timeline|undecryptable_tooltip")}
+            icon={E2ePadlockIcon.DecryptionFailure}
+        />
+    );
 }
 
 interface ISentReceiptProps {

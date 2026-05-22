@@ -294,6 +294,23 @@ describe("<PinnedMessagesCard />", () => {
             await initPinnedMessagesCard([], [pin]);
             expect(screen.queryAllByRole("listitem")).toHaveLength(0);
         });
+
+        it("should filter out null events returned by useFetchedPinnedEvents and only display valid events", async () => {
+            // RoomCreate is not a pinnable event type — useFetchedPinnedEvents returns null for it
+            const unpinnableEvent = mkEvent({
+                event: true,
+                type: EventType.RoomCreate,
+                content: {},
+                room: "!room:example.org",
+                user: "@alice:example.org",
+            });
+            // pin1 is a valid pinnable message, unpinnableEvent causes useFetchedPinnedEvents to return null
+            // useSortedFetchedPinnedEvents must filter out the null, leaving only pin1
+            await initPinnedMessagesCard([pin1], [unpinnableEvent]);
+
+            await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(1));
+            expect(screen.getByText("First pinned message")).toBeInTheDocument();
+        });
     });
 
     describe("unpin all", () => {
