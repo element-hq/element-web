@@ -26,7 +26,6 @@ import {
     EventType,
     type MatrixEvent,
     MatrixEventEvent,
-    type NotificationCountType,
     type Relations,
     type RelationType,
     type Room,
@@ -109,6 +108,11 @@ import {
     getEventTileReceiptState,
     type EventTileReceiptState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
+import {
+    getEventTileThread,
+    getEventTileThreadState,
+    type EventTileThreadState,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -306,7 +310,6 @@ interface IState {
     isQuoteExpanded?: boolean;
 
     thread: Thread | null;
-    threadNotification?: NotificationCountType;
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
@@ -333,7 +336,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
-        const thread = this.thread;
+        const thread = getEventTileThread(
+            this.props.mxEvent,
+            MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId()),
+        );
 
         this.state = {
             interaction: initialEventTileInteractionState,
@@ -476,52 +482,46 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     };
 
-    private get thread(): Thread | null {
-        let thread: Thread | undefined = this.props.mxEvent.getThread();
-        /**
-         * Accessing the threads value through the room due to a race condition
-         * that will be solved when there are proper backend support for threads
-         * We currently have no reliable way to discover than an event is a thread
-         * when we are at the sync stage
-         */
-        if (!thread) {
-            const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
-            thread = room?.findThreadForEvent(this.props.mxEvent) ?? undefined;
-        }
-        return thread ?? null;
+    private get threadState(): EventTileThreadState {
+        return getEventTileThreadState({
+            mxEvent: this.props.mxEvent,
+            thread: this.state.thread,
+            timelineRenderingType: this.context.timelineRenderingType,
+            highlightLink: this.props.highlightLink,
+        });
     }
 
-    private renderThreadPanelSummary(): JSX.Element | null {
-        if (!this.state.thread) {
+    private renderThreadPanelSummary(threadState: EventTileThreadState): JSX.Element | null {
+        if (!threadState.shouldShowThreadPanelSummary || !threadState.thread) {
             return null;
         }
 
         return (
             <div className="mx_ThreadPanel_replies">
                 <ThreadsIcon />
-                <span className="mx_ThreadPanel_replies_amount">{this.state.thread.length}</span>
-                <ThreadMessagePreview thread={this.state.thread} />
+                <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
+                <ThreadMessagePreview thread={threadState.thread} />
             </div>
         );
     }
 
-    private renderThreadInfo(): React.ReactNode {
-        if (this.state.thread && this.state.thread.id === this.props.mxEvent.getId()) {
+    private renderThreadInfo(threadState: EventTileThreadState): React.ReactNode {
+        if (threadState.shouldShowThreadSummary && threadState.thread) {
             return (
-                <ThreadSummary mxEvent={this.props.mxEvent} thread={this.state.thread} data-testid="thread-summary" />
+                <ThreadSummary mxEvent={this.props.mxEvent} thread={threadState.thread} data-testid="thread-summary" />
             );
         }
 
-        if (this.context.timelineRenderingType === TimelineRenderingType.Search && this.props.mxEvent.threadRootId) {
-            if (this.props.highlightLink) {
-                return (
-                    <a className="mx_ThreadSummary_icon" href={this.props.highlightLink}>
-                        <ThreadsIcon />
-                        {_t("timeline|thread_info_basic")}
-                    </a>
-                );
-            }
+        if (threadState.searchThreadInfo.kind === "link") {
+            return (
+                <a className="mx_ThreadSummary_icon" href={threadState.searchThreadInfo.href}>
+                    <ThreadsIcon />
+                    {_t("timeline|thread_info_basic")}
+                </a>
+            );
+        }
 
+        if (threadState.searchThreadInfo.kind === "text") {
             return (
                 <p className="mx_ThreadSummary_icon">
                     <ThreadsIcon />
@@ -1051,6 +1051,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isEditing = !!this.props.editState;
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
+        const threadState = this.threadState;
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
@@ -1093,7 +1094,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             timestamp: {
                 alwaysShowTimestamps: this.props.alwaysShowTimestamps,
                 hideTimestamp: this.props.hideTimestamp,
-                threadReplyEventTs: this.state.thread?.replyToEvent?.getTs(),
+                threadReplyEventTs: threadState.threadReplyEventTs,
             },
             footer: {
                 isOwnEvent,
@@ -1380,7 +1381,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
                             </div>
-                            {this.renderThreadPanelSummary()}
+                            {this.renderThreadPanelSummary(threadState)}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
                             <ThreadListActionBarWrapper
@@ -1493,7 +1494,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                             {reactionsRow}
                                         </div>
                                     )}
-                                    {this.renderThreadInfo()}
+                                    {this.renderThreadInfo(threadState)}
                                 </>
                             )}
                         </div>
@@ -1506,7 +1507,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                         {showBubblePinnedMessageBadge && pinnedMessageBadge}
                                     </div>
                                 )}
-                                {this.renderThreadInfo()}
+                                {this.renderThreadInfo(threadState)}
                             </>
                         )}
                         {msgOption}
