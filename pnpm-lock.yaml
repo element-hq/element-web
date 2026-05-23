@@ -9998,7 +9998,7 @@ packages:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
   matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/793166b9cf971afd6dcfb8f37f07d17a232eefaa:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/793166b9cf971afd6dcfb8f37f07d17a232eefaa}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/793166b9cf971afd6dcfb8f37f07d17a232eefaa}
     version: 41.5.0
     engines: {node: '>=22.0.0'}
 
