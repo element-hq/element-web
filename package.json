@@ -92,7 +92,7 @@
             "matrix-widget-api": "^1.17.0",
             "@types/node": "18.19.130",
             "config-file-ts": "0.2.8-rc1",
-            "node-abi": "4.29.0",
+            "node-abi": "4.31.0",
             "@types/pg-pool": "2.0.7",
             "axios@>1.0.0 <=1.15.0": "1.15.2",
             "esbuild@<=0.24.2": "0.27.4",
