@@ -89,7 +89,7 @@ export class ResizerViewModel
         if (this.panelHandle?.isCollapsed()) {
             const lastSize = SettingsStore.getValue("RoomList.panelSize");
             this.panelHandle.resize(`${lastSize ?? 100}%`);
-        }
+        } else this.panelHandle?.collapse();
     };
 
     public onPointerUp = (): void => {
