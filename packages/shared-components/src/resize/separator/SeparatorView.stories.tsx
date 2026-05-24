@@ -116,7 +116,7 @@ export const KeyboardFocused: Story = {
     },
 };
 
-export const Hover: Story = {
+export const HoverWhenCollapsed: Story = {
     // We'll manually take a screenshot for this story
     tags: ["autodocs", "!snapshot"],
     decorators: [
@@ -127,6 +127,48 @@ export const Hover: Story = {
                 }}
             >
                 <ResizableGroup>
+                    <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
+                        <Flex tabIndex={0} align="center" justify="center">
+                            LEFT CONTENT
+                        </Flex>
+                    </Panel>
+                    <Story />
+                    <Panel>
+                        <Flex align="center" justify="center">
+                            MAIN CONTENT
+                        </Flex>
+                    </Panel>
+                </ResizableGroup>
+            </div>
+        ),
+    ],
+    play: async ({ canvas, canvasElement }) => {
+        const separator = canvas.getByRole("separator");
+        separator.dataset.separator = "hover";
+        await expect(canvasElement).toMatchImageSnapshot();
+    },
+};
+
+export const HoverWhenExpanded: Story = {
+    // We'll manually take a screenshot for this story
+    tags: ["autodocs", "!snapshot"],
+    args: {
+        isCollapsed: false,
+    },
+    decorators: [
+        (Story) => (
+            <div
+                style={{
+                    height: "600px",
+                }}
+            >
+                <ResizableGroup>
+                    <div
+                        style={{
+                            height: "600px",
+                            width: "200px",
+                        }}
+                    />
                     <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
                         <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT

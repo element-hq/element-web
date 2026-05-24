@@ -15,7 +15,7 @@ import * as stories from "./SeparatorView.stories";
 import { BaseViewModel } from "../../core/viewmodel";
 import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 
-const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);
+const { Default, LeftPanelExpanded, KeyboardFocused, HoverWhenCollapsed, HoverWhenExpanded } = composeStories(stories);
 
 class MockViewModel extends BaseViewModel<ResizerViewSnapshot, unknown> implements SeparatorViewActions {
     public constructor(snapshot: ResizerViewSnapshot) {
@@ -52,6 +52,16 @@ describe("<SeparatorView />", () => {
 
     it("renders KeyboardFocused story", () => {
         const { container } = render(<KeyboardFocused />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders HoverWhenCollapsed story", () => {
+        const { container } = render(<HoverWhenCollapsed />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders HoverWhenExpanded story", () => {
+        const { container } = render(<HoverWhenExpanded />);
         expect(container).toMatchSnapshot();
     });
 
