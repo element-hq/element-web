@@ -23,10 +23,10 @@ catalog:
     # fonts
     "@fontsource/inter": 5.2.8
     # vite
-    vite: 8.0.10
-    vitest: 4.1.5
+    vite: 8.0.14
+    vitest: 4.1.7
     vitest-sonar-reporter: 3.0.0
-    "@vitest/coverage-v8": 4.1.5
+    "@vitest/coverage-v8": 4.1.7
 packageExtensions:
     fdir:
         dependencies:
