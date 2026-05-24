@@ -7,7 +7,6 @@
 
 import { waitFor } from "jest-matrix-react";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
-import whatInput from "what-input";
 
 import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -27,7 +26,6 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: true,
                 initialSize: 0,
-                isFocusedViaKeyboard: false,
             });
         });
 
@@ -37,7 +35,6 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: 34,
-                isFocusedViaKeyboard: false,
             });
         });
 
@@ -46,7 +43,6 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: undefined,
-                isFocusedViaKeyboard: false,
             });
         });
     });
@@ -120,15 +116,6 @@ describe("LeftPanelResizerViewModel", () => {
 
             expect(mockHandle.resize).toHaveBeenCalledWith("100%");
         });
-    });
-
-    it("should set isFocusedViaKeyboard state correctly", () => {
-        whatInput.ask = jest.fn().mockReturnValue("keyboard");
-        const vm = new ResizerViewModel();
-        vm.onFocus();
-        expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(true);
-        vm.onBlur();
-        expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(false);
     });
 
     it("should resize to nearest whole number", () => {

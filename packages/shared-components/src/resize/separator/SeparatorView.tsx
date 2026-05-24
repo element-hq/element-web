@@ -43,14 +43,14 @@ interface Props {
  */
 export function SeparatorView({ vm, className }: Props): React.ReactNode {
     const { translate: _t } = useI18n();
-    const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
+    const { isCollapsed } = useViewModel(vm);
 
     /**
      * There are two types of separator:
      * - bar: This shows a thick bar separator with a resize icon in the middle; shown when the panel is collapsed.
      * - border: This is just a 1px wide separator; shown when the panel is expanded.
      */
-    const type = isCollapsed || isFocusedViaKeyboard ? "bar" : "border";
+    const type = isCollapsed ? "bar" : "border";
 
     const barContent = (
         <Tooltip description={_t("left_panel|separator_label")} placement="right">

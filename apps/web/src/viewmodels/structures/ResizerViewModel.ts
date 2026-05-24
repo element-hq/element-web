@@ -24,13 +24,11 @@ function getInitialState(): ResizerViewSnapshot {
         return {
             isCollapsed: true,
             initialSize: 0,
-            isFocusedViaKeyboard: false,
         };
     }
     return {
         isCollapsed: false,
         initialSize: SettingsStore.getValue("RoomList.panelSize") ?? undefined,
-        isFocusedViaKeyboard: false,
     };
 }
 

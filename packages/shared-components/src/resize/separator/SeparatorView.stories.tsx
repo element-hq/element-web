@@ -32,7 +32,6 @@ const meta = {
         onPointerMove: fn(),
         onPointerDown: fn(),
         isCollapsed: true,
-        isFocusedViaKeyboard: false,
     },
     parameters: {
         design: {
@@ -109,7 +108,6 @@ export const KeyboardFocused: Story = {
     decorators: [(Story) => commonDecorator(Story)],
     args: {
         isCollapsed: false,
-        isFocusedViaKeyboard: true,
     },
     play: async ({ canvas, canvasElement }) => {
         const separator = canvas.getByRole("separator");
