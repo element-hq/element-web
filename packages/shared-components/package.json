@@ -130,7 +130,7 @@
         "typescript": "catalog:",
         "unplugin-dts": "1.0.1",
         "vite": "catalog:",
-        "vite-plugin-node-polyfills": "^0.26.0",
+        "vite-plugin-node-polyfills": "^0.28.0",
         "vitest": "catalog:",
         "vitest-sonar-reporter": "catalog:"
     },
