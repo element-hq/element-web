@@ -21,8 +21,6 @@ class MockViewModel extends BaseViewModel<ResizerViewSnapshot, unknown> implemen
     public constructor(snapshot: ResizerViewSnapshot) {
         super(undefined, snapshot);
     }
-    public onBlur: () => void = vi.fn();
-    public onFocus: () => void = vi.fn();
     public onPointerUp: () => void = vi.fn();
     public onPointerMove: () => void = vi.fn();
     public onPointerDown: () => void = vi.fn();
@@ -63,14 +61,5 @@ describe("<SeparatorView />", () => {
         await userEvent.click(separator);
         expect(vm.onPointerDown).toHaveBeenCalledOnce();
         expect(vm.onPointerUp).toHaveBeenCalledOnce();
-    });
-
-    it("should call onFocus and onBlur when receiving/loosing focus", async () => {
-        const vm = renderPanel();
-        const separator = screen.getByRole("separator");
-        separator.focus();
-        expect(vm.onFocus).toHaveBeenCalled();
-        separator.blur();
-        expect(vm.onBlur).toHaveBeenCalled();
     });
 });
