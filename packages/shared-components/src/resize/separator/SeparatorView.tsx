@@ -85,6 +85,7 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
             onBlur={vm.onBlur}
             aria-label={_t("left_panel|separator_label")}
             data-separator-type={type}
+            disableDoubleClick
         >
             {type === "bar" ? barContent : null}
         </Separator>
