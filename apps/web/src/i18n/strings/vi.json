@@ -1120,8 +1120,8 @@
         "other": "Đang mời %(user)s và %(count)s người khác"
     },
     "items_and_n_others": {
-        "other": "<Items/> và %(count)s mục khác",
-        "one": "<Items/> và một mục khác"
+        "one": "<Items/> và một mục khác",
+        "other": "<Items/> và %(count)s mục khác"
     },
     "keyboard": {
         "activate_button": "Kích hoạt nút đã chọn",
@@ -1973,6 +1973,75 @@
         "emoji_autocomplete": "Cho phép gợi ý Emoji khi đánh máy",
         "enable_markdown": "Bật đánh dấu",
         "enable_markdown_description": "Bắt đầu tin nhắn với <code>/plain</code> để gửi mà không dùng Markdown.",
+        "encryption": {
+            "advanced": {
+                "breadcrumb_first_description": "Thông tin tài khoản, danh bạ, tuỳ chọn và danh sách cuộc trò chuyện sẽ được giữ lại",
+                "breadcrumb_page": "Đặt lại mã hoá",
+                "breadcrumb_second_description": "Bạn sẽ mất bất kỳ lịch sử tin nhắn nào chỉ được lưu trên máy chủ",
+                "breadcrumb_third_description": "Bạn sẽ cần xác thực lại tất cả các thiết bị và danh bạ hiện có",
+                "breadcrumb_title": "Bạn có chắc muốn đặt lại danh tính số của mình không?",
+                "breadcrumb_title_cant_confirm": "Bạn cần đặt lại danh tính số của mình",
+                "breadcrumb_title_forgot": "Quên khoá khôi phục? Bạn sẽ cần đặt lại danh tính số của mình.",
+                "breadcrumb_title_sync_failed": "Đồng bộ kho lưu trữ khoá không thành công. Bạn cần đặt lại danh tính số của mình.",
+                "breadcrumb_warning": "Chỉ làm điều này nếu bạn tin rằng tài khoản của mình đã bị xâm phạm.",
+                "details_title": "Chi tiết mã hoá",
+                "do_not_close_warning": "Không đóng cửa sổ này cho đến khi quá trình đặt lại hoàn tất",
+                "export_keys": "Xuất khoá",
+                "import_keys": "Nhập khoá",
+                "other_people_device_description": "Cảnh báo: người dùng chưa được bạn xác thực một cách rõ ràng (ví dụ bằng biểu tượng cảm xúc) sẽ không nhận được tin nhắn được mã hoá của bạn. Ngoài ra, các thiết bị chưa xác thực của người dùng đã xác thực cũng sẽ không nhận được tin nhắn được mã hoá của bạn. Các thay đổi yêu cầu khởi động lại ứng dụng để có hiệu lực.",
+                "other_people_device_label": "Trong các phòng được mã hoá, chỉ gửi tin nhắn đến những người dùng đã xác thực",
+                "other_people_device_title": "Thiết bị của người khác",
+                "reset_identity": "Đặt lại danh tính mã hoá",
+                "reset_in_progress": "Đang đặt lại...",
+                "session_id": "Định danh (ID) phiên:",
+                "session_key": "Khoá phiên:",
+                "title": "Nâng cao"
+            },
+            "confirm_key_storage_off": "Bạn có chắc muốn giữ kho lưu trữ khoá ở trạng thái tắt không?",
+            "confirm_key_storage_off_description": "Nếu bạn gỡ bỏ tất cả thiết bị, bạn sẽ mất lịch sử tin nhắn và sẽ cần xác thực lại tất cả các liên hệ hiện có. <a>Tìm hiểu thêm</a>",
+            "delete_key_storage": {
+                "breadcrumb_page": "Xoá kho lưu trữ khoá",
+                "confirm": "Xoá kho lưu trữ khoá",
+                "description": "Xoá kho lưu trữ khoá sẽ gỡ bỏ danh tính mã hoá và các khoá tin nhắn của bạn khỏi máy chủ và tắt các tính năng bảo mật sau:",
+                "list_first": "Bạn sẽ không có lịch sử tin nhắn được mã hoá trên các thiết bị mới",
+                "list_second": "Bạn sẽ mất quyền truy cập vào các tin nhắn được mã hoá nếu bạn không đăng nhập trên bất kỳ thiết bị nào",
+                "title": "Bạn có chắc muốn tắt kho lưu trữ khoá và xoá nó không?"
+            },
+            "device_not_verified_button": "Xác thực thiết bị này",
+            "device_not_verified_description": "Bạn cần xác thực thiết bị này để xem cài đặt mã hoá.",
+            "device_not_verified_title": "Thiết bị chưa được xác thực",
+            "dialog_title": "<strong>Cài đặt:</strong> Mã hoá",
+            "key_storage": {
+                "allow_key_storage": "Cho phép lưu trữ khoá",
+                "description": "Điều này sẽ cho phép bạn xem lịch sử trò chuyện trên bất kỳ thiết bị mới nào và bắt buộc để sao lưu các cuộc trò chuyện và danh tính số. <a>Tìm hiểu thêm</a>",
+                "title": "Kho lưu trữ khoá"
+            },
+            "recovery": {
+                "change_recovery_confirm_button": "Xác nhận khoá khôi phục mới",
+                "change_recovery_confirm_description": "Nhập khoá khôi phục mới của bạn ở dưới để hoàn tất. Khoá cũ sẽ không còn hoạt động.",
+                "change_recovery_confirm_title": "Nhập khoá khôi phục mới của bạn",
+                "change_recovery_key": "Đổi khoá khôi phục",
+                "change_recovery_key_description": "Hãy ghi lại khoá khôi phục mới này ở một nơi an toàn. Sau đó nhấn Tiếp tục để xác nhận thay đổi.",
+                "change_recovery_key_title": "Đổi khoá khôi phục?",
+                "description": "Các cuộc trò chuyện của bạn được tự động sao lưu bằng mã hoá đầu cuối. Để khôi phục bản sao lưu này và giữ lại danh tính số khi bạn mất quyền truy cập vào tất cả các thiết bị, bạn sẽ cần khoá khôi phục.",
+                "enter_key_error": "Khoá khôi phục bạn nhập không chính xác.",
+                "enter_recovery_key": "Nhập khoá khôi phục",
+                "forgot_recovery_key": "Quên khoá khôi phục?",
+                "key_storage_warning": "Kho lưu trữ khoá của bạn không đồng bộ. Nhấn một trong các nút bên dưới để khắc phục sự cố.",
+                "save_key_description": "Không chia sẻ điều này với bất kỳ ai!",
+                "save_key_title": "Khoá khôi phục",
+                "set_up_recovery": "Nhận khoá khôi phục",
+                "set_up_recovery_confirm_button": "Hoàn tất thiết lập",
+                "set_up_recovery_confirm_description": "Nhập khoá khôi phục được hiển thị ở màn hình trước để hoàn tất thiết lập khôi phục.",
+                "set_up_recovery_confirm_title": "Nhập khoá khôi phục của bạn để xác nhận",
+                "set_up_recovery_description": "Kho lưu trữ khoá của bạn được bảo vệ bằng khoá khôi phục. Nếu bạn cần một khoá khôi phục mới sau khi thiết lập, bạn có thể tạo lại bằng cách chọn “%(changeRecoveryKeyButton)s”.",
+                "set_up_recovery_save_key_description": "Hãy ghi lại khoá khôi phục này ở một nơi an toàn, như trình quản lý mật khẩu, ghi chú được mã hoá, hoặc két sắt vật lý.",
+                "set_up_recovery_save_key_title": "Lưu khoá khôi phục của bạn ở một nơi an toàn",
+                "set_up_recovery_secondary_description": "Sau khi nhấn tiếp tục, chúng tôi sẽ tạo một khoá khôi phục cho bạn.",
+                "title": "Sao lưu"
+            },
+            "title": "Mã hoá"
+        },
         "general": {
             "account_management_section": "Quản lý tài khoản",
             "account_section": "Tài khoản",
@@ -2149,9 +2218,13 @@
         "prompt_invite": "Nhắc trước khi gửi lời mời đến các ID Matrix có khả năng không hợp lệ",
         "replace_plain_emoji": "Tự động thay thế hình biểu tượng",
         "security": {
+            "analytics_description": "Chia sẻ dữ liệu ẩn danh để giúp chúng tôi xác định các sự cố. Không có thông tin cá nhân. Không có bên thứ ba.",
             "bulk_options_accept_all_invites": "Chấp nhận tất cả các lời mời từ %(invitedRooms)s",
             "bulk_options_reject_all_invites": "Từ chối tất cả lời mời từ %(invitedRooms)s",
             "bulk_options_section": "Tùy chọn hàng loạt",
+            "dehydrated_device_description": "Tính năng thiết bị ngoại tuyến cho phép bạn nhận các tin nhắn được mã hoá ngay cả khi bạn không đăng nhập trên bất kỳ thiết bị nào",
+            "dehydrated_device_enabled": "Đã bật thiết bị ngoại tuyến",
+            "dialog_title": "<strong>Cài đặt:</strong> Bảo mật & Riêng tư",
             "e2ee_default_disabled_warning": "Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.",
             "enable_message_search": "Bật tính năng tìm kiếm tin nhắn trong các phòng được mã hóa",
             "encryption_section": "Mã hóa",
@@ -2170,6 +2243,7 @@
             "message_search_indexing": "Hiện đang lập chỉ mục: %(currentRoom)s",
             "message_search_indexing_idle": "Hiện không lập chỉ mục tin nhắn cho bất kỳ phòng nào.",
             "message_search_intro": "%(brand)s đang lưu trữ cục bộ an toàn các tin nhắn được mã hóa để chúng xuất hiện trong kết quả tìm kiếm:",
+            "message_search_pending_rooms": "Các phòng đang chờ lập chỉ mục: %(pendingRooms)s",
             "message_search_room_progress": "%(doneRooms)s trong số %(totalRooms)s",
             "message_search_section": "Tìm kiếm tin nhắn",
             "message_search_sleep_time": "Tin nhắn sẽ được tải xuống nhanh như thế nào.",
@@ -2184,6 +2258,7 @@
         "send_read_receipts_unsupported": "Máy chủ của bạn không hỗ trợ tắt gửi thông báo đã học.",
         "send_typing_notifications": "Gửi thông báo đang gõ tin nhắn",
         "sessions": {
+            "best_security_note": "Để bảo mật tốt nhất, hãy xác thực các phiên của bạn và xoá bỏ bất kỳ phiên nào mà bạn không nhận ra hay không còn sử dụng nữa.",
             "browser": "Trình duyệt",
             "confirm_sign_out": {
                 "one": "Xác nhận đăng xuất khỏi thiết bị này",
@@ -2208,6 +2283,9 @@
             "device_unverified_description_current": "Xác thực phiên hiện tại để nhắn tin bảo mật tốt hơn.",
             "device_verified_description": "Phiên này sẵn sàng nhắn tin bảo mật.",
             "device_verified_description_current": "Phiên hiện tại của bạn sẵn sàng nhắn tin bảo mật.",
+            "dialog_title": "<strong>Cài đặt:</strong> Các phiên",
+            "error_pusher_state": "Đặt trạng thái pusher không thành công",
+            "error_set_name": "Đặt tên phiên không thành công",
             "filter_all": "Tất cả",
             "filter_inactive": "Không hoạt động",
             "filter_inactive_description": "Không hoạt động trong %(inactiveAgeDays)s ngày hoặc lâu hơn",
@@ -2222,10 +2300,11 @@
             "inactive_sessions_list_description": "Hãy xem xét đăng xuất khỏi các phiên cũ (%(inactiveAgeDays)s ngày hoặc lâu hơn) mà bạn không dùng nữa.",
             "ip": "Địa chỉ Internet (IP)",
             "last_activity": "Hoạt động cuối",
+            "manage": "Quản lý phiên này",
             "mobile_session": "Phiên trên điện thoại",
             "n_sessions_selected": {
-                "other": "%(count)s phiên đã chọn",
-                "one": "%(count)s phiên đã chọn"
+                "one": "%(count)s phiên đã chọn",
+                "other": "%(count)s phiên đã chọn"
             },
             "no_inactive_sessions": "Không thấy phiên không hoạt động nào.",
             "no_sessions": "Không thấy phiên nào.",
@@ -2248,6 +2327,7 @@
             "sign_in_with_qr": "Đăng nhập bằng mã QR",
             "sign_in_with_qr_button": "Hiện mã QR",
             "sign_in_with_qr_description": "Bạn có thể dùng thiết bị này để đăng nhập vào một thiết bị mới bằng mã QR. Bạn cần quét mã QR hiển thị trên thiết bị này với thiết bị mà đã đăng xuất.",
+            "sign_in_with_qr_unsupported": "Không được hỗ trợ bởi nhà cung cấp tài khoản của bạn",
             "sign_out": "Đăng xuất phiên",
             "sign_out_all_other_sessions": "Đăng xuất khỏi mọi phiên khác (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2255,8 +2335,8 @@
                 "other": "Bạn có muốn đăng xuất %(count)s phiên?"
             },
             "sign_out_n_sessions": {
-                "other": "Đăng xuất khỏi %(count)s phiên",
-                "one": "Đăng xuất khỏi %(count)s phiên"
+                "one": "Đăng xuất khỏi %(count)s phiên",
+                "other": "Đăng xuất khỏi %(count)s phiên"
             },
             "title": "Các phiên",
             "unknown_session": "Không rõ loại phiên",
@@ -2841,8 +2921,8 @@
             },
             "format": "%(nameList)s%(transitionList)s",
             "hidden_event": {
-                "other": "%(oneUser)sgửi %(count)s tin nhắn ẩn",
-                "one": "%(oneUser)sgửi một tin nhắn ẩn"
+                "one": "%(oneUser)sgửi một tin nhắn ẩn",
+                "other": "%(oneUser)sgửi %(count)s tin nhắn ẩn"
             },
             "hidden_event_multiple": {
                 "one": "%(severalUsers)sgửi một tin nhắn ẩn",
@@ -2897,16 +2977,16 @@
                 "other": "%(severalUsers)s không thay đổi %(count)s lần"
             },
             "pinned_events": {
-                "other": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần",
-                "one": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng"
+                "one": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
+                "other": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần"
             },
             "pinned_events_multiple": {
                 "one": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
                 "other": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần"
             },
             "redacted": {
-                "other": "%(oneUser)sxóa %(count)s tin nhắn",
-                "one": "%(oneUser)sxóa một tin nhắn"
+                "one": "%(oneUser)sxóa một tin nhắn",
+                "other": "%(oneUser)sxóa %(count)s tin nhắn"
             },
             "redacted_multiple": {
                 "one": "%(severalUsers)sxóa một tin nhắn",
@@ -2939,8 +3019,8 @@
         },
         "typing_indicator": {
             "more_users": {
-                "other": "%(names)s và %(count)s người khác đang gõ …",
-                "one": "%(names)s và một người khác đang gõ …"
+                "one": "%(names)s và một người khác đang gõ …",
+                "other": "%(names)s và %(count)s người khác đang gõ …"
             },
             "one_user": "%(displayName)s đang gõ …",
             "two_users": "%(names)s và %(lastPerson)s đang gõ …"
