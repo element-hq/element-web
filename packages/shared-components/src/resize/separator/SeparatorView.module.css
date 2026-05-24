@@ -28,3 +28,50 @@
 .separator:focus-visible {
     background: var(--cpd-color-bg-action-tertiary-hovered);
 }
+
+/* When type=bar and the user hovers/focuses the separator, we show a thicker separator */
+.separator[data-separator-type="border"]:is([data-separator="hover"], [data-separator="active"]),
+.separator[data-separator-type="border"]:focus-visible {
+    /* We set the separator container to relative so that the child container (activeSeparatorContainer)
+    can be absolutely positioned */
+    position: relative;
+
+    /* Disable the browser outline on focus */
+    outline: none;
+
+    display: flex;
+    justify-content: center;
+
+    .activeSeparatorContainer {
+        /* This is hidden by default, make it visible on hover/focus */
+        display: flex;
+        justify-content: center;
+    }
+}
+
+/* Container for the green separator */
+.activeSeparatorContainer {
+    display: none;
+
+    /*
+    This container is absolutely position for two reasons:
+    1. By putting this container on a separate layer, we can position the thicker 2px separator
+       on top of the previous location of the thinner 1px separator. This ensures that the panels
+       don't change their width and leads to a more polished experience.
+    2. This container also has a width that covers the entire hit region between the panels.
+       This allows all the pointer events in the hit region to be captured (instead of just capturing
+       the pointer events within the 2px separator).
+    */
+    position: absolute;
+    width: 20px;
+    z-index: 100;
+
+    height: 100%;
+}
+
+/* This is the green separator shown on hover/focus */
+.activeSeparator {
+    width: 0px;
+    border-right: 2px solid var(--cpd-color-border-accent-primary);
+    outline: none;
+}

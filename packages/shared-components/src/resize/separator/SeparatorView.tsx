@@ -65,6 +65,19 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
         </Tooltip>
     );
 
+    /**
+     * When rendering the border separator, we replace the regular 1px separator with a thicker
+     * green separator when:
+     * - the user hovers over the hit region (i.e the area at the edge of the panel
+     *  from where you can start resizing the panel).
+     * - the user focuses the separator through keyboard navigation.
+     */
+    const focusedBorder = (
+        <div className={styles.activeSeparatorContainer}>
+            <div className={styles.activeSeparator} />
+        </div>
+    );
+
     return (
         <Separator
             className={classNames(styles.separator, className)}
@@ -76,6 +89,7 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
             disableDoubleClick
         >
             {type === "bar" ? barContent : null}
+            {focusedBorder}
         </Separator>
     );
 }
