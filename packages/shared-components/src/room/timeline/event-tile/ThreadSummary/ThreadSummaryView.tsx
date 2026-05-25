@@ -8,7 +8,6 @@
  */
 
 import React, { type ComponentPropsWithoutRef, type JSX, type MouseEventHandler, type ReactNode } from "react";
-import cx from "classnames";
 import { Avatar, IndicatorIcon, Tooltip } from "@vector-im/compound-web";
 import { ChevronRightIcon, ThreadsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -131,6 +130,7 @@ export function ThreadMessagePreviewView({ vm }: Readonly<ThreadMessagePreviewVi
     }
 
     const content = <span className={styles.content}>{previewContent}</span>;
+    const avatarClassName = avatar?.className ? `${styles.avatar} ${avatar.className}` : styles.avatar;
 
     return (
         <>
@@ -143,7 +143,7 @@ export function ThreadMessagePreviewView({ vm }: Readonly<ThreadMessagePreviewVi
                     aria-label={avatar.label}
                     type="round"
                     size="24px"
-                    className={cx(styles.avatar, avatar.className)}
+                    className={avatarClassName}
                 />
             )}
             {showDisplayName && senderName && <div className={styles.sender}>{senderName}</div>}
@@ -164,13 +164,15 @@ export function ThreadSummaryView({
         return <></>;
     }
 
+    const buttonClassName = [styles.threadSummary, className, narrow ? styles.narrow : undefined]
+        .filter(Boolean)
+        .join(" ");
+
     return (
         <button
             {...props}
             type={type}
-            className={cx(styles.threadSummary, className, {
-                [styles.narrow]: narrow,
-            })}
+            className={buttonClassName}
             onClick={vm.onClick}
             aria-label={openThreadLabel}
         >
