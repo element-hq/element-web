@@ -56,7 +56,7 @@ test.describe("Cryptography", function () {
                     "This message could not be decrypted",
                 );
                 await expect(lastTile).toMatchScreenshot("history-not-available.png", {
-                    mask: [page.locator(".mx_MessageTimestamp")],
+                    mask: [page.locator(".mx_EventTile_timestamp")],
                 });
 
                 // Now, we set up key backup, and then send another message.

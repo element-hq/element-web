@@ -489,7 +489,7 @@ describe("EventTile", () => {
 
         it("renders a placeholder timestamp in IRC layout", () => {
             const { container } = getComponent({ layout: Layout.IRC });
-            const timestamp = container.querySelector(".mx_MessageTimestamp");
+            const timestamp = container.querySelector(".mx_EventTile_timestamp");
 
             expect(timestamp).not.toBeNull();
             expect(timestamp?.tagName).toBe("SPAN");

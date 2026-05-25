@@ -83,7 +83,7 @@ test.describe("Appearance user settings tab", () => {
 
             await app.closeDialog();
             await expect(page).toMatchScreenshot("window-before-switch.png", {
-                mask: [page.locator(".mx_MessageTimestamp")],
+                mask: [page.locator(".mx_EventTile_timestamp")],
             });
 
             // Switch to dark theme
@@ -94,7 +94,7 @@ test.describe("Appearance user settings tab", () => {
             await app.closeDialog();
             // Font and emoji should remain the same after theme switch
             await expect(page).toMatchScreenshot("window-after-switch.png", {
-                mask: [page.locator(".mx_MessageTimestamp")],
+                mask: [page.locator(".mx_EventTile_timestamp")],
             });
         },
     );

@@ -408,7 +408,7 @@ test.describe("Timeline", () => {
                 ).toHaveCSS("padding-inline-start", "150px");
                 // Check width and spacing values of elements in .mx_EventTile, which should be equal to 150px
                 // --right-padding should be applied
-                for (const locator of await page.locator(".mx_EventTile > a").all()) {
+                for (const locator of await page.locator(".mx_EventTile > .mx_EventTile_timestamp").all()) {
                     if (await locator.isVisible()) {
                         await expect(locator).toHaveCSS("margin-right", "5px");
                     }
@@ -423,7 +423,7 @@ test.describe("Timeline", () => {
                     await expect(locator).toHaveCSS("width", "14px");
                 }
                 // var(--MessageTimestamp-width) should be applied
-                for (const locator of await page.locator(".mx_EventTile > a").all()) {
+                for (const locator of await page.locator(".mx_EventTile > .mx_EventTile_timestamp").all()) {
                     await expect(locator).toHaveCSS("min-width", "46px");
                 }
                 // Record alignment of collapsed GELS and messages on messagePanel
@@ -432,7 +432,7 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp from snapshot of mx_RoomView_timeline
                         css: `
-                            .mx_MessageTimestamp {
+                            .mx_EventTile_timestamp {
                                 visibility: hidden;
                             }
                         `,
@@ -455,7 +455,7 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp from snapshot of mx_RoomView_timeline
                         css: `
-                            .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                            .mx_EventTile_timestamp,.mx_TopUnreadMessagesBar {
                                 visibility: hidden;
                             }
                         `,
@@ -484,7 +484,7 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp from snapshot of mx_RoomView_timeline
                         css: `
-                            .mx_MessageTimestamp {
+                            .mx_EventTile_timestamp {
                                 visibility: hidden;
                             }
                         `,
@@ -518,7 +518,7 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp from snapshot of mx_RoomView_timeline
                         css: `
-                        .mx_MessageTimestamp {
+                        .mx_EventTile_timestamp {
                             visibility: hidden;
                         }
                     `,

@@ -99,7 +99,7 @@ test.describe("Editing", () => {
             // Assert CSS styles which are difficult or cannot be detected with snapshots are applied as expected
             await expect(li).toHaveCSS("clear", "both");
 
-            const timestamp = li.locator(".mx_EventTile .mx_MessageTimestamp");
+            const timestamp = li.locator(".mx_EventTile .mx_EventTile_timestamp");
             await expect(timestamp).toHaveCSS("position", "absolute");
             await expect(timestamp).toHaveCSS("inset-inline-start", "0px");
             await expect(timestamp).toHaveCSS("text-align", "center");
