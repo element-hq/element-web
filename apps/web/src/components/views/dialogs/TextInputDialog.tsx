@@ -25,6 +25,7 @@ interface IProps {
     hasCancel: boolean;
     validator?: (fieldState: IFieldState) => Promise<IValidationResult>; // result of withValidation
     fixedWidth?: boolean;
+    primaryButtonClass?: string;
     onFinished(ok?: false, text?: void): void;
     onFinished(ok: true, text: string): void;
 }
@@ -128,6 +129,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
                 </form>
                 <DialogButtons
                     primaryButton={this.state.busy ? _t(this.props.busyMessage) : this.props.button}
+                    primaryButtonClass={this.props.primaryButtonClass}
                     disabled={this.state.busy}
                     onPrimaryButtonClick={this.onOk}
                     onCancel={this.onCancel}

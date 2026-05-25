@@ -39,6 +39,7 @@ export default class ConfirmRedactDialog extends React.Component<IProps> {
                 placeholder={_t("redact|reason_label")}
                 focus
                 button={_t("action|remove")}
+                primaryButtonClass="danger"
             />
         );
     }
