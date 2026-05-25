@@ -169,13 +169,7 @@ export function ThreadSummaryView({
         .join(" ");
 
     return (
-        <button
-            {...props}
-            type={type}
-            className={buttonClassName}
-            onClick={vm.onClick}
-            aria-label={openThreadLabel}
-        >
+        <button {...props} type={type} className={buttonClassName} onClick={vm.onClick} aria-label={openThreadLabel}>
             <IndicatorIcon size="24px" indicator={notificationIndicator} className={styles.threadIcon}>
                 <ThreadsSolidIcon />
             </IndicatorIcon>
