@@ -7,7 +7,10 @@
 
 import React, { memo, type JSX, type FocusEvent, type MouseEventHandler } from "react";
 import classNames from "classnames";
-import { useDroppable } from "@dnd-kit/react";
+import { useDraggable, useDragOperation, useDroppable } from "@dnd-kit/react";
+import { Feedback } from "@dnd-kit/dom";
+import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
+import { useMergeRefs } from "react-merge-refs";
 
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
@@ -100,37 +103,49 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const { id, title, isExpanded, isUnread } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
-    const { ref, isDropTarget } = useDroppable({
+    const { ref: draggableRef, handleRef } = useDraggable({
         id,
+        data: { type: "section" },
+        plugins: [Feedback.configure({ feedback: "clone" })],
+        modifiers: [RestrictToVerticalAxis],
     });
+    const { ref: droppableRef, isDropTarget } = useDroppable({ id });
+    const { source } = useDragOperation();
+    const isDraggingSection = (source?.data as { type?: string })?.type === "section";
 
+    const buttonRef = useMergeRefs([draggableRef, handleRef, droppableRef]) as React.Ref<HTMLButtonElement>;
     return (
         <div
             aria-expanded={isExpanded}
             {...getGroupHeaderAccessibleProps(indexInList, sectionIndex, roomCountInSection)}
         >
-            <button
-                ref={ref}
-                type="button"
-                role="gridcell"
-                className={classNames(styles.header, {
-                    [styles.firstHeader]: sectionIndex === 0,
-                    // If the section is collapsed and it's the last one
-                    [styles.lastHeader]: !isExpanded && isLastSection,
-                    [styles.unread]: isUnread,
-                })}
-                onClick={vm.onClick}
-                aria-expanded={isExpanded}
-                onFocus={(e) => onFocus(id, e)}
-                tabIndex={isFocused ? 0 : -1}
-                aria-label={
-                    isUnread
-                        ? _t("room_list|section_header|toggle_unread", { section: title })
-                        : _t("room_list|section_header|toggle", { section: title })
-                }
-            >
-                <RoomListSectionHeaderContent vm={vm} isDropTarget={isDropTarget} />
-            </button>
+            <div role="gridcell" aria-expanded={isExpanded}>
+                <button
+                    ref={buttonRef}
+                    type="button"
+                    className={classNames(styles.header, {
+                        [styles.firstHeader]: sectionIndex === 0,
+                        // If the section is collapsed and it's the last one
+                        [styles.lastHeader]: !isExpanded && isLastSection,
+                        [styles.unread]: isUnread,
+                    })}
+                    onClick={vm.onClick}
+                    aria-expanded={isExpanded}
+                    onFocus={(e) => onFocus(id, e)}
+                    tabIndex={isFocused ? 0 : -1}
+                    aria-label={
+                        isUnread
+                            ? _t("room_list|section_header|toggle_unread", { section: title })
+                            : _t("room_list|section_header|toggle", { section: title })
+                    }
+                >
+                    <RoomListSectionHeaderContent
+                        vm={vm}
+                        isDraggingSection={isDraggingSection}
+                        isDropTarget={isDropTarget}
+                    />
+                </button>
+            </div>
         </div>
     );
 });

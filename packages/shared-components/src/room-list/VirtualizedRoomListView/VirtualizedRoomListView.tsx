@@ -22,6 +22,7 @@ import {
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
 import styles from "./VirtualizedRoomListView.module.css";
@@ -389,12 +390,23 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
 
     return (
         <DragDropProvider
+            onDragStart={(event) => {
+                const { source } = event.operation;
+                if ((source?.data as { type?: string })?.type === "section") {
+                    vm.onSectionDragStart();
+                }
+            }}
             onDragEnd={(event) => {
-                if (event.canceled) return;
-                const { target, source } = event.operation;
-                if (!source || !target) return;
-
-                vm.changeRoomSection(source.id as string, target.id as string);
+                const { source, target } = event.operation;
+                if ((source?.data as { type?: string })?.type === "section") {
+                    vm.onSectionDragEnd();
+                }
+                if (event.canceled || !source || !target) return;
+                if ((source.data as { type?: string })?.type === "section") {
+                    vm.changeSectionOrder(source.id as string, target.id as string);
+                } else {
+                    vm.changeRoomSection(source.id as string, target.id as string);
+                }
             }}
             sensors={[
                 // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
@@ -457,6 +469,11 @@ interface DragOverlayContentProps {
 function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
     const { source } = useDragOperation();
     if (!source) return null;
+
+    if ((source.data as { type?: string })?.type === "section") {
+        const sectionHeaderVM = vm.getSectionHeaderViewModel(source.id as string);
+        return <RoomListSectionHeaderDragOverlayView vm={sectionHeaderVM} />;
+    }
 
     const itemVm = vm.getRoomItemViewModel(source.id as string);
     if (!itemVm) return null;

@@ -23,22 +23,31 @@ import styles from "./RoomListSectionHeaderView.module.css";
 export interface RoomListSectionHeaderContentProps {
     /** The section header view model */
     vm: RoomListSectionHeaderViewModel;
+    /** Whether the section header is being dragged — hides the interactive menu when true */
+    isDragging?: boolean;
     /** Whether the section header is a drop target */
     isDropTarget?: boolean;
+    /** Whether the section header is a drop target for another section */
+    isDraggingSection?: boolean;
 }
 
 /**
- * The inner content of a section header: chevron, title, and menu.
+ * The inner content of a section header: chevron, title, and menu (or static menu icon when dragging).
+ * Used both inside the full {@link RoomListSectionHeaderView} and inside the drag overlay.
  */
 export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderContent({
     vm,
+    isDragging = false,
     isDropTarget = false,
+    isDraggingSection = false,
 }: RoomListSectionHeaderContentProps): JSX.Element {
     const { title, displaySectionMenu } = useViewModel(vm);
     return (
         <Flex
             className={classNames(styles.container, {
-                [styles.dropTarget]: isDropTarget,
+                [styles.border]: isDropTarget && !isDraggingSection,
+                [styles.dragging]: isDragging,
+                [styles.borderBottom]: isDropTarget && isDraggingSection,
             })}
             align="center"
             justify="space-between"
@@ -53,7 +62,7 @@ export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderC
                 />
                 <span className={styles.title}>{title}</span>
             </Flex>
-            {displaySectionMenu && <MenuComponent vm={vm} />}
+            {displaySectionMenu && !isDragging && <MenuComponent vm={vm} />}
         </Flex>
     );
 });
