@@ -68,11 +68,11 @@ $left-gutter: 64px;
 
     .mx_EventTile_timestamp {
         position: relative;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         width: var(--MessageTimestamp-width);
         flex: 0 0 var(--MessageTimestamp-width);
         white-space: nowrap;
-        line-height: 0;
 
         > .mx_MessageTimestamp {
             width: auto;
@@ -269,7 +269,13 @@ $left-gutter: 64px;
 
         .mx_EventTile_timestamp {
             min-width: var(--MessageTimestamp-width); /* ensure space for EventTile without timestamp */
+            justify-content: flex-end;
+            line-height: var(--irc-line-height);
             text-align: right;
+
+            > .mx_MessageTimestamp {
+                line-height: inherit;
+            }
         }
 
         > * {
@@ -487,7 +493,13 @@ $left-gutter: 64px;
         .mx_EventTile_timestamp {
             position: absolute;
             left: 0;
+            justify-content: center;
+            line-height: var(--EventTile_group_line-line-height);
             text-align: center;
+
+            > .mx_MessageTimestamp {
+                line-height: inherit;
+            }
         }
 
         .mx_ThreadSummary,
