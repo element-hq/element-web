@@ -91,9 +91,12 @@ Please see LICENSE files in the repository root for full details.
                 max-width: unset;
             }
 
-            .mx_MessageTimestamp {
+            .mx_EventTile_timestamp {
                 inset-inline: auto 0;
-                font-size: $font-12px;
+
+                > .mx_MessageTimestamp {
+                    font-size: $font-12px;
+                }
             }
 
             .mx_ReactionsRow {
@@ -109,7 +112,7 @@ Please see LICENSE files in the repository root for full details.
 
         &[data-layout="irc"] {
             .mx_EventTile_avatar,
-            .mx_MessageTimestamp {
+            .mx_EventTile_timestamp {
                 position: absolute;
             }
         }

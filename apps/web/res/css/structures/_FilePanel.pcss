@@ -65,10 +65,13 @@ Please see LICENSE files in the repository root for full details.
                     color: $event-timestamp-color; /* for ellipsis. Color of displayName and mxid is inherited */
                 }
 
-                .mx_MessageTimestamp {
+                .mx_EventTile_timestamp {
                     margin-left: auto;
-                    font: var(--cpd-font-body-xs-regular);
-                    color: var(--cpd-color-text-secondary);
+
+                    > .mx_MessageTimestamp {
+                        font: var(--cpd-font-body-xs-regular);
+                        color: var(--cpd-color-text-secondary);
+                    }
                 }
             }
         }

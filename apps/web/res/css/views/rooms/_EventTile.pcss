@@ -66,11 +66,24 @@ $left-gutter: 64px;
         }
     }
 
-    .mx_MessageTimestamp_lateIcon {
-        position: absolute;
-        right: 100%;
-        top: var(--cpd-space-1x);
-        color: var(--cpd-color-text-secondary);
+    .mx_EventTile_timestamp {
+        position: relative;
+        display: inline-block;
+        width: var(--MessageTimestamp-width);
+        flex: 0 0 var(--MessageTimestamp-width);
+        white-space: nowrap;
+
+        > .mx_MessageTimestamp {
+            width: auto;
+            display: inline-block;
+        }
+
+        .mx_MessageTimestamp_lateIcon {
+            position: absolute;
+            right: 100%;
+            top: var(--cpd-space-1x);
+            color: var(--cpd-color-text-secondary);
+        }
     }
 
     .mx_EventTileBubble {
@@ -141,7 +154,7 @@ $left-gutter: 64px;
         }
     }
 
-    &.mx_EventTile_isEditing .mx_MessageTimestamp {
+    &.mx_EventTile_isEditing .mx_EventTile_timestamp {
         visibility: hidden;
     }
 
@@ -253,7 +266,7 @@ $left-gutter: 64px;
         align-items: flex-start;
         padding-top: 0;
 
-        .mx_MessageTimestamp {
+        .mx_EventTile_timestamp {
             min-width: var(--MessageTimestamp-width); /* ensure space for EventTile without timestamp */
             text-align: right;
         }
@@ -470,7 +483,7 @@ $left-gutter: 64px;
             }
         }
 
-        .mx_MessageTimestamp {
+        .mx_EventTile_timestamp {
             position: absolute;
             left: 0;
             text-align: center;
@@ -542,7 +555,7 @@ $left-gutter: 64px;
                 /* 20px: avatar area */
                 padding-inline-start: calc(var(--EventTile_group_line-spacing-inline-start) + 20px);
 
-                .mx_MessageTimestamp {
+                .mx_EventTile_timestamp {
                     top: 0;
                 }
             }
@@ -1029,13 +1042,19 @@ $left-gutter: 64px;
         padding-inline-start: var(--leftOffset);
     }
 
-    .mx_MessageTimestamp {
-        font-size: $font-12px;
+    .mx_EventTile_timestamp {
         width: unset; /* Cancel the default width */
+        flex: 0 1 auto;
         overflow: hidden; /* ensure correct overflow behavior */
         text-overflow: ellipsis;
         position: initial;
         margin-left: auto; /* to ensure it's end-aligned even if it's the only element of its parent */
+
+        > .mx_MessageTimestamp {
+            font-size: $font-12px;
+            overflow: hidden; /* ensure correct overflow behavior */
+            text-overflow: ellipsis;
+        }
     }
 
     &:hover {
@@ -1123,7 +1142,7 @@ $left-gutter: 64px;
                     z-index: 9; /* position above the hover styling */
                 }
 
-                .mx_MessageTimestamp {
+                .mx_EventTile_timestamp {
                     top: 2px; /* Align with avatar */
                 }
 
@@ -1208,7 +1227,7 @@ $left-gutter: 64px;
                 }
             }
 
-            .mx_MessageTimestamp {
+            .mx_EventTile_timestamp {
                 position: absolute; /* for IRC layout */
                 top: 2px; /* Align with mx_EventTile_content */
             }

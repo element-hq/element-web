@@ -1180,7 +1180,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = eventTileSnapshot.timestamp.displayState;
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
-        const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
+        const dummyTimestamp = useIRCLayout ? <span className="mx_EventTile_timestamp" /> : null;
         const timestamp = showRealTimestamp ? messageTimestamp : dummyTimestamp;
         const linkedTimestamp = showLinkedTimestamp ? linkedMessageTimestamp : dummyTimestamp;
 
@@ -1666,13 +1666,13 @@ function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Ele
     }, [vm, props]);
 
     return (
-        <>
+        <span className="mx_EventTile_timestamp">
             {/* Render icon as described in, https://github.com/matrix-org/matrix-react-sdk/pull/11760 */}
             {props.receivedTs ? (
                 <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
             ) : undefined}
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
-        </>
+        </span>
     );
 }
 
