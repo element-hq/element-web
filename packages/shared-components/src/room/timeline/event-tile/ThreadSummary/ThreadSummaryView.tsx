@@ -19,6 +19,10 @@ export type ThreadSummaryNotificationIndicator = ComponentPropsWithoutRef<typeof
 
 export interface ThreadMessagePreviewAvatar {
     /**
+     * Optional class name supplied by the app for integration styling.
+     */
+    className?: string;
+    /**
      * Stable id used for avatar colour hashing.
      */
     id: string;
@@ -139,7 +143,7 @@ export function ThreadMessagePreviewView({ vm }: Readonly<ThreadMessagePreviewVi
                     aria-label={avatar.label}
                     type="round"
                     size="24px"
-                    className={styles.avatar}
+                    className={cx(styles.avatar, avatar.className)}
                 />
             )}
             {showDisplayName && senderName && <div className={styles.sender}>{senderName}</div>}

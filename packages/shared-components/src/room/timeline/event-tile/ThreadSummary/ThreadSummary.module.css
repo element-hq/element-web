@@ -61,13 +61,13 @@
     font-weight: var(--cpd-font-weight-semibold);
 }
 
-.content {
-    margin-left: var(--cpd-space-1x);
-    flex: 1;
-}
-
 .content strong {
     font: var(--cpd-font-body-sm-semibold);
+}
+
+.threadSummary .content {
+    margin-left: var(--cpd-space-1x);
+    flex: 1;
 }
 
 .repliesAmount {

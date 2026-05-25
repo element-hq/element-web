@@ -17,6 +17,7 @@ import {
     type Room,
     RoomEvent,
     type RoomMember,
+    RoomStateEvent,
     type Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -751,6 +752,60 @@ describe("ThreadMessagePreviewViewModel", () => {
             }),
         );
         expect(getMxcUrlToHttpMock(cli)).toHaveBeenCalledWith("mxc://example.org/avatar", 24, 24, "crop", false, true);
+    });
+
+    it("updates the avatar and sender when the current room member profile changes", async () => {
+        const room = new TestRoom() as TestRoom & Room;
+        const historicalEvent = makeEvent("Profile update reply", { senderName: "Historical Alice" });
+        const { vm } = makePreviewVm({
+            room,
+            timelineRenderingType: TimelineRenderingType.ThreadsList,
+            thread: Object.assign(new TestThread(room), {
+                replyToEvent: historicalEvent,
+            }) as TestThread & Thread,
+        });
+        await waitFor(() => expect(vm.getSnapshot().senderName).toBe("Historical Alice"));
+
+        const currentMember = makeMember("Current Alice", userId, "mxc://example.org/current-avatar");
+        room.getMember.mockReturnValue(currentMember);
+        room.emit(RoomStateEvent.Members, makeEvent("Member event"), room, currentMember);
+
+        await waitFor(() => expect(vm.getSnapshot().senderName).toBe("Current Alice"));
+        expect(vm.getSnapshot().avatar).toEqual(
+            expect.objectContaining({
+                id: userId,
+                name: "Current Alice",
+                src: "https://matrix.example.org/_matrix/media/mxc://example.org/current-avatar/24x24/crop",
+            }),
+        );
+    });
+
+    it("ignores current room member profile updates for other users and unsubscribes on dispose", async () => {
+        const room = new TestRoom() as TestRoom & Room;
+        const { vm } = makePreviewVm({
+            room,
+            timelineRenderingType: TimelineRenderingType.ThreadsList,
+            thread: Object.assign(new TestThread(room), {
+                replyToEvent: makeEvent("Profile listener reply", { senderName: "Historical Alice" }),
+            }) as TestThread & Thread,
+        });
+        await waitFor(() => expect(vm.getSnapshot().senderName).toBe("Historical Alice"));
+
+        expect(room.listenerCount(RoomStateEvent.Members)).toBe(1);
+
+        room.getMember.mockReturnValue(makeMember("Current Alice", userId, "mxc://example.org/avatar"));
+        room.emit(
+            RoomStateEvent.Members,
+            makeEvent("Other member event"),
+            room,
+            makeMember("Other User", "@other:example.org"),
+        );
+
+        expect(vm.getSnapshot().senderName).toBe("Historical Alice");
+
+        vm.dispose();
+
+        expect(room.listenerCount(RoomStateEvent.Members)).toBe(0);
     });
 
     it("uses current room profiles in thread timelines and suppresses avatar URLs in low-bandwidth mode", async () => {

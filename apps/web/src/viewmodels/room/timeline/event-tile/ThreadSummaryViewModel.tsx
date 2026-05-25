@@ -18,6 +18,8 @@ import {
     RoomEvent,
     type Room,
     type RoomMember,
+    type RoomState,
+    RoomStateEvent,
     type Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -79,6 +81,10 @@ export interface ThreadMessagePreviewViewModelProps {
      * Whether to render the sender display name.
      */
     showDisplayName: boolean;
+    /**
+     * Optional class name for app-side avatar integration styling.
+     */
+    avatarClassName?: string;
 }
 
 export class ThreadMessagePreviewViewModel
@@ -87,7 +93,10 @@ export class ThreadMessagePreviewViewModel
 {
     private threadListenerCleanups: Array<() => void> = [];
     private eventListenerCleanups: Array<() => void> = [];
+    private memberListenerCleanups: Array<() => void> = [];
     private watchedEvent?: MatrixEvent;
+    private watchedMemberRoom?: Room;
+    private watchedMemberUserId?: string;
     private previewRequestId = 0;
     private previewContentKey?: string;
     private previewContent?: ReactNode;
@@ -105,6 +114,7 @@ export class ThreadMessagePreviewViewModel
     public dispose(): void {
         this.teardownThreadListener();
         this.teardownEventListeners();
+        this.teardownMemberListener();
         super.dispose();
     }
 
@@ -190,6 +200,37 @@ export class ThreadMessagePreviewViewModel
         this.watchedEvent = undefined;
     }
 
+    private setupMemberListener(mxEvent?: MatrixEvent): void {
+        const userId = ThreadMessagePreviewViewModel.getProfileUserId(mxEvent);
+        const room = this.getProfileRoom();
+        const shouldUseCurrentProfiles = this.shouldUseCurrentProfiles();
+
+        if (!mxEvent || !userId || !room || !shouldUseCurrentProfiles) {
+            this.teardownMemberListener();
+            return;
+        }
+
+        if (this.watchedMemberRoom === room && this.watchedMemberUserId === userId) return;
+
+        this.teardownMemberListener();
+        this.watchedMemberRoom = room;
+        this.watchedMemberUserId = userId;
+
+        room.on(RoomStateEvent.Members, this.onRoomStateMember);
+        this.memberListenerCleanups.push(() => {
+            room.off(RoomStateEvent.Members, this.onRoomStateMember);
+        });
+    }
+
+    private teardownMemberListener(): void {
+        for (const cleanup of this.memberListenerCleanups) {
+            cleanup();
+        }
+        this.memberListenerCleanups = [];
+        this.watchedMemberRoom = undefined;
+        this.watchedMemberUserId = undefined;
+    }
+
     private readonly onThreadUpdate = (): void => {
         void this.updateFromThread();
     };
@@ -198,10 +239,16 @@ export class ThreadMessagePreviewViewModel
         void this.updateFromThread();
     };
 
+    private readonly onRoomStateMember = (_event: MatrixEvent, _state: RoomState, member: RoomMember): void => {
+        if (member.userId !== this.watchedMemberUserId) return;
+        this.updateProfileSnapshot();
+    };
+
     private async updateFromThread(): Promise<void> {
         const requestId = ++this.previewRequestId;
         const lastReply = this.props.thread.replyToEvent ?? undefined;
         this.setupEventListeners(lastReply);
+        this.setupMemberListener(lastReply);
 
         if (!lastReply) {
             this.setHidden();
@@ -289,6 +336,13 @@ export class ThreadMessagePreviewViewModel
         };
     }
 
+    private updateProfileSnapshot(): void {
+        const lastReply = this.props.thread.replyToEvent;
+        if (!lastReply || !this.snapshot.current.isVisible) return;
+
+        this.snapshot.merge(this.computeBaseReplySnapshot(lastReply));
+    }
+
     private setDecryptionFailure(
         baseSnapshot: Pick<ThreadMessagePreviewViewSnapshot, "avatar" | "senderName" | "showDisplayName">,
     ): void {
@@ -360,13 +414,33 @@ export class ThreadMessagePreviewViewModel
         props: ThreadMessagePreviewViewModelProps,
         mxEvent: MatrixEvent,
     ): RoomMember | null | undefined {
-        const userId = mxEvent.sender?.userId ?? mxEvent.getSender() ?? "";
-        if (userId && (props.useOnlyCurrentProfiles || THREAD_PROFILE_CONTEXTS.has(props.timelineRenderingType))) {
-            const currentMember = (props.room ?? props.thread.room)?.getMember(userId);
+        const userId = ThreadMessagePreviewViewModel.getProfileUserId(mxEvent);
+        if (userId && ThreadMessagePreviewViewModel.shouldUseCurrentProfilesForProps(props)) {
+            const currentMember = ThreadMessagePreviewViewModel.getProfileRoomForProps(props)?.getMember(userId);
             if (currentMember) return currentMember;
         }
 
         return mxEvent.sender;
+    }
+
+    private getProfileRoom(): Room | undefined {
+        return ThreadMessagePreviewViewModel.getProfileRoomForProps(this.props);
+    }
+
+    private shouldUseCurrentProfiles(): boolean {
+        return ThreadMessagePreviewViewModel.shouldUseCurrentProfilesForProps(this.props);
+    }
+
+    private static getProfileRoomForProps(props: ThreadMessagePreviewViewModelProps): Room | undefined {
+        return props.room ?? props.thread.room;
+    }
+
+    private static shouldUseCurrentProfilesForProps(props: ThreadMessagePreviewViewModelProps): boolean {
+        return props.useOnlyCurrentProfiles || THREAD_PROFILE_CONTEXTS.has(props.timelineRenderingType);
+    }
+
+    private static getProfileUserId(mxEvent?: MatrixEvent): string {
+        return mxEvent?.sender?.userId ?? mxEvent?.getSender() ?? "";
     }
 
     private static computeAvatar(
@@ -397,6 +471,7 @@ export class ThreadMessagePreviewViewModel
         }
 
         return {
+            className: props.avatarClassName,
             id: member?.userId ?? fallbackUserId,
             name,
             src,

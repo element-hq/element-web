@@ -1712,6 +1712,7 @@ function ThreadMessagePreviewWrapper({
                 lowBandwidth,
                 useOnlyCurrentProfiles,
                 showDisplayName,
+                avatarClassName: "mx_BaseAvatar",
             }),
     );
 
@@ -1760,6 +1761,7 @@ function ThreadSummaryWrapper({
                 timelineRenderingType,
                 lowBandwidth,
                 useOnlyCurrentProfiles,
+                avatarClassName: "mx_BaseAvatar",
             }),
     );
 
