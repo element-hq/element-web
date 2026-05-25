@@ -54,7 +54,7 @@ describe("KeyBackupDiagnostics", () => {
         it("should return Warning overall severity when server backup is missing", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             expect(result.overallSeverity).toBe(DiagnosticSeverity.Warning);
             expect(result.serverBackup.exists).toBe(false);
@@ -63,17 +63,31 @@ describe("KeyBackupDiagnostics", () => {
         it("should include a failing check for missing server backup", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const existsCheck = result.checks.find((c) => c.id === "server-backup-exists");
             expect(existsCheck).toBeDefined();
             expect(existsCheck!.severity).toBe(DiagnosticSeverity.Warning);
         });
 
+        it("should report Unknown when server backup info cannot be fetched", async () => {
+            jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockRejectedValue(new Error("network failure"));
+            jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
+
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
+
+            const existsCheck = result.checks.find((c) => c.id === "server-backup-exists");
+            expect(result.serverBackup.exists).toBe(false);
+            expect(result.serverBackup.fetchError).toBe(true);
+            expect(existsCheck!.severity).toBe(DiagnosticSeverity.Unknown);
+            expect(existsCheck!.detail).toBe("Unable to fetch backup info");
+            expect(existsCheck!.detail).not.toBe("No backup found on server");
+        });
+
         it("should return OK for server-backup-exists check when backup exists", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(MOCK_BACKUP_INFO);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const existsCheck = result.checks.find((c) => c.id === "server-backup-exists");
             expect(existsCheck!.severity).toBe(DiagnosticSeverity.OK);
@@ -83,7 +97,7 @@ describe("KeyBackupDiagnostics", () => {
         it("should return Warning for unsupported backup algorithm", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(UNSUPPORTED_BACKUP_INFO);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const algorithmCheck = result.checks.find((c) => c.id === "algorithm-supported");
             expect(algorithmCheck).toBeDefined();
@@ -91,10 +105,23 @@ describe("KeyBackupDiagnostics", () => {
             expect(result.serverBackup.algorithmSupported).toBe(false);
         });
 
+        it("should not error when an unsupported backup algorithm has no public key", async () => {
+            jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(UNSUPPORTED_BACKUP_INFO);
+            jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
+
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
+
+            const publicKeyCheck = result.checks.find((c) => c.id === "server-public-key-present");
+            expect(result.serverBackup.publicKeyPresent).toBe(false);
+            expect(publicKeyCheck!.severity).toBe(DiagnosticSeverity.Unknown);
+            expect(publicKeyCheck!.detail).toBe("Not applicable for unsupported backup algorithm");
+            expect(result.overallSeverity).not.toBe(DiagnosticSeverity.Error);
+        });
+
         it("should return OK for supported algorithm", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(MOCK_BACKUP_INFO);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const algorithmCheck = result.checks.find((c) => c.id === "algorithm-supported");
             expect(algorithmCheck!.severity).toBe(DiagnosticSeverity.OK);
@@ -104,7 +131,7 @@ describe("KeyBackupDiagnostics", () => {
         it("should return Error when server public key is missing from auth_data", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(NO_PUBLIC_KEY_BACKUP_INFO);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const publicKeyCheck = result.checks.find((c) => c.id === "server-public-key-present");
             expect(publicKeyCheck!.severity).toBe(DiagnosticSeverity.Error);
@@ -114,7 +141,7 @@ describe("KeyBackupDiagnostics", () => {
         it("should return OK when server public key is present in auth_data", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(MOCK_BACKUP_INFO);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const publicKeyCheck = result.checks.find((c) => c.id === "server-public-key-present");
             expect(publicKeyCheck!.severity).toBe(DiagnosticSeverity.OK);
@@ -126,7 +153,7 @@ describe("KeyBackupDiagnostics", () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(MOCK_BACKUP_INFO);
             jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(null);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const localKeyCheck = result.checks.find((c) => c.id === "local-private-key-exists");
             expect(localKeyCheck!.severity).toBe(DiagnosticSeverity.Warning);
@@ -141,7 +168,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: true,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const localKeyCheck = result.checks.find((c) => c.id === "local-private-key-exists");
             expect(localKeyCheck!.severity).toBe(DiagnosticSeverity.OK);
@@ -156,7 +183,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: true,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const matchCheck = result.checks.find((c) => c.id === "keys-match");
             expect(matchCheck!.severity).toBe(DiagnosticSeverity.OK);
@@ -171,7 +198,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: false,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const matchCheck = result.checks.find((c) => c.id === "keys-match");
             expect(matchCheck!.severity).toBe(DiagnosticSeverity.Error);
@@ -185,7 +212,7 @@ describe("KeyBackupDiagnostics", () => {
             jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
             jest.spyOn(matrixClient.getCrypto()!, "isKeyBackupTrusted").mockRejectedValue(new Error("crypto failure"));
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const matchCheck = result.checks.find((c) => c.id === "keys-match");
             expect(matchCheck!.severity).toBe(DiagnosticSeverity.Error);
@@ -196,7 +223,7 @@ describe("KeyBackupDiagnostics", () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(UNSUPPORTED_BACKUP_INFO);
             jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const matchCheck = result.checks.find((c) => c.id === "keys-match");
             expect(matchCheck!.severity).toBe(DiagnosticSeverity.Unknown);
@@ -207,7 +234,7 @@ describe("KeyBackupDiagnostics", () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(MOCK_BACKUP_INFO);
             jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(null);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             // One Warning check (local key missing) should make overall Warning
             expect(result.overallSeverity).toBe(DiagnosticSeverity.Warning);
@@ -221,7 +248,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: true,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             expect(result.overallSeverity).toBe(DiagnosticSeverity.OK);
         });
@@ -230,7 +257,7 @@ describe("KeyBackupDiagnostics", () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
             const before = Date.now();
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const after = Date.now();
             expect(result.timestamp).toBeGreaterThanOrEqual(before);
@@ -241,7 +268,7 @@ describe("KeyBackupDiagnostics", () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
             jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             const matchCheck = result.checks.find((c) => c.id === "keys-match");
             // No match check when there is no server backup to compare against
@@ -251,7 +278,7 @@ describe("KeyBackupDiagnostics", () => {
         it("should not expose publicKey in serverBackup when public key is absent", async () => {
             jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(NO_PUBLIC_KEY_BACKUP_INFO);
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
 
             expect(result.serverBackup.publicKey).toBeUndefined();
         });
@@ -266,7 +293,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: true,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
             const summary = buildSanitizedDiagnosticSummary(result);
 
             expect(summary).toContain("Version: 3");
@@ -283,7 +310,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: true,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
             const summary = buildSanitizedDiagnosticSummary(result);
 
             // The summary must never include the raw private key bytes or recovery keys
@@ -303,7 +330,7 @@ describe("KeyBackupDiagnostics", () => {
                 matchesDecryptionKey: false,
             });
 
-            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!, matrixClient);
+            const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
             const summary = buildSanitizedDiagnosticSummary(result);
 
             expect(summary).toContain("Matches Server Key: No");

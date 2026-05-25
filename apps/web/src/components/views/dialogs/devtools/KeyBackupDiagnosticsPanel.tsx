@@ -18,7 +18,12 @@ import {
     DiagnosticSeverity,
     type KeyBackupDiagnosticResult,
     type DiagnosticCheck,
+    type ServerBackupInfo,
 } from "../../../../utils/crypto/KeyBackupDiagnostics";
+
+function assertNever(value: never): never {
+    throw new Error(`Unexpected diagnostic severity: ${String(value)}`);
+}
 
 /**
  * Returns the CSS class name suffix for a given diagnostic severity.
@@ -33,6 +38,8 @@ function severityClass(severity: DiagnosticSeverity): string {
             return "mx_KeyBackupDiagnosticsPanel_error";
         case DiagnosticSeverity.Unknown:
             return "mx_KeyBackupDiagnosticsPanel_unknown";
+        default:
+            return assertNever(severity);
     }
 }
 
@@ -49,6 +56,8 @@ function severityIcon(severity: DiagnosticSeverity): string {
             return "✗";
         case DiagnosticSeverity.Unknown:
             return "?";
+        default:
+            return assertNever(severity);
     }
 }
 
@@ -65,13 +74,37 @@ function severityLabel(severity: DiagnosticSeverity): string {
             return _t("devtools|crypto|diagnostics_severity_error");
         case DiagnosticSeverity.Unknown:
             return _t("devtools|crypto|diagnostics_severity_unknown");
+        default:
+            return assertNever(severity);
     }
+}
+
+function serverBackupExistsLabel(serverBackup: ServerBackupInfo): string {
+    if (serverBackup.fetchError) {
+        return _t("devtools|crypto|diagnostics_fetch_error");
+    }
+
+    if (serverBackup.exists) {
+        return `${_t("devtools|crypto|diagnostics_value_yes")} (${serverBackup.version})`;
+    }
+
+    return _t("devtools|crypto|diagnostics_no_server_backup");
+}
+
+function serverPublicKeyLabel(serverBackup: ServerBackupInfo): string {
+    if (!serverBackup.algorithmSupported) {
+        return _t("devtools|crypto|diagnostics_not_applicable");
+    }
+
+    return serverBackup.publicKeyPresent
+        ? _t("devtools|crypto|diagnostics_server_public_key_present")
+        : _t("devtools|crypto|diagnostics_server_public_key_absent");
 }
 
 /**
  * Renders a single row in the consistency checks table.
  */
-function CheckRow({ check }: { check: DiagnosticCheck }): JSX.Element {
+function CheckRow({ check }: Readonly<{ check: DiagnosticCheck }>): JSX.Element {
     return (
         <tr className={severityClass(check.severity)}>
             <td>{check.label}</td>
@@ -88,18 +121,17 @@ function CheckRow({ check }: { check: DiagnosticCheck }): JSX.Element {
 /**
  * Renders the overall status banner at the top of the diagnostics panel.
  */
-function StatusBanner({ severity }: { severity: DiagnosticSeverity }): JSX.Element {
+function StatusBanner({ severity }: Readonly<{ severity: DiagnosticSeverity }>): JSX.Element {
     return (
-        <div
+        <output
             className={`mx_KeyBackupDiagnosticsPanel_statusBanner ${severityClass(severity)}`}
-            role="status"
             aria-label={_t("devtools|crypto|diagnostics_overall_status")}
         >
             <span className="mx_KeyBackupDiagnosticsPanel_statusIcon">{severityIcon(severity)}</span>
             <span>
                 {_t("devtools|crypto|diagnostics_overall_status")}: {severityLabel(severity)}
             </span>
-        </div>
+        </output>
     );
 }
 
@@ -123,7 +155,7 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
         const crypto = matrixClient.getCrypto();
         if (!crypto) return null;
 
-        return computeKeyBackupDiagnostics(crypto, matrixClient);
+        return computeKeyBackupDiagnostics(crypto);
     }, [matrixClient, refreshCounter]);
 
     const onRefresh = useCallback((): void => {
@@ -134,11 +166,14 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
     const onCopy = useCallback(async (): Promise<void> => {
         if (!diagnosticResult) return;
         const summary = buildSanitizedDiagnosticSummary(diagnosticResult);
-        const success = await copyPlaintext(summary);
+        let success = false;
+        try {
+            success = await copyPlaintext(summary);
+        } catch {
+            success = false;
+        }
         setCopyStatus(
-            success
-                ? _t("devtools|crypto|diagnostics_copy_success")
-                : _t("devtools|crypto|diagnostics_copy_failure"),
+            success ? _t("devtools|crypto|diagnostics_copy_success") : _t("devtools|crypto|diagnostics_copy_failure"),
         );
     }, [diagnosticResult]);
 
@@ -168,17 +203,16 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
                 <tbody>
                     <tr>
                         <th scope="row">{_t("devtools|crypto|diagnostics_server_exists")}</th>
-                        <td>
-                            {diagnosticResult.serverBackup.exists
-                                ? `${_t("devtools|crypto|diagnostics_value_yes")} (${diagnosticResult.serverBackup.version})`
-                                : _t("devtools|crypto|diagnostics_no_server_backup")}
-                        </td>
+                        <td>{serverBackupExistsLabel(diagnosticResult.serverBackup)}</td>
                     </tr>
                     {diagnosticResult.serverBackup.exists && (
                         <>
                             <tr>
                                 <th scope="row">{_t("devtools|crypto|diagnostics_server_algorithm")}</th>
-                                <td>{diagnosticResult.serverBackup.algorithm ?? _t("devtools|crypto|diagnostics_severity_unknown")}</td>
+                                <td>
+                                    {diagnosticResult.serverBackup.algorithm ??
+                                        _t("devtools|crypto|diagnostics_severity_unknown")}
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">{_t("devtools|crypto|diagnostics_algorithm_supported")}</th>
@@ -190,11 +224,7 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
                             </tr>
                             <tr>
                                 <th scope="row">{_t("devtools|crypto|diagnostics_server_public_key")}</th>
-                                <td>
-                                    {diagnosticResult.serverBackup.publicKeyPresent
-                                        ? _t("devtools|crypto|diagnostics_server_public_key_present")
-                                        : _t("devtools|crypto|diagnostics_server_public_key_absent")}
-                                </td>
+                                <td>{serverPublicKeyLabel(diagnosticResult.serverBackup)}</td>
                             </tr>
                         </>
                     )}
@@ -220,10 +250,13 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
                     {diagnosticResult.localBackup.matchesServerKey !== null && (
                         <tr>
                             <th scope="row">{_t("devtools|crypto|diagnostics_keys_match")}</th>
-                            <td className={diagnosticResult.localBackup.matchesServerKey
-                                ? severityClass(DiagnosticSeverity.OK)
-                                : severityClass(DiagnosticSeverity.Error)
-                            }>
+                            <td
+                                className={
+                                    diagnosticResult.localBackup.matchesServerKey
+                                        ? severityClass(DiagnosticSeverity.OK)
+                                        : severityClass(DiagnosticSeverity.Error)
+                                }
+                            >
                                 {diagnosticResult.localBackup.matchesServerKey
                                     ? _t("devtools|crypto|diagnostics_keys_match_yes")
                                     : _t("devtools|crypto|diagnostics_keys_match_no")}

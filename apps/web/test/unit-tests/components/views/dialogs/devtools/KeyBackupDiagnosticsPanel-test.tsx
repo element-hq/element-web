@@ -62,9 +62,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() =>
-            expect(screen.getByText("Cryptographic module is not available")).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(screen.getByText("Cryptographic module is not available")).toBeInTheDocument());
     });
 
     it("should render an OK status banner when all checks pass", async () => {
@@ -77,8 +75,8 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
-        expect(screen.getByRole("status")).toHaveTextContent("OK");
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
+        expect(screen.getByLabelText("Overall Status")).toHaveTextContent("OK");
     });
 
     it("should render a Warning status banner when local key is missing", async () => {
@@ -87,8 +85,8 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
-        expect(screen.getByRole("status")).toHaveTextContent("Warning");
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
+        expect(screen.getByLabelText("Overall Status")).toHaveTextContent("Warning");
     });
 
     it("should render an Error status banner when keys mismatch (critical case)", async () => {
@@ -101,8 +99,8 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
-        expect(screen.getByRole("status")).toHaveTextContent("Error");
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
+        expect(screen.getByLabelText("Overall Status")).toHaveTextContent("Error");
     });
 
     it("should render a Warning status banner when no server backup exists", async () => {
@@ -110,8 +108,8 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
-        expect(screen.getByRole("status")).toHaveTextContent("Warning");
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
+        expect(screen.getByLabelText("Overall Status")).toHaveTextContent("Warning");
     });
 
     it("should render the server backup section table", async () => {
@@ -124,9 +122,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() =>
-            expect(screen.getByRole("table", { name: "Server Backup" })).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(screen.getByRole("table", { name: "Server Backup" })).toBeInTheDocument());
         // Version should be visible
         expect(screen.getByRole("table", { name: "Server Backup" })).toHaveTextContent("3");
         // Algorithm should be visible
@@ -145,9 +141,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() =>
-            expect(screen.getByRole("table", { name: "Local Backup" })).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(screen.getByRole("table", { name: "Local Backup" })).toBeInTheDocument());
         expect(screen.getByRole("table", { name: "Local Backup" })).toHaveTextContent("Available");
     });
 
@@ -161,9 +155,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() =>
-            expect(screen.getByRole("table", { name: "Consistency Checks" })).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(screen.getByRole("table", { name: "Consistency Checks" })).toBeInTheDocument());
         const table = screen.getByRole("table", { name: "Consistency Checks" });
         // All five checks should appear for a full healthy backup
         expect(table).toHaveTextContent("Server backup exists");
@@ -183,7 +175,9 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("button", { name: "Copy diagnostic summary" })).toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.getByRole("button", { name: "Copy diagnostic summary" })).toBeInTheDocument(),
+        );
 
         await act(async () => {
             fireEvent.click(screen.getByRole("button", { name: "Copy diagnostic summary" }));
@@ -208,15 +202,37 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("button", { name: "Copy diagnostic summary" })).toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.getByRole("button", { name: "Copy diagnostic summary" })).toBeInTheDocument(),
+        );
 
         await act(async () => {
             fireEvent.click(screen.getByRole("button", { name: "Copy diagnostic summary" }));
         });
 
+        await waitFor(() => expect(screen.getByText("Diagnostic summary copied")).toBeInTheDocument());
+    });
+
+    it("should show copy failure message when copy rejects", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(HEALTHY_BACKUP_INFO);
+        jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
+        jest.spyOn(matrixClient.getCrypto()!, "isKeyBackupTrusted").mockResolvedValue({
+            trusted: true,
+            matchesDecryptionKey: true,
+        });
+        (strings.copyPlaintext as jest.Mock).mockRejectedValueOnce(new Error("clipboard denied"));
+
+        renderComponent();
+
         await waitFor(() =>
-            expect(screen.getByText("Diagnostic summary copied")).toBeInTheDocument(),
+            expect(screen.getByRole("button", { name: "Copy diagnostic summary" })).toBeInTheDocument(),
         );
+
+        await act(async () => {
+            fireEvent.click(screen.getByRole("button", { name: "Copy diagnostic summary" }));
+        });
+
+        await waitFor(() => expect(screen.getByText("Failed to copy diagnostic summary")).toBeInTheDocument());
     });
 
     it("should re-run diagnostics when the Refresh button is clicked", async () => {
@@ -240,9 +256,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
         });
 
         // getKeyBackupInfo should be called again after refresh
-        await waitFor(() =>
-            expect(getKeyBackupInfoSpy.mock.calls.length).toBeGreaterThan(callCountBefore),
-        );
+        await waitFor(() => expect(getKeyBackupInfoSpy.mock.calls.length).toBeGreaterThan(callCountBefore));
     });
 
     it("should NOT expose any private key material in the rendered DOM", async () => {
@@ -257,7 +271,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         const { container } = renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
 
         // The raw private key bytes must not appear anywhere in the DOM text
         const domText = container.textContent ?? "";
@@ -272,13 +286,12 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         renderComponent();
 
-        await waitFor(() =>
-            expect(screen.getByRole("table", { name: "Consistency Checks" })).toBeInTheDocument(),
-        );
+        await waitFor(() => expect(screen.getByRole("table", { name: "Consistency Checks" })).toBeInTheDocument());
         const table = screen.getByRole("table", { name: "Consistency Checks" });
         expect(table).toHaveTextContent("Backup algorithm supported");
         // The warning severity label should appear for the unsupported algorithm
         expect(table).toHaveTextContent("Warning");
+        expect(screen.getByRole("table", { name: "Server Backup" })).toHaveTextContent("Not applicable");
     });
 
     it("should match snapshot for the complete panel in healthy state", async () => {
@@ -291,7 +304,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
 
         const { container } = renderComponent();
 
-        await waitFor(() => expect(screen.getByRole("status")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
 
         expect(container).toMatchSnapshot();
     });

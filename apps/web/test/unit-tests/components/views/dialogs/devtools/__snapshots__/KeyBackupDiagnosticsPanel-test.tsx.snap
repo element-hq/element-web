@@ -8,10 +8,9 @@ exports[`<KeyBackupDiagnosticsPanel /> should match snapshot for the complete pa
     <h3>
       Key Backup Diagnostics
     </h3>
-    <div
+    <output
       aria-label="Overall Status"
       class="mx_KeyBackupDiagnosticsPanel_statusBanner mx_KeyBackupDiagnosticsPanel_ok"
-      role="status"
     >
       <span
         class="mx_KeyBackupDiagnosticsPanel_statusIcon"
@@ -23,7 +22,7 @@ exports[`<KeyBackupDiagnosticsPanel /> should match snapshot for the complete pa
         : 
         OK
       </span>
-    </div>
+    </output>
     <table
       aria-label="Server Backup"
     >

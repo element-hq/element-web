@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type CryptoApi, type KeyBackupInfo, type Curve25519AuthData } from "matrix-js-sdk/src/crypto-api";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 /** The supported backup algorithm for diagnostics. */
 const SUPPORTED_ALGORITHM = "m.megolm_backup.v1.curve25519-aes-sha2";
@@ -42,6 +41,8 @@ export interface DiagnosticCheck {
 export interface ServerBackupInfo {
     /** Whether a backup exists on the server. */
     exists: boolean;
+    /** Whether fetching backup info failed, leaving server state unknown. */
+    fetchError: boolean;
     /** The current backup version, if available. */
     version?: string;
     /** The backup algorithm, if available. */
@@ -118,6 +119,139 @@ function extractServerPublicKey(backupInfo: KeyBackupInfo): string | undefined {
     return authData?.public_key;
 }
 
+async function fetchServerBackupInfo(crypto: CryptoApi): Promise<{
+    backupInfo: KeyBackupInfo | null;
+    fetchError: boolean;
+}> {
+    try {
+        return {
+            backupInfo: await crypto.getKeyBackupInfo(),
+            fetchError: false,
+        };
+    } catch {
+        return {
+            backupInfo: null,
+            fetchError: true,
+        };
+    }
+}
+
+function buildServerBackupExistsCheck(
+    serverExists: boolean,
+    serverVersion: string | undefined,
+    fetchError: boolean,
+): DiagnosticCheck {
+    if (fetchError) {
+        return {
+            id: "server-backup-exists",
+            label: "Server backup exists",
+            severity: DiagnosticSeverity.Unknown,
+            detail: "Unable to fetch backup info",
+        };
+    }
+
+    return {
+        id: "server-backup-exists",
+        label: "Server backup exists",
+        severity: serverExists ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
+        detail: serverExists ? `Version: ${serverVersion}` : "No backup found on server",
+    };
+}
+
+function buildAlgorithmCheck(algorithmSupported: boolean, serverAlgorithm: string | undefined): DiagnosticCheck {
+    return {
+        id: "algorithm-supported",
+        label: "Backup algorithm supported",
+        severity: algorithmSupported ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
+        detail: serverAlgorithm ?? "Unknown algorithm",
+    };
+}
+
+function buildServerPublicKeyCheck(algorithmSupported: boolean, publicKeyPresent: boolean): DiagnosticCheck {
+    if (!algorithmSupported) {
+        return {
+            id: "server-public-key-present",
+            label: "Server public key present",
+            severity: DiagnosticSeverity.Unknown,
+            detail: "Not applicable for unsupported backup algorithm",
+        };
+    }
+
+    return {
+        id: "server-public-key-present",
+        label: "Server public key present",
+        severity: publicKeyPresent ? DiagnosticSeverity.OK : DiagnosticSeverity.Error,
+        detail: publicKeyPresent ? "Present in auth_data" : "Missing from auth_data",
+    };
+}
+
+function buildLocalPrivateKeyCheck(localPrivateKeyAvailable: boolean): DiagnosticCheck {
+    return {
+        id: "local-private-key-exists",
+        label: "Local backup private key available",
+        severity: localPrivateKeyAvailable ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
+        detail: localPrivateKeyAvailable ? "Cached locally" : "Not found locally",
+    };
+}
+
+async function buildKeyMatchCheck(
+    crypto: CryptoApi,
+    backupInfo: KeyBackupInfo | null,
+    localPrivateKeyAvailable: boolean,
+    algorithmSupported: boolean,
+    publicKeyPresent: boolean,
+): Promise<{
+    matchesServerKey: boolean | null;
+    check?: DiagnosticCheck;
+}> {
+    if (!backupInfo || !localPrivateKeyAvailable) {
+        return { matchesServerKey: null };
+    }
+
+    if (!algorithmSupported) {
+        return {
+            matchesServerKey: null,
+            check: {
+                id: "keys-match",
+                label: "Local key matches server key",
+                severity: DiagnosticSeverity.Unknown,
+                detail: "Cannot verify - unsupported algorithm",
+            },
+        };
+    }
+
+    if (!publicKeyPresent) {
+        return { matchesServerKey: null };
+    }
+
+    try {
+        const trustInfo = await crypto.isKeyBackupTrusted(backupInfo);
+        const matchesServerKey = trustInfo.matchesDecryptionKey;
+
+        return {
+            matchesServerKey,
+            check: {
+                id: "keys-match",
+                label: "Local key matches server key",
+                severity: matchesServerKey ? DiagnosticSeverity.OK : DiagnosticSeverity.Error,
+                detail: matchesServerKey
+                    ? "Local private key matches server public key"
+                    : "Local private key does NOT match server public key - backup state is inconsistent",
+            },
+        };
+    } catch {
+        return {
+            matchesServerKey: null,
+            check: {
+                id: "keys-match",
+                label: "Local key matches server key",
+                severity: DiagnosticSeverity.Error,
+                detail: "Failed to verify key match",
+            },
+        };
+    }
+}
+
 /**
  * Runs all key backup diagnostic checks and returns a structured result.
  *
@@ -126,23 +260,10 @@ function extractServerPublicKey(backupInfo: KeyBackupInfo): string | undefined {
  * access tokens, or secret storage private material.
  *
  * @param crypto - The CryptoApi instance from the MatrixClient.
- * @param client - The MatrixClient instance, used to check if the backup key is stored.
  * @returns A promise resolving to the complete diagnostic result.
  */
-export async function computeKeyBackupDiagnostics(
-    crypto: CryptoApi,
-    client: MatrixClient,
-): Promise<KeyBackupDiagnosticResult> {
-    const checks: DiagnosticCheck[] = [];
-
-    // ---- Fetch server-side backup info ----
-    let backupInfo: KeyBackupInfo | null = null;
-    try {
-        backupInfo = await crypto.getKeyBackupInfo();
-    } catch {
-        // If we can't fetch backup info, we'll report it in the checks below.
-    }
-
+export async function computeKeyBackupDiagnostics(crypto: CryptoApi): Promise<KeyBackupDiagnosticResult> {
+    const { backupInfo, fetchError } = await fetchServerBackupInfo(crypto);
     const serverExists = backupInfo !== null && backupInfo.version !== undefined;
     const serverVersion = backupInfo?.version;
     const serverAlgorithm = backupInfo?.algorithm;
@@ -150,87 +271,25 @@ export async function computeKeyBackupDiagnostics(
     const serverPublicKey = backupInfo ? extractServerPublicKey(backupInfo) : undefined;
     const publicKeyPresent = serverPublicKey !== undefined && serverPublicKey.length > 0;
 
-    // ---- Check 1: Server backup exists ----
-    checks.push({
-        id: "server-backup-exists",
-        label: "Server backup exists",
-        severity: serverExists ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
-        detail: serverExists ? `Version: ${serverVersion}` : "No backup found on server",
-    });
-
-    // ---- Check 2: Algorithm known and supported ----
-    if (serverExists) {
-        checks.push({
-            id: "algorithm-supported",
-            label: "Backup algorithm supported",
-            severity: algorithmSupported ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
-            detail: serverAlgorithm ?? "Unknown algorithm",
-        });
-    }
-
-    // ---- Check 3: Server public key present ----
-    if (serverExists) {
-        checks.push({
-            id: "server-public-key-present",
-            label: "Server public key present",
-            severity: publicKeyPresent ? DiagnosticSeverity.OK : DiagnosticSeverity.Error,
-            detail: publicKeyPresent ? "Present in auth_data" : "Missing from auth_data",
-        });
-    }
-
-    // ---- Fetch local backup key info ----
     const localPrivateKey = await crypto.getSessionBackupPrivateKey();
     const localPrivateKeyAvailable = localPrivateKey !== null;
-
-    // ---- Check 4: Local backup private key exists ----
-    checks.push({
-        id: "local-private-key-exists",
-        label: "Local backup private key available",
-        severity: localPrivateKeyAvailable ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
-        detail: localPrivateKeyAvailable ? "Cached locally" : "Not found locally",
-    });
-
-    // ---- Check 5: Keys match (the critical diagnostic) ----
-    // We use isKeyBackupTrusted() which internally derives the public key from
-    // the local private key and compares it to the server's public key.
-    // This avoids implementing any custom cryptography.
-    let matchesServerKey: boolean | null = null;
-
-    if (serverExists && backupInfo && localPrivateKeyAvailable && algorithmSupported && publicKeyPresent) {
-        try {
-            const trustInfo = await crypto.isKeyBackupTrusted(backupInfo);
-            matchesServerKey = trustInfo.matchesDecryptionKey;
-
-            checks.push({
-                id: "keys-match",
-                label: "Local key matches server key",
-                severity: matchesServerKey ? DiagnosticSeverity.OK : DiagnosticSeverity.Error,
-                detail: matchesServerKey
-                    ? "Local private key matches server public key"
-                    : "Local private key does NOT match server public key — backup state is inconsistent",
-            });
-        } catch {
-            matchesServerKey = null;
-            checks.push({
-                id: "keys-match",
-                label: "Local key matches server key",
-                severity: DiagnosticSeverity.Error,
-                detail: "Failed to verify key match",
-            });
-        }
-    } else if (serverExists && localPrivateKeyAvailable && !algorithmSupported) {
-        // Cannot check match for unsupported algorithms
-        checks.push({
-            id: "keys-match",
-            label: "Local key matches server key",
-            severity: DiagnosticSeverity.Unknown,
-            detail: "Cannot verify — unsupported algorithm",
-        });
-    }
-
-    // ---- Build the result ----
+    const keyMatch = await buildKeyMatchCheck(
+        crypto,
+        serverExists ? backupInfo : null,
+        localPrivateKeyAvailable,
+        algorithmSupported,
+        publicKeyPresent,
+    );
+    const checks: DiagnosticCheck[] = [
+        buildServerBackupExistsCheck(serverExists, serverVersion, fetchError),
+        ...(serverExists ? [buildAlgorithmCheck(algorithmSupported, serverAlgorithm)] : []),
+        ...(serverExists ? [buildServerPublicKeyCheck(algorithmSupported, publicKeyPresent)] : []),
+        buildLocalPrivateKeyCheck(localPrivateKeyAvailable),
+        ...(keyMatch.check ? [keyMatch.check] : []),
+    ];
     const serverBackup: ServerBackupInfo = {
         exists: serverExists,
+        fetchError,
         version: serverVersion,
         algorithm: serverAlgorithm,
         algorithmSupported,
@@ -240,7 +299,7 @@ export async function computeKeyBackupDiagnostics(
 
     const localBackup: LocalBackupInfo = {
         privateKeyAvailable: localPrivateKeyAvailable,
-        matchesServerKey,
+        matchesServerKey: keyMatch.matchesServerKey,
     };
 
     return {
@@ -263,39 +322,38 @@ export async function computeKeyBackupDiagnostics(
  * @returns A plain-text summary string.
  */
 export function buildSanitizedDiagnosticSummary(result: KeyBackupDiagnosticResult): string {
-    const lines: string[] = [];
-
-    lines.push("=== Key Backup Diagnostics ===");
-    lines.push(`Timestamp: ${new Date(result.timestamp).toISOString()}`);
-    lines.push(`Overall Status: ${result.overallSeverity.toUpperCase()}`);
-    lines.push("");
-
-    // Server backup section
-    lines.push("--- Server Backup ---");
-    lines.push(`Exists: ${result.serverBackup.exists ? "Yes" : "No"}`);
-    if (result.serverBackup.exists) {
-        lines.push(`Version: ${result.serverBackup.version ?? "unknown"}`);
-        lines.push(`Algorithm: ${result.serverBackup.algorithm ?? "unknown"}`);
-        lines.push(`Algorithm Supported: ${result.serverBackup.algorithmSupported ? "Yes" : "No"}`);
-        lines.push(`Public Key Present: ${result.serverBackup.publicKeyPresent ? "Yes" : "No"}`);
-    }
-    lines.push("");
-
-    // Local backup section
-    lines.push("--- Local Backup ---");
-    lines.push(`Private Key Available: ${result.localBackup.privateKeyAvailable ? "Yes" : "No"}`);
-    if (result.localBackup.matchesServerKey !== null) {
-        lines.push(`Matches Server Key: ${result.localBackup.matchesServerKey ? "Yes" : "No"}`);
-    }
-    lines.push("");
-
-    // Consistency checks
-    lines.push("--- Consistency Checks ---");
-    for (const check of result.checks) {
+    const consistencyChecks = result.checks.map((check) => {
         const status = check.severity.toUpperCase();
-        const detail = check.detail ? ` — ${check.detail}` : "";
-        lines.push(`[${status}] ${check.label}${detail}`);
-    }
+        const detail = check.detail ? ` - ${check.detail}` : "";
+        return `[${status}] ${check.label}${detail}`;
+    });
+
+    const lines: string[] = [
+        "=== Key Backup Diagnostics ===",
+        `Timestamp: ${new Date(result.timestamp).toISOString()}`,
+        `Overall Status: ${result.overallSeverity.toUpperCase()}`,
+        "",
+        "--- Server Backup ---",
+        `Fetch Error: ${result.serverBackup.fetchError ? "Yes" : "No"}`,
+        `Exists: ${result.serverBackup.exists ? "Yes" : "No"}`,
+        ...(result.serverBackup.exists
+            ? [
+                  `Version: ${result.serverBackup.version ?? "unknown"}`,
+                  `Algorithm: ${result.serverBackup.algorithm ?? "unknown"}`,
+                  `Algorithm Supported: ${result.serverBackup.algorithmSupported ? "Yes" : "No"}`,
+                  `Public Key Present: ${result.serverBackup.publicKeyPresent ? "Yes" : "No"}`,
+              ]
+            : []),
+        "",
+        "--- Local Backup ---",
+        `Private Key Available: ${result.localBackup.privateKeyAvailable ? "Yes" : "No"}`,
+        ...(result.localBackup.matchesServerKey !== null
+            ? [`Matches Server Key: ${result.localBackup.matchesServerKey ? "Yes" : "No"}`]
+            : []),
+        "",
+        "--- Consistency Checks ---",
+        ...consistencyChecks,
+    ];
 
     return lines.join("\n");
 }
