@@ -72,9 +72,13 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    class="mx_EventTile_timestamp"
                   >
-                    00:00
+                    <span
+                      class="mx_MessageTimestamp"
+                    >
+                      00:00
+                    </span>
                   </span>
                   <div
                     class="mx_EventTile_content"
@@ -212,9 +216,13 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    class="mx_EventTile_timestamp"
                   >
-                    00:00
+                    <span
+                      class="mx_MessageTimestamp"
+                    >
+                      00:00
+                    </span>
                   </span>
                   <div
                     class="mx_EventTile_content"
@@ -263,9 +271,13 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    class="mx_EventTile_timestamp"
                   >
-                    00:00
+                    <span
+                      class="mx_MessageTimestamp"
+                    >
+                      00:00
+                    </span>
                   </span>
                   <div
                     class="mx_EventTile_content"
@@ -325,9 +337,13 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    class="mx_EventTile_timestamp"
                   >
-                    00:00
+                    <span
+                      class="mx_MessageTimestamp"
+                    >
+                      00:00
+                    </span>
                   </span>
                   <div
                     class="mx_EventTile_content"
