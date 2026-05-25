@@ -22,7 +22,7 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import {
-    EventStatus,
+    type EventStatus,
     EventType,
     type MatrixEvent,
     MatrixEventEvent,
@@ -38,7 +38,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import {
     CryptoEvent,
-    DecryptionFailureCode,
     EventShieldColour,
     EventShieldReason,
     type UserVerificationStatus,
@@ -144,6 +143,7 @@ import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadLis
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
+import { getEventTileE2ePadlockState } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eState";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -728,120 +728,78 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private renderE2EPadlock(): ReactNode {
         // if the event was edited, show the verification info for the edit, not
         // the original
-        const ev = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
+        const verificationEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
+        const e2ePadlockState = getEventTileE2ePadlockState({
+            mxEvent: this.props.mxEvent,
+            verificationEvent,
+            shieldColour: this.state.shieldColour,
+            shieldReason: this.state.shieldReason,
+            isRoomEncrypted: this.context.isRoomEncrypted,
+            isLocalRoom: isLocalRoom(verificationEvent.getRoomId()!),
+        });
 
-        // no icon for local rooms
-        if (isLocalRoom(ev.getRoomId()!)) return null;
-
-        // event could not be decrypted
-        if (ev.isDecryptionFailure()) {
-            switch (ev.decryptionFailureReason) {
-                // These two errors get icons from DecryptionFailureBody, so we hide the padlock icon
-                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
-                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-                    return null;
-                default:
-                    return <E2ePadlockDecryptionFailure />;
-            }
-        }
-
-        if (this.state.shieldReason === EventShieldReason.AUTHENTICITY_NOT_GUARANTEED) {
-            // This may happen if the message was forwarded to us by another user, in which case we can show a better message
-            const forwarder = this.props.mxEvent.getKeyForwardingUser();
-            if (forwarder) {
-                return <E2eMessageSharedIcon keyForwardingUserId={forwarder} roomId={ev.getRoomId()!} />;
-            }
-        }
-
-        if (this.state.shieldColour !== EventShieldColour.NONE) {
-            let shieldReasonMessage: string;
-            switch (this.state.shieldReason) {
-                case EventShieldReason.UNVERIFIED_IDENTITY:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
-                    break;
-
-                case EventShieldReason.UNSIGNED_DEVICE:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_unsigned_device");
-                    break;
-
-                case EventShieldReason.UNKNOWN_DEVICE:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_unknown_device");
-                    break;
-
-                case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_authenticity_not_guaranteed");
-                    break;
-
-                case EventShieldReason.MISMATCHED_SENDER_KEY:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
-                    break;
-
-                case EventShieldReason.SENT_IN_CLEAR:
-                    shieldReasonMessage = _t("common|unencrypted");
-                    break;
-
-                case EventShieldReason.VERIFICATION_VIOLATION:
-                    shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
-                    break;
-
-                case EventShieldReason.MISMATCHED_SENDER:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
-                    break;
-
-                default:
-                    shieldReasonMessage = _t("error|unknown");
-                    break;
-            }
-
-            if (this.state.shieldColour === EventShieldColour.GREY) {
+        switch (e2ePadlockState.kind) {
+            case "none":
+                return null;
+            case "decryptionFailure":
+                return renderE2EPadlockIcon(E2ePadlockIcon.DecryptionFailure, _t("timeline|undecryptable_tooltip"));
+            case "messageShared":
                 return (
-                    <E2ePadlock
-                        className={
-                            // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                            "mx_EventTile_e2eIcon"
-                        }
-                        icon={E2ePadlockIcon.Normal}
-                        title={shieldReasonMessage}
+                    <E2eMessageSharedIcon
+                        keyForwardingUserId={e2ePadlockState.keyForwardingUserId}
+                        roomId={e2ePadlockState.roomId}
                     />
                 );
-            } else {
-                // red, by elimination
-                return (
-                    <E2ePadlock
-                        className={
-                            // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                            "mx_EventTile_e2eIcon"
-                        }
-                        icon={E2ePadlockIcon.Warning}
-                        title={shieldReasonMessage}
-                    />
+            case "unencrypted":
+                return renderE2EPadlockIcon(E2ePadlockIcon.Warning, _t("common|unencrypted"));
+            case "shield": {
+                let shieldReasonMessage: string;
+                switch (e2ePadlockState.shieldReason) {
+                    case EventShieldReason.UNVERIFIED_IDENTITY:
+                        shieldReasonMessage = _t("encryption|event_shield_reason_unverified_identity");
+                        break;
+
+                    case EventShieldReason.UNSIGNED_DEVICE:
+                        shieldReasonMessage = _t("encryption|event_shield_reason_unsigned_device");
+                        break;
+
+                    case EventShieldReason.UNKNOWN_DEVICE:
+                        shieldReasonMessage = _t("encryption|event_shield_reason_unknown_device");
+                        break;
+
+                    case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
+                        shieldReasonMessage = _t("encryption|event_shield_reason_authenticity_not_guaranteed");
+                        break;
+
+                    case EventShieldReason.MISMATCHED_SENDER_KEY:
+                        shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
+                        break;
+
+                    case EventShieldReason.SENT_IN_CLEAR:
+                        shieldReasonMessage = _t("common|unencrypted");
+                        break;
+
+                    case EventShieldReason.VERIFICATION_VIOLATION:
+                        shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
+                        break;
+
+                    case EventShieldReason.MISMATCHED_SENDER:
+                        shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender");
+                        break;
+
+                    default:
+                        shieldReasonMessage = _t("error|unknown");
+                        break;
+                }
+
+                return renderE2EPadlockIcon(
+                    e2ePadlockState.shieldColour === EventShieldColour.GREY
+                        ? E2ePadlockIcon.Normal
+                        : E2ePadlockIcon.Warning,
+                    shieldReasonMessage,
                 );
             }
         }
-
-        if (this.context.isRoomEncrypted) {
-            // else if room is encrypted
-            // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
-            if (ev.status === EventStatus.ENCRYPTING) {
-                return null;
-            }
-            if (ev.status === EventStatus.NOT_SENT) {
-                return null;
-            }
-            if (ev.isState()) {
-                return null; // we expect this to be unencrypted
-            }
-            if (ev.isRedacted()) {
-                return null; // we expect this to be unencrypted
-            }
-            if (!ev.isEncrypted()) {
-                // if the event is not encrypted, but it's an e2e room, show a warning
-                return <E2ePadlockUnencrypted />;
-            }
-        }
-
-        // no padlock needed
-        return null;
     }
 
     private readonly onActionBarFocusChange = (actionBarFocused: boolean): void => {
@@ -1585,28 +1543,15 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
 };
 export default SafeEventTile;
 
-function E2ePadlockUnencrypted(): JSX.Element {
+function renderE2EPadlockIcon(icon: E2ePadlockIcon, title: string): JSX.Element {
     return (
         <E2ePadlock
             className={
                 // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
                 "mx_EventTile_e2eIcon"
             }
-            title={_t("common|unencrypted")}
-            icon={E2ePadlockIcon.Warning}
-        />
-    );
-}
-
-function E2ePadlockDecryptionFailure(): JSX.Element {
-    return (
-        <E2ePadlock
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-            title={_t("timeline|undecryptable_tooltip")}
-            icon={E2ePadlockIcon.DecryptionFailure}
+            title={title}
+            icon={icon}
         />
     );
 }
