@@ -4,7 +4,7 @@ exports[`E2ePadlock > renders a 'DecryptionFailure' icon 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_c_"
+    aria-labelledby="react-use-id-1"
     class="E2ePadlock-module_e2ePadlock E2ePadlock-module_decryptionFailure"
     data-testid="e2e-padlock"
     role="img"
@@ -29,7 +29,7 @@ exports[`E2ePadlock > renders a 'Normal' icon 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_0_"
+    aria-labelledby="react-use-id-1"
     class="E2ePadlock-module_e2ePadlock E2ePadlock-module_normal"
     data-testid="e2e-padlock"
     role="img"
@@ -59,7 +59,7 @@ exports[`E2ePadlock > renders a 'Warning' icon 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_6_"
+    aria-labelledby="react-use-id-1"
     class="E2ePadlock-module_e2ePadlock E2ePadlock-module_warning"
     data-testid="e2e-padlock"
     role="img"
