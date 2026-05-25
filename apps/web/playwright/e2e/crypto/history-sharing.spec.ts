@@ -63,7 +63,7 @@ test.describe("History sharing", function () {
 
             // Mask message timestamps and exclude RR avatars from the screenshot. Bob sometimes sees Alice's RR on the
             // previous event, which is surprising but not what we're testing here.
-            const mask = [bobPage.locator(".mx_EventTile_timestamp")];
+            const mask = [bobPage.locator(".mx_MessageTimestamp")];
             await expect(bobPage.locator(".mx_RoomView_timeline")).toMatchScreenshot(
                 "shared-history-invite-accepted.png",
                 {

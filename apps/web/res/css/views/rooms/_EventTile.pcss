@@ -66,15 +66,24 @@ $left-gutter: 64px;
         }
     }
 
-    .mx_EventTile_timestamp {
+    .mx_MessageTimestamp {
         position: relative;
         display: inline-flex;
         align-items: center;
+        color: var(--cpd-color-text-secondary);
+        font: var(--cpd-font-body-xs-regular);
+        font-variant-numeric: tabular-nums;
         width: var(--MessageTimestamp-width);
         flex: 0 0 var(--MessageTimestamp-width);
         white-space: nowrap;
+        user-select: none;
+        text-decoration: none;
 
-        > .mx_MessageTimestamp {
+        > :not(.mx_MessageTimestamp_lateIcon) {
+            color: inherit;
+            font: inherit;
+            font-variant-numeric: inherit;
+            text-decoration: inherit;
             width: auto;
             display: inline-block;
         }
@@ -155,7 +164,7 @@ $left-gutter: 64px;
         }
     }
 
-    &.mx_EventTile_isEditing .mx_EventTile_timestamp {
+    &.mx_EventTile_isEditing .mx_MessageTimestamp {
         visibility: hidden;
     }
 
@@ -267,13 +276,13 @@ $left-gutter: 64px;
         align-items: flex-start;
         padding-top: 0;
 
-        .mx_EventTile_timestamp {
+        .mx_MessageTimestamp {
             min-width: var(--MessageTimestamp-width); /* ensure space for EventTile without timestamp */
             justify-content: flex-end;
             line-height: var(--irc-line-height);
             text-align: right;
 
-            > .mx_MessageTimestamp {
+            > :not(.mx_MessageTimestamp_lateIcon) {
                 line-height: inherit;
             }
         }
@@ -490,14 +499,14 @@ $left-gutter: 64px;
             }
         }
 
-        .mx_EventTile_timestamp {
+        .mx_MessageTimestamp {
             position: absolute;
             left: 0;
             justify-content: center;
             line-height: var(--EventTile_group_line-line-height);
             text-align: center;
 
-            > .mx_MessageTimestamp {
+            > :not(.mx_MessageTimestamp_lateIcon) {
                 line-height: inherit;
             }
         }
@@ -568,7 +577,7 @@ $left-gutter: 64px;
                 /* 20px: avatar area */
                 padding-inline-start: calc(var(--EventTile_group_line-spacing-inline-start) + 20px);
 
-                .mx_EventTile_timestamp {
+                .mx_MessageTimestamp {
                     top: 0;
                 }
             }
@@ -1055,7 +1064,7 @@ $left-gutter: 64px;
         padding-inline-start: var(--leftOffset);
     }
 
-    .mx_EventTile_timestamp {
+    .mx_MessageTimestamp {
         width: unset; /* Cancel the default width */
         flex: 0 1 auto;
         overflow: hidden; /* ensure correct overflow behavior */
@@ -1063,7 +1072,7 @@ $left-gutter: 64px;
         position: initial;
         margin-left: auto; /* to ensure it's end-aligned even if it's the only element of its parent */
 
-        > .mx_MessageTimestamp {
+        > :not(.mx_MessageTimestamp_lateIcon) {
             font-size: $font-12px;
             overflow: hidden; /* ensure correct overflow behavior */
             text-overflow: ellipsis;
@@ -1084,7 +1093,7 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile[data-shape="ThreadsList"] {
-    .mx_EventTile_timestamp {
+    .mx_MessageTimestamp {
         font-size: var(--cpd-font-size-body-sm);
         line-height: var(--cpd-font-line-height-regular);
     }
@@ -1160,7 +1169,7 @@ $left-gutter: 64px;
                     z-index: 9; /* position above the hover styling */
                 }
 
-                .mx_EventTile_timestamp {
+                .mx_MessageTimestamp {
                     top: 2px; /* Align with avatar */
                 }
 
@@ -1245,7 +1254,7 @@ $left-gutter: 64px;
                 }
             }
 
-            .mx_EventTile_timestamp {
+            .mx_MessageTimestamp {
                 position: absolute; /* for IRC layout */
                 top: 2px; /* Align with mx_EventTile_content */
             }

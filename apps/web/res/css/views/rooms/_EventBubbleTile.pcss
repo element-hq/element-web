@@ -36,7 +36,7 @@ Please see LICENSE files in the repository root for full details.
     --EventTile_bubble_line-margin-inline-end: -12px;
     --EventTile_bubble_gap-inline: 5px;
 
-    .mx_EventTile_timestamp {
+    .mx_MessageTimestamp {
         width: unset; /* Cancel the default width */
         flex: 0 1 auto;
         max-width: 80px;
@@ -287,8 +287,8 @@ Please see LICENSE files in the repository root for full details.
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
-        > .mx_EventTile_timestamp,
-        .mx_MessageActionBar + .mx_EventTile_timestamp {
+        > .mx_MessageTimestamp,
+        .mx_MessageActionBar + .mx_MessageTimestamp {
             position: absolute;
             padding: 4px 8px;
             bottom: 0;
@@ -321,8 +321,8 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &.mx_EventTile_sticker {
-            > .mx_EventTile_timestamp,
-            .mx_MessageActionBar + .mx_EventTile_timestamp {
+            > .mx_MessageTimestamp,
+            .mx_MessageActionBar + .mx_MessageTimestamp {
                 /* position timestamps for stickers to the right of the un-bubbled sticker */
                 right: unset;
                 left: 100%;
@@ -433,8 +433,8 @@ Please see LICENSE files in the repository root for full details.
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
-                > .mx_EventTile_timestamp,
-                .mx_MessageActionBar + .mx_EventTile_timestamp {
+                > .mx_MessageTimestamp,
+                .mx_MessageActionBar + .mx_MessageTimestamp {
                     display: none !important;
                 }
             }
@@ -605,14 +605,14 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_EventTile_line {
-        > .mx_EventTile_timestamp,
-        .mx_MessageActionBar + .mx_EventTile_timestamp {
+        > .mx_MessageTimestamp,
+        .mx_MessageActionBar + .mx_MessageTimestamp {
             right: auto;
             left: -77px;
             bottom: unset;
             align-self: center;
 
-            .mx_MessageTimestamp {
+            > :not(.mx_MessageTimestamp_lateIcon) {
                 vertical-align: middle;
             }
         }

@@ -72,10 +72,11 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_EventTile_timestamp"
+                    class="mx_MessageTimestamp"
                   >
                     <span
-                      class="mx_MessageTimestamp"
+                      aria-live="off"
+                      class="_content_1cs8y_8"
                     >
                       00:00
                     </span>
@@ -216,10 +217,11 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_EventTile_timestamp"
+                    class="mx_MessageTimestamp"
                   >
                     <span
-                      class="mx_MessageTimestamp"
+                      aria-live="off"
+                      class="_content_1cs8y_8"
                     >
                       00:00
                     </span>
@@ -271,10 +273,11 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_EventTile_timestamp"
+                    class="mx_MessageTimestamp"
                   >
                     <span
-                      class="mx_MessageTimestamp"
+                      aria-live="off"
+                      class="_content_1cs8y_8"
                     >
                       00:00
                     </span>
@@ -337,10 +340,11 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_EventTile_timestamp"
+                    class="mx_MessageTimestamp"
                   >
                     <span
-                      class="mx_MessageTimestamp"
+                      aria-live="off"
+                      class="_content_1cs8y_8"
                     >
                       00:00
                     </span>

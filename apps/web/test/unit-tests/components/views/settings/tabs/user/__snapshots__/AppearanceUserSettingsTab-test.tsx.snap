@@ -402,7 +402,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         tabindex="-1"
                       >
                         <span
-                          class="mx_EventTile_timestamp"
+                          class="mx_MessageTimestamp"
                         />
                         <div
                           class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"

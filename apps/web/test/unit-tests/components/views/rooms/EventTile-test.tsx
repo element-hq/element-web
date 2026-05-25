@@ -489,7 +489,7 @@ describe("EventTile", () => {
 
         it("renders a placeholder timestamp in IRC layout", () => {
             const { container } = getComponent({ layout: Layout.IRC });
-            const timestamp = container.querySelector(".mx_EventTile_timestamp");
+            const timestamp = container.querySelector(".mx_MessageTimestamp");
 
             expect(timestamp).not.toBeNull();
             expect(timestamp?.tagName).toBe("SPAN");
@@ -499,7 +499,7 @@ describe("EventTile", () => {
             jest.spyOn(dis, "dispatch").mockImplementation(() => {});
             const permalinkCreator = new RoomPermalinkCreator(room);
             const { container } = getComponent({ alwaysShowTimestamps: true, permalinkCreator });
-            const timestamp = container.querySelector<HTMLAnchorElement>("a.mx_MessageTimestamp");
+            const timestamp = container.querySelector<HTMLAnchorElement>(".mx_MessageTimestamp a");
 
             expect(timestamp).not.toBeNull();
             fireEvent.click(timestamp!);

@@ -6,21 +6,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, useEffect, type JSX } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { ActionBarView, EventContentBodyView } from "@element-hq/web-shared-components";
+import {
+    ActionBarView,
+    EventContentBodyView,
+    MessageTimestampView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import { EditHistoryActionBarViewModel } from "../../../viewmodels/message-body/EditHistoryActionBarViewModel";
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
-import { formatTime } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RedactedBodyFactory } from "./MBodyFactory";
+import {
+    MessageTimestampViewModel,
+    type MessageTimestampViewModelProps,
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -177,7 +185,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             }
         }
 
-        const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
         const isSending = ["sending", "queued", "encrypting"].includes(this.state.sendStatus!);
         const classes = classNames("mx_EventTile", {
             // Note: we keep the `sending` state class for tests, not for our styles
@@ -187,8 +194,12 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             <li>
                 <div className={classes}>
                     <div className="mx_EventTile_line">
-                        <span className="mx_EventTile_timestamp">
-                            <span className="mx_MessageTimestamp">{timestamp}</span>
+                        <span className="mx_MessageTimestamp">
+                            <MessageTimestampWrapper
+                                ts={mxEvent.getTs()}
+                                showTwelveHour={this.props.isTwelveHour}
+                                inhibitTooltip={true}
+                            />
                         </span>
                         {contentContainer}
                         {this.renderActionBar()}
@@ -197,4 +208,21 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             </li>
         );
     }
+}
+
+/**
+ * Wraps MessageTimestampView with a view model synced to the provided props.
+ * This wrapper can be removed after EditHistoryMessage has been changed to a function component.
+ */
+function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+    useEffect(() => {
+        vm.setTimestamp(props.ts);
+        vm.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+        });
+        vm.setTooltipInhibited(props.inhibitTooltip);
+    }, [vm, props]);
+
+    return <MessageTimestampView vm={vm} />;
 }

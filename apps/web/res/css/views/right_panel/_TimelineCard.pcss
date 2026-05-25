@@ -91,10 +91,10 @@ Please see LICENSE files in the repository root for full details.
                 max-width: unset;
             }
 
-            .mx_EventTile_timestamp {
+            .mx_MessageTimestamp {
                 inset-inline: auto 0;
 
-                > .mx_MessageTimestamp {
+                > :not(.mx_MessageTimestamp_lateIcon) {
                     font-size: $font-12px;
                 }
             }
@@ -112,7 +112,7 @@ Please see LICENSE files in the repository root for full details.
 
         &[data-layout="irc"] {
             .mx_EventTile_avatar,
-            .mx_EventTile_timestamp {
+            .mx_MessageTimestamp {
                 position: absolute;
             }
         }

@@ -73,12 +73,12 @@ interface MessageTimestampViewProps {
  *
  * The view model provides the timestamp values and display options. The component
  * can render as a link when `href` is set, and can show both sent-at and received-at
- * times in the tooltip when `tsReceivedAt` is provided. Use `className` for
- * host-level styling.
+ * times in the tooltip when `tsReceivedAt` is provided. Use `className` only for
+ * component-local styling; host layout should wrap the component.
  *
  * @example
  * ```tsx
- * <MessageTimestampView vm={messageTimestampViewModel} className="mx_MessageTimestamp" />
+ * <MessageTimestampView vm={messageTimestampViewModel} />
  * ```
  */
 export function MessageTimestampView({ vm, className }: Readonly<MessageTimestampViewProps>): JSX.Element {
