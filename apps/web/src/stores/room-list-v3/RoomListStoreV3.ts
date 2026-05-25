@@ -39,7 +39,7 @@ import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedSections } from "./section";
+import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedSections, reorderSection } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -508,6 +508,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     public async removeSection(tag: string, isEmpty: boolean): Promise<void> {
         await deleteSection(tag, isEmpty);
         this.scheduleEmit();
+    }
+
+    /**
+     * Reorder custom sections by moving sourceTag to the position of targetTag.
+     * @param sourceTag The tag of the section to move
+     * @param targetTag The tag of the section to move to
+     */
+    public async reorderSection(sourceTag: string, targetTag: string): Promise<void> {
+        await reorderSection(sourceTag, targetTag);
     }
 
     /**

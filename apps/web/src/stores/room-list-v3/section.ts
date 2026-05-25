@@ -255,3 +255,21 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
     delete sectionData[tag];
     await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 }
+
+/**
+ * Reorders sections by moving sourceTag after targetTag.
+ * Works for both default and custom sections.
+ * @param sourceTag - The tag of the section to move.
+ * @param targetTag - The tag of the section to move after.
+ */
+export async function reorderSection(sourceTag: string, targetTag: string): Promise<void> {
+    const ordered = getOrderedSections();
+    const fromIndex = ordered.indexOf(sourceTag as SectionTag);
+
+    if (fromIndex === -1 || !ordered.includes(targetTag as SectionTag) || sourceTag === targetTag) return;
+
+    ordered.splice(fromIndex, 1);
+    const newToIndex = ordered.indexOf(targetTag as SectionTag);
+    ordered.splice(newToIndex + 1, 0, sourceTag as SectionTag);
+    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, ordered);
+}
