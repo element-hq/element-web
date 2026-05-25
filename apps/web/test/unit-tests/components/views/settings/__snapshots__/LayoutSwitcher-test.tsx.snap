@@ -259,7 +259,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <span
-                  class="mx_MessageTimestamp"
+                  class="mx_EventTile_timestamp"
                 />
                 <div
                   class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
