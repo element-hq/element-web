@@ -126,7 +126,6 @@ exports[`LogoutDialog Prompts user to set up recovery if there is a backup on th
       </div>
     </div>
     <div
-      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -279,7 +278,6 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
       </div>
     </div>
     <div
-      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -432,7 +430,6 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
       </div>
     </div>
     <div
-      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

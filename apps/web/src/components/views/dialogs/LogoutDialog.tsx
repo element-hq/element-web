@@ -77,47 +77,18 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(false);
     };
 
-    // Dialog contents to show a spinner while deciding whether to prompt the
-    // user to set up recovery
-    function loading(): JSX.Element {
-        return (
-            <BaseDialog
-                title={_t("action|sign_out")}
-                contentId="mx_Dialog_content"
-                hasCancel={true}
-                onFinished={onFinished}
-            >
-                <Spinner />
-            </BaseDialog>
-        );
-    }
-
-    // Dialog contents to confirm whether the user is sure if they want to log
-    // out.
-    function confirmLogout(): JSX.Element {
-        return (
-            <QuestionDialog
-                hasCancelButton={true}
-                title={_t("action|sign_out")}
-                description={_t("auth|logout_dialog|description")}
-                button={_t("action|sign_out")}
-                onFinished={onFinished}
-            />
-        );
-    }
-
     if (hasOtherVerifiedDevices === undefined) {
-        return loading();
+        return <Loading onFinished={onFinished} />;
     } else if (hasOtherVerifiedDevices) {
-        return confirmLogout();
+        return <ConfirmLogout onFinished={onFinished} />;
     }
     switch (backupStatus) {
         case BackupStatus.LOADING:
-            return loading();
+            return <Loading onFinished={onFinished} />;
 
         case BackupStatus.NO_CRYPTO:
         case BackupStatus.BACKUP_ACTIVE:
-            return confirmLogout();
+            return <ConfirmLogout onFinished={onFinished} />;
 
         case BackupStatus.NO_BACKUP:
         case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
@@ -157,4 +128,37 @@ export default function LogoutDialog(props: IProps): JSX.Element {
             );
         }
     }
+}
+
+interface SubComponentProps {
+    onFinished: (confirmed?: boolean) => void;
+}
+
+// Dialog contents to show a spinner while deciding whether to prompt the
+// user to set up recovery
+function Loading(props: SubComponentProps): JSX.Element {
+    return (
+        <BaseDialog
+            title={_t("action|sign_out")}
+            contentId="mx_Dialog_content"
+            hasCancel={true}
+            onFinished={props.onFinished}
+        >
+            <Spinner />
+        </BaseDialog>
+    );
+}
+
+// Dialog contents to confirm whether the user is sure if they want to log
+// out.
+function ConfirmLogout(props: SubComponentProps): JSX.Element {
+    return (
+        <QuestionDialog
+            hasCancelButton={true}
+            title={_t("action|sign_out")}
+            description={_t("auth|logout_dialog|description")}
+            button={_t("action|sign_out")}
+            onFinished={props.onFinished}
+        />
+    );
 }
