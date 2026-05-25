@@ -25,7 +25,7 @@ describe("<RoomListSectionHeaderView /> stories", () => {
         const user = userEvent.setup();
 
         const { getByRole } = render(<Default />);
-        const button = getByRole("gridcell", { name: "Toggle Favourites section" });
+        const button = getByRole("button", { name: "Toggle Favourites section" });
         await user.click(button);
         expect(Default.args.onClick).toHaveBeenCalled();
     });
