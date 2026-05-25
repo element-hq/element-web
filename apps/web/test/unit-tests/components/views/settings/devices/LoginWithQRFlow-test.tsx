@@ -6,40 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, cleanup, fireEvent, render, screen } from "jest-matrix-react";
+import { cleanup, fireEvent, render, screen } from "jest-matrix-react";
 import React from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
-import { toDataURL, type QRCodeSegment, type QRCodeToDataURLOptions } from "qrcode";
 
+import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "../../../../../test-utils/qrcode";
 import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
 import { LoginWithQRFailureReason, type FailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
-
-jest.mock("qrcode", () => ({
-    ...jest.requireActual("qrcode"),
-    toDataURL: jest.fn(),
-}));
-
-const realQRCode = jest.requireActual("qrcode") as { toDataURL: typeof toDataURL };
-const mockedToDataURL = jest.mocked(toDataURL);
-
-let qrCodeRenderPromise: Promise<string>;
-
-function mockQRCodeRender(): void {
-    // Keep real PNG generation, but capture the promise so the test can await it directly.
-    mockedToDataURL.mockImplementation(((data: string | QRCodeSegment[], options?: QRCodeToDataURLOptions) => {
-        qrCodeRenderPromise = realQRCode.toDataURL(data, options);
-        return qrCodeRenderPromise;
-    }) as typeof toDataURL);
-}
-
-async function waitForQRCodeRender(): Promise<void> {
-    // Flush the React state update scheduled by QRCode after toDataURL resolves.
-    await act(async () => {
-        await qrCodeRenderPromise;
-        await Promise.resolve();
-    });
-}
 
 describe("<LoginWithQRFlow />", () => {
     const onClick = jest.fn();
@@ -58,7 +32,7 @@ describe("<LoginWithQRFlow />", () => {
     beforeEach(() => {});
 
     afterEach(() => {
-        mockedToDataURL.mockReset();
+        resetQRCodeMock();
         onClick.mockReset();
         cleanup();
     });
