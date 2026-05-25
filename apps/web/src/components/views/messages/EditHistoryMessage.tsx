@@ -187,7 +187,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             <li>
                 <div className={classes}>
                     <div className="mx_EventTile_line">
-                        <span className="mx_MessageTimestamp">{timestamp}</span>
+                        <span className="mx_EventTile_timestamp">
+                            <span className="mx_MessageTimestamp">{timestamp}</span>
+                        </span>
                         {contentContainer}
                         {this.renderActionBar()}
                     </div>
