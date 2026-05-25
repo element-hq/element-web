@@ -33,12 +33,12 @@
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "6.11.0",
+        "knip": "6.14.1",
         "lint-staged": "^17.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
-        "nx": "22.7.1",
+        "nx": "22.7.2",
         "prettier": "3.8.3",
         "typescript": "catalog:",
         "vitepress": "^1.6.4",
@@ -92,7 +92,7 @@
             "matrix-widget-api": "^1.17.0",
             "@types/node": "18.19.130",
             "config-file-ts": "0.2.8-rc1",
-            "node-abi": "4.29.0",
+            "node-abi": "4.31.0",
             "@types/pg-pool": "2.0.7",
             "axios@>1.0.0 <=1.15.0": "1.15.2",
             "esbuild@<=0.24.2": "0.27.4",
@@ -107,6 +107,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.33.3+sha512.a19744364a7e248b92657a4ca5973f9354d21caf982579674b1c539f32c7420c47138ad8b1254df07aba9bc782d9b3029e3db34d5dbff974326eb74dac8ff489",
+    "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800",
     "private": true
 }

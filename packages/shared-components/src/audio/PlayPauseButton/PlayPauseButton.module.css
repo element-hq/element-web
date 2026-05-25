@@ -6,6 +6,22 @@
  */
 
 .button {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
     border-radius: 32px;
     background-color: var(--cpd-color-bg-subtle-primary);
+    padding: var(--cpd-space-1-5x);
+    box-sizing: border-box;
+}
+
+.button svg {
+    width: 20px;
+    height: 20px;
+}
+
+.button[disabled] svg {
+    opacity: 0.5;
 }
