@@ -44,17 +44,15 @@
     transform: translateX(0);
 }
 
-.repliesAmount,
-.sender,
-.content {
-    line-height: var(--EventTile_ThreadSummary-line-height, 24px);
-}
-
 .sender,
 .content {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.content {
+    font: var(--cpd-font-body-sm-regular);
 }
 
 .sender {
@@ -63,6 +61,12 @@
 
 .content strong {
     font: var(--cpd-font-body-sm-semibold);
+}
+
+.threadSummary .repliesAmount,
+.threadSummary .sender,
+.threadSummary .content {
+    line-height: var(--EventTile_ThreadSummary-line-height, 24px);
 }
 
 .threadSummary .content {
