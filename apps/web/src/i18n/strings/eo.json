@@ -74,7 +74,6 @@
         "register": "Registri",
         "remove": "Forigi",
         "reply": "Respondi",
-        "report_content": "Raporti enhavon",
         "resend": "Resendi",
         "reset": "Restarigi",
         "resume": "Daŭrigi",
@@ -994,7 +993,6 @@
         "leave_beta": "Ĉesi provadon",
         "location_share_live": "Viva Loka Kundivido",
         "mjolnir": "Novaj manieroj ignori personojn",
-        "report_to_moderators": "Raportu al moderigaĵoj",
         "video_rooms": "Videoĉambroj",
         "video_rooms_a_new_way_to_chat": "Nova maniero babili per voĉo kaj video en %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videoĉambroj estas ĉiam ŝaltitaj VoIP-kanaloj enkonstruitaj en ĉambro en %(brand)s.",
@@ -1169,19 +1167,8 @@
     },
     "report_content": {
         "description": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn.",
-        "disagree": "Malkonsento",
-        "illegal_content": "Kontraŭleĝa enhavo",
         "missing_reason": "Bonvolu skribi, kial vi raportas.",
-        "nature": "Bonvolu elekti karakteron kaj priskribi, kial la mesaĝo estas mistrakta.",
-        "nature_disagreement": "Tio, kion skribas ĉi tiu uzanto, maltaŭgas.\nTio ĉi raportiĝos al reguligistoj de la ĉambro.",
-        "nature_illegal": "Ĉi tiu uzanto kondutas kontraŭleĝe, ekzemple malkaŝante personajn informojn pri aliuloj, aŭ minacante per agreso.\nĈi tio raportiĝos al reguligistoj de la ĉambro, kiuj povos ĝin plusendi al leĝa aŭtoritato.",
-        "nature_other": "Alia kialo. Bonvolu priskribi la problemon.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
-        "nature_spam": "Ĉi tiu uzanto sendas rubmesaĝojn kun reklamoj, ligiloj al reklamoj, aŭ al propagando.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
-        "other_label": "Alia",
-        "report_content_to_homeserver": "Raporti enhavon al la administrantode via hejmservilo",
-        "report_entire_room": "Raporti la tutan ĉambron",
-        "spam_or_propaganda": "Rubmesaĝo aŭ propagando",
-        "toxic_behaviour": "Vunda konduto"
+        "report_content_to_homeserver": "Raporti enhavon al la administrantode via hejmservilo"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Malsukcesis malĉifri%(failedCount)s salutaĵojn!",

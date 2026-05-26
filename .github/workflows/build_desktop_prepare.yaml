@@ -170,7 +170,7 @@ jobs:
               run: |
                   set -e
 
-                  BUNDLE_HASH=$(npx asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
+                  BUNDLE_HASH=$(pnpm exec asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
                   WEBAPP_VERSION=$(./scripts/get-version.ts)
                   WEB_VERSION=${WEBAPP_VERSION:0:12}
                   JS_VERSION=${WEBAPP_VERSION:16:12}
