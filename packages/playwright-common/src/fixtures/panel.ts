@@ -12,7 +12,7 @@ import { test as base } from "./services.js";
  * Rounding this number to a whole number would mean updating a whole
  * bunch of screenshots.
  */
-const LEFT_PANEL_WIDTH = "369.6875px";
+const LEFT_PANEL_WIDTH = "368.6875px";
 
 export const test = base.extend<{
     /**
