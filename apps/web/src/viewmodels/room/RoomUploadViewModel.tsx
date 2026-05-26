@@ -52,6 +52,22 @@ interface RoomUploadViewSnapshot extends UploadButtonViewSnapshot {
     mayDragAndDropFile: boolean;
 }
 
+export interface RoomUploadFileHandler {
+    handleFiles(
+        files: File[],
+        roomId: string,
+        relation: IEventRelation | undefined,
+        replyToEvent: MatrixEvent | undefined,
+        client: MatrixClient,
+        context: TimelineRenderingType,
+    ): Promise<void>;
+}
+
+const defaultRoomUploadFileHandler: RoomUploadFileHandler = {
+    handleFiles: (files, roomId, relation, replyToEvent, client, context) =>
+        ContentMessages.sharedInstance().sendContentListToRoom(files, roomId, relation, replyToEvent, client, context),
+};
+
 export class RoomUploadViewModel
     extends BaseViewModel<RoomUploadViewSnapshot, Record<string, never>>
     implements UploadButtonViewActions
@@ -66,6 +82,7 @@ export class RoomUploadViewModel
         private threadRelation: IEventRelation | undefined,
         public readonly openUploadDialog: () => void,
         private readonly moduleComposerApi = ModuleApi.instance.composer,
+        private fileHandler: RoomUploadFileHandler = defaultRoomUploadFileHandler,
     ) {
         super(
             {},
@@ -136,6 +153,14 @@ export class RoomUploadViewModel
         this.threadRelation = threadRelation;
     };
 
+    public setFileHandler = (fileHandler: RoomUploadFileHandler): void => {
+        this.fileHandler = fileHandler;
+    };
+
+    public resetFileHandler = (): void => {
+        this.fileHandler = defaultRoomUploadFileHandler;
+    };
+
     public initiateViaInputFiles = async (files: FileList | File[] | null): Promise<void> => {
         if (!this.checkCanUpload()) {
             return;
@@ -145,7 +170,7 @@ export class RoomUploadViewModel
         if (!files?.length) return;
 
         try {
-            await ContentMessages.sharedInstance().sendContentListToRoom(
+            await this.fileHandler.handleFiles(
                 Array.from(files),
                 roomId,
                 this.threadRelation,
@@ -167,7 +192,7 @@ export class RoomUploadViewModel
         if (!dataTransfer.files?.length) return;
 
         try {
-            await ContentMessages.sharedInstance().sendContentListToRoom(
+            await this.fileHandler.handleFiles(
                 Array.from(dataTransfer.files),
                 roomId,
                 this.threadRelation,

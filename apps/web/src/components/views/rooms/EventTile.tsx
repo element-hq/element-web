@@ -245,6 +245,11 @@ export interface EventTileProps {
     // whether to show reactions for this event
     showReactions?: boolean;
 
+    /**
+     * Consecutive standard media events to render inside this tile as one visual batch.
+     */
+    mediaBatchEvents?: MatrixEvent[];
+
     // which layout to use
     layout?: Layout;
 

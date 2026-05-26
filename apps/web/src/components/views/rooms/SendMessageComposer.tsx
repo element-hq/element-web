@@ -66,6 +66,14 @@ import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import ContentMessages from "../../../ContentMessages";
+import PendingAttachmentTray from "./PendingAttachmentTray";
+import {
+    addPendingComposerAttachments,
+    type PendingComposerAttachment,
+    removePendingComposerAttachment,
+    revokePendingComposerAttachmentObjectUrls,
+} from "./composer/PendingComposerAttachments";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -139,7 +147,11 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     toggleStickerPickerOpen: () => void;
 }
 
-export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
+interface ISendMessageComposerState {
+    pendingAttachments: PendingComposerAttachment[];
+}
+
+export class SendMessageComposer extends React.Component<ISendMessageComposerProps, ISendMessageComposerState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -149,6 +161,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private currentlyComposedEditorState: SerializedPart[] | null = null;
     private dispatcherRef?: string;
     private sendHistoryManager: SendHistoryManager;
+    public state: ISendMessageComposerState = { pendingAttachments: [] };
 
     public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -172,9 +185,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     public componentDidMount(): void {
         window.addEventListener("beforeunload", this.saveStoredEditorState);
         this.dispatcherRef = dis.register(this.onAction);
+        this.props.uploadVm.setFileHandler({
+            handleFiles: async (files) => {
+                this.setState(({ pendingAttachments }) => ({
+                    pendingAttachments: addPendingComposerAttachments(pendingAttachments, files, {
+                        createObjectURL: (file) => URL.createObjectURL(file),
+                    }),
+                }));
+            },
+        });
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
+        if (this.props.room.roomId !== prevProps.room.roomId) {
+            this.clearPendingAttachments();
+        }
+
         const replyingToThread = this.props.relation?.key === THREAD_RELATION_TYPE.name;
         const differentEventTarget = this.props.relation?.event_id !== prevProps.relation?.event_id;
 
@@ -330,8 +356,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
     public async sendMessage(): Promise<void> {
         const model = this.model;
+        const pendingAttachments = this.state.pendingAttachments;
 
-        if (model.isEmpty) {
+        if (model.isEmpty && pendingAttachments.length === 0) {
             return;
         }
 
@@ -359,10 +386,21 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
 
         const replyToEvent = this.props.replyToEvent;
+        const hasPendingAttachments = pendingAttachments.length > 0;
+        let sharedAttachmentCaption: string | undefined;
+        if (hasPendingAttachments && !model.isEmpty) {
+            const attachmentCaptionContent = createMessageContent(
+                this.props.mxClient.getSafeUserId(),
+                model,
+                replyToEvent,
+                this.props.relation,
+            );
+            sharedAttachmentCaption = attachmentCaptionContent.body.trim() ? attachmentCaptionContent.body : undefined;
+        }
         let shouldSend = true;
         let content: RoomMessageEventContent | null = null;
 
-        if (!containsEmote(model) && isSlashCommand(this.model)) {
+        if (!hasPendingAttachments && !containsEmote(model) && isSlashCommand(this.model)) {
             const [cmd, args, commandText] = getSlashCommand(this.props.room.roomId, this.model);
             if (cmd) {
                 const threadId =
@@ -405,12 +443,12 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
         }
 
-        if (isQuickReaction(model)) {
+        if (!hasPendingAttachments && isQuickReaction(model)) {
             shouldSend = false;
             this.sendQuickReaction();
         }
 
-        if (shouldSend) {
+        if (shouldSend && !model.isEmpty && !hasPendingAttachments) {
             const { roomId } = this.props.room;
             if (!content) {
                 content = createMessageContent(
@@ -462,6 +500,23 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
         }
 
+        if (hasPendingAttachments) {
+            await ContentMessages.sharedInstance().sendContentListToRoom(
+                pendingAttachments.map((attachment) => attachment.file),
+                this.props.room.roomId,
+                this.props.relation,
+                replyToEvent,
+                this.props.mxClient,
+                {
+                    context: this.context.timelineRenderingType,
+                    sharedCaption: sharedAttachmentCaption,
+                    skipConfirmation: true,
+                },
+            );
+            this.clearPendingAttachments();
+            dis.dispatch({ action: "message_sent" });
+        }
+
         this.sendHistoryManager.save(model, replyToEvent);
         // clear composer
         model.reset([]);
@@ -478,9 +533,28 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
     public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
+        this.props.uploadVm.resetFileHandler();
+        this.clearPendingAttachments(false);
         window.removeEventListener("beforeunload", this.saveStoredEditorState);
         this.saveStoredEditorState();
     }
+
+    private clearPendingAttachments(updateState = true): void {
+        revokePendingComposerAttachmentObjectUrls(this.state.pendingAttachments, {
+            revokeObjectURL: (objectUrl) => URL.revokeObjectURL(objectUrl),
+        });
+        if (updateState) {
+            this.setState({ pendingAttachments: [] });
+        }
+    }
+
+    private onPendingAttachmentRemove = (id: string): void => {
+        this.setState(({ pendingAttachments }) => ({
+            pendingAttachments: removePendingComposerAttachment(pendingAttachments, id, {
+                revokeObjectURL: (objectUrl) => URL.revokeObjectURL(objectUrl),
+            }),
+        }));
+    };
 
     private get editorStateKey(): string {
         let key = EDITOR_STATE_STORAGE_PREFIX + this.props.room.roomId;
@@ -638,6 +712,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : undefined;
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this.onKeyDown}>
+                <PendingAttachmentTray attachments={this.state.pendingAttachments} onRemove={this.onPendingAttachmentRemove} />
                 <BasicMessageComposer
                     onChange={this.onChange}
                     ref={this.editorRef}

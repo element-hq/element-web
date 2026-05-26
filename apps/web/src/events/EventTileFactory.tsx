@@ -74,6 +74,7 @@ export interface EventTileTypeProps extends Pick<
     | "callEventGrouper"
     | "isSeeingThroughMessageHiddenForModeration"
     | "inhibitInteraction"
+    | "mediaBatchEvents"
 > {
     ref?: React.RefObject<IEventTileType | null>;
     maxImageHeight?: number; // pixels
@@ -401,6 +402,7 @@ export function renderTile(
         isSeeingThroughMessageHiddenForModeration,
         inhibitInteraction,
         showHiddenEvents,
+        mediaBatchEvents,
     } = props;
 
     switch (renderType) {
@@ -425,6 +427,7 @@ export function renderTile(
                         permalinkCreator,
                         inhibitInteraction,
                         showHiddenEvents,
+                        mediaBatchEvents,
                     }),
             );
         default:
@@ -448,6 +451,7 @@ export function renderTile(
                         isSeeingThroughMessageHiddenForModeration,
                         inhibitInteraction,
                         showHiddenEvents,
+                        mediaBatchEvents,
                     }),
             );
     }

@@ -45,6 +45,82 @@ Please see LICENSE files in the repository root for full details.
     width: 100%;
 }
 
+.mx_PendingAttachmentTray_bounded {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--cpd-space-3x);
+    max-width: 100%;
+    max-height: 180px;
+    overflow-x: auto;
+    overflow-y: auto;
+    padding: var(--cpd-space-2x) 0;
+}
+
+.mx_PendingAttachmentTray_item {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: flex-start;
+    gap: var(--cpd-space-2x);
+    max-width: 320px;
+
+    &:hover,
+    &:focus-within {
+        .mx_PendingAttachmentTray_removeButton {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+}
+
+.mx_PendingAttachmentTray_thumbnailFrame {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 120px;
+    max-width: 160px;
+    max-height: 120px;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: $panel-actions;
+}
+
+.mx_PendingAttachmentTray_thumbnailImage {
+    display: block;
+    max-width: 160px;
+    max-height: 120px;
+    object-fit: contain;
+}
+
+.mx_PendingAttachmentTray_removeButton {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    inset-inline-start: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: rgb(0 0 0 / 60%);
+    color: var(--cpd-color-text-on-solid-primary);
+    cursor: pointer;
+    font: var(--cpd-font-body-md-semibold);
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+
+    &:focus-visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
 .mx_MessageComposer_actions {
     display: flex;
     align-items: center;

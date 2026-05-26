@@ -32,6 +32,10 @@ import { addTextToComposer } from "../../../../test-utils/composer";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import ContentMessages from "../../../../../src/ContentMessages";
+import { Action } from "../../../../../src/dispatcher/actions";
+import type { ComposerInsertFilesPayload } from "../../../../../src/dispatcher/payloads/ComposerInsertFilePayload";
+import FileDropTarget from "../../../../../src/components/structures/FileDropTarget";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -177,9 +181,16 @@ describe("<SendMessageComposer/>", () => {
 
         const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
 
+        const sendContentListToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
+        const sendContentToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentToRoom");
+
         beforeEach(() => {
             localStorage.clear();
             spyDispatcher.mockReset();
+            sendContentListToRoomSpy.mockReset().mockResolvedValue(undefined);
+            sendContentToRoomSpy.mockReset().mockResolvedValue(undefined);
+            URL.createObjectURL = jest.fn((file: Blob) => `blob:${(file as File).name}`);
+            URL.revokeObjectURL = jest.fn();
         });
 
         const defaultProps = {
@@ -197,6 +208,18 @@ describe("<SendMessageComposer/>", () => {
         );
         const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {
             return render(getRawComponent(props, roomContext, client));
+        };
+        const stageFilesViaPicker = async (container: HTMLElement, files: File[]): Promise<void> => {
+            fireEvent.change(container.querySelector('[data-testid="room-upload-context-input"]')!, {
+                target: { files },
+            });
+
+            for (const file of files) {
+                await waitFor(() => expect(container.querySelector(`[alt="${file.name}"]`)).not.toBeNull());
+            }
+        };
+        const stageFileViaPicker = async (container: HTMLElement, file: File): Promise<void> => {
+            await stageFilesViaPicker(container, [file]);
         };
 
         it("renders text and placeholder correctly", () => {
@@ -282,6 +305,231 @@ describe("<SendMessageComposer/>", () => {
                 parts: [{ type: "plain", text: "This is a message" }],
                 replyEventId: mockEvent.getId(),
             });
+        });
+
+        it("file picker image is staged in the composer and not sent immediately", async () => {
+            const { container } = getComponent();
+            const file = new File(["image"], "screenshot.png", { type: "image/png" });
+
+            await stageFileViaPicker(container, file);
+
+            expect(container.querySelector('[data-testid="pending-attachment-tray"]')).not.toBeNull();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("pasted image is staged in the composer and not sent immediately", async () => {
+            const { container } = getComponent();
+            const file = new File(["image"], "pasted-screenshot.png", { type: "image/png" });
+
+            fireEvent.paste(container.querySelector(".mx_BasicMessageComposer_input")!, {
+                clipboardData: { files: [file], types: [] },
+            });
+
+            await waitFor(() => expect(container.querySelector('[data-testid="pending-attachment-tray"]')).not.toBeNull());
+            expect(container.querySelector('[alt="pasted-screenshot.png"]')).not.toBeNull();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("large pasted screenshot is staged as a bounded thumbnail", async () => {
+            const { container } = getComponent();
+            const file = new File(["large image"], "large-pasted-screenshot.png", { type: "image/png" });
+
+            fireEvent.paste(container.querySelector(".mx_BasicMessageComposer_input")!, {
+                clipboardData: { files: [file], types: [] },
+            });
+
+            await waitFor(() => expect(container.querySelector('[data-testid="pending-attachment-tray"]')).not.toBeNull());
+            expect(container.querySelector('[data-testid="pending-attachment-tray"]')).toHaveClass(
+                "mx_PendingAttachmentTray_bounded",
+            );
+            expect(container.querySelector('[alt="large-pasted-screenshot.png"]')).toHaveClass(
+                "mx_PendingAttachmentTray_thumbnailImage",
+            );
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("dropped image is staged in the composer and not sent immediately while the composer handler is mounted", async () => {
+            const dropTarget = document.createElement("div");
+            document.body.appendChild(dropTarget);
+            const file = new File(["image"], "dropped-screenshot.png", { type: "image/png" });
+            const { container } = render(
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ScopedRoomContextProvider room={mockRoom} {...defaultRoomContext}>
+                        <RoomUploadContextProvider>
+                            <SendMessageComposer {...defaultProps} />
+                            <FileDropTarget parent={dropTarget} />
+                        </RoomUploadContextProvider>
+                    </ScopedRoomContextProvider>
+                </MatrixClientContext.Provider>,
+            );
+
+            fireEvent.drop(dropTarget, {
+                dataTransfer: { files: [file], types: ["Files"] },
+            });
+
+            await waitFor(() => expect(container.querySelector('[data-testid="pending-attachment-tray"]')).not.toBeNull());
+            expect(container.querySelector('[alt="dropped-screenshot.png"]')).not.toBeNull();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+            dropTarget.remove();
+        });
+
+        it("ComposerFileInsert is staged in the composer and not sent immediately while the composer handler is mounted", async () => {
+            const { container } = getComponent();
+            const file = new File(["image"], "module-screenshot.png", { type: "image/png" });
+
+            const dispatch = Object.getPrototypeOf(defaultDispatcher).dispatch as typeof defaultDispatcher.dispatch;
+            dispatch.call(defaultDispatcher, {
+                action: Action.ComposerFileInsert,
+                files: [file],
+                timelineRenderingType: TimelineRenderingType.Room,
+            } satisfies ComposerInsertFilesPayload);
+
+            await waitFor(() => expect(container.querySelector('[data-testid="pending-attachment-tray"]')).not.toBeNull());
+            expect(container.querySelector('[alt="module-screenshot.png"]')).not.toBeNull();
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+        });
+
+        it("send with pending image uses composer text as shared attachment context", async () => {
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+            const file = new File(["image"], "screenshot.png", { type: "image/png" });
+
+            await stageFileViaPicker(container, file);
+            expect(container.querySelector('[aria-label="Caption for screenshot.png"]')).toBeNull();
+            addTextToComposer(container, "caption text");
+
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() =>
+                expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                    [file],
+                    mockRoom.roomId,
+                    undefined,
+                    undefined,
+                    mockClient,
+                    {
+                        context: TimelineRenderingType.Room,
+                        sharedCaption: "caption text",
+                        skipConfirmation: true,
+                    },
+                ),
+            );
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+        });
+
+        it("revokes object URLs after pending images are sent", async () => {
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+            const firstFile = new File(["first"], "first.png", { type: "image/png" });
+            const secondFile = new File(["second"], "second.png", { type: "image/png" });
+
+            await stageFilesViaPicker(container, [firstFile, secondFile]);
+
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() => expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1));
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:first.png");
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:second.png");
+        });
+
+        it("revokes object URLs when pending images are discarded on unmount", async () => {
+            const { container, unmount } = getComponent();
+            const file = new File(["image"], "unmounted.png", { type: "image/png" });
+
+            await stageFileViaPicker(container, file);
+            unmount();
+
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:unmounted.png");
+        });
+
+        it("revokes object URLs when switching rooms clears pending images", async () => {
+            const { container, rerender } = getComponent();
+            const file = new File(["image"], "room-switch.png", { type: "image/png" });
+            const nextRoom = mkStubRoom("nextroom", "nextroom", mockClient) as any;
+
+            await stageFileViaPicker(container, file);
+            rerender(getRawComponent({ room: nextRoom }));
+
+            expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:room-switch.png");
+            await waitFor(() => expect(container.querySelector('[alt="room-switch.png"]')).toBeNull());
+        });
+
+        it("empty text composer with pending attachments still sends attachments on normal send", async () => {
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+            const file = new File(["image"], "screenshot.png", { type: "image/png" });
+
+            await stageFileViaPicker(container, file);
+
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() => expect(sendContentListToRoomSpy).toHaveBeenCalled());
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [file],
+                mockRoom.roomId,
+                undefined,
+                undefined,
+                mockClient,
+                {
+                    context: TimelineRenderingType.Room,
+                    sharedCaption: undefined,
+                    skipConfirmation: true,
+                },
+            );
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+        });
+
+        it("send with multiple pending images makes one composer upload request in tray order with shared context", async () => {
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+            const firstFile = new File(["first"], "first.png", { type: "image/png" });
+            const secondFile = new File(["second"], "second.png", { type: "image/png" });
+
+            await stageFilesViaPicker(container, [firstFile, secondFile]);
+            addTextToComposer(container, "Compare these screens");
+
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() => expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1));
+            expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
+                [firstFile, secondFile],
+                mockRoom.roomId,
+                undefined,
+                undefined,
+                mockClient,
+                {
+                    context: TimelineRenderingType.Room,
+                    sharedCaption: "Compare these screens",
+                    skipConfirmation: true,
+                },
+            );
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
+            expect(mockClient.sendMessage).not.toHaveBeenCalled();
+        });
+
+        it("remove-before-send keeps the removed image from being sent", async () => {
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+            const removedFile = new File(["remove"], "remove.png", { type: "image/png" });
+            const keptFile = new File(["keep"], "keep.png", { type: "image/png" });
+
+            await stageFilesViaPicker(container, [removedFile, keptFile]);
+
+            fireEvent.click(container.querySelector('[aria-label="Remove remove.png"]')!);
+            await waitFor(() => expect(container.querySelector('[alt="remove.png"]')).toBeNull());
+
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            await waitFor(() => expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1));
+            expect(sendContentListToRoomSpy.mock.calls[0][0]).toEqual([keptFile]);
+            expect(sendContentToRoomSpy).not.toHaveBeenCalled();
         });
 
         it("correctly sends a message", () => {

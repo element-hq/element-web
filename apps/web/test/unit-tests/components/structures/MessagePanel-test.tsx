@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventEmitter } from "events";
-import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render, within } from "jest-matrix-react";
 
@@ -32,6 +32,7 @@ import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { MEDIA_BATCH_CONTENT_KEY } from "../../../../src/utils/MediaBatch";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -125,6 +126,38 @@ describe("MessagePanel", function () {
             );
         }
         return events;
+    }
+
+    function mkImageBatchEvents(count = 2): MatrixEvent[] {
+        const ts0 = Date.now();
+        const batchId = "batch-123";
+
+        return Array.from({ length: count }, (_unused, index) =>
+            TestUtilsMatrix.mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: roomId,
+                user: "@user:id",
+                ts: ts0 + index * 1000,
+                content: {
+                    body: index === 0 ? "Shared screenshot context" : `screenshot-${index + 1}.png`,
+                    filename: index === 0 ? "screenshot-1.png" : undefined,
+                    msgtype: MsgType.Image,
+                    url: `mxc://example.org/screenshot-${index + 1}`,
+                    info: {
+                        mimetype: "image/png",
+                        size: 123,
+                        w: 800,
+                        h: 600,
+                    },
+                    [MEDIA_BATCH_CONTENT_KEY]: {
+                        id: batchId,
+                        index,
+                        count,
+                    },
+                },
+            }),
+        );
     }
 
     // Just to avoid breaking Dateseparator tests that might run at 00hrs
@@ -320,6 +353,36 @@ describe("MessagePanel", function () {
         // just check we have the right number of tiles for now
         const tiles = container.getElementsByClassName("mx_EventTile");
         expect(tiles.length).toEqual(10);
+    });
+
+    it("renders media-batch image events as one visible timeline tile", function () {
+        const batchEvents = mkImageBatchEvents(2);
+        const { container } = render(
+            getComponent({ events: batchEvents }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        const tiles = container.getElementsByClassName("mx_EventTile");
+        expect(tiles.length).toEqual(1);
+        expect(tiles[0].getAttribute("data-event-id")).toEqual(batchEvents[0].getId());
+
+        const batchBody = container.querySelector('[data-testid="media-batch-body"]');
+        expect(batchBody).toBeTruthy();
+        expect(batchBody).toHaveAttribute("data-media-batch-count", "2");
+        expect(batchBody?.getElementsByClassName("mx_MediaBatchBody_item")).toHaveLength(2);
+        expect(within(batchBody as HTMLElement).getByText("Shared screenshot context")).toBeTruthy();
+    });
+
+    it("renders the first media-batch event as a batch tile before the rest of the batch echoes", function () {
+        const [firstEvent] = mkImageBatchEvents(2);
+        const { container } = render(
+            getComponent({ events: [firstEvent] }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        const tiles = container.getElementsByClassName("mx_EventTile");
+        expect(tiles.length).toEqual(1);
+        expect(container.querySelector('[data-testid="media-batch-body"]')).toHaveAttribute("data-media-batch-count", "1");
     });
 
     it("should collapse adjacent member events", function () {
