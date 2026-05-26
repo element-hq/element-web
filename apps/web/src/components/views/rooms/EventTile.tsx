@@ -20,7 +20,6 @@ import React, {
     type MouseEvent,
     type ReactNode,
 } from "react";
-import classNames from "classnames";
 import {
     type EventStatus,
     EventType,
@@ -964,7 +963,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
-        const eventTileSnapshot = EventTileViewModel.createSnapshot({
+        const eventTileRenderState = EventTileViewModel.createRenderState({
             event: {
                 mxEvent: this.props.mxEvent,
                 eventSendStatus: this.props.eventSendStatus,
@@ -1012,11 +1011,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 hasPinnedMessageBadge,
             },
         });
+        const eventTileSnapshot = eventTileRenderState.snapshot;
 
-        const lineClasses = classNames("mx_EventTile_line", eventTileSnapshot.line.classState);
-        const tileClasses = classNames(eventTileSnapshot.root.classState);
-        const tileAriaLive = eventTileSnapshot.root.ariaLive;
-        const isRenderingNotification = eventTileSnapshot.event.isRenderingNotification;
+        const lineClasses = eventTileRenderState.line.className;
+        const tileClasses = eventTileRenderState.root.className;
+        const tileAriaLive = eventTileRenderState.root.ariaLive;
+        const isRenderingNotification = eventTileRenderState.root.isRenderingNotification;
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
@@ -1025,7 +1025,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
-        const scrollToken = eventTileSnapshot.root.scrollToken;
+        const scrollToken = eventTileRenderState.root.scrollToken;
 
         let avatar: JSX.Element | null = null;
         let sender: JSX.Element | null = null;
@@ -1068,7 +1068,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         ) : undefined;
 
         // Thread panel shows the timestamp of the last reply in that thread
-        const ts = eventTileSnapshot.timestamp.value;
+        const ts = eventTileRenderState.timestamp.value;
 
         const messageTimestampProps: MessageTimestampViewModelProps = {
             showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
@@ -1086,7 +1086,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = eventTileSnapshot.timestamp.displayState;
+        const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = eventTileRenderState.timestamp.displayState;
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
         const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
         const timestamp = showRealTimestamp ? messageTimestamp : dummyTimestamp;

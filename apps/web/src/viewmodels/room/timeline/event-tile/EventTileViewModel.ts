@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
 
 import {
     type EventTileSenderProfileState,
@@ -229,8 +230,51 @@ export interface EventTileViewModelSnapshot {
     footer: EventTileFooterSnapshot;
 }
 
+/** Render-ready EventTile state consumed by the existing component. */
+export interface EventTileRenderState {
+    /** Derived EventTile view state. */
+    snapshot: EventTileViewModelSnapshot;
+    /** EventTile root render state. */
+    root: {
+        /** EventTile root CSS classes. */
+        className: string;
+        /** EventTile aria-live value. */
+        ariaLive?: "off";
+        /** Stable scroll token for the event. */
+        scrollToken?: string;
+        /** Whether the tile is rendering as a notification. */
+        isRenderingNotification: boolean;
+    };
+    /** EventTile line render state. */
+    line: {
+        /** EventTile line CSS classes. */
+        className: string;
+    };
+    /** EventTile timestamp render state. */
+    timestamp: EventTileTimestampSnapshot;
+}
+
 /** Derives the current EventTile snapshot from component-owned inputs. */
 export class EventTileViewModel {
+    /** Derives render-ready EventTile state from component-owned inputs. */
+    public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
+        const snapshot = EventTileViewModel.createSnapshot(props);
+
+        return {
+            snapshot,
+            root: {
+                className: classNames(snapshot.root.classState),
+                ariaLive: snapshot.root.ariaLive,
+                scrollToken: snapshot.root.scrollToken,
+                isRenderingNotification: snapshot.event.isRenderingNotification,
+            },
+            line: {
+                className: classNames("mx_EventTile_line", snapshot.line.classState),
+            },
+            timestamp: snapshot.timestamp,
+        };
+    }
+
     /** Creates an EventTile view model snapshot. */
     public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;

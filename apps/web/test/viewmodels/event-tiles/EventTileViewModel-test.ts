@@ -112,6 +112,32 @@ describe("EventTileViewModel", () => {
         expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });
 
+    it("derives render-ready root and line state", () => {
+        const mxEvent = makeMessageEvent({ status: EventStatus.SENDING });
+
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                event: {
+                    mxEvent,
+                    eventSendStatus: EventStatus.SENDING,
+                },
+                display: {
+                    isHighlighted: true,
+                },
+            }),
+        );
+
+        expect(renderState.snapshot.event.isSending).toBe(true);
+        expect(renderState.root.className).toContain("mx_EventTile");
+        expect(renderState.root.className).toContain("mx_EventTile_sending");
+        expect(renderState.root.className).toContain("mx_EventTile_highlight");
+        expect(renderState.root.ariaLive).toBe("off");
+        expect(renderState.root.scrollToken).toBeUndefined();
+        expect(renderState.root.isRenderingNotification).toBe(false);
+        expect(renderState.line.className).toContain("mx_EventTile_line");
+        expect(renderState.timestamp).toBe(renderState.snapshot.timestamp);
+    });
+
     it("normalizes continuation by rendering mode and bubble layout", () => {
         const fileSnapshot = EventTileViewModel.createSnapshot(
             makeProps({
