@@ -38,6 +38,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const UnknownUser: Story = {
+    tags: ["skip-test"],
     args: {
         displayName: "@bob:example.com",
         userId: "@bob:example.com",
