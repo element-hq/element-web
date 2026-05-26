@@ -5,6 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+.wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: var(--cpd-space-3x);
+    margin-bottom: var(--cpd-space-4x);
+}
+
 .container {
     /* As per design, seperator should span whole width. */
     div[role="separator"] {
@@ -50,6 +57,7 @@
 .triggerButton {
     border: none;
     background: none;
+    padding: 0;
     display: flex;
     color: var(--cpd-color-body-primary);
     cursor: pointer;
@@ -63,7 +71,7 @@
         overflow: hidden;
         text-wrap: nowrap;
     }
-    margin-top: var(--cpd-space-3x);
-    margin-bottom: var(--cpd-space-4x);
     margin-left: var(--cpd-space-3x);
+    margin-right: var(--cpd-space-2x);
+    padding-inline-start: var(--cpd-space-1-5x);
 }

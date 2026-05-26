@@ -8,7 +8,7 @@
         "close": "Zamknij",
         "collapse": "Zwiń",
         "delete": "Usuń",
-        "dismiss": "Pomiń",
+        "dismiss": "Zamknij",
         "download": "Pobierz",
         "edit": "Edytuj",
         "explore_rooms": "Przeglądaj pokoje",
@@ -40,6 +40,9 @@
         "options": "Opcje",
         "preferences": "Preferencje",
         "state_encryption_enabled": "Eksperymentalne szyfrowanie włączone"
+    },
+    "devtools": {
+        "toggle_event": "przełącz zdarzenie"
     },
     "keyboard": {
         "shift": "Shift"
@@ -201,6 +204,14 @@
         "n_minutes_ago": "%(num)s minut temu"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Połączenie odrzucone",
+                "call_declined_by_us": "Odrzuciłeś połączenie"
+            },
+            "video_call_title": "Połączenie wideo",
+            "voice_call_title": "Połączenie głosowe"
+        },
         "decryption_failure": {
             "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości, ponieważ Twoje urządzenie nie zostało zweryfikowane",
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
@@ -212,6 +223,7 @@
         },
         "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
+        "e2e_state": "Stan szyfrowania end-to-end",
         "m.audio": {
             "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
@@ -219,6 +231,10 @@
         },
         "m.file": {
             "error_invalid": "Nieprawidłowy plik"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
+            "removed": "%(senderDisplayName)s usunął awatar pokoju."
         },
         "m.room.encryption": {
             "disable_attempt": "Zignorowano próbę wyłączenia szyfrowania",

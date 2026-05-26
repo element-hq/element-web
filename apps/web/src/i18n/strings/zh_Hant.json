@@ -93,7 +93,6 @@
         "rename": "重新命名",
         "reply": "回覆",
         "reply_in_thread": "在討論串中回覆",
-        "report_content": "回報內容",
         "resend": "重新傳送",
         "reset": "重設",
         "resume": "繼續",
@@ -743,7 +742,6 @@
         "thread_root_id": "討論串 Root ID：%(threadRootId)s",
         "threads_timeline": "討論串時間軸",
         "title": "開發者工具",
-        "toggle_event": "切換事件",
         "toolbox": "工具箱",
         "use_at_own_risk": "此使用者介面不會檢查值的類型。使用風險自負。",
         "user_read_up_to": "使用者讀取至： ",
@@ -1297,8 +1295,6 @@
         "notification_settings": "新通知設定",
         "notification_settings_beta_caption": "全新推出更簡便的通知設定調整方式。隨心所欲地自訂您的%(brand)s ，打造專屬體驗。",
         "notification_settings_beta_title": "通知設定",
-        "report_to_moderators": "回報給版主",
-        "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
         "sliding_sync": "滑動同步模式",
         "sliding_sync_description": "正在積極開發中，無法停用。",
         "sliding_sync_disabled_notice": "登出並重新登入以停用",
@@ -1547,22 +1543,10 @@
     },
     "report_content": {
         "description": "回報此訊息將會傳送其獨特的「活動 ID」給您家伺服器的管理員。如果此聊天室中的訊息已加密，您的家伺服器管理員將無法閱讀訊息文字或檢視任何檔案或圖片。",
-        "disagree": "不同意",
         "hide_messages_from_user": "若想隱藏來自該使用者所有目前與未來的訊息，請打勾。",
         "ignore_user": "忽略使用者",
-        "illegal_content": "違法內容",
         "missing_reason": "請填寫為什麼您要回報。",
-        "nature": "請挑選性質並描述此訊息為什麼是濫用。",
-        "nature_disagreement": "該使用者所寫的內容是錯誤的。\n這將會回報給聊天室管理員。",
-        "nature_illegal": "該使用者進行違法行為，例如洩漏他人個資，或威脅使用暴力。\n將會回報給聊天室版主，他們可能會將其回報給執法單位。",
-        "nature_other": "任何其他理由。請描述問題。\n將會回報給聊天室版主。",
-        "nature_spam": "該使用者傳送廣告、廣告連結或宣傳等垃圾訊息至聊天室。\n將會回報給聊天室版主。",
-        "nature_toxic": "該使用者表現出不良行為，例如侮辱其他使用者，或在適合家庭的聊天室中分享成人內容，又或是以其他方式違反該聊天室的規則。\n將回報給聊天室版主。",
-        "other_label": "其他",
-        "report_content_to_homeserver": "回報內容給您的家伺服器管理員",
-        "report_entire_room": "回報整個聊天室",
-        "spam_or_propaganda": "垃圾郵件或宣傳",
-        "toxic_behaviour": "有問題的行為"
+        "report_content_to_homeserver": "回報內容給您的家伺服器管理員"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "無法解密 %(failedCount)s 個工作階段！",
@@ -2901,9 +2885,7 @@
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 變更了聊天室大頭照。",
-            "changed_img": "%(senderDisplayName)s 將聊天室大頭照更改為 <img/>",
-            "lightbox_title": "%(senderDisplayName)s 將聊天室的大頭照改為 %(roomName)s",
-            "removed": "%(senderDisplayName)s 移除了聊天室的大頭照。"
+            "lightbox_title": "%(senderDisplayName)s 將聊天室的大頭照改為 %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

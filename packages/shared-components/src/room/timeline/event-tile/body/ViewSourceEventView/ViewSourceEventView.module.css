@@ -1,0 +1,64 @@
+/*
+Copyright 2026 Element Creations Ltd.
+Copyright 2024 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.content {
+    display: flex;
+    color: var(--cpd-color-text-secondary);
+    font-size: var(--cpd-font-size-body-xs);
+    width: 100%;
+    line-height: normal;
+}
+
+.source {
+    flex: 1;
+    overflow-inline: auto;
+}
+
+pre.source {
+    line-height: 1.2;
+    margin: 3.5px 0;
+}
+
+.toggle {
+    --ViewSourceEvent_toggle-size: 16px;
+
+    appearance: none;
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--cpd-color-icon-accent-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    width: var(--ViewSourceEvent_toggle-size);
+    min-width: var(--ViewSourceEvent_toggle-size);
+    height: var(--ViewSourceEvent_toggle-size);
+}
+
+.content:hover .toggle,
+.toggle:focus-visible {
+    visibility: visible;
+}
+
+.toggle:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
+    border-radius: var(--cpd-space-1x);
+}
+
+.toggle svg {
+    width: var(--ViewSourceEvent_toggle-size);
+    height: var(--ViewSourceEvent_toggle-size);
+}
+
+.expanded .toggle {
+    align-self: flex-end;
+}

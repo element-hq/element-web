@@ -89,6 +89,11 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "打开房间 %(roomName)s",
+            "video_call": "以视频通话方式打开房间 %(roomName)s。",
+            "voice_call": "以语音通话方式打开房间 %(roomName)s。"
+        },
         "appearance": "外观",
         "chat_moved": "聊天已移动",
         "collapse_all_sections": "折叠所有区域",
@@ -180,6 +185,14 @@
         "n_minutes_ago": "%(num)s分钟前"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "来电被拒接",
+                "call_declined_by_us": "你已拒接来电"
+            },
+            "video_call_title": "视频通话",
+            "voice_call_title": "语音通话"
+        },
         "decryption_failure": {
             "blocked": "由于你的设备未经验证，发件人已阻止你接收此消息。",
             "historical_event_no_key_backup": "消息历史在此设备上不可用",
@@ -191,6 +204,7 @@
         },
         "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下载",
+        "e2e_state": "端到端加密状态",
         "m.audio": {
             "audio_player": "音频播放器",
             "error_downloading_audio": "下载音频时出错",
@@ -198,6 +212,10 @@
         },
         "m.file": {
             "error_invalid": "无效文件"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s 将房间头像更改为 <img/>",
+            "removed": "%(senderDisplayName)s 已移除房间头像。"
         },
         "m.room.encryption": {
             "disable_attempt": "已忽略尝试禁用加密",

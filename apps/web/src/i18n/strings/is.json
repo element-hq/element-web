@@ -86,7 +86,6 @@
         "rename": "Endurnefna",
         "reply": "Svara",
         "reply_in_thread": "Svara í spjallþræði",
-        "report_content": "Kæra efni",
         "resend": "Endursenda",
         "reset": "Endursetja",
         "resume": "Halda áfram",
@@ -628,7 +627,6 @@
         },
         "state_key": "Stöðulykill",
         "title": "Forritunartól",
-        "toggle_event": "víxla atburði af/á",
         "toolbox": "Verkfærakassi",
         "use_at_own_risk": "Þetta viðmót athugar EKKI tegundir gildanna. Notist á eigin ábyrgð.",
         "value": "Gildi",
@@ -1082,8 +1080,6 @@
         "location_share_live_description": "Bráðabirgðaútfærsla. Staðsetningar haldast í ferli spjallrása.",
         "mjolnir": "Nýjar leiðir til að hunsa fólk",
         "msc3531_hide_messages_pending_moderation": "Láta umsjónarmenn fela skilaboð sem bíða yfirferðar.",
-        "report_to_moderators": "Tilkynna til umsjónarmanna",
-        "report_to_moderators_description": "Í spjallrásum sem styðja eftirlit umsjónarmanna, mun 'Kæra'-hnappurinn gefa þér færi á að tilkynna misnotkun til umsjónarmanna spjallrása.",
         "under_active_development": "Í virkri þróun.",
         "video_rooms": "Myndspjallrásir",
         "video_rooms_a_new_way_to_chat": "Ný leið til að spjalla með tali og myndmerki í %(brand)s.",
@@ -1302,20 +1298,9 @@
     },
     "report_content": {
         "description": "Tilkynning um þessi skilaboð mun senda einstakt 'atviksauðkenni' til stjórnanda heimaþjóns. Ef skilaboð í þessari spjallrás eru dulrituð getur stjórnandi heimaþjóns ekki lesið skilaboðatextann eða skoðað skrár eða myndir.",
-        "disagree": "Ósammála",
         "ignore_user": "Hunsa notanda",
-        "illegal_content": "Ólöglegt efni",
         "missing_reason": "Fylltu út skýringu á því hvers vegna þú ert að kæra.",
-        "nature": "Veldu ástæðu og lýstu því hvað gerir þessi skilaboð ótæk.",
-        "nature_disagreement": "Það sem notandinn er að skrifa sem er rangt.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar.",
-        "nature_illegal": "Þessi notandi er að sýna ólöglega hegðun, til dæmis með því að hrella aðra notendur eða hóta ofbeldi.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar, sem gætu þurft að tilkynna þetta til viðeigandi yfirvalda.",
-        "nature_other": "Einhver önnur ástæða. Lýstu vandamálinu.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar.",
-        "nature_spam": "Þessi notandi er að dreifa auglýsingum inn á spjallrásina, tenglum á auglýsingar eða áróður.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar.",
-        "other_label": "Annað",
-        "report_content_to_homeserver": "Kæra efni til kerfisstjóra heimaþjónsins þíns",
-        "report_entire_room": "Kæra alla spjallrásina",
-        "spam_or_propaganda": "Ruslpóstur eða áróður",
-        "toxic_behaviour": "Eitruð hegðun"
+        "report_content_to_homeserver": "Kæra efni til kerfisstjóra heimaþjónsins þíns"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Mistókst að afkóða %(failedCount)s setur!",
@@ -2372,9 +2357,7 @@
         "m.poll.start": "%(senderName)s hefur sett í gang könnun - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar.",
-            "changed_img": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar í <img/>",
-            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s",
-            "removed": "%(senderDisplayName)s fjarlægði auðkennismynd spjallrásarinnar."
+            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

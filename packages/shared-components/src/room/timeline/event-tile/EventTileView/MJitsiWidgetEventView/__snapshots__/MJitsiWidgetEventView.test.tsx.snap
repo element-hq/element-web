@@ -1,0 +1,125 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MJitsiWidgetEventView > renders a timestamp 1`] = `
+<div>
+  <div
+    class="EventTileBubble-module_container"
+  >
+    <svg
+      color="var(--cpd-color-icon-primary)"
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+      />
+    </svg>
+    <div
+      class="EventTileBubble-module_title"
+    >
+      Video conference started by Alice
+    </div>
+    <div
+      class="EventTileBubble-module_subtitle"
+    >
+      Join the conference at the top of this room
+    </div>
+    <span>
+      14:56
+    </span>
+  </div>
+</div>
+`;
+
+exports[`MJitsiWidgetEventView > renders nothing when hidden 1`] = `<div />`;
+
+exports[`MJitsiWidgetEventView > renders the Ended story without a subtitle 1`] = `
+<div>
+  <div
+    class="EventTileBubble-module_container"
+  >
+    <svg
+      color="var(--cpd-color-icon-primary)"
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+      />
+    </svg>
+    <div
+      class="EventTileBubble-module_title"
+    >
+      Video conference ended by Alice
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MJitsiWidgetEventView > renders the Started story 1`] = `
+<div>
+  <div
+    class="EventTileBubble-module_container"
+  >
+    <svg
+      color="var(--cpd-color-icon-primary)"
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+      />
+    </svg>
+    <div
+      class="EventTileBubble-module_title"
+    >
+      Video conference started by Alice
+    </div>
+    <div
+      class="EventTileBubble-module_subtitle"
+    >
+      Join the conference at the top of this room
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MJitsiWidgetEventView > renders the Updated story 1`] = `
+<div>
+  <div
+    class="EventTileBubble-module_container"
+  >
+    <svg
+      color="var(--cpd-color-icon-primary)"
+      fill="currentColor"
+      height="1em"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
+      />
+    </svg>
+    <div
+      class="EventTileBubble-module_title"
+    >
+      Video conference updated by Alice
+    </div>
+    <div
+      class="EventTileBubble-module_subtitle"
+    >
+      Join the conference from the room information card on the right
+    </div>
+  </div>
+</div>
+`;

@@ -86,7 +86,6 @@
         "rename": "Riemërtojeni",
         "reply": "Përgjigje",
         "reply_in_thread": "Përgjigjuni te rrjedha",
-        "report_content": "Raportoni Lëndë",
         "resend": "Ridërgoje",
         "reset": "Rikthe te parazgjedhjet",
         "resume": "Rimerre",
@@ -709,7 +708,6 @@
         "state_key": "Kyç Gjendjesh",
         "threads_timeline": "Rrjedhë kohore rrjedhash",
         "title": "Mjete zhvilluesi",
-        "toggle_event": "shfaqe/fshihe aktin",
         "toolbox": "Grup mjetesh",
         "use_at_own_risk": "Kjo UI NUK kontrollon llojet e vlerave. Përdorini me përgjegjësinë tuaj.",
         "value": "Vlerë",
@@ -1228,8 +1226,6 @@
         "location_share_live_description": "Sendërtim i përkohshëm. Vendndodhjet mbeten te historiku i dhomës.",
         "mjolnir": "Rrugë të reja për të shpërfillur njerëz",
         "msc3531_hide_messages_pending_moderation": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit.",
-        "report_to_moderators": "Raportojeni te moderatorët",
-        "report_to_moderators_description": "Në dhoma që mbulojnë moderimin, butoni “Raportojeni” do t’ju lejojë t’u raportoni abuzim moderatorëve të dhomës.",
         "sliding_sync_description": "Nën zhvillim aktiv, s’mund të çaktivizohet.",
         "sliding_sync_disabled_notice": "Që të çaktivizohet, dilni dhe rihyni në llogari",
         "sliding_sync_server_no_support": "Shërbyesit tuaj i mungon mbulim i brendshëm për këtë",
@@ -1470,22 +1466,10 @@
     },
     "report_content": {
         "description": "Raportimi i këtij mesazhi do të shkaktojë dërgimin e 'ID-së së aktit' unike te përgjegjësi i shërbyesit tuaj Home. Nëse mesazhet në këtë dhomë fshehtëzohen, përgjegjësi i shërbyesit tuaj Home s’do të jetë në gjendje të lexojë tekstin e mesazhit apo të shohë çfarëdo kartelë apo figurë.",
-        "disagree": "S’pajtohem",
         "hide_messages_from_user": "I vini shenjë, nëse doni të fshihen krejt mesazhet e tanishme dhe të ardhshme nga ky përdorues.",
         "ignore_user": "Shpërfille përdoruesin",
-        "illegal_content": "Lëndë e Paligjshme",
         "missing_reason": "Ju lutemi, plotësoni arsyen pse po raportoni.",
-        "nature": "Ju lutemi, zgjidhni një karakterizim dhe përshkruani se ç’e bën këtë mesazh abuziv.",
-        "nature_disagreement": "Ajo ç’shkruan ky përdorues është gabim.\nKjo do t’u njoftohet përgjegjësve të dhomës.",
-        "nature_illegal": "Ky përdorues shfaq sjellje të paligjshme, bie fjala, duke zbuluar identitet personash ose duke kërcënuar me dhunë.\nKjo do t’u njoftohet përgjegjësve të dhomës, të cilët mund ta përshkallëzojnë punën drejt autoriteteve ligjore.",
-        "nature_other": "Çfarëdo arsye tjetër. Ju lutemi, përshkruani problemin.\nKjo do t’u raportohet moderatorëve të dhomës.",
-        "nature_spam": "Ky përdorues dërgon në dhomë reklama të padëshiruara, lidhje për te reklama të tilla ose te propagandë e padëshiruar.\nKjo do t’u njoftohet përgjegjësve të dhomës.",
-        "nature_toxic": "Ky përdorues po tregon sjellje toksike, bie fjala, duke fyer përdorues të tjerë ose duke dhënë lëndë vetëm për të rritur në një dhomë të menduar për familje, ose duke shkelur në mënyra të tjera rregullat e kësaj dhome.\nKjo do t’u njoftohet moderatorëve të dhomës.",
-        "other_label": "Tjetër",
-        "report_content_to_homeserver": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home",
-        "report_entire_room": "Raporto krejt dhomën",
-        "spam_or_propaganda": "Mesazh i padëshiruar ose propagandë",
-        "toxic_behaviour": "Sjellje Toksike"
+        "report_content_to_homeserver": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "S’u arrit të shfshehtëzohet sesioni %(failedCount)s!",
@@ -2712,9 +2696,7 @@
         "m.poll.start": "%(senderName)s nisi një anketim - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ndryshoi avatarin e dhomës.",
-            "changed_img": "%(senderDisplayName)s ndryshoi avatarin e dhomës në <img/>",
-            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s",
-            "removed": "%(senderDisplayName)s hoqi avatarin e dhomës."
+            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

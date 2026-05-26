@@ -95,7 +95,6 @@
         "rename": "Nimeä uudelleen",
         "reply": "Vastaa",
         "reply_in_thread": "Vastaa ketjuun",
-        "report_content": "Ilmoita sisällöstä",
         "report_room": "Ilmoita huoneesta",
         "resend": "Lähetä uudelleen",
         "reset": "Palauta alkutilaan",
@@ -1274,8 +1273,6 @@
         "msc3531_hide_messages_pending_moderation": "Anna moderaattorien piilottaa moderointia odottavia viestejä.",
         "notification_settings": "Uudet ilmoitusasetukset",
         "notification_settings_beta_title": "Ilmoitusasetukset",
-        "report_to_moderators": "Ilmoita moderaattoreille",
-        "report_to_moderators_description": "Moderointia tukevissa huoneissa väärinkäytökset voi ilmoittaa Ilmoita-painikkeella huoneen moderaattoreille.",
         "sliding_sync": "Liukuvan synkronoinnin tila",
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
         "sliding_sync_disabled_notice": "Kirjaudu uudelleen sisään poistaaksesi käytöstä",
@@ -1508,13 +1505,8 @@
     "report_content": {
         "description": "Tämän viestin ilmoittaminen lähettää sen yksilöllisen tapahtumatunnuksen (event ID) kotipalvelimesi ylläpitäjälle. Jos tämän huoneen viestit on salattu, kotipalvelimesi ylläpitäjä ei voi lukea viestin tekstiä tai nähdä tiedostoja tai kuvia.",
         "ignore_user": "Sivuuta käyttäjä",
-        "illegal_content": "Laiton sisältö",
         "missing_reason": "Kerro miksi teet ilmoitusta.",
-        "other_label": "Muut",
-        "report_content_to_homeserver": "Ilmoita sisällöstä kotipalvelimesi ylläpitäjälle",
-        "report_entire_room": "Raportoi koko huone",
-        "spam_or_propaganda": "Roskapostitusta tai propagandaa",
-        "toxic_behaviour": "Myrkyllinen käyttäytyminen"
+        "report_content_to_homeserver": "Ilmoita sisällöstä kotipalvelimesi ylläpitäjälle"
     },
     "report_room": {
         "reason_label": "Kuvaile syy"
@@ -2868,9 +2860,7 @@
         "m.poll.start": "%(senderName)s on aloittanut kyselyn - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s vaihtoi huoneen kuvan.",
-            "changed_img": "%(senderDisplayName)s vaihtoi huoneen kuvaksi <img/>",
-            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan",
-            "removed": "%(senderDisplayName)s poisti huoneen kuvan."
+            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan"
         },
         "m.room.canonical_alias": {
             "alt_added": {

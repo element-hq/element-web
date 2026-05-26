@@ -77,7 +77,6 @@
         "rename": "שנה שם",
         "reply": "תשובה",
         "reply_in_thread": "מענה בשרשור",
-        "report_content": "דווח על תוכן",
         "resend": "שלח מחדש",
         "reset": "אתחל",
         "resume": "תקציר",
@@ -1136,7 +1135,6 @@
     "report_content": {
         "description": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות.",
         "missing_reason": "אנא מלאו מדוע אתם מדווחים.",
-        "other_label": "אחר",
         "report_content_to_homeserver": "דווח על תוכן למנהל שרת הבית שלך"
     },
     "restore_key_backup_dialog": {
@@ -1977,9 +1975,7 @@
         "m.poll.start": "%(senderName)s התחיל סקר - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s שינה את תמונת החדר.",
-            "changed_img": "%(senderDisplayName)s שינה את האווטאר של החדר ל- <img/>",
-            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s",
-            "removed": "%(senderDisplayName)s הסיר את האווטאר של החדר."
+            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

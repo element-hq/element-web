@@ -156,8 +156,8 @@ Please see LICENSE files in the repository root for full details.
         padding-right: 48px !important;
     }
 
-    .mx_MImageBody {
-        .mx_MImageBody_thumbnail_container {
+    .mx_ImageBody {
+        .mx_ImageBody_container {
             justify-content: center;
             min-height: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
             min-width: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
@@ -181,8 +181,8 @@ Please see LICENSE files in the repository root for full details.
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
 
-            .mx_MImageBody .mx_MImageBody_thumbnail_container,
-            .mx_MImageBody::before,
+            .mx_ImageBody .mx_ImageBody_container,
+            .mx_ImageBody::before,
             .mx_MVideoBody .mx_MVideoBody_container,
             .mx_MediaBody,
             .mx_MLocationBody_map,
@@ -220,8 +220,8 @@ Please see LICENSE files in the repository root for full details.
             margin-inline-start: auto;
             border-bottom-left-radius: var(--cornerRadius);
 
-            .mx_MImageBody .mx_MImageBody_thumbnail_container,
-            .mx_MImageBody::before,
+            .mx_ImageBody .mx_ImageBody_container,
+            .mx_ImageBody::before,
             .mx_MVideoBody .mx_MVideoBody_container,
             .mx_MediaBody,
             .mx_MLocationBody_map,
@@ -334,16 +334,12 @@ Please see LICENSE files in the repository root for full details.
             }
         }
 
-        .mx_MImageBody {
+        .mx_ImageBody {
             width: 100%;
-
-            .mx_MImageBody_thumbnail.mx_MImageBody_thumbnail--blurhash {
-                position: unset;
-            }
         }
 
         /* noinspection CssReplaceWithShorthandSafely */
-        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_ImageBody .mx_ImageBody_container,
         .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MediaBody {
             border-radius: unset;
@@ -359,7 +355,8 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    &:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+    &:not(.mx_EventTile_noBubble):not(.mx_EventTile_alignedBetweenBubbles)
+        .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
         /* make the top and bottom padding 1px smaller so that we can pad
             .mx_EventTile_content by 1px */
         /* to avoid anti-zalgo cutting off our larger than text emojis. */
@@ -375,9 +372,9 @@ Please see LICENSE files in the repository root for full details.
     &.mx_EventTile_continuation[data-self="false"] .mx_EventTile_line {
         border-top-left-radius: 0;
 
-        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_ImageBody .mx_ImageBody_container,
         .mx_MVideoBody .mx_MVideoBody_container,
-        .mx_MImageBody::before,
+        .mx_ImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map,
         .mx_MBeaconBody {
@@ -387,9 +384,9 @@ Please see LICENSE files in the repository root for full details.
     &.mx_EventTile_lastInSection[data-self="false"] .mx_EventTile_line {
         border-bottom-left-radius: var(--cornerRadius);
 
-        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_ImageBody .mx_ImageBody_container,
         .mx_MVideoBody .mx_MVideoBody_container,
-        .mx_MImageBody::before,
+        .mx_ImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map,
         .mx_MBeaconBody {
@@ -400,9 +397,9 @@ Please see LICENSE files in the repository root for full details.
     &.mx_EventTile_continuation[data-self="true"] .mx_EventTile_line {
         border-top-right-radius: 0;
 
-        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_ImageBody .mx_ImageBody_container,
         .mx_MVideoBody .mx_MVideoBody_container,
-        .mx_MImageBody::before,
+        .mx_ImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map,
         .mx_MBeaconBody {
@@ -412,9 +409,9 @@ Please see LICENSE files in the repository root for full details.
     &.mx_EventTile_lastInSection[data-self="true"] .mx_EventTile_line {
         border-bottom-right-radius: var(--cornerRadius);
 
-        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_ImageBody .mx_ImageBody_container,
         .mx_MVideoBody .mx_MVideoBody_container,
-        .mx_MImageBody::before,
+        .mx_ImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map,
         .mx_MBeaconBody {
@@ -526,6 +523,21 @@ Please see LICENSE files in the repository root for full details.
     .mx_LegacyCallEvent_wrapper,
     .mx_CallEvent_wrapper {
         justify-content: center;
+    }
+
+    &.mx_EventTile_alignedBetweenBubbles {
+        margin-inline-start: calc(
+            var(--EventTile_bubble-margin-inline-start) + var(--EventTile_bubble_line-margin-inline-start)
+        );
+        margin-inline-end: calc(
+            var(--EventTile_bubble-margin-inline-end) + var(--EventTile_bubble_line-margin-inline-end)
+        );
+
+        .mx_EventTile_line {
+            max-width: 100%;
+            width: 100%;
+            margin: 0;
+        }
     }
 }
 

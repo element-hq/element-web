@@ -255,14 +255,16 @@ export function TextualBodyView({
             [styles.annotatedInline]: kind === TextualBodyViewKind.EMOTE,
         });
 
+        // Reply quotes need to tweak this wrapper so long edited messages still clamp nicely.
+        // Keep this hook stable so app CSS doesn't have to reach into CSS-module class names.
         renderedBody =
             kind === TextualBodyViewKind.EMOTE ? (
-                <span dir="auto" className={annotatedClasses}>
+                <span dir="auto" className={annotatedClasses} data-textual-body-annotation-wrapper="">
                     {renderedBody}
                     {markers}
                 </span>
             ) : (
-                <div dir="auto" className={annotatedClasses}>
+                <div dir="auto" className={annotatedClasses} data-textual-body-annotation-wrapper="">
                     {renderedBody}
                     {markers}
                 </div>

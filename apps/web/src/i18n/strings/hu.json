@@ -97,7 +97,6 @@
         "rename": "Átnevezés",
         "reply": "Válasz",
         "reply_in_thread": "Válasz üzenetszálban",
-        "report_content": "Tartalom jelentése",
         "report_room": "Szoba jelentése",
         "resend": "Újraküldés",
         "reset": "Visszaállítás",
@@ -889,7 +888,6 @@
         "thread_root_id": "Üzenetszál gyökérazonosítója: %(threadRootId)s",
         "threads_timeline": "Üzenetszálak idővonala",
         "title": "Fejlesztői eszközök",
-        "toggle_event": "esemény be/ki",
         "toolbox": "Eszköztár",
         "use_at_own_risk": "Ez a felület nem ellenőrzi az érték típusát. Csak saját felelősségére használja.",
         "user_avatar": "Profilkép: %(avatar)s",
@@ -1571,8 +1569,6 @@
         "notifications": "Engedélyezze az értesítési panelt a szoba fejlécében",
         "render_reaction_images": "Egyéni képek megjelenítése reakciókban",
         "render_reaction_images_description": "Néha „egyéni emodzsiknak” nevezik.",
-        "report_to_moderators": "Jelentés a moderátoroknak",
-        "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "room_list_sections": "Szobalista szakaszok",
         "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
@@ -1854,25 +1850,10 @@
     },
     "report_content": {
         "description": "Az üzenet bejelentése egy egyedi „eseményazonosítót” küld el a Matrix-kiszolgáló adminisztrátorának. Ha az üzenetek titkosítottak a szobában, akkor a Matrix-kiszolgáló adminisztrátora nem tudja elolvasni az üzenetet, vagy nem tudja megnézni a fájlokat vagy képeket.",
-        "disagree": "Nem értek egyet",
-        "error_create_room_moderation_bot": "Nem lehet szobát létrehozni a moderációs bot segítségével",
         "hide_messages_from_user": "Jelölje be, ha ennek a felhasználónak a jelenlegi és jövőbeli üzeneteit is el szeretné rejteni.",
         "ignore_user": "Felhasználó mellőzése",
-        "illegal_content": "Törvénytelen tartalom",
         "missing_reason": "Adja meg, hogy miért jelenti.",
-        "nature": "Válassza ki az üzenet természetét, vagy írja le, hogy miért elítélendő.",
-        "nature_disagreement": "Amit ez a felhasználó ír az rossz.\nErről a szoba moderátorának jelentés készül.",
-        "nature_illegal": "A felhasználó illegális viselkedést valósít meg, például kipécézett valakit vagy tettlegességgel fenyeget.\nEz jelezve lesz a moderátorok felé, akik akár hivatalos szervek felé is továbbíthatják ezt.",
-        "nature_nonstandard_admin": "Ezt a szobát illegális vagy mérgező tartalomnak szentelték, vagy a moderátorok nem szűrik az illegális vagy mérgező tartalmakat.\nEzt jelentésre kerül a rendszergazdák felé itt: %(homeserver)s .",
-        "nature_nonstandard_admin_encrypted": "Ezt a szobát illegális vagy mérgező tartalomnak szentelték, vagy a moderátorok nem szűrik az illegális vagy mérgező tartalmakat.\nEzt jelentésre kerül a rendszergazdák felé itt: %(homeserver)s . A rendszergazdák a titkosított tartalmat ebben a szobában nem tudják elolvasni.",
-        "nature_other": "Bármi más ok. Írja le a problémát.\nEz lesz elküldve a szoba moderátorainak.",
-        "nature_spam": "A felhasználó kéretlen reklámokkal, reklámhivatkozásokkal vagy propagandával bombázza a szobát.\nEz jelezve lesz a szoba moderátorai felé.",
-        "nature_toxic": "A felhasználó mérgező viselkedést tanúsít, például más felhasználókat inzultál vagy felnőtt tartalmat oszt meg egy családbarát szobában, vagy más módon sérti a szoba szabályait.\nEz moderátorok felé jelzésre kerül.",
-        "other_label": "Egyéb",
-        "report_content_to_homeserver": "Tartalom bejelentése a Matrix-kiszolgáló adminisztrátorának",
-        "report_entire_room": "Az egész szoba jelentése",
-        "spam_or_propaganda": "Kéretlen tartalom vagy propaganda",
-        "toxic_behaviour": "Mérgező viselkedés"
+        "report_content_to_homeserver": "Tartalom bejelentése a Matrix-kiszolgáló adminisztrátorának"
     },
     "report_room": {
         "description": "A szoba jelentése a Matrix-kiszolgáló rendszergazdájának. Ha az üzenetek titkosítva vannak, a rendszergazda nem fogja tudni elolvasni azokat.",
@@ -3356,7 +3337,6 @@
         "download_action_downloading": "Letöltés",
         "download_failed": "Letöltés sikertelen",
         "download_failed_description": "Hiba történt a fájl letöltése közben",
-        "e2e_state": "A végpontok közti titkosítás állapota",
         "edits": {
             "tooltip_label": "Szerkesztés ideje: %(date)s. Kattintson a szerkesztések megtekintéséhez.",
             "tooltip_sub": "A szerkesztések megtekintéséhez kattints",
@@ -3437,9 +3417,7 @@
         "m.poll.start": "%(senderName)s szavazást indított - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s megváltoztatta a szoba profilképét.",
-            "changed_img": "%(senderDisplayName)s megváltoztatta a szoba profilképét: <img/>",
-            "lightbox_title": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba profilképét",
-            "removed": "%(senderDisplayName)s törölte a szoba profilképét."
+            "lightbox_title": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba profilképét"
         },
         "m.room.canonical_alias": {
             "alt_added": {

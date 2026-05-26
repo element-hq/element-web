@@ -93,7 +93,6 @@
         "rename": "Hanova anarana",
         "reply": "Valio",
         "reply_in_thread": "Valio amin'ny kofehy",
-        "report_content": "Mitatitra votoaty",
         "resend": "Voaroaka",
         "reset": "Amerina aminy laoniny",
         "resume": "CV",
@@ -741,7 +740,6 @@
         "thread_root_id": "Id fototra :%(threadRootId)s",
         "threads_timeline": "Laha-tahirin'ny randram-potoana",
         "title": "Fitaovana ny mampandroso",
-        "toggle_event": "Itsipaka hetsika",
         "toolbox": "Toeram-pitahirizana ny mety ilaina",
         "use_at_own_risk": "TSY manamarina ny karazana soatoavina ity UI ity. Ampiasao amin'ny risikao manokana.",
         "user_read_up_to": "Ny mpampiasa dia namaky hatramin'ny :",
@@ -1296,8 +1294,6 @@
         "notifications": "Alefaso ny tontonana fampahafantarana ao amin'ny lohateniny efitrano",
         "render_reaction_images": "Mandefa sary mahazatra amin'ny fanehoan-kevitra",
         "render_reaction_images_description": "Indraindray antsoina hoe emojis mahazatra.",
-        "report_to_moderators": "Tatitra aminy mpandrindra",
-        "report_to_moderators_description": "Ao amin'ny efitrano izay manohana ny fampitoniana, ny bokotra \"Report\" dia hamela anao hitatitra ny fanararaotana amin'ireo mpandrindra ny efitrano.",
         "sliding_sync": "Fomba atao",
         "sliding_sync_description": "Eo ambany fampandrosoana mavitrika, tsy azo kilemaina.",
         "sliding_sync_disabled_notice": "Miala aloa de miverena mba hahafahana mampiato",
@@ -1553,25 +1549,10 @@
     },
     "report_content": {
         "description": "Ny tatitra an'ity hafatra ity dia handefa ny event ID azy manokana any amin'ny mpitantana ny homeserver-nao. Raha misy encryption ny hafatra ao amin'ity efitrano ity dia tsy afaka mamaky ny lahatsoratra na mijery rakitra na sary ny mpitantana ny homeserver anao.",
-        "disagree": "Tsy miombon-kevitra",
-        "error_create_room_moderation_bot": "Tsy afaka mamorona toerana miaraka amin'ny bot fandrindrana",
         "hide_messages_from_user": "Jereo raha te hanafina ny hafatra rehetra ankehitriny sy ho avy amin'ity mpampiasa ity ianao.",
         "ignore_user": "Tsy iraharaha ny mpampiasa",
-        "illegal_content": "Votoaty tsy ara-dalàna",
         "missing_reason": "Fenoy azafady ny antony hanaovanao tatitra.",
-        "nature": "Misafidiana toetra iray ary lazao ny antony mahatonga an'ity hafatra ity hanararaotana.",
-        "nature_disagreement": "Diso ny zavatra soratan'ity mpampiasa ity. Hampandrenesina amin’ireo mpandrindra ny efitrano izany.",
-        "nature_illegal": "Ity mpampiasa ity dia mampiseho fitondran-tena tsy ara-dalàna, ohatra amin'ny fametavetana olona na fandrahonana herisetra. Hatao amin’ireo mpandrindra efitrano izay mety hampiakatra izany any amin’ny tompon’andraikitra ara-dalàna izany.",
-        "nature_nonstandard_admin": "Ity efitrano ity dia natokana hoany votoaty tsy ara-dalàna na misy poizina na ny mpandrindra dia tsy afaka mamatsy votoaty tsy ara-dalàna na misy poizina. Hatao amin’ny mpitantana ny%(homeserver)s .",
-        "nature_nonstandard_admin_encrypted": "Ity efitrano ity dia natokana hoany votoaty tsy ara-dalàna na misy poizina na ny mpandrindra dia tsy afaka mamatsy votoaty tsy ara-dalàna na misy poizina. Hatao amin’ny mpitantana ny%(homeserver)s . Tsy ho azon'ny mpitantana mamaky ny votoatin'ity efitrano ity.",
-        "nature_other": "Ny antony hafa. Farito ny olana azafady. Hampandrenesina amin’ireo mpandrindra ny efitrano izany.",
-        "nature_spam": "Ity mpampiasa ity dia mametaka ny efitrano miaraka aminy doka, rohy mankany amin'ny doka na propagandy. Hampandrenesina amin’ireo mpandrindra ny efitrano izany.",
-        "nature_toxic": "Maneho fihetsika misy poizina ity mpampiasa ity, ohatra amin'ny faniratsirana ny mpampiasa hafa na ny fizarana votoaty hoany olon-dehibe irery ao aminy efitranony fianakaviana na raha tsy izany dia manitsakitsaka ny fitsipika ao amin'ity efitrano ity. Hampandrenesina amin’ireo mpandrindra ny efitrano izany.",
-        "other_label": "Hafa",
-        "report_content_to_homeserver": "Mitatitra votoaty amin'ny Administrator Homeserver-nao",
-        "report_entire_room": "Tatitra ny efitrano manontolo",
-        "spam_or_propaganda": "Spam na propagandy",
-        "toxic_behaviour": "Fitondran-tena misy poizina"
+        "report_content_to_homeserver": "Mitatitra votoaty amin'ny Administrator Homeserver-nao"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Tsy nahomby ny decrypt%(failedCount)s sessions!",
@@ -2890,9 +2871,7 @@
         "m.poll.start": "%(senderName)snanomboka ny fitsapan-kevitra -%(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)snanova ny avatar.",
-            "changed_img": "%(senderDisplayName)sniova ny avatar ho<img/>",
-            "lightbox_title": "%(senderDisplayName)sniova ny avatar ho%(roomName)s",
-            "removed": "%(senderDisplayName)snesorina ny avatar."
+            "lightbox_title": "%(senderDisplayName)sniova ny avatar ho%(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

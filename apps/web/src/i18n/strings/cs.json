@@ -97,7 +97,6 @@
         "rename": "Přejmenovat",
         "reply": "Odpovědět",
         "reply_in_thread": "Odpovědět ve vlákně",
-        "report_content": "Nahlásit obsah",
         "report_room": "Nahlásit místnost",
         "resend": "Poslat znovu",
         "reset": "Resetovat",
@@ -474,6 +473,7 @@
         "description": "Popis",
         "deselect_all": "Zrušit výběr všech",
         "device": "Zařízení",
+        "disabled_by_homeserver": "Zakázáno domovským serverem",
         "edited": "upraveno",
         "email_address": "E-mailová adresa",
         "emoji": "Emoji",
@@ -681,8 +681,10 @@
     "create_section_dialog": {
         "create_section": "Vytvořit sekci",
         "description": "Sekce určeny pouze pro vás",
+        "edit_section": "Upravit sekci",
         "label": "Název sekce",
-        "title": "Vytvořte sekci"
+        "title": "Vytvořte sekci",
+        "title_edition": "Upravit sekci"
     },
     "create_space": {
         "add_details_prompt": "Přidejte nějaké podrobnosti, aby ho lidé lépe rozpoznali.",
@@ -889,7 +891,6 @@
         "thread_root_id": "ID kořenového vlákna: %(threadRootId)s",
         "threads_timeline": "Časová osa vláken",
         "title": "Nástroje pro vývojáře",
-        "toggle_event": "přepnout událost",
         "toolbox": "Sada nástrojů",
         "use_at_own_risk": "Toto uživatelské rozhraní NEKONTROLUJE typy hodnot. Použití na vlastní nebezpečí.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -964,7 +965,7 @@
         "cross_signing_user_verified": "Tohoto uživatele jste ověřili a on ověřil všechny své relace.",
         "cross_signing_user_warning": "Tento uživatel zatím neověřil všechny své relace.",
         "enter_recovery_key": "Zadejte klíč pro obnovení",
-        "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení ověřit.",
+        "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení zaručit.",
         "event_shield_reason_mismatched_sender": "Odesílatel události se neshoduje s vlastníkem zařízení, které ji odeslalo.",
         "event_shield_reason_mismatched_sender_key": "Šifrované neověřenou relací",
         "event_shield_reason_unknown_device": "Šifrováno neznámým nebo smazaným zařízením.",
@@ -1365,6 +1366,14 @@
         "impossible_dialog_title": "Integrace nejsou povolené"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "Momentálně s těmito kontakty nemáte žádné chaty. Před pokračováním potvrďte jejich pozvání do této místnosti.",
+            "invite_title": "Pozvat nové kontakty do této místnosti?",
+            "start_chat_subtitle_multiple_users": "Momentálně s těmito lidmi nemáte žádné chaty. Před pokračováním potvrďte jejich pozvání.",
+            "start_chat_subtitle_one_user": "Momentálně s touto osobou nemáte žádné chaty. Před pokračováním potvrďte pozvání.",
+            "start_chat_title_multiple_users": "Zahájit chat s těmito novými kontakty?",
+            "start_chat_title_one_user": "Zahájit chat s tímto novým kontaktem?"
+        },
         "email_caption": "Pozvat emailem",
         "email_limit_one": "Pozvánky e-mailem lze zasílat pouze po jedné",
         "email_use_default_is": "Odeslat pozvánku pomocí serveru identit. <default>Použít výchozí (%(defaultIdentityServerName)s)</default> nebo přenastavit <settings>Nastavení</settings>.",
@@ -1528,6 +1537,11 @@
         "experimental_section": "Předběžné ukázky",
         "extended_profiles_msc_support": "Vyžaduje, aby váš server podporoval MSC4133",
         "feature_disable_call_per_sender_encryption": "Zakázat šifrování podle odesílatele pro Element Call",
+        "feature_user_status": {
+            "description": "Umožňuje zobrazit a nastavit aktuální stav.",
+            "display_name": "Stav uživatele",
+            "required_msc_support": "Vyžaduje MSC4429 (aktualizace profilu pro starší synchronizaci)"
+        },
         "feature_wysiwyg_composer_description": "V editoru zpráv použít formátovaný text namísto Markdown.",
         "group_calls": "Nový zážitek ze skupinových hovorů",
         "group_developer": "Pro vývojáře",
@@ -1563,8 +1577,6 @@
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
-        "report_to_moderators": "Nahlásit moderátorům",
-        "report_to_moderators_description": "V místnostech, které podporují moderování, můžete pomocí tlačítka \"Nahlásit\" nahlásit zneužití moderátorům místnosti.",
         "room_list_sections": "Sekce seznamu místností",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
@@ -1844,27 +1856,18 @@
         "ongoing": "Odstaňování…",
         "reason_label": "Důvod (volitelné)"
     },
+    "remove_section_dialog": {
+        "confirmation": "Opravdu chcete tuto sekci odstranit?",
+        "description": "Chaty v této sekci budou stále dostupné ve vašem seznamu chatů.",
+        "remove_section": "Odstranit sekci",
+        "title": "Odstranit sekci?"
+    },
     "report_content": {
         "description": "Nahlášení této zprávy pošle její jedinečné 'event ID' správci vašeho domovského serveru. Pokud jsou zprávy šifrované, správce nebude mít možnost přečíst text zprávy ani se podívat na soubory nebo obrázky.",
-        "disagree": "Nesouhlasím",
-        "error_create_room_moderation_bot": "Nelze vytvořit místnost s moderačním robotem",
         "hide_messages_from_user": "Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele.",
         "ignore_user": "Ignorovat uživatele",
-        "illegal_content": "Nelegální obsah",
         "missing_reason": "Vyplňte prosím co chcete nahlásit.",
-        "nature": "Vyberte prosím charakter zprávy a popište, v čem je tato zpráva zneužitelná.",
-        "nature_disagreement": "To, co tento uživatel píše, je špatné.\nTato skutečnost bude nahlášena moderátorům místnosti.",
-        "nature_illegal": "Tento uživatel se chová nezákonně, například zveřejňuje osobní údaje o cizích lidech nebo vyhrožuje násilím.\nTato skutečnost bude nahlášena moderátorům místnosti, kteří to mohou předat právním orgánům.",
-        "nature_nonstandard_admin": "Tato místnost obsahuje nelegální nebo toxický obsah nebo jeji moderátoři nezvládají moderovat.\nToto bude nahlášeno správcům %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Tato místnost obsahuje nelegální nebo toxický obsah nebo jeji moderátoři nezvládají moderovat.\nToto bude nahlášeno správcům %(homeserver)s. Správci nebudou moci číst šifrovaný obsah této místnosti.",
-        "nature_other": "Jakýkoli jiný důvod. Popište problém.\nTento problém bude nahlášen moderátorům místnosti.",
-        "nature_spam": "Tento uživatel spamuje místnost reklamami, odkazy na reklamy nebo propagandou.\nTato skutečnost bude nahlášena moderátorům místnosti.",
-        "nature_toxic": "Tento uživatel se chová nevhodně, například uráží ostatní uživatele, sdílí obsah určený pouze pro dospělé v místnosti určené pro rodiny s dětmi nebo jinak porušuje pravidla této místnosti.\nTato skutečnost bude nahlášena moderátorům místnosti.",
-        "other_label": "Další možnosti",
-        "report_content_to_homeserver": "Nahlásit obsah správci vašeho domovského serveru",
-        "report_entire_room": "Nahlásit celou místnost",
-        "spam_or_propaganda": "Spam nebo propaganda",
-        "toxic_behaviour": "Nevhodné chování"
+        "report_content_to_homeserver": "Nahlásit obsah správci vašeho domovského serveru"
     },
     "report_room": {
         "description": "Nahlaste tuto místnost svému poskytovateli účtu. Pokud jsou zprávy zašifrované, váš administrátor je nebude moci číst.",
@@ -2736,7 +2739,7 @@
             "enter_passphrase": "Zadejte přístupovou frázi",
             "export_description_1": "Tento proces vám umožňuje exportovat do souboru klíče ke zprávám, které jste dostali v šifrovaných místnostech. Když pak tento soubor importujete do jiného Matrix klienta, všechny tyto zprávy bude možné opět dešifrovat.",
             "export_description_2": "Exportovaný soubor umožní komukoli, kdo si jej přečte, dešifrovat všechny šifrované zprávy, které vidíte, takže byste měli dbát na jeho zabezpečení. K tomu vám pomůže níže uvedená jedinečná přístupová fráze, která bude použita pouze k zašifrování exportovaných dat. Importovat data bude možné pouze pomocí stejné přístupové fráze.",
-            "export_title": "Exportovat klíče místnosti",
+            "export_title": "Exportovat klíče místností",
             "file_to_import": "Soubor k importu",
             "import_description_1": "Tento proces vás provede importem šifrovacích klíčů, které jste si stáhli z jiného Matrix klienta. Po úspěšném naimportování budete v tomto klientovi moci dešifrovat všechny zprávy, které jste mohli dešifrovat v původním klientovi.",
             "import_description_2": "Stažený soubor je chráněn přístupovou frází. Soubor můžete naimportovat pouze pokud zadáte odpovídající přístupovou frázi.",
@@ -3142,6 +3145,14 @@
         "server_error_detail": "Server je nedostupný, přetížený nebo se něco pokazilo.",
         "shrug": "Vloží ¯\\_(ツ)_/¯ na začátek zprávy",
         "spoiler": "Odešle danou zprávu jako spoiler",
+        "status": {
+            "description": "Nastavte svůj aktuální stav",
+            "no_args": "Nebyly zadány žádné argumenty. Měli byste zadat emoji a volitelný textový prvek.",
+            "no_emoji": "Nezadali jste emoji",
+            "no_text": "Nezadali jste žádný popisný text",
+            "too_long_emoji": "První argument musí být emoji",
+            "too_long_text": "Zadaný text byl příliš dlouhý."
+        },
         "tableflip": "Vloží (╯°□°）╯︵ ┻━┻ na začátek zprávy",
         "topic": "Nastaví nebo zjistí téma místnosti",
         "topic_none": "Tato místnost nemá žádné specifické téma.",
@@ -3363,7 +3374,6 @@
         "download_action_downloading": "Stahování",
         "download_failed": "Stažení se nezdařilo",
         "download_failed_description": "Při stahování tohoto souboru došlo k chybě",
-        "e2e_state": "Stav šifrování mezi koncovými body",
         "edits": {
             "tooltip_label": "Upraveno v %(date)s. Klinutím zobrazíte změny.",
             "tooltip_sub": "Klikněte pro zobrazení úprav",
@@ -3445,9 +3455,7 @@
         "m.poll.start": "%(senderName)s zahájil(a) hlasování - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s změnil(a) avatar místnosti.",
-            "changed_img": "%(senderDisplayName)s změnil(a) avatar místnosti na <img/>",
-            "lightbox_title": "%(senderDisplayName)s změnil(a) avatar místnosti %(roomName)s",
-            "removed": "%(senderDisplayName)s odstranil(a) avatar místnosti."
+            "lightbox_title": "%(senderDisplayName)s změnil(a) avatar místnosti %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3890,6 +3898,18 @@
         "call_held": "%(peerName)s podržel hovor",
         "call_held_resume": "Podrželi jste hovor <a>Pokračovat</a>",
         "call_held_switch": "Podrželi jste hovor <a>Přepnout</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> je v hovoru",
+                "few": "",
+                "other": "<avatars/> jsou v hovoru"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s v hovoru",
+                "few": "",
+                "other": "<avatars/> +%(overflowCount)s v hovoru"
+            }
+        },
         "call_toast_unknown_room": "Neznámá místnost",
         "camera_disabled": "Vaše kamera je vypnutá",
         "camera_enabled": "Vaše kamera je stále zapnutá",
@@ -3912,10 +3932,12 @@
         "enable_microphone": "Zrušit ztlumení mikrofonu",
         "expand": "Návrat do hovoru",
         "get_call_link": "Sdílet odkaz na hovor",
+        "group_call_started": "Skupinový hovor byl zahájen",
         "hangup": "Zavěsit",
         "hide_sidebar_button": "Skrýt postranní panel",
         "input_devices": "Vstupní zařízení",
         "jitsi_call": "Jitsi konference",
+        "join_with_video": "Připojte se pomocí videa",
         "legacy_call": "Zastaralý způsob hovoru",
         "maximise": "Vyplnit obrazovku",
         "maximise_call": "Maximalizovat hovor",
@@ -3977,6 +3999,11 @@
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome": {
+        "tagline_element": "Navrženo pro rychlost a jednoduchost.",
+        "title_element": "Buďte ve svém živlu",
+        "title_generic": "Vítejte v %(brand)s"
+    },
     "widget": {
         "added_by": "Widget přidal",
         "capabilities_dialog": {

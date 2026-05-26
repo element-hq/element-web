@@ -492,6 +492,48 @@ describe("TextForEvent", () => {
         });
     });
 
+    describe("textForCallInviteEvent()", () => {
+        let mockClient: MatrixClient;
+        let callInviteEvent: MatrixEvent;
+
+        beforeEach(() => {
+            stubClient();
+            mockClient = MatrixClientPeg.safeGet();
+
+            mocked(mockClient.supportsVoip).mockReturnValue(true);
+
+            callInviteEvent = {
+                getSender: jest.fn().mockReturnValue("@alice:matrix.org"),
+                sender: { name: "Alice" },
+                getContent: jest.fn().mockReturnValue({}),
+                getType: jest.fn().mockReturnValue(EventType.CallInvite),
+                isState: jest.fn().mockReturnValue(false),
+            } as unknown as MatrixEvent;
+        });
+
+        it("returns correct message for legacy voice call invite", () => {
+            mocked(callInviteEvent).getContent.mockReturnValue({ offer: { sdp: "m=audio" } });
+            expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a voice call.");
+        });
+
+        it("returns correct message for legacy video call invite", () => {
+            mocked(callInviteEvent).getContent.mockReturnValue({ offer: { sdp: "m=video" } });
+            expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a video call.");
+        });
+
+        it("returns correct message for MSC4075 voice call", () => {
+            mocked(callInviteEvent).getType.mockReturnValue(EventType.RTCNotification);
+            mocked(callInviteEvent).getContent.mockReturnValue({ "m.call.intent": "audio" });
+            expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a voice call.");
+        });
+
+        it("returns correct message for MSC4075 video call", () => {
+            mocked(callInviteEvent).getType.mockReturnValue(EventType.RTCNotification);
+            mocked(callInviteEvent).getContent.mockReturnValue({ "m.call.intent": "video" });
+            expect(textForEvent(callInviteEvent, mockClient)).toEqual("Alice placed a video call.");
+        });
+    });
+
     describe("textForMemberEvent()", () => {
         beforeEach(() => {
             stubClient();

@@ -14,6 +14,16 @@ import { mocked } from "jest-mock";
 import ChangePassword from "../../../../../src/components/views/settings/ChangePassword";
 import { stubClient } from "../../../../test-utils";
 
+jest.mock("../../../../../src/utils/PasswordScorer", () => ({
+    scorePassword: jest.fn(() => ({
+        score: 4,
+        feedback: {
+            warning: "",
+            suggestions: [],
+        },
+    })),
+}));
+
 describe("<ChangePassword />", () => {
     it("renders expected fields", () => {
         const onFinished = jest.fn();

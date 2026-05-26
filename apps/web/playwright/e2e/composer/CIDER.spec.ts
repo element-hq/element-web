@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { getSampleFilePath } from "../../sample-files";
@@ -18,6 +20,7 @@ test.describe("Composer", () => {
         botCreateOpts: {
             displayName: "Bob",
         },
+        lockLeftPanelWidth: false,
     });
 
     test.use({
@@ -28,7 +31,9 @@ test.describe("Composer", () => {
         },
     });
 
-    test.beforeEach(async ({ room }) => {}); // trigger room fixture
+    test.beforeEach(async ({ app, room /* trigger room fixture */ }) => {
+        await rejectToastIfExists(app.page, "Notifications");
+    });
 
     test.describe("CIDER", () => {
         test("sends a message when you click send or press Enter", async ({ page }) => {
@@ -75,6 +80,12 @@ test.describe("Composer", () => {
             await page.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter"); // Send message
 
             await expect(page.locator(".mx_EventTile_body", { hasText: "😇" })).toBeVisible();
+        });
+
+        test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+            // Shrink the viewport
+            await page.setViewportSize({ width: 500, height: 1080 });
+            await expect(app.getComposer()).toMatchScreenshot("narrow.png");
         });
 
         test.describe("render emoji picker with larger viewport height", async () => {
@@ -175,6 +186,7 @@ test.describe("Composer", () => {
             await app.viewRoomByName("Bob");
 
             const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+            await composer.click();
             await composer.pressSequentially("@bob");
 
             // Note that we include the user ID here as the room tile is also an 'option' role
@@ -201,14 +213,8 @@ test.describe("Composer", () => {
         });
 
         test("can paste a file", async ({ page, bot, app }) => {
-            // Set up a private room so we have another user to mention
-            await app.client.createRoom({
-                is_direct: true,
-                invite: [bot.credentials.userId],
-            });
-            await app.viewRoomByName("Bob");
             await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
-            await expect(page.locator(".mx_MImageBody")).toBeVisible();
+            await expect(page.locator(".mx_ImageBody")).toBeVisible();
         });
     });
 });

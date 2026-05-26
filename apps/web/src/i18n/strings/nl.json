@@ -95,7 +95,6 @@
         "rename": "Hernoemen",
         "reply": "Beantwoorden",
         "reply_in_thread": "Reageer in draad",
-        "report_content": "Inhoud melden",
         "resend": "Opnieuw versturen",
         "reset": "Opnieuw instellen",
         "resume": "Hervatten",
@@ -647,7 +646,6 @@
         "show_hidden_events": "Verborgen gebeurtenissen op de tijdslijn weergeven",
         "state_key": "Toestandssleutel",
         "title": "Ontwikkelaarstools",
-        "toggle_event": "wissel gebeurtenis",
         "toolbox": "Gereedschap",
         "use_at_own_risk": "De UI heeft GEEN controle op het type van de waardes. Gebruik op eigen risico.",
         "value": "Waarde",
@@ -1350,21 +1348,10 @@
     },
     "report_content": {
         "description": "Dit bericht melden zal zijn unieke ‘gebeurtenis-ID’ versturen naar de beheerder van jouw homeserver. Als de berichten in deze kamer versleuteld zijn, zal de beheerder van jouw homeserver het bericht niet kunnen lezen, noch enige bestanden of afbeeldingen zien.",
-        "disagree": "Niet mee eens",
         "hide_messages_from_user": "Vink aan als je alle huidige en toekomstige berichten van deze persoon wilt verbergen.",
         "ignore_user": "Negeer persoon",
-        "illegal_content": "Illegale Inhoud",
         "missing_reason": "Geef aan waarom je deze melding indient.",
-        "nature": "Kies een reden en beschrijf wat dit bericht kwetsend maakt.",
-        "nature_disagreement": "Wat deze persoon schrijft is verkeerd.\nDit zal worden gerapporteerd aan de kamermoderators.",
-        "nature_illegal": "Deze persoon vertoont illegaal gedrag, bijvoorbeeld door doxing van personen of te dreigen met geweld.\nDit zal gerapporteerd worden aan de moderators van deze kamer die dit kunnen doorzetten naar de gerechtelijke autoriteiten.",
-        "nature_other": "Een andere reden. Beschrijf alstublieft het probleem.\nDit zal gerapporteerd worden aan de kamermoderators.",
-        "nature_spam": "Deze persoon spamt de kamer met advertenties, links naar advertenties of propaganda.\nDit zal gerapporteerd worden aan de moderators van deze kamer.",
-        "other_label": "Overige",
-        "report_content_to_homeserver": "Inhoud melden aan de beheerder van jouw homeserver",
-        "report_entire_room": "Rapporteer het hele kamer",
-        "spam_or_propaganda": "Spam of propaganda",
-        "toxic_behaviour": "Giftig Gedrag"
+        "report_content_to_homeserver": "Inhoud melden aan de beheerder van jouw homeserver"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Ontsleutelen van %(failedCount)s sessies is mislukt!",
@@ -2485,9 +2472,7 @@
         "m.poll.start": "%(senderName)s is een poll gestart - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s veranderde de kamerafbeelding.",
-            "changed_img": "%(senderDisplayName)s heeft de kamerafbeelding aangepast naar <img/>",
-            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd",
-            "removed": "%(senderDisplayName)s heeft de kamerafbeelding verwijderd."
+            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd"
         },
         "m.room.canonical_alias": {
             "alt_added": {

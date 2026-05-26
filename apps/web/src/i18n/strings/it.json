@@ -95,7 +95,6 @@
         "rename": "Rinomina",
         "reply": "Rispondi",
         "reply_in_thread": "Rispondi nella conversazione",
-        "report_content": "Segnala contenuto",
         "resend": "Reinvia",
         "reset": "Ripristina",
         "resume": "Riprendi",
@@ -744,7 +743,6 @@
         "thread_root_id": "ID root del thread: %(threadRootId)s",
         "threads_timeline": "Linea temporale conversazioni",
         "title": "Strumenti per sviluppatori",
-        "toggle_event": "commuta evento",
         "toolbox": "Strumenti",
         "use_at_own_risk": "Questa interfaccia NON controlla i tipi dei valori. Usa a tuo rischio.",
         "user_read_up_to": "L'utente ha letto fino: ",
@@ -1311,8 +1309,6 @@
         "notifications": "Attiva il pannello delle notifiche nell'intestazione della stanza",
         "render_reaction_images": "Mostra immagini personalizzate nelle reazioni",
         "render_reaction_images_description": "A volte chiamati \"emoji personalizzati\".",
-        "report_to_moderators": "Segnala ai moderatori",
-        "report_to_moderators_description": "Nelle stanze che supportano la moderazione, il pulsante \"Segnala\" ti permetterà di segnalare abusi ai moderatori della stanza.",
         "sliding_sync": "Modalità di sincr. con slide",
         "sliding_sync_description": "In sviluppo attivo, non può essere disattivato.",
         "sliding_sync_disabled_notice": "Disconnettiti e riconnettiti per disattivare",
@@ -1569,25 +1565,10 @@
     },
     "report_content": {
         "description": "La segnalazione di questo messaggio invierà il suo 'ID evento' univoco all'amministratore del tuo homeserver. Se i messaggi della stanza sono cifrati, l'amministratore non potrà leggere il messaggio o vedere file e immagini.",
-        "disagree": "Rifiuta",
-        "error_create_room_moderation_bot": "Impossibile creare una stanza con il bot di moderazione",
         "hide_messages_from_user": "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente.",
         "ignore_user": "Ignora utente",
-        "illegal_content": "Contenuto illegale",
         "missing_reason": "Inserisci il motivo della segnalazione.",
-        "nature": "Scegli la natura del problema e descrivi cosa rende questo messaggio un abuso.",
-        "nature_disagreement": "Questo utente sta scrivendo cose sbagliate.\nVerrà segnalato ai moderatori della stanza.",
-        "nature_illegal": "Questo utente sta mostrando un comportamento illegale, ad esempio facendo doxing o minacciando violenza.\nVerrà segnalato ai moderatori della stanza che potrebbero portarlo in ambito legale.",
-        "nature_nonstandard_admin": "Questa stanza è dedicata a contenuti illegali o dannosi, oppure i moderatori non riescono a fermarli.\nVerrà segnalato agli amministratori di %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Questa stanza è dedicata a contenuti illegali o dannosi, oppure i moderatori non riescono a fermarli.\nVerrà segnalato agli amministratori di %(homeserver)s. Gli amministratori NON potranno leggere il contenuto criptato di questa stanza.",
-        "nature_other": "Altri motivi. Si prega di descrivere il problema.\nVerrà segnalato ai moderatori della stanza.",
-        "nature_spam": "Questo utente sta facendo spam nella stanza con pubblicità, collegamenti ad annunci o a propagande.\nVerrà segnalato ai moderatori della stanza.",
-        "nature_toxic": "Questo utente sta mostrando un cattivo comportamento, ad esempio insultando altri utenti o condividendo contenuti per adulti in una stanza per tutti, oppure violando le regole della stessa.\nVerrà segnalato ai moderatori della stanza.",
-        "other_label": "Altro",
-        "report_content_to_homeserver": "Segnala il contenuto all'amministratore dell'homeserver",
-        "report_entire_room": "Segnala l'intera stanza",
-        "spam_or_propaganda": "Spam o propaganda",
-        "toxic_behaviour": "Cattivo comportamento"
+        "report_content_to_homeserver": "Segnala il contenuto all'amministratore dell'homeserver"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Decifrazione di %(failedCount)s sessioni fallita!",
@@ -2906,9 +2887,7 @@
         "m.poll.start": "%(senderName)s ha iniziato un sondaggio - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ha cambiato l'avatar della stanza.",
-            "changed_img": "%(senderDisplayName)s ha cambiato l'avatar della stanza a <img/>",
-            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s",
-            "removed": "%(senderDisplayName)s ha rimosso l'avatar della stanza."
+            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

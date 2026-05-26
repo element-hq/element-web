@@ -79,7 +79,6 @@
         "rename": "Pervadinti",
         "reply": "Atsakyti",
         "reply_in_thread": "Atsakyti temoje",
-        "report_content": "Pranešti",
         "resend": "Siųsti iš naujo",
         "reset": "Iš naujo nustatyti",
         "resume": "Tęsti",
@@ -895,7 +894,6 @@
         "mjolnir": "Nauji būdai ignoruoti žmones",
         "msc3531_hide_messages_pending_moderation": "Leisti moderatoriams slėpti žinutes, laukiančias moderavimo.",
         "notification_settings": "Nauji pranešimų nustatymai",
-        "report_to_moderators": "Pranešti prižiūrėtojams",
         "sliding_sync": "Slankiojo sinchronizavimo režimas",
         "sliding_sync_description": "Aktyviai kuriama, negalima išjungti. Šiuo metu nesuderinama su „Element“ skambučiais.",
         "under_active_development": "Šiuo metu aktyviai kuriama.",
@@ -1030,7 +1028,6 @@
     "report_content": {
         "description": "Pranešant apie šią netinkamą žinutę, serverio administratoriui bus nusiųstas unikalus 'įvykio ID'. Jei žinutės šiame kambaryje yra šifruotos, serverio administratorius negalės perskaityti žinutės teksto ar peržiūrėti failų arba paveikslėlių.",
         "missing_reason": "Įrašykite kodėl pranešate.",
-        "other_label": "Kitas",
         "report_content_to_homeserver": "Pranešti apie turinį serverio administratoriui"
     },
     "restore_key_backup_dialog": {
@@ -1913,9 +1910,7 @@
         "m.poll.start": "%(senderName)s pradėjo apklausą - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s pakeitė kambario avatarą.",
-            "changed_img": "%(senderDisplayName)s pakeitė kambario pseudoportretą į <img/>",
-            "lightbox_title": "%(senderDisplayName)s pakeitė kambario %(roomName)s pseudoportretą",
-            "removed": "%(senderDisplayName)s pašalino kambario pseudoportretą."
+            "lightbox_title": "%(senderDisplayName)s pakeitė kambario %(roomName)s pseudoportretą"
         },
         "m.room.canonical_alias": {
             "alt_added": {

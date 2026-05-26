@@ -65,6 +65,18 @@ describe("AudioPlayerViewModel", () => {
         expect(playback.skipTo).toHaveBeenCalledWith(10 + 5); // 5 seconds forward
     });
 
+    it("does not stop propagation for unhandled key down events", () => {
+        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const event = new KeyboardEvent("keydown", { key: "a" });
+        const stopPropagationSpy = jest.spyOn(event, "stopPropagation");
+
+        vm.onKeyDown(event as unknown as ReactKeyboardEvent<HTMLDivElement>);
+
+        expect(stopPropagationSpy).not.toHaveBeenCalled();
+        expect(playback.toggle).not.toHaveBeenCalled();
+        expect(playback.skipTo).not.toHaveBeenCalled();
+    });
+
     it("should update snapshot when setProps is called with new mediaName", () => {
         const vm = new AudioPlayerViewModel({ playback, mediaName: "oldName" });
         expect(vm.getSnapshot().mediaName).toBe("oldName");

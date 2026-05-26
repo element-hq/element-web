@@ -74,7 +74,6 @@
         "remove": "حذف کن",
         "rename": "تغییر نام",
         "reply": "پاسخ",
-        "report_content": "گزارش محتوا",
         "resend": "بازفرست",
         "reset": "بازراه‌اندازی",
         "resume": "ادامه",
@@ -1068,7 +1067,6 @@
     "report_content": {
         "description": "گزارش این پیام شناسه‌ی منحصر به فرد رخداد آن را برای مدیر سرور ارسال می‌کند. اگر پیام‌های این اتاق رمزشده باشند، مدیر سرور شما امکان خواندن متن آن پیام یا مشاهده‌ی عکس یا فایل‌های دیگر را نخواهد داشت.",
         "missing_reason": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
-        "other_label": "دیگر",
         "report_content_to_homeserver": "گزارش محتوا به مدیر سرور خود"
     },
     "restore_key_backup_dialog": {
@@ -1811,9 +1809,7 @@
         "m.poll.start": "%(senderName)s یک نظر سنجی را شروع کرد - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s آواتار اتاق تغییر کرد.",
-            "changed_img": "%(senderDisplayName)s آواتار اتاق را به <img/> تغییر داد",
-            "lightbox_title": "%(senderDisplayName)s آواتار خود را در %(roomName)s تغییر داد",
-            "removed": "%(senderDisplayName)s آواتار اتاق را حذف کرد."
+            "lightbox_title": "%(senderDisplayName)s آواتار خود را در %(roomName)s تغییر داد"
         },
         "m.room.canonical_alias": {
             "alt_added": {

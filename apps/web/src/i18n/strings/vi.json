@@ -92,7 +92,6 @@
         "rename": "Đặt lại tên",
         "reply": "Phản hồi",
         "reply_in_thread": "Trả lời theo chủ đề",
-        "report_content": "Báo cáo nội dung",
         "resend": "Gửi lại",
         "reset": "Cài lại",
         "resume": "Tiếp tục",
@@ -694,7 +693,6 @@
         "thread_root_id": "ID luồng gốc: %(threadRootId)s",
         "threads_timeline": "Dòng thời gian luồng",
         "title": "Công cụ phát triển",
-        "toggle_event": "chuyển đổi sự kiện",
         "toolbox": "Hộp công cụ",
         "use_at_own_risk": "Giao diện người dùng này KHÔNG kiểm tra các loại giá trị. Sử dụng và hãy biết nguy cơ.",
         "user_read_up_to": "Người dùng đọc lên tới: ",
@@ -1225,8 +1223,6 @@
         "msc3531_hide_messages_pending_moderation": "Cho phép điều phối viên ẩn các tin nhắn đang chờ duyệt.",
         "notification_settings": "Cài đặt thông báo mới",
         "notification_settings_beta_title": "Cài đặt thông báo",
-        "report_to_moderators": "Báo cáo cho điều phối viên",
-        "report_to_moderators_description": "Trong các phòng hỗ trợ điều phối, nút \"Báo cáo\" sẽ giúp bạn báo cáo lạm dụng cho điều phối viên của phòng.",
         "sliding_sync": "Chế độ đồng bộ tối ưu (Sync v3)",
         "sliding_sync_description": "Đang được phát triển tích cực, không thể vô hiệu.",
         "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa",
@@ -1439,20 +1435,9 @@
     },
     "report_content": {
         "description": "Báo cáo thông báo này sẽ gửi 'ID sự kiện' duy nhất của nó đến quản trị viên của máy chủ của bạn. Nếu tin nhắn trong phòng này được mã hóa, quản trị viên máy chủ của bạn sẽ không thể đọc nội dung tin nhắn hoặc xem bất kỳ tệp hoặc hình ảnh nào.",
-        "disagree": "Không đồng ý",
         "ignore_user": "Tảng lờ người dùng",
-        "illegal_content": "Nội dung bất hợp pháp",
         "missing_reason": "Vui lòng điền lý do bạn đang báo cáo.",
-        "nature": "Vui lòng chọn một bản chất và mô tả điều gì khiến thông báo này bị lạm dụng.",
-        "nature_disagreement": "Những gì người dùng này đang viết là sai.\nĐiều này sẽ được báo cáo tới các moderator của phòng.",
-        "nature_illegal": "Người dùng này đang hiển thị hành vi bất hợp pháp, ví dụ bằng cách doxing mọi người hoặc đe dọa bạo lực.\nĐiều này sẽ được báo cáo cho những người điều hành phòng có thể leo thang điều này cho các cơ quan pháp lý.",
-        "nature_other": "Bất kỳ lý do nào khác. Xin hãy mô tả vấn đề.\nĐiều này sẽ được báo cáo cho người điều hành phòng.",
-        "nature_spam": "Người dùng này đang spam phòng bằng quảng cáo, liên kết đến quảng cáo hoặc tuyên truyền.\nĐiều này sẽ được báo cáo cho người điều hành phòng.",
-        "other_label": "Khác",
-        "report_content_to_homeserver": "Báo cáo Nội dung cho Quản trị viên Máy chủ Trang chủ của Bạn",
-        "report_entire_room": "Báo cáo toàn bộ phòng",
-        "spam_or_propaganda": "Thư rác hoặc tuyên truyền",
-        "toxic_behaviour": "Hành vi độc hại"
+        "report_content_to_homeserver": "Báo cáo Nội dung cho Quản trị viên Máy chủ Trang chủ của Bạn"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Không giải mã được phiên %(failedCount)s !",
@@ -2662,9 +2647,7 @@
         "m.poll.start": "%(senderName)s vừa bắt đầu một cuộc bình chọn - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s đã thay đổi avatar phòng.",
-            "changed_img": "%(senderDisplayName)s đã thay đổi hình đại diện của phòng thành <img />",
-            "lightbox_title": "%(senderDisplayName)s đã thay đổi hình đại diện cho %(roomName)s",
-            "removed": "%(senderDisplayName)s đã xóa hình đại diện của phòng."
+            "lightbox_title": "%(senderDisplayName)s đã thay đổi hình đại diện cho %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

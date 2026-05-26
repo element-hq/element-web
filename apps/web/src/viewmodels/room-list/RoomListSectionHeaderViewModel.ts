@@ -16,8 +16,8 @@ import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotif
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
-import RoomListStoreV3, { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -45,8 +45,7 @@ export class RoomListSectionHeaderViewModel
     private readonly expandedBySpace = new Map<string, boolean>();
 
     public constructor(props: RoomListSectionHeaderViewModelProps) {
-        const isDefaultSection =
-            props.tag === DefaultTagID.Favourite || props.tag === DefaultTagID.LowPriority || props.tag === CHATS_TAG;
+        const isDefaultSection = isDefaultSectionTag(props.tag);
         super(props, {
             id: props.tag,
             title: props.title,
@@ -140,8 +139,7 @@ export class RoomListSectionHeaderViewModel
      * Handle changes to custom section data.
      */
     private onCustomSectionDataChange(): void {
-        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
-        const sectionData = customSectionData[this.props.tag];
+        const sectionData = isCustomSectionTag(this.props.tag) ? getCustomSectionData()[this.props.tag] : undefined;
         if (sectionData) {
             this.snapshot.merge({ title: sectionData.name });
         }

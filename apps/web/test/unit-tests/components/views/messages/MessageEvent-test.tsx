@@ -20,15 +20,11 @@ import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permal
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { Mjolnir } from "../../../../../src/mjolnir/Mjolnir";
 
-jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="image-body" />,
-}));
-
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
     DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
     FileBodyFactory: () => <div data-testid="file-body" />,
+    ImageBodyFactory: () => <div data-testid="image-body" />,
     RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
     VideoBodyFactory: () => <video data-testid="video-body" />,
     renderMBody: () => <div data-testid="file-body" />,

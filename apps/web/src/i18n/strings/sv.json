@@ -97,7 +97,6 @@
         "rename": "Döp om",
         "reply": "Svara",
         "reply_in_thread": "Svara i tråd",
-        "report_content": "Anmäl innehåll",
         "report_room": "Anmäl rum",
         "resend": "Skicka igen",
         "reset": "Återställ",
@@ -853,7 +852,6 @@
         "thread_root_id": "Trådroots-ID: %(threadRootId)s",
         "threads_timeline": "Trådtidslinje",
         "title": "Utvecklarverktyg",
-        "toggle_event": "växla händelse",
         "toolbox": "Verktygslåda",
         "use_at_own_risk": "Det här UI:t kontrollerar inte typer för värden. Använd på egen risk.",
         "user_read_up_to": "Användaren har läst fram till: ",
@@ -1488,8 +1486,6 @@
         "notifications": "Aktivera aviseringspanelen i rumshuvudet",
         "render_reaction_images": "Återge anpassade bilder i reaktioner",
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
-        "report_to_moderators": "Rapportera till moderatorer",
-        "report_to_moderators_description": "I rum som stöder moderering så låter \"Rapportera\"-knappen dig rapportera trakasseri till rumsmoderatorer.",
         "sliding_sync": "Sliding sync-läge",
         "sliding_sync_description": "Under aktiv utveckling, kan inte inaktiveras.",
         "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
@@ -1756,25 +1752,10 @@
     },
     "report_content": {
         "description": "Att rapportera det här meddelandet kommer att skicka dess unika 'händelse-ID' till administratören för din hemserver. Om meddelanden i det här rummet är krypterade kommer din hemserveradministratör inte att kunna läsa meddelandetexten eller se några filer eller bilder.",
-        "disagree": "Håll inte med",
-        "error_create_room_moderation_bot": "Kunde inte skapa rum med modereringsbot",
         "hide_messages_from_user": "Bocka i om du vill dölja alla nuvarande och framtida meddelanden från den här användaren.",
         "ignore_user": "Ignorera användare",
-        "illegal_content": "Olagligt innehåll",
         "missing_reason": "Vänligen fyll i varför du anmäler.",
-        "nature": "Välj en art och beskriv vad som gör detta meddelande kränkande.",
-        "nature_disagreement": "Vad användaren skriver är fel.\nDetta kommer att anmälas till rumsmoderatorerna.",
-        "nature_illegal": "Användaren påvisar olagligt beteende, som att doxa folk eller hota med våld.\nDetta kommer att rapporteras till rumsmoderatorerna som kanske eskalerar detta till juridiska myndigheter.",
-        "nature_nonstandard_admin": "Detta rum är dedikerat till olagligt eller toxiskt innehåll eller moderatorerna misslyckas med att moderera olagligt eller toxiskt innehåll.\nDetta kommer att rapporteras till administratörerna för%(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Detta rum är dedikerat till olagligt eller giftigt innehåll eller moderatorerna misslyckas med att moderera olagligt eller toxiskt innehåll.\nDetta kommer att rapporteras till administratörerna för%(homeserver)s. Administratörerna kommer INTE kunna läsa krypterat innehåll i det här rummet.",
-        "nature_other": "Annan orsak. Beskriv problemet tack.\nDetta kommer att rapporteras till rumsmoderatorerna.",
-        "nature_spam": "Användaren spammar rummet med reklam eller länkar till reklam eller propaganda.\nDetta kommer att rapporteras till rumsmoderatorerna.",
-        "nature_toxic": "Den här användaren uppvisar ett stötande beteende, till exempel genom att förolämpa andra användare eller dela vuxenmaterial i familjevänliga rum, eller på annat sätt bryter mot rummets regler.\nDetta kommer att rapporteras till rummets moderatorer.",
-        "other_label": "Annat",
-        "report_content_to_homeserver": "Rapportera innehåll till din hemserveradministratör",
-        "report_entire_room": "Rapportera hela rummet",
-        "spam_or_propaganda": "Spam eller propaganda",
-        "toxic_behaviour": "Stötande beteende"
+        "report_content_to_homeserver": "Rapportera innehåll till din hemserveradministratör"
     },
     "report_room": {
         "description": "Rapportera det här rummet till din hemserveradministratör. Detta skickar rummets unika ID, men om meddelanden är krypterade kan administratören inte läsa dem eller visa delade filer.",
@@ -3223,7 +3204,6 @@
         "download_action_downloading": "Laddar ner",
         "download_failed": "Nedladdning misslyckades",
         "download_failed_description": "Ett fel uppstod när den här filen laddades ned",
-        "e2e_state": "Tillståndet för end-to-end-krypteringen",
         "edits": {
             "tooltip_label": "Redigerat vid %(date)s. Klicka för att visa redigeringar.",
             "tooltip_sub": "Klicka för att visa redigeringar",
@@ -3305,9 +3285,7 @@
         "m.poll.start": "%(senderName)s har startat en omröstning - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s bytte rummets avatar.",
-            "changed_img": "%(senderDisplayName)s bytte rummets avatar till <img/>",
-            "lightbox_title": "%(senderDisplayName)s bytte avatar för %(roomName)s",
-            "removed": "%(senderDisplayName)s tog bort rummets avatar."
+            "lightbox_title": "%(senderDisplayName)s bytte avatar för %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

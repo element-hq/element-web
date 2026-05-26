@@ -95,7 +95,6 @@
         "rename": "이름 변경",
         "reply": "답장",
         "reply_in_thread": "스레드에 답장",
-        "report_content": "내용 신고",
         "report_room": "방 신고",
         "resend": "다시 보내기",
         "reset": "되돌리기",
@@ -876,7 +875,6 @@
         "thread_root_id": "스레드 Root ID: %(threadRootId)s",
         "threads_timeline": "스레드 타임라인",
         "title": "개발자 도구",
-        "toggle_event": "이벤트 토글",
         "toolbox": "도구 상자",
         "use_at_own_risk": "이 UI는 값의 유형을 확인하지 않습니다. 사용 시 주의하십시오.",
         "user_avatar": "아바타: %(avatar)s",
@@ -1543,8 +1541,6 @@
         "notifications": "방 헤더에서 알림 패널 활성화",
         "render_reaction_images": "반응에 사용자 정의 이미지 렌더링",
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
-        "report_to_moderators": "관리자에게 신고하기",
-        "report_to_moderators_description": "운영자가 관리하는 방에서는 '신고' 버튼으로 관리자에게 문제를 신고할 수 있습니다.",
         "room_list_sections": "대화방 목록 섹션",
         "sliding_sync": "슬라이딩 동기화 모드",
         "sliding_sync_description": "개발 진행 중인 기능이며 비활성화는 불가능합니다. 현재 Element Call 기능은 지원하지 않습니다.",
@@ -1809,25 +1805,10 @@
     },
     "report_content": {
         "description": "이 메시지를 신고하면 고유 '이벤트 ID'를 홈서버의 관리자에게 보내게 됩니다. 이 방의 메시지가 암호화되어 있다면, 홈서버 관리자는 메시지 문자를 읽거나 파일 혹은 사진을 볼 수 없습니다.",
-        "disagree": "동의 안 함",
-        "error_create_room_moderation_bot": "모더레이션 봇과 함께 채팅방을 생성할 수 없습니다",
         "hide_messages_from_user": "이 사용자로부터 현재 및 향후 모든 메시지를 숨기려면 선택하십시오.",
         "ignore_user": "사용자 무시",
-        "illegal_content": "불법 콘텐츠",
         "missing_reason": "왜 신고하는 지 이유를 적어주세요.",
-        "nature": "부적절한 메시지의 유형을 선택하고, 해당 메시지가 왜 부적절한지 설명해 주세요.",
-        "nature_disagreement": "이 사용자가 작성한 내용은 잘못되었습니다.\n이 내용은 채팅방 관리자에게 신고될 것입니다.",
-        "nature_illegal": "이 사용자는 개인 정보를 유출하거나 폭력을 행사하겠다고 위협하는 등 불법적인 행동을 보이고 있습니다. 이 사실은 채팅방 운영자에게 신고되며, 운영자는 사법 당국에 신고할 수 있습니다.",
-        "nature_nonstandard_admin": "이 방은 불법 또는 유해한 콘텐츠를 게시하거나, 운영진이 불법 또는 유해한 콘텐츠를 적절히 관리하지 못하는 경우에 해당됩니다.\n해당 사항은 %(homeserver)s 관리자에게 신고될 예정입니다.",
-        "nature_nonstandard_admin_encrypted": "이 채팅방은 불법 또는 유해한 콘텐츠를 다루거나, 관리자가 불법/유해 콘텐츠를 적절히 관리하지 못하는 방입니다. 이는 %(homeserver)s 관리자로 신고됩니다. 관리자는 이 채팅방의 암호화된 내용을 열람할 수 없습니다.",
-        "nature_other": "기타 사유. 문제를 설명해 주세요.\n이 내용은 채팅방 관리자에게 보고될 예정입니다.",
-        "nature_spam": "이 사용자는 광고, 광고 링크 또는 선전성 링크로 채팅방을 스팸하고 있습니다. 이는 채팅방 관리자에게 신고될 예정입니다.",
-        "nature_toxic": "이 사용자는 다른 사용자를 모욕하거나 가족 친화적인 채팅방에서 성인 전용 콘텐츠를 공유하는 등 채팅방 규칙을 위반하는 유해한 행동을 하고 있습니다. 이는 채팅방 관리자에게 신고될 예정입니다.",
-        "other_label": "기타",
-        "report_content_to_homeserver": "홈서버 관리자에게 내용 신고하기",
-        "report_entire_room": "채팅방 전체 신고",
-        "spam_or_propaganda": "스팸 또는 광고",
-        "toxic_behaviour": "유해한 행동"
+        "report_content_to_homeserver": "홈서버 관리자에게 내용 신고하기"
     },
     "report_room": {
         "description": "이 채팅방을 계정 제공자에게 신고하세요. 메시지가 암호화된 경우, 관리자는 내용을 확인할 수 없습니다",
@@ -3279,7 +3260,6 @@
         "download_action_downloading": "다운로드 중",
         "download_failed": "다운로드 실패",
         "download_failed_description": "이 파일을 다운로드하는 동안 오류가 발생했습니다.",
-        "e2e_state": "종단 간 암호화 현황",
         "edits": {
             "tooltip_label": "%(date)s에 편집함. 클릭해서 편집 보기.",
             "tooltip_sub": "편집 내용을 보려면 클릭하세요",
@@ -3360,9 +3340,7 @@
         "m.poll.start": "%(senderName)s님이 설문을 시작했습니다 - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 방 아바타를 변경했습니다.",
-            "changed_img": "%(senderDisplayName)s님이 방 아바타를 <img/>(으)로 바꿈",
-            "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈",
-            "removed": "%(senderDisplayName)s님이 방 아바타를 제거했습니다."
+            "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈"
         },
         "m.room.canonical_alias": {
             "alt_added": {
