@@ -1054,8 +1054,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
-        const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
-        const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
+        const groupPadlock = eventTileRenderState.e2ePadlock.showInGroupLine && this.renderE2EPadlock();
+        const ircPadlock = eventTileRenderState.e2ePadlock.showInIrcLine && this.renderE2EPadlock();
 
         const receiptState = this.receiptState;
         let msgOption: JSX.Element | undefined;

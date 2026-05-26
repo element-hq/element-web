@@ -138,6 +138,54 @@ describe("EventTileViewModel", () => {
         expect(renderState.timestamp).toBe(renderState.snapshot.timestamp);
     });
 
+    it("derives E2E padlock placement for group layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                    isBubbleMessage: false,
+                },
+            }),
+        );
+
+        expect(renderState.e2ePadlock).toEqual({
+            showInGroupLine: true,
+            showInIrcLine: false,
+        });
+    });
+
+    it("derives E2E padlock placement for IRC layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                    isBubbleMessage: false,
+                },
+            }),
+        );
+
+        expect(renderState.e2ePadlock).toEqual({
+            showInGroupLine: false,
+            showInIrcLine: true,
+        });
+    });
+
+    it("does not place E2E padlocks for bubble messages", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                    isBubbleMessage: true,
+                },
+            }),
+        );
+
+        expect(renderState.e2ePadlock).toEqual({
+            showInGroupLine: false,
+            showInIrcLine: false,
+        });
+    });
+
     it("normalizes continuation by rendering mode and bubble layout", () => {
         const fileSnapshot = EventTileViewModel.createSnapshot(
             makeProps({

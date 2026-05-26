@@ -252,6 +252,13 @@ export interface EventTileRenderState {
     };
     /** EventTile timestamp render state. */
     timestamp: EventTileTimestampSnapshot;
+    /** EventTile E2E padlock slot state. */
+    e2ePadlock: {
+        /** Whether the padlock should render in the group-layout timestamp area. */
+        showInGroupLine: boolean;
+        /** Whether the padlock should render in the IRC-layout timestamp area. */
+        showInIrcLine: boolean;
+    };
 }
 
 /** Derives the current EventTile snapshot from component-owned inputs. */
@@ -259,6 +266,8 @@ export class EventTileViewModel {
     /** Derives render-ready EventTile state from component-owned inputs. */
     public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
         const snapshot = EventTileViewModel.createSnapshot(props);
+        const useIRCLayout = snapshot.timestamp.displayState.useIRCLayout;
+        const showPadlock = !props.display.isBubbleMessage;
 
         return {
             snapshot,
@@ -272,6 +281,10 @@ export class EventTileViewModel {
                 className: classNames("mx_EventTile_line", snapshot.line.classState),
             },
             timestamp: snapshot.timestamp,
+            e2ePadlock: {
+                showInGroupLine: !useIRCLayout && showPadlock,
+                showInIrcLine: useIRCLayout && showPadlock,
+            },
         };
     }
 
