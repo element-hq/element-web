@@ -63,12 +63,33 @@ describe("LeftPanelResizerViewModel", () => {
         });
     });
 
-    it("should noop on onSeparatorClick() when handle is not yet set", () => {
+    it("should noop on click when handle is not yet set", () => {
         const vm = new ResizerViewModel();
-        expect(() => vm.onSeparatorClick()).not.toThrow();
+        expect(() => {
+            // Click
+            vm.onPointerDown();
+            vm.onPointerUp();
+        }).not.toThrow();
     });
 
-    describe("should expand panel on onSeparatorClick()", () => {
+    it("should noop on mouse drag", () => {
+        const vm = new ResizerViewModel();
+        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+        const mockHandle = {
+            resize: jest.fn(),
+            isCollapsed: jest.fn().mockReturnValue(true),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        // Simulate drag
+        vm.onPointerDown();
+        vm.onPointerMove();
+        vm.onPointerUp();
+
+        expect(mockHandle.resize).not.toHaveBeenCalledWith("34%");
+    });
+
+    describe("should expand panel on click()", () => {
         it("to last non-zero width that the user set", () => {
             const vm = new ResizerViewModel();
             SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
@@ -78,7 +99,9 @@ describe("LeftPanelResizerViewModel", () => {
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
 
-            vm.onSeparatorClick();
+            // Simulate click
+            vm.onPointerDown();
+            vm.onPointerUp();
 
             expect(mockHandle.resize).toHaveBeenCalledWith("34%");
         });
@@ -91,7 +114,9 @@ describe("LeftPanelResizerViewModel", () => {
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
 
-            vm.onSeparatorClick();
+            // Simulate click
+            vm.onPointerDown();
+            vm.onPointerUp();
 
             expect(mockHandle.resize).toHaveBeenCalledWith("100%");
         });
