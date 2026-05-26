@@ -43,9 +43,15 @@ export interface E2ePadlockProps {
 }
 
 const icons: Record<E2ePadlockIcon, JSX.Element> = {
-    [E2ePadlockIcon.Normal]: <InfoIcon color="var(--cpd-color-icon-tertiary)" />,
-    [E2ePadlockIcon.Warning]: <ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />,
-    [E2ePadlockIcon.DecryptionFailure]: <ErrorSolidIcon color="var(--cpd-color-icon-tertiary)" />,
+    [E2ePadlockIcon.Normal]: <InfoIcon />,
+    [E2ePadlockIcon.Warning]: <ErrorSolidIcon />,
+    [E2ePadlockIcon.DecryptionFailure]: <ErrorSolidIcon />,
+};
+
+const iconClasses: Record<E2ePadlockIcon, string> = {
+    [E2ePadlockIcon.Normal]: styles.normal,
+    [E2ePadlockIcon.Warning]: styles.warning,
+    [E2ePadlockIcon.DecryptionFailure]: styles.decryptionFailure,
 };
 
 /**
@@ -62,7 +68,7 @@ export function E2ePadlock({ icon, title, className }: Readonly<E2ePadlockProps>
         <Tooltip label={title} isTriggerInteractive={true}>
             <div
                 data-testid="e2e-padlock"
-                className={classNames(styles.e2ePadlock, className)}
+                className={classNames(styles.e2ePadlock, iconClasses[icon], className)}
                 role="img"
                 tabIndex={0}
                 aria-label={_t("timeline|e2e_state")}

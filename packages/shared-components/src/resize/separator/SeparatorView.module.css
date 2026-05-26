@@ -6,21 +6,25 @@
  */
 
 .separator {
-    /* Hide the separator by default */
-    display: none;
     /* Necessary to avoid weird focus outlines (doubled on one side, absent on one side etc...) */
     outline-offset: -2px;
 }
 
-.separator[data-separator="hover"],
-.separator:focus-visible {
-    background: var(--cpd-color-bg-action-tertiary-hovered);
+/* When type=border, we just render a 1px border */
+.separator[data-separator-type="border"] {
+    width: 0px;
+    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
 }
 
-.visible {
-    /* Show the separator when the left panel is collapsed */
+/* When type=bar, we render the 12px separator */
+.separator[data-separator-type="bar"] {
+    width: 12px;
     display: flex;
     align-items: center;
-    width: 12px;
     border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+}
+
+.separator[data-separator-type="bar"][data-separator="hover"],
+.separator:focus-visible {
+    background: var(--cpd-color-bg-action-tertiary-hovered);
 }

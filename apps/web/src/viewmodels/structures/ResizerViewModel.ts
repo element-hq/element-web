@@ -47,8 +47,15 @@ export class ResizerViewModel
      */
     private panelHandle?: PanelImperativeHandle;
 
+    /**
+     * Needed to distinguish between a drag and a click on the separator.
+     */
+    private readonly mouseClickHandler: MouseClickHandler;
+
     public constructor() {
         super(undefined, getInitialState());
+        // Run onSeparatorClick when the separator is clicked.
+        this.mouseClickHandler = new MouseClickHandler(this.onSeparatorClick);
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {
@@ -79,11 +86,23 @@ export class ResizerViewModel
         this.panelHandle = handle;
     };
 
-    public onSeparatorClick = (): void => {
+    private onSeparatorClick = (): void => {
         if (this.panelHandle?.isCollapsed()) {
             const lastSize = SettingsStore.getValue("RoomList.panelSize");
             this.panelHandle.resize(`${lastSize ?? 100}%`);
         }
+    };
+
+    public onPointerUp = (): void => {
+        this.mouseClickHandler.onPointerUp();
+    };
+
+    public onPointerMove = (): void => {
+        this.mouseClickHandler.onPointerMove();
+    };
+
+    public onPointerDown = (): void => {
+        this.mouseClickHandler.onPointerDown();
     };
 
     public onFocus = (): void => {
@@ -106,5 +125,28 @@ export class ResizerViewModel
 
     public onBlur = (): void => {
         this.snapshot.merge({ isFocusedViaKeyboard: false });
+    };
+}
+
+/**
+ * Dragging the separator will emit a click event.
+ * This class uses pointer event handlers to distinguish between a drag and a click
+ * on the separator.
+ */
+class MouseClickHandler {
+    public constructor(private readonly onClick: () => void) {}
+
+    private isResize = false;
+
+    public onPointerUp = (): void => {
+        if (!this.isResize) this.onClick();
+    };
+
+    public onPointerDown = (): void => {
+        this.isResize = false;
+    };
+
+    public onPointerMove = (): void => {
+        this.isResize = true;
     };
 }

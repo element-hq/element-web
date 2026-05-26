@@ -303,7 +303,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         // Focus the first invalid field and show feedback in the stricter mode
         // that no longer allows empty values for required fields.
         invalidField.focus();
-        invalidField.validate({ allowEmpty: false, focused: true });
+        await invalidField.validate({ allowEmpty: false, focused: true });
         return false;
     }
 
