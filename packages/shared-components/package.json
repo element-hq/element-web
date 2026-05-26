@@ -137,7 +137,6 @@
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "pnpm@11.2.2",
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
         "react": "catalog:"

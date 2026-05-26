@@ -112,7 +112,6 @@
     "hakDependencies": {
         "matrix-seshat": "4.3.0"
     },
-    "packageManager": "pnpm@11.2.2",
     "nx": {
         "includedScripts": []
     }
