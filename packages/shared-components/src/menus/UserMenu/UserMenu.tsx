@@ -111,7 +111,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
-        <button className={classNames(styles.triggerButton, className)} aria-label={_t("menus|user_menu|title")}>
+        <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
         </button>
     );
@@ -119,7 +119,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
     // The menu should appear to the right of the avatar, over the displayname if the menu is expanded,
     // so the display name goes outside the menu block in a wrapper.
     return (
-        <div className={styles.wrapper}>
+        <div className={classNames(styles.wrapper, className)}>
             <Menu
                 open={open}
                 showTitle={false}
