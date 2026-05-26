@@ -15,8 +15,7 @@
         "room_name": "Szoba: %(name)s",
         "room_status_bar": "Szoba állapotsora",
         "seek_bar_label": "Hang keresősávja",
-        "unread_messages": "Olvasatlan üzenetek.",
-        "user_menu": "Felhasználói menü"
+        "unread_messages": "Olvasatlan üzenetek."
     },
     "a11y_jump_first_unread_room": "Ugrás az első olvasatlan szobához.",
     "action": {
@@ -98,7 +97,6 @@
         "rename": "Átnevezés",
         "reply": "Válasz",
         "reply_in_thread": "Válasz üzenetszálban",
-        "report_content": "Tartalom jelentése",
         "report_room": "Szoba jelentése",
         "resend": "Újraküldés",
         "reset": "Visszaállítás",
@@ -341,7 +339,6 @@
         "sign_in_instead_prompt": "Már van fiókja? <a>Jelentkezzen be itt</a>",
         "sign_in_or_register": "Bejelentkezés vagy fiók létrehozása",
         "sign_in_or_register_description": "A folytatáshoz használja a fiókját, vagy hozzon létre egy újat.",
-        "sign_in_prompt": "Van már fiókja? <a>Jelentkezzen be</a>",
         "sign_in_with_sso": "Bejelentkezés „egyszeri bejelentkezéssel”",
         "signing_in": "Bejelentkezés…",
         "soft_logout": {
@@ -476,6 +473,7 @@
         "description": "Leírás",
         "deselect_all": "Kijelölés megszüntetése",
         "device": "Eszköz",
+        "disabled_by_homeserver": "A Matrix-kiszolgáló letiltotta",
         "edited": "szerkesztve",
         "email_address": "E-mail-cím",
         "emoji": "Emodzsi",
@@ -678,6 +676,14 @@
         "unfederated_label_default_on": "Ne engedélyezze ezt, ha a szobát külső csapat is használja másik Matrix-kiszolgálóról. Ezt később nem lehet megváltoztatni.",
         "unsupported_version": "A kiszolgáló nem támogatja a megadott szobaverziót."
     },
+    "create_section_dialog": {
+        "create_section": "Szakasz létrehozása",
+        "description": "A szakaszok csak Önnek szólnak",
+        "edit_section": "Szakasz szerkesztése",
+        "label": "Szakasz neve",
+        "title": "Szakasz létrehozása",
+        "title_edition": "Szakasz szerkesztése"
+    },
     "create_space": {
         "add_details_prompt": "Adjon hozzá néhány részletet, hogy könnyebben felismerhető legyen.",
         "add_details_prompt_2": "Ezeket bármikor megváltoztathatja.",
@@ -825,8 +831,8 @@
         "invalid_device_key_id": "Érvénytelen eszközkulcs-azonosító",
         "invalid_json": "Nem tűnik érvényes JSON szövegnek.",
         "level": "Szint",
-        "low_bandwidth_mode": "Alacsony sávszélességű mód",
-        "low_bandwidth_mode_description": "Kompatibilis Matrix-kiszolgálóra van szükség.",
+        "low_bandwidth_mode": "A nagy sávszélességet igénylő funkciók letiltása",
+        "low_bandwidth_mode_description": "Kikapcsolja a titkosítást, a jelenléti jelzéseket, a profilképeket, az olvasási visszajelzéseket és a gépelési értesítéseket.",
         "main_timeline": "Fő idővonal",
         "manual_device_verification": "Kézi eszközellenőrzés",
         "no_receipt_found": "Nincs visszajelzés",
@@ -882,7 +888,6 @@
         "thread_root_id": "Üzenetszál gyökérazonosítója: %(threadRootId)s",
         "threads_timeline": "Üzenetszálak idővonala",
         "title": "Fejlesztői eszközök",
-        "toggle_event": "esemény be/ki",
         "toolbox": "Eszköztár",
         "use_at_own_risk": "Ez a felület nem ellenőrzi az érték típusát. Csak saját felelősségére használja.",
         "user_avatar": "Profilkép: %(avatar)s",
@@ -1110,7 +1115,7 @@
         "verification_requested_toast_title": "Hitelesítés kérés elküldve",
         "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b> ) digitális személyazonossága alaphelyzetbe lett állítva. <a>További információ</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b> digitális személyazonossága alaphelyzetbe lett állítva. <a>További információ</a>",
-        "verify_toast_description": "2026 áprilisának végétől a nem ellenőrzött eszközök nem tudnak üzeneteket küldeni és fogadni. <a>További információk</a>",
+        "verify_toast_description": "2026. október végétől a nem ellenőrzött eszközök nem tudnak üzeneteket küldeni és fogadni. <a>További információk</a>",
         "verify_toast_title": "Az eszköz ellenőrzése",
         "withdraw_verification_action": "Ellenőrzés visszavonása"
     },
@@ -1353,6 +1358,14 @@
         "impossible_dialog_title": "Az integrációk nem engedélyezettek"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "Jelenleg nincsenek csevegései ezekkel a személyekkel. Mielőtt továbbmenne, erősítse meg, hogy meghívja őket ebbe a szobába.",
+            "invite_title": "Új személyeket hív meg ebbe a szobába?",
+            "start_chat_subtitle_multiple_users": "Jelenleg nincs folyamatban lévő csevegése ezekkel a felhasználókkal. A folytatáshoz erősítse meg a meghívást.",
+            "start_chat_subtitle_one_user": "Még nem beszélgetett ezzel a személlyel. Folytatás előtt erősítse meg a meghívást.",
+            "start_chat_title_multiple_users": "Szeretne csevegni ezekkel az új személyekkel?",
+            "start_chat_title_one_user": "Csevegést kezdeményez ezzel az új felhasználóval?"
+        },
         "email_caption": "Meghívás e-maillel",
         "email_limit_one": "E-mail meghívóból egyszerre csak egy küldhető el",
         "email_use_default_is": "Használjon azonosítási kiszolgálót az e-mailben történő meghíváshoz. <default> Használja az alapértelmezett kiszolgálót (%(defaultIdentityServerName)s)</default> vagy adjon meg egy másikat a <settings>Beállításokban</settings>.",
@@ -1516,6 +1529,11 @@
         "experimental_section": "Korai előzetesek",
         "extended_profiles_msc_support": "A kiszolgálónak támogatnia kell az MSC4133-at",
         "feature_disable_call_per_sender_encryption": "Küldőnkénti titkosítás letiltása Element Callhoz",
+        "feature_user_status": {
+            "description": "Lehetővé teszi az aktuális állapot megtekintését és beállítását.",
+            "display_name": "Felhasználói állapot",
+            "required_msc_support": "MSC4429 szükséges (profilfrissítések a régi szinkronizáláshoz)"
+        },
         "feature_wysiwyg_composer_description": "Szövegszerkesztő használata a Markdown formázás helyett az üzenet írásakor.",
         "group_calls": "Új konferenciahívási élmény",
         "group_developer": "Fejlesztői",
@@ -1551,8 +1569,6 @@
         "notifications": "Engedélyezze az értesítési panelt a szoba fejlécében",
         "render_reaction_images": "Egyéni képek megjelenítése reakciókban",
         "render_reaction_images_description": "Néha „egyéni emodzsiknak” nevezik.",
-        "report_to_moderators": "Jelentés a moderátoroknak",
-        "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "room_list_sections": "Szobalista szakaszok",
         "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
@@ -1826,27 +1842,18 @@
         "ongoing": "Eltávolítás…",
         "reason_label": "Ok (nem kötelező)"
     },
+    "remove_section_dialog": {
+        "confirmation": "Biztos, hogy eltávolítja ezt a szakaszt?",
+        "description": "Az ebben a szakaszban található beszélgetések továbbra is elérhetők lesznek a csevegések listájában.",
+        "remove_section": "Szakasz eltávolítása",
+        "title": "Eltávolítja a szakaszt?"
+    },
     "report_content": {
         "description": "Az üzenet bejelentése egy egyedi „eseményazonosítót” küld el a Matrix-kiszolgáló adminisztrátorának. Ha az üzenetek titkosítottak a szobában, akkor a Matrix-kiszolgáló adminisztrátora nem tudja elolvasni az üzenetet, vagy nem tudja megnézni a fájlokat vagy képeket.",
-        "disagree": "Nem értek egyet",
-        "error_create_room_moderation_bot": "Nem lehet szobát létrehozni a moderációs bot segítségével",
         "hide_messages_from_user": "Jelölje be, ha ennek a felhasználónak a jelenlegi és jövőbeli üzeneteit is el szeretné rejteni.",
         "ignore_user": "Felhasználó mellőzése",
-        "illegal_content": "Törvénytelen tartalom",
         "missing_reason": "Adja meg, hogy miért jelenti.",
-        "nature": "Válassza ki az üzenet természetét, vagy írja le, hogy miért elítélendő.",
-        "nature_disagreement": "Amit ez a felhasználó ír az rossz.\nErről a szoba moderátorának jelentés készül.",
-        "nature_illegal": "A felhasználó illegális viselkedést valósít meg, például kipécézett valakit vagy tettlegességgel fenyeget.\nEz jelezve lesz a moderátorok felé, akik akár hivatalos szervek felé is továbbíthatják ezt.",
-        "nature_nonstandard_admin": "Ezt a szobát illegális vagy mérgező tartalomnak szentelték, vagy a moderátorok nem szűrik az illegális vagy mérgező tartalmakat.\nEzt jelentésre kerül a rendszergazdák felé itt: %(homeserver)s .",
-        "nature_nonstandard_admin_encrypted": "Ezt a szobát illegális vagy mérgező tartalomnak szentelték, vagy a moderátorok nem szűrik az illegális vagy mérgező tartalmakat.\nEzt jelentésre kerül a rendszergazdák felé itt: %(homeserver)s . A rendszergazdák a titkosított tartalmat ebben a szobában nem tudják elolvasni.",
-        "nature_other": "Bármi más ok. Írja le a problémát.\nEz lesz elküldve a szoba moderátorainak.",
-        "nature_spam": "A felhasználó kéretlen reklámokkal, reklámhivatkozásokkal vagy propagandával bombázza a szobát.\nEz jelezve lesz a szoba moderátorai felé.",
-        "nature_toxic": "A felhasználó mérgező viselkedést tanúsít, például más felhasználókat inzultál vagy felnőtt tartalmat oszt meg egy családbarát szobában, vagy más módon sérti a szoba szabályait.\nEz moderátorok felé jelzésre kerül.",
-        "other_label": "Egyéb",
-        "report_content_to_homeserver": "Tartalom bejelentése a Matrix-kiszolgáló adminisztrátorának",
-        "report_entire_room": "Az egész szoba jelentése",
-        "spam_or_propaganda": "Kéretlen tartalom vagy propaganda",
-        "toxic_behaviour": "Mérgező viselkedés"
+        "report_content_to_homeserver": "Tartalom bejelentése a Matrix-kiszolgáló adminisztrátorának"
     },
     "report_room": {
         "description": "A szoba jelentése a Matrix-kiszolgáló rendszergazdájának. Ha az üzenetek titkosítva vannak, a rendszergazda nem fogja tudni elolvasni azokat.",
@@ -2665,7 +2672,8 @@
             "unable_to_load_msisdns": "Nem sikerült betölteni a telefonszámokat",
             "username": "Felhasználónév"
         },
-        "inline_url_previews_default": "Beágyazott webcím-előnézetek alapértelmezett engedélyezése",
+        "inline_url_previews_default": "Előnézetek engedélyezése",
+        "inline_url_previews_encrypted": "Előnézetek engedélyezése a titkosított szobákban",
         "insert_trailing_colon_mentions": "Záró kettőspont beszúrása egy felhasználó üzenet elején való megemlítésekor",
         "invite_controls": {
             "default_label": "Felhasználók meghívhatják szobákba"
@@ -2803,6 +2811,8 @@
             "enable_tray_icon": "Tálcaikon megjelenítése és az ablak minimalizálása bezáráskor",
             "keyboard_heading": "Gyorsbillentyűk",
             "keyboard_view_shortcuts_button": "Az összes gyorsbillentyű megtekintéséhez <a>kattintson ide</a>.",
+            "link_previews_description": "Információkat jelenít meg a hivatkozásokról az üzenetek alatt",
+            "link_previews_heading": "Hivatkozás-előnézetek",
             "media_heading": "Képek, GIF-ek és videók",
             "presence_description": "Ossza meg a tevékenységét és állapotát másokkal.",
             "publish_timezone": "Időzóna közzététele a nyilvános profilon",
@@ -3100,6 +3110,14 @@
         "server_error_detail": "A kiszolgáló nem érhető el, túlterhelt vagy valami más probléma van.",
         "shrug": "Az egyszerű szöveges üzenet elé teszi ezt: ¯\\_(ツ)_/¯",
         "spoiler": "A megadott üzenet elküldése kitakarva",
+        "status": {
+            "description": "Jelenlegi állapot beállítása",
+            "no_args": "Nincsenek megadva paraméterek. Adjon meg egy emodzsit, és esetlegesen egy szöveget.",
+            "no_emoji": "Nem adott meg emodzsit",
+            "no_text": "Nem adott meg állapotszöveget",
+            "too_long_emoji": "Az első paraméternek egy emodzsinak kell lennie.",
+            "too_long_text": "Az Ön által megadott szöveg túl hosszú volt."
+        },
         "tableflip": "Az egyszerű szöveges üzenet elé teszi ezt: (╯°□°）╯︵ ┻━┻",
         "topic": "Lekérdezi vagy beállítja a szoba témáját",
         "topic_none": "A szobának nincs témája.",
@@ -3319,7 +3337,6 @@
         "download_action_downloading": "Letöltés",
         "download_failed": "Letöltés sikertelen",
         "download_failed_description": "Hiba történt a fájl letöltése közben",
-        "e2e_state": "A végpontok közti titkosítás állapota",
         "edits": {
             "tooltip_label": "Szerkesztés ideje: %(date)s. Kattintson a szerkesztések megtekintéséhez.",
             "tooltip_sub": "A szerkesztések megtekintéséhez kattints",
@@ -3400,9 +3417,7 @@
         "m.poll.start": "%(senderName)s szavazást indított - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s megváltoztatta a szoba profilképét.",
-            "changed_img": "%(senderDisplayName)s megváltoztatta a szoba profilképét: <img/>",
-            "lightbox_title": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba profilképét",
-            "removed": "%(senderDisplayName)s törölte a szoba profilképét."
+            "lightbox_title": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba profilképét"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3526,7 +3541,6 @@
             "created_rule_rooms": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s, ok: %(reason)s",
             "created_rule_servers": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő kiszolgálók voltak kitiltva: %(glob)s, ok: %(reason)s",
             "created_rule_users": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s, ok: %(reason)s",
-            "message_hidden": "Ezt a felhasználót figyelmen kívül hagyod, így az üzenetei el lesznek rejtve. <a>Megjelenítés mindenképpen.</a>",
             "removed_rule": "%(senderName)s törölte az ennek megfelelő kitiltó szabályt: %(glob)s",
             "removed_rule_rooms": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s",
             "removed_rule_servers": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő kiszolgálók ki voltak tiltva: %(glob)s",
@@ -3829,12 +3843,6 @@
         "verify_button": "Felhasználó ellenőrzése",
         "verify_explainer": "A biztonság fokozásáért ellenőrizd ezt a felhasználót egy egyszeri kód egyeztetésével mindkettőtök készülékén."
     },
-    "user_menu": {
-        "link_new_device": "Új eszköz összekapcsolása",
-        "settings": "Összes beállítás",
-        "switch_theme_dark": "Sötét módra váltás",
-        "switch_theme_light": "Világos módra váltás"
-    },
     "voip": {
         "already_in_call": "A hívás már folyamatban van",
         "already_in_call_person": "Már hívásban van ezzel a személlyel.",
@@ -3850,6 +3858,16 @@
         "call_held": "%(peerName)s várakoztatja a hívást",
         "call_held_resume": "A hívás várakozik, <a>folytatás</a>",
         "call_held_switch": "A hívás várakozik, <a>átkapcsolás</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> hívásban",
+                "other": "<avatars/> hívásban"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s a hívásban",
+                "other": "<avatars/> +%(overflowCount)s a hívásban"
+            }
+        },
         "call_toast_unknown_room": "Ismeretlen szoba",
         "camera_disabled": "A kamerája ki van kapcsolva",
         "camera_enabled": "A kamerája még mindig be van kapcsolva",
@@ -3872,10 +3890,12 @@
         "enable_microphone": "Mikrofon némításának feloldása",
         "expand": "Visszatérés a híváshoz",
         "get_call_link": "Hívási hivatkozás megosztása",
+        "group_call_started": "Csoportos hívás elindítva",
         "hangup": "Bontás",
         "hide_sidebar_button": "Oldalsáv elrejtése",
         "input_devices": "Beviteli eszközök",
         "jitsi_call": "Jitsi konferencia",
+        "join_with_video": "Csatlakozás videóval",
         "legacy_call": "Örökölt hívás",
         "maximise": "Képernyő kitöltése",
         "maximise_call": "Maximalizálja a hívást",
@@ -3936,6 +3956,11 @@
         "you_are_presenting": "Ön tartja a bemutatót"
     },
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
+    "welcome": {
+        "tagline_element": "A sebesség és az egyszerűség jegyében.",
+        "title_element": "Legyen elemében",
+        "title_generic": "Üdvözli az %(brand)s"
+    },
     "widget": {
         "added_by": "A kisalkalmazást hozzáadta",
         "capabilities_dialog": {
@@ -3957,6 +3982,7 @@
             "change_name_this_room": "A szoba nevének megváltoztatása",
             "change_topic_active_room": "Az aktív szobája témájának módosítása",
             "change_topic_this_room": "A szoba témájának megváltoztatása",
+            "download_file": "Fájlok letöltése a médiatárból",
             "receive_membership_active_room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése az aktív szobájában",
             "receive_membership_this_room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése ebben a szobában",
             "remove_ban_invite_leave_active_room": "Eltávolítani, kitiltani vagy meghívni embereket az aktív szobába és, hogy ön elhagyja a szobát",

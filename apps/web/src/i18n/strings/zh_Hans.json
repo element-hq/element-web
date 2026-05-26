@@ -15,8 +15,7 @@
         "room_name": "房间 %(name)s",
         "room_status_bar": "房间状态栏",
         "seek_bar_label": "音频搜索栏",
-        "unread_messages": "未读消息。",
-        "user_menu": "用户菜单"
+        "unread_messages": "未读消息。"
     },
     "a11y_jump_first_unread_room": "跳转到首个未读房间。",
     "action": {
@@ -98,7 +97,6 @@
         "rename": "重命名",
         "reply": "回复",
         "reply_in_thread": "在消息列中回复",
-        "report_content": "举报内容",
         "report_room": "举报房间",
         "resend": "重新发送",
         "reset": "重置",
@@ -341,7 +339,6 @@
         "sign_in_instead_prompt": "已有账户？<a>登录</a>",
         "sign_in_or_register": "登录或创建账户",
         "sign_in_or_register_description": "使用你的现有账户或创建一个新账户继续。",
-        "sign_in_prompt": "已有账户？<a>登录</a>",
         "sign_in_with_sso": "以单点模式登录",
         "signing_in": "正在登录…",
         "soft_logout": {
@@ -892,7 +889,6 @@
         "thread_root_id": "消息列根 ID：%(threadRootId)s",
         "threads_timeline": "消息列时间线",
         "title": "开发者工具",
-        "toggle_event": "切换事件",
         "toolbox": "工具箱",
         "use_at_own_risk": "此 UI 不检查值的数据类型。需自行承担使用风险。",
         "user_avatar": "头像：%(avatar)s",
@@ -904,7 +900,7 @@
         "user_read_up_to_ignore_synthetic": "用户阅读到（ignoreSynthetic）： ",
         "user_read_up_to_private": "用户阅读到（m.read.private）： ",
         "user_read_up_to_private_ignore_synthetic": "用户阅读到（m.read.private;ignoreSynthetic）：",
-        "user_room_membership": "成员资格",
+        "user_room_membership": "成员资格：%(membership)s",
         "user_verification_status": {
             "identity_changed": "验证状态：<E2EIcon /> 未验证且已更改数字身份",
             "unverified": "验证状态：<E2EIcon /> 未验证",
@@ -1368,6 +1364,14 @@
         "impossible_dialog_title": "不允许集成"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "你与这些联系人暂无任何聊天。请确认对方被邀请到此房间后再继续。",
+            "invite_title": "邀请新联系人到此房间？",
+            "start_chat_subtitle_multiple_users": "你与这些人员暂无任何聊天。请确认对方被邀请后再继续。",
+            "start_chat_subtitle_one_user": "你与此人暂无任何聊天。请确认对方被邀请后再继续。",
+            "start_chat_title_multiple_users": "与这些新联系人开始聊天？",
+            "start_chat_title_one_user": "与此新联系人开始聊天？"
+        },
         "email_caption": "通过邮件邀请",
         "email_limit_one": "通过邮件发送邀请一次只能发送一个",
         "email_use_default_is": "使用身份服务器通过邮件地址邀请。<default>使用默认的 (%(defaultIdentityServerName)s)</default> 或在 <settings>设置</settings> 中进行管理。",
@@ -1531,6 +1535,11 @@
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
+        "feature_user_status": {
+            "description": "启用以查看并设置当前状态。",
+            "display_name": "用户状态",
+            "required_msc_support": "需要 MSC4429（面向旧版同步模式的配置文件更新）"
+        },
         "feature_wysiwyg_composer_description": "在消息编辑器中使用富文本取代 Markdown。",
         "group_calls": "新的群呼体验",
         "group_developer": "开发者",
@@ -1555,7 +1564,7 @@
         "latex_maths": "在消息中渲染 LaTeX 数学公式",
         "leave_beta": "退出 Beta 测试",
         "leave_beta_reload": "退出 Beta 测试将重载 %(brand)s。",
-        "location_share_live": "分享实时位置",
+        "location_share_live": "正在共享实时位置",
         "location_share_live_description": "临时实现。位置将持续保留于房间历史。",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
@@ -1566,8 +1575,6 @@
         "notifications": "在房间标题处启用通知面板",
         "render_reaction_images": "在反应中渲染自定义图像",
         "render_reaction_images_description": "有时被称为“自定义 Emoji”。",
-        "report_to_moderators": "向协管员举报",
-        "report_to_moderators_description": "在支持审核的房间中，“举报”按钮可以让你向房间协管员举报滥用行为。",
         "room_list_sections": "房间列表区域",
         "sliding_sync": "滑动同步模式",
         "sliding_sync_description": "正在处于开发中，并且一旦启用就无法禁用。当前与 Element Call 不兼容。",
@@ -1852,25 +1859,10 @@
     },
     "report_content": {
         "description": "举报此消息会将其唯一的“事件 ID”发送给服务器管理员。如果此房间中的消息已加密，则服务器管理员将无法查看消息文本、任何文件或图像。",
-        "disagree": "不同意",
-        "error_create_room_moderation_bot": "无法使用协管机器人创建房间",
         "hide_messages_from_user": "如果你想隐藏此用户当前及未来的所有消息，请选中此项。",
         "ignore_user": "忽略用户",
-        "illegal_content": "非法内容",
         "missing_reason": "请填写举报理由。",
-        "nature": "请选择一种性质，并描述该消息为何具有滥用性。",
-        "nature_disagreement": "此用户输入的内容有误。\n此问题将报告给房间协管员。",
-        "nature_illegal": "此用户存在违法行为，例如人肉搜索或威胁使用暴力。\n我们会将此情况报告给房间管理员，管理员可能会将此问题上报给法律部门。",
-        "nature_nonstandard_admin": "此房间专门用于非法或有害内容，或者管理员未能审核非法或有害内容。\n此问题将报告给 %(homeserver)s 的管理员。",
-        "nature_nonstandard_admin_encrypted": "此房间专门发布非法或有害内容，或者管理员未能审核非法或有害内容。\n此问题将报告给 %(homeserver)s 的管理员。管理员将无法阅读此房间的加密内容。",
-        "nature_other": "任何其它原因。请描述问题。\n这将报告给房间管理员。",
-        "nature_spam": "此用户正在向房间发送垃圾广告、广告链接或推广内容。\n我们将向房间管理员报告此问题。",
-        "nature_toxic": "此用户表现不良，例如辱骂其他用户、在家庭友好型房间分享仅限成人的内容或以其它方式违反此房间的规则。\n将向房间管理员举报。",
-        "other_label": "其它",
-        "report_content_to_homeserver": "向服务器管理员举报此内容",
-        "report_entire_room": "举报整个房间",
-        "spam_or_propaganda": "垃圾内容或广告",
-        "toxic_behaviour": "有害行为"
+        "report_content_to_homeserver": "向服务器管理员举报此内容"
     },
     "report_room": {
         "description": "向服务器管理员举报此房间。如果消息已被加密，则管理员无法看到它们。",
@@ -2642,7 +2634,7 @@
             "deactivate_confirm_content_5": "你将被从身份服务器中移除：你的好友将无法再通过你的邮件地址或电话号码找到你。",
             "deactivate_confirm_content_6": "你的旧消息仍然会被接收者看到，就像你过去发送的邮件一样。是否对以后加入房间的人员隐藏你发送的消息？",
             "deactivate_confirm_continue": "确认停用账户",
-            "deactivate_confirm_erase_label": "隐藏我的信息不被新加入者看到",
+            "deactivate_confirm_erase_label": "对新加入者隐藏我的消息",
             "deactivate_section": "停用账户",
             "deactivate_warning": "停用账户是一项永久性操作，请务必小心！",
             "discovery_email_empty": "添加邮件后，将出现发现选项。",
@@ -2890,7 +2882,7 @@
             "message_search_unsupported_web": "%(brand)s 在 Web 浏览器中运行时无法安全地在本地缓存加密消息。请使用 <desktopLink>%(brand)s Desktop</desktopLink> 使加密消息出现在搜索结果中。",
             "record_session_details": "在会话管理器中记录客户端名称、版本及 URL 以更易于识别",
             "send_analytics": "发送分析数据",
-            "strict_encryption": "仅向已验证用户发送信息"
+            "strict_encryption": "仅向已验证用户发送消息"
         },
         "send_read_receipts": "发送已读回执",
         "send_read_receipts_unsupported": "你的服务器不支持禁用发送已读回执。",
@@ -3111,12 +3103,12 @@
         "invite_failed": "用户（%(user)s）最终未被邀请加入 %(roomId)s，但邀请程序未显示任何错误。",
         "join": "通过指定的房间地址加入",
         "jumptodate": "在时间线中跳转到指定日期",
-        "jumptodate_invalid_input": "我们无法理解指定的日期 (%(inputDate)s)。尝试使用 YYYY-MM-DD 格式。",
+        "jumptodate_invalid_input": "我们无法理解指定的日期（%(inputDate)s）。尝试使用 YYYY-MM-DD 格式。",
         "lenny": "附加“( ͡° ͜ʖ ͡°)”到纯文本消息",
         "manual_device_verification_confirm_description": "这将允许其它设备以你的身份发送和接收消息。如果有人告诉你在此处粘贴内容，你很可能被诈骗！你确定要验证此设备？",
         "manual_device_verification_confirm_title": "警告：手动设备验证",
         "me": "显示操作",
-        "msg": "向指定用户发送信息",
+        "msg": "向指定用户发送消息",
         "myavatar": "更改个人资料图像（应用于所有房间）",
         "myroomavatar": "仅更改我在当前房间内的个人资料图像",
         "myroomnick": "仅更改我在当前房间内的显示名称",
@@ -3137,6 +3129,14 @@
         "server_error_detail": "服务器不可用、超载或出现其它问题。",
         "shrug": "附加“ˉ\\_(ツ)_/ˉ”到纯文本消息",
         "spoiler": "作为剧透发送指定消息",
+        "status": {
+            "description": "设置你当前的状态",
+            "no_args": "未提供任何参数。你应该提供 1 个 Emoji 与 1 个可选的文本构成。",
+            "no_emoji": "你未提供 Emoji",
+            "no_text": "你未提供任何状态文本",
+            "too_long_emoji": "第 1 个参数必须为 Emoji",
+            "too_long_text": "你提供的文本过长。"
+        },
         "tableflip": "附加“(╯°□°）╯︵ ┻━┻”到纯文本消息",
         "topic": "获取或设置房间主题",
         "topic_none": "此房间没有主题",
@@ -3358,7 +3358,6 @@
         "download_action_downloading": "下载中",
         "download_failed": "下载失败",
         "download_failed_description": "下载此文件时出错",
-        "e2e_state": "端到端加密状态",
         "edits": {
             "tooltip_label": "编辑于 %(date)s，点击查看编辑历史。",
             "tooltip_sub": "点击查看编辑历史",
@@ -3440,9 +3439,7 @@
         "m.poll.start": "%(senderName)s 发起投票： %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 已更改房间头像。",
-            "changed_img": "%(senderDisplayName)s 已将房间头像更改为 <img/>",
-            "lightbox_title": "%(senderDisplayName)s 已更改房间 %(roomName)s 中的头像",
-            "removed": "%(senderDisplayName)s 已移除房间头像。"
+            "lightbox_title": "%(senderDisplayName)s 已更改房间 %(roomName)s 中的头像"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3455,7 +3452,7 @@
             },
             "changed": "%(senderName)s 更改了此房间的地址。",
             "changed_alternative": "%(senderName)s 更改了此房间的备选地址。",
-            "changed_main_and_alternative": "%(senderName)s 已更改此房间的主要地址与备用地址。",
+            "changed_main_and_alternative": "%(senderName)s 已更改此房间的主要地址与备选地址。",
             "removed": "%(senderName)s 已移除此房间的主地址。",
             "set": "%(senderName)s 已将此房间的主地址设置为 %(address)s。"
         },
@@ -3566,7 +3563,6 @@
             "created_rule_rooms": "%(senderName)s 已创建一条与 %(glob)s 匹配的房间封禁规则，原因：%(reason)s",
             "created_rule_servers": "%(senderName)s 已创建一条与 %(glob)s 匹配的服务器封禁规则，原因：%(reason)s",
             "created_rule_users": "%(senderName)s 已创建一条与 %(glob)s 匹配的用户封禁规则，原因：%(reason)s",
-            "message_hidden": "你已忽略此用户，因此其消息已被隐藏。<a>仍然显示。</a>",
             "removed_rule": "%(senderName)s 已移除一条与 %(glob)s 匹配的封禁规则",
             "removed_rule_rooms": "%(senderName)s 已移除匹配 %(glob)s 的房间封禁规则。",
             "removed_rule_servers": "%(senderName)s 已移除与 %(glob)s 匹配的服务器封禁规则",
@@ -3681,8 +3677,7 @@
                 "other": "已被移除 %(count)s 次"
             },
             "kicked_multiple": {
-                "one": "已被移除",
-                "other": "被移除 %(count)s 次"
+                "other": "已被移除 %(count)s 次"
             },
             "left": {
                 "one": "%(oneUser)s 已离开",
@@ -3693,16 +3688,14 @@
                 "other": "%(severalUsers)s 离开 %(count)s 次"
             },
             "no_change": {
-                "one": "%(oneUser)s 未产生任何更改",
-                "other": "%(oneUser)s未产生任何更改 %(count)s 次"
+                "other": "%(oneUser)s 未产生任何更改 %(count)s 次"
             },
             "no_change_multiple": {
                 "one": "%(severalUsers)s 未产生任何更改",
                 "other": "%(severalUsers)s 未产生任何更改 %(count)s 次"
             },
             "pinned_events": {
-                "one": "%(oneUser)s 更改了此房间的<a>已置顶消息</a>",
-                "other": "%(oneUser)s 已更改房间内的 <a>已置顶消息</a> %(count)s 次"
+                "other": "%(oneUser)s 已更改房间内的<a>已置顶消息</a> %(count)s 次"
             },
             "pinned_events_multiple": {
                 "one": "%(severalUsers)s 已更改房间的 <a>已置顶消息</a>",
@@ -3789,8 +3782,8 @@
     "upload_file": {
         "cancel_all_button": "全部取消",
         "error_file_too_large": "此文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
-        "error_files_too_large": "这些文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s。",
-        "error_some_files_too_large": "某些文件<b>过大</b>，无法上传。文件大小限制为 %(limit)s。",
+        "error_files_too_large": "这些文件<b>过大大</b>而无法上传。文件大小限制为 %(limit)s。",
+        "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
         "not_image": "你选择的文件不是有效的图像文件。",
         "title": "上传文件",
@@ -3817,7 +3810,7 @@
         "demote_self_confirm_title": "降级自身？",
         "disinvite_button_room": "撤消邀请",
         "disinvite_button_room_name": "从 %(roomName)s 取消邀请",
-        "disinvite_button_space": "取消邀请",
+        "disinvite_button_space": "从空间取消邀请",
         "error_ban_user": "封禁用户失败",
         "error_deactivate": "用户停用失败",
         "error_kicking_user": "用户移除失败",
@@ -3848,9 +3841,9 @@
             "confirm_description_2": "如果消息量较大，这可能需要一些时间。在此期间请勿刷新客户端。",
             "confirm_keep_state_explainer": "如果你还想移除此用户的系统消息（例如，成员关系变更、个人资料变更等），请取消选中。",
             "confirm_keep_state_label": "保留系统消息",
-            "confirm_title": "移除 %(user)s 最近的信息",
+            "confirm_title": "移除 %(user)s 的最近消息",
             "no_recent_messages_description": "尝试向上滚动时间线，查看是否有更早的消息。",
-            "no_recent_messages_title": "未找到 %(user)s 的最近信息"
+            "no_recent_messages_title": "未找到 %(user)s 的最近消息"
         },
         "redact_button": "移除消息",
         "revoke_invite": "撤消申请",
@@ -3871,12 +3864,6 @@
         "verify_button": "验证用户",
         "verify_explainer": "为了提高安全性，请通过检查两台设备上的一次性代码来验证此用户。"
     },
-    "user_menu": {
-        "link_new_device": "关联新设备",
-        "settings": "所有设置",
-        "switch_theme_dark": "切换为深色模式",
-        "switch_theme_light": "切换为浅色模式"
-    },
     "voip": {
         "already_in_call": "已在通话中",
         "already_in_call_person": "你已正在与此人通话。",
@@ -3890,8 +3877,16 @@
         "call_failed_media_permissions": "已授予摄像头使用权",
         "call_failed_microphone": "通话失败，因为无法访问麦克风。请检查麦克风是否已插入并正确设置。",
         "call_held": "%(peerName)s 已挂起通话",
-        "call_held_resume": "你正在通话 <a>恢复</a>",
-        "call_held_switch": "你正在通话 <a>切换</a>",
+        "call_held_resume": "你已挂起通话 <a>恢复</a>",
+        "call_held_switch": "你已挂起通话 <a>切换</a>",
+        "call_members": {
+            "exhaustive": {
+                "other": "<avatars/> 正在通话"
+            },
+            "overflow": {
+                "other": "<avatars/> +%(overflowCount)s 正在通话"
+            }
+        },
         "call_toast_unknown_room": "未知房间",
         "camera_disabled": "摄像头已关闭",
         "camera_enabled": "摄像头仍处于开启状态",
@@ -3899,7 +3894,7 @@
         "close_lobby": "关闭大厅",
         "connecting": "正在连接",
         "connection_lost": "与服务器的连接已丢失",
-        "connection_lost_description": "在未连接到服务器的情况下，你无法拨打电话。",
+        "connection_lost_description": "在未连接到服务器的情况下，你无法进行通话。",
         "consulting": "正在与 %(transferTarget)s 协商。<a>转接到 %(transferee)s</a>",
         "default_device": "默认设备",
         "dial": "拨号",
@@ -3914,10 +3909,12 @@
         "enable_microphone": "取消静音麦克风",
         "expand": "返回到通话",
         "get_call_link": "分享通话链接",
+        "group_call_started": "群组通话已开始",
         "hangup": "挂断",
         "hide_sidebar_button": "隐藏边栏",
         "input_devices": "输入设备",
         "jitsi_call": "Jitsi 会议",
+        "join_with_video": "以视频方式加入",
         "legacy_call": "旧版通话",
         "maximise": "填充屏幕",
         "maximise_call": "最大化",
@@ -3926,7 +3923,7 @@
         },
         "minimise_call": "最小化",
         "misconfigured_server": "由于服务器配置错误，通话失败",
-        "misconfigured_server_description": "请要求主服务器 (<code>%(homeserverDomain)s</code>) 的管理员配置 TURN 服务器，以确保通话可靠运行。",
+        "misconfigured_server_description": "请要求主服务器（<code>%(homeserverDomain)s</code>）的管理员配置 TURN 服务器，以确保通话可靠运行。",
         "misconfigured_server_fallback": "或者，你可以尝试使用位于 <server/> 的公共服务器，但这不完全可靠，并且会与该服务器共享 IP 地址。你也可以在“设置”中管理此设置。",
         "misconfigured_server_fallback_accept": "尝试使用 %(server)s",
         "more_button": "更多",
@@ -4036,15 +4033,15 @@
             "see_videos_sent_this_room": "查看发布到此房间的视频",
             "send_emotes_active_room": "以你的身份在活跃房间发送表情",
             "send_emotes_this_room": "以你的身份在此房间发送表情",
-            "send_event_type_active_room": "以你的身份在活跃房间中发送<b>%(eventType)s</b>事件",
+            "send_event_type_active_room": "以你的身份在活跃房间中发送 <b>%(eventType)s</b> 事件",
             "send_event_type_this_room": "以你的身份在此房间发送 <b>%(eventType)s</b> 事件",
             "send_files_active_room": "以你的身份在活跃房间发送普通文件",
             "send_files_this_room": "以你的身份在此房间发送普通文件",
             "send_images_active_room": "以你的身份在活跃房间发送图像",
             "send_images_this_room": "以你的身份在此房间发送图片",
             "send_messages_active_room": "以你的身份在活跃房间发送消息",
-            "send_messages_this_room": "以你的身份在此房间中发送信息",
-            "send_msgtype_active_room": "以你的身份在活跃房间中发送<b>%(msgtype)s</b>消息",
+            "send_messages_this_room": "以你的身份在此房间中发送消息",
+            "send_msgtype_active_room": "以你的身份在活跃房间中发送 <b>%(msgtype)s</b> 消息",
             "send_msgtype_this_room": "以你的身份在此房间发送 <b>%(msgtype)s</b> 消息",
             "send_stickers_active_room": "向你的活跃房间发送贴纸",
             "send_stickers_active_room_as_you": "以你的身份在活跃房间发送贴纸",
@@ -4070,7 +4067,7 @@
             "start_audio_stream": "开始音频流"
         },
         "cookie_warning": "此小部件可能会使用 Cookies。",
-        "error_hangup_description": "通话已中断。（错误：(message)s）",
+        "error_hangup_description": "通话已中断。（错误：%(message)s）",
         "error_hangup_title": "连接丢失",
         "error_loading": "载入小部件时出错",
         "error_mixed_content": "错误：混合内容",

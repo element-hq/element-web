@@ -15,8 +15,7 @@
         "room_name": "Ruangan %(name)s",
         "room_status_bar": "Bilah status ruangan",
         "seek_bar_label": "Bilah pencarian audio",
-        "unread_messages": "Pesan yang belum dibaca.",
-        "user_menu": "Menu pengguna"
+        "unread_messages": "Pesan yang belum dibaca."
     },
     "a11y_jump_first_unread_room": "Pergi ke ruangan yang belum dibaca.",
     "action": {
@@ -98,7 +97,6 @@
         "rename": "Ubah Nama",
         "reply": "Balas",
         "reply_in_thread": "Balas di utasan",
-        "report_content": "Laporkan Konten",
         "report_room": "Laporkan ruangan",
         "resend": "Kirim Ulang",
         "reset": "Atur Ulang",
@@ -341,7 +339,6 @@
         "sign_in_instead_prompt": "Masuk saja",
         "sign_in_or_register": "Masuk atau Buat Akun",
         "sign_in_or_register_description": "Gunakan akun Anda atau buat akun baru untuk lanjut.",
-        "sign_in_prompt": "Punya sebuah akun? <a>Masuk</a>",
         "sign_in_with_sso": "Masuk dengan single sign on",
         "signing_in": "Memasuki…",
         "soft_logout": {
@@ -873,7 +870,6 @@
         "thread_root_id": "ID Akar Utas: %(threadRootId)s",
         "threads_timeline": "Lini masa utasan",
         "title": "Alat pengembang",
-        "toggle_event": "alih peristiwa",
         "toolbox": "Kotak Peralatan",
         "use_at_own_risk": "UI ini TIDAK memeriksa tipe nilai. Gunakan dengan hati-hati.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -1547,8 +1543,6 @@
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
-        "report_to_moderators": "Laporkan ke moderator",
-        "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1823,25 +1817,10 @@
     },
     "report_content": {
         "description": "Melaporkan pesan ini akan mengirimkan ID peristiwa yang untuk ke administrator homeserver Anda. Jika pesan-pesan di ruangan ini terenkripsi, maka administrator homeserver Anda tidak akan dapat membaca teks pesan atau menampilkan file atau gambar apa saja.",
-        "disagree": "Tidak Setuju",
-        "error_create_room_moderation_bot": "Tidak dapat membuat ruangan dengan bot moderasi",
         "hide_messages_from_user": "Periksa jika Anda ingin menyembunyikan semua pesan saat ini dan pesan baru dari pengguna ini.",
         "ignore_user": "Abaikan pengguna",
-        "illegal_content": "Konten Ilegal",
         "missing_reason": "Mohon isi kenapa Anda melaporkan.",
-        "nature": "Harap pilih sifat dan jelaskan apa yang membuat pesan ini kasar.",
-        "nature_disagreement": "Apa yang ditulis pengguna itu salah.\nIni akan dilaporkan ke moderator ruangan.",
-        "nature_illegal": "Pengguna ini menampilkan kelakuan yang ilegal, misalnya dengan doxing orang lain atau ancaman kekerasan.\nIni akan dilaporkan ke moderator ruangan yang mungkin melaporkannya juga ke otoritas hukum.",
-        "nature_nonstandard_admin": "Ruang ini didedikasikan untuk konten ilegal atau toksik atau moderator gagal memoderasi konten ilegal atau toksik.\nHal ini akan dilaporkan kepada administrator %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Ruang ini didedikasikan untuk konten ilegal atau toksik atau moderator gagal memoderasi konten ilegal atau toksik.\nHal ini akan dilaporkan kepada administrator %(homeserver)s. Administrator TIDAK akan dapat membaca konten terenkripsi di ruangan ini.",
-        "nature_other": "Alasan yang lain. Mohon jelaskan masalahnya.\nIni akan dilaporkan ke moderator ruangan.",
-        "nature_spam": "Pengguna ini spam ruangan dengan iklan, tautan ke iklan atau ke propaganda.\nIni akan dilaporkan ke moderator ruangan.",
-        "nature_toxic": "Pengguna ini menampilkan kelakuan yang toksik, misalnya dengan menghina pengguna lain atau membagikan konten dewasa di ruangan ramah keluarga atau merusak aturan ruangan.\nIni akan dilaporkan ke moderator ruangan.",
-        "other_label": "Lainnya",
-        "report_content_to_homeserver": "Laporkan Konten ke Administrator Homeserver Anda",
-        "report_entire_room": "Laporkan seluruh ruangan",
-        "spam_or_propaganda": "Spam atau propaganda",
-        "toxic_behaviour": "Kelakukan Toxic"
+        "report_content_to_homeserver": "Laporkan Konten ke Administrator Homeserver Anda"
     },
     "report_room": {
         "description": "Laporkan ruangan ini ke admin homeserver Anda. Ini akan mengirimkan ID unik ruangan, tetapi jika pesan dienkripsi, administrator tidak akan dapat membacanya atau melihat file terbagi.",
@@ -3310,7 +3289,6 @@
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",
-        "e2e_state": "Keadaan enkripsi ujung ke ujung",
         "edits": {
             "tooltip_label": "Diedit di %(date)s. Klik untuk melihat editan.",
             "tooltip_sub": "Klik untuk melihat editan",
@@ -3392,9 +3370,7 @@
         "m.poll.start": "%(senderName)s telah memulai sebuah pungutan suara — %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mengubah avatar ruangan ini.",
-            "changed_img": "%(senderDisplayName)s mengubah avatar ruangan ke <img/>",
-            "lightbox_title": "%(senderDisplayName)s mengubah avatar untuk %(roomName)s",
-            "removed": "%(senderDisplayName)s menghapus avatar ruangan."
+            "lightbox_title": "%(senderDisplayName)s mengubah avatar untuk %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3516,7 +3492,6 @@
             "created_rule_rooms": "%(senderName)s membuat sebuah peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
             "created_rule_servers": "%(senderName)s membuat sebuah peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
             "created_rule_users": "%(senderName)s membuat sebuah peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
-            "message_hidden": "Anda telah mengabaikan pengguna ini, jadi pesannya disembunyikan. <a>Tampilkan saja.</a>",
             "removed_rule": "%(senderName)s menghapus sebuah peraturan pencekalan yang berisi %(glob)s",
             "removed_rule_rooms": "%(senderName)s menghapus peraturan pencekalan ruangan yang berisi %(glob)s",
             "removed_rule_servers": "%(senderName)s menghapus peraturan pencekalan server yang berisi %(glob)s",
@@ -3820,12 +3795,6 @@
         "verification_unavailable": "Verifikasi pengguna tidak tersedia",
         "verify_button": "Verifikasi Pengguna",
         "verify_explainer": "Untuk keamanan lebih, verifikasi pengguna ini dengan memeriksa kode satu kali di kedua perangkat Anda."
-    },
-    "user_menu": {
-        "link_new_device": "Tautkan perangkat baru",
-        "settings": "Semua pengaturan",
-        "switch_theme_dark": "Ubah ke mode gelap",
-        "switch_theme_light": "Ubah ke mode terang"
     },
     "voip": {
         "already_in_call": "Sudah ada di panggilan",

@@ -142,7 +142,7 @@ function DeclineCallButtonWithNotificationEvent({
             Icon={CloseIcon}
             size="md"
         >
-            {_t("action|ignore")}
+            {_t("action|decline")}
         </Button>
     );
 }

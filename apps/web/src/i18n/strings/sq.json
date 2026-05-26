@@ -10,8 +10,7 @@
             "one": "1 përmendje e palexuar."
         },
         "room_name": "Dhoma %(name)s",
-        "unread_messages": "Mesazhe të palexuar.",
-        "user_menu": "Menu përdoruesi"
+        "unread_messages": "Mesazhe të palexuar."
     },
     "a11y_jump_first_unread_room": "Hidhu te dhoma e parë e palexuar.",
     "action": {
@@ -87,7 +86,6 @@
         "rename": "Riemërtojeni",
         "reply": "Përgjigje",
         "reply_in_thread": "Përgjigjuni te rrjedha",
-        "report_content": "Raportoni Lëndë",
         "resend": "Ridërgoje",
         "reset": "Rikthe te parazgjedhjet",
         "resume": "Rimerre",
@@ -292,7 +290,6 @@
         "sign_in_instead_prompt": "Në vend të kësaj, hyni",
         "sign_in_or_register": "Hyni ose Krijoni një Llogari",
         "sign_in_or_register_description": "Që të vazhdohet, përdorni llogarinë tuaj të përdoruesit ose krijoni një të re.",
-        "sign_in_prompt": "Keni një llogari? <a>Hyni</a>",
         "sign_in_with_sso": "Bëni hyrjen me hyrje njëshe",
         "signing_in": "Po hyhet…",
         "soft_logout": {
@@ -711,7 +708,6 @@
         "state_key": "Kyç Gjendjesh",
         "threads_timeline": "Rrjedhë kohore rrjedhash",
         "title": "Mjete zhvilluesi",
-        "toggle_event": "shfaqe/fshihe aktin",
         "toolbox": "Grup mjetesh",
         "use_at_own_risk": "Kjo UI NUK kontrollon llojet e vlerave. Përdorini me përgjegjësinë tuaj.",
         "value": "Vlerë",
@@ -1230,8 +1226,6 @@
         "location_share_live_description": "Sendërtim i përkohshëm. Vendndodhjet mbeten te historiku i dhomës.",
         "mjolnir": "Rrugë të reja për të shpërfillur njerëz",
         "msc3531_hide_messages_pending_moderation": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit.",
-        "report_to_moderators": "Raportojeni te moderatorët",
-        "report_to_moderators_description": "Në dhoma që mbulojnë moderimin, butoni “Raportojeni” do t’ju lejojë t’u raportoni abuzim moderatorëve të dhomës.",
         "sliding_sync_description": "Nën zhvillim aktiv, s’mund të çaktivizohet.",
         "sliding_sync_disabled_notice": "Që të çaktivizohet, dilni dhe rihyni në llogari",
         "sliding_sync_server_no_support": "Shërbyesit tuaj i mungon mbulim i brendshëm për këtë",
@@ -1472,22 +1466,10 @@
     },
     "report_content": {
         "description": "Raportimi i këtij mesazhi do të shkaktojë dërgimin e 'ID-së së aktit' unike te përgjegjësi i shërbyesit tuaj Home. Nëse mesazhet në këtë dhomë fshehtëzohen, përgjegjësi i shërbyesit tuaj Home s’do të jetë në gjendje të lexojë tekstin e mesazhit apo të shohë çfarëdo kartelë apo figurë.",
-        "disagree": "S’pajtohem",
         "hide_messages_from_user": "I vini shenjë, nëse doni të fshihen krejt mesazhet e tanishme dhe të ardhshme nga ky përdorues.",
         "ignore_user": "Shpërfille përdoruesin",
-        "illegal_content": "Lëndë e Paligjshme",
         "missing_reason": "Ju lutemi, plotësoni arsyen pse po raportoni.",
-        "nature": "Ju lutemi, zgjidhni një karakterizim dhe përshkruani se ç’e bën këtë mesazh abuziv.",
-        "nature_disagreement": "Ajo ç’shkruan ky përdorues është gabim.\nKjo do t’u njoftohet përgjegjësve të dhomës.",
-        "nature_illegal": "Ky përdorues shfaq sjellje të paligjshme, bie fjala, duke zbuluar identitet personash ose duke kërcënuar me dhunë.\nKjo do t’u njoftohet përgjegjësve të dhomës, të cilët mund ta përshkallëzojnë punën drejt autoriteteve ligjore.",
-        "nature_other": "Çfarëdo arsye tjetër. Ju lutemi, përshkruani problemin.\nKjo do t’u raportohet moderatorëve të dhomës.",
-        "nature_spam": "Ky përdorues dërgon në dhomë reklama të padëshiruara, lidhje për te reklama të tilla ose te propagandë e padëshiruar.\nKjo do t’u njoftohet përgjegjësve të dhomës.",
-        "nature_toxic": "Ky përdorues po tregon sjellje toksike, bie fjala, duke fyer përdorues të tjerë ose duke dhënë lëndë vetëm për të rritur në një dhomë të menduar për familje, ose duke shkelur në mënyra të tjera rregullat e kësaj dhome.\nKjo do t’u njoftohet moderatorëve të dhomës.",
-        "other_label": "Tjetër",
-        "report_content_to_homeserver": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home",
-        "report_entire_room": "Raporto krejt dhomën",
-        "spam_or_propaganda": "Mesazh i padëshiruar ose propagandë",
-        "toxic_behaviour": "Sjellje Toksike"
+        "report_content_to_homeserver": "Raportoni Lëndë te Përgjegjësi i Shërbyesit Tuaj Home"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "S’u arrit të shfshehtëzohet sesioni %(failedCount)s!",
@@ -2714,9 +2696,7 @@
         "m.poll.start": "%(senderName)s nisi një anketim - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ndryshoi avatarin e dhomës.",
-            "changed_img": "%(senderDisplayName)s ndryshoi avatarin e dhomës në <img/>",
-            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s",
-            "removed": "%(senderDisplayName)s hoqi avatarin e dhomës."
+            "lightbox_title": "%(senderDisplayName)s ndryshoi avatarin në %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2834,7 +2814,6 @@
             "created_rule_rooms": "%(senderName)s krijoi një rregull mbi dëbim dhomash që kanë përputhje me %(glob)s për %(reason)s",
             "created_rule_servers": "%(senderName)s krijoi një rregull mbi dëbim shërbyesish që kanë përputhje me %(glob)s për %(reason)s",
             "created_rule_users": "%(senderName)s krijoi një rregull mbi dëbim përdoruesish që kanë përputhje me %(glob)s për %(reason)s",
-            "message_hidden": "E keni shpërfillur këtë përdorues, ndaj mesazhi i tij është fshehur. <a>Shfaqe, sido qoftë.</a>",
             "removed_rule": "%(senderName)s hoqi një rregull dëbimi mbi përputhje me %(glob)s",
             "removed_rule_rooms": "%(senderName)s hoqi rregullin që dëbon dhoma që kanë përputhje me %(glob)s",
             "removed_rule_servers": "%(senderName)s hoqi rregullin që dëbon shërbyes që kanë përputhje me %(glob)s",
@@ -3109,11 +3088,6 @@
         "unban_space_warning": "S’do të jenë në gjendje të hyjnë kudo qoftë ku s’jeni përgjegjës.",
         "verify_button": "Verifikoni Përdoruesin",
         "verify_explainer": "Për siguri ekstra, verifikojeni këtë përdorues duke kontrolluar në të dyja pajisjet tuaja një kod njëpërdorimsh."
-    },
-    "user_menu": {
-        "settings": "Krejt rregullimet",
-        "switch_theme_dark": "Kalo nën mënyrën e errët",
-        "switch_theme_light": "Kalo nën mënyrën e çelët"
     },
     "voip": {
         "already_in_call": "Tashmë në thirrje",

@@ -15,8 +15,7 @@
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado da sala",
         "seek_bar_label": "Barra de procura de áudio",
-        "unread_messages": "Mensagens não lidas",
-        "user_menu": "Menu do utilizador"
+        "unread_messages": "Mensagens não lidas"
     },
     "a11y_jump_first_unread_room": "Salta para a primeira sala não lida.",
     "action": {
@@ -96,7 +95,6 @@
         "rename": "Renomear",
         "reply": "Responder",
         "reply_in_thread": "Responder no tópico",
-        "report_content": "Denunciar conteúdo",
         "resend": "Reenviar",
         "reset": "Redefinir",
         "resume": "Retoma",
@@ -337,7 +335,6 @@
         "sign_in_instead_prompt": "Já tem uma conta? <a>Entre aqui</a>",
         "sign_in_or_register": "Iniciar Sessão ou Criar Conta",
         "sign_in_or_register_description": "Use a sua conta ou crie uma nova conta para continuar.",
-        "sign_in_prompt": "Tens uma conta? <a>Inicia sessão</a>",
         "sign_in_with_sso": "Inicia sessão com o início de sessão único",
         "signing_in": "A iniciar sessão...",
         "soft_logout": {
@@ -834,7 +831,6 @@
         "thread_root_id": "ID da raiz do tópico: %(threadRootId)s",
         "threads_timeline": "Cronograma de tópicos",
         "title": "Ferramentas de desenvolvedor",
-        "toggle_event": "alternar evento",
         "toolbox": "Caixa de ferramentas",
         "use_at_own_risk": "Esta interface de utilizador NÃO verifica os tipos dos valores. Utiliza-a por tua conta e risco.",
         "user_read_up_to": "O utilizador leu até: ",
@@ -1443,8 +1439,6 @@
         "notifications": "Ativar o painel de notificações no cabeçalho da sala",
         "render_reaction_images": "Renderizar imagens personalizadas em reações",
         "render_reaction_images_description": "Por vezes designados por \"emojis personalizados\".",
-        "report_to_moderators": "Denunciar aos moderadores",
-        "report_to_moderators_description": "Nas salas que suportam moderação, o botão \"Denunciar\" permite-te denunciar abusos aos moderadores da sala.",
         "sliding_sync": "Modo Sliding Sync",
         "sliding_sync_description": "Em desenvolvimento ativo, não pode ser desativado.",
         "sliding_sync_disabled_notice": "Termina a sessão e volta a entrar para desativar",
@@ -1709,25 +1703,10 @@
     },
     "report_content": {
         "description": "Ao reportar esta mensagem, envias o seu \"ID de evento\" único para o administrador do teu servidor. Se as mensagens nesta sala estiverem cifradas, o administrador não poderá ler o texto ou ver quaisquer ficheiros ou imagens.",
-        "disagree": "Não concordo",
-        "error_create_room_moderation_bot": "Não é possível criar uma sala com o bot de moderação",
         "hide_messages_from_user": "Verifica se pretendes ocultar todas as mensagens actuais e futuras deste utilizador.",
         "ignore_user": "Ignora o utilizador",
-        "illegal_content": "Conteúdo ilegal",
         "missing_reason": "Por favor, indica o motivo da tua denúncia.",
-        "nature": "Escolhe uma natureza e descreve o que torna esta mensagem abusiva.",
-        "nature_disagreement": "O que este utilizador está a escrever está errado.\nIsto será reportado aos moderadores da sala.",
-        "nature_illegal": "Este utilizador está a demonstrar um comportamento ilegal, por exemplo, ao fazer \"doxing\" a pessoas ou ao ameaçar com violência.\nEsta situação será comunicada aos moderadores da sala, que podem encaminhar o caso para as autoridades legais.",
-        "nature_nonstandard_admin": "Esta sala é dedicada a conteúdos ilegais ou tóxicos, ou os moderadores não conseguem moderar conteúdos ilegais ou tóxicos.\nIsto será comunicado aos administradores da %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Esta sala é dedicada a conteúdos ilegais ou tóxicos ou os moderadores não conseguem moderar conteúdos ilegais ou tóxicos.\nIsto será comunicado aos administradores da %(homeserver)s. Os administradores NÃO poderão ler o conteúdo cifrado desta sala.",
-        "nature_other": "Qualquer outro motivo. Descreve o problema.\nEste problema será comunicado aos moderadores da sala.",
-        "nature_spam": "Este utilizador está a enviar spam para a sala através de anúncios, ligações para anúncios ou propaganda.\nIsto será comunicado aos moderadores da sala.",
-        "nature_toxic": "Este utilizador está a demonstrar um comportamento tóxico, por exemplo, insultando outros utilizadores ou partilhando conteúdos só para adultos numa sala familiar ou violando as regras desta sala.\nEste comportamento será comunicado aos moderadores da sala.",
-        "other_label": "Outros",
-        "report_content_to_homeserver": "Denuncia conteúdo ao administrador do teu servidor doméstico",
-        "report_entire_room": "Denuncia a sala inteira",
-        "spam_or_propaganda": "Spam ou propaganda",
-        "toxic_behaviour": "Comportamento tóxico"
+        "report_content_to_homeserver": "Denuncia conteúdo ao administrador do teu servidor doméstico"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Falha ao descriptografar%(failedCount)s sessões!",
@@ -3140,7 +3119,6 @@
         "download_action_downloading": "A transferir…",
         "download_failed": "A transferência falhou",
         "download_failed_description": "Ocorreu um erro ao transferir este ficheiro",
-        "e2e_state": "Estado da encriptação de ponta a ponta",
         "edits": {
             "tooltip_label": "Editado em %(date)s. Clica para ver as edições.",
             "tooltip_sub": "Clica para ver as edições",
@@ -3222,9 +3200,7 @@
         "m.poll.start": "%(senderName)s iniciou uma sondagem - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mudaste o avatar da sala.",
-            "changed_img": "%(senderDisplayName)s alterou a imagem da sala para <img/>",
-            "lightbox_title": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s",
-            "removed": "%(senderDisplayName)s removeu a imagem da sala."
+            "lightbox_title": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3345,7 +3321,6 @@
             "created_rule_rooms": "%(senderName)s criou uma regra que bane salas que correspondam a %(glob)s porque %(reason)s",
             "created_rule_servers": "%(senderName)s criou uma regra proibindo servidores correspondentes a %(glob)s para %(reason)s",
             "created_rule_users": "%(senderName)s criou uma regra que bane os utilizadores que correspondam a %(glob)s porque %(reason)s",
-            "message_hidden": "Ignoraste este utilizador, por isso a sua mensagem está oculta. <a>Mostra de qualquer forma.</a>",
             "removed_rule": "%(senderName)sremoveu uma regra de proibição correspondente %(glob)s",
             "removed_rule_rooms": "%(senderName)s eliminou a regra que proibia a correspondência de salas %(glob)s",
             "removed_rule_servers": "%(senderName)s eliminou a regra que bania os servidores que correspondessem a %(glob)s",
@@ -3649,12 +3624,6 @@
         "verification_unavailable": "Verificação do usuário indisponível",
         "verify_button": "Verificar utilizador",
         "verify_explainer": "Para maior segurança, verifica este utilizador através de um código de utilização única em ambos os dispositivos."
-    },
-    "user_menu": {
-        "link_new_device": "Vincular novo dispositivo",
-        "settings": "Todas as definições",
-        "switch_theme_dark": "Mudar para o modo escuro",
-        "switch_theme_light": "Mudar para o modo claro"
     },
     "voip": {
         "already_in_call": "Já em chamada",

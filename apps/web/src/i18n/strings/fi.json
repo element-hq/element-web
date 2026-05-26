@@ -15,8 +15,7 @@
         "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
-        "unread_messages": "Lukemattomat viestit.",
-        "user_menu": "Käyttäjän valikko"
+        "unread_messages": "Lukemattomat viestit."
     },
     "a11y_jump_first_unread_room": "Siirry ensimmäiseen lukemattomaan huoneeseen.",
     "action": {
@@ -96,7 +95,6 @@
         "rename": "Nimeä uudelleen",
         "reply": "Vastaa",
         "reply_in_thread": "Vastaa ketjuun",
-        "report_content": "Ilmoita sisällöstä",
         "report_room": "Ilmoita huoneesta",
         "resend": "Lähetä uudelleen",
         "reset": "Palauta alkutilaan",
@@ -330,7 +328,6 @@
         "sign_in_instead_prompt": "Onko sinulla jo tili? <a>Kirjaudu tästä</a>",
         "sign_in_or_register": "Kirjaudu sisään tai luo tili",
         "sign_in_or_register_description": "Käytä tiliäsi tai luo uusi jatkaaksesi.",
-        "sign_in_prompt": "Sinulla on jo tili? <a>Kirjaudu sisään</a>",
         "sign_in_with_sso": "Kirjaudu sisään käyttäen kertakirjautumista",
         "signing_in": "Kirjaudutaan…",
         "soft_logout": {
@@ -1276,8 +1273,6 @@
         "msc3531_hide_messages_pending_moderation": "Anna moderaattorien piilottaa moderointia odottavia viestejä.",
         "notification_settings": "Uudet ilmoitusasetukset",
         "notification_settings_beta_title": "Ilmoitusasetukset",
-        "report_to_moderators": "Ilmoita moderaattoreille",
-        "report_to_moderators_description": "Moderointia tukevissa huoneissa väärinkäytökset voi ilmoittaa Ilmoita-painikkeella huoneen moderaattoreille.",
         "sliding_sync": "Liukuvan synkronoinnin tila",
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
         "sliding_sync_disabled_notice": "Kirjaudu uudelleen sisään poistaaksesi käytöstä",
@@ -1510,13 +1505,8 @@
     "report_content": {
         "description": "Tämän viestin ilmoittaminen lähettää sen yksilöllisen tapahtumatunnuksen (event ID) kotipalvelimesi ylläpitäjälle. Jos tämän huoneen viestit on salattu, kotipalvelimesi ylläpitäjä ei voi lukea viestin tekstiä tai nähdä tiedostoja tai kuvia.",
         "ignore_user": "Sivuuta käyttäjä",
-        "illegal_content": "Laiton sisältö",
         "missing_reason": "Kerro miksi teet ilmoitusta.",
-        "other_label": "Muut",
-        "report_content_to_homeserver": "Ilmoita sisällöstä kotipalvelimesi ylläpitäjälle",
-        "report_entire_room": "Raportoi koko huone",
-        "spam_or_propaganda": "Roskapostitusta tai propagandaa",
-        "toxic_behaviour": "Myrkyllinen käyttäytyminen"
+        "report_content_to_homeserver": "Ilmoita sisällöstä kotipalvelimesi ylläpitäjälle"
     },
     "report_room": {
         "reason_label": "Kuvaile syy"
@@ -2870,9 +2860,7 @@
         "m.poll.start": "%(senderName)s on aloittanut kyselyn - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s vaihtoi huoneen kuvan.",
-            "changed_img": "%(senderDisplayName)s vaihtoi huoneen kuvaksi <img/>",
-            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan",
-            "removed": "%(senderDisplayName)s poisti huoneen kuvan."
+            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2993,7 +2981,6 @@
             "created_rule_rooms": "%(senderName)s loi huoneita estävän säännön %(glob)s, syy: %(reason)s",
             "created_rule_servers": "%(senderName)s loi palvelimia estävän säännön %(glob)s, syy: %(reason)s",
             "created_rule_users": "%(senderName)s loi porttikiellonsäännön %(glob)s, syy: %(reason)s",
-            "message_hidden": "Olet sivuuttanut tämän käyttäjän, joten hänen viestinsä on piilotettu. <a>Näytä silti.</a>",
             "removed_rule": "%(senderName)s poisti estosäännön %(glob)s",
             "removed_rule_rooms": "%(senderName)s poisti huoneita estävän säännön %(glob)s",
             "removed_rule_servers": "%(senderName)s poisti palvelimia estävän säännön %(glob)s",
@@ -3268,12 +3255,6 @@
         "unban_space_everything": "Poista porttikielto kaikesta, mihin pystyn",
         "verify_button": "Varmenna käyttäjä",
         "verify_explainer": "Lisäturvaksi, varmenna tämä käyttäjä tarkistamalla koodin kummankin laitteella."
-    },
-    "user_menu": {
-        "link_new_device": "Yhdistä uusi laite",
-        "settings": "Kaikki asetukset",
-        "switch_theme_dark": "Vaihda tummaan teemaan",
-        "switch_theme_light": "Vaihda vaaleaan teemaan"
     },
     "voip": {
         "already_in_call": "Olet jo puhelussa",

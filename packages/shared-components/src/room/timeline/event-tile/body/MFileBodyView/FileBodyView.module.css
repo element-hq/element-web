@@ -26,8 +26,8 @@
 
     & button {
         display: flex;
-        margin: 0 !important;
-        padding: 0 !important;
+        margin: 0;
+        padding: 0;
         border: none;
         width: 100%;
         min-block-size: unset;
@@ -39,6 +39,9 @@
             width: 16px;
             height: 16px;
             padding: var(--cpd-space-2x);
+            color: var(--cpd-color-text-secondary);
+            background-color: var(--cpd-color-bg-subtle-primary);
+            border-radius: 20px;
         }
 
         & span {
@@ -57,7 +60,7 @@
 
 .content [data-type="download"] {
     align-items: center;
-    color: var(--cpd-color-text-action-accent);
+    height: var(--cpd-space-9x);
 
     & iframe {
         margin: 0;

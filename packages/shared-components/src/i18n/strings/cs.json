@@ -41,12 +41,24 @@
         "preferences": "Předvolby",
         "state_encryption_enabled": "Experimentální šifrování stavu povoleno"
     },
+    "devtools": {
+        "toggle_event": "přepnout událost"
+    },
     "keyboard": {
         "shift": "Shift"
     },
     "left_panel": {
         "open_dial_pad": "Otevřít číselník",
         "separator_label": "Kliknutím nebo přetažením rozbalíte"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Vytvořit účet",
+            "got_an_account": "Máte účet?",
+            "manage_account": "Spravovat účet",
+            "sign_in": "Přihlásit se",
+            "title": "Uživatelská nabídka"
+        }
     },
     "notifications": {
         "all_messages": "Všechny zprávy",
@@ -101,6 +113,8 @@
             "voice_call": "Otevřete místnost %(roomName)s pomocí hlasového hovoru."
         },
         "appearance": "Vzhled",
+        "chat_moved": "Chat byl přesunut",
+        "collapse_all_sections": "Sbalit všechny sekce",
         "collapse_filters": "Sbalit seznam filtrů",
         "empty": {
             "no_chats": "Zatím žádné chaty",
@@ -119,6 +133,7 @@
             "show_activity": "Zobrazit veškerou aktivitu",
             "show_chats": "Zobrazit všechny chaty"
         },
+        "expand_all_sections": "Rozbalit všechny sekce",
         "expand_filters": "Rozbalit seznam filtrů",
         "filters": {
             "favourite": "Oblíbené",
@@ -148,6 +163,9 @@
         "room_options": "Možnosti místnosti",
         "section_created": "Sekce vytvořena",
         "section_header": {
+            "edit_section": "Upravit sekci",
+            "more_options": "Další možnosti",
+            "remove_section": "Odstranit sekci",
             "toggle": "Přepnout %(section)s sekci",
             "toggle_unread": "Přepnout sekci %(section)s s nepřečtenými místnostmi"
         },
@@ -186,6 +204,10 @@
         "n_minutes_ago": "před %(num)s minutami"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "Videohovor",
+            "voice_call_title": "Hlasový hovor"
+        },
         "decryption_failure": {
             "blocked": "Odesílatel vám zablokoval příjem této zprávy, protože vaše zařízení není ověřeno",
             "historical_event_no_key_backup": "Historické zprávy nejsou na tomto zařízení k dispozici",
@@ -204,6 +226,10 @@
         },
         "m.file": {
             "error_invalid": "Neplatný soubor"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s změnil(a) avatar místnosti na <img/>",
+            "removed": "%(senderDisplayName)s odstranil(a) avatar místnosti."
         },
         "m.room.encryption": {
             "disable_attempt": "Ignorovaný pokus o deaktivaci šifrování",
@@ -224,8 +250,14 @@
         },
         "message_timestamp_received_at": "Přijato: %(dateTime)s",
         "message_timestamp_sent_at": "Odesláno: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Tohoto uživatele ignorujete, takže jsou jeho zprávy skryté. <a>Přesto zobrazit.</a>"
+        },
+        "pending_moderation": "Zpráva čeká na moderaci",
+        "pending_moderation_reason": "Zpráva čeká na moderaci: %(reason)s",
         "url_preview": {
             "close": "Zavřít náhled",
+            "open_link": "Otevřít odkaz",
             "show_n_more": {
                 "one": "Zobrazit %(count)s další náhled",
                 "few": "Zobrazit %(count)s další náhledy",
@@ -233,6 +265,13 @@
             },
             "view_image": "Zobrazit obrázek"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Připojit nové zařízení",
+        "open_feedback": "Zpětná vazba",
+        "open_home": "Domov",
+        "open_security": "Zabezpečení a soukromí",
+        "open_settings": "Všechna nastavení"
     },
     "widget": {
         "context_menu": {

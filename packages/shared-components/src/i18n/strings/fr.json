@@ -41,12 +41,24 @@
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
     },
+    "devtools": {
+        "toggle_event": "afficher/masquer l’évènement"
+    },
     "keyboard": {
         "shift": "Maj"
     },
     "left_panel": {
         "open_dial_pad": "Ouvrir le pavé de numérotation",
         "separator_label": "Cliquez ou glissez pour agrandir"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Créer un compte",
+            "got_an_account": "Tu as un compte ?",
+            "manage_account": "Gérer le compte",
+            "sign_in": "Se connecter",
+            "title": "Menu utilisateur"
+        }
     },
     "notifications": {
         "all_messages": "Tous les messages",
@@ -100,6 +112,7 @@
         },
         "appearance": "Apparence",
         "chat_moved": "La conversation a été déplacée",
+        "collapse_all_sections": "Réduire toutes les sections",
         "collapse_filters": "Réduire la liste des filtres",
         "empty": {
             "no_chats": "Pas encore de discussions",
@@ -118,6 +131,7 @@
             "show_activity": "Voir toutes les activités",
             "show_chats": "Afficher toutes les discussions"
         },
+        "expand_all_sections": "Développer toutes les sections",
         "expand_filters": "Développer la liste des filtres",
         "filters": {
             "favourite": "Favoris",
@@ -147,6 +161,9 @@
         "room_options": "Options du salon",
         "section_created": "Section créée",
         "section_header": {
+            "edit_section": "Modifier la section",
+            "more_options": "Plus d’options",
+            "remove_section": "Supprimer la section",
             "toggle": "Afficher/masquer la section %(section)s",
             "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"
         },
@@ -185,6 +202,14 @@
         "n_minutes_ago": "il y a %(num)s minutes"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Appel refusé",
+                "call_declined_by_us": "Vous avez rejeté un appel"
+            },
+            "video_call_title": "Appel vidéo",
+            "voice_call_title": "Appel audio"
+        },
         "decryption_failure": {
             "blocked": "L'expéditeur vous a empêché de recevoir ce message car votre appareil n'est pas vérifié",
             "historical_event_no_key_backup": "L'historique des messages n'est pas disponible sur cet appareil",
@@ -196,6 +221,7 @@
         },
         "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
+        "e2e_state": "État du chiffrement de bout en bout",
         "m.audio": {
             "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
@@ -203,6 +229,10 @@
         },
         "m.file": {
             "error_invalid": "Fichier invalide"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s a changé l'avatar du salon en <img/>",
+            "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
         },
         "m.room.encryption": {
             "disable_attempt": "Essai de désactiver le chiffrement ignoré",
@@ -223,6 +253,11 @@
         },
         "message_timestamp_received_at": "Reçu à : %(dateTime)s",
         "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Vous avez ignoré cet utilisateur, son message est donc masqué. <a> Afficher quand même. </a>"
+        },
+        "pending_moderation": "Message en attente de modération",
+        "pending_moderation_reason": "Message en attente de modération : %(reason)s",
         "url_preview": {
             "close": "Fermer l’aperçu",
             "open_link": "Ouvrir le lien",
@@ -232,6 +267,13 @@
             },
             "view_image": "Afficher l'image"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Associer un nouvel appareil",
+        "open_feedback": "Commentaire",
+        "open_home": "Accueil",
+        "open_security": "Sécurité et confidentialité",
+        "open_settings": "Tous les paramètres"
     },
     "widget": {
         "context_menu": {

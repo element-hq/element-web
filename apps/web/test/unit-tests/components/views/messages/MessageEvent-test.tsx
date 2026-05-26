@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, type RenderResult } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/jest";
 import fs from "fs";
@@ -18,21 +18,13 @@ import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-
-jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="unknown-body" />,
-}));
-
-jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="image-body" />,
-}));
+import { Mjolnir } from "../../../../../src/mjolnir/Mjolnir";
 
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
     DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
     FileBodyFactory: () => <div data-testid="file-body" />,
+    ImageBodyFactory: () => <div data-testid="image-body" />,
     RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
     VideoBodyFactory: () => <video data-testid="video-body" />,
     renderMBody: () => <div data-testid="file-body" />,
@@ -83,12 +75,18 @@ describe("MessageEvent", () => {
     };
 
     beforeEach(() => {
+        localStorage.clear();
         client = stubClient();
         room = mkRoom(client, "!room:example.com");
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(SettingsStore, "getValue");
         jest.spyOn(SettingsStore, "watchSetting");
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(jest.fn());
+    });
+
+    afterEach(() => {
+        localStorage.clear();
+        jest.restoreAllMocks();
     });
 
     it("renders the shared redacted body for redacted events", () => {
@@ -115,6 +113,53 @@ describe("MessageEvent", () => {
 
         expect(result.getByText("Message deleted by Moderator")).toBeInTheDocument();
         expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+        expect(result.queryByTestId("textual-body")).toBeNull();
+    });
+
+    it("renders the shared Mjolnir body for banned senders", () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => settingName === "feature_mjolnir");
+        jest.spyOn(Mjolnir, "sharedInstance").mockReturnValue({
+            isUserBanned: jest.fn().mockReturnValue(true),
+            isServerBanned: jest.fn().mockReturnValue(false),
+        } as unknown as Mjolnir);
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            id: "$hidden:example.com",
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: MsgType.Text,
+                body: "Hidden",
+            },
+        });
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText(/You have ignored this user, so their message is hidden\./)).toBeInTheDocument();
+        const allowButton = result.getByRole("button", { name: "Show anyways." });
+
+        fireEvent.click(allowButton);
+
+        expect(localStorage.getItem(`mx_mjolnir_render_${room.roomId}__$hidden:example.com`)).toBe("true");
+    });
+
+    it("renders the shared unknown body for unsupported message types", () => {
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: "org.example.unsupported",
+                body: "Unsupported message body",
+            },
+        });
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("Unsupported message body")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_UnknownBody")).not.toBeNull();
         expect(result.queryByTestId("textual-body")).toBeNull();
     });
 

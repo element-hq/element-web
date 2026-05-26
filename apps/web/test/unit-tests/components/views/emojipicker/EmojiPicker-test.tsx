@@ -13,6 +13,7 @@ import userEvent from "@testing-library/user-event";
 import EmojiPicker from "../../../../../src/components/views/emojipicker/EmojiPicker";
 import { stubClient } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel.ts";
 
 describe("EmojiPicker", function () {
     stubClient();
@@ -23,10 +24,7 @@ describe("EmojiPicker", function () {
 
     beforeEach(() => {
         // Clear recent emojis to prevent test pollution
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-            if (settingName === "recent_emoji") return [] as any;
-            return jest.requireActual("../../../../../src/settings/SettingsStore").default.getValue(settingName);
-        });
+        SettingsStore.reset();
     });
 
     afterEach(() => {
@@ -98,10 +96,11 @@ describe("EmojiPicker", function () {
 
     it("should initialize categories with recent as firstVisible when recent emojis exist", () => {
         // Mock recent emojis
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-            if (settingName === "recent_emoji") return ["😀", "🎉", "❤️"] as any;
-            return jest.requireActual("../../../../../src/settings/SettingsStore").default.getValue(settingName);
-        });
+        SettingsStore.setValue("recent_emoji", null, SettingLevel.ACCOUNT, [
+            { emoji: "😀", total: 3 },
+            { emoji: "🎉", total: 2 },
+            { emoji: "❤️", total: 2 },
+        ]);
 
         const ref = createRef<EmojiPicker>();
         render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />);
@@ -394,10 +393,10 @@ describe("EmojiPicker", function () {
 
         it("check tabindex for recent category when recent emojis exist", async () => {
             // Mock recent emojis
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
-                if (settingName === "recent_emoji") return ["😀", "🎉"] as any;
-                return jest.requireActual("../../../../../src/settings/SettingsStore").default.getValue(settingName);
-            });
+            SettingsStore.setValue("recent_emoji", null, SettingLevel.ACCOUNT, [
+                { emoji: "😀", total: 3 },
+                { emoji: "🎉", total: 2 },
+            ]);
 
             const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
 

@@ -10,7 +10,7 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
       tabindex="0"
     >
       <div
-        aria-labelledby="_r_0_"
+        aria-labelledby="react-use-id-1"
         class="mx_PollListItemEnded_content"
       >
         <div

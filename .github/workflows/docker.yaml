@@ -26,7 +26,7 @@ jobs:
                   persist-credentials: false
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
+              uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
               if: github.event_name != 'pull_request'
 
             - name: Set up QEMU
@@ -127,7 +127,7 @@ jobs:
 
             - name: Get team registry token
               id: import-secrets
-              uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3
+              uses: hashicorp/vault-action@892a26828f195e65540a40b4768ae4571f51ebfc # v4
               if: github.event_name != 'pull_request'
               with:
                   url: https://vault.infra.ci.i.element.dev

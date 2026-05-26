@@ -17,8 +17,7 @@
         "room_name": "Miestnosť %(name)s",
         "room_status_bar": "Stavový riadok miestnosti",
         "seek_bar_label": "Panel vyhľadávania zvuku",
-        "unread_messages": "Neprečítané správy.",
-        "user_menu": "Používateľské menu"
+        "unread_messages": "Neprečítané správy."
     },
     "a11y_jump_first_unread_room": "Preskočiť na prvú neprečítanú miestnosť.",
     "action": {
@@ -100,7 +99,6 @@
         "rename": "Premenovať",
         "reply": "Odpovedať",
         "reply_in_thread": "Odpovedať vo vlákne",
-        "report_content": "Nahlásiť obsah",
         "report_room": "Nahlásiť miestnosť",
         "resend": "Poslať znovu",
         "reset": "Obnoviť predvolené",
@@ -343,7 +341,6 @@
         "sign_in_instead_prompt": "Už máte účet? <a>Prihláste sa tu</a>",
         "sign_in_or_register": "Prihlásiť sa alebo vytvoriť nový účet",
         "sign_in_or_register_description": "Použite váš existujúci účet alebo si vytvorte nový, aby ste mohli pokračovať.",
-        "sign_in_prompt": "Máte účet? <a>Prihláste sa</a>",
         "sign_in_with_sso": "Prihlásiť sa pomocou jediného prihlasovania",
         "signing_in": "Prihlasovanie…",
         "soft_logout": {
@@ -881,7 +878,6 @@
         "thread_root_id": "ID koreňového vlákna: %(threadRootId)s",
         "threads_timeline": "Časová os vlákien",
         "title": "Vývojárske nástroje",
-        "toggle_event": "prepnúť udalosť",
         "toolbox": "Nástroje",
         "use_at_own_risk": "Toto používateľské rozhranie nekontroluje typy hodnôt. Používajte ho na vlastné riziko.",
         "user_avatar": "Profilový obrázok: %(avatar)s",
@@ -1562,8 +1558,6 @@
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
-        "report_to_moderators": "Nahlásiť moderátorom",
-        "report_to_moderators_description": "V miestnostiach, ktoré podporujú moderovanie, môžete pomocou tlačidla \"Nahlásiť\" nahlásiť porušovanie pravidiel moderátorom miestnosti.",
         "sliding_sync": "Režim kĺzavej synchronizácie",
         "sliding_sync_description": "V štádiu aktívneho vývoja, nie je možné to vypnúť.",
         "sliding_sync_disabled_notice": "Odhláste sa a znova sa prihláste, aby sa to vyplo",
@@ -1846,25 +1840,10 @@
     },
     "report_content": {
         "description": "Nahlásenie tejto správy odošle jej jedinečné \"ID udalosti\" správcovi vášho domovského servera. Ak sú správy v tejto miestnosti zašifrované, správca domovského servera nebude môcť prečítať text správy ani zobraziť žiadne súbory alebo obrázky.",
-        "disagree": "Nesúhlasím",
-        "error_create_room_moderation_bot": "Nie je možné vytvoriť miestnosť s moderovacím botom",
         "hide_messages_from_user": "Označte, či chcete skryť všetky aktuálne a budúce správy od tohto používateľa.",
         "ignore_user": "Ignorovať používateľa",
-        "illegal_content": "Nelegálny obsah",
         "missing_reason": "Vyplňte prosím, prečo podávate hlásenie.",
-        "nature": "Prosím, vyberte charakter a popíšte, čo robí túto správu obťažujúcou.",
-        "nature_disagreement": "To, čo tento používateľ napísal, je nesprávne.\nBude to nahlásené moderátorom miestnosti.",
-        "nature_illegal": "Tento používateľ prejavuje protiprávne správanie, napríklad zverejňuje doxing (citlivé informácie o ľudoch) alebo sa vyhráža násilím.\nToto bude nahlásené moderátorom miestnosti, ktorí to môžu postúpiť právnym orgánom.",
-        "nature_nonstandard_admin": "Táto miestnosť je venovaná nezákonnému alebo škodlivému obsahu alebo moderátori nedokážu moderovať nelegálny alebo škodlivý obsah..\nToto bude hlásené správcom servera %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Táto miestnosť je venovaná nezákonnému alebo škodlivému obsahu alebo moderátori nedokážu moderovať nelegálny alebo škodlivý obsah..\nToto bude hlásené správcom servera %(homeserver)s. Správcovia nebudú vedieť prečítať šifrovaný obsah tejto miestnosti.",
-        "nature_other": "Akýkoľvek iný dôvod. Opíšte problém.\nTento problém bude nahlásený moderátorom miestnosti.",
-        "nature_spam": "Tento používateľ spamuje miestnosť reklamami, odkazmi na reklamy alebo propagandou.\nToto bude nahlásené moderátorom miestnosti.",
-        "nature_toxic": "Tento používateľ prejavuje nepriateľské správanie, napríklad uráža ostatných používateľov alebo zdieľa obsah určený len pre dospelých v miestnosti určenej pre rodiny alebo inak porušuje pravidlá tejto miestnosti.\nToto bude nahlásené moderátorom miestnosti.",
-        "other_label": "Ďalšie",
-        "report_content_to_homeserver": "Nahlásenie obsahu správcovi domovského serveru",
-        "report_entire_room": "Nahlásiť celú miestnosť",
-        "spam_or_propaganda": "Spam alebo propaganda",
-        "toxic_behaviour": "Nebezpečné správanie"
+        "report_content_to_homeserver": "Nahlásenie obsahu správcovi domovského serveru"
     },
     "report_room": {
         "description": "Nahláste túto miestnosť poskytovateľovi účtu. Ak sú správy zašifrované, váš správca ich nebude môcť prečítať.",
@@ -3362,7 +3341,6 @@
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",
-        "e2e_state": "Stav end-to-end šifrovania",
         "edits": {
             "tooltip_label": "Upravené %(date)s. Kliknutím zobrazíte úpravy.",
             "tooltip_sub": "Kliknutím zobrazíte úpravy",
@@ -3445,9 +3423,7 @@
         "m.poll.start": "%(senderName)s spustil anketu - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s zmenil obrázok miestnosti.",
-            "changed_img": "%(senderDisplayName)s zmenil obrázok miestnosti <img/>",
-            "lightbox_title": "%(senderDisplayName)s zmenil obrázok miestnosti %(roomName)s",
-            "removed": "%(senderDisplayName)s odstránil obrázok miestnosti."
+            "lightbox_title": "%(senderDisplayName)s zmenil obrázok miestnosti %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3569,7 +3545,6 @@
             "created_rule_rooms": "%(senderName)s vytvoril pravidlo zakázať vstúpiť do miestností zhodujúcich sa s %(glob)s, dôvod: %(reason)s",
             "created_rule_servers": "%(senderName)s vytvoril pravidlo zakázať vstúpiť z domovských serverov zhodujúcich sa s %(glob)s, dôvod: %(reason)s",
             "created_rule_users": "%(senderName)s vytvoril pravidlo zakázať vstúpiť používateľom zhodujúcim sa s %(glob)s, dôvod: %(reason)s",
-            "message_hidden": "Tohto používateľa ste ignorovali, takže jeho správa je skrytá. <a>Ukázať aj tak.</a>",
             "removed_rule": "%(senderName)s odstránil pravidlo zákazu vstupu zhodné s %(glob)s",
             "removed_rule_rooms": "%(senderName)s odstránil pravidlo zákaz vstúpiť do miestností zhodujúcich sa s %(glob)s",
             "removed_rule_servers": "%(senderName)s odstránil pravidlo zakázať vstúpiť z domovského servera zhodnými s %(glob)s",
@@ -3906,12 +3881,6 @@
         "verification_unavailable": "Overenie používateľa nie je k dispozícii",
         "verify_button": "Overiť používateľa",
         "verify_explainer": "V záujme zvýšenia bezpečnosti overte tohto používateľa tak, že na oboch zariadeniach skontrolujete jednorazový kód."
-    },
-    "user_menu": {
-        "link_new_device": "Prepojiť nové zariadenie",
-        "settings": "Všetky nastavenia",
-        "switch_theme_dark": "Prepnúť na tmavý režim",
-        "switch_theme_light": "Prepnúť na svetlý režim"
     },
     "voip": {
         "already_in_call": "Hovor už prebieha",

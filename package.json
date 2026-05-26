@@ -33,12 +33,12 @@
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "6.4.1",
-        "lint-staged": "^16.0.0",
+        "knip": "6.14.1",
+        "lint-staged": "^17.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
-        "nx": "22.7.0",
+        "nx": "22.7.2",
         "prettier": "3.8.3",
         "typescript": "catalog:",
         "vitepress": "^1.6.4",
@@ -47,8 +47,7 @@
     },
     "pnpm": {
         "onlyBuiltDependencies": [
-            "matrix-js-sdk",
-            "electron"
+            "matrix-js-sdk"
         ],
         "ignoredBuiltDependencies": [
             "@sentry/cli",
@@ -69,7 +68,7 @@
             "app-builder-lib": "patches/app-builder-lib.patch",
             "knip": "patches/knip.patch",
             "plist": "patches/plist.patch",
-            "unplugin-dts": "patches/unplugin-dts.patch"
+            "@dnd-kit/abstract": "patches/@dnd-kit__abstract.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
@@ -88,33 +87,28 @@
             "@types/react-dom": "catalog:",
             "oidc-client-ts": "3.5.0",
             "jwt-decode": "4.0.0",
-            "caniuse-lite": "1.0.30001788",
+            "caniuse-lite": "1.0.30001793",
             "markdown-it": "14.1.1",
-            "testcontainers": "^11.0.0",
             "matrix-widget-api": "^1.17.0",
-            "qs": "6.15.0",
             "@types/node": "18.19.130",
             "config-file-ts": "0.2.8-rc1",
-            "node-abi": "4.28.0",
+            "node-abi": "4.31.0",
             "@types/pg-pool": "2.0.7",
-            "ajv@6.12.6": "6.14.0",
-            "ajv@>=8 <8.18.0": "8.18.0",
-            "axios@>1.0.0 <1.15.0": "1.15.0",
-            "picomatch@>=4.0.0 <4.0.4": "4.0.4",
+            "axios@>1.0.0 <=1.15.0": "1.15.2",
             "esbuild@<=0.24.2": "0.27.4",
             "esbuild@~0.27.0": "0.27.4",
-            "minimatch@>=10.0.0 <10.2.3": ">=10.2.3",
-            "lodash@4.17.23": "4.18.1",
             "follow-redirects@1.15.11": "1.16.0",
-            "@actions/github@6.0.1": "8.0.1",
-            "dompurify@>=3.0.0 <=3.3.3": "3.4.0",
-            "protobufjs@>=7.0.0 <7.5.5": "7.5.5",
-            "@xmldom/xmldom@0.8.12": "0.8.13"
+            "brace-expansion@>=5 <5.0.6": "5.0.6",
+            "ip-address@>=10 <10.1.1": "10.1.1",
+            "uuid@>=11 <11.1.1": "11.1.1",
+            "yaml@>=2 <2.8.3": "2.8.4",
+            "protobufjs@7 <7.5.8": "7.6.1",
+            "@protobufjs/utf8@1 <1.1.1": "1.1.1"
         }
     },
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
+    "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800",
     "private": true
 }

@@ -15,8 +15,7 @@
         "room_name": "Salon %(name)s",
         "room_status_bar": "Barre de statut du salon",
         "seek_bar_label": "Barre de recherche audio",
-        "unread_messages": "Messages non lus.",
-        "user_menu": "Menu utilisateur"
+        "unread_messages": "Messages non lus."
     },
     "a11y_jump_first_unread_room": "Sauter au premier salon non lu.",
     "action": {
@@ -98,7 +97,6 @@
         "rename": "Renommer",
         "reply": "Répondre",
         "reply_in_thread": "Répondre dans le fil de discussion",
-        "report_content": "Signaler le contenu",
         "report_room": "Signaler le salon",
         "resend": "Renvoyer",
         "reset": "Réinitialiser",
@@ -341,7 +339,6 @@
         "sign_in_instead_prompt": "Vous avez déjà un compte ? <a>Connectez-vous ici</a>",
         "sign_in_or_register": "Se connecter ou créer un compte",
         "sign_in_or_register_description": "Utilisez votre compte ou créez en un pour continuer.",
-        "sign_in_prompt": "Vous avez un compte ? <a>Connectez-vous</a>",
         "sign_in_with_sso": "Se connecter avec l’authentification unique",
         "signing_in": "Authentification…",
         "soft_logout": {
@@ -476,6 +473,7 @@
         "description": "Description",
         "deselect_all": "Tout désélectionner",
         "device": "Appareil",
+        "disabled_by_homeserver": "Désactivé par le serveur d’accueil",
         "edited": "modifié",
         "email_address": "Adresse e-mail",
         "emoji": "Émojis",
@@ -683,8 +681,10 @@
     "create_section_dialog": {
         "create_section": "Créer une section",
         "description": "Ces sections sont réservées à vous.",
+        "edit_section": "Modifier la section",
         "label": "Nom de la section",
-        "title": "Créer une section"
+        "title": "Créer une section",
+        "title_edition": "Modifier une section"
     },
     "create_space": {
         "add_details_prompt": "Ajoutez des informations pour aider les personnes à l’identifier.",
@@ -891,7 +891,6 @@
         "thread_root_id": "ID du fil de discussion racine : %(threadRootId)s",
         "threads_timeline": "Historique des fils de discussion",
         "title": "Outils de développement",
-        "toggle_event": "Afficher/masquer l’évènement",
         "toolbox": "Boîte à outils",
         "use_at_own_risk": "Cette interface ne vérifie pas les types des valeurs. Utilisez la à vos propres risques.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -1538,6 +1537,11 @@
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
         "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
+        "feature_user_status": {
+            "description": "Permet de visualiser et de définir un statut actuel.",
+            "display_name": "Statut de l'utilisateur",
+            "required_msc_support": "Nécessite MSC4429 (Mises à jour de profil pour Legacy Sync)"
+        },
         "feature_wysiwyg_composer_description": "Utilise le texte formaté au lieu de Markdown dans le compositeur de message.",
         "group_calls": "Nouvelle expérience d’appel de groupe",
         "group_developer": "Développeur",
@@ -1573,8 +1577,6 @@
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
-        "report_to_moderators": "Signaler aux modérateurs",
-        "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
         "room_list_sections": "Sections de la liste de salons",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
@@ -1851,27 +1853,18 @@
         "ongoing": "Suppression…",
         "reason_label": "Raison (optionnelle)"
     },
+    "remove_section_dialog": {
+        "confirmation": "Êtes-vous sûr de vouloir supprimer cette section ?",
+        "description": "Les discussions de cette section resteront disponibles dans votre liste de discussions.",
+        "remove_section": "Supprimer la section",
+        "title": "Supprimer la section ?"
+    },
     "report_content": {
         "description": "Le signalement de ce message enverra son « event ID » unique à l’administrateur de votre serveur d’accueil. Si les messages dans ce salon sont chiffrés, l’administrateur ne pourra pas lire le texte du message ou voir les fichiers ou les images.",
-        "disagree": "Désaccord",
-        "error_create_room_moderation_bot": "Impossible de créer un salon avec un bot de modération",
         "hide_messages_from_user": "Cocher pour masquer tous les messages présents et futurs de cet utilisateur.",
         "ignore_user": "Ignorer l’utilisateur",
-        "illegal_content": "Contenu illicite",
         "missing_reason": "Dites-nous pourquoi vous envoyez un signalement.",
-        "nature": "Veuillez choisir la nature du rapport et décrire ce qui rend ce message abusif.",
-        "nature_disagreement": "Ce que cet utilisateur écrit est déplacé.\nCeci sera signalé aux modérateurs du salon.",
-        "nature_illegal": "Cet utilisateur fait preuve d’un comportement illicite, par exemple en publiant des informations personnelles d’autres ou en proférant des menaces.\nCeci sera signalé aux modérateurs du salon qui pourront l’escalader aux autorités.",
-        "nature_nonstandard_admin": "Le sujet de ce salon est illégal ou toxique, ou les modérateurs ne modèrent pas le contenu illégal ou toxique.\nCe fait sera signalé aux administrateurs de %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Ce salon est dédié à des contenus illégaux ou toxiques ou les modérateurs ne parviennent pas à modérer les contenus illégaux ou toxiques.\nCela sera signalé aux administrateurs de %(homeserver)s. Les administrateurs ne pourront pas lire le contenu chiffré de ce salon.",
-        "nature_other": "Toute autre raison. Veuillez décrire le problème.\nCeci sera signalé aux modérateurs du salon.",
-        "nature_spam": "Cet utilisateur inonde le salon de publicités ou liens vers des publicités, ou vers de la propagande.\nCeci sera signalé aux modérateurs du salon.",
-        "nature_toxic": "Cet utilisateur fait preuve d’un comportement toxique, par exemple en insultant les autres ou en partageant du contenu pour adultes dans un salon familial, ou en violant les règles de ce salon.\nCeci sera signalé aux modérateurs du salon.",
-        "other_label": "Autre",
-        "report_content_to_homeserver": "Signaler le contenu à l’administrateur de votre serveur d’accueil",
-        "report_entire_room": "Signaler le salon entier",
-        "spam_or_propaganda": "Publicité ou propagande",
-        "toxic_behaviour": "Comportement toxique"
+        "report_content_to_homeserver": "Signaler le contenu à l’administrateur de votre serveur d’accueil"
     },
     "report_room": {
         "description": "Signalez ce salon à votre fournisseur de compte. Si les messages sont chiffrés, votre administrateur ne pourra pas les lire.",
@@ -3138,6 +3131,14 @@
         "server_error_detail": "Le serveur semble être inaccessible, surchargé ou quelque chose s’est mal passé.",
         "shrug": "Ajoute ¯\\_(ツ)_/¯ en préfixe du message",
         "spoiler": "Envoie le message flouté",
+        "status": {
+            "description": "Définissez votre statut actuel",
+            "no_args": "Aucun argument fourni. Vous devez fournir un emoji et un composant texte facultatif.",
+            "no_emoji": "Vous n'avez pas fourni d'emoji",
+            "no_text": "Vous n'avez fourni aucun texte de statut",
+            "too_long_emoji": "Le premier paramètre doit être un emoji.",
+            "too_long_text": "Le texte que vous avez fourni était trop long."
+        },
         "tableflip": "Ajoute (╯°□°）╯︵ ┻━┻ en préfixe du message",
         "topic": "Récupère ou définit le sujet du salon",
         "topic_none": "Ce salon n'a pas de sujet.",
@@ -3359,7 +3360,6 @@
         "download_action_downloading": "Téléchargement en cours",
         "download_failed": "Échec du téléchargement",
         "download_failed_description": "Une erreur s'est produite lors du téléchargement de ce fichier",
-        "e2e_state": "État du chiffrement de bout en bout",
         "edits": {
             "tooltip_label": "Modifié le %(date)s. Cliquer pour voir les modifications.",
             "tooltip_sub": "Cliquez pour voir les modifications",
@@ -3441,9 +3441,7 @@
         "m.poll.start": "%(senderName)s a démarré un sondage – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s a changé l’avatar du salon.",
-            "changed_img": "%(senderDisplayName)s a changé l’avatar du salon en <img/>",
-            "lightbox_title": "%(senderDisplayName)s a changé l’avatar de %(roomName)s",
-            "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
+            "lightbox_title": "%(senderDisplayName)s a changé l’avatar de %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3567,7 +3565,6 @@
             "created_rule_rooms": "%(senderName)s a créé une règle qui bannit les salons correspondant à %(glob)s pour %(reason)s",
             "created_rule_servers": "%(senderName)s a créé une règle qui bannit les serveurs correspondant à %(glob)s pour %(reason)s",
             "created_rule_users": "%(senderName)s a créé une règle qui bannit les utilisateurs correspondant à %(glob)s pour %(reason)s",
-            "message_hidden": "Vous avez ignoré cet utilisateur, donc ses messages sont cachés. <a>Les montrer quand même.</a>",
             "removed_rule": "%(senderName)s a supprimé une règle de bannissement correspondant à %(glob)s",
             "removed_rule_rooms": "%(senderName)s a supprimé la règle qui bannit les salons correspondant à %(glob)s",
             "removed_rule_servers": "%(senderName)s a supprimé la règle qui bannit les serveurs correspondant à %(glob)s",
@@ -3871,12 +3868,6 @@
         "verification_unavailable": "Vérification de l’utilisateur indisponible",
         "verify_button": "Vérifier l’utilisateur",
         "verify_explainer": "Pour une sécurité supplémentaire, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils."
-    },
-    "user_menu": {
-        "link_new_device": "Associer un nouvel appareil",
-        "settings": "Tous les paramètres",
-        "switch_theme_dark": "Passer au mode sombre",
-        "switch_theme_light": "Passer au mode clair"
     },
     "voip": {
         "already_in_call": "Déjà en cours d’appel",

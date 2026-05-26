@@ -17,8 +17,7 @@
         "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
-        "unread_messages": "Nepročitane poruke.",
-        "user_menu": "Korisnički izbornik"
+        "unread_messages": "Nepročitane poruke."
     },
     "a11y_jump_first_unread_room": "Skoči na prvu sobu s nepročitanim porukama.",
     "action": {
@@ -100,7 +99,6 @@
         "rename": "Preimenuj",
         "reply": "Odgovori",
         "reply_in_thread": "Odgovori u niti",
-        "report_content": "Prijavi sadržaj",
         "report_room": "Prijavi sobu",
         "resend": "Ponovno pošalji",
         "reset": "Poništi",
@@ -343,7 +341,6 @@
         "sign_in_instead_prompt": "Već imate račun? <a>Prijavi se ovdje</a>",
         "sign_in_or_register": "Prijavite se ili izradite račun",
         "sign_in_or_register_description": "Za nastavak upotrijebite svoj račun ili izradite novi.",
-        "sign_in_prompt": "Imate li račun? <a>Prijava</a>",
         "sign_in_with_sso": "Prijavite se pomoću jedinstvene prijave (SSO)",
         "signing_in": "U tijeku je prijava…",
         "soft_logout": {
@@ -881,7 +878,6 @@
         "thread_root_id": "ID korijena niti: %(threadRootId)s",
         "threads_timeline": "Vremenska traka niti",
         "title": "Alati za razvojne inženjere",
-        "toggle_event": "uključi/isključi događaj",
         "toolbox": "Alatni okvir",
         "use_at_own_risk": "Ovo korisničko sučelje NE provjerava vrste vrijednosti. Upotrebljavajte na vlastitu odgovornost.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -1561,8 +1557,6 @@
         "notifications": "Omogući ploču s obavijestima u zaglavlju sobe",
         "render_reaction_images": "Prikaži prilagođene slike u reakcijama",
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
-        "report_to_moderators": "Prijavi moderatorima",
-        "report_to_moderators_description": "U sobama koje podržavaju moderiranje gumb „Prijavi” omogućit će vam da moderatorima sobe prijavite svako neprimjereno ponašanje.",
         "sliding_sync": "Način rada Sliding Sync",
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
         "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
@@ -1845,25 +1839,10 @@
     },
     "report_content": {
         "description": "Prijavljivanjem ove poruke administratoru matičnog poslužitelja poslat će se njezin jedinstveni ID događaja. Ako su poruke u ovoj sobi šifrirane, administrator matičnog poslužitelja neće moći pročitati tekst poruke niti pregledati datoteke ili slike.",
-        "disagree": "Ne slažem se",
-        "error_create_room_moderation_bot": "Nije moguće izraditi sobu botom za moderiranje",
         "hide_messages_from_user": "Označite ako želite sakriti sve trenutačne i buduće poruke od ovog korisnika.",
         "ignore_user": "Ignoriraj korisnika",
-        "illegal_content": "Nezakonit sadržaj",
         "missing_reason": "Navedite razlog prijave.",
-        "nature": "Odaberite sadržaj poruke i objasnite zašto je uvredljiva.",
-        "nature_disagreement": "Ono što ovaj korisnik piše nije u redu.\nTo će se prijaviti moderatorima sobe.",
-        "nature_illegal": "Ovaj korisnik se ponaša nezakonito, npr. otkriva osobne podatke drugih korisnika ili prijeti nasiljem.\nTo će se prijaviti moderatorima sobe, koji taj slučaj mogu prijaviti nadležnim organima.",
-        "nature_nonstandard_admin": "Ova je soba namijenjena nezakonitom ili neprimjerenom sadržaju ili moderatori ne moderiraju nezakonit ili neprimjeren sadržaj.\nTo će se prijaviti administratorima poslužitelja %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Ova je soba namijenjena nezakonitom ili neprimjerenom sadržaju ili moderatori ne moderiraju nezakonit ili neprimjeren sadržaj.\nTo će se prijaviti administratorima poslužitelja %(homeserver)s. Administratori NEĆE moći čitati šifrirani sadržaj ove sobe.",
-        "nature_other": "Bilo koji drugi razlog. Opišite problem.\nTo će se prijaviti moderatorima sobe.",
-        "nature_spam": "Ovaj korisnik zasipa sobu oglasima, poveznicama na oglase ili propagandom.\nTo će se prijaviti moderatorima sobe.",
-        "nature_toxic": "Ovaj se korisnik neprimjereno ponaša, na primjer vrijeđa druge korisnike ili dijeli sadržaj za odrasle u sobi prihvatljivoj za obitelji ili na drugi način krši pravila ove sobe.\nTo će se prijaviti moderatorima sobe.",
-        "other_label": "Ostalo",
-        "report_content_to_homeserver": "Prijavite sadržaj administratoru matičnog poslužitelja",
-        "report_entire_room": "Prijavi cijelu sobu",
-        "spam_or_propaganda": "Neželjeni sadržaj ili propaganda",
-        "toxic_behaviour": "Neprimjereno ponašanje"
+        "report_content_to_homeserver": "Prijavite sadržaj administratoru matičnog poslužitelja"
     },
     "report_room": {
         "description": "Prijavite ovu sobu svom davatelju usluga računa. Ako su poruke šifrirane, administrator ih neće moći pročitati.",
@@ -3367,7 +3346,6 @@
         "download_action_downloading": "Preuzimanje",
         "download_failed": "Preuzimanje nije uspjelo",
         "download_failed_description": "Došlo je do pogreške prilikom preuzimanja ove datoteke",
-        "e2e_state": "Stanje sveobuhvatnog šifriranja",
         "edits": {
             "tooltip_label": "Uređeno dana %(date)s. Kliknite za pregled uređenih stavki.",
             "tooltip_sub": "Kliknite za pregled uređenih stavki",
@@ -3450,9 +3428,7 @@
         "m.poll.start": "%(senderName)s započeo/la je anketu – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s promijenio/la je avatar sobe.",
-            "changed_img": "%(senderDisplayName)s promijenio/la je avatar sobe u <img/>",
-            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s",
-            "removed": "%(senderDisplayName)s uklonio/la je avatar sobe."
+            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3576,7 +3552,6 @@
             "created_rule_rooms": "%(senderName)s izradio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s za %(reason)s",
             "created_rule_servers": "%(senderName)s izradio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s za %(reason)s",
             "created_rule_users": "%(senderName)s izradio/la je pravilo kojim se zabranjuju korisnici koji odgovaraju %(glob)s za %(reason)s",
-            "message_hidden": "Ignorirali ste ovog korisnika, pa je njegova poruka skrivena. <a>Svejedno prikaži.</a>",
             "removed_rule": "%(senderName)s uklonio/la je pravilo za zabranu koje odgovara %(glob)s",
             "removed_rule_rooms": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s",
             "removed_rule_servers": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s",
@@ -3919,12 +3894,6 @@
         "verification_unavailable": "Provjera korisnika nije dostupna",
         "verify_button": "Potvrdi korisnika",
         "verify_explainer": "Radi dodatne sigurnosti potvrdite ovog korisnika provjerom jednokratnog koda na oba uređaja."
-    },
-    "user_menu": {
-        "link_new_device": "Poveži novi uređaj",
-        "settings": "Sve postavke",
-        "switch_theme_dark": "Prebaci na tamni način rada",
-        "switch_theme_light": "Prebaci na svijetli način rada"
     },
     "voip": {
         "already_in_call": "Već u pozivu",

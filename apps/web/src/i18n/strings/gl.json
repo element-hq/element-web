@@ -10,8 +10,7 @@
             "one": "1 mención non lida."
         },
         "room_name": "Sala %(name)s",
-        "unread_messages": "Mensaxes non lidas.",
-        "user_menu": "Menú de usuaria"
+        "unread_messages": "Mensaxes non lidas."
     },
     "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
     "action": {
@@ -84,7 +83,6 @@
         "rename": "Cambiar nome",
         "reply": "Resposta",
         "reply_in_thread": "Responder nun fío",
-        "report_content": "Denunciar contido",
         "resend": "Volver a enviar",
         "reset": "Restablecer",
         "resume": "Retomar",
@@ -261,7 +259,6 @@
         "sign_in_instead_prompt": "Xa tes unha conta? <a>Conecta aquí</a>",
         "sign_in_or_register": "Conéctate ou Crea unha Conta",
         "sign_in_or_register_description": "Usa a túa conta ou crea unha nova para continuar.",
-        "sign_in_prompt": "Tes unha conta? <a>Conéctate</a>",
         "sign_in_with_sso": "Entrar usando Single Sign On",
         "soft_logout": {
             "clear_data_button": "Eliminar todos os datos",
@@ -626,7 +623,6 @@
         },
         "state_key": "Chave do estado",
         "title": "Ferramentas desenvolvemento",
-        "toggle_event": "activar evento",
         "toolbox": "Ferramentas",
         "use_at_own_risk": "Esta IU non comproba os tipos dos valores. Usa baixo a túa responsabilidade.",
         "value": "Valor",
@@ -1344,21 +1340,10 @@
     },
     "report_content": {
         "description": "Ao denunciar esta mensaxe vasnos enviar o seu 'event ID' único á administración do servidor. Se as mensaxes da sala están cifradas, a administración do servidor non poderá ler o texto da mensaxe ou ver imaxes ou ficheiros.",
-        "disagree": "En desacordo",
         "hide_messages_from_user": "Marcar para agochar as mensaxes actuais e futuras desta usuaria.",
         "ignore_user": "Ignorar usuaria",
-        "illegal_content": "Contido ilegal",
         "missing_reason": "Escribe a razón do informe.",
-        "nature": "Escolle unha opción e describe a razón pola que esta é unha mensaxe abusiva.",
-        "nature_disagreement": "O que escribe esta usuaria non é correcto.\nSerá denunciado á moderación da sala.",
-        "nature_illegal": "Esta usuaria está a comportarse dun xeito ilegal, por exemplo ameazando a persoas ou exhibindo violencia.\nEsto vaise denunciar ante a moderación da sala que podería presentar o caso ante as autoridades legais.",
-        "nature_other": "Outra razón. Por favor, describe o problema.\nInformaremos disto á moderación da sala.",
-        "nature_spam": "Esta usuaria está facendo spam na sala con anuncios, ligazóns a anuncios ou propaganda.\nEsto vai ser denunciado ante a moderación da sala.",
-        "other_label": "Outro",
-        "report_content_to_homeserver": "Denuncia sobre contido á Administración do teu servidor",
-        "report_entire_room": "Denunciar a toda a sala",
-        "spam_or_propaganda": "Spam ou propaganda",
-        "toxic_behaviour": "Comportamento tóxico"
+        "report_content_to_homeserver": "Denuncia sobre contido á Administración do teu servidor"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Fallo ao descifrar %(failedCount)s sesións!",
@@ -2436,9 +2421,7 @@
         "m.poll.start": "%(senderName)s publicou unha enquisa - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s cambiou o avatar da sala.",
-            "changed_img": "%(senderDisplayName)s cambiou o avatar da sala a <img/>",
-            "lightbox_title": "%(senderDisplayName)s cambiou o avatar para %(roomName)s",
-            "removed": "%(senderDisplayName)s eliminou o avatar da sala."
+            "lightbox_title": "%(senderDisplayName)s cambiou o avatar para %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2553,7 +2536,6 @@
             "created_rule_rooms": "%(senderName)s creou unha regra bloqueando salas con %(glob)s por %(reason)s",
             "created_rule_servers": "%(senderName)s creou unha regra bloqueando servidores con %(glob)s por %(reason)s",
             "created_rule_users": "%(senderName)s creou unha regra de bloqueo de usuarias con %(glob)s por %(reason)s",
-            "message_hidden": "Estás a ignorar a esta usuaria, polo que a imaxe está agochada. <a>Mostrar igualmente.</a>",
             "removed_rule": "%(senderName)s eliminou a regra de bloqueo con %(glob)s",
             "removed_rule_rooms": "%(senderName)s eliminou a regra que bloquea salas con %(glob)s",
             "removed_rule_servers": "%(senderName)s eliminou a regra que bloquea servidores con %(glob)s",
@@ -2821,11 +2803,6 @@
         "unban_space_warning": "Non poderán acceder a calquera lugar no que non sexas administradora.",
         "verify_button": "Verificar Usuaria",
         "verify_explainer": "Para maior seguridade, verifica esta usuaria comprobando o código temporal en dous dos teus dispositivos."
-    },
-    "user_menu": {
-        "settings": "Todos os axustes",
-        "switch_theme_dark": "Cambiar a decorado escuro",
-        "switch_theme_light": "Cambiar a decorado claro"
     },
     "voip": {
         "already_in_call": "Xa estás nunha chamada",

@@ -12,7 +12,7 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
-            ignoreBinaries: ["awk"],
+            ignoreBinaries: ["awk", "printf"],
         },
         "packages/module-api": {},
         "apps/web": {
@@ -65,13 +65,8 @@ export default {
     ignoreExportsUsedInFile: true,
     compilers: {
         pcss: (text: string) =>
-            [...text.matchAll(/(?<=@)import[^;]+/g)]
-                .map(([line]) => {
-                    if (line.startsWith("import url(")) {
-                        return line.replace("url(", "").slice(0, -1);
-                    }
-                    return line;
-                })
+            [...text.matchAll(/@import\s+(?:url\()?["']([^"']+)["']\)?[^;]*;/g)]
+                .map(([, specifier]) => `import "${specifier}";`)
                 .join("\n"),
     },
     nx: {

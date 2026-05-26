@@ -16,8 +16,7 @@
         "room_name": "Istaba %(name)s",
         "room_status_bar": "Istabas statusa josla",
         "seek_bar_label": "Audio meklēšanas josla",
-        "unread_messages": "Nelasītās ziņas.",
-        "user_menu": "Lietotāja izvēlne"
+        "unread_messages": "Nelasītās ziņas."
     },
     "a11y_jump_first_unread_room": "Pāriet uz pirmo nelasīto istabu.",
     "action": {
@@ -97,7 +96,6 @@
         "rename": "Pārdēvēt",
         "reply": "Atbildēt",
         "reply_in_thread": "Atbildēt pavedienā",
-        "report_content": "Ziņot par saturu",
         "resend": "Nosūtīt atkārtoti",
         "reset": "Atiestatīt",
         "resume": "Turpināt",
@@ -338,7 +336,6 @@
         "sign_in_instead_prompt": "Jau ir konts? <a>Pierakstieties šeit</a>",
         "sign_in_or_register": "Pieteikties vai izveidot kontu",
         "sign_in_or_register_description": "Jāizmanto savs konts vai jāizveido jauns, lai turpinātu.",
-        "sign_in_prompt": "Vai ir konts? <a>Pieteikties</a>",
         "sign_in_with_sso": "Pieteikties ar vienoto pierakstīšanos",
         "signing_in": "Piesakās…",
         "soft_logout": {
@@ -785,7 +782,6 @@
         "thread_root_id": "Pavediena saknes ID: %(threadRootId)s",
         "threads_timeline": "Pavedienu laika skala",
         "title": "Izstrādātāja rīki",
-        "toggle_event": "pārslēgt notikumu",
         "toolbox": "Instrumentārijs",
         "use_at_own_risk": "Šī lietotāja saskarne NEPĀRBAUDA vērtību veidus. Izmantojiet uz savu risku.",
         "user_read_up_to": "Lietotājs izlasījis līdz: ",
@@ -1271,8 +1267,6 @@
         "notifications": "Iespējot paziņojumu paneli istabas galvenē",
         "render_reaction_images": "Atveidot pielāgotus attēlus reakcijās",
         "render_reaction_images_description": "Dažkārt tās dēvē par \"pielāgotām emocijzīmēm\".",
-        "report_to_moderators": "Ziņot moderatoriem",
-        "report_to_moderators_description": "Istabās, kurās tiek nodrošināta moderēšana, poga \"Ziņot\" ļauj paziņot istabas moderatoriem par pārkāpumiem.",
         "sliding_sync": "Sliding Sync režīms",
         "sliding_sync_description": "Aktīvā izstrādes stadijā, to nevar atspējot.",
         "sliding_sync_disabled_notice": "Lai atspējotu, izrakstieties un pierakstieties atkārtoti",
@@ -1508,25 +1502,10 @@
     },
     "report_content": {
         "description": "Ziņojuma par šo ziņu iesniegšana nosūtīs tās neatkārtojamo notikuma identifikatoru mājasservera pārvaldniekam. Ja ziņas šajā istabā ir šifrētas, mājasservera pārvaldnieks nevarēs lasīt ziņas saturu vai skatīt jebkādas datnes vai attēlus.",
-        "disagree": "Nepiekrist",
-        "error_create_room_moderation_bot": "Nevar izveidot istabu ar moderēšanas botu",
         "hide_messages_from_user": "Atzīmējiet, vai vēlaties slēpt visas šī lietotāja pašreizējās un turpmākās ziņas.",
         "ignore_user": "Neņemt vērā lietotāju",
-        "illegal_content": "Nelikumīgs saturs",
         "missing_reason": "Lūdzu, norādiet ziņošanas iemeslu.",
-        "nature": "Lūdzu, izvēlieties pārkāpuma raksturu un aprakstiet, kāpēc šī ziņa ir uzskatāma par aizskarošu.",
-        "nature_disagreement": "Tas, ko šis lietotājs raksta, ir nepareizi.\nPar to tiks ziņots istabas moderatoriem.",
-        "nature_illegal": "Šis lietotājs veic nelikumīgas darbības, piemēram, publiskojot cilvēku dzīvesvietu vai draudot ar vardarbību.\nPar to tiks ziņots istabas moderatoriem, kuri to var nodot tiesībsargājošajām iestādēm.",
-        "nature_nonstandard_admin": "Šī istaba ir veltīta nelikumīgam vai kaitīgam saturam vai moderatori nespēj pārskatīt nelikumīgu vai kaitīgu saturu.\nPar šo tiks ziņots %(homeserver)s pārvaldītājiem.",
-        "nature_nonstandard_admin_encrypted": "Šī istaba ir veltīta nelikumīgam vai kaitīgam saturam vai moderatori nespēj pārskatīt nelikumīgu vai kaitīgu saturu.\nPar šo tiks ziņots %(homeserver)s pārvaldītājiem. Tie nevarēs lasīt šīs istabas šifrēto saturu.",
-        "nature_other": "Jebkāds cits iemesls. Lūdzu, aprakstiet problēmu.\nPar to tiks ziņots istabas moderatoriem.",
-        "nature_spam": "Šis lietotājs pārpludina istabu ar reklāmām, saitēm uz reklāmām vai propagandu.\nPar to tiks ziņots istabas moderatoriem.",
-        "nature_toxic": "Šis lietotājs demonstrē toksisku uzvedību, piemēram, apvainojot citus lietotājus vai kopīgojot tikai pieaugušajiem paredzēto saturu ģimenei draudzīgā istabā vai citādi pārkāpjot šīs istabas noteikumus.\nPar to tiks ziņots istabas moderatoriem.",
-        "other_label": "Citi",
-        "report_content_to_homeserver": "Ziņot par saturu mājasservera pārvaldniekam",
-        "report_entire_room": "Ziņot par visu istabu",
-        "spam_or_propaganda": "Surogātpasts vai propaganda",
-        "toxic_behaviour": "Toksiska uzvedība"
+        "report_content_to_homeserver": "Ziņot par saturu mājasservera pārvaldniekam"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Neizdevās atšifrēt %(failedCount)s sesijas.",
@@ -2837,9 +2816,7 @@
         "m.poll.start": "%(senderName)s uzsāka aptauju- %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mainīja istabas avataru.",
-            "changed_img": "%(senderDisplayName)s nomainīja istabas avataru uz <img/>",
-            "lightbox_title": "%(senderDisplayName)s nomainīja %(roomName)s istabas avataru",
-            "removed": "%(senderDisplayName)s dzēsa istabas avataru."
+            "lightbox_title": "%(senderDisplayName)s nomainīja %(roomName)s istabas avataru"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2955,7 +2932,6 @@
             "created_rule_rooms": "%(senderName)s izveidoja noteikumu pieejas liegšanai istabām, kas atbilst %(glob)s dēļ %(reason)s",
             "created_rule_servers": "%(senderName)s izveidoja noteikumu pieejas liegšanai serveriem, kas atbilst %(glob)s dēļ %(reason)s",
             "created_rule_users": "%(senderName)s izveidoja noteikumu pieejas liegšanai lietotājiem, kas atbilst %(glob)s dēļ %(reason)s",
-            "message_hidden": "Šis lietotājs netiek ņemts vērā, tādēļ viņa ziņa ir paslēpta. <a>Vienalga rādīt.</a>",
             "removed_rule": "%(senderName)s dzēsa noteikumu pieejas liegšanai atbilstoši %(glob)s",
             "removed_rule_rooms": "%(senderName)s dzēsa noteikumu pieejas liegšanai istabām, kas atbilst %(glob)s",
             "removed_rule_servers": "%(senderName)s dzēsa noteikumu pieejas liegšanai serveriem, kas atbilst %(glob)s",
@@ -3259,11 +3235,6 @@
         "share_button": "Dalīties ar saiti uz lietotāju",
         "verify_button": "Apliecināt lietotāju",
         "verify_explainer": "Papildu drošībai jāapliecina šis lietotājs, pārbaudot vienreizēju kodu abās ierīcēs."
-    },
-    "user_menu": {
-        "settings": "Visi iestatījumi",
-        "switch_theme_dark": "Pārslēgt tumšo režīmu",
-        "switch_theme_light": "Pārslēgt gaišo režīmu"
     },
     "voip": {
         "already_in_call": "Notiek zvans",

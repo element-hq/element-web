@@ -17,8 +17,7 @@
         "room_name": "Ystafell %(matere)s",
         "room_status_bar": "Bar statws ystafell",
         "seek_bar_label": "Bar chwilio sain",
-        "unread_messages": "Negeseuon heb eu darllen.",
-        "user_menu": "Dewislen defnyddiwr"
+        "unread_messages": "Negeseuon heb eu darllen."
     },
     "a11y_jump_first_unread_room": "Symud i'r ystafell gyntaf heb ei darllen.",
     "action": {
@@ -100,7 +99,6 @@
         "rename": "Ailenwi",
         "reply": "Ateb",
         "reply_in_thread": "Ateb i edefyn",
-        "report_content": "Cynnwys yr Adroddiad",
         "report_room": "Ystafell adrodd",
         "resend": "Ailanfon",
         "reset": "Ailosod",
@@ -343,7 +341,6 @@
         "sign_in_instead_prompt": "Oes gennych chi gyfrif yn barod? <a>Mewngofnodwch yma</a>",
         "sign_in_or_register": "Mewngofnodi neu Creu Cyfrif",
         "sign_in_or_register_description": "Defnyddiwch eich cyfrif neu crëwch un newydd i barhau.",
-        "sign_in_prompt": "Oes gennych chi gyfrif? <a>Mewngofnodwch</a>",
         "sign_in_with_sso": "Mewngofnodwch gyda mewngofnod sengl",
         "signing_in": "Wrthi'n mewngofnodi…",
         "soft_logout": {
@@ -879,7 +876,6 @@
         "thread_root_id": "ID Gwraidd Edefyn: %(threadRootId)s",
         "threads_timeline": "Llinell amser edafedd",
         "title": "Offer datblygwr",
-        "toggle_event": "toglo digwyddiad",
         "toolbox": "Blwch offer",
         "use_at_own_risk": "NID yw'r UI hwn yn gwirio'r mathau o werthoedd. Defnyddiwch ar eich menter eich hun.",
         "user_avatar": "Afatar: %(avatar)s",
@@ -1560,8 +1556,6 @@
         "notifications": "Galluogi'r panel hysbysiadau ym mhennyn yr ystafell",
         "render_reaction_images": "Rendro delweddau personol mewn adweithiau",
         "render_reaction_images_description": "Weithiau'n cael eu hadnabod fel \"emojis cyfaddas\".",
-        "report_to_moderators": "Adrodd i cymedrolwyr",
-        "report_to_moderators_description": "Mewn ystafelloedd sy'n cefnogi cymedroli, bydd y botwm “Adrodd” yn gadael i chi adrodd ar gam-drin i gymedrolwyr ystafelloedd.",
         "sliding_sync": "Modd Cydweddu Llithro",
         "sliding_sync_description": "Wrthi'n datblygu, nid oes modd ei analluogi.",
         "sliding_sync_disabled_notice": "Allgofnodwch a mewngofnodi i analluogi",
@@ -1830,25 +1824,10 @@
     },
     "report_content": {
         "description": "Bydd adrodd y neges hon yn anfon ei 'ID digwyddiad' unigryw at weinyddwr eich gweinyddwr cartref. Os yw negeseuon yn yr ystafell hon wedi'u hamgryptio, ni fydd gweinyddwr eich gweinydd cartref yn gallu darllen testun y neges na gweld unrhyw ffeiliau neu ddelweddau.",
-        "disagree": "Anghytuno",
-        "error_create_room_moderation_bot": "Methu creu ystafell gyda bot cymedroli",
         "hide_messages_from_user": "Gwiriwch a ydych am guddio'r holl negeseuon presennol ac yn y dyfodol gan y defnyddiwr hwn.",
         "ignore_user": "Anwybyddu defnyddiwr",
-        "illegal_content": "Cynnwys Anghyfreithlon",
         "missing_reason": "Dywedwch pam eich bod yn adrodd.",
-        "nature": "Dewiswch natur a disgrifiwch beth sy'n gwneud y neges hon yn ddifrïol.",
-        "nature_disagreement": "Mae'r hyn y mae'r defnyddiwr hwn yn ei ysgrifennu yn anghywir.\nBydd hyn yn cael ei adrodd i gymedrolwyr yr ystafell.",
-        "nature_illegal": "Mae'r defnyddiwr hwn yn dangos ymddygiad anghyfreithlon, er enghraifft trwy fygwth pobl neu fygwth trais.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell a all uwchgyfeirio hyn i awdurdodau cyfreithiol.",
-        "nature_nonstandard_admin": "Mae'r ystafell hon wedi'i neilltuo ar gyfer cynnwys anghyfreithlon neu wenwynig neu mae'r cymedrolwyr yn methu â chymedroli cynnwys anghyfreithlon neu wenwynig.\nBydd hyn yn cael ei adrodd i weinyddwyr %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Mae'r ystafell hon wedi'i neilltuo ar gyfer cynnwys anghyfreithlon neu wenwynig neu mae'r cymedrolwyr yn methu â chymedroli cynnwys anghyfreithlon neu wenwynig.\nBydd hyn yn cael ei adrodd i weinyddwyr %(homeserver)s. NI fydd y gweinyddwyr yn gallu darllen cynnwys yr ystafell hon wedi'i amgryptio.",
-        "nature_other": "Unrhyw reswm arall. Disgrifiwch y broblem.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell.",
-        "nature_spam": "Mae'r defnyddiwr hwn yn sbamio'r ystafell gyda hysbysebion, dolenni i hysbysebion neu i bropaganda.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell.",
-        "nature_toxic": "Mae'r defnyddiwr hwn yn arddangos ymddygiad gwenwynig, er enghraifft trwy sarhau defnyddwyr eraill neu rannu cynnwys oedolion yn unig mewn ystafell sy'n gyfeillgar i deuluoedd neu dorri rheolau'r ystafell hon fel arall.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell.",
-        "other_label": "Arall",
-        "report_content_to_homeserver": "Adrodd Cynnwys i'ch Gweinyddwr Homeserver",
-        "report_entire_room": "Rhoi gwybod am yr ystafell gyfan",
-        "spam_or_propaganda": "Sbam neu bropaganda",
-        "toxic_behaviour": "Ymddygiad Gwenwynig"
+        "report_content_to_homeserver": "Adrodd Cynnwys i'ch Gweinyddwr Homeserver"
     },
     "report_room": {
         "description": "Rhowch wybod am yr ystafell hon i ddarparwr eich cyfrif. Os yw'r neges wedi'i amgryptio, ni fydd eich gweinyddwr yn gallu eu darllen.",
@@ -3325,7 +3304,6 @@
         "download_action_downloading": "Yn llwytho i lawr",
         "download_failed": "Methodd y llwytho i lawr",
         "download_failed_description": "Bu gwall wrth lawrlwytho'r ffeil hon",
-        "e2e_state": "Cyflwr yr amgryptio o'r dechrau i'r diwedd",
         "edits": {
             "tooltip_label": "Wedi'i olygu am %(date)s. Cliciwch i weld golygiadau.",
             "tooltip_sub": "Cliciwch i weld golygiadau",
@@ -3406,9 +3384,7 @@
         "m.poll.start": "Mae %(senderName)s wedi dechrau arolwg - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "Mae %(senderDisplayName)s wedi newid afatar yr ystafell.",
-            "changed_img": "Mae %(senderDisplayName)s wedi newid yr afatar ystafell i<img/>",
-            "lightbox_title": "Newidiodd %(senderDisplayName)s yr afatar ar gyfer %(roomName)s",
-            "removed": "Mae %(senderDisplayName)s wedi tynnu afatar yr ystafell."
+            "lightbox_title": "Newidiodd %(senderDisplayName)s yr afatar ar gyfer %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3530,7 +3506,6 @@
             "created_rule_rooms": "Creodd %(senderName)s reol yn gwahardd ystafelloedd sy'n cyfateb i %(glob)s am %(reason)s",
             "created_rule_servers": "Creodd %(senderName)s reol yn gwahardd gweinyddwyr sy'n cyfateb i %(glob)s am %(reason)s",
             "created_rule_users": "Creodd %(senderName)s reol yn gwahardd defnyddwyr rhag paru %(glob)s am %(reason)s",
-            "message_hidden": "Rydych chi wedi anwybyddu'r defnyddiwr hwn, felly mae eu neges wedi'i chuddio. <a>Dangos beth bynnag.</a>",
             "removed_rule": "Mae %(senderName)s wedi dileu rheol gwahardd sy'n cyfateb i %(glob)s",
             "removed_rule_rooms": "Mae %(senderName)s wedi dileu'r rheol sy'n gwahardd ystafelloedd sy'n cyfateb i %(glob)s",
             "removed_rule_servers": "Mae %(senderName)s wedi dileu'r rheol sy'n gwahardd gweinyddwyr sy'n cyfateb i %(glob)s",
@@ -3840,12 +3815,6 @@
         "verification_unavailable": "Nid yw dilysu defnyddiwr ar gael",
         "verify_button": "Dilysu Defnyddiwr",
         "verify_explainer": "Ar gyfer diogelwch ychwanegol, gwiriwch y defnyddiwr hwn trwy wirio cod un-amser ar eich dwy ddyfais."
-    },
-    "user_menu": {
-        "link_new_device": "Cysylltu'r ddyfais newydd",
-        "settings": "Pob gosodiad",
-        "switch_theme_dark": "Newid i'r modd tywyll",
-        "switch_theme_light": "Newid i'r modd golau"
     },
     "voip": {
         "already_in_call": "Eisoes mewn galwad",

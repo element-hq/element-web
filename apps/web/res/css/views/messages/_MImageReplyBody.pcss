@@ -6,6 +6,64 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+.mx_MImageReplyBody,
+.mx_MStickerBody_wrapper {
+    .mx_MImageBody_banner {
+        position: absolute;
+        bottom: $spacing-4;
+        left: $spacing-4;
+        padding: $spacing-4;
+        border-radius: var(--MBody-border-radius);
+        font-size: $font-15px;
+        user-select: none;
+        pointer-events: none;
+        max-width: min(100%, 350px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        background-color: rgb(0, 0, 0, 0.6);
+        color: #ffffff;
+    }
+
+    .mx_MImageBody_placeholder {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background-color: $background;
+
+        .mx_Blurhash > canvas {
+            animation: mx--anim-pulse 1.75s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+    }
+
+    .mx_MImageBody_thumbnail_container {
+        border-radius: var(--MBody-border-radius);
+        overflow: hidden;
+        contain: paint;
+    }
+
+    .mx_MImageBody_thumbnail {
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+
+    .mx_MImageBody_gifLabel {
+        position: absolute;
+        display: block;
+        top: 0px;
+        left: 14px;
+        padding: 5px;
+        border-radius: 5px;
+        background: $imagebody-giflabel;
+        border: 2px solid $imagebody-giflabel-border;
+        color: $imagebody-giflabel-color;
+        pointer-events: none;
+    }
+}
+
 .mx_MImageReplyBody {
     display: flex;
     column-gap: $spacing-4;

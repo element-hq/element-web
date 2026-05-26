@@ -10,8 +10,7 @@
             "other": "メンションを含む未読メッセージ%(count)s件。"
         },
         "room_name": "ルーム %(name)s",
-        "unread_messages": "未読メッセージ。",
-        "user_menu": "ユーザーメニュー"
+        "unread_messages": "未読メッセージ。"
     },
     "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
     "action": {
@@ -86,7 +85,6 @@
         "rename": "表示名を変更",
         "reply": "返信",
         "reply_in_thread": "スレッドで返信",
-        "report_content": "コンテンツを報告",
         "resend": "再送信",
         "reset": "リセット",
         "resume": "再開",
@@ -290,7 +288,6 @@
         "sign_in_instead_prompt": "サインイン",
         "sign_in_or_register": "サインインするか、アカウントを作成してください",
         "sign_in_or_register_description": "続行するには、作成済のアカウントを使用するか、新しいアカウントを作成してください。",
-        "sign_in_prompt": "アカウントがありますか？<a>サインインしてください</a>",
         "sign_in_with_sso": "シングルサインオンを使用してサインイン",
         "signing_in": "サインインしています…",
         "soft_logout": {
@@ -708,7 +705,6 @@
         "state_key": "ステートキー",
         "threads_timeline": "スレッドのタイムライン",
         "title": "開発者ツール",
-        "toggle_event": "イベントを切り替える",
         "toolbox": "ツールボックス",
         "use_at_own_risk": "このユーザーインターフェースは、値の種類を確認しません。自己責任で使用してください。",
         "user_read_up_to": "ユーザーの既読状況： ",
@@ -1223,8 +1219,6 @@
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
         "mjolnir": "参加者を無視する新しい方法",
         "msc3531_hide_messages_pending_moderation": "モデレーターに、保留中のモデレーションのメッセージを非表示にすることを許可。",
-        "report_to_moderators": "モデレーターに報告",
-        "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
         "sliding_sync": "スライド式同期モード",
         "sliding_sync_description": "開発中です。無効にできません。",
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",
@@ -1461,20 +1455,10 @@
     },
     "report_content": {
         "description": "このメッセージを報告すると、このメッセージの一意の「イベントID」があなたのホームサーバーの管理者に送信されます。このルーム内のメッセージが暗号化されている場合、ホームサーバーの管理者はメッセージのテキストを読んだり、ファイルや画像を表示したりすることはできません。",
-        "disagree": "同意しない",
         "hide_messages_from_user": "このユーザーのメッセージを非表示にするかどうか確認してください。",
         "ignore_user": "ユーザーを無視",
-        "illegal_content": "不法なコンテンツ",
         "missing_reason": "報告する理由を記入してください。",
-        "nature": "特徴を選び、このメッセージを報告する理由を記入してください。",
-        "nature_disagreement": "ユーザーの投稿内容が正しくない。\nこのユーザーをルームのモデレーターに報告します。",
-        "nature_other": "その他の理由。問題を記入してください。\nルームのモデレーターに報告します。",
-        "nature_spam": "ユーザーが広告や、広告・プロパガンダへのリンクのスパムを行っている。\nこのユーザーをルームのモデレーターに報告します。",
-        "other_label": "その他",
-        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告",
-        "report_entire_room": "ルーム全体を報告",
-        "spam_or_propaganda": "スパム、プロパガンダ",
-        "toxic_behaviour": "危害を加える振る舞い"
+        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s個のセッションの復号化に失敗しました！",
@@ -2655,9 +2639,7 @@
         "m.poll.start": "%(senderName)sがアンケートを開始しました - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)sがルームのアバターを変更しました。",
-            "changed_img": "%(senderDisplayName)sはルームのアバターを<img/>に変更しました",
-            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました",
-            "removed": "%(senderDisplayName)sがルームのアバターを削除しました。"
+            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2772,7 +2754,6 @@
             "created_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
-            "message_hidden": "このユーザーを無視しているのでメッセージは隠されます。<a>表示する。</a>",
             "removed_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
             "removed_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
             "removed_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
@@ -3048,11 +3029,6 @@
         "unban_space_warning": "あなたが管理者でない場所にアクセスすることができなくなります。",
         "verify_button": "ユーザーの認証",
         "verify_explainer": "セキュリティー強化のため、両者の端末でワンタイムコードを確認し、このユーザーを認証してください。"
-    },
-    "user_menu": {
-        "settings": "全ての設定",
-        "switch_theme_dark": "ダークテーマに切り替える",
-        "switch_theme_light": "ライトテーマに切り替える"
     },
     "voip": {
         "already_in_call": "既に通話中です",

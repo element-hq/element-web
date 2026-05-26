@@ -15,8 +15,7 @@
         "room_name": "Kamer %(name)s",
         "room_status_bar": "Kamerstatus balk",
         "seek_bar_label": "Audio zoekbalk",
-        "unread_messages": "Ongelezen berichten.",
-        "user_menu": "Gebruikersmenu"
+        "unread_messages": "Ongelezen berichten."
     },
     "a11y_jump_first_unread_room": "Ga naar de eerste ongelezen kamer",
     "action": {
@@ -96,7 +95,6 @@
         "rename": "Hernoemen",
         "reply": "Beantwoorden",
         "reply_in_thread": "Reageer in draad",
-        "report_content": "Inhoud melden",
         "resend": "Opnieuw versturen",
         "reset": "Opnieuw instellen",
         "resume": "Hervatten",
@@ -279,7 +277,6 @@
         "sign_in_instead_prompt": "Heb je al een account? <a>Inloggen</a>",
         "sign_in_or_register": "Meld je aan of maak een account aan",
         "sign_in_or_register_description": "Gebruik je bestaande account of maak een nieuwe aan om verder te gaan.",
-        "sign_in_prompt": "Heb je een account? <a>Inloggen</a>",
         "sign_in_with_sso": "Inloggen met eenmalig inloggen",
         "soft_logout": {
             "clear_data_button": "Alle gegevens wissen",
@@ -649,7 +646,6 @@
         "show_hidden_events": "Verborgen gebeurtenissen op de tijdslijn weergeven",
         "state_key": "Toestandssleutel",
         "title": "Ontwikkelaarstools",
-        "toggle_event": "wissel gebeurtenis",
         "toolbox": "Gereedschap",
         "use_at_own_risk": "De UI heeft GEEN controle op het type van de waardes. Gebruik op eigen risico.",
         "value": "Waarde",
@@ -1352,21 +1348,10 @@
     },
     "report_content": {
         "description": "Dit bericht melden zal zijn unieke ‘gebeurtenis-ID’ versturen naar de beheerder van jouw homeserver. Als de berichten in deze kamer versleuteld zijn, zal de beheerder van jouw homeserver het bericht niet kunnen lezen, noch enige bestanden of afbeeldingen zien.",
-        "disagree": "Niet mee eens",
         "hide_messages_from_user": "Vink aan als je alle huidige en toekomstige berichten van deze persoon wilt verbergen.",
         "ignore_user": "Negeer persoon",
-        "illegal_content": "Illegale Inhoud",
         "missing_reason": "Geef aan waarom je deze melding indient.",
-        "nature": "Kies een reden en beschrijf wat dit bericht kwetsend maakt.",
-        "nature_disagreement": "Wat deze persoon schrijft is verkeerd.\nDit zal worden gerapporteerd aan de kamermoderators.",
-        "nature_illegal": "Deze persoon vertoont illegaal gedrag, bijvoorbeeld door doxing van personen of te dreigen met geweld.\nDit zal gerapporteerd worden aan de moderators van deze kamer die dit kunnen doorzetten naar de gerechtelijke autoriteiten.",
-        "nature_other": "Een andere reden. Beschrijf alstublieft het probleem.\nDit zal gerapporteerd worden aan de kamermoderators.",
-        "nature_spam": "Deze persoon spamt de kamer met advertenties, links naar advertenties of propaganda.\nDit zal gerapporteerd worden aan de moderators van deze kamer.",
-        "other_label": "Overige",
-        "report_content_to_homeserver": "Inhoud melden aan de beheerder van jouw homeserver",
-        "report_entire_room": "Rapporteer het hele kamer",
-        "spam_or_propaganda": "Spam of propaganda",
-        "toxic_behaviour": "Giftig Gedrag"
+        "report_content_to_homeserver": "Inhoud melden aan de beheerder van jouw homeserver"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Ontsleutelen van %(failedCount)s sessies is mislukt!",
@@ -2487,9 +2472,7 @@
         "m.poll.start": "%(senderName)s is een poll gestart - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s veranderde de kamerafbeelding.",
-            "changed_img": "%(senderDisplayName)s heeft de kamerafbeelding aangepast naar <img/>",
-            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd",
-            "removed": "%(senderDisplayName)s heeft de kamerafbeelding verwijderd."
+            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2604,7 +2587,6 @@
             "created_rule_rooms": "%(senderName)s heeft geregeld dat kamers met %(glob)s verbannen worden vanwege %(reason)s",
             "created_rule_servers": "%(senderName)s heeft geregeld dat servers die met %(glob)s sporen verbannen worden vanwege %(reason)s",
             "created_rule_users": "%(senderName)s heeft geregeld dat personen die met %(glob)s sporen verbannen worden vanwege %(reason)s",
-            "message_hidden": "Je hebt deze persoon genegeerd, dus de berichten worden verborgen. <a>Toch tonen?</a>",
             "removed_rule": "%(senderName)s heeft een banregel die met %(glob)s strookt verwijderd",
             "removed_rule_rooms": "%(senderName)s heeft de banregel voor kamers met %(glob)s verwijderd",
             "removed_rule_servers": "%(senderName)s heeft de banregel voor servers die met %(glob)s stroken verwijderd",
@@ -2872,11 +2854,6 @@
         "unban_space_warning": "Ze zullen geen toegang hebben tot alles waar je geen beheerder van bent.",
         "verify_button": "Persoon verifiëren",
         "verify_explainer": "Als extra beveiliging kan je deze persoon verifiëren door een eenmalige code op jullie toestellen te controleren."
-    },
-    "user_menu": {
-        "settings": "Instellingen",
-        "switch_theme_dark": "Naar donkere modus wisselen",
-        "switch_theme_light": "Naar lichte modus wisselen"
     },
     "voip": {
         "already_in_call": "Al in de oproep",

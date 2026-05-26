@@ -13,15 +13,20 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.59.1
-    "playwright-core": 1.59.1
+    "@playwright/test": 1.60.0
+    "playwright-core": 1.60.0
     # Compound
-    "@vector-im/compound-design-tokens": 10.1.0
-    "@vector-im/compound-web": 9.2.1
+    "@vector-im/compound-design-tokens": 10.1.1
+    "@vector-im/compound-web": 9.3.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
     "@fontsource/inter": 5.2.8
+    # vite
+    vite: 8.0.13
+    vitest: 4.1.7
+    vitest-sonar-reporter: 3.0.0
+    "@vitest/coverage-v8": 4.1.7
 packageExtensions:
     fdir:
         dependencies:

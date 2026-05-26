@@ -1,16 +1,27 @@
-import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@storybook/react-vite";
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import type { ArgTypes, Decorator, Preview, ReactRenderer, StrictArgs } from "@storybook/react-vite";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 
 import "./compound.css";
+import "./app-web-root.css";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
-import { setLanguage } from "../src/core/i18n/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
+
+import { EventPresentationProvider, type EventDensity, type EventLayout, I18nApi, I18nContext } from "../src";
+import { setLanguage } from "../src/core/i18n/i18n";
 import { StoryContext } from "storybook/internal/csf";
-import { I18nApi, I18nContext } from "../src";
+import { DragDropProvider } from "@dnd-kit/react";
+import { PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 
 export const globalTypes = {
     theme: {
@@ -32,26 +43,93 @@ export const globalTypes = {
         name: "Language",
         description: "Global language for components",
     },
+    eventLayout: {
+        name: "Event layout",
+        description: "Global event layout for timeline components",
+        toolbar: {
+            icon: "component",
+            title: "Event layout",
+            items: [
+                { title: "Modern", value: "group" },
+                { title: "Bubble", value: "bubble" },
+                { title: "IRC", value: "irc" },
+            ],
+        },
+    },
+    eventDensity: {
+        name: "Event density",
+        description: "Global event density for timeline components",
+        toolbar: {
+            icon: "listunordered",
+            title: "Event density",
+            items: [
+                { title: "Default", value: "default" },
+                { title: "Compact", value: "compact" },
+            ],
+        },
+    },
+    rootCss: {
+        name: "Root CSS",
+        description: "Global root CSS for component previews",
+        toolbar: {
+            icon: "paintbrush",
+            title: "Root CSS",
+            items: [
+                { title: "Default", value: "storybook" },
+                { title: "Element Web", value: "app-web" },
+            ],
+        },
+    },
     initialGlobals: {
-        theme: "system",
+        theme: "light",
         language: "en",
+        eventLayout: "group",
+        eventDensity: "default",
+        rootCss: "storybook",
     },
 } satisfies ArgTypes;
 
 const allThemesClasses = globalTypes.theme.toolbar.items.map(({ value }) => `cpd-theme-${value}`);
 
+const RootCssSwitcher: React.FC<{
+    rootCss: string;
+}> = ({ rootCss }) => {
+    useLayoutEffect(() => {
+        if (rootCss === "app-web") {
+            document.documentElement.dataset.storybookRootCss = rootCss;
+        } else {
+            delete document.documentElement.dataset.storybookRootCss;
+        }
+
+        return () => {
+            delete document.documentElement.dataset.storybookRootCss;
+        };
+    }, [rootCss]);
+
+    return null;
+};
+
 const ThemeSwitcher: React.FC<{
     theme: string;
 }> = ({ theme }) => {
     useLayoutEffect(() => {
-        document.documentElement.classList.remove(...allThemesClasses);
+        document.body.classList.remove(...allThemesClasses);
         if (theme !== "system") {
-            document.documentElement.classList.add(`cpd-theme-${theme}`);
+            document.body.classList.add(`cpd-theme-${theme}`);
         }
-        return () => document.documentElement.classList.remove(...allThemesClasses);
+        return () => document.body.classList.remove(...allThemesClasses);
     }, [theme]);
 
     return null;
+};
+
+const withRootCss: Decorator = (Story, context) => {
+    return (
+        <>
+            <RootCssSwitcher rootCss={context.globals.rootCss} />
+            <Story />
+        </>
+    );
 };
 
 const withThemeProvider: Decorator = (Story, context) => {
@@ -83,9 +161,57 @@ const withI18nProvider: Decorator = (Story) => {
     );
 };
 
+const withEventPresentationProvider: Decorator = (Story, context) => {
+    return (
+        <EventPresentationProvider
+            value={{
+                layout: context.globals.eventLayout as EventLayout,
+                density: context.globals.eventDensity as EventDensity,
+            }}
+        >
+            <Story />
+        </EventPresentationProvider>
+    );
+};
+
+/**
+ * Wrap all stories in a DragDropProvider that excludes the Accessibility plugin.
+ * dnd-kit's Accessibility plugin adds aria attributes (tabindex, aria-pressed, etc.)
+ * that conflict with the existing ARIA roles used in the room list components.
+ */
+const withDragDropProvider: Decorator = (Story) => {
+    return (
+        <DragDropProvider
+            sensors={[
+                // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
+                // So we start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
+                PointerSensor.configure({
+                    activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
+                }),
+            ]}
+        >
+            <Story />
+        </DragDropProvider>
+    );
+};
+
 const preview: Preview = {
     tags: ["autodocs", "snapshot"],
-    decorators: [withThemeProvider, withTooltipProvider, withI18nProvider],
+    initialGlobals: {
+        rootCss: "storybook",
+        theme: "light",
+        language: "en",
+        eventLayout: "group",
+        eventDensity: "default",
+    },
+    decorators: [
+        withRootCss,
+        withThemeProvider,
+        withEventPresentationProvider,
+        withTooltipProvider,
+        withI18nProvider,
+        withDragDropProvider,
+    ],
     parameters: {
         options: {
             storySort: {
@@ -101,6 +227,6 @@ const preview: Preview = {
         },
     },
     loaders: [languageLoader],
-};
+} satisfies Preview;
 
 export default preview;

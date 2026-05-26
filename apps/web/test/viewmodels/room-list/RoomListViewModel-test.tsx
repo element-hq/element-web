@@ -10,7 +10,7 @@ import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 
 import { createTestClient, flushPromises, flushPromisesWithFakeTimers, mkStubRoom, stubClient } from "../../test-utils";
-import RoomListStoreV3, { CHATS_TAG, RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
@@ -21,6 +21,17 @@ import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListVie
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { tagRoom } from "../../../src/utils/room/tagRoom";
+import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
+import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
+
+jest.mock("../../../src/utils/room/tagRoom", () => ({
+    tagRoom: jest.fn(),
+}));
+
+jest.mock("../../../src/utils/room/getSectionTagForRoom", () => ({
+    getSectionTagForRoom: jest.fn().mockReturnValue(null),
+}));
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -461,6 +472,20 @@ describe("RoomListViewModel", () => {
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CreateRoom,
                 parent_space: spaceRoom,
+            });
+        });
+    });
+
+    describe("notifyCollapseState", () => {
+        it("should dispatch collapseSections=undefined when feature_room_list_sections is disabled", () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.RoomListSectionsCollapseStateChanged,
+                collapseSections: undefined,
             });
         });
     });
@@ -971,6 +996,96 @@ describe("RoomListViewModel", () => {
                 expect(favSection!.roomIds).toEqual(["!fav1:server"]);
             });
 
+            describe("Collapse/expand all sections", () => {
+                it("should collapse all sections when Action.RoomListCollapseAllSections is dispatched", async () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                    const chatsHeader = viewModel.getSectionHeaderViewModel(CHATS_TAG);
+                    expect(favHeader.isExpanded).toBe(true);
+
+                    dispatcher.dispatch({ action: Action.RoomListCollapseAllSections });
+                    await flushPromisesWithFakeTimers();
+
+                    expect(favHeader.isExpanded).toBe(false);
+                    expect(chatsHeader.isExpanded).toBe(false);
+
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([]);
+                    expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([]);
+                });
+
+                it("should expand all sections when Action.RoomListExpandAllSections is dispatched", async () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    // Collapse first
+                    const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                    favHeader.onClick();
+                    expect(favHeader.isExpanded).toBe(false);
+
+                    dispatcher.dispatch({ action: Action.RoomListExpandAllSections });
+                    await flushPromisesWithFakeTimers();
+
+                    expect(favHeader.isExpanded).toBe(true);
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([
+                        "!fav1:server",
+                        "!fav2:server",
+                    ]);
+                });
+            });
+
+            describe("notifyCollapseState", () => {
+                it("should dispatch collapseSections=expand when all sections are expanded (default)", () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+                    RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                    expect(dispatchSpy).toHaveBeenCalledWith({
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "expand",
+                    });
+                });
+
+                it("should dispatch collapseSection=collapse when all sections are collapsed", () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    // Collapse all sections
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded = false;
+                    viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded = false;
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded = false;
+
+                    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+                    RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                    expect(dispatchSpy).toHaveBeenCalledWith({
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    });
+                });
+
+                it("should dispatch collapseSection=undefined when it is a flat list", () => {
+                    jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                        spaceId: "home",
+                        sections: [
+                            { tag: DefaultTagID.Favourite, rooms: [] },
+                            { tag: CHATS_TAG, rooms: [regularRoom1] },
+                            { tag: DefaultTagID.LowPriority, rooms: [] },
+                        ],
+                    });
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+                    RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                    expect(dispatchSpy).toHaveBeenCalledWith({
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: undefined,
+                    });
+                });
+            });
+
             it("should apply sticky room within the correct section", async () => {
                 stubClient();
                 viewModel = new RoomListViewModel({ client: matrixClient });
@@ -1002,6 +1117,39 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections[0].roomIds[0]).toBe("!fav1:server");
                 expect(snapshot.roomListState.activeRoomIndex).toBe(0);
             });
+        });
+    });
+
+    describe("changeRoomSection", () => {
+        beforeEach(() => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            mocked(tagRoom).mockClear();
+        });
+
+        it("should call tagRoom with the room and target tag", () => {
+            jest.spyOn(matrixClient, "getRoom").mockReturnValue(room1);
+            mocked(getSectionTagForRoom).mockReturnValue(null);
+
+            viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
+
+            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite);
+        });
+
+        it("should do nothing when the room is not found", () => {
+            jest.spyOn(matrixClient, "getRoom").mockReturnValue(null);
+
+            viewModel.changeRoomSection("!unknown:server", DefaultTagID.Favourite);
+
+            expect(tagRoom).not.toHaveBeenCalled();
+        });
+
+        it("should do nothing when the room is already in the target section", () => {
+            jest.spyOn(matrixClient, "getRoom").mockReturnValue(room1);
+            mocked(getSectionTagForRoom).mockReturnValue(DefaultTagID.Favourite);
+
+            viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
+
+            expect(tagRoom).not.toHaveBeenCalled();
         });
     });
 });

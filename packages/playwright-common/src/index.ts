@@ -13,6 +13,7 @@ import { routeConfigJson } from "./utils/config_json.js";
 
 export * from "./utils/config_json.js";
 export * from "./utils/context.js";
+export * from "./utils/toasts.js";
 
 export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
 
@@ -83,18 +84,8 @@ export const test = base.extend<TestFixtures>({
     config: async ({}, use) => use({}),
     labsFlags: async ({}, use) => use([]),
     disablePresence: async ({}, use) => use(false),
-    lockLeftPanelWidth: true,
-    page: async ({ homeserver, context, page, config, labsFlags, disablePresence, lockLeftPanelWidth }, use) => {
+    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
         await routeConfigJson(context, homeserver.baseUrl, config, labsFlags, disablePresence);
-        if (lockLeftPanelWidth) {
-            await page.addStyleTag({
-                content: `
-                        #left-panel {
-                            flex: 0 0 369.6875px !important;
-                        }
-                `,
-            });
-        }
         await use(page);
     },
 });

@@ -31,7 +31,7 @@ jobs:
                   persist-credentials: false
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
+              uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4
@@ -55,6 +55,13 @@ jobs:
                   registry: ghcr.io
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
+
+            # Fudge and run this separately rather than relying on the dependency,
+            # otherwise nx does not appear to pick up the .env file that playwright
+            # common's prebuild step creates.
+            - run: pnpm nx run-many --nxBail -t docker:prebuild
+              env:
+                  INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
             - run: pnpm nx run-many --nxBail -t docker:build
               id: build

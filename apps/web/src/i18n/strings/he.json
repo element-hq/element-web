@@ -10,8 +10,7 @@
             "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
         },
         "room_name": "חדר %(name)s",
-        "unread_messages": "הודעות שלא נקראו.",
-        "user_menu": "תפריט משתמש"
+        "unread_messages": "הודעות שלא נקראו."
     },
     "a11y_jump_first_unread_room": "קפצו לחדר הראשון שלא נקרא.",
     "action": {
@@ -78,7 +77,6 @@
         "rename": "שנה שם",
         "reply": "תשובה",
         "reply_in_thread": "מענה בשרשור",
-        "report_content": "דווח על תוכן",
         "resend": "שלח מחדש",
         "reset": "אתחל",
         "resume": "תקציר",
@@ -240,7 +238,6 @@
         "sign_in_instead_prompt": "התחבר במקום זאת",
         "sign_in_or_register": "התחברו או צרו חשבון",
         "sign_in_or_register_description": "השתמשו בחשבונכם או צרו חשבון חדש.",
-        "sign_in_prompt": "יש לך חשבון? <a> היכנס </a>",
         "sign_in_with_sso": "היכנס באמצעות כניסה יחידה",
         "soft_logout": {
             "clear_data_button": "נקה את כל הנתונים",
@@ -1138,7 +1135,6 @@
     "report_content": {
         "description": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות.",
         "missing_reason": "אנא מלאו מדוע אתם מדווחים.",
-        "other_label": "אחר",
         "report_content_to_homeserver": "דווח על תוכן למנהל שרת הבית שלך"
     },
     "restore_key_backup_dialog": {
@@ -1979,9 +1975,7 @@
         "m.poll.start": "%(senderName)s התחיל סקר - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s שינה את תמונת החדר.",
-            "changed_img": "%(senderDisplayName)s שינה את האווטאר של החדר ל- <img/>",
-            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s",
-            "removed": "%(senderDisplayName)s הסיר את האווטאר של החדר."
+            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2085,7 +2079,6 @@
             "created_rule_rooms": "%(senderName)s יצר כלל החוסם חדרים התואמים ל%(glob)s עבור %(reason)s",
             "created_rule_servers": "%(senderName)s יצר כלל החוסם שרתים התואמים ל%(glob)s עבור %(reason)s",
             "created_rule_users": "%(senderName)s יצר כלל החוסם משתמשים התואמים ל%(glob)s עבור %(reason)s",
-            "message_hidden": "התעלמת ממשתמש זה, ולכן המסר שלו מוסתר. <a> הצג בכל מקרה. </a>",
             "removed_rule": "%(senderName)s הסיר כלל חסימה התואם ל%(glob)s",
             "removed_rule_rooms": "%(senderName)s הסיר את הכלל שחוסם חדרים התואמים ל%(glob)s",
             "removed_rule_servers": "%(senderName)s הסיר את הכלל החוסם שרתים התואמים ל%(glob)s",
@@ -2302,11 +2295,6 @@
         "unban_button_space": "הסר חסימה ממרחב העבודה",
         "verify_button": "אמת משתמש",
         "verify_explainer": "ליתר ביטחון, אמת משתמש זה על ידי בדיקת קוד חד פעמי בשני המכשירים שלך."
-    },
-    "user_menu": {
-        "settings": "כל ההגדרות",
-        "switch_theme_dark": "שנה למצב כהה",
-        "switch_theme_light": "שנה למצב בהיר"
     },
     "voip": {
         "already_in_call": "כבר בשיחה",

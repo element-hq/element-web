@@ -15,8 +15,7 @@
         "room_name": "Oda %(name)s",
         "room_status_bar": "Oda durum çubuğu",
         "seek_bar_label": "Ses arama çubuğu",
-        "unread_messages": "Okunmamış mesajlar.",
-        "user_menu": "Kullanıcı menüsü"
+        "unread_messages": "Okunmamış mesajlar."
     },
     "a11y_jump_first_unread_room": "İlk okunmamış odaya git.",
     "action": {
@@ -96,7 +95,6 @@
         "rename": "Yeniden adlandır",
         "reply": "Yanıtla",
         "reply_in_thread": "Konu içinde yanıtla\n",
-        "report_content": "İçeriği Raporla",
         "resend": "Yeniden Gönder",
         "reset": "Sıfırla",
         "resume": "Devam et",
@@ -337,7 +335,6 @@
         "sign_in_instead_prompt": "Zaten bir hesabınız var mı? <a>Buradan oturum açın</a>",
         "sign_in_or_register": "Giriş Yap veya Hesap Oluştur",
         "sign_in_or_register_description": "Devam etmek için hesabınızı kullanın veya yeni bir hesap oluşturun.",
-        "sign_in_prompt": "Hesabınız var mı? <a>Oturum aç</a>",
         "sign_in_with_sso": "Tek oturum açma ile oturum açın",
         "signing_in": "Oturum açılıyor…",
         "soft_logout": {
@@ -833,7 +830,6 @@
         "thread_root_id": "Konu Kök Kimliği: %(threadRootId)s",
         "threads_timeline": "Dizi mesajlar zaman çizelgesi",
         "title": "Geliştirici araçları",
-        "toggle_event": "etkinliği değiştir",
         "toolbox": "Araç Kutusu",
         "use_at_own_risk": "Bu kullanıcı arayüzü, değerlerin türlerini kontrol ETMEZ. Kendi sorumluluğunuzda kullanın.",
         "user_read_up_to": "Kullanıcı buraya kadar okudu: ",
@@ -1442,8 +1438,6 @@
         "notifications": "Oda başlığındaki bildirim panelini etkinleştir",
         "render_reaction_images": "Tepkilerde özel görüntüler oluştur",
         "render_reaction_images_description": "Bazen \"özel emojiler\" olarak da adlandırılır.",
-        "report_to_moderators": "Moderatörlere bildir",
-        "report_to_moderators_description": "Moderasyonu destekleyen odalarda, \"Bildir\" düğmesi, kötüye kullanımı oda moderatörlerine bildirmenize olanak tanır.",
         "sliding_sync": "Sliding Sync modu",
         "sliding_sync_description": "Aktif geliştirme aşamasında, devre dışı bırakılamaz.",
         "sliding_sync_disabled_notice": "Devre dışı bırakmak için oturumu kapatıp tekrar açın",
@@ -1708,25 +1702,10 @@
     },
     "report_content": {
         "description": "Bu mesajı bildirdiğinizde, benzersiz 'etkinlik kimliği' ev sunucunuzun yöneticisine gönderilir. Bu odadaki iletiler şifrelenmişse, ev sunucusu yöneticiniz ileti metnini okuyamaz veya herhangi bir dosya ya da resmi görüntüleyemez.",
-        "disagree": "Katılmıyorum",
-        "error_create_room_moderation_bot": "Moderasyon botu ile oda oluşturulamıyor",
         "hide_messages_from_user": "Bu kullanıcıdan gelen tüm mevcut ve gelecekteki mesajları gizlemek istiyorsanız işaretleyin.",
         "ignore_user": "Kullanıcıyı görmezden gel",
-        "illegal_content": "Yasadışı İçerik",
         "missing_reason": "Lütfen neden raporlama yaptığınızı belirtin.",
-        "nature": "Lütfen bir nitelik seçin ve bu mesajın neden taciz edici olduğunu açıklayın.",
-        "nature_disagreement": "Bu kullanıcının yazdıkları yanlıştır.\nBu durum oda moderatörlerine bildirilecektir.",
-        "nature_illegal": "Bu kullanıcı yasadışı davranışlar sergiliyor, örneğin insanlara iftira atıyor veya şiddet tehdidinde bulunuyor.\nBu durum oda moderatörlerine bildirilecek ve onlar da konuyu yasal mercilere taşıyabileceklerdir.",
-        "nature_nonstandard_admin": "Bu oda yasadışı veya zehirli içeriğe adanmıştır veya moderatörler yasadışı veya zehirli içeriği denetlemede başarısız olmuşlardır.\nBu durum %(homeserver)s yöneticilerine bildirilecektir.",
-        "nature_nonstandard_admin_encrypted": "Bu oda yasadışı veya zehirli içeriğe adanmıştır veya moderatörler yasadışı veya zehirli içeriği denetlemekte başarısız olmaktadır.\nBu durum %(homeserver)s yöneticilerine bildirilecektir. Yöneticiler bu odanın şifrelenmiş içeriğini okuyamayacaktır.",
-        "nature_other": "Başka herhangi bir sebep. Lütfen sorunu açıklayın.\nBu durum oda moderatörlerine bildirilecektir.",
-        "nature_spam": "Bu kullanıcı, odaya reklamlar, reklam bağlantıları veya propaganda ile spam gönderiyor.\nBu durum oda moderatörlerine bildirilecektir.",
-        "nature_toxic": "Bu kullanıcı, örneğin diğer kullanıcılara hakaret ederek veya aile dostu bir odada yalnızca yetişkinlere yönelik içerik paylaşarak veya bu odanın kurallarını başka bir şekilde ihlal ederek zehirli davranışlar sergiliyor.\nBu durum oda moderatörlerine bildirilecektir.",
-        "other_label": "Diğer",
-        "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın",
-        "report_entire_room": "Tüm odayı bildir",
-        "spam_or_propaganda": "Spam veya propaganda",
-        "toxic_behaviour": "Zehirli Davranış"
+        "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s adet oturum çözümlenemedi!",
@@ -3131,7 +3110,6 @@
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",
-        "e2e_state": "Uçtan uca şifrelemenin durumu",
         "edits": {
             "tooltip_label": "%(date)s tarihinde düzenlendi. Düzenlemeleri görmek için tıkla.",
             "tooltip_sub": "Düzenlemeleri görmek için tıkla",
@@ -3213,9 +3191,7 @@
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s odanın avatarını değiştirdi.",
-            "changed_img": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi",
-            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi",
-            "removed": "%(senderDisplayName)s odanın avatarını kaldırdı."
+            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3336,7 +3312,6 @@
             "created_rule_rooms": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir oda yasaklama kuralı oluşturdu",
             "created_rule_servers": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
             "created_rule_users": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen kullanıcıları yasaklama kuralı oluşturdu",
-            "message_hidden": "Bu kullanıcıyı yok saydınız, bu yüzden mesajları gizlidir. <a>Yine de göster.</a>",
             "removed_rule": "%(senderName)s %(glob)s ile eşleşen banlama kuralını kaldırdı",
             "removed_rule_rooms": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını kaldırdı",
             "removed_rule_servers": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını kaldırdı",
@@ -3635,12 +3610,6 @@
         "verification_unavailable": "Kullanıcı doğrulaması kullanılamıyor",
         "verify_button": "Kullanıcıyı Doğrula",
         "verify_explainer": "Ekstra güvenlik için, her iki cihazınızda da tek seferlik bir kodu kontrol ederek bu kullanıcıyı doğrulayın."
-    },
-    "user_menu": {
-        "link_new_device": "Yeni cihaz bağla",
-        "settings": "Tüm ayarlar",
-        "switch_theme_dark": "Karanlık Moda Geç",
-        "switch_theme_light": "Aydınlık Moda Geç"
     },
     "voip": {
         "already_in_call": "Bu kişi zaten çağrıda",

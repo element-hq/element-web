@@ -29,7 +29,9 @@ describe("TileErrorView", () => {
     });
 
     it("renders the bubble layout variant", () => {
-        const { container } = render(<BubbleLayout />);
+        const { container } = render(<BubbleLayout />, {
+            presentation: { layout: "bubble" },
+        });
         expect(container).toMatchSnapshot();
     });
 
@@ -58,7 +60,6 @@ describe("TileErrorView", () => {
 
         const vm = new TestTileErrorViewModel(
             {
-                layout: "group",
                 message: "Can't load this message",
                 eventType: "m.room.message",
                 bugReportCtaLabel: "Submit debug logs",
@@ -81,7 +82,6 @@ describe("TileErrorView", () => {
 
     it("applies a custom className to the root element", () => {
         const vm = new MockViewModel<TileErrorViewSnapshot>({
-            layout: "group",
             message: "Can't load this message",
         }) as TileErrorViewModel;
 

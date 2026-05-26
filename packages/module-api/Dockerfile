@@ -1,4 +1,4 @@
-ARG ELEMENT_VERSION=latest@sha256:c7fa40b5ba3891f8af3ce63da0818f457c1802a9ee4d2f5e46a9df36a2388eed
+ARG ELEMENT_VERSION=latest@sha256:c21772a1eabeededa19be591343f548995e458ec34ba8f27425ae923c10af82e
 
 FROM --platform=$BUILDPLATFORM node:lts-alpine@sha256:d1b3b4da11eefd5941e7f0b9cf17783fc99d9c6fc34884a665f40a06dbdfc94f AS builder
 
