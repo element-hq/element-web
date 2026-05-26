@@ -18,9 +18,19 @@ import { useI18n } from "../../core/i18n/i18nContext";
 
 export interface SeparatorViewActions {
     /**
-     * onClick handler for the separator.
+     * onPointerUp handler for separator.
      */
-    onSeparatorClick: () => void;
+    onPointerUp: () => void;
+
+    /**
+     * onPointerMove handler for separator.
+     */
+    onPointerMove: () => void;
+
+    /**
+     * onPointerDown handler for separator.
+     */
+    onPointerDown: () => void;
 
     /**
      * onFocus handler for the separator.
@@ -45,28 +55,39 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
     const { translate: _t } = useI18n();
     const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
 
-    const classes = classNames(styles.separator, className, {
-        [styles.visible]: isCollapsed || isFocusedViaKeyboard,
-    });
+    /**
+     * There are two types of separator:
+     * - bar: This shows a thick bar separator with a resize icon in the middle; shown when the panel is collapsed.
+     * - border: This is just a 1px wide separator; shown when the panel is expanded.
+     */
+    const type = isCollapsed || isFocusedViaKeyboard ? "bar" : "border";
+
+    const barContent = (
+        <Tooltip description={_t("left_panel|separator_label")} placement="right">
+            <DragIcon
+                width="20px"
+                height="12px"
+                // Without a custom view-box, this svg would scale incorrectly and would appear tiny within the separator.
+                // See https://github.com/element-hq/compound/issues/242
+                viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+                transform="rotate(90)"
+            />
+        </Tooltip>
+    );
 
     return (
         <Separator
-            className={classes}
-            onClick={vm.onSeparatorClick}
+            className={classNames(styles.separator, className)}
+            onPointerUp={vm.onPointerUp}
+            onPointerMove={vm.onPointerMove}
+            onPointerDown={vm.onPointerDown}
             onFocus={vm.onFocus}
             onBlur={vm.onBlur}
             aria-label={_t("left_panel|separator_label")}
+            data-separator-type={type}
+            disableDoubleClick
         >
-            <Tooltip description={_t("left_panel|separator_label")} placement="right">
-                <DragIcon
-                    width="20px"
-                    height="12px"
-                    // Without a custom view-box, this svg would scale incorrectly and would appear tiny within the separator.
-                    // See https://github.com/element-hq/compound/issues/242
-                    viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
-                    transform="rotate(90)"
-                />
-            </Tooltip>
+            {type === "bar" ? barContent : null}
         </Separator>
     );
 }

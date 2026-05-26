@@ -3,7 +3,7 @@
 exports[`RoomStatusBarView > renders connection lost 1`] = `
 <div>
   <div
-    aria-labelledby="_r_0_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -32,7 +32,7 @@ exports[`RoomStatusBarView > renders connection lost 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-          id="_r_0_"
+          id="react-use-id-1"
         >
           Connectivity to the server has been lost.
         </p>
@@ -53,7 +53,7 @@ exports[`RoomStatusBarView > renders connection lost 1`] = `
 exports[`RoomStatusBarView > renders consent link 1`] = `
 <div>
   <div
-    aria-labelledby="_r_2_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -82,7 +82,7 @@ exports[`RoomStatusBarView > renders consent link 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-          id="_r_2_"
+          id="react-use-id-1"
         >
           You can't send any messages until you review and agree to our terms and conditions.
         </p>
@@ -111,7 +111,7 @@ exports[`RoomStatusBarView > renders consent link 1`] = `
 exports[`RoomStatusBarView > renders local room error 1`] = `
 <div>
   <div
-    aria-labelledby="_r_6_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -137,7 +137,7 @@ exports[`RoomStatusBarView > renders local room error 1`] = `
     >
       <p
         class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-        id="_r_6_"
+        id="react-use-id-1"
       >
         Could not start a chat with this user
       </p>
@@ -174,7 +174,7 @@ exports[`RoomStatusBarView > renders local room error 1`] = `
 exports[`RoomStatusBarView > renders resource limit error 1`] = `
 <div>
   <div
-    aria-labelledby="_r_1_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -203,7 +203,7 @@ exports[`RoomStatusBarView > renders resource limit error 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-          id="_r_1_"
+          id="react-use-id-1"
         >
           Your message wasn't sent because this homeserver has been blocked by its administrator.
         </p>
@@ -237,7 +237,7 @@ exports[`RoomStatusBarView > renders resource limit error 1`] = `
 exports[`RoomStatusBarView > renders unsent messages 1`] = `
 <div>
   <div
-    aria-labelledby="_r_3_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -266,7 +266,7 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-          id="_r_3_"
+          id="react-use-id-1"
         >
           Some of your messages have not been sent
         </p>
@@ -330,7 +330,7 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
 exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
 <div>
   <div
-    aria-labelledby="_r_4_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -359,7 +359,7 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-          id="_r_4_"
+          id="react-use-id-1"
         >
           Some of your messages have not been sent
         </p>
@@ -423,7 +423,7 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
 exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
 <div>
   <div
-    aria-labelledby="_r_5_"
+    aria-labelledby="react-use-id-1"
     class="Banner-module_banner"
     data-type="critical"
     role="status"
@@ -452,7 +452,7 @@ exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
       >
         <p
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
-          id="_r_5_"
+          id="react-use-id-1"
         >
           Some of your messages have not been sent
         </p>

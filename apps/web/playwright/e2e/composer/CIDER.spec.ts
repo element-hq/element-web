@@ -20,6 +20,7 @@ test.describe("Composer", () => {
         botCreateOpts: {
             displayName: "Bob",
         },
+        lockLeftPanelWidth: false,
     });
 
     test.use({
@@ -185,6 +186,7 @@ test.describe("Composer", () => {
             await app.viewRoomByName("Bob");
 
             const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+            await composer.click();
             await composer.pressSequentially("@bob");
 
             // Note that we include the user ID here as the room tile is also an 'option' role
