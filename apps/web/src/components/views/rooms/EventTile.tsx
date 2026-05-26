@@ -298,7 +298,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
     private replyChain = createRef<ReplyChain>();
-    private e2eViewModel: EventTileE2eViewModel;
+    private readonly e2eViewModel: EventTileE2eViewModel;
     private e2eViewModelSubscription?: () => void;
 
     public readonly ref = createRef<HTMLElement>();

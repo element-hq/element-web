@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventEmitter } from "events";
 import { waitFor } from "@testing-library/dom";
 import { EventType, MatrixEventEvent, type MatrixClient, type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import {
@@ -16,8 +15,18 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { E2ePadlockIcon } from "@element-hq/web-shared-components";
 
-import { mkEvent } from "../../test-utils";
+import { mkEvent, MockClientWithEventEmitter } from "../../test-utils";
 import { EventTileE2eViewModel } from "../../../src/viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
+
+function makeClient(
+    getEncryptionInfoForEvent = jest.fn<Promise<EventEncryptionInfo | null>, [MatrixEvent]>(),
+): MockClientWithEventEmitter & MatrixClient {
+    return new MockClientWithEventEmitter({
+        getCrypto: jest.fn(() => ({
+            getEncryptionInfoForEvent,
+        })),
+    }) as MockClientWithEventEmitter & MatrixClient;
+}
 
 describe("EventTileE2eViewModel", () => {
     const roomId = "!room:example.org";
@@ -45,16 +54,6 @@ describe("EventTileE2eViewModel", () => {
                 body: "Hello",
             },
         });
-    }
-
-    function makeClient(
-        getEncryptionInfoForEvent = jest.fn<Promise<EventEncryptionInfo | null>, [MatrixEvent]>(),
-    ): MatrixClient {
-        return Object.assign(new EventEmitter(), {
-            getCrypto: jest.fn(() => ({
-                getEncryptionInfoForEvent,
-            })),
-        }) as unknown as MatrixClient;
     }
 
     function makeViewModel(props: ConstructorParameters<typeof EventTileE2eViewModel>[0]): EventTileE2eViewModel {
@@ -114,7 +113,7 @@ describe("EventTileE2eViewModel", () => {
         vm.start();
         await waitFor(() => expect(vm.getSnapshot().kind).toBe("icon"));
 
-        (cli as unknown as EventEmitter).emit(CryptoEvent.UserTrustStatusChanged, userId, {});
+        cli.emit(CryptoEvent.UserTrustStatusChanged, userId, {});
 
         await waitFor(() =>
             expect(vm.getSnapshot()).toEqual({
@@ -184,13 +183,13 @@ describe("EventTileE2eViewModel", () => {
         });
         vm.start();
 
-        expect((cli as unknown as EventEmitter).listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(1);
+        expect(cli.listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(1);
         expect(mxEvent.listenerCount(MatrixEventEvent.Decrypted)).toBe(1);
         expect(mxEvent.listenerCount(MatrixEventEvent.Replaced)).toBe(1);
 
         vm.dispose();
 
-        expect((cli as unknown as EventEmitter).listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(0);
+        expect(cli.listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(0);
         expect(mxEvent.listenerCount(MatrixEventEvent.Decrypted)).toBe(0);
         expect(mxEvent.listenerCount(MatrixEventEvent.Replaced)).toBe(0);
     });
@@ -213,7 +212,7 @@ describe("EventTileE2eViewModel", () => {
         expect(oldEvent.listenerCount(MatrixEventEvent.Replaced)).toBe(0);
         expect(newEvent.listenerCount(MatrixEventEvent.Decrypted)).toBe(1);
         expect(newEvent.listenerCount(MatrixEventEvent.Replaced)).toBe(1);
-        expect((cli as unknown as EventEmitter).listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(1);
+        expect(cli.listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(1);
     });
 
     it("does not register live listeners when disabled", () => {
@@ -227,7 +226,7 @@ describe("EventTileE2eViewModel", () => {
         });
         vm.start();
 
-        expect((cli as unknown as EventEmitter).listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(0);
+        expect(cli.listenerCount(CryptoEvent.UserTrustStatusChanged)).toBe(0);
         expect(mxEvent.listenerCount(MatrixEventEvent.Decrypted)).toBe(0);
         expect(mxEvent.listenerCount(MatrixEventEvent.Replaced)).toBe(0);
     });
@@ -249,7 +248,7 @@ describe("EventTileE2eViewModel", () => {
         vm.start();
         await waitFor(() => expect(getEncryptionInfoForEvent).toHaveBeenCalledTimes(1));
 
-        (cli as unknown as EventEmitter).emit(CryptoEvent.UserTrustStatusChanged, "@bob:example.org", {});
+        cli.emit(CryptoEvent.UserTrustStatusChanged, "@bob:example.org", {});
 
         expect(getEncryptionInfoForEvent).toHaveBeenCalledTimes(1);
     });
@@ -277,7 +276,7 @@ describe("EventTileE2eViewModel", () => {
             enableListeners: true,
         });
         vm.start();
-        (cli as unknown as EventEmitter).emit(CryptoEvent.UserTrustStatusChanged, userId, {});
+        cli.emit(CryptoEvent.UserTrustStatusChanged, userId, {});
 
         await waitFor(() =>
             expect(vm.getSnapshot()).toEqual({
