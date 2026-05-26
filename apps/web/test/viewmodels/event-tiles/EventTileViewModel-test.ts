@@ -408,4 +408,46 @@ describe("EventTileViewModel", () => {
             showBubblePinnedMessageBadge: true,
         });
     });
+
+    it("derives footer render placement for default layouts", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                },
+                footer: {
+                    isOwnEvent: true,
+                    hasReactionsRow: true,
+                    hasReactions: true,
+                },
+            }),
+        );
+
+        expect(renderState.footer).toMatchObject({
+            hasFooter: true,
+            showInIrcLayout: false,
+            showInDefaultLayout: true,
+        });
+    });
+
+    it("derives footer render placement for IRC layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                },
+                footer: {
+                    isOwnEvent: true,
+                    hasReactionsRow: true,
+                    hasReactions: true,
+                },
+            }),
+        );
+
+        expect(renderState.footer).toMatchObject({
+            hasFooter: true,
+            showInIrcLayout: true,
+            showInDefaultLayout: false,
+        });
+    });
 });

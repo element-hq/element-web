@@ -266,6 +266,13 @@ export interface EventTileRenderState {
         /** Whether the padlock should render in the IRC-layout timestamp area. */
         showInIrcLine: boolean;
     };
+    /** EventTile footer slot state. */
+    footer: EventTileFooterSnapshot & {
+        /** Whether the footer belongs inside the IRC-layout message line. */
+        showInIrcLayout: boolean;
+        /** Whether the footer belongs below the message line. */
+        showInDefaultLayout: boolean;
+    };
 }
 
 /** Derives the current EventTile snapshot from component-owned inputs. */
@@ -296,6 +303,11 @@ export class EventTileViewModel {
             e2ePadlock: {
                 showInGroupLine: !useIRCLayout && showPadlock,
                 showInIrcLine: useIRCLayout && showPadlock,
+            },
+            footer: {
+                ...snapshot.footer,
+                showInIrcLayout: useIRCLayout,
+                showInDefaultLayout: !useIRCLayout,
             },
         };
     }

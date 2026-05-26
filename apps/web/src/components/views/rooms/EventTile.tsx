@@ -1103,7 +1103,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const { hasFooter, showMainPinnedMessageBadge, showBubblePinnedMessageBadge } = eventTileSnapshot.footer;
+        const { hasFooter, showMainPinnedMessageBadge, showBubblePinnedMessageBadge } = eventTileRenderState.footer;
 
         switch (this.context.timelineRenderingType) {
             case TimelineRenderingType.Thread: {
@@ -1349,7 +1349,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 showHiddenEvents: this.context.showHiddenEvents,
                             })}
                             {actionBar}
-                            {this.props.layout === Layout.IRC && (
+                            {eventTileRenderState.footer.showInIrcLayout && (
                                 <>
                                     {hasFooter && (
                                         <div className="mx_EventTile_footer">
@@ -1361,7 +1361,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 </>
                             )}
                         </div>
-                        {this.props.layout !== Layout.IRC && (
+                        {eventTileRenderState.footer.showInDefaultLayout && (
                             <>
                                 {hasFooter && (
                                     <div className="mx_EventTile_footer">
