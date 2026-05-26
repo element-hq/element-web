@@ -69,7 +69,6 @@ function createClient(roomStates: Record<string, RoomState | undefined>): Matrix
 }
 
 function createViewModel(displayName?: string): {
-    client: MatrixClient;
     roomState: TestRoomState;
     vm: E2eMessageSharedIconViewModel;
 } {
@@ -81,7 +80,7 @@ function createViewModel(displayName?: string): {
         keyForwardingUserId: USER_ID,
     });
 
-    return { client, roomState, vm };
+    return { roomState, vm };
 }
 
 describe("E2eMessageSharedIconViewModel", () => {
@@ -188,33 +187,11 @@ describe("E2eMessageSharedIconViewModel", () => {
         expect(listener).toHaveBeenCalledTimes(2);
     });
 
-    it("updates and rebinds its room state listener when the client changes", () => {
-        const originalRoomState = createRoomState({ [USER_ID]: "Bob" });
-        const newRoomState = createRoomState({ [USER_ID]: "Alice" });
-        const originalClient = createClient({ [ROOM_ID]: originalRoomState as unknown as RoomState });
-        const newClient = createClient({ [ROOM_ID]: newRoomState as unknown as RoomState });
-        const vm = new E2eMessageSharedIconViewModel({
-            client: originalClient,
-            roomId: ROOM_ID,
-            keyForwardingUserId: USER_ID,
-        });
-        const listener = jest.fn();
-        vm.subscribe(listener);
-
-        vm.setClient(newClient);
-
-        expect(originalRoomState.listenerCount(RoomStateEvent.Events)).toBe(0);
-        expect(newRoomState.listenerCount(RoomStateEvent.Events)).toBe(1);
-        expect(vm.getSnapshot().displayName).toBe("Alice");
-        expect(listener).toHaveBeenCalledTimes(1);
-    });
-
     it("does not emit updates when setters receive unchanged values", () => {
-        const { client, vm } = createViewModel("Bob");
+        const { vm } = createViewModel("Bob");
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setClient(client);
         vm.setRoomId(ROOM_ID);
         vm.setKeyForwardingUserId(USER_ID);
 

@@ -346,10 +346,6 @@ function E2eMessageSharedIconWrapper({
     );
 
     useEffect(() => {
-        vm.setClient(client);
-    }, [client, vm]);
-
-    useEffect(() => {
         vm.setRoomId(roomId);
     }, [roomId, vm]);
 
