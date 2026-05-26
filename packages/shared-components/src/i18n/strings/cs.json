@@ -41,6 +41,9 @@
         "preferences": "Předvolby",
         "state_encryption_enabled": "Experimentální šifrování stavu povoleno"
     },
+    "devtools": {
+        "toggle_event": "přepnout událost"
+    },
     "keyboard": {
         "shift": "Shift"
     },
@@ -223,6 +226,10 @@
         },
         "m.file": {
             "error_invalid": "Neplatný soubor"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s změnil(a) avatar místnosti na <img/>",
+            "removed": "%(senderDisplayName)s odstranil(a) avatar místnosti."
         },
         "m.room.encryption": {
             "disable_attempt": "Ignorovaný pokus o deaktivaci šifrování",
