@@ -7,7 +7,7 @@
 
 .content {
     color: var(--cpd-color-text-secondary); /* override anchor color */
-    font-size: var(--cpd-font-size-body-xs);
+    font: var(--cpd-font-body-xs-regular);
     font-variant-numeric: tabular-nums;
     display: inline-block;
     white-space: nowrap;
