@@ -335,7 +335,7 @@ function E2eMessageSharedIconWrapper({
     roomId,
     keyForwardingUserId,
 }: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
-    const client = MatrixClientPeg.safeGet();
+    const client = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new E2eMessageSharedIconViewModel({
