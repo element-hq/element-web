@@ -1,0 +1,41 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<RoomListSectionHeaderDragOverlayView /> stories > renders Default story 1`] = `
+<div>
+  <div
+    style="width: 320px; padding: 8px;"
+  >
+    <div
+      class="RoomListSectionHeaderView-module_header RoomListSectionHeaderDragOverlayView-module_dragOverlay"
+    >
+      <div
+        class="Flex-module_flex RoomListSectionHeaderView-module_container RoomListSectionHeaderView-module_dragging"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <div
+          class="Flex-module_flex"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            class="RoomListSectionHeaderView-module_chevron"
+            fill="var(--cpd-color-icon-secondary)"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+          <span
+            class="RoomListSectionHeaderView-module_title"
+          >
+            Work
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
