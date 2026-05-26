@@ -7,10 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventStatus, EventType, type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
+import { E2ePadlockIcon } from "@element-hq/web-shared-components";
 
 import { mkEvent } from "../../test-utils";
 import {
     getEventTileE2ePadlockState,
+    getEventTileE2ePadlockViewState,
     type EventTileE2ePadlockStateInput,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileE2eState";
 
@@ -182,5 +184,84 @@ describe("EventTileE2eState", () => {
         const state = getEventTileE2ePadlockState(makeInput({ mxEvent, isRoomEncrypted: true }));
 
         expect(state.kind).toBe("none");
+    });
+
+    it("maps decryption failure state to the decryption failure icon view state", () => {
+        const mxEvent = makeEvent();
+        mockDecryptionFailure(mxEvent, DecryptionFailureCode.UNKNOWN_ERROR);
+
+        const state = getEventTileE2ePadlockViewState(makeInput({ mxEvent }));
+
+        expect(state).toEqual({
+            kind: "icon",
+            icon: E2ePadlockIcon.DecryptionFailure,
+            title: "This message could not be decrypted",
+        });
+    });
+
+    it("maps unencrypted state to the warning icon view state", () => {
+        const state = getEventTileE2ePadlockViewState(makeInput({ isRoomEncrypted: true }));
+
+        expect(state).toEqual({
+            kind: "icon",
+            icon: E2ePadlockIcon.Warning,
+            title: "Not encrypted",
+        });
+    });
+
+    it.each([
+        [EventShieldReason.UNKNOWN, E2ePadlockIcon.Normal, "Unknown error"],
+        [EventShieldReason.UNVERIFIED_IDENTITY, E2ePadlockIcon.Normal, "Encrypted by an unverified user."],
+        [EventShieldReason.UNSIGNED_DEVICE, E2ePadlockIcon.Normal, "Encrypted by a device not verified by its owner."],
+        [EventShieldReason.UNKNOWN_DEVICE, E2ePadlockIcon.Normal, "Encrypted by an unknown or deleted device."],
+        [
+            EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
+            E2ePadlockIcon.Warning,
+            "The authenticity of this encrypted message can't be guaranteed on this device.",
+        ],
+        [EventShieldReason.MISMATCHED_SENDER_KEY, E2ePadlockIcon.Warning, "Encrypted by an unverified session"],
+        [EventShieldReason.SENT_IN_CLEAR, E2ePadlockIcon.Warning, "Not encrypted"],
+        [
+            EventShieldReason.VERIFICATION_VIOLATION,
+            E2ePadlockIcon.Warning,
+            "Sender's verified digital identity was reset",
+        ],
+        [
+            EventShieldReason.MISMATCHED_SENDER,
+            E2ePadlockIcon.Warning,
+            "The sender of the event does not match the owner of the device that sent it.",
+        ],
+    ])("maps shield reason %s to an icon view state", (shieldReason, expectedIcon, expectedTitle) => {
+        const state = getEventTileE2ePadlockViewState(
+            makeInput({
+                shieldColour: expectedIcon === E2ePadlockIcon.Normal ? EventShieldColour.GREY : EventShieldColour.RED,
+                shieldReason,
+            }),
+        );
+
+        expect(state).toEqual({
+            kind: "icon",
+            icon: expectedIcon,
+            title: expectedTitle,
+        });
+    });
+
+    it("keeps forwarded-message state renderable by the shared-message indicator", () => {
+        const mxEvent = makeEvent();
+        jest.spyOn(mxEvent, "getKeyForwardingUser").mockReturnValue("@bob:example.org");
+
+        const state = getEventTileE2ePadlockViewState(
+            makeInput({
+                mxEvent,
+                shieldColour: EventShieldColour.GREY,
+                shieldReason: EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
+            }),
+        );
+
+        expect(state).toEqual({
+            kind: "messageShared",
+            keyForwardingUserId: "@bob:example.org",
+            roomId,
+        });
     });
 });
