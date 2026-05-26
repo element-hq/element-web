@@ -45,12 +45,6 @@ function createRoomState(displayNames: Record<string, string | undefined> = {}):
     return Object.assign(new EventEmitter(), { getMember }) as TestRoomState;
 }
 
-function createRoomStateWithoutEmitter(displayNames: Record<string, string | undefined> = {}): RoomState {
-    return {
-        getMember: createGetMember(displayNames),
-    } as unknown as RoomState;
-}
-
 function createRoom(roomState: RoomState): Room {
     const room = {
         getLiveTimeline: jest.fn(() => ({
@@ -213,22 +207,6 @@ describe("E2eMessageSharedIconViewModel", () => {
         expect(newRoomState.listenerCount(RoomStateEvent.Events)).toBe(1);
         expect(vm.getSnapshot().displayName).toBe("Alice");
         expect(listener).toHaveBeenCalledTimes(1);
-    });
-
-    it("handles room state objects without event emitter methods", () => {
-        const roomState = createRoomStateWithoutEmitter({ [USER_ID]: "Bob" });
-        const client = createClient({ [ROOM_ID]: roomState });
-        const vm = new E2eMessageSharedIconViewModel({
-            client,
-            roomId: ROOM_ID,
-            keyForwardingUserId: USER_ID,
-        });
-
-        expect(vm.getSnapshot()).toMatchObject({
-            displayName: "Bob",
-            userId: USER_ID,
-        });
-        expect(() => vm.dispose()).not.toThrow();
     });
 
     it("does not emit updates when setters receive unchanged values", () => {

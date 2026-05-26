@@ -13,11 +13,6 @@ import {
     type E2eMessageSharedIconViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-interface RoomStateEventEmitter {
-    on(event: string | symbol, listener: (...args: unknown[]) => void): void;
-    off(event: string | symbol, listener: (...args: unknown[]) => void): void;
-}
-
 export interface E2eMessageSharedIconViewModelProps {
     /** Matrix client used to look up room membership state. */
     client: MatrixClient;
@@ -70,7 +65,7 @@ export class E2eMessageSharedIconViewModel
         this.teardownRoomStateListener();
 
         const roomState = this.getForwardRoomState();
-        if (!E2eMessageSharedIconViewModel.isRoomStateEventEmitter(roomState)) return;
+        if (!roomState) return;
 
         this.roomStateListenerDisposables = new Disposables();
         roomState.on(RoomStateEvent.Events, this.updateSnapshotFromProps);
@@ -102,14 +97,5 @@ export class E2eMessageSharedIconViewModel
         const forwardingMember = roomState?.getMember(props.keyForwardingUserId);
 
         return forwardingMember?.rawDisplayName ?? props.keyForwardingUserId;
-    }
-
-    private static isRoomStateEventEmitter(
-        roomState: RoomState | undefined,
-    ): roomState is RoomState & RoomStateEventEmitter {
-        return (
-            typeof (roomState as RoomStateEventEmitter | undefined)?.on === "function" &&
-            typeof (roomState as RoomStateEventEmitter | undefined)?.off === "function"
-        );
     }
 }
