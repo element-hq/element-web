@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventTimeline, RoomStateEvent, type MatrixClient, type RoomState } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
+    Disposables,
     type E2eMessageSharedIconViewModel as E2eMessageSharedIconViewModelInterface,
     type E2eMessageSharedIconViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -30,7 +31,7 @@ export class E2eMessageSharedIconViewModel
     extends BaseViewModel<E2eMessageSharedIconViewSnapshot, E2eMessageSharedIconViewModelProps>
     implements E2eMessageSharedIconViewModelInterface
 {
-    private roomStateListenerCleanup?: () => void;
+    private roomStateListenerDisposables?: Disposables;
 
     public constructor(props: E2eMessageSharedIconViewModelProps) {
         super(props, E2eMessageSharedIconViewModel.computeSnapshot(props));
@@ -71,15 +72,16 @@ export class E2eMessageSharedIconViewModel
         const roomState = this.getForwardRoomState();
         if (!E2eMessageSharedIconViewModel.isRoomStateEventEmitter(roomState)) return;
 
+        this.roomStateListenerDisposables = new Disposables();
         roomState.on(RoomStateEvent.Events, this.updateSnapshotFromProps);
-        this.roomStateListenerCleanup = (): void => {
+        this.roomStateListenerDisposables.track(() => {
             roomState.off(RoomStateEvent.Events, this.updateSnapshotFromProps);
-        };
+        });
     }
 
     private teardownRoomStateListener(): void {
-        this.roomStateListenerCleanup?.();
-        this.roomStateListenerCleanup = undefined;
+        this.roomStateListenerDisposables?.dispose();
+        this.roomStateListenerDisposables = undefined;
     }
 
     private getForwardRoomState(): RoomState | undefined {
