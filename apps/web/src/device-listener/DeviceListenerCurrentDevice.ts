@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { type LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
+import { LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -17,6 +17,7 @@ import {
     RoomStateEvent,
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { type DeviceListener, type DeviceState } from ".";
 import {
@@ -39,6 +40,11 @@ export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disa
  * Account data key to indicate whether the user has chosen to enable or disable recovery.
  */
 export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
+
+/**
+ * We remind the user to verify their device 2 days after they dismiss the toast.
+ */
+const DEVICE_VERIFICATION_NAG_INTERVAL = 2 * 24 * 60 * 60 * 1000;
 
 /**
  * Handles all of DeviceListener's work that relates to the current device.
@@ -124,6 +130,19 @@ export class DeviceListenerCurrentDevice {
      * them again until they refresh or restart the app.
      */
     public dismissEncryptionSetup(): void {
+        // If the user dismissed the "verify this session" toast, then we will
+        // re-show it later if the device still isn't verified.
+        if (this.deviceState === "verify_this_session") {
+            setTimeout(() => {
+                if (this.deviceState === "verify_this_session") {
+                    const logSpan = new LogSpan(this.logger, "nag_" + secureRandomString(4));
+                    logSpan.info("Re-showing device verification toast");
+                    this.dismissedThisDeviceToast = false;
+                    this.setDeviceState("verify_this_session", logSpan);
+                }
+            }, DEVICE_VERIFICATION_NAG_INTERVAL);
+        }
+
         this.dismissedThisDeviceToast = true;
         this.deviceListener.recheck();
     }
@@ -218,7 +237,7 @@ export class DeviceListenerCurrentDevice {
         } else {
             // Everything is OK - no need to show a toast
             logSpan.info("No toast needed");
-            await this.setDeviceState("ok", logSpan);
+            this.setDeviceState("ok", logSpan);
         }
     }
 
@@ -252,14 +271,14 @@ export class DeviceListenerCurrentDevice {
             logSpan.warn(fullMessage, ...logItems);
         }
 
-        await this.setDeviceState(newState, logSpan);
+        this.setDeviceState(newState, logSpan);
     }
 
     /**
      * Set the state of the device, and perform any actions necessary in
      * response to the state changing.
      */
-    private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
+    private setDeviceState(newState: DeviceState, logSpan: LogSpan): void {
         this.deviceState = newState;
 
         this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
