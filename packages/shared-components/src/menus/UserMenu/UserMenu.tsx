@@ -102,7 +102,7 @@ export declare interface UserMenuViewActions {
 export type UserMenuViewProps = {
     vm: ViewModel<UserMenuViewSnapshot, UserMenuViewActions>;
     /**
-     * Class name for the trigger
+     * Class name for the wrapper
      */
     className?: string;
 };
