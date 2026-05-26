@@ -35,12 +35,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import {
-    CryptoEvent,
-    EventShieldColour,
-    type EventShieldReason,
-    type UserVerificationStatus,
-} from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId, uniqBy } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -88,7 +82,6 @@ import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../event
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
@@ -141,7 +134,7 @@ import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadLis
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
-import { getEventTileE2ePadlockViewState } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eState";
+import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -291,18 +284,6 @@ export interface EventTileProps {
 interface IState {
     interaction: EventTileInteractionState;
 
-    /**
-     * E2EE shield we should show for decryption problems.
-     *
-     * Note this will be `EventShieldColour.NONE` for all unencrypted events, **including those in encrypted rooms**.
-     */
-    shieldColour: EventShieldColour;
-
-    /**
-     * Reason code for the E2EE shield. `null` if `shieldColour` is `EventShieldColour.NONE`
-     */
-    shieldReason: EventShieldReason | null;
-
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null | undefined;
 
@@ -317,6 +298,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
     private replyChain = createRef<ReplyChain>();
+    private e2eViewModel: EventTileE2eViewModel;
+    private e2eViewModelSubscription?: () => void;
 
     public readonly ref = createRef<HTMLElement>();
 
@@ -328,7 +311,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
-    private unmounted = false;
     private readonly id = uniqueId();
     private staleHoverCheckActive = false;
 
@@ -343,14 +325,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.state = {
             interaction: initialEventTileInteractionState,
 
-            shieldColour: EventShieldColour.NONE,
-            shieldReason: null,
-
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
 
             thread,
         };
+
+        this.e2eViewModel = new EventTileE2eViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            mxEvent: this.props.mxEvent,
+            isRoomEncrypted: this.context.isRoomEncrypted,
+            eventSendStatus: this.props.eventSendStatus,
+            enableListeners: !this.props.forExport,
+        });
 
         // don't do RR animations until we are mounted
         this.suppressReadReceiptAnimation = true;
@@ -378,11 +365,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidMount(): void {
-        this.unmounted = false;
         this.suppressReadReceiptAnimation = false;
+        this.e2eViewModelSubscription = this.e2eViewModel.subscribe(() => {
+            this.forceUpdate();
+        });
+        this.e2eViewModel.start();
+
         const client = MatrixClientPeg.safeGet();
         if (!this.props.forExport) {
-            client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
             this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
             DecryptionFailureTracker.instance.addVisibleEvent(this.props.mxEvent);
@@ -402,8 +392,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const room = client.getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);
-
-        this.verifyEvent();
     }
 
     private readonly updateThread = (thread: Thread): void => {
@@ -422,7 +410,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.stopStaleHoverCheck();
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
             const room = client.getRoom(this.props.mxEvent.getRoomId());
             room?.off(ThreadEvent.New, this.onNewThread);
@@ -434,11 +421,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.props.mxEvent.removeListener(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
         this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
-        this.unmounted = false;
+        this.e2eViewModelSubscription?.();
+        this.e2eViewModelSubscription = undefined;
+        this.e2eViewModel.dispose();
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
 
-    public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
+    public componentDidUpdate(_prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
         // Some overlays, such as portalled tooltips, can interrupt the normal mouseleave path.
         // While hover is active, verify it against the browser's real :hover state on mouse movement.
         if (!prevState.interaction.hover && this.state.interaction.hover) {
@@ -452,10 +441,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             MatrixClientPeg.safeGet().on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
-        // re-check the sender verification as outgoing events progress through the send process.
-        if (prevProps.eventSendStatus !== this.props.eventSendStatus) {
-            this.verifyEvent();
-        }
+        this.e2eViewModel.setProps({
+            mxEvent: this.props.mxEvent,
+            isRoomEncrypted: this.context.isRoomEncrypted,
+            eventSendStatus: this.props.eventSendStatus,
+            enableListeners: !this.props.forExport,
+        });
 
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
 
@@ -570,52 +561,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     /** called when the event is decrypted after we show it.
      */
     private readonly onDecrypted = (): void => {
-        // we need to re-verify the sending device.
-        this.verifyEvent();
+        // E2E padlock verification is handled by EventTileE2eViewModel; this refreshes the rest of the tile body.
         this.forceUpdate();
-    };
-
-    private readonly onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
-        if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent();
-        }
     };
 
     /** called when the event is edited after we show it. */
     private readonly onReplaced = (): void => {
+        // E2E padlock verification is handled by EventTileE2eViewModel; this refreshes the rest of the tile body.
         this.forceUpdate();
-        // re-verify the event if it is replaced (the edit may not be verified)
-        this.verifyEvent();
     };
-
-    private verifyEvent(): void {
-        this.doVerifyEvent().catch((e) => {
-            const event = this.props.mxEvent;
-            logger.error(`Error getting encryption info on event ${event.getId()} in room ${event.getRoomId()}`, e);
-        });
-    }
-
-    private async doVerifyEvent(): Promise<void> {
-        // if the event was edited, show the verification info for the edit, not
-        // the original
-        const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
-
-        if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
-            this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
-            return;
-        }
-
-        const encryptionInfo =
-            (await MatrixClientPeg.safeGet().getCrypto()?.getEncryptionInfoForEvent(mxEvent)) ?? null;
-        if (this.unmounted) return;
-        if (encryptionInfo === null) {
-            // likely a decryption error
-            this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
-            return;
-        }
-
-        this.setState({ shieldColour: encryptionInfo.shieldColour, shieldReason: encryptionInfo.shieldReason });
-    }
 
     private propsEqual(objA: EventTileProps, objB: EventTileProps): boolean {
         const keysA = Object.keys(objA) as Array<keyof EventTileProps>;
@@ -724,17 +678,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     private renderE2EPadlock(): ReactNode {
-        // if the event was edited, show the verification info for the edit, not
-        // the original
-        const verificationEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
-        const e2ePadlockViewState = getEventTileE2ePadlockViewState({
-            mxEvent: this.props.mxEvent,
-            verificationEvent,
-            shieldColour: this.state.shieldColour,
-            shieldReason: this.state.shieldReason,
-            isRoomEncrypted: this.context.isRoomEncrypted,
-            isLocalRoom: isLocalRoom(verificationEvent.getRoomId()!),
-        });
+        const e2ePadlockViewState = this.e2eViewModel.getSnapshot();
 
         switch (e2ePadlockViewState.kind) {
             case "none":
