@@ -65,7 +65,6 @@
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
             "postcss-mixins": "patches/postcss-mixins.patch",
-            "app-builder-lib": "patches/app-builder-lib.patch",
             "knip": "patches/knip.patch",
             "plist": "patches/plist.patch",
             "@dnd-kit/abstract": "patches/@dnd-kit__abstract.patch"
