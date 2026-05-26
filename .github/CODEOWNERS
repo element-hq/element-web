@@ -21,9 +21,15 @@
 
 
 /apps/web/src/models/Call.ts                             @element-hq/element-call-reviewers
+/apps/web/test/unit-tests/models/Call-test.ts            @element-hq/element-call-reviewers
+/apps/web/src/stores/CallStore.ts                        @element-hq/element-call-reviewers
+/apps/web/test/unit-tests/stores/CallStore-test.ts       @element-hq/element-call-reviewers
 /apps/web/src/call-types.ts                              @element-hq/element-call-reviewers
 /apps/web/src/components/views/voip                      @element-hq/element-call-reviewers
-/apps/web/playwright/e2e/voip/element-call.spec.ts       @element-hq/element-call-reviewers
+/apps/web/res/css/views/voip                             @element-hq/element-call-reviewers
+/apps/web/playwright/e2e/voip                            @element-hq/element-call-reviewers
+/apps/web/playwright/snapshots/voip                      @element-hq/element-call-reviewers
+/apps/web/test/test-utils/call.ts                        @element-hq/element-call-reviewers
 
 # Ignore translations as those will be updated by GHA for Localazy download
 /apps/web/src/i18n/strings

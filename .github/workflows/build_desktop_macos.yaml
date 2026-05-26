@@ -70,7 +70,7 @@ permissions: {} # No permissions required
 jobs:
     build:
         name: Build macOS Universal
-        runs-on: macos-15 # M1
+        runs-on: macos-26 # M1
         environment: ${{ inputs.sign && 'Desktop Apple' || '' }}
         steps:
             - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1

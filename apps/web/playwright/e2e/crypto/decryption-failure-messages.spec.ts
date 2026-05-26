@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
 import type { Preset, RoomMemberEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
 import {
@@ -118,6 +120,9 @@ test.describe("Cryptography", function () {
                 user: alice,
                 bot: bob,
             }) => {
+                await rejectToastIfExists(page, "Verify this device");
+                await rejectToastIfExists(page, "Notifications");
+
                 // Bob creates an encrypted room and sends a message to it. He then invites Alice
                 const roomId = await bob.evaluate(
                     async (client, { alice }) => {
@@ -224,6 +229,9 @@ test.describe("Cryptography", function () {
                 user: alice,
                 bot: bob,
             }) => {
+                await rejectToastIfExists(page, "Verify this device");
+                await rejectToastIfExists(page, "Notifications");
+
                 // Bob:
                 // - creates an encrypted room,
                 // - invites Alice,

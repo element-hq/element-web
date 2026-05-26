@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render } from "jest-matrix-react";
+import { render, waitFor } from "jest-matrix-react";
 import React from "react";
 import { mocked } from "jest-mock";
 import { type RoomMember, type RoomState } from "matrix-js-sdk/src/matrix";
@@ -14,7 +14,7 @@ import { E2eMessageSharedIcon } from "../../../../../../src/components/views/roo
 import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../../test-utils";
 
 describe("E2eMessageSharedIcon", () => {
-    it("renders correctly for a known user", () => {
+    it("renders correctly for a known user", async () => {
         const mockClient = createTestClient();
         const mockMember = { rawDisplayName: "Bob" } as RoomMember;
         const mockState = {
@@ -34,22 +34,26 @@ describe("E2eMessageSharedIcon", () => {
             withClientContextRenderOptions(mockClient),
         );
 
-        expect(result.container).toMatchSnapshot();
-        expect(result.container.firstChild).toHaveAccessibleName(
-            "Bob (@bob:example.com) shared this message since you were not in the room when it was sent.",
+        await waitFor(() =>
+            expect(result.container.firstChild).toHaveAccessibleName(
+                "Bob (@bob:example.com) shared this message since you were not in the room when it was sent.",
+            ),
         );
+        expect(result.container).toMatchSnapshot();
     });
 
-    it("renders correctly for an unknown user", () => {
+    it("renders correctly for an unknown user", async () => {
         const mockClient = createTestClient();
         const result = render(
             <E2eMessageSharedIcon keyForwardingUserId="@bob:example.com" roomId="!roomId" />,
             withClientContextRenderOptions(mockClient),
         );
 
-        expect(result.container).toMatchSnapshot();
-        expect(result.container.firstChild).toHaveAccessibleName(
-            "@bob:example.com (@bob:example.com) shared this message since you were not in the room when it was sent.",
+        await waitFor(() =>
+            expect(result.container.firstChild).toHaveAccessibleName(
+                "@bob:example.com (@bob:example.com) shared this message since you were not in the room when it was sent.",
+            ),
         );
+        expect(result.container).toMatchSnapshot();
     });
 });

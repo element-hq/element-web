@@ -83,7 +83,6 @@
         "rename": "Cambiar nome",
         "reply": "Resposta",
         "reply_in_thread": "Responder nun fío",
-        "report_content": "Denunciar contido",
         "resend": "Volver a enviar",
         "reset": "Restablecer",
         "resume": "Retomar",
@@ -1341,21 +1340,10 @@
     },
     "report_content": {
         "description": "Ao denunciar esta mensaxe vasnos enviar o seu 'event ID' único á administración do servidor. Se as mensaxes da sala están cifradas, a administración do servidor non poderá ler o texto da mensaxe ou ver imaxes ou ficheiros.",
-        "disagree": "En desacordo",
         "hide_messages_from_user": "Marcar para agochar as mensaxes actuais e futuras desta usuaria.",
         "ignore_user": "Ignorar usuaria",
-        "illegal_content": "Contido ilegal",
         "missing_reason": "Escribe a razón do informe.",
-        "nature": "Escolle unha opción e describe a razón pola que esta é unha mensaxe abusiva.",
-        "nature_disagreement": "O que escribe esta usuaria non é correcto.\nSerá denunciado á moderación da sala.",
-        "nature_illegal": "Esta usuaria está a comportarse dun xeito ilegal, por exemplo ameazando a persoas ou exhibindo violencia.\nEsto vaise denunciar ante a moderación da sala que podería presentar o caso ante as autoridades legais.",
-        "nature_other": "Outra razón. Por favor, describe o problema.\nInformaremos disto á moderación da sala.",
-        "nature_spam": "Esta usuaria está facendo spam na sala con anuncios, ligazóns a anuncios ou propaganda.\nEsto vai ser denunciado ante a moderación da sala.",
-        "other_label": "Outro",
-        "report_content_to_homeserver": "Denuncia sobre contido á Administración do teu servidor",
-        "report_entire_room": "Denunciar a toda a sala",
-        "spam_or_propaganda": "Spam ou propaganda",
-        "toxic_behaviour": "Comportamento tóxico"
+        "report_content_to_homeserver": "Denuncia sobre contido á Administración do teu servidor"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Fallo ao descifrar %(failedCount)s sesións!",

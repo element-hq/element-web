@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`E2ePadlock renders a 'DecryptionFailure' icon 1`] = `
-<DocumentFragment>
+exports[`E2ePadlock > renders a 'DecryptionFailure' icon 1`] = `
+<div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_c_"
-    class="mx_EventTile_e2eIcon"
+    aria-labelledby="react-use-id-1"
+    class="E2ePadlock-module_e2ePadlock E2ePadlock-module_decryptionFailure"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
-      color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -22,20 +22,20 @@ exports[`E2ePadlock renders a 'DecryptionFailure' icon 1`] = `
       />
     </svg>
   </div>
-</DocumentFragment>
+</div>
 `;
 
-exports[`E2ePadlock renders a 'Normal' icon 1`] = `
-<DocumentFragment>
+exports[`E2ePadlock > renders a 'Normal' icon 1`] = `
+<div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_0_"
-    class="mx_EventTile_e2eIcon"
+    aria-labelledby="react-use-id-1"
+    class="E2ePadlock-module_e2ePadlock E2ePadlock-module_normal"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
-      color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -52,20 +52,20 @@ exports[`E2ePadlock renders a 'Normal' icon 1`] = `
       />
     </svg>
   </div>
-</DocumentFragment>
+</div>
 `;
 
-exports[`E2ePadlock renders a 'Warning' icon 1`] = `
-<DocumentFragment>
+exports[`E2ePadlock > renders a 'Warning' icon 1`] = `
+<div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_6_"
-    class="mx_EventTile_e2eIcon"
+    aria-labelledby="react-use-id-1"
+    class="E2ePadlock-module_e2ePadlock E2ePadlock-module_warning"
     data-testid="e2e-padlock"
+    role="img"
     tabindex="0"
   >
     <svg
-      color="var(--cpd-color-icon-critical-primary)"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -77,5 +77,5 @@ exports[`E2ePadlock renders a 'Warning' icon 1`] = `
       />
     </svg>
   </div>
-</DocumentFragment>
+</div>
 `;
