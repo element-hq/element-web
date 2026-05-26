@@ -1,8 +1,8 @@
-# syntax=docker.io/docker/dockerfile:1.23-labs@sha256:7eca9451d94f9b8ad22e44988b92d595d3e4d65163794237949a8c3413fbed5d
+# syntax=docker.io/docker/dockerfile:1.24-labs@sha256:7d49dad25a050e14338ba7028b0460243f9d911dedc160a8fe20c34738fef3af
 # Context must be the root of the monorepo
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:2c00db8852d28215c6203fafe9f05046acd9fdd48bcfc42467f4cba39b42dab4 AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:44aeb8a19d0a201cdcb18ea3b25de9249454e6fc3cd05731584659859022fefb AS builder
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
@@ -25,7 +25,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:1df9285ed5bdaaad9ca503ac608e12fe1ba93136bb249fe976477989c1db4ede
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:01cb6604af2fd0dce17f7aab60759e47ad288bec0425ad4b43e749369d2eecca
 
 # Need root user to install packages & manipulate the usr directory
 USER root

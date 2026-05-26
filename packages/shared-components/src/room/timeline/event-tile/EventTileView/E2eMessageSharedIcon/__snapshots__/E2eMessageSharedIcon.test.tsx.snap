@@ -4,7 +4,7 @@ exports[`E2eMessageSharedIconView > renders an unknown user tooltip state 1`] = 
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_6_"
+    aria-labelledby="react-use-id-1"
     class="E2ePadlock-module_e2ePadlock"
     data-testid="e2e-padlock"
     role="img"
@@ -35,7 +35,7 @@ exports[`E2eMessageSharedIconView > renders the default shared-message icon 1`] 
 <div>
   <div
     aria-label="State of the end-to-end encryption"
-    aria-labelledby="_r_0_"
+    aria-labelledby="react-use-id-1"
     class="E2ePadlock-module_e2ePadlock"
     data-testid="e2e-padlock"
     role="img"
