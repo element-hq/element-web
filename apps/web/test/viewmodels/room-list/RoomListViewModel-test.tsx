@@ -1185,6 +1185,101 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections[0].roomIds[0]).toBe("!fav1:server");
                 expect(snapshot.roomListState.activeRoomIndex).toBe(0);
             });
+
+            describe("Drag and drop", () => {
+                beforeEach(() => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+                    // Ensure section header VMs are created before tests that interact with them
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                    viewModel.getSectionHeaderViewModel(CHATS_TAG);
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority);
+                });
+
+                it("should delegate changeSectionOrder to RoomListStoreV3.reorderSection", () => {
+                    const reorderSpy = jest
+                        .spyOn(RoomListStoreV3.instance, "reorderSection")
+                        .mockResolvedValue(undefined);
+
+                    viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
+
+                    expect(reorderSpy).toHaveBeenCalledWith(DefaultTagID.Favourite, CHATS_TAG);
+                });
+
+                it("should collapse every section on drag start", () => {
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
+
+                    viewModel.onSectionDragStart();
+
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(false);
+
+                    for (const section of viewModel.getSnapshot().sections) {
+                        expect(section.roomIds).toEqual([]);
+                    }
+                });
+
+                it("should restore the pre-drag expansion state on drag end", () => {
+                    // Collapse Favourite before the drag; other sections remain expanded
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
+
+                    viewModel.onSectionDragStart();
+                    viewModel.onSectionDragEnd();
+
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(true);
+
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([]);
+                    expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([
+                        "!reg1:server",
+                        "!reg2:server",
+                    ]);
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.LowPriority)!.roomIds).toEqual([
+                        "!low1:server",
+                    ]);
+                });
+
+                it("should re-snapshot expansion state on each drag start", () => {
+                    // First cycle: Favourite is collapsed before the drag
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
+                    viewModel.onSectionDragStart();
+                    viewModel.onSectionDragEnd();
+
+                    // Between cycles: collapse CHATS_TAG as well
+                    viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
+                    viewModel.onSectionDragStart();
+                    viewModel.onSectionDragEnd();
+
+                    // The second drag end must restore the state captured at the second drag start
+                    // (Favourite collapsed, CHATS_TAG collapsed, LowPriority expanded), not the first cycle's snapshot.
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(true);
+                });
+
+                it("should be a no-op when drag end is called without drag start", () => {
+                    viewModel.onSectionDragEnd();
+
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(true);
+
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([
+                        "!fav1:server",
+                        "!fav2:server",
+                    ]);
+                    expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([
+                        "!reg1:server",
+                        "!reg2:server",
+                    ]);
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.LowPriority)!.roomIds).toEqual([
+                        "!low1:server",
+                    ]);
+                });
+            });
         });
     });
 

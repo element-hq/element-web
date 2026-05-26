@@ -19,6 +19,7 @@ import {
     CHATS_TAG,
     CUSTOM_SECTION_TAG_PREFIX,
     isSectionTag,
+    reorderSection,
 } from "../../../../src/stores/room-list-v3/section";
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
@@ -332,6 +333,87 @@ describe("section", () => {
 
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             expect(customDataCall![3]).not.toHaveProperty(tag);
+        });
+    });
+
+    describe("reorderSection", () => {
+        const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc`;
+
+        function mockSettings(
+            orderedTags: string[],
+            customData: Record<string, { tag: string; name: string }> = {},
+        ): void {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.OrderedCustomSections") return orderedTags;
+                if (setting === "RoomList.CustomSectionData") return customData;
+                return null;
+            });
+        }
+
+        it.each<{
+            description: string;
+            initial: string[];
+            customData: Record<string, { tag: string; name: string }>;
+            source: string;
+            target: string;
+            expected: string[];
+        }>([
+            {
+                description: "a default section after another default",
+                initial: [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority],
+                customData: {},
+                source: DefaultTagID.Favourite,
+                target: CHATS_TAG,
+                expected: [CHATS_TAG, DefaultTagID.Favourite, DefaultTagID.LowPriority],
+            },
+            {
+                description: "a custom section after a default",
+                initial: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
+                customData: { [customTag]: { tag: customTag, name: "Custom" } },
+                source: customTag,
+                target: DefaultTagID.LowPriority,
+                expected: [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority, customTag],
+            },
+        ])(
+            "moves $description and saves the new order at ACCOUNT level",
+            async ({ initial, customData, source, target, expected }) => {
+                mockSettings(initial, customData);
+                const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+                await reorderSection(source, target);
+
+                expect(setValueSpy).toHaveBeenCalledWith(
+                    "RoomList.OrderedCustomSections",
+                    null,
+                    expect.anything(),
+                    expected,
+                );
+            },
+        );
+
+        it.each([
+            {
+                description: "source and target are the same",
+                source: CHATS_TAG,
+                target: CHATS_TAG,
+            },
+            {
+                description: "source is not in the ordered list",
+                source: `${CUSTOM_SECTION_TAG_PREFIX}unknown`,
+                target: CHATS_TAG,
+            },
+            {
+                description: "target is not in the ordered list",
+                source: DefaultTagID.Favourite,
+                target: `${CUSTOM_SECTION_TAG_PREFIX}unknown`,
+            },
+        ])("does nothing when $description", async ({ source, target }) => {
+            mockSettings([DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority]);
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            await reorderSection(source, target);
+
+            expect(setValueSpy).not.toHaveBeenCalled();
         });
     });
 
