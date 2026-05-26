@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { Button } from "@vector-im/compound-web";
+import { Button, Text } from "@vector-im/compound-web";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
@@ -108,12 +108,12 @@ export default function LogoutDialog(props: IProps): JSX.Element {
                         className="mx_EncryptionCard_noBorder"
                     >
                         <EncryptionCardEmphasisedContent>
-                            <p>{_t("auth|logout_dialog|setup_secure_backup_description")}</p>
-                            <div>
+                            <Text>{_t("auth|logout_dialog|setup_secure_backup_description")}</Text>
+                            <Text>
                                 <a target="_blank" href="https://element.io/en/help#encryption16">
                                     {_t("action|learn_more")} <PopOutIcon />
                                 </a>
-                            </div>
+                            </Text>
                         </EncryptionCardEmphasisedContent>
                         <EncryptionCardButtons>
                             <Button onClick={onGoToSettings} Icon={KeyIcon}>

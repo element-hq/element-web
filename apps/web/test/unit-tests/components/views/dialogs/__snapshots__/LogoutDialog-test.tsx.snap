@@ -51,10 +51,14 @@ exports[`LogoutDialog Prompts user to set up recovery if there is a backup on th
         class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
-        <div>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           <a
             href="https://element.io/en/help#encryption16"
             target="_blank"
@@ -76,7 +80,7 @@ exports[`LogoutDialog Prompts user to set up recovery if there is a backup on th
               />
             </svg>
           </a>
-        </div>
+        </p>
       </div>
       <div
         class="mx_EncryptionCard_buttons"
@@ -203,10 +207,14 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
         class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
-        <div>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           <a
             href="https://element.io/en/help#encryption16"
             target="_blank"
@@ -228,7 +236,7 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
               />
             </svg>
           </a>
-        </div>
+        </p>
       </div>
       <div
         class="mx_EncryptionCard_buttons"
@@ -355,10 +363,14 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
         class="_flex_4dswl_9 mx_EncryptionCard_emphasisedContent"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
-        <p>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
-        <div>
+        <p
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
           <a
             href="https://element.io/en/help#encryption16"
             target="_blank"
@@ -380,7 +392,7 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
               />
             </svg>
           </a>
-        </div>
+        </p>
       </div>
       <div
         class="mx_EncryptionCard_buttons"
