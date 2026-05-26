@@ -1030,11 +1030,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = eventTileRenderState.timestamp.displayState;
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
-        const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
-        const timestamp = showRealTimestamp ? messageTimestamp : dummyTimestamp;
-        const linkedTimestamp = showLinkedTimestamp ? linkedMessageTimestamp : dummyTimestamp;
+        const dummyTimestamp = eventTileRenderState.timestamp.showDummy ? (
+            <span className="mx_MessageTimestamp" />
+        ) : null;
+        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp
+            ? messageTimestamp
+            : dummyTimestamp;
+        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp
+            ? linkedMessageTimestamp
+            : dummyTimestamp;
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (hasPinnedMessageBadge) {
@@ -1052,8 +1057,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
-        const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
+        const groupTimestamp = eventTileRenderState.timestamp.showInGroupLine ? linkedTimestamp : null;
+        const ircTimestamp = eventTileRenderState.timestamp.showInIrcLine ? linkedTimestamp : null;
         const groupPadlock = eventTileRenderState.e2ePadlock.showInGroupLine && this.renderE2EPadlock();
         const ircPadlock = eventTileRenderState.e2ePadlock.showInIrcLine && this.renderE2EPadlock();
 

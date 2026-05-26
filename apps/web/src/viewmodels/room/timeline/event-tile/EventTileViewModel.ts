@@ -251,7 +251,14 @@ export interface EventTileRenderState {
         className: string;
     };
     /** EventTile timestamp render state. */
-    timestamp: EventTileTimestampSnapshot;
+    timestamp: EventTileTimestampSnapshot & {
+        /** Whether EventTile should render the placeholder timestamp used by IRC layout. */
+        showDummy: boolean;
+        /** Whether the timestamp slot belongs in the group-layout line. */
+        showInGroupLine: boolean;
+        /** Whether the timestamp slot belongs in the IRC-layout line. */
+        showInIrcLine: boolean;
+    };
     /** EventTile E2E padlock slot state. */
     e2ePadlock: {
         /** Whether the padlock should render in the group-layout timestamp area. */
@@ -280,7 +287,12 @@ export class EventTileViewModel {
             line: {
                 className: classNames("mx_EventTile_line", snapshot.line.classState),
             },
-            timestamp: snapshot.timestamp,
+            timestamp: {
+                ...snapshot.timestamp,
+                showDummy: useIRCLayout,
+                showInGroupLine: !useIRCLayout,
+                showInIrcLine: useIRCLayout,
+            },
             e2ePadlock: {
                 showInGroupLine: !useIRCLayout && showPadlock,
                 showInIrcLine: useIRCLayout && showPadlock,

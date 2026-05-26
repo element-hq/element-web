@@ -135,7 +135,7 @@ describe("EventTileViewModel", () => {
         expect(renderState.root.scrollToken).toBeUndefined();
         expect(renderState.root.isRenderingNotification).toBe(false);
         expect(renderState.line.className).toContain("mx_EventTile_line");
-        expect(renderState.timestamp).toBe(renderState.snapshot.timestamp);
+        expect(renderState.timestamp).toMatchObject(renderState.snapshot.timestamp);
     });
 
     it("derives E2E padlock placement for group layout", () => {
@@ -184,6 +184,61 @@ describe("EventTileViewModel", () => {
             showInGroupLine: false,
             showInIrcLine: false,
         });
+    });
+
+    it("derives timestamp slots for group layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                },
+                interaction: {
+                    hover: true,
+                },
+            }),
+        );
+
+        expect(renderState.timestamp.showDummy).toBe(false);
+        expect(renderState.timestamp.showInGroupLine).toBe(true);
+        expect(renderState.timestamp.showInIrcLine).toBe(false);
+    });
+
+    it("derives timestamp slots for IRC layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                },
+                interaction: {
+                    hover: true,
+                },
+            }),
+        );
+
+        expect(renderState.timestamp.showDummy).toBe(true);
+        expect(renderState.timestamp.showInGroupLine).toBe(false);
+        expect(renderState.timestamp.showInIrcLine).toBe(true);
+    });
+
+    it("keeps the IRC timestamp slot for the dummy timestamp when timestamps are hidden", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                },
+                interaction: {
+                    hover: true,
+                },
+                timestamp: {
+                    hideTimestamp: true,
+                },
+            }),
+        );
+
+        expect(renderState.timestamp.showDummy).toBe(true);
+        expect(renderState.timestamp.displayState.showLinkedTimestamp).toBe(false);
+        expect(renderState.timestamp.showInGroupLine).toBe(false);
+        expect(renderState.timestamp.showInIrcLine).toBe(true);
     });
 
     it("normalizes continuation by rendering mode and bubble layout", () => {
