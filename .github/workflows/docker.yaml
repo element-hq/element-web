@@ -127,7 +127,7 @@ jobs:
 
             - name: Get team registry token
               id: import-secrets
-              uses: hashicorp/vault-action@4c06c5ccf5c0761b6029f56cfb1dcf5565918a3b # v3
+              uses: hashicorp/vault-action@892a26828f195e65540a40b4768ae4571f51ebfc # v4
               if: github.event_name != 'pull_request'
               with:
                   url: https://vault.infra.ci.i.element.dev
