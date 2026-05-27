@@ -56,31 +56,28 @@ exports[`LogoutDialog Prompts user to set up recovery if there is a backup on th
         >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
-        <p
+        <a
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          href="https://element.io/en/help#encryption16"
+          target="_blank"
         >
-          <a
-            href="https://element.io/en/help#encryption16"
-            target="_blank"
+          Learn more
+           
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Learn more
-             
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
-              />
-              <path
-                d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
-              />
-            </svg>
-          </a>
-        </p>
+            <path
+              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+            />
+            <path
+              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+            />
+          </svg>
+        </a>
       </div>
       <div
         class="mx_EncryptionCard_buttons"
@@ -212,31 +209,28 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
         >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
-        <p
+        <a
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          href="https://element.io/en/help#encryption16"
+          target="_blank"
         >
-          <a
-            href="https://element.io/en/help#encryption16"
-            target="_blank"
+          Learn more
+           
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Learn more
-             
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
-              />
-              <path
-                d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
-              />
-            </svg>
-          </a>
-        </p>
+            <path
+              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+            />
+            <path
+              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+            />
+          </svg>
+        </a>
       </div>
       <div
         class="mx_EncryptionCard_buttons"
@@ -368,31 +362,28 @@ exports[`LogoutDialog Prompts user to set up recovery if there is no backup on t
         >
           This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.
         </p>
-        <p
+        <a
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          href="https://element.io/en/help#encryption16"
+          target="_blank"
         >
-          <a
-            href="https://element.io/en/help#encryption16"
-            target="_blank"
+          Learn more
+           
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Learn more
-             
-            <svg
-              fill="currentColor"
-              height="1em"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
-              />
-              <path
-                d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
-              />
-            </svg>
-          </a>
-        </p>
+            <path
+              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+            />
+            <path
+              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+            />
+          </svg>
+        </a>
       </div>
       <div
         class="mx_EncryptionCard_buttons"
