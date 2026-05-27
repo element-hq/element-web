@@ -20,7 +20,6 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
                 margin-top: 0 !important;
                 margin-left: 0 !important;
                 padding-top: 32px !important;
-                padding-left: 20px !important;
                 -webkit-app-region: drag;
                 -webkit-user-select: none;
             }
