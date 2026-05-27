@@ -37,21 +37,19 @@ describe("EditHistoryMessage", () => {
     beforeEach(() => {
         client = stubClient();
         developerMode = false;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            ((settingName: SettingKey) => {
-                switch (settingName) {
-                    case "developerMode":
-                        return developerMode;
-                    case "showTwelveHourTimestamps":
-                    case "TextualBody.enableBigEmoji":
-                        return false;
-                    case "Pill.shouldShowPillAvatar":
-                        return true;
-                    default:
-                        return null;
-                }
-            }) as typeof SettingsStore.getValue,
-        );
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(((settingName: SettingKey) => {
+            switch (settingName) {
+                case "developerMode":
+                    return developerMode;
+                case "showTwelveHourTimestamps":
+                case "TextualBody.enableBigEmoji":
+                    return false;
+                case "Pill.shouldShowPillAvatar":
+                    return true;
+                default:
+                    return null;
+            }
+        }) as typeof SettingsStore.getValue);
         jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
     });
 
@@ -67,8 +65,8 @@ describe("EditHistoryMessage", () => {
             user: "@alice:example.com",
             type: "m.room.message",
             content: {
-                msgtype: MsgType.Text,
-                body: "Original body",
+                "msgtype": MsgType.Text,
+                "body": "Original body",
                 "m.new_content": {
                     msgtype: MsgType.Text,
                     body: "Edited body",
@@ -242,8 +240,8 @@ describe("EditHistoryMessage", () => {
             type: "m.room.message",
             ts: 200,
             content: {
-                msgtype: MsgType.Text,
-                body: "Second",
+                "msgtype": MsgType.Text,
+                "body": "Second",
                 "m.new_content": {
                     msgtype: MsgType.Text,
                     body: "Second edited",
@@ -253,7 +251,10 @@ describe("EditHistoryMessage", () => {
         const setTimestampSpy = jest.spyOn(MessageTimestampViewModel.prototype, "setTimestamp");
         const setDisplayOptionsSpy = jest.spyOn(MessageTimestampViewModel.prototype, "setDisplayOptions");
 
-        const { getByRole, getByText, queryByRole, rerender } = renderComponent({ mxEvent: firstEvent, isTwelveHour: false });
+        const { getByRole, getByText, queryByRole, rerender } = renderComponent({
+            mxEvent: firstEvent,
+            isTwelveHour: false,
+        });
 
         expect(getByRole("button", { name: /remove/i })).toBeInTheDocument();
 
