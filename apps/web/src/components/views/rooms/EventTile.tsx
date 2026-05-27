@@ -318,6 +318,14 @@ function E2eMessageSharedIconWrapper({
             }),
     );
 
+    useEffect(() => {
+        vm.setRoomId(roomId);
+    }, [roomId, vm]);
+
+    useEffect(() => {
+        vm.setKeyForwardingUserId(keyForwardingUserId);
+    }, [keyForwardingUserId, vm]);
+
     return (
         <E2eMessageSharedIconView
             vm={vm}
@@ -723,7 +731,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             case "messageShared":
                 return (
                     <E2eMessageSharedIconWrapper
-                        key={`${e2ePadlockViewState.roomId}|${e2ePadlockViewState.keyForwardingUserId}`}
                         keyForwardingUserId={e2ePadlockViewState.keyForwardingUserId}
                         roomId={e2ePadlockViewState.roomId}
                     />

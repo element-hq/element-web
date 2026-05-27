@@ -24,6 +24,7 @@ type TestRoomState = EventEmitter & {
 const USER_ID = "@bob:example.com";
 const OTHER_USER_ID = "@alice:example.com";
 const ROOM_ID = "!roomId";
+const OTHER_ROOM_ID = "!otherRoomId";
 
 function createGetMember(
     displayNames: Record<string, string | undefined>,
@@ -128,7 +129,7 @@ describe("E2eMessageSharedIconViewModel", () => {
         expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it("builds a snapshot from the configured key forwarding user", () => {
+    it("updates when the key forwarding user changes", () => {
         const roomState = createRoomState({
             [USER_ID]: "Bob",
             [OTHER_USER_ID]: "Alice",
@@ -137,13 +138,64 @@ describe("E2eMessageSharedIconViewModel", () => {
         const vm = new E2eMessageSharedIconViewModel({
             client,
             roomId: ROOM_ID,
-            keyForwardingUserId: OTHER_USER_ID,
+            keyForwardingUserId: USER_ID,
         });
+        const listener = jest.fn();
+        vm.subscribe(listener);
+
+        vm.setKeyForwardingUserId(OTHER_USER_ID);
 
         expect(vm.getSnapshot()).toMatchObject({
             displayName: "Alice",
             userId: OTHER_USER_ID,
         });
+        expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it("updates and rebinds its room state listener when the room changes", () => {
+        const originalRoomState = createRoomState({ [USER_ID]: "Bob" });
+        const newRoomState = createRoomState({ [USER_ID]: "Alice" });
+        const client = createClient({
+            [ROOM_ID]: originalRoomState as unknown as RoomState,
+            [OTHER_ROOM_ID]: newRoomState as unknown as RoomState,
+        });
+        const vm = new E2eMessageSharedIconViewModel({
+            client,
+            roomId: ROOM_ID,
+            keyForwardingUserId: USER_ID,
+        });
+        const listener = jest.fn();
+        vm.subscribe(listener);
+
+        vm.setRoomId(OTHER_ROOM_ID);
+
+        expect(originalRoomState.listenerCount(RoomStateEvent.Events)).toBe(0);
+        expect(newRoomState.listenerCount(RoomStateEvent.Events)).toBe(1);
+        expect(vm.getSnapshot().displayName).toBe("Alice");
+        expect(listener).toHaveBeenCalledTimes(1);
+
+        originalRoomState.getMember.mockReturnValue({ rawDisplayName: "Ignored" } as RoomMember);
+        originalRoomState.emit(RoomStateEvent.Events);
+
+        expect(vm.getSnapshot().displayName).toBe("Alice");
+        expect(listener).toHaveBeenCalledTimes(1);
+
+        newRoomState.getMember.mockReturnValue({ rawDisplayName: "Carol" } as RoomMember);
+        newRoomState.emit(RoomStateEvent.Events);
+
+        expect(vm.getSnapshot().displayName).toBe("Carol");
+        expect(listener).toHaveBeenCalledTimes(2);
+    });
+
+    it("does not emit updates when setters receive unchanged values", () => {
+        const { vm } = createViewModel("Bob");
+        const listener = jest.fn();
+        vm.subscribe(listener);
+
+        vm.setRoomId(ROOM_ID);
+        vm.setKeyForwardingUserId(USER_ID);
+
+        expect(listener).not.toHaveBeenCalled();
     });
 
     it("removes its room state listener when disposed", () => {
