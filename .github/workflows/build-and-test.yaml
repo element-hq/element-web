@@ -194,7 +194,7 @@ jobs:
         name: "Prepare Element Desktop"
         uses: ./.github/workflows/build_desktop_prepare.yaml
         needs: build_ew
-        #        if: needs.build_ew.outputs.skip == 'false'
+        if: needs.build_ew.outputs.skip == 'false'
         permissions:
             contents: read
         with:
