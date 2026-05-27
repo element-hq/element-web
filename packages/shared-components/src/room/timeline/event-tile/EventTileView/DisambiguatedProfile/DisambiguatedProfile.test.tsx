@@ -8,7 +8,6 @@
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { createEvent, fireEvent } from "@testing-library/dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@test-utils";
 
@@ -69,8 +68,8 @@ describe("DisambiguatedProfileView", () => {
         }
     }
 
-    const getProfileContainer = (displayName: string): HTMLDivElement => {
-        const profileContainer = screen.getByText(displayName).closest("div");
+    const getProfileContainer = (displayName: string): HTMLElement => {
+        const profileContainer = screen.getByText(displayName).parentElement;
         if (!profileContainer) {
             throw new Error("Expected profile container to exist");
         }
@@ -107,11 +106,11 @@ describe("DisambiguatedProfileView", () => {
         );
 
         render(<DisambiguatedProfileView vm={vm} />);
-        await user.click(screen.getByText("Clickable User"));
+        await user.click(screen.getByRole("button", { name: "Clickable User" }));
         expect(onClick).toHaveBeenCalled();
     });
 
-    it("should set button semantics when onClick is provided", () => {
+    it("should render a native button when onClick is provided", () => {
         const vm = new DisambiguatedProfileViewModel(
             {
                 displayName: "Keyboard User",
@@ -120,13 +119,15 @@ describe("DisambiguatedProfileView", () => {
         );
 
         render(<DisambiguatedProfileView vm={vm} />);
-        const profileContainer = getProfileContainer("Keyboard User");
-        expect(profileContainer).toHaveAttribute("role", "button");
-        expect(profileContainer).toHaveAttribute("tabIndex", "0");
+        const profileButton = screen.getByRole("button", { name: "Keyboard User" });
+        expect(profileButton).toHaveAttribute("type", "button");
+        expect(profileButton).not.toHaveAttribute("role");
+        expect(profileButton).not.toHaveAttribute("tabIndex");
     });
 
-    it("should call onClick on keyboard activation keys", () => {
+    it("should call onClick on native keyboard activation keys", async () => {
         const onClick = vi.fn();
+        const user = userEvent.setup();
         const vm = new DisambiguatedProfileViewModel(
             {
                 displayName: "Keyboard User",
@@ -135,21 +136,18 @@ describe("DisambiguatedProfileView", () => {
         );
 
         render(<DisambiguatedProfileView vm={vm} />);
-        const profileContainer = getProfileContainer("Keyboard User");
+        const profileButton = screen.getByRole("button", { name: "Keyboard User" });
 
-        const enterEvent = createEvent.keyDown(profileContainer, { key: "Enter" });
-        fireEvent(profileContainer, enterEvent);
+        profileButton.focus();
+        await user.keyboard("{Enter}");
+        await user.keyboard(" ");
 
-        const spaceEvent = createEvent.keyDown(profileContainer, { key: " " });
-        fireEvent(profileContainer, spaceEvent);
-
-        expect(enterEvent.defaultPrevented).toBe(true);
-        expect(spaceEvent.defaultPrevented).toBe(true);
         expect(onClick).toHaveBeenCalledTimes(2);
     });
 
-    it("should not call onClick for non-activation keys", () => {
+    it("should not call onClick for non-activation keys", async () => {
         const onClick = vi.fn();
+        const user = userEvent.setup();
         const vm = new DisambiguatedProfileViewModel(
             {
                 displayName: "Keyboard User",
@@ -158,21 +156,22 @@ describe("DisambiguatedProfileView", () => {
         );
 
         render(<DisambiguatedProfileView vm={vm} />);
-        const profileContainer = getProfileContainer("Keyboard User");
+        const profileButton = screen.getByRole("button", { name: "Keyboard User" });
 
-        fireEvent.keyDown(profileContainer, { key: "Escape" });
+        profileButton.focus();
+        await user.keyboard("{Escape}");
         expect(onClick).not.toHaveBeenCalled();
     });
 
-    it("should not set button semantics when onClick is not provided", () => {
+    it("should render static text when onClick is not provided", () => {
         const vm = new DisambiguatedProfileViewModel({
             displayName: "Static User",
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
         const profileContainer = getProfileContainer("Static User");
-        expect(profileContainer).not.toHaveAttribute("role");
-        expect(profileContainer).not.toHaveAttribute("tabIndex");
+        expect(profileContainer.tagName).toBe("SPAN");
+        expect(screen.queryByRole("button", { name: "Static User" })).not.toBeInTheDocument();
     });
 
     it("should display tooltip title when provided", () => {
@@ -182,7 +181,7 @@ describe("DisambiguatedProfileView", () => {
         });
 
         render(<DisambiguatedProfileView vm={vm} />);
-        expect(screen.getByText("User With Tooltip").closest("div")).toHaveAttribute(
+        expect(getProfileContainer("User With Tooltip")).toHaveAttribute(
             "title",
             "User With Tooltip (@user:example.org)",
         );

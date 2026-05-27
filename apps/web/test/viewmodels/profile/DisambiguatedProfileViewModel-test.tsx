@@ -70,6 +70,15 @@ describe("DisambiguatedProfileViewModel", () => {
         expect(vm.getSnapshot()).toBe(prevSnapshot);
     });
 
+    it("should not expose onClick when no click handler is provided", () => {
+        const vm = new DisambiguatedProfileViewModel({
+            member,
+            fallbackName: "Fallback",
+        });
+
+        expect(vm.onClick).toBeUndefined();
+    });
+
     it("should keep onClick bound when extracted as a callback", () => {
         const onClick = jest.fn();
         const vm = new DisambiguatedProfileViewModel({

@@ -9,7 +9,28 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
+
+    &:where(button) {
+        appearance: none;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        box-sizing: content-box;
+        color: inherit;
+        cursor: pointer;
+        text-align: inherit;
+        vertical-align: bottom;
+    }
+
+    &:where(button):focus-visible {
+        outline: 2px solid var(--cpd-color-border-focused);
+        outline-offset: 2px;
+        border-radius: var(--cpd-space-0-5x);
+    }
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);

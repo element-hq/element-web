@@ -11,7 +11,21 @@ Please see LICENSE files in the repository root for full details.
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
+
+    &:where(button) {
+        /* Clear default button styling */
+        appearance: none;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        box-sizing: content-box;
+        cursor: pointer;
+        vertical-align: bottom;
+    }
 
     .mx_DisambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
