@@ -264,6 +264,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
 
             return (
                 <RoomListSectionHeaderView
+                    // Stable key per section avoids a @dnd-kit registration race when a new section is inserted.
+                    key={headerId}
                     vm={sectionHeaderVM}
                     isFocused={isFocused}
                     onFocus={onFocus}
