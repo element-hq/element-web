@@ -47,6 +47,7 @@
     },
     "pnpm": {
         "onlyBuiltDependencies": [
+            "canvas",
             "matrix-js-sdk"
         ],
         "ignoredBuiltDependencies": [
