@@ -6,15 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /*
- * Unit-test alternative to playwright/e2e/favicon/badge-overlay.spec.ts.
+ * Tests for BadgeOverlayRenderer (the 16x16 PNG used as the Windows taskbar overlay).
  *
  * Approach:
- *  1. Run under the existing Jest + jsdom setup, transpiled by the same babel
- *     pipeline as production (avoids the esbuild-vs-babel divergence the
- *     Playwright test has).
- *  2. Swap jest-canvas-mock's HTMLCanvasElement stubs for shims backed by
+ *  1. Swap jest-canvas-mock's HTMLCanvasElement stubs for shims backed by
  *     node-canvas so real pixels come out of toBlob().
- *  3. Drive the real BadgeOverlayRenderer and compare the PNG bytes against a
+ *  2. Drive the real BadgeOverlayRenderer and compare the PNG bytes against a
  *     stored baseline via jest-image-snapshot.
  */
 

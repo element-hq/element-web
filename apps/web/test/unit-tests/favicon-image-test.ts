@@ -6,16 +6,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /*
- * Unit-test alternative to playwright/e2e/favicon/favicon.spec.ts.
+ * Tests for the Favicon class (browser-tab favicon with a badge drawn over
+ * the Element logo).
  *
  * Approach:
- *  1. Run under the existing Jest + jsdom setup (same babel pipeline as prod).
- *  2. Swap jest-canvas-mock's HTMLCanvasElement stubs for shims backed by
+ *  1. Swap jest-canvas-mock's HTMLCanvasElement stubs for shims backed by
  *     node-canvas so real pixels come out.
- *  3. Pre-load the real Element favicon (apps/web/res/vector-icons/144.png)
+ *  2. Pre-load the real Element favicon (apps/web/res/vector-icons/144.png)
  *     as a node-canvas Image, then have document.createElement("img") return
  *     it so Favicon's internal baseImage is already populated.
- *  4. Drive the real Favicon class, run timers, then read the badged PNG out
+ *  3. Drive the real Favicon class, run timers, then read the badged PNG out
  *     of the <link rel=icon>'s href and compare via jest-image-snapshot.
  */
 

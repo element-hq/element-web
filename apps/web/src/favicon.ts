@@ -156,9 +156,10 @@ abstract class IconRenderer {
         this.context.stroke();
         this.context.fillStyle = params.textColor;
 
-        const text = typeof opt.n === "number" && opt.n > 999
-            ? (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+"
-            : "" + opt.n;
+        const text =
+            typeof opt.n === "number" && opt.n > 999
+                ? (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+"
+                : "" + opt.n;
         // Centre the glyph vertically on the badge using its measured bounding
         // box. `actualBoundingBoxAscent` is the distance from the alphabetic
         // baseline up to the top of the glyph, so placing the baseline at
