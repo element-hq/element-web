@@ -154,9 +154,6 @@ jobs:
                   spctl -a -vvv -t install /Volumes/Element/*.app
                   hdiutil detach /Volumes/Element
 
-            - name: Check ulimit
-              run: ulimit -n
-
             - name: "[Unsigned] Build App"
               if: inputs.sign == ''
               working-directory: apps/desktop
