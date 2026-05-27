@@ -291,6 +291,14 @@ interface IState {
     thread: Thread | null;
 }
 
+interface EventTileRenderInputs {
+    displayInfo: ReturnType<typeof getEventDisplayInfo>;
+    hasPinnedMessageBadge: boolean;
+    hasReactionsRow: boolean;
+    threadState: EventTileThreadState;
+    isOwnEvent: boolean;
+}
+
 // MUST be rendered within a RoomContext with a set timelineRenderingType
 export class UnwrappedEventTile extends React.Component<EventTileProps, IState> {
     private suppressReadReceiptAnimation: boolean;
@@ -844,23 +852,35 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return false;
     }
 
-    private createViewModelProps(
+    private createRenderInputs(
         displayInfo = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
             this.shouldHideEvent(),
         ),
-    ): EventTileViewModelProps {
-        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
+    ): EventTileRenderInputs {
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
-        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
-        const isEditing = !!this.props.editState;
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
         const threadState = this.threadState;
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
+
+        return {
+            displayInfo,
+            hasPinnedMessageBadge,
+            hasReactionsRow,
+            threadState,
+            isOwnEvent,
+        };
+    }
+
+    private createViewModelProps(inputs: EventTileRenderInputs = this.createRenderInputs()): EventTileViewModelProps {
+        const { displayInfo, hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
+        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
+        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
+        const isEditing = !!this.props.editState;
 
         return {
             event: {
@@ -952,20 +972,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const eventType = this.props.mxEvent.getType();
         const replacingEventId = this.props.mxEvent.replacingEventId();
 
-        const {
-            hasRenderer,
-            isBubbleMessage,
-            isInfoMessage,
-            isLeftAlignedBubbleMessage,
-            noBubbleEvent,
-            isSeeingThroughMessageHiddenForModeration,
-            isAlignedBetweenBubbles,
-        } = getEventDisplayInfo(
+        const displayInfo = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
             this.shouldHideEvent(),
         );
+        const { hasRenderer, isSeeingThroughMessageHiddenForModeration } = displayInfo;
         const { isQuoteExpanded } = this.state;
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
@@ -979,25 +992,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
-        const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
-        const hasReactionsRow = !isRedacted;
-        const threadState = this.threadState;
-        // Use `getSender()` because searched events might not have a proper `sender`.
-        const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
+        const renderInputs = this.createRenderInputs(displayInfo);
+        const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = renderInputs;
 
         // EventTile is still a class component, so sync the owned root VM before rendering its child views.
-        this.viewModel.setProps(
-            this.createViewModelProps({
-                hasRenderer,
-                isBubbleMessage,
-                isInfoMessage,
-                isLeftAlignedBubbleMessage,
-                noBubbleEvent,
-                isSeeingThroughMessageHiddenForModeration,
-                isAlignedBetweenBubbles,
-            }),
-        );
+        this.viewModel.setProps(this.createViewModelProps(renderInputs));
         const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;
 
