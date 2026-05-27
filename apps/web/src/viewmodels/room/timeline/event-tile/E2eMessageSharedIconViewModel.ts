@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { EventTimeline, RoomStateEvent, type MatrixClient, type RoomState } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    Disposables,
     type E2eMessageSharedIconViewModel as E2eMessageSharedIconViewModelInterface,
     type E2eMessageSharedIconViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -26,27 +25,9 @@ export class E2eMessageSharedIconViewModel
     extends BaseViewModel<E2eMessageSharedIconViewSnapshot, E2eMessageSharedIconViewModelProps>
     implements E2eMessageSharedIconViewModelInterface
 {
-    private roomStateListenerDisposables?: Disposables;
-
     public constructor(props: E2eMessageSharedIconViewModelProps) {
         super(props, E2eMessageSharedIconViewModel.computeSnapshot(props));
         this.setupRoomStateListener();
-        this.disposables.track(() => this.teardownRoomStateListener());
-    }
-
-    public setRoomId(roomId: string): void {
-        if (this.props.roomId === roomId) return;
-
-        this.props = { ...this.props, roomId };
-        this.setupRoomStateListener();
-        this.updateSnapshotFromProps();
-    }
-
-    public setKeyForwardingUserId(keyForwardingUserId: string): void {
-        if (this.props.keyForwardingUserId === keyForwardingUserId) return;
-
-        this.props = { ...this.props, keyForwardingUserId };
-        this.updateSnapshotFromProps();
     }
 
     private updateSnapshotFromProps = (): void => {
@@ -54,21 +35,10 @@ export class E2eMessageSharedIconViewModel
     };
 
     private setupRoomStateListener(): void {
-        this.teardownRoomStateListener();
-
         const roomState = this.getForwardRoomState();
         if (!roomState) return;
 
-        this.roomStateListenerDisposables = new Disposables();
-        roomState.on(RoomStateEvent.Events, this.updateSnapshotFromProps);
-        this.roomStateListenerDisposables.track(() => {
-            roomState.off(RoomStateEvent.Events, this.updateSnapshotFromProps);
-        });
-    }
-
-    private teardownRoomStateListener(): void {
-        this.roomStateListenerDisposables?.dispose();
-        this.roomStateListenerDisposables = undefined;
+        this.disposables.trackListener(roomState, RoomStateEvent.Events, this.updateSnapshotFromProps);
     }
 
     private getForwardRoomState(): RoomState | undefined {
