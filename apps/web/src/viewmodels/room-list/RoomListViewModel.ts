@@ -645,6 +645,10 @@ export class RoomListViewModel
     };
 
     public onSectionCreated = (tag: string): void => {
+        // Refresh roomsResult so the new section lands in the same snapshot as the scroll-to.
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomsMap(this.roomsResult);
         this.updateRoomListData(false, null, tag);
         this.showToast("section_created");
     };
