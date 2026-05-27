@@ -41,7 +41,17 @@
         "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel"
     },
     "left_panel": {
-        "open_dial_pad": "Ava numbriklahvistik"
+        "open_dial_pad": "Ava numbriklahvistik",
+        "separator_label": "Laiendamiseks klõpsa või lohista"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Loo kasutajakonto",
+            "got_an_account": "Kas sul on kasutajakonto juba olemas?",
+            "manage_account": "Halda kasutajakontot",
+            "sign_in": "Logi sisse",
+            "title": "Kasutajamenüü"
+        }
     },
     "notifications": {
         "all_messages": "Kõik sõnumid",
@@ -60,6 +70,7 @@
         },
         "jump_to_date": "Vaata kuupäeva",
         "jump_to_date_beginning": "Jututoa algus",
+        "jump_to_date_prompt": "Vali kuupäev, mida soovid vaadata",
         "pinned_message_badge": "Esiletõstetud sõnum",
         "status_bar": {
             "delete_all": "Kustuta kõik",
@@ -93,6 +104,7 @@
             "voice_call": "Ava %(roomName)s jututuba, kus on pooleli häälkõne"
         },
         "appearance": "Välimus",
+        "chat_moved": "Vestlus on tõstetud mujale",
         "collapse_filters": "Ahenda filtriloendit",
         "empty": {
             "no_chats": "Vestlusi veel ei leidu",
@@ -172,6 +184,14 @@
         "n_minutes_ago": "%(num)s minutit tagasi"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Osapool jättis kõnele vastamata",
+                "call_declined_by_us": "Sa jätsid kõne vastamata"
+            },
+            "video_call_title": "Videokõne",
+            "voice_call_title": "Häälkõne"
+        },
         "decryption_failure": {
             "blocked": "Kuna sinu seade on verifitseerimata, siis saatja on blokeerinud võimaluse, et sa saaksid selle sõnumi",
             "historical_event_no_key_backup": "Varasemad sõnumid pole selles seadmes loetavad",
@@ -183,6 +203,7 @@
         },
         "download_action_decrypting": "Dekrüptin",
         "download_action_downloading": "Laadin alla",
+        "e2e_state": "Läbiva krüptimise olek",
         "m.audio": {
             "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
@@ -190,6 +211,10 @@
         },
         "m.file": {
             "error_invalid": "Vigane fail"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s muutis jututoa uueks tunnuspildiks: <img/>",
+            "removed": "%(senderDisplayName)s eemaldas jututoa tunnuspildi."
         },
         "m.room.encryption": {
             "disable_attempt": "Eirasin katset lõpetada krüptimise kasutamine",
@@ -210,11 +235,27 @@
         },
         "message_timestamp_received_at": "Saabumise aeg: %(dateTime)s",
         "message_timestamp_sent_at": "Saatmise aeg: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Sa eirad seda kasutajat, seega on tema sõnum peidetud. <a>Näita seda ikkagi.</a>"
+        },
+        "pending_moderation": "Sõnum on modereerimise ootel",
+        "pending_moderation_reason": "Sõnum on modereerimise ootel: %(reason)s",
         "url_preview": {
             "close": "Sulge eelvaade",
             "open_link": "Ava link",
+            "show_n_more": {
+                "one": "Näita veel %(count)s muud eelvaadet",
+                "other": "Näita veel %(count)s muud eelvaadet"
+            },
             "view_image": "Vaata pilti"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Seosta uus seade",
+        "open_feedback": "Tagasiside",
+        "open_home": "Avaleht",
+        "open_security": "Turvalisus ja privaatsus",
+        "open_settings": "Kõik seadistused"
     },
     "widget": {
         "context_menu": {

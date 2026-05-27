@@ -29,7 +29,9 @@ describe("TileErrorView", () => {
     });
 
     it("renders the bubble layout variant", () => {
-        const { container } = render(<BubbleLayout />);
+        const { container } = render(<BubbleLayout />, {
+            presentation: { layout: "bubble" },
+        });
         expect(container).toMatchSnapshot();
     });
 

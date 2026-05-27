@@ -85,7 +85,6 @@
         "rename": "表示名を変更",
         "reply": "返信",
         "reply_in_thread": "スレッドで返信",
-        "report_content": "コンテンツを報告",
         "resend": "再送信",
         "reset": "リセット",
         "resume": "再開",
@@ -1220,8 +1219,6 @@
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
         "mjolnir": "参加者を無視する新しい方法",
         "msc3531_hide_messages_pending_moderation": "モデレーターに、保留中のモデレーションのメッセージを非表示にすることを許可。",
-        "report_to_moderators": "モデレーターに報告",
-        "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
         "sliding_sync": "スライド式同期モード",
         "sliding_sync_description": "開発中です。無効にできません。",
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",
@@ -1458,20 +1455,10 @@
     },
     "report_content": {
         "description": "このメッセージを報告すると、このメッセージの一意の「イベントID」があなたのホームサーバーの管理者に送信されます。このルーム内のメッセージが暗号化されている場合、ホームサーバーの管理者はメッセージのテキストを読んだり、ファイルや画像を表示したりすることはできません。",
-        "disagree": "同意しない",
         "hide_messages_from_user": "このユーザーのメッセージを非表示にするかどうか確認してください。",
         "ignore_user": "ユーザーを無視",
-        "illegal_content": "不法なコンテンツ",
         "missing_reason": "報告する理由を記入してください。",
-        "nature": "特徴を選び、このメッセージを報告する理由を記入してください。",
-        "nature_disagreement": "ユーザーの投稿内容が正しくない。\nこのユーザーをルームのモデレーターに報告します。",
-        "nature_other": "その他の理由。問題を記入してください。\nルームのモデレーターに報告します。",
-        "nature_spam": "ユーザーが広告や、広告・プロパガンダへのリンクのスパムを行っている。\nこのユーザーをルームのモデレーターに報告します。",
-        "other_label": "その他",
-        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告",
-        "report_entire_room": "ルーム全体を報告",
-        "spam_or_propaganda": "スパム、プロパガンダ",
-        "toxic_behaviour": "危害を加える振る舞い"
+        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s個のセッションの復号化に失敗しました！",

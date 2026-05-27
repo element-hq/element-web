@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { cleanup, fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { cleanup, fireEvent, render, screen } from "jest-matrix-react";
 import React from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason, RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 
+import { mockQRCodeRender, resetQRCodeMock, waitForQRCodeRender } from "../../../../../test-utils/qrcode";
 import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
 import { type FailureReason, LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
@@ -30,6 +31,7 @@ describe("<LoginWithQRFlow />", () => {
     }) => <LoginWithQRFlow {...defaultProps} {...props} />;
 
     afterEach(() => {
+        resetQRCodeMock();
         onClick.mockReset();
         cleanup();
     });
@@ -59,6 +61,7 @@ describe("<LoginWithQRFlow />", () => {
             });
 
             it("renders QR code", async () => {
+                mockQRCodeRender();
                 const { container } = render(
                     getComponent({
                         phase: Phase.ShowingQR,
@@ -67,7 +70,8 @@ describe("<LoginWithQRFlow />", () => {
                     }),
                 );
                 // QR code is rendered async so we wait for it:
-                await waitFor(() => screen.getAllByAltText("QR Code").length === 1);
+                await waitForQRCodeRender();
+                expect(screen.getAllByAltText("QR Code")).toHaveLength(1);
                 expect(container).toMatchSnapshot();
             });
 

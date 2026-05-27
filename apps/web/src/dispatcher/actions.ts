@@ -201,6 +201,11 @@ export enum Action {
     ComposerInsert = "composer_insert",
 
     /**
+     * Inserts a file into a target composer.
+     */
+    ComposerFileInsert = "composer_insert_file",
+
+    /**
      * Switches space. Should be used with SwitchSpacePayload.
      */
     SwitchSpace = "switch_space",

@@ -23,7 +23,7 @@
     position: relative;
     overflow: hidden;
     contain: paint;
-    border-radius: var(--MBody-border-radius);
+    border-radius: 8px;
 }
 
 .placeholder {
@@ -70,7 +70,7 @@
     max-width: min(100%, 350px);
     overflow: hidden;
     padding: var(--cpd-space-1x);
-    border-radius: var(--MBody-border-radius);
+    border-radius: 8px;
     background-color: rgb(0 0 0 / 0.6);
     color: #fff;
     text-overflow: ellipsis;

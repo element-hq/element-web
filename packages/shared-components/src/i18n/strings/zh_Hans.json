@@ -89,6 +89,11 @@
         }
     },
     "room_list": {
+        "a11y": {
+            "default": "打开房间 %(roomName)s",
+            "video_call": "以视频通话方式打开房间 %(roomName)s。",
+            "voice_call": "以语音通话方式打开房间 %(roomName)s。"
+        },
         "appearance": "外观",
         "chat_moved": "聊天已移动",
         "collapse_all_sections": "折叠所有区域",
@@ -181,6 +186,10 @@
     },
     "timeline": {
         "call_tile": {
+            "declined": {
+                "call_declined": "来电被拒接",
+                "call_declined_by_us": "你已拒接来电"
+            },
             "video_call_title": "视频通话",
             "voice_call_title": "语音通话"
         },
@@ -195,6 +204,7 @@
         },
         "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下载",
+        "e2e_state": "端到端加密状态",
         "m.audio": {
             "audio_player": "音频播放器",
             "error_downloading_audio": "下载音频时出错",

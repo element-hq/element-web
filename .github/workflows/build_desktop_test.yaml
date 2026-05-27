@@ -42,6 +42,7 @@ jobs:
                   persist-credentials: false
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+              id: pnpm
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version-file: apps/desktop/.node-version
@@ -75,12 +76,13 @@ jobs:
             # We previously disabled the `EnableNodeCliInspectArguments` fuse, but Playwright requires
             # it to be enabled to test Electron apps, so turn it back on.
             - name: Set EnableNodeCliInspectArguments fuse enabled
-              run: $RUN_AS npx @electron/fuses write --app "$EXECUTABLE" EnableNodeCliInspectArguments=on
+              run: $RUN_AS $PNPM_PATH/pnpm exec electron-fuses write --app "$EXECUTABLE" EnableNodeCliInspectArguments=on
               working-directory: apps/desktop
               shell: bash
               env:
                   # We need sudo on Linux as it is installed in /opt/
                   RUN_AS: ${{ runner.os == 'Linux' && 'sudo' || '' }}
+                  PNPM_PATH: ${{ steps.pnpm.outputs.bin_dest }}
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 
             - name: Run tests

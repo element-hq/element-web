@@ -6,26 +6,30 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     aria-label="Spaces"
     class="mx_SpacePanel collapsed newUi"
   >
-    <button
-      aria-expanded="false"
-      aria-haspopup="menu"
-      aria-label="User menu"
-      class="_triggerButton_1ejl3_50 mx_UserMenu"
-      data-state="closed"
-      id="radix-_r_0_"
-      type="button"
+    <div
+      class="_wrapper_1yvpq_8 mx_UserMenu"
     >
-      <span
-        aria-label="@test:test"
-        class="_avatar_va14e_8 _avatar-imageless_va14e_55"
-        data-color="5"
-        data-type="round"
-        role="img"
-        style="--cpd-avatar-size: 36px;"
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="_triggerButton_1yvpq_57"
+        data-state="closed"
+        id="radix-react-use-id-1"
+        type="button"
       >
-        t
-      </span>
-    </button>
+        <span
+          aria-label="@test:test"
+          class="_avatar_va14e_8 _avatar-imageless_va14e_55"
+          data-color="5"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 36px;"
+        >
+          t
+        </span>
+      </button>
+    </div>
     <div
       aria-label="Expand"
       class="mx_AccessibleButton mx_SpacePanel_toggleCollapse"
@@ -325,11 +329,11 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby="_r_14_"
+        aria-labelledby="react-use-id-2"
         class="_icon-button_1215g_8 mx_ThreadsActivityCentreButton"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_12_"
+        id="radix-react-use-id-3"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -357,7 +361,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     <button
       aria-expanded="false"
       aria-label="Quick settings"
-      aria-labelledby="_r_19_"
+      aria-labelledby="react-use-id-4"
       class="_icon-button_1215g_8 mx_QuickSettingsButton"
       data-kind="primary"
       role="button"
