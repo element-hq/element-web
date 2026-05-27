@@ -73,7 +73,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                 >
                   <span
                     aria-live="off"
-                    class="mx_MessageTimestamp _content_1i5vl_8"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -214,7 +214,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                 >
                   <span
                     aria-live="off"
-                    class="mx_MessageTimestamp _content_1i5vl_8"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -266,7 +266,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                 >
                   <span
                     aria-live="off"
-                    class="mx_MessageTimestamp _content_1i5vl_8"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -329,7 +329,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                 >
                   <span
                     aria-live="off"
-                    class="mx_MessageTimestamp _content_1i5vl_8"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
