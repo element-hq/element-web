@@ -130,7 +130,6 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
-import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
@@ -1219,6 +1218,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             case TimelineRenderingType.Notification:
             case TimelineRenderingType.ThreadsList: {
                 const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
+                this.viewModel.setThreadListActionBarViewModelProps({
+                    onViewInRoomClick: this.onViewInRoomClick,
+                    onCopyLinkClick: this.onCopyLinkToThreadClick,
+                });
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return React.createElement(
                     this.props.as || "li",
@@ -1298,9 +1301,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {this.renderThreadPanelSummary(threadState)}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <ThreadListActionBarWrapper
-                                onViewInRoomClick={this.onViewInRoomClick}
-                                onCopyLinkClick={this.onCopyLinkToThreadClick}
+                            <ActionBarView
+                                vm={this.viewModel.threadListActionBarViewModel}
+                                className="mx_ThreadActionBar"
                             />
                         )}
 
@@ -1774,33 +1777,6 @@ interface ActionBarWrapperProps {
     isQuoteExpanded?: boolean;
     toggleThreadExpanded: () => void;
     getRelationsForEvent?: GetRelationsForEvent;
-}
-
-interface ThreadListActionBarWrapperProps {
-    onViewInRoomClick: (anchor: HTMLElement | null) => void;
-    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
-}
-
-function ThreadListActionBarWrapper({
-    onViewInRoomClick,
-    onCopyLinkClick,
-}: Readonly<ThreadListActionBarWrapperProps>): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadListActionBarViewModel({
-                onViewInRoomClick,
-                onCopyLinkClick,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setProps({
-            onViewInRoomClick,
-            onCopyLinkClick,
-        });
-    }, [vm, onViewInRoomClick, onCopyLinkClick]);
-
-    return <ActionBarView vm={vm} className="mx_ThreadActionBar" />;
 }
 
 function ActionBarWrapper({

@@ -487,4 +487,23 @@ describe("EventTileViewModel", () => {
 
         vm.dispose();
     });
+
+    it("owns and updates the thread-list action bar child view model", () => {
+        const vm = new EventTileViewModel(makeProps());
+        const onViewInRoomClick = jest.fn();
+        const onCopyLinkClick = jest.fn();
+
+        vm.setThreadListActionBarViewModelProps({
+            onViewInRoomClick,
+            onCopyLinkClick,
+        });
+
+        vm.threadListActionBarViewModel.onViewInRoomClick(null);
+        vm.threadListActionBarViewModel.onCopyLinkClick(null);
+
+        expect(onViewInRoomClick).toHaveBeenCalledWith(null);
+        expect(onCopyLinkClick).toHaveBeenCalledWith(null);
+
+        vm.dispose();
+    });
 });

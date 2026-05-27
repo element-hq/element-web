@@ -34,6 +34,10 @@ import {
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
+import {
+    ThreadListActionBarViewModel,
+    type ThreadListActionBarViewModelProps,
+} from "../../ThreadListActionBarViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -288,6 +292,7 @@ export interface EventTileTimestampViewModelsProps {
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
     public readonly messageTimestampViewModel: MessageTimestampViewModel;
     public readonly linkedMessageTimestampViewModel: MessageTimestampViewModel;
+    public readonly threadListActionBarViewModel: ThreadListActionBarViewModel;
 
     public constructor(props: EventTileViewModelProps) {
         const initialRenderState = EventTileViewModel.createRenderState(props);
@@ -300,6 +305,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         );
         this.messageTimestampViewModel = new MessageTimestampViewModel(initialTimestampProps);
         this.linkedMessageTimestampViewModel = new MessageTimestampViewModel(initialTimestampProps);
+        this.threadListActionBarViewModel = new ThreadListActionBarViewModel({});
     }
 
     /** Updates root EventTile inputs and refreshes the derived render state. */
@@ -314,9 +320,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         EventTileViewModel.updateTimestampViewModel(this.linkedMessageTimestampViewModel, props.linkedMessageTimestamp);
     }
 
+    /** Updates the child thread-list action bar view model owned by the root EventTile view model. */
+    public setThreadListActionBarViewModelProps(props: ThreadListActionBarViewModelProps): void {
+        this.threadListActionBarViewModel.setProps(props);
+    }
+
     public override dispose(): void {
         this.messageTimestampViewModel.dispose();
         this.linkedMessageTimestampViewModel.dispose();
+        this.threadListActionBarViewModel.dispose();
         super.dispose();
     }
 
