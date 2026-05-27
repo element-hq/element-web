@@ -331,7 +331,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             thread,
         };
 
-        this.viewModel = new EventTileViewModel(this.getViewModelProps());
+        this.viewModel = new EventTileViewModel(this.createViewModelProps());
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -844,7 +844,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return false;
     }
 
-    private getViewModelProps(
+    private createViewModelProps(
         displayInfo = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
@@ -912,6 +912,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         };
     }
 
+    private renderMessageTimestamp(
+        vm: EventTileViewModel["messageTimestampViewModel"],
+        receivedTs?: number,
+    ): JSX.Element {
+        return (
+            <>
+                {receivedTs ? <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" /> : undefined}
+                <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
+            </>
+        );
+    }
+
     private renderContextMenu(): ReactNode {
         if (!this.state.interaction.contextMenu) return null;
 
@@ -974,8 +986,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
+        // EventTile is still a class component, so sync the owned root VM before rendering its child views.
         this.viewModel.setProps(
-            this.getViewModelProps({
+            this.createViewModelProps({
                 hasRenderer,
                 isBubbleMessage,
                 isInfoMessage,
@@ -1061,23 +1074,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             messageTimestamp: messageTimestampProps,
             linkedMessageTimestamp: linkedMessageTimestampProps,
         });
-        const lateTimestampIcon = messageTimestampProps.receivedTs ? (
-            <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
-        ) : undefined;
-        const messageTimestamp = (
-            <>
-                {lateTimestampIcon}
-                <MessageTimestampView vm={this.viewModel.messageTimestampViewModel} className="mx_MessageTimestamp" />
-            </>
+        const messageTimestamp = this.renderMessageTimestamp(
+            this.viewModel.messageTimestampViewModel,
+            messageTimestampProps.receivedTs,
         );
-        const linkedMessageTimestamp = (
-            <>
-                {lateTimestampIcon}
-                <MessageTimestampView
-                    vm={this.viewModel.linkedMessageTimestampViewModel}
-                    className="mx_MessageTimestamp"
-                />
-            </>
+        const linkedMessageTimestamp = this.renderMessageTimestamp(
+            this.viewModel.linkedMessageTimestampViewModel,
+            messageTimestampProps.receivedTs,
         );
 
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
