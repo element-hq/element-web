@@ -8,7 +8,15 @@
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
-import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
+import {
+    assertRoomInSection,
+    assertSectionsOrder,
+    dragRoomToSection,
+    dragSectionToSection,
+    getPrimaryFilters,
+    getRoomList,
+    getSectionHeader,
+} from "./utils";
 
 test.describe("Room list sections", () => {
     test.use({
@@ -195,6 +203,29 @@ test.describe("Room list sections", () => {
 
             await dragRoomToSection(page, "my room", "Favourites");
             await assertRoomInSection(page, "Favourites", "my room");
+        });
+
+        test("should reorder default sections via dnd", async ({ page, app }) => {
+            // Populate each default section so all three headers are visible
+            const favouriteId = await app.client.createRoom({ name: "fav room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            await app.client.createRoom({ name: "regular room" });
+
+            const lowPrioId = await app.client.createRoom({ name: "low prio room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.lowpriority");
+            }, lowPrioId);
+
+            // Initial order
+            await assertSectionsOrder(page, ["Favourites", "Chats", "Low Priority"]);
+
+            // Moves Favourites to immediately after Low Priority
+            await dragSectionToSection(page, "Favourites", "Low Priority");
+
+            await assertSectionsOrder(page, ["Chats", "Low Priority", "Favourites"]);
         });
 
         test("should move a room from Favourites to Chats when using dnd", async ({ page, app }) => {

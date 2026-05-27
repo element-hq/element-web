@@ -9,7 +9,15 @@ import { type Page } from "@playwright/test";
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
-import { assertRoomInSection, dragRoomToSection, getRoomList, getRoomListHeader, getSectionHeader } from "./utils";
+import {
+    assertRoomInSection,
+    assertSectionsOrder,
+    dragRoomToSection,
+    dragSectionToSection,
+    getRoomList,
+    getRoomListHeader,
+    getSectionHeader,
+} from "./utils";
 
 test.describe("Room list custom sections", () => {
     test.use({
@@ -281,6 +289,21 @@ test.describe("Room list custom sections", () => {
 
             await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
             await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "true");
+        });
+    });
+
+    test.describe("Section reordering via dnd", () => {
+        test("should reorder custom sections via dnd", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            // Default placement: custom sections sit at the top of Chats
+            await assertSectionsOrder(page, ["Work", "Personal", "Chats"]);
+
+            // Moves Work after Chats
+            await dragSectionToSection(page, "Work", "Chats");
+            await assertSectionsOrder(page, ["Personal", "Chats", "Work"]);
         });
     });
 
