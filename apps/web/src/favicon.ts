@@ -134,7 +134,6 @@ abstract class IconRenderer {
         const fontSize = Math.floor(opt.h * fontScale) + "px";
         this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
         this.context.textAlign = "center";
-        this.context.textBaseline = "middle";
 
         if (more) {
             this.context.moveTo(opt.x + opt.w / 2, opt.y);
@@ -157,14 +156,18 @@ abstract class IconRenderer {
         this.context.stroke();
         this.context.fillStyle = params.textColor;
 
+        const text = typeof opt.n === "number" && opt.n > 999
+            ? (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+"
+            : "" + opt.n;
+        // Centre the glyph vertically on the badge using its measured bounding
+        // box. `actualBoundingBoxAscent` is the distance from the alphabetic
+        // baseline up to the top of the glyph, so placing the baseline at
+        // `centre + ascent/2` puts the glyph's visual centre at the badge centre,
+        // regardless of font size or font metrics.
+        const metrics = this.context.measureText(text);
         const textX = Math.floor(opt.x + opt.w / 2);
-        const textY = Math.floor(opt.y + opt.h / 2);
-        if (typeof opt.n === "number" && opt.n > 999) {
-            const count = (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+";
-            this.context.fillText(count, textX, textY);
-        } else {
-            this.context.fillText("" + opt.n, textX, textY);
-        }
+        const textY = Math.floor(opt.y + opt.h / 2 + metrics.actualBoundingBoxAscent / 2);
+        this.context.fillText(text, textX, textY);
 
         this.context.closePath();
     }
