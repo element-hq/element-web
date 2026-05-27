@@ -37,11 +37,17 @@
         "attachment": "Вложение",
         "encryption_enabled": "Шифрование включено",
         "loading": "Загрузка…",
+        "options": "Опции",
         "preferences": "Настройки",
         "state_encryption_enabled": "Экспериментальное шифрование включено"
     },
     "left_panel": {
         "open_dial_pad": "Открыть панель набора номера"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Создать учетную запись"
+        }
     },
     "notifications": {
         "all_messages": "Все сообщения",
