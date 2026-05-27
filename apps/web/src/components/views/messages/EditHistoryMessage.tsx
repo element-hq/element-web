@@ -45,9 +45,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
-    private EventContentBodyViewModel: EventContentBodyViewModel;
-    private editHistoryActionBarViewModel: EditHistoryActionBarViewModel;
-    private messageTimestampViewModel: MessageTimestampViewModel;
+    private readonly eventContentBodyViewModel: EventContentBodyViewModel;
+    private readonly editHistoryActionBarViewModel: EditHistoryActionBarViewModel;
+    private readonly messageTimestampViewModel: MessageTimestampViewModel;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -61,7 +61,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
 
         const mxEventContent = getReplacedContent(event);
-        this.EventContentBodyViewModel = new EventContentBodyViewModel({
+        this.eventContentBodyViewModel = new EventContentBodyViewModel({
             mxEvent: event,
             content: mxEventContent,
             highlights: [],
@@ -90,7 +90,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     public componentDidUpdate(prevProps: IProps): void {
         if (prevProps.mxEvent !== this.props.mxEvent) {
             const mxEventContent = getReplacedContent(this.props.mxEvent);
-            this.EventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
+            this.eventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
             this.messageTimestampViewModel.setTimestamp(this.props.mxEvent.getTs());
         }
 
@@ -142,7 +142,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     public componentWillUnmount(): void {
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
-        this.EventContentBodyViewModel.dispose();
+        this.eventContentBodyViewModel.dispose();
         this.editHistoryActionBarViewModel.dispose();
         this.messageTimestampViewModel.dispose();
     }
@@ -171,7 +171,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = <EventContentBodyView vm={this.EventContentBodyViewModel} as="span" />;
+                contentElements = <EventContentBodyView vm={this.eventContentBodyViewModel} as="span" />;
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
