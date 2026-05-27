@@ -74,8 +74,9 @@ export class ModuleApi implements Api {
     public readonly _registerLegacyRoomListCustomisations = legacyCustomisationsFactory(RoomListCustomisations);
     public readonly _registerLegacyUserIdentifierCustomisations =
         legacyCustomisationsFactory(UserIdentifierCustomisations);
-    public readonly _registerLegacyWidgetPermissionsCustomisations =
-        legacyCustomisationsFactory(WidgetPermissionCustomisations);
+    public readonly _registerLegacyWidgetPermissionsCustomisations: (
+        customisations: typeof WidgetPermissionCustomisations,
+    ) => void = legacyCustomisationsFactory(WidgetPermissionCustomisations);
     public readonly _registerLegacyWidgetVariablesCustomisations =
         legacyCustomisationsFactory(WidgetVariableCustomisations);
     /* eslint-enable @typescript-eslint/naming-convention */
