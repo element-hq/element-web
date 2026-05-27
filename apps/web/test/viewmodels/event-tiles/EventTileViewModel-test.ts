@@ -466,4 +466,25 @@ describe("EventTileViewModel", () => {
         unsubscribe();
         vm.dispose();
     });
+
+    it("owns and updates timestamp child view models", () => {
+        const vm = new EventTileViewModel(makeProps());
+
+        vm.setTimestampViewModelProps({
+            messageTimestamp: {
+                ts: 123,
+                showTwelveHour: false,
+            },
+            linkedMessageTimestamp: {
+                ts: 456,
+                href: "#event",
+                showTwelveHour: true,
+            },
+        });
+
+        expect(vm.messageTimestampViewModel.getSnapshot().href).toBeUndefined();
+        expect(vm.linkedMessageTimestampViewModel.getSnapshot().href).toBe("#event");
+
+        vm.dispose();
+    });
 });

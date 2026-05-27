@@ -33,6 +33,7 @@ import {
 } from "./EventTileDerivedState";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
+import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -276,16 +277,75 @@ export interface EventTileRenderState {
     };
 }
 
+export interface EventTileTimestampViewModelsProps {
+    /** Props for the plain timestamp view model. */
+    messageTimestamp: MessageTimestampViewModelProps;
+    /** Props for the permalink timestamp view model. */
+    linkedMessageTimestamp: MessageTimestampViewModelProps;
+}
+
 /** Derives the current EventTile snapshot from component-owned inputs. */
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
+    public readonly messageTimestampViewModel: MessageTimestampViewModel;
+    public readonly linkedMessageTimestampViewModel: MessageTimestampViewModel;
+
     public constructor(props: EventTileViewModelProps) {
-        super(props, EventTileViewModel.createRenderState(props));
+        const initialRenderState = EventTileViewModel.createRenderState(props);
+
+        super(props, initialRenderState);
+
+        const initialTimestampProps = EventTileViewModel.createDefaultTimestampViewModelProps(
+            props,
+            initialRenderState,
+        );
+        this.messageTimestampViewModel = new MessageTimestampViewModel(initialTimestampProps);
+        this.linkedMessageTimestampViewModel = new MessageTimestampViewModel(initialTimestampProps);
     }
 
     /** Updates root EventTile inputs and refreshes the derived render state. */
     public setProps(props: EventTileViewModelProps): void {
         this.props = props;
         this.snapshot.set(EventTileViewModel.createRenderState(props));
+    }
+
+    /** Updates the child timestamp view models owned by the root EventTile view model. */
+    public setTimestampViewModelProps(props: EventTileTimestampViewModelsProps): void {
+        EventTileViewModel.updateTimestampViewModel(this.messageTimestampViewModel, props.messageTimestamp);
+        EventTileViewModel.updateTimestampViewModel(this.linkedMessageTimestampViewModel, props.linkedMessageTimestamp);
+    }
+
+    public override dispose(): void {
+        this.messageTimestampViewModel.dispose();
+        this.linkedMessageTimestampViewModel.dispose();
+        super.dispose();
+    }
+
+    private static createDefaultTimestampViewModelProps(
+        props: EventTileViewModelProps,
+        renderState: EventTileRenderState,
+    ): MessageTimestampViewModelProps {
+        return {
+            showRelative: props.display.timelineRenderingType === TimelineRenderingType.ThreadsList,
+            showTwelveHour: props.display.isTwelveHour,
+            ts: renderState.timestamp.value,
+        };
+    }
+
+    private static updateTimestampViewModel(
+        viewModel: MessageTimestampViewModel,
+        props: MessageTimestampViewModelProps,
+    ): void {
+        viewModel.setTimestamp(props.ts);
+        viewModel.setReceivedTimestamp(props.receivedTs);
+        viewModel.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+            showFullDate: props.showFullDate,
+            showSeconds: props.showSeconds,
+            showRelative: props.showRelative,
+        });
+        viewModel.setTooltipInhibited(props.inhibitTooltip);
+        viewModel.setHref(props.href);
+        viewModel.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */

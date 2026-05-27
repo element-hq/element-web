@@ -117,10 +117,7 @@ import {
     initialEventTileInteractionState,
     type EventTileInteractionState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
-import {
-    MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import { type MessageTimestampViewModelProps } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import {
     MAX_ITEMS_WHEN_LIMITED,
@@ -1055,14 +1052,33 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             ts,
             receivedTs: getLateEventInfo(this.props.mxEvent)?.received_ts,
         };
-        const messageTimestamp = <MessageTimestampWrapper {...messageTimestampProps} />;
+        const linkedMessageTimestampProps: MessageTimestampViewModelProps = {
+            ...messageTimestampProps,
+            href: permalink,
+            onClick: this.onPermalinkClicked,
+            onContextMenu: this.onTimestampContextMenu,
+        };
+        this.viewModel.setTimestampViewModelProps({
+            messageTimestamp: messageTimestampProps,
+            linkedMessageTimestamp: linkedMessageTimestampProps,
+        });
+        const lateTimestampIcon = messageTimestampProps.receivedTs ? (
+            <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
+        ) : undefined;
+        const messageTimestamp = (
+            <>
+                {lateTimestampIcon}
+                <MessageTimestampView vm={this.viewModel.messageTimestampViewModel} className="mx_MessageTimestamp" />
+            </>
+        );
         const linkedMessageTimestamp = (
-            <MessageTimestampWrapper
-                {...messageTimestampProps}
-                href={permalink}
-                onClick={this.onPermalinkClicked}
-                onContextMenu={this.onTimestampContextMenu}
-            />
+            <>
+                {lateTimestampIcon}
+                <MessageTimestampView
+                    vm={this.viewModel.linkedMessageTimestampViewModel}
+                    className="mx_MessageTimestamp"
+                />
+            </>
         );
 
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
@@ -1511,34 +1527,6 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
                 </Tooltip>
             </div>
         </div>
-    );
-}
-
-/**
- * Wraps MessageTimestampView with a view model synced to the provided props.
- * This wrapper can be removed after EventTile has been changed to a function component.
- */
-function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
-    useEffect(() => {
-        vm.setTimestamp(props.ts);
-        vm.setReceivedTimestamp(props.receivedTs);
-        vm.setDisplayOptions({
-            showTwelveHour: props.showTwelveHour,
-            showRelative: props.showRelative,
-        });
-        vm.setHref(props.href);
-        vm.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
-    }, [vm, props]);
-
-    return (
-        <>
-            {/* Render icon as described in, https://github.com/matrix-org/matrix-react-sdk/pull/11760 */}
-            {props.receivedTs ? (
-                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
-            ) : undefined}
-            <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
-        </>
     );
 }
 
