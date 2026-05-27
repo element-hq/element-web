@@ -18,7 +18,7 @@ import {
     signInByGeneratingQR,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AutoDiscovery, type MatrixClient, type XOR } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, MatrixClient, type XOR } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
@@ -58,7 +58,6 @@ interface IState {
     checkCode?: string;
     failureReason?: FailureReason;
     serverNameOrBaseUrl?: string;
-    newClient?: MatrixClient;
 }
 
 export enum LoginWithQRFailureReason {
@@ -238,10 +237,23 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     throw new Error("Server name/base URL not found in state");
                 }
 
-                // TODO: we need to check if the received homeserver name is different from that which we created the rendezvous with.
-                // If it is different then we need to create a new client to the new homeserver whilst maintaining the rendezvous channel on the existing client
+                // Whilst the 2024 version of MSC4108 says that we always get a server name, in practise the
+                // rust-sdk is currently misbehaving and we may receive a base URL instead. Additionally, the 2025
+                // version of MSC4108  will always give the base URL.
+                // As such, we should be resilient and support both formats until the spec and implementations have
+                // stabilised.
 
-                const metadata = await this.props.client.getAuthMetadata();
+                const { homeserverUrl, identityServerUrl } = await resolveServerURLs(this.state.serverNameOrBaseUrl);
+
+                if (!homeserverUrl) {
+                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                    logger.error("Failed to discover homeserver URL");
+                    throw new Error("Failed to discover homeserver URL");
+                }
+
+                // Create a new client as the homeserver URL may not be the same as we used for the secure channel
+                const metadata = await new MatrixClient({ baseUrl: homeserverUrl }).getAuthMetadata();
+
                 // Generate our new device ID
                 const deviceId = secureRandomString(10);
                 const { userCode } = await this.state.rendezvous.deviceAuthorizationGrant({
@@ -256,22 +268,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 });
 
                 if (tokenResponse) {
-                    // Whilst the 2024 version of MSC4108 says that we always get a server name, in practise the
-                    // rust-sdk is currently misbehaving and we may receive a base URL instead. Additionally, the 2025
-                    // version of MSC4108  will always give the base URL.
-                    // As such, we should be resilient and support both formats until the spec and implementations have
-                    // stabilised.
-
-                    const { homeserverUrl, identityServerUrl } = await resolveServerURLs(
-                        this.state.serverNameOrBaseUrl,
-                    );
-
-                    if (!homeserverUrl) {
-                        this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                        logger.error("Failed to discover homeserver URL");
-                        throw new Error("Failed to discover homeserver URL");
-                    }
-
                     const { secrets } = await this.state.rendezvous.shareSecrets();
 
                     await this.props.onLoggedIn({
