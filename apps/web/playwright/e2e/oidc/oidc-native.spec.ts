@@ -101,10 +101,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(
                 page.getByText("For security, this session has been removed. Please sign in again."),
             ).toBeVisible();
-            //await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
+            await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
 
-            const localStorageKeys = await page.evaluate(() => Object.keys(localStorage));
-            expect(localStorageKeys).toHaveLength(0);
+            await expect.poll(() => page.evaluate(() => Object.keys(localStorage))).toHaveLength(0);
         },
     );
 

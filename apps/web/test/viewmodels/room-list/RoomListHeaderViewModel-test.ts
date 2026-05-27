@@ -29,6 +29,8 @@ import PosthogTrackers from "../../../src/PosthogTrackers";
 
 jest.mock("../../../src/PosthogTrackers", () => ({
     trackInteraction: jest.fn(),
+    trackSectionCreation: jest.fn(),
+    trackCollapseOrExpandSection: jest.fn(),
 }));
 
 jest.mock("../../../src/utils/space", () => ({

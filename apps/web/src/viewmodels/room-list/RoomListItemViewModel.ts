@@ -403,6 +403,8 @@ export class RoomListItemViewModel
 
     public onCreateSection = async (): Promise<void> => {
         const newTag = await RoomListStoreV3.instance.createSection();
+        PosthogTrackers.trackSectionCreation("RoomListItemOverflowMenu");
+
         // Add the room to the section
         if (newTag) {
             tagRoom(this.props.room, newTag);
