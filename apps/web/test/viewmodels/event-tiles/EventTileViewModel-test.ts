@@ -450,4 +450,20 @@ describe("EventTileViewModel", () => {
             showInDefaultLayout: false,
         });
     });
+
+    it("updates an instance snapshot when inputs change", () => {
+        const vm = new EventTileViewModel(makeProps());
+        const listener = jest.fn();
+        const unsubscribe = vm.subscribe(listener);
+
+        expect(vm.getSnapshot().snapshot.timestamp.show).toBe(false);
+
+        vm.setProps(makeProps({ interaction: { hover: true } }));
+
+        expect(vm.getSnapshot().snapshot.timestamp.show).toBe(true);
+        expect(listener).toHaveBeenCalled();
+
+        unsubscribe();
+        vm.dispose();
+    });
 });

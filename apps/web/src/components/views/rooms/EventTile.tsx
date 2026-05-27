@@ -91,7 +91,10 @@ import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
-import { EventTileViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import {
+    EventTileViewModel,
+    type EventTileViewModelProps,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import {
     getEventTileReceiptState,
     type EventTileReceiptState,
@@ -298,6 +301,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
     private replyChain = createRef<ReplyChain>();
+    private readonly viewModel: EventTileViewModel;
     private readonly e2eViewModel: EventTileE2eViewModel;
     private e2eViewModelSubscription?: () => void;
 
@@ -330,6 +334,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
             thread,
         };
+
+        this.viewModel = new EventTileViewModel(this.getViewModelProps());
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -424,6 +430,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.e2eViewModelSubscription?.();
         this.e2eViewModelSubscription = undefined;
         this.e2eViewModel.dispose();
+        this.viewModel.dispose();
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
 
@@ -841,6 +848,74 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return false;
     }
 
+    private getViewModelProps(
+        displayInfo = getEventDisplayInfo(
+            MatrixClientPeg.safeGet(),
+            this.props.mxEvent,
+            this.context.showHiddenEvents,
+            this.shouldHideEvent(),
+        ),
+    ): EventTileViewModelProps {
+        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
+        const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
+        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
+        const isEditing = !!this.props.editState;
+        const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
+        const hasReactionsRow = !isRedacted;
+        const threadState = this.threadState;
+        // Use `getSender()` because searched events might not have a proper `sender`.
+        const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
+
+        return {
+            event: {
+                mxEvent: this.props.mxEvent,
+                eventSendStatus: this.props.eventSendStatus,
+                isEditing,
+                isEncryptionFailure,
+                forExport: this.props.forExport,
+            },
+            display: {
+                timelineRenderingType: this.context.timelineRenderingType,
+                layout: this.props.layout,
+                continuation: this.props.continuation,
+                isProbablyMedia,
+                isBubbleMessage: displayInfo.isBubbleMessage,
+                isLeftAlignedBubbleMessage: displayInfo.isLeftAlignedBubbleMessage,
+                isAlignedBetweenBubbles: displayInfo.isAlignedBetweenBubbles,
+                isInfoMessage: displayInfo.isInfoMessage,
+                noBubbleEvent: displayInfo.noBubbleEvent,
+                isTwelveHour: this.props.isTwelveHour,
+                isHighlighted: this.shouldHighlight(),
+                isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
+                isLast: this.props.last,
+                isLastInSection: this.props.lastInSection,
+                isContextual: this.props.contextual,
+            },
+            interaction: {
+                hover: this.state.interaction.hover,
+                showActionBarFromFocus: this.state.interaction.showActionBarFromFocus,
+                focusWithin: this.state.interaction.focusWithin,
+                isActionBarFocused: this.state.interaction.actionBarFocused,
+                hasContextMenu: !!this.state.interaction.contextMenu,
+                inhibitInteraction: this.props.inhibitInteraction,
+            },
+            sender: {
+                hideSender: this.props.hideSender,
+            },
+            timestamp: {
+                alwaysShowTimestamps: this.props.alwaysShowTimestamps,
+                hideTimestamp: this.props.hideTimestamp,
+                threadReplyEventTs: threadState.threadReplyEventTs,
+            },
+            footer: {
+                isOwnEvent,
+                hasReactionsRow,
+                hasReactions: !!this.state.reactions,
+                hasPinnedMessageBadge,
+            },
+        };
+    }
+
     private renderContextMenu(): ReactNode {
         if (!this.state.interaction.contextMenu) return null;
 
@@ -896,65 +971,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
-
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
-        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
-        const isEditing = !!this.props.editState;
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
         const threadState = this.threadState;
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
-        const eventTileRenderState = EventTileViewModel.createRenderState({
-            event: {
-                mxEvent: this.props.mxEvent,
-                eventSendStatus: this.props.eventSendStatus,
-                isEditing,
-                isEncryptionFailure,
-                forExport: this.props.forExport,
-            },
-            display: {
-                timelineRenderingType: this.context.timelineRenderingType,
-                layout: this.props.layout,
-                continuation: this.props.continuation,
-                isProbablyMedia,
+        this.viewModel.setProps(
+            this.getViewModelProps({
+                hasRenderer,
                 isBubbleMessage,
-                isLeftAlignedBubbleMessage,
-                isAlignedBetweenBubbles,
                 isInfoMessage,
+                isLeftAlignedBubbleMessage,
                 noBubbleEvent,
-                isTwelveHour: this.props.isTwelveHour,
-                isHighlighted: this.shouldHighlight(),
-                isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
-                isLast: this.props.last,
-                isLastInSection: this.props.lastInSection,
-                isContextual: this.props.contextual,
-            },
-            interaction: {
-                hover: this.state.interaction.hover,
-                showActionBarFromFocus: this.state.interaction.showActionBarFromFocus,
-                focusWithin: this.state.interaction.focusWithin,
-                isActionBarFocused: this.state.interaction.actionBarFocused,
-                hasContextMenu: !!this.state.interaction.contextMenu,
-                inhibitInteraction: this.props.inhibitInteraction,
-            },
-            sender: {
-                hideSender: this.props.hideSender,
-            },
-            timestamp: {
-                alwaysShowTimestamps: this.props.alwaysShowTimestamps,
-                hideTimestamp: this.props.hideTimestamp,
-                threadReplyEventTs: threadState.threadReplyEventTs,
-            },
-            footer: {
-                isOwnEvent,
-                hasReactionsRow,
-                hasReactions: !!this.state.reactions,
-                hasPinnedMessageBadge,
-            },
-        });
+                isSeeingThroughMessageHiddenForModeration,
+                isAlignedBetweenBubbles,
+            }),
+        );
+        const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;
 
         const lineClasses = eventTileRenderState.line.className;

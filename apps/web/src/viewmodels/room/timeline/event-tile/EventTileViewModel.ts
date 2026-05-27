@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import {
     type EventTileSenderProfileState,
@@ -276,7 +277,17 @@ export interface EventTileRenderState {
 }
 
 /** Derives the current EventTile snapshot from component-owned inputs. */
-export class EventTileViewModel {
+export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
+    public constructor(props: EventTileViewModelProps) {
+        super(props, EventTileViewModel.createRenderState(props));
+    }
+
+    /** Updates root EventTile inputs and refreshes the derived render state. */
+    public setProps(props: EventTileViewModelProps): void {
+        this.props = props;
+        this.snapshot.set(EventTileViewModel.createRenderState(props));
+    }
+
     /** Derives render-ready EventTile state from component-owned inputs. */
     public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
         const snapshot = EventTileViewModel.createSnapshot(props);
@@ -473,6 +484,4 @@ export class EventTileViewModel {
             noBubbleEvent: display.noBubbleEvent,
         });
     }
-
-    private constructor() {}
 }
