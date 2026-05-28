@@ -54,7 +54,7 @@ const defaultPreview: ThreadMessagePreviewViewSnapshot = {
 };
 
 const meta = {
-    title: "Timeline/Timeline Event//ThreadSummary",
+    title: "Timeline/Timeline Event/ThreadSummary",
     component: ThreadSummaryViewWrapper,
     tags: ["autodocs"],
     args: {
