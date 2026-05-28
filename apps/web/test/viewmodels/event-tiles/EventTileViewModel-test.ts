@@ -467,23 +467,11 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
-    it("owns and updates timestamp child view models", () => {
+    it("owns timestamp child view models", () => {
         const vm = new EventTileViewModel(makeProps());
 
-        vm.setTimestampViewModelProps({
-            messageTimestamp: {
-                ts: 123,
-                showTwelveHour: false,
-            },
-            linkedMessageTimestamp: {
-                ts: 456,
-                href: "#event",
-                showTwelveHour: true,
-            },
-        });
-
         expect(vm.messageTimestampViewModel.getSnapshot().href).toBeUndefined();
-        expect(vm.linkedMessageTimestampViewModel.getSnapshot().href).toBe("#event");
+        expect(vm.linkedMessageTimestampViewModel.getSnapshot().href).toBeUndefined();
 
         vm.dispose();
     });
@@ -493,7 +481,7 @@ describe("EventTileViewModel", () => {
         const onViewInRoomClick = jest.fn();
         const onCopyLinkClick = jest.fn();
 
-        vm.setThreadListActionBarViewModelProps({
+        vm.threadListActionBarViewModel.setProps({
             onViewInRoomClick,
             onCopyLinkClick,
         });
