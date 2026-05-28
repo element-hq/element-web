@@ -125,17 +125,17 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     // Given a roving emoji button returns the role=row element containing it
-    private getRow = (rovingNode?: Element): Element | undefined => {
+    private readonly getRow = (rovingNode?: Element): Element | undefined => {
         return this.getGridcell(rovingNode)?.parentElement ?? undefined;
     };
 
     // Given a roving emoji button returns the role=gridcell element containing it
-    private getGridcell = (rovingNode?: Element): Element | undefined => {
+    private readonly getGridcell = (rovingNode?: Element): Element | undefined => {
         return rovingNode?.parentElement ?? undefined;
     };
 
     // Given a role=gridcell node returns the roving emoji button contained within
-    private getRovingNode = (gridcellNode: Element): HTMLElement | undefined => {
+    private readonly getRovingNode = (gridcellNode: Element): HTMLElement | undefined => {
         const node = gridcellNode.children[0];
         return node instanceof HTMLElement ? node : undefined;
     };
@@ -159,11 +159,11 @@ class EmojiPicker extends React.Component<IProps, IState> {
         }
     };
 
-    private shouldMoveFocus = (): boolean => {
+    private readonly shouldMoveFocus = (): boolean => {
         return document.activeElement !== document.querySelector(".mx_EmojiPicker_search input");
     };
 
-    private onGridNavigation = (ev: React.KeyboardEvent, focusNode: HTMLElement, state: RovingState): void => {
+    private readonly onGridNavigation = (ev: React.KeyboardEvent, focusNode: HTMLElement, state: RovingState): void => {
         if (this.getRow(state.activeNode) !== this.getRow(focusNode)) {
             focusNode.scrollIntoView({
                 behavior: "auto",

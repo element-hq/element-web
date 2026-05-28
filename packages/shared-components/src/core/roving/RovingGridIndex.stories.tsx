@@ -66,8 +66,8 @@ function GridButton({ label }: Readonly<{ label: string }>): JSX.Element {
 function GridRows({ rows }: Readonly<{ rows: string[][] }>): JSX.Element {
     return (
         <>
-            {rows.map((row, rowIndex) => (
-                <div role="row" style={rowStyle} key={rowIndex}>
+            {rows.map((row) => (
+                <div role="row" style={rowStyle} key={row.join("|")}>
                     {row.map((label) => (
                         <div role="gridcell" key={label}>
                             <GridButton label={label} />

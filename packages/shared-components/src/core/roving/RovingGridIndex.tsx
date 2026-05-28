@@ -176,7 +176,7 @@ const getVerticalTarget = (
 
         const nextColumnIndex = Math.min(columnIndex, nextRow.children.length - 1);
         const target = getRovingNode(nextRow.children[nextColumnIndex]);
-        if (target && target.offsetParent !== null && state.nodes.includes(target)) {
+        if (target?.offsetParent && state.nodes.includes(target)) {
             return target;
         }
     }
