@@ -602,6 +602,20 @@ describe("ThreadMessagePreviewViewModel", () => {
         expect(vm.getSnapshot().isVisible).toBe(false);
     });
 
+    it("catches fire-and-forget preview update errors", async () => {
+        const previewError = new Error("Preview failed");
+        jest.mocked(MessagePreviewStore.instance.generatePreviewForEvent).mockImplementation(() => {
+            throw previewError;
+        });
+        const loggerSpy = jest.spyOn(logger, "error").mockImplementation(() => {});
+
+        makePreviewVm();
+
+        await waitFor(() =>
+            expect(loggerSpy).toHaveBeenCalledWith("Failed to update thread preview", previewError),
+        );
+    });
+
     it("shows a decryption failure preview when decryption rejects into a failure state", async () => {
         const decryptError = new Error("No key");
         const event = makeEvent("Encrypted reply");

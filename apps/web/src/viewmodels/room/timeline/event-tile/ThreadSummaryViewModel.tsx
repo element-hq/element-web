@@ -108,7 +108,7 @@ export class ThreadMessagePreviewViewModel
         });
 
         this.setupThreadListener();
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public dispose(): void {
@@ -121,38 +121,38 @@ export class ThreadMessagePreviewViewModel
     public setClient(cli: MatrixClient): void {
         if (this.props.cli === cli) return;
         this.props = { ...this.props, cli };
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public setThread(thread: Thread): void {
         if (this.props.thread === thread) return;
         this.props = { ...this.props, thread };
         this.setupThreadListener();
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public setRoom(room?: Room): void {
         if (this.props.room === room) return;
         this.props = { ...this.props, room };
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public setTimelineRenderingType(timelineRenderingType: TimelineRenderingType): void {
         if (this.props.timelineRenderingType === timelineRenderingType) return;
         this.props = { ...this.props, timelineRenderingType };
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public setLowBandwidth(lowBandwidth?: boolean): void {
         if (this.props.lowBandwidth === lowBandwidth) return;
         this.props = { ...this.props, lowBandwidth };
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public setUseOnlyCurrentProfiles(useOnlyCurrentProfiles: boolean): void {
         if (this.props.useOnlyCurrentProfiles === useOnlyCurrentProfiles) return;
         this.props = { ...this.props, useOnlyCurrentProfiles };
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     }
 
     public setShowDisplayName(showDisplayName: boolean): void {
@@ -232,17 +232,23 @@ export class ThreadMessagePreviewViewModel
     }
 
     private readonly onThreadUpdate = (): void => {
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     };
 
     private readonly onEventContentChanged = (): void => {
-        void this.updateFromThread();
+        this.updateFromThreadSafely();
     };
 
     private readonly onRoomStateMember = (_event: MatrixEvent, _state: RoomState, member: RoomMember): void => {
         if (member.userId !== this.watchedMemberUserId) return;
         this.updateProfileSnapshot();
     };
+
+    private updateFromThreadSafely(): void {
+        void this.updateFromThread().catch((error) => {
+            logger.error("Failed to update thread preview", error);
+        });
+    }
 
     private async updateFromThread(): Promise<void> {
         const requestId = ++this.previewRequestId;
