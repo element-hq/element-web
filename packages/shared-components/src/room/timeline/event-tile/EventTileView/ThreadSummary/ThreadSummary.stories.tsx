@@ -9,8 +9,8 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../../../core/viewmodel";
-import { withViewDocs } from "../../../../../.storybook/withViewDocs";
+import { useMockedViewModel } from "../../../../../core/viewmodel";
+import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 import {
     ThreadSummaryView,
     type ThreadMessagePreviewViewSnapshot,
@@ -54,7 +54,7 @@ const defaultPreview: ThreadMessagePreviewViewSnapshot = {
 };
 
 const meta = {
-    title: "Timeline/ThreadSummary",
+    title: "Timeline/Timeline Event//ThreadSummary",
     component: ThreadSummaryViewWrapper,
     tags: ["autodocs"],
     args: {

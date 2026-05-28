@@ -11,7 +11,7 @@ import React, { type ComponentPropsWithoutRef, type JSX, type MouseEventHandler,
 import { Avatar, IndicatorIcon, Tooltip } from "@vector-im/compound-web";
 import { ChevronRightIcon, ThreadsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { type ViewModel, useViewModel } from "../../../../core/viewmodel";
+import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./ThreadSummary.module.css";
 
 export type ThreadSummaryNotificationIndicator = ComponentPropsWithoutRef<typeof IndicatorIcon>["indicator"];

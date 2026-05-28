@@ -11,7 +11,7 @@ import { render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { MockViewModel } from "../../../../core/viewmodel";
+import { MockViewModel } from "../../../../../core/viewmodel";
 import {
     ThreadSummaryView,
     type ThreadMessagePreviewViewSnapshot,
