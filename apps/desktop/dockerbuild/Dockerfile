@@ -16,8 +16,9 @@ RUN ln -s /usr/bin/python3 /usr/bin/python & ln -s /usr/bin/pip3 /usr/bin/pip
 
 ENV DEBUG_COLORS=true
 ENV FORCE_COLOR=true
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
-WORKDIR /project
+WORKDIR /project/apps/desktop
 
 ARG TARGETOS
 ARG TARGETARCH
