@@ -157,23 +157,21 @@ const getVerticalTarget = (
 
     const row = getRow(state.activeNode);
     const gridCell = getGridCell(state.activeNode);
-    const rowContainer = row?.parentElement;
-    if (!row || !gridCell || !rowContainer) return undefined;
+    if (!row || !gridCell) return undefined;
 
     const columnIndex = Array.from(row.children).indexOf(gridCell);
-    const rows = Array.from(rowContainer.children);
-    const rowIndex = rows.indexOf(row);
-    if (columnIndex === -1 || rowIndex === -1) return undefined;
+    const activeIndex = state.nodes.indexOf(state.activeNode);
+    if (columnIndex === -1 || activeIndex === -1) return undefined;
 
-    const direction = action === RovingAction.ArrowUp ? -1 : 1;
-    for (
-        let nextRowIndex = rowIndex + direction;
-        nextRowIndex >= 0 && nextRowIndex < rows.length;
-        nextRowIndex += direction
-    ) {
-        const nextRow = rows[nextRowIndex];
+    const nextRowProbeIndex =
+        action === RovingAction.ArrowUp
+            ? activeIndex - columnIndex - 1
+            : activeIndex - columnIndex + row.children.length;
+    const nextRow = getRow(state.nodes[nextRowProbeIndex]);
+
+    if (nextRow) {
         if (!(nextRow instanceof HTMLElement) || nextRow.offsetParent === null || nextRow.children.length === 0) {
-            continue;
+            return undefined;
         }
 
         const nextColumnIndex = Math.min(columnIndex, nextRow.children.length - 1);

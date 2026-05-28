@@ -42,6 +42,11 @@ const activeCellLabelStyle: React.CSSProperties = {
     font: "var(--cpd-font-body-sm-regular)",
 };
 
+const gridLabelStyle: React.CSSProperties = {
+    color: "var(--cpd-color-text-secondary)",
+    font: "var(--cpd-font-body-md-semibold)",
+};
+
 function GridButton({ label }: Readonly<{ label: string }>): JSX.Element {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLButtonElement>();
 
@@ -55,6 +60,22 @@ function GridButton({ label }: Readonly<{ label: string }>): JSX.Element {
         >
             {label}
         </button>
+    );
+}
+
+function GridRows({ rows }: Readonly<{ rows: string[][] }>): JSX.Element {
+    return (
+        <>
+            {rows.map((row, rowIndex) => (
+                <div role="row" style={rowStyle} key={rowIndex}>
+                    {row.map((label) => (
+                        <div role="gridcell" key={label}>
+                            <GridButton label={label} />
+                        </div>
+                    ))}
+                </div>
+            ))}
+        </>
     );
 }
 
@@ -101,16 +122,46 @@ function GridExample({
                         style={gridStyle}
                         tabIndex={-1}
                     >
-                        {rows.map((row, rowIndex) => (
-                            <div role="row" style={rowStyle} key={rowIndex}>
-                                {row.map((label) => (
-                                    <div role="gridcell" key={label}>
-                                        <GridButton label={label} />
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                        <GridRows rows={rows} />
                     </div>
+                </div>
+            )}
+        </RovingGridIndexProvider>
+    );
+}
+
+function MultipleGridExample({
+    grids,
+    handleHomeEnd,
+    handleLoop,
+}: Readonly<{
+    grids: Array<{
+        label: string;
+        rows: string[][];
+    }>;
+    handleHomeEnd?: boolean;
+    handleLoop?: boolean;
+}>): JSX.Element {
+    return (
+        <RovingGridIndexProvider handleHomeEnd={handleHomeEnd} handleLoop={handleLoop}>
+            {({ onKeyDownHandler }) => (
+                <div style={containerStyle}>
+                    {grids.map((grid) => (
+                        <section style={containerStyle} key={grid.label}>
+                            <span id={`grid-label-${grid.label}`} style={gridLabelStyle}>
+                                {grid.label}
+                            </span>
+                            <div
+                                role="grid"
+                                aria-labelledby={`grid-label-${grid.label}`}
+                                onKeyDown={onKeyDownHandler}
+                                style={gridStyle}
+                                tabIndex={-1}
+                            >
+                                <GridRows rows={grid.rows} />
+                            </div>
+                        </section>
+                    ))}
                 </div>
             )}
         </RovingGridIndexProvider>
@@ -195,7 +246,7 @@ export const VirtualFocus: Story = {
     },
 };
 
-export const LoopingHorizontalNavigation: Story = {
+export const LoopingGrid: Story = {
     args: {
         rows: [
             ["A1", "A2", "A3"],
@@ -203,5 +254,28 @@ export const LoopingHorizontalNavigation: Story = {
         ],
         handleHomeEnd: true,
         handleLoop: true,
+    },
+};
+
+export const MultipleGrids: StoryObj<typeof MultipleGridExample> = {
+    render: (args) => <MultipleGridExample {...args} />,
+    args: {
+        grids: [
+            {
+                label: "Primary grid",
+                rows: [
+                    ["A1", "A2", "A3"],
+                    ["B1", "B2", "B3"],
+                ],
+            },
+            {
+                label: "Secondary grid",
+                rows: [
+                    ["C1", "C2"],
+                    ["D1", "D2", "D3"],
+                ],
+            },
+        ],
+        handleHomeEnd: true,
     },
 };

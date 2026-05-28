@@ -142,6 +142,44 @@ describe("RovingGridIndexProvider", () => {
         expectTabIndexes(["A3", "B2"], "B2");
     });
 
+    it("moves vertically across separate grid containers", async () => {
+        const user = userEvent.setup();
+        render(
+            <RovingGridIndexProvider>
+                {({ onKeyDownHandler }) => (
+                    <>
+                        <div role="grid" aria-label="First roving grid" onKeyDown={onKeyDownHandler} tabIndex={-1}>
+                            <div role="row">
+                                {["A1", "A2", "A3"].map((label) => (
+                                    <div role="gridcell" key={label}>
+                                        <GridButton label={label} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div role="grid" aria-label="Second roving grid" onKeyDown={onKeyDownHandler} tabIndex={-1}>
+                            <div role="row">
+                                {["B1", "B2"].map((label) => (
+                                    <div role="gridcell" key={label}>
+                                        <GridButton label={label} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                )}
+            </RovingGridIndexProvider>,
+        );
+
+        await user.tab();
+        await user.keyboard("{ArrowRight}");
+        await user.keyboard("{ArrowRight}");
+        expect(getButton("A3")).toHaveFocus();
+
+        await user.keyboard("{ArrowDown}");
+        expect(getButton("B2")).toHaveFocus();
+    });
+
     it("keeps the active cell unchanged at grid boundaries", async () => {
         const user = userEvent.setup();
         render(<DefaultGrid rows={[["A1", "A2"]]} />);

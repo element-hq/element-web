@@ -51,6 +51,11 @@ const activeLabelStyle: React.CSSProperties = {
     font: "var(--cpd-font-body-sm-regular)",
 };
 
+const toolbarLabelStyle: React.CSSProperties = {
+    color: "var(--cpd-color-text-secondary)",
+    font: "var(--cpd-font-body-md-semibold)",
+};
+
 const getAction = (event: React.KeyboardEvent): RovingAction | undefined => {
     switch (event.key) {
         case "Home":
@@ -131,6 +136,47 @@ function RovingButton({
         >
             {label}
         </button>
+    );
+}
+
+function MultipleToolbarExample({
+    toolbars,
+    handleHomeEnd,
+    handleLeftRight,
+    handleLoop,
+}: Readonly<{
+    toolbars: Array<{
+        label: string;
+        items: string[];
+    }>;
+    handleHomeEnd?: boolean;
+    handleLeftRight?: boolean;
+    handleLoop?: boolean;
+}>): JSX.Element {
+    return (
+        <RovingTabIndexProvider handleHomeEnd={handleHomeEnd} handleLeftRight={handleLeftRight} handleLoop={handleLoop}>
+            {({ onKeyDownHandler }) => (
+                <div style={containerStyle}>
+                    {toolbars.map((toolbar, index) => (
+                        <section style={containerStyle} key={toolbar.label}>
+                            <span id={`toolbar-label-${index}`} style={toolbarLabelStyle}>
+                                {toolbar.label}
+                            </span>
+                            <div
+                                role="toolbar"
+                                aria-labelledby={`toolbar-label-${index}`}
+                                onKeyDown={onKeyDownHandler}
+                                style={toolbarStyle}
+                            >
+                                {toolbar.items.map((label) => (
+                                    <RovingButton key={label} label={label} />
+                                ))}
+                            </div>
+                        </section>
+                    ))}
+                </div>
+            )}
+        </RovingTabIndexProvider>
     );
 }
 
@@ -293,5 +339,23 @@ export const WithInput: Story = {
         handleLeftRight: true,
         handleInputFields: false,
         withInput: true,
+    },
+};
+
+export const MultipleToolbars: StoryObj<typeof MultipleToolbarExample> = {
+    render: (args) => <MultipleToolbarExample {...args} />,
+    args: {
+        toolbars: [
+            {
+                label: "Formatting toolbar",
+                items: ["Bold", "Italic", "Underline"],
+            },
+            {
+                label: "Insert toolbar",
+                items: ["Link", "Image", "Table"],
+            },
+        ],
+        handleHomeEnd: true,
+        handleLeftRight: true,
     },
 };
