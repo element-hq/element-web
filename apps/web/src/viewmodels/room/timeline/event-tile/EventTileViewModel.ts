@@ -34,7 +34,10 @@ import {
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
-import { ThreadListActionBarViewModel } from "../../ThreadListActionBarViewModel";
+import {
+    ThreadListActionBarViewModel,
+    type ThreadListActionBarViewModelProps,
+} from "../../ThreadListActionBarViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -280,22 +283,14 @@ export interface EventTileRenderState {
 
 /** Derives the current EventTile snapshot from component-owned inputs. */
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
-    public readonly messageTimestampViewModel: MessageTimestampViewModel;
-    public readonly linkedMessageTimestampViewModel: MessageTimestampViewModel;
-    public readonly threadListActionBarViewModel: ThreadListActionBarViewModel;
+    private messageTimestampViewModel?: MessageTimestampViewModel;
+    private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
+    private threadListActionBarViewModel?: ThreadListActionBarViewModel;
 
     public constructor(props: EventTileViewModelProps) {
         const initialRenderState = EventTileViewModel.createRenderState(props);
 
         super(props, initialRenderState);
-
-        const initialTimestampProps = EventTileViewModel.createDefaultTimestampViewModelProps(
-            props,
-            initialRenderState,
-        );
-        this.messageTimestampViewModel = new MessageTimestampViewModel(initialTimestampProps);
-        this.linkedMessageTimestampViewModel = new MessageTimestampViewModel(initialTimestampProps);
-        this.threadListActionBarViewModel = new ThreadListActionBarViewModel({});
     }
 
     /** Updates root EventTile inputs and refreshes the derived render state. */
@@ -305,21 +300,28 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     }
 
     public override dispose(): void {
-        this.messageTimestampViewModel.dispose();
-        this.linkedMessageTimestampViewModel.dispose();
-        this.threadListActionBarViewModel.dispose();
+        this.messageTimestampViewModel?.dispose();
+        this.linkedMessageTimestampViewModel?.dispose();
+        this.threadListActionBarViewModel?.dispose();
         super.dispose();
     }
 
-    private static createDefaultTimestampViewModelProps(
-        props: EventTileViewModelProps,
-        renderState: EventTileRenderState,
-    ): MessageTimestampViewModelProps {
-        return {
-            showRelative: props.display.timelineRenderingType === TimelineRenderingType.ThreadsList,
-            showTwelveHour: props.display.isTwelveHour,
-            ts: renderState.timestamp.value,
-        };
+    /** Lazily creates and returns the plain timestamp child view model. */
+    public getMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
+        this.messageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        return this.messageTimestampViewModel;
+    }
+
+    /** Lazily creates and returns the permalink timestamp child view model. */
+    public getLinkedMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
+        this.linkedMessageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        return this.linkedMessageTimestampViewModel;
+    }
+
+    /** Lazily creates and returns the thread-list action bar child view model. */
+    public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
+        this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
+        return this.threadListActionBarViewModel;
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */

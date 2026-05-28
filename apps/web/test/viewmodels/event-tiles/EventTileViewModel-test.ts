@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventStatus, EventType, type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { mkEvent } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
@@ -467,11 +467,37 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
-    it("owns timestamp child view models", () => {
+    it("lazily owns timestamp child view models", () => {
         const vm = new EventTileViewModel(makeProps());
+        const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
+        const linkedMessageTimestampViewModel = vm.getLinkedMessageTimestampViewModel({ ts: 456 });
 
-        expect(vm.messageTimestampViewModel.getSnapshot().href).toBeUndefined();
-        expect(vm.linkedMessageTimestampViewModel.getSnapshot().href).toBeUndefined();
+        expect(messageTimestampViewModel.getSnapshot().href).toBeUndefined();
+        expect(linkedMessageTimestampViewModel.getSnapshot().href).toBeUndefined();
+
+        vm.dispose();
+    });
+
+    it("does not initialize timestamp child view models for events without an origin timestamp", () => {
+        const mxEvent = new MatrixEvent({
+            type: EventType.RoomMessage,
+            room_id: roomId,
+            sender: userId,
+            content: { msgtype: MsgType.Text, body: "Hello" },
+            event_id: "$event",
+        });
+        const vm = new EventTileViewModel(
+            makeProps({
+                event: {
+                    mxEvent,
+                },
+                timestamp: {
+                    hideTimestamp: true,
+                },
+            }),
+        );
+
+        expect(vm.getSnapshot().timestamp.displayState.showRealTimestamp).toBe(false);
 
         vm.dispose();
     });
@@ -481,13 +507,13 @@ describe("EventTileViewModel", () => {
         const onViewInRoomClick = jest.fn();
         const onCopyLinkClick = jest.fn();
 
-        vm.threadListActionBarViewModel.setProps({
+        const threadListActionBarViewModel = vm.getThreadListActionBarViewModel({
             onViewInRoomClick,
             onCopyLinkClick,
         });
 
-        vm.threadListActionBarViewModel.onViewInRoomClick(null);
-        vm.threadListActionBarViewModel.onCopyLinkClick(null);
+        threadListActionBarViewModel.onViewInRoomClick(null);
+        threadListActionBarViewModel.onCopyLinkClick(null);
 
         expect(onViewInRoomClick).toHaveBeenCalledWith(null);
         expect(onCopyLinkClick).toHaveBeenCalledWith(null);

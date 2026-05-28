@@ -118,7 +118,10 @@ import {
     initialEventTileInteractionState,
     type EventTileInteractionState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
-import { type MessageTimestampViewModelProps } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import {
+    type MessageTimestampViewModel,
+    type MessageTimestampViewModelProps,
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import {
     MAX_ITEMS_WHEN_LIMITED,
@@ -342,12 +345,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         };
 
         this.viewModel = new EventTileViewModel(this.createViewModelProps());
-        const initialTimestampValue = this.viewModel.getSnapshot().timestamp.value;
-        const initialMessageTimestampProps = this.createMessageTimestampProps(initialTimestampValue);
-        this.viewModel.messageTimestampViewModel.setProps(initialMessageTimestampProps);
-        this.viewModel.linkedMessageTimestampViewModel.setProps(
-            this.createLinkedMessageTimestampProps(initialMessageTimestampProps),
-        );
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -1078,29 +1075,27 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const messageTimestampProps = this.createMessageTimestampProps(ts);
         const linkedMessageTimestampProps = this.createLinkedMessageTimestampProps(messageTimestampProps);
-        const messageTimestamp = (
-            <MessageTimestampAdapter
-                vm={this.viewModel.messageTimestampViewModel}
-                timestampProps={messageTimestampProps}
-            />
-        );
-        const linkedMessageTimestamp = (
-            <MessageTimestampAdapter
-                vm={this.viewModel.linkedMessageTimestampViewModel}
-                timestampProps={linkedMessageTimestampProps}
-            />
-        );
 
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
         const dummyTimestamp = eventTileRenderState.timestamp.showDummy ? (
             <span className="mx_MessageTimestamp" />
         ) : null;
-        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp
-            ? messageTimestamp
-            : dummyTimestamp;
-        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp
-            ? linkedMessageTimestamp
-            : dummyTimestamp;
+        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
+            <MessageTimestampAdapter
+                vm={this.viewModel.getMessageTimestampViewModel(messageTimestampProps)}
+                timestampProps={messageTimestampProps}
+            />
+        ) : (
+            dummyTimestamp
+        );
+        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
+            <MessageTimestampAdapter
+                vm={this.viewModel.getLinkedMessageTimestampViewModel(linkedMessageTimestampProps)}
+                timestampProps={linkedMessageTimestampProps}
+            />
+        ) : (
+            dummyTimestamp
+        );
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (hasPinnedMessageBadge) {
@@ -1309,7 +1304,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
                             <ThreadListActionBarAdapter
-                                vm={this.viewModel.threadListActionBarViewModel}
+                                vm={this.viewModel.getThreadListActionBarViewModel({
+                                    onViewInRoomClick: this.onViewInRoomClick,
+                                    onCopyLinkClick: this.onCopyLinkToThreadClick,
+                                })}
                                 onViewInRoomClick={this.onViewInRoomClick}
                                 onCopyLinkClick={this.onCopyLinkToThreadClick}
                                 className="mx_ThreadActionBar"
@@ -1543,7 +1541,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
 }
 
 interface MessageTimestampAdapterProps {
-    vm: EventTileViewModel["messageTimestampViewModel"];
+    vm: MessageTimestampViewModel;
     timestampProps: MessageTimestampViewModelProps;
 }
 
