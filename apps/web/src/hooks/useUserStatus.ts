@@ -27,6 +27,24 @@ export function userStatusTextWithinMaxLength(text: string): boolean {
     return textEncoder.encode(text).length <= MAX_STATUS_TEXT_BYTES;
 }
 
+export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefined {
+    if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
+        return undefined;
+    }
+    if ("emoji" in rawUserStatus === false || typeof rawUserStatus.emoji !== "string" || !rawUserStatus.emoji) {
+        return undefined;
+    }
+    if ("text" in rawUserStatus === false || typeof rawUserStatus.text !== "string" || !rawUserStatus.text) {
+        return undefined;
+    }
+    return {
+        emoji: rawUserStatus.emoji,
+        text: userStatusTextWithinMaxLength(rawUserStatus.text)
+            ? rawUserStatus.text
+            : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
+    };
+}
+
 /**
  * Hook to get the MSC4426 user status for a given user ID. Returns undefined if the feature is disabled,
  * the user does not have a status, or if there was an error fetching the status.
@@ -76,23 +94,5 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
         return;
     }
 
-    if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
-        logger.warn(`value of "org.matrix.msc4426.status" was not an object for ${userId}`);
-        return;
-    }
-    if ("emoji" in rawUserStatus === false || typeof rawUserStatus.emoji !== "string" || !rawUserStatus.emoji) {
-        logger.warn(`"emoji" property was not a valid string for ${userId}`);
-        return;
-    }
-    if ("text" in rawUserStatus === false || typeof rawUserStatus.text !== "string" || !rawUserStatus.text) {
-        logger.warn(`"text" property was not a valid string for ${userId}`);
-        return;
-    }
-
-    return {
-        emoji: rawUserStatus.emoji,
-        text: userStatusTextWithinMaxLength(rawUserStatus.text)
-            ? rawUserStatus.text
-            : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
-    };
+    return validateUserStatus(rawUserStatus);
 }
