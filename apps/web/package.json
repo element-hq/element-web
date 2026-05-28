@@ -66,6 +66,7 @@
         "domutils": "^4.0.0",
         "emojibase-regex": "^17.0.0",
         "escape-html": "^1.0.3",
+        "events": "^3.3.0",
         "file-saver": "^2.0.5",
         "filesize": "11.0.17",
         "github-markdown-css": "^5.5.1",
