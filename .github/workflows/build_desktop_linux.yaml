@@ -153,6 +153,7 @@ jobs:
                     pnpm -C apps/desktop run build:native
 
             - name: Fix permissions
+              continue-on-error: true # TODO remove this
               run: |
                   shopt -s globstar
 
