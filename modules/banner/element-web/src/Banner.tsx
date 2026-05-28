@@ -37,9 +37,10 @@ interface Props {
     logoUrl: string;
     href: string;
     menu: ModuleConfig["menu"];
+    title: string;
 }
 
-const Banner: FC<Props> = ({ api, logoUrl, href, menu }) => {
+const Banner: FC<Props> = ({ api, logoUrl, href, menu, title }) => {
     let menuJsx;
     switch (menu.type) {
         case "static": {
@@ -59,7 +60,7 @@ const Banner: FC<Props> = ({ api, logoUrl, href, menu }) => {
                 <Logo api={api} src={logoUrl} href={href} height="100%" />
             </LogoContainer>
             <Heading size="sm" weight="medium" as="h1">
-                {api.config.get("brand")}
+                {title}
             </Heading>
         </Root>
     );
