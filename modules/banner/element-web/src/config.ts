@@ -90,6 +90,13 @@ export const ModuleConfig = z.object({
     logo_link_url: z.url(),
 
     /**
+     * The title to show to the right of the Logo
+     *
+     * Will fall back to `brand` variable if undefined, can be hidden by setting to the empty string.
+     */
+    title: z.optional(z.string()),
+
+    /**
      * Configuration for the menu.
      */
     menu: z.discriminatedUnion("type", [StaticConfig, UniventionConfig]),

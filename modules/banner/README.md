@@ -5,11 +5,12 @@ Allows rendering a top bar with slide out left panel menu.
 
 Supports the following configuration options:
 
-| Key           | Type   | Description                                                  |
-| ------------- | ------ | ------------------------------------------------------------ |
-| logo_url      | string | URL to the logo to render in the banner                      |
-| logo_link_url | string | URL to send the user to when clicking the logo in the banner |
-| menu          | `Menu` | Data to render in the banner menu                            |
+| Key           | Type   | Description                                                                                    |
+| ------------- | ------ | ---------------------------------------------------------------------------------------------- |
+| logo_url      | string | URL to the logo to render in the banner                                                        |
+| logo_link_url | string | URL to send the user to when clicking the logo in the banner                                   |
+| title         | string | The title to render next to the logo, falls back to top level `brand` variable if unspecified. |
+| menu          | `Menu` | Data to render in the banner menu                                                              |
 
 The `Menu` type is fulfilled by the following discriminated union:
 

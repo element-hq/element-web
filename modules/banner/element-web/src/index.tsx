@@ -47,6 +47,7 @@ class BannerModule implements Module {
                     logoUrl={this.config.logo_url}
                     href={this.config.logo_link_url}
                     menu={this.config.menu}
+                    title={this.config.title ?? this.api.config.get("brand")}
                 />
             </ThemeProvider>,
         );
