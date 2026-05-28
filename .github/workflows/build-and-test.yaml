@@ -104,7 +104,7 @@ jobs:
     playwright_ew:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build_ew.outputs.num-runners }}"
         needs: build_ew
-        if: needs.build_ew.outputs.skip == 'false'
+        # if: needs.build_ew.outputs.skip == 'false'
         runs-on: ubuntu-24.04
         permissions:
             actions: read
