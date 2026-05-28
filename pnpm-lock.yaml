@@ -277,7 +277,6 @@ patchedDependencies:
   '@types/auto-launch': b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538
   '@types/mdx': c209882c533714d2dcbf4cf397002125ea83677ef152eff403386611cd0f0d3a
   '@vector-im/matrix-wysiwyg': 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
-  app-builder-lib: 61c04213ed5259e902efe4df6d87517e2daaa2597f168028f5b3dc3df8ff0c8f
   await-lock: b767a571946a4f8710ac54b1a7bec8a7c1570f9b85d75922392fae20d0578964
   jest-fixed-jsdom: b4bc876eca343b57d231c1cf9817ddb13ff04503ece7794d1690f342f6289ad3
   jsdom: 040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f
@@ -427,7 +426,7 @@ importers:
         version: 4.1.7(@vitest/browser@4.1.7)(vitest@4.1.7)
       app-builder-lib:
         specifier: 26.11.1
-        version: 26.11.1(patch_hash=61c04213ed5259e902efe4df6d87517e2daaa2597f168028f5b3dc3df8ff0c8f)(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
+        version: 26.11.1(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
       chokidar:
         specifier: ^5.0.0
         version: 5.0.0
@@ -19594,7 +19593,7 @@ snapshots:
 
   app-builder-bin@5.0.0-alpha.12: {}
 
-  app-builder-lib@26.11.1(patch_hash=61c04213ed5259e902efe4df6d87517e2daaa2597f168028f5b3dc3df8ff0c8f)(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1):
+  app-builder-lib@26.11.1(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/asar': 3.4.1
@@ -21206,7 +21205,7 @@ snapshots:
 
   dmg-builder@26.11.1(electron-builder-squirrel-windows@26.11.1):
     dependencies:
-      app-builder-lib: 26.11.1(patch_hash=61c04213ed5259e902efe4df6d87517e2daaa2597f168028f5b3dc3df8ff0c8f)(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
+      app-builder-lib: 26.11.1(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
       builder-util: 26.11.1
       fs-extra: 10.1.0
       iconv-lite: 0.6.3
@@ -21384,7 +21383,7 @@ snapshots:
 
   electron-builder-squirrel-windows@26.11.1(dmg-builder@26.11.1):
     dependencies:
-      app-builder-lib: 26.11.1(patch_hash=61c04213ed5259e902efe4df6d87517e2daaa2597f168028f5b3dc3df8ff0c8f)(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
+      app-builder-lib: 26.11.1(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
       builder-util: 26.11.1
       electron-winstaller: 5.4.0
     transitivePeerDependencies:
@@ -21393,7 +21392,7 @@ snapshots:
 
   electron-builder@26.11.1(electron-builder-squirrel-windows@26.11.1):
     dependencies:
-      app-builder-lib: 26.11.1(patch_hash=61c04213ed5259e902efe4df6d87517e2daaa2597f168028f5b3dc3df8ff0c8f)(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
+      app-builder-lib: 26.11.1(dmg-builder@26.11.1)(electron-builder-squirrel-windows@26.11.1)
       builder-util: 26.11.1
       builder-util-runtime: 9.6.1
       chalk: 4.1.2
