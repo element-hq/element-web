@@ -301,50 +301,6 @@ interface EventTileRenderInputs {
     isOwnEvent: boolean;
 }
 
-interface E2eMessageSharedIconWrapperProps {
-    /**
-     * The ID of the room containing the event whose keys were shared.
-     */
-    roomId: string;
-    /**
-     * The ID of the user who shared the keys.
-     */
-    keyForwardingUserId: string;
-}
-
-function E2eMessageSharedIconWrapper({
-    roomId,
-    keyForwardingUserId,
-}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
-    const client = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new E2eMessageSharedIconViewModel({
-                client,
-                roomId,
-                keyForwardingUserId,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setRoomId(roomId);
-    }, [roomId, vm]);
-
-    useEffect(() => {
-        vm.setKeyForwardingUserId(keyForwardingUserId);
-    }, [keyForwardingUserId, vm]);
-
-    return (
-        <E2eMessageSharedIconView
-            vm={vm}
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-        />
-    );
-}
-
 // MUST be rendered within a RoomContext with a set timelineRenderingType
 export class UnwrappedEventTile extends React.Component<EventTileProps, IState> {
     private suppressReadReceiptAnimation: boolean;
@@ -1990,5 +1946,49 @@ function ActionBarWrapper({
                 </ContextMenu>
             ) : null}
         </>
+    );
+}
+
+interface E2eMessageSharedIconWrapperProps {
+    /**
+     * The ID of the room containing the event whose keys were shared.
+     */
+    roomId: string;
+    /**
+     * The ID of the user who shared the keys.
+     */
+    keyForwardingUserId: string;
+}
+
+function E2eMessageSharedIconWrapper({
+    roomId,
+    keyForwardingUserId,
+}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
+    const client = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new E2eMessageSharedIconViewModel({
+                client,
+                roomId,
+                keyForwardingUserId,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setRoomId(roomId);
+    }, [roomId, vm]);
+
+    useEffect(() => {
+        vm.setKeyForwardingUserId(keyForwardingUserId);
+    }, [keyForwardingUserId, vm]);
+
+    return (
+        <E2eMessageSharedIconView
+            vm={vm}
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+        />
     );
 }
