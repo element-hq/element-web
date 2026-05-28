@@ -343,9 +343,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.viewModel = new EventTileViewModel(this.createViewModelProps());
         const initialTimestampValue = this.viewModel.getSnapshot().timestamp.value;
         const initialMessageTimestampProps = this.createMessageTimestampProps(initialTimestampValue);
-        syncMessageTimestampViewModel(this.viewModel.messageTimestampViewModel, initialMessageTimestampProps);
-        syncMessageTimestampViewModel(
-            this.viewModel.linkedMessageTimestampViewModel,
+        this.viewModel.messageTimestampViewModel.setProps(initialMessageTimestampProps);
+        this.viewModel.linkedMessageTimestampViewModel.setProps(
             this.createLinkedMessageTimestampProps(initialMessageTimestampProps),
         );
 
@@ -1549,7 +1548,7 @@ interface MessageTimestampAdapterProps {
 
 function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimestampAdapterProps>): JSX.Element {
     useEffect(() => {
-        syncMessageTimestampViewModel(vm, timestampProps);
+        vm.setProps(timestampProps);
     }, [vm, timestampProps]);
 
     return (
@@ -1560,26 +1559,6 @@ function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimesta
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );
-}
-
-function syncMessageTimestampViewModel(
-    vm: EventTileViewModel["messageTimestampViewModel"],
-    timestampProps: MessageTimestampViewModelProps,
-): void {
-    vm.setTimestamp(timestampProps.ts);
-    vm.setReceivedTimestamp(timestampProps.receivedTs);
-    vm.setDisplayOptions({
-        showTwelveHour: timestampProps.showTwelveHour,
-        showFullDate: timestampProps.showFullDate,
-        showSeconds: timestampProps.showSeconds,
-        showRelative: timestampProps.showRelative,
-    });
-    vm.setTooltipInhibited(timestampProps.inhibitTooltip);
-    vm.setHref(timestampProps.href);
-    vm.setHandlers({
-        onClick: timestampProps.onClick,
-        onContextMenu: timestampProps.onContextMenu,
-    });
 }
 
 interface ThreadListActionBarAdapterProps {
