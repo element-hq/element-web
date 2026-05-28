@@ -15,4 +15,12 @@ export {
     useRovingTabIndex,
 } from "./RovingTabIndex";
 export type { IAction, IContext, IState, RovingTabIndexProviderProps } from "./RovingTabIndex";
+export { RovingGridIndexProvider } from "./RovingGridIndex";
+export type {
+    RovingGridCellResolver,
+    RovingGridIndexProviderProps,
+    RovingGridMoveFocus,
+    RovingGridNodeResolver,
+    RovingGridRowResolver,
+} from "./RovingGridIndex";
 export { RovingTabIndexWrapper } from "./RovingTabIndexWrapper";
