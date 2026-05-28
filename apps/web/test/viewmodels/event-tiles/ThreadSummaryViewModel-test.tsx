@@ -611,9 +611,7 @@ describe("ThreadMessagePreviewViewModel", () => {
 
         makePreviewVm();
 
-        await waitFor(() =>
-            expect(loggerSpy).toHaveBeenCalledWith("Failed to update thread preview", previewError),
-        );
+        await waitFor(() => expect(loggerSpy).toHaveBeenCalledWith("Failed to update thread preview", previewError));
     });
 
     it("shows a decryption failure preview when decryption rejects into a failure state", async () => {
