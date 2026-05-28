@@ -160,7 +160,7 @@ jobs:
                   sudo chown -R $USER:$USER apps/desktop/.hak
                   # For node_modules pnpm strict security
                   sudo chown -R $USER:$USER **/node_modules
-                  sudo chmod +x node_modules/7zip-bin/linux/*/7za
+                  sudo chmod +x apps/desktop/node_modules/7zip-bin/linux/*/7za
 
             - name: Check native libraries in hak dependencies
               working-directory: apps/desktop
