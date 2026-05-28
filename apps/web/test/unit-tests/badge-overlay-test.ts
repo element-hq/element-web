@@ -76,15 +76,16 @@ beforeAll(() => {
     };
 });
 
+// The overlay only ships on Windows and matches the platform's own
+// notification badges, which clamp at "99+". Anything above 99 should
+// render identically, so we just snapshot the boundary cases.
 const SAMPLES: Array<{ name: string; value: number | string; bgColor?: string }> = [
     { name: "1", value: 1 },
     { name: "9", value: 9 },
     { name: "10", value: 10 },
-    { name: "12", value: 12 },
     { name: "99", value: 99 },
-    { name: "100", value: 100 },
-    { name: "999", value: 999 },
-    { name: "1000", value: 1000 },
+    { name: "100 (clamped to 99+)", value: 100 },
+    { name: "9999 (clamped to 99+)", value: 9999 },
     { name: "error", value: "×", bgColor: "#f00" },
 ];
 

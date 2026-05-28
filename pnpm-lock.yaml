@@ -468,7 +468,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e1a7f6532b82638dcd3ceabe67e5f136e2d54e0d
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -662,6 +662,9 @@ importers:
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0
+      '@types/jest-image-snapshot':
+        specifier: ^6.4.1
+        version: 6.4.1
       '@types/jitsi-meet':
         specifier: ^2.0.2
         version: 2.0.5
@@ -5642,6 +5645,9 @@ packages:
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
 
+  '@types/jest-image-snapshot@6.4.1':
+    resolution: {integrity: sha512-pj3Sdc7Cx5mMLUttPprazSDQCur2cr512Dm38e9aAHI55LDxEhqdyqzK9myC4EmEy7sPAF2nGJ8zifX4qso7sQ==}
+
   '@types/jest@30.0.0':
     resolution: {integrity: sha512-XTYugzhuwqWjws0CVz8QpM36+T+Dz5mTEBKhNs/esGLnCIlGdRy+Dq78NRjd7ls7r8BC8ZRMOrKlkO1hU0JOwA==}
 
@@ -5734,6 +5740,9 @@ packages:
 
   '@types/picomatch@4.0.2':
     resolution: {integrity: sha512-qHHxQ+P9PysNEGbALT8f8YOSHW0KJu6l2xU8DYY0fu/EmGxXdVnuTLvFUvBgPJMSqXq29SYHveejeAha+4AYgA==}
+
+  '@types/pixelmatch@5.2.6':
+    resolution: {integrity: sha512-wC83uexE5KGuUODn6zkm9gMzTwdY5L0chiK+VrKcDfEjzxh1uadlWTvOmAbCpnM9zx/Ww3f8uKlYQVnO/TrqVg==}
 
   '@types/plist@3.0.5':
     resolution: {integrity: sha512-E6OCaRmAe4WDmWNsL/9RMqdkkzDCY1etutkflWk4c+AcjDU07Pcz1fQwTX0TQz+Pxqn9i4L1TU3UFpjnrcDgxA==}
@@ -10145,8 +10154,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e1a7f6532b82638dcd3ceabe67e5f136e2d54e0d:
+    resolution: {gitHosted: true, integrity: sha512-gEbgqEiUhz1iryI39+yuAmygIvM9yP2Cbz8c77AQvIqB2dXiA95qK+DhxAt9rkubw40f2fG3Dy55WUWG88skaQ==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e1a7f6532b82638dcd3ceabe67e5f136e2d54e0d}
     version: 41.6.0
     engines: {node: '>=22.0.0'}
 
@@ -18564,6 +18573,12 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
 
+  '@types/jest-image-snapshot@6.4.1':
+    dependencies:
+      '@types/jest': 30.0.0
+      '@types/pixelmatch': 5.2.6
+      ssim.js: 3.5.0
+
   '@types/jest@30.0.0':
     dependencies:
       expect: 30.4.1
@@ -18667,6 +18682,10 @@ snapshots:
       pg-types: 2.2.0
 
   '@types/picomatch@4.0.2': {}
+
+  '@types/pixelmatch@5.2.6':
+    dependencies:
+      '@types/node': 18.19.130
 
   '@types/plist@3.0.5':
     dependencies:
@@ -23913,7 +23932,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e1a7f6532b82638dcd3ceabe67e5f136e2d54e0d:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.2.0

@@ -194,7 +194,14 @@ export class BadgeOverlayRenderer extends IconRenderer {
             return null;
         }
 
-        this.circle(contents, { ...(bgColor ? { bgColor } : undefined) });
+        // Windows native notification badges clamp at "99+"
+        // (https://learn.microsoft.com/en-us/windows/apps/develop/notifications/badges),
+        // and the overlay canvas is only 16x16, so we follow the same convention here.
+        // This only affects the Windows taskbar overlay; browser-tab favicons
+        // (Favicon below) still render larger counts as e.g. "1k+".
+        const clamped = typeof contents === "number" && contents > 99 ? "99+" : contents;
+
+        this.circle(clamped, { ...(bgColor ? { bgColor } : undefined) });
         return new Promise((resolve, reject) => {
             this.canvas.toBlob(
                 (blob) => {
