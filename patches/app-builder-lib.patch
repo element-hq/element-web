@@ -1,5 +1,5 @@
 diff --git a/out/node-module-collector/moduleManager.js b/out/node-module-collector/moduleManager.js
-index f483d9387a3270afc884b8478f19dd2825477a04..a718d92825b4813bc27eb10775a70d8e0731fcf7 100644
+index e9d6d16f8950c01417039d65ed1939009d642b7a..9f47c5e18fb34fe60e4f09bf512f9639aa2d90c0 100644
 --- a/out/node-module-collector/moduleManager.js
 +++ b/out/node-module-collector/moduleManager.js
 @@ -5,6 +5,7 @@ const builder_util_1 = require("builder-util");
@@ -10,16 +10,22 @@ index f483d9387a3270afc884b8478f19dd2825477a04..a718d92825b4813bc27eb10775a70d8e
  var LogMessageByKey;
  (function (LogMessageByKey) {
      LogMessageByKey["PKG_DUPLICATE_REF"] = "duplicate dependency references";
-@@ -115,8 +116,12 @@ class ModuleManager {
+@@ -115,15 +116,15 @@ class ModuleManager {
                  return { packageDir: path.dirname(direct), packageJson: json };
              }
          }
 -        // 2) upward hoisted search, then 3) downward non-hoisted search
--        return (await this.upwardSearch(parentDir, pkgName, requiredRange)) || (await this.downwardSearch(parentDir, pkgName, requiredRange)) || null;
 +        // 2) upward hoisted search, then 3) downward non-hoisted search, then 4) downward from workspace root
+         const upward = await this.upwardSearch(parentDir, pkgName, requiredRange);
+         if (upward) {
+             return upward;
+         }
+-        if (skipDownwardSearch) {
+-            return null;
+-        }
+-        return (await this.downwardSearch(parentDir, pkgName, requiredRange)) || null;
 +        const workspaceRoot = await searchModule.getProjectRootPath(parentDir);
-+        return (await this.upwardSearch(parentDir, pkgName, requiredRange)) ||
-+            (await this.downwardSearch(parentDir, pkgName, requiredRange)) ||
++        return (await this.downwardSearch(parentDir, pkgName, requiredRange)) ||
 +            (await this.downwardSearch(workspaceRoot, pkgName, requiredRange)) ||
 +            null;
      }
