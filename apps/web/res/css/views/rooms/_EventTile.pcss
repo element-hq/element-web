@@ -1066,12 +1066,23 @@ $left-gutter: 64px;
         .mx_ThreadPanel_replies_amount {
             @mixin ThreadRepliesAmount;
         }
+    }
+}
 
-        .mx_ThreadSummary_content {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
+.mx_ThreadSummary_icon {
+    display: inline-block;
+    margin-top: $spacing-8;
+    margin-bottom: $spacing-8;
+
+    > svg {
+        @mixin ThreadSummaryIcon;
+        vertical-align: middle;
+        margin-inline-end: $spacing-8;
+        margin-top: -2px;
+    }
+
+    a& {
+        color: $secondary-content;
     }
 }
 
