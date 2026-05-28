@@ -98,21 +98,32 @@ abstract class IconRenderer {
         const opt = this.options(n, params);
 
         let more = false;
+        // Font-height multiplier applied to opt.h to ensure text fits the badge.
+        let fontScale: number;
         if (!this.baseImage) {
-            // If we omit the background, assume the entire canvas is our target.
+            // If we omit the background, the entire canvas is our target.
+            // Keep it a circle inside the square canvas (favicons / overlay
+            // icons are square) and shrink the text for multi-digit counts
+            // so it doesn't overflow the fixed-width circle.
             opt.x = 0;
             opt.y = 0;
             opt.w = this.canvas.width;
             opt.h = this.canvas.height;
-        }
-        if (opt.len === 2) {
+            if (opt.len === 2) fontScale = 0.65;
+            else if (opt.len >= 3) fontScale = 0.5;
+            else fontScale = 1;
+        } else if (opt.len === 2) {
             opt.x = opt.x - opt.w * 0.4;
             opt.w = opt.w * 1.4;
             more = true;
+            fontScale = 1;
         } else if (opt.len >= 3) {
             opt.x = opt.x - opt.w * 0.65;
             opt.w = opt.w * 1.65;
             more = true;
+            fontScale = 0.85;
+        } else {
+            fontScale = 1;
         }
 
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -120,7 +131,7 @@ abstract class IconRenderer {
             this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
         }
         this.context.beginPath();
-        const fontSize = Math.floor(opt.h * (typeof opt.n === "number" && opt.n > 99 ? 0.85 : 1)) + "px";
+        const fontSize = Math.floor(opt.h * fontScale) + "px";
         this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
         this.context.textAlign = "center";
 
@@ -145,12 +156,19 @@ abstract class IconRenderer {
         this.context.stroke();
         this.context.fillStyle = params.textColor;
 
-        if (typeof opt.n === "number" && opt.n > 999) {
-            const count = (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+";
-            this.context.fillText(count, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.2));
-        } else {
-            this.context.fillText("" + opt.n, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.15));
-        }
+        const text =
+            typeof opt.n === "number" && opt.n > 999
+                ? (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+"
+                : "" + opt.n;
+        // Centre the glyph vertically on the badge using its measured bounding
+        // box. `actualBoundingBoxAscent` is the distance from the alphabetic
+        // baseline up to the top of the glyph, so placing the baseline at
+        // `centre + ascent/2` puts the glyph's visual centre at the badge centre,
+        // regardless of font size or font metrics.
+        const metrics = this.context.measureText(text);
+        const textX = Math.floor(opt.x + opt.w / 2);
+        const textY = Math.floor(opt.y + opt.h / 2 + metrics.actualBoundingBoxAscent / 2);
+        this.context.fillText(text, textX, textY);
 
         this.context.closePath();
     }
@@ -176,7 +194,14 @@ export class BadgeOverlayRenderer extends IconRenderer {
             return null;
         }
 
-        this.circle(contents, { ...(bgColor ? { bgColor } : undefined) });
+        // Windows native notification badges clamp at "99+"
+        // (https://learn.microsoft.com/en-us/windows/apps/develop/notifications/badges),
+        // and the overlay canvas is only 16x16, so we follow the same convention here.
+        // This only affects the Windows taskbar overlay; browser-tab favicons
+        // (Favicon below) still render larger counts as e.g. "1k+".
+        const clamped = typeof contents === "number" && contents > 99 ? "99+" : contents;
+
+        this.circle(clamped, { ...(bgColor ? { bgColor } : undefined) });
         return new Promise((resolve, reject) => {
             this.canvas.toBlob(
                 (blob) => {
