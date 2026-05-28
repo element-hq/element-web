@@ -11,6 +11,7 @@ import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-soli
 import { Button } from "@vector-im/compound-web";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { EventPreviewView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
 import { _t } from "../../../languageHandler";
@@ -24,8 +25,9 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
-import { EventPreview } from "./EventPreview.tsx";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { EventPreviewViewModel } from "../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -118,7 +120,7 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
                             )}
                         </div>
                     )}
-                    <EventPreview
+                    <EventPreviewWrapper
                         mxEvent={pinnedEvent}
                         className="mx_PinnedMessageBanner_message"
                         data-testid="banner-message"
@@ -139,6 +141,25 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             {!isSinglePinnedEvent && <BannerButton room={room} />}
         </div>
     );
+}
+
+type EventPreviewWrapperProps = Omit<React.ComponentPropsWithoutRef<"span">, "children" | "title"> & {
+    mxEvent: MatrixEvent;
+};
+
+function EventPreviewWrapper({ mxEvent, ...props }: Readonly<EventPreviewWrapperProps>): JSX.Element {
+    const cli = useContext(MatrixClientContext);
+    const vm = useCreateAutoDisposedViewModel(() => new EventPreviewViewModel({ cli, mxEvent }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    useEffect(() => {
+        vm.setClient(cli);
+    }, [cli, vm]);
+
+    return <EventPreviewView {...props} vm={vm} />;
 }
 
 /**

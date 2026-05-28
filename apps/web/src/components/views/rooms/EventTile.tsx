@@ -43,6 +43,7 @@ import {
     useCreateAutoDisposedViewModel,
     ActionBarView,
     E2eMessageSharedIconView,
+    EventPreviewView,
     MessageTimestampView,
     PinnedMessageBadge,
     ReactionsRowButtonView,
@@ -89,7 +90,6 @@ import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationB
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
-import { EventPreview } from "./EventPreview";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
@@ -143,6 +143,7 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
+import { EventPreviewViewModel } from "../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -1297,7 +1298,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
                                     <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : (
-                                    <EventPreview mxEvent={this.props.mxEvent} />
+                                    <EventPreviewWrapper mxEvent={this.props.mxEvent} />
                                 )}
                             </div>
                             {this.renderThreadPanelSummary(threadState)}
@@ -1561,6 +1562,25 @@ function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Ele
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );
+}
+
+type EventPreviewWrapperProps = Omit<React.ComponentPropsWithoutRef<"span">, "children" | "title"> & {
+    mxEvent: MatrixEvent;
+};
+
+function EventPreviewWrapper({ mxEvent, ...props }: Readonly<EventPreviewWrapperProps>): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new EventPreviewViewModel({ cli, mxEvent }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    useEffect(() => {
+        vm.setClient(cli);
+    }, [cli, vm]);
+
+    return <EventPreviewView {...props} vm={vm} />;
 }
 
 interface ThreadMessagePreviewWrapperProps {
