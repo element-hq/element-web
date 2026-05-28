@@ -18,6 +18,7 @@ import { type RoomNotificationState } from "../../stores/notifications/RoomNotif
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
+import PosthogTrackers from "../../PosthogTrackers";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -80,6 +81,9 @@ export class RoomListSectionHeaderViewModel
     public set isExpanded(value: boolean) {
         this.expandedBySpace.set(this.props.spaceId, value);
         this.snapshot.merge({ isExpanded: value });
+
+        const kind = value ? "Expand" : "Collapse";
+        PosthogTrackers.trackCollapseOrExpandSection(kind, "SectionHeader");
     }
 
     /**
@@ -153,5 +157,7 @@ export class RoomListSectionHeaderViewModel
         // There is one notification state per room in the section
         const isEmpty = this.roomNotificationStates.size === 0;
         await RoomListStoreV3.instance.removeSection(this.props.tag, isEmpty);
+
+        PosthogTrackers.trackInteraction("WebDeleteSection");
     };
 }

@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type Room } from "matrix-js-sdk/src/matrix";
+
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import {
@@ -21,6 +23,8 @@ import {
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
+import { MetaSpace } from "../../../../src/stores/spaces";
+import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 
 describe("section", () => {
     afterEach(() => {
@@ -33,7 +37,9 @@ describe("section", () => {
         const validEntry = { tag: validTag, name: "Valid" };
 
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            // Default: no known spaces
+            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it.each([null, false, 42, "string", []] as const)("returns an empty object when the raw value is %p", (raw) => {
@@ -41,12 +47,12 @@ describe("section", () => {
             expect(getCustomSectionData()).toEqual({});
         });
 
-        it("returns valid entries and drops invalid ones", () => {
+        it("returns valid entries and drops invalid ones, defaulting spaceId to MetaSpace.Home", () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({
                 [validTag]: validEntry,
                 [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" },
             });
-            expect(getCustomSectionData()).toEqual({ [validTag]: validEntry });
+            expect(getCustomSectionData()).toEqual({ [validTag]: { ...validEntry, spaceId: MetaSpace.Home } });
         });
 
         it("drops entries that fail the isValidCustomSection check", () => {
@@ -58,13 +64,44 @@ describe("section", () => {
             });
             expect(getCustomSectionData()).toEqual({});
         });
+
+        it("defaults spaceId to MetaSpace.Home when spaceId is missing", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({ [validTag]: validEntry });
+            expect(getCustomSectionData()[validTag].spaceId).toBe(MetaSpace.Home);
+        });
+
+        it("defaults spaceId to MetaSpace.Home when the stored space does not exist", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: { ...validEntry, spaceId: "!gone:server" },
+            });
+            // spacePanelSpaces is empty (default mock), so !gone:server is unknown
+            expect(getCustomSectionData()[validTag].spaceId).toBe(MetaSpace.Home);
+        });
+
+        it("keeps spaceId when the meta-space is enabled", () => {
+            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([MetaSpace.Home]);
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: { ...validEntry, spaceId: MetaSpace.Home },
+            });
+            expect(getCustomSectionData()[validTag].spaceId).toBe(MetaSpace.Home);
+        });
+
+        it("keeps spaceId when the real space room exists", () => {
+            const spaceId = "!space:server";
+            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([{ roomId: spaceId } as Room]);
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: { ...validEntry, spaceId },
+            });
+            expect(getCustomSectionData()[validTag].spaceId).toBe(spaceId);
+        });
     });
 
     describe("getOrderedCustomSections", () => {
         const tag = "element.io.section.abc";
 
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it("returns an empty array when the raw value is not an array", () => {
@@ -93,6 +130,8 @@ describe("section", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(null);
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it.each([
@@ -105,7 +144,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            const result = await createSection();
+            const result = await createSection(MetaSpace.Home);
             expect(result).toEqual(expected);
         });
 
@@ -115,7 +154,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            const result = await createSection();
+            const result = await createSection(MetaSpace.Home);
             expect(result).toMatch(/^element\.io\.section\./);
         });
 
@@ -125,7 +164,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            await createSection();
+            await createSection(MetaSpace.Home);
             expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog);
         });
 
@@ -143,7 +182,7 @@ describe("section", () => {
             } as any);
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            await createSection();
+            await createSection(MetaSpace.Home);
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
             const savedOrder = orderedCall![3] as string[];
@@ -152,9 +191,12 @@ describe("section", () => {
 
             const newTag = savedOrder[1];
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
-            const savedSection = (customDataCall![3] as Record<string, { tag: string; name: string }>)[newTag];
+            const savedSection = (customDataCall![3] as Record<string, { tag: string; name: string; spaceId: string }>)[
+                newTag
+            ];
             expect(savedSection.name).toBe("My Section");
             expect(savedSection.tag).toBe(newTag);
+            expect(savedSection.spaceId).toBe(MetaSpace.Home);
         });
     });
 
@@ -219,7 +261,7 @@ describe("section", () => {
                 "RoomList.CustomSectionData",
                 null,
                 expect.anything(),
-                expect.objectContaining({ [tag]: { tag, name: "New Name" } }),
+                expect.objectContaining({ [tag]: expect.objectContaining({ tag, name: "New Name" }) }),
             );
         });
     });

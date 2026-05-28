@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
 
 import {
     type EventTileSenderProfileState,
@@ -229,8 +230,88 @@ export interface EventTileViewModelSnapshot {
     footer: EventTileFooterSnapshot;
 }
 
+/** Render-ready EventTile state consumed by the existing component. */
+export interface EventTileRenderState {
+    /** Derived EventTile view state. */
+    snapshot: EventTileViewModelSnapshot;
+    /** EventTile root render state. */
+    root: {
+        /** EventTile root CSS classes. */
+        className: string;
+        /** EventTile aria-live value. */
+        ariaLive?: "off";
+        /** Stable scroll token for the event. */
+        scrollToken?: string;
+        /** Whether the tile is rendering as a notification. */
+        isRenderingNotification: boolean;
+    };
+    /** EventTile line render state. */
+    line: {
+        /** EventTile line CSS classes. */
+        className: string;
+    };
+    /** EventTile timestamp render state. */
+    timestamp: EventTileTimestampSnapshot & {
+        /** Whether EventTile should render the placeholder timestamp used by IRC layout. */
+        showDummy: boolean;
+        /** Whether the timestamp slot belongs in the group-layout line. */
+        showInGroupLine: boolean;
+        /** Whether the timestamp slot belongs in the IRC-layout line. */
+        showInIrcLine: boolean;
+    };
+    /** EventTile E2E padlock slot state. */
+    e2ePadlock: {
+        /** Whether the padlock should render in the group-layout timestamp area. */
+        showInGroupLine: boolean;
+        /** Whether the padlock should render in the IRC-layout timestamp area. */
+        showInIrcLine: boolean;
+    };
+    /** EventTile footer slot state. */
+    footer: EventTileFooterSnapshot & {
+        /** Whether the footer belongs inside the IRC-layout message line. */
+        showInIrcLayout: boolean;
+        /** Whether the footer belongs below the message line. */
+        showInDefaultLayout: boolean;
+    };
+}
+
 /** Derives the current EventTile snapshot from component-owned inputs. */
 export class EventTileViewModel {
+    /** Derives render-ready EventTile state from component-owned inputs. */
+    public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
+        const snapshot = EventTileViewModel.createSnapshot(props);
+        const useIRCLayout = snapshot.timestamp.displayState.useIRCLayout;
+        const showPadlock = !props.display.isBubbleMessage;
+
+        return {
+            snapshot,
+            root: {
+                className: classNames(snapshot.root.classState),
+                ariaLive: snapshot.root.ariaLive,
+                scrollToken: snapshot.root.scrollToken,
+                isRenderingNotification: snapshot.event.isRenderingNotification,
+            },
+            line: {
+                className: classNames("mx_EventTile_line", snapshot.line.classState),
+            },
+            timestamp: {
+                ...snapshot.timestamp,
+                showDummy: useIRCLayout,
+                showInGroupLine: !useIRCLayout,
+                showInIrcLine: useIRCLayout,
+            },
+            e2ePadlock: {
+                showInGroupLine: !useIRCLayout && showPadlock,
+                showInIrcLine: useIRCLayout && showPadlock,
+            },
+            footer: {
+                ...snapshot.footer,
+                showInIrcLayout: useIRCLayout,
+                showInDefaultLayout: !useIRCLayout,
+            },
+        };
+    }
+
     /** Creates an EventTile view model snapshot. */
     public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;
