@@ -8,6 +8,7 @@
 export {
     checkInputableElement,
     findNextSiblingElement,
+    findPreviousSiblingElement,
     RovingAction,
     RovingStateActionType,
     RovingTabIndexContext,

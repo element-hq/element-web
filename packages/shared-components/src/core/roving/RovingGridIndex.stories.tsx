@@ -20,6 +20,13 @@ const gridStyle: React.CSSProperties = {
     borderRadius: 8,
 };
 
+const containerStyle: React.CSSProperties = {
+    display: "inline-flex",
+    flexDirection: "column",
+    gap: 8,
+    alignItems: "flex-start",
+};
+
 const rowStyle: React.CSSProperties = {
     display: "flex",
     gap: 4,
@@ -28,6 +35,11 @@ const rowStyle: React.CSSProperties = {
 const buttonStyle: React.CSSProperties = {
     width: 44,
     height: 36,
+};
+
+const activeCellLabelStyle: React.CSSProperties = {
+    color: "var(--cpd-color-text-secondary)",
+    font: "var(--cpd-font-body-sm-regular)",
 };
 
 function GridButton({ label }: Readonly<{ label: string }>): JSX.Element {
@@ -48,12 +60,14 @@ function GridButton({ label }: Readonly<{ label: string }>): JSX.Element {
 
 function GridExample({
     rows,
+    handleHomeEnd,
     handleInputFields,
     handleLoop,
     moveFocus = true,
     withInput,
 }: Readonly<{
     rows: string[][];
+    handleHomeEnd?: boolean;
     handleInputFields?: boolean;
     handleLoop?: boolean;
     moveFocus?: React.ComponentProps<typeof RovingGridIndexProvider>["moveFocus"];
@@ -63,22 +77,23 @@ function GridExample({
 
     return (
         <RovingGridIndexProvider
+            handleHomeEnd={handleHomeEnd}
             handleInputFields={handleInputFields}
             handleLoop={handleLoop}
             moveFocus={moveFocus}
             onGridNavigation={(_event, target) => setActiveLabel(target.textContent ?? "")}
         >
             {({ onKeyDownHandler }) => (
-                <div>
+                <div style={containerStyle}>
                     {withInput && (
                         <input
                             aria-label="Search"
                             aria-activedescendant={activeLabel ? `grid-button-${activeLabel}` : undefined}
                             onKeyDown={onKeyDownHandler}
-                            placeholder="Search"
-                            style={{ marginBottom: 8 }}
+                            placeholder="Focus stays here; use arrow keys"
                         />
                     )}
+                    {withInput && <span style={activeCellLabelStyle}>Active cell: {activeLabel}</span>}
                     <div
                         role="grid"
                         aria-label="Example roving grid"
@@ -108,7 +123,30 @@ const meta = {
     title: "Core/RovingGridIndex",
     component: RovingGridIndexWrapper,
     tags: ["autodocs"],
+    args: {
+        rows: [],
+        handleHomeEnd: true,
+        handleLoop: true,
+    },
     argTypes: {
+        handleHomeEnd: {
+            control: "boolean",
+        },
+        handleInputFields: {
+            control: false,
+            table: {
+                disable: true,
+            },
+        },
+        handleLoop: {
+            control: "boolean",
+        },
+        moveFocus: {
+            control: false,
+            table: {
+                disable: true,
+            },
+        },
         withInput: {
             control: false,
             table: {
@@ -129,6 +167,7 @@ export const DefaultGrid: Story = {
             ["B1", "B2", "B3", "B4"],
             ["C1", "C2", "C3", "C4"],
         ],
+        handleHomeEnd: true,
     },
 };
 
@@ -139,6 +178,7 @@ export const RaggedRows: Story = {
             ["B1", "B2"],
             ["C1", "C2", "C3"],
         ],
+        handleHomeEnd: true,
     },
 };
 
@@ -148,6 +188,7 @@ export const VirtualFocus: Story = {
             ["A1", "A2", "A3"],
             ["B1", "B2", "B3"],
         ],
+        handleHomeEnd: true,
         handleInputFields: true,
         moveFocus: false,
         withInput: true,
@@ -160,6 +201,7 @@ export const LoopingHorizontalNavigation: Story = {
             ["A1", "A2", "A3"],
             ["B1", "B2", "B3"],
         ],
+        handleHomeEnd: true,
         handleLoop: true,
     },
 };
