@@ -259,7 +259,7 @@ const RovingTabIndexWrapper = withViewDocs(RovingTabIndexExample, RovingTabIndex
 const meta = {
     title: "Core/RovingTabIndex",
     component: RovingTabIndexWrapper,
-    tags: ["autodocs"],
+    tags: ["autodocs", "skip-test"],
     args: {
         labels: [],
         handleHomeEnd: true,

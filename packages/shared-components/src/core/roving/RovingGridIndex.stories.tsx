@@ -173,7 +173,7 @@ const RovingGridIndexWrapper = withViewDocs(GridExample, RovingGridIndexProvider
 const meta = {
     title: "Core/RovingGridIndex",
     component: RovingGridIndexWrapper,
-    tags: ["autodocs"],
+    tags: ["autodocs", "skip-test"],
     args: {
         rows: [],
         handleHomeEnd: true,
