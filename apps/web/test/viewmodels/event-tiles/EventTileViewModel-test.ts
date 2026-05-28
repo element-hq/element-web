@@ -112,6 +112,135 @@ describe("EventTileViewModel", () => {
         expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });
 
+    it("derives render-ready root and line state", () => {
+        const mxEvent = makeMessageEvent({ status: EventStatus.SENDING });
+
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                event: {
+                    mxEvent,
+                    eventSendStatus: EventStatus.SENDING,
+                },
+                display: {
+                    isHighlighted: true,
+                },
+            }),
+        );
+
+        expect(renderState.snapshot.event.isSending).toBe(true);
+        expect(renderState.root.className).toContain("mx_EventTile");
+        expect(renderState.root.className).toContain("mx_EventTile_sending");
+        expect(renderState.root.className).toContain("mx_EventTile_highlight");
+        expect(renderState.root.ariaLive).toBe("off");
+        expect(renderState.root.scrollToken).toBeUndefined();
+        expect(renderState.root.isRenderingNotification).toBe(false);
+        expect(renderState.line.className).toContain("mx_EventTile_line");
+        expect(renderState.timestamp).toMatchObject(renderState.snapshot.timestamp);
+    });
+
+    it("derives E2E padlock placement for group layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                    isBubbleMessage: false,
+                },
+            }),
+        );
+
+        expect(renderState.e2ePadlock).toEqual({
+            showInGroupLine: true,
+            showInIrcLine: false,
+        });
+    });
+
+    it("derives E2E padlock placement for IRC layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                    isBubbleMessage: false,
+                },
+            }),
+        );
+
+        expect(renderState.e2ePadlock).toEqual({
+            showInGroupLine: false,
+            showInIrcLine: true,
+        });
+    });
+
+    it("does not place E2E padlocks for bubble messages", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                    isBubbleMessage: true,
+                },
+            }),
+        );
+
+        expect(renderState.e2ePadlock).toEqual({
+            showInGroupLine: false,
+            showInIrcLine: false,
+        });
+    });
+
+    it("derives timestamp slots for group layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                },
+                interaction: {
+                    hover: true,
+                },
+            }),
+        );
+
+        expect(renderState.timestamp.showDummy).toBe(false);
+        expect(renderState.timestamp.showInGroupLine).toBe(true);
+        expect(renderState.timestamp.showInIrcLine).toBe(false);
+    });
+
+    it("derives timestamp slots for IRC layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                },
+                interaction: {
+                    hover: true,
+                },
+            }),
+        );
+
+        expect(renderState.timestamp.showDummy).toBe(true);
+        expect(renderState.timestamp.showInGroupLine).toBe(false);
+        expect(renderState.timestamp.showInIrcLine).toBe(true);
+    });
+
+    it("keeps the IRC timestamp slot for the dummy timestamp when timestamps are hidden", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                },
+                interaction: {
+                    hover: true,
+                },
+                timestamp: {
+                    hideTimestamp: true,
+                },
+            }),
+        );
+
+        expect(renderState.timestamp.showDummy).toBe(true);
+        expect(renderState.timestamp.displayState.showLinkedTimestamp).toBe(false);
+        expect(renderState.timestamp.showInGroupLine).toBe(false);
+        expect(renderState.timestamp.showInIrcLine).toBe(true);
+    });
+
     it("normalizes continuation by rendering mode and bubble layout", () => {
         const fileSnapshot = EventTileViewModel.createSnapshot(
             makeProps({
@@ -277,6 +406,48 @@ describe("EventTileViewModel", () => {
             hasFooter: true,
             showMainPinnedMessageBadge: false,
             showBubblePinnedMessageBadge: true,
+        });
+    });
+
+    it("derives footer render placement for default layouts", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.Group,
+                },
+                footer: {
+                    isOwnEvent: true,
+                    hasReactionsRow: true,
+                    hasReactions: true,
+                },
+            }),
+        );
+
+        expect(renderState.footer).toMatchObject({
+            hasFooter: true,
+            showInIrcLayout: false,
+            showInDefaultLayout: true,
+        });
+    });
+
+    it("derives footer render placement for IRC layout", () => {
+        const renderState = EventTileViewModel.createRenderState(
+            makeProps({
+                display: {
+                    layout: Layout.IRC,
+                },
+                footer: {
+                    isOwnEvent: true,
+                    hasReactionsRow: true,
+                    hasReactions: true,
+                },
+            }),
+        );
+
+        expect(renderState.footer).toMatchObject({
+            hasFooter: true,
+            showInIrcLayout: true,
+            showInDefaultLayout: false,
         });
     });
 });
