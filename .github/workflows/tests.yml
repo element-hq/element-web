@@ -39,7 +39,7 @@ jobs:
         steps:
             # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
             # so, with the one at the end too, this will let us work out how much disk has been used.
-            - name: df
+            - name: dfbefore
               run: df -h && df -i
 
             - name: Checkout code
