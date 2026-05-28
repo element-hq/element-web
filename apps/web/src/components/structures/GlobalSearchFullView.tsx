@@ -88,9 +88,52 @@ function SectionHeader({ title }: { title: string }): JSX.Element {
     );
 }
 
+// ── Text highlight ────────────────────────────────────────────────────────────
+
+function HighlightedText({ text, query, style }: { text: string; query: string; style?: React.CSSProperties }): JSX.Element {
+    const trimmed = query.trim();
+    if (!trimmed) return <span style={style}>{text}</span>;
+
+    const lcText = text.toLowerCase();
+    const lcQuery = trimmed.toLowerCase();
+    const parts: { text: string; highlight: boolean }[] = [];
+    let cursor = 0;
+    let idx = lcText.indexOf(lcQuery, cursor);
+    while (idx !== -1) {
+        if (idx > cursor) parts.push({ text: text.slice(cursor, idx), highlight: false });
+        parts.push({ text: text.slice(idx, idx + lcQuery.length), highlight: true });
+        cursor = idx + lcQuery.length;
+        idx = lcText.indexOf(lcQuery, cursor);
+    }
+    if (cursor < text.length) parts.push({ text: text.slice(cursor), highlight: false });
+
+    return (
+        <span style={style}>
+            {parts.map((part, i) =>
+                part.highlight ? (
+                    <mark
+                        key={i}
+                        style={{
+                            background: "var(--cpd-color-yellow-300)",
+                            fontWeight: 700,
+                            color: "inherit",
+                            padding: 0,
+                            borderRadius: "2px",
+                        }}
+                    >
+                        {part.text}
+                    </mark>
+                ) : (
+                    <span key={i}>{part.text}</span>
+                ),
+            )}
+        </span>
+    );
+}
+
 // ── Person card ───────────────────────────────────────────────────────────────
 
-function PersonCard({ result, onClick }: { result: PersonResult; onClick: () => void }): JSX.Element {
+function PersonCard({ result, query, onClick }: { result: PersonResult; query: string; onClick: () => void }): JSX.Element {
     return (
         <button
             type="button"
@@ -118,28 +161,30 @@ function PersonCard({ result, onClick }: { result: PersonResult; onClick: () => 
         >
             <MemberAvatar member={result.member} size="36px" hideTitle />
             <div style={{ display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
-                <span
+                <HighlightedText
+                    text={result.name}
+                    query={query}
                     style={{
                         font: "var(--cpd-font-body-md-semibold)",
                         color: "var(--cpd-color-text-primary)",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
+                        display: "block",
                     }}
-                >
-                    {result.name}
-                </span>
-                <span
+                />
+                <HighlightedText
+                    text={result.userId}
+                    query={query}
                     style={{
                         font: "var(--cpd-font-body-sm-regular)",
                         color: "var(--cpd-color-text-secondary)",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
+                        display: "block",
                     }}
-                >
-                    {result.userId}
-                </span>
+                />
             </div>
         </button>
     );
@@ -147,7 +192,7 @@ function PersonCard({ result, onClick }: { result: PersonResult; onClick: () => 
 
 // ── Room / Space card ─────────────────────────────────────────────────────────
 
-function RoomCard({ result, onClick }: { result: RoomResult | SpaceResult; onClick: () => void }): JSX.Element {
+function RoomCard({ result, query, onClick }: { result: RoomResult | SpaceResult; query: string; onClick: () => void }): JSX.Element {
     return (
         <button
             type="button"
@@ -175,29 +220,31 @@ function RoomCard({ result, onClick }: { result: RoomResult | SpaceResult; onCli
         >
             <RoomAvatar room={result.room} size="36px" />
             <div style={{ display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
-                <span
+                <HighlightedText
+                    text={result.name}
+                    query={query}
                     style={{
                         font: "var(--cpd-font-body-md-semibold)",
                         color: "var(--cpd-color-text-primary)",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
+                        display: "block",
                     }}
-                >
-                    {result.name}
-                </span>
+                />
                 {result.address && (
-                    <span
+                    <HighlightedText
+                        text={result.address}
+                        query={query}
                         style={{
                             font: "var(--cpd-font-body-sm-regular)",
                             color: "var(--cpd-color-text-secondary)",
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
+                            display: "block",
                         }}
-                    >
-                        {result.address}
-                    </span>
+                    />
                 )}
             </div>
         </button>
@@ -219,9 +266,11 @@ function formatMessageDate(date: Date): string {
 
 function MessageResultCard({
     result,
+    query,
     onClick,
 }: {
     result: MessageSearchResult;
+    query: string;
     onClick: () => void;
 }): JSX.Element {
     return (
@@ -275,7 +324,7 @@ function MessageResultCard({
                             flexShrink: 0,
                         }}
                     >
-                        {result.senderName}
+                        <HighlightedText text={result.senderName} query={query} />
                     </span>
                     <span
                         style={{
@@ -288,17 +337,18 @@ function MessageResultCard({
                         {formatMessageDate(result.timestamp)}
                     </span>
                 </div>
-                <span
+                <HighlightedText
+                    text={result.body}
+                    query={query}
                     style={{
                         font: "var(--cpd-font-body-md-regular)",
                         color: "var(--cpd-color-text-secondary)",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
+                        display: "block",
                     }}
-                >
-                    {result.body}
-                </span>
+                />
             </div>
         </button>
     );
@@ -393,6 +443,7 @@ function MessagesResultsContent({
                             <MessageResultCard
                                 key={result.eventId}
                                 result={result}
+                                query={query}
                                 onClick={() => onRoomClick(result.roomId)}
                             />
                         ))}
@@ -552,7 +603,7 @@ function ResultsContent({
                     <SectionHeader title="People" />
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-2x)" }}>
                         {visiblePeople.map((p) => (
-                            <PersonCard key={p.userId} result={p} onClick={() => onPersonClick(p)} />
+                            <PersonCard key={p.userId} result={p} query={query} onClick={() => onPersonClick(p)} />
                         ))}
                     </div>
                     {isAll && people.length > MAX_CATEGORY_RESULTS && (
@@ -569,7 +620,7 @@ function ResultsContent({
                     <SectionHeader title="Rooms" />
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-2x)" }}>
                         {visibleRooms.map((r) => (
-                            <RoomCard key={r.roomId} result={r} onClick={() => onRoomClick(r.roomId)} />
+                            <RoomCard key={r.roomId} result={r} query={query} onClick={() => onRoomClick(r.roomId)} />
                         ))}
                     </div>
                     {isAll && rooms.length > MAX_CATEGORY_RESULTS && (
@@ -586,7 +637,7 @@ function ResultsContent({
                     <SectionHeader title="Spaces" />
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-2x)" }}>
                         {visibleSpaces.map((s) => (
-                            <RoomCard key={s.roomId} result={s} onClick={() => onRoomClick(s.roomId)} />
+                            <RoomCard key={s.roomId} result={s} query={query} onClick={() => onRoomClick(s.roomId)} />
                         ))}
                     </div>
                     {isAll && spaces.length > MAX_CATEGORY_RESULTS && (
