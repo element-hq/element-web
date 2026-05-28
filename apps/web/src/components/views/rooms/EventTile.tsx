@@ -20,6 +20,7 @@ import React, {
     type MouseEvent,
     type ReactNode,
 } from "react";
+import classNames from "classnames";
 import {
     type EventStatus,
     EventType,
@@ -46,6 +47,8 @@ import {
     PinnedMessageBadge,
     ReactionsRowButtonView,
     ReactionsRowView,
+    ThreadMessagePreviewView,
+    ThreadSummaryView,
     TileErrorView,
     useViewModel,
 } from "@element-hq/web-shared-components";
@@ -80,7 +83,6 @@ import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
-import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
@@ -91,6 +93,7 @@ import { EventPreview } from "./EventPreview";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { EventTileViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { E2eMessageSharedIconViewModel } from "../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
 import {
@@ -119,6 +122,10 @@ import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import {
+    ThreadMessagePreviewViewModel,
+    ThreadSummaryViewModel,
+} from "../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel.tsx";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import {
     MAX_ITEMS_WHEN_LIMITED,
@@ -535,7 +542,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             <div className="mx_ThreadPanel_replies">
                 <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-                <ThreadMessagePreview thread={threadState.thread} />
+                <ThreadMessagePreviewWrapper thread={threadState.thread} />
             </div>
         );
     }
@@ -543,7 +550,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private renderThreadInfo(threadState: EventTileThreadState): React.ReactNode {
         if (threadState.shouldShowThreadSummary && threadState.thread) {
             return (
-                <ThreadSummary mxEvent={this.props.mxEvent} thread={threadState.thread} data-testid="thread-summary" />
+                <ThreadSummaryWrapper
+                    mxEvent={this.props.mxEvent}
+                    thread={threadState.thread}
+                    data-testid="thread-summary"
+                />
             );
         }
 
@@ -1550,6 +1561,100 @@ function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Ele
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );
+}
+
+interface ThreadMessagePreviewWrapperProps {
+    thread: Thread;
+    showDisplayName?: boolean;
+}
+
+function ThreadMessagePreviewWrapper({
+    thread,
+    showDisplayName = false,
+}: Readonly<ThreadMessagePreviewWrapperProps>): JSX.Element {
+    const cli = useMatrixClientContext();
+    const { room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
+        "room",
+        "timelineRenderingType",
+        "lowBandwidth",
+    );
+    const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ThreadMessagePreviewViewModel({
+                cli,
+                thread,
+                room,
+                timelineRenderingType,
+                lowBandwidth,
+                useOnlyCurrentProfiles,
+                showDisplayName,
+                avatarClassName: "mx_BaseAvatar",
+            }),
+    );
+
+    useEffect(() => {
+        vm.setClient(cli);
+        vm.setThread(thread);
+        vm.setRoom(room);
+        vm.setTimelineRenderingType(timelineRenderingType);
+        vm.setLowBandwidth(lowBandwidth);
+        vm.setUseOnlyCurrentProfiles(useOnlyCurrentProfiles);
+        vm.setShowDisplayName(showDisplayName);
+    }, [vm, cli, thread, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles, showDisplayName]);
+
+    return <ThreadMessagePreviewView vm={vm} />;
+}
+
+interface ThreadSummaryWrapperProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
+    mxEvent: MatrixEvent;
+    thread: Thread;
+}
+
+function ThreadSummaryWrapper({
+    mxEvent,
+    thread,
+    className,
+    ...props
+}: Readonly<ThreadSummaryWrapperProps>): JSX.Element {
+    const cli = useMatrixClientContext();
+    const { isCard } = useContext(CardContext);
+    const { narrow, room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
+        "narrow",
+        "room",
+        "timelineRenderingType",
+        "lowBandwidth",
+    );
+    const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ThreadSummaryViewModel({
+                cli,
+                mxEvent,
+                thread,
+                narrow,
+                isCard,
+                room,
+                timelineRenderingType,
+                lowBandwidth,
+                useOnlyCurrentProfiles,
+                avatarClassName: "mx_BaseAvatar",
+            }),
+    );
+
+    useEffect(() => {
+        vm.setClient(cli);
+        vm.setRootEvent(mxEvent);
+        vm.setThread(thread);
+        vm.setNarrow(narrow);
+        vm.setIsCard(isCard);
+        vm.setRoom(room);
+        vm.setTimelineRenderingType(timelineRenderingType);
+        vm.setLowBandwidth(lowBandwidth);
+        vm.setUseOnlyCurrentProfiles(useOnlyCurrentProfiles);
+    }, [vm, cli, mxEvent, thread, narrow, isCard, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles]);
+
+    return <ThreadSummaryView {...props} vm={vm} className={classNames("mx_ThreadSummary", className)} />;
 }
 
 interface ReactionsRowButtonItemProps {

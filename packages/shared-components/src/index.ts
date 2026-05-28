@@ -53,6 +53,7 @@ export * from "./room/timeline/event-tile/EventTileView/TextualEventView";
 export * from "./room/timeline/event-tile/body/AudioPlayerView";
 export * from "./room/timeline/event-tile/body/DecryptionFailureBodyView";
 export * from "./room/timeline/event-tile/body/MediaBody";
+export * from "./room/timeline/event-tile/EventTileView/ThreadSummary";
 export * from "./room/timeline/event-tile/reactions/ReactionsRow";
 export * from "./room/timeline/event-tile/reactions/ReactionsRowButton";
 export * from "./room/timeline/event-tile/reactions/ReactionsRowButtonTooltip";
