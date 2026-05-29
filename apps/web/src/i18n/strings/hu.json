@@ -975,7 +975,6 @@
         "import_invalid_passphrase": "Hitelesítési ellenőrzés sikertelen: hibás jelszó?",
         "key_storage_out_of_sync": "A kulcstároló nincs szinkronban.",
         "key_storage_out_of_sync_description": "Erősítse meg a helyreállítási kulcsot, hogy továbbra is hozzáférjen a kulcstárolóhoz és az üzenetelőzményekhez.",
-        "message_shared_by": "%(displayName)s (%(userId)s) megosztotta ezt az üzenetet, mivel nem volt a szobában, amikor elküldték.",
         "messages_not_secure": {
             "cause_1": "Saját Matrix-kiszolgáló",
             "cause_2": "Az ellenőrizendő felhasználó ehhez a Matrix-kiszolgálóhoz kapcsolódik:",
