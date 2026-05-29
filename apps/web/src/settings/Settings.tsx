@@ -608,7 +608,7 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|group_calls"),
         controller: new ReloadOnChangeController(),
-        default: false,
+        default: true,
     },
     "feature_disable_call_per_sender_encryption": {
         isFeature: true,
