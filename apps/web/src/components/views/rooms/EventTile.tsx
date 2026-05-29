@@ -513,7 +513,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             <div className="mx_ThreadPanel_replies">
                 <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-                <ThreadMessagePreviewWrapper thread={threadState.thread} />
+                <ThreadMessagePreviewAdapter thread={threadState.thread} />
             </div>
         );
     }
@@ -521,7 +521,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private renderThreadInfo(threadState: EventTileThreadState): React.ReactNode {
         if (threadState.shouldShowThreadSummary && threadState.thread) {
             return (
-                <ThreadSummaryWrapper
+                <ThreadSummaryAdapter
                     mxEvent={this.props.mxEvent}
                     thread={threadState.thread}
                     data-testid="thread-summary"
@@ -712,7 +712,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return null;
             case "messageShared":
                 return (
-                    <E2eMessageSharedIconWrapper
+                    <E2eMessageSharedIconAdapter
                         keyForwardingUserId={e2ePadlockViewState.keyForwardingUserId}
                         roomId={e2ePadlockViewState.roomId}
                     />
@@ -1068,7 +1068,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         const actionBar = eventTileSnapshot.actionBar.show ? (
-            <ActionBarWrapper
+            <ActionBarAdapter
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
                 permalinkCreator={this.props.permalinkCreator}
@@ -1116,7 +1116,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         let reactionsRow: JSX.Element | undefined;
         if (hasReactionsRow) {
             reactionsRow = (
-                <ReactionsRowWrapper
+                <ReactionsRowAdapter
                     mxEvent={this.props.mxEvent}
                     reactions={this.state.reactions}
                     key="mx_EventTile_reactionsRow"
@@ -1571,15 +1571,15 @@ function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimesta
     );
 }
 
-interface ThreadMessagePreviewWrapperProps {
+interface ThreadMessagePreviewAdapterProps {
     thread: Thread;
     showDisplayName?: boolean;
 }
 
-function ThreadMessagePreviewWrapper({
+function ThreadMessagePreviewAdapter({
     thread,
     showDisplayName = false,
-}: Readonly<ThreadMessagePreviewWrapperProps>): JSX.Element {
+}: Readonly<ThreadMessagePreviewAdapterProps>): JSX.Element {
     const cli = useMatrixClientContext();
     const { room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
         "room",
@@ -1614,17 +1614,17 @@ function ThreadMessagePreviewWrapper({
     return <ThreadMessagePreviewView vm={vm} />;
 }
 
-interface ThreadSummaryWrapperProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
+interface ThreadSummaryAdapterProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
     mxEvent: MatrixEvent;
     thread: Thread;
 }
 
-function ThreadSummaryWrapper({
+function ThreadSummaryAdapter({
     mxEvent,
     thread,
     className,
     ...props
-}: Readonly<ThreadSummaryWrapperProps>): JSX.Element {
+}: Readonly<ThreadSummaryAdapterProps>): JSX.Element {
     const cli = useMatrixClientContext();
     const { isCard } = useContext(CardContext);
     const { narrow, room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
@@ -1688,7 +1688,7 @@ function ThreadListActionBarAdapter({
     return <ActionBarView vm={vm} className={className} />;
 }
 
-interface ReactionsRowButtonItemProps {
+interface ReactionsRowButtonAdapterProps {
     mxEvent: MatrixEvent;
     content: string;
     count: number;
@@ -1698,7 +1698,7 @@ interface ReactionsRowButtonItemProps {
     customReactionImagesEnabled?: boolean;
 }
 
-function ReactionsRowButtonItem(props: Readonly<ReactionsRowButtonItemProps>): JSX.Element {
+function ReactionsRowButtonAdapter(props: Readonly<ReactionsRowButtonAdapterProps>): JSX.Element {
     const client = useMatrixClientContext();
 
     const vm = useCreateAutoDisposedViewModel(
@@ -1761,12 +1761,12 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
     return [...myReactions.values()];
 };
 
-interface ReactionsRowWrapperProps {
+interface ReactionsRowAdapterProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
 }
 
-function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrapperProps>): JSX.Element | null {
+function ReactionsRowAdapter({ mxEvent, reactions }: Readonly<ReactionsRowAdapterProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
@@ -1868,7 +1868,7 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
             });
 
             return (
-                <ReactionsRowButtonItem
+                <ReactionsRowButtonAdapter
                     key={content}
                     content={content}
                     count={deduplicatedEvents.length}
@@ -1922,7 +1922,7 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
     );
 }
 
-interface ActionBarWrapperProps {
+interface ActionBarAdapterProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
@@ -1934,7 +1934,7 @@ interface ActionBarWrapperProps {
     getRelationsForEvent?: GetRelationsForEvent;
 }
 
-function ActionBarWrapper({
+function ActionBarAdapter({
     mxEvent,
     reactions,
     permalinkCreator,
@@ -1944,7 +1944,7 @@ function ActionBarWrapper({
     isQuoteExpanded,
     toggleThreadExpanded,
     getRelationsForEvent,
-}: Readonly<ActionBarWrapperProps>): JSX.Element {
+}: Readonly<ActionBarAdapterProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
     const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
@@ -2052,7 +2052,7 @@ function ActionBarWrapper({
     );
 }
 
-interface E2eMessageSharedIconWrapperProps {
+interface E2eMessageSharedIconAdapterProps {
     /**
      * The ID of the room containing the event whose keys were shared.
      */
@@ -2063,10 +2063,10 @@ interface E2eMessageSharedIconWrapperProps {
     keyForwardingUserId: string;
 }
 
-function E2eMessageSharedIconWrapper({
+function E2eMessageSharedIconAdapter({
     roomId,
     keyForwardingUserId,
-}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
+}: Readonly<E2eMessageSharedIconAdapterProps>): JSX.Element {
     const client = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
         () =>
