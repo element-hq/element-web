@@ -5,8 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export {
-    EventPreviewView,
-    type EventPreviewViewModel,
-    type EventPreviewViewSnapshot,
-} from "./EventPreviewView";
+export { EventPreviewView, type EventPreviewViewModel, type EventPreviewViewSnapshot } from "./EventPreviewView";
