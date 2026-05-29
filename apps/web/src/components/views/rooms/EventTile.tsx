@@ -30,9 +30,8 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId } from "lodash";
-import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useCreateAutoDisposedViewModel, PinnedMessageBadge, TileErrorView } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
@@ -46,8 +45,6 @@ import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import NotificationBadge from "./NotificationBadge";
 import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
 import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
@@ -63,7 +60,6 @@ import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
-import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
@@ -74,6 +70,7 @@ import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
 import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
 import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
+import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
 import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
@@ -1102,21 +1099,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const groupPadlock = eventTileRenderState.e2ePadlock.showInGroupLine && this.renderE2EPadlock();
         const ircPadlock = eventTileRenderState.e2ePadlock.showInIrcLine && this.renderE2EPadlock();
 
-        const receiptState = this.receiptState;
-        let msgOption: JSX.Element | undefined;
-        if (receiptState.shouldShowSentReceipt || receiptState.shouldShowSendingReceipt) {
-            msgOption = <SentReceipt messageState={this.props.eventSendStatus} />;
-        } else if (this.props.showReadReceipts) {
-            msgOption = (
-                <ReadReceiptGroup
-                    readReceipts={this.props.readReceipts ?? []}
-                    readReceiptMap={this.props.readReceiptMap ?? {}}
-                    checkUnmounting={this.props.checkUnmounting}
-                    suppressAnimation={this.suppressReadReceiptAnimation}
-                    isTwelveHour={this.props.isTwelveHour}
-                />
-            );
-        }
+        const msgOption = (
+            <ReceiptAdapter
+                receiptState={this.receiptState}
+                eventSendStatus={this.props.eventSendStatus}
+                showReadReceipts={this.props.showReadReceipts}
+                readReceipts={this.props.readReceipts}
+                readReceiptMap={this.props.readReceiptMap}
+                checkUnmounting={this.props.checkUnmounting}
+                suppressAnimation={this.suppressReadReceiptAnimation}
+                isTwelveHour={this.props.isTwelveHour}
+            />
+        );
 
         const replyChainState = getEventTileReplyChainState({
             mxEvent: this.props.mxEvent,
@@ -1483,40 +1477,3 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
     );
 };
 export default SafeEventTile;
-
-interface ISentReceiptProps {
-    messageState: EventStatus | undefined;
-}
-
-function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
-    const isSent = !messageState || messageState === "sent";
-    const isFailed = messageState === "not_sent";
-
-    let icon: JSX.Element | undefined;
-    let label: string | undefined;
-    if (messageState === "encrypting") {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_encrypting");
-    } else if (isSent) {
-        icon = <CheckCircleIcon />;
-        label = _t("timeline|send_state_sent");
-    } else if (isFailed) {
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-        label = _t("timeline|send_state_failed");
-    } else {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_sending");
-    }
-
-    return (
-        <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup">
-                <Tooltip label={label} placement="top-end">
-                    <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
-                    </div>
-                </Tooltip>
-            </div>
-        </div>
-    );
-}
