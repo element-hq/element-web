@@ -246,7 +246,7 @@ catalogs:
       version: 3.0.0
 
 overrides:
-  pretty-format@30>react-is: 19.2.5
+  pretty-format@30>react-is: 19.2.6
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
   oidc-client-ts: 3.5.0
@@ -639,7 +639,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -1232,8 +1232,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.3)
       linkify-react:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.3)(react@19.2.6)
+        specifier: 4.3.3
+        version: 4.3.3(linkifyjs@4.3.3)(react@19.2.6)
       linkify-string:
         specifier: 4.3.3
         version: 4.3.3(linkifyjs@4.3.3)
@@ -1256,8 +1256,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(react@19.2.6)
       react-resizable-panels:
-        specifier: 4.9.0
-        version: 4.9.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        specifier: 4.11.2
+        version: 4.11.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react-virtuoso:
         specifier: ^4.14.0
         version: 4.18.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -10121,10 +10121,10 @@ packages:
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
 
-  linkify-react@4.3.2:
-    resolution: {integrity: sha512-mi744h1hf+WDsr+paJgSBBgYNLMWNSHyM9V9LVUo03RidNGdw1VpI7Twnt+K3pEh3nIzB4xiiAgZxpd61ItKpQ==}
+  linkify-react@4.3.3:
+    resolution: {integrity: sha512-bMWuN1YJ3hyDyojk4hzUugecN2RsTuibKAQBplUT2o+3uK33THdRL2qD0Zf3ibCXuBLBCyOE6Uj/S/1cY48Ygw==}
     peerDependencies:
-      linkifyjs: ^4.0.0
+      linkifyjs: '==4.3.3'
       react: '>= 15.0.0'
 
   linkify-string@4.3.3:
@@ -10297,8 +10297,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d}
     version: 41.6.0
     engines: {node: '>=22.0.0'}
 
@@ -11825,8 +11825,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.9.0:
-    resolution: {integrity: sha512-sEl+hA6y9/kxa0aPlrUC+G1lcShAf/PiIjoeC8kWXxa53RfAVplVCIxEl01Nwa4L2iRa5JXBXq1/mI8ch6qOZQ==}
+  react-resizable-panels@4.11.2:
+    resolution: {integrity: sha512-+kfFbDZ8mygc7g0vxOcDzCVGuwiIUOnILqPoUHo6/uP+Mmyx6HzZU+kj1aOPDlktXuobYbr6BtQekvJwHRX4Eg==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -23790,7 +23790,7 @@ snapshots:
     dependencies:
       uc.micro: 2.1.0
 
-  linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.2.6):
+  linkify-react@4.3.3(linkifyjs@4.3.3)(react@19.2.6):
     dependencies:
       linkifyjs: 4.3.3
       react: 19.2.6
@@ -24002,7 +24002,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.2.0
@@ -25909,7 +25909,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  react-resizable-panels@4.9.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+  react-resizable-panels@4.11.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
