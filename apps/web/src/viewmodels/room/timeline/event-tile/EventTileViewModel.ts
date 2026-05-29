@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
+import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import {
     type EventTileSenderProfileState,
@@ -32,6 +33,11 @@ import {
 } from "./EventTileDerivedState";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
+import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
+import {
+    ThreadListActionBarViewModel,
+    type ThreadListActionBarViewModelProps,
+} from "../../ThreadListActionBarViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -276,7 +282,48 @@ export interface EventTileRenderState {
 }
 
 /** Derives the current EventTile snapshot from component-owned inputs. */
-export class EventTileViewModel {
+export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
+    private messageTimestampViewModel?: MessageTimestampViewModel;
+    private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
+    private threadListActionBarViewModel?: ThreadListActionBarViewModel;
+
+    public constructor(props: EventTileViewModelProps) {
+        const initialRenderState = EventTileViewModel.createRenderState(props);
+
+        super(props, initialRenderState);
+    }
+
+    /** Updates root EventTile inputs and refreshes the derived render state. */
+    public setProps(props: EventTileViewModelProps): void {
+        this.props = props;
+        this.snapshot.set(EventTileViewModel.createRenderState(props));
+    }
+
+    public override dispose(): void {
+        this.messageTimestampViewModel?.dispose();
+        this.linkedMessageTimestampViewModel?.dispose();
+        this.threadListActionBarViewModel?.dispose();
+        super.dispose();
+    }
+
+    /** Lazily creates and returns the plain timestamp child view model. */
+    public getMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
+        this.messageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        return this.messageTimestampViewModel;
+    }
+
+    /** Lazily creates and returns the permalink timestamp child view model. */
+    public getLinkedMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
+        this.linkedMessageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        return this.linkedMessageTimestampViewModel;
+    }
+
+    /** Lazily creates and returns the thread-list action bar child view model. */
+    public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
+        this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
+        return this.threadListActionBarViewModel;
+    }
+
     /** Derives render-ready EventTile state from component-owned inputs. */
     public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
         const snapshot = EventTileViewModel.createSnapshot(props);
@@ -473,6 +520,4 @@ export class EventTileViewModel {
             noBubbleEvent: display.noBubbleEvent,
         });
     }
-
-    private constructor() {}
 }
