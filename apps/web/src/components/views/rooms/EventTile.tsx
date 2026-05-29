@@ -502,7 +502,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             <div className="mx_ThreadPanel_replies">
                 <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-                <ThreadMessagePreviewAdapter thread={threadState.thread} />
+                <ThreadMessagePreviewAdapter eventTileViewModel={this.viewModel} thread={threadState.thread} />
             </div>
         );
     }
@@ -511,6 +511,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (threadState.shouldShowThreadSummary && threadState.thread) {
             return (
                 <ThreadSummaryAdapter
+                    eventTileViewModel={this.viewModel}
                     mxEvent={this.props.mxEvent}
                     thread={threadState.thread}
                     data-testid="thread-summary"
@@ -702,6 +703,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             case "messageShared":
                 return (
                     <E2eMessageSharedIconAdapter
+                        eventTileViewModel={this.viewModel}
                         keyForwardingUserId={e2ePadlockViewState.keyForwardingUserId}
                         roomId={e2ePadlockViewState.roomId}
                     />
@@ -1082,7 +1084,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         ) : null;
         const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
             <MessageTimestampAdapter
-                vm={this.viewModel.getMessageTimestampViewModel(messageTimestampProps)}
+                eventTileViewModel={this.viewModel}
+                kind="plain"
                 timestampProps={messageTimestampProps}
             />
         ) : (
@@ -1090,7 +1093,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         );
         const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
             <MessageTimestampAdapter
-                vm={this.viewModel.getLinkedMessageTimestampViewModel(linkedMessageTimestampProps)}
+                eventTileViewModel={this.viewModel}
+                kind="linked"
                 timestampProps={linkedMessageTimestampProps}
             />
         ) : (
@@ -1304,10 +1308,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
                             <ThreadListActionBarAdapter
-                                vm={this.viewModel.getThreadListActionBarViewModel({
-                                    onViewInRoomClick: this.onViewInRoomClick,
-                                    onCopyLinkClick: this.onCopyLinkToThreadClick,
-                                })}
+                                eventTileViewModel={this.viewModel}
                                 onViewInRoomClick={this.onViewInRoomClick}
                                 onCopyLinkClick={this.onCopyLinkToThreadClick}
                                 className="mx_ThreadActionBar"

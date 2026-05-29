@@ -8,18 +8,26 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, type JSX } from "react";
 import { MessageTimestampView } from "@element-hq/web-shared-components";
 
-import {
-    type MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { type MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
 interface MessageTimestampAdapterProps {
-    vm: MessageTimestampViewModel;
+    eventTileViewModel: EventTileViewModel;
+    kind: "plain" | "linked";
     timestampProps: MessageTimestampViewModelProps;
 }
 
-export function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimestampAdapterProps>): JSX.Element {
+export function MessageTimestampAdapter({
+    eventTileViewModel,
+    kind,
+    timestampProps,
+}: Readonly<MessageTimestampAdapterProps>): JSX.Element {
+    const vm =
+        kind === "linked"
+            ? eventTileViewModel.getLinkedMessageTimestampViewModel(timestampProps)
+            : eventTileViewModel.getMessageTimestampViewModel(timestampProps);
+
     useEffect(() => {
         vm.setProps(timestampProps);
     }, [vm, timestampProps]);

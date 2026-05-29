@@ -35,6 +35,16 @@ import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
 import {
+    ThreadMessagePreviewViewModel,
+    type ThreadMessagePreviewViewModelProps,
+    ThreadSummaryViewModel,
+    type ThreadSummaryViewModelProps,
+} from "./ThreadSummaryViewModel.tsx";
+import {
+    E2eMessageSharedIconViewModel,
+    type E2eMessageSharedIconViewModelProps,
+} from "./E2eMessageSharedIconViewModel";
+import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
 } from "../../ThreadListActionBarViewModel";
@@ -285,7 +295,10 @@ export interface EventTileRenderState {
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
     private messageTimestampViewModel?: MessageTimestampViewModel;
     private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
+    private threadMessagePreviewViewModel?: ThreadMessagePreviewViewModel;
+    private threadSummaryViewModel?: ThreadSummaryViewModel;
     private threadListActionBarViewModel?: ThreadListActionBarViewModel;
+    private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
 
     public constructor(props: EventTileViewModelProps) {
         const initialRenderState = EventTileViewModel.createRenderState(props);
@@ -302,7 +315,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public override dispose(): void {
         this.messageTimestampViewModel?.dispose();
         this.linkedMessageTimestampViewModel?.dispose();
+        this.threadMessagePreviewViewModel?.dispose();
+        this.threadSummaryViewModel?.dispose();
         this.threadListActionBarViewModel?.dispose();
+        this.e2eMessageSharedIconViewModel?.dispose();
         super.dispose();
     }
 
@@ -318,10 +334,28 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         return this.linkedMessageTimestampViewModel;
     }
 
+    /** Lazily creates and returns the thread message preview child view model. */
+    public getThreadMessagePreviewViewModel(props: ThreadMessagePreviewViewModelProps): ThreadMessagePreviewViewModel {
+        this.threadMessagePreviewViewModel ??= new ThreadMessagePreviewViewModel(props);
+        return this.threadMessagePreviewViewModel;
+    }
+
+    /** Lazily creates and returns the thread summary child view model. */
+    public getThreadSummaryViewModel(props: ThreadSummaryViewModelProps): ThreadSummaryViewModel {
+        this.threadSummaryViewModel ??= new ThreadSummaryViewModel(props);
+        return this.threadSummaryViewModel;
+    }
+
     /** Lazily creates and returns the thread-list action bar child view model. */
     public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
         this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
         return this.threadListActionBarViewModel;
+    }
+
+    /** Lazily creates and returns the E2E message-shared icon child view model. */
+    public getE2eMessageSharedIconViewModel(props: E2eMessageSharedIconViewModelProps): E2eMessageSharedIconViewModel {
+        this.e2eMessageSharedIconViewModel ??= new E2eMessageSharedIconViewModel(props);
+        return this.e2eMessageSharedIconViewModel;
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */

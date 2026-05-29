@@ -8,20 +8,22 @@ Please see LICENSE files in the repository root for full details.
 import React, { useContext, useEffect, type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, type Thread } from "matrix-js-sdk/src/matrix";
-import { ThreadSummaryView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { ThreadSummaryView } from "@element-hq/web-shared-components";
 
 import { CardContext } from "../../right_panel/context";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
 import { useSettingValue } from "../../../../hooks/useSettings";
-import { ThreadSummaryViewModel } from "../../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel.tsx";
+import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 interface ThreadSummaryAdapterProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
+    eventTileViewModel: EventTileViewModel;
     mxEvent: MatrixEvent;
     thread: Thread;
 }
 
 export function ThreadSummaryAdapter({
+    eventTileViewModel,
     mxEvent,
     thread,
     className,
@@ -36,21 +38,18 @@ export function ThreadSummaryAdapter({
         "lowBandwidth",
     );
     const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadSummaryViewModel({
-                cli,
-                mxEvent,
-                thread,
-                narrow,
-                isCard,
-                room,
-                timelineRenderingType,
-                lowBandwidth,
-                useOnlyCurrentProfiles,
-                avatarClassName: "mx_BaseAvatar",
-            }),
-    );
+    const vm = eventTileViewModel.getThreadSummaryViewModel({
+        cli,
+        mxEvent,
+        thread,
+        narrow,
+        isCard,
+        room,
+        timelineRenderingType,
+        lowBandwidth,
+        useOnlyCurrentProfiles,
+        avatarClassName: "mx_BaseAvatar",
+    });
 
     useEffect(() => {
         vm.setClient(cli);

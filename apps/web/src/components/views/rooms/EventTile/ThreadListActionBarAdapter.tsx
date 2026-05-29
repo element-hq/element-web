@@ -8,21 +8,26 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, type JSX } from "react";
 import { ActionBarView } from "@element-hq/web-shared-components";
 
-import { type ThreadListActionBarViewModel } from "../../../../viewmodels/room/ThreadListActionBarViewModel";
+import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 interface ThreadListActionBarAdapterProps {
-    vm: ThreadListActionBarViewModel;
+    eventTileViewModel: EventTileViewModel;
     onViewInRoomClick: (anchor: HTMLElement | null) => void;
     onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
     className?: string;
 }
 
 export function ThreadListActionBarAdapter({
-    vm,
+    eventTileViewModel,
     onViewInRoomClick,
     onCopyLinkClick,
     className,
 }: Readonly<ThreadListActionBarAdapterProps>): JSX.Element {
+    const vm = eventTileViewModel.getThreadListActionBarViewModel({
+        onViewInRoomClick,
+        onCopyLinkClick,
+    });
+
     useEffect(() => {
         vm.setProps({
             onViewInRoomClick,

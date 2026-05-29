@@ -6,12 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, type JSX } from "react";
-import { E2eMessageSharedIconView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { E2eMessageSharedIconView } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { E2eMessageSharedIconViewModel } from "../../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
+import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 interface E2eMessageSharedIconAdapterProps {
+    eventTileViewModel: EventTileViewModel;
     /**
      * The ID of the room containing the event whose keys were shared.
      */
@@ -23,18 +24,20 @@ interface E2eMessageSharedIconAdapterProps {
 }
 
 export function E2eMessageSharedIconAdapter({
+    eventTileViewModel,
     roomId,
     keyForwardingUserId,
 }: Readonly<E2eMessageSharedIconAdapterProps>): JSX.Element {
     const client = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new E2eMessageSharedIconViewModel({
-                client,
-                roomId,
-                keyForwardingUserId,
-            }),
-    );
+    const vm = eventTileViewModel.getE2eMessageSharedIconViewModel({
+        client,
+        roomId,
+        keyForwardingUserId,
+    });
+
+    useEffect(() => {
+        vm.setClient(client);
+    }, [client, vm]);
 
     useEffect(() => {
         vm.setRoomId(roomId);
