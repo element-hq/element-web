@@ -20,7 +20,6 @@ import React, {
     type MouseEvent,
     type ReactNode,
 } from "react";
-import classNames from "classnames";
 import {
     type EventStatus,
     EventType,
@@ -42,13 +41,9 @@ import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-de
 import {
     useCreateAutoDisposedViewModel,
     ActionBarView,
-    E2eMessageSharedIconView,
-    MessageTimestampView,
     PinnedMessageBadge,
     ReactionsRowButtonView,
     ReactionsRowView,
-    ThreadMessagePreviewView,
-    ThreadSummaryView,
     TileErrorView,
     useViewModel,
 } from "@element-hq/web-shared-components";
@@ -87,18 +82,20 @@ import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
-import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
+import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
+import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
+import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
+import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
+import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
-import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
-import { E2eMessageSharedIconViewModel } from "../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
 import {
     getEventTileReceiptState,
     type EventTileReceiptState,
@@ -121,14 +118,7 @@ import {
     initialEventTileInteractionState,
     type EventTileInteractionState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
-import {
-    type MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
-import {
-    ThreadMessagePreviewViewModel,
-    ThreadSummaryViewModel,
-} from "../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel.tsx";
+import { type MessageTimestampViewModelProps } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import {
     MAX_ITEMS_WHEN_LIMITED,
@@ -141,7 +131,6 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
-import { type ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
@@ -1551,143 +1540,6 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     );
 }
 
-interface MessageTimestampAdapterProps {
-    vm: MessageTimestampViewModel;
-    timestampProps: MessageTimestampViewModelProps;
-}
-
-function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimestampAdapterProps>): JSX.Element {
-    useEffect(() => {
-        vm.setProps(timestampProps);
-    }, [vm, timestampProps]);
-
-    return (
-        <>
-            {timestampProps.receivedTs ? (
-                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
-            ) : undefined}
-            <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
-        </>
-    );
-}
-
-interface ThreadMessagePreviewAdapterProps {
-    thread: Thread;
-    showDisplayName?: boolean;
-}
-
-function ThreadMessagePreviewAdapter({
-    thread,
-    showDisplayName = false,
-}: Readonly<ThreadMessagePreviewAdapterProps>): JSX.Element {
-    const cli = useMatrixClientContext();
-    const { room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
-        "room",
-        "timelineRenderingType",
-        "lowBandwidth",
-    );
-    const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadMessagePreviewViewModel({
-                cli,
-                thread,
-                room,
-                timelineRenderingType,
-                lowBandwidth,
-                useOnlyCurrentProfiles,
-                showDisplayName,
-                avatarClassName: "mx_BaseAvatar",
-            }),
-    );
-
-    useEffect(() => {
-        vm.setClient(cli);
-        vm.setThread(thread);
-        vm.setRoom(room);
-        vm.setTimelineRenderingType(timelineRenderingType);
-        vm.setLowBandwidth(lowBandwidth);
-        vm.setUseOnlyCurrentProfiles(useOnlyCurrentProfiles);
-        vm.setShowDisplayName(showDisplayName);
-    }, [vm, cli, thread, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles, showDisplayName]);
-
-    return <ThreadMessagePreviewView vm={vm} />;
-}
-
-interface ThreadSummaryAdapterProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
-    mxEvent: MatrixEvent;
-    thread: Thread;
-}
-
-function ThreadSummaryAdapter({
-    mxEvent,
-    thread,
-    className,
-    ...props
-}: Readonly<ThreadSummaryAdapterProps>): JSX.Element {
-    const cli = useMatrixClientContext();
-    const { isCard } = useContext(CardContext);
-    const { narrow, room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
-        "narrow",
-        "room",
-        "timelineRenderingType",
-        "lowBandwidth",
-    );
-    const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadSummaryViewModel({
-                cli,
-                mxEvent,
-                thread,
-                narrow,
-                isCard,
-                room,
-                timelineRenderingType,
-                lowBandwidth,
-                useOnlyCurrentProfiles,
-                avatarClassName: "mx_BaseAvatar",
-            }),
-    );
-
-    useEffect(() => {
-        vm.setClient(cli);
-        vm.setRootEvent(mxEvent);
-        vm.setThread(thread);
-        vm.setNarrow(narrow);
-        vm.setIsCard(isCard);
-        vm.setRoom(room);
-        vm.setTimelineRenderingType(timelineRenderingType);
-        vm.setLowBandwidth(lowBandwidth);
-        vm.setUseOnlyCurrentProfiles(useOnlyCurrentProfiles);
-    }, [vm, cli, mxEvent, thread, narrow, isCard, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles]);
-
-    return <ThreadSummaryView {...props} vm={vm} className={classNames("mx_ThreadSummary", className)} />;
-}
-
-interface ThreadListActionBarAdapterProps {
-    vm: ThreadListActionBarViewModel;
-    onViewInRoomClick: (anchor: HTMLElement | null) => void;
-    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
-    className?: string;
-}
-
-function ThreadListActionBarAdapter({
-    vm,
-    onViewInRoomClick,
-    onCopyLinkClick,
-    className,
-}: Readonly<ThreadListActionBarAdapterProps>): JSX.Element {
-    useEffect(() => {
-        vm.setProps({
-            onViewInRoomClick,
-            onCopyLinkClick,
-        });
-    }, [vm, onViewInRoomClick, onCopyLinkClick]);
-
-    return <ActionBarView vm={vm} className={className} />;
-}
-
 interface ReactionsRowButtonAdapterProps {
     mxEvent: MatrixEvent;
     content: string;
@@ -2049,49 +1901,5 @@ function ActionBarAdapter({
                 </ContextMenu>
             ) : null}
         </>
-    );
-}
-
-interface E2eMessageSharedIconAdapterProps {
-    /**
-     * The ID of the room containing the event whose keys were shared.
-     */
-    roomId: string;
-    /**
-     * The ID of the user who shared the keys.
-     */
-    keyForwardingUserId: string;
-}
-
-function E2eMessageSharedIconAdapter({
-    roomId,
-    keyForwardingUserId,
-}: Readonly<E2eMessageSharedIconAdapterProps>): JSX.Element {
-    const client = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new E2eMessageSharedIconViewModel({
-                client,
-                roomId,
-                keyForwardingUserId,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setRoomId(roomId);
-    }, [roomId, vm]);
-
-    useEffect(() => {
-        vm.setKeyForwardingUserId(keyForwardingUserId);
-    }, [keyForwardingUserId, vm]);
-
-    return (
-        <E2eMessageSharedIconView
-            vm={vm}
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-        />
     );
 }
