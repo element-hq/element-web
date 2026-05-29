@@ -1038,6 +1038,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const actionBar = eventTileSnapshot.actionBar.show ? (
             <ActionBarAdapter
+                eventTileViewModel={this.viewModel}
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
                 permalinkCreator={this.props.permalinkCreator}

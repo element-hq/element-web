@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useContext, useEffect, useState, type JSX } from "react";
 import { type MatrixEvent, type Relations } from "matrix-js-sdk/src/matrix";
-import { ActionBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { ActionBarView } from "@element-hq/web-shared-components";
 
 import type ReplyChain from "../../elements/ReplyChain";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
@@ -16,7 +16,7 @@ import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
 import RoomContext from "../../../../contexts/RoomContext";
 import { CardContext } from "../../right_panel/context";
 import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
-import { EventTileActionBarViewModel } from "../../../../viewmodels/room/EventTileActionBarViewModel";
+import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { type GetRelationsForEvent } from "../../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 
 interface ActionBarEventTileOps {
@@ -29,6 +29,7 @@ interface ActionBarEventTile {
 }
 
 interface ActionBarAdapterProps {
+    eventTileViewModel: EventTileViewModel;
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
@@ -41,6 +42,7 @@ interface ActionBarAdapterProps {
 }
 
 export function ActionBarAdapter({
+    eventTileViewModel,
     mxEvent,
     reactions,
     permalinkCreator,
@@ -62,22 +64,24 @@ export function ActionBarAdapter({
     const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
         setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new EventTileActionBarViewModel({
-                mxEvent,
-                timelineRenderingType: roomContext.timelineRenderingType,
-                canSendMessages: roomContext.canSendMessages,
-                canReact: roomContext.canReact,
-                isSearch,
-                isCard,
-                isQuoteExpanded,
-                onToggleThreadExpanded: toggleThreadExpanded,
-                onOptionsClick: handleOptionsClick,
-                onReactionsClick: handleReactionsClick,
-                getRelationsForEvent,
-            }),
-    );
+    const vm = eventTileViewModel.getActionBarViewModel({
+        mxEvent,
+        timelineRenderingType: roomContext.timelineRenderingType,
+        canSendMessages: roomContext.canSendMessages,
+        canReact: roomContext.canReact,
+        isSearch,
+        isCard,
+        isQuoteExpanded,
+        onToggleThreadExpanded: toggleThreadExpanded,
+        onOptionsClick: handleOptionsClick,
+        onReactionsClick: handleReactionsClick,
+        getRelationsForEvent,
+    });
+
+    useEffect(() => {
+        // This child VM owns Matrix and settings listeners, so release it when the view using it leaves the tree.
+        return () => eventTileViewModel.releaseActionBarViewModel();
+    }, [eventTileViewModel]);
 
     useEffect(() => {
         vm.setProps({

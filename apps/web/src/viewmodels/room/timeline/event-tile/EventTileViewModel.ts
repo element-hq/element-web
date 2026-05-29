@@ -48,6 +48,7 @@ import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
 } from "../../ThreadListActionBarViewModel";
+import { EventTileActionBarViewModel, type EventTileActionBarViewModelProps } from "../../EventTileActionBarViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -299,6 +300,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     private threadSummaryViewModel?: ThreadSummaryViewModel;
     private threadListActionBarViewModel?: ThreadListActionBarViewModel;
     private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
+    private actionBarViewModel?: EventTileActionBarViewModel;
 
     public constructor(props: EventTileViewModelProps) {
         const initialRenderState = EventTileViewModel.createRenderState(props);
@@ -319,6 +321,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         this.threadSummaryViewModel?.dispose();
         this.threadListActionBarViewModel?.dispose();
         this.e2eMessageSharedIconViewModel?.dispose();
+        this.actionBarViewModel?.dispose();
         super.dispose();
     }
 
@@ -374,6 +377,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public releaseE2eMessageSharedIconViewModel(): void {
         this.e2eMessageSharedIconViewModel?.dispose();
         this.e2eMessageSharedIconViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the event action bar child view model. */
+    public getActionBarViewModel(props: EventTileActionBarViewModelProps): EventTileActionBarViewModel {
+        this.actionBarViewModel ??= new EventTileActionBarViewModel(props);
+        return this.actionBarViewModel;
+    }
+
+    /** Releases the event action bar child view model when its adapter unmounts. */
+    public releaseActionBarViewModel(): void {
+        this.actionBarViewModel?.dispose();
+        this.actionBarViewModel = undefined;
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */
