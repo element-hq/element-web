@@ -978,7 +978,6 @@
         "import_invalid_passphrase": "Kontrola ověření selhala: špatné heslo?",
         "key_storage_out_of_sync": "Vaše úložiště klíčů není synchronizováno.",
         "key_storage_out_of_sync_description": "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.",
-        "message_shared_by": "%(displayName)s (%(userId)s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",

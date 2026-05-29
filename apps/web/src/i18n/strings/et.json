@@ -961,7 +961,6 @@
         "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
         "key_storage_out_of_sync": "Sinu krüptovõtmete hoidla pole sünkroonis.",
         "key_storage_out_of_sync_description": "Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti.",
-        "message_shared_by": "Kuna sa polnud sõnumi saatmise ajal jututoas, siis %(displayName)s (%(userId)s) jagas seda sõnumit sinuga.",
         "messages_not_secure": {
             "cause_1": "Sinu koduserver",
             "cause_2": "Sinu poolt verifitseeritava kasutaja koduserver",

@@ -958,7 +958,6 @@
         "import_invalid_passphrase": "Autentiseringssjekk mislyktes: Feil passord?",
         "key_storage_out_of_sync": "Nøkkeloppbevaringen din er ikke synkronisert.",
         "key_storage_out_of_sync_description": "Bekreft gjenopprettingsnøkkelen for å opprettholde tilgang til nøkkellagring og meldingshistorikk.",
-        "message_shared_by": "%(displayName)s (%(userId)s) delte denne meldingen siden du ikke var i rommet da den ble sendt.",
         "messages_not_secure": {
             "cause_1": "Hjemmeserveren din",
             "cause_2": "Hjemmeserveren brukeren du bekrefter er koblet til",
