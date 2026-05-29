@@ -13,13 +13,17 @@
         },
         {
             "description": "Separate updates to overrides from other groups",
-            "matchDepTypes": ["pnpm.overrides"],
+            "matchManagers": ["npm"],
+            "matchFileNames": ["pnpm-workspace.yaml"],
+            "matchDepTypes": ["pnpm-workspace.overrides"],
             "groupSlug": null
         },
         {
             "description": "Disable any major updates to overrides as this almost always is wrong",
-            "matchDepTypes": ["pnpm.overrides"],
             "matchUpdateTypes": ["major"],
+            "matchManagers": ["npm"],
+            "matchFileNames": ["pnpm-workspace.yaml"],
+            "matchDepTypes": ["pnpm-workspace.overrides"],
             "enabled": false
         }
     ],
