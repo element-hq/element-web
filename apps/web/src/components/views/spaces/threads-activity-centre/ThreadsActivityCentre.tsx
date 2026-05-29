@@ -19,7 +19,7 @@ import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPa
 import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { useUnreadThreadRooms } from "./useUnreadThreadRooms";
-import { NotificationBadgeViewWrapper } from "../../rooms/NotificationBadge/NotificationBadgeViewWrapper";
+import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
 import { type NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
@@ -142,7 +142,7 @@ function ThreadsActivityCentreRow({ room, onClick, notificationLevel }: ThreadsA
             label={room.name}
             Icon={<DecoratedRoomAvatar room={room} size="32px" />}
         >
-            <NotificationBadgeViewWrapper level={notificationLevel} count={0} symbol={null} forceDot={true} />
+            <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />
         </MenuItem>
     );
 }

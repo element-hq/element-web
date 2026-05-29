@@ -26,7 +26,7 @@ import ExternalLink from "../../elements/ExternalLink";
 import LabelledCheckbox from "../../elements/LabelledCheckbox";
 import StyledRadioGroup from "../../elements/StyledRadioGroup";
 import TagComposer from "../../elements/TagComposer";
-import { NotificationBadgeViewWrapper } from "../../rooms/NotificationBadge/NotificationBadgeViewWrapper";
+import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
 import { SettingsBanner } from "../shared/SettingsBanner";
 import { SettingsSection } from "../shared/SettingsSection";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
@@ -272,7 +272,7 @@ export default function NotificationSettings2(): JSX.Element {
                         {},
                         {
                             badge: (
-                                <NotificationBadgeViewWrapper
+                                <StatelessNotificationBadge
                                     symbol="1"
                                     count={1}
                                     level={NotificationLevel.Notification}
