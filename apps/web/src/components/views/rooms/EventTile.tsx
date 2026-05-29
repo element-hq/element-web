@@ -9,11 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, {
     createRef,
-    useCallback,
-    useContext,
     useEffect,
-    useMemo,
-    useState,
     type JSX,
     type Ref,
     type FocusEvent,
@@ -27,7 +23,6 @@ import {
     MatrixEventEvent,
     type Relations,
     type Room,
-    RelationsEvent,
     RoomEvent,
     type RoomMember,
     type Thread,
@@ -36,17 +31,9 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { Tooltip } from "@vector-im/compound-web";
-import { uniqueId, uniqBy } from "lodash";
+import { uniqueId } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import {
-    useCreateAutoDisposedViewModel,
-    ActionBarView,
-    PinnedMessageBadge,
-    ReactionsRowButtonView,
-    ReactionsRowView,
-    TileErrorView,
-    useViewModel,
-} from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, PinnedMessageBadge, TileErrorView } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -55,7 +42,7 @@ import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import ContextMenu, { aboveLeftOf, aboveRightOf } from "../../structures/ContextMenu";
+import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -68,9 +55,7 @@ import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import ReactionPicker from "../emojipicker/ReactionPicker";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
-import { isContentActionable } from "../../../utils/EventUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { copyPlaintext } from "../../../utils/strings";
@@ -84,14 +69,14 @@ import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationB
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
+import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
 import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
+import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
 import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
-import SettingsStore from "../../../settings/SettingsStore";
-import { CardContext } from "../right_panel/context";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
@@ -119,19 +104,12 @@ import {
     type EventTileInteractionState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
 import { type MessageTimestampViewModelProps } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
-import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
-import {
-    MAX_ITEMS_WHEN_LIMITED,
-    ReactionsRowViewModel,
-} from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 import {
     getEventTileReactionRelations,
     isEventTileReactionRelation,
     type GetRelationsForEvent,
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
-import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
@@ -1538,369 +1516,5 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
                 </Tooltip>
             </div>
         </div>
-    );
-}
-
-interface ReactionsRowButtonAdapterProps {
-    mxEvent: MatrixEvent;
-    content: string;
-    count: number;
-    reactionEvents: MatrixEvent[];
-    myReactionEvent?: MatrixEvent;
-    disabled?: boolean;
-    customReactionImagesEnabled?: boolean;
-}
-
-function ReactionsRowButtonAdapter(props: Readonly<ReactionsRowButtonAdapterProps>): JSX.Element {
-    const client = useMatrixClientContext();
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowButtonViewModel({
-                client,
-                mxEvent: props.mxEvent,
-                content: props.content,
-                count: props.count,
-                reactionEvents: props.reactionEvents,
-                myReactionEvent: props.myReactionEvent,
-                disabled: props.disabled,
-                customReactionImagesEnabled: props.customReactionImagesEnabled,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
-    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
-
-    useEffect(() => {
-        vm.setCount(props.count);
-    }, [props.count, vm]);
-
-    useEffect(() => {
-        vm.setMyReactionEvent(props.myReactionEvent);
-    }, [props.myReactionEvent, vm]);
-
-    useEffect(() => {
-        vm.setDisabled(props.disabled);
-    }, [props.disabled, vm]);
-
-    return <ReactionsRowButtonView vm={vm} />;
-}
-
-interface ReactionGroup {
-    content: string;
-    events: MatrixEvent[];
-}
-
-const getReactionGroups = (reactions?: Relations | null): ReactionGroup[] =>
-    reactions
-        ?.getSortedAnnotationsByKey()
-        ?.map(([content, events]) => ({
-            content,
-            events: [...events],
-        }))
-        .filter(({ events }) => events.length > 0) ?? [];
-
-const getMyReactions = (reactions: Relations | null | undefined, userId?: string): MatrixEvent[] | null => {
-    if (!reactions || !userId) {
-        return null;
-    }
-
-    const myReactions = reactions.getAnnotationsBySender()?.[userId];
-    if (!myReactions) {
-        return null;
-    }
-
-    return [...myReactions.values()];
-};
-
-interface ReactionsRowAdapterProps {
-    mxEvent: MatrixEvent;
-    reactions?: Relations | null;
-}
-
-function ReactionsRowAdapter({ mxEvent, reactions }: Readonly<ReactionsRowAdapterProps>): JSX.Element | null {
-    const roomContext = useContext(RoomContext);
-    const userId = roomContext.room?.client.getUserId() ?? undefined;
-    const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
-    const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
-    const [menuDisplayed, setMenuDisplayed] = useState(false);
-    const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowViewModel({
-                isActionable: isContentActionable(mxEvent),
-                reactionGroupCount: reactionGroups.length,
-                canReact: roomContext.canReact,
-                addReactionButtonActive: false,
-            }),
-    );
-
-    const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
-        setMenuAnchorRect(event.currentTarget.getBoundingClientRect());
-        setMenuDisplayed(true);
-    }, []);
-
-    const closeReactionMenu = useCallback((): void => {
-        setMenuDisplayed(false);
-    }, []);
-
-    const updateReactionsState = useCallback((): void => {
-        const nextReactionGroups = getReactionGroups(reactions);
-        setReactionGroups(nextReactionGroups);
-        setMyReactions(getMyReactions(reactions, userId));
-        vm.setReactionGroupCount(nextReactionGroups.length);
-    }, [reactions, userId, vm]);
-
-    useEffect(() => {
-        vm.setActionable(isContentActionable(mxEvent));
-    }, [mxEvent, vm]);
-
-    useEffect(() => {
-        vm.setCanReact(roomContext.canReact);
-        if (!roomContext.canReact && menuDisplayed) {
-            setMenuDisplayed(false);
-        }
-    }, [roomContext.canReact, menuDisplayed, vm]);
-
-    useEffect(() => {
-        vm.setAddReactionHandlers({
-            onAddReactionClick: openReactionMenu,
-            onAddReactionContextMenu: openReactionMenu,
-        });
-    }, [openReactionMenu, vm]);
-
-    useEffect(() => {
-        vm.setAddReactionButtonActive(menuDisplayed);
-    }, [menuDisplayed, vm]);
-
-    useEffect(() => {
-        updateReactionsState();
-    }, [updateReactionsState]);
-
-    useEffect(() => {
-        if (!reactions) return;
-
-        reactions.on(RelationsEvent.Add, updateReactionsState);
-        reactions.on(RelationsEvent.Remove, updateReactionsState);
-        reactions.on(RelationsEvent.Redaction, updateReactionsState);
-
-        return () => {
-            reactions.off(RelationsEvent.Add, updateReactionsState);
-            reactions.off(RelationsEvent.Remove, updateReactionsState);
-            reactions.off(RelationsEvent.Redaction, updateReactionsState);
-        };
-    }, [reactions, updateReactionsState]);
-
-    useEffect(() => {
-        const onDecrypted = (): void => {
-            vm.setActionable(isContentActionable(mxEvent));
-        };
-
-        if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
-            mxEvent.once(MatrixEventEvent.Decrypted, onDecrypted);
-        }
-
-        return () => {
-            mxEvent.off(MatrixEventEvent.Decrypted, onDecrypted);
-        };
-    }, [mxEvent, vm]);
-
-    const snapshot = useViewModel(vm);
-    const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
-    const items = useMemo((): JSX.Element[] | undefined => {
-        const mappedItems = reactionGroups.map(({ content, events }) => {
-            // Deduplicate reaction events by sender per Matrix spec.
-            const deduplicatedEvents = uniqBy(events, (event: MatrixEvent) => event.getSender());
-            const myReactionEvent = myReactions?.find((reactionEvent) => {
-                if (reactionEvent.isRedacted()) {
-                    return false;
-                }
-                return reactionEvent.getRelation()?.key === content;
-            });
-
-            return (
-                <ReactionsRowButtonAdapter
-                    key={content}
-                    content={content}
-                    count={deduplicatedEvents.length}
-                    mxEvent={mxEvent}
-                    reactionEvents={deduplicatedEvents}
-                    myReactionEvent={myReactionEvent}
-                    customReactionImagesEnabled={customReactionImagesEnabled}
-                    disabled={
-                        !roomContext.canReact ||
-                        (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
-                    }
-                />
-            );
-        });
-
-        if (!mappedItems.length) {
-            return undefined;
-        }
-
-        return snapshot.showAllButtonVisible ? mappedItems.slice(0, MAX_ITEMS_WHEN_LIMITED) : mappedItems;
-    }, [
-        reactionGroups,
-        myReactions,
-        mxEvent,
-        customReactionImagesEnabled,
-        roomContext.canReact,
-        roomContext.canSelfRedact,
-        snapshot.showAllButtonVisible,
-    ]);
-
-    if (!snapshot.isVisible || !items?.length) {
-        return null;
-    }
-
-    let contextMenu: JSX.Element | undefined;
-    if (menuDisplayed && menuAnchorRect && reactions && roomContext.canReact) {
-        contextMenu = (
-            <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
-                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
-            </ContextMenu>
-        );
-    }
-
-    return (
-        <>
-            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
-                {items}
-            </ReactionsRowView>
-            {contextMenu}
-        </>
-    );
-}
-
-interface ActionBarAdapterProps {
-    mxEvent: MatrixEvent;
-    reactions?: Relations | null;
-    permalinkCreator?: RoomPermalinkCreator;
-    getTile: () => IEventTileType | null;
-    getReplyChain: () => ReplyChain | null;
-    onFocusChange?: (focused: boolean) => void;
-    isQuoteExpanded?: boolean;
-    toggleThreadExpanded: () => void;
-    getRelationsForEvent?: GetRelationsForEvent;
-}
-
-function ActionBarAdapter({
-    mxEvent,
-    reactions,
-    permalinkCreator,
-    getTile,
-    getReplyChain,
-    onFocusChange,
-    isQuoteExpanded,
-    toggleThreadExpanded,
-    getRelationsForEvent,
-}: Readonly<ActionBarAdapterProps>): JSX.Element {
-    const roomContext = useContext(RoomContext);
-    const { isCard } = useContext(CardContext);
-    const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const isSearch = Boolean(roomContext.search);
-    const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
-        setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
-    const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
-        setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new EventTileActionBarViewModel({
-                mxEvent,
-                timelineRenderingType: roomContext.timelineRenderingType,
-                canSendMessages: roomContext.canSendMessages,
-                canReact: roomContext.canReact,
-                isSearch,
-                isCard,
-                isQuoteExpanded,
-                onToggleThreadExpanded: toggleThreadExpanded,
-                onOptionsClick: handleOptionsClick,
-                onReactionsClick: handleReactionsClick,
-                getRelationsForEvent,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setProps({
-            mxEvent,
-            timelineRenderingType: roomContext.timelineRenderingType,
-            canSendMessages: roomContext.canSendMessages,
-            canReact: roomContext.canReact,
-            isSearch,
-            isCard,
-            isQuoteExpanded,
-            getRelationsForEvent,
-            onToggleThreadExpanded: toggleThreadExpanded,
-            onOptionsClick: handleOptionsClick,
-            onReactionsClick: handleReactionsClick,
-        });
-    }, [
-        vm,
-        mxEvent,
-        roomContext.timelineRenderingType,
-        roomContext.canSendMessages,
-        roomContext.canReact,
-        isSearch,
-        isCard,
-        isQuoteExpanded,
-        getRelationsForEvent,
-        handleOptionsClick,
-        handleReactionsClick,
-        toggleThreadExpanded,
-    ]);
-
-    useEffect(() => {
-        onFocusChange?.(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));
-    }, [onFocusChange, optionsMenuAnchorRect, reactionsMenuAnchorRect]);
-
-    useEffect(() => {
-        setOptionsMenuAnchorRect(null);
-        setReactionsMenuAnchorRect(null);
-    }, [mxEvent]);
-
-    const closeOptionsMenu = useCallback((): void => {
-        setOptionsMenuAnchorRect(null);
-    }, []);
-
-    const closeReactionsMenu = useCallback((): void => {
-        setReactionsMenuAnchorRect(null);
-    }, []);
-
-    const tile = getTile();
-    const replyChain = getReplyChain();
-    const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
-
-    return (
-        <>
-            <ActionBarView vm={vm} className="mx_MessageActionBar" />
-            {optionsMenuAnchorRect ? (
-                <MessageContextMenu
-                    {...aboveLeftOf(optionsMenuAnchorRect)}
-                    mxEvent={mxEvent}
-                    permalinkCreator={permalinkCreator}
-                    eventTileOps={eventTileOps}
-                    collapseReplyChain={collapseReplyChain}
-                    onFinished={closeOptionsMenu}
-                    getRelationsForEvent={getRelationsForEvent}
-                />
-            ) : null}
-            {reactionsMenuAnchorRect ? (
-                <ContextMenu
-                    {...aboveLeftOf(reactionsMenuAnchorRect)}
-                    onFinished={closeReactionsMenu}
-                    managed={false}
-                    focusLock
-                >
-                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
-                </ContextMenu>
-            ) : null}
-        </>
     );
 }
