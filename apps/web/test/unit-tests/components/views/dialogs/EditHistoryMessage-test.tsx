@@ -220,13 +220,15 @@ describe("EditHistoryMessage", () => {
 
     it("updates content and timestamp view models when props change", () => {
         developerMode = true;
+        const firstEventTs = Date.parse("2021-12-17T08:09:00.000Z");
+        const secondEventTs = Date.parse("2021-12-17T09:09:00.000Z");
         const firstEvent = mkEvent({
             event: true,
             id: "$first",
             room: roomId,
             user: "@alice:example.com",
             type: "m.room.message",
-            ts: 100,
+            ts: firstEventTs,
             content: {
                 msgtype: MsgType.Text,
                 body: "First",
@@ -238,7 +240,7 @@ describe("EditHistoryMessage", () => {
             room: roomId,
             user: "@alice:example.com",
             type: "m.room.message",
-            ts: 200,
+            ts: secondEventTs,
             content: {
                 "msgtype": MsgType.Text,
                 "body": "Second",
@@ -248,8 +250,6 @@ describe("EditHistoryMessage", () => {
                 },
             },
         });
-        const setTimestampSpy = jest.spyOn(MessageTimestampViewModel.prototype, "setTimestamp");
-        const setDisplayOptionsSpy = jest.spyOn(MessageTimestampViewModel.prototype, "setDisplayOptions");
 
         const { getByRole, getByText, queryByRole, rerender } = renderComponent({
             mxEvent: firstEvent,
@@ -257,6 +257,7 @@ describe("EditHistoryMessage", () => {
         });
 
         expect(getByRole("button", { name: /remove/i })).toBeInTheDocument();
+        expect(getByText("08:09")).toBeInTheDocument();
 
         rerender(
             <MatrixClientContext.Provider value={client}>
@@ -265,10 +266,7 @@ describe("EditHistoryMessage", () => {
         );
 
         expect(getByText("Second edited")).toBeInTheDocument();
-        expect(setTimestampSpy).toHaveBeenCalledWith(200);
-        expect(setDisplayOptionsSpy).toHaveBeenCalledWith({
-            showTwelveHour: true,
-        });
+        expect(getByText("9:09 AM")).toBeInTheDocument();
         expect(queryByRole("button", { name: /remove/i })).toBeNull();
         expect(getByRole("button", { name: /view source/i })).toBeInTheDocument();
     });

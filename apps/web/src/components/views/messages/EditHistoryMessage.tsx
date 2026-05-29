@@ -91,12 +91,13 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         if (prevProps.mxEvent !== this.props.mxEvent) {
             const mxEventContent = getReplacedContent(this.props.mxEvent);
             this.eventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
-            this.messageTimestampViewModel.setTimestamp(this.props.mxEvent.getTs());
         }
 
-        if (prevProps.isTwelveHour !== this.props.isTwelveHour) {
-            this.messageTimestampViewModel.setDisplayOptions({
+        if (prevProps.mxEvent !== this.props.mxEvent || prevProps.isTwelveHour !== this.props.isTwelveHour) {
+            this.messageTimestampViewModel.setProps({
+                ts: this.props.mxEvent.getTs(),
                 showTwelveHour: this.props.isTwelveHour,
+                inhibitTooltip: true,
             });
         }
 
@@ -148,13 +149,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     }
 
     private renderActionBar(): React.ReactNode {
-        this.editHistoryActionBarViewModel.setProps({
-            canRemove: !this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact,
-            showViewSource: SettingsStore.getValue("developerMode"),
-            onRemoveClick: this.onRedactClick,
-            onViewSourceClick: this.onViewSourceClick,
-        });
-
         return (
             <ActionBarView vm={this.editHistoryActionBarViewModel} className="mx_ThreadActionBar mx_HistoryActionBar" />
         );
