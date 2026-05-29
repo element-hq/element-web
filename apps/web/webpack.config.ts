@@ -266,6 +266,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "net": false,
                 "tls": false,
                 "crypto": false,
+                "events": import.meta.resolve("events/"),
 
                 // Polyfill needed by counterpart
                 "util": import.meta.resolve("util/"),
