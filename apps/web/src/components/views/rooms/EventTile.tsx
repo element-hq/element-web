@@ -49,8 +49,6 @@ import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper
 import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
-import MemberAvatar from "../avatars/MemberAvatar";
-import SenderProfile from "../messages/SenderProfile";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -71,6 +69,7 @@ import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAda
 import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
 import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
+import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
 import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
@@ -1007,31 +1006,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Local echos have a send "status".
         const scrollToken = eventTileRenderState.root.scrollToken;
 
-        let avatar: JSX.Element | null = null;
-        let sender: JSX.Element | null = null;
-        const { avatarSize } = eventTileSnapshot.sender.profileState;
-
-        if (this.props.mxEvent.sender && avatarSize !== null) {
-            avatar = (
-                <div className="mx_EventTile_avatar">
-                    <MemberAvatar
-                        member={eventTileSnapshot.sender.avatarMember}
-                        size={avatarSize}
-                        viewUserOnClick={eventTileSnapshot.sender.viewUserOnClick}
-                        forceHistorical={this.props.mxEvent.getType() === EventType.RoomMember}
-                    />
-                </div>
-            );
-        }
-
-        const senderProfileMode = eventTileSnapshot.sender.profileMode;
-        if (senderProfileMode === "clickable") {
-            sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
-        } else if (senderProfileMode === "tooltip") {
-            sender = <SenderProfile mxEvent={this.props.mxEvent} withTooltip />;
-        } else if (senderProfileMode === "default") {
-            sender = <SenderProfile mxEvent={this.props.mxEvent} />;
-        }
+        const avatar = (
+            <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
+        );
+        const sender = (
+            <EventTileSenderAdapter
+                mxEvent={this.props.mxEvent}
+                senderSnapshot={eventTileSnapshot.sender}
+                onSenderProfileClick={this.onSenderProfileClick}
+            />
+        );
 
         const actionBar = eventTileSnapshot.actionBar.show ? (
             <ActionBarAdapter
