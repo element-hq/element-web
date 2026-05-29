@@ -426,6 +426,72 @@ describe("RovingTabIndex", () => {
             checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
         });
 
+        it("moves between multiple toolbar containers in one roving group", async () => {
+            const { container } = render(
+                <RovingTabIndexProvider handleLeftRight>
+                    {({ onKeyDownHandler }) => (
+                        <>
+                            <div aria-label="Formatting toolbar" onKeyDown={onKeyDownHandler} role="toolbar">
+                                <Button>Bold</Button>
+                                <Button>Italic</Button>
+                            </div>
+                            <div aria-label="Insert toolbar" onKeyDown={onKeyDownHandler} role="toolbar">
+                                <Button>Link</Button>
+                                <Button>Image</Button>
+                            </div>
+                        </>
+                    )}
+                </RovingTabIndexProvider>,
+            );
+
+            const buttons = container.querySelectorAll("button");
+            act(() => buttons[1].focus());
+            checkTabIndexes(buttons, [-1, 0, -1, -1]);
+
+            await userEvent.keyboard("[ArrowRight]");
+            expect(buttons[2]).toHaveFocus();
+            checkTabIndexes(buttons, [-1, -1, 0, -1]);
+
+            await userEvent.keyboard("[ArrowLeft]");
+            expect(buttons[1]).toHaveFocus();
+            checkTabIndexes(buttons, [-1, 0, -1, -1]);
+        });
+
+        it("handles Home, End, and loop across multiple toolbar containers", async () => {
+            const { container } = render(
+                <RovingTabIndexProvider handleHomeEnd handleLeftRight handleLoop>
+                    {({ onKeyDownHandler }) => (
+                        <>
+                            <div aria-label="Formatting toolbar" onKeyDown={onKeyDownHandler} role="toolbar">
+                                <Button>Bold</Button>
+                                <Button>Italic</Button>
+                            </div>
+                            <div aria-label="Insert toolbar" onKeyDown={onKeyDownHandler} role="toolbar">
+                                <Button>Link</Button>
+                                <Button>Image</Button>
+                            </div>
+                        </>
+                    )}
+                </RovingTabIndexProvider>,
+            );
+
+            const buttons = container.querySelectorAll("button");
+            act(() => buttons[2].focus());
+            checkTabIndexes(buttons, [-1, -1, 0, -1]);
+
+            await userEvent.keyboard("[End]");
+            expect(buttons[3]).toHaveFocus();
+            checkTabIndexes(buttons, [-1, -1, -1, 0]);
+
+            await userEvent.keyboard("[ArrowRight]");
+            expect(buttons[0]).toHaveFocus();
+            checkTabIndexes(buttons, [0, -1, -1, -1]);
+
+            await userEvent.keyboard("[Home]");
+            expect(buttons[0]).toHaveFocus();
+            checkTabIndexes(buttons, [0, -1, -1, -1]);
+        });
+
         it("handles Home and End when handleHomeEnd=true", async () => {
             const { container } = renderToolbar(
                 <>
