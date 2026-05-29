@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { fireEvent, render } from "jest-matrix-react";
 import React from "react";
 
-import { StatelessNotificationBadge } from "../../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
+import { NotificationBadgeViewWrapper } from "../../../../../../src/components/views/rooms/NotificationBadge/NotificationBadgeViewWrapper";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
 import NotificationBadge from "../../../../../../src/components/views/rooms/NotificationBadge";
@@ -47,12 +47,12 @@ describe("NotificationBadge", () => {
         expect(container.querySelector(".mx_NotificationBadge")).toBeInTheDocument();
     });
 
-    describe("StatelessNotificationBadge", () => {
+    describe("NotificationBadgeViewWrapper", () => {
         it("lets you click it", () => {
             const cb = jest.fn();
 
             const { getByRole } = render(
-                <StatelessNotificationBadge symbol="" level={NotificationLevel.Highlight} count={5} onClick={cb} />,
+                <NotificationBadgeViewWrapper symbol="" level={NotificationLevel.Highlight} count={5} onClick={cb} />,
             );
 
             fireEvent.click(getByRole("button")!);
@@ -65,7 +65,7 @@ describe("NotificationBadge", () => {
             });
 
             const { container } = render(
-                <StatelessNotificationBadge symbol="" level={NotificationLevel.Activity} count={1} />,
+                <NotificationBadgeViewWrapper symbol="" level={NotificationLevel.Activity} count={1} />,
             );
 
             expect(container.firstChild).toBeNull();

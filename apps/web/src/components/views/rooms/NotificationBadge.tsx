@@ -14,7 +14,7 @@ import { type XOR } from "../../../@types/common";
 import { type NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { _t } from "../../../languageHandler";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
-import { StatelessNotificationBadge } from "./NotificationBadge/StatelessNotificationBadge";
+import { NotificationBadgeViewWrapper } from "./NotificationBadge/NotificationBadgeViewWrapper";
 
 interface IProps {
     notification: NotificationState;
@@ -100,7 +100,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             return null;
         }
 
-        const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {
+        const commonProps: React.ComponentProps<typeof NotificationBadgeViewWrapper> = {
             symbol: notification.symbol,
             count: notification.count,
             level: notification.level,
@@ -109,9 +109,15 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
         let badge: JSX.Element;
         if (onClick) {
-            badge = <StatelessNotificationBadge {...commonProps} onClick={onClick} tabIndex={tabIndex} />;
+            badge = (
+                <NotificationBadgeViewWrapper
+                    {...commonProps}
+                    onClick={(event) => onClick(event as React.MouseEvent)}
+                    tabIndex={tabIndex}
+                />
+            );
         } else {
-            badge = <StatelessNotificationBadge {...commonProps} />;
+            badge = <NotificationBadgeViewWrapper {...commonProps} />;
         }
 
         if (showUnsentTooltip && notification.level === NotificationLevel.Unsent) {

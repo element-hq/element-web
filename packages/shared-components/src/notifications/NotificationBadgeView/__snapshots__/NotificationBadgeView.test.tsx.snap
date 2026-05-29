@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NotificationBadgeView > renders the default notification badge 1`] = `
+<div>
+  <div
+    class="NotificationBadgeView-module_notificationBadge mx_NotificationBadge NotificationBadgeView-module_visible NotificationBadgeView-module_badge2Char mx_NotificationBadge_visible mx_NotificationBadge_2char cpd-theme-light"
+  >
+    <span
+      class="NotificationBadgeView-module_count mx_NotificationBadge_count"
+    >
+      3
+    </span>
+  </div>
+</div>
+`;
