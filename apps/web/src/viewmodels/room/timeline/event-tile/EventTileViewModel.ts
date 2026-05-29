@@ -340,10 +340,22 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         return this.threadMessagePreviewViewModel;
     }
 
+    /** Releases the thread message preview child view model when its adapter unmounts. */
+    public releaseThreadMessagePreviewViewModel(): void {
+        this.threadMessagePreviewViewModel?.dispose();
+        this.threadMessagePreviewViewModel = undefined;
+    }
+
     /** Lazily creates and returns the thread summary child view model. */
     public getThreadSummaryViewModel(props: ThreadSummaryViewModelProps): ThreadSummaryViewModel {
         this.threadSummaryViewModel ??= new ThreadSummaryViewModel(props);
         return this.threadSummaryViewModel;
+    }
+
+    /** Releases the thread summary child view model when its adapter unmounts. */
+    public releaseThreadSummaryViewModel(): void {
+        this.threadSummaryViewModel?.dispose();
+        this.threadSummaryViewModel = undefined;
     }
 
     /** Lazily creates and returns the thread-list action bar child view model. */
@@ -356,6 +368,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public getE2eMessageSharedIconViewModel(props: E2eMessageSharedIconViewModelProps): E2eMessageSharedIconViewModel {
         this.e2eMessageSharedIconViewModel ??= new E2eMessageSharedIconViewModel(props);
         return this.e2eMessageSharedIconViewModel;
+    }
+
+    /** Releases the E2E message-shared icon child view model when its adapter unmounts. */
+    public releaseE2eMessageSharedIconViewModel(): void {
+        this.e2eMessageSharedIconViewModel?.dispose();
+        this.e2eMessageSharedIconViewModel = undefined;
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */

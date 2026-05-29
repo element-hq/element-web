@@ -52,6 +52,11 @@ export function ThreadSummaryAdapter({
     });
 
     useEffect(() => {
+        // This child VM owns Matrix listeners, so release it when the view using it leaves the tree.
+        return () => eventTileViewModel.releaseThreadSummaryViewModel();
+    }, [eventTileViewModel]);
+
+    useEffect(() => {
         vm.setClient(cli);
         vm.setRootEvent(mxEvent);
         vm.setThread(thread);

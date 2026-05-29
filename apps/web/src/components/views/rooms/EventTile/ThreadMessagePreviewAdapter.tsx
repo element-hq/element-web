@@ -44,6 +44,11 @@ export function ThreadMessagePreviewAdapter({
     });
 
     useEffect(() => {
+        // This child VM owns Matrix listeners, so release it when the view using it leaves the tree.
+        return () => eventTileViewModel.releaseThreadMessagePreviewViewModel();
+    }, [eventTileViewModel]);
+
+    useEffect(() => {
         vm.setClient(cli);
         vm.setThread(thread);
         vm.setRoom(room);

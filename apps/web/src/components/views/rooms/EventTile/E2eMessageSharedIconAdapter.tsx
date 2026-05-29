@@ -36,6 +36,11 @@ export function E2eMessageSharedIconAdapter({
     });
 
     useEffect(() => {
+        // This child VM owns Matrix listeners, so release it when the view using it leaves the tree.
+        return () => eventTileViewModel.releaseE2eMessageSharedIconViewModel();
+    }, [eventTileViewModel]);
+
+    useEffect(() => {
         vm.setClient(client);
     }, [client, vm]);
 
