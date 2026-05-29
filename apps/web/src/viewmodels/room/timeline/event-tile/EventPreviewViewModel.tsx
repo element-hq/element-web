@@ -5,8 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type ReactNode } from "react";
-import { M_POLL_START, type MatrixClient, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     BaseViewModel,
@@ -14,8 +13,11 @@ import {
     type EventPreviewViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-import { _t } from "../../../../languageHandler";
-import { MessagePreviewStore } from "../../../../stores/message-preview";
+import {
+    EventPreviewContentCache,
+    getEventPreviewContent,
+    MatrixEventContentChangeListener,
+} from "./EventPreviewUtils";
 
 export interface EventPreviewViewModelProps {
     /**
@@ -32,11 +34,9 @@ export class EventPreviewViewModel
     extends BaseViewModel<EventPreviewViewSnapshot, EventPreviewViewModelProps>
     implements EventPreviewViewModelInterface
 {
-    private eventListenerCleanups: Array<() => void> = [];
-    private watchedEvent?: MatrixEvent;
+    private readonly eventContentListener = new MatrixEventContentChangeListener();
+    private readonly previewContentCache = new EventPreviewContentCache();
     private previewRequestId = 0;
-    private previewContentKey?: string;
-    private previewContent?: ReactNode;
 
     private static readonly hiddenSnapshot: EventPreviewViewSnapshot = {
         isVisible: false,
@@ -45,8 +45,8 @@ export class EventPreviewViewModel
     public constructor(props: EventPreviewViewModelProps) {
         super(props, EventPreviewViewModel.hiddenSnapshot);
 
-        this.disposables.track(() => this.teardownEventListeners());
-        this.setupEventListeners(props.mxEvent);
+        this.disposables.track(() => this.eventContentListener.teardown());
+        this.eventContentListener.setEvent(props.mxEvent, this.onEventContentChanged);
         void this.updatePreview();
     }
 
@@ -57,7 +57,7 @@ export class EventPreviewViewModel
             ...this.props,
             mxEvent,
         };
-        this.setupEventListeners(mxEvent);
+        this.eventContentListener.setEvent(mxEvent, this.onEventContentChanged);
         void this.updatePreview();
     }
 
@@ -69,30 +69,6 @@ export class EventPreviewViewModel
             cli,
         };
         void this.updatePreview();
-    }
-
-    private setupEventListeners(mxEvent?: MatrixEvent): void {
-        if (this.watchedEvent === mxEvent) return;
-
-        this.teardownEventListeners();
-        this.watchedEvent = mxEvent;
-
-        if (!mxEvent) return;
-
-        mxEvent.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
-        mxEvent.on(MatrixEventEvent.Decrypted, this.onEventContentChanged);
-        this.eventListenerCleanups.push(() => {
-            mxEvent.off(MatrixEventEvent.Replaced, this.onEventContentChanged);
-            mxEvent.off(MatrixEventEvent.Decrypted, this.onEventContentChanged);
-        });
-    }
-
-    private teardownEventListeners(): void {
-        for (const cleanup of this.eventListenerCleanups) {
-            cleanup();
-        }
-        this.eventListenerCleanups = [];
-        this.watchedEvent = undefined;
     }
 
     private onEventContentChanged = (): void => {
@@ -125,21 +101,15 @@ export class EventPreviewViewModel
             return;
         }
 
-        const preview = MessagePreviewStore.instance.generatePreviewForEvent(mxEvent);
-        if (!preview) {
+        const previewContent = getEventPreviewContent(mxEvent, this.previewContentCache);
+        if (!previewContent) {
             this.setHidden();
             return;
         }
 
-        const prefix = EventPreviewViewModel.getPreviewPrefix(
-            mxEvent.getType(),
-            mxEvent.getContent().msgtype as MsgType | undefined,
-        );
-
         this.snapshot.merge({
             isVisible: true,
-            previewContent: this.getPreviewContent(preview, prefix),
-            previewTooltip: prefix ? undefined : preview,
+            ...previewContent,
         });
     }
 
@@ -158,49 +128,5 @@ export class EventPreviewViewModel
             previewContent: undefined,
             previewTooltip: undefined,
         });
-    }
-
-    private getPreviewContent(preview: string, prefix: string | null): ReactNode {
-        const key = `${prefix ?? ""}\u0000${preview}`;
-        if (this.previewContentKey === key && this.previewContent !== undefined) {
-            return this.previewContent;
-        }
-
-        this.previewContentKey = key;
-        this.previewContent = prefix
-            ? _t(
-                  "event_preview|preview",
-                  {
-                      prefix,
-                      preview,
-                  },
-                  {
-                      bold: (sub) => <strong>{sub}</strong>,
-                  },
-              )
-            : preview;
-
-        return this.previewContent;
-    }
-
-    private static getPreviewPrefix(type: string, msgType?: MsgType): string | null {
-        switch (type) {
-            case M_POLL_START.name:
-                return _t("event_preview|prefix|poll");
-            default:
-        }
-
-        switch (msgType) {
-            case MsgType.Audio:
-                return _t("event_preview|prefix|audio");
-            case MsgType.Image:
-                return _t("event_preview|prefix|image");
-            case MsgType.Video:
-                return _t("event_preview|prefix|video");
-            case MsgType.File:
-                return _t("event_preview|prefix|file");
-            default:
-                return null;
-        }
     }
 }
