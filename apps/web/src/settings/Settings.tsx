@@ -284,6 +284,7 @@ export interface Settings {
     "useSystemFont": IBaseSetting<boolean>;
     "systemFont": IBaseSetting<string>;
     "webRtcAllowPeerToPeer": IBaseSetting<boolean>;
+    "enableLegacyCallsVoip": IBaseSetting<boolean>;
     "webrtc_audiooutput": IBaseSetting<string>;
     "webrtc_audioinput": IBaseSetting<string>;
     "webrtc_videoinput": IBaseSetting<string>;
@@ -995,6 +996,11 @@ export const SETTINGS: Settings = {
         default: "",
         displayName: _td("settings|appearance|custom_font_name"),
         controller: new SystemFontController(),
+    },
+    "enableLegacyCallsVoip": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|voip|enable_legacy_calls"),
+        default: SdkConfig.get("element_call").use_exclusively ?? true,
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

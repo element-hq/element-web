@@ -19,6 +19,7 @@ import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import { requestMediaPermissions } from "../../../../../utils/media/requestMediaPermissions";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
@@ -33,6 +34,8 @@ interface IState {
     audioAutoGainControl: boolean;
     audioEchoCancellation: boolean;
     audioNoiseSuppression: boolean;
+    enableLegacyCallsVoip: boolean;
+    groupCallsEnabled: boolean;
 }
 
 /**
@@ -65,14 +68,31 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
             audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl(),
             audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation(),
             audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression(),
+            enableLegacyCallsVoip: SettingsStore.getValue("enableLegacyCallsVoip"),
+            groupCallsEnabled: SettingsStore.getValue("feature_group_calls"),
         };
     }
 
+    private legacyCallsWatcherRef: string | undefined;
+    private groupCallsWatcherRef: string | undefined;
+
     public async componentDidMount(): Promise<void> {
+        this.legacyCallsWatcherRef = SettingsStore.watchSetting("enableLegacyCallsVoip", null, (...[, , , value]) =>
+            this.setState({ enableLegacyCallsVoip: value as boolean }),
+        );
+        this.groupCallsWatcherRef = SettingsStore.watchSetting("feature_group_calls", null, (...[, , , value]) =>
+            this.setState({ groupCallsEnabled: value as boolean }),
+        );
+
         const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
         if (canSeeDeviceLabels) {
             await this.refreshMediaDevices();
         }
+    }
+
+    public componentWillUnmount(): void {
+        SettingsStore.unwatchSetting(this.legacyCallsWatcherRef);
+        SettingsStore.unwatchSetting(this.groupCallsWatcherRef);
     }
 
     private refreshMediaDevices = async (stream?: MediaStream): Promise<void> => {
@@ -185,6 +205,8 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
             );
         }
 
+        const showLegacySettings = !this.state.groupCallsEnabled || this.state.enableLegacyCallsVoip;
+
         return (
             <SettingsTab>
                 <Form.Root
@@ -193,57 +215,65 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         evt.stopPropagation();
                     }}
                 >
-                    <SettingsSection>
-                        {requestButton}
-                        <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
-                            {speakerDropdown}
-                            {microphoneDropdown}
-                            <SettingsToggleInput
-                                name="voice-auto-gain"
-                                label={_t("settings|voip|voice_agc")}
-                                checked={this.state.audioAutoGainControl}
-                                onChange={this.onAutoGainChanged}
-                            />
-                        </SettingsSubsection>
-                        <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
-                            {webcamDropdown}
-                            <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
-                        </SettingsSubsection>
-                    </SettingsSection>
-
-                    <SettingsSection heading={_t("common|advanced")}>
-                        <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
-                            <SettingsToggleInput
-                                name="voice-noise-suppression"
-                                label={_t("settings|voip|noise_suppression")}
-                                helpMessage={_t("settings|voip|noise_suppression_description")}
-                                checked={this.state.audioNoiseSuppression}
-                                onChange={this.onNoiseSuppressionChanged}
-                            />
-                            <SettingsToggleInput
-                                name="voice-echo-cancellation"
-                                label={_t("settings|voip|echo_cancellation")}
-                                helpMessage={_t("settings|voip|echo_cancellation_description")}
-                                checked={this.state.audioEchoCancellation}
-                                onChange={this.onEchoCancellationChanged}
-                            />
-                        </SettingsSubsection>
-                        <SettingsSubsection heading={_t("settings|voip|connection_section")}>
-                            <SettingsFlag
-                                name="webRtcAllowPeerToPeer"
-                                level={SettingLevel.DEVICE}
-                                onChange={this.changeWebRtcMethod}
-                            />
-                            <SettingsFlag
-                                name="fallbackICEServerAllowed"
-                                label={_t("settings|voip|enable_fallback_ice_server", {
-                                    server: new URL(FALLBACK_ICE_SERVER).pathname,
-                                })}
-                                level={SettingLevel.DEVICE}
-                                hideIfCannotSet
-                            />
-                        </SettingsSubsection>
-                    </SettingsSection>
+                    {this.state.groupCallsEnabled && (
+                        <SettingsSection>
+                            <SettingsFlag name="enableLegacyCallsVoip" level={SettingLevel.DEVICE} />
+                        </SettingsSection>
+                    )}
+                    {showLegacySettings && (
+                        <SettingsSection>
+                            {requestButton}
+                            <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
+                                {speakerDropdown}
+                                {microphoneDropdown}
+                                <SettingsToggleInput
+                                    name="voice-auto-gain"
+                                    label={_t("settings|voip|voice_agc")}
+                                    checked={this.state.audioAutoGainControl}
+                                    onChange={this.onAutoGainChanged}
+                                />
+                            </SettingsSubsection>
+                            <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
+                                {webcamDropdown}
+                                <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                            </SettingsSubsection>
+                        </SettingsSection>
+                    )}
+                    {showLegacySettings && (
+                        <SettingsSection heading={_t("common|advanced")}>
+                            <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
+                                <SettingsToggleInput
+                                    name="voice-noise-suppression"
+                                    label={_t("settings|voip|noise_suppression")}
+                                    helpMessage={_t("settings|voip|noise_suppression_description")}
+                                    checked={this.state.audioNoiseSuppression}
+                                    onChange={this.onNoiseSuppressionChanged}
+                                />
+                                <SettingsToggleInput
+                                    name="voice-echo-cancellation"
+                                    label={_t("settings|voip|echo_cancellation")}
+                                    helpMessage={_t("settings|voip|echo_cancellation_description")}
+                                    checked={this.state.audioEchoCancellation}
+                                    onChange={this.onEchoCancellationChanged}
+                                />
+                            </SettingsSubsection>
+                            <SettingsSubsection heading={_t("settings|voip|connection_section")}>
+                                <SettingsFlag
+                                    name="webRtcAllowPeerToPeer"
+                                    level={SettingLevel.DEVICE}
+                                    onChange={this.changeWebRtcMethod}
+                                />
+                                <SettingsFlag
+                                    name="fallbackICEServerAllowed"
+                                    label={_t("settings|voip|enable_fallback_ice_server", {
+                                        server: new URL(FALLBACK_ICE_SERVER).pathname,
+                                    })}
+                                    level={SettingLevel.DEVICE}
+                                    hideIfCannotSet
+                                />
+                            </SettingsSubsection>
+                        </SettingsSection>
+                    )}
                 </Form.Root>
             </SettingsTab>
         );

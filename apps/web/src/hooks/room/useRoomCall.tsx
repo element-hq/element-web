@@ -13,7 +13,6 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";
-import SdkConfig from "../../SdkConfig";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { useWidgets } from "../../utils/WidgetUtils";
@@ -112,9 +111,8 @@ export const useRoomCall = (
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
     const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
-    const useElementCallExclusively = useMemo(() => {
-        return SdkConfig.get("element_call").use_exclusively;
-    }, []);
+    const enableLegacyCallsVoip = useSettingValue("enableLegacyCallsVoip");
+    const useElementCallExclusively = !enableLegacyCallsVoip && groupCallsEnabled;
 
     const serverIsConfiguredForElementCall = useEventEmitterState(
         CallStore.instance,
