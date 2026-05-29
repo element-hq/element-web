@@ -37,6 +37,11 @@ jobs:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2]
         steps:
+            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
+            # so, with the one at the end too, this will let us work out how much disk has been used.
+            - name: df
+              run: df -h && df -i
+
             - name: Checkout code
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:

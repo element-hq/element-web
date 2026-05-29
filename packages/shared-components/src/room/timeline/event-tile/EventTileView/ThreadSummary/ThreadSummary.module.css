@@ -1,0 +1,121 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.threadSummary,
+.content {
+    color: var(--cpd-color-text-secondary);
+}
+
+.threadSummary {
+    margin-top: var(--cpd-space-2x);
+    min-width: 267px;
+    max-width: min(calc(100% - var(--EventTile_group_line-spacing-inline-start, 0px)), 600px);
+    width: fit-content;
+    height: 40px;
+    position: relative;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    padding-inline: var(--cpd-space-3x) var(--cpd-space-4x);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 8px;
+    box-sizing: border-box;
+    clear: both;
+    overflow: hidden;
+    border: 1px solid var(--cpd-color-bg-subtle-secondary);
+    font: var(--cpd-font-body-sm-regular);
+    appearance: none;
+    cursor: pointer;
+    text-align: start;
+}
+
+.threadSummary:hover,
+.threadSummary:focus {
+    border-color: var(--cpd-color-border-interactive-secondary);
+}
+
+.threadSummary:hover .chevron,
+.threadSummary:focus .chevron {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.sender,
+.content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content {
+    font: var(--cpd-font-body-sm-regular);
+}
+
+.sender {
+    font-weight: var(--cpd-font-weight-semibold);
+}
+
+.content strong {
+    font: var(--cpd-font-body-sm-semibold);
+}
+
+.threadSummary .repliesAmount,
+.threadSummary .sender,
+.threadSummary .content {
+    line-height: var(--EventTile_ThreadSummary-line-height, 24px);
+}
+
+.threadSummary .content {
+    margin-left: var(--cpd-space-1x);
+    flex: 1;
+}
+
+.repliesAmount {
+    color: var(--cpd-color-text-secondary);
+    font-weight: var(--cpd-font-weight-semibold);
+    white-space: nowrap;
+    position: relative;
+    padding: 0 var(--cpd-space-3x) 0 var(--cpd-space-2x);
+}
+
+.avatar {
+    margin-inline-end: var(--cpd-space-2x);
+    flex-shrink: 0;
+}
+
+.threadIcon {
+    flex-shrink: 0;
+}
+
+.chevron {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 60px;
+    box-sizing: border-box;
+    background: linear-gradient(270deg, var(--cpd-color-bg-canvas-default) 50%, transparent 100%);
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.1s ease-in-out;
+}
+
+.chevron svg {
+    position: absolute;
+    top: 50%;
+    right: var(--cpd-space-1x);
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    color: var(--cpd-color-text-secondary);
+}
+
+.narrow {
+    min-width: initial;
+    max-width: 100%;
+    width: initial;
+}

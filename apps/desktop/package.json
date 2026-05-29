@@ -47,7 +47,7 @@
         "docker:setup": "docker build --platform linux/amd64 -t element-desktop-dockerbuild -f dockerbuild/Dockerfile .",
         "docker:build:native": "scripts/in-docker.sh pnpm run hak",
         "docker:build": "scripts/in-docker.sh pnpm run build",
-        "docker:install": "scripts/in-docker.sh pnpm install",
+        "docker:install": "scripts/in-docker.sh pnpm install --filter=element-desktop --frozen-lockfile",
         "clean": "rimraf webapp.asar dist packages deploys lib",
         "hak": "node scripts/hak/index.ts",
         "test:unit": "vitest",

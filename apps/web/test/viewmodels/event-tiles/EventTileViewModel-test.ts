@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventStatus, EventType, type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { mkEvent } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
@@ -449,5 +449,75 @@ describe("EventTileViewModel", () => {
             showInIrcLayout: true,
             showInDefaultLayout: false,
         });
+    });
+
+    it("updates an instance snapshot when inputs change", () => {
+        const vm = new EventTileViewModel(makeProps());
+        const listener = jest.fn();
+        const unsubscribe = vm.subscribe(listener);
+
+        expect(vm.getSnapshot().snapshot.timestamp.show).toBe(false);
+
+        vm.setProps(makeProps({ interaction: { hover: true } }));
+
+        expect(vm.getSnapshot().snapshot.timestamp.show).toBe(true);
+        expect(listener).toHaveBeenCalled();
+
+        unsubscribe();
+        vm.dispose();
+    });
+
+    it("lazily owns timestamp child view models", () => {
+        const vm = new EventTileViewModel(makeProps());
+        const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
+        const linkedMessageTimestampViewModel = vm.getLinkedMessageTimestampViewModel({ ts: 456 });
+
+        expect(messageTimestampViewModel.getSnapshot().href).toBeUndefined();
+        expect(linkedMessageTimestampViewModel.getSnapshot().href).toBeUndefined();
+
+        vm.dispose();
+    });
+
+    it("does not initialize timestamp child view models for events without an origin timestamp", () => {
+        const mxEvent = new MatrixEvent({
+            type: EventType.RoomMessage,
+            room_id: roomId,
+            sender: userId,
+            content: { msgtype: MsgType.Text, body: "Hello" },
+            event_id: "$event",
+        });
+        const vm = new EventTileViewModel(
+            makeProps({
+                event: {
+                    mxEvent,
+                },
+                timestamp: {
+                    hideTimestamp: true,
+                },
+            }),
+        );
+
+        expect(vm.getSnapshot().timestamp.displayState.showRealTimestamp).toBe(false);
+
+        vm.dispose();
+    });
+
+    it("owns and updates the thread-list action bar child view model", () => {
+        const vm = new EventTileViewModel(makeProps());
+        const onViewInRoomClick = jest.fn();
+        const onCopyLinkClick = jest.fn();
+
+        const threadListActionBarViewModel = vm.getThreadListActionBarViewModel({
+            onViewInRoomClick,
+            onCopyLinkClick,
+        });
+
+        threadListActionBarViewModel.onViewInRoomClick(null);
+        threadListActionBarViewModel.onCopyLinkClick(null);
+
+        expect(onViewInRoomClick).toHaveBeenCalledWith(null);
+        expect(onCopyLinkClick).toHaveBeenCalledWith(null);
+
+        vm.dispose();
     });
 });
