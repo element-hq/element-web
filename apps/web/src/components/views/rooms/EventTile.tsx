@@ -1089,6 +1089,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (hasReactionsRow) {
             reactionsRow = (
                 <ReactionsRowAdapter
+                    eventTileViewModel={this.viewModel}
                     mxEvent={this.props.mxEvent}
                     reactions={this.state.reactions}
                     key="mx_EventTile_reactionsRow"

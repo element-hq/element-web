@@ -49,6 +49,7 @@ import {
     type ThreadListActionBarViewModelProps,
 } from "../../ThreadListActionBarViewModel";
 import { EventTileActionBarViewModel, type EventTileActionBarViewModelProps } from "../../EventTileActionBarViewModel";
+import { ReactionsRowViewModel, type ReactionsRowViewModelProps } from "./reactions/ReactionsRowViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -301,6 +302,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     private threadListActionBarViewModel?: ThreadListActionBarViewModel;
     private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
     private actionBarViewModel?: EventTileActionBarViewModel;
+    private reactionsRowViewModel?: ReactionsRowViewModel;
 
     public constructor(props: EventTileViewModelProps) {
         const initialRenderState = EventTileViewModel.createRenderState(props);
@@ -322,6 +324,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         this.threadListActionBarViewModel?.dispose();
         this.e2eMessageSharedIconViewModel?.dispose();
         this.actionBarViewModel?.dispose();
+        this.reactionsRowViewModel?.dispose();
         super.dispose();
     }
 
@@ -389,6 +392,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public releaseActionBarViewModel(): void {
         this.actionBarViewModel?.dispose();
         this.actionBarViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the reactions row child view model. */
+    public getReactionsRowViewModel(props: ReactionsRowViewModelProps): ReactionsRowViewModel {
+        this.reactionsRowViewModel ??= new ReactionsRowViewModel(props);
+        return this.reactionsRowViewModel;
+    }
+
+    /** Releases the reactions row child view model when its adapter unmounts. */
+    public releaseReactionsRowViewModel(): void {
+        this.reactionsRowViewModel?.dispose();
+        this.reactionsRowViewModel = undefined;
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */
