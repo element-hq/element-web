@@ -94,7 +94,10 @@ import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { EventTileViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import {
+    EventTileViewModel,
+    type EventTileViewModelProps,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { E2eMessageSharedIconViewModel } from "../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
 import {
     getEventTileReceiptState,
@@ -119,7 +122,7 @@ import {
     type EventTileInteractionState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
 import {
-    MessageTimestampViewModel,
+    type MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import {
@@ -138,7 +141,7 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
-import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
+import { type ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
@@ -300,48 +303,12 @@ interface IState {
     thread: Thread | null;
 }
 
-interface E2eMessageSharedIconWrapperProps {
-    /**
-     * The ID of the room containing the event whose keys were shared.
-     */
-    roomId: string;
-    /**
-     * The ID of the user who shared the keys.
-     */
-    keyForwardingUserId: string;
-}
-
-function E2eMessageSharedIconWrapper({
-    roomId,
-    keyForwardingUserId,
-}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
-    const client = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new E2eMessageSharedIconViewModel({
-                client,
-                roomId,
-                keyForwardingUserId,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setRoomId(roomId);
-    }, [roomId, vm]);
-
-    useEffect(() => {
-        vm.setKeyForwardingUserId(keyForwardingUserId);
-    }, [keyForwardingUserId, vm]);
-
-    return (
-        <E2eMessageSharedIconView
-            vm={vm}
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-        />
-    );
+interface EventTileRenderInputs {
+    displayInfo: ReturnType<typeof getEventDisplayInfo>;
+    hasPinnedMessageBadge: boolean;
+    hasReactionsRow: boolean;
+    threadState: EventTileThreadState;
+    isOwnEvent: boolean;
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
@@ -350,6 +317,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private isListeningForReceipts: boolean;
     private tile = createRef<IEventTileType>();
     private replyChain = createRef<ReplyChain>();
+    private readonly viewModel: EventTileViewModel;
     private readonly e2eViewModel: EventTileE2eViewModel;
     private e2eViewModelSubscription?: () => void;
 
@@ -382,6 +350,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
             thread,
         };
+
+        this.viewModel = new EventTileViewModel(this.createViewModelProps());
 
         this.e2eViewModel = new EventTileE2eViewModel({
             cli: MatrixClientPeg.safeGet(),
@@ -476,6 +446,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.e2eViewModelSubscription?.();
         this.e2eViewModelSubscription = undefined;
         this.e2eViewModel.dispose();
+        this.viewModel.dispose();
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
 
@@ -897,73 +868,65 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return false;
     }
 
-    private renderContextMenu(): ReactNode {
-        if (!this.state.interaction.contextMenu) return null;
-
-        const tile = this.getTile();
-        const replyChain = this.getReplyChain();
-        const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-        const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
-
-        return (
-            <MessageContextMenu
-                {...aboveRightOf(this.state.interaction.contextMenu.position)}
-                mxEvent={this.props.mxEvent}
-                permalinkCreator={this.props.permalinkCreator}
-                eventTileOps={eventTileOps}
-                collapseReplyChain={collapseReplyChain}
-                onFinished={this.onCloseMenu}
-                rightClick={true}
-                reactions={this.state.reactions}
-                link={this.state.interaction.contextMenu.link}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-            />
-        );
+    private createMessageTimestampProps(ts: number): MessageTimestampViewModelProps {
+        return {
+            showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
+            showTwelveHour: this.props.isTwelveHour,
+            ts,
+            receivedTs: getLateEventInfo(this.props.mxEvent)?.received_ts,
+        };
     }
 
-    public render(): ReactNode {
-        const eventType = this.props.mxEvent.getType();
-        const replacingEventId = this.props.mxEvent.replacingEventId();
+    private createLinkedMessageTimestampProps(
+        messageTimestampProps: MessageTimestampViewModelProps,
+    ): MessageTimestampViewModelProps {
+        return {
+            ...messageTimestampProps,
+            href: this.getPermalink(),
+            onClick: this.onPermalinkClicked,
+            onContextMenu: this.onTimestampContextMenu,
+        };
+    }
 
-        const {
-            hasRenderer,
-            isBubbleMessage,
-            isInfoMessage,
-            isLeftAlignedBubbleMessage,
-            noBubbleEvent,
-            isSeeingThroughMessageHiddenForModeration,
-            isAlignedBetweenBubbles,
-        } = getEventDisplayInfo(
+    private getPermalink(): string {
+        if (this.props.permalinkCreator) {
+            return this.props.permalinkCreator.forEvent(this.props.mxEvent.getId()!);
+        }
+
+        return "#";
+    }
+
+    private createRenderInputs(
+        displayInfo = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
             this.shouldHideEvent(),
-        );
-        const { isQuoteExpanded } = this.state;
-        // This shouldn't happen: the caller should check we support this type
-        // before trying to instantiate us
-        if (!hasRenderer) {
-            const { mxEvent } = this.props;
-            logger.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
-            return (
-                <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
-                    <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
-                </div>
-            );
-        }
-
-        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
-
+        ),
+    ): EventTileRenderInputs {
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
-        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
-        const isEditing = !!this.props.editState;
         const hasPinnedMessageBadge = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         const hasReactionsRow = !isRedacted;
         const threadState = this.threadState;
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
 
-        const eventTileRenderState = EventTileViewModel.createRenderState({
+        return {
+            displayInfo,
+            hasPinnedMessageBadge,
+            hasReactionsRow,
+            threadState,
+            isOwnEvent,
+        };
+    }
+
+    private createViewModelProps(inputs: EventTileRenderInputs = this.createRenderInputs()): EventTileViewModelProps {
+        const { displayInfo, hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = inputs;
+        const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
+        const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
+        const isEditing = !!this.props.editState;
+
+        return {
             event: {
                 mxEvent: this.props.mxEvent,
                 eventSendStatus: this.props.eventSendStatus,
@@ -976,11 +939,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 layout: this.props.layout,
                 continuation: this.props.continuation,
                 isProbablyMedia,
-                isBubbleMessage,
-                isLeftAlignedBubbleMessage,
-                isAlignedBetweenBubbles,
-                isInfoMessage,
-                noBubbleEvent,
+                isBubbleMessage: displayInfo.isBubbleMessage,
+                isLeftAlignedBubbleMessage: displayInfo.isLeftAlignedBubbleMessage,
+                isAlignedBetweenBubbles: displayInfo.isAlignedBetweenBubbles,
+                isInfoMessage: displayInfo.isInfoMessage,
+                noBubbleEvent: displayInfo.noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
                 isHighlighted: this.shouldHighlight(),
                 isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
@@ -1010,7 +973,61 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 hasReactions: !!this.state.reactions,
                 hasPinnedMessageBadge,
             },
-        });
+        };
+    }
+
+    private renderContextMenu(): ReactNode {
+        if (!this.state.interaction.contextMenu) return null;
+
+        const tile = this.getTile();
+        const replyChain = this.getReplyChain();
+        const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
+        const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+
+        return (
+            <MessageContextMenu
+                {...aboveRightOf(this.state.interaction.contextMenu.position)}
+                mxEvent={this.props.mxEvent}
+                permalinkCreator={this.props.permalinkCreator}
+                eventTileOps={eventTileOps}
+                collapseReplyChain={collapseReplyChain}
+                onFinished={this.onCloseMenu}
+                rightClick={true}
+                reactions={this.state.reactions}
+                link={this.state.interaction.contextMenu.link}
+                getRelationsForEvent={this.props.getRelationsForEvent}
+            />
+        );
+    }
+
+    public render(): ReactNode {
+        const eventType = this.props.mxEvent.getType();
+        const replacingEventId = this.props.mxEvent.replacingEventId();
+
+        const displayInfo = getEventDisplayInfo(
+            MatrixClientPeg.safeGet(),
+            this.props.mxEvent,
+            this.context.showHiddenEvents,
+            this.shouldHideEvent(),
+        );
+        const { hasRenderer, isSeeingThroughMessageHiddenForModeration } = displayInfo;
+        const { isQuoteExpanded } = this.state;
+        // This shouldn't happen: the caller should check we support this type
+        // before trying to instantiate us
+        if (!hasRenderer) {
+            const { mxEvent } = this.props;
+            logger.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
+            return (
+                <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
+                    <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
+                </div>
+            );
+        }
+
+        const renderInputs = this.createRenderInputs(displayInfo);
+        const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = renderInputs;
+
+        const eventTileRenderState = EventTileViewModel.createRenderState(this.createViewModelProps(renderInputs));
         const eventTileSnapshot = eventTileRenderState.snapshot;
 
         const lineClasses = eventTileRenderState.line.className;
@@ -1018,10 +1035,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const tileAriaLive = eventTileRenderState.root.ariaLive;
         const isRenderingNotification = eventTileRenderState.root.isRenderingNotification;
 
-        let permalink = "#";
-        if (this.props.permalinkCreator) {
-            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId()!);
-        }
+        const permalink = this.getPermalink();
 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
@@ -1070,32 +1084,29 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Thread panel shows the timestamp of the last reply in that thread
         const ts = eventTileRenderState.timestamp.value;
 
-        const messageTimestampProps: MessageTimestampViewModelProps = {
-            showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
-            showTwelveHour: this.props.isTwelveHour,
-            ts,
-            receivedTs: getLateEventInfo(this.props.mxEvent)?.received_ts,
-        };
-        const messageTimestamp = <MessageTimestampWrapper {...messageTimestampProps} />;
-        const linkedMessageTimestamp = (
-            <MessageTimestampWrapper
-                {...messageTimestampProps}
-                href={permalink}
-                onClick={this.onPermalinkClicked}
-                onContextMenu={this.onTimestampContextMenu}
-            />
-        );
+        const messageTimestampProps = this.createMessageTimestampProps(ts);
+        const linkedMessageTimestampProps = this.createLinkedMessageTimestampProps(messageTimestampProps);
 
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
         const dummyTimestamp = eventTileRenderState.timestamp.showDummy ? (
             <span className="mx_MessageTimestamp" />
         ) : null;
-        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp
-            ? messageTimestamp
-            : dummyTimestamp;
-        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp
-            ? linkedMessageTimestamp
-            : dummyTimestamp;
+        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
+            <MessageTimestampAdapter
+                vm={this.viewModel.getMessageTimestampViewModel(messageTimestampProps)}
+                timestampProps={messageTimestampProps}
+            />
+        ) : (
+            dummyTimestamp
+        );
+        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
+            <MessageTimestampAdapter
+                vm={this.viewModel.getLinkedMessageTimestampViewModel(linkedMessageTimestampProps)}
+                timestampProps={linkedMessageTimestampProps}
+            />
+        ) : (
+            dummyTimestamp
+        );
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (hasPinnedMessageBadge) {
@@ -1303,9 +1314,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {this.renderThreadPanelSummary(threadState)}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <ThreadListActionBarWrapper
+                            <ThreadListActionBarAdapter
+                                vm={this.viewModel.getThreadListActionBarViewModel({
+                                    onViewInRoomClick: this.onViewInRoomClick,
+                                    onCopyLinkClick: this.onCopyLinkToThreadClick,
+                                })}
                                 onViewInRoomClick={this.onViewInRoomClick}
                                 onCopyLinkClick={this.onCopyLinkToThreadClick}
+                                className="mx_ThreadActionBar"
                             />
                         )}
 
@@ -1535,27 +1551,19 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
     );
 }
 
-/**
- * Wraps MessageTimestampView with a view model synced to the provided props.
- * This wrapper can be removed after EventTile has been changed to a function component.
- */
-function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+interface MessageTimestampAdapterProps {
+    vm: MessageTimestampViewModel;
+    timestampProps: MessageTimestampViewModelProps;
+}
+
+function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimestampAdapterProps>): JSX.Element {
     useEffect(() => {
-        vm.setTimestamp(props.ts);
-        vm.setReceivedTimestamp(props.receivedTs);
-        vm.setDisplayOptions({
-            showTwelveHour: props.showTwelveHour,
-            showRelative: props.showRelative,
-        });
-        vm.setHref(props.href);
-        vm.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
-    }, [vm, props]);
+        vm.setProps(timestampProps);
+    }, [vm, timestampProps]);
 
     return (
         <>
-            {/* Render icon as described in, https://github.com/matrix-org/matrix-react-sdk/pull/11760 */}
-            {props.receivedTs ? (
+            {timestampProps.receivedTs ? (
                 <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
             ) : undefined}
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
@@ -1655,6 +1663,29 @@ function ThreadSummaryWrapper({
     }, [vm, cli, mxEvent, thread, narrow, isCard, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles]);
 
     return <ThreadSummaryView {...props} vm={vm} className={classNames("mx_ThreadSummary", className)} />;
+}
+
+interface ThreadListActionBarAdapterProps {
+    vm: ThreadListActionBarViewModel;
+    onViewInRoomClick: (anchor: HTMLElement | null) => void;
+    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
+    className?: string;
+}
+
+function ThreadListActionBarAdapter({
+    vm,
+    onViewInRoomClick,
+    onCopyLinkClick,
+    className,
+}: Readonly<ThreadListActionBarAdapterProps>): JSX.Element {
+    useEffect(() => {
+        vm.setProps({
+            onViewInRoomClick,
+            onCopyLinkClick,
+        });
+    }, [vm, onViewInRoomClick, onCopyLinkClick]);
+
+    return <ActionBarView vm={vm} className={className} />;
 }
 
 interface ReactionsRowButtonItemProps {
@@ -1903,33 +1934,6 @@ interface ActionBarWrapperProps {
     getRelationsForEvent?: GetRelationsForEvent;
 }
 
-interface ThreadListActionBarWrapperProps {
-    onViewInRoomClick: (anchor: HTMLElement | null) => void;
-    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
-}
-
-function ThreadListActionBarWrapper({
-    onViewInRoomClick,
-    onCopyLinkClick,
-}: Readonly<ThreadListActionBarWrapperProps>): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadListActionBarViewModel({
-                onViewInRoomClick,
-                onCopyLinkClick,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setProps({
-            onViewInRoomClick,
-            onCopyLinkClick,
-        });
-    }, [vm, onViewInRoomClick, onCopyLinkClick]);
-
-    return <ActionBarView vm={vm} className="mx_ThreadActionBar" />;
-}
-
 function ActionBarWrapper({
     mxEvent,
     reactions,
@@ -2045,5 +2049,49 @@ function ActionBarWrapper({
                 </ContextMenu>
             ) : null}
         </>
+    );
+}
+
+interface E2eMessageSharedIconWrapperProps {
+    /**
+     * The ID of the room containing the event whose keys were shared.
+     */
+    roomId: string;
+    /**
+     * The ID of the user who shared the keys.
+     */
+    keyForwardingUserId: string;
+}
+
+function E2eMessageSharedIconWrapper({
+    roomId,
+    keyForwardingUserId,
+}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
+    const client = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new E2eMessageSharedIconViewModel({
+                client,
+                roomId,
+                keyForwardingUserId,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setRoomId(roomId);
+    }, [roomId, vm]);
+
+    useEffect(() => {
+        vm.setKeyForwardingUserId(keyForwardingUserId);
+    }, [keyForwardingUserId, vm]);
+
+    return (
+        <E2eMessageSharedIconView
+            vm={vm}
+            className={
+                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
+                "mx_EventTile_e2eIcon"
+            }
+        />
     );
 }
