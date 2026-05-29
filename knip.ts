@@ -62,6 +62,10 @@ export default {
             entry: ["scripts/**", "docs/**"],
         },
     },
+    ignoreDependencies: [
+        // Used by multiple packages, raises a false positive for some reason
+        "events",
+    ],
     ignoreExportsUsedInFile: true,
     compilers: {
         pcss: (text: string) =>

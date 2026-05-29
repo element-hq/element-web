@@ -369,6 +369,8 @@ export const LinkedTextConfiguration = {
     urlTargetTransformer: urlTargetTransformFunction,
 };
 
+type LinkifyOpts = Parameters<typeof _linkifyString>[1];
+
 /**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
@@ -376,7 +378,10 @@ export const LinkedTextConfiguration = {
  * @param [options] Options for linkifyString.
  * @returns Linkified string
  */
-export function linkifyString(value: string, options = generateLinkedTextOptions(LinkedTextConfiguration)): string {
+export function linkifyString(
+    value: string,
+    options: LinkifyOpts = generateLinkedTextOptions(LinkedTextConfiguration),
+): string {
     return _linkifyString(value, options);
 }
 
@@ -387,7 +392,10 @@ export function linkifyString(value: string, options = generateLinkedTextOptions
  * @param [options] Options for linkifyHtml.
  * @returns Linkified string
  */
-export function linkifyHtml(value: string, options = generateLinkedTextOptions(LinkedTextConfiguration)): string {
+export function linkifyHtml(
+    value: string,
+    options: LinkifyOpts = generateLinkedTextOptions(LinkedTextConfiguration),
+): string {
     return _linkifyHtml(value, options);
 }
 
@@ -400,7 +408,7 @@ export function linkifyHtml(value: string, options = generateLinkedTextOptions(L
  */
 export function linkifyAndSanitizeHtml(
     dirtyHtml: string,
-    options = generateLinkedTextOptions(LinkedTextConfiguration),
+    options: LinkifyOpts = generateLinkedTextOptions(LinkedTextConfiguration),
 ): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
