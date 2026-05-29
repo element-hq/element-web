@@ -639,7 +639,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -810,8 +810,8 @@ importers:
         specifier: ^0.27.4
         version: 0.27.10
       '@types/content-type':
-        specifier: ^1.1.9
-        version: 1.1.9
+        specifier: ^2.0.0
+        version: 2.0.0
       '@types/css-tree':
         specifier: ^2.3.8
         version: 2.3.11
@@ -5628,8 +5628,9 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/content-type@1.1.9':
-    resolution: {integrity: sha512-Hq9IMnfekuOCsEmYl4QX2HBrT+XsfXiupfrLLY8Dcf3Puf4BkBOxSbWYTITSOQAhJoYPBez+b4MJRpIYL65z8A==}
+  '@types/content-type@2.0.0':
+    resolution: {integrity: sha512-wZQlLoRx3carjGy5yHA6GnCBGChd/9DDYTAOPbISfXGjhI4j70U6SU/tu5EEz7NpX2MxpUVgbbYFIgLqDItbVQ==}
+    deprecated: This is a stub types definition. content-type provides its own type definitions, so you do not need this installed.
 
   '@types/counterpart@0.18.4':
     resolution: {integrity: sha512-aqBg5oAGo/qh/+wxUfuMadDu2WO0MEWOblyzwaM1Ske2xilUxBfgPqapAFVAfrVTDMVwa0UMarzGot8m64IAzA==}
@@ -10297,8 +10298,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d}
     version: 41.6.0
     engines: {node: '>=22.0.0'}
 
@@ -18459,7 +18460,9 @@ snapshots:
     dependencies:
       '@types/node': 18.19.130
 
-  '@types/content-type@1.1.9': {}
+  '@types/content-type@2.0.0':
+    dependencies:
+      content-type: 2.0.0
 
   '@types/counterpart@0.18.4': {}
 
@@ -24002,7 +24005,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ec54b54a8964e87832421a8e1faf60ede9364798:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.2.0
