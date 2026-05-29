@@ -55,7 +55,7 @@ jobs:
             num-runners: ${{ env.NUM_RUNNERS }}
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
             # Skip pull_request runs on renovate PRs to speed up CI time, delegating to the full run in merge queue
-            skip: false
+            skip: ${{ inputs.skip || (github.event_name == 'pull_request' && startsWith(github.head_ref, 'renovate/')) }}
         steps:
             - name: Checkout code
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -104,7 +104,7 @@ jobs:
     playwright_ew:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build_ew.outputs.num-runners }}"
         needs: build_ew
-        # if: needs.build_ew.outputs.skip == 'false'
+        if: needs.build_ew.outputs.skip == 'false'
         runs-on: ubuntu-24.04
         permissions:
             actions: read
@@ -194,7 +194,7 @@ jobs:
         name: "Prepare Element Desktop"
         uses: ./.github/workflows/build_desktop_prepare.yaml
         needs: build_ew
-        # if: needs.build_ew.outputs.skip == 'false'
+        if: needs.build_ew.outputs.skip == 'false'
         permissions:
             contents: read
         with:
@@ -207,7 +207,7 @@ jobs:
         name: "Desktop Windows"
         uses: ./.github/workflows/build_desktop_windows.yaml
         # Skip Windows builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
-        # if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
+        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
         strategy:
             matrix:
                 arch: [x64, ia32, arm64]
@@ -243,7 +243,7 @@ jobs:
         uses: ./.github/workflows/build_desktop_macos.yaml
         # Skip macOS builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
         # and we have a very low limit of concurrent macos runners (5) across the Github org.
-        # if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
+        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
         with:
             blob_report: true
 
