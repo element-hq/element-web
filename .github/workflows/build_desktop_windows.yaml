@@ -108,6 +108,12 @@ jobs:
                         }
                       }
 
+            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
+            - name: Configure git line endings
+              run: |
+                  git config --system core.autocrlf false
+                  git config --system core.eol lf
+
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   repository: element-hq/element-web
