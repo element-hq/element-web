@@ -205,6 +205,13 @@
         "message_timestamp_received_at": "Получено в %(dateTime)s",
         "message_timestamp_sent_at": "Отправлено в %(dateTime)s"
     },
+    "user_menu": {
+        "link_new_device": "Привязать новое устройство",
+        "open_feedback": "Отзыв",
+        "open_home": "Главная",
+        "open_security": "Безопасность",
+        "open_settings": "Все настройки"
+    },
     "widget": {
         "context_menu": {
             "move_left": "Переместить влево",
