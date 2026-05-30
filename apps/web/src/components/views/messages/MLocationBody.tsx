@@ -6,10 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { type MatrixEvent, ClientEvent, type ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
-import { Tooltip } from "@vector-im/compound-web";
+import {
+    hide,
+    useFloating,
+    autoUpdate,
+    offset,
+    flip,
+    shift,
+    arrow,
+    useHover,
+    useFocus,
+    useDismiss,
+    useRole,
+    useInteractions,
+    FloatingPortal,
+    FloatingArrow,
+} from "@floating-ui/react";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -118,6 +133,81 @@ export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent; error: 
     );
 };
 
+const BoundaryAwareTooltip: React.FC<{ label: string; children: React.ReactElement }> = ({ label, children }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const arrowRef = useRef<SVGSVGElement>(null);
+    const [boundaryEl, setBoundaryEl] = useState<HTMLElement | null>(null);
+
+    useEffect(() => {
+        setBoundaryEl(document.querySelector(".mx_RoomView_messagePanel"));
+    }, []);
+
+    const middleware = useMemo(
+        () => [
+            offset(6),
+            flip({
+                boundary: boundaryEl ? [boundaryEl] : undefined,
+                fallbackAxisSideDirection: "start",
+                padding: 5,
+            }),
+            shift({ padding: 5 }),
+            hide({ strategy: "escaped", padding: 6, boundary: boundaryEl ? [boundaryEl] : undefined }),
+            arrow({ element: arrowRef }),
+        ],
+        [boundaryEl],
+    );
+
+    const { refs, floatingStyles, context } = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+        placement: "bottom",
+        middleware,
+        whileElementsMounted: autoUpdate,
+    });
+
+    const { getReferenceProps, getFloatingProps } = useInteractions([
+        useHover(context, { move: false, delay: { open: 300, close: 0 }, mouseOnly: true }),
+        useFocus(context),
+        useDismiss(context),
+        useRole(context, { role: "tooltip" }),
+    ]);
+
+    const escaped = context.middlewareData?.hide?.escaped ?? false;
+
+    return (
+        <>
+            {React.cloneElement(children, getReferenceProps({ ref: refs.setReference }))}
+            <FloatingPortal>
+                {isOpen && (
+                    <div
+                        ref={refs.setFloating}
+                        style={{
+                            ...floatingStyles,
+                            font: "var(--cpd-font-body-xs-medium)",
+                            padding: "var(--cpd-space-1-5x) var(--cpd-space-3x)",
+                            background: "var(--cpd-color-alpha-gray-1400)",
+                            color: "var(--cpd-color-text-on-solid-primary)",
+                            borderRadius: 4,
+                            cursor: "pointer",
+                            ...(escaped ? { visibility: "hidden" as const } : {}),
+                        }}
+                        {...getFloatingProps()}
+                    >
+                        <FloatingArrow
+                            ref={arrowRef}
+                            context={context}
+                            width={10}
+                            height={6}
+                            style={{ fill: "var(--cpd-color-alpha-gray-1400)" }}
+                        />
+                        {label}
+                    </div>
+                )}
+            </FloatingPortal>
+        </>
+    );
+};
+
 interface LocationBodyContentProps {
     mxEvent: MatrixEvent;
     mapId: string;
@@ -151,9 +241,9 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
 
     return (
         <div className="mx_MLocationBody">
-            <Tooltip label={tooltip}>
+            <BoundaryAwareTooltip label={tooltip}>
                 <div className="mx_MLocationBody_map">{mapElement}</div>
-            </Tooltip>
+            </BoundaryAwareTooltip>
         </div>
     );
 };

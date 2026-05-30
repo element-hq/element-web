@@ -40,6 +40,7 @@
         "@babel/runtime": "^7.12.5",
         "@element-hq/element-web-module-api": "workspace:*",
         "@element-hq/web-shared-components": "workspace:*",
+        "@floating-ui/react": "^0.27.19",
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "catalog:",
         "@formatjs/intl-segmenter": "^12.0.0",

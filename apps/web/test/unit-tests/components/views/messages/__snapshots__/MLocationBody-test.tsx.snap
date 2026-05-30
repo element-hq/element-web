@@ -34,7 +34,6 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
     class="mx_MLocationBody"
   >
     <div
-      aria-labelledby="react-use-id-1"
       class="mx_MLocationBody_map"
     >
       <div
@@ -76,7 +75,6 @@ exports[`MLocationBody <MLocationBody> without error renders marker correctly fo
     class="mx_MLocationBody"
   >
     <div
-      aria-labelledby="react-use-id-1"
       class="mx_MLocationBody_map"
     >
       <div
