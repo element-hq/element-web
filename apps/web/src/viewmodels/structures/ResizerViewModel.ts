@@ -84,10 +84,16 @@ export class ResizerViewModel
     };
 
     private onSeparatorClick = (): void => {
+        // When the panel is expanded, single click should collapse.
+        if (!this.panelHandle?.isCollapsed()) this.panelHandle?.collapse();
+    };
+
+    public onDoubleClick = (): void => {
+        // When panel is collapsed, double click should expand the panel.
         if (this.panelHandle?.isCollapsed()) {
             const lastSize = SettingsStore.getValue("RoomList.panelSize");
             this.panelHandle.resize(`${lastSize ?? 100}%`);
-        } else this.panelHandle?.collapse();
+        }
     };
 
     public onPointerUp = (): void => {

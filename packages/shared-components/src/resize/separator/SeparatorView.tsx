@@ -31,6 +31,11 @@ export interface SeparatorViewActions {
      * onPointerDown handler for separator.
      */
     onPointerDown: () => void;
+
+    /**
+     * onDoubleClick handler for the separator.
+     */
+    onDoubleClick: () => void;
 }
 
 interface Props {
@@ -86,6 +91,7 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
             onPointerDown={vm.onPointerDown}
             aria-label={_t("left_panel|separator_label")}
             data-separator-type={type}
+            onDoubleClick={vm.onDoubleClick}
             disableDoubleClick
         >
             {type === "bar" ? barContent : null}

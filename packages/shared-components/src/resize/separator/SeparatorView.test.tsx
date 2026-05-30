@@ -24,6 +24,7 @@ class MockViewModel extends BaseViewModel<ResizerViewSnapshot, unknown> implemen
     public onPointerUp: () => void = vi.fn();
     public onPointerMove: () => void = vi.fn();
     public onPointerDown: () => void = vi.fn();
+    public onDoubleClick: () => void = vi.fn();
 }
 
 function renderPanel(initialSnapshot?: Partial<ResizerViewSnapshot>): MockViewModel {
@@ -71,5 +72,12 @@ describe("<SeparatorView />", () => {
         await userEvent.click(separator);
         expect(vm.onPointerDown).toHaveBeenCalledOnce();
         expect(vm.onPointerUp).toHaveBeenCalledOnce();
+    });
+
+    it("should call onDoubleClick on double click", async () => {
+        const vm = renderPanel();
+        const separator = screen.getByRole("separator");
+        await userEvent.dblClick(separator);
+        expect(vm.onDoubleClick).toHaveBeenCalledOnce();
     });
 });

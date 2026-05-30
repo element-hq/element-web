@@ -85,7 +85,7 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.resize).not.toHaveBeenCalledWith("34%");
     });
 
-    describe("should expand panel on click when panel is collapsed", () => {
+    describe("should expand panel on double click when panel is collapsed", () => {
         it("to last non-zero width that the user set", () => {
             const vm = new ResizerViewModel();
             SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
@@ -94,11 +94,7 @@ describe("LeftPanelResizerViewModel", () => {
                 isCollapsed: jest.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
-
-            // Simulate click
-            vm.onPointerDown();
-            vm.onPointerUp();
-
+            vm.onDoubleClick();
             expect(mockHandle.resize).toHaveBeenCalledWith("34%");
         });
 
@@ -109,11 +105,7 @@ describe("LeftPanelResizerViewModel", () => {
                 isCollapsed: jest.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
-
-            // Simulate click
-            vm.onPointerDown();
-            vm.onPointerUp();
-
+            vm.onDoubleClick();
             expect(mockHandle.resize).toHaveBeenCalledWith("100%");
         });
     });
