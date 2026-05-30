@@ -63,15 +63,25 @@ import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
-import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
+import QuestionDialog from "../../../../src/components/views/dialogs/QuestionDialog.tsx";
+import { Phase, SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { accessSecretStorage } from "../../../../src/SecurityManager.ts";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
+}));
+
+// `accessSecretStorage` drives the recovery-key (4S) creation/unlock flow. We mock only this
+// named export (keeping the rest of SecurityManager real) so we can assert how the forced
+// first-device recovery flow invokes it without actually opening modals or touching crypto.
+jest.mock("../../../../src/SecurityManager.ts", () => ({
+    ...jest.requireActual("../../../../src/SecurityManager.ts"),
+    accessSecretStorage: jest.fn().mockResolvedValue(undefined),
 }));
 
 // Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
@@ -146,6 +156,7 @@ describe("<MatrixChat />", () => {
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             isCrossSigningReady: jest.fn().mockReturnValue(false),
+            isSecretStorageReady: jest.fn().mockReturnValue(false),
             isDehydrationSupported: jest.fn().mockReturnValue(false),
             getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
@@ -160,6 +171,7 @@ describe("<MatrixChat />", () => {
         }),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
+            hasKey: jest.fn().mockResolvedValue(false),
         },
         matrixRTC: createStubMatrixRTC(),
         getDehydratedDevice: jest.fn(),
@@ -1209,9 +1221,277 @@ describe("<MatrixChat />", () => {
                         .fn()
                         .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
                     isCrossSigningReady: jest.fn().mockReturnValue(false),
+                    isSecretStorageReady: jest.fn().mockReturnValue(false),
                     requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
                 } as any;
             }
+        });
+
+        describe("forced recovery-key (4S) setup on first device", () => {
+            // These tests exercise `onCompleteSecurityE2eSetupFinished`: once a device is
+            // cross-signing-ready but secret storage (4S) is not yet ready, the forced-verification
+            // flow must drive recovery-key creation/unlock before login can complete.
+            //
+            // We use the same persisted-session route as the "unskippable verification" tests: with
+            // `force_verification` + `must_verify_device` set and the device not yet
+            // secret-storage-ready, MatrixChat lands on the Complete Security screen. Completing that
+            // screen (driving the SetupEncryptionStore to `Phase.Finished`) invokes
+            // `onCompleteSecurityE2eSetupFinished`.
+            const mockedAccessSecretStorage = mocked(accessSecretStorage);
+
+            /** A crypto mock where cross-signing is ready but 4S readiness is configurable. */
+            function crossSignedButNoSecretStorageCrypto(secretStorageReady: boolean): Mocked<CryptoApi> {
+                return {
+                    getVersion: jest.fn().mockReturnValue("Version 0"),
+                    getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+                    getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
+                    getUserVerificationStatus: jest
+                        .fn()
+                        .mockResolvedValue(new UserVerificationStatus(true, true, false)),
+                    setDeviceIsolationMode: jest.fn(),
+                    isDehydrationSupported: jest.fn().mockReturnValue(false),
+                    isCrossSigningReady: jest.fn().mockResolvedValue(true),
+                    isSecretStorageReady: jest.fn().mockResolvedValue(secretStorageReady),
+                    getDeviceVerificationStatus: jest
+                        .fn()
+                        .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
+                } as unknown as Mocked<CryptoApi>;
+            }
+
+            beforeEach(() => {
+                // Force verification is turned on, and this device must be verified (mirrors the
+                // "unskippable verification" describe's setup).
+                defaultProps.config.force_verification = true;
+                localStorage.setItem("must_verify_device", "true");
+                // lostKeys() === false means there are other devices to verify against, so the
+                // Complete Security screen renders its Intro rather than a recovery-only flow.
+                jest.spyOn(SetupEncryptionStore.sharedInstance(), "lostKeys").mockReturnValue(false);
+                // Isolate the tests from the real (async) logout side effects: the escape hatch
+                // dispatches {action:"logout"}, which we assert on the dispatcher directly.
+                jest.spyOn(Lifecycle, "logout").mockImplementation(async () => {});
+
+                mockedAccessSecretStorage.mockClear().mockResolvedValue(undefined);
+            });
+
+            afterEach(() => {
+                defaultProps.config.force_verification = false;
+                localStorage.removeItem("must_verify_device");
+            });
+
+            /**
+             * Render MatrixChat through the persisted-session route until the Complete Security
+             * screen is showing, then complete it (drive the SetupEncryptionStore to
+             * `Phase.Finished`), which fires `onCompleteSecurityE2eSetupFinished`.
+             */
+            async function getToCompleteSecurityAndFinish(): Promise<void> {
+                getComponent();
+
+                // We land on the Complete Security screen because secret storage is not ready.
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
+
+                // Completing the Complete Security body drives the store to Phase.Finished, which is
+                // what calls our onFinished handler (onCompleteSecurityE2eSetupFinished).
+                const store = SetupEncryptionStore.sharedInstance();
+                act(() => {
+                    store.phase = Phase.Finished;
+                    store.emit("update");
+                });
+            }
+
+            it("creates a recovery key (forceReset: true) on a first device with no 4S, then proceeds", async () => {
+                // Given a genuine first device: cross-signing is ready, but there is no secret
+                // storage at all (neither cached locally nor present server-side).
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+
+                // Mirror successful creation: once accessSecretStorage runs, 4S becomes ready.
+                mockedAccessSecretStorage.mockImplementation(async () => {
+                    crypto.isSecretStorageReady.mockResolvedValue(true);
+                });
+                const createDialog = jest.spyOn(Modal, "createDialog");
+
+                await getToCompleteSecurityAndFinish();
+
+                // We drive recovery-key *creation* (a reset, because there is no existing key)...
+                await waitFor(() =>
+                    expect(mockedAccessSecretStorage).toHaveBeenCalledWith(expect.any(Function), { forceReset: true }),
+                );
+
+                // ...and once a recovery key exists, login proceeds into the app - with no escape
+                // dialog and no logout (a clean single-pass success).
+                await screen.findByLabelText("User menu");
+                expect(createDialog).not.toHaveBeenCalledWith(QuestionDialog, expect.anything());
+                expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: "logout" });
+            });
+
+            it("does not reset existing secret storage for a returning user (forceReset: false; unlocks, never resets)", async () => {
+                // THE CRITICAL REGRESSION GUARD.
+                //
+                // Given a returning user whose 4S exists server-side (`hasKey() === true`) but is not
+                // yet cached on this device (`isSecretStorageReady() === false`): we must take the
+                // non-destructive *unlock* path, never reset. Resetting would orphan the user's
+                // existing recovery key and message-key backup -> permanent data loss.
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(true);
+
+                // Mirror a successful unlock: once accessSecretStorage runs, 4S becomes ready.
+                mockedAccessSecretStorage.mockImplementation(async () => {
+                    crypto.isSecretStorageReady.mockResolvedValue(true);
+                });
+                const createDialog = jest.spyOn(Modal, "createDialog");
+
+                await getToCompleteSecurityAndFinish();
+
+                // It must unlock (forceReset: false), NOT reset (forceReset: true).
+                await waitFor(() =>
+                    expect(mockedAccessSecretStorage).toHaveBeenCalledWith(expect.any(Function), { forceReset: false }),
+                );
+                expect(mockedAccessSecretStorage).not.toHaveBeenCalledWith(expect.any(Function), { forceReset: true });
+
+                // And because the unlock made 4S ready, login proceeds - no escape dialog, no logout.
+                await screen.findByLabelText("User menu");
+                expect(createDialog).not.toHaveBeenCalledWith(QuestionDialog, expect.anything());
+                expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: "logout" });
+            });
+
+            it("does not change behaviour when force_verification is unset (no forced recovery; login proceeds)", async () => {
+                // Given force_verification is off, the forced-recovery gate is fully bypassed.
+                defaultProps.config.force_verification = false;
+                localStorage.removeItem("must_verify_device");
+
+                // Cross-signing is ready and 4S is not, but none of that matters without forcing.
+                mockClient.getCrypto.mockReturnValue(crossSignedButNoSecretStorageCrypto(false));
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+
+                getComponent();
+
+                // We go straight into the app: no Complete Security gate, no forced recovery.
+                await screen.findByLabelText("User menu");
+                expect(
+                    screen.queryByRole("heading", { name: "Confirm your digital identity" }),
+                ).not.toBeInTheDocument();
+                expect(mockedAccessSecretStorage).not.toHaveBeenCalled();
+            });
+
+            it("offers Retry / Sign out when recovery setup is cancelled, and logs out on Sign out", async () => {
+                // First device, no 4S anywhere -> forced creation. The user cancels: the recovery
+                // flow rejects and 4S stays not-ready.
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+                mockedAccessSecretStorage.mockRejectedValue(new Error("cancelled"));
+
+                // The escape-hatch dialog: the user chooses "Sign out" (cancel button -> [false]).
+                const createDialog = jest
+                    .spyOn(Modal, "createDialog")
+                    .mockReturnValue({ finished: Promise.resolve([false]) } as unknown as ReturnType<
+                        typeof Modal.createDialog
+                    >);
+
+                await getToCompleteSecurityAndFinish();
+
+                // The escape dialog is shown, and choosing "Sign out" logs the user out without
+                // ever reaching the app.
+                await waitFor(() => expect(createDialog).toHaveBeenCalledWith(QuestionDialog, expect.anything()));
+                await waitFor(() => expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "logout" }));
+                expect(screen.queryByLabelText("User menu")).not.toBeInTheDocument();
+            });
+
+            it("retries recovery setup when the user chooses Retry, then proceeds once a recovery key exists", async () => {
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+
+                // First attempt is cancelled; the second succeeds and makes 4S ready.
+                mockedAccessSecretStorage
+                    .mockRejectedValueOnce(new Error("cancelled"))
+                    .mockImplementationOnce(async () => {
+                        crypto.isSecretStorageReady.mockResolvedValue(true);
+                    });
+
+                // First dialog -> "Retry" ([true]); any further dialog -> "Sign out" ([false]) so a
+                // regression that never makes 4S ready fails fast via logout instead of hanging.
+                jest.spyOn(Modal, "createDialog")
+                    .mockReturnValueOnce({ finished: Promise.resolve([true]) } as unknown as ReturnType<
+                        typeof Modal.createDialog
+                    >)
+                    .mockReturnValue({ finished: Promise.resolve([false]) } as unknown as ReturnType<
+                        typeof Modal.createDialog
+                    >);
+
+                await getToCompleteSecurityAndFinish();
+
+                // Two attempts: the cancelled one, then the successful retry.
+                await waitFor(() => expect(mockedAccessSecretStorage).toHaveBeenCalledTimes(2));
+                // After the successful retry, login proceeds and we never logged out.
+                await screen.findByLabelText("User menu");
+                expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: "logout" });
+            });
+
+            it("blocks login without driving recovery when cross-signing is not yet ready", async () => {
+                // shouldForceVerification is true, but cross-signing isn't ready: the early guard
+                // must stop login before any recovery flow runs.
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                crypto.isCrossSigningReady.mockResolvedValue(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+
+                await getToCompleteSecurityAndFinish();
+
+                expect(mockedAccessSecretStorage).not.toHaveBeenCalled();
+                expect(screen.queryByLabelText("User menu")).not.toBeInTheDocument();
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
+            });
+
+            it("does not loop forever when recovery setup resolves but 4S never becomes ready (soft-lock escape)", async () => {
+                // accessSecretStorage resolves, but isSecretStorageReady stays false forever (e.g. a
+                // device that cannot store the backup secret). We must not spin: the user is offered
+                // Retry / Sign out. Here the dialog is dismissed (Esc/background -> finished resolves
+                // to []), which must be treated as a sign-out (any falsy result -> logout).
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+                mockedAccessSecretStorage.mockResolvedValue(undefined);
+
+                const createDialog = jest
+                    .spyOn(Modal, "createDialog")
+                    .mockReturnValue({ finished: Promise.resolve([]) } as unknown as ReturnType<
+                        typeof Modal.createDialog
+                    >);
+
+                await getToCompleteSecurityAndFinish();
+
+                await waitFor(() => expect(createDialog).toHaveBeenCalledWith(QuestionDialog, expect.anything()));
+                await waitFor(() => expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "logout" }));
+                // Bounded: exactly one recovery attempt before the user was asked to choose.
+                expect(mockedAccessSecretStorage).toHaveBeenCalledTimes(1);
+            });
+
+            it("offers Retry / Sign out (not an unhandled trap) when the readiness re-check throws", async () => {
+                // accessSecretStorage resolves, but the subsequent readiness re-check
+                // (shouldForceVerification -> isSecretStorageReady) throws a transient crypto error.
+                // The fix keeps that re-check inside the try, so we must still reach the escape
+                // dialog rather than escaping as an unhandled rejection that re-strands the user.
+                const crypto = crossSignedButNoSecretStorageCrypto(false);
+                mockClient.getCrypto.mockReturnValue(crypto);
+                mocked(mockClient.secretStorage.hasKey).mockResolvedValue(false);
+                mockedAccessSecretStorage.mockImplementation(async () => {
+                    crypto.isSecretStorageReady.mockRejectedValue(new Error("transient crypto error"));
+                });
+
+                const createDialog = jest
+                    .spyOn(Modal, "createDialog")
+                    .mockReturnValue({ finished: Promise.resolve([false]) } as unknown as ReturnType<
+                        typeof Modal.createDialog
+                    >);
+
+                await getToCompleteSecurityAndFinish();
+
+                await waitFor(() => expect(createDialog).toHaveBeenCalledWith(QuestionDialog, expect.anything()));
+                await waitFor(() => expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "logout" }));
+            });
         });
 
         describe("showScreen", () => {

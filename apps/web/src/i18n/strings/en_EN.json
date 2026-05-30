@@ -972,6 +972,8 @@
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
+        "force_recovery_setup_description": "To keep access to your messages, you need to set up recovery before continuing. This protects your chat history if you lose this device.",
+        "force_recovery_setup_title": "Set up recovery to continue",
         "forgot_recovery_key": "Forgot recovery key?",
         "identity_needs_reset_description": "You have to reset your digital identity in order to ensure access to your chat history",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",

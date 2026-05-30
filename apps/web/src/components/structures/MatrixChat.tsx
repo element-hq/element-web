@@ -35,6 +35,7 @@ import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
+import { accessSecretStorage } from "../../SecurityManager";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from "../../Notifier";
 import Modal from "../../Modal";
@@ -1387,8 +1388,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const crypto = client.getCrypto();
         const crossSigningReady = await crypto?.isCrossSigningReady();
+        // `force_verification` mandates a recoverable identity, not merely a cross-signed
+        // one: the transparent first-device bootstrap (InitialCryptoSetupStore) sets up
+        // cross-signing but never creates secret storage (4S), so a user could otherwise
+        // end up cross-signing-ready with no recovery key and no way to recover after
+        // losing the device. Gate on secret-storage readiness so the requirement is only
+        // satisfied once a recovery key exists.
+        const secretStorageReady = await crypto?.isSecretStorageReady();
 
-        return !crossSigningReady;
+        return !crossSigningReady || !secretStorageReady;
     }
 
     /**
@@ -2133,12 +2141,60 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */
     private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
-        const forceVerify = await this.shouldForceVerification();
-        if (forceVerify) {
-            const isVerified = await MatrixClientPeg.safeGet().getCrypto()?.isCrossSigningReady();
-            if (!isVerified) {
-                // We must verify but we haven't yet verified - don't continue logging in
+        if (await this.shouldForceVerification()) {
+            const cli = MatrixClientPeg.safeGet();
+            const crypto = cli.getCrypto();
+            const crossSigningReady = await crypto?.isCrossSigningReady();
+            if (!crossSigningReady) {
+                // We must verify but cross-signing isn't ready yet - don't continue logging in.
                 return;
+            }
+
+            // Cross-signing is ready but `shouldForceVerification` is still true, which means
+            // secret storage (4S) has not been set up. The transparent InitialCryptoSetup
+            // (E2E_SETUP) deliberately does not create a recovery key, and the COMPLETE_SECURITY
+            // body only offers device-to-device verification / existing-recovery-key entry - it
+            // cannot mint a recovery key on a lone first device. Drive Element's recovery-key
+            // creation flow until a recovery key exists, or let the user sign out - we must never
+            // trap them on the (now inert) setup screen if they cancel.
+            let recoverySetUp = false;
+            while (!recoverySetUp) {
+                try {
+                    // Distinguish "4S genuinely absent" (must create a recovery key) from "4S
+                    // exists server-side but isn't unlocked on this device" (must unlock, never
+                    // reset - resetting orphans the user's existing recovery key and message-key
+                    // backup). hasKey() reflects server-side default-key presence; recompute it
+                    // every pass so a retry after a partial attempt still does the right thing.
+                    const hasExisting4S = await cli.secretStorage.hasKey();
+                    await accessSecretStorage(async () => {}, { forceReset: !hasExisting4S });
+                    // Re-check readiness inside the try: if a transient crypto error throws here
+                    // too, fall through to the Retry/Sign out choice rather than escaping as an
+                    // unhandled rejection (this handler is fire-and-forget) that would re-strand
+                    // the user on the inert setup screen.
+                    recoverySetUp = !(await this.shouldForceVerification());
+                } catch (e) {
+                    logger.warn("Forced recovery-key setup was not completed", e);
+                    recoverySetUp = false;
+                }
+
+                if (recoverySetUp) break;
+
+                // Recovery still isn't set up - the user cancelled, or the attempt failed. Rather
+                // than silently stranding them on the inert setup screen, force an explicit choice:
+                // try again, or sign out. Any dismissal of this dialog (cancel/Esc/background) is
+                // treated as "sign out", so the requirement cannot be slipped past, and the user
+                // can never be trapped with no way forward.
+                const { finished } = Modal.createDialog(QuestionDialog, {
+                    title: _t("encryption|force_recovery_setup_title"),
+                    description: _t("encryption|force_recovery_setup_description"),
+                    button: _t("action|retry"),
+                    cancelButton: _t("action|logout"),
+                });
+                const [retry] = await finished;
+                if (!retry) {
+                    dis.dispatch({ action: "logout" });
+                    return;
+                }
             }
         }
 
