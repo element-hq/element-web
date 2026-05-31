@@ -119,6 +119,8 @@ export const KeyboardFocused: Story = {
     play: async ({ canvas, canvasElement }) => {
         const separator = canvas.getByRole("separator");
         separator.focus();
+        // Wait for animations to finish
+        await new Promise((r) => setTimeout(r, 500));
         await expect(canvasElement).toMatchImageSnapshot();
     },
 };
@@ -194,6 +196,8 @@ export const HoverWhenExpanded: Story = {
     play: async ({ canvas, canvasElement }) => {
         const separator = canvas.getByRole("separator");
         separator.dataset.separator = "hover";
+        // Wait for animations to finish
+        await new Promise((r) => setTimeout(r, 500));
         await expect(canvasElement).toMatchImageSnapshot();
     },
 };
