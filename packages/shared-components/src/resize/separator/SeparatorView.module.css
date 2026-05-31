@@ -13,9 +13,6 @@
     can be absolutely positioned */
     position: relative;
 
-    /* Disable the browser outline on focus since we have our own hover/focus style */
-    outline: none;
-
     display: flex;
     justify-content: center;
 }
@@ -28,6 +25,9 @@
     */
     width: 1px;
 
+    /* We can disable the browser focus ring since we show a thicker green separator on focus */
+    outline: none;
+
     .activeSeparatorContainer {
         .activeSeparator {
             width: 0px;
@@ -39,11 +39,6 @@
 
 /* When type=bar, we render the 12px separator */
 .separator[data-separator-type="bar"] {
-    .activeSeparatorContainer {
-        /* When showing the bar separator, hide the other border */
-        display: none;
-    }
-
     width: 12px;
     display: flex;
     align-items: center;

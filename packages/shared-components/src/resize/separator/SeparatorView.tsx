@@ -53,7 +53,7 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
     /**
      * There are two types of separator:
      * - bar: This shows a thick bar separator with a resize icon in the middle; shown when the panel is collapsed.
-     * - border: This is just a 1px wide separator; shown when the panel is expanded.
+     * - border: This is just a thin separator; shown when the panel is expanded.
      */
     const type = isCollapsed ? "bar" : "border";
 
@@ -71,13 +71,11 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
     );
 
     /**
-     * When rendering the border separator, we replace the regular 1px separator with a thicker
-     * green separator when:
-     * - the user hovers over the hit region (i.e the area at the edge of the panel
-     *  from where you can start resizing the panel).
-     * - the user focuses the separator through keyboard navigation.
+     * This border is:
+     * - a 1px grey border that separates the left panel and main content.
+     * - a 2px green border when the panel is expanded and the user is interacting with the separator.
      */
-    const focusedBorder = (
+    const border = (
         <div className={styles.activeSeparatorContainer}>
             <div className={styles.activeSeparator} />
         </div>
@@ -94,8 +92,7 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
             onDoubleClick={vm.onDoubleClick}
             disableDoubleClick
         >
-            {type === "bar" ? barContent : null}
-            {focusedBorder}
+            {type === "bar" ? barContent : border}
         </Separator>
     );
 }
