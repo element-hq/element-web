@@ -22,6 +22,12 @@
 
 /* When type=border, we just render a 1px border */
 .separator[data-separator-type="border"] {
+    /*
+    We reserve 1px of space even though the actual separator is absolute positioned.
+    This keeps the panel looking the same as when the border was part of the panel.
+    */
+    width: 1px;
+
     .activeSeparatorContainer {
         .activeSeparator {
             width: 0px;
