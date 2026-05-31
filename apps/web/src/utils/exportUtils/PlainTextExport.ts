@@ -17,6 +17,7 @@ import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import SettingsStore from "../../settings/SettingsStore";
 import { formatFullDate } from "../../DateUtils";
+import SdkConfig from "../../SdkConfig";
 
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
@@ -36,7 +37,7 @@ export default class PlainTextExporter extends Exporter {
     }
 
     public get destinationFileName(): string {
-        return this.makeFileNameNoExtension() + ".txt";
+        return this.makeFileNameNoExtension(SdkConfig.get().brand) + ".txt";
     }
 
     public textForReplyEvent = (content: IContent): string => {
