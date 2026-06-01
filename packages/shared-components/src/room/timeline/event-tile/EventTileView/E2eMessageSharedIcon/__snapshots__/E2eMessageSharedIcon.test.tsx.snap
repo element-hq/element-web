@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`E2eMessageSharedIcon renders correctly for a known user 1`] = `
+exports[`E2eMessageSharedIconView > renders an unknown user tooltip state 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
     aria-labelledby="react-use-id-1"
-    class="_e2ePadlock_1hynz_8 _normal_1hynz_21 mx_EventTile_e2eIcon"
+    class="E2ePadlock-module_e2ePadlock E2ePadlock-module_normal"
     data-testid="e2e-padlock"
     role="img"
     tabindex="0"
@@ -30,12 +30,12 @@ exports[`E2eMessageSharedIcon renders correctly for a known user 1`] = `
 </div>
 `;
 
-exports[`E2eMessageSharedIcon renders correctly for an unknown user 1`] = `
+exports[`E2eMessageSharedIconView > renders the default shared-message icon 1`] = `
 <div>
   <div
     aria-label="State of the end-to-end encryption"
     aria-labelledby="react-use-id-1"
-    class="_e2ePadlock_1hynz_8 _normal_1hynz_21 mx_EventTile_e2eIcon"
+    class="E2ePadlock-module_e2ePadlock E2ePadlock-module_normal"
     data-testid="e2e-padlock"
     role="img"
     tabindex="0"

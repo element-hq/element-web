@@ -9,6 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import {
     RovingAction,
+    RovingGridIndexProvider as SharedRovingGridIndexProvider,
+    type RovingGridIndexProviderProps,
     RovingTabIndexProvider as SharedRovingTabIndexProvider,
     type RovingTabIndexProviderProps,
 } from "@element-hq/web-shared-components";
@@ -56,10 +58,15 @@ const getWebRovingAction = (ev: React.KeyboardEvent): RovingAction | undefined =
     }
 };
 
-type IProps = Omit<RovingTabIndexProviderProps, "getAction">;
+type IRovingTabIndexProps = Omit<RovingTabIndexProviderProps, "getAction">;
+type IRovingGridIndexProps = Omit<RovingGridIndexProviderProps, "getAction">;
 
-export const RovingTabIndexProvider: React.FC<IProps> = (props) => {
+export const RovingTabIndexProvider: React.FC<IRovingTabIndexProps> = (props) => {
     return <SharedRovingTabIndexProvider {...props} getAction={getWebRovingAction} />;
+};
+
+export const RovingGridIndexProvider: React.FC<IRovingGridIndexProps> = (props) => {
+    return <SharedRovingGridIndexProvider {...props} getAction={getWebRovingAction} />;
 };
 
 // re-export the semantic helper components for simplicity

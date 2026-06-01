@@ -962,7 +962,6 @@
         "import_invalid_passphrase": "인증 확인 실패: 비밀번호를 틀리셨나요?",
         "key_storage_out_of_sync": "키 저장소가 동기화되지 않았습니다.",
         "key_storage_out_of_sync_description": "키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요.",
-        "message_shared_by": "메시지가 전송될 당시 방에 계시지 않아, %(displayName)s(%(userId)s)님이 이 메시지를 공유했습니다.",
         "messages_not_secure": {
             "cause_1": "당신의 홈 서버",
             "cause_2": "사용자가 확인 중인 홈 서버에 연결된 사용자",

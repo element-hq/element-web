@@ -207,6 +207,7 @@ export class RoomListHeaderViewModel
 
     public createSection = (): void => {
         RoomListStoreV3.instance.createSection();
+        PosthogTrackers.trackSectionCreation("RoomListHeader");
     };
 
     public collapseOrExpandSections = (): void => {
@@ -215,6 +216,9 @@ export class RoomListHeaderViewModel
                 ? Action.RoomListExpandAllSections
                 : Action.RoomListCollapseAllSections;
         defaultDispatcher.fire(action);
+
+        const kind = action === Action.RoomListExpandAllSections ? "Expand" : "Collapse";
+        PosthogTrackers.trackCollapseOrExpandSection(kind, "RoomListHeader");
     };
 
     private readonly onDispatch = (payload: { action: string }): void => {

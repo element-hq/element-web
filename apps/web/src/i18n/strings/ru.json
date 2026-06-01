@@ -164,9 +164,9 @@
         "autodiscovery_hs_incompatible": "Ваш домашний сервер устарел и не поддерживает минимальную требуемую версию API. Обратитесь к владельцу сервера или обновите его.",
         "autodiscovery_invalid": "Неверный ответ при попытке обнаружения домашнего сервера",
         "autodiscovery_invalid_hs": "URL-адрес домашнего сервера не является допустимым домашним сервером Matrix",
-        "autodiscovery_invalid_hs_base_url": "Неверный base_url для m.homeserver",
+        "autodiscovery_invalid_hs_base_url": "Неверный адрес base_url для m.homeserver",
         "autodiscovery_invalid_is": "URL-адрес сервера идентификации не является действительным сервером идентификации",
-        "autodiscovery_invalid_is_base_url": "Неверный base_url для m.identity_server",
+        "autodiscovery_invalid_is_base_url": "Неверный адрес base_url для m.identity_server",
         "autodiscovery_invalid_is_response": "Неверный ответ на запрос идентификации сервера",
         "autodiscovery_invalid_json": "Неверный JSON",
         "autodiscovery_no_well_known": "Не найден файл .well-known",
@@ -473,6 +473,7 @@
         "description": "Описание",
         "deselect_all": "Отменить выбор",
         "device": "Устройство",
+        "disabled_by_homeserver": "Отключено на домашнем сервере",
         "edited": "изменено",
         "email_address": "Электронная почта",
         "emoji": "Смайлы",
@@ -679,8 +680,10 @@
     },
     "create_section_dialog": {
         "create_section": "Новый раздел",
+        "edit_section": "Редактировать раздел",
         "label": "Название раздела",
-        "title": "Новый раздел"
+        "title": "Новый раздел",
+        "title_edition": "Редактировать раздел"
     },
     "create_space": {
         "add_details_prompt": "Добавьте некоторые подробности, чтобы помочь людям узнать его.",

@@ -957,7 +957,6 @@
         "import_invalid_passphrase": "Pemeriksaan autentikasi gagal: kata sandi salah?",
         "key_storage_out_of_sync": "Penyimpanan kunci Anda tidak tersinkron.",
         "key_storage_out_of_sync_description": "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.",
-        "message_shared_by": "%(displayName)s (%(userId)s) telah membagikan pesan ini sejak Anda tidak berada di ruangan saat pesan tersebut dikirim.",
         "messages_not_secure": {
             "cause_1": "Homeserver Anda",
             "cause_2": "Homeserver pengguna yang Anda memverifikasi",
