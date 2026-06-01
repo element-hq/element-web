@@ -37,6 +37,8 @@ export class EventPreviewViewModel
     private readonly eventContentListener = new MatrixEventContentChangeListener();
     private readonly previewContentCache = new EventPreviewContentCache();
     private previewRequestId = 0;
+    private updatePreviewInFlight = false;
+    private updatePreviewQueued = false;
 
     private static readonly hiddenSnapshot: EventPreviewViewSnapshot = {
         isVisible: false,
@@ -76,9 +78,29 @@ export class EventPreviewViewModel
     };
 
     private updatePreviewSafely(): void {
-        void this.updatePreview().catch((error) => {
-            logger.error("Failed to update event preview", error);
-        });
+        if (this.updatePreviewInFlight) {
+            this.updatePreviewQueued = true;
+            return;
+        }
+
+        void this.drainPreviewUpdates();
+    }
+
+    private async drainPreviewUpdates(): Promise<void> {
+        this.updatePreviewInFlight = true;
+
+        try {
+            do {
+                this.updatePreviewQueued = false;
+                try {
+                    await this.updatePreview();
+                } catch (error) {
+                    logger.error("Failed to update event preview", error);
+                }
+            } while (this.updatePreviewQueued && !this.isDisposed);
+        } finally {
+            this.updatePreviewInFlight = false;
+        }
     }
 
     private async updatePreview(): Promise<void> {

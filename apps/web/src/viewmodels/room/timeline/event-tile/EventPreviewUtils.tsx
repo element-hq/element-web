@@ -7,6 +7,7 @@
 
 import React, { type ReactNode } from "react";
 import { M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { Disposables } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
 import { MessagePreviewStore } from "../../../../stores/message-preview";
@@ -47,6 +48,7 @@ export class EventPreviewContentCache {
 export class MatrixEventContentChangeListener {
     private mxEvent?: MatrixEvent;
     private callback?: () => void;
+    private disposables?: Disposables;
 
     public setEvent(mxEvent: MatrixEvent | undefined, callback: () => void): void {
         if (this.mxEvent === mxEvent && this.callback === callback) return;
@@ -57,19 +59,14 @@ export class MatrixEventContentChangeListener {
 
         if (!mxEvent) return;
 
-        mxEvent.on(MatrixEventEvent.Replaced, callback);
-        mxEvent.on(MatrixEventEvent.Decrypted, callback);
+        this.disposables = new Disposables();
+        this.disposables.trackListener(mxEvent, MatrixEventEvent.Replaced, callback);
+        this.disposables.trackListener(mxEvent, MatrixEventEvent.Decrypted, callback);
     }
 
     public teardown(): void {
-        if (!this.mxEvent || !this.callback) {
-            this.mxEvent = undefined;
-            this.callback = undefined;
-            return;
-        }
-
-        this.mxEvent.off(MatrixEventEvent.Replaced, this.callback);
-        this.mxEvent.off(MatrixEventEvent.Decrypted, this.callback);
+        this.disposables?.dispose();
+        this.disposables = undefined;
         this.mxEvent = undefined;
         this.callback = undefined;
     }
