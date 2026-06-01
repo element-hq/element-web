@@ -982,7 +982,6 @@
         "import_invalid_passphrase": "Próba autentykacji nieudana: nieprawidłowe hasło?",
         "key_storage_out_of_sync": "Twój magazyn kluczy nie jest zsynchronizowany.",
         "key_storage_out_of_sync_description": "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.",
-        "message_shared_by": "%(displayName)s (%(userId)s) udostępnił tę wiadomość, kiedy nie było Cię w pokoju, gdy została wysłana.",
         "messages_not_secure": {
             "cause_1": "Twój serwer domowy",
             "cause_2": "Użytkownik, którego weryfikujesz jest połączony z serwerem domowym",
@@ -3281,7 +3280,8 @@
         "copy_link_text": "Kopiuj link z zaproszeniem",
         "count_of_members": {
             "one": "%(count)s członek",
-            "other": "%(count)s członków"
+            "few": "%(count)s członków",
+            "many": "%(count)s członków"
         },
         "create_new_room_button": "Utwórz nowy pokój",
         "failed_querying_public_rooms": "Nie udało się pobrać pokoi publicznych",

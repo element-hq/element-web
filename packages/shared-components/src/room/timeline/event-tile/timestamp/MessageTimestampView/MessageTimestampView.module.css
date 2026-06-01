@@ -7,7 +7,7 @@
 
 .content {
     color: var(--cpd-color-text-secondary); /* override anchor color */
-    font-size: var(--cpd-font-size-body-xs);
+    font-size: 0.625rem; /* There is no Compound equivalent to $font-10px */
     font-variant-numeric: tabular-nums;
     display: inline-block;
     white-space: nowrap;
