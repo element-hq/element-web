@@ -243,7 +243,7 @@ catalogs:
       version: 4.1.7
 
 overrides:
-  pretty-format@30>react-is: 19.2.5
+  pretty-format@30>react-is: 19.2.6
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
   oidc-client-ts: 3.5.0
@@ -801,8 +801,8 @@ importers:
         specifier: ^0.27.4
         version: 0.27.10
       '@types/content-type':
-        specifier: ^1.1.9
-        version: 1.1.9
+        specifier: ^2.0.0
+        version: 2.0.0
       '@types/css-tree':
         specifier: ^2.3.8
         version: 2.3.11
@@ -1220,8 +1220,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.3)
       linkify-react:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.3)(react@19.2.6)
+        specifier: 4.3.3
+        version: 4.3.3(linkifyjs@4.3.3)(react@19.2.6)
       linkify-string:
         specifier: 4.3.3
         version: 4.3.3(linkifyjs@4.3.3)
@@ -5606,8 +5606,9 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/content-type@1.1.9':
-    resolution: {integrity: sha512-Hq9IMnfekuOCsEmYl4QX2HBrT+XsfXiupfrLLY8Dcf3Puf4BkBOxSbWYTITSOQAhJoYPBez+b4MJRpIYL65z8A==}
+  '@types/content-type@2.0.0':
+    resolution: {integrity: sha512-wZQlLoRx3carjGy5yHA6GnCBGChd/9DDYTAOPbISfXGjhI4j70U6SU/tu5EEz7NpX2MxpUVgbbYFIgLqDItbVQ==}
+    deprecated: This is a stub types definition. content-type provides its own type definitions, so you do not need this installed.
 
   '@types/counterpart@0.18.4':
     resolution: {integrity: sha512-aqBg5oAGo/qh/+wxUfuMadDu2WO0MEWOblyzwaM1Ske2xilUxBfgPqapAFVAfrVTDMVwa0UMarzGot8m64IAzA==}
@@ -10099,10 +10100,10 @@ packages:
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
 
-  linkify-react@4.3.2:
-    resolution: {integrity: sha512-mi744h1hf+WDsr+paJgSBBgYNLMWNSHyM9V9LVUo03RidNGdw1VpI7Twnt+K3pEh3nIzB4xiiAgZxpd61ItKpQ==}
+  linkify-react@4.3.3:
+    resolution: {integrity: sha512-bMWuN1YJ3hyDyojk4hzUugecN2RsTuibKAQBplUT2o+3uK33THdRL2qD0Zf3ibCXuBLBCyOE6Uj/S/1cY48Ygw==}
     peerDependencies:
-      linkifyjs: ^4.0.0
+      linkifyjs: '==4.3.3'
       react: '>= 15.0.0'
 
   linkify-string@4.3.3:
@@ -18413,7 +18414,9 @@ snapshots:
     dependencies:
       '@types/node': 18.19.130
 
-  '@types/content-type@1.1.9': {}
+  '@types/content-type@2.0.0':
+    dependencies:
+      content-type: 2.0.0
 
   '@types/counterpart@0.18.4': {}
 
@@ -23743,7 +23746,7 @@ snapshots:
     dependencies:
       uc.micro: 2.1.0
 
-  linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.2.6):
+  linkify-react@4.3.3(linkifyjs@4.3.3)(react@19.2.6):
     dependencies:
       linkifyjs: 4.3.3
       react: 19.2.6
