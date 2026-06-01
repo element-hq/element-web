@@ -1,6 +1,7 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
+ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
@@ -58,6 +59,9 @@ allowBuilds:
     protobufjs: false
     # Builds optional crypto binding, which we do not need
     ssh2: false
+    # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
+    sharp: true
+    workerd: true
 
 patchedDependencies:
     "@vector-im/matrix-wysiwyg": patches/@vector-im__matrix-wysiwyg.patch
