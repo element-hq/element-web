@@ -14,7 +14,6 @@ import { formatFullDateNoDayNoTime } from "../../DateUtils";
 import { type ExportType, type IExportOptions } from "./exportUtils";
 import { _t } from "../../languageHandler";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
-import SdkConfig from "../../SdkConfig";
 
 export default class JSONExporter extends Exporter {
     protected totalSize = 0;
@@ -30,7 +29,7 @@ export default class JSONExporter extends Exporter {
     }
 
     public get destinationFileName(): string {
-        return this.makeFileNameNoExtension(SdkConfig.get().brand) + ".json";
+        return this.makeFileNameNoExtension() + ".json";
     }
 
     protected createJSONString(): string {
