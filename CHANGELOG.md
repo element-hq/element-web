@@ -1,3 +1,10 @@
+Changes in [1.12.20](https://github.com/element-hq/element-web/releases/tag/v1.12.20) (2026-05-27)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport staging] Realign the User Menu profile picture on desktop ([#33634](https://github.com/element-hq/element-web/pull/33634)). Contributed by @RiotRobot.
+
+
 Changes in [1.12.19](https://github.com/element-hq/element-web/releases/tag/v1.12.19) (2026-05-27)
 ==================================================================================================
 ## 🦖 Deprecations

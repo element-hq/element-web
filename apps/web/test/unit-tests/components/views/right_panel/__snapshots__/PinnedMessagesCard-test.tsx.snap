@@ -198,7 +198,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+              class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
               id="react-use-id-3"
             >
               <div
@@ -279,7 +279,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+              class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
               id="react-use-id-6"
             >
               <div
@@ -426,7 +426,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+              class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
               id="react-use-id-3"
             >
               <div
@@ -507,7 +507,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+              class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
               id="react-use-id-6"
             >
               <div

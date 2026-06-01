@@ -64,8 +64,8 @@ test.describe("Threads", () => {
 
         // User asserts timeline thread summary visible & clicks it
         let locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("BotBob")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText(MessageLong)).toBeAttached();
+        await expect(locator.getByText("BotBob")).toBeAttached();
+        await expect(locator.getByText(MessageLong)).toBeAttached();
         await locator.click();
 
         // Wait until the both messages are read
@@ -122,8 +122,8 @@ test.describe("Threads", () => {
 
         // User asserts summary was updated correctly
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("Tom")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText("Test")).toBeAttached();
+        await expect(locator.getByText("Tom")).toBeAttached();
+        await expect(locator.getByText("Test")).toBeAttached();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Check reactions and hidden events
@@ -243,8 +243,8 @@ test.describe("Threads", () => {
 
         // User asserts summary was updated correctly
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("BotBob")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText(MessageLong)).toBeAttached();
+        await expect(locator.getByText("BotBob")).toBeAttached();
+        await expect(locator.getByText(MessageLong)).toBeAttached();
 
         // User closes right panel after clicking back to thread list
         locator = page.locator(".mx_ThreadPanel");
@@ -255,8 +255,8 @@ test.describe("Threads", () => {
         await bot.sendMessage(roomId, "How are things?", threadId);
 
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("BotBob")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText("How are things?")).toBeAttached();
+        await expect(locator.getByText("BotBob")).toBeAttached();
+        await expect(locator.getByText("How are things?")).toBeAttached();
 
         locator = page.getByRole("banner").getByRole("button", { name: "Threads" });
         await expect(locator).toHaveAttribute("data-indicator", "success"); // User asserts thread list unread indicator
@@ -265,7 +265,7 @@ test.describe("Threads", () => {
         // User asserts thread with correct root & latest events & unread dot
         locator = page.locator(".mx_ThreadPanel .mx_EventTile_last");
         await expect(locator.locator(".mx_EventTile_body").getByText("Hello Mr. Bot")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText("How are things?")).toBeAttached();
+        await expect(locator.getByText("How are things?")).toBeAttached();
         // Check the number of the replies
         await expect(locator.locator(".mx_ThreadPanel_replies_amount").getByText("2")).toBeAttached();
         // Make sure the notification dot is visible
@@ -279,8 +279,8 @@ test.describe("Threads", () => {
         await locator.press("Enter");
 
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("Tom")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText("Great!")).toBeAttached();
+        await expect(locator.getByText("Tom")).toBeAttached();
+        await expect(locator.getByText("Great!")).toBeAttached();
 
         // User edits & asserts
         locator = page.locator(".mx_ThreadView .mx_EventTile_last");
@@ -291,8 +291,8 @@ test.describe("Threads", () => {
         await locator.getByRole("textbox").press("Enter");
 
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("Tom")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content")).toHaveText("Great! How about yourself?");
+        await expect(locator.getByText("Tom")).toBeAttached();
+        await expect(locator).toContainText("Great! How about yourself?");
 
         // User closes right panel
         await page.locator(".mx_ThreadPanel").getByRole("button", { name: "Close" }).click();
@@ -302,8 +302,8 @@ test.describe("Threads", () => {
 
         // User asserts
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("BotBob")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText("I'm very good thanks")).toBeAttached();
+        await expect(locator.getByText("BotBob")).toBeAttached();
+        await expect(locator.getByText("I'm very good thanks")).toBeAttached();
 
         // Bot edits their latest event
         await bot.sendMessage(roomId, {
@@ -321,8 +321,8 @@ test.describe("Threads", () => {
 
         // User asserts
         locator = page.locator(".mx_RoomView_body .mx_ThreadSummary");
-        await expect(locator.locator(".mx_ThreadSummary_sender").getByText("BotBob")).toBeAttached();
-        await expect(locator.locator(".mx_ThreadSummary_content").getByText("I'm very good thanks :)")).toBeAttached();
+        await expect(locator.getByText("BotBob")).toBeAttached();
+        await expect(locator.getByText("I'm very good thanks :)")).toBeAttached();
     });
 
     test.describe("with larger viewport", async () => {

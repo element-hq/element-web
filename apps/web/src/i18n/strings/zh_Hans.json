@@ -976,7 +976,6 @@
         "import_invalid_passphrase": "身份验证检查失败：密码不正确？",
         "key_storage_out_of_sync": "你的密钥存储不同步。",
         "key_storage_out_of_sync_description": "请确认恢复密钥，以保持对密钥存储与消息历史记录的访问权。",
-        "message_shared_by": "由于此消息在发送时你不位于此房间，%(displayName)s（%(userId)s）共享了此消息。",
         "messages_not_secure": {
             "cause_1": "你的主服务器版本太旧，不支持所需的最低 API 版本。请联系你的服务器所有者或升级你的服务器。",
             "cause_2": "你正在验证的用户所连接的主服务器",
