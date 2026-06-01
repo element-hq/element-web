@@ -17,23 +17,43 @@ import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import { type EventTileReceiptState } from "../../../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
 
+/**
+ * A single read receipt entry displayed in the event tile receipt row.
+ */
 interface ReadReceiptProps {
+    /** The user ID associated with the receipt. */
     userId: string;
+    /** The room member metadata for the user, if available. */
     roomMember: RoomMember | null;
+    /** Timestamp of the receipt in milliseconds since the Unix epoch. */
     ts: number;
 }
 
+/**
+ * Props for the {@link ReceiptAdapter} component.
+ */
 interface ReceiptAdapterProps {
+    /** Current receipt state for the event tile. */
     receiptState: EventTileReceiptState;
+    /** Send status used when rendering the sent-state badge. */
     eventSendStatus?: EventStatus;
+    /** Whether read receipts should be shown. */
     showReadReceipts?: boolean;
+    /** Read receipts to render when the group is visible. */
     readReceipts?: ReadReceiptProps[];
+    /** Read receipt positions keyed by user ID. */
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
+    /** Checks whether the receipt row is unmounting. */
     checkUnmounting?: () => boolean;
+    /** Suppresses receipt animation when true. */
     suppressAnimation: boolean;
+    /** Whether timestamps should use a 12-hour clock. */
     isTwelveHour?: boolean;
 }
 
+/**
+ * Renders the send-state or read-receipt indicator for an event tile.
+ */
 export function ReceiptAdapter({
     receiptState,
     eventSendStatus,

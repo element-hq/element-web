@@ -16,12 +16,21 @@ import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
+/**
+ * Props for the {@link ThreadSummaryAdapter} component.
+ */
 interface ThreadSummaryAdapterProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
+    /** View model backing the thread summary tile. */
     eventTileViewModel: EventTileViewModel;
+    /** Root event for the thread summary. */
     mxEvent: MatrixEvent;
+    /** Thread represented by the summary tile. */
     thread: Thread;
 }
 
+/**
+ * Renders the thread summary tile for an event.
+ */
 export function ThreadSummaryAdapter({
     eventTileViewModel,
     mxEvent,

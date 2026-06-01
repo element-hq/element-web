@@ -25,16 +25,29 @@ import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/ev
 import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 
+/**
+ * Props for the {@link ReactionsRowButtonAdapter} component.
+ */
 interface ReactionsRowButtonAdapterProps {
+    /** Matrix event whose reaction button is being rendered. */
     mxEvent: MatrixEvent;
+    /** Reaction emoji or custom content key for this button. */
     content: string;
+    /** Total number of reactions in this group. */
     count: number;
+    /** Reaction events belonging to this group. */
     reactionEvents: MatrixEvent[];
+    /** The current user's reaction event, if present. */
     myReactionEvent?: MatrixEvent;
+    /** Disables interaction when true. */
     disabled?: boolean;
+    /** Enables rendering custom reaction images. */
     customReactionImagesEnabled?: boolean;
 }
 
+/**
+ * Renders a single reaction button within the event tile reaction row.
+ */
 function ReactionsRowButtonAdapter(props: Readonly<ReactionsRowButtonAdapterProps>): JSX.Element {
     const client = useMatrixClientContext();
 
@@ -98,12 +111,21 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
     return [...myReactions.values()];
 };
 
+/**
+ * Props for the {@link ReactionsRowAdapter} component.
+ */
 interface ReactionsRowAdapterProps {
+    /** View model backing the event tile reaction row. */
     eventTileViewModel: EventTileViewModel;
+    /** Matrix event whose reactions are being rendered. */
     mxEvent: MatrixEvent;
+    /** Current reaction relations for the event, if available. */
     reactions?: Relations | null;
 }
 
+/**
+ * Renders the reaction row and reaction picker for an event tile.
+ */
 export function ReactionsRowAdapter({
     eventTileViewModel,
     mxEvent,

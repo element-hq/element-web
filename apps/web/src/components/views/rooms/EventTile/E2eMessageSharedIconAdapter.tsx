@@ -11,18 +11,21 @@ import { E2eMessageSharedIconView } from "@element-hq/web-shared-components";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
+/**
+ * Props for the {@link E2eMessageSharedIconAdapter} component.
+ */
 interface E2eMessageSharedIconAdapterProps {
+    /** View model backing the shared-key indicator. */
     eventTileViewModel: EventTileViewModel;
-    /**
-     * The ID of the room containing the event whose keys were shared.
-     */
+    /** The ID of the room containing the event whose keys were shared. */
     roomId: string;
-    /**
-     * The ID of the user who shared the keys.
-     */
+    /** The ID of the user who shared the keys. */
     keyForwardingUserId: string;
 }
 
+/**
+ * Renders the end-to-end encryption key-sharing indicator.
+ */
 export function E2eMessageSharedIconAdapter({
     eventTileViewModel,
     roomId,

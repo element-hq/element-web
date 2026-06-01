@@ -10,13 +10,23 @@ import { ActionBarView } from "@element-hq/web-shared-components";
 
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
+/**
+ * Props for the {@link ThreadListActionBarAdapter} component.
+ */
 interface ThreadListActionBarAdapterProps {
+    /** View model backing the thread list action bar. */
     eventTileViewModel: EventTileViewModel;
+    /** Opens the event in the room timeline. */
     onViewInRoomClick: (anchor: HTMLElement | null) => void;
+    /** Copies the event permalink to the clipboard. */
     onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
+    /** Optional class name applied to the action bar. */
     className?: string;
 }
 
+/**
+ * Renders the action bar used by the thread list view.
+ */
 export function ThreadListActionBarAdapter({
     eventTileViewModel,
     onViewInRoomClick,

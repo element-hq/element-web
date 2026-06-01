@@ -19,28 +19,53 @@ import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { type GetRelationsForEvent } from "../../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 
+/**
+ * Operations exposed by the event tile for action bar interactions.
+ */
 interface ActionBarEventTileOps {
+    /** Returns whether the widget is currently hidden. */
     isWidgetHidden(): boolean;
+    /** Unhides the widget if it was previously hidden. */
     unhideWidget(): void;
 }
 
+/**
+ * Event tile handle used by the action bar to query tile-level operations.
+ */
 interface ActionBarEventTile {
+    /** Returns the available tile operations, if any. */
     getEventTileOps?(): ActionBarEventTileOps;
 }
 
+/**
+ * Props for the {@link ActionBarAdapter} component.
+ */
 interface ActionBarAdapterProps {
+    /** View model backing the event tile action bar. */
     eventTileViewModel: EventTileViewModel;
+    /** Matrix event rendered by this tile. */
     mxEvent: MatrixEvent;
+    /** Reaction relation state for the event, if available. */
     reactions?: Relations | null;
+    /** Creates permalinks for the room, when link actions are shown. */
     permalinkCreator?: RoomPermalinkCreator;
+    /** Returns the current tile instance for event tile operations. */
     getTile: () => ActionBarEventTile | null;
+    /** Returns the current reply chain for the tile, if any. */
     getReplyChain: () => ReplyChain | null;
+    /** Notifies the parent when the action bar gains or loses focus. */
     onFocusChange?: (focused: boolean) => void;
+    /** Indicates whether the event quote is currently expanded. */
     isQuoteExpanded?: boolean;
+    /** Toggles the thread expansion state for this tile. */
     toggleThreadExpanded: () => void;
+    /** Looks up relation data for the current event. */
     getRelationsForEvent?: GetRelationsForEvent;
 }
 
+/**
+ * Renders the event tile action bar and its context menus.
+ */
 export function ActionBarAdapter({
     eventTileViewModel,
     mxEvent,

@@ -12,11 +12,19 @@ import MemberAvatar from "../../avatars/MemberAvatar";
 import SenderProfile from "../../messages/SenderProfile";
 import { type EventTileSenderSnapshot } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
+/**
+ * Props for the {@link EventTileAvatarAdapter} component.
+ */
 interface EventTileAvatarAdapterProps {
+    /** Matrix event whose sender avatar is being rendered. */
     mxEvent: MatrixEvent;
+    /** Snapshot of the sender identity state for this tile. */
     senderSnapshot: EventTileSenderSnapshot;
 }
 
+/**
+ * Renders the sender avatar for an event tile.
+ */
 export function EventTileAvatarAdapter({
     mxEvent,
     senderSnapshot,
@@ -39,12 +47,21 @@ export function EventTileAvatarAdapter({
     );
 }
 
+/**
+ * Props for the {@link EventTileSenderAdapter} component.
+ */
 interface EventTileSenderAdapterProps {
+    /** Matrix event whose sender identity is being rendered. */
     mxEvent: MatrixEvent;
+    /** Snapshot of the sender identity state for this tile. */
     senderSnapshot: EventTileSenderSnapshot;
+    /** Invoked when the sender profile is clicked. */
     onSenderProfileClick: () => void;
 }
 
+/**
+ * Renders the sender identity display for an event tile.
+ */
 export function EventTileSenderAdapter({
     mxEvent,
     senderSnapshot,

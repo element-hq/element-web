@@ -14,12 +14,21 @@ import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
+/**
+ * Props for the {@link ThreadMessagePreviewAdapter} component.
+ */
 interface ThreadMessagePreviewAdapterProps {
+    /** View model backing the thread preview. */
     eventTileViewModel: EventTileViewModel;
+    /** Thread whose message preview is rendered. */
     thread: Thread;
+    /** Whether the sender display name should be shown. */
     showDisplayName?: boolean;
 }
 
+/**
+ * Renders the preview shown for a thread message.
+ */
 export function ThreadMessagePreviewAdapter({
     eventTileViewModel,
     thread,

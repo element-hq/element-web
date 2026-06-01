@@ -12,12 +12,21 @@ import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/ev
 import { type MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
+/**
+ * Props for the {@link MessageTimestampAdapter} component.
+ */
 interface MessageTimestampAdapterProps {
+    /** View model backing the event tile timestamp. */
     eventTileViewModel: EventTileViewModel;
+    /** Chooses the plain or linked timestamp view model. */
     kind: "plain" | "linked";
+    /** Props forwarded into the timestamp view model. */
     timestampProps: MessageTimestampViewModelProps;
 }
 
+/**
+ * Renders the timestamp badge for an event tile.
+ */
 export function MessageTimestampAdapter({
     eventTileViewModel,
     kind,
