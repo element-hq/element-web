@@ -100,7 +100,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             await ourComboBox.selectOption("Custom level");
             const ourPl = settings.getByRole("spinbutton", { name: user.userId });
             await ourPl.fill("80");
-            await ourPl.blur(); // Shows a warning on
+            await page.keyboard.press("Tab"); // Shows a warning on
 
             // Accept the de-op
             await page.getByRole("button", { name: "Continue" }).click();

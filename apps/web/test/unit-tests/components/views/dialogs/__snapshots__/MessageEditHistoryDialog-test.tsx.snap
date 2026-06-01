@@ -72,7 +72,8 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    aria-live="off"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -113,7 +114,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="_r_2_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -212,7 +213,8 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    aria-live="off"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -263,7 +265,8 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    aria-live="off"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -325,7 +328,8 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   class="mx_EventTile_line"
                 >
                   <span
-                    class="mx_MessageTimestamp"
+                    aria-live="off"
+                    class="mx_MessageTimestamp _content_1jaux_8"
                   >
                     00:00
                   </span>
@@ -366,7 +370,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="_r_c_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

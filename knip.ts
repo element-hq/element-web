@@ -12,7 +12,7 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
-            ignoreBinaries: ["awk"],
+            ignoreBinaries: ["awk", "printf"],
         },
         "packages/module-api": {},
         "apps/web": {
@@ -62,6 +62,10 @@ export default {
             entry: ["scripts/**", "docs/**"],
         },
     },
+    ignoreDependencies: [
+        // Used by multiple packages, raises a false positive for some reason
+        "events",
+    ],
     ignoreExportsUsedInFile: true,
     compilers: {
         pcss: (text: string) =>

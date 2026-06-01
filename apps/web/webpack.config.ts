@@ -258,7 +258,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "$webapp": path.resolve(__dirname, "webapp"),
 
                 // Make shared-components imports resolve to EW deps
-                "counterpart": getPackageRoot("counterpart"),
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
             },
             fallback: {
@@ -267,6 +266,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "net": false,
                 "tls": false,
                 "crypto": false,
+                "events": import.meta.resolve("events/"),
 
                 // Polyfill needed by counterpart
                 "util": import.meta.resolve("util/"),

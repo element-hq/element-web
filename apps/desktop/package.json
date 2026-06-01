@@ -3,7 +3,7 @@
     "productName": "Element",
     "main": "lib/electron-main.js",
     "exports": "./lib/electron-main.js",
-    "version": "1.12.18",
+    "version": "1.12.20",
     "description": "Element: the future of secure communication",
     "author": {
         "name": "Element",
@@ -47,7 +47,7 @@
         "docker:setup": "docker build --platform linux/amd64 -t element-desktop-dockerbuild -f dockerbuild/Dockerfile .",
         "docker:build:native": "scripts/in-docker.sh pnpm run hak",
         "docker:build": "scripts/in-docker.sh pnpm run build",
-        "docker:install": "scripts/in-docker.sh pnpm install",
+        "docker:install": "scripts/in-docker.sh pnpm install --filter=element-desktop --frozen-lockfile",
         "clean": "rimraf webapp.asar dist packages deploys lib",
         "hak": "node scripts/hak/index.ts",
         "test:unit": "vitest",
@@ -83,12 +83,12 @@
         "@typescript-eslint/eslint-plugin": "^8.0.0",
         "@typescript-eslint/parser": "^8.0.0",
         "@vitest/coverage-v8": "catalog:",
-        "app-builder-lib": "26.9.1",
+        "app-builder-lib": "26.11.1",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
-        "electron": "42.0.0",
-        "electron-builder": "26.9.1",
-        "electron-builder-squirrel-windows": "26.9.1",
+        "electron": "42.2.0",
+        "electron-builder": "26.11.1",
+        "electron-builder-squirrel-windows": "26.11.1",
         "electron-devtools-installer": "^4.0.0",
         "eslint": "^8.26.0",
         "eslint-config-google": "^0.14.0",
@@ -112,7 +112,6 @@
     "hakDependencies": {
         "matrix-seshat": "4.3.0"
     },
-    "packageManager": "pnpm@10.33.3+sha512.a19744364a7e248b92657a4ca5973f9354d21caf982579674b1c539f32c7420c47138ad8b1254df07aba9bc782d9b3029e3db34d5dbff974326eb74dac8ff489",
     "nx": {
         "includedScripts": []
     }

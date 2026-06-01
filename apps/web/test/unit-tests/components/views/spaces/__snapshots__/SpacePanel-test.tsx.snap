@@ -7,15 +7,15 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     class="mx_SpacePanel collapsed newUi"
   >
     <div
-      class="_wrapper_1yvpq_8"
+      class="_wrapper_1yvpq_8 mx_UserMenu"
     >
       <button
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="User menu"
-        class="_triggerButton_1yvpq_57 mx_UserMenu"
+        class="_triggerButton_1yvpq_57"
         data-state="closed"
-        id="radix-_r_0_"
+        id="radix-react-use-id-1"
         type="button"
       >
         <span
@@ -329,11 +329,11 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="Threads"
-        aria-labelledby="_r_14_"
+        aria-labelledby="react-use-id-2"
         class="_icon-button_1215g_8 mx_ThreadsActivityCentreButton"
         data-kind="primary"
         data-state="closed"
-        id="radix-_r_12_"
+        id="radix-react-use-id-3"
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -361,7 +361,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     <button
       aria-expanded="false"
       aria-label="Quick settings"
-      aria-labelledby="_r_19_"
+      aria-labelledby="react-use-id-4"
       class="_icon-button_1215g_8 mx_QuickSettingsButton"
       data-kind="primary"
       role="button"

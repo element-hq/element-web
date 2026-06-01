@@ -13,6 +13,8 @@ import Modal from "../../Modal";
 import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
+import { isMetaSpace, MetaSpace, type SpaceKey } from "../spaces";
+import SpaceStore from "../spaces/SpaceStore";
 
 /**
  * A synthetic tag used to represent the "Chats" section, which contains
@@ -60,6 +62,8 @@ export function isSectionTag(tagId: TagID): boolean {
 type CustomSection = {
     tag: CustomTag;
     name: string;
+    /** The space in which this section was created. Used to control visibility of empty sections. */
+    spaceId?: SpaceKey;
 };
 
 /**
@@ -84,6 +88,14 @@ export type CustomSectionsData = Record<CustomTag, CustomSection>;
 export type OrderedCustomSections = CustomTag[];
 
 /**
+ * Returns true if the given space key corresponds to an enabled meta-space or a known top-level space room.
+ */
+function doesSpaceExist(spaceId: SpaceKey): boolean {
+    if (isMetaSpace(spaceId)) return SpaceStore.instance.enabledMetaSpaces.includes(spaceId);
+    return SpaceStore.instance.spacePanelSpaces.some((room) => room.roomId === spaceId);
+}
+
+/**
  * Retrieves the custom sections data from the settings.
  * Invalid or malformed entries are dropped and the cleaned data is persisted back to settings.
  */
@@ -92,9 +104,17 @@ export function getCustomSectionData(): CustomSectionsData {
     // Data are malformed
     if (typeof raw !== "object" || raw === null || Array.isArray(raw)) return {};
 
-    // Filter out invalid entries
     return Object.fromEntries(
-        Object.entries(raw).filter(([key, value]) => isValidCustomSection(value) && value.tag === key),
+        Object.entries(raw)
+            .filter(([key, value]) => isValidCustomSection(value) && value.tag === key)
+            .map(([key, value]) => [
+                key,
+                {
+                    ...value,
+                    // Default to MetaSpace.Home for legacy sections (no spaceId) or if the stored space no longer exists
+                    spaceId: value.spaceId && doesSpaceExist(value.spaceId) ? value.spaceId : MetaSpace.Home,
+                },
+            ]),
     ) as CustomSectionsData;
 }
 
@@ -113,16 +133,17 @@ export function getOrderedCustomSections(): OrderedCustomSections {
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
+ * @param spaceId The space in which the section is being created. Used to control visibility of the empty section.
  * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(): Promise<string | undefined> {
+export async function createSection(spaceId: SpaceKey): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);
 
     const [shouldCreateSection, sectionName] = await modal.finished;
     if (!shouldCreateSection || !sectionName) return undefined;
 
     const tag: CustomTag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
-    const newSection: CustomSection = { tag, name: sectionName };
+    const newSection: CustomSection = { tag, name: sectionName, spaceId };
 
     // Save the new section data
     const sectionData = getCustomSectionData();
