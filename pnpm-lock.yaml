@@ -246,7 +246,7 @@ catalogs:
       version: 3.0.0
 
 overrides:
-  pretty-format@30>react-is: 19.2.5
+  pretty-format@30>react-is: 19.2.6
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
   oidc-client-ts: 3.5.0
@@ -1232,8 +1232,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.3)
       linkify-react:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.3)(react@19.2.6)
+        specifier: 4.3.3
+        version: 4.3.3(linkifyjs@4.3.3)(react@19.2.6)
       linkify-string:
         specifier: 4.3.3
         version: 4.3.3(linkifyjs@4.3.3)
@@ -10122,10 +10122,10 @@ packages:
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
 
-  linkify-react@4.3.2:
-    resolution: {integrity: sha512-mi744h1hf+WDsr+paJgSBBgYNLMWNSHyM9V9LVUo03RidNGdw1VpI7Twnt+K3pEh3nIzB4xiiAgZxpd61ItKpQ==}
+  linkify-react@4.3.3:
+    resolution: {integrity: sha512-bMWuN1YJ3hyDyojk4hzUugecN2RsTuibKAQBplUT2o+3uK33THdRL2qD0Zf3ibCXuBLBCyOE6Uj/S/1cY48Ygw==}
     peerDependencies:
-      linkifyjs: ^4.0.0
+      linkifyjs: '==4.3.3'
       react: '>= 15.0.0'
 
   linkify-string@4.3.3:
@@ -23787,7 +23787,7 @@ snapshots:
     dependencies:
       uc.micro: 2.1.0
 
-  linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.2.6):
+  linkify-react@4.3.3(linkifyjs@4.3.3)(react@19.2.6):
     dependencies:
       linkifyjs: 4.3.3
       react: 19.2.6
