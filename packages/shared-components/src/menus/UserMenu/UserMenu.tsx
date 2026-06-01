@@ -117,7 +117,10 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
-            <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+            <div className={styles.avatarWrapper}>
+                <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+                {statusEmoji && <span className={styles.statusEmoji}>{statusEmoji}</span>}
+            </div>
         </button>
     );
 
@@ -199,7 +202,6 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     )}
                 </section>
             </Menu>
-            {statusEmoji && <span className={styles.statusEmoji}>{statusEmoji}</span>}
             {expanded && (
                 <Text type="heading" size="sm" as="span" weight="semibold">
                     {displayName}
