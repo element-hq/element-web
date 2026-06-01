@@ -241,12 +241,9 @@ catalogs:
     vitest:
       specifier: 4.1.7
       version: 4.1.7
-    vitest-sonar-reporter:
-      specifier: 3.0.0
-      version: 3.0.0
 
 overrides:
-  pretty-format@30>react-is: 19.2.5
+  pretty-format@30>react-is: 19.2.6
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
   oidc-client-ts: 3.5.0
@@ -496,9 +493,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@18.19.130)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.13(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-      vitest-sonar-reporter:
-        specifier: 'catalog:'
-        version: 3.0.0(vitest@4.1.7)
 
   apps/web:
     dependencies:
@@ -761,9 +755,6 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.12.7
         version: 7.28.5(@babel/core@7.29.0)
-      '@casualbot/jest-sonar-reporter':
-        specifier: 2.7.1
-        version: 2.7.1
       '@element-hq/element-call-embedded':
         specifier: 0.19.4
         version: 0.19.4
@@ -810,8 +801,8 @@ importers:
         specifier: ^0.27.4
         version: 0.27.10
       '@types/content-type':
-        specifier: ^1.1.9
-        version: 1.1.9
+        specifier: ^2.0.0
+        version: 2.0.0
       '@types/css-tree':
         specifier: ^2.3.8
         version: 2.3.11
@@ -1146,9 +1137,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@18.19.130)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.13(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-      vitest-sonar-reporter:
-        specifier: 'catalog:'
-        version: 3.0.0(vitest@4.1.7)
 
   packages/playwright-common:
     dependencies:
@@ -1232,8 +1220,8 @@ importers:
         specifier: 4.3.3
         version: 4.3.3(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.3)
       linkify-react:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.3)(react@19.2.6)
+        specifier: 4.3.3
+        version: 4.3.3(linkifyjs@4.3.3)(react@19.2.6)
       linkify-string:
         specifier: 4.3.3
         version: 4.3.3(linkifyjs@4.3.3)
@@ -1412,9 +1400,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@18.19.130)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.13(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-      vitest-sonar-reporter:
-        specifier: 'catalog:'
-        version: 3.0.0(vitest@4.1.7)
 
   packages/vite-common:
     dependencies:
@@ -1424,9 +1409,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@18.19.130)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.13(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-      vitest-sonar-reporter:
-        specifier: 'catalog:'
-        version: 3.0.0(vitest@4.1.7)
     devDependencies:
       typescript:
         specifier: 'catalog:'
@@ -2253,10 +2235,6 @@ packages:
 
   '@cacheable/utils@2.4.1':
     resolution: {integrity: sha512-eiFgzCbIneyMlLOmNG4g9xzF7Hv3Mga4LjxjcSC/ues6VYq2+gUbQI8JqNuw/ZM8tJIeIaBGpswAsqV2V7ApgA==}
-
-  '@casualbot/jest-sonar-reporter@2.7.1':
-    resolution: {integrity: sha512-C/lzwYEXnHueUufmvSLRKSz8ANVCrFv7HjtGsLoPDUYwugn6CYB1E7gEiCUlWaDeq+DUib2xMUX0nMYpwxUYzA==}
-    engines: {node: '>=14.0.0'}
 
   '@chevrotain/types@11.1.2':
     resolution: {integrity: sha512-U+HFai5+zmJCkK86QsaJtoITlboZHBqrVketcO2ROv865xfCMSFpELQoz1GkX5GzME8pTa+3kbKrZHQtI0gdbw==}
@@ -5628,8 +5606,9 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/content-type@1.1.9':
-    resolution: {integrity: sha512-Hq9IMnfekuOCsEmYl4QX2HBrT+XsfXiupfrLLY8Dcf3Puf4BkBOxSbWYTITSOQAhJoYPBez+b4MJRpIYL65z8A==}
+  '@types/content-type@2.0.0':
+    resolution: {integrity: sha512-wZQlLoRx3carjGy5yHA6GnCBGChd/9DDYTAOPbISfXGjhI4j70U6SU/tu5EEz7NpX2MxpUVgbbYFIgLqDItbVQ==}
+    deprecated: This is a stub types definition. content-type provides its own type definitions, so you do not need this installed.
 
   '@types/counterpart@0.18.4':
     resolution: {integrity: sha512-aqBg5oAGo/qh/+wxUfuMadDu2WO0MEWOblyzwaM1Ske2xilUxBfgPqapAFVAfrVTDMVwa0UMarzGot8m64IAzA==}
@@ -10121,10 +10100,10 @@ packages:
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
 
-  linkify-react@4.3.2:
-    resolution: {integrity: sha512-mi744h1hf+WDsr+paJgSBBgYNLMWNSHyM9V9LVUo03RidNGdw1VpI7Twnt+K3pEh3nIzB4xiiAgZxpd61ItKpQ==}
+  linkify-react@4.3.3:
+    resolution: {integrity: sha512-bMWuN1YJ3hyDyojk4hzUugecN2RsTuibKAQBplUT2o+3uK33THdRL2qD0Zf3ibCXuBLBCyOE6Uj/S/1cY48Ygw==}
     peerDependencies:
-      linkifyjs: ^4.0.0
+      linkifyjs: '==4.3.3'
       react: '>= 15.0.0'
 
   linkify-string@4.3.3:
@@ -10541,11 +10520,6 @@ packages:
 
   mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
-    hasBin: true
-
-  mkdirp@1.0.4:
-    resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
-    engines: {node: '>=10'}
     hasBin: true
 
   mkdirp@3.0.1:
@@ -13446,12 +13420,6 @@ packages:
       '@vitest/browser-webdriverio':
         optional: true
 
-  vitest-sonar-reporter@3.0.0:
-    resolution: {integrity: sha512-QRT5m9Z/3Kt0WVDVcFHm5LC9Ba89yDP4twlX2QUAJ9PdqfJBkLAh/kXj7m6U3i0k6GxnIEiwCc295bmAYokmZg==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    peerDependencies:
-      vitest: '>=3'
-
   vitest@4.1.7:
     resolution: {integrity: sha512-flYyaFd2CgoCoU+0UKt3pxksgC+S02iTDN0n3LtqaMeXsI9SBcdNujc2k0DeFLzUn/0k538yNjOSdwgCqcrwJA==}
     engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -13761,9 +13729,6 @@ packages:
   xml-name-validator@5.0.0:
     resolution: {integrity: sha512-EvGK8EJ3DhaHfbRlETOWAS5pO9MZITeauHKJyb8wyajUfQUenkIg2MvLDTZ4T/TgIcm3HU0TFBgWWboAZ30UHg==}
     engines: {node: '>=18'}
-
-  xml@1.0.1:
-    resolution: {integrity: sha512-huCv9IH9Tcf95zuYCsQraZtWnJvBtLVE0QHMOs8bWyZAFZNDcYjsPq1nEx8jKA9y+Beo9v+7OBPRisQTjinQMw==}
 
   xmlbuilder@15.1.1:
     resolution: {integrity: sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==}
@@ -14914,11 +14879,6 @@ snapshots:
     dependencies:
       hashery: 1.5.1
       keyv: 5.6.0
-
-  '@casualbot/jest-sonar-reporter@2.7.1':
-    dependencies:
-      mkdirp: 1.0.4
-      xml: 1.0.1
 
   '@chevrotain/types@11.1.2': {}
 
@@ -18454,7 +18414,9 @@ snapshots:
     dependencies:
       '@types/node': 18.19.130
 
-  '@types/content-type@1.1.9': {}
+  '@types/content-type@2.0.0':
+    dependencies:
+      content-type: 2.0.0
 
   '@types/counterpart@0.18.4': {}
 
@@ -23784,7 +23746,7 @@ snapshots:
     dependencies:
       uc.micro: 2.1.0
 
-  linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.2.6):
+  linkify-react@4.3.3(linkifyjs@4.3.3)(react@19.2.6):
     dependencies:
       linkifyjs: 4.3.3
       react: 19.2.6
@@ -24266,8 +24228,6 @@ snapshots:
   mkdirp@0.5.6:
     dependencies:
       minimist: 1.2.8
-
-  mkdirp@1.0.4: {}
 
   mkdirp@3.0.1: {}
 
@@ -27832,10 +27792,6 @@ snapshots:
       - babel-plugin-macros
       - typescript
 
-  vitest-sonar-reporter@3.0.0(vitest@4.1.7):
-    dependencies:
-      vitest: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@18.19.130)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.13(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-
   vitest@4.1.7(@opentelemetry/api@1.9.1)(@types/node@18.19.130)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.13(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4)):
     dependencies:
       '@vitest/expect': 4.1.7
@@ -28271,8 +28227,6 @@ snapshots:
       is-wsl: 3.1.1
 
   xml-name-validator@5.0.0: {}
-
-  xml@1.0.1: {}
 
   xmlbuilder@15.1.1: {}
 

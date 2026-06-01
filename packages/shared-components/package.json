@@ -51,6 +51,8 @@
         "test:unit": "nx test:unit",
         "test:storybook": "nx test:storybook",
         "test:storybook:update": "nx test:storybook:update",
+        "coverage": "pnpm test:unit --coverage",
+        "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info",
         "build": "nx build",
         "prepack": "pnpm run build",
         "storybook": "storybook dev -p 6007",
@@ -72,7 +74,7 @@
         "events": "^3.3.0",
         "html-react-parser": "^6.0.0",
         "linkify-html": "4.3.3",
-        "linkify-react": "4.3.2",
+        "linkify-react": "4.3.3",
         "linkify-string": "4.3.3",
         "linkifyjs": "4.3.3",
         "lodash": "npm:lodash-es@^4.17.21",
@@ -132,8 +134,7 @@
         "unplugin-dts": "1.0.1",
         "vite": "catalog:",
         "vite-plugin-node-polyfills": "^0.28.0",
-        "vitest": "catalog:",
-        "vitest-sonar-reporter": "catalog:"
+        "vitest": "catalog:"
     },
     "engines": {
         "node": ">=20.0.0"

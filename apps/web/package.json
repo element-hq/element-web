@@ -34,6 +34,7 @@
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --",
         "coverage": "pnpm test --coverage",
+        "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "dependencies": {
@@ -125,7 +126,6 @@
         "@babel/preset-env": "^7.12.11",
         "@babel/preset-react": "^7.12.10",
         "@babel/preset-typescript": "^7.12.7",
-        "@casualbot/jest-sonar-reporter": "2.7.1",
         "@element-hq/element-call-embedded": "0.19.4",
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
@@ -141,7 +141,7 @@
         "@testing-library/react": "^16.0.0",
         "@testing-library/user-event": "^14.5.2",
         "@types/commonmark": "^0.27.4",
-        "@types/content-type": "^1.1.9",
+        "@types/content-type": "^2.0.0",
         "@types/css-tree": "^2.3.8",
         "@types/diff-match-patch": "^1.0.32",
         "@types/escape-html": "^1.0.1",
@@ -235,11 +235,6 @@
         "webpack-retry-chunk-load-plugin": "^3.1.1",
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
-    },
-    "@casualbot/jest-sonar-reporter": {
-        "outputDirectory": "coverage",
-        "outputName": "jest-sonar-report.xml",
-        "relativePaths": true
     },
     "engines": {
         "node": ">=22.18"
