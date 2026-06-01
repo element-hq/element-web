@@ -1,6 +1,7 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
+ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
