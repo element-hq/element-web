@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { readFile } from "node:fs/promises";
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import type { Locator, Page } from "@playwright/test";
@@ -30,6 +31,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
         displayName: "Hanako",
     });
+    let roomId: string;
 
     const uploadFile = async (app: ElementAppPage, sampleFile: string) => {
         // Upload a file from the message composer
@@ -42,6 +44,37 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         );
         // wait for the tile to finish loading
         await expect(app.page.getByTestId("audio-player-name").last().filter({ hasText: sampleFile })).toBeVisible();
+    };
+
+    const sendAudioFile = async (app: ElementAppPage, sampleFile: string, replyToEventId?: string): Promise<string> => {
+        const file = await readFile(getSampleFilePath(sampleFile));
+        const upload = await app.client.uploadContent(file, { name: sampleFile, type: "audio/ogg" });
+        const content = {
+            body: sampleFile,
+            msgtype: "m.audio",
+            url: upload.content_uri,
+            info: {
+                mimetype: "audio/ogg",
+                size: file.byteLength,
+                duration: 1000,
+            },
+            ...(replyToEventId
+                ? {
+                      "m.relates_to": {
+                          "m.in_reply_to": {
+                              event_id: replyToEventId,
+                          },
+                      },
+                  }
+                : {}),
+        };
+
+        const { event_id: eventId } = await app.client.sendEvent(roomId, null, "m.room.message", content);
+        await expect(
+            app.page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
+        ).toBeVisible();
+        await expect(app.page.getByTestId("audio-player-name").last()).toHaveText(sampleFile);
+        return eventId;
     };
 
     const scrollToBottomOfTimeline = async (page: Page) => {
@@ -142,7 +175,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
     test.beforeEach(async ({ page, app, user }) => {
         await rejectToast(page, "Verify this device");
-        await app.client.createRoom({ name: "Test Room" });
+        roomId = await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 
         // Wait until configuration is finished
@@ -269,27 +302,9 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             const tile = page.locator(".mx_EventTile_last");
 
-            await uploadFile(app, "upload-first.ogg");
-
-            // Assert that the audio player is rendered
-            await expect(
-                page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
-            ).toBeVisible();
-
-            await clickButtonReply(tile);
-
-            // Reply to the player with another audio file
-            await uploadFile(app, "upload-second.ogg");
-
-            // Assert that the audio player is rendered
-            await expect(
-                page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" }),
-            ).toBeVisible();
-
-            await clickButtonReply(tile);
-
-            // Reply to the player with yet another audio file to create a reply chain
-            await uploadFile(app, "upload-third.ogg");
+            const firstEventId = await sendAudioFile(app, "upload-first.ogg");
+            const secondEventId = await sendAudioFile(app, "upload-second.ogg", firstEventId);
+            await sendAudioFile(app, "upload-third.ogg", secondEventId);
 
             // Assert that the audio player is rendered
             await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();

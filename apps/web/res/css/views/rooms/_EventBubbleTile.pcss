@@ -288,7 +288,7 @@ Please see LICENSE files in the repository root for full details.
 
         /* the selector here is quite weird because timestamps can appear linked & unlinked and in different places */
         /* in the DOM depending on the specific rendering context */
-        > a, /* timestamp wrapper anchor */
+        > a, /* linked timestamp element */
         .mx_MessageActionBar + .mx_MessageTimestamp {
             position: absolute;
             padding: 4px 8px;
@@ -322,7 +322,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         &.mx_EventTile_sticker {
-            > a, /* timestamp wrapper anchor */
+            > a, /* linked timestamp element */
             .mx_MessageActionBar + .mx_MessageTimestamp {
                 /* position timestamps for stickers to the right of the un-bubbled sticker */
                 right: unset;
@@ -434,7 +434,7 @@ Please see LICENSE files in the repository root for full details.
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
-                > a, /* timestamp wrapper anchor */
+                > a, /* linked timestamp element */
                 .mx_MessageActionBar + .mx_MessageTimestamp {
                     display: none !important;
                 }
@@ -549,7 +549,7 @@ Please see LICENSE files in the repository root for full details.
         font-style: italic;
 
         > a {
-            /* timestamp anchor wrapper */
+            /* linked timestamp element */
             align-self: center;
             bottom: unset;
             top: unset;
@@ -606,7 +606,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_EventTile_line {
-        > a, /* timestamp wrapper anchor */
+        > a, /* linked timestamp element */
         .mx_MessageActionBar + .mx_MessageTimestamp {
             right: auto;
             left: -77px;
