@@ -179,7 +179,19 @@ jobs:
             contents: read
             pull-requests: read
             checks: write
+            statuses: write
         steps:
+            - name: Skip SonarCloud in merge queue
+              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  description: SonarCloud skipped
+                  context: SonarCloud Code Analysis
+                  sha: ${{ github.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
             - name: Checkout code
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
