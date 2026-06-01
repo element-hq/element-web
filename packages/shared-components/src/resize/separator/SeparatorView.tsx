@@ -72,8 +72,8 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
 
     /**
      * This border is:
-     * - a 1px grey border that separates the left panel and main content.
-     * - a 2px green border when the panel is expanded and the user is interacting with the separator.
+     * - a 1px border that separates the left panel and main content.
+     * - a 2px border when the panel is expanded and the user is interacting with the separator.
      */
     const border = (
         <div className={styles.activeSeparatorContainer}>

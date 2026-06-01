@@ -25,7 +25,7 @@
     */
     width: 1px;
 
-    /* We can disable the browser focus ring since we show a thicker green separator on focus */
+    /* We can disable the browser focus ring since we show a thicker separator on focus */
     outline: none;
 
     .activeSeparatorContainer {
@@ -56,13 +56,13 @@
     .activeSeparatorContainer {
         .activeSeparator {
             width: 0px;
-            border-right: 2px solid var(--cpd-color-border-accent-primary);
+            border-right: 2px solid var(--cpd-color-border-interactive-secondary);
             outline: none;
         }
     }
 }
 
-/* Container for the green separator */
+/* Container for the separator when the left panel is expanded */
 .activeSeparatorContainer {
     display: flex;
     justify-content: center;
