@@ -94,7 +94,9 @@ describe("LeftPanelResizerViewModel", () => {
                 isCollapsed: jest.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
-            vm.onDoubleClick();
+            // Simulate click
+            vm.onPointerDown();
+            vm.onPointerUp();
             expect(mockHandle.resize).toHaveBeenCalledWith("34%");
         });
 
@@ -105,7 +107,9 @@ describe("LeftPanelResizerViewModel", () => {
                 isCollapsed: jest.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
-            vm.onDoubleClick();
+            // Simulate click
+            vm.onPointerDown();
+            vm.onPointerUp();
             expect(mockHandle.resize).toHaveBeenCalledWith("100%");
         });
     });
@@ -118,10 +122,7 @@ describe("LeftPanelResizerViewModel", () => {
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
-        // Simulate click
-        vm.onPointerDown();
-        vm.onPointerUp();
-
+        vm.onDoubleClick();
         expect(mockHandle.collapse).toHaveBeenCalled();
     });
 

@@ -74,8 +74,8 @@ test.describe("Collapsible Room list", () => {
             await expect(separator).toBeInViewport();
             await expect(page).toMatchScreenshot("room-list-collapse-fully-collapsed.png");
 
-            // Should be possible to expand by double clicking on the separator
-            await separator.dblclick();
+            // Should be possible to expand by clicking on the separator
+            await separator.click();
             currentBoundingBox = await leftPanelLocator.boundingBox();
             expect(currentBoundingBox.width).toBeGreaterThan(365);
 
