@@ -26,7 +26,6 @@ catalog:
     # vite
     vite: 8.0.13
     vitest: 4.1.7
-    vitest-sonar-reporter: 3.0.0
     "@vitest/coverage-v8": 4.1.7
 
 packageExtensions:
