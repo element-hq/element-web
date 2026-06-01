@@ -47,7 +47,7 @@ export class EventPreviewViewModel
 
         this.disposables.track(() => this.eventContentListener.teardown());
         this.eventContentListener.setEvent(props.mxEvent, this.onEventContentChanged);
-        void this.updatePreview();
+        this.updatePreviewSafely();
     }
 
     public setEvent(mxEvent?: MatrixEvent): void {
@@ -58,7 +58,7 @@ export class EventPreviewViewModel
             mxEvent,
         };
         this.eventContentListener.setEvent(mxEvent, this.onEventContentChanged);
-        void this.updatePreview();
+        this.updatePreviewSafely();
     }
 
     public setClient(cli: MatrixClient): void {
@@ -68,12 +68,18 @@ export class EventPreviewViewModel
             ...this.props,
             cli,
         };
-        void this.updatePreview();
+        this.updatePreviewSafely();
     }
 
     private onEventContentChanged = (): void => {
-        void this.updatePreview();
+        this.updatePreviewSafely();
     };
+
+    private updatePreviewSafely(): void {
+        void this.updatePreview().catch((error) => {
+            logger.error("Failed to update event preview", error);
+        });
+    }
 
     private async updatePreview(): Promise<void> {
         const { cli, mxEvent } = this.props;
