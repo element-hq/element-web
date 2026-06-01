@@ -6,11 +6,11 @@
  */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import { EventType, type MatrixClient, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { EventPreviewViewModel } from "../../../../../../src/viewmodels/room/timeline/event-tile/EventPreviewViewModel";
-import { flushPromises, mkEvent, stubClient } from "../../../../../test-utils";
+import { mkEvent, stubClient } from "../../../../../test-utils";
 
 describe("EventPreviewViewModel", () => {
     const roomId = "!room:example.com";
@@ -50,7 +50,7 @@ describe("EventPreviewViewModel", () => {
         const mxEvent = makeMessageEvent({ body: "Text preview" });
         const vm = new EventPreviewViewModel({ cli, mxEvent });
 
-        await flushPromises();
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Text preview"));
 
         expect(decryptEventIfNeeded).toHaveBeenCalledWith(mxEvent);
         expect(vm.getSnapshot()).toMatchObject({
@@ -64,7 +64,7 @@ describe("EventPreviewViewModel", () => {
         const mxEvent = makeMessageEvent({ body: "clip.mp4", msgtype: MsgType.Video });
         const vm = new EventPreviewViewModel({ cli, mxEvent });
 
-        await flushPromises();
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBeDefined());
 
         render(<>{vm.getSnapshot().previewContent}</>);
 
@@ -78,8 +78,7 @@ describe("EventPreviewViewModel", () => {
         const mxEvent = makeMessageEvent({ body: "Original" });
         const vm = new EventPreviewViewModel({ cli, mxEvent });
 
-        await flushPromises();
-        expect(vm.getSnapshot().previewContent).toBe("Original");
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Original"));
 
         const replacementEvent = new MatrixEvent({
             type: EventType.RoomMessage,
@@ -100,9 +99,8 @@ describe("EventPreviewViewModel", () => {
         });
 
         mxEvent.makeReplaced(replacementEvent);
-        await flushPromises();
 
-        expect(vm.getSnapshot().previewContent).toBe("Edited");
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Edited"));
     });
 
     it("skips unchanged setter inputs and updates for a different event", async () => {
@@ -111,22 +109,21 @@ describe("EventPreviewViewModel", () => {
         const vm = new EventPreviewViewModel({ cli, mxEvent: originalEvent });
         const listener = jest.fn();
 
-        await flushPromises();
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Original"));
         decryptEventIfNeeded.mockClear();
         vm.subscribe(listener);
 
         vm.setEvent(originalEvent);
         vm.setClient(cli);
-        await flushPromises();
 
         expect(listener).not.toHaveBeenCalled();
         expect(decryptEventIfNeeded).not.toHaveBeenCalled();
 
         vm.setEvent(updatedEvent);
-        await flushPromises();
+
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Updated"));
 
         expect(listener).toHaveBeenCalledTimes(1);
-        expect(vm.getSnapshot().previewContent).toBe("Updated");
     });
 
     it("removes event listeners when disposed", async () => {
@@ -134,7 +131,8 @@ describe("EventPreviewViewModel", () => {
         const vm = new EventPreviewViewModel({ cli, mxEvent });
         const listener = jest.fn();
 
-        await flushPromises();
+        await waitFor(() => expect(vm.getSnapshot().previewContent).toBe("Original"));
+        decryptEventIfNeeded.mockClear();
         vm.subscribe(listener);
         vm.dispose();
 
@@ -157,9 +155,9 @@ describe("EventPreviewViewModel", () => {
         });
 
         mxEvent.makeReplaced(replacementEvent);
-        await flushPromises();
 
         expect(listener).not.toHaveBeenCalled();
+        expect(decryptEventIfNeeded).not.toHaveBeenCalled();
         expect(vm.getSnapshot().previewContent).toBe("Original");
     });
 });
