@@ -278,11 +278,12 @@ test.describe("Sliding Sync", () => {
             { roomRescind, clientUserId },
         );
 
+        // toggle the invites filter off again so we see all the rooms again
+        await primaryFilters.getByRole("option", { name: "Invites" }).click();
+
         await page.getByRole("option", { name: "Open room Room to Rescind" }).click();
 
         await page.locator(".mx_RoomView").getByRole("button", { name: "Forget this room", exact: true }).click();
-
-        await primaryFilters.getByRole("option", { name: "Invites" }).click();
 
         // Wait for the rescind to take effect and check the joined list once more
         await expect(page.getByTestId("room-list").getByRole("option")).toHaveCount(2);
