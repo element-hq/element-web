@@ -5,17 +5,25 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { type ReactNode } from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
-import { ImageReplyBodyView, ImageReplyBodyViewPlaceholder } from "./ImageReplyBodyView";
+import { ImageReplyBodyView, ImageReplyBodyViewPlaceholder, type ImageReplyBodyViewProps } from "./ImageReplyBodyView";
 import imageSrc from "../../../../../../static/image-body/install-spinner.png";
 
 const demoBlurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
 
-const ImageReplyBodyViewWrapper = withViewDocs(ImageReplyBodyView, ImageReplyBodyView);
+type ImageReplyBodyViewWrapperProps = Omit<ImageReplyBodyViewProps, "aspectRatio"> & {
+    aspectRatio?: string;
+};
+
+const ImageReplyBodyViewWrapperImpl = (props: ImageReplyBodyViewWrapperProps): ReactNode => (
+    <ImageReplyBodyView {...props} />
+);
+
+const ImageReplyBodyViewWrapper = withViewDocs(ImageReplyBodyViewWrapperImpl, ImageReplyBodyView);
 
 const meta = {
     title: "Timeline/Timeline Body/ImageReplyBodyView",
