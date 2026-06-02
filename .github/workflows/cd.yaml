@@ -40,7 +40,7 @@ jobs:
               id: builder
               uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version-file: package.json
@@ -55,6 +55,13 @@ jobs:
                   registry: ghcr.io
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
+
+            # Fudge and run this separately rather than relying on the dependency,
+            # otherwise nx does not appear to pick up the .env file that playwright
+            # common's prebuild step creates.
+            - run: pnpm nx run-many --nxBail -t docker:prebuild
+              env:
+                  INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
             - run: pnpm nx run-many --nxBail -t docker:build
               id: build

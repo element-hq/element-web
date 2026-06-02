@@ -51,6 +51,8 @@
         "test:unit": "nx test:unit",
         "test:storybook": "nx test:storybook",
         "test:storybook:update": "nx test:storybook:update",
+        "coverage": "pnpm test:unit --coverage",
+        "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info",
         "build": "nx build",
         "prepack": "pnpm run build",
         "storybook": "storybook dev -p 6007",
@@ -69,11 +71,12 @@
         "@vector-im/compound-design-tokens": "catalog:",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",
+        "events": "^3.3.0",
         "html-react-parser": "^6.0.0",
-        "linkify-html": "4.3.2",
-        "linkify-react": "4.3.2",
-        "linkify-string": "4.3.2",
-        "linkifyjs": "4.3.2",
+        "linkify-html": "4.3.3",
+        "linkify-react": "4.3.3",
+        "linkify-string": "4.3.3",
+        "linkifyjs": "4.3.3",
         "lodash": "npm:lodash-es@^4.17.21",
         "matrix-web-i18n": "catalog:",
         "react-blurhash": "^0.3.0",
@@ -128,16 +131,14 @@
         "typedoc-plugin-markdown": "^4.9.0",
         "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "catalog:",
-        "unplugin-dts": "1.0.0",
+        "unplugin-dts": "1.0.1",
         "vite": "catalog:",
-        "vite-plugin-node-polyfills": "^0.26.0",
-        "vitest": "catalog:",
-        "vitest-sonar-reporter": "catalog:"
+        "vite-plugin-node-polyfills": "^0.28.0",
+        "vitest": "catalog:"
     },
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "pnpm@10.33.3+sha512.a19744364a7e248b92657a4ca5973f9354d21caf982579674b1c539f32c7420c47138ad8b1254df07aba9bc782d9b3029e3db34d5dbff974326eb74dac8ff489",
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
         "react": "catalog:"

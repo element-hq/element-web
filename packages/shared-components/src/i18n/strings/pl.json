@@ -8,7 +8,7 @@
         "close": "Zamknij",
         "collapse": "Zwiń",
         "delete": "Usuń",
-        "dismiss": "Pomiń",
+        "dismiss": "Zamknij",
         "download": "Pobierz",
         "edit": "Edytuj",
         "explore_rooms": "Przeglądaj pokoje",
@@ -205,6 +205,10 @@
     },
     "timeline": {
         "call_tile": {
+            "declined": {
+                "call_declined": "Połączenie odrzucone",
+                "call_declined_by_us": "Odrzuciłeś połączenie"
+            },
             "video_call_title": "Połączenie wideo",
             "voice_call_title": "Połączenie głosowe"
         },
@@ -219,6 +223,7 @@
         },
         "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
+        "e2e_state": "Stan szyfrowania end-to-end",
         "m.audio": {
             "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
@@ -248,6 +253,7 @@
             "label": "Działania na wiadomościach",
             "view_in_room": "Wyświetl w pokoju"
         },
+        "message_shared_by": "%(displayName)s (%(userId)s) udostępnił tę wiadomość, kiedy nie było Cię w pokoju, gdy została wysłana.",
         "message_timestamp_received_at": "Odebrano: %(dateTime)s",
         "message_timestamp_sent_at": "Wysłano: %(dateTime)s",
         "mjolnir": {

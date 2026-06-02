@@ -62,8 +62,12 @@ export async function dragRoomToSection(page: Page, roomName: string, sectionNam
     const source = sourceRow.locator("button").first();
     const target = getSectionHeader(page, sectionName);
 
-    const sourceBox = await source.boundingBox();
-    const targetBox = await target.boundingBox();
+    await expect(sourceRow).toBeVisible();
+    await expect(source).toBeVisible();
+    await expect(target).toBeVisible();
+
+    const sourceBox = await getBoundingBox(source, `room ${roomName}`);
+    const targetBox = await getBoundingBox(target, `section ${sectionName}`);
 
     const sourceX = sourceBox.x + sourceBox.width / 2;
     const sourceY = sourceBox.y + sourceBox.height / 2;
@@ -76,6 +80,30 @@ export async function dragRoomToSection(page: Page, roomName: string, sectionNam
     await page.mouse.move(sourceX, targetY, { steps: 10 });
     // Drop the room
     await page.mouse.up();
+}
+
+/**
+ * Wait for a locator to have stable viewport geometry and return its bounding box.
+ *
+ * Playwright's boundingBox() returns null when the element is not visible or is detached.
+ * Room list updates are driven by sync and virtualization, so a newly-created room or
+ * section can match the locator before it is ready for mouse coordinates.
+ */
+async function getBoundingBox(
+    locator: Locator,
+    description: string,
+): Promise<NonNullable<Awaited<ReturnType<Locator["boundingBox"]>>>> {
+    await locator.scrollIntoViewIfNeeded();
+    await expect
+        .poll(() => locator.boundingBox(), { message: `Expected ${description} to have a bounding box` })
+        .not.toBeNull();
+
+    const box = await locator.boundingBox();
+    if (!box) {
+        throw new Error(`Expected ${description} to have a bounding box`);
+    }
+
+    return box;
 }
 
 /**

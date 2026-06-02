@@ -22,7 +22,8 @@
         "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
         "docs:dev": "vitepress dev docs",
         "docs:build": "vitepress build docs",
-        "docs:preview": "vitepress preview docs"
+        "docs:preview": "vitepress preview docs",
+        "coverage:diff": "diff-cover --config-file diff-cover.toml apps/*/coverage/lcov.info packages/*/coverage/lcov.info"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
@@ -33,80 +34,27 @@
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "6.11.0",
+        "knip": "6.14.1",
         "lint-staged": "^17.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
-        "nx": "22.7.1",
+        "nx": "22.7.4",
         "prettier": "3.8.3",
         "typescript": "catalog:",
         "vitepress": "^1.6.4",
         "vitepress-plugin-mermaid": "^2.0.17",
         "yaml": "^2.3.3"
     },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "matrix-js-sdk"
-        ],
-        "ignoredBuiltDependencies": [
-            "@sentry/cli",
-            "nx"
-        ],
-        "patchedDependencies": {
-            "@vector-im/matrix-wysiwyg": "patches/@vector-im__matrix-wysiwyg.patch",
-            "react-blurhash": "patches/react-blurhash.patch",
-            "linkify-html": "patches/linkify-html.patch",
-            "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
-            "@types/auto-launch": "patches/@types__auto-launch.patch",
-            "@types/mdx": "patches/@types__mdx.patch",
-            "await-lock": "patches/await-lock.patch",
-            "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
-            "jsdom": "patches/jsdom.patch",
-            "rollup": "patches/rollup.patch",
-            "postcss-mixins": "patches/postcss-mixins.patch",
-            "app-builder-lib": "patches/app-builder-lib.patch",
-            "knip": "patches/knip.patch",
-            "plist": "patches/plist.patch",
-            "@dnd-kit/abstract": "patches/@dnd-kit__abstract.patch"
-        },
-        "peerDependencyRules": {
-            "allowedVersions": {
-                "react": "19",
-                "react-dom": "19",
-                "eslint": "8"
-            }
-        },
-        "allowedDeprecatedVersions": {
-            "eslint": "8",
-            "react-beautiful-dnd": "13"
-        },
-        "overrides": {
-            "pretty-format@30>react-is": "19.2.5",
-            "@types/react": "catalog:",
-            "@types/react-dom": "catalog:",
-            "oidc-client-ts": "3.5.0",
-            "jwt-decode": "4.0.0",
-            "caniuse-lite": "1.0.30001791",
-            "markdown-it": "14.1.1",
-            "matrix-widget-api": "^1.17.0",
-            "@types/node": "18.19.130",
-            "config-file-ts": "0.2.8-rc1",
-            "node-abi": "4.29.0",
-            "@types/pg-pool": "2.0.7",
-            "axios@>1.0.0 <=1.15.0": "1.15.2",
-            "esbuild@<=0.24.2": "0.27.4",
-            "esbuild@~0.27.0": "0.27.4",
-            "follow-redirects@1.15.11": "1.16.0",
-            "brace-expansion@>=5 <5.0.5": "5.0.6",
-            "ip-address@>=10 <10.1.1": "10.1.1",
-            "uuid@>=11 <11.1.1": "11.1.1",
-            "yaml@>=2 <2.8.3": "2.8.4"
-        }
-    },
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.33.3+sha512.a19744364a7e248b92657a4ca5973f9354d21caf982579674b1c539f32c7420c47138ad8b1254df07aba9bc782d9b3029e3db34d5dbff974326eb74dac8ff489",
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "11.2.2+sha512.36e6621fad506178936455e70247b8808ef4ec25797a9f437a93281a020484e2607f6a469a22e982987c3dbb8866e3071514ab10a4a1749e06edcd1ec118436f",
+            "onFail": "error"
+        }
+    },
     "private": true
 }
