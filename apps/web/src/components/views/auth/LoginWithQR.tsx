@@ -182,14 +182,8 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         this.props.onPhaseChange?.(this.state.phase);
     }
 
-    private readyToLoad(props: Props): boolean {
-        return props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
-    }
-
     public componentDidMount(): void {
-        if (this.readyToLoad(this.props)) {
-            void this.updateMode(this.props.mode);
-        }
+        void this.updateMode(this.props.mode);
     }
 
     public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<IState>): void {
@@ -197,7 +191,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             this.props.onPhaseChange?.(this.state.phase);
         }
 
-        if (prevProps.mode !== this.props.mode || this.readyToLoad(prevProps) !== this.readyToLoad(this.props)) {
+        if (prevProps.mode !== this.props.mode) {
             void this.updateMode(this.props.mode);
         }
     }

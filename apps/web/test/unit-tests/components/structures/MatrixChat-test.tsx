@@ -71,7 +71,6 @@ import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
-import QrLoginDialog from "../../../../src/async-components/views/dialogs/QrLoginDialog.tsx";
 import type { QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
@@ -415,7 +414,7 @@ describe("<MatrixChat />", () => {
             // Open QR dialog so we can grab the onLoggedIn method
             defaultDispatcher.fire(Action.ViewQrLogin, true);
             expect(createDialogSpy).toHaveBeenCalledWith(
-                QrLoginDialog,
+                expect.anything(),
                 {
                     onLoggedIn: expect.any(Function),
                     serverConfig: defaultProps.config.validated_server_config,

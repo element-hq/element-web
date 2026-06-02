@@ -23,10 +23,13 @@ import {
     HTTPError,
     type MatrixClient,
     MatrixHttpApi,
+    OAuthGrantType,
 } from "matrix-js-sdk/src/matrix";
 
 import LoginWithQR, { LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
+import fetchMock from "@fetch-mock/jest";
+import { mockPlatformPeg } from "../../../../../test-utils";
 
 jest.mock("matrix-js-sdk/src/rendezvous/transports");
 jest.mock("matrix-js-sdk/src/rendezvous/channels");
@@ -314,7 +317,6 @@ describe("<LoginWithQR />", () => {
                 client: MatrixClient;
                 onFinished?: () => void;
                 onLoggedIn?: () => Promise<void>;
-                clientId?: string;
                 ref?: RefObject<LoginWithQR | null>;
             }) => (
                 <LoginWithQR
@@ -325,22 +327,33 @@ describe("<LoginWithQR />", () => {
                 />
             );
 
-            test("should show spinner in login mode with no clientId", async () => {
-                render(getComponent({ client }));
-
-                await waitFor(() =>
-                    expect(mockedFlow).toHaveBeenLastCalledWith({
-                        phase: Phase.Loading,
-                        onClick: expect.any(Function),
-                        intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE,
-                    }),
-                );
-            });
-
             test("should handle qr login", async () => {
+                fetchMock.get("https://hs/_matrix/client/versions", {
+                    unstable_features: {},
+                    versions: ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"],
+                });
+                const authMetadata = {
+                    ...mockOpenIdConfiguration("https://auth.org/", [OAuthGrantType.DeviceAuthorization]),
+                    jwks_uri: undefined,
+                };
+                fetchMock.get("https://hs/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadata);
+                fetchMock.post(authMetadata.registration_endpoint!, {
+                    client_id: "!client_id!",
+                });
+
+                mockPlatformPeg({
+                    getOidcClientMetadata: jest.fn().mockReturnValue({
+                        clientName: "App name",
+                        clientUri: "https://company",
+                        redirectUris: ["https://app"],
+                        logoUri: "https://company/logo.png",
+                        applicationType: "web",
+                    }),
+                });
+
                 const ref = createRef<LoginWithQR>();
 
-                render(getComponent({ client, ref, clientId: "mock-client-id" }));
+                render(getComponent({ client, ref }));
                 jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockResolvedValue({
                     secrets: {
                         cross_signing: {
