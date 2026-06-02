@@ -301,6 +301,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             opts.unstableMSC4429SyncUserProfileFields = ["org.matrix.msc4426.status"];
         }
 
+        opts.unstableMSC1763Retention = SettingsStore.getValue("feature_retention");
+
         if (SettingsStore.getValue("feature_sliding_sync")) {
             throw new UserFriendlyError("sliding_sync_legacy_no_longer_supported");
         }

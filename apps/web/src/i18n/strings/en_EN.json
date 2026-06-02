@@ -1536,6 +1536,10 @@
             "display_name": "User status",
             "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
         },
+        "feature_retention": {
+            "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
+            "display_name": "Message retention"
+        },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",
