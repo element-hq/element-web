@@ -5,8 +5,8 @@
     "description": "Module API surface for element-web",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/element-hq/element-modules.git",
-        "directory": "packages/element-web-module-api"
+        "url": "git+https://github.com/element-hq/element-web.git",
+        "directory": "packages/module-api"
     },
     "author": "element-hq",
     "license": "SEE LICENSE IN README.md",
