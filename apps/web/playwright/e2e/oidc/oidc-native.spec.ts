@@ -76,6 +76,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const locator = await app.settings.openUserMenu();
         await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
         await page.getByRole("button", { name: "Remove this device", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
@@ -124,6 +125,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.waitForTimeout(2000);
         await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
         await page.getByRole("button", { name: "Remove this device" }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await expect(page).toHaveURL(/\/#\/welcome$/);
 
         // Log in again
@@ -158,6 +160,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.waitForTimeout(2000);
             await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
             await page.getByRole("button", { name: "Remove this device" }).click();
+            await page.getByRole("button", { name: "Remove this device anyway" }).click();
             await expect(page).toHaveURL(/\/#\/welcome$/);
 
             // Log in again
@@ -209,6 +212,12 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     .getByRole("menuitem", { name: "All settings" })
                     .click();
                 await page.getByRole("button", { name: "Remove this device" }).click();
+                // Since we have another device, it only shows a normal logout
+                // confirmation dialog, rather than prompting the user to set up
+                // recovery. Use the test ID to find this button to avoid
+                // ambiguity between the dialog button and the one in Settings.
+                await page.getByTestId("dialog-primary-button").click();
+
                 await expect(page).toHaveURL(/\/#\/welcome$/);
 
                 // Log in again
