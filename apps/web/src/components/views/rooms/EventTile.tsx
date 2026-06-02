@@ -29,8 +29,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
-import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, PinnedMessageBadge, TileErrorView } from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, TileErrorView } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -60,17 +59,16 @@ import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadP
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
-import { EventPreview } from "./EventPreview";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
-import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
-import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
-import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
-import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
+import { EventTileFooter } from "./EventTile/EventTileFooter";
+import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
+import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/EventTileThreadInfo";
+import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
@@ -105,7 +103,6 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { useSettingValue } from "../../../hooks/useSettings";
-import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
@@ -465,51 +462,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             timelineRenderingType: this.context.timelineRenderingType,
             highlightLink: this.props.highlightLink,
         });
-    }
-
-    private renderThreadPanelSummary(threadState: EventTileThreadState): JSX.Element | null {
-        if (!threadState.shouldShowThreadPanelSummary || !threadState.thread) {
-            return null;
-        }
-
-        return (
-            <div className="mx_ThreadPanel_replies">
-                <ThreadsIcon />
-                <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-                <ThreadMessagePreviewAdapter eventTileViewModel={this.viewModel} thread={threadState.thread} />
-            </div>
-        );
-    }
-
-    private renderThreadInfo(threadState: EventTileThreadState): React.ReactNode {
-        if (threadState.shouldShowThreadSummary && threadState.thread) {
-            return (
-                <ThreadSummaryAdapter
-                    eventTileViewModel={this.viewModel}
-                    mxEvent={this.props.mxEvent}
-                    thread={threadState.thread}
-                    data-testid="thread-summary"
-                />
-            );
-        }
-
-        if (threadState.searchThreadInfo.kind === "link") {
-            return (
-                <a className="mx_ThreadSummary_icon" href={threadState.searchThreadInfo.href}>
-                    <ThreadsIcon />
-                    {_t("timeline|thread_info_basic")}
-                </a>
-            );
-        }
-
-        if (threadState.searchThreadInfo.kind === "text") {
-            return (
-                <p className="mx_ThreadSummary_icon">
-                    <ThreadsIcon />
-                    {_t("timeline|thread_info_basic")}
-                </p>
-            );
-        }
     }
 
     private readonly onViewInRoomClick = (_anchor: HTMLElement | null): void => {
@@ -997,45 +949,24 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const messageTimestampProps = this.createMessageTimestampProps(ts);
         const linkedMessageTimestampProps = this.createLinkedMessageTimestampProps(messageTimestampProps);
 
-        // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
-        const dummyTimestamp = eventTileRenderState.timestamp.showDummy ? (
-            <span className="mx_MessageTimestamp" />
-        ) : null;
-        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
-            <MessageTimestampAdapter
+        const timestamp = (
+            <EventTileTimestampSlot
                 eventTileViewModel={this.viewModel}
                 kind="plain"
                 timestampProps={messageTimestampProps}
+                showTimestamp={eventTileRenderState.timestamp.displayState.showRealTimestamp}
+                showDummy={eventTileRenderState.timestamp.showDummy}
             />
-        ) : (
-            dummyTimestamp
         );
-        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
-            <MessageTimestampAdapter
+        const linkedTimestamp = (
+            <EventTileTimestampSlot
                 eventTileViewModel={this.viewModel}
                 kind="linked"
                 timestampProps={linkedMessageTimestampProps}
+                showTimestamp={eventTileRenderState.timestamp.displayState.showLinkedTimestamp}
+                showDummy={eventTileRenderState.timestamp.showDummy}
             />
-        ) : (
-            dummyTimestamp
         );
-
-        let pinnedMessageBadge: JSX.Element | undefined;
-        if (hasPinnedMessageBadge) {
-            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={this.id} tabIndex={0} />;
-        }
-
-        let reactionsRow: JSX.Element | undefined;
-        if (hasReactionsRow) {
-            reactionsRow = (
-                <ReactionsRowAdapter
-                    eventTileViewModel={this.viewModel}
-                    mxEvent={this.props.mxEvent}
-                    reactions={this.state.reactions}
-                    key="mx_EventTile_reactionsRow"
-                />
-            );
-        }
 
         const groupTimestamp = eventTileRenderState.timestamp.showInGroupLine ? linkedTimestamp : null;
         const ircTimestamp = eventTileRenderState.timestamp.showInIrcLine ? linkedTimestamp : null;
@@ -1132,13 +1063,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {linkedTimestamp}
                             {msgOption}
                         </div>,
-                        hasFooter && (
-                            <div className="mx_EventTile_footer" key="mx_EventTile_footer">
-                                {showMainPinnedMessageBadge && pinnedMessageBadge}
-                                {reactionsRow}
-                                {showBubblePinnedMessageBadge && pinnedMessageBadge}
-                            </div>
-                        ),
+                        <EventTileFooter
+                            key="mx_EventTile_footer"
+                            eventTileViewModel={this.viewModel}
+                            mxEvent={this.props.mxEvent}
+                            reactions={this.state.reactions}
+                            hasFooter={hasFooter}
+                            hasPinnedMessageBadge={hasPinnedMessageBadge}
+                            hasReactionsRow={hasReactionsRow}
+                            pinnedMessageBadgeAriaDescribedBy={this.id}
+                            placement="default"
+                            showMainPinnedMessageBadge={showMainPinnedMessageBadge}
+                            showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
+                        />,
                     ],
                 );
             }
@@ -1212,16 +1149,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                            <div className="mx_EventTile_body">
-                                {this.props.mxEvent.isRedacted() ? (
-                                    <RedactedBodyFactory mxEvent={this.props.mxEvent} />
-                                ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
-                                ) : (
-                                    <EventPreview mxEvent={this.props.mxEvent} />
-                                )}
-                            </div>
-                            {this.renderThreadPanelSummary(threadState)}
+                            <EventTilePreviewBody mxEvent={this.props.mxEvent} />
+                            <EventTileThreadPanelSummary
+                                eventTileViewModel={this.viewModel}
+                                threadState={threadState}
+                            />
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
                             <ThreadListActionBarAdapter
@@ -1330,26 +1262,43 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {actionBar}
                             {eventTileRenderState.footer.showInIrcLayout && (
                                 <>
-                                    {hasFooter && (
-                                        <div className="mx_EventTile_footer">
-                                            {pinnedMessageBadge}
-                                            {reactionsRow}
-                                        </div>
-                                    )}
-                                    {this.renderThreadInfo(threadState)}
+                                    <EventTileFooter
+                                        eventTileViewModel={this.viewModel}
+                                        mxEvent={this.props.mxEvent}
+                                        reactions={this.state.reactions}
+                                        hasFooter={hasFooter}
+                                        hasPinnedMessageBadge={hasPinnedMessageBadge}
+                                        hasReactionsRow={hasReactionsRow}
+                                        pinnedMessageBadgeAriaDescribedBy={this.id}
+                                        placement="irc"
+                                    />
+                                    <EventTileThreadInfo
+                                        eventTileViewModel={this.viewModel}
+                                        mxEvent={this.props.mxEvent}
+                                        threadState={threadState}
+                                    />
                                 </>
                             )}
                         </div>
                         {eventTileRenderState.footer.showInDefaultLayout && (
                             <>
-                                {hasFooter && (
-                                    <div className="mx_EventTile_footer">
-                                        {showMainPinnedMessageBadge && pinnedMessageBadge}
-                                        {reactionsRow}
-                                        {showBubblePinnedMessageBadge && pinnedMessageBadge}
-                                    </div>
-                                )}
-                                {this.renderThreadInfo(threadState)}
+                                <EventTileFooter
+                                    eventTileViewModel={this.viewModel}
+                                    mxEvent={this.props.mxEvent}
+                                    reactions={this.state.reactions}
+                                    hasFooter={hasFooter}
+                                    hasPinnedMessageBadge={hasPinnedMessageBadge}
+                                    hasReactionsRow={hasReactionsRow}
+                                    pinnedMessageBadgeAriaDescribedBy={this.id}
+                                    placement="default"
+                                    showMainPinnedMessageBadge={showMainPinnedMessageBadge}
+                                    showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
+                                />
+                                <EventTileThreadInfo
+                                    eventTileViewModel={this.viewModel}
+                                    mxEvent={this.props.mxEvent}
+                                    threadState={threadState}
+                                />
                             </>
                         )}
                         {msgOption}
