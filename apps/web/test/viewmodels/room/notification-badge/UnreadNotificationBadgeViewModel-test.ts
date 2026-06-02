@@ -14,6 +14,14 @@ import { UnreadNotificationBadgeViewModel } from "../../../../src/viewmodels/roo
 describe("UnreadNotificationBadgeViewModel", () => {
     let client: MatrixClient;
     let room: Room;
+    const trackedRoomEvents = [
+        RoomEvent.UnreadNotifications,
+        RoomEvent.Receipt,
+        RoomEvent.Timeline,
+        RoomEvent.Redaction,
+        RoomEvent.LocalEchoUpdated,
+        RoomEvent.MyMembership,
+    ];
 
     beforeEach(() => {
         client = stubClient();
@@ -82,18 +90,28 @@ describe("UnreadNotificationBadgeViewModel", () => {
         const nextRoom = new Room("!next:example.org", client, "@user:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        const initialRoomReceiptListeners = room.listenerCount(RoomEvent.Receipt);
-        const initialNextRoomReceiptListeners = nextRoom.listenerCount(RoomEvent.Receipt);
+        const initialRoomListenerCounts = new Map(
+            trackedRoomEvents.map((eventName) => [eventName, room.listenerCount(eventName)]),
+        );
+        const initialNextRoomListenerCounts = new Map(
+            trackedRoomEvents.map((eventName) => [eventName, nextRoom.listenerCount(eventName)]),
+        );
         const vm = new UnreadNotificationBadgeViewModel({ room });
 
-        expect(room.listenerCount(RoomEvent.Receipt)).toBe(initialRoomReceiptListeners + 1);
+        for (const eventName of trackedRoomEvents) {
+            expect(room.listenerCount(eventName)).toBe(initialRoomListenerCounts.get(eventName)! + 1);
+        }
 
         vm.setRoom(nextRoom);
 
-        expect(room.listenerCount(RoomEvent.Receipt)).toBe(initialRoomReceiptListeners);
-        expect(nextRoom.listenerCount(RoomEvent.Receipt)).toBe(initialNextRoomReceiptListeners + 1);
+        for (const eventName of trackedRoomEvents) {
+            expect(room.listenerCount(eventName)).toBe(initialRoomListenerCounts.get(eventName));
+            expect(nextRoom.listenerCount(eventName)).toBe(initialNextRoomListenerCounts.get(eventName)! + 1);
+        }
 
         vm.dispose();
-        expect(nextRoom.listenerCount(RoomEvent.Receipt)).toBe(initialNextRoomReceiptListeners);
+        for (const eventName of trackedRoomEvents) {
+            expect(nextRoom.listenerCount(eventName)).toBe(initialNextRoomListenerCounts.get(eventName));
+        }
     });
 });

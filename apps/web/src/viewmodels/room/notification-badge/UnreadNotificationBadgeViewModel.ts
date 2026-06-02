@@ -6,11 +6,16 @@
  */
 
 import { type NotificationCount, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { BaseViewModel, type NotificationBadgeViewSnapshot } from "@element-hq/web-shared-components";
+import {
+    BaseViewModel,
+    type NotificationBadgeViewSnapshot,
+    type NotificationBadgeViewModel as NotificationBadgeViewModelInterface,
+} from "@element-hq/web-shared-components";
 
 import { determineUnreadState } from "../../../RoomNotifs";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import SettingsStore from "../../../settings/SettingsStore";
-import { computeNotificationBadgeViewSnapshot } from "./notificationBadgeSnapshot";
+import { formatCount } from "../../../utils/FormattingUtils";
 
 export interface UnreadNotificationBadgeViewModelProps {
     room?: Room;
@@ -22,19 +27,40 @@ interface InternalProps extends UnreadNotificationBadgeViewModelProps {
     hideBold: boolean;
 }
 
-export class UnreadNotificationBadgeViewModel extends BaseViewModel<NotificationBadgeViewSnapshot, InternalProps> {
-    private roomListenerDisposers: Array<() => void> = [];
+export class UnreadNotificationBadgeViewModel
+    extends BaseViewModel<NotificationBadgeViewSnapshot, InternalProps>
+    implements NotificationBadgeViewModelInterface
+{
+    private listenerCleanups: Array<() => void> = [];
 
     private static readonly computeSnapshot = (props: InternalProps): NotificationBadgeViewSnapshot => {
         const { symbol, count, level } = determineUnreadState(props.room, props.threadId, false);
+        const shouldRender =
+            level !== NotificationLevel.None && !(props.hideBold && level === NotificationLevel.Activity);
+        const hasUnreadCount = level >= NotificationLevel.Notification && (!!count || !!symbol);
+        const isEmptyBadge = symbol === null && count === 0;
 
-        return computeNotificationBadgeViewSnapshot({
-            symbol,
-            count,
-            level,
-            forceDot: props.forceDot,
-            hideBold: props.hideBold,
-        });
+        let displaySymbol = symbol;
+        if (displaySymbol === null && count > 0) {
+            displaySymbol = formatCount(count);
+        }
+
+        const badgeType =
+            props.forceDot || level <= NotificationLevel.Activity
+                ? "dot"
+                : !displaySymbol || displaySymbol.length < 3
+                  ? "badge_2char"
+                  : "badge_3char";
+
+        return {
+            shouldRender,
+            isVisible: isEmptyBadge ? true : hasUnreadCount,
+            isNotification: level === NotificationLevel.Notification,
+            isHighlight: level >= NotificationLevel.Highlight,
+            isKnocked: false,
+            badgeType,
+            symbol: displaySymbol,
+        };
     };
 
     public constructor(props: UnreadNotificationBadgeViewModelProps) {
@@ -45,22 +71,25 @@ export class UnreadNotificationBadgeViewModel extends BaseViewModel<Notification
 
         super(internalProps, UnreadNotificationBadgeViewModel.computeSnapshot(internalProps));
 
-        this.attachRoomListeners(internalProps.room);
-        this.disposables.track(() => this.detachRoomListeners());
+        this.setupListeners();
 
         const hideBoldWatcherRef = SettingsStore.watchSetting("feature_hidebold", null, this.onHideBoldSettingChanged);
         this.disposables.track(() => SettingsStore.unwatchSetting(hideBoldWatcherRef));
     }
 
+    public dispose(): void {
+        this.teardownListeners();
+        super.dispose();
+    }
+
     public setRoom(room?: Room): void {
         if (this.props.room === room) return;
 
-        this.detachRoomListeners();
         this.props = {
             ...this.props,
             room,
         };
-        this.attachRoomListeners(room);
+        this.setupListeners();
         this.updateSnapshotFromProps();
     }
 
@@ -98,7 +127,10 @@ export class UnreadNotificationBadgeViewModel extends BaseViewModel<Notification
         this.snapshot.merge(UnreadNotificationBadgeViewModel.computeSnapshot(this.props));
     }
 
-    private attachRoomListeners(room?: Room): void {
+    private setupListeners(): void {
+        this.teardownListeners();
+
+        const { room } = this.props;
         if (!room) return;
 
         room.on(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications);
@@ -108,21 +140,21 @@ export class UnreadNotificationBadgeViewModel extends BaseViewModel<Notification
         room.on(RoomEvent.LocalEchoUpdated, this.onNotificationChanged);
         room.on(RoomEvent.MyMembership, this.onNotificationChanged);
 
-        this.roomListenerDisposers = [
-            () => room.off(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications),
-            () => room.off(RoomEvent.Receipt, this.onNotificationChanged),
-            () => room.off(RoomEvent.Timeline, this.onNotificationChanged),
-            () => room.off(RoomEvent.Redaction, this.onNotificationChanged),
-            () => room.off(RoomEvent.LocalEchoUpdated, this.onNotificationChanged),
-            () => room.off(RoomEvent.MyMembership, this.onNotificationChanged),
-        ];
+        this.listenerCleanups.push(() => {
+            room.off(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications);
+            room.off(RoomEvent.Receipt, this.onNotificationChanged);
+            room.off(RoomEvent.Timeline, this.onNotificationChanged);
+            room.off(RoomEvent.Redaction, this.onNotificationChanged);
+            room.off(RoomEvent.LocalEchoUpdated, this.onNotificationChanged);
+            room.off(RoomEvent.MyMembership, this.onNotificationChanged);
+        });
     }
 
-    private detachRoomListeners(): void {
-        for (const dispose of this.roomListenerDisposers) {
-            dispose();
+    private teardownListeners(): void {
+        for (const cleanup of this.listenerCleanups) {
+            cleanup();
         }
-        this.roomListenerDisposers = [];
+        this.listenerCleanups = [];
     }
 
     private readonly onRoomUnreadNotifications = (

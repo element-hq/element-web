@@ -5,14 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, {
-    type JSX,
-    type KeyboardEvent,
-    type MouseEvent,
-    type PropsWithChildren,
-    type Ref,
-    useCallback,
-} from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -54,75 +47,17 @@ export interface NotificationBadgeViewSnapshot {
      * Accessible label for the knock icon.
      */
     knockLabel?: string;
-    /**
-     * Whether the badge should expose button semantics.
-     */
-    isClickable?: boolean;
 }
 
-export type NotificationBadgeViewActivationEvent = MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>;
-
-export interface NotificationBadgeViewActions {
-    /**
-     * Invoked when the user activates the badge.
-     */
-    onClick?: (event: NotificationBadgeViewActivationEvent) => void;
-}
-
-export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot, NotificationBadgeViewActions>;
+export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot>;
 
 interface NotificationBadgeViewProps {
     vm: NotificationBadgeViewModel;
-    tabIndex?: number;
-    children?: PropsWithChildren["children"];
-    ref?: Ref<HTMLDivElement>;
 }
 
-export function NotificationBadgeView({
-    vm,
-    tabIndex,
-    children,
-    ref,
-}: Readonly<NotificationBadgeViewProps>): JSX.Element {
-    const {
-        shouldRender,
-        isVisible,
-        isNotification,
-        isHighlight,
-        isKnocked,
-        badgeType,
-        symbol,
-        knockLabel,
-        isClickable: snapshotIsClickable,
-    } = useViewModel(vm);
-    const isClickable = !!vm.onClick && !!snapshotIsClickable;
-
-    const onKeyDown = useCallback(
-        (event: KeyboardEvent<HTMLDivElement>): void => {
-            if (!isClickable || !vm.onClick) return;
-
-            if (event.key === "Enter") {
-                event.preventDefault();
-                event.stopPropagation();
-                vm.onClick(event);
-            } else if (event.key === " ") {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-        },
-        [isClickable, vm],
-    );
-
-    const onKeyUp = useCallback(
-        (event: KeyboardEvent<HTMLDivElement>): void => {
-            if (!isClickable || !vm.onClick || event.key !== " ") return;
-
-            event.preventDefault();
-            event.stopPropagation();
-            vm.onClick(event);
-        },
-        [isClickable, vm],
-    );
+export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProps>): JSX.Element {
+    const { shouldRender, isVisible, isNotification, isHighlight, isKnocked, badgeType, symbol, knockLabel } =
+        useViewModel(vm);
 
     if (!shouldRender) {
         return <></>;
@@ -155,26 +90,5 @@ export function NotificationBadgeView({
             <span className={classNames(styles.count, "mx_NotificationBadge_count")}>{symbol}</span>
         );
 
-    if (isClickable) {
-        return (
-            <div
-                className={classNames("mx_AccessibleButton", classes)}
-                role="button"
-                tabIndex={tabIndex ?? 0}
-                onClick={vm.onClick}
-                onKeyDown={onKeyDown}
-                onKeyUp={onKeyUp}
-                ref={ref}
-            >
-                {content}
-                {children}
-            </div>
-        );
-    }
-
-    return (
-        <div className={classes} ref={ref}>
-            {content}
-        </div>
-    );
+    return <div className={classes}>{content}</div>;
 }
