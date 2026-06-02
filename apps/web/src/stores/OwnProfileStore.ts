@@ -24,7 +24,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
 import SettingsStore from "../settings/SettingsStore";
-import { UserStatus, validateUserStatus } from "../utils/userStatus";
+import { type UserStatus, validateUserStatus } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;

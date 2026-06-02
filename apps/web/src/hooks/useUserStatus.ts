@@ -12,7 +12,7 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { UserStatus, validateUserStatus } from "../utils/userStatus";
+import { type UserStatus, validateUserStatus } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
 
