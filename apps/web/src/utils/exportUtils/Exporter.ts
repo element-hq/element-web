@@ -27,7 +27,7 @@ type BlobFile = {
 
 type FileDetails = {
     directory: string;
-    name: string;
+    eventId: string;
     date: string;
     extension: string;
     count?: number;
@@ -242,25 +242,57 @@ export default abstract class Exporter {
         return blob;
     }
 
-    public splitFileName(file: string): string[] {
-        const lastDot = file.lastIndexOf(".");
-        if (lastDot === -1) return [file, ""];
-        const fileName = file.slice(0, lastDot);
-        const ext = file.slice(lastDot + 1);
-        return [fileName, "." + ext];
+    private static readonly MIME_TO_EXT: Record<string, string> = {
+        "application/pdf": ".pdf",
+        "audio/ogg": ".ogg",
+        "audio/mp4": ".m4a",
+        "audio/mpeg": ".mp3",
+        "image/gif": ".gif",
+        "image/jpeg": ".jpg",
+        "image/jpg": ".jpg",
+        "image/png": ".png",
+        "image/webp": ".webp",
+        "text/plain": ".txt",
+        "video/mp4": ".mp4",
+        "video/webm": ".webm",
+    };
+
+    public getFileExtension(event: MatrixEvent): string {
+        if (event.getType() === "m.sticker") return ".png";
+        if (isVoiceMessage(event)) return ".ogg";
+        const content = event.getContent();
+        const msgtype = content.msgtype;
+        if (msgtype === "m.text" || msgtype === "m.notice") return ".txt";
+        const mime = content.info?.mimetype;
+        if (typeof mime === "string") {
+            const ext = Exporter.MIME_TO_EXT[mime.toLowerCase()];
+            if (ext) return ext;
+        }
+        const filename = content.filename;
+        if (typeof filename === "string") {
+            // Fallback to previous method of splitting on "."
+            const lastDot = filename.lastIndexOf(".");
+            if (lastDot !== -1 && lastDot < filename.length - 1) {
+                const rawExt = filename.slice(lastDot + 1);
+                if (rawExt) return "." + rawExt;
+            }
+        }
+        // Last resort fallback to a somewhat "generic" extension but log
+        // the issue
+        console.warn("Unknown file type, defaulting to .bin", event.getType(), content);
+        return ".bin";
     }
 
     protected makeUniqueFilePath(details: FileDetails): string {
-        const makePath = ({ directory, name, date, extension, count = 0 }: FileDetails): string =>
-            `${directory}/${name}-${date}${count > 0 ? ` (${count})` : ""}${extension}`;
-        const defaultPath = makePath(details);
-        const count = this.fileNames.get(defaultPath) || 0;
-        this.fileNames.set(defaultPath, count + 1);
+        const { directory, eventId, extension } = details;
+        const safeEventId = eventId.replace(/[^a-zA-Z0-9]/g, "");
+        const path = `${directory}/${safeEventId}${extension}`;
+        const count = this.fileNames.get(path) || 0;
+        this.fileNames.set(path, count + 1);
         if (count > 0) {
-            return makePath({ ...details, count });
+            return `${directory}/${safeEventId}_(${count})${extension}`;
         }
-
-        return defaultPath;
+        return path;
     }
 
     public getFilePath(event: MatrixEvent): string {
@@ -279,17 +311,11 @@ export default abstract class Exporter {
             default:
                 fileDirectory = event.getType() === "m.sticker" ? "stickers" : "files";
         }
-        const fileDate = formatFullDateNoDay(new Date(event.getTs()));
-        let [fileName, fileExt] = this.splitFileName(event.getContent().body);
-
-        if (event.getType() === "m.sticker") fileExt = ".png";
-        if (isVoiceMessage(event)) fileExt = ".ogg";
-
         return this.makeUniqueFilePath({
             directory: fileDirectory,
-            name: fileName,
-            date: fileDate,
-            extension: fileExt,
+            eventId: event.getId() ?? `missing-id-${event.getTs()}-`,
+            date: formatFullDateNoDay(new Date(event.getTs())),
+            extension: this.getFileExtension(event),
         });
     }
 
