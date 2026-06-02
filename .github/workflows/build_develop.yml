@@ -127,15 +127,14 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: element-web-develop
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name element-web-develop
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
             - run: |
                   echo "Deployed to ${STEPS_CFP_OUTPUTS_URL}" >> $GITHUB_STEP_SUMMARY
               env:
-                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.url }}
+                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.deployment-url }}

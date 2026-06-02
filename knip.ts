@@ -1,6 +1,6 @@
 import { KnipConfig } from "knip";
 
-// Specify this as knip loads config files which may conditionally add reporters, e.g. `@casualbot/jest-sonar-reporter'
+// Specify this as knip loads config files which may conditionally load plugins
 process.env.GITHUB_ACTIONS = "1";
 
 export default {
@@ -67,6 +67,10 @@ export default {
         "events",
     ],
     ignoreExportsUsedInFile: true,
+    ignoreBinaries: [
+        // Optional for coverage:diff development script
+        "diff-cover",
+    ],
     compilers: {
         pcss: (text: string) =>
             [...text.matchAll(/@import\s+(?:url\()?["']([^"']+)["']\)?[^;]*;/g)]

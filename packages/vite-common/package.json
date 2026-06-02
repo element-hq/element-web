@@ -13,7 +13,6 @@
         "typescript": "catalog:"
     },
     "peerDependencies": {
-        "@vitest/coverage-v8": "catalog:",
-        "vitest-sonar-reporter": "catalog:"
+        "@vitest/coverage-v8": "catalog:"
     }
 }

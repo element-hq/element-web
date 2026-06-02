@@ -1192,13 +1192,18 @@ describe("<MatrixChat />", () => {
                     getVersion: jest.fn().mockReturnValue("Version 0"),
                     getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
                     getUserDeviceInfo: jest.fn().mockReturnValue({
-                        get: jest
-                            .fn()
-                            .mockReturnValue(
-                                new Map([
-                                    ["devid", { dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") }],
-                                ]),
-                            ),
+                        get: jest.fn().mockReturnValue(
+                            new Map([
+                                [
+                                    "devid",
+                                    {
+                                        deviceId: "devid",
+                                        dehydrated: false,
+                                        getIdentityKey: jest.fn().mockReturnValue("k"),
+                                    },
+                                ],
+                            ]),
+                        ),
                     }),
                     getUserVerificationStatus: jest
                         .fn()
