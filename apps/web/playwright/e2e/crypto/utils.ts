@@ -248,7 +248,7 @@ export async function logIntoElementAndVerify(page: Page, credentials: Credentia
  * Click the "sign out" option in Element, and wait for the welcome page to load
  *
  * @param page - Playwright `Page` object.
- * @param discardKeys - if true, expect a "You'll lose access to your encrypted messages" dialog, and dismiss it.
+ * @param discardKeys - if true, expect a "You're about to lose access to your encrypted chats" dialog, and dismiss it.
  */
 export async function logOutOfElement(page: Page, discardKeys: boolean = false) {
     await page.getByRole("button", { name: "User menu" }).click();
@@ -256,7 +256,7 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
     await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
     await page.getByRole("button", { name: "Remove this device" }).click();
     if (discardKeys) {
-        await page.getByRole("button", { name: "I don't want my encrypted messages" }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
     } else {
         await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
     }
