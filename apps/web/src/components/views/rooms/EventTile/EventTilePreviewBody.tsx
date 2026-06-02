@@ -22,15 +22,19 @@ export function EventTilePreviewBody({
     eventTileViewModel,
     mxEvent,
 }: Readonly<EventTilePreviewBodyProps>): JSX.Element {
+    let body: JSX.Element;
+
+    if (mxEvent.isRedacted()) {
+        body = <RedactedBodyFactory mxEvent={mxEvent} />;
+    } else if (mxEvent.isDecryptionFailure()) {
+        body = <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
+    } else {
+        body = <EventPreviewAdapter eventTileViewModel={eventTileViewModel} mxEvent={mxEvent} />;
+    }
+
     return (
         <div className="mx_EventTile_body">
-            {mxEvent.isRedacted() ? (
-                <RedactedBodyFactory mxEvent={mxEvent} />
-            ) : mxEvent.isDecryptionFailure() ? (
-                <DecryptionFailureBodyFactory mxEvent={mxEvent} />
-            ) : (
-                <EventPreviewAdapter eventTileViewModel={eventTileViewModel} mxEvent={mxEvent} />
-            )}
+            {body}
         </div>
     );
 }
