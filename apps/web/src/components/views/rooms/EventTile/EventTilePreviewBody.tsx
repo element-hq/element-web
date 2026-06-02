@@ -15,6 +15,7 @@ interface EventTilePreviewBodyProps {
     mxEvent: MatrixEvent;
 }
 
+/** Renders the compact body preview used by notification and thread-list tiles. */
 export function EventTilePreviewBody({ mxEvent }: Readonly<EventTilePreviewBodyProps>): JSX.Element {
     return (
         <div className="mx_EventTile_body">

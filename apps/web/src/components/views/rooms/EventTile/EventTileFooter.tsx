@@ -25,6 +25,7 @@ interface EventTileFooterProps {
     showBubblePinnedMessageBadge?: boolean;
 }
 
+/** Renders the pinned-message badge and reactions row for an EventTile. */
 export function EventTileFooter({
     eventTileViewModel,
     mxEvent,

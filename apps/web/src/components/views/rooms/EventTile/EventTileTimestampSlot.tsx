@@ -19,6 +19,7 @@ interface EventTileTimestampSlotProps {
     showDummy: boolean;
 }
 
+/** Renders a real or placeholder timestamp slot for an EventTile. */
 export function EventTileTimestampSlot({
     eventTileViewModel,
     kind,

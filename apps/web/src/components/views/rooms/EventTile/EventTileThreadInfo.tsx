@@ -21,6 +21,7 @@ interface EventTileThreadInfoProps {
     threadState: EventTileThreadState;
 }
 
+/** Renders the thread-panel reply summary shown under a preview tile. */
 export function EventTileThreadPanelSummary({
     eventTileViewModel,
     threadState,
@@ -38,6 +39,7 @@ export function EventTileThreadPanelSummary({
     );
 }
 
+/** Renders thread summary or search thread affordances for an EventTile. */
 export function EventTileThreadInfo({
     eventTileViewModel,
     mxEvent,
