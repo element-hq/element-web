@@ -32,9 +32,5 @@ export function EventTilePreviewBody({
         body = <EventPreviewAdapter eventTileViewModel={eventTileViewModel} mxEvent={mxEvent} />;
     }
 
-    return (
-        <div className="mx_EventTile_body">
-            {body}
-        </div>
-    );
+    return <div className="mx_EventTile_body">{body}</div>;
 }
