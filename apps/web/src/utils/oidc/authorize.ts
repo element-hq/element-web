@@ -94,6 +94,7 @@ export type CompleteOidcLoginResponse = {
     // claims of the given access token; used during token refresh to validate new tokens
     idTokenClaims: IdTokenClaims;
 };
+
 /**
  * Attempt to complete authorization code flow to get an access token
  * @param urlParams the parameters extracted from the app-load URI.

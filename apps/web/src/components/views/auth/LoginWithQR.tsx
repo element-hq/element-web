@@ -67,6 +67,15 @@ export enum LoginWithQRFailureReason {
 
 export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
 
+/**
+ * Resolve a server name or baseURL to the homeserver & identity server URLs.
+ * @param serverNameOrBaseUrl the name or URL to resolve
+ * Whilst the 2024 version of MSC4108 says that we always get a server name, in practise the
+ * rust-sdk is currently misbehaving and we may receive a base URL instead. Additionally, the 2025
+ * version of MSC4108  will always give the base URL.
+ * As such, we should be resilient and support both formats until the spec and implementations have
+ * stabilised.
+ */
 async function resolveServerURLs(serverNameOrBaseUrl: string): Promise<{
     homeserverUrl?: string;
     identityServerUrl?: string;
@@ -236,12 +245,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
                     throw new Error("Server name/base URL not found in state");
                 }
-
-                // Whilst the 2024 version of MSC4108 says that we always get a server name, in practise the
-                // rust-sdk is currently misbehaving and we may receive a base URL instead. Additionally, the 2025
-                // version of MSC4108  will always give the base URL.
-                // As such, we should be resilient and support both formats until the spec and implementations have
-                // stabilised.
 
                 const { homeserverUrl, identityServerUrl } = await resolveServerURLs(this.state.serverNameOrBaseUrl);
 

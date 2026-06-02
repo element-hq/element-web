@@ -25,11 +25,31 @@ import { type FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
 import { ErrorMessage } from "../../structures/ErrorMessage";
 
 interface Props {
+    /**
+     * The phase the flow is to be rendered in
+     */
     phase: Phase;
+    /**
+     * The QR code data to render in Phase.ShowingQR
+     */
     code?: Uint8Array;
+    /**
+     * The intent mode of the flow (login or reciprocate).
+     */
     intent: RendezvousIntent;
+    /**
+     * State transition handler
+     * @param type the type of transition to take
+     * @param checkCodeEntered the check code entered, only present for Click.Approve
+     */
     onClick(type: Click, checkCodeEntered?: string): Promise<void>;
+    /**
+     * The failure reason to render in Phase.Error
+     */
     failureReason?: FailureReason;
+    /**
+     * The 6 digit user code to render in Phase.WaitingForDevice
+     */
     userCode?: string;
 }
 
