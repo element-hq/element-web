@@ -21,9 +21,16 @@ import { useAsyncMemo } from "../../../hooks/useAsyncMemo.ts";
 import Spinner from "../elements/Spinner.tsx";
 
 interface Props {
+    /**
+     * The server config to use for QR code login
+     */
     serverConfig: ValidatedServerConfig;
 }
 
+/**
+ * Default welcome (/#/welcome) screen to render if not overridden by config.json
+ * Links out to Login, Registration, QR Login & Directory (if guest access is supported)
+ */
 const DefaultWelcome: React.FC<Props> = ({ serverConfig }) => {
     const brand = SdkConfig.get("brand");
     const branding = SdkConfig.getObject("branding");

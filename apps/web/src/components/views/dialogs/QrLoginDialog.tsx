@@ -19,11 +19,26 @@ import BaseDialog from "./BaseDialog.tsx";
 import { _t } from "../../../languageHandler.tsx";
 
 interface Props {
+    /**
+     * The server config to use for QR code login
+     */
     serverConfig: ValidatedServerConfig;
+
+    /**
+     * Handler for when the dialog is to be closed
+     */
     onFinished(this: void): void;
+
+    /**
+     * Handler for successful completion of QR Login
+     * @param credentials - the credentials to log in with
+     */
     onLoggedIn(this: void, credentials: QrLoginCredentials): Promise<void>;
 }
 
+/**
+ * Dialog for facilitating the Login with QR flow, shown from DefaultWelcome.
+ */
 const QrLoginDialog: FC<Props> = ({ serverConfig, onLoggedIn, onFinished }) => {
     const tempClient = useMemo(() => createClient({ baseUrl: serverConfig.hsUrl }), [serverConfig]);
     const clientId = useAsyncMemo(

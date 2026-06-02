@@ -32,19 +32,46 @@ export type QrLoginCredentials = Omit<CompleteOidcLoginResponse, "idTokenClaims"
     };
 
 type BaseProps = {
+    /**
+     * The MatrixClient to use for the rendezvous communication with the other device.
+     */
     client: MatrixClient;
+    /**
+     * Whether to show a QR code or facilitate scanning one. Only Mode.Show is currently supported.
+     */
     mode: Mode;
+    /**
+     * Callback when the internal phase state has changed
+     * @param phase - the new phase which is being entered
+     */
     onPhaseChange?(phase: Phase): void;
+    /**
+     * Callback when the flow is concluded
+     * @param success - whether it was successful
+     */
     onFinished(this: void, success?: boolean): void;
 };
 
 type Props = XOR<
     {
+        /**
+         * Intent to facilitate logging into this device from an existing device
+         */
         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
-        clientId?: string; // A spinner will be shown while undefined
+        /**
+         * The client ID to use for OIDC authentication, a spinner will be shown while `undefined`.
+         */
+        clientId?: string;
+        /**
+         * Callback for successful login
+         * @param credentials - the credentials to authenticate with
+         */
         onLoggedIn(credentials: QrLoginCredentials): Promise<void>;
     },
     {
+        /**
+         * Intent to facilitate logging into another device from this existing device
+         */
         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
     }
 > &
@@ -102,9 +129,10 @@ async function resolveServerURLs(serverNameOrBaseUrl: string): Promise<{
 /**
  * A component that allows sign in and E2EE set up with a QR code.
  *
- * It implements `login.reciprocate` capabilities and showing QR codes.
+ * It implements `login.reciprocate` & `login.start` capabilities and showing QR codes.
+ * It does not implement any flows requiring the scanning of QR codes.
  *
- * This uses the unstable feature of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
+ * Implements the v2024 version of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
 export default class LoginWithQR extends React.Component<Props, IState> {
     private finished = false;

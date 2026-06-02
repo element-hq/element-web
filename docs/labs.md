@@ -137,4 +137,6 @@ it may have unintended consequences.
 ## Log in with QR (`feature_login_with_qr`)
 
 Enables logging in to Element Web/Desktop by using Element X to scan a QR code.
-Requires server support, based on MSC4108. Can only be configured via config.
+Requires server support, based on the v2024 edition of [MSC4108](https://github.com/matrix-org/matrix-spec-proposals/pull/4108).
+Can only be configured via config.json, as labs flags cannot be set until after login, and are cleared on log out. The UI option is disabled.
+Note, this does not affect the existing `Link new device` flow using the same MSC.

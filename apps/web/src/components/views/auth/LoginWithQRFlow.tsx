@@ -54,9 +54,9 @@ interface Props {
 }
 
 /**
- * A component that implements the UI for sign in and E2EE set up with a QR code.
+ * A component that implements the UI for sign in and E2EE set up by rendering a QR code in both login & reciprocate directions.
  *
- * This supports the unstable features of MSC4108
+ * Implements the v2024 version of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
 export default class LoginWithQRFlow extends React.Component<Props> {
     private checkCodeInput = createRef<HTMLInputElement>();

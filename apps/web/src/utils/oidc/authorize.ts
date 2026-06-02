@@ -76,22 +76,42 @@ const getCodeAndStateFromParams = (
     return { code, state };
 };
 
+/**
+ * Return type for {@link completeOidcLogin}
+ * Contains all the credentials gathered from a successful OIDC login
+ */
 export type CompleteOidcLoginResponse = {
-    // url of the homeserver selected during login
+    /**
+     * URL of the homeserver selected during login
+     */
     homeserverUrl: string;
-    // identity server url as discovered during login
+    /**
+     * Identity server URL as discovered during login
+     */
     identityServerUrl?: string;
-    // accessToken gained from OIDC token issuer
+    /**
+     * Access Token gained from OIDC token issuer
+     */
     accessToken: string;
-    // refreshToken gained from OIDC token issuer, when falsy token cannot be refreshed
+    /**
+     * Refresh Token gained from OIDC token issuer, when falsy token cannot be refreshed
+     */
     refreshToken?: string;
-    // idToken gained from OIDC token issuer
+    /**
+     * ID Token gained from OIDC token issuer
+     */
     idToken?: string;
-    // this client's id as registered with the OIDC issuer
+    /**
+     * This client's ID as registered with the OIDC issuer
+     */
     clientId: string;
-    // issuer used during authentication
+    /**
+     * Issuer used during authentication
+     */
     issuer: string;
-    // claims of the given access token; used during token refresh to validate new tokens
+    /**
+     * Claims of the given access token; used during token refresh to validate new tokens
+     */
     idTokenClaims: IdTokenClaims;
 };
 
