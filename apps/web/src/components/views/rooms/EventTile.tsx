@@ -776,24 +776,22 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return "#";
     }
 
-    private createRootAttributes(
-        { tileClasses, tileAriaLive, scrollToken }: EventTileRootRenderState,
-        ariaAtomic: true | "true" = true,
-    ): Record<string, unknown> {
+    private createRootAttributes({
+        tileClasses,
+        tileAriaLive,
+        scrollToken,
+    }: EventTileRootRenderState): Record<string, unknown> {
         return {
             "className": tileClasses,
             "aria-live": tileAriaLive,
-            "aria-atomic": ariaAtomic,
+            "aria-atomic": true,
             "data-scroll-tokens": scrollToken,
         };
     }
 
-    private createInteractiveRootAttributes(
-        rootRenderState: EventTileRootRenderState,
-        ariaAtomic: true | "true" = true,
-    ): Record<string, unknown> {
+    private createInteractiveRootAttributes(rootRenderState: EventTileRootRenderState): Record<string, unknown> {
         return {
-            ...this.createRootAttributes(rootRenderState, ariaAtomic),
+            ...this.createRootAttributes(rootRenderState),
             ref: this.ref,
             onMouseEnter: this.onMouseEnter,
             onMouseLeave: this.onMouseLeave,
@@ -811,21 +809,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         isSeeingThroughMessageHiddenForModeration?: boolean;
         permalinkCreator?: RoomPermalinkCreator;
     }): EventTileTypeProps {
-        const tileProps: EventTileTypeProps = {
+        return {
             ...this.props,
             ref: this.tile,
+            ...(replacingEventId === undefined ? {} : { replacingEventId }),
             isSeeingThroughMessageHiddenForModeration,
             highlights: this.props.highlights,
             highlightLink: this.props.highlightLink,
             permalinkCreator,
             showHiddenEvents: this.context.showHiddenEvents,
         };
-
-        if (replacingEventId !== undefined) {
-            tileProps.replacingEventId = replacingEventId;
-        }
-
-        return tileProps;
     }
 
     private createRenderInputs(
@@ -976,8 +969,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const permalink = this.getPermalink();
 
-        // we can't use local echoes as scroll tokens, because their event IDs change.
-        // Local echos have a send "status".
         const scrollToken = eventTileRenderState.root.scrollToken;
         const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
 
@@ -1007,7 +998,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         ) : undefined;
 
-        // Thread panel shows the timestamp of the last reply in that thread
         const ts = eventTileRenderState.timestamp.value;
 
         const messageTimestampProps = this.createMessageTimestampProps(ts);
@@ -1132,11 +1122,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             case TimelineRenderingType.Notification:
             case TimelineRenderingType.ThreadsList: {
                 const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
-                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        ...this.createInteractiveRootAttributes(rootRenderState, "true"),
+                        ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
                         "data-layout": this.props.layout,
                         "data-shape": this.context.timelineRenderingType,
@@ -1238,11 +1227,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
             default: {
                 // Pinned, Room, Search
-                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        ...this.createInteractiveRootAttributes(rootRenderState, "true"),
+                        ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
