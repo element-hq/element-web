@@ -10,9 +10,9 @@ import { RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 import { createClient } from "matrix-js-sdk/src/matrix";
 
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import LoginWithQR, { type QrLoginCredentials } from "../../views/auth/LoginWithQR.tsx";
-import { Mode, Phase } from "../../views/auth/LoginWithQR-types.ts";
-import BaseDialog from "./BaseDialog.tsx";
+import LoginWithQR, { type QrLoginCredentials } from "../../../components/views/auth/LoginWithQR.tsx";
+import { Mode, Phase } from "../../../components/views/auth/LoginWithQR-types.ts";
+import BaseDialog from "../../../components/views/dialogs/BaseDialog.tsx";
 import { _t } from "../../../languageHandler.tsx";
 
 interface Props {

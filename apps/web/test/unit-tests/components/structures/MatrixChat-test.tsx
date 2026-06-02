@@ -71,7 +71,7 @@ import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
-import QrLoginDialog from "../../../../src/components/views/dialogs/QrLoginDialog.tsx";
+import QrLoginDialog from "../../../../src/async-components/views/dialogs/QrLoginDialog.tsx";
 import type { QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({

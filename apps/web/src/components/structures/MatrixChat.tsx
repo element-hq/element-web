@@ -142,7 +142,6 @@ import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
 import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
-import QrLoginDialog from "../views/dialogs/QrLoginDialog.tsx";
 import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
 import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
 
@@ -835,7 +834,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     logger.warn("Ignoring payload due to unexpected call outside auth flows", payload);
                 } else {
                     Modal.createDialog(
-                        QrLoginDialog,
+                        lazy(() => import("../../async-components/views/dialogs/QrLoginDialog")),
                         {
                             serverConfig: this.getServerProperties().serverConfig,
                             onLoggedIn: this.onUserCompletedQrLoginFlow,
