@@ -18,7 +18,7 @@ import {
     signInByGeneratingQR,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AutoDiscovery, MatrixClient, type XOR } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, MatrixClient, OAuthGrantType, type OidcClientConfig, type XOR } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
@@ -76,13 +76,51 @@ type Props = XOR<
     BaseProps;
 
 interface IState {
+    /**
+     * The current phase of the flow
+     */
     phase: Phase;
+    /**
+     * The rendezvous channel in use
+     */
     rendezvous?: MSC4108SignInWithQR;
+    /**
+     * TODO
+     */
     verificationUri?: string;
+    /**
+     * TODO
+     */
     userCode?: string;
+    /**
+     * TODO
+     */
     checkCode?: string;
+    /**
+     * TODO
+     */
     failureReason?: FailureReason;
-    serverNameOrBaseUrl?: string;
+    /**
+     * TODO
+     */
+    loginServerDetails?: {
+        /**
+         * TODO
+         */
+        homeserverUrl: string;
+        /**
+         * TODO
+         */
+        identityServerUrl?: string;
+        /**
+         * TODO
+         */
+        metadata: OidcClientConfig;
+        /**
+         * TODO
+         */
+        clientId: string;
+    };
 }
 
 export enum LoginWithQRFailureReason {
@@ -101,10 +139,9 @@ export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
  * As such, we should be resilient and support both formats until the spec and implementations have
  * stabilised.
  */
-async function resolveServerURLs(serverNameOrBaseUrl: string): Promise<{
-    homeserverUrl?: string;
-    identityServerUrl?: string;
-}> {
+async function resolveServerURLs(
+    serverNameOrBaseUrl: string,
+): Promise<Pick<Partial<NonNullable<IState["loginServerDetails"]>>, "homeserverUrl" | "identityServerUrl">> {
     if (serverNameOrBaseUrl.startsWith("http://") || serverNameOrBaseUrl.startsWith("https://")) {
         // treat as base URL and skip discovery
         return {
@@ -223,9 +260,40 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 });
             } else {
                 const { serverName } = await rendezvous.negotiateProtocols();
+                const { homeserverUrl, identityServerUrl } = await resolveServerURLs(serverName!);
+
+                if (!homeserverUrl) {
+                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                    logger.error("Failed to discover homeserver URL");
+                    throw new Error("Failed to discover homeserver URL");
+                }
+
+                let metadata: OidcClientConfig;
+                let clientId: string;
+                try {
+                    // Create a new client as the homeserver URL may not be the same as we used for the secure channel
+                    metadata = await new MatrixClient({ baseUrl: homeserverUrl }).getAuthMetadata();
+                    if (!metadata.grant_types_supported.includes(OAuthGrantType.DeviceAuthorization)) {
+                        throw new Error("Server does not support Device Authorization Grant");
+                    }
+                    clientId = await getOidcClientId(metadata, SdkConfig.get().oidc_static_clients);
+                } catch (e) {
+                    this.setState({
+                        phase: Phase.Error,
+                        failureReason: ClientRendezvousFailureReason.HomeserverLacksSupport,
+                    });
+                    logger.error("Failed to register OIDC Client ID", e);
+                    throw new Error("Failed to register OIDC Client ID", { cause: e });
+                }
+
                 this.setState({
                     phase: Phase.OutOfBandConfirmation,
-                    serverNameOrBaseUrl: serverName,
+                    loginServerDetails: {
+                        homeserverUrl,
+                        identityServerUrl,
+                        metadata,
+                        clientId,
+                    },
                 });
             }
 
@@ -267,22 +335,12 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 // done
                 this.onFinished(true);
             } else {
-                if (!this.state.serverNameOrBaseUrl) {
+                if (!this.state.loginServerDetails) {
                     this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                    throw new Error("Server name/base URL not found in state");
+                    throw new Error("Server details not found in state");
                 }
 
-                const { homeserverUrl, identityServerUrl } = await resolveServerURLs(this.state.serverNameOrBaseUrl);
-
-                if (!homeserverUrl) {
-                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                    logger.error("Failed to discover homeserver URL");
-                    throw new Error("Failed to discover homeserver URL");
-                }
-
-                // Create a new client as the homeserver URL may not be the same as we used for the secure channel
-                const metadata = await new MatrixClient({ baseUrl: homeserverUrl }).getAuthMetadata();
-                const clientId = await getOidcClientId(metadata, SdkConfig.get().oidc_static_clients);
+                const { homeserverUrl, identityServerUrl, clientId, metadata } = this.state.loginServerDetails;
 
                 // Generate our new device ID
                 const deviceId = secureRandomString(10);
