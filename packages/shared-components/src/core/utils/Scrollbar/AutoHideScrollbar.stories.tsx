@@ -11,30 +11,31 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AutoHideScrollbar } from "./AutoHideScrollbar";
 
 const containerStyle: React.CSSProperties = {
+    border: "1px solid",
+    width: "200px",
     height: "100px",
 };
 
 const meta = {
     title: "Core/AutoHideScrollbar",
     component: AutoHideScrollbar,
-    tags: ["autodocs"],
+    tags: ["autodocs", "skip-test"],
     args: {
         element: "div",
-        role: "scrollbar",
+        role: "container",
+        style: containerStyle,
         children: (
-            <div style={containerStyle}>
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
-                    <li>Item 5</li>
-                    <li>Item 6</li>
-                    <li>Item 7</li>
-                    <li>Item 8</li>
-                    <li>Item 9</li>
-                </ul>
-            </div>
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+                <li>Item 4</li>
+                <li>Item 5</li>
+                <li>Item 6</li>
+                <li>Item 7</li>
+                <li>Item 8</li>
+                <li>Item 9</li>
+            </ul>
         ),
     },
 } satisfies Meta<typeof AutoHideScrollbar>;

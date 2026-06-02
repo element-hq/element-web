@@ -14,62 +14,72 @@ type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
     JSX.IntrinsicElements[T] extends HTMLAttributes<object> ? DynamicElementProps<T> : DynamicElementProps<"div">;
 type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<Omit<JSX.IntrinsicElements[T], "ref">>;
 
-export type AutoHideScrollbarProps<T extends keyof JSX.IntrinsicElements> = Omit<
+/**
+ * Props for `AutoHideScrollbar`.
+ */
+export type AutoHideScrollbarProps<T extends keyof JSX.IntrinsicElements = "div"> = Omit<
     DynamicHtmlElementProps<T>,
     "onScroll"
 > & {
-    element: T;
+    /** Element tag to render. */
+    element?: T;
+    /** Additional class names to append to the scrollbar root. */
     className?: string;
+    /** Native scroll handler attached with a passive listener. */
     onScroll?: (event: Event) => void;
+    /** Optional wheel handler forwarded to the root element. */
     onWheel?: (event: WheelEvent) => void;
+    /** Inline styles applied to the root element. */
     style?: React.CSSProperties;
+    /** Tab index override; defaults to `-1`. */
     tabIndex?: number;
+    /** Receives the mounted scroll container element. */
     wrappedRef?: (ref: HTMLDivElement | null) => void;
+    /** Scrollable content rendered inside the container. */
     children: ReactNode;
 };
 
-export class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> extends React.Component<
-    AutoHideScrollbarProps<T>
-> {
-    public static defaultProps = {
-        element: "div" as keyof HTMLElementTagNameMap,
-    };
+/**
+ * Scroll container that hides native scrollbars until hovered.
+ */
+export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">(
+    props: AutoHideScrollbarProps<T>,
+): React.ReactNode {
+    const { element = "div" as T, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = props;
+    const [container, setContainer] = React.useState<HTMLDivElement | null>(null);
 
-    public readonly containerRef = React.createRef<HTMLDivElement>();
-
-    public componentDidMount(): void {
-        if (this.containerRef.current && this.props.onScroll) {
-            // Using the passive option to not block the main thread
-            // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
-            this.containerRef.current.addEventListener("scroll", this.props.onScroll, { passive: true });
+    React.useEffect(() => {
+        if (!container || !onScroll) {
+            return;
         }
 
-        this.props.wrappedRef?.(this.containerRef.current);
-    }
+        // Using the passive option to not block the main thread.
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        container.addEventListener("scroll", onScroll, { passive: true });
 
-    public componentWillUnmount(): void {
-        if (this.containerRef.current && this.props.onScroll) {
-            this.containerRef.current.removeEventListener("scroll", this.props.onScroll);
-        }
+        return (): void => {
+            container.removeEventListener("scroll", onScroll);
+        };
+    }, [container, onScroll]);
 
-        this.props.wrappedRef?.(null);
-    }
+    React.useEffect(() => {
+        wrappedRef?.(container);
 
-    public render(): React.ReactNode {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { element, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = this.props;
+        return (): void => {
+            wrappedRef?.(null);
+        };
+    }, [container, wrappedRef]);
 
-        return React.createElement(
-            element,
-            {
-                ...otherProps,
-                ref: this.containerRef,
-                className: classNames(styles.scrollbar, className),
-                // Firefox sometimes makes this element focusable due to
-                // overflow:scroll;, so force it out of tab order by default.
-                tabIndex: tabIndex ?? -1,
-            },
-            children,
-        );
-    }
+    return React.createElement(
+        element,
+        {
+            ...otherProps,
+            ref: setContainer,
+            className: classNames(styles.scrollbar, className),
+            // Firefox sometimes makes this element focusable due to
+            // overflow:scroll;, so force it out of tab order by default.
+            tabIndex: tabIndex ?? -1,
+        },
+        children,
+    );
 }
