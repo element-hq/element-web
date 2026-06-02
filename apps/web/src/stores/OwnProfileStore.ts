@@ -113,8 +113,9 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
             this.monitoredUser.removeListener(UserEvent.AvatarUrl, this.onProfileUpdate);
         }
         this.matrixClient?.removeListener(RoomStateEvent.Events, this.onStateEvents);
-        if (SettingsStore.getValue("feature_user_status"))
+        if (SettingsStore.getValue("feature_user_status")) {
             this.matrixClient?.removeListener(ClientEvent.UserProfileUpdate, this.onExtendedProfileUpdate);
+        }
         await this.reset({});
     }
 
@@ -127,8 +128,9 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
             this.monitoredUser.on(UserEvent.AvatarUrl, this.onProfileUpdate);
         }
 
-        if (SettingsStore.getValue("feature_user_status"))
+        if (SettingsStore.getValue("feature_user_status")) {
             this.matrixClient.on(ClientEvent.UserProfileUpdate, this.onExtendedProfileUpdate);
+        }
 
         // We also have to listen for membership events for ourselves as the above User events
         // are fired only with presence, which matrix.org (and many others) has disabled.
