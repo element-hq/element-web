@@ -18,7 +18,6 @@ import React, {
 } from "react";
 import {
     type EventStatus,
-    EventType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -29,7 +28,6 @@ import {
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { uniqueId } from "lodash";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useCreateAutoDisposedViewModel, PinnedMessageBadge, TileErrorView } from "@element-hq/web-shared-components";
@@ -109,6 +107,8 @@ import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorVi
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
+import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
+import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -610,42 +610,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return true;
     }
 
-    /**
-     * Determine whether an event should be highlighted
-     * For edited events, if a previous version of the event was highlighted
-     * the event should remain highlighted as the user may have been notified
-     * (Clearer explanation of why an event is highlighted is planned -
-     * https://github.com/vector-im/element-web/issues/24927)
-     * @returns boolean
-     */
-    private shouldHighlight(): boolean {
-        if (this.props.forExport) return false;
-        if (this.context.timelineRenderingType === TimelineRenderingType.Notification) return false;
-        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
-
-        if (this.props.isRedacted) return false;
-
-        // This event is a room mention but we don't want the call tile to have a highlight.
-        if (this.props.mxEvent.getType() === EventType.RTCNotification) return false;
-
-        const cli = MatrixClientPeg.safeGet();
-        const actions = cli.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
-        // get the actions for the previous version of the event too if it is an edit
-        const previousActions = this.props.mxEvent.replacingEvent()
-            ? cli.getPushActionsForEvent(this.props.mxEvent)
-            : undefined;
-        if (!actions?.tweaks && !previousActions?.tweaks) {
-            return false;
-        }
-
-        // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === cli.credentials.userId) {
-            return false;
-        }
-
-        return !!(actions?.tweaks.highlight || previousActions?.tweaks.highlight);
-    }
-
     private readonly onSenderProfileClick = (): void => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
@@ -821,18 +785,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    /**
-     * In some cases we can't use shouldHideEvent() since whether or not we hide
-     * an event depends on other things that the event itself
-     * @returns {boolean} true if event should be hidden
-     */
-    private shouldHideEvent(): boolean {
-        // If the call was replaced we don't render anything since we render the other call
-        if (this.props.callEventGrouper?.hangupReason === CallErrorCode.Replaced) return true;
-
-        return false;
-    }
-
     private createMessageTimestampProps(ts: number): MessageTimestampViewModelProps {
         return {
             showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
@@ -866,7 +818,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
-            this.shouldHideEvent(),
+            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
         ),
     ): EventTileRenderInputs {
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
@@ -910,7 +862,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 isInfoMessage: displayInfo.isInfoMessage,
                 noBubbleEvent: displayInfo.noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
-                isHighlighted: this.shouldHighlight(),
+                isHighlighted: shouldHighlightEventTile({
+                    cli: MatrixClientPeg.safeGet(),
+                    mxEvent: this.props.mxEvent,
+                    timelineRenderingType: this.context.timelineRenderingType,
+                    forExport: this.props.forExport,
+                    isRedacted: this.props.isRedacted,
+                }),
                 isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
                 isLast: this.props.last,
                 isLastInSection: this.props.lastInSection,
@@ -973,7 +931,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
-            this.shouldHideEvent(),
+            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
         );
         const { hasRenderer, isSeeingThroughMessageHiddenForModeration } = displayInfo;
         const { isQuoteExpanded } = this.state;
