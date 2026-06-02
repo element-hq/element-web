@@ -73,6 +73,7 @@ interface MoreOptionContentProps {
 
 export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     const snapshot = useViewModel(vm);
+    const hasSections = snapshot.sections.length > 0;
     return (
         // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div onKeyDown={(e) => e.stopPropagation()}>
@@ -151,7 +152,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                             )}
                         </MenuItem>
                     ))}
-                    <Separator />
+                    {hasSections && <Separator />}
                     <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
                 </SubMenu>
             )}
