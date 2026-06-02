@@ -218,11 +218,9 @@
         "log_in_new_account": "<a>Log in</a> to your new account.",
         "logout_dialog": {
             "description": "Are you sure you want to remove this device?",
-            "megolm_export": "Manually export keys",
-            "setup_key_backup_title": "You'll lose access to your encrypted messages",
-            "setup_secure_backup_description_1": "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
-            "setup_secure_backup_description_2": "When you remove this device you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
-            "skip_key_backup": "I don't want my encrypted messages"
+            "setup_key_backup_title": "You're about to lose access to your encrypted chats",
+            "setup_secure_backup_description": "This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.",
+            "skip_key_backup": "Remove this device anyway"
         },
         "misconfigured_body": "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
         "misconfigured_title": "Your %(brand)s is misconfigured",
@@ -1003,9 +1001,6 @@
         "set_up_recovery": "Back up your chats",
         "set_up_recovery_toast_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "set_up_toast_title": "Set up Secure Backup",
-        "setup_secure_backup": {
-            "explainer": "Back up your keys before removing this device to avoid losing them."
-        },
         "turn_on_key_storage": "Turn on key storage",
         "turn_on_key_storage_description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity.",
         "udd": {
