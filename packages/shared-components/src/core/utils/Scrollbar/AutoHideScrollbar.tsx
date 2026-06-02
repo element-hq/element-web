@@ -21,20 +21,20 @@ export type AutoHideScrollbarProps<T extends keyof JSX.IntrinsicElements = "div"
     DynamicHtmlElementProps<T>,
     "onScroll"
 > & {
-    /** Element tag to render. */
+    /** Element tag to render. @default div*/
     element?: T;
     /** Additional class names to append to the scrollbar root. */
     className?: string;
-    /** Native scroll handler attached with a passive listener. */
-    onScroll?: (event: Event) => void;
-    /** Optional wheel handler forwarded to the root element. */
-    onWheel?: (event: WheelEvent) => void;
     /** Inline styles applied to the root element. */
     style?: React.CSSProperties;
     /** Tab index override; defaults to `-1`. */
     tabIndex?: number;
     /** Receives the mounted scroll container element. */
     wrappedRef?: (ref: HTMLDivElement | null) => void;
+    /** Native scroll handler attached with a passive listener. */
+    onScroll?: (event: Event) => void;
+    /** Optional wheel handler forwarded to the root element. */
+    onWheel?: (event: WheelEvent) => void;
     /** Scrollable content rendered inside the container. */
     children: ReactNode;
 };
