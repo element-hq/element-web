@@ -44,6 +44,7 @@ import {
     E2eMessageSharedIconViewModel,
     type E2eMessageSharedIconViewModelProps,
 } from "./E2eMessageSharedIconViewModel";
+import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
 import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
@@ -301,6 +302,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     private threadSummaryViewModel?: ThreadSummaryViewModel;
     private threadListActionBarViewModel?: ThreadListActionBarViewModel;
     private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
+    private eventPreviewViewModel?: EventPreviewViewModel;
     private actionBarViewModel?: EventTileActionBarViewModel;
     private reactionsRowViewModel?: ReactionsRowViewModel;
 
@@ -323,6 +325,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         this.threadSummaryViewModel?.dispose();
         this.threadListActionBarViewModel?.dispose();
         this.e2eMessageSharedIconViewModel?.dispose();
+        this.eventPreviewViewModel?.dispose();
         this.actionBarViewModel?.dispose();
         this.reactionsRowViewModel?.dispose();
         super.dispose();
@@ -380,6 +383,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public releaseE2eMessageSharedIconViewModel(): void {
         this.e2eMessageSharedIconViewModel?.dispose();
         this.e2eMessageSharedIconViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the event preview child view model. */
+    public getEventPreviewViewModel(props: EventPreviewViewModelProps): EventPreviewViewModel {
+        this.eventPreviewViewModel ??= new EventPreviewViewModel(props);
+        return this.eventPreviewViewModel;
+    }
+
+    /** Releases the event preview child view model when its adapter unmounts. */
+    public releaseEventPreviewViewModel(): void {
+        this.eventPreviewViewModel?.dispose();
+        this.eventPreviewViewModel = undefined;
     }
 
     /** Lazily creates and returns the event action bar child view model. */

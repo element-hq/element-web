@@ -62,10 +62,10 @@ import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadP
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
-import { EventPreview } from "./EventPreview";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
+import { EventPreviewAdapter } from "./EventTile/EventPreviewAdapter";
 import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
 import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
@@ -1259,7 +1259,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
                                     <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : (
-                                    <EventPreview mxEvent={this.props.mxEvent} />
+                                    <EventPreviewAdapter
+                                        eventTileViewModel={this.viewModel}
+                                        mxEvent={this.props.mxEvent}
+                                    />
                                 )}
                             </div>
                             {this.renderThreadPanelSummary(threadState)}

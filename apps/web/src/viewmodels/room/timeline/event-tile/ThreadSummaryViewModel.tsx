@@ -7,13 +7,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type MouseEvent, type ReactNode } from "react";
+import { type MouseEvent } from "react";
 import {
-    M_POLL_START,
     type MatrixClient,
     type MatrixEvent,
-    MatrixEventEvent,
-    MsgType,
     type NotificationCount,
     RoomEvent,
     type Room,
@@ -40,11 +37,15 @@ import { type ShowThreadPayload } from "../../../../dispatcher/payloads/ShowThre
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { determineUnreadState } from "../../../../RoomNotifs";
 import { notificationLevelToIndicator } from "../../../../utils/notifications";
-import { MessagePreviewStore } from "../../../../stores/message-preview";
 import { mediaFromMxc } from "../../../../customisations/Media";
 import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { keepIfSame } from "../../../../utils/keepIfSame";
+import {
+    EventPreviewContentCache,
+    getEventPreviewContent,
+    MatrixEventContentChangeListener,
+} from "./EventPreviewUtils";
 
 const AVATAR_SIZE_PX = 24;
 const THREAD_PROFILE_CONTEXTS = new Set<TimelineRenderingType>([
@@ -92,14 +93,12 @@ export class ThreadMessagePreviewViewModel
     implements ThreadMessagePreviewViewModelInterface
 {
     private threadListenerCleanups: Array<() => void> = [];
-    private eventListenerCleanups: Array<() => void> = [];
     private memberListenerCleanups: Array<() => void> = [];
-    private watchedEvent?: MatrixEvent;
+    private readonly eventContentListener = new MatrixEventContentChangeListener();
+    private readonly previewContentCache = new EventPreviewContentCache();
     private watchedMemberRoom?: Room;
     private watchedMemberUserId?: string;
     private previewRequestId = 0;
-    private previewContentKey?: string;
-    private previewContent?: ReactNode;
 
     public constructor(props: ThreadMessagePreviewViewModelProps) {
         super(props, {
@@ -113,7 +112,7 @@ export class ThreadMessagePreviewViewModel
 
     public dispose(): void {
         this.teardownThreadListener();
-        this.teardownEventListeners();
+        this.eventContentListener.teardown();
         this.teardownMemberListener();
         super.dispose();
     }
@@ -176,30 +175,6 @@ export class ThreadMessagePreviewViewModel
         this.threadListenerCleanups = [];
     }
 
-    private setupEventListeners(mxEvent?: MatrixEvent): void {
-        if (this.watchedEvent === mxEvent) return;
-
-        this.teardownEventListeners();
-        this.watchedEvent = mxEvent;
-
-        if (!mxEvent) return;
-
-        mxEvent.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
-        mxEvent.on(MatrixEventEvent.Decrypted, this.onEventContentChanged);
-        this.eventListenerCleanups.push(() => {
-            mxEvent.off(MatrixEventEvent.Replaced, this.onEventContentChanged);
-            mxEvent.off(MatrixEventEvent.Decrypted, this.onEventContentChanged);
-        });
-    }
-
-    private teardownEventListeners(): void {
-        for (const cleanup of this.eventListenerCleanups) {
-            cleanup();
-        }
-        this.eventListenerCleanups = [];
-        this.watchedEvent = undefined;
-    }
-
     private setupMemberListener(mxEvent?: MatrixEvent): void {
         const userId = ThreadMessagePreviewViewModel.getProfileUserId(mxEvent);
         const room = this.getProfileRoom();
@@ -253,7 +228,7 @@ export class ThreadMessagePreviewViewModel
     private async updateFromThread(): Promise<void> {
         const requestId = ++this.previewRequestId;
         const lastReply = this.props.thread.replyToEvent ?? undefined;
-        this.setupEventListeners(lastReply);
+        this.eventContentListener.setEvent(lastReply, this.onEventContentChanged);
         this.setupMemberListener(lastReply);
 
         if (!lastReply) {
@@ -303,22 +278,15 @@ export class ThreadMessagePreviewViewModel
             return;
         }
 
-        const preview = MessagePreviewStore.instance.generatePreviewForEvent(mxEvent);
+        const preview = getEventPreviewContent(mxEvent, this.previewContentCache);
         if (!preview) {
             this.setHidden();
             return;
         }
 
-        const prefix = ThreadMessagePreviewViewModel.getPreviewPrefix(
-            mxEvent.getType(),
-            mxEvent.getContent().msgtype as MsgType | undefined,
-        );
-        const previewContent = this.getPreviewContent(preview, prefix);
-
         this.snapshot.merge({
             ...baseSnapshot,
-            previewContent,
-            previewTooltip: prefix ? undefined : preview,
+            ...preview,
             isVisible: true,
         });
     }
@@ -370,50 +338,6 @@ export class ThreadMessagePreviewViewModel
             previewTooltip: undefined,
             showDisplayName: this.props.showDisplayName,
         });
-    }
-
-    private getPreviewContent(preview: string, prefix: string | null): ReactNode {
-        const key = `${prefix ?? ""}\u0000${preview}`;
-        if (this.previewContentKey === key) {
-            return this.previewContent;
-        }
-
-        this.previewContentKey = key;
-        this.previewContent = prefix
-            ? _t(
-                  "event_preview|preview",
-                  {
-                      prefix,
-                      preview,
-                  },
-                  {
-                      bold: (sub) => <strong>{sub}</strong>,
-                  },
-              )
-            : preview;
-
-        return this.previewContent;
-    }
-
-    private static getPreviewPrefix(type: string, msgType?: MsgType): string | null {
-        switch (type) {
-            case M_POLL_START.name:
-                return _t("event_preview|prefix|poll");
-            default:
-        }
-
-        switch (msgType) {
-            case MsgType.Audio:
-                return _t("event_preview|prefix|audio");
-            case MsgType.Image:
-                return _t("event_preview|prefix|image");
-            case MsgType.Video:
-                return _t("event_preview|prefix|video");
-            case MsgType.File:
-                return _t("event_preview|prefix|file");
-            default:
-                return null;
-        }
     }
 
     private static getDisplayMember(
