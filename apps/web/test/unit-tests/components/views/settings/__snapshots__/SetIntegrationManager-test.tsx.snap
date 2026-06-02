@@ -2,7 +2,7 @@
 
 exports[`SetIntegrationManager should render manage integrations sections 1`] = `
 <form
-  class="_root_19upo_16 mx_SetIntegrationManager"
+  class="_root_1o4d9_17 mx_SetIntegrationManager"
   data-testid="mx_SetIntegrationManager"
 >
   <div
@@ -42,10 +42,10 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
     Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
   </div>
   <div
-    class="_inline-field_19upo_32"
+    class="_inline-field_1o4d9_33"
   >
     <div
-      class="_inline-field-control_19upo_44"
+      class="_inline-field-control_1o4d9_45"
     >
       <div
         class="_container_udcm8_10"
@@ -62,10 +62,10 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
       </div>
     </div>
     <div
-      class="_inline-field-body_19upo_38"
+      class="_inline-field-body_1o4d9_39"
     >
       <label
-        class="_label_19upo_59"
+        class="_label_1o4d9_60"
         for="react-use-id-1"
       >
         Enable the integration manager
