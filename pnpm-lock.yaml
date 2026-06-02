@@ -633,7 +633,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b15f7ec26a0b2501b75ba8e63e5536b22c4f8cc8
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -698,8 +698,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0
       ua-parser-js:
-        specifier: 1.0.40
-        version: 1.0.40
+        specifier: 1.0.41
+        version: 1.0.41
       what-input:
         specifier: ^5.2.10
         version: 5.2.12
@@ -10276,8 +10276,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b15f7ec26a0b2501b75ba8e63e5536b22c4f8cc8:
+    resolution: {gitHosted: true, integrity: sha512-IrkcjEY8t4qhVEs6H9Yurs/tHjgcm0ePkYHwlid/ii/4PkVRAC/IPjFGYPFQAvhhB5cy6Uu6zRiZKSSKt4mysg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b15f7ec26a0b2501b75ba8e63e5536b22c4f8cc8}
     version: 41.6.0
     engines: {node: '>=22.0.0'}
 
@@ -13054,8 +13054,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  ua-parser-js@1.0.40:
-    resolution: {integrity: sha512-z6PJ8Lml+v3ichVojCiB8toQJBuwR42ySM4ezjXIqXK3M0HczmKQ3LF4rhU55PfD99KEEXQG6yb7iOMyvYuHew==}
+  ua-parser-js@1.0.41:
+    resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
 
   uc.micro@2.1.0:
@@ -23958,7 +23958,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68e5cdea91fddbb72023e12dd5f57206a3a1ef0d:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b15f7ec26a0b2501b75ba8e63e5536b22c4f8cc8:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.2.0
@@ -27424,7 +27424,7 @@ snapshots:
 
   typescript@6.0.3: {}
 
-  ua-parser-js@1.0.40: {}
+  ua-parser-js@1.0.41: {}
 
   uc.micro@2.1.0: {}
 
