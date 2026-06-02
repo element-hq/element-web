@@ -992,7 +992,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const renderInputs = this.createRenderInputs(displayInfo);
         const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = renderInputs;
 
-        const eventTileRenderState = EventTileViewModel.createRenderState(this.createViewModelProps(renderInputs));
+        this.viewModel.setProps(this.createViewModelProps(renderInputs));
+        const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;
 
         const lineClasses = eventTileRenderState.line.className;
