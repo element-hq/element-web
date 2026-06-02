@@ -31,13 +31,6 @@ const slowTestReporter: Reporter = {
 // if we're running under GHA, enable the GHA & Sonar reporters
 if (env["GITHUB_ACTIONS"] !== undefined) {
     reporters.push(["github-actions", { silent: false }]);
-    reporters.push([
-        "vitest-sonar-reporter",
-        {
-            outputFile: "coverage/sonar-report.xml",
-            onWritePath: (path): string => `${process.cwd()}/${path}`,
-        },
-    ]);
 
     // if we're running against the develop branch, also enable the slow test reporter
     if (env["GITHUB_REF"] == "refs/heads/develop") {

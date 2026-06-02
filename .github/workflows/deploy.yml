@@ -91,11 +91,9 @@ jobs:
                   check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
 
             - name: Deploy to Cloudflare Pages
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }}
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }} --branch main
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-                  branch: main

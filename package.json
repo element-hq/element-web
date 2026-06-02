@@ -22,7 +22,8 @@
         "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
         "docs:dev": "vitepress dev docs",
         "docs:build": "vitepress build docs",
-        "docs:preview": "vitepress preview docs"
+        "docs:preview": "vitepress preview docs",
+        "coverage:diff": "diff-cover --config-file diff-cover.toml apps/*/coverage/lcov.info packages/*/coverage/lcov.info"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
