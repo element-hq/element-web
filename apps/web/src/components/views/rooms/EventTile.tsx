@@ -54,7 +54,12 @@ import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
+import {
+    haveRendererForEvent,
+    isMessageEvent,
+    renderTile,
+    type EventTileTypeProps,
+} from "../../../events/EventTileFactory";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
@@ -269,6 +274,12 @@ interface EventTileRenderInputs {
     hasReactionsRow: boolean;
     threadState: EventTileThreadState;
     isOwnEvent: boolean;
+}
+
+interface EventTileRootRenderState {
+    tileClasses: string;
+    tileAriaLive?: "off";
+    scrollToken?: string;
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
@@ -765,6 +776,58 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return "#";
     }
 
+    private createRootAttributes(
+        { tileClasses, tileAriaLive, scrollToken }: EventTileRootRenderState,
+        ariaAtomic: true | "true" = true,
+    ): Record<string, unknown> {
+        return {
+            "className": tileClasses,
+            "aria-live": tileAriaLive,
+            "aria-atomic": ariaAtomic,
+            "data-scroll-tokens": scrollToken,
+        };
+    }
+
+    private createInteractiveRootAttributes(
+        rootRenderState: EventTileRootRenderState,
+        ariaAtomic: true | "true" = true,
+    ): Record<string, unknown> {
+        return {
+            ...this.createRootAttributes(rootRenderState, ariaAtomic),
+            ref: this.ref,
+            onMouseEnter: this.onMouseEnter,
+            onMouseLeave: this.onMouseLeave,
+            onFocus: this.onFocusWithin,
+            onBlur: this.onBlurWithin,
+        };
+    }
+
+    private createRenderTileProps({
+        replacingEventId,
+        isSeeingThroughMessageHiddenForModeration,
+        permalinkCreator = this.props.permalinkCreator,
+    }: {
+        replacingEventId?: string;
+        isSeeingThroughMessageHiddenForModeration?: boolean;
+        permalinkCreator?: RoomPermalinkCreator;
+    }): EventTileTypeProps {
+        const tileProps: EventTileTypeProps = {
+            ...this.props,
+            ref: this.tile,
+            isSeeingThroughMessageHiddenForModeration,
+            highlights: this.props.highlights,
+            highlightLink: this.props.highlightLink,
+            permalinkCreator,
+            showHiddenEvents: this.context.showHiddenEvents,
+        };
+
+        if (replacingEventId !== undefined) {
+            tileProps.replacingEventId = replacingEventId;
+        }
+
+        return tileProps;
+    }
+
     private createRenderInputs(
         displayInfo = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
@@ -916,6 +979,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
         const scrollToken = eventTileRenderState.root.scrollToken;
+        const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
 
         const avatar = (
             <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
@@ -1018,19 +1082,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "ref": this.ref,
-                        "className": tileClasses,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": true,
-                        "data-scroll-tokens": scrollToken,
+                        ...this.createInteractiveRootAttributes(rootRenderState),
                         "data-has-reply": !!replyChain,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
                         "data-event-id": this.props.mxEvent.getId(),
-                        "onMouseEnter": this.onMouseEnter,
-                        "onMouseLeave": this.onMouseLeave,
-                        "onFocus": this.onFocusWithin,
-                        "onBlur": this.onBlurWithin,
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
@@ -1045,20 +1101,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         >
                             {this.renderContextMenu()}
                             {replyChain}
-                            {renderTile(TimelineRenderingType.Thread, {
-                                ...this.props,
-
-                                // overrides
-                                ref: this.tile,
-                                replacingEventId,
-                                isSeeingThroughMessageHiddenForModeration,
-
-                                // appease TS
-                                highlights: this.props.highlights,
-                                highlightLink: this.props.highlightLink,
-                                permalinkCreator: this.props.permalinkCreator!,
-                                showHiddenEvents: this.context.showHiddenEvents,
-                            })}
+                            {renderTile(
+                                TimelineRenderingType.Thread,
+                                this.createRenderTileProps({
+                                    replacingEventId,
+                                    isSeeingThroughMessageHiddenForModeration,
+                                    permalinkCreator: this.props.permalinkCreator!,
+                                }),
+                            )}
                             {actionBar}
                             {linkedTimestamp}
                             {msgOption}
@@ -1086,20 +1136,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "ref": this.ref,
-                        "className": tileClasses,
+                        ...this.createInteractiveRootAttributes(rootRenderState, "true"),
                         "tabIndex": -1,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": "true",
-                        "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
                         "data-shape": this.context.timelineRenderingType,
                         "data-self": isOwnEvent,
                         "data-has-reply": !!replyChain,
-                        "onMouseEnter": this.onMouseEnter,
-                        "onMouseLeave": this.onMouseLeave,
-                        "onFocus": this.onFocusWithin,
-                        "onBlur": this.onBlurWithin,
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1169,45 +1211,29 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 );
             }
             case TimelineRenderingType.File: {
-                return React.createElement(
-                    this.props.as || "li",
-                    {
-                        "className": tileClasses,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": true,
-                        "data-scroll-tokens": scrollToken,
-                    },
-                    [
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            key="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                                {avatar}
-                                {sender}
-                                {timestamp}
-                            </div>
-                        </a>,
-                        <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
-                            {this.renderContextMenu()}
-                            {renderTile(TimelineRenderingType.File, {
-                                ...this.props,
-
-                                // overrides
-                                ref: this.tile,
+                return React.createElement(this.props.as || "li", this.createRootAttributes(rootRenderState), [
+                    <a
+                        className="mx_EventTile_senderDetailsLink"
+                        key="mx_EventTile_senderDetailsLink"
+                        href={permalink}
+                        onClick={this.onPermalinkClicked}
+                    >
+                        <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
+                            {avatar}
+                            {sender}
+                            {timestamp}
+                        </div>
+                    </a>,
+                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        {this.renderContextMenu()}
+                        {renderTile(
+                            TimelineRenderingType.File,
+                            this.createRenderTileProps({
                                 isSeeingThroughMessageHiddenForModeration,
-
-                                // appease TS
-                                highlights: this.props.highlights,
-                                highlightLink: this.props.highlightLink,
-                                permalinkCreator: this.props.permalinkCreator,
-                                showHiddenEvents: this.context.showHiddenEvents,
-                            })}
-                        </div>,
-                    ],
-                );
+                            }),
+                        )}
+                    </div>,
+                ]);
             }
 
             default: {
@@ -1216,20 +1242,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "ref": this.ref,
-                        "className": tileClasses,
+                        ...this.createInteractiveRootAttributes(rootRenderState, "true"),
                         "tabIndex": -1,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": "true",
-                        "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
                         "data-event-id": this.props.mxEvent.getId(),
                         "data-has-reply": !!replyChain,
-                        "onMouseEnter": this.onMouseEnter,
-                        "onMouseLeave": this.onMouseLeave,
-                        "onFocus": this.onFocusWithin,
-                        "onBlur": this.onBlurWithin,
                     },
                     <>
                         {ircTimestamp}
@@ -1246,19 +1264,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {groupTimestamp}
                             {groupPadlock}
                             {replyChain}
-                            {renderTile(this.context.timelineRenderingType, {
-                                ...this.props,
-
-                                // overrides
-                                ref: this.tile,
-                                isSeeingThroughMessageHiddenForModeration,
-
-                                // appease TS
-                                highlights: this.props.highlights,
-                                highlightLink: this.props.highlightLink,
-                                permalinkCreator: this.props.permalinkCreator,
-                                showHiddenEvents: this.context.showHiddenEvents,
-                            })}
+                            {renderTile(
+                                this.context.timelineRenderingType,
+                                this.createRenderTileProps({
+                                    isSeeingThroughMessageHiddenForModeration,
+                                }),
+                            )}
                             {actionBar}
                             {eventTileRenderState.footer.showInIrcLayout && (
                                 <>
