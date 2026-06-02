@@ -28,6 +28,10 @@ describe("UserMenu", () => {
         const { container } = render(<Condensed />);
         expect(container).toMatchSnapshot();
     });
+    it("renders the status emoji when set", async () => {
+        const { container } = render(<WithStatusEmoji />);
+        expect(container).toMatchSnapshot();
+    });
     it("renders a menu", async () => {
         const { baseElement, getByRole } = render(<Default />);
         await userEvent.click(getByRole("button"));
@@ -44,10 +48,6 @@ describe("UserMenu", () => {
     });
     it("renders a menu without an avatar", async () => {
         const { baseElement } = render(<NoAvatar />);
-        expect(baseElement).toMatchSnapshot();
-    });
-    it("renders the status emoji when set", async () => {
-        const { baseElement } = render(<WithStatusEmoji />);
         expect(baseElement).toMatchSnapshot();
     });
 });
