@@ -23,8 +23,8 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
-import { validateUserStatus, type UserStatus } from "../hooks/useUserStatus";
 import SettingsStore from "../settings/SettingsStore";
+import { UserStatus, validateUserStatus } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;
