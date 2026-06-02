@@ -1182,7 +1182,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                            <EventTilePreviewBody mxEvent={this.props.mxEvent} />
+                            <EventTilePreviewBody eventTileViewModel={this.viewModel} mxEvent={this.props.mxEvent} />
                             <EventTileThreadPanelSummary
                                 eventTileViewModel={this.viewModel}
                                 threadState={threadState}
