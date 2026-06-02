@@ -886,3 +886,61 @@ exports[`UserMenu > renders condensed view 1`] = `
   </div>
 </div>
 `;
+
+exports[`UserMenu > renders the status emoji when set 1`] = `
+<body>
+  
+  
+
+
+  <div>
+    <div
+      class="UserMenu-module_wrapper"
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="UserMenu-module_triggerButton"
+        data-state="closed"
+        id="radix-react-use-id-1"
+        type="button"
+      >
+        <div
+          class="UserMenu-module_avatarWrapper"
+        >
+          <span
+            aria-label="@person-name:homeserver.com"
+            class="_avatar_va14e_8"
+            data-color="1"
+            data-type="round"
+            role="img"
+            style="--cpd-avatar-size: 36px;"
+          >
+            <img
+              alt=""
+              class="_image_va14e_43"
+              data-type="round"
+              height="36px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="/static/element.png"
+              width="36px"
+            />
+          </span>
+          <span
+            class="UserMenu-module_statusEmoji"
+          >
+            🐹
+          </span>
+        </div>
+      </button>
+      <span
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Sally Sanderson
+      </span>
+    </div>
+  </div>
+</body>
+`;
