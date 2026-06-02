@@ -56,10 +56,17 @@ import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
+import { MEDIA_BATCH_CONTENT_KEY, type MediaBatchEventContent, type MediaBatchMetadata } from "./utils/MediaBatch";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
+
+interface SendContentListToRoomOptions {
+    context?: TimelineRenderingType;
+    sharedCaption?: string;
+    skipConfirmation?: boolean;
+}
 
 export class UploadCanceledError extends Error {}
 export class UploadFailedError extends Error {
@@ -443,8 +450,13 @@ export default class ContentMessages {
         relation: IEventRelation | undefined,
         replyToEvent: MatrixEvent | undefined,
         matrixClient: MatrixClient,
-        context = TimelineRenderingType.Room,
+        contextOrOptions: TimelineRenderingType | SendContentListToRoomOptions = TimelineRenderingType.Room,
     ): Promise<void> {
+        const options: SendContentListToRoomOptions =
+            typeof contextOrOptions === "object" ? contextOrOptions : { context: contextOrOptions };
+        const context = options.context ?? TimelineRenderingType.Room;
+        const providedSharedCaption = options.sharedCaption?.trim() || undefined;
+        const skipConfirmation = options.skipConfirmation ?? false;
         if (matrixClient.isGuest()) {
             dis.dispatch({ action: "require_registration" });
             return;
@@ -484,24 +496,59 @@ export default class ContentMessages {
         }
 
         let uploadAll = false;
+        let filesToUpload = okFiles;
+        let sharedCaption: string | undefined;
+        const allImages = okFiles.length > 1 && okFiles.every((file) => file.type.startsWith("image/"));
+
+        if (skipConfirmation) {
+            sharedCaption = providedSharedCaption;
+            uploadAll = true;
+        } else if (allImages) {
+            const { finished } = Modal.createDialog(UploadConfirmDialog, {
+                file: okFiles[0],
+                files: okFiles,
+                currentIndex: 0,
+                totalFiles: okFiles.length,
+                allowCaption: true,
+            });
+            const [shouldContinue, , uploadCaption, selectedFiles] = await finished;
+            if (!shouldContinue) return;
+            filesToUpload = selectedFiles?.length ? selectedFiles : okFiles;
+            if (filesToUpload.length === 0) return;
+            sharedCaption = uploadCaption;
+            uploadAll = true;
+        }
+
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
+        const mediaBatchId =
+            filesToUpload.length > 1 && filesToUpload.every((file) => file.type.startsWith("image/"))
+                ? crypto.randomUUID()
+                : undefined;
         let promBefore: Promise<any> = Promise.resolve();
-        for (let i = 0; i < okFiles.length; ++i) {
-            const file = okFiles[i];
+        for (let i = 0; i < filesToUpload.length; ++i) {
+            const file = filesToUpload[i];
             const loopPromiseBefore = promBefore;
+            const mediaBatch: MediaBatchMetadata | undefined = mediaBatchId
+                ? { id: mediaBatchId, index: i, count: filesToUpload.length }
+                : undefined;
+            let caption: string | undefined;
 
-            if (!uploadAll) {
+            if (sharedCaption && i === 0 && file.type.startsWith("image/")) {
+                caption = sharedCaption;
+            } else if (!uploadAll) {
                 const { finished } = Modal.createDialog(UploadConfirmDialog, {
                     file,
                     currentIndex: i,
-                    totalFiles: okFiles.length,
+                    totalFiles: filesToUpload.length,
+                    allowCaption: true,
                 });
-                const [shouldContinue, shouldUploadAll] = await finished;
+                const [shouldContinue, shouldUploadAll, uploadCaption] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
                     uploadAll = true;
                 }
+                caption = filesToUpload.length === 1 && file.type.startsWith("image/") ? uploadCaption : undefined;
             }
 
             promBefore = doMaybeLocalRoomAction(
@@ -514,6 +561,8 @@ export default class ContentMessages {
                         matrixClient,
                         replyToEvent ?? undefined,
                         loopPromiseBefore,
+                        caption,
+                        mediaBatch,
                     ),
                 matrixClient,
             );
@@ -560,15 +609,21 @@ export default class ContentMessages {
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
+        caption?: string,
+        mediaBatch?: MediaBatchMetadata,
     ): Promise<void> {
         const fileName = file.name || _t("common|attachment");
+        const trimmedCaption = caption?.trim();
         const content: Omit<MediaEventContent, "info"> & { info: Partial<MediaEventInfo> } = {
-            body: fileName,
+            body: trimmedCaption || fileName,
             info: {
                 size: file.size,
             },
             msgtype: MsgType.File, // set more specifically later
         };
+        if (trimmedCaption) {
+            content.filename = fileName;
+        }
 
         // Attach mentions, which really only applies if there's a replyToEvent.
         attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
@@ -645,6 +700,10 @@ export default class ContentMessages {
 
             if (upload.cancelled) throw new UploadCanceledError();
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
+
+            if (mediaBatch && content.msgtype === MsgType.Image) {
+                (content as MediaEventContent & MediaBatchEventContent)[MEDIA_BATCH_CONTENT_KEY] = mediaBatch;
+            }
 
             const response = await matrixClient.sendMessage(roomId, threadId ?? null, content as MediaEventContent);
 

@@ -23,7 +23,9 @@ import { createTestClient, flushPromises, mkEvent } from "../test-utils";
 import { BlurhashEncoder } from "../../src/BlurhashEncoder";
 import Modal from "../../src/Modal";
 import ErrorDialog from "../../src/components/views/dialogs/ErrorDialog";
+import UploadConfirmDialog from "../../src/components/views/dialogs/UploadConfirmDialog";
 import { _t } from "../../src/languageHandler";
+import { MEDIA_BATCH_CONTENT_KEY } from "../../src/utils/MediaBatch";
 
 jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
 
@@ -109,6 +111,79 @@ describe("ContentMessages", () => {
                     msgtype: "m.image",
                 }),
             );
+        });
+
+        it("should send captioned image content with filename separate from body", async () => {
+            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const file = new File([], "screenshot.png", { type: "image/png" });
+            await contentMessages.sendContentToRoom(
+                file,
+                roomId,
+                undefined,
+                client,
+                undefined,
+                undefined,
+                "Bug: the dashboard chart is blank",
+            );
+            expect(client.sendMessage).toHaveBeenCalledTimes(1);
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.image",
+                    filename: "screenshot.png",
+                    body: "Bug: the dashboard chart is blank",
+                }),
+            );
+        });
+
+        it("adds media batch metadata to image content when provided", async () => {
+            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const file = new File([], "screenshot.png", { type: "image/png" });
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined, undefined, undefined, {
+                id: "batch-1",
+                index: 1,
+                count: 2,
+            });
+
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.image",
+                    [MEDIA_BATCH_CONTENT_KEY]: {
+                        id: "batch-1",
+                        index: 1,
+                        count: 2,
+                    },
+                }),
+            );
+        });
+
+        it("should keep the filename as body when image caption is blank", async () => {
+            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const file = new File([], "screenshot.png", { type: "image/png" });
+            await contentMessages.sendContentToRoom(
+                file,
+                roomId,
+                undefined,
+                client,
+                undefined,
+                undefined,
+                "   ",
+            );
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.image",
+                    body: "screenshot.png",
+                }),
+            );
+            expect(mocked(client.sendMessage).mock.calls[0][2]).not.toHaveProperty("filename");
         });
 
         it("should use m.image for PNG files which cannot be parsed but successfully thumbnail", async () => {
@@ -316,6 +391,145 @@ describe("ContentMessages", () => {
                 }),
             );
             dialogSpy.mockRestore();
+        });
+    });
+
+    describe("sendContentListToRoom", () => {
+        beforeEach(() => {
+            (contentMessages as unknown as { mediaConfig: Record<string, never> }).mediaConfig = {};
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            );
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("passes allowCaption to room upload confirmations and forwards single-image captions", async () => {
+            const file = new File([], "screenshot.png", { type: "image/png" });
+            const sendSpy = jest.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue();
+            const dialogSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, false, "Bug: the dashboard chart is blank"]),
+                close: jest.fn(),
+            } as any);
+
+            await contentMessages.sendContentListToRoom([file], roomId, undefined, undefined, client);
+
+            expect(dialogSpy).toHaveBeenCalledWith(UploadConfirmDialog, {
+                file,
+                currentIndex: 0,
+                totalFiles: 1,
+                allowCaption: true,
+            });
+            expect(sendSpy).toHaveBeenCalledWith(
+                file,
+                roomId,
+                undefined,
+                client,
+                undefined,
+                expect.any(Promise),
+                "Bug: the dashboard chart is blank",
+                undefined,
+            );
+        });
+
+        it("shows one shared confirmation for multi-image uploads and forwards the caption to the first image", async () => {
+            const files = [
+                new File([], "first.png", { type: "image/png" }),
+                new File([], "second.png", { type: "image/png" }),
+            ];
+            const selectedFiles = [files[0], files[1]];
+            const sendSpy = jest.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue();
+            const dialogSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, true, "Compare these two screens", selectedFiles]),
+                close: jest.fn(),
+            } as any);
+
+            await contentMessages.sendContentListToRoom(files, roomId, undefined, undefined, client);
+
+            expect(dialogSpy).toHaveBeenCalledTimes(1);
+            expect(dialogSpy).toHaveBeenCalledWith(UploadConfirmDialog, {
+                file: files[0],
+                files,
+                currentIndex: 0,
+                totalFiles: 2,
+                allowCaption: true,
+            });
+            expect(sendSpy).toHaveBeenNthCalledWith(
+                1,
+                files[0],
+                roomId,
+                undefined,
+                client,
+                undefined,
+                expect.any(Promise),
+                "Compare these two screens",
+                expect.objectContaining({
+                    index: 0,
+                    count: 2,
+                }),
+            );
+            expect(sendSpy).toHaveBeenNthCalledWith(
+                2,
+                files[1],
+                roomId,
+                undefined,
+                client,
+                undefined,
+                expect.any(Promise),
+                undefined,
+                expect.objectContaining({
+                    index: 1,
+                    count: 2,
+                }),
+            );
+            expect(sendSpy.mock.calls[0][7]?.id).toEqual(sendSpy.mock.calls[1][7]?.id);
+        });
+
+        it("can skip confirmation and apply a provided shared caption to a multi-image upload batch", async () => {
+            const files = [
+                new File([], "first.png", { type: "image/png" }),
+                new File([], "second.png", { type: "image/png" }),
+            ];
+            const sendSpy = jest.spyOn(contentMessages, "sendContentToRoom").mockResolvedValue();
+            const dialogSpy = jest.spyOn(Modal, "createDialog");
+
+            await contentMessages.sendContentListToRoom(files, roomId, undefined, undefined, client, {
+                sharedCaption: "Compare these two screens",
+                skipConfirmation: true,
+            });
+
+            expect(dialogSpy).not.toHaveBeenCalled();
+            expect(sendSpy).toHaveBeenNthCalledWith(
+                1,
+                files[0],
+                roomId,
+                undefined,
+                client,
+                undefined,
+                expect.any(Promise),
+                "Compare these two screens",
+                expect.objectContaining({
+                    index: 0,
+                    count: 2,
+                }),
+            );
+            expect(sendSpy).toHaveBeenNthCalledWith(
+                2,
+                files[1],
+                roomId,
+                undefined,
+                client,
+                undefined,
+                expect.any(Promise),
+                undefined,
+                expect.objectContaining({
+                    index: 1,
+                    count: 2,
+                }),
+            );
+            expect(sendSpy.mock.calls[0][7]?.id).toEqual(sendSpy.mock.calls[1][7]?.id);
         });
     });
 

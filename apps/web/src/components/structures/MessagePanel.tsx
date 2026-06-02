@@ -54,6 +54,7 @@ import { hasThreadSummary } from "../../utils/EventUtils";
 import { type BaseGrouper } from "./grouper/BaseGrouper";
 import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
+import { MediaBatchGrouper } from "./grouper/MediaBatchGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
@@ -749,6 +750,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         isGrouped = false,
         nextEvent: WrappedEvent | null = null,
         nextEventWithTile: MatrixEvent | null = null,
+        mediaBatchEvents?: MatrixEvent[],
     ): ReactNode[] {
         const mxEv = wrappedEvent.event;
         const ret: ReactNode[] = [];
@@ -834,6 +836,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 showReadReceipts={this.props.showReadReceipts}
                 callEventGrouper={callEventGrouper}
                 hideSender={this.state.hideSender}
+                mediaBatchEvents={mediaBatchEvents}
             />,
         );
 
@@ -1104,7 +1107,7 @@ export interface WrappedEvent {
 }
 
 // all the grouper classes that we use, ordered by priority
-const groupers = [CreationGrouper, MainGrouper];
+const groupers = [CreationGrouper, MediaBatchGrouper, MainGrouper];
 
 /**
  * Look through the supplied list of WrappedEvent, and return the first

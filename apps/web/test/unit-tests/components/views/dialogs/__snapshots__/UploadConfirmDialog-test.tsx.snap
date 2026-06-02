@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`<UploadConfirmDialog /> should display image preview 1`] = `
+exports[`<UploadConfirmDialog /> should display image preview without a caption field by default 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"
@@ -25,7 +25,8 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
         Upload files
       </h1>
     </div>
-    <div
+    <form
+      class="_root_19upo_16"
       id="mx_Dialog_content"
     >
       <div
@@ -48,22 +49,22 @@ exports[`<UploadConfirmDialog /> should display image preview 1`] = `
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="mx_Dialog_buttons"
-    >
-      <span
-        class="mx_Dialog_buttons_row"
+      <div
+        class="mx_Dialog_buttons"
       >
-        <button
-          class="mx_Dialog_primary"
-          data-testid="dialog-primary-button"
-          type="button"
+        <span
+          class="mx_Dialog_buttons_row"
         >
-          Upload
-        </button>
-      </span>
-    </div>
+          <button
+            class="mx_Dialog_primary"
+            data-testid="dialog-primary-button"
+            type="button"
+          >
+            Upload
+          </button>
+        </span>
+      </div>
+    </form>
     <div
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"

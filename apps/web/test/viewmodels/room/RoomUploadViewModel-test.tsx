@@ -149,6 +149,44 @@ describe("RoomUploadViewModel", () => {
                 TimelineRenderingType.Thread,
             );
         });
+
+        it("can route selected files through an injected handler before upload behavior is chosen", async () => {
+            const handleFiles = jest.fn().mockResolvedValue(undefined);
+            const vm = new RoomUploadViewModel(
+                room,
+                client,
+                TimelineRenderingType.Thread,
+                dis,
+                undefined,
+                undefined,
+                () => {},
+                undefined,
+                { handleFiles },
+            );
+            const replyEvent = mkEvent({ event: true, type: "anything", user: "anyone", content: {} });
+            vm.setReplyToEvent(replyEvent);
+            const threadRelation: IEventRelation = { key: "foo" };
+            vm.setThreadRelation(threadRelation);
+            const files = [
+                {
+                    name: "fake.png",
+                    size: 1024,
+                    type: "image/png",
+                },
+            ] as unknown as FileList;
+
+            await vm.initiateViaInputFiles(files);
+
+            expect(handleFiles).toHaveBeenCalledWith(
+                files,
+                room.roomId,
+                threadRelation,
+                replyEvent,
+                client,
+                TimelineRenderingType.Thread,
+            );
+            expect(sendContentListToRoomSpy).not.toHaveBeenCalled();
+        });
     });
 
     describe("uploads via data transfer", () => {

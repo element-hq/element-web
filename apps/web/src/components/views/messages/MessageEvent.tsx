@@ -17,6 +17,7 @@ import {
     M_LOCATION,
     M_POLL_START,
     type IContent,
+    type MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { MjolnirBodyView, UnknownBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
@@ -41,6 +42,7 @@ import {
     renderMBody,
 } from "./MBodyFactory";
 import { TextualBodyFactory } from "./TextualBodyFactory";
+import MediaBatchBody, { hasMediaCaption } from "./MediaBatchBody";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -50,6 +52,11 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
 
     // helper function to access relations for this event
     getRelationsForEvent?: GetRelationsForEvent;
+
+    /**
+     * Consecutive standard media events to render as one visual batch.
+     */
+    mediaBatchEvents?: MatrixEvent[];
 
     isSeeingThroughMessageHiddenForModeration?: boolean;
 
@@ -311,10 +318,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
         }
 
-        const hasCaption =
-            [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
-            content.filename &&
-            content.filename !== content.body;
+        const hasCaption = hasMediaCaption(this.props.mxEvent);
         const bodyProps: IBodyProps = {
             ref: this.body,
             mxEvent: this.props.mxEvent,
@@ -333,6 +337,10 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             inhibitInteraction: this.props.inhibitInteraction,
             id: this.props.id,
         };
+        if (this.props.mediaBatchEvents?.length && msgtype === MsgType.Image) {
+            return <MediaBatchBody {...bodyProps} mediaBatchEvents={this.props.mediaBatchEvents} />;
+        }
+
         if (hasCaption) {
             return <CaptionBody {...bodyProps} WrappedBodyType={BodyType} />;
         }
