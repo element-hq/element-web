@@ -28,8 +28,9 @@ try {
     const configFile = await fs.readFile(configPath, "utf-8");
     for (const line of configFile.trim().split("\n")) {
         if (!line || line.startsWith("#")) continue;
-        const [dependency, path] = line.split("=");
-        const dependencyPath = join(nodeModulesPath, dependency);
+        const [dependency, path, dir] = line.split("=");
+        const nodeModules = dir ? join(dir, "node_modules") : nodeModulesPath;
+        const dependencyPath = join(nodeModules, dependency);
 
         try {
             try {

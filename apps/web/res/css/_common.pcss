@@ -163,10 +163,10 @@ b {
     font-weight: bold;
 }
 
-/* Keep the legacy link colour without overriding Compound anchors. */
-a:where(:not([data-kind])):hover,
-a:where(:not([data-kind])):link,
-a:where(:not([data-kind])):visited {
+/* Keep the legacy link colour without overriding Compound anchors or shared timestamp styling. */
+a:where(:not([data-kind]):not(.mx_MessageTimestamp)):hover,
+a:where(:not([data-kind]):not(.mx_MessageTimestamp)):link,
+a:where(:not([data-kind]):not(.mx_MessageTimestamp)):visited {
     color: $accent-alt;
 }
 
@@ -600,6 +600,8 @@ legend {
         .mx_InviteDialog_section button,
         .mx_InviteDialog_editor button,
         .mx_UnknownIdentityUsersWarningDialog button,
+        .mx_ThreadActionBar button,
+        .mx_HistoryActionBar button,
         [data-kind],
         [class|="maplibregl"]
     ),
@@ -912,16 +914,8 @@ legend {
     overflow: hidden;
 }
 
-/* This class is used extensively in element-web and are included here for compatibility with the existing timeline and layout.
-/* TODO: Review mx_MessageTimestamp usage after finishing migration of timeline tiles to shared components. */
-/* https://github.com/element-hq/element-web/issues/31651 */
+/* Layout compatibility hook for timestamp placement in existing app/web timeline surfaces. */
 .mx_MessageTimestamp {
-    color: var(--cpd-color-text-secondary) !important; /* override anchor color */
-    font-size: $font-10px;
-    font-variant-numeric: tabular-nums;
     display: block; /* enable the width setting below */
     width: var(--MessageTimestamp-width);
-    white-space: nowrap;
-    user-select: none;
-    text-decoration: none;
 }

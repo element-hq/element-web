@@ -6,6 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
+import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import {
     type EventTileSenderProfileState,
@@ -31,6 +33,23 @@ import {
 } from "./EventTileDerivedState";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
+import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
+import {
+    ThreadMessagePreviewViewModel,
+    type ThreadMessagePreviewViewModelProps,
+    ThreadSummaryViewModel,
+    type ThreadSummaryViewModelProps,
+} from "./ThreadSummaryViewModel.tsx";
+import {
+    E2eMessageSharedIconViewModel,
+    type E2eMessageSharedIconViewModelProps,
+} from "./E2eMessageSharedIconViewModel";
+import {
+    ThreadListActionBarViewModel,
+    type ThreadListActionBarViewModelProps,
+} from "../../ThreadListActionBarViewModel";
+import { EventTileActionBarViewModel, type EventTileActionBarViewModelProps } from "../../EventTileActionBarViewModel";
+import { ReactionsRowViewModel, type ReactionsRowViewModelProps } from "./reactions/ReactionsRowViewModel";
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
@@ -229,8 +248,199 @@ export interface EventTileViewModelSnapshot {
     footer: EventTileFooterSnapshot;
 }
 
+/** Render-ready EventTile state consumed by the existing component. */
+export interface EventTileRenderState {
+    /** Derived EventTile view state. */
+    snapshot: EventTileViewModelSnapshot;
+    /** EventTile root render state. */
+    root: {
+        /** EventTile root CSS classes. */
+        className: string;
+        /** EventTile aria-live value. */
+        ariaLive?: "off";
+        /** Stable scroll token for the event. */
+        scrollToken?: string;
+        /** Whether the tile is rendering as a notification. */
+        isRenderingNotification: boolean;
+    };
+    /** EventTile line render state. */
+    line: {
+        /** EventTile line CSS classes. */
+        className: string;
+    };
+    /** EventTile timestamp render state. */
+    timestamp: EventTileTimestampSnapshot & {
+        /** Whether EventTile should render the placeholder timestamp used by IRC layout. */
+        showDummy: boolean;
+        /** Whether the timestamp slot belongs in the group-layout line. */
+        showInGroupLine: boolean;
+        /** Whether the timestamp slot belongs in the IRC-layout line. */
+        showInIrcLine: boolean;
+    };
+    /** EventTile E2E padlock slot state. */
+    e2ePadlock: {
+        /** Whether the padlock should render in the group-layout timestamp area. */
+        showInGroupLine: boolean;
+        /** Whether the padlock should render in the IRC-layout timestamp area. */
+        showInIrcLine: boolean;
+    };
+    /** EventTile footer slot state. */
+    footer: EventTileFooterSnapshot & {
+        /** Whether the footer belongs inside the IRC-layout message line. */
+        showInIrcLayout: boolean;
+        /** Whether the footer belongs below the message line. */
+        showInDefaultLayout: boolean;
+    };
+}
+
 /** Derives the current EventTile snapshot from component-owned inputs. */
-export class EventTileViewModel {
+export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
+    private messageTimestampViewModel?: MessageTimestampViewModel;
+    private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
+    private threadMessagePreviewViewModel?: ThreadMessagePreviewViewModel;
+    private threadSummaryViewModel?: ThreadSummaryViewModel;
+    private threadListActionBarViewModel?: ThreadListActionBarViewModel;
+    private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
+    private actionBarViewModel?: EventTileActionBarViewModel;
+    private reactionsRowViewModel?: ReactionsRowViewModel;
+
+    public constructor(props: EventTileViewModelProps) {
+        const initialRenderState = EventTileViewModel.createRenderState(props);
+
+        super(props, initialRenderState);
+    }
+
+    /** Updates root EventTile inputs and refreshes the derived render state. */
+    public setProps(props: EventTileViewModelProps): void {
+        this.props = props;
+        this.snapshot.set(EventTileViewModel.createRenderState(props));
+    }
+
+    public override dispose(): void {
+        this.messageTimestampViewModel?.dispose();
+        this.linkedMessageTimestampViewModel?.dispose();
+        this.threadMessagePreviewViewModel?.dispose();
+        this.threadSummaryViewModel?.dispose();
+        this.threadListActionBarViewModel?.dispose();
+        this.e2eMessageSharedIconViewModel?.dispose();
+        this.actionBarViewModel?.dispose();
+        this.reactionsRowViewModel?.dispose();
+        super.dispose();
+    }
+
+    /** Lazily creates and returns the plain timestamp child view model. */
+    public getMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
+        this.messageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        return this.messageTimestampViewModel;
+    }
+
+    /** Lazily creates and returns the permalink timestamp child view model. */
+    public getLinkedMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
+        this.linkedMessageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        return this.linkedMessageTimestampViewModel;
+    }
+
+    /** Lazily creates and returns the thread message preview child view model. */
+    public getThreadMessagePreviewViewModel(props: ThreadMessagePreviewViewModelProps): ThreadMessagePreviewViewModel {
+        this.threadMessagePreviewViewModel ??= new ThreadMessagePreviewViewModel(props);
+        return this.threadMessagePreviewViewModel;
+    }
+
+    /** Releases the thread message preview child view model when its adapter unmounts. */
+    public releaseThreadMessagePreviewViewModel(): void {
+        this.threadMessagePreviewViewModel?.dispose();
+        this.threadMessagePreviewViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the thread summary child view model. */
+    public getThreadSummaryViewModel(props: ThreadSummaryViewModelProps): ThreadSummaryViewModel {
+        this.threadSummaryViewModel ??= new ThreadSummaryViewModel(props);
+        return this.threadSummaryViewModel;
+    }
+
+    /** Releases the thread summary child view model when its adapter unmounts. */
+    public releaseThreadSummaryViewModel(): void {
+        this.threadSummaryViewModel?.dispose();
+        this.threadSummaryViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the thread-list action bar child view model. */
+    public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
+        this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
+        return this.threadListActionBarViewModel;
+    }
+
+    /** Lazily creates and returns the E2E message-shared icon child view model. */
+    public getE2eMessageSharedIconViewModel(props: E2eMessageSharedIconViewModelProps): E2eMessageSharedIconViewModel {
+        this.e2eMessageSharedIconViewModel ??= new E2eMessageSharedIconViewModel(props);
+        return this.e2eMessageSharedIconViewModel;
+    }
+
+    /** Releases the E2E message-shared icon child view model when its adapter unmounts. */
+    public releaseE2eMessageSharedIconViewModel(): void {
+        this.e2eMessageSharedIconViewModel?.dispose();
+        this.e2eMessageSharedIconViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the event action bar child view model. */
+    public getActionBarViewModel(props: EventTileActionBarViewModelProps): EventTileActionBarViewModel {
+        this.actionBarViewModel ??= new EventTileActionBarViewModel(props);
+        return this.actionBarViewModel;
+    }
+
+    /** Releases the event action bar child view model when its adapter unmounts. */
+    public releaseActionBarViewModel(): void {
+        this.actionBarViewModel?.dispose();
+        this.actionBarViewModel = undefined;
+    }
+
+    /** Lazily creates and returns the reactions row child view model. */
+    public getReactionsRowViewModel(props: ReactionsRowViewModelProps): ReactionsRowViewModel {
+        this.reactionsRowViewModel ??= new ReactionsRowViewModel(props);
+        return this.reactionsRowViewModel;
+    }
+
+    /** Releases the reactions row child view model when its adapter unmounts. */
+    public releaseReactionsRowViewModel(): void {
+        this.reactionsRowViewModel?.dispose();
+        this.reactionsRowViewModel = undefined;
+    }
+
+    /** Derives render-ready EventTile state from component-owned inputs. */
+    public static createRenderState(props: EventTileViewModelProps): EventTileRenderState {
+        const snapshot = EventTileViewModel.createSnapshot(props);
+        const useIRCLayout = snapshot.timestamp.displayState.useIRCLayout;
+        const showPadlock = !props.display.isBubbleMessage;
+
+        return {
+            snapshot,
+            root: {
+                className: classNames(snapshot.root.classState),
+                ariaLive: snapshot.root.ariaLive,
+                scrollToken: snapshot.root.scrollToken,
+                isRenderingNotification: snapshot.event.isRenderingNotification,
+            },
+            line: {
+                className: classNames("mx_EventTile_line", snapshot.line.classState),
+            },
+            timestamp: {
+                ...snapshot.timestamp,
+                showDummy: useIRCLayout,
+                showInGroupLine: !useIRCLayout,
+                showInIrcLine: useIRCLayout,
+            },
+            e2ePadlock: {
+                showInGroupLine: !useIRCLayout && showPadlock,
+                showInIrcLine: useIRCLayout && showPadlock,
+            },
+            footer: {
+                ...snapshot.footer,
+                showInIrcLayout: useIRCLayout,
+                showInDefaultLayout: !useIRCLayout,
+            },
+        };
+    }
+
     /** Creates an EventTile view model snapshot. */
     public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;
@@ -392,6 +602,4 @@ export class EventTileViewModel {
             noBubbleEvent: display.noBubbleEvent,
         });
     }
-
-    private constructor() {}
 }

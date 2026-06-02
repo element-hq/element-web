@@ -965,7 +965,6 @@
         "import_invalid_passphrase": "Kontrola overenia zlyhala: Nesprávne heslo?",
         "key_storage_out_of_sync": "Vaše úložisko kľúčov nie je synchronizované.",
         "key_storage_out_of_sync_description": "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.",
-        "message_shared_by": "%(displayName)s (%(userId)s ) zdieľal túto správu čase, keď ste ešte neboli v miestnosti, keď bola odoslaná.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ku ktorému je pripojený používateľ, ktorého overujete",

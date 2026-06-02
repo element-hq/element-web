@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.19",
+    "version": "1.12.20",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -34,6 +34,7 @@
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --",
         "coverage": "pnpm test --coverage",
+        "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "dependencies": {
@@ -43,7 +44,7 @@
         "@fontsource/fira-code": "^5",
         "@fontsource/inter": "catalog:",
         "@formatjs/intl-segmenter": "^12.0.0",
-        "@matrix-org/analytics-events": "^0.33.0",
+        "@matrix-org/analytics-events": "^0.36.0",
         "@matrix-org/emojibase-bindings": "^1.5.0",
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@sentry/browser": "^10.0.0",
@@ -66,6 +67,7 @@
         "domutils": "^4.0.0",
         "emojibase-regex": "^17.0.0",
         "escape-html": "^1.0.3",
+        "events": "^3.3.0",
         "file-saver": "^2.0.5",
         "filesize": "11.0.17",
         "github-markdown-css": "^5.5.1",
@@ -124,8 +126,7 @@
         "@babel/preset-env": "^7.12.11",
         "@babel/preset-react": "^7.12.10",
         "@babel/preset-typescript": "^7.12.7",
-        "@casualbot/jest-sonar-reporter": "2.7.1",
-        "@element-hq/element-call-embedded": "0.19.3",
+        "@element-hq/element-call-embedded": "0.19.4",
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",
@@ -140,7 +141,7 @@
         "@testing-library/react": "^16.0.0",
         "@testing-library/user-event": "^14.5.2",
         "@types/commonmark": "^0.27.4",
-        "@types/content-type": "^1.1.9",
+        "@types/content-type": "^2.0.0",
         "@types/css-tree": "^2.3.8",
         "@types/diff-match-patch": "^1.0.32",
         "@types/escape-html": "^1.0.1",
@@ -223,7 +224,7 @@
         "stylelint-scss": "^7.0.0",
         "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
-        "testcontainers": "^11.0.0",
+        "testcontainers": "^12.0.0",
         "typescript": "catalog:",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
@@ -235,14 +236,8 @@
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
     },
-    "@casualbot/jest-sonar-reporter": {
-        "outputDirectory": "coverage",
-        "outputName": "jest-sonar-report.xml",
-        "relativePaths": true
-    },
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800",
     "private": true
 }

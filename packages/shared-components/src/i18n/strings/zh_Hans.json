@@ -234,6 +234,7 @@
             "label": "消息操作",
             "view_in_room": "在房间中查看"
         },
+        "message_shared_by": "由于此消息在发送时你不位于此房间，%(displayName)s（%(userId)s）共享了此消息。",
         "message_timestamp_received_at": "接收于 %(dateTime)s",
         "message_timestamp_sent_at": "发送于 %(dateTime)s",
         "mjolnir": {

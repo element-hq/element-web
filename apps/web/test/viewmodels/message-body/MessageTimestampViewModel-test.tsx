@@ -120,49 +120,30 @@ describe("MessageTimestampViewModel", () => {
         });
     });
 
-    it("updates the timestamp and received timestamp", () => {
-        const vm = new MessageTimestampViewModel({
-            ts: nowDate.getTime(),
-        });
-
-        vm.setTimestamp(nowDate.getTime() + HOUR_MS);
-        vm.setReceivedTimestamp(nowDate.getTime() + DAY_MS);
-
-        expect(vm.getSnapshot()).toMatchObject({
-            ts: "09:09",
-            tsSentAt: "Fri, Dec 17, 2021, 09:09:00",
-            tsReceivedAt: "Sat, Dec 18, 2021, 08:09:00",
-        });
-    });
-
-    it("updates display options", () => {
-        const vm = new MessageTimestampViewModel({
-            ts: nowDate.getTime(),
-        });
-
-        vm.setDisplayOptions({
-            showTwelveHour: true,
-            showSeconds: true,
-        });
-
-        expect(vm.getSnapshot()).toMatchObject({
-            ts: "8:09:00 AM",
-            tsSentAt: "Fri, Dec 17, 2021, 8:09:00 AM",
-        });
-    });
-
-    it("updates tooltip, href, and handlers", () => {
+    it("updates all props in one batch", () => {
         const onClick = jest.fn();
         const onContextMenu = jest.fn();
         const vm = new MessageTimestampViewModel({
             ts: nowDate.getTime(),
         });
+        const listener = jest.fn();
+        vm.subscribe(listener);
 
-        vm.setTooltipInhibited(true);
-        vm.setHref("https://example.test/event");
-        vm.setHandlers({ onClick, onContextMenu });
+        vm.setProps({
+            ts: nowDate.getTime() + HOUR_MS,
+            receivedTs: nowDate.getTime() + DAY_MS,
+            showTwelveHour: true,
+            inhibitTooltip: true,
+            href: "https://example.test/event",
+            onClick,
+            onContextMenu,
+        });
 
+        expect(listener).toHaveBeenCalledTimes(1);
         expect(vm.getSnapshot()).toMatchObject({
+            ts: "9:09 AM",
+            tsSentAt: "Fri, Dec 17, 2021, 9:09:00 AM",
+            tsReceivedAt: "Sat, Dec 18, 2021, 8:09:00 AM",
             inhibitTooltip: true,
             href: "https://example.test/event",
         });
@@ -170,16 +151,43 @@ describe("MessageTimestampViewModel", () => {
         expect(vm.onContextMenu).toBe(onContextMenu);
     });
 
-    it("does not emit an update when props are unchanged", () => {
+    it("replaces props and clears omitted optional values", () => {
+        const onClick = jest.fn();
+        const onContextMenu = jest.fn();
         const vm = new MessageTimestampViewModel({
             ts: nowDate.getTime(),
+            receivedTs: nowDate.getTime() + DAY_MS,
+            inhibitTooltip: true,
             href: "https://example.test/event",
+            onClick,
+            onContextMenu,
         });
+
+        vm.setProps({
+            ts: nowDate.getTime() + HOUR_MS,
+        });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            ts: "09:09",
+            tsSentAt: "Fri, Dec 17, 2021, 09:09:00",
+        });
+        expect(vm.getSnapshot().tsReceivedAt).toBeUndefined();
+        expect(vm.getSnapshot().inhibitTooltip).toBeUndefined();
+        expect(vm.getSnapshot().href).toBeUndefined();
+        expect(vm.onClick).toBeUndefined();
+        expect(vm.onContextMenu).toBeUndefined();
+    });
+
+    it("does not emit an update when batched props are unchanged", () => {
+        const props = {
+            ts: nowDate.getTime(),
+            href: "https://example.test/event",
+        };
+        const vm = new MessageTimestampViewModel(props);
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setTimestamp(nowDate.getTime());
-        vm.setHref("https://example.test/event");
+        vm.setProps(props);
 
         expect(listener).not.toHaveBeenCalled();
     });

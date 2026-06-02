@@ -94,7 +94,12 @@ function createMockCrypto(): CryptoApi {
             get: jest
                 .fn()
                 .mockReturnValue(
-                    new Map([["devid", { dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") }]]),
+                    new Map([
+                        [
+                            "devid",
+                            { deviceId: "devid", dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") },
+                        ],
+                    ]),
                 ),
         }),
         getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(true, true, false)),

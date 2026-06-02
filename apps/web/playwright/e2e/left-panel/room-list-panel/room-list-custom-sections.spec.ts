@@ -9,7 +9,7 @@ import { type Page } from "@playwright/test";
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
-import { assertRoomInSection, getRoomList, getRoomListHeader, getSectionHeader } from "./utils";
+import { assertRoomInSection, dragRoomToSection, getRoomList, getRoomListHeader, getSectionHeader } from "./utils";
 
 test.describe("Room list custom sections", () => {
     test.use({
@@ -329,6 +329,22 @@ test.describe("Room list custom sections", () => {
                 await expect(roomList).toMatchScreenshot("room-list-sections-chat-moved-toast.png");
             },
         );
+
+        test("should accept drag and drop into a section created after another section exists", async ({
+            page,
+            app,
+        }) => {
+            await app.client.createRoom({ name: "room A" });
+            await app.client.createRoom({ name: "room B" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            await dragRoomToSection(page, "room A", "Personal");
+            await assertRoomInSection(page, "Personal", "room A");
+
+            await dragRoomToSection(page, "room B", "Work");
+            await assertRoomInSection(page, "Work", "room B");
+        });
 
         test("should remove a room from a custom section when toggling the same section", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });

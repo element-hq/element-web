@@ -963,7 +963,6 @@
         "import_invalid_passphrase": "Methodd y gwiriad dilysu: cyfrinair anghywir?",
         "key_storage_out_of_sync": "Nid yw eich storfa allweddi wedi'i gydweddu.",
         "key_storage_out_of_sync_description": "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.",
-        "message_shared_by": "Rhannodd %(displayName)s (%(userId)s) y neges hon gan nad oeddech chi yn yr ystafell pan gafodd ei hanfon.",
         "messages_not_secure": {
             "cause_1": "Eich gweinydd cartref",
             "cause_2": "Y gweinydd cartref y mae'r defnyddiwr rydych chi'n ei wirio wedi'i gysylltu ag ef",
