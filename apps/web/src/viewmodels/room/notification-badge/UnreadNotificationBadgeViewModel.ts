@@ -8,6 +8,7 @@
 import { type NotificationCount, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
+    type NotificationBadgeType,
     type NotificationBadgeViewSnapshot,
     type NotificationBadgeViewModel as NotificationBadgeViewModelInterface,
 } from "@element-hq/web-shared-components";
@@ -16,6 +17,22 @@ import { determineUnreadState } from "../../../RoomNotifs";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import SettingsStore from "../../../settings/SettingsStore";
 import { formatCount } from "../../../utils/FormattingUtils";
+
+const notificationChangeEvents = [
+    RoomEvent.Receipt,
+    RoomEvent.Timeline,
+    RoomEvent.Redaction,
+    RoomEvent.LocalEchoUpdated,
+    RoomEvent.MyMembership,
+];
+
+function getBadgeType(level: NotificationLevel, symbol: string | null, forceDot?: boolean): NotificationBadgeType {
+    if (forceDot || level <= NotificationLevel.Activity) {
+        return "dot";
+    }
+
+    return symbol && symbol.length >= 3 ? "badge_3char" : "badge_2char";
+}
 
 export interface UnreadNotificationBadgeViewModelProps {
     room?: Room;
@@ -35,30 +52,17 @@ export class UnreadNotificationBadgeViewModel
 
     private static readonly computeSnapshot = (props: InternalProps): NotificationBadgeViewSnapshot => {
         const { symbol, count, level } = determineUnreadState(props.room, props.threadId, false);
-        const shouldRender =
-            level !== NotificationLevel.None && !(props.hideBold && level === NotificationLevel.Activity);
-        const hasUnreadCount = level >= NotificationLevel.Notification && (!!count || !!symbol);
-        const isEmptyBadge = symbol === null && count === 0;
-
-        let displaySymbol = symbol;
-        if (displaySymbol === null && count > 0) {
-            displaySymbol = formatCount(count);
-        }
-
-        const badgeType =
-            props.forceDot || level <= NotificationLevel.Activity
-                ? "dot"
-                : !displaySymbol || displaySymbol.length < 3
-                  ? "badge_2char"
-                  : "badge_3char";
+        const displaySymbol = symbol ?? (count > 0 ? formatCount(count) : null);
+        const hasUnreadCount = level >= NotificationLevel.Notification && (count > 0 || symbol !== null);
+        const isSuppressedActivity = props.hideBold && level === NotificationLevel.Activity;
 
         return {
-            shouldRender,
-            isVisible: isEmptyBadge ? true : hasUnreadCount,
+            shouldRender: level !== NotificationLevel.None && !isSuppressedActivity,
+            isVisible: symbol === null && count === 0 ? true : hasUnreadCount,
             isNotification: level === NotificationLevel.Notification,
             isHighlight: level >= NotificationLevel.Highlight,
             isKnocked: false,
-            badgeType,
+            badgeType: getBadgeType(level, displaySymbol, props.forceDot),
             symbol: displaySymbol,
         };
     };
@@ -134,19 +138,15 @@ export class UnreadNotificationBadgeViewModel
         if (!room) return;
 
         room.on(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications);
-        room.on(RoomEvent.Receipt, this.onNotificationChanged);
-        room.on(RoomEvent.Timeline, this.onNotificationChanged);
-        room.on(RoomEvent.Redaction, this.onNotificationChanged);
-        room.on(RoomEvent.LocalEchoUpdated, this.onNotificationChanged);
-        room.on(RoomEvent.MyMembership, this.onNotificationChanged);
+        for (const eventName of notificationChangeEvents) {
+            room.on(eventName, this.onNotificationChanged);
+        }
 
         this.listenerCleanups.push(() => {
             room.off(RoomEvent.UnreadNotifications, this.onRoomUnreadNotifications);
-            room.off(RoomEvent.Receipt, this.onNotificationChanged);
-            room.off(RoomEvent.Timeline, this.onNotificationChanged);
-            room.off(RoomEvent.Redaction, this.onNotificationChanged);
-            room.off(RoomEvent.LocalEchoUpdated, this.onNotificationChanged);
-            room.off(RoomEvent.MyMembership, this.onNotificationChanged);
+            for (const eventName of notificationChangeEvents) {
+                room.off(eventName, this.onNotificationChanged);
+            }
         });
     }
 
