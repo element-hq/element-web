@@ -25,6 +25,8 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
 import { type CompleteOidcLoginResponse } from "../../../utils/oidc/authorize";
+import { getOidcClientId } from "../../../utils/oidc/registerClient.ts";
+import SdkConfig from "../../../SdkConfig.ts";
 
 export type QrLoginCredentials = Omit<CompleteOidcLoginResponse, "idTokenClaims"> &
     Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>> & {
@@ -58,10 +60,6 @@ type Props = XOR<
          * Intent to facilitate logging into this device from an existing device
          */
         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
-        /**
-         * The client ID to use for OIDC authentication, a spinner will be shown while `undefined`.
-         */
-        clientId?: string;
         /**
          * Callback for successful login
          * @param credentials - the credentials to authenticate with
@@ -148,7 +146,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
     }
 
     private readyToLoad(props: Props): boolean {
-        return props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE || !!props.clientId;
+        return props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
     }
 
     public componentDidMount(): void {
@@ -284,19 +282,18 @@ export default class LoginWithQR extends React.Component<Props, IState> {
 
                 // Create a new client as the homeserver URL may not be the same as we used for the secure channel
                 const metadata = await new MatrixClient({ baseUrl: homeserverUrl }).getAuthMetadata();
+                const clientId = await getOidcClientId(metadata, SdkConfig.get().oidc_static_clients);
 
                 // Generate our new device ID
                 const deviceId = secureRandomString(10);
                 const { userCode } = await this.state.rendezvous.deviceAuthorizationGrant({
                     metadata,
-                    clientId: this.props.clientId!,
+                    clientId,
                     deviceId,
                 });
                 this.setState({ phase: Phase.WaitingForDevice, userCode });
 
-                const tokenResponse = await this.state.rendezvous.completeLoginOnNewDevice({
-                    clientId: this.props.clientId!,
-                });
+                const tokenResponse = await this.state.rendezvous.completeLoginOnNewDevice({ clientId });
 
                 if (tokenResponse) {
                     const { secrets } = await this.state.rendezvous.shareSecrets();
@@ -305,7 +302,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         accessToken: tokenResponse.access_token,
                         refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
-                        clientId: this.props.clientId!,
+                        clientId,
                         idToken: tokenResponse.id_token,
                         issuer: metadata!.issuer,
                         identityServerUrl,
