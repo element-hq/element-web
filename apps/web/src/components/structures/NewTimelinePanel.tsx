@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions, ReadMarker } from "@element-hq/web-shared-components";
+import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, ReadMarker } from "@element-hq/web-shared-components";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
@@ -14,8 +14,14 @@ import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
 import Spinner from "../views/elements/Spinner";
 
-/** Minimal static VM for DateSeparatorView — no jump-to menu, label only. */
-class StaticDateSeparatorViewModel implements DateSeparatorViewSnapshot, DateSeparatorViewActions {
+/**
+ * Minimal static VM for DateSeparatorView — no jump-to menu, label only.
+ *
+ * `DateSeparatorViewActions` is a weak type (all members optional), so we
+ * don't list it in `implements` (that trips TS2559); the instance still
+ * satisfies the `DateSeparatorViewModel` intersection when passed as `vm`.
+ */
+class StaticDateSeparatorViewModel implements DateSeparatorViewSnapshot {
     public readonly label: string;
     public readonly jumpToEnabled = false;
 

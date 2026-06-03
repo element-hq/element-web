@@ -8,9 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { EventTile } from "./EventTile/EventTile";
+import EventTile, { type GetRelationsForEvent, type IReadReceiptProps } from "./EventTile";
 import type { Layout } from "../../../settings/enums/Layout";
-import type { GetRelationsForEvent, ReadReceiptProps } from "./EventTile/types";
 import type { IReadReceiptPosition } from "./ReadReceiptMarker";
 import type { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
@@ -35,7 +34,7 @@ export interface LegacyEventTileAdapterProps {
     hideSender?: boolean;
 
     // Read state
-    readReceipts?: ReadReceiptProps[];
+    readReceipts?: IReadReceiptProps[];
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     showReadReceipts?: boolean;
 
