@@ -49,7 +49,7 @@ const AuthFooter: FC<Props> = ({ api, config, onLoggedIn }) => {
 
     return (
         <Container>
-            <Button onClick={onTryJoin} size="sm" kind="secondary">
+            <Button onClick={onTryJoin} size="md" kind="secondary">
                 {api.i18n.translate("join_cta")}
             </Button>
         </Container>
