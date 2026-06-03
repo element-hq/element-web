@@ -194,21 +194,21 @@ jobs:
 
             - name: Checkout code
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-              if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
                   persist-credentials: false
                   fetch-depth: 0 # Full history, fastest for diff-cover
 
             - name: Download coverage artifacts
               uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-              if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
                   pattern: coverage-*
                   path: coverage
 
             - name: Diff Coverage
               id: coverage
-              if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               uses: Affanmir/diff-cover-action@0d8c98f613bbd2428df50b3109b1e3b1d5ab59d3 # v2.1.0
               with:
                   compare-branch: origin/${{ github.base_ref || 'develop' }}

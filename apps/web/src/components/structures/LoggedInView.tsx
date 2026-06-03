@@ -795,8 +795,12 @@ class LoggedInView extends React.Component<IProps, IState> {
         );
 
         const roomView = <div className="mx_RoomView_wrapper">{pageElement}</div>;
-        const content =
-            useNewRoomList && this.resizerViewModel ? (
+
+        let content: React.ReactNode;
+        if (useNewRoomList && this.resizerViewModel && !moduleRenderer) {
+            // New room list owned by element-web: resizable layout with a draggable separator.
+            // The SpacePanel lives inside GroupView (leftPanel omits it when the new room list is enabled).
+            content = (
                 <GroupView vm={this.resizerViewModel}>
                     <SpacePanel />
                     <LeftResizablePanelView
@@ -811,13 +815,21 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <SeparatorView className="mx_Separator" vm={this.resizerViewModel} />
                     <Panel className="mx_LeftPanel_panel">{roomView}</Panel>
                 </GroupView>
-            ) : (
+            );
+        } else {
+            // Fallback layout: the old room list, or a module's full-screen view (e.g. multiroom) which
+            // must not use the resizable layout above. SpacePanel is guarded on useNewRoomList to avoid a
+            // duplicate (the old room list already renders one inside leftPanel); the legacy ResizeHandle is
+            // dropped for module views, which manage their own layout.
+            content = (
                 <>
+                    {useNewRoomList && <SpacePanel />}
                     {leftPanel}
                     {!moduleRenderer && <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />}
                     {roomView}
                 </>
             );
+        }
 
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
