@@ -16,10 +16,12 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
         cssKey = await window.webContents.insertCSS(`
             /* Create margin of space for the traffic light buttons */
             .mx_UserMenu {
-                /* We zero the margin and use padding as we want to use it as a drag handle */ 
+                /* We zero the margin and use padding as we want to use it as a drag handle */
                 margin-top: 0 !important;
                 margin-left: 0 !important;
-                padding-top: 32px !important;
+                /* 26px aligns the avatar centre with the search field / room header row
+                   while still clearing the traffic light buttons (which end at ~20px) */
+                padding-top: 26px !important;
                 -webkit-app-region: drag;
                 -webkit-user-select: none;
             }
@@ -29,8 +31,8 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
             }
             /* Maintain alignment of the toggle space panel button */
             .mx_SpacePanel_toggleCollapse {
-                /* 19px original top value, 32px margin-top above, 12px original margin-top value */
-                top: calc(19px + 32px - 12px) !important;
+                /* 19px original top value, 26px padding-top above, 12px original margin-top value */
+                top: calc(19px + 26px - 12px) !important;
             }
             /* Prevent the media lightbox sender info from clipping into the traffic light buttons */
             .mx_ImageView_info_wrapper {
