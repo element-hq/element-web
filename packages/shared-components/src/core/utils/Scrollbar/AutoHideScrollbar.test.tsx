@@ -32,7 +32,7 @@ describe("AutoHideScrollbar", () => {
 
     it("forwards props to the requested element", () => {
         render(
-            <AutoHideScrollbar element="section" aria-label="Scrollable content" data-testid="scrollbar">
+            <AutoHideScrollbar as="section" aria-label="Scrollable content" data-testid="scrollbar">
                 <div>Item 1</div>
             </AutoHideScrollbar>,
         );
@@ -70,5 +70,37 @@ describe("AutoHideScrollbar", () => {
 
         fireEvent.scroll(scrollbar);
         expect(onScroll).toHaveBeenCalledTimes(1);
+    });
+
+    it("provides wrappedRef before parent componentDidMount runs", () => {
+        const calls: Array<string> = [];
+
+        class TimingProbe extends React.Component {
+            private scrollNode: HTMLDivElement | null = null;
+
+            public componentDidMount(): void {
+                calls.push("parent-did-mount");
+                expect(this.scrollNode).not.toBeNull();
+            }
+
+            public render(): React.ReactNode {
+                return (
+                    <AutoHideScrollbar
+                        data-testid="scrollbar"
+                        wrappedRef={(node) => {
+                            calls.push(node ? "wrapped-ref" : "wrapped-ref-null");
+                            this.scrollNode = node;
+                        }}
+                    >
+                        <div>Item 1</div>
+                    </AutoHideScrollbar>
+                );
+            }
+        }
+
+        render(<TimingProbe />);
+
+        expect(calls).toEqual(["wrapped-ref", "parent-did-mount"]);
+        expect(screen.getByTestId("scrollbar")).toBeInTheDocument();
     });
 });

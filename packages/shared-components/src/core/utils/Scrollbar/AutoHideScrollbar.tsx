@@ -21,8 +21,8 @@ export type AutoHideScrollbarProps<T extends keyof JSX.IntrinsicElements = "div"
     DynamicHtmlElementProps<T>,
     "onScroll"
 > & {
-    /** Element tag to render. @default div*/
-    element?: T;
+    /** The type of the HTML element. @default div*/
+    as?: T;
     /** Additional class names to append to the scrollbar root. */
     className?: string;
     /** Inline styles applied to the root element. */
@@ -45,8 +45,19 @@ export type AutoHideScrollbarProps<T extends keyof JSX.IntrinsicElements = "div"
 export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">(
     props: AutoHideScrollbarProps<T>,
 ): React.ReactNode {
-    const { element = "div" as T, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = props;
+    const { as = "div" as T, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = props;
     const [container, setContainer] = React.useState<HTMLDivElement | null>(null);
+    const collectContainer = React.useCallback(
+        (node: HTMLDivElement | null): void => {
+            if (node) {
+                setContainer(node);
+                wrappedRef?.(node);
+            } else {
+                wrappedRef?.(null);
+            }
+        },
+        [wrappedRef],
+    );
 
     React.useEffect(() => {
         if (!container || !onScroll) {
@@ -62,19 +73,11 @@ export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">
         };
     }, [container, onScroll]);
 
-    React.useEffect(() => {
-        wrappedRef?.(container);
-
-        return (): void => {
-            wrappedRef?.(null);
-        };
-    }, [container, wrappedRef]);
-
     return React.createElement(
-        element,
+        as,
         {
             ...otherProps,
-            ref: setContainer,
+            ref: collectContainer,
             className: classNames(styles.scrollbar, className),
             // Firefox sometimes makes this element focusable due to
             // overflow:scroll;, so force it out of tab order by default.

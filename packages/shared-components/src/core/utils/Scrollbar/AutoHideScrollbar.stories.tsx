@@ -21,7 +21,7 @@ const meta = {
     component: AutoHideScrollbar,
     tags: ["autodocs", "skip-test"],
     args: {
-        element: "div",
+        as: "div",
         role: "container",
         style: containerStyle,
         children: (
