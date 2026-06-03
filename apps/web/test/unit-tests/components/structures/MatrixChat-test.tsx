@@ -25,6 +25,7 @@ import {
     type CryptoApi,
 } from "matrix-js-sdk/src/crypto-api";
 import fetchMock from "@fetch-mock/jest";
+import * as qrLogin from "matrix-js-sdk/src/rendezvous";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
 import * as StorageAccess from "../../../../src/utils/StorageAccess";
@@ -71,7 +72,7 @@ import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
-import type { QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
+import { type QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -356,6 +357,7 @@ describe("<MatrixChat />", () => {
                     applicationType: "web",
                 }),
             });
+            jest.spyOn(qrLogin, "signInByGeneratingQR").mockReturnValue(new Promise(() => {}));
         });
 
         it("should open QrLoginDialog on ViewQrLogin action", async () => {
