@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type PropsWithChildren } from "react";
 import { type User } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import ReadReceiptMarker, { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import { type IReadReceiptProps } from "./EventTile";
 import AccessibleButton from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { formatDate } from "../../../DateUtils";
 import { Action } from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";

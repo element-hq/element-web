@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX } from "react";
+import React, { type JSX } from "react";
+import { AutoHideScrollbar, type AutoHideScrollbarProps } from "@element-hq/web-shared-components";
 
-import AutoHideScrollbar, { type IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {
@@ -32,7 +32,6 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     IProps<T>,
     IState
 > {
-    private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement?: HTMLDivElement;
     private likelyTrackpadUser: boolean | null = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
@@ -182,12 +181,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         ) : null;
 
         return (
-            <AutoHideScrollbar
-                {...otherProps}
-                ref={this.autoHideScrollbar}
-                wrappedRef={this.collectScroller}
-                onWheel={this.onMouseWheel}
-            >
+            <AutoHideScrollbar {...otherProps} wrappedRef={this.collectScroller} onWheel={this.onMouseWheel}>
                 {leftOverflowIndicator}
                 {children}
                 {rightOverflowIndicator}

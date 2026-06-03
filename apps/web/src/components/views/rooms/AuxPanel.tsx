@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import AppsDrawer from "./AppsDrawer";
 import SettingsStore from "../../../settings/SettingsStore";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
 import LegacyCallViewForRoom from "../voip/LegacyCallViewForRoom";
 import { objectHasDiff } from "../../../utils/objects";
