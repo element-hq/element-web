@@ -177,9 +177,7 @@
         "log_in_new_account": "<a>Saluti</a> per via nova konto.",
         "logout_dialog": {
             "description": "Ĉu vi certe volas adiaŭi?",
-            "megolm_export": "Mane elporti ŝlosilojn",
             "setup_key_backup_title": "Vi perdos aliron al viaj ĉifritaj mesaĝoj",
-            "setup_secure_backup_description_1": "Ĉifritaj mesaĝoj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la ricevonto(j) havas la ŝlosilojn necesajn por legado.",
             "skip_key_backup": "Mi ne volas miajn ĉifritajn mesaĝojn"
         },
         "misconfigured_body": "Petu vian %(brand)s-administranton kontroli <a>vian agordaron</a> je malĝustaj aŭ duoblaj eroj.",
@@ -627,9 +625,6 @@
             "warning": "Se vi ne forigis la rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
         "set_up_toast_title": "Agordi Sekuran savkopiadon",
-        "setup_secure_backup": {
-            "explainer": "Savkopiu viajn ŝlosilojn antaŭ adiaŭo, por ilin ne perdi."
-        },
         "udd": {
             "other_ask_verify_text": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
             "other_new_session_text": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",

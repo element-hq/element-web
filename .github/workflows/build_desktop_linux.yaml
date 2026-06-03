@@ -133,7 +133,7 @@ jobs:
 
             # This allows contributors to test changes to the dockerbuild image within a pull request
             - name: Build docker image
-              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
+              uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7
               if: steps.changed_files.outputs.any_modified == 'true'
               with:
                   file: apps/desktop/dockerbuild/Dockerfile
