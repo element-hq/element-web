@@ -18,8 +18,8 @@ catalog:
     "@playwright/test": 1.60.0
     "playwright-core": 1.60.0
     # Compound
-    "@vector-im/compound-design-tokens": 10.1.1
-    "@vector-im/compound-web": 9.3.0
+    "@vector-im/compound-design-tokens": 10.2.1
+    "@vector-im/compound-web": 9.4.1
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts

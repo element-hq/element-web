@@ -108,7 +108,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                 Anyone can join.
               </span>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div>
                   <div
@@ -122,10 +122,10 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -143,16 +143,16 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="react-use-id-1"
                     >
                       Preview space
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-2"
                     >
                       Allow people to preview your space before they join.
@@ -234,13 +234,13 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                     </svg>
                   </div>
                   <form
-                    class="_root_19upo_16"
+                    class="_root_1o4d9_17"
                   >
                     <div
-                      class="_inline-field_19upo_32"
+                      class="_inline-field_1o4d9_33"
                     >
                       <div
-                        class="_inline-field-control_19upo_44"
+                        class="_inline-field-control_1o4d9_45"
                       >
                         <div
                           class="_container_udcm8_10"
@@ -258,16 +258,16 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                         </div>
                       </div>
                       <div
-                        class="_inline-field-body_19upo_38"
+                        class="_inline-field-body_1o4d9_39"
                       >
                         <label
-                          class="_label_19upo_59"
+                          class="_label_1o4d9_60"
                           for="react-use-id-3"
                         >
                           Publish this room to the public in matrix.org's room directory?
                         </label>
                         <span
-                          class="_message_19upo_85 _help-message_19upo_91"
+                          class="_message_1o4d9_86 _help-message_1o4d9_92"
                           id="radix-react-use-id-4"
                         >
                           You must have permission to set the main address to publish this room.
@@ -486,13 +486,13 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                 Anyone can join.
               </span>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -510,16 +510,16 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="react-use-id-1"
                     >
                       Preview space
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-2"
                     >
                       Allow people to preview your space before they join.
