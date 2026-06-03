@@ -118,3 +118,9 @@ export const CollapseSections: Story = {
         collapseSections: "collapse",
     },
 };
+
+export const ExpandSections: Story = {
+    args: {
+        collapseSections: "expand",
+    },
+};
