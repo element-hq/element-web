@@ -216,11 +216,8 @@
         "log_in_new_account": "새 계정으로 <a>로그인</a>하기.",
         "logout_dialog": {
             "description": "정말로 이 기기를 제거하시겠습니까?",
-            "megolm_export": "수동으로 키 내보내기",
-            "setup_key_backup_title": "암호화된 메시지에 접근할 수 없게 됩니다",
-            "setup_secure_backup_description_1": "암호화된 메시지는 종단간 암호화로 보호됩니다. 오직 당신과 상대방만 이 메시지를 읽을 수 있는 키를 갖습니다.",
-            "setup_secure_backup_description_2": "이 기기를 제거하면 다른 기기에 암호화 키가 있거나 서버에 백업해 두지 않은 경우, 암호화된 메시지를 읽을 수 없게 됩니다.",
-            "skip_key_backup": "저는 제 암호화된 메시지를 원하지 않아요"
+            "setup_key_backup_title": "암호화된 채팅에 대한 접근 권한을 잃게 됩니다.",
+            "skip_key_backup": "그래도 이 기기 삭제"
         },
         "misconfigured_body": "%(brand)s 관리자에게 <a>당신의 설정</a>에 잘못되거나 중복된 항목이 있는지 확인하도록 요청하세요.",
         "misconfigured_title": "%(brand)s이 잘못 설정됨",
@@ -470,6 +467,7 @@
         "description": "설명",
         "deselect_all": "전체 선택 해제",
         "device": "기기",
+        "disabled_by_homeserver": "홈서버에 의해 비활성화됨",
         "edited": "편집됨",
         "email_address": "이메일 주소",
         "emoji": "이모지",
@@ -672,6 +670,14 @@
         "unfederated_label_default_on": "해당 방이 자체 홈서버를 보유한 외부 팀과의 협업에 사용될 경우 이 기능을 비활성화할 수 있습니다. 이 설정은 나중에 변경할 수 없습니다.",
         "unsupported_version": "서버가 지정된 방 버전을 지원하지 않습니다."
     },
+    "create_section_dialog": {
+        "create_section": "섹션 생성",
+        "description": "이 섹션은 당신만을 위한 공간입니다.",
+        "edit_section": "섹션 편집",
+        "label": "섹션 이름",
+        "title": "섹션 만들기",
+        "title_edition": "섹션을 편집하세요"
+    },
     "create_space": {
         "add_details_prompt": "사람들이 알아볼 수 있도록 세부 사항을 추가하세요.",
         "add_details_prompt_2": "이 설정은 언제든지 변경할 수 있습니다.",
@@ -820,7 +826,7 @@
         "invalid_json": "유효한 JSON이 아닌 것 같습니다.",
         "level": "레벨",
         "low_bandwidth_mode": "저대역폭 모드",
-        "low_bandwidth_mode_description": "호환되는 홈 서버가 필요합니다.",
+        "low_bandwidth_mode_description": "암호화, 상태 표시, 프로필 이미지, 읽음 확인, 타이핑 알림 기능이 비활성화됩니다.",
         "main_timeline": "주 타임라인",
         "manual_device_verification": "수동 기기 검증",
         "no_receipt_found": "영수증을 찾을 수 없습니다",
@@ -987,9 +993,6 @@
         "set_up_recovery": "대화 백업하기",
         "set_up_recovery_toast_description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
         "set_up_toast_title": "보안 백업 설정",
-        "setup_secure_backup": {
-            "explainer": "키를 잃어버리지 않도록 이 기기에서 로그아웃하기 전에 미리 백업해 두세요."
-        },
         "turn_on_key_storage": "키 저장 기능 켜기",
         "turn_on_key_storage_description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다.",
         "udd": {
@@ -1344,6 +1347,14 @@
         "impossible_dialog_title": "통합이 허용되지 않습니다"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "이 연락처들과는 기존 대화 기록이 없습니다. 계속하기 전에 이 방에 초대하는 것이 맞는지 확인해 주세요",
+            "invite_title": "이 방에 새 사용자를 초대할까요?",
+            "start_chat_subtitle_multiple_users": "이 사람들과는 기존 대화 기록이 없습니다. 계속하기 전에 초대를 진행할지 확인해 주세요.",
+            "start_chat_subtitle_one_user": "이 사람과는 기존 대화 기록이 없습니다. 계속하기 전에 초대를 진행할지 확인해 주세요.",
+            "start_chat_title_multiple_users": "이 새 연락처들과 대화를 시작하시겠습니까?",
+            "start_chat_title_one_user": "이 사용자와 대화를 시작하시겠습니까?"
+        },
         "email_caption": "이메일로 초대",
         "email_limit_one": "이메일 초대는 한 번에 하나씩만 보낼 수 있습니다",
         "email_use_default_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
@@ -1505,6 +1516,11 @@
         "experimental_section": "조기 시연",
         "extended_profiles_msc_support": "서버가 MSC4133을 지원해야 합니다.",
         "feature_disable_call_per_sender_encryption": "Element 통화에서 발신자별 암호화 비활성화",
+        "feature_user_status": {
+            "description": "현재 상태를 확인하고 설정할 수 있도록 합니다.",
+            "display_name": "사용자 상태",
+            "required_msc_support": "레거시 동기화 프로필 업데이트를 위해 MSC4429 규격이 필요합니다."
+        },
         "feature_wysiwyg_composer_description": "메시지 작성기에서 Markdown 대신 서식 있는 텍스트를 사용하세요",
         "group_calls": "그룹 통화 새 기능",
         "group_developer": "개발자",
@@ -1801,6 +1817,12 @@
         "error": "이 메시지를 삭제할 수 없습니다. (%(code)s)",
         "ongoing": "제거 중…",
         "reason_label": "이유(선택 사항)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "이 섹션을 정말로 삭제하시겠습니까?",
+        "description": "섹션의 대화방들은 전체 채팅 목록에서 계속 확인할 수 있습니다.",
+        "remove_section": "섹션 제거",
+        "title": "이 섹션을 삭제하시겠습니까?"
     },
     "report_content": {
         "description": "이 메시지를 신고하면 고유 '이벤트 ID'를 홈서버의 관리자에게 보내게 됩니다. 이 방의 메시지가 암호화되어 있다면, 홈서버 관리자는 메시지 문자를 읽거나 파일 혹은 사진을 볼 수 없습니다.",
@@ -2614,6 +2636,7 @@
             "username": "사용자 이름"
         },
         "inline_url_previews_default": "기본으로 인라인 URL 미리 보기 사용하기",
+        "inline_url_previews_encrypted": "암호화된 방에서 미리 보기 기능 활성화",
         "insert_trailing_colon_mentions": "메시지 시작 부분에 사용자 언급 뒤에 콜론을 추가합니다",
         "invite_controls": {
             "default_label": "사용자가 방에 초대할 수 있도록 허용"
@@ -2751,6 +2774,8 @@
             "enable_tray_icon": "트레이 아이콘을 표시하고 닫을 때 창을 최소화합니다.",
             "keyboard_heading": "키보드 단축키",
             "keyboard_view_shortcuts_button": "모든 키보드 단축키를 보려면 <a>여기를 클릭하세요</a>.",
+            "link_previews_description": "메시지 아래에 링크 정보를 표시합니다.",
+            "link_previews_heading": "링크 미리보기",
             "media_heading": "이미지, GIF 및 동영상",
             "presence_description": "귀하의 활동과 상태를 다른 사람들과 공유하세요.",
             "publish_timezone": "공개 프로필에 시간대 게시",
@@ -3041,6 +3066,14 @@
         "server_error_detail": "서버를 쓸 수 없거나 과부하거나, 다른 문제가 있습니다.",
         "shrug": "¯\\_(ツ)_/¯ 앞에 일반 문자 메시지를 놓으세요",
         "spoiler": "스포일러로서 주어진 메시지를 전송",
+        "status": {
+            "description": "현재 상태 설정",
+            "no_args": "인자가 제공되지 않았습니다. 이모지와 선택 사항인 텍스트 컴포넌트를 입력해야 합니다.",
+            "no_emoji": "이모티콘을 제공하지 않으셨습니다.",
+            "no_text": "상태 메시지를 제공하지 않으셨습니다.",
+            "too_long_emoji": "첫 번째 인수는 이모티콘이어야 합니다.",
+            "too_long_text": "입력하신 텍스트가 너무 깁니다."
+        },
         "tableflip": "평문 텍스트 메시지 앞에 (╯°□°）╯︵ ┻━┻ 를 덧붙임",
         "topic": "방 주제를 얻거나 설정하기",
         "topic_none": "이 방은 주제가 없습니다.",
@@ -3743,6 +3776,14 @@
         "call_held": "%(peerName)s님이 통화를 보류했습니다",
         "call_held_resume": "통화를 보류했습니다. <a>다시 시작</a>",
         "call_held_switch": "통화를 보류했습니다. <a>전환</a>",
+        "call_members": {
+            "exhaustive": {
+                "other": "<avatars/> 통화 참여 중"
+            },
+            "overflow": {
+                "other": "<avatars/> +%(overflowCount)s명 통화 중"
+            }
+        },
         "call_toast_unknown_room": "알 수 없는 채팅방",
         "camera_disabled": "카메라가 꺼져 있습니다",
         "camera_enabled": "카메라가 여전히 활성화되어 있습니다",
@@ -3765,10 +3806,12 @@
         "enable_microphone": "마이크 음소거 해제",
         "expand": "통화로 돌아가기",
         "get_call_link": "통화 링크 공유하기",
+        "group_call_started": "그룹 통화 시작됨",
         "hangup": "전화 끊기",
         "hide_sidebar_button": "사이드바 숨기기",
         "input_devices": "입력 장치",
         "jitsi_call": "Jitsi 화상 회의",
+        "join_with_video": "동영상으로 참여하기",
         "legacy_call": "레거시 콜",
         "maximise": "화면 채우기",
         "maximise_call": "통화 최대화",
@@ -3828,6 +3871,11 @@
         "you_are_presenting": "화면을 공유 중입니다."
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome": {
+        "tagline_element": "압도적인 속도와 간결함.",
+        "title_element": "가장 나다운 공간, 엘리먼트에서",
+        "title_generic": "%(brand)s에 오신 것을 환영합니다"
+    },
     "widget": {
         "added_by": "위젯을 추가했습니다",
         "capabilities_dialog": {
@@ -3849,6 +3897,7 @@
             "change_name_this_room": "이 채팅방의 이름을 변경하세요",
             "change_topic_active_room": "현재 사용 중인 채팅방의 주제를 변경하세요",
             "change_topic_this_room": "이 채팅방의 주제를 변경하세요",
+            "download_file": "미디어 저장소에서 파일 다운로드",
             "receive_membership_active_room": "현재 채팅방의 멤버 변동 내역 보기",
             "receive_membership_this_room": "채팅방 멤버 변동 내역 보기",
             "remove_ban_invite_leave_active_room": "다른 사용자를 현재 채팅방에서 내보내거나, 차단하거나, 초대할 수 있으며, 회원님 자신도 강제로 퇴장시킬 수 있습니다.",

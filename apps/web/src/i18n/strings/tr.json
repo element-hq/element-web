@@ -214,10 +214,7 @@
         "log_in_new_account": "Yeni hesabınızla <a>Oturum aç</a>ın.",
         "logout_dialog": {
             "description": "Oturumdan çıkmak istediğinize emin misiniz?",
-            "megolm_export": "Elle dışa aktarılmış anahtarlar",
             "setup_key_backup_title": "Şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz",
-            "setup_secure_backup_description_1": "Şifreli mesajlar uçtan uca şifreleme ile korunur. Bu mesajları yalnızca siz ve alıcı(lar) okuyabilir.",
-            "setup_secure_backup_description_2": "Oturumu kapattığınızda, bu anahtarlar bu cihazdan silinecek. Bu, diğer cihazlarınızda bu anahtarlara sahip olmadığınız veya anahtarları sunucuya yedeklemediğiniz sürece şifreli mesajları okuyamayacağınız anlamına gelir.",
             "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum"
         },
         "misconfigured_body": "%(brand)s yöneticinize <a>yapılandırmanızın</a> hatalı ve mükerrer girdilerini kontrol etmesi için talepte bulunun.",
@@ -923,9 +920,6 @@
         "set_up_recovery": "Kurtarmayı ayarlayın",
         "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
         "set_up_toast_title": "Güvenli Yedekleme kur",
-        "setup_secure_backup": {
-            "explainer": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle."
-        },
         "udd": {
             "interactive_verification_button": "Emoji ile etkileşimli olarak doğrula",
             "other_ask_verify_text": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",

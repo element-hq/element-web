@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Zaloguj się</a> do nowego konta.",
         "logout_dialog": {
             "description": "Czy na pewno chcesz usunąć to urządzenie?",
-            "megolm_export": "Ręcznie eksportuj klucze",
             "setup_key_backup_title": "Utracisz dostęp do swoich wiadomości szyfrowanych",
-            "setup_secure_backup_description_1": "Wiadomości szyfrowane są zabezpieczone szyfrowaniem end-to-end. Tylko Ty i Twój odbiorca mają klucze, aby je wyświetlić.",
-            "setup_secure_backup_description_2": "Po usunięciu tego urządzenia nie będziesz mógł czytać wiadomości szyfrowanych, chyba że posiadasz klucze do nich na innych urządzeniach lub kopię na serwerze.",
             "skip_key_backup": "Nie chcę moich zaszyfrowanych wiadomości"
         },
         "misconfigured_body": "Poproś swojego administratora %(brand)s by sprawdzić <a>Twoją konfigurację</a> względem niewłaściwych lub zduplikowanych elementów.",
@@ -1007,9 +1004,6 @@
         "set_up_recovery": "Utwórz kopię zapasową swoich czatów",
         "set_up_recovery_toast_description": "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić tę kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
-        "setup_secure_backup": {
-            "explainer": "Utwórz kopię zapasową kluczy przed usunięciem tego urządzenia, by ich nie stracić."
-        },
         "turn_on_key_storage": "Włącz magazyn kluczy",
         "turn_on_key_storage_description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej.",
         "udd": {

@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Přihlaste se</a> svým novým účtem.",
         "logout_dialog": {
             "description": "Opravdu chcete toto zařízení odstranit?",
-            "megolm_export": "Export klíčů",
             "setup_key_backup_title": "Přijdete o přístup k šifrovaným zprávám",
-            "setup_secure_backup_description_1": "Šifrované zprávy jsou zabezpečené koncovým šifrováním. Klíče pro jejich dešifrování máte jen vy a příjemci zpráv.",
-            "setup_secure_backup_description_2": "Po odstranění tohoto zařízení nebudete moci číst šifrované zprávy, pokud k nim nemáte klíče na ostatních zařízeních nebo je nezálohujete na server.",
             "skip_key_backup": "Už své zašifrované zprávy nechci"
         },
         "misconfigured_body": "Požádejte správce vašeho %(brand)su, aby zkontroloval <a>vaši konfiguraci</a>. Pravděpodobně obsahuje chyby nebo duplicity.",
@@ -1003,9 +1000,6 @@
         "set_up_recovery": "Zálohujte své chaty",
         "set_up_recovery_toast_description": "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
-        "setup_secure_backup": {
-            "explainer": "Před odebráním tohoto zařízení si zálohujte klíče, abyste o ně nepřišli."
-        },
         "turn_on_key_storage": "Zapnout úložiště klíčů",
         "turn_on_key_storage_description": "Díky tomu budete moci zobrazit historii chatu na jakémkoli novém zařízení a je to nutné pro zálohování chatů a digitální identity.",
         "udd": {

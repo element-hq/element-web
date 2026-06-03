@@ -214,10 +214,7 @@
         "log_in_new_account": "<a>Inicia sessão em</a> na tua nova conta.",
         "logout_dialog": {
             "description": "Tens a certeza que queres encerrar a sessão?",
-            "megolm_export": "Exportação manual de chaves",
             "setup_key_backup_title": "Perderás o acesso às tuas mensagens encriptadas",
-            "setup_secure_backup_description_1": "As mensagens encriptadas são protegidas com encriptação de ponta a ponta. Só tu e o(s) destinatário(s) têm as chaves para ler estas mensagens.",
-            "setup_secure_backup_description_2": "Quando terminares a sessão, estas chaves serão eliminadas deste dispositivo, o que significa que não poderás ler mensagens encriptadas, a menos que tenhas as chaves para elas nos teus outros dispositivos ou tenhas feito uma cópia de segurança das mesmas no servidor.",
             "skip_key_backup": "Não quero as minhas mensagens encriptadas"
         },
         "misconfigured_body": "Pede ao teu administrador %(brand)s para verificar <a>a tua configuração</a> para ver se há entradas incorretas ou duplicadas.",
@@ -924,9 +921,6 @@
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
-        "setup_secure_backup": {
-            "explainer": "Guarda as tuas chaves antes de saíres para evitar perdê-las."
-        },
         "udd": {
             "interactive_verification_button": "Verifica interactivamente por emoji",
             "other_ask_verify_text": "Pede a este utilizador para verificar a sua sessão ou verifica-a manualmente abaixo.",

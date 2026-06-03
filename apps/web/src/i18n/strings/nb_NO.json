@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Logg på</a> din nye konto.",
         "logout_dialog": {
             "description": "Er du sikker på at du vil logge av?",
-            "megolm_export": "Eksporter nøkler manuelt",
             "setup_key_backup_title": "Du mister tilgangen til de krypterte meldingene dine",
-            "setup_secure_backup_description_1": "Krypterte meldinger er sikret med punkt-til-punkt-kryptering. Bare du og mottakeren(e) har nøklene til å lese disse meldingene.",
-            "setup_secure_backup_description_2": "Når du logger av, slettes disse nøklene fra denne enheten, noe som betyr at du ikke vil kunne lese krypterte meldinger med mindre du har nøklene til dem på dine andre enheter, eller har sikkerhetskopiert dem til serveren.",
             "skip_key_backup": "Jeg vil ikke ha mine krypterte meldinger"
         },
         "misconfigured_body": "Spør din%(brand)s administrator om å sjekke <a>konfigurasjonen din</a> for feil eller dupliserte oppføringer.",
@@ -983,9 +980,6 @@
         "set_up_recovery": "Sett opp gjenoppretting",
         "set_up_recovery_toast_description": "Generer en gjenopprettingsnøkkel som kan brukes til å gjenopprette den krypterte meldingshistorikken i tilfelle du mister tilgangen til enhetene dine.",
         "set_up_toast_title": "Sett opp sikker sikkerhetskopiering",
-        "setup_secure_backup": {
-            "explainer": "Ta sikkerhetskopi av nøklene dine før du logger av for å unngå å miste dem."
-        },
         "turn_on_key_storage": "Slå på nøkkeloppbevaring",
         "turn_on_key_storage_description": "Lagre din kryptografiske identitet og nøkler til meldinger sikkert på serveren. Dette gjør at du kan se historikken for meldinger på alle nye enheter.",
         "udd": {

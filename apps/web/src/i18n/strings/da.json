@@ -217,10 +217,7 @@
         "log_in_new_account": "<a>Log ind</a> på din nye konto.",
         "logout_dialog": {
             "description": "Er du sikker på, at du vil logge ud?",
-            "megolm_export": "Eksporter nøgler manuelt",
             "setup_key_backup_title": "Du vil miste adgang til dine krypterede beskeder",
-            "setup_secure_backup_description_1": "Krypterede beskeder er sikret med end-to-end encryption. Kun du og din(e) modpart(er) har nøglerne til at læse disse beskeder.",
-            "setup_secure_backup_description_2": "Når du logger ud, slettes disse nøgler fra denne enhed, hvilket betyder, at du ikke kan læse krypterede beskeder, medmindre du har nøglerne til dem på dine andre enheder eller har sikkerhedskopieret dem til serveren.",
             "skip_key_backup": "Jeg vil ikke have mine krypterede beskeder"
         },
         "misconfigured_body": "Bed din %(brand)s administrator om at kontrollere <a>din konfiguration</a> for forkerte eller dobbelte poster.",
@@ -866,9 +863,6 @@
             "warning": "Hvis du ikke har fjernet gendannelsesmetoden, kan det være en hacker forsøger at få adgang til din konto. Skift din kontos adgangskode og indstil straks en ny gendannelsesmetode under Indstillinger."
         },
         "set_up_toast_title": "Opsæt sikkerhedskopiering",
-        "setup_secure_backup": {
-            "explainer": "Sikkerhedskopier dine nøgler før du logger ud, for at undgå at miste dem."
-        },
         "udd": {
             "interactive_verification_button": "Bekræft interaktivt med emoji",
             "other_ask_verify_text": "Bed denne bruger om at bekræfte sin session, eller bekræft den manuelt nedenfor.",
