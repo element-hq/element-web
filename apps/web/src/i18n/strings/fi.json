@@ -212,9 +212,7 @@
         "log_in_new_account": "<a>Kirjaudu</a> uudelle tilillesi.",
         "logout_dialog": {
             "description": "Haluatko varmasti poistaa tämän laitteen?",
-            "megolm_export": "Vie avaimet käsin",
             "setup_key_backup_title": "Menetät pääsyn salattuihin viesteihisi",
-            "setup_secure_backup_description_1": "Salatut viestit turvataan päästä päähän -salauksella. Vain sinä ja viestien vastaanottaja(t) omaavat avaimet näiden viestien lukemiseen.",
             "skip_key_backup": "En halua salattuja viestejäni"
         },
         "misconfigured_body": "Pyydä %(brand)s-ylläpitäjääsi tarkistamaan, onko <a>asetuksissasi</a>virheellisiä tai toistettuja merkintöjä.",
@@ -819,9 +817,6 @@
         "set_up_recovery": "Varmuuskopioi keskustelusi",
         "set_up_recovery_toast_description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
-        "setup_secure_backup": {
-            "explainer": "Varmuuskopioi avaimesi ennen kuin poistat tämän laitteen välttääksesi avainten menetyksen."
-        },
         "udd": {
             "interactive_verification_button": "Vahvista vuorovaikutteisesti emojilla",
             "other_ask_verify_text": "Pyydä tätä käyttäjää vahvistamaan istuntonsa, tai vahvista se manuaalisesti alla.",

@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Entrar</a> em sua nova conta.",
         "logout_dialog": {
             "description": "Deseja mesmo sair?",
-            "megolm_export": "Exportar chaves manualmente",
             "setup_key_backup_title": "Você perderá acesso às suas mensagens criptografadas",
-            "setup_secure_backup_description_1": "As mensagens estão protegidas com a criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens.",
-            "setup_secure_backup_description_2": "Quando você se desconectar, essas chaves serão excluídas desse dispositivo, o que significa que você não poderá ler mensagens criptografadas, a menos que tenha as chaves delas em seus outros dispositivos ou tenha feito backup delas no servidor.",
             "skip_key_backup": "Não quero minhas mensagens criptografadas"
         },
         "misconfigured_body": "Entre em contato com o administrador do %(brand)s para verificar se há entradas inválidas ou duplicadas nas <a>suas configurações</a>.",
@@ -977,9 +974,6 @@
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
         "set_up_toast_title": "Configurar o backup online",
-        "setup_secure_backup": {
-            "explainer": "Faça o backup das suas chaves antes de sair, para evitar perdê-las."
-        },
         "turn_on_key_storage": "Ativar o armazenamento de chaves",
         "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
         "udd": {

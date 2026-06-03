@@ -204,10 +204,7 @@
         "log_in_new_account": "<a>Sign in</a> để vào tài khoản mới của bạn.",
         "logout_dialog": {
             "description": "Bạn có chắc mình muốn đăng xuất không?",
-            "megolm_export": "Xuất các khóa thủ công",
             "setup_key_backup_title": "Bạn sẽ mất quyền truy cập vào các tin nhắn được mã hóa của mình",
-            "setup_secure_backup_description_1": "Các tin nhắn được mã hóa được bảo mật bằng mã hóa đầu cuối. Chỉ bạn và (những) người nhận mới có chìa khóa để đọc những tin nhắn này.",
-            "setup_secure_backup_description_2": "Khi bạn đăng xuất, các khóa sẽ được xóa khỏi thiết bị này, tức là bạn không thể đọc các tin nhắn được mã hóa trừ khi bạn có khóa cho chúng trong thiết bị khác, hoặc sao lưu chúng lên máy chủ.",
             "skip_key_backup": "Tôi không muốn tin nhắn được mã hóa của mình"
         },
         "misconfigured_body": "Yêu cầu quản trị viên %(brand)s của bạn kiểm tra <a>your config</a> để tìm các mục nhập sai hoặc trùng lặp.",
@@ -775,9 +772,6 @@
             "warning": "Nếu bạn không xóa phương pháp khôi phục, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
         "set_up_toast_title": "Thiết lập Sao lưu Bảo mật",
-        "setup_secure_backup": {
-            "explainer": "Sao lưu chìa khóa của bạn trước khi đăng xuất để tránh mất chúng."
-        },
         "udd": {
             "interactive_verification_button": "Xác thực có tương tác bằng biểu tượng cảm xúc",
             "other_ask_verify_text": "Yêu cầu người dùng này xác thực phiên của họ hoặc xác minh theo cách thủ công bên dưới.",

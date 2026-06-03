@@ -5,6 +5,7 @@
     "action": {
         "back": "돌아가기",
         "click": "클릭",
+        "close": "닫기",
         "collapse": "접기",
         "delete": "삭제",
         "dismiss": "버리기",
@@ -16,6 +17,7 @@
         "invite": "초대",
         "new_conversation": "새로운 대화",
         "new_room": "새로운 방",
+        "new_section": "새로운 섹션",
         "new_video_room": "새로운 비디오룸",
         "open_menu": "메뉴 열기",
         "pause": "일시중지",
@@ -34,6 +36,7 @@
     "common": {
         "attachment": "첨부 파일",
         "encryption_enabled": "암호화 활성화됨",
+        "loading": "로딩 중…",
         "options": "옵션",
         "preferences": "환경설정",
         "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
@@ -44,6 +47,15 @@
     "left_panel": {
         "open_dial_pad": "다이얼 패드 열기",
         "separator_label": "클릭하거나 드래그하여 확대"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "계정 만들기",
+            "got_an_account": "계정이 있으신가요?",
+            "manage_account": "계정 관리",
+            "sign_in": "로그인",
+            "title": "사용자 메뉴"
+        }
     },
     "notifications": {
         "all_messages": "모든 메시지",
@@ -94,6 +106,8 @@
             "voice_call": "%(roomName)s 대화방에서 음성 통화 시작"
         },
         "appearance": "모양",
+        "chat_moved": "채팅이 이동되었습니다",
+        "collapse_all_sections": "모든 섹션 접기",
         "collapse_filters": "필터 목록 접기",
         "empty": {
             "no_chats": "아직 채팅이 없습니다.",
@@ -112,6 +126,7 @@
             "show_activity": "모든 활동 보기",
             "show_chats": "모든 채팅 보기"
         },
+        "expand_all_sections": "모든 섹션 펼치기",
         "expand_filters": "필터 목록 펼치기",
         "filters": {
             "favourite": "즐겨찾기",
@@ -129,7 +144,8 @@
             "leave_room": "방 떠나기",
             "low_priority": "우선순위 낮음",
             "mark_read": "읽음으로 표시",
-            "mark_unread": "읽지 않음으로 표시"
+            "mark_unread": "읽지 않음으로 표시",
+            "move_to_section": "이동"
         },
         "notification_options": "알림 옵션",
         "open_space_menu": "스페이스 메뉴 열기",
@@ -138,8 +154,13 @@
             "more_options": "옵션 더보기"
         },
         "room_options": "채팅방 옵션",
+        "section_created": "섹션 생성됨",
         "section_header": {
-            "toggle": "%(section)s 섹션 전환"
+            "edit_section": "섹션 편집",
+            "more_options": "옵션 더보기",
+            "remove_section": "섹션 제거",
+            "toggle": "%(section)s 섹션 전환",
+            "toggle_unread": "읽지 않은 방이 있는 %(section)s 섹션 접기/펼치기"
         },
         "show_message_previews": "메시지 미리보기 표시",
         "sort": "정렬",
@@ -176,6 +197,10 @@
         "n_minutes_ago": "%(num)s분 전"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "영상 통화",
+            "voice_call_title": "음성 통화"
+        },
         "decryption_failure": {
             "blocked": "발신자가 귀하의 기기가 인증되지 않았기 때문에 이 메시지를 수신하지 못하도록 차단했습니다.",
             "historical_event_no_key_backup": "이 기기에서는 이전 메시지를 볼 수 없습니다.",
@@ -214,13 +239,26 @@
         },
         "message_timestamp_received_at": "수신 시간: %(dateTime)s",
         "message_timestamp_sent_at": "발송 시간: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>"
+        },
+        "pending_moderation": "검토 대기 중인 메시지",
+        "pending_moderation_reason": "검토 대기 중인 메시지: %(reason)s",
         "url_preview": {
             "close": "미리보기 닫기",
+            "open_link": "링크 열기",
             "show_n_more": {
                 "other": "외 %(count)s개의 미리보기 더 보기"
             },
             "view_image": "이미지 보기"
         }
+    },
+    "user_menu": {
+        "link_new_device": "새 기기 연결",
+        "open_feedback": "피드백",
+        "open_home": "홈",
+        "open_security": "보안 및 개인정보 보호",
+        "open_settings": "모든 설정"
     },
     "widget": {
         "context_menu": {

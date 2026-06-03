@@ -210,10 +210,7 @@
         "log_in_new_account": "<a>Hiditra</a> amin'ny kaontinao vaovao.",
         "logout_dialog": {
             "description": "Tena te hivoaka ve ianao?",
-            "megolm_export": "Manondrana lakile amin'ny tanana",
             "setup_key_backup_title": "Ho very ny fidirana amin'ny hafatrao voasakana",
-            "setup_secure_backup_description_1": "Ny hafatra voarakitra dia arovana aminy fanafenana farany mankany amin'ny farany. Ianao sy ny mpandray (ireo) ihany no manana ny fanalahidy hamakiana ireo hafatra ireo.",
-            "setup_secure_backup_description_2": "Rehefa mivoaka ianao dia ho voafafa amin'ity fitaovana ity ireo fanalahidy ireo, izay midika fa tsy ho afaka hamaky hafatra voafono ianao raha tsy manana ny fanalahidin'izy ireo amin'ny fitaovanao hafa, na averinao any aminy mpizara.",
             "skip_key_backup": "Tsy tiako ny hafatra voarakotra"
         },
         "misconfigured_body": "Anontanio ny anao%(brand)s admin hanamarina<a> ny config</a> hoany fidirana diso na dika mitovy.",
@@ -824,9 +821,6 @@
             "warning": "Raha tsy nesorinao ny fomba fanarenana, dia mety hanandrana hiditra aminy kaontinao ny mpanafika. Hanova ny tenimiafiny kaontinao ary mametraha fomba fanarenana vaovao avy hatrany ao amin'ny fanitsiana."
         },
         "set_up_toast_title": "Hanitsy angona voaharo",
-        "setup_secure_backup": {
-            "explainer": "Amboary ny fanalahidinao alohany hivoahana mba tsy ho very."
-        },
         "udd": {
             "interactive_verification_button": "Hamarino amin'ny alalany emoji",
             "other_ask_verify_text": "Angataho ity mpampiasa ity mba hanamarina ny fotoam-pivorian'izy ireo, na hanamarina izany amin'ny tanana eto ambany.",

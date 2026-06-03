@@ -209,10 +209,7 @@
         "log_in_new_account": "<a>登入</a>到您的新帳號。",
         "logout_dialog": {
             "description": "您確定要登出嗎？",
-            "megolm_export": "手動匯出金鑰",
             "setup_key_backup_title": "您將會失去您的加密訊息",
-            "setup_secure_backup_description_1": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
-            "setup_secure_backup_description_2": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
             "skip_key_backup": "我不要我的加密訊息了"
         },
         "misconfigured_body": "請要求您的 %(brand)s 管理員檢查<a>您的設定</a>是否有不正確或重覆的項目。",
@@ -830,9 +827,6 @@
         "set_up_recovery": "設定復原",
         "set_up_recovery_toast_description": "產生一把復原金鑰，以便在您無法存取裝置時恢復您的加密訊息歷史記錄。",
         "set_up_toast_title": "設定安全備份",
-        "setup_secure_backup": {
-            "explainer": "請在登出前備份您的金鑰，以免遺失。"
-        },
         "turn_on_key_storage_description": "在伺服器安全地儲存您的加密身分及訊息金鑰。如此一來，您便能在任何新裝置上檢視訊息歷史紀錄。",
         "udd": {
             "interactive_verification_button": "透過表情符號互動來驗證",

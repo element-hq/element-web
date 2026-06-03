@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Connectez-vous</a> à votre nouveau compte.",
         "logout_dialog": {
             "description": "Êtes-vous sûr de vouloir supprimer cet appareil ?",
-            "megolm_export": "Exporter manuellement les clés",
             "setup_key_backup_title": "Vous perdrez l’accès à vos messages chiffrés",
-            "setup_secure_backup_description_1": "Les messages chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) ont les clés pour lire ces messages.",
-            "setup_secure_backup_description_2": "Quand vous supprimez cet appareil, vous ne pourrez plus lire les messages chiffrés à moins d’avoir les clés de ces messages sur vos autres appareils, ou de les avoir sauvegardées sur le serveur.",
             "skip_key_backup": "Je ne veux pas de mes messages chiffrés"
         },
         "misconfigured_body": "Demandez à votre administrateur %(brand)s de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
@@ -1003,9 +1000,6 @@
         "set_up_recovery": "Sauvegardez vos discussions",
         "set_up_recovery_toast_description": "Vos discussions sont automatiquement sauvegardées grâce à un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
-        "setup_secure_backup": {
-            "explainer": "Sauvegardez vos clés avant de supprimer cet appareil pour éviter de les perdre."
-        },
         "turn_on_key_storage": "Activer le stockage des clés",
         "turn_on_key_storage_description": "Cela vous permettra de consulter votre historique de conversations sur tous vos nouveaux appareils et est nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.",
         "udd": {

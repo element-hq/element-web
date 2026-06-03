@@ -218,11 +218,9 @@
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
             "description": "你确定要移除此设备？",
-            "megolm_export": "手动导出密钥",
-            "setup_key_backup_title": "你将失去加密消息的访问权",
-            "setup_secure_backup_description_1": "加密消息采用端到端加密技术确保安全。只有你与收件人拥有读取这些消息的密钥。",
-            "setup_secure_backup_description_2": "当你移除此设备时，这些密钥将从此设备中删除，这意味着你将无法读取加密消息，除非你在其他设备上拥有这些密钥，或者将它们备份到服务器。",
-            "skip_key_backup": "我要丢弃加密消息"
+            "setup_key_backup_title": "你即将失去加密聊天的访问权",
+            "setup_secure_backup_description": "这是你的唯一设备。一旦移除，下次登录时你需要使用恢复密钥验证数字身份并恢复加密聊天。",
+            "skip_key_backup": "仍要移除此设备"
         },
         "misconfigured_body": "请 %(brand)s 的管理员检查<a>你的配置</a>中是否存在错误或重复的条目。",
         "misconfigured_title": "你的 %(brand)s 配置错误",
@@ -473,6 +471,7 @@
         "description": "描述",
         "deselect_all": "取消全选",
         "device": "设备",
+        "disabled_by_homeserver": "已被主服务器禁用",
         "edited": "已编辑",
         "email_address": "邮件地址",
         "emoji": "表情符号",
@@ -1001,9 +1000,6 @@
         "set_up_recovery": "备份聊天",
         "set_up_recovery_toast_description": "你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥并保留数字身份。",
         "set_up_toast_title": "设置安全备份",
-        "setup_secure_backup": {
-            "explainer": "移除此设备前备份密钥以防止丢失。"
-        },
         "turn_on_key_storage": "启用密钥存储",
         "turn_on_key_storage_description": "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。",
         "udd": {

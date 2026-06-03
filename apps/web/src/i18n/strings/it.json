@@ -212,10 +212,7 @@
         "log_in_new_account": "<a>Accedi</a> al tuo nuovo account.",
         "logout_dialog": {
             "description": "Sei sicuro di volerti disconnettere?",
-            "megolm_export": "Esporta le chiavi manualmente",
             "setup_key_backup_title": "Perderai l'accesso ai tuoi messaggi cifrati",
-            "setup_secure_backup_description_1": "I messaggi cifrati sono resi sicuri con una crittografia end-to-end. Solo tu e il/i destinatario/i avete le chiavi per leggere questi messaggi.",
-            "setup_secure_backup_description_2": "Quando ti disconnetti queste chiavi verranno eliminate dal dispositivo, quindi non potrai leggere i messaggi cifrati a meno che tu non abbia le chiavi su altri dispositivi, o salvate in backup sul server.",
             "skip_key_backup": "Non voglio i miei messaggi cifrati"
         },
         "misconfigured_body": "Chiedi al tuo amministratore di %(brand)s di controllare <a>la tua configurazione</a> per voci non valide o doppie.",
@@ -828,9 +825,6 @@
             "warning": "Se non hai rimosso il metodo di ripristino, è possibile che un aggressore stia cercando di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni."
         },
         "set_up_toast_title": "Imposta il Backup Sicuro",
-        "setup_secure_backup": {
-            "explainer": "Fai una copia delle tue chiavi prima di disconnetterti per evitare di perderle."
-        },
         "udd": {
             "interactive_verification_button": "Verifica interattivamente con emoji",
             "other_ask_verify_text": "Chiedi a questo utente di verificare la sua sessione o verificala manualmente sotto.",
