@@ -25,10 +25,10 @@ import {
     MatrixHttpApi,
     OAuthGrantType,
 } from "matrix-js-sdk/src/matrix";
+import fetchMock from "@fetch-mock/jest";
 
 import LoginWithQR, { LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
-import fetchMock from "@fetch-mock/jest";
 import { mockPlatformPeg } from "../../../../../test-utils";
 
 jest.mock("matrix-js-sdk/src/rendezvous/transports");
