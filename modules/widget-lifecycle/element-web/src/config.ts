@@ -12,7 +12,7 @@ z.config(z.locales.en());
 /** The config.json key under which widget lifecycle module configuration is stored. */
 export const CONFIG_KEY = "io.element.element-web-modules.widget-lifecycle";
 
-export const WidgetConfigurationSchema = z.partial(
+const WidgetConfigurationSchema = z.partial(
     z.looseObject({
         preload_approved: z.boolean(),
         identity_approved: z.boolean(),
