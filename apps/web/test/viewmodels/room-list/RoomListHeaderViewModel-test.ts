@@ -129,6 +129,18 @@ describe("RoomListHeaderViewModel", () => {
             expect(snapshot.canCreateRoom).toBe(false);
         });
 
+        it("should display compose menu when section feature is enabled@", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "feature_room_list_sections") return true;
+                return false;
+            });
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+            const snapshot = vm.getSnapshot();
+            expect(snapshot.displayComposeMenu).toBe(true);
+        });
+
         it("should show invite option when space is public", () => {
             jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
             jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
