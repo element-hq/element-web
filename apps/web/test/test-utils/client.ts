@@ -160,6 +160,7 @@ export const mockClientMethodsCrypto = (): Partial<
     },
     getCrypto: jest.fn().mockReturnValue({
         getUserDeviceInfo: jest.fn(),
+        getDeviceVerificationStatus: jest.fn().mockResolvedValue(null),
         getCrossSigningStatus: jest.fn().mockResolvedValue({
             publicKeysOnDevice: true,
             privateKeysInSecretStorage: false,

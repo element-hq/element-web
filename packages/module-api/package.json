@@ -1,12 +1,12 @@
 {
     "name": "@element-hq/element-web-module-api",
     "type": "module",
-    "version": "1.13.0",
+    "version": "1.14.0",
     "description": "Module API surface for element-web",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/element-hq/element-modules.git",
-        "directory": "packages/element-web-module-api"
+        "url": "git+https://github.com/element-hq/element-web.git",
+        "directory": "packages/module-api"
     },
     "author": "element-hq",
     "license": "SEE LICENSE IN README.md",
@@ -27,7 +27,9 @@
     "scripts": {
         "prepack": "nx build",
         "lint:types": "nx lint:types",
-        "test:unit": "vitest"
+        "test:unit": "vitest",
+        "coverage": "pnpm test:unit --coverage",
+        "coverage:diff": "diff-cover --config-file ../../diff-cover.toml coverage/lcov.info"
     },
     "devDependencies": {
         "@element-hq/vite-common": "workspace:*",
@@ -44,8 +46,7 @@
         "typescript": "^6.0.0",
         "unplugin-dts": "1.0.1",
         "vite": "catalog:",
-        "vitest": "catalog:",
-        "vitest-sonar-reporter": "catalog:"
+        "vitest": "catalog:"
     },
     "peerDependencies": {
         "@matrix-org/react-sdk-module-api": "*",

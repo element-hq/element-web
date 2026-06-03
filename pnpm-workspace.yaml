@@ -1,6 +1,7 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
+ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
@@ -24,9 +25,8 @@ catalog:
     # fonts
     "@fontsource/inter": 5.2.8
     # vite
-    vite: 8.0.13
+    vite: 8.0.14
     vitest: 4.1.7
-    vitest-sonar-reporter: 3.0.0
     "@vitest/coverage-v8": 4.1.7
 
 packageExtensions:
@@ -59,6 +59,9 @@ allowBuilds:
     protobufjs: false
     # Builds optional crypto binding, which we do not need
     ssh2: false
+    # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
+    sharp: true
+    workerd: true
 
 patchedDependencies:
     "@vector-im/matrix-wysiwyg": patches/@vector-im__matrix-wysiwyg.patch

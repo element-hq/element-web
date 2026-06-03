@@ -80,8 +80,6 @@ jobs:
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
-                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
-
                   # tell jest to use coloured output
                   FORCE_COLOR: true
                   MAX_WORKERS: ${{ steps.cpu-cores.outputs.count }}
@@ -102,28 +100,6 @@ jobs:
                   path: |
                       apps/web/coverage
                       !apps/web/coverage/lcov-report
-
-    complete:
-        name: jest-tests
-        needs: [jest_ew, vitest]
-        if: always()
-        runs-on: ubuntu-24.04
-        permissions:
-            statuses: write
-        steps:
-            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              run: exit 1
-
-            - name: Skip SonarCloud in merge queue
-              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
-              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
-              with:
-                  authToken: ${{ secrets.GITHUB_TOKEN }}
-                  state: success
-                  description: SonarCloud skipped
-                  context: SonarCloud Code Analysis
-                  sha: ${{ github.sha }}
-                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     vitest:
         name: Vitest
@@ -191,3 +167,61 @@ jobs:
                   path: |
                       ${{ matrix.path }}/coverage
                       !${{ matrix.path }}/coverage/lcov-report
+
+    complete:
+        name: Tests
+        needs:
+            - jest_ew
+            - vitest
+        if: always()
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+            pull-requests: read
+            checks: write
+            statuses: write
+        steps:
+            - name: Skip SonarCloud in merge queue
+              if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  description: SonarCloud skipped
+                  context: SonarCloud Code Analysis
+                  sha: ${{ github.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              with:
+                  persist-credentials: false
+                  fetch-depth: 0 # Full history, fastest for diff-cover
+
+            - name: Download coverage artifacts
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              with:
+                  pattern: coverage-*
+                  path: coverage
+
+            - name: Diff Coverage
+              id: coverage
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              uses: Affanmir/diff-cover-action@0d8c98f613bbd2428df50b3109b1e3b1d5ab59d3 # v2.1.0
+              with:
+                  compare-branch: origin/${{ github.base_ref || 'develop' }}
+                  mode: coverage
+                  coverage-files: coverage/*/*lcov.info
+                  ignore-whitespace: true
+                  show-uncovered: true
+                  post-comment: false
+                  create-annotations: true
+                  annotation-type: warning
+                  fail-on-threshold: ${{ contains(github.event.pull_request.labels.*.name, 'Z-Skip-Coverage') && 'false' || 'true' }}
+                  fail-under: 80
+
+            - name: Check status of tests
+              if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              run: exit 1

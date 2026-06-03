@@ -9,18 +9,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React, {
     createRef,
-    useCallback,
-    useContext,
     useEffect,
-    useMemo,
-    useState,
     type JSX,
     type Ref,
     type FocusEvent,
     type MouseEvent,
     type ReactNode,
 } from "react";
-import classNames from "classnames";
 import {
     type EventStatus,
     EventType,
@@ -28,7 +23,6 @@ import {
     MatrixEventEvent,
     type Relations,
     type Room,
-    RelationsEvent,
     RoomEvent,
     type RoomMember,
     type Thread,
@@ -36,22 +30,9 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import { Tooltip } from "@vector-im/compound-web";
-import { uniqueId, uniqBy } from "lodash";
-import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import {
-    useCreateAutoDisposedViewModel,
-    ActionBarView,
-    E2eMessageSharedIconView,
-    MessageTimestampView,
-    PinnedMessageBadge,
-    ReactionsRowButtonView,
-    ReactionsRowView,
-    ThreadMessagePreviewView,
-    ThreadSummaryView,
-    TileErrorView,
-    useViewModel,
-} from "@element-hq/web-shared-components";
+import { uniqueId } from "lodash";
+import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, PinnedMessageBadge, TileErrorView } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -60,22 +41,16 @@ import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
-import ContextMenu, { aboveLeftOf, aboveRightOf } from "../../structures/ContextMenu";
+import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";
 import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
-import NotificationBadge from "./NotificationBadge";
 import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
 import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
-import MemberAvatar from "../avatars/MemberAvatar";
-import SenderProfile from "../messages/SenderProfile";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import ReactionPicker from "../emojipicker/ReactionPicker";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
-import { isContentActionable } from "../../../utils/EventUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { copyPlaintext } from "../../../utils/strings";
@@ -83,22 +58,25 @@ import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
-import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
-import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
-import { EventPreview } from "./EventPreview";
+import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
-import SettingsStore from "../../../settings/SettingsStore";
-import { CardContext } from "../right_panel/context";
-import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
+import { EventPreviewAdapter } from "./EventTile/EventPreviewAdapter";
+import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
+import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
+import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
+import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
+import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
+import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
+import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
-import { E2eMessageSharedIconViewModel } from "../../../viewmodels/room/timeline/event-tile/E2eMessageSharedIconViewModel";
 import {
     getEventTileReceiptState,
     type EventTileReceiptState,
@@ -121,28 +99,13 @@ import {
     initialEventTileInteractionState,
     type EventTileInteractionState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileInteractionState";
-import {
-    type MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
-import {
-    ThreadMessagePreviewViewModel,
-    ThreadSummaryViewModel,
-} from "../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel.tsx";
-import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
-import {
-    MAX_ITEMS_WHEN_LIMITED,
-    ReactionsRowViewModel,
-} from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import { type MessageTimestampViewModelProps } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 import {
     getEventTileReactionRelations,
     isEventTileReactionRelation,
     type GetRelationsForEvent,
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
-import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
-import { type ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
@@ -513,7 +476,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             <div className="mx_ThreadPanel_replies">
                 <ThreadsIcon />
                 <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-                <ThreadMessagePreviewWrapper thread={threadState.thread} />
+                <ThreadMessagePreviewAdapter eventTileViewModel={this.viewModel} thread={threadState.thread} />
             </div>
         );
     }
@@ -521,7 +484,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private renderThreadInfo(threadState: EventTileThreadState): React.ReactNode {
         if (threadState.shouldShowThreadSummary && threadState.thread) {
             return (
-                <ThreadSummaryWrapper
+                <ThreadSummaryAdapter
+                    eventTileViewModel={this.viewModel}
                     mxEvent={this.props.mxEvent}
                     thread={threadState.thread}
                     data-testid="thread-summary"
@@ -712,7 +676,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return null;
             case "messageShared":
                 return (
-                    <E2eMessageSharedIconWrapper
+                    <E2eMessageSharedIconAdapter
+                        eventTileViewModel={this.viewModel}
                         keyForwardingUserId={e2ePadlockViewState.keyForwardingUserId}
                         roomId={e2ePadlockViewState.roomId}
                     />
@@ -1041,34 +1006,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Local echos have a send "status".
         const scrollToken = eventTileRenderState.root.scrollToken;
 
-        let avatar: JSX.Element | null = null;
-        let sender: JSX.Element | null = null;
-        const { avatarSize } = eventTileSnapshot.sender.profileState;
-
-        if (this.props.mxEvent.sender && avatarSize !== null) {
-            avatar = (
-                <div className="mx_EventTile_avatar">
-                    <MemberAvatar
-                        member={eventTileSnapshot.sender.avatarMember}
-                        size={avatarSize}
-                        viewUserOnClick={eventTileSnapshot.sender.viewUserOnClick}
-                        forceHistorical={this.props.mxEvent.getType() === EventType.RoomMember}
-                    />
-                </div>
-            );
-        }
-
-        const senderProfileMode = eventTileSnapshot.sender.profileMode;
-        if (senderProfileMode === "clickable") {
-            sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
-        } else if (senderProfileMode === "tooltip") {
-            sender = <SenderProfile mxEvent={this.props.mxEvent} withTooltip />;
-        } else if (senderProfileMode === "default") {
-            sender = <SenderProfile mxEvent={this.props.mxEvent} />;
-        }
+        const avatar = (
+            <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
+        );
+        const sender = (
+            <EventTileSenderAdapter
+                mxEvent={this.props.mxEvent}
+                senderSnapshot={eventTileSnapshot.sender}
+                onSenderProfileClick={this.onSenderProfileClick}
+            />
+        );
 
         const actionBar = eventTileSnapshot.actionBar.show ? (
-            <ActionBarWrapper
+            <ActionBarAdapter
+                eventTileViewModel={this.viewModel}
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
                 permalinkCreator={this.props.permalinkCreator}
@@ -1093,7 +1044,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         ) : null;
         const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
             <MessageTimestampAdapter
-                vm={this.viewModel.getMessageTimestampViewModel(messageTimestampProps)}
+                eventTileViewModel={this.viewModel}
+                kind="plain"
                 timestampProps={messageTimestampProps}
             />
         ) : (
@@ -1101,7 +1053,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         );
         const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
             <MessageTimestampAdapter
-                vm={this.viewModel.getLinkedMessageTimestampViewModel(linkedMessageTimestampProps)}
+                eventTileViewModel={this.viewModel}
+                kind="linked"
                 timestampProps={linkedMessageTimestampProps}
             />
         ) : (
@@ -1116,7 +1069,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         let reactionsRow: JSX.Element | undefined;
         if (hasReactionsRow) {
             reactionsRow = (
-                <ReactionsRowWrapper
+                <ReactionsRowAdapter
+                    eventTileViewModel={this.viewModel}
                     mxEvent={this.props.mxEvent}
                     reactions={this.state.reactions}
                     key="mx_EventTile_reactionsRow"
@@ -1129,21 +1083,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const groupPadlock = eventTileRenderState.e2ePadlock.showInGroupLine && this.renderE2EPadlock();
         const ircPadlock = eventTileRenderState.e2ePadlock.showInIrcLine && this.renderE2EPadlock();
 
-        const receiptState = this.receiptState;
-        let msgOption: JSX.Element | undefined;
-        if (receiptState.shouldShowSentReceipt || receiptState.shouldShowSendingReceipt) {
-            msgOption = <SentReceipt messageState={this.props.eventSendStatus} />;
-        } else if (this.props.showReadReceipts) {
-            msgOption = (
-                <ReadReceiptGroup
-                    readReceipts={this.props.readReceipts ?? []}
-                    readReceiptMap={this.props.readReceiptMap ?? {}}
-                    checkUnmounting={this.props.checkUnmounting}
-                    suppressAnimation={this.suppressReadReceiptAnimation}
-                    isTwelveHour={this.props.isTwelveHour}
-                />
-            );
-        }
+        const msgOption = (
+            <ReceiptAdapter
+                receiptState={this.receiptState}
+                eventSendStatus={this.props.eventSendStatus}
+                showReadReceipts={this.props.showReadReceipts}
+                readReceipts={this.props.readReceipts}
+                readReceiptMap={this.props.readReceiptMap}
+                checkUnmounting={this.props.checkUnmounting}
+                suppressAnimation={this.suppressReadReceiptAnimation}
+                isTwelveHour={this.props.isTwelveHour}
+            />
+        );
 
         const replyChainState = getEventTileReplyChainState({
             mxEvent: this.props.mxEvent,
@@ -1308,17 +1259,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
                                     <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : (
-                                    <EventPreview mxEvent={this.props.mxEvent} />
+                                    <EventPreviewAdapter
+                                        eventTileViewModel={this.viewModel}
+                                        mxEvent={this.props.mxEvent}
+                                    />
                                 )}
                             </div>
                             {this.renderThreadPanelSummary(threadState)}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
                             <ThreadListActionBarAdapter
-                                vm={this.viewModel.getThreadListActionBarViewModel({
-                                    onViewInRoomClick: this.onViewInRoomClick,
-                                    onCopyLinkClick: this.onCopyLinkToThreadClick,
-                                })}
+                                eventTileViewModel={this.viewModel}
                                 onViewInRoomClick={this.onViewInRoomClick}
                                 onCopyLinkClick={this.onCopyLinkToThreadClick}
                                 className="mx_ThreadActionBar"
@@ -1513,585 +1464,3 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
     );
 };
 export default SafeEventTile;
-
-interface ISentReceiptProps {
-    messageState: EventStatus | undefined;
-}
-
-function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
-    const isSent = !messageState || messageState === "sent";
-    const isFailed = messageState === "not_sent";
-
-    let icon: JSX.Element | undefined;
-    let label: string | undefined;
-    if (messageState === "encrypting") {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_encrypting");
-    } else if (isSent) {
-        icon = <CheckCircleIcon />;
-        label = _t("timeline|send_state_sent");
-    } else if (isFailed) {
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-        label = _t("timeline|send_state_failed");
-    } else {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_sending");
-    }
-
-    return (
-        <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup">
-                <Tooltip label={label} placement="top-end">
-                    <div className="mx_ReadReceiptGroup_button" role="status">
-                        <span className="mx_ReadReceiptGroup_container">{icon}</span>
-                    </div>
-                </Tooltip>
-            </div>
-        </div>
-    );
-}
-
-interface MessageTimestampAdapterProps {
-    vm: MessageTimestampViewModel;
-    timestampProps: MessageTimestampViewModelProps;
-}
-
-function MessageTimestampAdapter({ vm, timestampProps }: Readonly<MessageTimestampAdapterProps>): JSX.Element {
-    useEffect(() => {
-        vm.setProps(timestampProps);
-    }, [vm, timestampProps]);
-
-    return (
-        <>
-            {timestampProps.receivedTs ? (
-                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
-            ) : undefined}
-            <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
-        </>
-    );
-}
-
-interface ThreadMessagePreviewWrapperProps {
-    thread: Thread;
-    showDisplayName?: boolean;
-}
-
-function ThreadMessagePreviewWrapper({
-    thread,
-    showDisplayName = false,
-}: Readonly<ThreadMessagePreviewWrapperProps>): JSX.Element {
-    const cli = useMatrixClientContext();
-    const { room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
-        "room",
-        "timelineRenderingType",
-        "lowBandwidth",
-    );
-    const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadMessagePreviewViewModel({
-                cli,
-                thread,
-                room,
-                timelineRenderingType,
-                lowBandwidth,
-                useOnlyCurrentProfiles,
-                showDisplayName,
-                avatarClassName: "mx_BaseAvatar",
-            }),
-    );
-
-    useEffect(() => {
-        vm.setClient(cli);
-        vm.setThread(thread);
-        vm.setRoom(room);
-        vm.setTimelineRenderingType(timelineRenderingType);
-        vm.setLowBandwidth(lowBandwidth);
-        vm.setUseOnlyCurrentProfiles(useOnlyCurrentProfiles);
-        vm.setShowDisplayName(showDisplayName);
-    }, [vm, cli, thread, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles, showDisplayName]);
-
-    return <ThreadMessagePreviewView vm={vm} />;
-}
-
-interface ThreadSummaryWrapperProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "onClick"> {
-    mxEvent: MatrixEvent;
-    thread: Thread;
-}
-
-function ThreadSummaryWrapper({
-    mxEvent,
-    thread,
-    className,
-    ...props
-}: Readonly<ThreadSummaryWrapperProps>): JSX.Element {
-    const cli = useMatrixClientContext();
-    const { isCard } = useContext(CardContext);
-    const { narrow, room, timelineRenderingType, lowBandwidth } = useScopedRoomContext(
-        "narrow",
-        "room",
-        "timelineRenderingType",
-        "lowBandwidth",
-    );
-    const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ThreadSummaryViewModel({
-                cli,
-                mxEvent,
-                thread,
-                narrow,
-                isCard,
-                room,
-                timelineRenderingType,
-                lowBandwidth,
-                useOnlyCurrentProfiles,
-                avatarClassName: "mx_BaseAvatar",
-            }),
-    );
-
-    useEffect(() => {
-        vm.setClient(cli);
-        vm.setRootEvent(mxEvent);
-        vm.setThread(thread);
-        vm.setNarrow(narrow);
-        vm.setIsCard(isCard);
-        vm.setRoom(room);
-        vm.setTimelineRenderingType(timelineRenderingType);
-        vm.setLowBandwidth(lowBandwidth);
-        vm.setUseOnlyCurrentProfiles(useOnlyCurrentProfiles);
-    }, [vm, cli, mxEvent, thread, narrow, isCard, room, timelineRenderingType, lowBandwidth, useOnlyCurrentProfiles]);
-
-    return <ThreadSummaryView {...props} vm={vm} className={classNames("mx_ThreadSummary", className)} />;
-}
-
-interface ThreadListActionBarAdapterProps {
-    vm: ThreadListActionBarViewModel;
-    onViewInRoomClick: (anchor: HTMLElement | null) => void;
-    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
-    className?: string;
-}
-
-function ThreadListActionBarAdapter({
-    vm,
-    onViewInRoomClick,
-    onCopyLinkClick,
-    className,
-}: Readonly<ThreadListActionBarAdapterProps>): JSX.Element {
-    useEffect(() => {
-        vm.setProps({
-            onViewInRoomClick,
-            onCopyLinkClick,
-        });
-    }, [vm, onViewInRoomClick, onCopyLinkClick]);
-
-    return <ActionBarView vm={vm} className={className} />;
-}
-
-interface ReactionsRowButtonItemProps {
-    mxEvent: MatrixEvent;
-    content: string;
-    count: number;
-    reactionEvents: MatrixEvent[];
-    myReactionEvent?: MatrixEvent;
-    disabled?: boolean;
-    customReactionImagesEnabled?: boolean;
-}
-
-function ReactionsRowButtonItem(props: Readonly<ReactionsRowButtonItemProps>): JSX.Element {
-    const client = useMatrixClientContext();
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowButtonViewModel({
-                client,
-                mxEvent: props.mxEvent,
-                content: props.content,
-                count: props.count,
-                reactionEvents: props.reactionEvents,
-                myReactionEvent: props.myReactionEvent,
-                disabled: props.disabled,
-                customReactionImagesEnabled: props.customReactionImagesEnabled,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
-    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
-
-    useEffect(() => {
-        vm.setCount(props.count);
-    }, [props.count, vm]);
-
-    useEffect(() => {
-        vm.setMyReactionEvent(props.myReactionEvent);
-    }, [props.myReactionEvent, vm]);
-
-    useEffect(() => {
-        vm.setDisabled(props.disabled);
-    }, [props.disabled, vm]);
-
-    return <ReactionsRowButtonView vm={vm} />;
-}
-
-interface ReactionGroup {
-    content: string;
-    events: MatrixEvent[];
-}
-
-const getReactionGroups = (reactions?: Relations | null): ReactionGroup[] =>
-    reactions
-        ?.getSortedAnnotationsByKey()
-        ?.map(([content, events]) => ({
-            content,
-            events: [...events],
-        }))
-        .filter(({ events }) => events.length > 0) ?? [];
-
-const getMyReactions = (reactions: Relations | null | undefined, userId?: string): MatrixEvent[] | null => {
-    if (!reactions || !userId) {
-        return null;
-    }
-
-    const myReactions = reactions.getAnnotationsBySender()?.[userId];
-    if (!myReactions) {
-        return null;
-    }
-
-    return [...myReactions.values()];
-};
-
-interface ReactionsRowWrapperProps {
-    mxEvent: MatrixEvent;
-    reactions?: Relations | null;
-}
-
-function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrapperProps>): JSX.Element | null {
-    const roomContext = useContext(RoomContext);
-    const userId = roomContext.room?.client.getUserId() ?? undefined;
-    const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
-    const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
-    const [menuDisplayed, setMenuDisplayed] = useState(false);
-    const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowViewModel({
-                isActionable: isContentActionable(mxEvent),
-                reactionGroupCount: reactionGroups.length,
-                canReact: roomContext.canReact,
-                addReactionButtonActive: false,
-            }),
-    );
-
-    const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
-        setMenuAnchorRect(event.currentTarget.getBoundingClientRect());
-        setMenuDisplayed(true);
-    }, []);
-
-    const closeReactionMenu = useCallback((): void => {
-        setMenuDisplayed(false);
-    }, []);
-
-    const updateReactionsState = useCallback((): void => {
-        const nextReactionGroups = getReactionGroups(reactions);
-        setReactionGroups(nextReactionGroups);
-        setMyReactions(getMyReactions(reactions, userId));
-        vm.setReactionGroupCount(nextReactionGroups.length);
-    }, [reactions, userId, vm]);
-
-    useEffect(() => {
-        vm.setActionable(isContentActionable(mxEvent));
-    }, [mxEvent, vm]);
-
-    useEffect(() => {
-        vm.setCanReact(roomContext.canReact);
-        if (!roomContext.canReact && menuDisplayed) {
-            setMenuDisplayed(false);
-        }
-    }, [roomContext.canReact, menuDisplayed, vm]);
-
-    useEffect(() => {
-        vm.setAddReactionHandlers({
-            onAddReactionClick: openReactionMenu,
-            onAddReactionContextMenu: openReactionMenu,
-        });
-    }, [openReactionMenu, vm]);
-
-    useEffect(() => {
-        vm.setAddReactionButtonActive(menuDisplayed);
-    }, [menuDisplayed, vm]);
-
-    useEffect(() => {
-        updateReactionsState();
-    }, [updateReactionsState]);
-
-    useEffect(() => {
-        if (!reactions) return;
-
-        reactions.on(RelationsEvent.Add, updateReactionsState);
-        reactions.on(RelationsEvent.Remove, updateReactionsState);
-        reactions.on(RelationsEvent.Redaction, updateReactionsState);
-
-        return () => {
-            reactions.off(RelationsEvent.Add, updateReactionsState);
-            reactions.off(RelationsEvent.Remove, updateReactionsState);
-            reactions.off(RelationsEvent.Redaction, updateReactionsState);
-        };
-    }, [reactions, updateReactionsState]);
-
-    useEffect(() => {
-        const onDecrypted = (): void => {
-            vm.setActionable(isContentActionable(mxEvent));
-        };
-
-        if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
-            mxEvent.once(MatrixEventEvent.Decrypted, onDecrypted);
-        }
-
-        return () => {
-            mxEvent.off(MatrixEventEvent.Decrypted, onDecrypted);
-        };
-    }, [mxEvent, vm]);
-
-    const snapshot = useViewModel(vm);
-    const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
-    const items = useMemo((): JSX.Element[] | undefined => {
-        const mappedItems = reactionGroups.map(({ content, events }) => {
-            // Deduplicate reaction events by sender per Matrix spec.
-            const deduplicatedEvents = uniqBy(events, (event: MatrixEvent) => event.getSender());
-            const myReactionEvent = myReactions?.find((reactionEvent) => {
-                if (reactionEvent.isRedacted()) {
-                    return false;
-                }
-                return reactionEvent.getRelation()?.key === content;
-            });
-
-            return (
-                <ReactionsRowButtonItem
-                    key={content}
-                    content={content}
-                    count={deduplicatedEvents.length}
-                    mxEvent={mxEvent}
-                    reactionEvents={deduplicatedEvents}
-                    myReactionEvent={myReactionEvent}
-                    customReactionImagesEnabled={customReactionImagesEnabled}
-                    disabled={
-                        !roomContext.canReact ||
-                        (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
-                    }
-                />
-            );
-        });
-
-        if (!mappedItems.length) {
-            return undefined;
-        }
-
-        return snapshot.showAllButtonVisible ? mappedItems.slice(0, MAX_ITEMS_WHEN_LIMITED) : mappedItems;
-    }, [
-        reactionGroups,
-        myReactions,
-        mxEvent,
-        customReactionImagesEnabled,
-        roomContext.canReact,
-        roomContext.canSelfRedact,
-        snapshot.showAllButtonVisible,
-    ]);
-
-    if (!snapshot.isVisible || !items?.length) {
-        return null;
-    }
-
-    let contextMenu: JSX.Element | undefined;
-    if (menuDisplayed && menuAnchorRect && reactions && roomContext.canReact) {
-        contextMenu = (
-            <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
-                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
-            </ContextMenu>
-        );
-    }
-
-    return (
-        <>
-            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
-                {items}
-            </ReactionsRowView>
-            {contextMenu}
-        </>
-    );
-}
-
-interface ActionBarWrapperProps {
-    mxEvent: MatrixEvent;
-    reactions?: Relations | null;
-    permalinkCreator?: RoomPermalinkCreator;
-    getTile: () => IEventTileType | null;
-    getReplyChain: () => ReplyChain | null;
-    onFocusChange?: (focused: boolean) => void;
-    isQuoteExpanded?: boolean;
-    toggleThreadExpanded: () => void;
-    getRelationsForEvent?: GetRelationsForEvent;
-}
-
-function ActionBarWrapper({
-    mxEvent,
-    reactions,
-    permalinkCreator,
-    getTile,
-    getReplyChain,
-    onFocusChange,
-    isQuoteExpanded,
-    toggleThreadExpanded,
-    getRelationsForEvent,
-}: Readonly<ActionBarWrapperProps>): JSX.Element {
-    const roomContext = useContext(RoomContext);
-    const { isCard } = useContext(CardContext);
-    const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const isSearch = Boolean(roomContext.search);
-    const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
-        setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
-    const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
-        setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new EventTileActionBarViewModel({
-                mxEvent,
-                timelineRenderingType: roomContext.timelineRenderingType,
-                canSendMessages: roomContext.canSendMessages,
-                canReact: roomContext.canReact,
-                isSearch,
-                isCard,
-                isQuoteExpanded,
-                onToggleThreadExpanded: toggleThreadExpanded,
-                onOptionsClick: handleOptionsClick,
-                onReactionsClick: handleReactionsClick,
-                getRelationsForEvent,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setProps({
-            mxEvent,
-            timelineRenderingType: roomContext.timelineRenderingType,
-            canSendMessages: roomContext.canSendMessages,
-            canReact: roomContext.canReact,
-            isSearch,
-            isCard,
-            isQuoteExpanded,
-            getRelationsForEvent,
-            onToggleThreadExpanded: toggleThreadExpanded,
-            onOptionsClick: handleOptionsClick,
-            onReactionsClick: handleReactionsClick,
-        });
-    }, [
-        vm,
-        mxEvent,
-        roomContext.timelineRenderingType,
-        roomContext.canSendMessages,
-        roomContext.canReact,
-        isSearch,
-        isCard,
-        isQuoteExpanded,
-        getRelationsForEvent,
-        handleOptionsClick,
-        handleReactionsClick,
-        toggleThreadExpanded,
-    ]);
-
-    useEffect(() => {
-        onFocusChange?.(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));
-    }, [onFocusChange, optionsMenuAnchorRect, reactionsMenuAnchorRect]);
-
-    useEffect(() => {
-        setOptionsMenuAnchorRect(null);
-        setReactionsMenuAnchorRect(null);
-    }, [mxEvent]);
-
-    const closeOptionsMenu = useCallback((): void => {
-        setOptionsMenuAnchorRect(null);
-    }, []);
-
-    const closeReactionsMenu = useCallback((): void => {
-        setReactionsMenuAnchorRect(null);
-    }, []);
-
-    const tile = getTile();
-    const replyChain = getReplyChain();
-    const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
-
-    return (
-        <>
-            <ActionBarView vm={vm} className="mx_MessageActionBar" />
-            {optionsMenuAnchorRect ? (
-                <MessageContextMenu
-                    {...aboveLeftOf(optionsMenuAnchorRect)}
-                    mxEvent={mxEvent}
-                    permalinkCreator={permalinkCreator}
-                    eventTileOps={eventTileOps}
-                    collapseReplyChain={collapseReplyChain}
-                    onFinished={closeOptionsMenu}
-                    getRelationsForEvent={getRelationsForEvent}
-                />
-            ) : null}
-            {reactionsMenuAnchorRect ? (
-                <ContextMenu
-                    {...aboveLeftOf(reactionsMenuAnchorRect)}
-                    onFinished={closeReactionsMenu}
-                    managed={false}
-                    focusLock
-                >
-                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
-                </ContextMenu>
-            ) : null}
-        </>
-    );
-}
-
-interface E2eMessageSharedIconWrapperProps {
-    /**
-     * The ID of the room containing the event whose keys were shared.
-     */
-    roomId: string;
-    /**
-     * The ID of the user who shared the keys.
-     */
-    keyForwardingUserId: string;
-}
-
-function E2eMessageSharedIconWrapper({
-    roomId,
-    keyForwardingUserId,
-}: Readonly<E2eMessageSharedIconWrapperProps>): JSX.Element {
-    const client = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new E2eMessageSharedIconViewModel({
-                client,
-                roomId,
-                keyForwardingUserId,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setRoomId(roomId);
-    }, [roomId, vm]);
-
-    useEffect(() => {
-        vm.setKeyForwardingUserId(keyForwardingUserId);
-    }, [keyForwardingUserId, vm]);
-
-    return (
-        <E2eMessageSharedIconView
-            vm={vm}
-            className={
-                // Timeline PCSS uses this app class as a layout hook for positioning and layout variants.
-                "mx_EventTile_e2eIcon"
-            }
-        />
-    );
-}
