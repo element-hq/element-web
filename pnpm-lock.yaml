@@ -801,9 +801,6 @@ importers:
       '@types/commonmark':
         specifier: ^0.27.4
         version: 0.27.10
-      '@types/content-type':
-        specifier: ^2.0.0
-        version: 2.0.0
       '@types/css-tree':
         specifier: ^2.3.8
         version: 2.3.11
@@ -5609,10 +5606,6 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
-
-  '@types/content-type@2.0.0':
-    resolution: {integrity: sha512-wZQlLoRx3carjGy5yHA6GnCBGChd/9DDYTAOPbISfXGjhI4j70U6SU/tu5EEz7NpX2MxpUVgbbYFIgLqDItbVQ==}
-    deprecated: This is a stub types definition. content-type provides its own type definitions, so you do not need this installed.
 
   '@types/counterpart@0.18.4':
     resolution: {integrity: sha512-aqBg5oAGo/qh/+wxUfuMadDu2WO0MEWOblyzwaM1Ske2xilUxBfgPqapAFVAfrVTDMVwa0UMarzGot8m64IAzA==}
@@ -18418,10 +18411,6 @@ snapshots:
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 18.19.130
-
-  '@types/content-type@2.0.0':
-    dependencies:
-      content-type: 2.0.0
 
   '@types/counterpart@0.18.4': {}
 

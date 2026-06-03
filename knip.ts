@@ -45,7 +45,6 @@ export default {
                 // dependency so that // we can run `tsc` (since we import the typescript
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
-                "@types/content-type",
                 "@types/sdp-transform",
             ],
         },
