@@ -23,6 +23,7 @@ import {
 import { _t } from "../../../../core/i18n/i18n";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
+import styles from "./RoomListItemMoreOptionsMenu.module.css";
 
 /**
  * View model type for room list item
@@ -142,6 +143,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                         <MenuItem
                             key={section.tag}
                             label={section.name}
+                            labelProps={{ className: styles.sectionLabel }}
                             onSelect={() => vm.onToggleSection(section.tag)}
                             onClick={(evt) => evt.stopPropagation()}
                             hideChevron={true}
