@@ -112,6 +112,8 @@ overrides:
     yaml@>=2 <2.8.3: 2.8.4
     protobufjs@7 <7.5.8: 7.6.1
     "@protobufjs/utf8@1 <1.1.1": 1.1.1
+    # Workaround for https://github.com/electron/electron/issues/51619
+    yauzl: "^3.3.1"
 
 minimumReleaseAgeExclude:
     - "matrix-js-sdk"
