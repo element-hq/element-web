@@ -125,6 +125,8 @@ export interface RoomListItemViewActions {
     onCreateSection: () => void;
     /** Called when toggling a room's membership in a section */
     onToggleSection: (tag: string) => void;
+    /** Called when removing the room from a section */
+    onRemoveFromSection: () => void;
 }
 
 /**
