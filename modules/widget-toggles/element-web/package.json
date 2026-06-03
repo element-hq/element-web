@@ -20,7 +20,7 @@
         "@types/node": "^22.10.7",
         "@types/react": "^19",
         "@vitejs/plugin-react": "^5.0.0",
-        "@vitest/browser-playwright": "4.1.7",
+        "@vitest/browser-playwright": "^4.0.0",
         "@vitest/coverage-v8": "^4.0.0",
         "react": "^19",
         "rollup-plugin-external-globals": "^0.13.0",
