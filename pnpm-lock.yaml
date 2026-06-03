@@ -632,8 +632,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: 41.7.0-rc.2
-        version: 41.7.0-rc.2
+        specifier: 41.7.0-rc.3
+        version: 41.7.0-rc.3
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -3370,8 +3370,8 @@ packages:
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.2.0':
-    resolution: {integrity: sha512-puyZefvq6sHfqlmkri8umhA44724H2JL0YtX8wlvhGuNl8awX/Q1tZyW2Iekm9ZJP7BtuOqlNdg9oQd6iaGbNw==}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.3.1':
+    resolution: {integrity: sha512-VRjWhE1UgHnPpJ3b9B5+8z71ZC/HICFngPPFIN6ktzmUBKI5RusPujzbAQUoB3CgZ0yU58L99AfSQS4YTztSWw==}
     engines: {node: '>= 18'}
 
   '@matrix-org/react-sdk-module-api@2.5.0':
@@ -10276,8 +10276,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@41.7.0-rc.2:
-    resolution: {integrity: sha512-+8jmbkm8UyQeTwQJaY/gm6UTEw56GLfb1EzEiR+OSNYNJ2D1IaEmnPnlgjRH3NKoP8e7S0aOe3Zl5DcPkuoHnA==}
+  matrix-js-sdk@41.7.0-rc.3:
+    resolution: {integrity: sha512-DKPusJPhOt4RNM3fA9LMr3AWcsgljup75RkzgjKsJSYIv4c4O4olQpmrNRyDyDgCJD5EvRhsD5unjuA2VMPgEw==}
     engines: {node: '>=22.0.0'}
 
   matrix-web-i18n@3.6.0:
@@ -16166,7 +16166,7 @@ snapshots:
       emojibase: 17.0.0
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
-  '@matrix-org/matrix-sdk-crypto-wasm@18.2.0': {}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.3.1': {}
 
   '@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.6)':
     dependencies:
@@ -23957,10 +23957,10 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@41.7.0-rc.2:
+  matrix-js-sdk@41.7.0-rc.3:
     dependencies:
       '@babel/runtime': 7.29.2
-      '@matrix-org/matrix-sdk-crypto-wasm': 18.2.0
+      '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
       another-json: 0.2.0
       bs58: 6.0.0
       content-type: 2.0.0
