@@ -24,7 +24,7 @@
         "rollup-plugin-external-globals": "^0.13.0",
         "typescript": "^6.0.0",
         "vite": "^7.3.2",
-        "vite-plugin-node-polyfills": "^0.25.0",
+        "vite-plugin-node-polyfills": "^0.28.0",
         "vite-plugin-svgr": "^4.3.0"
     },
     "dependencies": {
