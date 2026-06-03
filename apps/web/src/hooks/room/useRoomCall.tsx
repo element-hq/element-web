@@ -38,6 +38,7 @@ import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import SdkConfig from "../../SdkConfig";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -112,7 +113,11 @@ export const useRoomCall = (
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
     const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
     const enableLegacyCallsVoip = useSettingValue("enableLegacyCallsVoip");
-    const useElementCallExclusively = !enableLegacyCallsVoip && groupCallsEnabled;
+    const configurationEcOnly = !enableLegacyCallsVoip && groupCallsEnabled;
+    const sdkConfigEcOnly = useMemo(() => {
+        return SdkConfig.get("element_call").use_exclusively;
+    }, []);
+    const useElementCallExclusively = configurationEcOnly || sdkConfigEcOnly;
 
     const serverIsConfiguredForElementCall = useEventEmitterState(
         CallStore.instance,

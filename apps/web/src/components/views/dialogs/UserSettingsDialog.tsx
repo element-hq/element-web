@@ -44,10 +44,11 @@ import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
 import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
-import { useSettingValue } from "../../../hooks/useSettings";
+import { useFeatureEnabled, useSettingValue } from "../../../hooks/useSettings";
 import { NoChange, useEventEmitterAsyncState, type AsyncStateCallbackResult } from "../../../hooks/useEventEmitter";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
 import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
+import SdkConfig from "../../../SdkConfig";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -96,7 +97,8 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 }
 
 export default function UserSettingsDialog(props: IProps): JSX.Element {
-    const voipEnabled = useSettingValue(UIFeature.Voip);
+    const legacyVoipAvailable = useSettingValue(UIFeature.Voip) && !SdkConfig.get("element_call").use_exclusively;
+    const groupCallsFeatureEnabled = useFeatureEnabled("feature_group_calls");
     const mjolnirEnabled = useSettingValue("feature_mjolnir");
     // store these props in state as changing tabs back and forth should clear them
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
@@ -189,11 +191,11 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
             ),
         );
 
-        if (voipEnabled) {
+        if (legacyVoipAvailable) {
             tabs.push(
                 new Tab(
                     UserTab.Voice,
-                    _td("settings|voip|title"),
+                    groupCallsFeatureEnabled ? _td("settings|voip|title_legacy") : _td("settings|voip|title"),
                     <MicOnIcon />,
                     <VoiceUserSettingsTab />,
                     "UserSettingsVoiceVideo",
