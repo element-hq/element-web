@@ -28,6 +28,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         onSetRoomNotifState: vi.fn(),
         onCreateSection: vi.fn(),
         onToggleSection: vi.fn(),
+        onRemoveFromSection: vi.fn(),
     };
 
     const renderMenu = (overrides: Partial<RoomListItemViewSnapshot> = {}): ReturnType<typeof render> => {
@@ -240,6 +241,20 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         await user.click(newSection);
 
         expect(mockCallbacks.onCreateSection).toHaveBeenCalled();
+    });
+
+    it("should call onRemoveFromSection when Remove from section is clicked", async () => {
+        const user = userEvent.setup();
+        const TestComponent = (): JSX.Element => {
+            const vm = useMockedViewModel({ ...defaultSnapshot, isInSection: true }, mockCallbacks);
+            return <MoreOptionContent vm={vm} />;
+        };
+        render(<TestComponent />);
+
+        const removeFromSection = screen.getByRole("menuitem", { name: "Remove from section" });
+        await user.click(removeFromSection);
+
+        expect(mockCallbacks.onRemoveFromSection).toHaveBeenCalled();
     });
 
     it("should render section items in move to section submenu", () => {
