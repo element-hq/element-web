@@ -293,8 +293,8 @@ jobs:
                       --config=playwright-merge.config.ts \
                       ./all-blob-reports
               env:
-                  # Only pass creds to the flaky-reporter on main branch runs
-                  GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
+                  # Only pass creds to the flaky-reporter on main branch runs, or in merge queues (knowing these may be false positives)
+                  GITHUB_TOKEN: ${{ case(github.event_name == 'merge_group' || github.ref_name == 'develop', secrets.ELEMENT_BOT_TOKEN, '') }}
                   PLAYWRIGHT_HTML_TITLE: ${{ case(github.event_name == 'pull_request', format('Playwright Report PR-{0}', env.PR_NUMBER), 'Playwright Report') }}
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
