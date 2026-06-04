@@ -60,7 +60,7 @@
     overflow: visible;
 }
 
-.statusEmoji {
+.iconStatusEmoji {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -75,6 +75,11 @@
     /* center of circle on the right edge of the avatar */
     right: -10px;
     background-color: var(--cpd-color-bg-canvas-default);
+}
+
+.statusButton {
+    border-radius: var(--cpd-border-radius-10x);
+    background: var(--cpd-color-bg-subtle-secondary);
 }
 
 .triggerButton {

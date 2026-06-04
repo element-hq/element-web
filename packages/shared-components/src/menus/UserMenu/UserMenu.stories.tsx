@@ -24,6 +24,7 @@ const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
         openHomePage: fn(),
         openSecurity: fn(),
         openSettings: fn(),
+        clearStatus: fn(),
     });
     return <UserMenuView vm={vm} />;
 };
@@ -172,7 +173,10 @@ export const GuestOpen: Story = {
 
 export const WithStatusEmoji: Story = {
     args: {
-        statusEmoji: "🐹",
+        userStatus: {
+            emoji: "🐹",
+            text: "On the wheel",
+        },
     },
 };
 

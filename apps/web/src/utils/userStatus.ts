@@ -5,12 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-const MAX_STATUS_TEXT_BYTES = 256;
+import { type UserStatus } from "@element-hq/web-shared-components";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-export interface UserStatus {
-    emoji: string;
-    text: string;
-}
+const MAX_STATUS_TEXT_BYTES = 256;
 
 export function userStatusTextWithinMaxLength(text: string): boolean {
     const textEncoder = new TextEncoder();
@@ -33,4 +31,15 @@ export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefin
             ? rawUserStatus.text
             : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
     };
+}
+
+export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Promise<void> {
+    return client.setExtendedProfileProperty("org.matrix.msc4426.status", {
+        emoji: userStatus.emoji,
+        text: userStatus.text,
+    });
+}
+
+export function clearUserStatus(client: MatrixClient): Promise<void> {
+    return client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
 }
