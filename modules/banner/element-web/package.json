@@ -17,7 +17,7 @@
         "@types/node": "^22.10.7",
         "@types/react": "^19",
         "@types/react-dom": "^19",
-        "@vitejs/plugin-react": "^5.0.0",
+        "@vitejs/plugin-react": "^6.0.0",
         "matrix-web-i18n": "^3.6.0",
         "matrix-widget-api": "^1.17.0",
         "react": "19.2.6",
