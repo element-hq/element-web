@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig, esmExternalRequirePlugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import externalGlobals from "rollup-plugin-external-globals";
@@ -26,8 +26,12 @@ export default defineConfig({
         outDir: "lib",
         target: "esnext",
         sourcemap: true,
-        rollupOptions: {
-            external: ["react"],
+        rolldownOptions: {
+            plugins: [
+                esmExternalRequirePlugin({
+                    external: ["react"],
+                }),
+            ],
         },
     },
     plugins: [
