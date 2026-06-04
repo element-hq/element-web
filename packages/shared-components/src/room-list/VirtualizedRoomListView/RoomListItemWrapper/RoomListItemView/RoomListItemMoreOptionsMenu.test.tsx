@@ -8,29 +8,15 @@
 import React, { type JSX } from "react";
 import { render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 
 import { RoomListItemMoreOptionsMenu, MoreOptionContent } from "./RoomListItemMoreOptionsMenu";
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
+import { mockedActions as mockCallbacks } from "./mocked-actions";
 
 describe("<RoomListItemMoreOptionsMenu />", () => {
-    const mockCallbacks = {
-        onOpenRoom: vi.fn(),
-        onMarkAsRead: vi.fn(),
-        onMarkAsUnread: vi.fn(),
-        onToggleFavorite: vi.fn(),
-        onToggleLowPriority: vi.fn(),
-        onInvite: vi.fn(),
-        onCopyRoomLink: vi.fn(),
-        onLeaveRoom: vi.fn(),
-        onSetRoomNotifState: vi.fn(),
-        onCreateSection: vi.fn(),
-        onToggleSection: vi.fn(),
-        onRemoveFromSection: vi.fn(),
-    };
-
     const renderMenu = (overrides: Partial<RoomListItemViewSnapshot> = {}): ReturnType<typeof render> => {
         const TestComponent = (): JSX.Element => {
             const vm = useMockedViewModel(
