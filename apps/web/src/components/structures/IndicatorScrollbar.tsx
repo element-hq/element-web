@@ -55,7 +55,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         };
     }
 
-    private collectScroller = (scroller: HTMLDivElement | null): void => {
+    private readonly collectScroller = (scroller: HTMLDivElement | null): void => {
         if (this.scrollElement === scroller) {
             this.props.wrappedRef?.(scroller);
             return;
@@ -89,7 +89,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         UIStore.instance.on(UI_EVENTS.Resize, this.checkOverflow);
     }
 
-    private onScroll = (ev: Event): void => {
+    private readonly onScroll = (ev: Event): void => {
         this.props.onScroll?.(ev);
         this.checkOverflow();
     };
@@ -190,20 +190,17 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     };
 
     public render(): React.ReactNode {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {
             children,
             className,
             element = "div" as T,
-            onScroll,
+            onScroll: _onScroll, // Omit from rendering
             style,
             tabIndex,
             trackHorizontalOverflow,
-            wrappedRef,
+            wrappedRef: _wrappedRef, // Omit from rendering
             ...otherProps
         } = this.props;
-        void onScroll;
-        void wrappedRef;
 
         const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };
         const rightIndicatorStyle = { right: this.state.rightIndicatorOffset };

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type CSSProperties, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import classNames from "classnames";
 
 import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";
@@ -951,7 +952,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         return (
             <div
                 ref={this.collectScroll}
-                className={`mx_AutoHideScrollbar mx_ScrollPanel${this.props.className ? ` ${this.props.className}` : ""}`}
+                className={classNames("mx_AutoHideScrollbar", "mx_ScrollPanel", this.props.className)}
                 style={this.props.style}
                 tabIndex={-1}
             >

@@ -58,7 +58,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
 
-    private scrollRef = React.createRef<HTMLDivElement>();
+    private readonly scrollRef = React.createRef<HTMLDivElement>();
     private scrollElement?: HTMLDivElement;
 
     public constructor(props: IProps) {
@@ -129,7 +129,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         this.scrollElement = undefined;
     }
 
-    private getScrollBody = (): HTMLDivElement | undefined => {
+    private readonly getScrollBody = (): HTMLDivElement | undefined => {
         return this.scrollElement ?? this.scrollRef.current ?? undefined;
     };
 
