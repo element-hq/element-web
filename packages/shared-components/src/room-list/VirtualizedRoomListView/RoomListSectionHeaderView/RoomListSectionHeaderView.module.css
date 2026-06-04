@@ -109,5 +109,10 @@
 
 .dragging {
     outline: 1px solid var(--cpd-color-border-interactive-hovered);
-    background-color: color-mix(in srgb, var(--cpd-color-bg-action-tertiary-hovered) 90%, transparent);
+    background-color: color-mix(in srgb, var(--cpd-color-bg-action-tertiary-hovered) 95%, transparent);
+    color: var(--cpd-color-text-primary);
+}
+
+.dragSource .container {
+    opacity: 0.6;
 }

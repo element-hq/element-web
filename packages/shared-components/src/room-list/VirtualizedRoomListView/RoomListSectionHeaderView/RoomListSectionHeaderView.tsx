@@ -103,7 +103,11 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const { id, title, isExpanded, isUnread } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
-    const { ref: draggableRef, handleRef } = useDraggable({
+    const {
+        ref: draggableRef,
+        handleRef,
+        isDragSource,
+    } = useDraggable({
         id,
         data: { type: "section" },
         plugins: [Feedback.configure({ feedback: "clone" })],
@@ -128,6 +132,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         // If the section is collapsed and it's the last one
                         [styles.lastHeader]: !isExpanded && isLastSection,
                         [styles.unread]: isUnread,
+                        [styles.dragSource]: isDragSource,
                     })}
                     onClick={vm.onClick}
                     aria-expanded={isExpanded}
