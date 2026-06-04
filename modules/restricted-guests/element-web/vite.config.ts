@@ -38,13 +38,6 @@ export default defineConfig({
                     react: "window.React",
                 },
             },
-            transform: {
-                define: {
-                    // Use production mode for the build as it is tested against production builds of Element Web,
-                    // this is required for React JSX versions to be compatible.
-                    "process.env.NODE_ENV": JSON.stringify("production"),
-                },
-            },
         },
     },
     plugins: [
@@ -58,4 +51,10 @@ export default defineConfig({
             react: "window.React",
         }),
     ],
+    define: {
+        // Use production mode for the build as it is tested against production builds of Element Web,
+        // this is required for React JSX versions to be compatible.
+        "process.env.NODE_ENV": "'production'",
+        "process": { env: { NODE_ENV: "production" } },
+    },
 });
