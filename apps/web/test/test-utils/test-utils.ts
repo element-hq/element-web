@@ -359,6 +359,7 @@ export function createTestClient(): MatrixClient {
         sendTextMessage: jest.fn(),
         deleteRoomTag: jest.fn().mockResolvedValue({}),
         setRoomTag: jest.fn().mockResolvedValue({}),
+        getExtendedProfileProperty: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./UserMenu.stories.tsx";
 
-const { Default, LongerName, Condensed, Guest, Open, NoAvatar } = composeStories(stories);
+const { Default, LongerName, Condensed, Guest, Open, NoAvatar, WithStatusEmoji } = composeStories(stories);
 
 describe("UserMenu", () => {
     it("renders a button", async () => {
@@ -26,6 +26,10 @@ describe("UserMenu", () => {
     });
     it("renders condensed view", async () => {
         const { container } = render(<Condensed />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders the status emoji when set", async () => {
+        const { container } = render(<WithStatusEmoji />);
         expect(container).toMatchSnapshot();
     });
     it("renders a menu", async () => {
