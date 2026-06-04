@@ -7,13 +7,13 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     class="mx_SpacePanel collapsed newUi"
   >
     <div
-      class="_wrapper_1yvpq_8 mx_UserMenu"
+      class="_wrapper_1wynm_8 mx_UserMenu"
     >
       <button
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="User menu"
-        class="_triggerButton_1yvpq_57"
+        class="_triggerButton_1wynm_57"
         data-state="closed"
         id="radix-react-use-id-1"
         type="button"
