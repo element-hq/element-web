@@ -37,11 +37,6 @@ jobs:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2]
         steps:
-            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
-            # so, with the one at the end too, this will let us work out how much disk has been used.
-            - name: dfbefore
-              run: df -h && df -i
-
             - name: Checkout code
               uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
@@ -111,6 +106,11 @@ jobs:
                     - packages/module-api
         runs-on: ubuntu-24.04
         steps:
+            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
+            # so, with the one at the end too, this will let us work out how much disk has been used.
+            - name: dfbefore
+              run: df -h && df -i
+
             - name: Checkout code
               uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
