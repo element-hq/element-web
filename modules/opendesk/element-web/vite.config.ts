@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import externalGlobals from "rollup-plugin-external-globals";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -50,6 +51,10 @@ export default defineConfig({
         react(),
         nodePolyfills({
             include: ["events"],
+        }),
+        externalGlobals({
+            // Reuse React from the host app
+            react: "window.React",
         }),
     ],
 });
