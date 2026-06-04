@@ -47,6 +47,7 @@ import Timer from "../../utils/Timer";
 import shouldHideEvent from "../../shouldHideEvent";
 import MessagePanel from "./MessagePanel";
 import { type IScrollState } from "./ScrollPanel";
+import { NewTimelinePanel } from "./NewTimelinePanel";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
@@ -1356,6 +1357,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     public canJumpToReadMarker = (): boolean => {
+        // The new MVVM timeline manages its own read-marker UI via TimelineOverlayButtons.
+        if (SettingsStore.getValue("feature_new_timeline")) return false;
+
         // 1. Do not show jump bar if neither the RM nor the RR are set.
         // 3. We want to show the bar if the read-marker is off the top of the screen.
         // 4. Also, if pos === null, the event might not be paginated - show the unread bar
@@ -1843,6 +1847,21 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating = this.state.forwardPaginating || this.syncImpliesForwardPaginating;
         const events = this.state.events;
+
+        // New MVVM timeline behind Labs flag
+        if (SettingsStore.getValue("feature_new_timeline")) {
+            const room = this.props.timelineSet.room;
+            if (room) {
+                return (
+                    <NewTimelinePanel
+                        key={room.roomId}
+                        room={room}
+                        highlightedEventId={this.props.highlightedEventId}
+                    />
+                );
+            }
+        }
+
         return (
             <MessagePanel
                 ref={this.messagePanel}
