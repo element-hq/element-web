@@ -21,6 +21,11 @@ jobs:
             issues: read
             pull-requests: read
         steps:
+            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
+            # so, with the one at the end too, this will let us work out how much disk has been used.
+            - name: dfbefore
+              run: df -h && df -i
+
             - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   persist-credentials: false
@@ -58,3 +63,8 @@ jobs:
               with:
                   name: received-images
                   path: packages/shared-components/__vis__/linux
+
+            # Dump the disk usage on failure, because this job seems to fail with disk fills sometimes
+            - name: df
+              run: df -h && df -i
+              if: ${{ failure() }}
