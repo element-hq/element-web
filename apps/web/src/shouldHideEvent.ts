@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixEvent, EventType, RelationType, M_POLL_END } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, JoinRule, RelationType, M_POLL_END } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { type IRoomState } from "./components/structures/RoomView";
 import { type SettingKey } from "./settings/Settings.tsx";
@@ -70,9 +71,13 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
     const eventDiff = memberEventDiff(ev);
 
     if (eventDiff.isMemberEvent) {
-        if ((eventDiff.isJoin || eventDiff.isPart) && !isEnabled("showJoinLeaves")) return true;
-        if (eventDiff.isAvatarChange && !isEnabled("showAvatarChanges")) return true;
-        if (eventDiff.isDisplaynameChange && !isEnabled("showDisplaynameChanges")) return true;
+        const cli = MatrixClientPeg.get();
+        const room = cli?.getRoom(ev.getRoomId());
+        const isInviteOnly = room?.getJoinRule() === JoinRule.Invite;
+
+        if ((eventDiff.isJoin || eventDiff.isPart) && isInviteOnly) return true;
+        if (eventDiff.isAvatarChange && isInviteOnly) return true;
+        if (eventDiff.isDisplaynameChange && isInviteOnly) return true;
     }
 
     return false;

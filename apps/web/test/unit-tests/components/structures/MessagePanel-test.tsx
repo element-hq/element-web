@@ -87,9 +87,6 @@ describe("MessagePanel", function () {
         canSendMessages: true,
         showReadReceipts: true,
         showRedactions: false,
-        showJoinLeaves: false,
-        showAvatarChanges: false,
-        showDisplaynameChanges: true,
         showHiddenEvents: false,
     } as unknown as RoomContextType;
 
@@ -101,10 +98,6 @@ describe("MessagePanel", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        // HACK: We assume all settings want to be disabled
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((arg) => {
-            return arg === "showDisplaynameChanges";
-        });
 
         sdkContext = new SdkContextClass();
 

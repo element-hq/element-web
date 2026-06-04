@@ -269,9 +269,6 @@ export interface IRoomState {
     showHiddenEvents: boolean;
     showReadReceipts: boolean;
     showRedactions: boolean;
-    showJoinLeaves: boolean;
-    showAvatarChanges: boolean;
-    showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
     showUrlPreview: boolean;
     e2eStatus?: E2EStatus;
@@ -499,9 +496,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showHiddenEvents: SettingsStore.getValue("showHiddenEventsInTimeline"),
             showReadReceipts: true,
             showRedactions: true,
-            showJoinLeaves: true,
-            showAvatarChanges: true,
-            showDisplaynameChanges: true,
             // Default to false to avoid any accidental leakage.
             showUrlPreview: false,
             matrixClientIsReady: context.client?.isInitialSyncComplete(),
@@ -656,9 +650,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             shouldPeek: shouldPeek,
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             showRedactions: SettingsStore.getValue("showRedactions", roomId),
-            showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
-            showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
-            showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
             wasContextSwitch: wasContextSwitch,
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
@@ -722,15 +713,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("showRedactions", roomId, (...[, , , value]) =>
                 this.setState({ showRedactions: value as boolean }),
-            ),
-            SettingsStore.watchSetting("showJoinLeaves", roomId, (...[, , , value]) =>
-                this.setState({ showJoinLeaves: value as boolean }),
-            ),
-            SettingsStore.watchSetting("showAvatarChanges", roomId, (...[, , , value]) =>
-                this.setState({ showAvatarChanges: value as boolean }),
-            ),
-            SettingsStore.watchSetting("showDisplaynameChanges", roomId, (...[, , , value]) =>
-                this.setState({ showDisplaynameChanges: value as boolean }),
             ),
         ]);
 
