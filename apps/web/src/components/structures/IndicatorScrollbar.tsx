@@ -5,13 +5,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX } from "react";
+import React, { type HTMLAttributes, type JSX, type ReactNode } from "react";
+import classNames from "classnames";
 
-import AutoHideScrollbar, { type IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
-export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {
+type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
+    JSX.IntrinsicElements[T] extends HTMLAttributes<object> ? DynamicElementProps<T> : DynamicElementProps<"div">;
+type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<Omit<JSX.IntrinsicElements[T], "ref">>;
+
+export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElementProps<T>, "onScroll"> & {
     element?: T;
+    className?: string;
+    onScroll?: (event: Event) => void;
+    style?: React.CSSProperties;
+    tabIndex?: number;
+    wrappedRef?: (ref: HTMLDivElement | null) => void;
+    children: ReactNode;
     // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
     // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
     // by the parent element.
@@ -32,7 +42,6 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     IProps<T>,
     IState
 > {
-    private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement?: HTMLDivElement;
     private likelyTrackpadUser: boolean | null = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
@@ -46,13 +55,20 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         };
     }
 
-    private collectScroller = (scroller: HTMLDivElement): void => {
+    private collectScroller = (scroller: HTMLDivElement | null): void => {
+        if (this.scrollElement === scroller) {
+            this.props.wrappedRef?.(scroller);
+            return;
+        }
+
+        this.scrollElement?.removeEventListener("scroll", this.onScroll);
+        this.scrollElement = scroller ?? undefined;
         this.props.wrappedRef?.(scroller);
-        if (scroller && !this.scrollElement) {
-            this.scrollElement = scroller;
+
+        if (this.scrollElement) {
             // Using the passive option to not block the main thread
             // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
-            this.scrollElement.addEventListener("scroll", this.checkOverflow, { passive: true });
+            this.scrollElement.addEventListener("scroll", this.onScroll, { passive: true });
             this.checkOverflow();
         }
     };
@@ -72,6 +88,11 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         this.checkOverflow();
         UIStore.instance.on(UI_EVENTS.Resize, this.checkOverflow);
     }
+
+    private onScroll = (ev: Event): void => {
+        this.props.onScroll?.(ev);
+        this.checkOverflow();
+    };
 
     private checkOverflow = (): void => {
         if (!this.scrollElement) return;
@@ -115,7 +136,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     };
 
     public componentWillUnmount(): void {
-        this.scrollElement?.removeEventListener("scroll", this.checkOverflow);
+        this.scrollElement?.removeEventListener("scroll", this.onScroll);
         UIStore.instance.off(UI_EVENTS.Resize, this.checkOverflow);
     }
 
@@ -170,7 +191,19 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
 
     public render(): React.ReactNode {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
+        const {
+            children,
+            className,
+            element = "div" as T,
+            onScroll,
+            style,
+            tabIndex,
+            trackHorizontalOverflow,
+            wrappedRef,
+            ...otherProps
+        } = this.props;
+        void onScroll;
+        void wrappedRef;
 
         const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };
         const rightIndicatorStyle = { right: this.state.rightIndicatorOffset };
@@ -181,17 +214,19 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
             <div className="mx_IndicatorScrollbar_rightOverflowIndicator" style={rightIndicatorStyle} />
         ) : null;
 
-        return (
-            <AutoHideScrollbar
-                {...otherProps}
-                ref={this.autoHideScrollbar}
-                wrappedRef={this.collectScroller}
-                onWheel={this.onMouseWheel}
-            >
-                {leftOverflowIndicator}
-                {children}
-                {rightOverflowIndicator}
-            </AutoHideScrollbar>
+        return React.createElement(
+            element,
+            {
+                ...otherProps,
+                ref: this.collectScroller,
+                className: classNames("mx_AutoHideScrollbar", className),
+                style,
+                tabIndex: tabIndex ?? -1,
+                onWheel: this.onMouseWheel,
+            },
+            leftOverflowIndicator,
+            children,
+            rightOverflowIndicator,
         );
     }
 }

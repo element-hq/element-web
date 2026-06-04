@@ -6,7 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, type ReactNode, useContext, useId, useMemo, useRef, useState } from "react";
+import React, {
+    type ReactElement,
+    type ReactNode,
+    useContext,
+    useId,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import classNames from "classnames";
 import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -22,7 +31,6 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
@@ -142,7 +150,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         [cli, msc3946ProcessDynamicPredecessor],
     );
 
-    const scrollRef = useRef<AutoHideScrollbar<"div">>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
     const [scrollState, setScrollState] = useState<IScrollState>({
         // these are estimates which update as soon as it mounts
         scrollTop: 0,
@@ -299,22 +307,26 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         noResults = false;
     }
 
-    const onScroll = (): void => {
-        const body = scrollRef.current?.containerRef.current;
+    useLayoutEffect(() => {
+        const body = scrollRef.current;
         if (!body) return;
-        setScrollState({
-            scrollTop: body.scrollTop,
-            height: body.clientHeight,
-        });
-    };
 
-    const wrappedRef = (body: HTMLDivElement | null): void => {
-        if (!body) return;
-        setScrollState({
-            scrollTop: body.scrollTop,
-            height: body.clientHeight,
-        });
-    };
+        const onScroll = (): void => {
+            setScrollState({
+                scrollTop: body.scrollTop,
+                height: body.clientHeight,
+            });
+        };
+
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        body.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+
+        return () => {
+            body.removeEventListener("scroll", onScroll);
+        };
+    }, []);
 
     const roomsScrollState = getScrollState(scrollState, numRooms);
     const spacesScrollState = getScrollState(scrollState, numSpaces, numRooms);
@@ -328,12 +340,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 onSearch={setQuery}
                 autoFocus={true}
             />
-            <AutoHideScrollbar
-                className="mx_AddExistingToSpace_content"
-                onScroll={onScroll}
-                wrappedRef={wrappedRef}
-                ref={scrollRef}
-            >
+            <div className="mx_AutoHideScrollbar mx_AddExistingToSpace_content" ref={scrollRef} tabIndex={-1}>
                 {rooms.length > 0 && roomsRenderer
                     ? roomsRenderer(rooms, selectedToAdd, roomsScrollState, onChange)
                     : undefined}
@@ -347,7 +354,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 {noResults ? (
                     <span className="mx_AddExistingToSpace_noResults">{_t("common|no_results")}</span>
                 ) : undefined}
-            </AutoHideScrollbar>
+            </div>
 
             <div className="mx_AddExistingToSpace_footer">{footer}</div>
         </div>

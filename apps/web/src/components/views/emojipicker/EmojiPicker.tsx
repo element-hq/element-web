@@ -13,7 +13,6 @@ import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import Header from "./Header";
 import Search from "./Search";
 import Preview from "./Preview";
@@ -59,7 +58,8 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
 
-    private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
+    private scrollRef = React.createRef<HTMLDivElement>();
+    private scrollElement?: HTMLDivElement;
 
     public constructor(props: IProps) {
         super(props);
@@ -114,8 +114,27 @@ class EmojiPicker extends React.Component<IProps, IState> {
         });
     }
 
+    public componentDidMount(): void {
+        this.scrollElement = this.scrollRef.current ?? undefined;
+        const body = this.scrollElement;
+        if (!body) return;
+
+        // Using the passive option to not block the main thread
+        // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+        body.addEventListener("scroll", this.onScroll, { passive: true });
+    }
+
+    public componentWillUnmount(): void {
+        this.scrollElement?.removeEventListener("scroll", this.onScroll);
+        this.scrollElement = undefined;
+    }
+
+    private getScrollBody = (): HTMLDivElement | undefined => {
+        return this.scrollElement ?? this.scrollRef.current ?? undefined;
+    };
+
     private onScroll = (): void => {
-        const body = this.scrollRef.current?.containerRef.current;
+        const body = this.getScrollBody();
         if (!body) return;
         this.setState({
             scrollTop: body.scrollTop,
@@ -174,7 +193,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private updateVisibility = (): void => {
-        const body = this.scrollRef.current?.containerRef.current;
+        const body = this.getScrollBody();
         if (!body) return;
         const rect = body.getBoundingClientRect();
         let firstVisibleFound = false;
@@ -213,9 +232,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private scrollToCategory = (category: string): void => {
-        this.scrollRef.current?.containerRef.current
-            ?.querySelector(`[data-category-id="${category}"]`)
-            ?.scrollIntoView();
+        this.getScrollBody()?.querySelector(`[data-category-id="${category}"]`)?.scrollIntoView();
     };
 
     private onChangeFilter = (filter: string): void => {
@@ -293,7 +310,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         // Only select emoji if highlight is shown
         if (!this.state.showHighlight) return;
 
-        const btn = this.scrollRef.current?.containerRef.current?.querySelector<HTMLButtonElement>(
+        const btn = this.getScrollBody()?.querySelector<HTMLButtonElement>(
             '.mx_EmojiPicker_item_wrapper [tabindex="0"]',
         );
         btn?.click();
@@ -339,7 +356,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 onGridNavigation={this.onGridNavigation}
                 onKeyDown={this.onKeyDown}
             >
-                {({ onKeyDownHandler }) => {
+                {({ onKeyDownHandler }: { onKeyDownHandler: (ev: React.KeyboardEvent) => void }) => {
                     let heightBefore = 0;
                     return (
                         <section
@@ -355,13 +372,13 @@ class EmojiPicker extends React.Component<IProps, IState> {
                                 onEnter={this.onEnterFilter}
                                 onKeyDown={onKeyDownHandler}
                             />
-                            <AutoHideScrollbar
+                            <div
                                 id="mx_EmojiPicker_body"
-                                className={classNames("mx_EmojiPicker_body", {
+                                className={classNames("mx_EmojiPicker_body mx_AutoHideScrollbar", {
                                     mx_EmojiPicker_body_showHighlight: this.state.showHighlight,
                                 })}
                                 ref={this.scrollRef}
-                                onScroll={this.onScroll}
+                                tabIndex={-1}
                             >
                                 {this.categories.map((category) => {
                                     const emojis = this.memoizedDataByCategory[category.id];
@@ -385,7 +402,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                                     heightBefore += height;
                                     return categoryElement;
                                 })}
-                            </AutoHideScrollbar>
+                            </div>
                             {this.state.previewEmoji ? (
                                 <Preview emoji={this.state.previewEmoji} />
                             ) : (

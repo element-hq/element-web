@@ -11,7 +11,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { SDKContext } from "../../contexts/SDKContext";
@@ -218,6 +217,7 @@ export default class ScrollPanel extends React.Component<IProps> {
 
         this.context?.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
 
+        this.divScroll?.removeEventListener("scroll", this.onScroll);
         this.divScroll = null;
     }
 
@@ -839,14 +839,26 @@ export default class ScrollPanel extends React.Component<IProps> {
         if (!this.divScroll) {
             // Likewise, we should have the ref by this point, but if not
             // turn the NPE into something meaningful.
-            throw new Error("ScrollPanel.getScrollNode called before AutoHideScrollbar ref collected");
+            throw new Error("ScrollPanel.getScrollNode called before scroll ref collected");
         }
 
         return this.divScroll;
     }
 
     private collectScroll = (divScroll: HTMLDivElement | null): void => {
+        if (this.divScroll === divScroll) {
+            return;
+        }
+
+        this.divScroll?.removeEventListener("scroll", this.onScroll);
         this.divScroll = divScroll;
+
+        if (this.divScroll) {
+            // Using the passive option to not block the main thread
+            // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
+            this.divScroll.addEventListener("scroll", this.onScroll, { passive: true });
+            this.checkScroll();
+        }
     };
 
     /**
@@ -937,11 +949,11 @@ export default class ScrollPanel extends React.Component<IProps> {
         // give the <ol> an explicit role=list because Safari+VoiceOver seems to think an ordered-list with
         // list-style-type: none; is no longer a list
         return (
-            <AutoHideScrollbar
-                wrappedRef={this.collectScroll}
-                onScroll={this.onScroll}
-                className={`mx_ScrollPanel ${this.props.className}`}
+            <div
+                ref={this.collectScroll}
+                className={`mx_ScrollPanel mx_AutoHideScrollbar${this.props.className ? ` ${this.props.className}` : ""}`}
                 style={this.props.style}
+                tabIndex={-1}
             >
                 {this.props.fixedChildren}
                 <div className="mx_RoomView_messageListWrapper">
@@ -949,7 +961,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                         {this.props.children}
                     </ol>
                 </div>
-            </AutoHideScrollbar>
+            </div>
         );
     }
 }
