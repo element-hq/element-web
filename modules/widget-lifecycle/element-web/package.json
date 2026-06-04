@@ -16,9 +16,9 @@
         "@types/node": "^22.10.7",
         "@vitest/coverage-v8": "^4.0.0",
         "typescript": "^6.0.0",
-        "vite": "^7.3.2",
+        "vite": "^8.0.0",
         "vitest": "^4.0.0",
-        "vitest-sonar-reporter": "^2.0.0"
+        "vitest-sonar-reporter": "^3.0.0"
     },
     "dependencies": {
         "zod": "^4.0.0"
