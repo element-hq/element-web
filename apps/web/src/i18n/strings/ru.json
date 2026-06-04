@@ -3948,6 +3948,11 @@
         "you_are_presenting": "Вы представляете"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
+    "welcome": {
+        "tagline_element": "Благодаря быстродействию и простоте.",
+        "title_element": "Почувствуйте себя в своей стихии.",
+        "title_generic": "Добро пожаловать в %(brand)s!"
+    },    
     "widget": {
         "added_by": "Виджет добавлен",
         "capabilities_dialog": {
