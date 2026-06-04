@@ -12,20 +12,9 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
+import { type UserStatus, validateUserStatus } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
-
-export interface UserStatus {
-    emoji: string;
-    text: string;
-}
-
-const MAX_STATUS_TEXT_BYTES = 256;
-
-export function userStatusTextWithinMaxLength(text: string): boolean {
-    const textEncoder = new TextEncoder();
-    return textEncoder.encode(text).length <= MAX_STATUS_TEXT_BYTES;
-}
 
 /**
  * Hook to get the MSC4426 user status for a given user ID. Returns undefined if the feature is disabled,
@@ -76,23 +65,5 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
         return;
     }
 
-    if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
-        logger.warn(`value of "org.matrix.msc4426.status" was not an object for ${userId}`);
-        return;
-    }
-    if ("emoji" in rawUserStatus === false || typeof rawUserStatus.emoji !== "string" || !rawUserStatus.emoji) {
-        logger.warn(`"emoji" property was not a valid string for ${userId}`);
-        return;
-    }
-    if ("text" in rawUserStatus === false || typeof rawUserStatus.text !== "string" || !rawUserStatus.text) {
-        logger.warn(`"text" property was not a valid string for ${userId}`);
-        return;
-    }
-
-    return {
-        emoji: rawUserStatus.emoji,
-        text: userStatusTextWithinMaxLength(rawUserStatus.text)
-            ? rawUserStatus.text
-            : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
-    };
+    return validateUserStatus(rawUserStatus);
 }
