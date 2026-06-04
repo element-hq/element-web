@@ -12,7 +12,6 @@ import React, { type JSX } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../languageHandler";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { PosthogScreenTracker, type ScreenName } from "../../PosthogTrackers";
 import { type NonEmptyArray } from "../../@types/common";
 import { RovingAccessibleButton, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
@@ -74,7 +73,7 @@ function TabPanel<T extends string>({ tab }: ITabPanelProps<T>): JSX.Element {
             id={domIDForTabID(tab.id)}
             aria-labelledby={`${domIDForTabID(tab.id)}_label`}
         >
-            <AutoHideScrollbar className="mx_TabbedView_tabPanelContent">{tab.body}</AutoHideScrollbar>
+            <div className="mx_TabbedView_tabPanelContent mx_AutoHideScrollbar">{tab.body}</div>
         </div>
     );
 }

@@ -17,7 +17,6 @@ import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { filterBoolean } from "../../../utils/arrays";
@@ -158,7 +157,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     onSearch={setQuery}
                     autoFocus={true}
                 />
-                <AutoHideScrollbar className="mx_ManageRestrictedJoinRuleDialog_content">
+                <div className="mx_ManageRestrictedJoinRuleDialog_content mx_AutoHideScrollbar">
                     {filteredSpacesContainingRoom.length > 0 ? (
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
                             <h3>
@@ -224,7 +223,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     {totalResults < 1 ? (
                         <span className="mx_ManageRestrictedJoinRuleDialog_noResults">{_t("common|no_results")}</span>
                     ) : undefined}
-                </AutoHideScrollbar>
+                </div>
 
                 <div className="mx_ManageRestrictedJoinRuleDialog_footer">
                     {inviteOnlyWarning}

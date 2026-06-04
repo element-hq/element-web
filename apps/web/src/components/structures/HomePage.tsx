@@ -10,7 +10,6 @@ import React, { type JSX } from "react";
 import { useContext, useState } from "react";
 import { ChatSolidIcon, ExploreIcon, GroupIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getHomePageUrl } from "../../utils/pages";
 import { _t, _tDom } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
@@ -113,7 +112,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     }
 
     return (
-        <AutoHideScrollbar className="mx_HomePage mx_HomePage_default" element="main">
+        <main className="mx_HomePage mx_HomePage_default mx_AutoHideScrollbar">
             <div className="mx_HomePage_default_wrapper">
                 {introSection}
                 <div className="mx_HomePage_default_buttons">
@@ -131,7 +130,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                     </AccessibleButton>
                 </div>
             </div>
-        </AutoHideScrollbar>
+        </main>
     );
 };
 

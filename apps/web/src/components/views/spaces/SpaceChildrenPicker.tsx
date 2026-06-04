@@ -13,7 +13,6 @@ import { _t } from "../../../languageHandler";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import SearchBox from "../../structures/SearchBox";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { Entry } from "../dialogs/AddExistingToSpaceDialog";
 import { filterBoolean } from "../../../utils/arrays";
 
@@ -61,7 +60,7 @@ const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
                 onSearch={setQuery}
                 autoFocus={true}
             />
-            <AutoHideScrollbar>
+            <div className="mx_AutoHideScrollbar">
                 {filteredRooms.map((room) => {
                     return (
                         <Entry
@@ -77,7 +76,7 @@ const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
                 {filteredRooms.length < 1 ? (
                     <span className="mx_SpaceChildrenPicker_noResults">{_t("common|no_results")}</span>
                 ) : undefined}
-            </AutoHideScrollbar>
+            </div>
         </div>
     );
 };

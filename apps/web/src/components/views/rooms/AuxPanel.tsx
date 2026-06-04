@@ -11,7 +11,6 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import AppsDrawer from "./AppsDrawer";
 import SettingsStore from "../../../settings/SettingsStore";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
 import LegacyCallViewForRoom from "../voip/LegacyCallViewForRoom";
 import { objectHasDiff } from "../../../utils/objects";
@@ -44,11 +43,11 @@ export default class AuxPanel extends React.Component<IProps> {
         }
 
         return (
-            <AutoHideScrollbar role="region" className="mx_AuxPanel">
+            <div role="region" className="mx_AuxPanel mx_AutoHideScrollbar">
                 {this.props.children}
                 {appsDrawer}
                 {callView}
-            </AutoHideScrollbar>
+            </div>
         );
     }
 }

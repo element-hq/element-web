@@ -14,7 +14,6 @@ import ReadReceiptMarker, { type IReadReceiptPosition } from "./ReadReceiptMarke
 import { type IReadReceiptProps } from "./EventTile";
 import AccessibleButton from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { formatDate } from "../../../DateUtils";
 import { Action } from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";
@@ -146,7 +145,7 @@ export function ReadReceiptGroup({
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
             <ContextMenu menuClassName="mx_ReadReceiptGroup_popup" onFinished={closeMenu} {...aboveLeftOf(buttonRect)}>
-                <AutoHideScrollbar>
+                <div className="mx_AutoHideScrollbar">
                     <SectionHeader className="mx_ReadReceiptGroup_title">
                         {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                     </SectionHeader>
@@ -158,7 +157,7 @@ export function ReadReceiptGroup({
                             onAfterClick={closeMenu}
                         />
                     ))}
-                </AutoHideScrollbar>
+                </div>
             </ContextMenu>
         );
     }

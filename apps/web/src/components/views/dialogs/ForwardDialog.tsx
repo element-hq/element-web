@@ -34,7 +34,6 @@ import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -384,7 +383,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                 />
                             )}
                         </RovingTabIndexContext.Consumer>
-                        <AutoHideScrollbar className="mx_ForwardList_content">
+                        <div className="mx_ForwardList_content mx_AutoHideScrollbar">
                             {rooms.length > 0 ? (
                                 <div className="mx_ForwardList_results">
                                     <TruncatedList
@@ -412,7 +411,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                             ) : (
                                 <span className="mx_ForwardList_noResults">{_t("common|no_results")}</span>
                             )}
-                        </AutoHideScrollbar>
+                        </div>
                     </div>
                 )}
             </RovingTabIndexProvider>
