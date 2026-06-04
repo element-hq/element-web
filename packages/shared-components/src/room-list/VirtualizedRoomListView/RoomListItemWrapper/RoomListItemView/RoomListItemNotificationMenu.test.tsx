@@ -29,6 +29,7 @@ describe("<RoomListItemNotificationMenu />", () => {
         onSetRoomNotifState: vi.fn(),
         onCreateSection: vi.fn(),
         onToggleSection: vi.fn(),
+        onRemoveFromSection: vi.fn(),
     };
 
     const renderMenu = (roomNotifState: RoomNotifState = RoomNotifState.AllMessages): ReturnType<typeof render> => {
