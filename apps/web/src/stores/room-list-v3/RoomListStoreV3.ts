@@ -458,14 +458,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @returns An array of sections
      */
     private getSections(filterKeys?: FilterKey[]): Section[] {
-        return this.sortedTags.map((tag) => {
-            const filters = filterBoolean([this.filterByTag.get(tag)?.key, ...(filterKeys || [])]);
+        return this.sortedTags
+            .map((tag) => {
+                const filters = filterBoolean([this.filterByTag.get(tag)?.key, ...(filterKeys ?? [])]);
 
-            return {
-                tag,
-                rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filters) || []),
-            };
-        });
+                return {
+                    tag,
+                    rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filters) || []),
+                };
+            })
+            .filter((section) => !filterKeys || section.rooms.length > 0);
     }
 
     /**

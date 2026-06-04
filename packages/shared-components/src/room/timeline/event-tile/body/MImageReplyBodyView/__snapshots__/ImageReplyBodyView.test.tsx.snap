@@ -1,0 +1,185 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ImageReplyBodyView > matches snapshot for animated-preview story 1`] = `
+<div>
+  <div
+    style="max-width: 220px;"
+  >
+    <div
+      class="ImageReplyBodyView-module_root"
+    >
+      <div
+        class="ImageReplyBodyView-module_thumbnailContainer"
+        style="max-width: 57px; max-height: 44px; aspect-ratio: 57 / 43.95;"
+      >
+        <div
+          class="ImageReplyBodyView-module_mediaContent"
+          style="width: 100%; height: 100%; max-width: 57px; max-height: 44px;"
+        >
+          <img
+            alt="Reply preview"
+            class="ImageReplyBodyView-module_image"
+            src="/static/image-body/install-spinner.png"
+          />
+          <p
+            class="ImageReplyBodyView-module_gifLabel"
+          >
+            GIF
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ImageReplyBodyView > matches snapshot for default story 1`] = `
+<div>
+  <div
+    style="max-width: 220px;"
+  >
+    <div
+      class="ImageReplyBodyView-module_root"
+    >
+      <div
+        class="ImageReplyBodyView-module_thumbnailContainer"
+        style="max-width: 57px; max-height: 44px; aspect-ratio: 57 / 43.95;"
+      >
+        <div
+          class="ImageReplyBodyView-module_mediaContent"
+          style="width: 100%; height: 100%; max-width: 57px; max-height: 44px;"
+        >
+          <img
+            alt="Reply preview"
+            class="ImageReplyBodyView-module_image"
+            src="/static/image-body/install-spinner.png"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ImageReplyBodyView > matches snapshot for loading-with-blurhash story 1`] = `
+<div>
+  <div
+    style="max-width: 220px;"
+  >
+    <div
+      class="ImageReplyBodyView-module_root"
+    >
+      <div
+        class="ImageReplyBodyView-module_thumbnailContainer"
+        style="max-width: 57px; max-height: 44px; aspect-ratio: 57 / 43.95;"
+      >
+        <div
+          class="ImageReplyBodyView-module_placeholder"
+        >
+          <div
+            class="ImageReplyBodyView-module_blurhash"
+            style="display: inline-block; height: 44px; width: 57px; position: relative;"
+          >
+            <canvas
+              height="32"
+              style="position: absolute; inset: 0px; width: 100%; height: 100%;"
+              width="32"
+            />
+          </div>
+        </div>
+        <div
+          class="ImageReplyBodyView-module_mediaContent"
+          style="width: 100%; height: 100%; max-width: 57px; max-height: 44px;"
+        >
+          <img
+            alt="Reply preview"
+            class="ImageReplyBodyView-module_image"
+            src="/static/image-body/install-spinner.png"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ImageReplyBodyView > matches snapshot for loading-with-spinner story 1`] = `
+<div>
+  <div
+    style="max-width: 220px;"
+  >
+    <div
+      class="ImageReplyBodyView-module_root"
+    >
+      <div
+        class="ImageReplyBodyView-module_thumbnailContainer"
+        style="max-width: 57px; max-height: 44px; aspect-ratio: 57 / 43.95;"
+      >
+        <div
+          class="ImageReplyBodyView-module_placeholder"
+        >
+          <div
+            class="ImageReplyBodyView-module_spinner"
+          >
+            <svg
+              aria-label="Loading…"
+              class="_icon_1855a_18"
+              fill="currentColor"
+              height="1em"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="ImageReplyBodyView-module_mediaContent"
+          style="width: 100%; height: 100%; max-width: 57px; max-height: 44px;"
+        >
+          <img
+            alt="Reply preview"
+            class="ImageReplyBodyView-module_image"
+            src="/static/image-body/install-spinner.png"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ImageReplyBodyView > matches snapshot for with-banner story 1`] = `
+<div>
+  <div
+    style="max-width: 220px;"
+  >
+    <div
+      class="ImageReplyBodyView-module_root"
+    >
+      <div
+        class="ImageReplyBodyView-module_thumbnailContainer"
+        style="max-width: 57px; max-height: 44px; aspect-ratio: 57 / 43.95;"
+      >
+        <div
+          class="ImageReplyBodyView-module_mediaContent"
+          style="width: 100%; height: 100%; max-width: 57px; max-height: 44px;"
+        >
+          <img
+            alt="Reply preview"
+            class="ImageReplyBodyView-module_image"
+            src="/static/image-body/install-spinner.png"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

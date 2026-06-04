@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
-import CollapseAllIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse-all";
+import { CollapseAllIcon, ExpandAllIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -182,7 +182,11 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                                     : _t("room_list|expand_all_sections")
                             }
                         >
-                            <CollapseAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            {collapseSections === "collapse" ? (
+                                <CollapseAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            ) : (
+                                <ExpandAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            )}
                         </IconButton>
                     )}
 

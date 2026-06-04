@@ -189,9 +189,7 @@
         "log_in_new_account": "<a>Skráðu þig inn</a> í nýja notandaaðganginn þinn.",
         "logout_dialog": {
             "description": "Ertu viss um að þú viljir skrá þig út?",
-            "megolm_export": "Flytja út dulritunarlykla handvirkt",
             "setup_key_backup_title": "Þú munt tapa dulrituðu skilaboðunum þínum",
-            "setup_secure_backup_description_1": "Öryggi dulritaðra skilaboða er tryggt með enda-í-enda dulritun. Einungis þú og viðtakendurnir hafa dulritunarlyklana til að lesa slík skilaboð.",
             "skip_key_backup": "Ég vil ekki dulrituðu skilaboðin mín"
         },
         "misconfigured_body": "Biddu kerfisstjórann á %(brand)s að athuga hvort <a>uppsetningin þín</a> innihaldi rangar eða tvíteknar færslur.",
@@ -693,9 +691,6 @@
             "title": "Endurheimtuaðferð fjarlægð"
         },
         "set_up_toast_title": "Setja upp varið öryggisafrit",
-        "setup_secure_backup": {
-            "explainer": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki."
-        },
         "udd": {
             "interactive_verification_button": "Sannprófa gagnvirkt með táknmyndum",
             "other_ask_verify_text": "Biddu þennan notanda að sannreyna setuna sína, eða sannreyndu hana handvirkt hér fyrir neðan.",

@@ -51,6 +51,10 @@ export interface UserMenuViewSnapshot {
      */
     manageAccountHref?: string;
     /**
+     * The user status emoji to display, or undefined for no icon.
+     */
+    statusEmoji?: string;
+    /**
      * A set of actions that the user can perform from the menu.
      */
     actions: Partial<{
@@ -108,11 +112,15 @@ export type UserMenuViewProps = {
 };
 
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar } = useViewModel(vm);
+    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar, statusEmoji } =
+        useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
-            <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+            <div className={styles.avatarWrapper}>
+                <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+                {statusEmoji && <span className={styles.statusEmoji}>{statusEmoji}</span>}
+            </div>
         </button>
     );
 
@@ -195,7 +203,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                 </section>
             </Menu>
             {expanded && (
-                <Text type="heading" size="sm" as="span" weight="semibold">
+                <Text type="heading" size="sm" as="span" weight="semibold" className={styles.displayName}>
                     {displayName}
                 </Text>
             )}

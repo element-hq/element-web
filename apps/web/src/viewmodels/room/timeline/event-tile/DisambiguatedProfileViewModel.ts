@@ -15,7 +15,7 @@ import { type MouseEvent } from "react";
 import { _t } from "../../../../languageHandler";
 import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
 import UserIdentifier from "../../../../customisations/UserIdentifier";
-import type { UserStatus } from "../../../../hooks/useUserStatus";
+import { type UserStatus } from "../../../../utils/userStatus";
 
 /**
  * Information about a member for disambiguation purposes.

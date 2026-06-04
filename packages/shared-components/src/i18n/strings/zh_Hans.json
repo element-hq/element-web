@@ -91,6 +91,7 @@
     "room_list": {
         "a11y": {
             "default": "打开房间 %(roomName)s",
+            "invitation": "打开房间 %(roomName)s 的邀请。",
             "video_call": "以视频通话方式打开房间 %(roomName)s。",
             "voice_call": "以语音通话方式打开房间 %(roomName)s。"
         },

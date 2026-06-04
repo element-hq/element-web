@@ -164,13 +164,13 @@ exports[`<ExportDialog /> renders export dialog 1`] = `
       </span>
     </div>
     <form
-      class="_root_19upo_16"
+      class="_root_1o4d9_17"
     >
       <div
-        class="_inline-field_19upo_32 mx_ExportDialog_attachments-checkbox"
+        class="_inline-field_1o4d9_33 mx_ExportDialog_attachments-checkbox"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_inline-field-control_1o4d9_45"
         >
           <div
             class="_container_153f2_10"
@@ -199,10 +199,10 @@ exports[`<ExportDialog /> renders export dialog 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_19upo_38"
+          class="_inline-field-body_1o4d9_39"
         >
           <label
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="include-attachments"
           >
             Include Attachments
