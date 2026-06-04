@@ -16,7 +16,7 @@
         "@element-hq/element-web-module-api": "^1.0.0",
         "@types/node": "^22.10.7",
         "@types/react": "^19",
-        "@vitejs/plugin-react": "^5.0.0",
+        "@vitejs/plugin-react": "^6.0.0",
         "react": "19.2.6",
         "rollup-plugin-external-globals": "^0.13.0",
         "typescript": "^6.0.0",

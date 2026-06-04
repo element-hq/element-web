@@ -19,7 +19,7 @@
         "@testing-library/user-event": "^14.6.1",
         "@types/node": "^22.10.7",
         "@types/react": "^19",
-        "@vitejs/plugin-react": "^5.0.0",
+        "@vitejs/plugin-react": "^6.0.0",
         "@vitest/browser-playwright": "^4.0.0",
         "@vitest/coverage-v8": "^4.0.0",
         "react": "^19",
