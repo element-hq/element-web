@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig, esmExternalRequirePlugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import externalGlobals from "rollup-plugin-external-globals";
@@ -25,8 +25,18 @@ export default defineConfig({
         outDir: "lib",
         target: "esnext",
         sourcemap: true,
-        rollupOptions: {
-            external: ["react"],
+        rolldownOptions: {
+            plugins: [
+                esmExternalRequirePlugin({
+                    external: ["react"],
+                }),
+            ],
+            output: {
+                globals: {
+                    // Reuse React from the host app
+                    react: "window.React",
+                },
+            },
         },
         minify: false,
     },
@@ -43,6 +53,7 @@ export default defineConfig({
     define: {
         // Use production mode for the build as it is tested against production builds of Element Web,
         // this is required for React JSX versions to be compatible.
-        process: { env: { NODE_ENV: "production" } },
+        "process.env.NODE_ENV": "'production'",
+        "process": { env: { NODE_ENV: "production" } },
     },
 });
