@@ -75,9 +75,9 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
         const room = cli?.getRoom(ev.getRoomId());
         const isInviteOnly = room?.getJoinRule() === JoinRule.Invite;
 
-        if ((eventDiff.isJoin || eventDiff.isPart) && isInviteOnly) return true;
-        if (eventDiff.isAvatarChange && isInviteOnly) return true;
-        if (eventDiff.isDisplaynameChange && isInviteOnly) return true;
+        if ((eventDiff.isJoin || eventDiff.isPart) && !isInviteOnly) return true;
+        if (eventDiff.isAvatarChange && !isInviteOnly) return true;
+        if (eventDiff.isDisplaynameChange && !isInviteOnly) return true;
     }
 
     return false;
