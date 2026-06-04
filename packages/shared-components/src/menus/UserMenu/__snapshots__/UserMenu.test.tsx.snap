@@ -35,7 +35,7 @@ exports[`UserMenu > renders a button 1`] = `
       </span>
     </button>
     <span
-      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
     >
       Sally Sanderson
     </span>
