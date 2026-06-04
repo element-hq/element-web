@@ -112,7 +112,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     }
 
     return (
-        <main className="mx_HomePage mx_HomePage_default mx_AutoHideScrollbar">
+        <main className="mx_AutoHideScrollbar mx_HomePage mx_HomePage_default" tabIndex={-1}>
             <div className="mx_HomePage_default_wrapper">
                 {introSection}
                 <div className="mx_HomePage_default_buttons">

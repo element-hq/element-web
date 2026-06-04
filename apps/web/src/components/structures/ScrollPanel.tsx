@@ -951,7 +951,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         return (
             <div
                 ref={this.collectScroll}
-                className={`mx_ScrollPanel mx_AutoHideScrollbar${this.props.className ? ` ${this.props.className}` : ""}`}
+                className={`mx_AutoHideScrollbar mx_ScrollPanel${this.props.className ? ` ${this.props.className}` : ""}`}
                 style={this.props.style}
                 tabIndex={-1}
             >

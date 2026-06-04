@@ -99,7 +99,11 @@ const BaseCard: React.FC<IProps> = ({
     }
 
     if (!withoutScrollContainer) {
-        children = <div className="mx_AutoHideScrollbar">{children}</div>;
+        children = (
+            <div className="mx_AutoHideScrollbar" tabIndex={-1}>
+                {children}
+            </div>
+        );
     }
 
     const shouldRenderHeader = header || !hideHeaderButtons;

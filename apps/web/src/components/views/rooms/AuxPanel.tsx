@@ -43,7 +43,7 @@ export default class AuxPanel extends React.Component<IProps> {
         }
 
         return (
-            <div role="region" className="mx_AuxPanel mx_AutoHideScrollbar">
+            <div role="region" className="mx_AutoHideScrollbar mx_AuxPanel" tabIndex={-1}>
                 {this.props.children}
                 {appsDrawer}
                 {callView}

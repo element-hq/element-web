@@ -383,7 +383,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                 />
                             )}
                         </RovingTabIndexContext.Consumer>
-                        <div className="mx_ForwardList_content mx_AutoHideScrollbar">
+                        <div className="mx_AutoHideScrollbar mx_ForwardList_content" tabIndex={-1}>
                             {rooms.length > 0 ? (
                                 <div className="mx_ForwardList_results">
                                     <TruncatedList

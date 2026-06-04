@@ -145,7 +145,7 @@ export function ReadReceiptGroup({
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
             <ContextMenu menuClassName="mx_ReadReceiptGroup_popup" onFinished={closeMenu} {...aboveLeftOf(buttonRect)}>
-                <div className="mx_AutoHideScrollbar">
+                <div className="mx_AutoHideScrollbar" tabIndex={-1}>
                     <SectionHeader className="mx_ReadReceiptGroup_title">
                         {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                     </SectionHeader>

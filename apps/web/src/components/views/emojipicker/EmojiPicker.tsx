@@ -374,7 +374,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                             />
                             <div
                                 id="mx_EmojiPicker_body"
-                                className={classNames("mx_EmojiPicker_body mx_AutoHideScrollbar", {
+                                className={classNames("mx_AutoHideScrollbar mx_EmojiPicker_body", {
                                     mx_EmojiPicker_body_showHighlight: this.state.showHighlight,
                                 })}
                                 ref={this.scrollRef}

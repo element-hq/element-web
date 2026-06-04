@@ -157,7 +157,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     onSearch={setQuery}
                     autoFocus={true}
                 />
-                <div className="mx_ManageRestrictedJoinRuleDialog_content mx_AutoHideScrollbar">
+                <div className="mx_AutoHideScrollbar mx_ManageRestrictedJoinRuleDialog_content" tabIndex={-1}>
                     {filteredSpacesContainingRoom.length > 0 ? (
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
                             <h3>

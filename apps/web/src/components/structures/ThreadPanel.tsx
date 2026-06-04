@@ -234,7 +234,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                         disableGrouping={true}
                     />
                 ) : (
-                    <div className="mx_AutoHideScrollbar">
+                    <div className="mx_AutoHideScrollbar" tabIndex={-1}>
                         <Spinner />
                     </div>
                 )}
