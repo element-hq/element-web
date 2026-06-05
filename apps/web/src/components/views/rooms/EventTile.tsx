@@ -814,7 +814,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private getPreviewKind(): EventTilePreviewBodyKind {
-        if (this.props.isRedacted) {
+        if (this.props.isRedacted || this.props.mxEvent.isRedacted()) {
             return "redacted";
         }
 
@@ -975,7 +975,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             event: {
                 eventType: this.props.mxEvent.getType(),
                 msgtype: typeof content.msgtype === "string" ? content.msgtype : undefined,
-                eventTs: this.props.mxEvent.getTs(),
+                eventTs: this.props.mxEvent.getTs() ?? 0,
                 scrollToken: getScrollToken({
                     eventId: this.props.mxEvent.getId() ?? undefined,
                     isLocalEcho: !!this.props.mxEvent.status,
