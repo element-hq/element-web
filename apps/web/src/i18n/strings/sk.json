@@ -272,7 +272,6 @@
             "point_the_camera": "Naskenujte tu zobrazený QR kód",
             "scan_code_instruction": "Naskenujte QR kód pomocou druhého zariadenia",
             "scan_qr_code": "Prihláste sa pomocou QR kódu",
-            "security_code": "Bezpečnostný kód",
             "security_code_prompt": "Ak sa zobrazí výzva, zadajte nižšie uvedený kód na svojom druhom zariadení.",
             "select_qr_code": "Vyberte '%(scanQRCode)s'",
             "unsupported_explainer": "Poskytovateľ vášho účtu nepodporuje prihlásenie do nového zariadenia pomocou QR kódu.",

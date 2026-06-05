@@ -267,7 +267,6 @@
             "point_the_camera": "Jāvērš kamera uz šeit parādīto kvadrātkodu",
             "scan_code_instruction": "Zemāk esošais kvadrātkods ir jānolasa ar ierīci, kurā ir notikusi atteikšanās.",
             "scan_qr_code": "Nolasīt kvadrātkodu",
-            "security_code": "Drošības kods",
             "security_code_prompt": "Ja tiek prasīts, otrā ierīcē jāievada zemāk esošais kods",
             "select_qr_code": "Jāatlasa '%(scanQRCode)s'",
             "unsupported_explainer": "Konta nodrošinātājs neatbalsta pieteikšanos jaunā ierīcē ar kvadrātkodu.",

@@ -270,7 +270,6 @@
             "point_the_camera": "Scanne den hier angezeigten QR-Code",
             "scan_code_instruction": "Scanne den QR-Code mit einem weiteren Gerät.",
             "scan_qr_code": "Anmeldung mit QR-Code",
-            "security_code": "Sicherheitscode",
             "security_code_prompt": "Wenn du dazu aufgefordert wirst, gib den folgenden Code auf deinem anderen Gerät ein.",
             "select_qr_code": "Wähle \"%(scanQRCode)s\"",
             "unsupported_explainer": "Dein Kontoanbieter unterstützt keine Anmeldung bei einem neuen Gerät per QR-Code.",
