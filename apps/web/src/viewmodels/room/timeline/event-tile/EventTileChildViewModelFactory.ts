@@ -5,18 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    EventPreviewViewModel,
-    type EventPreviewViewModelProps,
-} from "./EventPreviewViewModel";
+import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
 import {
     E2eMessageSharedIconViewModel,
     type E2eMessageSharedIconViewModelProps,
 } from "./E2eMessageSharedIconViewModel";
-import {
-    MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "./timestamp/MessageTimestampViewModel";
+import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
 import {
     ThreadMessagePreviewViewModel,
     type ThreadMessagePreviewViewModelProps,
@@ -27,14 +21,8 @@ import {
     ThreadListActionBarViewModel,
     type ThreadListActionBarViewModelProps,
 } from "../../ThreadListActionBarViewModel";
-import {
-    EventTileActionBarViewModel,
-    type EventTileActionBarViewModelProps,
-} from "../../EventTileActionBarViewModel";
-import {
-    ReactionsRowViewModel,
-    type ReactionsRowViewModelProps,
-} from "./reactions/ReactionsRowViewModel";
+import { EventTileActionBarViewModel, type EventTileActionBarViewModelProps } from "../../EventTileActionBarViewModel";
+import { ReactionsRowViewModel, type ReactionsRowViewModelProps } from "./reactions/ReactionsRowViewModel";
 
 /**
  * App-side owner for EventTile child view models.

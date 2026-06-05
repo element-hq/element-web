@@ -28,7 +28,9 @@ export function EventTileTimestampSlot({
     if (showTimestamp) {
         return (
             <>
-                {showLateIcon ? <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" /> : undefined}
+                {showLateIcon ? (
+                    <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
+                ) : undefined}
                 <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
             </>
         );

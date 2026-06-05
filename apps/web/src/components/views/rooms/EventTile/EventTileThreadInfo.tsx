@@ -7,10 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode } from "react";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import {
-    ThreadMessagePreviewView,
-    ThreadSummaryView,
-} from "@element-hq/web-shared-components";
+import { ThreadMessagePreviewView, ThreadSummaryView } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
 import { type EventTileThreadState } from "../../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
@@ -48,10 +45,7 @@ export function EventTileThreadPanelSummary({
 }
 
 /** Renders thread summary or search thread affordances for an EventTile. */
-export function EventTileThreadInfo({
-    threadState,
-    threadSummaryVm,
-}: Readonly<EventTileThreadInfoProps>): ReactNode {
+export function EventTileThreadInfo({ threadState, threadSummaryVm }: Readonly<EventTileThreadInfoProps>): ReactNode {
     if (threadState.shouldShowThreadSummary && threadState.thread) {
         return <ThreadSummaryView vm={threadSummaryVm} className="mx_ThreadSummary" data-testid="thread-summary" />;
     }

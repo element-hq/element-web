@@ -1101,9 +1101,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
         const avatarMember = this.getAvatarMember();
 
-        const avatar = (
-            <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />
-        );
+        const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
         const sender = (
             <EventTileSenderAdapter
                 mxEvent={this.props.mxEvent}
