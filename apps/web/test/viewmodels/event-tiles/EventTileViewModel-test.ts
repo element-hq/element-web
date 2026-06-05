@@ -14,6 +14,7 @@ import {
     EventTileViewModel,
     type EventTileViewModelProps,
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { createEventTileChildViewModelFactory } from "../../../src/viewmodels/room/timeline/event-tile/EventTileChildViewModelFactory";
 
 describe("EventTileViewModel", () => {
     const roomId = "!room:example.org";
@@ -467,18 +468,20 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
-    it("lazily owns timestamp child view models", () => {
+    it("creates timestamp child view models through the helper", () => {
         const vm = new EventTileViewModel(makeProps());
-        const messageTimestampViewModel = vm.getMessageTimestampViewModel({ ts: 123 });
-        const linkedMessageTimestampViewModel = vm.getLinkedMessageTimestampViewModel({ ts: 456 });
+        const childViewModels = createEventTileChildViewModelFactory();
+        const messageTimestampViewModel = childViewModels.getMessageTimestampViewModel({ ts: 123 });
+        const linkedMessageTimestampViewModel = childViewModels.getLinkedMessageTimestampViewModel({ ts: 456 });
 
         expect(messageTimestampViewModel.getSnapshot().href).toBeUndefined();
         expect(linkedMessageTimestampViewModel.getSnapshot().href).toBeUndefined();
 
+        childViewModels.dispose();
         vm.dispose();
     });
 
-    it("does not initialize timestamp child view models for events without an origin timestamp", () => {
+    it("does not compute a real timestamp when hidden", () => {
         const mxEvent = new MatrixEvent({
             type: EventType.RoomMessage,
             room_id: roomId,
@@ -502,12 +505,12 @@ describe("EventTileViewModel", () => {
         vm.dispose();
     });
 
-    it("owns and updates the thread-list action bar child view model", () => {
-        const vm = new EventTileViewModel(makeProps());
+    it("owns and updates the thread-list action bar child view model through the helper", () => {
+        const childViewModels = createEventTileChildViewModelFactory();
         const onViewInRoomClick = jest.fn();
         const onCopyLinkClick = jest.fn();
 
-        const threadListActionBarViewModel = vm.getThreadListActionBarViewModel({
+        const threadListActionBarViewModel = childViewModels.getThreadListActionBarViewModel({
             onViewInRoomClick,
             onCopyLinkClick,
         });
@@ -518,6 +521,6 @@ describe("EventTileViewModel", () => {
         expect(onViewInRoomClick).toHaveBeenCalledWith(null);
         expect(onCopyLinkClick).toHaveBeenCalledWith(null);
 
-        vm.dispose();
+        childViewModels.dispose();
     });
 });
