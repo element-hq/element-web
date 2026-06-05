@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
  * Proxy configuration utilities for Element Desktop.
  */
 
-import { session } from "electron";
+import { session, app } from "electron";
 
 export interface DesktopProxyConfig {
     mode: "system" | "direct" | "custom";
@@ -43,6 +43,10 @@ export function getLastAppliedConfig(): DesktopProxyConfig | null {
  */
 export async function applyProxyConfig(config?: Partial<DesktopProxyConfig>): Promise<void> {
     try {
+        if (!app.isReady()) {
+            await app.whenReady();
+        }
+
         const normalized = normalizeConfig(config ?? { mode: "system" });
         let electronCfg = toElectronProxyConfig(normalized);
 

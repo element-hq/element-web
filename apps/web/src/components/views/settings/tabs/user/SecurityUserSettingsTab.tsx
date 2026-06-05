@@ -34,6 +34,9 @@ import { SettingsSubsection, SettingsSubsectionText } from "../../shared/Setting
 import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
+import PlatformPeg from "../../../../../PlatformPeg";
+import Modal from "../../../../../Modal";
+import { NetworkProxyModal } from "../../NetworkProxyModal";
 
 interface IIgnoredUserProps {
     userId: string;

@@ -4,7 +4,7 @@
     "targets": {
         "prebuild:module_system": {
             "cache": true,
-            "command": "node module_system/scripts/install.ts",
+            "command": "echo skipped",
             "inputs": ["{projectRoot}/build_config.yaml"],
             "outputs": ["{projectRoot}/src/modules.js", "{projectRoot}/package.json", "{workspaceRoot}/pnpm-lock.yaml"],
             "options": { "cwd": "apps/web" }

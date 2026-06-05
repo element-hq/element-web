@@ -318,7 +318,7 @@ export default abstract class BasePlatform {
 
     /**
      * Returns true if the platform supports network proxy configuration.
-     * @returns {boolean} whether the platform supports proxy configuration
+     * @returns whether the platform supports proxy configuration
      */
     public supportsProxyConfiguration(): boolean {
         return false;

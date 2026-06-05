@@ -6,12 +6,19 @@
  */
 
 import { BaseViewModel } from "../../viewmodel/BaseViewModel";
-import { 
+import { _t } from "../../utils/i18n";
+import {
     type NetworkProxyViewModel as INetworkProxyViewModel,
     type NetworkProxyViewSnapshot,
 } from "./NetworkProxyView";
 
+/**
+ * Properties for the NetworkProxyViewModel.
+ */
 export interface NetworkProxyViewModelProps {
+    /**
+     * The initial proxy configuration to populate the view.
+     */
     initialConfig: {
         mode: "system" | "direct" | "custom";
         scheme?: string;
@@ -21,13 +28,22 @@ export interface NetworkProxyViewModelProps {
         password?: string;
         bypass?: string;
     };
+    /**
+     * Callback invoked when the user attempts to save the configuration.
+     */
     onSave: (config: any) => Promise<void>;
+    /**
+     * Callback invoked when the user cancels the configuration.
+     */
     onCancel: () => void;
 }
 
-export class NetworkProxyViewModel 
-    extends BaseViewModel<NetworkProxyViewSnapshot, NetworkProxyViewModelProps> 
-    implements INetworkProxyViewModel 
+/**
+ * View model handling the logic and state for the network proxy settings view.
+ */
+export class NetworkProxyViewModel
+    extends BaseViewModel<NetworkProxyViewSnapshot, NetworkProxyViewModelProps>
+    implements INetworkProxyViewModel
 {
     public constructor(props: NetworkProxyViewModelProps) {
         super(props, {
@@ -89,7 +105,10 @@ export class NetworkProxyViewModel
             });
             this.snapshot.merge({ hasChanges: false, loading: false });
         } catch (e) {
-            this.snapshot.merge({ error: String(e), loading: false });
+            this.snapshot.merge({
+                error: _t("settings|network_proxy|error_saving_config", { err: String(e) }),
+                loading: false,
+            });
         }
     };
 
@@ -100,10 +119,10 @@ export class NetworkProxyViewModel
     private update(patch: Partial<NetworkProxyViewSnapshot>): void {
         this.snapshot.merge(patch);
         const next = this.getSnapshot();
-        
+
         // Calculate hasChanges
         const initial = this.props.initialConfig;
-        const hasChanges = 
+        const hasChanges =
             next.mode !== initial.mode ||
             next.scheme !== (initial.scheme ?? "http") ||
             next.host !== (initial.host ?? "") ||

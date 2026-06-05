@@ -106,15 +106,26 @@ type RawDependencies = {
     packageJson: string;
 };
 
+function getLockfilePath(): string {
+    if (fs.existsSync("./pnpm-lock.yaml")) {
+        return "./pnpm-lock.yaml";
+    }
+    // Monorepo: lockfile is at the root
+    if (fs.existsSync("../../pnpm-lock.yaml")) {
+        return "../../pnpm-lock.yaml";
+    }
+    throw new Error("Could not find pnpm-lock.yaml");
+}
+
 function readCurrentPackageDetails(): RawDependencies {
     return {
-        lockfile: fs.readFileSync("./pnpm-lock.yaml", "utf-8"),
+        lockfile: fs.readFileSync(getLockfilePath(), "utf-8"),
         packageJson: fs.readFileSync("./package.json", "utf-8"),
     };
 }
 
 function writePackageDetails(deps: RawDependencies): void {
-    fs.writeFileSync("./pnpm-lock.yaml", deps.lockfile, "utf-8");
+    fs.writeFileSync(getLockfilePath(), deps.lockfile, "utf-8");
     fs.writeFileSync("./package.json", deps.packageJson, "utf-8");
 }
 
@@ -144,34 +155,25 @@ function findDepVersionInPackageJson(dep: string, pkgJsonStr: string): string {
 function getTopLevelDependencyVersion(dep: string): string {
     const dependencyTree = JSON.parse(
         childProcess
-            .execSync(`npm list ${dep} --depth=0 --json`, {
+            .execSync(`pnpm list ${dep} --depth=0 --json`, {
                 env: process.env,
                 stdio: ["inherit", "pipe", "pipe"],
             })
             .toString("utf-8"),
     );
 
-    /*
-        What a dependency tree looks like:
-        {
-          "version": "1.10.13",
-          "name": "element-web",
-          "dependencies": {
-            "@matrix-org/react-sdk-module-api": {
-              "version": "0.0.1",
-              "resolved": "file:../../../matrix-react-sdk-module-api"
-            }
-          }
-        }
-     */
-
-    return dependencyTree["dependencies"][dep]["version"];
+    return dependencyTree[0]["dependencies"][dep]["version"];
 }
 
 function getModuleApiVersionFor(moduleName: string): string {
     // We'll just pretend that this isn't highly problematic...
     // pnpm is fairly stable in putting modules in a flat hierarchy, at least.
-    const pkgJsonStr = fs.readFileSync(`./node_modules/${moduleName}/package.json`, "utf-8");
+    let pkgJsonPath = `./node_modules/${moduleName}/package.json`;
+    if (!fs.existsSync(pkgJsonPath)) {
+        // Monorepo: node_modules is at the root
+        pkgJsonPath = `../../node_modules/${moduleName}/package.json`;
+    }
+    const pkgJsonStr = fs.readFileSync(pkgJsonPath, "utf-8");
     return findDepVersionInPackageJson(moduleApiDepName, pkgJsonStr);
 }
 

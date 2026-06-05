@@ -171,7 +171,7 @@ function loadLocalConfigFile(): Json {
 
 let loadConfigPromise: Promise<void> | undefined;
 // Loads the config from asar, and applies a config.json from userData atop if one exists
-// Writes config to `globalThis.vectorConfig`. Idempotent, returns the same promise on subsequent calls.
+// Writes config to `global.vectorConfig`. Idempotent, returns the same promise on subsequent calls.
 function loadConfig(): Promise<void> {
     if (loadConfigPromise) return loadConfigPromise;
 
@@ -180,13 +180,13 @@ function loadConfig(): Promise<void> {
 
         try {
             console.log(`Loading app config: ${path.join(asarPath, LocalConfigFilename)}`);
-            globalThis.vectorConfig = loadJsonFile(asarPath, LocalConfigFilename);
+            global.vectorConfig = loadJsonFile(asarPath, LocalConfigFilename);
         } catch {
             // it would be nice to check the error code here and bail if the config
             // is unparsable, but we get MODULE_NOT_FOUND in the case of a missing
             // file or invalid json, so node is just very unhelpful.
             // Continue with the defaults (ie. an empty config)
-            globalThis.vectorConfig = {};
+            global.vectorConfig = {};
         }
 
         try {
@@ -198,27 +198,27 @@ function loadConfig(): Promise<void> {
             // defined, and panics as a result.
             if (Object.keys(localConfig).find((k) => homeserverProps.includes(<any>k))) {
                 // Rip out all the homeserver options from the vector config
-                globalThis.vectorConfig = Object.keys(globalThis.vectorConfig)
+                global.vectorConfig = Object.keys(global.vectorConfig)
                     .filter((k) => !homeserverProps.includes(<any>k))
                     .reduce(
                         (obj, key) => {
-                            obj[key] = globalThis.vectorConfig[key];
+                            obj[key] = global.vectorConfig[key];
                             return obj;
                         },
-                        {} as Omit<Partial<(typeof globalThis)["vectorConfig"]>, keyof typeof homeserverProps>,
+                        {} as Omit<Partial<(typeof global)["vectorConfig"]>, keyof typeof homeserverProps>,
                     );
             }
 
-            globalThis.vectorConfig = Object.assign(globalThis.vectorConfig, localConfig);
+            global.vectorConfig = Object.assign(global.vectorConfig, localConfig);
         } catch (e) {
             if (e instanceof SyntaxError) {
                 await app.whenReady();
                 void dialog.showMessageBox({
                     type: "error",
-                    title: `Your ${globalThis.vectorConfig.brand || "Element"} is misconfigured`,
+                    title: `Your ${global.vectorConfig.brand || "Element"} is misconfigured`,
                     message:
-                        `Your custom ${globalThis.vectorConfig.brand || "Element"} configuration contains invalid JSON. ` +
-                        `Please correct the problem and reopen ${globalThis.vectorConfig.brand || "Element"}.`,
+                        `Your custom ${global.vectorConfig.brand || "Element"} configuration contains invalid JSON. ` +
+                        `Please correct the problem and reopen ${global.vectorConfig.brand || "Element"}.`,
                     detail: e.message || "",
                 });
             }
@@ -227,8 +227,8 @@ function loadConfig(): Promise<void> {
         }
 
         // Tweak modules paths as they assume the root is at the same level as webapp, but for `vector://vector/webapp` it is not.
-        if (Array.isArray(globalThis.vectorConfig.modules)) {
-            globalThis.vectorConfig.modules = globalThis.vectorConfig.modules.map((m) => {
+        if (Array.isArray(global.vectorConfig.modules)) {
+            global.vectorConfig.modules = global.vectorConfig.modules.map((m) => {
                 if (m.startsWith("/")) {
                     return "/webapp" + m;
                 }
@@ -243,7 +243,7 @@ function loadConfig(): Promise<void> {
 // Configure Electron Sentry and crashReporter using sentry.dsn in config.json if one is present.
 async function configureSentry(): Promise<void> {
     await loadConfig();
-    const { dsn, environment } = globalThis.vectorConfig.sentry || {};
+    const { dsn, environment } = global.vectorConfig.sentry || {};
     if (dsn) {
         console.log(`Enabling Sentry with dsn=${dsn} environment=${environment}`);
         Sentry.init({
@@ -262,13 +262,13 @@ async function setupGlobals(): Promise<void> {
 
     // Figure out the tray icon path & brand name
     const iconFile = `icon.${process.platform === "win32" ? "ico" : "png"}`;
-    globalThis.trayConfig = {
+    global.trayConfig = {
         icon_path: path.join(path.dirname(asarPath), "build", iconFile),
-        brand: globalThis.vectorConfig.brand || "Element",
+        brand: global.vectorConfig.brand || "Element",
     };
 }
 
-globalThis.appQuitting = false;
+global.appQuitting = false;
 
 const exitShortcuts: Array<(input: Input, platform: string) => boolean> = [
     (input, platform): boolean => platform !== "darwin" && input.alt && input.key.toUpperCase() === "F4",
@@ -438,14 +438,14 @@ app.on("ready", async () => {
     // Minimist parses `--no-`-prefixed arguments as booleans with value `false` rather than verbatim.
     if (argv["update"] === false) {
         console.log("Auto update disabled via command line flag");
-    } else if (globalThis.vectorConfig["update_base_url"]) {
-        void updater.start(globalThis.vectorConfig["update_base_url"]);
+    } else if (global.vectorConfig["update_base_url"]) {
+        void updater.start(global.vectorConfig["update_base_url"]);
     } else {
         console.log("No update_base_url is defined: auto update is disabled");
     }
 
     // Set up i18n before loading storage as we need translations for dialogs
-    globalThis.appLocalization = new AppLocalization({
+    global.appLocalization = new AppLocalization({
         components: [(): void => tray.initApplicationMenu(), (): void => Menu.setApplicationMenu(buildMenuTemplate())],
         store,
     });
@@ -458,14 +458,14 @@ app.on("ready", async () => {
 
     console.debug("Opening main window");
     const preloadScript = path.normalize(`${__dirname}/preload.cjs`);
-    globalThis.mainWindow = new BrowserWindow({
+    global.mainWindow = new BrowserWindow({
         // https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
         backgroundColor: "#fff",
 
         titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
         trafficLightPosition: { x: 9, y: 8 },
 
-        icon: globalThis.trayConfig.icon_path,
+        icon: global.trayConfig.icon_path,
         show: false,
         autoHideMenuBar: store.get("autoHideMenuBar"),
 
@@ -482,47 +482,47 @@ app.on("ready", async () => {
         },
     });
 
-    globalThis.mainWindow.setContentProtection(store.get("enableContentProtection"));
+    global.mainWindow.setContentProtection(store.get("enableContentProtection"));
 
     try {
         console.debug("Ensuring storage is ready");
-        if (!(await store.prepareSafeStorage(globalThis.mainWindow.webContents.session))) return;
+        if (!(await store.prepareSafeStorage(global.mainWindow.webContents.session))) return;
     } catch (e) {
         console.error(e);
         app.exit(1);
     }
 
-    globalThis.mainWindow.loadURL("vector://vector/webapp/");
+    global.mainWindow.loadURL("vector://vector/webapp/");
 
     if (process.platform === "darwin") {
-        setupMacosTitleBar(globalThis.mainWindow);
+        setupMacosTitleBar(global.mainWindow);
     }
 
     // Handle spellchecker
     // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
-    globalThis.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
+    global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
 
     // Create trayIcon icon
-    if (store.get("minimizeToTray")) tray.create(globalThis.trayConfig);
+    if (store.get("minimizeToTray")) tray.create(global.trayConfig);
 
-    globalThis.mainWindow.once("ready-to-show", () => {
-        if (!globalThis.mainWindow) return;
-        mainWindowState.manage(globalThis.mainWindow);
+    global.mainWindow.once("ready-to-show", () => {
+        if (!global.mainWindow) return;
+        mainWindowState.manage(global.mainWindow);
 
         if (!argv["hidden"]) {
-            globalThis.mainWindow.show();
+            global.mainWindow.show();
         } else {
             // hide here explicitly because window manage above sometimes shows it
-            globalThis.mainWindow.hide();
+            global.mainWindow.hide();
         }
     });
 
-    globalThis.mainWindow.webContents.on("before-input-event", (event: Event, input: Input): void => {
+    global.mainWindow.webContents.on("before-input-event", (event: Event, input: Input): void => {
         const exitShortcutPressed =
             input.type === "keyDown" && exitShortcuts.some((shortcutFn) => shortcutFn(input, process.platform));
 
         // We only care about the exit shortcuts here
-        if (!exitShortcutPressed || !globalThis.mainWindow) return;
+        if (!exitShortcutPressed || !global.mainWindow) return;
 
         // Prevent the default behaviour
         event.preventDefault();
@@ -531,12 +531,12 @@ app.on("ready", async () => {
         const shouldWarnBeforeExit = store.get("warnBeforeExit", true);
         if (shouldWarnBeforeExit) {
             const shouldCancelCloseRequest =
-                dialog.showMessageBoxSync(globalThis.mainWindow, {
+                dialog.showMessageBoxSync(global.mainWindow, {
                     type: "question",
                     buttons: [
                         _t("action|cancel"),
                         _t("action|close_brand", {
-                            brand: globalThis.vectorConfig.brand || "Element",
+                            brand: global.vectorConfig.brand || "Element",
                         }),
                     ],
                     message: _t("confirm_quit"),
@@ -550,23 +550,23 @@ app.on("ready", async () => {
         app.exit();
     });
 
-    globalThis.mainWindow.on("closed", () => {
-        globalThis.mainWindow = null;
+    global.mainWindow.on("closed", () => {
+        global.mainWindow = null;
     });
-    globalThis.mainWindow.on("close", async (e) => {
+    global.mainWindow.on("close", async (e) => {
         // If we are not quitting and have a tray icon then minimize to tray
-        if (!globalThis.appQuitting && (tray.hasTray() || process.platform === "darwin")) {
+        if (!global.appQuitting && (tray.hasTray() || process.platform === "darwin")) {
             // On Mac, closing the window just hides it
             // (this is generally how single-window Mac apps
             // behave, eg. Mail.app)
             e.preventDefault();
 
-            if (globalThis.mainWindow?.isFullScreen()) {
-                globalThis.mainWindow.once("leave-full-screen", () => globalThis.mainWindow?.hide());
+            if (global.mainWindow?.isFullScreen()) {
+                global.mainWindow.once("leave-full-screen", () => global.mainWindow?.hide());
 
-                globalThis.mainWindow.setFullScreen(false);
+                global.mainWindow.setFullScreen(false);
             } else {
-                globalThis.mainWindow?.hide();
+                global.mainWindow?.hide();
             }
 
             return false;
@@ -575,16 +575,16 @@ app.on("ready", async () => {
 
     if (process.platform === "win32") {
         // Handle forward/backward mouse buttons in Windows
-        globalThis.mainWindow.on("app-command", (e, cmd) => {
-            if (cmd === "browser-backward" && globalThis.mainWindow?.webContents.canGoBack()) {
-                globalThis.mainWindow.webContents.goBack();
-            } else if (cmd === "browser-forward" && globalThis.mainWindow?.webContents.canGoForward()) {
-                globalThis.mainWindow.webContents.goForward();
+        global.mainWindow.on("app-command", (e, cmd) => {
+            if (cmd === "browser-backward" && global.mainWindow?.webContents.canGoBack()) {
+                global.mainWindow.webContents.goBack();
+            } else if (cmd === "browser-forward" && global.mainWindow?.webContents.canGoForward()) {
+                global.mainWindow.webContents.goForward();
             }
         });
     }
 
-    webContentsHandler(globalThis.mainWindow.webContents);
+    webContentsHandler(global.mainWindow.webContents);
 
     session.defaultSession.setDisplayMediaRequestHandler(
         (_, callback) => {
@@ -602,14 +602,14 @@ app.on("ready", async () => {
                         callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
                     });
             } else {
-                globalThis.mainWindow?.webContents.send("openProxySettings");
+                global.mainWindow?.webContents.send("openProxySettings");
             }
             setDisplayMediaCallback(callback);
         },
         { useSystemPicker: true },
     ); // Use Mac OS 15+ native picker
 
-    setupMediaAuth(globalThis.mainWindow);
+    setupMediaAuth(global.mainWindow);
 });
 
 app.on("window-all-closed", () => {
@@ -617,12 +617,12 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
-    globalThis.mainWindow?.show();
+    global.mainWindow?.show();
 });
 
 function beforeQuit(): void {
-    globalThis.appQuitting = true;
-    globalThis.mainWindow?.webContents.send("before-quit");
+    global.appQuitting = true;
+    global.mainWindow?.webContents.send("before-quit");
 }
 
 app.on("before-quit", beforeQuit);
@@ -633,10 +633,10 @@ app.on("second-instance", (ev, commandLine, workingDirectory) => {
     if (commandLine.includes("--hidden")) return;
 
     // Someone tried to run a second instance, we should focus our window.
-    if (globalThis.mainWindow) {
-        if (!globalThis.mainWindow.isVisible()) globalThis.mainWindow.show();
-        if (globalThis.mainWindow.isMinimized()) globalThis.mainWindow.restore();
-        globalThis.mainWindow.focus();
+    if (global.mainWindow) {
+        if (!global.mainWindow.isVisible()) global.mainWindow.show();
+        if (global.mainWindow.isMinimized()) global.mainWindow.restore();
+        global.mainWindow.focus();
     }
 });
 

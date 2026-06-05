@@ -33,7 +33,7 @@
 .configSection {
     display: flex;
     flex-direction: column;
-    gap: var(--cpd-space-3x);
+    gap: var(--cpd-space-4x);
 }
 
 .field {
@@ -44,7 +44,7 @@
 
 .fieldRow {
     display: flex;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-4x);
 }
 
 .fieldRow > .field {
@@ -52,12 +52,13 @@
 }
 
 .portField {
-    width: 100px;
+    width: 120px;
 }
 
 .select {
     width: 100%;
-    padding: var(--cpd-space-2x);
+    height: 40px;
+    padding: 0 var(--cpd-space-2x);
     border: 1px solid var(--cpd-color-border-subtle);
     border-radius: 8px;
     background: var(--cpd-color-bg-canvas-default);
@@ -82,6 +83,33 @@
 .footer {
     display: flex;
     justify-content: flex-end;
-    gap: var(--cpd-space-2x);
+    gap: var(--cpd-space-3x);
     margin-top: var(--cpd-space-2x);
+}
+
+/* 
+ * PORTED FIX FROM TURN 115
+ * Force standard inputs to show focus rings. 
+ * Target any Compound container that has focus within it and apply the outline to its visual UI element.
+ */
+.networkProxyView :global(div[class*="_container_"]):focus-within,
+.networkProxyView :global(div[class*="_container_"]):focus-within :global(div[class*="_ui_"]),
+.networkProxyView :global(div[class*="_container_"]):focus-within :global(input) {
+    outline: 2px solid var(--cpd-color-border-focused) !important;
+    outline-offset: 1px !important;
+}
+
+/* Specific fix for PasswordInput where the container itself needs the outline */
+.networkProxyView :global(.mx_NetworkProxyModal_passwordInput):focus-within {
+    outline: 2px solid var(--cpd-color-border-focused) !important;
+    outline-offset: 1px !important;
+    border-radius: 8px !important;
+}
+
+/* Ensure eye icon button doesn't have its own weird borders/backgrounds */
+.networkProxyView :global(button) {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
