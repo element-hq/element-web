@@ -13,6 +13,7 @@ import {
     ReactionsRowView,
     useCreateAutoDisposedViewModel,
     useViewModel,
+    type ReactionsRowViewSnapshot,
 } from "@element-hq/web-shared-components";
 
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
@@ -82,6 +83,59 @@ function ReactionsRowButtonAdapter(props: Readonly<ReactionsRowButtonAdapterProp
     }, [props.disabled, vm]);
 
     return <ReactionsRowButtonView vm={vm} />;
+}
+
+interface ReactionsRowContextMenuProps {
+    mxEvent: MatrixEvent;
+    reactions?: Relations | null;
+    menuDisplayed: boolean;
+    menuAnchorRect: DOMRect | null;
+    closeReactionMenu: () => void;
+}
+
+function ReactionsRowContextMenu({
+    mxEvent,
+    reactions,
+    menuDisplayed,
+    menuAnchorRect,
+    closeReactionMenu,
+}: Readonly<ReactionsRowContextMenuProps>): JSX.Element | null {
+    if (!menuDisplayed || !menuAnchorRect || !reactions) {
+        return null;
+    }
+
+    return (
+        <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
+            <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
+        </ContextMenu>
+    );
+}
+
+interface ReactionsRowContentProps {
+    vm: ReactionsRowViewModel;
+    snapshot: ReactionsRowViewSnapshot;
+    items?: JSX.Element[];
+    contextMenu?: JSX.Element;
+}
+
+function ReactionsRowContent({
+    vm,
+    snapshot,
+    items,
+    contextMenu,
+}: Readonly<ReactionsRowContentProps>): JSX.Element | null {
+    if (!snapshot.isVisible || !items?.length) {
+        return null;
+    }
+
+    return (
+        <>
+            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
+                {items}
+            </ReactionsRowView>
+            {contextMenu}
+        </>
+    );
 }
 
 interface ReactionGroup {
@@ -253,25 +307,16 @@ export function ReactionsRowAdapter({
         snapshot.showAllButtonVisible,
     ]);
 
-    if (!snapshot.isVisible || !items?.length) {
-        return null;
-    }
+    const contextMenu =
+        roomContext.canReact && menuDisplayed && menuAnchorRect && reactions ? (
+            <ReactionsRowContextMenu
+                mxEvent={mxEvent}
+                reactions={reactions}
+                menuDisplayed={menuDisplayed}
+                menuAnchorRect={menuAnchorRect}
+                closeReactionMenu={closeReactionMenu}
+            />
+        ) : undefined;
 
-    let contextMenu: JSX.Element | undefined;
-    if (menuDisplayed && menuAnchorRect && reactions && roomContext.canReact) {
-        contextMenu = (
-            <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
-                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
-            </ContextMenu>
-        );
-    }
-
-    return (
-        <>
-            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
-                {items}
-            </ReactionsRowView>
-            {contextMenu}
-        </>
-    );
+    return <ReactionsRowContent vm={vm} snapshot={snapshot} items={items} contextMenu={contextMenu} />;
 }

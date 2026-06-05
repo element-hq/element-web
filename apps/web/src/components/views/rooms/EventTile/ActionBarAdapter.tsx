@@ -37,6 +37,67 @@ interface ActionBarEventTile {
     getEventTileOps?(): ActionBarEventTileOps;
 }
 
+interface ActionBarMenusProps {
+    mxEvent: MatrixEvent;
+    reactions?: Relations | null;
+    permalinkCreator?: RoomPermalinkCreator;
+    optionsMenuAnchorRect: DOMRect | null;
+    reactionsMenuAnchorRect: DOMRect | null;
+    closeOptionsMenu: () => void;
+    closeReactionsMenu: () => void;
+    getTile: () => ActionBarEventTile | null;
+    getReplyChain: () => ReplyChain | null;
+    getRelationsForEvent?: GetRelationsForEvent;
+}
+
+function ActionBarMenus({
+    mxEvent,
+    reactions,
+    permalinkCreator,
+    optionsMenuAnchorRect,
+    reactionsMenuAnchorRect,
+    closeOptionsMenu,
+    closeReactionsMenu,
+    getTile,
+    getReplyChain,
+    getRelationsForEvent,
+}: Readonly<ActionBarMenusProps>): JSX.Element | null {
+    const tile = getTile();
+    const replyChain = getReplyChain();
+    const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
+    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+
+    if (!optionsMenuAnchorRect && !reactionsMenuAnchorRect) {
+        return null;
+    }
+
+    return (
+        <>
+            {optionsMenuAnchorRect ? (
+                <MessageContextMenu
+                    {...aboveLeftOf(optionsMenuAnchorRect)}
+                    mxEvent={mxEvent}
+                    permalinkCreator={permalinkCreator}
+                    eventTileOps={eventTileOps}
+                    collapseReplyChain={collapseReplyChain}
+                    onFinished={closeOptionsMenu}
+                    getRelationsForEvent={getRelationsForEvent}
+                />
+            ) : null}
+            {reactionsMenuAnchorRect ? (
+                <ContextMenu
+                    {...aboveLeftOf(reactionsMenuAnchorRect)}
+                    onFinished={closeReactionsMenu}
+                    managed={false}
+                    focusLock
+                >
+                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
+                </ContextMenu>
+            ) : null}
+        </>
+    );
+}
+
 /**
  * Props for the {@link ActionBarAdapter} component.
  */
@@ -135,35 +196,21 @@ export function ActionBarAdapter({
         setReactionsMenuAnchorRect(null);
     }, []);
 
-    const tile = getTile();
-    const replyChain = getReplyChain();
-    const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
-    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
-
     return (
         <>
             <ActionBarView vm={vm} className="mx_MessageActionBar" />
-            {optionsMenuAnchorRect ? (
-                <MessageContextMenu
-                    {...aboveLeftOf(optionsMenuAnchorRect)}
-                    mxEvent={mxEvent}
-                    permalinkCreator={permalinkCreator}
-                    eventTileOps={eventTileOps}
-                    collapseReplyChain={collapseReplyChain}
-                    onFinished={closeOptionsMenu}
-                    getRelationsForEvent={getRelationsForEvent}
-                />
-            ) : null}
-            {reactionsMenuAnchorRect ? (
-                <ContextMenu
-                    {...aboveLeftOf(reactionsMenuAnchorRect)}
-                    onFinished={closeReactionsMenu}
-                    managed={false}
-                    focusLock
-                >
-                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
-                </ContextMenu>
-            ) : null}
+            <ActionBarMenus
+                mxEvent={mxEvent}
+                reactions={reactions}
+                permalinkCreator={permalinkCreator}
+                optionsMenuAnchorRect={optionsMenuAnchorRect}
+                reactionsMenuAnchorRect={reactionsMenuAnchorRect}
+                closeOptionsMenu={closeOptionsMenu}
+                closeReactionsMenu={closeReactionsMenu}
+                getTile={getTile}
+                getReplyChain={getReplyChain}
+                getRelationsForEvent={getRelationsForEvent}
+            />
         </>
     );
 }
