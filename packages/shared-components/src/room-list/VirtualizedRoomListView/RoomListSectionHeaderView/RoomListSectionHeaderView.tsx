@@ -117,11 +117,16 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
 
     const { source } = useDragOperation();
     const draggedData = source?.data as { type?: string; index?: number } | undefined;
-    const isDraggingSection = draggedData?.type === "section";
+    const isDraggingRoom = isDropTarget && draggedData?.type === "room";
+    const isDraggingSection = isDropTarget && draggedData?.type === "section";
+
     const sourceSectionIndex = isDraggingSection ? (draggedData.index ?? -1) : -1;
-    const isSourceBelow = isDraggingSection && sourceSectionIndex > sectionIndex;
+    const isSourceAbove = isDraggingSection && sourceSectionIndex > sectionIndex;
+    const hasBottomBorder = isDraggingSection && !isSourceAbove;
+    const hasTopBorder = isDraggingSection && isSourceAbove;
 
     const buttonRef = useMergeRefs([draggableRef, handleRef, droppableRef]) as React.Ref<HTMLButtonElement>;
+
     return (
         <div
             aria-expanded={isExpanded}
@@ -137,6 +142,9 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         [styles.lastHeader]: !isExpanded && isLastSection,
                         [styles.unread]: isUnread,
                         [styles.dragSource]: isDragSource,
+                        [styles.dropTarget]: isDraggingRoom,
+                        [styles.dropTargetBottom]: hasBottomBorder,
+                        [styles.dropTargetTop]: hasTopBorder,
                     })}
                     onClick={vm.onClick}
                     aria-expanded={isExpanded}
@@ -148,12 +156,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                             : _t("room_list|section_header|toggle", { section: title })
                     }
                 >
-                    <RoomListSectionHeaderContent
-                        vm={vm}
-                        isDraggingSection={isDraggingSection}
-                        isDropTarget={isDropTarget}
-                        isSourceBelow={isSourceBelow}
-                    />
+                    <RoomListSectionHeaderContent vm={vm} />
                 </button>
             </div>
         </div>

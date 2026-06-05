@@ -89,28 +89,26 @@
     padding-bottom: 0;
 }
 
-.border {
+.dropTarget .container {
     box-shadow: inset 0 0 0 2px var(--cpd-color-border-accent-primary);
 }
 
-.borderBottom::after {
+.dropTargetBottom .container::after,
+.dropTargetTop .container::before {
     content: "";
     position: absolute;
-    bottom: 0;
     left: 0;
     right: 0;
     height: 2px;
     background-color: var(--cpd-color-border-accent-primary);
 }
 
-.borderTop::before {
-    content: "";
-    position: absolute;
+.dropTargetBottom .container::after {
+    bottom: 0;
+}
+
+.dropTargetTop .container::before {
     top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: var(--cpd-color-border-accent-primary);
 }
 
 .menu {

@@ -25,12 +25,6 @@ export interface RoomListSectionHeaderContentProps {
     vm: RoomListSectionHeaderViewModel;
     /** Whether the section header is being dragged — hides the interactive menu when true */
     isDragging?: boolean;
-    /** Whether the section header is a drop target */
-    isDropTarget?: boolean;
-    /** Whether the section header is a drop target for another section */
-    isDraggingSection?: boolean;
-    /** Whether the dragged section originates from below this header */
-    isSourceBelow?: boolean;
 }
 
 /**
@@ -40,18 +34,12 @@ export interface RoomListSectionHeaderContentProps {
 export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderContent({
     vm,
     isDragging = false,
-    isDropTarget = false,
-    isDraggingSection = false,
-    isSourceBelow = false,
 }: RoomListSectionHeaderContentProps): JSX.Element {
     const { title, displaySectionMenu } = useViewModel(vm);
     return (
         <Flex
             className={classNames(styles.container, {
-                [styles.border]: isDropTarget && !isDraggingSection,
                 [styles.dragging]: isDragging,
-                [styles.borderBottom]: isDropTarget && isDraggingSection && !isSourceBelow,
-                [styles.borderTop]: isDropTarget && isDraggingSection && isSourceBelow,
             })}
             align="center"
             justify="space-between"
