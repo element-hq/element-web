@@ -7,6 +7,11 @@
 
 import React from "react";
 import { Avatar } from "@vector-im/compound-web";
+import {
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    HistoryIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
@@ -93,6 +98,44 @@ function BrandedPill(): React.JSX.Element {
 
 // ── TopBar ──────────────────────────────────────────────────────────────────────
 
+// ── Nav button ──────────────────────────────────────────────────────────────────
+
+function NavButton({
+    children,
+    label,
+    disabled = false,
+}: {
+    children: React.ReactNode;
+    label: string;
+    disabled?: boolean;
+}): React.JSX.Element {
+    return (
+        <button
+            type="button"
+            aria-label={label}
+            disabled={disabled}
+            style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "28px",
+                height: "28px",
+                border: "none",
+                borderRadius: "6px",
+                background: "none",
+                color: disabled ? "var(--cpd-color-icon-disabled)" : "var(--cpd-color-icon-secondary)",
+                cursor: disabled ? "default" : "pointer",
+                padding: 0,
+                flexShrink: 0,
+            }}
+        >
+            {children}
+        </button>
+    );
+}
+
+// ── TopBar ──────────────────────────────────────────────────────────────────────
+
 interface TopBarProps {
     userName?: string;
     userId?: string;
@@ -126,13 +169,28 @@ function TopBar({
                 <ElementLogo />
             </div>
 
-            {/* Centre: Search */}
-            <div style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto", display: "flex", alignItems: "center" }}>
+            {/* Centre: Nav controls + Search */}
+            <div style={{ flex: 1, minWidth: 0, maxWidth: "calc(480px + 28px + 28px + 28px + var(--cpd-space-2x) * 3)", margin: "0 auto", display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
+                {/* Back / Forward / History */}
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-1x)", flexShrink: 0 }}>
+                    <NavButton label="Go back" disabled>
+                        <ChevronLeftIcon width={18} height={18} />
+                    </NavButton>
+                    <NavButton label="Go forward">
+                        <ChevronRightIcon width={18} height={18} />
+                    </NavButton>
+                    <NavButton label="History">
+                        <HistoryIcon width={18} height={18} />
+                    </NavButton>
+                </div>
+
+                {/* Search pill */}
                 <input
                     type="search"
                     placeholder={searchPlaceholder}
                     style={{
-                        width: "100%",
+                        flex: 1,
+                        minWidth: 0,
                         height: "36px",
                         padding: "0 var(--cpd-space-3x)",
                         boxSizing: "border-box",
