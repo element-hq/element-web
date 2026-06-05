@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
@@ -13,7 +12,6 @@ import {
     type EventTileSenderProfileState,
     type FooterDisplayState,
     getAriaLive,
-    getEventTileAvatarMember,
     getEventTileClassState,
     getEventTileLineClassState,
     getEventTileSenderProfileState,
@@ -21,13 +19,13 @@ import {
     getFooterDisplayState,
     getIsContinuation,
     getReplyChainAlwaysShowTimestamps,
-    getScrollToken,
     getSenderProfileMode,
     getShouldShowMessageActionBar,
     getShouldShowTimestamp,
     getShouldViewUserOnClick,
     getTimestampDisplayState,
     isSendingStatus,
+    type EventTileSendStatus,
     type SenderProfileMode,
     type TimestampDisplayState,
 } from "./EventTileDerivedState";
@@ -35,10 +33,20 @@ import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
-    /** The Matrix event rendered by the tile. */
-    mxEvent: MatrixEvent;
+    /** The Matrix event type. */
+    eventType: string;
+    /** The Matrix message type. */
+    msgtype?: string;
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** The stable scroll token for the event, when available. */
+    scrollToken?: string;
+    /** Whether the tile has a sender avatar candidate. */
+    hasSender: boolean;
+    /** Whether the event avatar should use historical member details. */
+    forceHistoricalAvatar: boolean;
     /** The event send status supplied by EventTile. */
-    eventSendStatus?: EventStatus | null;
+    eventSendStatus?: EventTileSendStatus | null;
     /** Whether the event is currently being edited. */
     isEditing: boolean;
     /** Whether the event failed decryption. */
@@ -177,8 +185,10 @@ export interface EventTileLineSnapshot {
 export interface EventTileSenderSnapshot {
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
-    /** The room member whose avatar should render. */
-    avatarMember: RoomMember | null;
+    /** Whether EventTile should render an avatar slot. */
+    hasSender: boolean;
+    /** Whether the avatar should use historical member details. */
+    forceHistoricalAvatar: boolean;
     /** Whether clicking the avatar should open the user profile. */
     viewUserOnClick: boolean;
     /** SenderProfile rendering mode. */
@@ -327,8 +337,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Creates an EventTile view model snapshot. */
     public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;
-        const eventType = event.mxEvent.getType();
-        const msgtype = event.mxEvent.getContent().msgtype;
+        const { eventType, msgtype } = event;
         const isSending = isSendingStatus(event.eventSendStatus ?? undefined);
         const isContinuation = getIsContinuation(display.continuation, display.timelineRenderingType, display.layout);
         const isRenderingNotification = display.timelineRenderingType === TimelineRenderingType.Notification;
@@ -350,7 +359,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             layout: display.layout,
         });
         const showTimestamp = getShouldShowTimestamp({
-            eventTs: event.mxEvent.getTs(),
+            eventTs: event.eventTs,
             eventType,
             hideTimestamp: timestamp.hideTimestamp,
             alwaysShowTimestamps: timestamp.alwaysShowTimestamps,
@@ -362,7 +371,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         });
         const timestampValue = getEventTileTimestamp({
             timelineRenderingType: display.timelineRenderingType,
-            eventTs: event.mxEvent.getTs(),
+            eventTs: event.eventTs,
             threadReplyEventTs: timestamp.threadReplyEventTs,
         });
 
@@ -370,7 +379,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             event: eventSnapshot,
             root: {
                 ariaLive: getAriaLive(event.eventSendStatus),
-                scrollToken: getScrollToken(event.mxEvent),
+                scrollToken: event.scrollToken,
                 classState: EventTileViewModel.getClassState({
                     event,
                     display,
@@ -392,7 +401,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             },
             sender: {
                 profileState: senderProfileState,
-                avatarMember: getEventTileAvatarMember(event.mxEvent),
+                hasSender: event.hasSender,
+                forceHistoricalAvatar: event.forceHistoricalAvatar,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,
                     display.timelineRenderingType,

@@ -17,6 +17,7 @@ import React, {
     type ReactNode,
 } from "react";
 import {
+    EventType,
     type EventStatus,
     type MatrixEvent,
     MatrixEventEvent,
@@ -81,6 +82,7 @@ import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/Ev
 import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
+    type EventTileEventInput,
     type EventTileViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import {
@@ -102,6 +104,7 @@ import {
     type EventTileThreadState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
 import { getEventTileReplyChainState } from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
+import { getScrollToken } from "../../../viewmodels/room/timeline/event-tile/EventTileDerivedState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -706,6 +709,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private readonly getReplyChain = (): ReplyChain | null => this.replyChain.current;
 
+    private getAvatarMember(): RoomMember | null {
+        if (this.props.mxEvent.getContent().third_party_invite) {
+            return this.props.mxEvent.target;
+        }
+
+        return this.props.mxEvent.sender;
+    }
+
     private readonly getReactions = (): Relations | null => {
         return getEventTileReactionRelations({
             mxEvent: this.props.mxEvent,
@@ -958,11 +969,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
         const isEditing = !!this.props.editState;
+        const content = this.props.mxEvent.getContent();
 
         return {
             event: {
-                mxEvent: this.props.mxEvent,
-                eventSendStatus: this.props.eventSendStatus,
+                eventType: this.props.mxEvent.getType(),
+                msgtype: typeof content.msgtype === "string" ? content.msgtype : undefined,
+                eventTs: this.props.mxEvent.getTs(),
+                scrollToken: getScrollToken({
+                    eventId: this.props.mxEvent.getId() ?? undefined,
+                    isLocalEcho: !!this.props.mxEvent.status,
+                }),
+                hasSender: !!this.props.mxEvent.sender,
+                forceHistoricalAvatar: this.props.mxEvent.getType() === EventType.RoomMember,
+                eventSendStatus: this.props.eventSendStatus as EventTileEventInput["eventSendStatus"],
                 isEditing,
                 isEncryptionFailure,
                 forExport: this.props.forExport,
@@ -1079,9 +1099,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const scrollToken = eventTileRenderState.root.scrollToken;
         const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
+        const avatarMember = this.getAvatarMember();
 
         const avatar = (
-            <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
+            <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />
         );
         const sender = (
             <EventTileSenderAdapter
