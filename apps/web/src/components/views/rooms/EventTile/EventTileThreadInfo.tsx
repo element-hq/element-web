@@ -7,6 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode } from "react";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    ThreadMessagePreviewView,
+    ThreadSummaryView,
+} from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
 import { type EventTileThreadState } from "../../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
@@ -14,12 +18,14 @@ import {
     type ThreadMessagePreviewViewModel,
     type ThreadSummaryViewModel,
 } from "../../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel.tsx";
-import { ThreadMessagePreviewAdapter } from "./ThreadMessagePreviewAdapter";
-import { ThreadSummaryAdapter } from "./ThreadSummaryAdapter";
 
 interface EventTileThreadInfoProps {
     threadState: EventTileThreadState;
     threadSummaryVm: ThreadSummaryViewModel;
+}
+
+interface EventTileThreadPanelSummaryProps {
+    threadState: EventTileThreadState;
     threadMessagePreviewVm: ThreadMessagePreviewViewModel;
 }
 
@@ -27,7 +33,7 @@ interface EventTileThreadInfoProps {
 export function EventTileThreadPanelSummary({
     threadState,
     threadMessagePreviewVm,
-}: Readonly<Pick<EventTileThreadInfoProps, "threadState" | "threadMessagePreviewVm">>): JSX.Element | null {
+}: Readonly<EventTileThreadPanelSummaryProps>): JSX.Element | null {
     if (!threadState.shouldShowThreadPanelSummary || !threadState.thread) {
         return null;
     }
@@ -36,7 +42,7 @@ export function EventTileThreadPanelSummary({
         <div className="mx_ThreadPanel_replies">
             <ThreadsIcon />
             <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-            <ThreadMessagePreviewAdapter vm={threadMessagePreviewVm} />
+            <ThreadMessagePreviewView vm={threadMessagePreviewVm} />
         </div>
     );
 }
@@ -45,10 +51,9 @@ export function EventTileThreadPanelSummary({
 export function EventTileThreadInfo({
     threadState,
     threadSummaryVm,
-    threadMessagePreviewVm,
 }: Readonly<EventTileThreadInfoProps>): ReactNode {
     if (threadState.shouldShowThreadSummary && threadState.thread) {
-        return <ThreadSummaryAdapter vm={threadSummaryVm} data-testid="thread-summary" />;
+        return <ThreadSummaryView vm={threadSummaryVm} className="mx_ThreadSummary" data-testid="thread-summary" />;
     }
 
     if (threadState.searchThreadInfo.kind === "link") {

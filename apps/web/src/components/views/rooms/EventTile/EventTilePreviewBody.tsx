@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventPreviewView } from "@element-hq/web-shared-components";
 
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../../messages/MBodyFactory";
 import { type EventPreviewViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
-import { EventPreviewAdapter } from "./EventPreviewAdapter";
 
 interface EventTilePreviewBodyProps {
     mxEvent: MatrixEvent;
@@ -26,7 +26,7 @@ export function EventTilePreviewBody({ mxEvent, eventPreviewVm }: Readonly<Event
     } else if (mxEvent.isDecryptionFailure()) {
         body = <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
     } else {
-        body = <EventPreviewAdapter vm={eventPreviewVm} />;
+        body = <EventPreviewView vm={eventPreviewVm} />;
     }
 
     return <div className="mx_EventTile_body">{body}</div>;

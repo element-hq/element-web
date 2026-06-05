@@ -29,7 +29,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
-import { useCreateAutoDisposedViewModel, TileErrorView } from "@element-hq/web-shared-components";
+import {
+    ActionBarView,
+    E2eMessageSharedIconView,
+    useCreateAutoDisposedViewModel,
+    TileErrorView,
+} from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -68,10 +73,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { isContentActionable } from "../../../utils/EventUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
-import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
-import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { EventTileFooter } from "./EventTile/EventTileFooter";
 import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
 import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/EventTileThreadInfo";
@@ -614,7 +617,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             case "none":
                 return null;
             case "messageShared":
-                return <E2eMessageSharedIconAdapter vm={e2eMessageSharedIconVm!} />;
+                return <E2eMessageSharedIconView vm={e2eMessageSharedIconVm!} className="mx_EventTile_e2eIcon" />;
             case "icon":
                 return <E2eStandardPadlockIcon icon={e2ePadlockViewState.icon} title={e2ePadlockViewState.title} />;
         }
@@ -1243,13 +1246,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             />
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <ThreadListActionBarAdapter
+                            <ActionBarView
                                 vm={this.viewModel.getThreadListActionBarViewModel({
                                     onViewInRoomClick: this.onViewInRoomClick,
                                     onCopyLinkClick: this.onCopyLinkToThreadClick,
                                 })}
-                                onViewInRoomClick={this.onViewInRoomClick}
-                                onCopyLinkClick={this.onCopyLinkToThreadClick}
                                 className="mx_ThreadActionBar"
                             />
                         )}
@@ -1333,7 +1334,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                     <EventTileThreadInfo
                                         threadState={threadState}
                                         threadSummaryVm={threadSummaryVm!}
-                                        threadMessagePreviewVm={threadMessagePreviewVm!}
                                     />
                                 </>
                             )}
@@ -1355,7 +1355,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 <EventTileThreadInfo
                                     threadState={threadState}
                                     threadSummaryVm={threadSummaryVm!}
-                                    threadMessagePreviewVm={threadMessagePreviewVm!}
                                 />
                             </>
                         )}

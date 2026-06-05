@@ -6,9 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import { MessageTimestampView } from "@element-hq/web-shared-components";
 
 import { type MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
-import { MessageTimestampAdapter } from "./MessageTimestampAdapter";
+import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
 interface EventTileTimestampSlotProps {
     vm: MessageTimestampViewModel;
@@ -25,7 +26,12 @@ export function EventTileTimestampSlot({
     showDummy,
 }: Readonly<EventTileTimestampSlotProps>): JSX.Element | null {
     if (showTimestamp) {
-        return <MessageTimestampAdapter vm={vm} showLateIcon={showLateIcon} />;
+        return (
+            <>
+                {showLateIcon ? <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" /> : undefined}
+                <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
+            </>
+        );
     }
 
     if (showDummy) {
