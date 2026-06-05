@@ -35,8 +35,17 @@ function getBadgeType(level: NotificationLevel, symbol: string | null, forceDot?
 }
 
 export interface UnreadNotificationBadgeViewModelProps {
+    /**
+     * Room whose unread state should be represented by the badge.
+     */
     room?: Room;
+    /**
+     * Thread to read unread state from. Omit for room-level unread state.
+     */
     threadId?: string;
+    /**
+     * Show a dot instead of a numeric/symbol badge whenever the badge would otherwise render.
+     */
     forceDot?: boolean;
 }
 
