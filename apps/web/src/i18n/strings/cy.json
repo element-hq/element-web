@@ -272,7 +272,6 @@
             "point_the_camera": "Sganiwch y cod QR sy'n cael ei ddangos yma",
             "scan_code_instruction": "Sganiwch y cod QR gyda dyfais arall",
             "scan_qr_code": "Mewngofnodwch gyda chod QR",
-            "security_code": "Cod diogelwch",
             "security_code_prompt": "Os gofynnir i chi, nodwch y cod isod ar eich dyfais arall.",
             "select_qr_code": "Dewiswch \"%(scanQRCode)s\"",
             "unsupported_explainer": "Nid yw darparwr eich cyfrif yn cefnogi mewngofnodi i ddyfais newydd gyda chod QR.",

@@ -217,6 +217,7 @@
         "logout_dialog": {
             "description": "정말로 이 기기를 제거하시겠습니까?",
             "setup_key_backup_title": "암호화된 채팅에 대한 접근 권한을 잃게 됩니다.",
+            "setup_secure_backup_description": "현재 유일하게 등록된 기기입니다. 이 기기를 제거하면 다음 로그인 시 디지털 신원을 인증하고 암호화된 대화를 복구하기 위해 복구 키가 필요합니다.",
             "skip_key_backup": "그래도 이 기기 삭제"
         },
         "misconfigured_body": "%(brand)s 관리자에게 <a>당신의 설정</a>에 잘못되거나 중복된 항목이 있는지 확인하도록 요청하세요.",
@@ -268,7 +269,6 @@
             "point_the_camera": "여기에 표시된 QR 코드를 스캔하세요",
             "scan_code_instruction": "다른 기기로 QR 코드를 스캔하세요",
             "scan_qr_code": "QR 코드로 로그인",
-            "security_code": "보안 코드",
             "security_code_prompt": "요청 시, 다른 기기에서 아래 코드를 입력하세요.",
             "select_qr_code": "\"%(scanQRCode)s\"를 선택하십시오.",
             "unsupported_explainer": "귀하의 계정 제공업체는 QR 코드를 사용한 새 기기 로그인을 지원하지 않습니다.",

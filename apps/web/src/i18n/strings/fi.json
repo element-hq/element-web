@@ -212,8 +212,8 @@
         "log_in_new_account": "<a>Kirjaudu</a> uudelle tilillesi.",
         "logout_dialog": {
             "description": "Haluatko varmasti poistaa tämän laitteen?",
-            "setup_key_backup_title": "Menetät pääsyn salattuihin viesteihisi",
-            "skip_key_backup": "En halua salattuja viestejäni"
+            "setup_key_backup_title": "Olet menettämässä pääsyn salattuihin keskusteluihisi",
+            "skip_key_backup": "Poista tämä laite silti"
         },
         "misconfigured_body": "Pyydä %(brand)s-ylläpitäjääsi tarkistamaan, onko <a>asetuksissasi</a>virheellisiä tai toistettuja merkintöjä.",
         "misconfigured_title": "%(brand)sin asetukset ovat pielessä",
@@ -239,7 +239,9 @@
             "check_code_heading": "Kirjoita toisessa laitteessa näkyvä numero",
             "check_code_input_label": "2-numeroinen koodi",
             "check_code_mismatch": "Numerot eivät täsmää",
+            "choose_desktop_computer": "Valitse \"%(desktopComputer)s\"",
             "completing_setup": "Viimeistellään uuden laitteesi käyttöönottoa",
+            "desktop_computer": "Pöytätietokone",
             "error_etag_missing": "Tapahtui odottamaton virhe. Tämä voi johtua selaimen laajennuksesta, välityspalvelimesta tai palvelimen virheellisestä konfiguroinnista.",
             "error_expired": "Kirjautuminen vanhentui. Yritä uudelleen.",
             "error_expired_title": "Kirjautumista ei suoritettu ajoissa",
@@ -260,16 +262,22 @@
             "error_user_declined": "Sinä tai palveluntarjoajasi hylkäsi kirjautumispyynnön.",
             "error_user_declined_title": "Kirjautuminen hylätty",
             "follow_remaining_instructions": "Noudata jäljellä olevia ohjeita",
+            "open_element_mobile_device": "Avaa %(brand)s mobiililaitteellasi",
             "open_element_other_device": "Avaa %(brand)s toisella laitteellasi",
             "point_the_camera": "Skannaa tässä näkyvä QR-koodi",
-            "scan_code_instruction": "Skannaa QR-koodi toisella laitteella",
+            "ready_to_scan": "Valmis skannaamaan",
+            "scan_code_instruction": "Skannaa QR-koodi",
+            "scan_code_instruction_reciprocate": "Skannaa QR-koodi toisella laitteella",
             "scan_qr_code": "Kirjaudu sisään QR-koodilla",
-            "security_code": "Turvakoodi",
-            "security_code_prompt": "Anna pyydettäessä alla oleva koodi toisella laitteellasi.",
+            "security_code_prompt": "Palveluntarjoajasi saattaa kysyä seuraavaa koodia kirjautumisen vahvistamiseksi.",
+            "security_code_title": "Vahvistuskoodisi",
             "select_qr_code": "Valitse \"%(scanQRCode)s\"",
+            "select_ready_to_scan": "Valitse \"%(readyToScan)s\" ja skannaa tässä näkyvä QR-koodi",
+            "start_over": "Aloita alusta",
+            "tap_avatar_link_new_device": "Napauta avatariasi ja valitse \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Palveluntarjoajasi ei tue kirjautumista uuteen laitteeseen QR-koodilla.",
             "unsupported_heading": "QR-koodia ei tueta",
-            "waiting_for_device": "Odotetaan laitteen sisäänkirjautumista"
+            "waiting_for_device": "Odotetaan toista laitettasi"
         },
         "register_action": "Luo tili",
         "registration": {
@@ -326,6 +334,7 @@
         "sign_in_instead_prompt": "Onko sinulla jo tili? <a>Kirjaudu tästä</a>",
         "sign_in_or_register": "Kirjaudu sisään tai luo tili",
         "sign_in_or_register_description": "Käytä tiliäsi tai luo uusi jatkaaksesi.",
+        "sign_in_with_qr": "Kirjaudu sisään QR-koodilla",
         "sign_in_with_sso": "Kirjaudu sisään käyttäen kertakirjautumista",
         "signing_in": "Kirjaudutaan…",
         "soft_logout": {
@@ -1264,6 +1273,7 @@
         "leave_beta": "Poistu beetasta",
         "leave_beta_reload": "Beetasta poistuminen lataa %(brand)sin uudelleen.",
         "location_share_live_description": "Tilapäinen toteutus. Sijainnit säilyvät huoneen historiassa.",
+        "login_with_qr": "Kirjaudu sisään QR-koodilla",
         "mjolnir": "Uusia tapoja jättää ihmiset huomiotta",
         "msc3531_hide_messages_pending_moderation": "Anna moderaattorien piilottaa moderointia odottavia viestejä.",
         "notification_settings": "Uudet ilmoitusasetukset",
