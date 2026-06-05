@@ -12,21 +12,32 @@ import { EventPreviewView } from "@element-hq/web-shared-components";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../../messages/MBodyFactory";
 import { type EventPreviewViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
 
+export type EventTilePreviewBodyKind = "redacted" | "decryptionFailure" | "preview";
+
 interface EventTilePreviewBodyProps {
+    previewKind: EventTilePreviewBodyKind;
     mxEvent: MatrixEvent;
-    eventPreviewVm: EventPreviewViewModel;
+    eventPreviewVm?: EventPreviewViewModel;
 }
 
 /** Renders the compact body preview used by notification and thread-list tiles. */
-export function EventTilePreviewBody({ mxEvent, eventPreviewVm }: Readonly<EventTilePreviewBodyProps>): JSX.Element {
+export function EventTilePreviewBody({
+    previewKind,
+    mxEvent,
+    eventPreviewVm,
+}: Readonly<EventTilePreviewBodyProps>): JSX.Element {
     let body: JSX.Element;
 
-    if (mxEvent.isRedacted()) {
-        body = <RedactedBodyFactory mxEvent={mxEvent} />;
-    } else if (mxEvent.isDecryptionFailure()) {
-        body = <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
-    } else {
-        body = <EventPreviewView vm={eventPreviewVm} />;
+    switch (previewKind) {
+        case "redacted":
+            body = <RedactedBodyFactory mxEvent={mxEvent} />;
+            break;
+        case "decryptionFailure":
+            body = <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
+            break;
+        case "preview":
+            body = <EventPreviewView vm={eventPreviewVm!} />;
+            break;
     }
 
     return <div className="mx_EventTile_body">{body}</div>;

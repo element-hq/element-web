@@ -76,14 +76,22 @@ import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
 import { EventTileFooter } from "./EventTile/EventTileFooter";
-import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
+import { EventTilePreviewBody, type EventTilePreviewBodyKind } from "./EventTile/EventTilePreviewBody";
 import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/EventTileThreadInfo";
 import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
-import { createEventTileChildViewModelFactory } from "../../../viewmodels/room/timeline/event-tile/EventTileChildViewModelFactory";
+import {
+    createEventTileChildViewModelFactory,
+    type EventTileChildViewModelFactory,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileChildViewModelFactory";
+import { type EventPreviewViewModel } from "../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
+import {
+    type ThreadMessagePreviewViewModel,
+    type ThreadSummaryViewModel,
+} from "../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel";
 import {
     getEventTileReceiptState,
     type EventTileReceiptState,
@@ -788,6 +796,88 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return "#";
     }
 
+    private getPreviewKind(): EventTilePreviewBodyKind {
+        if (this.props.isRedacted) {
+            return "redacted";
+        }
+
+        if (this.props.mxEvent.isDecryptionFailure()) {
+            return "decryptionFailure";
+        }
+
+        return "preview";
+    }
+
+    private getEventPreviewViewModel(previewKind: EventTilePreviewBodyKind): EventPreviewViewModel | undefined {
+        if (previewKind !== "preview") {
+            this.childViewModels.releaseEventPreviewViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getEventPreviewViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            mxEvent: this.props.mxEvent,
+        });
+    }
+
+    private getThreadMessagePreviewViewModel(
+        thread: Thread | null | undefined,
+        useOnlyCurrentProfiles: boolean,
+    ): ThreadMessagePreviewViewModel | undefined {
+        if (!thread) {
+            this.childViewModels.releaseThreadMessagePreviewViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getThreadMessagePreviewViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            thread,
+            room: this.context.room,
+            timelineRenderingType: this.context.timelineRenderingType,
+            lowBandwidth: this.context.lowBandwidth,
+            useOnlyCurrentProfiles,
+            showDisplayName: false,
+            avatarClassName: "mx_BaseAvatar",
+        });
+    }
+
+    private getThreadSummaryViewModel(
+        thread: Thread | null | undefined,
+        useOnlyCurrentProfiles: boolean,
+    ): ThreadSummaryViewModel | undefined {
+        if (!thread) {
+            this.childViewModels.releaseThreadSummaryViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getThreadSummaryViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            mxEvent: this.props.mxEvent,
+            thread,
+            narrow: this.context.narrow,
+            isCard: false,
+            room: this.context.room,
+            timelineRenderingType: this.context.timelineRenderingType,
+            lowBandwidth: this.context.lowBandwidth,
+            useOnlyCurrentProfiles,
+            avatarClassName: "mx_BaseAvatar",
+        });
+    }
+
+    private getThreadListActionBarViewModel(): ReturnType<
+        EventTileChildViewModelFactory["getThreadListActionBarViewModel"]
+    > | undefined {
+        if (this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList) {
+            this.childViewModels.releaseThreadListActionBarViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getThreadListActionBarViewModel({
+            onViewInRoomClick: this.onViewInRoomClick,
+            onCopyLinkClick: this.onCopyLinkToThreadClick,
+        });
+    }
+
     private createRootAttributes({
         tileClasses,
         tileAriaLive,
@@ -1066,42 +1156,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         );
 
         const useOnlyCurrentProfiles = Boolean(SettingsStore.getValue("useOnlyCurrentProfiles"));
-        const eventPreviewVm = this.childViewModels.getEventPreviewViewModel({
-            cli: MatrixClientPeg.safeGet(),
-            mxEvent: this.props.mxEvent,
-        });
+        const previewKind = this.getPreviewKind();
+        const eventPreviewVm = this.getEventPreviewViewModel(previewKind);
         const reactionsRowVm = this.childViewModels.getReactionsRowViewModel({
             isActionable: isContentActionable(this.props.mxEvent),
             reactionGroupCount: this.state.reactions?.getSortedAnnotationsByKey()?.length ?? 0,
             canReact: this.context.canReact,
             addReactionButtonActive: false,
         });
-        const threadMessagePreviewVm = threadState.thread
-            ? this.childViewModels.getThreadMessagePreviewViewModel({
-                  cli: MatrixClientPeg.safeGet(),
-                  thread: threadState.thread,
-                  room: this.context.room,
-                  timelineRenderingType: this.context.timelineRenderingType,
-                  lowBandwidth: this.context.lowBandwidth,
-                  useOnlyCurrentProfiles,
-                  showDisplayName: false,
-                  avatarClassName: "mx_BaseAvatar",
-              })
-            : (this.childViewModels.releaseThreadMessagePreviewViewModel(), undefined);
-        const threadSummaryVm = threadState.thread
-            ? this.childViewModels.getThreadSummaryViewModel({
-                  cli: MatrixClientPeg.safeGet(),
-                  mxEvent: this.props.mxEvent,
-                  thread: threadState.thread,
-                  narrow: this.context.narrow,
-                  isCard: false,
-                  room: this.context.room,
-                  timelineRenderingType: this.context.timelineRenderingType,
-                  lowBandwidth: this.context.lowBandwidth,
-                  useOnlyCurrentProfiles,
-                  avatarClassName: "mx_BaseAvatar",
-              })
-            : (this.childViewModels.releaseThreadSummaryViewModel(), undefined);
+        const threadMessagePreviewVm = this.getThreadMessagePreviewViewModel(threadState.thread, useOnlyCurrentProfiles);
+        const threadSummaryVm = this.getThreadSummaryViewModel(threadState.thread, useOnlyCurrentProfiles);
+        const threadListActionBarVm = this.getThreadListActionBarViewModel();
 
         const replyChainState = getEventTileReplyChainState({
             mxEvent: this.props.mxEvent,
@@ -1243,23 +1308,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                            <EventTilePreviewBody mxEvent={this.props.mxEvent} eventPreviewVm={eventPreviewVm} />
+                            <EventTilePreviewBody
+                                previewKind={previewKind}
+                                mxEvent={this.props.mxEvent}
+                                eventPreviewVm={eventPreviewVm}
+                            />
                             <EventTileThreadPanelSummary
                                 threadState={threadState}
                                 threadMessagePreviewVm={threadMessagePreviewVm!}
                             />
                         </div>
-                        {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList ? (
-                            <ActionBarView
-                                vm={this.childViewModels.getThreadListActionBarViewModel({
-                                    onViewInRoomClick: this.onViewInRoomClick,
-                                    onCopyLinkClick: this.onCopyLinkToThreadClick,
-                                })}
-                                className="mx_ThreadActionBar"
-                            />
-                        ) : (
-                            (this.childViewModels.releaseThreadListActionBarViewModel(), null)
-                        )}
+                        {threadListActionBarVm ? (
+                            <ActionBarView vm={threadListActionBarVm} className="mx_ThreadActionBar" />
+                        ) : null}
 
                         {msgOption}
                     </>,
