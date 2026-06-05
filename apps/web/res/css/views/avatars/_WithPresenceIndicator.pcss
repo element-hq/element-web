@@ -13,34 +13,10 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_WithPresenceIndicator_icon {
         position: absolute;
+        /* PresenceIconView has its own idea of where it should be positioned which it probably shouldn't */
+        top: initial;
+        left: initial;
         right: -2px;
         bottom: -2px;
-    }
-
-    .mx_WithPresenceIndicator_icon::before {
-        content: "";
-        width: 100%;
-        height: 100%;
-        right: 0;
-        bottom: 0;
-        position: absolute;
-        border: 2px solid var(--cpd-color-bg-canvas-default);
-        border-radius: 50%;
-    }
-
-    .mx_WithPresenceIndicator_icon_offline::before {
-        background-color: $presence-offline;
-    }
-
-    .mx_WithPresenceIndicator_icon_online::before {
-        background-color: $accent;
-    }
-
-    .mx_WithPresenceIndicator_icon_away::before {
-        background-color: $presence-away;
-    }
-
-    .mx_WithPresenceIndicator_icon_busy::before {
-        background-color: $presence-busy;
     }
 }

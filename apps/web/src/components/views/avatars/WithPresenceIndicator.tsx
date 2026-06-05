@@ -23,22 +23,22 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { BUSY_PRESENCE_NAME } from "../rooms/PresenceLabel";
+import AvatarPresenceIconView from "../rooms/MemberList/tiles/common/PresenceIconView";
 
 interface Props {
     room: Room;
-    size: string; // CSS size
-    tooltipProps?: {
-        tabIndex?: number;
-    };
     children: ReactNode;
 }
 
 export enum Presence {
-    // Note: the names here are used in CSS class names
-    Online = "ONLINE",
-    Away = "AWAY",
-    Offline = "OFFLINE",
-    Busy = "BUSY",
+    // This class used to have its own presence indicator and has been
+    // updated to use the new one so presence colours / icons match across the app.
+    // These values are the ones from the wire that PresenceIconView expects,
+    // but really some of the logic here could be deduplicated.
+    Online = "online",
+    Away = "unavailable",
+    Offline = "offline",
+    Busy = "busy",
 }
 
 function tooltipText(variant: Presence): string {
@@ -117,22 +117,13 @@ export const usePresence = (room: Room, member: RoomMember | null): Presence | n
     return presence;
 };
 
-const WithPresenceIndicator: React.FC<Props> = ({ room, size, tooltipProps, children }) => {
+const WithPresenceIndicator: React.FC<Props> = ({ room, children }) => {
     const dmMember = useDmMember(room);
     const presence = usePresence(room, dmMember);
 
     let icon: JSX.Element | undefined;
     if (presence) {
-        icon = (
-            <div
-                tabIndex={tooltipProps?.tabIndex ?? 0}
-                className={`mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_${presence.toLowerCase()}`}
-                style={{
-                    width: size,
-                    height: size,
-                }}
-            />
-        );
+        icon = <AvatarPresenceIconView presenceState={presence} className="mx_WithPresenceIndicator_icon" />;
     }
 
     if (!presence) return <>{children}</>;
