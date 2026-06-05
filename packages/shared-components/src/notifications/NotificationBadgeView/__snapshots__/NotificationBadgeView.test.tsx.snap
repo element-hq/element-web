@@ -3,10 +3,12 @@
 exports[`NotificationBadgeView > renders the default notification badge 1`] = `
 <div>
   <div
-    class="NotificationBadgeView-module_notificationBadge mx_NotificationBadge NotificationBadgeView-module_visible NotificationBadgeView-module_badge2Char mx_NotificationBadge_visible mx_NotificationBadge_2char cpd-theme-light"
+    class="NotificationBadgeView-module_notificationBadge NotificationBadgeView-module_visible NotificationBadgeView-module_badge2Char cpd-theme-light"
+    data-badge-type="badge_2char"
+    data-testid="notification-badge"
   >
     <span
-      class="NotificationBadgeView-module_count mx_NotificationBadge_count"
+      class="NotificationBadgeView-module_count"
     >
       3
     </span>

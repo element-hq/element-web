@@ -63,32 +63,33 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         return <></>;
     }
 
-    const classes = classNames(styles.notificationBadge, "mx_NotificationBadge", {
+    const classes = classNames(styles.notificationBadge, {
         [styles.visible]: isVisible,
         [styles.notification]: isNotification,
         [styles.highlight]: isHighlight,
         [styles.dot]: badgeType === "dot",
         [styles.badge2Char]: badgeType === "badge_2char",
         [styles.badge3Char]: badgeType === "badge_3char",
-
-        "mx_NotificationBadge_visible": isVisible,
-        "mx_NotificationBadge_level_notification": isNotification,
-        "mx_NotificationBadge_level_highlight": isHighlight,
-        "mx_NotificationBadge_knocked": isKnocked,
-        // Exactly one of mx_NotificationBadge_dot, mx_NotificationBadge_2char, mx_NotificationBadge_3char.
-        "mx_NotificationBadge_dot": badgeType === "dot",
-        "mx_NotificationBadge_2char": badgeType === "badge_2char",
-        "mx_NotificationBadge_3char": badgeType === "badge_3char",
         // Badges with text should always use light colors.
         "cpd-theme-light": badgeType !== "dot",
     });
+    const notificationLevel = isHighlight ? "highlight" : isNotification ? "notification" : undefined;
 
     const content =
         isKnocked && knockLabel ? (
             <AskToJoinIcon aria-label={knockLabel} />
         ) : (
-            <span className={classNames(styles.count, "mx_NotificationBadge_count")}>{symbol}</span>
+            <span className={styles.count}>{symbol}</span>
         );
 
-    return <div className={classes}>{content}</div>;
+    return (
+        <div
+            data-testid="notification-badge"
+            data-badge-type={badgeType}
+            data-notification-level={notificationLevel}
+            className={classes}
+        >
+            {content}
+        </div>
+    );
 }

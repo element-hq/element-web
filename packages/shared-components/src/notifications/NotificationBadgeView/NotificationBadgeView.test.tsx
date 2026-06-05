@@ -22,9 +22,9 @@ describe("NotificationBadgeView", () => {
     });
 
     it("renders a dot badge", () => {
-        const { container } = render(<Dot />);
+        render(<Dot />);
 
-        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeInTheDocument();
+        expect(screen.getByTestId("notification-badge")).toHaveAttribute("data-badge-type", "dot");
     });
 
     it("renders a knocked badge icon", () => {
