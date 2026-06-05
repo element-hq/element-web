@@ -39,7 +39,7 @@ exports[`UserMenu > renders a button 1`] = `
       </div>
     </button>
     <span
-      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
     >
       Sally Sanderson
     </span>
@@ -86,7 +86,7 @@ exports[`UserMenu > renders a button with a longer name 1`] = `
       </div>
     </button>
     <span
-      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
     >
       Sally Sanderson with a longer name
     </span>
@@ -138,7 +138,7 @@ exports[`UserMenu > renders a guest menu 1`] = `
         </div>
       </button>
       <span
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
       >
         Guest
       </span>
@@ -191,7 +191,7 @@ exports[`UserMenu > renders a menu 1`] = `
         </div>
       </button>
       <span
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
       >
         Sally Sanderson
       </span>
@@ -258,7 +258,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         </div>
       </button>
       <span
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
       >
         Sally Sanderson
       </span>
@@ -571,7 +571,7 @@ exports[`UserMenu > renders an open menu 1`] = `
         </div>
       </button>
       <span
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
       >
         Sally Sanderson with a longer name
       </span>
@@ -931,7 +931,7 @@ exports[`UserMenu > renders the status emoji when set 1`] = `
       </div>
     </button>
     <span
-      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 UserMenu-module_displayName"
     >
       Sally Sanderson
     </span>
