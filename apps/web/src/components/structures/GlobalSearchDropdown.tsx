@@ -11,7 +11,6 @@ import { type Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { FilterIcon, HistoryIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { GlobalSearchFilter, type PersonResult, useGlobalSearch } from "../../hooks/useGlobalSearch";
-import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
@@ -56,52 +55,6 @@ function FilterChip({ label, active, onClick }: FilterChipProps): JSX.Element {
             }}
         >
             {label}
-        </button>
-    );
-}
-
-// ── People avatar pill ────────────────────────────────────────────────────────
-
-function PersonPill({ room, onClick }: { room: Room; onClick?: () => void }): JSX.Element {
-    const dmMap = DMRoomMap.shared();
-    const userId = dmMap.getUserIdForRoomId(room.roomId);
-    const member = userId ? room.getMember(userId) : null;
-    const displayName = member?.rawDisplayName ?? room.name ?? "Unknown";
-
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "var(--cpd-space-1x)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "var(--cpd-space-1x)",
-                borderRadius: "8px",
-                minWidth: "56px",
-                maxWidth: "72px",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
-        >
-            <RoomAvatar room={room} size="40px" />
-            <span
-                style={{
-                    font: "var(--cpd-font-body-xs-regular)",
-                    color: "var(--cpd-color-text-primary)",
-                    textAlign: "center",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    width: "100%",
-                }}
-            >
-                {displayName}
-            </span>
         </button>
     );
 }
@@ -345,22 +298,6 @@ export function GlobalSearchDropdown({
         : [];
     const dmMap = DMRoomMap.shared();
 
-    // Recently viewed DM rooms (from BreadcrumbsStore)
-    const recentPeople = BreadcrumbsStore.instance.rooms.filter((r) => dmMap.getUserIdForRoomId(r.roomId));
-
-    // Recently viewed: all rooms from BreadcrumbsStore (people + rooms), up to 8 for the horizontal row
-    const recentlyViewed = BreadcrumbsStore.instance.rooms.slice(0, 8);
-
-    // Recent suggestions: non-DM rooms from recentSearches, up to 4
-    const recentSuggestions = recentSearches.filter((r) => !dmMap.getUserIdForRoomId(r.roomId)).slice(0, 4);
-    const suggestions = recentSuggestions.length < 4
-        ? [...recentSuggestions, ...recentPeople.slice(0, 4 - recentSuggestions.length)]
-        : recentSuggestions;
-
-    // Scoped recent items for filter-active default state
-    const filteredRecentPeople = recentPeople.slice(0, 6);
-    const filteredRecentRooms = recentSuggestions.slice(0, 4);
-
     // Search results (driven by hook; hook respects the active filter)
     const searchResults = useGlobalSearch({ query, filter: activeFilter });
 
@@ -425,32 +362,17 @@ export function GlobalSearchDropdown({
                 </div>
             )}
 
-            {/* ── State 1: No filter, no query — recently viewed + recent searches ── */}
+            {/* ── State 1: No filter, no query — recent searches ── */}
             {!isFilterActive && !hasQuery && !isCommandMode && (
                 <>
-                    {/* Recently viewed: avatar row (people + rooms), max 6, no scroll */}
-                    {recentlyViewed.length > 0 && (
+                    {recentSearches.length > 0 ? (
                         <div>
-                            <SectionHeader label="Recently viewed" />
-                            <div style={{ display: "flex", justifyContent: "space-between", padding: "var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-3x)" }}>
-                                {recentlyViewed.slice(0, 6).map((room) => (
-                                    <PersonPill key={room.roomId} room={room} onClick={() => onRoomClick(room.roomId)} />
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Recent searches: up to 6 items from recentSearches (mix of rooms/spaces/people) */}
-                    {recentSearches.length > 0 && (
-                        <div style={{ borderTop: recentlyViewed.length > 0 ? "1px solid var(--cpd-color-border-disabled)" : undefined }}>
                             <SectionHeader label="Recent searches" />
                             {recentSearches.slice(0, 6).map((room) => (
                                 <SuggestionRow key={room.roomId} room={room} onClick={() => onRoomClick(room.roomId)} />
                             ))}
                         </div>
-                    )}
-
-                    {recentlyViewed.length === 0 && recentSearches.length === 0 && (
+                    ) : (
                         <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", padding: "var(--cpd-space-4x) var(--cpd-space-3x)", color: "var(--cpd-color-text-secondary)" }}>
                             <HistoryIcon width={16} height={16} />
                             <span style={{ font: "var(--cpd-font-body-sm-regular)" }}>No recent search to show</span>

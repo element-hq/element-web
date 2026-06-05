@@ -7,7 +7,7 @@
 
 import React, { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, HistoryIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -19,6 +19,9 @@ import { GlobalSearchViewModel } from "../../viewmodels/globalSearch/GlobalSearc
 import { GlobalSearchFilter } from "../../hooks/useGlobalSearch";
 import { GlobalSearchDropdown } from "./GlobalSearchDropdown";
 import { GlobalSearchFullView } from "./GlobalSearchFullView";
+import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
+import DMRoomMap from "../../utils/DMRoomMap";
+import RoomAvatar from "../views/avatars/RoomAvatar";
 
 function ElementLogo(): JSX.Element {
     return (
@@ -73,9 +76,11 @@ function ElementLogo(): JSX.Element {
  */
 export function TopBar(): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const [canGoBack, setCanGoBack] = useState(canNavigateBack);
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const historyRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -121,6 +126,18 @@ export function TopBar(): JSX.Element {
         return () => document.removeEventListener("pointerdown", handlePointerDown);
     }, [isOpen, vm]);
 
+    // Close history dropdown on click outside
+    useEffect(() => {
+        if (!isHistoryOpen) return;
+        const handlePointerDown = (e: PointerEvent): void => {
+            if (historyRef.current && !historyRef.current.contains(e.target as Node)) {
+                setIsHistoryOpen(false);
+            }
+        };
+        document.addEventListener("pointerdown", handlePointerDown);
+        return () => document.removeEventListener("pointerdown", handlePointerDown);
+    }, [isHistoryOpen]);
+
     // Clear search and return to default state when user navigates away
     useEffect(() => {
         const token = defaultDispatcher.register((payload) => {
@@ -160,8 +177,8 @@ export function TopBar(): JSX.Element {
             </div>
 
             {/* Centre: nav chevrons + search field */}
-            <div ref={containerRef} style={{ flexShrink: 0, maxWidth: "calc(480px + 28px + 28px + var(--cpd-space-1x) + var(--cpd-space-2x))", width: "100%", position: "relative", display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
-                {/* Back / Forward buttons immediately left of the search pill */}
+            <div ref={containerRef} style={{ flexShrink: 0, maxWidth: "calc(480px + 28px + 28px + 28px + var(--cpd-space-1x) * 2 + var(--cpd-space-2x))", width: "100%", position: "relative", display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
+                {/* Back / Forward / History buttons */}
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-1x)", flexShrink: 0 }}>
                     <button
                         type="button"
@@ -208,6 +225,140 @@ export function TopBar(): JSX.Element {
                     >
                         <ChevronRightIcon width={18} height={18} />
                     </button>
+
+                    {/* History button + dropdown */}
+                    <div ref={historyRef} style={{ position: "relative" }}>
+                        <button
+                            type="button"
+                            aria-label="History"
+                            aria-expanded={isHistoryOpen}
+                            onClick={() => setIsHistoryOpen((v) => !v)}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "28px",
+                                height: "28px",
+                                border: "none",
+                                borderRadius: "6px",
+                                background: isHistoryOpen ? "var(--cpd-color-bg-subtle-secondary)" : "none",
+                                color: "var(--cpd-color-icon-secondary)",
+                                cursor: "pointer",
+                                padding: 0,
+                            }}
+                            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
+                            onMouseLeave={(e) => {
+                                if (!isHistoryOpen) (e.currentTarget as HTMLButtonElement).style.background = "none";
+                            }}
+                        >
+                            <HistoryIcon width={18} height={18} />
+                        </button>
+
+                        {/* Tooltip */}
+                        {!isHistoryOpen && (
+                            <style>{`
+                                [aria-label="History"]:hover::after {
+                                    content: "History";
+                                    position: absolute;
+                                    top: calc(100% + 6px);
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: var(--cpd-color-bg-action-primary-rest);
+                                    color: var(--cpd-color-text-on-solid-primary);
+                                    font: var(--cpd-font-body-xs-regular);
+                                    padding: 4px 8px;
+                                    border-radius: 6px;
+                                    white-space: nowrap;
+                                    pointer-events: none;
+                                    z-index: 1100;
+                                }
+                            `}</style>
+                        )}
+
+                        {/* History dropdown */}
+                        {isHistoryOpen && (
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    top: "calc(100% + 8px)",
+                                    left: 0,
+                                    width: "329px",
+                                    background: "var(--cpd-color-bg-canvas-default)",
+                                    border: "1px solid var(--cpd-color-border-interactive-secondary)",
+                                    borderRadius: "12px",
+                                    boxShadow: "0px 4px 24px 0px rgba(27, 29, 34, 0.10)",
+                                    overflow: "hidden",
+                                    zIndex: 1050,
+                                }}
+                            >
+                                {/* Header */}
+                                <div
+                                    style={{
+                                        padding: "var(--cpd-space-3x) var(--cpd-space-4x) var(--cpd-space-2x)",
+                                        borderBottom: "1px solid var(--cpd-color-border-disabled)",
+                                    }}
+                                >
+                                    <span style={{ font: "var(--cpd-font-body-sm-semibold)", color: "var(--cpd-color-text-secondary)" }}>
+                                        Recent
+                                    </span>
+                                </div>
+
+                                {/* Items */}
+                                <div style={{ padding: "var(--cpd-space-2x) var(--cpd-space-2x) var(--cpd-space-4x)" }}>
+                                    {BreadcrumbsStore.instance.rooms.slice(0, 8).length === 0 ? (
+                                        <div style={{ padding: "var(--cpd-space-4x) var(--cpd-space-2x)", font: "var(--cpd-font-body-sm-regular)", color: "var(--cpd-color-text-secondary)", textAlign: "center" }}>
+                                            No recently viewed rooms
+                                        </div>
+                                    ) : (
+                                        BreadcrumbsStore.instance.rooms.slice(0, 8).map((room) => {
+                                            const dmMap = DMRoomMap.shared();
+                                            const userId = dmMap.getUserIdForRoomId(room.roomId);
+                                            const member = userId ? room.getMember(userId) : null;
+                                            const name = member?.rawDisplayName ?? room.name ?? "Unknown";
+                                            const subtitle = member?.userId ?? room.getCanonicalAlias() ?? room.roomId;
+                                            return (
+                                                <button
+                                                    key={room.roomId}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setIsHistoryOpen(false);
+                                                        vm.onRoomClick(room.roomId);
+                                                    }}
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "var(--cpd-space-3x)",
+                                                        width: "100%",
+                                                        padding: "var(--cpd-space-2x) var(--cpd-space-2x)",
+                                                        background: "none",
+                                                        border: "none",
+                                                        borderBottom: "1px solid var(--cpd-color-gray-300)",
+                                                        cursor: "pointer",
+                                                        textAlign: "left",
+                                                        boxSizing: "border-box",
+                                                    }}
+                                                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
+                                                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
+                                                >
+                                                    <div style={{ flexShrink: 0 }}>
+                                                        <RoomAvatar room={room} size="32px" />
+                                                    </div>
+                                                    <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                                                        <span style={{ font: "var(--cpd-font-body-sm-semibold)", color: "var(--cpd-color-text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                                            {name}
+                                                        </span>
+                                                        <span style={{ font: "var(--cpd-font-body-sm-regular)", color: "var(--cpd-color-text-secondary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                                            {subtitle}
+                                                        </span>
+                                                    </div>
+                                                </button>
+                                            );
+                                        })
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Search pill */}
