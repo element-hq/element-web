@@ -270,7 +270,6 @@
             "point_the_camera": "Skann QR-koden som vises her",
             "scan_code_instruction": "Skann QR-koden med en annen enhet",
             "scan_qr_code": "Logg på med QR-kode",
-            "security_code": "Sikkerhetskode",
             "security_code_prompt": "Hvis du blir spurt, skriv inn koden nedenfor på den andre enheten.",
             "select_qr_code": "Velg \"%(scanQRCode)s»",
             "unsupported_explainer": "Din kontoleverandør støtter ikke pålogging på en ny enhet med en QR-kode.",

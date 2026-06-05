@@ -41,6 +41,9 @@
         "preferences": "환경설정",
         "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
     },
+    "devtools": {
+        "toggle_event": "이벤트 토글"
+    },
     "keyboard": {
         "shift": "전환"
     },
@@ -198,6 +201,10 @@
     },
     "timeline": {
         "call_tile": {
+            "declined": {
+                "call_declined": "통화 거절",
+                "call_declined_by_us": "통화를 거절하셨습니다"
+            },
             "video_call_title": "영상 통화",
             "voice_call_title": "음성 통화"
         },
@@ -212,6 +219,7 @@
         },
         "download_action_decrypting": "복호화 중",
         "download_action_downloading": "다운로드 중",
+        "e2e_state": "종단 간 암호화 현황",
         "m.audio": {
             "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
@@ -219,6 +227,10 @@
         },
         "m.file": {
             "error_invalid": "잘못된 파일입니다."
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s님이 방 아바타를 <img/>으로 변경했습니다.",
+            "removed": "%(senderDisplayName)s님이 방 아바타를 삭제했습니다."
         },
         "m.room.encryption": {
             "disable_attempt": "암호화를 비활성화하려는 시도가 무시되었습니다.",
@@ -237,6 +249,7 @@
             "label": "메시지 작업",
             "view_in_room": "대화방에서 보기"
         },
+        "message_shared_by": "이 메시지가 전송될 당시 대화방에 계시지 않았기 때문에, %(displayName)s(%(userId)s)님이 이 메시지를 공유했습니다.",
         "message_timestamp_received_at": "수신 시간: %(dateTime)s",
         "message_timestamp_sent_at": "발송 시간: %(dateTime)s",
         "mjolnir": {

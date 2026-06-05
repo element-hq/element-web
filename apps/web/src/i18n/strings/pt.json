@@ -266,7 +266,6 @@
             "point_the_camera": "Aponta a câmara para o código QR mostrado aqui",
             "scan_code_instruction": "Lê o código QR com outro dispositivo",
             "scan_qr_code": "Ler código QR",
-            "security_code": "Código de segurança",
             "security_code_prompt": "Se solicitado, insira o código abaixo no seu outro dispositivo.",
             "select_qr_code": "Seleciona \"%(scanQRCode)s\"",
             "unsupported_explainer": "O teu fornecedor de conta não suporta o início de sessão num novo dispositivo com um código QR.",
