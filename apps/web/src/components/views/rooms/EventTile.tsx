@@ -34,6 +34,7 @@ import {
     E2eMessageSharedIconView,
     useCreateAutoDisposedViewModel,
     TileErrorView,
+    E2ePadlock,
 } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
@@ -72,7 +73,6 @@ import PinningUtils from "../../../utils/PinningUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import { isContentActionable } from "../../../utils/EventUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
-import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
 import { EventTileFooter } from "./EventTile/EventTileFooter";
@@ -630,7 +630,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             case "messageShared":
                 return <E2eMessageSharedIconView vm={e2eMessageSharedIconVm!} className="mx_EventTile_e2eIcon" />;
             case "icon":
-                return <E2eStandardPadlockIcon icon={e2ePadlockViewState.icon} title={e2ePadlockViewState.title} />;
+                return (
+                    <E2ePadlock
+                        title={e2ePadlockViewState.title}
+                        icon={e2ePadlockViewState.icon}
+                        className="mx_EventTile_e2eIcon"
+                    />
+                );
         }
     }
 
@@ -864,9 +870,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     }
 
-    private getThreadListActionBarViewModel(): ReturnType<
-        EventTileChildViewModelFactory["getThreadListActionBarViewModel"]
-    > | undefined {
+    private getThreadListActionBarViewModel():
+        | ReturnType<EventTileChildViewModelFactory["getThreadListActionBarViewModel"]>
+        | undefined {
         if (this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList) {
             this.childViewModels.releaseThreadListActionBarViewModel();
             return undefined;
@@ -1164,7 +1170,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             canReact: this.context.canReact,
             addReactionButtonActive: false,
         });
-        const threadMessagePreviewVm = this.getThreadMessagePreviewViewModel(threadState.thread, useOnlyCurrentProfiles);
+        const threadMessagePreviewVm = this.getThreadMessagePreviewViewModel(
+            threadState.thread,
+            useOnlyCurrentProfiles,
+        );
         const threadSummaryVm = this.getThreadSummaryViewModel(threadState.thread, useOnlyCurrentProfiles);
         const threadListActionBarVm = this.getThreadListActionBarViewModel();
 
