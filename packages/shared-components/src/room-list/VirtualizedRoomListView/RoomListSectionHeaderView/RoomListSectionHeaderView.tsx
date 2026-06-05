@@ -113,7 +113,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
     });
-    const { ref: droppableRef, isDropTarget } = useDroppable({ id });
+    const { ref: droppableRef, isDropTarget } = useDroppable({ id, disabled: isDragSource });
     const { source } = useDragOperation();
     const isDraggingSection = (source?.data as { type?: string })?.type === "section";
 
