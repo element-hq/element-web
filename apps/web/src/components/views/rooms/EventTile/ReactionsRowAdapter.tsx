@@ -5,13 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useMemo, useState, type JSX } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState, type JSX } from "react";
 import { MatrixEventEvent, type MatrixEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import {
     ReactionsRowButtonView,
     ReactionsRowView,
-    useCreateAutoDisposedViewModel,
     useViewModel,
     type ReactionsRowViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -25,65 +24,6 @@ import { isContentActionable } from "../../../../utils/EventUtils";
 import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 import { type ReactionsRowViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
-
-/**
- * Props for the {@link ReactionsRowButtonAdapter} component.
- */
-interface ReactionsRowButtonAdapterProps {
-    /** Matrix event whose reaction button is being rendered. */
-    mxEvent: MatrixEvent;
-    /** Reaction emoji or custom content key for this button. */
-    content: string;
-    /** Total number of reactions in this group. */
-    count: number;
-    /** Reaction events belonging to this group. */
-    reactionEvents: MatrixEvent[];
-    /** The current user's reaction event, if present. */
-    myReactionEvent?: MatrixEvent;
-    /** Disables interaction when true. */
-    disabled?: boolean;
-    /** Enables rendering custom reaction images. */
-    customReactionImagesEnabled?: boolean;
-}
-
-/**
- * Renders a single reaction button within the event tile reaction row.
- */
-function ReactionsRowButtonAdapter(props: Readonly<ReactionsRowButtonAdapterProps>): JSX.Element {
-    const client = useMatrixClientContext();
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowButtonViewModel({
-                client,
-                mxEvent: props.mxEvent,
-                content: props.content,
-                count: props.count,
-                reactionEvents: props.reactionEvents,
-                myReactionEvent: props.myReactionEvent,
-                disabled: props.disabled,
-                customReactionImagesEnabled: props.customReactionImagesEnabled,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
-    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
-
-    useEffect(() => {
-        vm.setCount(props.count);
-    }, [props.count, vm]);
-
-    useEffect(() => {
-        vm.setMyReactionEvent(props.myReactionEvent);
-    }, [props.myReactionEvent, vm]);
-
-    useEffect(() => {
-        vm.setDisabled(props.disabled);
-    }, [props.disabled, vm]);
-
-    return <ReactionsRowButtonView vm={vm} />;
-}
 
 interface ReactionsRowContextMenuProps {
     mxEvent: MatrixEvent;
@@ -185,12 +125,15 @@ export function ReactionsRowAdapter({
     mxEvent,
     reactions,
 }: Readonly<ReactionsRowAdapterProps>): JSX.Element | null {
+    const client = useMatrixClientContext();
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
     const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
+    const buttonVmMapRef = useRef(new Map<string, ReactionsRowButtonViewModel>());
+    const buttonVmContextRef = useRef<{ client: typeof client; mxEvent: MatrixEvent } | null>(null);
 
     const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
         setMenuAnchorRect(event.currentTarget.getBoundingClientRect());
@@ -265,6 +208,20 @@ export function ReactionsRowAdapter({
     const snapshot = useViewModel(vm);
     const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
     const items = useMemo((): JSX.Element[] | undefined => {
+        const contextChanged =
+            !buttonVmContextRef.current ||
+            buttonVmContextRef.current.client !== client ||
+            buttonVmContextRef.current.mxEvent !== mxEvent;
+
+        if (contextChanged) {
+            for (const buttonVm of buttonVmMapRef.current.values()) {
+                buttonVm.dispose();
+            }
+            buttonVmMapRef.current.clear();
+            buttonVmContextRef.current = { client, mxEvent };
+        }
+
+        const nextKeys = new Set<string>();
         const mappedItems = reactionGroups.map(({ content, events }) => {
             // Deduplicate reaction events by sender per Matrix spec.
             const deduplicatedEvents = uniqBy(events, (event: MatrixEvent) => event.getSender());
@@ -274,23 +231,41 @@ export function ReactionsRowAdapter({
                 }
                 return reactionEvent.getRelation()?.key === content;
             });
+            const disabled =
+                !roomContext.canReact ||
+                (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact);
 
-            return (
-                <ReactionsRowButtonAdapter
-                    key={content}
-                    content={content}
-                    count={deduplicatedEvents.length}
-                    mxEvent={mxEvent}
-                    reactionEvents={deduplicatedEvents}
-                    myReactionEvent={myReactionEvent}
-                    customReactionImagesEnabled={customReactionImagesEnabled}
-                    disabled={
-                        !roomContext.canReact ||
-                        (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
-                    }
-                />
-            );
+            let buttonVm = buttonVmMapRef.current.get(content);
+            if (!buttonVm) {
+                buttonVm = new ReactionsRowButtonViewModel({
+                    client,
+                    mxEvent,
+                    content,
+                    count: deduplicatedEvents.length,
+                    reactionEvents: deduplicatedEvents,
+                    myReactionEvent,
+                    disabled,
+                    customReactionImagesEnabled,
+                });
+                buttonVmMapRef.current.set(content, buttonVm);
+            } else {
+                buttonVm.setReactionData(content, deduplicatedEvents, customReactionImagesEnabled);
+                buttonVm.setCount(deduplicatedEvents.length);
+                buttonVm.setMyReactionEvent(myReactionEvent);
+                buttonVm.setDisabled(disabled);
+            }
+
+            nextKeys.add(content);
+
+            return <ReactionsRowButtonView key={content} vm={buttonVm} />;
         });
+
+        for (const [content, buttonVm] of buttonVmMapRef.current) {
+            if (!nextKeys.has(content)) {
+                buttonVm.dispose();
+                buttonVmMapRef.current.delete(content);
+            }
+        }
 
         if (!mappedItems.length) {
             return undefined;
@@ -298,6 +273,7 @@ export function ReactionsRowAdapter({
 
         return snapshot.showAllButtonVisible ? mappedItems.slice(0, MAX_ITEMS_WHEN_LIMITED) : mappedItems;
     }, [
+        client,
         reactionGroups,
         myReactions,
         mxEvent,
@@ -306,6 +282,16 @@ export function ReactionsRowAdapter({
         roomContext.canSelfRedact,
         snapshot.showAllButtonVisible,
     ]);
+
+    useEffect(
+        () => () => {
+            for (const buttonVm of buttonVmMapRef.current.values()) {
+                buttonVm.dispose();
+            }
+            buttonVmMapRef.current.clear();
+        },
+        [],
+    );
 
     const contextMenu =
         roomContext.canReact && menuDisplayed && menuAnchorRect && reactions ? (
