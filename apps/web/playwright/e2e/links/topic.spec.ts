@@ -1,9 +1,10 @@
 /*
-Copyright 2026 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
 import { test, expect } from "../../element-web-test";
 
 test.describe("Topic links", () => {
@@ -14,13 +15,7 @@ test.describe("Topic links", () => {
             await use({ roomId });
         },
     });
-    for (const link of [
-        "https://example.org",
-        "example.org",
-        "ftp://example.org",
-        "#aroom:example.org",
-        "@alice:example.org",
-    ]) {
+    for (const link of ["https://example.org", "ftp://example.org", "#aroom:example.org", "@alice:example.org"]) {
         // Playwright treats '@' as a tag, so replace it to be safe
         test(`should linkify plaintext '${link.replace("@", "_@")}'`, async ({ page, user, app, room }) => {
             await app.client.sendStateEvent(

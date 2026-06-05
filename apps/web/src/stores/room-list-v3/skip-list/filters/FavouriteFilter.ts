@@ -5,8 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Filter } from ".";
-import { FilterKey } from ".";
+import { FilterEnum, type Filter } from ".";
 import { DefaultTagID } from "../tag";
 
 export class FavouriteFilter implements Filter {
@@ -14,7 +13,7 @@ export class FavouriteFilter implements Filter {
         return !!room.tags[DefaultTagID.Favourite];
     }
 
-    public get key(): FilterKey.FavouriteFilter {
-        return FilterKey.FavouriteFilter;
+    public get key(): FilterEnum.FavouriteFilter {
+        return FilterEnum.FavouriteFilter;
     }
 }

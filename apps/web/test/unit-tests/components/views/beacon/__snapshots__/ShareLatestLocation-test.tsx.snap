@@ -3,7 +3,7 @@
 exports[`<ShareLatestLocation /> renders share buttons when there is a location 1`] = `
 <DocumentFragment>
   <a
-    aria-labelledby="_r_0_"
+    aria-labelledby="react-use-id-1"
     data-testid="open-location-in-osm"
     href="https://www.openstreetmap.org/?mlat=51&mlon=42#map=16/51/42"
     rel="noreferrer noopener"
@@ -25,10 +25,10 @@ exports[`<ShareLatestLocation /> renders share buttons when there is a location 
       />
     </svg>
   </a>
-  <div
+  <span
     class="mx_CopyableText mx_ShareLatestLocation_copy"
   >
-    <div
+    <button
       aria-label="Copy"
       class="mx_AccessibleButton mx_CopyableText_copyButton"
       role="button"
@@ -48,7 +48,7 @@ exports[`<ShareLatestLocation /> renders share buttons when there is a location 
           d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
         />
       </svg>
-    </div>
-  </div>
+    </button>
+  </span>
 </DocumentFragment>
 `;

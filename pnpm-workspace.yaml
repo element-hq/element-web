@@ -1,33 +1,132 @@
-nodeLinker: hoisted
 linkWorkspacePackages: true
+cleanupUnusedCatalogs: true
+ignorePatchFailures: false
+ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
-cleanupUnusedCatalogs: true
+
 catalog:
     # typescript
-    typescript: 5.9.3
+    typescript: 6.0.3
     # react
     react: ^19.0.0
     react-dom: ^19.0.0
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@element-hq/element-web-playwright-common": 2.2.7
-    "@playwright/test": 1.58.2
-    "playwright-core": 1.58.2
-    # Module API
-    "@element-hq/element-web-module-api": 1.12.0
+    "@playwright/test": 1.60.0
+    "playwright-core": 1.60.0
     # Compound
-    "@vector-im/compound-design-tokens": 7.0.0
-    "@vector-im/compound-web": 8.4.0
+    "@vector-im/compound-design-tokens": 10.2.1
+    "@vector-im/compound-web": 9.4.1
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
     "@fontsource/inter": 5.2.8
+    # vite
+    vite: 8.0.15
+    vitest: 4.1.7
+    "@vitest/coverage-v8": 4.1.7
+
 packageExtensions:
     fdir:
         dependencies:
             # Fix missing type dependency
             "@types/picomatch": 4.0.2
-ignorePatchFailures: false
+    "@joshwooding/vite-plugin-react-docgen-typescript":
+        peerDependencies:
+            # Silence warning
+            vite: "^8.0.0"
+
+allowBuilds:
+    matrix-js-sdk: true
+    # Installs the CLI, which we do not need
+    "@sentry/cli": false
+    # Installs nx cloud client, which we do not need
+    nx: false
+    # Runs `vp config` to set up git hooks, which we do not need
+    unrs-resolver: false
+    # Prints funding banner
+    core-js: false
+    # Builds native bindings, which we do not need
+    cpu-features: false
+    # Copies the 7z binaries which match our arch, though somehow works without it
+    electron-winstaller: false
+    # Installs esbuild binary, though somehow works without it
+    esbuild: false
+    # Performs additional version checks, which we do not need
+    protobufjs: false
+    # Builds optional crypto binding, which we do not need
+    ssh2: false
+    # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
+    sharp: true
+    workerd: true
+
+patchedDependencies:
+    # Workaround for missing types export
+    "@vector-im/matrix-wysiwyg": patches/@vector-im__matrix-wysiwyg.patch
+    # Workaround for lack of React 19 support
+    react-blurhash: patches/react-blurhash.patch
+    # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
+    linkify-html: patches/linkify-html.patch
+    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
+    "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
+    # Workaround to access a private API
+    "@types/auto-launch": patches/@types__auto-launch.patch
+    # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock
+    await-lock: patches/await-lock.patch
+    # Workaround for global type mismatches
+    jest-fixed-jsdom: patches/jest-fixed-jsdom.patch
+    # Workaround for jsdom being super opinionated and making it hard to tweak global properties
+    jsdom: patches/jsdom.patch
+    # Workaround for missing return types
+    postcss-mixins: patches/postcss-mixins.patch
+    # Workaround for some babel rules being false positively flagged
+    knip: patches/knip.patch
+    # Workaround for being stuck on an old version of plist due to electron-builder not supporting ESM yet
+    plist: patches/plist.patch
+    # Workaround for type fails
+    "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
+
+peerDependencyRules:
+    allowedVersions:
+        react: "19"
+        react-dom: "19"
+        eslint: "8"
+
+allowedDeprecatedVersions:
+    eslint: "8"
+    react-beautiful-dnd: "13"
+
+overrides:
+    pretty-format@30>react-is: 19.2.6
+    "@types/react": "catalog:"
+    "@types/react-dom": "catalog:"
+    oidc-client-ts: 3.5.0
+    jwt-decode: 4.0.0
+    caniuse-lite: 1.0.30001793
+    markdown-it: 14.1.1
+    matrix-widget-api: "^1.17.0"
+    "@types/node": 18.19.130
+    config-file-ts: 0.2.8-rc1
+    node-abi: 4.31.0
+    "@types/pg-pool": 2.0.7
+    axios@>1.0.0 <=1.15.0: 1.16.1
+    esbuild@<=0.24.2: 0.27.4
+    esbuild@~0.27.0: 0.27.4
+    follow-redirects@1.15.11: 1.16.0
+    brace-expansion@>=5 <=5.0.5: 5.0.6
+    ip-address@>=10 <10.1.1: 10.1.1
+    uuid@>=11 <11.1.1: 11.1.1
+    yaml@>=2 <2.8.3: 2.8.4
+    protobufjs@7 <7.5.8: 7.6.1
+    "@protobufjs/utf8@1 <1.1.1": 1.1.1
+    # Workaround for https://github.com/electron/electron/issues/51619
+    yauzl: "^3.3.1"
+
+minimumReleaseAgeExclude:
+    - "matrix-js-sdk"
+    - "@matrix-org/*"
+    - "@vector-im/*"
+    - "@element-hq/*"

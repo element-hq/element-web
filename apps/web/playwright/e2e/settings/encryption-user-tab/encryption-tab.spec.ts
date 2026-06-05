@@ -47,6 +47,9 @@ test.describe("Encryption tab", () => {
 
                 await util.verifyDevice(recoveryKey);
 
+                // Prevent flakiness by scrolling to top of the tab
+                await page.getByRole("heading", { name: "Key storage" }).scrollIntoViewIfNeeded();
+
                 await expect(content).toMatchScreenshot("default-tab.png", {
                     mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
                 });
@@ -82,6 +85,7 @@ test.describe("Encryption tab", () => {
 
                 // Fill the recovery key
                 await util.enterRecoveryKey(recoveryKey);
+                await dialog.getByRole("heading", { name: "Key storage" }).scrollIntoViewIfNeeded();
                 await expect(dialog).toMatchScreenshot("default-tab.png", {
                     mask: [dialog.getByTestId("deviceId"), dialog.getByTestId("sessionKey")],
                 });

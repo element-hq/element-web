@@ -36,20 +36,20 @@ jobs:
         name: Test ${{ inputs.project }}
         runs-on: ${{ inputs.runs-on }}
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
-                  repository: ${{ github.repository == 'element-hq/element-web-pro' && 'element-hq/element-web' || github.repository }}
+                  repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+              id: pnpm
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
-              working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
@@ -76,34 +76,45 @@ jobs:
             # We previously disabled the `EnableNodeCliInspectArguments` fuse, but Playwright requires
             # it to be enabled to test Electron apps, so turn it back on.
             - name: Set EnableNodeCliInspectArguments fuse enabled
-              run: $RUN_AS npx @electron/fuses write --app "$EXECUTABLE" EnableNodeCliInspectArguments=on
+              run: $RUN_AS $PNPM_PATH/pnpm exec electron-fuses write --app "$EXECUTABLE" EnableNodeCliInspectArguments=on
               working-directory: apps/desktop
               shell: bash
               env:
                   # We need sudo on Linux as it is installed in /opt/
                   RUN_AS: ${{ runner.os == 'Linux' && 'sudo' || '' }}
+                  PNPM_PATH: ${{ steps.pnpm.outputs.bin_dest }}
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 
             - name: Run tests
-              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
               timeout-minutes: 20
-              with:
-                  run: pnpm -C apps/desktop test --project=${{ inputs.project }} ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} ${{ inputs.blob_report == false && '--reporter=html' || '' }} ${{ inputs.args }}
+              shell: bash
+              working-directory: apps/desktop
+              run: |
+                  $PREFIX pnpm playwright test \
+                      ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} \
+                      ${{ inputs.blob_report == false && '--reporter=html' || '' }} \
+                      $ARGS
               env:
+                  PREFIX: ${{ runner.os == 'Linux' && 'xvfb-run' || '' }}
+                  PW_TAG: ${{ inputs.project }}
                   ELEMENT_DESKTOP_EXECUTABLE: ${{ steps.executable.outputs.path }}
+                  ARGS: ${{ inputs.args }}
+                  DEBUG: pw:browser
 
             - name: Upload blob report
               if: always() && inputs.blob_report
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: blob-report-${{ inputs.artifact }}
                   path: apps/desktop/blob-report
                   retention-days: 1
+                  if-no-files-found: error
 
             - name: Upload HTML report
               if: always() && inputs.blob_report == false
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: ${{ inputs.artifact }}-test
                   path: apps/desktop/playwright-report
                   retention-days: 14
+                  if-no-files-found: error

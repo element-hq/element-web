@@ -15,8 +15,7 @@
         "room_name": "Ruangan %(name)s",
         "room_status_bar": "Bilah status ruangan",
         "seek_bar_label": "Bilah pencarian audio",
-        "unread_messages": "Pesan yang belum dibaca.",
-        "user_menu": "Menu pengguna"
+        "unread_messages": "Pesan yang belum dibaca."
     },
     "a11y_jump_first_unread_room": "Pergi ke ruangan yang belum dibaca.",
     "action": {
@@ -32,7 +31,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click": "Klik",
         "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
@@ -66,7 +64,6 @@
         "go": "Mulai",
         "go_back": "Kembali ke sebelumnya",
         "got_it": "Mengerti",
-        "hide": "Sembunyikan",
         "hide_advanced": "Sembunyikan lanjutan",
         "hold": "Jeda",
         "ignore": "Abaikan",
@@ -100,7 +97,6 @@
         "rename": "Ubah Nama",
         "reply": "Balas",
         "reply_in_thread": "Balas di utasan",
-        "report_content": "Laporkan Konten",
         "report_room": "Laporkan ruangan",
         "resend": "Kirim Ulang",
         "reset": "Atur Ulang",
@@ -117,7 +113,7 @@
         "show_advanced": "Tampilkan lanjutan",
         "show_all": "Tampilkan semua",
         "sign_in": "Masuk",
-        "sign_out": "Keluar",
+        "sign_out": "Hapus perangkat ini",
         "skip": "Lewat",
         "start": "Mulai",
         "start_chat": "Mulai obrolan",
@@ -222,10 +218,7 @@
         "log_in_new_account": "<a>Masuk</a> ke akun yang baru.",
         "logout_dialog": {
             "description": "Apakah Anda yakin ingin keluar?",
-            "megolm_export": "Ekspor kunci secara manual",
             "setup_key_backup_title": "Anda akan kehilangan akses ke pesan terenkripsi Anda",
-            "setup_secure_backup_description_1": "Pesan terenkripsi diamankan dengan enkripsi ujung ke ujung. Hanya Anda dan penerima punya kuncinya untuk membaca pesan ini.",
-            "setup_secure_backup_description_2": "Ketika Anda keluar, kunci-kunci ini akan dihapus dari perangkat ini, yang berarti Anda tidak dapat membaca pesan-pesan terenkripsi kecuali jika Anda mempunyai kuncinya di perangkat Anda yang lain, atau telah mencadangkannya ke server.",
             "skip_key_backup": "Saya tidak ingin pesan-pesan terenkripsi saya"
         },
         "misconfigured_body": "Tanyakan admin %(brand)s Anda untuk memeriksa <a>konfigurasi Anda</a> untuk entri yang tidak benar atau entri duplikat.",
@@ -277,7 +270,6 @@
             "point_the_camera": "Arahkan kamera ke kode QR yang ditampilkan di sini",
             "scan_code_instruction": "Pindai kode QR dengan perangkat lain",
             "scan_qr_code": "Masuk dengan kode QR",
-            "security_code": "Kode keamanan",
             "security_code_prompt": "Jika diminta, masukkan kode di bawah ini pada perangkat Anda yang lain.",
             "select_qr_code": "Pilih \"%(scanQRCode)s\"",
             "unsupported_explainer": "Penyedia akun Anda tidak mendukung masuk ke perangkat baru dengan kode QR.",
@@ -343,7 +335,6 @@
         "sign_in_instead_prompt": "Masuk saja",
         "sign_in_or_register": "Masuk atau Buat Akun",
         "sign_in_or_register_description": "Gunakan akun Anda atau buat akun baru untuk lanjut.",
-        "sign_in_prompt": "Punya sebuah akun? <a>Masuk</a>",
         "sign_in_with_sso": "Masuk dengan single sign on",
         "signing_in": "Memasuki…",
         "soft_logout": {
@@ -590,7 +581,6 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "voice": "Suara",
         "warning": "Peringatan"
     },
     "composer": {
@@ -876,7 +866,6 @@
         "thread_root_id": "ID Akar Utas: %(threadRootId)s",
         "threads_timeline": "Lini masa utasan",
         "title": "Alat pengembang",
-        "toggle_event": "alih peristiwa",
         "toolbox": "Kotak Peralatan",
         "use_at_own_risk": "UI ini TIDAK memeriksa tipe nilai. Gunakan dengan hati-hati.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -964,7 +953,6 @@
         "import_invalid_passphrase": "Pemeriksaan autentikasi gagal: kata sandi salah?",
         "key_storage_out_of_sync": "Penyimpanan kunci Anda tidak tersinkron.",
         "key_storage_out_of_sync_description": "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.",
-        "message_shared_by": "%(displayName)s (%(userId)s) telah membagikan pesan ini sejak Anda tidak berada di ruangan saat pesan tersebut dikirim.",
         "messages_not_secure": {
             "cause_1": "Homeserver Anda",
             "cause_2": "Homeserver pengguna yang Anda memverifikasi",
@@ -990,9 +978,6 @@
         "set_up_recovery": "Siapkan pemulihan",
         "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_title": "Siapkan Cadangan Aman",
-        "setup_secure_backup": {
-            "explainer": "Cadangkan kunci Anda sebelum keluar untuk menghindari kehilangannya."
-        },
         "turn_on_key_storage": "Aktifkan penyimpanan kunci",
         "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
         "udd": {
@@ -1352,9 +1337,6 @@
         "impossible_dialog_title": "Integrasi tidak diperbolehkan"
     },
     "invite": {
-        "ask_anyway_description": "Tidak dapat menemukan profil untuk ID Matrix yang disertakan di bawah — apakah Anda ingin memulai percakapan langsung saja?",
-        "ask_anyway_label": "Mulai percakapan langsung saja",
-        "ask_anyway_never_warn_label": "Mulai percakapan langsung saja dan jangan peringatkan saya lagi",
         "email_caption": "Undang melalui email",
         "email_limit_one": "Undangan lewat surel hanya dapat dikirim satu-satu",
         "email_use_default_is": "Gunakan sebuah server identitas untuk mengundang melalui email. <default>Gunakan bawaan (%(defaultIdentityServerName)s)</default> atau kelola di <settings>Pengaturan</settings>.",
@@ -1553,11 +1535,6 @@
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
-        "report_to_moderators": "Laporkan ke moderator",
-        "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
-        "share_history_on_invite": "Bagikan riwayat terenkripsi dengan anggota baru",
-        "share_history_on_invite_description": "Saat mengundang pengguna ke ruangan terenkripsi yang memiliki keterlihatan riwayat yang diatur ke \"terbagi\", bagikan riwayat terenkripsi dengan pengguna tersebut, dan terima riwayat terenkripsi saat Anda diundang ke ruangan tersebut.",
-        "share_history_on_invite_warning": "Fitur ini bersifat EKSPERIMENTAL dan tidak semua tindakan pencegahan keamanan diterapkan. Jangan aktifkan pada akun produksi.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1799,7 +1776,6 @@
         "restricted": "Dibatasi"
     },
     "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
@@ -1833,25 +1809,10 @@
     },
     "report_content": {
         "description": "Melaporkan pesan ini akan mengirimkan ID peristiwa yang untuk ke administrator homeserver Anda. Jika pesan-pesan di ruangan ini terenkripsi, maka administrator homeserver Anda tidak akan dapat membaca teks pesan atau menampilkan file atau gambar apa saja.",
-        "disagree": "Tidak Setuju",
-        "error_create_room_moderation_bot": "Tidak dapat membuat ruangan dengan bot moderasi",
         "hide_messages_from_user": "Periksa jika Anda ingin menyembunyikan semua pesan saat ini dan pesan baru dari pengguna ini.",
         "ignore_user": "Abaikan pengguna",
-        "illegal_content": "Konten Ilegal",
         "missing_reason": "Mohon isi kenapa Anda melaporkan.",
-        "nature": "Harap pilih sifat dan jelaskan apa yang membuat pesan ini kasar.",
-        "nature_disagreement": "Apa yang ditulis pengguna itu salah.\nIni akan dilaporkan ke moderator ruangan.",
-        "nature_illegal": "Pengguna ini menampilkan kelakuan yang ilegal, misalnya dengan doxing orang lain atau ancaman kekerasan.\nIni akan dilaporkan ke moderator ruangan yang mungkin melaporkannya juga ke otoritas hukum.",
-        "nature_nonstandard_admin": "Ruang ini didedikasikan untuk konten ilegal atau toksik atau moderator gagal memoderasi konten ilegal atau toksik.\nHal ini akan dilaporkan kepada administrator %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Ruang ini didedikasikan untuk konten ilegal atau toksik atau moderator gagal memoderasi konten ilegal atau toksik.\nHal ini akan dilaporkan kepada administrator %(homeserver)s. Administrator TIDAK akan dapat membaca konten terenkripsi di ruangan ini.",
-        "nature_other": "Alasan yang lain. Mohon jelaskan masalahnya.\nIni akan dilaporkan ke moderator ruangan.",
-        "nature_spam": "Pengguna ini spam ruangan dengan iklan, tautan ke iklan atau ke propaganda.\nIni akan dilaporkan ke moderator ruangan.",
-        "nature_toxic": "Pengguna ini menampilkan kelakuan yang toksik, misalnya dengan menghina pengguna lain atau membagikan konten dewasa di ruangan ramah keluarga atau merusak aturan ruangan.\nIni akan dilaporkan ke moderator ruangan.",
-        "other_label": "Lainnya",
-        "report_content_to_homeserver": "Laporkan Konten ke Administrator Homeserver Anda",
-        "report_entire_room": "Laporkan seluruh ruangan",
-        "spam_or_propaganda": "Spam atau propaganda",
-        "toxic_behaviour": "Kelakukan Toxic"
+        "report_content_to_homeserver": "Laporkan Konten ke Administrator Homeserver Anda"
     },
     "report_room": {
         "description": "Laporkan ruangan ini ke admin homeserver Anda. Ini akan mengirimkan ID unik ruangan, tetapi jika pesan dienkripsi, administrator tidak akan dapat membacanya atau melihat file terbagi.",
@@ -2213,8 +2174,6 @@
             "aliases_section": "Alamat Ruangan",
             "avatar_field_label": "Avatar ruangan",
             "canonical_alias_field_label": "Alamat utama",
-            "default_url_previews_off": "Tampilan URL dinonaktifkan secara bawaan untuk anggota di ruangan ini.",
-            "default_url_previews_on": "Tampilan URL diaktifkan secara bawaan untuk anggota di ruangan ini.",
             "description_space": "Edit pengaturan yang berkaitan dengan space Anda.",
             "error_creating_alias_description": "Terjadi sebuah kesalahan membuat alamat. Ini mungkin tidak diperbolehkan oleh servernya atau ada kegagalan sementara.",
             "error_creating_alias_title": "Terjadi kesalahan membuat alamat",
@@ -2245,12 +2204,7 @@
             "published_aliases_explainer_space": "Alamat yang dipublikasikan dapat digunakan oleh siapa saja di server apa saja untuk bergabung dengan space Anda.",
             "published_aliases_section": "Alamat yang Dipublikasikan",
             "save": "Simpan Perubahan",
-            "topic_field_label": "Topik Ruangan",
-            "url_preview_encryption_warning": "Di ruangan terenkripsi, seperti ruangan ini, tampilan URL dinonaktifkan secara bawaan untuk memastikan homeserver Anda (di mana tampilannya dibuat) tidak mendapatkan informasi tentang tautan yang Anda lihat di ruangan ini.",
-            "url_preview_explainer": "Ketika seseorang menambahkan URL di pesannya, sebuah tampilan URL dapat ditampilkan untuk memberikan informasi lainnya tentang tautan itu seperti judul, deskripsi, dan sebuah gambar dari website.",
-            "url_previews_section": "Tampilan URL",
-            "user_url_previews_default_off": "Anda telah <a>menonaktifkan</a> tampilan URL secara bawaan.",
-            "user_url_previews_default_on": "Anda telah <a>mengaktifkan</a> tampilan URL secara bawaan."
+            "topic_field_label": "Topik Ruangan"
         },
         "notifications": {
             "browse_button": "Jelajahi",
@@ -2672,8 +2626,6 @@
             "username": "Nama pengguna"
         },
         "inline_url_previews_default": "Aktifkan tampilan URL secara bawaan",
-        "inline_url_previews_room": "Aktifkan tampilan URL secara bawaan untuk anggota di ruangan ini",
-        "inline_url_previews_room_account": "Aktifkan tampilan URL secara bawaan (hanya memengaruhi Anda)",
         "insert_trailing_colon_mentions": "Tambahkan sebuah karakter titik dua sesudah sebutan pengguna dari awal pesan",
         "invite_controls": {
             "default_label": "Izinkan pengguna mengundang Anda ke ruangan"
@@ -3283,7 +3235,6 @@
         },
         "empty_description": "Gunakan “%(replyInThread)s” ketika berada di atas pesan.",
         "empty_title": "Utas membantu percakapan Anda sesuai dengan topik dan mudah untuk dilacak.",
-        "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada",
         "mark_all_read": "Tandai semua sebagai dibaca",
         "my_threads": "Utasan saya",
         "my_threads_description": "Menampilkan semua utasan yang Anda berpartisipasi",
@@ -3327,11 +3278,9 @@
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",
-        "e2e_state": "Keadaan enkripsi ujung ke ujung",
         "edits": {
             "tooltip_label": "Diedit di %(date)s. Klik untuk melihat editan.",
             "tooltip_sub": "Klik untuk melihat editan",
@@ -3413,9 +3362,7 @@
         "m.poll.start": "%(senderName)s telah memulai sebuah pungutan suara — %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mengubah avatar ruangan ini.",
-            "changed_img": "%(senderDisplayName)s mengubah avatar ruangan ke <img/>",
-            "lightbox_title": "%(senderDisplayName)s mengubah avatar untuk %(roomName)s",
-            "removed": "%(senderDisplayName)s menghapus avatar ruangan."
+            "lightbox_title": "%(senderDisplayName)s mengubah avatar untuk %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3525,10 +3472,7 @@
             "removed": "Widget %(widgetName)s dihapus oleh %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Tutup kutip",
             "copy_link_thread": "Salin tautan ke utasan",
-            "expand_reply_chain": "Buka kutip",
-            "label": "Aksi Pesan",
             "view_in_room": "Tampilkan di ruangan"
         },
         "mjolnir": {
@@ -3540,7 +3484,6 @@
             "created_rule_rooms": "%(senderName)s membuat sebuah peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
             "created_rule_servers": "%(senderName)s membuat sebuah peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
             "created_rule_users": "%(senderName)s membuat sebuah peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
-            "message_hidden": "Anda telah mengabaikan pengguna ini, jadi pesannya disembunyikan. <a>Tampilkan saja.</a>",
             "removed_rule": "%(senderName)s menghapus sebuah peraturan pencekalan yang berisi %(glob)s",
             "removed_rule_rooms": "%(senderName)s menghapus peraturan pencekalan ruangan yang berisi %(glob)s",
             "removed_rule_servers": "%(senderName)s menghapus peraturan pencekalan server yang berisi %(glob)s",
@@ -3845,12 +3788,6 @@
         "verify_button": "Verifikasi Pengguna",
         "verify_explainer": "Untuk keamanan lebih, verifikasi pengguna ini dengan memeriksa kode satu kali di kedua perangkat Anda."
     },
-    "user_menu": {
-        "link_new_device": "Tautkan perangkat baru",
-        "settings": "Semua pengaturan",
-        "switch_theme_dark": "Ubah ke mode gelap",
-        "switch_theme_light": "Ubah ke mode terang"
-    },
     "voip": {
         "already_in_call": "Sudah ada di panggilan",
         "already_in_call_person": "Anda sudah ada di panggilan dengan orang itu.",
@@ -3875,7 +3812,6 @@
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
-        "decline_call": "Tolak",
         "default_device": "Perangkat Bawaan",
         "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
@@ -3926,7 +3862,6 @@
         "show_sidebar_button": "Tampilkan sisi bilah",
         "silence": "Diamkan panggilan",
         "silenced": "Notifikasi dibisukan",
-        "skip_lobby_toggle_option": "Segera bergabung",
         "start_screenshare": "Mulai membagikan layar Anda",
         "stop_screenshare": "Berhenti membagikan layar Anda",
         "too_many_calls": "Terlalu Banyak Panggilan",
@@ -3948,7 +3883,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_incoming": "Panggilan video masuk",
-        "video_call_started": "Panggilan video dimulai",
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",
@@ -3956,7 +3890,6 @@
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {

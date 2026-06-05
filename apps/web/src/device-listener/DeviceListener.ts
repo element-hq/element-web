@@ -149,7 +149,8 @@ export class DeviceListener {
     }
 
     /**
-     * Set the account data "m.org.matrix.custom.backup_disabled" to { "disabled": true }.
+     * Set the account data indicate that the user has chosen to disable key
+     * backup.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
         await this.currentDevice?.recordKeyBackupDisabled();
@@ -340,7 +341,7 @@ export class DeviceListener {
         });
     }
 
-    private onRecordClientInformationSettingChange: CallbackFn = (
+    private onRecordClientInformationSettingChange: CallbackFn<"deviceClientInformationOptIn"> = (
         _originalSettingName,
         _roomId,
         _level,

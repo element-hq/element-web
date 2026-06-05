@@ -3,29 +3,62 @@
         "seek_bar_label": "Heli kerimisriba"
     },
     "action": {
+        "back": "Tagasi",
+        "click": "Klõpsa",
+        "close": "Sulge",
+        "collapse": "Ahenda",
         "delete": "Kustuta",
         "dismiss": "Loobu",
+        "download": "Laadi alla",
         "edit": "Muuda",
         "explore_rooms": "Tutvu jututubadega",
+        "go": "Mine",
+        "hide": "Peida",
         "invite": "Kutsu",
         "new_conversation": "Uus vestlus",
         "new_room": "Uus jututuba",
+        "new_section": "Uus jaotis",
         "new_video_room": "Uus videotuba",
         "open_menu": "Ava menüü",
         "pause": "Peata",
+        "pin": "Tõste esile",
         "play": "Esita",
+        "react": "Reageeri",
         "remove": "Eemalda",
+        "reply": "Vasta",
+        "reply_in_thread": "Vasta jutulõngas",
         "retry": "Proovi uuesti",
         "search": "Otsing",
-        "start_chat": "Alusta vestlust"
+        "start_chat": "Alusta vestlust",
+        "unpin": "Lõpeta esiletõstmine",
+        "view_source": "Vaata lähtekoodi"
     },
     "common": {
+        "attachment": "Manus",
         "encryption_enabled": "Krüptimine on kasutusel",
+        "loading": "Laadin...",
+        "options": "Valikud",
         "preferences": "Eelistused",
         "state_encryption_enabled": "Katseline olekusündmuste krüptimine on kasutusel"
     },
+    "devtools": {
+        "toggle_event": "lülita sündmus sisse/välja"
+    },
+    "keyboard": {
+        "shift": "Shift"
+    },
     "left_panel": {
-        "open_dial_pad": "Ava numbriklahvistik"
+        "open_dial_pad": "Ava numbriklahvistik",
+        "separator_label": "Laiendamiseks klõpsa või lohista"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Loo kasutajakonto",
+            "got_an_account": "Kas sul on kasutajakonto juba olemas?",
+            "manage_account": "Halda kasutajakontot",
+            "sign_in": "Logi sisse",
+            "title": "Kasutajamenüü"
+        }
     },
     "notifications": {
         "all_messages": "Kõik sõnumid",
@@ -42,6 +75,10 @@
             "shared": "Uued liikmed näevad ajalugu",
             "world_readable": "Kõik võivad ajalugu näha"
         },
+        "jump_to_date": "Vaata kuupäeva",
+        "jump_to_date_beginning": "Jututoa algus",
+        "jump_to_date_prompt": "Vali kuupäev, mida soovid vaadata",
+        "pinned_message_badge": "Esiletõstetud sõnum",
         "status_bar": {
             "delete_all": "Kustuta kõik",
             "exceeded_resource_limit_description": "Teenuse kasutamise jätkamiseks võta ühendust oma teenuse haldajaga või peakasutajaga.",
@@ -69,9 +106,13 @@
                 "one": "Ava %(roomName)s jututuba ühe lugemata sõnumiga.",
                 "other": "Ava %(roomName)s jututuba %(count)s lugemata sõnumiga."
             },
-            "unsent_message": "Ava „%(roomName)s“ jututuba saatmata sõnumiga."
+            "unsent_message": "Ava „%(roomName)s“ jututuba saatmata sõnumiga.",
+            "video_call": "Ava %(roomName)s jututuba, kus on pooleli videokõne",
+            "voice_call": "Ava %(roomName)s jututuba, kus on pooleli häälkõne"
         },
         "appearance": "Välimus",
+        "chat_moved": "Vestlus on tõstetud mujale",
+        "collapse_all_sections": "Ahenda kõik jaotised",
         "collapse_filters": "Ahenda filtriloendit",
         "empty": {
             "no_chats": "Vestlusi veel ei leidu",
@@ -90,6 +131,7 @@
             "show_activity": "Vaata kõiki tegevusi",
             "show_chats": "Näita kõiki vestlusi"
         },
+        "expand_all_sections": "Laienda kõiki jaotisi",
         "expand_filters": "Laienda filtriloendit",
         "filters": {
             "favourite": "Lemmikud",
@@ -107,7 +149,8 @@
             "leave_room": "Lahku jututoast",
             "low_priority": "Vähetähtis",
             "mark_read": "Märgi loetuks",
-            "mark_unread": "Märgi mitteloetuks"
+            "mark_unread": "Märgi mitteloetuks",
+            "move_to_section": "Tõsta teise jaotisse"
         },
         "notification_options": "Teavituste eelistused",
         "open_space_menu": "Ava kogukonna menüü",
@@ -116,10 +159,18 @@
             "more_options": "Täiendavad seadistused"
         },
         "room_options": "Jututoa valikud",
+        "section_created": "Jaotis on loodud",
+        "section_header": {
+            "edit_section": "Muuda jaotist",
+            "more_options": "Täiendavad valikud",
+            "remove_section": "Eemalda jaotis",
+            "toggle": "Lülita %(section)s jaotis sisse/välja",
+            "toggle_unread": "Lülita lugemata jututubadega %(section)s jaotis sisse/välja"
+        },
         "show_message_previews": "Näita sõnumite eelvaateid",
         "sort": "Järjesta",
         "sort_type": {
-            "activity": "Aktiivsuse alusel",
+            "activity": "Viimatine aktiivsus",
             "atoz": "Tähestiku järjekorras",
             "unread_first": "Esmalt lugemata"
         },
@@ -130,6 +181,9 @@
     },
     "terms": {
         "tac_button": "Vaata üle kasutustingimused"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa"
     },
     "time": {
         "about_day_ago": "umbes päev tagasi",
@@ -148,6 +202,14 @@
         "n_minutes_ago": "%(num)s minutit tagasi"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Osapool jättis kõnele vastamata",
+                "call_declined_by_us": "Sa jätsid kõne vastamata"
+            },
+            "video_call_title": "Videokõne",
+            "voice_call_title": "Häälkõne"
+        },
         "decryption_failure": {
             "blocked": "Kuna sinu seade on verifitseerimata, siis saatja on blokeerinud võimaluse, et sa saaksid selle sõnumi",
             "historical_event_no_key_backup": "Varasemad sõnumid pole selles seadmes loetavad",
@@ -157,10 +219,20 @@
             "sender_unsigned_device": "Saadetud ebaturvalisest seadmest.",
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestunud"
         },
+        "download_action_decrypting": "Dekrüptin",
+        "download_action_downloading": "Laadin alla",
+        "e2e_state": "Läbiva krüptimise olek",
         "m.audio": {
             "audio_player": "Meediaesitaja",
             "error_downloading_audio": "Helifaili allalaadimine ei õnnestunud",
             "unnamed_audio": "Nimetu helifail"
+        },
+        "m.file": {
+            "error_invalid": "Vigane fail"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s muutis jututoa uueks tunnuspildiks: <img/>",
+            "removed": "%(senderDisplayName)s eemaldas jututoa tunnuspildi."
         },
         "m.room.encryption": {
             "disable_attempt": "Eirasin katset lõpetada krüptimise kasutamine",
@@ -171,7 +243,38 @@
             "parameters_changed": "Mõned krüptimise parameetrid on muutunud.",
             "state_enabled": "Selle jututoa sõnumid ja olekusündmused on läbivalt krüptitud. Kui uued kasutajad liituvad, siis saad nad verifitseerida tunnuspildile klõpsates.",
             "unsupported": "Selles jututoas kasutatud krüptimine ei ole toetatud."
+        },
+        "mab": {
+            "collapse_reply_chain": "Peida tsiteeritud sisu",
+            "copy_link_thread": "Kopeeri jutulõnga link",
+            "expand_reply_chain": "Näita tsiteeritud sisu",
+            "label": "Tegevused sõnumitega",
+            "view_in_room": "Vaata jututoas"
+        },
+        "message_shared_by": "Kuna sa polnud sõnumi saatmise ajal jututoas, siis %(displayName)s (%(userId)s) jagas seda sõnumit sinuga.",
+        "message_timestamp_received_at": "Saabumise aeg: %(dateTime)s",
+        "message_timestamp_sent_at": "Saatmise aeg: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Sa eirad seda kasutajat, seega on tema sõnum peidetud. <a>Näita seda ikkagi.</a>"
+        },
+        "pending_moderation": "Sõnum on modereerimise ootel",
+        "pending_moderation_reason": "Sõnum on modereerimise ootel: %(reason)s",
+        "url_preview": {
+            "close": "Sulge eelvaade",
+            "open_link": "Ava link",
+            "show_n_more": {
+                "one": "Näita veel %(count)s muud eelvaadet",
+                "other": "Näita veel %(count)s muud eelvaadet"
+            },
+            "view_image": "Vaata pilti"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Seosta uus seade",
+        "open_feedback": "Tagasiside",
+        "open_home": "Avaleht",
+        "open_security": "Turvalisus ja privaatsus",
+        "open_settings": "Kõik seadistused"
     },
     "widget": {
         "context_menu": {

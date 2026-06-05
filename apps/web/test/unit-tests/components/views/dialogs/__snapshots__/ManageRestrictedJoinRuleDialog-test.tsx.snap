@@ -76,19 +76,19 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
           class="mx_ManageRestrictedJoinRuleDialog_entry"
         >
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
-              class="_inline-field_19upo_32"
+              class="_inline-field_1o4d9_33"
             >
               <div
-                class="_inline-field-control_19upo_44"
+                class="_inline-field-control_1o4d9_45"
               >
                 <div
                   class="_container_153f2_10"
                 >
                   <input
-                    aria-describedby="_r_5_"
+                    aria-describedby="react-use-id-1"
                     class="_input_153f2_18"
                     id="checkbox_vY7Q4uEh9K"
                     type="checkbox"
@@ -112,15 +112,15 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
                 </div>
               </div>
               <div
-                class="_inline-field-body_19upo_38"
+                class="_inline-field-body_1o4d9_39"
               >
                 <label
-                  class="_label_19upo_59"
+                  class="_label_1o4d9_60"
                   for="checkbox_vY7Q4uEh9K"
                 >
                   <div>
                     <span
-                      class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                      class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                       data-color="1"
                       data-testid="avatar-img"
                       data-type="round"
@@ -137,8 +137,8 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
                   </div>
                 </label>
                 <span
-                  class="_message_19upo_85 _help-message_19upo_91"
-                  id="_r_5_"
+                  class="_message_1o4d9_86 _help-message_1o4d9_92"
+                  id="react-use-id-1"
                 >
                   0 members
                 </span>

@@ -14,6 +14,12 @@ import pngToIco from "png-to-ico";
 import path from "node:path";
 
 import { _t } from "./language-helper.js";
+import { getBuildConfig } from "./build-config.js";
+import { getBrand } from "./config.js";
+import { getIconPath } from "./icon.js";
+
+// This hardcoded uuid is an arbitrary v4 uuid generated on https://www.uuidgenerator.net/version4
+const UUID_NAMESPACE = "9fc9c6a0-9ffe-45c9-9cd7-5639ae38b232";
 
 let trayIcon: Tray | null = null;
 
@@ -38,31 +44,25 @@ function toggleWin(): void {
     }
 }
 
-function getUuid(): string {
-    // The uuid field is optional and only needed on unsigned Windows packages where the executable path changes
-    // The hardcoded uuid is an arbitrary v4 uuid generated on https://www.uuidgenerator.net/version4
-    return global.vectorConfig["uuid"] || "eba84003-e499-4563-8e9d-166e34b5cc25";
-}
-
-export function create(config: (typeof global)["trayConfig"]): void {
+export async function create(): Promise<void> {
     // no trays on darwin
     if (process.platform === "darwin" || trayIcon) return;
-    const defaultIcon = nativeImage.createFromPath(config.icon_path);
+    const iconPath = await getIconPath();
+    const defaultIcon = nativeImage.createFromPath(iconPath);
 
-    let guid: string | undefined;
-    if (process.platform === "win32" && app.isPackaged) {
+    const buildConfig = getBuildConfig();
+    if (process.platform === "win32" && app.isPackaged && buildConfig.windowsCertSubjectName) {
         // Providing a GUID lets Windows be smarter about maintaining user's tray preferences
         // https://github.com/electron/electron/pull/21891
-        // Ideally we would only specify it for signed packages but determining whether the app is signed sufficiently
-        // is non-trivial. So instead we have an escape hatch that unsigned packages can iterate the `uuid` in
-        // config.json to prevent Windows refusing GUID-reuse if their executable path changes.
-        guid = uuidv5(`${app.getName()}-${app.getPath("userData")}`, getUuid());
+        // We generate the GUID in a custom arbitrary namespace and use the subject name & userData path
+        // to differentiate different app builds on the same system.
+        const guid = uuidv5(`${buildConfig.windowsCertSubjectName}:${app.getPath("userData")}`, UUID_NAMESPACE);
+        trayIcon = new Tray(defaultIcon, guid);
+    } else {
+        trayIcon = new Tray(defaultIcon);
     }
 
-    // Passing guid=undefined on Windows will cause it to throw `Error: Invalid GUID format`
-    // The type here is wrong, the param must be omitted, never undefined.
-    trayIcon = guid ? new Tray(defaultIcon, guid) : new Tray(defaultIcon);
-    trayIcon.setToolTip(config.brand);
+    trayIcon.setToolTip(getBrand());
     initApplicationMenu();
     trayIcon.on("click", toggleWin);
 

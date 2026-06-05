@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import React, { type HTMLAttributes } from "react";
+import React, { type ComponentProps, createContext, type HTMLAttributes, useContext } from "react";
 
 import Heading from "../../typography/Heading";
 import { SettingsHeader } from "../SettingsHeader";
@@ -19,15 +19,30 @@ export interface SettingsSectionProps extends HTMLAttributes<HTMLDivElement> {
     legacy?: boolean;
 }
 
-function renderHeading(heading: string | React.ReactNode | undefined, legacy: boolean): React.ReactNode | undefined {
+type HeadingLevel = 2 | 3 | 4 | 5 | 6;
+
+/**
+ * React context to correctly set heading levels in nested settings sections dynamically
+ */
+export const HeadingLevelContext = createContext<HeadingLevel>(2);
+
+function SectionHeading({
+    heading,
+    legacy,
+    level,
+}: {
+    heading: string | React.ReactNode | undefined;
+    legacy: boolean;
+    level: HeadingLevel;
+}): React.ReactNode | undefined {
     switch (typeof heading) {
         case "string":
             return legacy ? (
-                <Heading as="h2" size="3">
+                <Heading as={`h${level}`} size={(level + 1).toString() as ComponentProps<typeof Heading>["size"]}>
                     {heading}
                 </Heading>
             ) : (
-                <SettingsHeader label={heading} />
+                <SettingsHeader as={`h${level}`} label={heading} />
             );
         case "undefined":
             return undefined;
@@ -60,22 +75,28 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
     legacy = true,
     children,
     ...rest
-}) => (
-    <div
-        {...rest}
-        className={classnames("mx_SettingsSection", className, {
-            mx_SettingsSection_newUi: !legacy,
-        })}
-    >
-        {heading &&
-            (subHeading ? (
-                <div className="mx_SettingsSection_header">
-                    {renderHeading(heading, legacy)}
-                    {subHeading}
-                </div>
-            ) : (
-                renderHeading(heading, legacy)
-            ))}
-        {legacy ? <div className="mx_SettingsSection_subSections">{children}</div> : children}
-    </div>
-);
+}) => {
+    const level = useContext(HeadingLevelContext);
+
+    return (
+        <div
+            {...rest}
+            className={classnames("mx_SettingsSection", className, {
+                mx_SettingsSection_newUi: !legacy,
+            })}
+        >
+            {heading &&
+                (subHeading ? (
+                    <div className="mx_SettingsSection_header">
+                        <SectionHeading heading={heading} legacy={legacy} level={level} />
+                        {subHeading}
+                    </div>
+                ) : (
+                    <SectionHeading heading={heading} legacy={legacy} level={level} />
+                ))}
+            <HeadingLevelContext.Provider value={heading ? ((level + 1) as HeadingLevel) : level}>
+                {legacy ? <div className="mx_SettingsSection_subSections">{children}</div> : children}
+            </HeadingLevelContext.Provider>
+        </div>
+    );
+};

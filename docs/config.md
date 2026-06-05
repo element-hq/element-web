@@ -214,14 +214,15 @@ Starting with `branding`, the following subproperties are available:
 
 1. `welcome_background_url`: When a string, the URL for the full-page image background of the login, registration, and welcome
    pages. This property can additionally be an array to have the app choose an image at random from the selections.
-2. `auth_header_logo_url`: A URL to the logo used on the login, registration, etc pages.
-3. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
+2. `logo_link_url`: When rendering the a brand Logo, if it is linkified, this is the link it should direct to. Defaults to `https://element.io`.
+3. `auth_header_logo_url`: A URL to the logo used on the login, registration, etc pages.
+4. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
    `url` property.
 
 `embedded_pages` can be configured as such:
 
-1. `welcome_url`: A URL to an HTML page to show as a welcome page (landing on `#/welcome`). When not specified, the default
-   `welcome.html` that ships with Element will be used instead.
+1. `welcome_url`: A URL to an HTML page to show as a welcome page (landing on `#/welcome`).
+   When not specified, a default internal component will be used instead.
 2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
    show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
    no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).
@@ -605,3 +606,15 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
+
+## Additional config options for Element Desktop
+
+1. `update_base_url`: Specifies the URL of the update server, see [document](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/updates.md).
+2. `web_base_url`: Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.
+
+---
+
+The app contains a configuration file specified at build time using [these instructions](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#config).
+This config can be overwritten by the end using by creating a `config.json` file at the paths described [here](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson).
+
+After changing the config, the app will need to be exited fully (including via the task tray) and re-started.

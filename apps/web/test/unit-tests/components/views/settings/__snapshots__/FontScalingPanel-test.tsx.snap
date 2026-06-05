@@ -9,11 +9,11 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Font size
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
@@ -149,7 +149,7 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
         >
           <svg
             aria-label="Loading…"
-            class="_icon_11k6c_18"
+            class="_icon_1855a_18"
             data-testid="spinner"
             fill="currentColor"
             height="1em"

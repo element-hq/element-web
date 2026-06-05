@@ -31,6 +31,7 @@ const {
     EmptyInvitesFilter,
     EmptyMentionsFilter,
     EmptyLowPriorityFilter,
+    Toast,
 } = composeStories(stories);
 
 const renderWithMockContext = (component: React.ReactElement): ReturnType<typeof render> => {
@@ -124,6 +125,11 @@ describe("<RoomListView />", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("renders Toast story", () => {
+        const { container } = renderWithMockContext(<Toast />);
+        expect(container).toMatchSnapshot();
+    });
+
     it("should call onToggleFilter when filter is clicked", async () => {
         const user = userEvent.setup();
         renderWithMockContext(<Default />);
@@ -185,5 +191,14 @@ describe("<RoomListView />", () => {
         await user.click(screen.getByRole("button", { name: "See all activity" }));
 
         expect(EmptyLowPriorityFilter.args.onToggleFilter).toHaveBeenCalled();
+    });
+
+    it("should call closeToast when close button is clicked on toast", async () => {
+        const user = userEvent.setup();
+        renderWithMockContext(<Toast />);
+
+        await user.click(screen.getByRole("button", { name: "Close" }));
+
+        expect(EmptyLowPriorityFilter.args.closeToast).toHaveBeenCalled();
     });
 });

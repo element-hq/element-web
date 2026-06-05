@@ -17,7 +17,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
-import type { QueryDict } from "matrix-js-sdk/src/utils";
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../Lifecycle";
@@ -27,8 +26,8 @@ import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
 import { type ValidatedServerConfig } from "../utils/ValidatedServerConfig";
 import { ModuleRunner } from "../modules/ModuleRunner";
-import { parseQs } from "./url_utils";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
+import { type URLParams } from "./url_utils.ts";
 import { UserFriendlyError } from "../languageHandler";
 import { ModuleApi } from "../modules/Api";
 import { RoomView } from "../components/structures/RoomView";
@@ -41,20 +40,22 @@ logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
 
-function onTokenLoginCompleted(): void {
-    // if we did a token login, we're now left with the token, hs and is
-    // url as query params in the url;
-    // if we did an oidc authorization code flow login, we're left with the auth code and state
-    // as query params in the url;
-    // a little nasty but let's redirect to clear them.
+function onTokenLoginCompleted(urlParams: URLParams, fragmentAfterLogin: string): void {
     const url = new URL(window.location.href);
 
-    url.searchParams.delete("no_universal_links");
-    url.searchParams.delete("loginToken");
-    url.searchParams.delete("state");
-    url.searchParams.delete("code");
+    // if we did a token login, we're now left with the login token as query param in the url; clear it out
+    for (const param in { ...urlParams.legacy_sso, ...urlParams.oidc_query }) {
+        url.searchParams.delete(param);
+    }
 
-    logger.log(`Redirecting to ${url.href} to drop delegated authentication params from queryparams`);
+    // Added by OIDC auth to avoid being hijacked by Element X on macOS
+    url.searchParams.delete("no_universal_links");
+
+    // if we did an oidc authorization code flow login, we're left with the auth code and state in the fragment in the url,
+    // we clear it out by using the fragmentAfterLogin
+    url.hash = fragmentAfterLogin;
+
+    logger.log(`Redirecting to ${url.href} to drop authentication params from url`);
     window.history.replaceState(null, "", url.href);
 }
 
@@ -87,7 +88,7 @@ async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
     return false;
 }
 
-export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
+export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
     // XXX: This lives here because certain components import so many things that importing it in a sensible place (eg.
     // the builtins module or init.tsx) causes a circular dependency.
     ModuleApi.instance.builtins.setComponents({
@@ -98,8 +99,6 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
 
     initRouting();
     const platform = PlatformPeg.get();
-
-    const params = parseQs(window.location);
 
     const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
@@ -113,7 +112,7 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
-    const isReturningFromSso = !!params.loginToken || (!!params.code && !!params.state);
+    const isReturningFromSso = !!urlParams.legacy_sso || !!urlParams.oidc_fragment || !!urlParams.oidc_query;
     const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
@@ -155,8 +154,7 @@ export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<Ma
                     ref={matrixChatRef}
                     onNewScreen={onNewScreen}
                     config={config}
-                    realQueryParams={params}
-                    startingFragmentQueryParams={fragParams}
+                    urlParams={urlParams}
                     enableGuest={!config.disable_guests}
                     onTokenLoginCompleted={onTokenLoginCompleted}
                     initialScreenAfterLogin={initialScreenAfterLogin}

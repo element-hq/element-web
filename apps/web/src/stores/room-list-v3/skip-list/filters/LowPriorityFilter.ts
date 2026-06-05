@@ -5,8 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Filter } from ".";
-import { FilterKey } from ".";
+import { type Filter, FilterEnum } from ".";
 import { DefaultTagID } from "../tag";
 
 export class LowPriorityFilter implements Filter {
@@ -14,7 +13,7 @@ export class LowPriorityFilter implements Filter {
         return !!room.tags[DefaultTagID.LowPriority];
     }
 
-    public get key(): FilterKey.LowPriorityFilter {
-        return FilterKey.LowPriorityFilter;
+    public get key(): FilterEnum.LowPriorityFilter {
+        return FilterEnum.LowPriorityFilter;
     }
 }

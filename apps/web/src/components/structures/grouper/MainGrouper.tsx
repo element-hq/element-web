@@ -17,7 +17,7 @@ import { hasText } from "../../../TextForEvent";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import HistoryTile from "../../views/rooms/HistoryTile";
 import EventListSummary from "../../views/elements/EventListSummary";
-import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
+import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
 
 const groupedStateEvents = [
     EventType.RoomMember,

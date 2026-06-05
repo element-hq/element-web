@@ -11,10 +11,10 @@ import os from "node:os";
 import { getElectronVersionFromInstalled } from "app-builder-lib/out/electron/electronVersion.js";
 import childProcess, { type SpawnOptions } from "node:child_process";
 
-import { type Arch, type Target, TARGETS, getHost, isHostId, type TargetId } from "./target.js";
+import { type Arch, type Target, TARGETS, getHost, isHostId, type TargetId } from "./target.ts";
 
 async function getRuntimeVersion(projectRoot: string): Promise<string> {
-    const electronVersion = await getElectronVersionFromInstalled(path.join(projectRoot, "..", ".."));
+    const electronVersion = await getElectronVersionFromInstalled(projectRoot);
     if (!electronVersion) {
         throw new Error("Can't determine Electron version");
     }
@@ -28,11 +28,10 @@ export default class HakEnv {
     public runtime: string = "electron";
     public runtimeVersion?: string;
     public dotHakDir: string;
+    public readonly projectRoot: string;
 
-    public constructor(
-        public readonly projectRoot: string,
-        targetId: TargetId | null,
-    ) {
+    public constructor(projectRoot: string, targetId: TargetId | null) {
+        this.projectRoot = projectRoot;
         const target = targetId ? TARGETS[targetId] : getHost();
 
         if (!target) {
@@ -103,6 +102,9 @@ export default class HakEnv {
                 // See https://nodejs.org/en/blog/vulnerability/april-2024-security-releases-2
                 shell: this.isWin(),
                 ...options,
+            });
+            proc.on("error", (err) => {
+                reject(err);
             });
             proc.on("exit", (code) => {
                 if (code) {

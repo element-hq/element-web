@@ -18,10 +18,5 @@ declare global {
     var appQuitting: boolean;
     var appLocalization: AppLocalization;
     var vectorConfig: IConfigOptions;
-    var trayConfig: {
-        // eslint-disable-next-line camelcase
-        icon_path: string;
-        brand: string;
-    };
 }
 /* eslint-enable no-var */

@@ -1,19 +1,10 @@
-#!/usr/bin/env -S npx ts-node
-
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
 import cronstrue from "cronstrue";
 import _ from "lodash";
-
-const argv = parseArgs<{
-    debug: boolean;
-    on: string | string[];
-}>(process.argv.slice(2), {
-    string: ["on"],
-    boolean: ["debug"],
-});
+import url from "node:url";
 
 /**
  * Generates unique ID strings (incremental base36) representing the given inputs.
@@ -97,13 +88,13 @@ class Graph<T extends Node> {
     // Removes nodes without any edges
     public cull(): void {
         const seenNodes = new Set<Node>();
-        graph.edges.forEach(([source, destination]) => {
+        this.edges.forEach(([source, destination]) => {
             seenNodes.add(source);
             seenNodes.add(destination);
         });
-        graph.nodes.forEach((node) => {
+        this.nodes.forEach((node) => {
             if (!seenNodes.has(node)) {
-                graph.nodes.delete(node.id);
+                this.nodes.delete(node.id);
             }
         });
     }
@@ -281,10 +272,10 @@ const triggers = new Map<string, Trigger>(); // keyed by trigger id
 const projects = new Map<string, Project>(); // keyed by project name
 const workflows = new Map<string, Workflow>(); // keyed by workflow name
 
-function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow): Trigger[] {
+function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow, on?: string[]): Trigger[] {
     if (!TRIGGERS[key]) return [];
 
-    if ((typeof argv.on === "string" || Array.isArray(argv.on)) && !toArray(argv.on).includes(key)) {
+    if (on && !on.includes(key)) {
         return [];
     }
 
@@ -297,16 +288,16 @@ function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: W
     });
 }
 
-function readFile(...pathSegments: string[]): string {
-    return fs.readFileSync(path.join(...pathSegments), { encoding: "utf-8" });
+function readFile(...pathSegments: string[]): Promise<string> {
+    return fs.readFile(path.join(...pathSegments), { encoding: "utf-8" });
 }
 
-function readJson<T extends object>(...pathSegments: string[]): T {
-    return JSON.parse(readFile(...pathSegments));
+async function readJson<T extends object>(...pathSegments: string[]): Promise<T> {
+    return JSON.parse(await readFile(...pathSegments));
 }
 
-function readYaml<T extends object>(...pathSegments: string[]): T {
-    return YAML.parse(readFile(...pathSegments));
+async function readYaml<T extends object>(...pathSegments: string[]): Promise<T> {
+    return YAML.parse(await readFile(...pathSegments));
 }
 
 function toArray<T>(v: T | T[]): T[] {
@@ -330,56 +321,6 @@ function shallowCompare(obj1: Record<string, any>, obj2: Record<string, any>): b
     );
 }
 
-// Data ingest
-for (const projectPath of argv._) {
-    const {
-        name,
-        repository: { url },
-    } = readJson<{ name: string; repository: { url: string } }>(projectPath, "package.json");
-    const workflowsPath = path.join(projectPath, ".github", "workflows");
-
-    const project: Project = {
-        name,
-        url,
-        path: projectPath,
-        workflows: new Map(),
-    };
-
-    for (const file of fs.readdirSync(workflowsPath).filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))) {
-        const data = readYaml<WorkflowYaml>(workflowsPath, file);
-        const name = data.name ?? file;
-        const workflow: Workflow = {
-            id: `${project.name}/${name}`,
-            name,
-            shape: "hexagon",
-            path: path.join(workflowsPath, file),
-            project,
-            link: `${project.url}/blob/develop/.github/workflows/${file}`,
-
-            on: data.on,
-            jobs: [],
-        };
-
-        for (const jobId in data.jobs) {
-            const job = data.jobs[jobId];
-            workflow.jobs.push({
-                id: `${workflow.name}/${jobId}`,
-                jobId,
-                name: job.name ?? jobId,
-                strategy: job.strategy,
-                needs: job.needs ? toArray(job.needs) : undefined,
-                shape: "subroutine",
-                link: `${project.url}/blob/develop/.github/workflows/${file}`,
-            });
-        }
-
-        project.workflows.set(name, workflow);
-        workflows.set(name, workflow);
-    }
-
-    projects.set(name, project);
-}
-
 class MermaidFlowchartPrinter {
     private static INDENT = 4;
     private currentIndent = 0;
@@ -391,10 +332,11 @@ class MermaidFlowchartPrinter {
         this.text += " ".repeat(this.currentIndent) + text + "\n";
     }
 
-    public finish(): void {
+    public finish(print: boolean): string {
         this.indent(-1);
         if (this.markdown) this.print("```\n");
-        console.log(this.text);
+        if (print) console.log(this.text);
+        return this.text;
     }
 
     private indent(delta = 1): void {
@@ -485,151 +427,6 @@ class MermaidFlowchartPrinter {
     }
 }
 
-const graph = new Graph<Workflow | Node>();
-for (const workflow of workflows.values()) {
-    if (
-        (typeof argv.on === "string" || Array.isArray(argv.on)) &&
-        !toArray(argv.on).some((trigger) => trigger in workflow.on)
-    ) {
-        continue;
-    }
-
-    graph.addNode(workflow);
-    Object.keys(workflow.on).forEach((trigger) => {
-        const nodes = getTriggerNodes(trigger as keyof WorkflowYaml["on"], workflow);
-        nodes.forEach((node) => {
-            graph.addNode(node);
-            graph.addEdge(node, workflow, "project" in node ? "workflow_run" : undefined);
-        });
-    });
-}
-
-// TODO separate disconnected nodes into their own graph
-graph.cull();
-
-// This is an awful hack to make the output graphs much better by allowing the splitting of certain nodes //
-const bifurcatedNodes = [triggers.get("on:workflow_dispatch")].filter(Boolean) as Node[];
-const removedEdgeMap = new Map<Node, Edge<any>[]>();
-for (const node of bifurcatedNodes) {
-    removedEdgeMap.set(node, graph.removeNode(node));
-}
-
-const components = graph.components;
-for (const node of bifurcatedNodes) {
-    const removedEdges = removedEdgeMap.get(node)!;
-    components.forEach((graph) => {
-        removedEdges.forEach((edge) => {
-            if (graph.nodes.has(edge[1].id)) {
-                graph.addNode(node);
-                graph.addEdge(...edge);
-            }
-        });
-    });
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-if (argv.debug) {
-    debugGraph("global", graph);
-}
-
-components.forEach((graph) => {
-    const title = [...graph.roots]
-        .map((root) => root.name)
-        .join(" & ")
-        .replaceAll("<br>", " ");
-    const printer = new MermaidFlowchartPrinter("LR", title, true);
-    graph.nodes.forEach((node) => {
-        if ("project" in node) {
-            // TODO unsure about this edge
-            // if (node.jobs.length === 1) {
-            //     printer.node(node);
-            //     return;
-            // }
-
-            // TODO handle job.if on github.event_name
-
-            const subgraph = new Graph<Job>();
-            for (const job of node.jobs) {
-                subgraph.addNode(job);
-                if (job.needs) {
-                    toArray(job.needs).forEach((req) => {
-                        subgraph.addEdge(node.jobs.find((job) => job.jobId === req)!, job, "needs");
-                    });
-                }
-            }
-
-            printer.subgraph(node.id, node.name, () => {
-                subgraph.edges.forEach(([source, destination, text]) => {
-                    printer.edge(source, destination, text);
-                });
-
-                subgraph.nodes.forEach((job) => {
-                    if (!job.strategy?.matrix) {
-                        printer.node(job);
-                        return;
-                    }
-
-                    let variations = cartesianProduct(
-                        Object.keys(job.strategy.matrix)
-                            .filter(
-                                (key) =>
-                                    key !== "include" && key !== "exclude" && Array.isArray(job.strategy!.matrix[key]),
-                            )
-                            .map((matrixKey) => {
-                                return job.strategy!.matrix[matrixKey].map((value) => ({ [matrixKey]: value }));
-                            }),
-                    )
-                        .map((variation) => Object.assign({}, ...variation))
-                        .filter((variation) => Object.keys(variation).length > 0);
-
-                    if (job.strategy.matrix.include) {
-                        variations.push(...job.strategy.matrix.include);
-                    }
-                    job.strategy.matrix.exclude?.forEach((exclusion) => {
-                        variations = variations.filter((variation) => {
-                            return !shallowCompare(exclusion, variation);
-                        });
-                    });
-
-                    // TODO validate edge case
-                    if (variations.length === 0) {
-                        printer.node(job);
-                        return;
-                    }
-
-                    const jobName = job.name.replace(/\${{.+}}/g, "").replace(/(?:\(\)| )+/g, " ");
-                    printer.subgraph(job.id, jobName, () => {
-                        variations.forEach((variation, i) => {
-                            let variationName = job.name;
-                            if (variationName.includes("${{ matrix.")) {
-                                Object.keys(variation).map((key) => {
-                                    variationName = variationName.replace(`\${{ matrix.${key} }}`, variation[key]);
-                                });
-                            } else {
-                                variationName = `${variationName} (${Object.values(variation).join(", ")})`;
-                            }
-
-                            printer.node({ ...job, id: `${job.id}-variation-${i}`, name: variationName });
-                        });
-                    });
-                });
-            });
-            return;
-        }
-
-        printer.node(node);
-    });
-    graph.edges.forEach(([sourceName, destinationName, text]) => {
-        printer.edge(sourceName, destinationName, text);
-    });
-    printer.finish();
-
-    if (argv.debug) {
-        printer.idGenerator.debug();
-        debugGraph("subgraph", graph);
-    }
-});
-
 function debugGraph(name: string, graph: Graph<any>): void {
     console.log("```");
     console.log(`## ${name}`);
@@ -637,4 +434,234 @@ function debugGraph(name: string, graph: Graph<any>): void {
     console.log(graph.edges.map((edge) => ({ source: edge[0].id, destination: edge[1].id, text: edge[2] })));
     console.log("```");
     console.log("");
+}
+
+export default async function main(dirs: string[], on?: string[], print = false, debug = false): Promise<string> {
+    // Data ingest
+    for (const projectPath of dirs) {
+        const {
+            name,
+            repository: { url },
+        } = await readJson<{ name: string; repository: { url: string } }>(projectPath, "package.json");
+        const workflowsPath = path.join(projectPath, ".github", "workflows");
+
+        let files: string[];
+        try {
+            files = await fs.readdir(workflowsPath);
+        } catch (e) {
+            console.error(`Could not read ${workflowsPath}`, e);
+            continue;
+        }
+
+        const project: Project = {
+            name,
+            url,
+            path: projectPath,
+            workflows: new Map(),
+        };
+
+        for (const file of files.filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))) {
+            const data = await readYaml<WorkflowYaml>(workflowsPath, file);
+            const name = data.name ?? file;
+            const workflow: Workflow = {
+                id: `${project.name}/${name}`,
+                name,
+                shape: "hexagon",
+                path: path.join(workflowsPath, file),
+                project,
+                link: `${project.url}/blob/develop/.github/workflows/${file}`,
+
+                on: data.on,
+                jobs: [],
+            };
+
+            for (const jobId in data.jobs) {
+                const job = data.jobs[jobId];
+                workflow.jobs.push({
+                    id: `${workflow.name}/${jobId}`,
+                    jobId,
+                    name: job.name ?? jobId,
+                    strategy: job.strategy,
+                    needs: job.needs ? toArray(job.needs) : undefined,
+                    shape: "subroutine",
+                    link: `${project.url}/blob/develop/.github/workflows/${file}`,
+                });
+            }
+
+            project.workflows.set(name, workflow);
+            workflows.set(name, workflow);
+        }
+
+        projects.set(name, project);
+    }
+
+    const graph = new Graph<Workflow | Node>();
+    for (const workflow of workflows.values()) {
+        if (on && !on.some((trigger) => trigger in workflow.on)) {
+            continue;
+        }
+
+        graph.addNode(workflow);
+        Object.keys(workflow.on).forEach((trigger) => {
+            const nodes = getTriggerNodes(trigger as keyof WorkflowYaml["on"], workflow, on);
+            nodes.forEach((node) => {
+                graph.addNode(node);
+                graph.addEdge(node, workflow, "project" in node ? "workflow_run" : undefined);
+            });
+        });
+    }
+
+    // TODO separate disconnected nodes into their own graph
+    graph.cull();
+
+    // This is an awful hack to make the output graphs much better by allowing the splitting of certain nodes //
+    const bifurcatedNodes = [triggers.get("on:workflow_dispatch")].filter(Boolean) as Node[];
+    const removedEdgeMap = new Map<Node, Edge<any>[]>();
+    for (const node of bifurcatedNodes) {
+        removedEdgeMap.set(node, graph.removeNode(node));
+    }
+
+    const components = graph.components;
+    for (const node of bifurcatedNodes) {
+        const removedEdges = removedEdgeMap.get(node)!;
+        components.forEach((graph) => {
+            removedEdges.forEach((edge) => {
+                if (graph.nodes.has(edge[1].id)) {
+                    graph.addNode(node);
+                    graph.addEdge(...edge);
+                }
+            });
+        });
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    if (debug) {
+        debugGraph("global", graph);
+    }
+
+    let text = "";
+    components.forEach((graph) => {
+        const title = [...graph.roots]
+            .map((root) => root.name)
+            .join(" & ")
+            .replaceAll("<br>", " ");
+        const printer = new MermaidFlowchartPrinter("LR", title, true);
+        graph.nodes.forEach((node) => {
+            if ("project" in node) {
+                // TODO unsure about this edge
+                // if (node.jobs.length === 1) {
+                //     printer.node(node);
+                //     return;
+                // }
+
+                // TODO handle job.if on github.event_name
+
+                const subgraph = new Graph<Job>();
+                for (const job of node.jobs) {
+                    subgraph.addNode(job);
+                    if (job.needs) {
+                        toArray(job.needs).forEach((req) => {
+                            subgraph.addEdge(node.jobs.find((job) => job.jobId === req)!, job, "needs");
+                        });
+                    }
+                }
+
+                printer.subgraph(node.id, node.name, () => {
+                    subgraph.edges.forEach(([source, destination, text]) => {
+                        printer.edge(source, destination, text);
+                    });
+
+                    subgraph.nodes.forEach((job) => {
+                        if (!job.strategy?.matrix) {
+                            printer.node(job);
+                            return;
+                        }
+
+                        let variations = cartesianProduct(
+                            Object.keys(job.strategy.matrix)
+                                .filter(
+                                    (key) =>
+                                        key !== "include" &&
+                                        key !== "exclude" &&
+                                        Array.isArray(job.strategy!.matrix[key]),
+                                )
+                                .map((matrixKey) => {
+                                    return job.strategy!.matrix[matrixKey].map((value) => ({ [matrixKey]: value }));
+                                }),
+                        )
+                            .map((variation) => Object.assign({}, ...variation))
+                            .filter((variation) => Object.keys(variation).length > 0);
+
+                        if (job.strategy.matrix.include) {
+                            variations.push(...job.strategy.matrix.include);
+                        }
+                        job.strategy.matrix.exclude?.forEach((exclusion) => {
+                            variations = variations.filter((variation) => {
+                                return !shallowCompare(exclusion, variation);
+                            });
+                        });
+
+                        // TODO validate edge case
+                        if (variations.length === 0) {
+                            printer.node(job);
+                            return;
+                        }
+
+                        const jobName = job.name.replace(/\${{.+}}/g, "").replace(/(?:\(\)| )+/g, " ");
+                        printer.subgraph(job.id, jobName, () => {
+                            variations.forEach((variation, i) => {
+                                let variationName = job.name;
+                                if (variationName.includes("${{ matrix.")) {
+                                    Object.keys(variation).map((key) => {
+                                        variationName = variationName.replace(`\${{ matrix.${key} }}`, variation[key]);
+                                    });
+                                } else {
+                                    variationName = `${variationName} (${Object.values(variation).join(", ")})`;
+                                }
+
+                                printer.node({ ...job, id: `${job.id}-variation-${i}`, name: variationName });
+                            });
+                        });
+                    });
+                });
+                return;
+            }
+
+            printer.node(node);
+        });
+        graph.edges.forEach(([sourceName, destinationName, text]) => {
+            printer.edge(sourceName, destinationName, text);
+        });
+        text += printer.finish(print);
+
+        if (debug) {
+            printer.idGenerator.debug();
+            debugGraph("subgraph", graph);
+        }
+    });
+
+    return text;
+}
+
+if (import.meta.url.startsWith("file:")) {
+    const modulePath = url.fileURLToPath(import.meta.url);
+    if (process.argv[1] === modulePath) {
+        const argv = parseArgs<{
+            debug: boolean;
+            on: string | string[];
+        }>(process.argv.slice(2), {
+            string: ["on"],
+            boolean: ["debug"],
+        });
+
+        const on = typeof argv.on === "string" || Array.isArray(argv.on) ? toArray(argv.on) : undefined;
+        main(argv._, on, true, argv.debug)
+            .then((ret) => {
+                process.exit(0);
+            })
+            .catch((e) => {
+                console.error(e);
+                process.exit(1);
+            });
+    }
 }

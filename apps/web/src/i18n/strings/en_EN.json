@@ -15,8 +15,7 @@
         "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
         "seek_bar_label": "Audio seek bar",
-        "unread_messages": "Unread messages.",
-        "user_menu": "User menu"
+        "unread_messages": "Unread messages."
     },
     "a11y_jump_first_unread_room": "Jump to first unread room.",
     "action": {
@@ -32,7 +31,6 @@
         "cancel": "Cancel",
         "change": "Change",
         "clear": "Clear",
-        "click": "Click",
         "click_to_copy": "Click to copy",
         "close": "Close",
         "collapse": "Collapse",
@@ -43,7 +41,7 @@
         "copy_link": "Copy link",
         "create": "Create",
         "create_a_room": "Create a room",
-        "create_account": "Create Account",
+        "create_account": "Create account",
         "decline": "Decline",
         "decline_and_block": "Decline and block",
         "decline_invite": "Decline invite",
@@ -66,7 +64,6 @@
         "go": "Go",
         "go_back": "Go back",
         "got_it": "Got it",
-        "hide": "Hide",
         "hide_advanced": "Hide advanced",
         "hold": "Hold",
         "ignore": "Ignore",
@@ -100,7 +97,6 @@
         "rename": "Rename",
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
-        "report_content": "Report Content",
         "report_room": "Report room",
         "resend": "Resend",
         "reset": "Reset",
@@ -222,11 +218,9 @@
         "log_in_new_account": "<a>Log in</a> to your new account.",
         "logout_dialog": {
             "description": "Are you sure you want to remove this device?",
-            "megolm_export": "Manually export keys",
-            "setup_key_backup_title": "You'll lose access to your encrypted messages",
-            "setup_secure_backup_description_1": "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
-            "setup_secure_backup_description_2": "When you remove this device you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
-            "skip_key_backup": "I don't want my encrypted messages"
+            "setup_key_backup_title": "You're about to lose access to your encrypted chats",
+            "setup_secure_backup_description": "This is your only device. If you remove it you'll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in.",
+            "skip_key_backup": "Remove this device anyway"
         },
         "misconfigured_body": "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
         "misconfigured_title": "Your %(brand)s is misconfigured",
@@ -252,7 +246,9 @@
             "check_code_heading": "Enter the number shown on your other device",
             "check_code_input_label": "2-digit code",
             "check_code_mismatch": "The numbers don't match",
+            "choose_desktop_computer": "Choose \"%(desktopComputer)s\"",
             "completing_setup": "Completing set up of your new device",
+            "desktop_computer": "Desktop computer",
             "error_etag_missing": "An unexpected error occurred. This may be due to a browser extension, proxy server, or server misconfiguration.",
             "error_expired": "Sign in expired. Please try again.",
             "error_expired_title": "The sign in was not completed in time",
@@ -273,16 +269,22 @@
             "error_user_declined": "You or the account provider declined the sign in request.",
             "error_user_declined_title": "Sign in declined",
             "follow_remaining_instructions": "Follow the remaining instructions",
+            "open_element_mobile_device": "Open %(brand)s on your mobile device",
             "open_element_other_device": "Open %(brand)s on your other device",
             "point_the_camera": "Scan the QR code shown here",
-            "scan_code_instruction": "Scan the QR code with another device",
+            "ready_to_scan": "Ready to scan",
+            "scan_code_instruction": "Scan the QR code",
+            "scan_code_instruction_reciprocate": "Scan the QR code with another device",
             "scan_qr_code": "Sign in with QR code",
-            "security_code": "Security code",
-            "security_code_prompt": "If asked, enter the code below on your other device.",
+            "security_code_prompt": "Your account provider may ask for the following code to verify the sign in.",
+            "security_code_title": "Your verification code",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
+            "select_ready_to_scan": "Select \"%(readyToScan)s\" and scan the QR code shown here",
+            "start_over": "Start over",
+            "tap_avatar_link_new_device": "Tap your avatar and select \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
             "unsupported_heading": "QR code not supported",
-            "waiting_for_device": "Waiting for device to sign in"
+            "waiting_for_device": "Waiting for your other device"
         },
         "register_action": "Create Account",
         "registration": {
@@ -341,9 +343,10 @@
         "sign_in_description": "Use your account to continue.",
         "sign_in_instead": "Sign in instead",
         "sign_in_instead_prompt": "Already have an account? <a>Sign in here</a>",
+        "sign_in_manually": "Sign in manually",
         "sign_in_or_register": "Sign In or Create Account",
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
-        "sign_in_prompt": "Got an account? <a>Sign in</a>",
+        "sign_in_with_qr": "Sign in with QR code",
         "sign_in_with_sso": "Sign in with single sign-on",
         "signing_in": "Signing In…",
         "soft_logout": {
@@ -478,6 +481,7 @@
         "description": "Description",
         "deselect_all": "Deselect all",
         "device": "Device",
+        "disabled_by_homeserver": "Disabled by homeserver",
         "edited": "edited",
         "email_address": "Email address",
         "emoji": "Emoji",
@@ -590,7 +594,6 @@
         "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
-        "voice": "Voice",
         "warning": "Warning"
     },
     "composer": {
@@ -682,6 +685,14 @@
         "unfederated_label_default_off": "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.",
         "unfederated_label_default_on": "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.",
         "unsupported_version": "The server does not support the room version specified."
+    },
+    "create_section_dialog": {
+        "create_section": "Create section",
+        "description": "Sections are only for you",
+        "edit_section": "Edit section",
+        "label": "Section name",
+        "title": "Create a section",
+        "title_edition": "Edit a section"
     },
     "create_space": {
         "add_details_prompt": "Add some details to help people recognise it.",
@@ -830,8 +841,8 @@
         "invalid_device_key_id": "Invalid device key ID",
         "invalid_json": "Doesn't look like valid JSON.",
         "level": "Level",
-        "low_bandwidth_mode": "Low bandwidth mode",
-        "low_bandwidth_mode_description": "Requires compatible homeserver.",
+        "low_bandwidth_mode": "Disable bandwidth-heavy features",
+        "low_bandwidth_mode_description": "Disables encryption, presence, avatars, read receipts, and typing notifications",
         "main_timeline": "Main timeline",
         "manual_device_verification": "Manual device verification",
         "no_receipt_found": "No receipt found",
@@ -888,7 +899,6 @@
         "thread_root_id": "Thread Root ID: %(threadRootId)s",
         "threads_timeline": "Threads timeline",
         "title": "Developer tools",
-        "toggle_event": "toggle event",
         "toolbox": "Toolbox",
         "use_at_own_risk": "This UI does NOT check the types of the values. Use at your own risk.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -976,7 +986,6 @@
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
         "key_storage_out_of_sync_description": "Confirm your recovery key to maintain access to your key storage and message history.",
-        "message_shared_by": "%(displayName)s (%(userId)s) shared this message since you were not in the room when it was sent.",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -1002,9 +1011,6 @@
         "set_up_recovery": "Back up your chats",
         "set_up_recovery_toast_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "set_up_toast_title": "Set up Secure Backup",
-        "setup_secure_backup": {
-            "explainer": "Back up your keys before removing this device to avoid losing them."
-        },
         "turn_on_key_storage": "Turn on key storage",
         "turn_on_key_storage_description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity.",
         "udd": {
@@ -1116,7 +1122,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of April 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
@@ -1364,9 +1370,14 @@
         "impossible_dialog_title": "Integrations not allowed"
     },
     "invite": {
-        "ask_anyway_description": "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?",
-        "ask_anyway_label": "Start DM anyway",
-        "ask_anyway_never_warn_label": "Start DM anyway and never warn me again",
+        "confirm_unknown_users": {
+            "invite_subtitle": "You currently don't have any chats with these contacts. Confirm inviting them to this room before continuing.",
+            "invite_title": "Invite new contacts to this room?",
+            "start_chat_subtitle_multiple_users": "You currently don't have any chats with these people. Confirm inviting them before continuing.",
+            "start_chat_subtitle_one_user": "You currently don't have any chats with this person. Confirm inviting them before continuing.",
+            "start_chat_title_multiple_users": "Start a chat with these new contacts?",
+            "start_chat_title_one_user": "Start a chat with this new contact?"
+        },
         "email_caption": "Invite by email",
         "email_limit_one": "Invites by email can only be sent one at a time",
         "email_use_default_is": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
@@ -1517,6 +1528,7 @@
         "bridge_state_manager": "This bridge is managed by <user />.",
         "bridge_state_workspace": "Workspace: <networkLink/>",
         "click_for_info": "Click for more info",
+        "config_only": "Can only be enabled via config.json.",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
         "dynamic_room_predecessors": "Dynamic room predecessors",
@@ -1530,6 +1542,11 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_user_status": {
+            "description": "Enables being able to see and set a current status.",
+            "display_name": "User status",
+            "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
+        },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",
@@ -1556,6 +1573,7 @@
         "leave_beta_reload": "Leaving the beta will reload %(brand)s.",
         "location_share_live": "Live Location Sharing",
         "location_share_live_description": "Temporary implementation. Locations persist in room history.",
+        "login_with_qr": "Log in with QR code",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
         "new_room_list": "Enable new room list",
@@ -1565,11 +1583,7 @@
         "notifications": "Enable the notifications panel in the room header",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
-        "report_to_moderators": "Report to moderators",
-        "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
-        "share_history_on_invite": "Share encrypted history with new members",
-        "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
-        "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
+        "room_list_sections": "Room list sections",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Sign in again to disable",
@@ -1814,7 +1828,6 @@
         "restricted": "Restricted"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "presence": {
         "away": "Away",
         "busy": "Busy",
@@ -1846,27 +1859,18 @@
         "ongoing": "Removing…",
         "reason_label": "Reason (optional)"
     },
+    "remove_section_dialog": {
+        "confirmation": "Are you sure you want to remove this section?",
+        "description": "The chats in this section will still be available in your chats list.",
+        "remove_section": "Remove section",
+        "title": "Remove section?"
+    },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
-        "disagree": "Disagree",
-        "error_create_room_moderation_bot": "Unable to create room with moderation bot",
         "hide_messages_from_user": "Check if you want to hide all current and future messages from this user.",
         "ignore_user": "Ignore user",
-        "illegal_content": "Illegal Content",
         "missing_reason": "Please fill why you're reporting.",
-        "nature": "Please pick a nature and describe what makes this message abusive.",
-        "nature_disagreement": "What this user is writing is wrong.\nThis will be reported to the room moderators.",
-        "nature_illegal": "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.",
-        "nature_nonstandard_admin": "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.",
-        "nature_other": "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.",
-        "nature_spam": "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.",
-        "nature_toxic": "This user is displaying toxic behaviour, for instance by insulting other users or sharing adult-only content in a family-friendly room or otherwise violating the rules of this room.\nThis will be reported to the room moderators.",
-        "other_label": "Other",
-        "report_content_to_homeserver": "Report Content to Your Homeserver Administrator",
-        "report_entire_room": "Report the entire room",
-        "spam_or_propaganda": "Spam or propaganda",
-        "toxic_behaviour": "Toxic Behaviour"
+        "report_content_to_homeserver": "Report Content to Your Homeserver Administrator"
     },
     "report_room": {
         "description": "Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.",
@@ -2164,6 +2168,11 @@
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
+        "section": {
+            "chats": "Chats",
+            "favourites": "Favourites",
+            "low_priority": "Low Priority"
+        },
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
@@ -2237,8 +2246,6 @@
             "aliases_section": "Room Addresses",
             "avatar_field_label": "Room avatar",
             "canonical_alias_field_label": "Main address",
-            "default_url_previews_off": "URL previews are disabled by default for participants in this room.",
-            "default_url_previews_on": "URL previews are enabled by default for participants in this room.",
             "description_space": "Edit settings relating to your space.",
             "error_creating_alias_description": "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.",
             "error_creating_alias_title": "Error creating address",
@@ -2269,12 +2276,7 @@
             "published_aliases_explainer_space": "Published addresses can be used by anyone on any server to join your space.",
             "published_aliases_section": "Published Addresses",
             "save": "Save Changes",
-            "topic_field_label": "Room Topic",
-            "url_preview_encryption_warning": "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
-            "url_preview_explainer": "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
-            "url_previews_section": "URL Previews",
-            "user_url_previews_default_off": "You have <a>disabled</a> URL previews by default.",
-            "user_url_previews_default_on": "You have <a>enabled</a> URL previews by default."
+            "topic_field_label": "Room Topic"
         },
         "notifications": {
             "browse_button": "Browse",
@@ -2696,9 +2698,8 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
-        "inline_url_previews_default": "Enable inline URL previews by default",
-        "inline_url_previews_room": "Enable URL previews by default for participants in this room",
-        "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
+        "inline_url_previews_default": "Enable previews",
+        "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"
@@ -2856,6 +2857,8 @@
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
             "keyboard_heading": "Keyboard shortcuts",
             "keyboard_view_shortcuts_button": "To view all keyboard shortcuts, <a>click here</a>.",
+            "link_previews_description": "Shows information about links underneath messages",
+            "link_previews_heading": "Link previews",
             "media_heading": "Images, GIFs and videos",
             "presence_description": "Share your activity and status with others.",
             "publish_timezone": "Publish timezone on public profile",
@@ -3155,6 +3158,14 @@
         "server_error_detail": "Server unavailable, overloaded, or something else went wrong.",
         "shrug": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
         "spoiler": "Sends the given message as a spoiler",
+        "status": {
+            "description": "Set your current status",
+            "no_args": "No arguments provided. You should supply an emoij and an optional text component.",
+            "no_emoji": "You did not provide an emoji",
+            "no_text": "You did not provide any status text",
+            "too_long_emoji": "The first argument must be an emoji",
+            "too_long_text": "The text you provided was too long."
+        },
         "tableflip": "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message",
         "topic": "Gets or sets the room topic",
         "topic_none": "This room has no topic.",
@@ -3330,7 +3341,6 @@
         },
         "empty_description": "Use “%(replyInThread)s” when hovering over a message.",
         "empty_title": "Threads help keep your conversations on-topic and easy to track.",
-        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation",
         "mark_all_read": "Mark all as read",
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
@@ -3374,11 +3384,9 @@
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
-        "e2e_state": "State of the end-to-end encryption",
         "edits": {
             "tooltip_label": "Edited at %(date)s. Click to view edits.",
             "tooltip_sub": "Click to view edits",
@@ -3460,9 +3468,7 @@
         "m.poll.start": "%(senderName)s has started a poll - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s changed the room avatar.",
-            "changed_img": "%(senderDisplayName)s changed the room avatar to <img/>",
-            "lightbox_title": "%(senderDisplayName)s changed the avatar for %(roomName)s",
-            "removed": "%(senderDisplayName)s removed the room avatar."
+            "lightbox_title": "%(senderDisplayName)s changed the avatar for %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3574,10 +3580,7 @@
             "removed": "%(widgetName)s widget removed by %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Collapse quotes",
             "copy_link_thread": "Copy link to thread",
-            "expand_reply_chain": "Expand quotes",
-            "label": "Message Actions",
             "view_in_room": "View in room"
         },
         "mjolnir": {
@@ -3589,7 +3592,6 @@
             "created_rule_rooms": "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
             "created_rule_servers": "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
             "created_rule_users": "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
-            "message_hidden": "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
             "removed_rule": "%(senderName)s removed a ban rule matching %(glob)s",
             "removed_rule_rooms": "%(senderName)s removed the rule banning rooms matching %(glob)s",
             "removed_rule_servers": "%(senderName)s removed the rule banning servers matching %(glob)s",
@@ -3894,12 +3896,6 @@
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
     },
-    "user_menu": {
-        "link_new_device": "Link new device",
-        "settings": "All settings",
-        "switch_theme_dark": "Switch to dark mode",
-        "switch_theme_light": "Switch to light mode"
-    },
     "voip": {
         "already_in_call": "Already in call",
         "already_in_call_person": "You're already in a call with this person.",
@@ -3915,6 +3911,16 @@
         "call_held": "%(peerName)s held the call",
         "call_held_resume": "You held the call <a>Resume</a>",
         "call_held_switch": "You held the call <a>Switch</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> on the call",
+                "other": "<avatars/> on the call"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s on the call",
+                "other": "<avatars/> +%(overflowCount)s on the call"
+            }
+        },
         "call_toast_unknown_room": "Unknown room",
         "camera_disabled": "Your camera is turned off",
         "camera_enabled": "Your camera is still enabled",
@@ -3924,7 +3930,6 @@
         "connection_lost": "Connectivity to the server has been lost",
         "connection_lost_description": "You cannot place calls without a connection to the server.",
         "consulting": "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
-        "decline_call": "Decline",
         "default_device": "Default Device",
         "dial": "Dial",
         "dialpad": "Dialpad",
@@ -3938,10 +3943,12 @@
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",
         "get_call_link": "Share call link",
+        "group_call_started": "Group call started",
         "hangup": "Hangup",
         "hide_sidebar_button": "Hide sidebar",
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
+        "join_with_video": "Join with video",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",
@@ -3975,7 +3982,6 @@
         "show_sidebar_button": "Show sidebar",
         "silence": "Silence call",
         "silenced": "Notifications silenced",
-        "skip_lobby_toggle_option": "Join immediately",
         "start_screenshare": "Start sharing your screen",
         "stop_screenshare": "Stop sharing your screen",
         "too_many_calls": "Too Many Calls",
@@ -3997,7 +4003,6 @@
         "user_is_presenting": "%(sharerName)s is presenting",
         "video_call": "Video call",
         "video_call_incoming": "Incoming video call",
-        "video_call_started": "Video call started",
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
         "voice_call_incoming": "Incoming voice call",
@@ -4005,7 +4010,11 @@
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Welcome to Element",
+    "welcome": {
+        "tagline_element": "Supercharged for speed and simplicity.",
+        "title_element": "Be in your element",
+        "title_generic": "Welcome to %(brand)s"
+    },
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {
@@ -4027,6 +4036,7 @@
             "change_name_this_room": "Change the name of this room",
             "change_topic_active_room": "Change the topic of your active room",
             "change_topic_this_room": "Change the topic of this room",
+            "download_file": "Download files from the media repository",
             "receive_membership_active_room": "See when people join, leave, or are invited to your active room",
             "receive_membership_this_room": "See when people join, leave, or are invited to this room",
             "remove_ban_invite_leave_active_room": "Remove, ban, or invite people to your active room, and make you leave",

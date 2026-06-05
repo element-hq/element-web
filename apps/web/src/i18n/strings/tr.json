@@ -15,8 +15,7 @@
         "room_name": "Oda %(name)s",
         "room_status_bar": "Oda durum çubuğu",
         "seek_bar_label": "Ses arama çubuğu",
-        "unread_messages": "Okunmamış mesajlar.",
-        "user_menu": "Kullanıcı menüsü"
+        "unread_messages": "Okunmamış mesajlar."
     },
     "a11y_jump_first_unread_room": "İlk okunmamış odaya git.",
     "action": {
@@ -32,7 +31,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click": "Tıklayın",
         "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
@@ -97,7 +95,6 @@
         "rename": "Yeniden adlandır",
         "reply": "Yanıtla",
         "reply_in_thread": "Konu içinde yanıtla\n",
-        "report_content": "İçeriği Raporla",
         "resend": "Yeniden Gönder",
         "reset": "Sıfırla",
         "resume": "Devam et",
@@ -217,10 +214,7 @@
         "log_in_new_account": "Yeni hesabınızla <a>Oturum aç</a>ın.",
         "logout_dialog": {
             "description": "Oturumdan çıkmak istediğinize emin misiniz?",
-            "megolm_export": "Elle dışa aktarılmış anahtarlar",
             "setup_key_backup_title": "Şifrelenmiş mesajlarınıza erişiminizi kaybedeceksiniz",
-            "setup_secure_backup_description_1": "Şifreli mesajlar uçtan uca şifreleme ile korunur. Bu mesajları yalnızca siz ve alıcı(lar) okuyabilir.",
-            "setup_secure_backup_description_2": "Oturumu kapattığınızda, bu anahtarlar bu cihazdan silinecek. Bu, diğer cihazlarınızda bu anahtarlara sahip olmadığınız veya anahtarları sunucuya yedeklemediğiniz sürece şifreli mesajları okuyamayacağınız anlamına gelir.",
             "skip_key_backup": "Şifrelenmiş mesajlarımı istemiyorum"
         },
         "misconfigured_body": "%(brand)s yöneticinize <a>yapılandırmanızın</a> hatalı ve mükerrer girdilerini kontrol etmesi için talepte bulunun.",
@@ -272,7 +266,6 @@
             "point_the_camera": "Burada gösterilen QR kodunu tarayın",
             "scan_code_instruction": "QR kodunu başka bir cihazla tarayın",
             "scan_qr_code": "QR kod ile oturum aç",
-            "security_code": "Güvenlik kodu",
             "security_code_prompt": "İstenirse, diğer cihazınızda aşağıdaki kodu girin.",
             "select_qr_code": "Seç \"%(scanQRCode)s”",
             "unsupported_explainer": "Hesap sağlayıcınız, QR koduyla yeni bir cihazda oturum açmayı desteklemiyor.",
@@ -338,7 +331,6 @@
         "sign_in_instead_prompt": "Zaten bir hesabınız var mı? <a>Buradan oturum açın</a>",
         "sign_in_or_register": "Giriş Yap veya Hesap Oluştur",
         "sign_in_or_register_description": "Devam etmek için hesabınızı kullanın veya yeni bir hesap oluşturun.",
-        "sign_in_prompt": "Hesabınız var mı? <a>Oturum aç</a>",
         "sign_in_with_sso": "Tek oturum açma ile oturum açın",
         "signing_in": "Oturum açılıyor…",
         "soft_logout": {
@@ -834,7 +826,6 @@
         "thread_root_id": "Konu Kök Kimliği: %(threadRootId)s",
         "threads_timeline": "Dizi mesajlar zaman çizelgesi",
         "title": "Geliştirici araçları",
-        "toggle_event": "etkinliği değiştir",
         "toolbox": "Araç Kutusu",
         "use_at_own_risk": "Bu kullanıcı arayüzü, değerlerin türlerini kontrol ETMEZ. Kendi sorumluluğunuzda kullanın.",
         "user_read_up_to": "Kullanıcı buraya kadar okudu: ",
@@ -928,9 +919,6 @@
         "set_up_recovery": "Kurtarmayı ayarlayın",
         "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
         "set_up_toast_title": "Güvenli Yedekleme kur",
-        "setup_secure_backup": {
-            "explainer": "Anahtarlarını kaybetmemek için, çıkış yapmadan önce önleri yedekle."
-        },
         "udd": {
             "interactive_verification_button": "Emoji ile etkileşimli olarak doğrula",
             "other_ask_verify_text": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
@@ -1252,9 +1240,6 @@
         "impossible_dialog_title": "Entegrasyonlara izin verilmiyor"
     },
     "invite": {
-        "ask_anyway_description": "Aşağıda listelenen Matrix Kimlikleri için profil bulunamadı - yine de bir DM başlatmak ister misiniz?",
-        "ask_anyway_label": "Yine de DM'ye başla",
-        "ask_anyway_never_warn_label": "Yine de DM'yi başlat ve beni bir daha uyarma",
         "email_caption": "E-posta ile davet et",
         "email_limit_one": "E-posta yoluyla davetler yalnızca birer birer gönderilebilir",
         "email_use_default_is": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
@@ -1446,8 +1431,6 @@
         "notifications": "Oda başlığındaki bildirim panelini etkinleştir",
         "render_reaction_images": "Tepkilerde özel görüntüler oluştur",
         "render_reaction_images_description": "Bazen \"özel emojiler\" olarak da adlandırılır.",
-        "report_to_moderators": "Moderatörlere bildir",
-        "report_to_moderators_description": "Moderasyonu destekleyen odalarda, \"Bildir\" düğmesi, kötüye kullanımı oda moderatörlerine bildirmenize olanak tanır.",
         "sliding_sync": "Sliding Sync modu",
         "sliding_sync_description": "Aktif geliştirme aşamasında, devre dışı bırakılamaz.",
         "sliding_sync_disabled_notice": "Devre dışı bırakmak için oturumu kapatıp tekrar açın",
@@ -1679,7 +1662,6 @@
         "restricted": "Sınırlı"
     },
     "powered_by_matrix": "Matrix tarafından desteklenmektedir",
-    "powered_by_matrix_with_logo": "Merkezi olmayan, şifreli sohbet ve işbirliği $matrixLogo tarafından desteklenmektedir.",
     "presence": {
         "away": "Uzakta",
         "busy": "Meşgul",
@@ -1713,25 +1695,10 @@
     },
     "report_content": {
         "description": "Bu mesajı bildirdiğinizde, benzersiz 'etkinlik kimliği' ev sunucunuzun yöneticisine gönderilir. Bu odadaki iletiler şifrelenmişse, ev sunucusu yöneticiniz ileti metnini okuyamaz veya herhangi bir dosya ya da resmi görüntüleyemez.",
-        "disagree": "Katılmıyorum",
-        "error_create_room_moderation_bot": "Moderasyon botu ile oda oluşturulamıyor",
         "hide_messages_from_user": "Bu kullanıcıdan gelen tüm mevcut ve gelecekteki mesajları gizlemek istiyorsanız işaretleyin.",
         "ignore_user": "Kullanıcıyı görmezden gel",
-        "illegal_content": "Yasadışı İçerik",
         "missing_reason": "Lütfen neden raporlama yaptığınızı belirtin.",
-        "nature": "Lütfen bir nitelik seçin ve bu mesajın neden taciz edici olduğunu açıklayın.",
-        "nature_disagreement": "Bu kullanıcının yazdıkları yanlıştır.\nBu durum oda moderatörlerine bildirilecektir.",
-        "nature_illegal": "Bu kullanıcı yasadışı davranışlar sergiliyor, örneğin insanlara iftira atıyor veya şiddet tehdidinde bulunuyor.\nBu durum oda moderatörlerine bildirilecek ve onlar da konuyu yasal mercilere taşıyabileceklerdir.",
-        "nature_nonstandard_admin": "Bu oda yasadışı veya zehirli içeriğe adanmıştır veya moderatörler yasadışı veya zehirli içeriği denetlemede başarısız olmuşlardır.\nBu durum %(homeserver)s yöneticilerine bildirilecektir.",
-        "nature_nonstandard_admin_encrypted": "Bu oda yasadışı veya zehirli içeriğe adanmıştır veya moderatörler yasadışı veya zehirli içeriği denetlemekte başarısız olmaktadır.\nBu durum %(homeserver)s yöneticilerine bildirilecektir. Yöneticiler bu odanın şifrelenmiş içeriğini okuyamayacaktır.",
-        "nature_other": "Başka herhangi bir sebep. Lütfen sorunu açıklayın.\nBu durum oda moderatörlerine bildirilecektir.",
-        "nature_spam": "Bu kullanıcı, odaya reklamlar, reklam bağlantıları veya propaganda ile spam gönderiyor.\nBu durum oda moderatörlerine bildirilecektir.",
-        "nature_toxic": "Bu kullanıcı, örneğin diğer kullanıcılara hakaret ederek veya aile dostu bir odada yalnızca yetişkinlere yönelik içerik paylaşarak veya bu odanın kurallarını başka bir şekilde ihlal ederek zehirli davranışlar sergiliyor.\nBu durum oda moderatörlerine bildirilecektir.",
-        "other_label": "Diğer",
-        "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın",
-        "report_entire_room": "Tüm odayı bildir",
-        "spam_or_propaganda": "Spam veya propaganda",
-        "toxic_behaviour": "Zehirli Davranış"
+        "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s adet oturum çözümlenemedi!",
@@ -2082,8 +2049,6 @@
             "aliases_section": "Oda Adresleri",
             "avatar_field_label": "Oda avatarı",
             "canonical_alias_field_label": "Ana adres",
-            "default_url_previews_off": "URL ön izlemeleri, bu odadaki kullanıcılar için varsayılan olarak devre dışı bıraktırılmıştır.",
-            "default_url_previews_on": "URL önizlemeleri, bu odadaki katılımcılar için varsayılan olarak etkin.",
             "description_space": "Alanınızla ilgili ayarları düzenleyin.",
             "error_creating_alias_description": "Adres oluşturulurken hata ile karşılaşıldı. Sunucu tarafından izin verilmemiş yada geçici bir hata olabilir.",
             "error_creating_alias_title": "Adres oluşturulurken hata",
@@ -2112,12 +2077,7 @@
             "published_aliases_explainer_space": "Yayınlanan adresler, herhangi bir sunucudaki herkes tarafından alanınıza katılmak için kullanılabilir.",
             "published_aliases_section": "Yayınlanmış adresler",
             "save": "Değişiklikleri Kaydet",
-            "topic_field_label": "Oda Başlığı",
-            "url_preview_encryption_warning": "Bunun gibi şifreli odalarda, ana sunucunuzun (önizlemelerin oluşturulduğu yer) bu odada gördüğünüz bağlantılar hakkında bilgi toplayamamasını sağlamak için URL önizlemeleri varsayılan olarak devre dışı bırakılır.",
-            "url_preview_explainer": "Birisi mesajına bir URL eklediğinde, bu bağlantı hakkında başlık, açıklama ve web sitesinden bir görüntü gibi daha fazla bilgi vermek için bir URL önizlemesi gösterilebilir.",
-            "url_previews_section": "URL önizlemeleri",
-            "user_url_previews_default_off": "URL önizlemelerini varsayılan olarak <a> devre dışı </a> bıraktınız.",
-            "user_url_previews_default_on": "URL önizlemelerini varsayılan olarak <a>etkinleştirdiniz</a>."
+            "topic_field_label": "Oda Başlığı"
         },
         "notifications": {
             "browse_button": "Gözat",
@@ -2514,8 +2474,6 @@
             "username": "Kullanıcı Adı"
         },
         "inline_url_previews_default": "Varsayılan olarak satır içi URL önizlemeleri aç",
-        "inline_url_previews_room": "Bu odadaki katılımcılar için URL önizlemeyi varsayılan olarak açık hale getir",
-        "inline_url_previews_room_account": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",
         "insert_trailing_colon_mentions": "Mesajın başında kullanıcı etiketlerinden sonra iki nokta üst üste ekle",
         "jump_to_bottom_on_send": "Mesaj gönderdiğinizde zaman çizelgesinin en sonuna atla",
         "key_backup": {
@@ -3099,7 +3057,6 @@
         },
         "empty_description": "Bir mesajın üzerine geldiğinizde \"%(replyInThread)s\" kullan.",
         "empty_title": "Mesaj dizileri, konuşmalarınızın konuyla ilgili ve takip edilmesi kolay kalmasına yardımcı olur.",
-        "error_start_thread_existing_relation": "Varolan bir ilişkiye sahip mesaj dizisinden dolayı, mesaj dizisi oluşturulamıyor",
         "mark_all_read": "Tümünü okundu olarak işaretle",
         "my_threads": "Mesaj dizilerim",
         "my_threads_description": "Katıldığınız tüm mesaj dizilerini gösterir",
@@ -3143,11 +3100,9 @@
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Şifre çözülüyor",
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",
-        "e2e_state": "Uçtan uca şifrelemenin durumu",
         "edits": {
             "tooltip_label": "%(date)s tarihinde düzenlendi. Düzenlemeleri görmek için tıkla.",
             "tooltip_sub": "Düzenlemeleri görmek için tıkla",
@@ -3229,9 +3184,7 @@
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s odanın avatarını değiştirdi.",
-            "changed_img": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi",
-            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi",
-            "removed": "%(senderDisplayName)s odanın avatarını kaldırdı."
+            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3340,10 +3293,7 @@
             "removed": "%(widgetName)s görsel bileşeni %(senderName)s tarafından silindi"
         },
         "mab": {
-            "collapse_reply_chain": "Alıntıları daralt",
             "copy_link_thread": "Bağlantıyı konuya kopyala",
-            "expand_reply_chain": "Alıntıları genişlet",
-            "label": "Mesaj Eylemleri",
             "view_in_room": "Odada görüntüle"
         },
         "mjolnir": {
@@ -3355,7 +3305,6 @@
             "created_rule_rooms": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir oda yasaklama kuralı oluşturdu",
             "created_rule_servers": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
             "created_rule_users": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen kullanıcıları yasaklama kuralı oluşturdu",
-            "message_hidden": "Bu kullanıcıyı yok saydınız, bu yüzden mesajları gizlidir. <a>Yine de göster.</a>",
             "removed_rule": "%(senderName)s %(glob)s ile eşleşen banlama kuralını kaldırdı",
             "removed_rule_rooms": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını kaldırdı",
             "removed_rule_servers": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını kaldırdı",
@@ -3655,12 +3604,6 @@
         "verify_button": "Kullanıcıyı Doğrula",
         "verify_explainer": "Ekstra güvenlik için, her iki cihazınızda da tek seferlik bir kodu kontrol ederek bu kullanıcıyı doğrulayın."
     },
-    "user_menu": {
-        "link_new_device": "Yeni cihaz bağla",
-        "settings": "Tüm ayarlar",
-        "switch_theme_dark": "Karanlık Moda Geç",
-        "switch_theme_light": "Aydınlık Moda Geç"
-    },
     "voip": {
         "already_in_call": "Bu kişi zaten çağrıda",
         "already_in_call_person": "Bu kişi ile halihazırda çağrıdasınız.",
@@ -3755,13 +3698,11 @@
         "user_busy_description": "Aradığınız kullanıcı meşgul.",
         "user_is_presenting": "%(sharerName)s sunum yapıyor",
         "video_call": "Görüntülü arama",
-        "video_call_started": "Görüntülü arama başlatıldı",
         "video_call_using": "Görüntülü arama kullanılıyor:",
         "voice_call": "Sesli arama",
         "you_are_presenting": "Sunum yapıyorsunuz"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s %(osName)s",
-    "welcome_to_element": "Element'e Hoş Geldiniz",
     "widget": {
         "added_by": "Widget ekleyen",
         "capabilities_dialog": {

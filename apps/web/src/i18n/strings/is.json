@@ -10,8 +10,7 @@
             "other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig."
         },
         "room_name": "Spjallrás %(name)s",
-        "unread_messages": "Ólesin skilaboð.",
-        "user_menu": "Valmynd notandans"
+        "unread_messages": "Ólesin skilaboð."
     },
     "a11y_jump_first_unread_room": "Fara í fyrstu ólesnu spjallrásIna.",
     "action": {
@@ -26,7 +25,6 @@
         "cancel": "Hætta við",
         "change": "Breyta",
         "clear": "Hreinsa",
-        "click": "Smelltu",
         "click_to_copy": "Smelltu til að afrita",
         "close": "Loka",
         "collapse": "Fella saman",
@@ -88,7 +86,6 @@
         "rename": "Endurnefna",
         "reply": "Svara",
         "reply_in_thread": "Svara í spjallþræði",
-        "report_content": "Kæra efni",
         "resend": "Endursenda",
         "reset": "Endursetja",
         "resume": "Halda áfram",
@@ -192,9 +189,7 @@
         "log_in_new_account": "<a>Skráðu þig inn</a> í nýja notandaaðganginn þinn.",
         "logout_dialog": {
             "description": "Ertu viss um að þú viljir skrá þig út?",
-            "megolm_export": "Flytja út dulritunarlykla handvirkt",
             "setup_key_backup_title": "Þú munt tapa dulrituðu skilaboðunum þínum",
-            "setup_secure_backup_description_1": "Öryggi dulritaðra skilaboða er tryggt með enda-í-enda dulritun. Einungis þú og viðtakendurnir hafa dulritunarlyklana til að lesa slík skilaboð.",
             "skip_key_backup": "Ég vil ekki dulrituðu skilaboðin mín"
         },
         "misconfigured_body": "Biddu kerfisstjórann á %(brand)s að athuga hvort <a>uppsetningin þín</a> innihaldi rangar eða tvíteknar færslur.",
@@ -264,7 +259,6 @@
         "sign_in_instead_prompt": "Skrá inn í staðinn",
         "sign_in_or_register": "Skráðu þig inn eða búðu til aðgang",
         "sign_in_or_register_description": "Notaðu aðganginn þinn eða búðu til nýjan til að halda áfram.",
-        "sign_in_prompt": "Ertu með aðgang? <a>Skráðu þig inn</a>",
         "sign_in_with_sso": "Skrá inn með einfaldri innskráningu (single sign-on)",
         "soft_logout": {
             "clear_data_button": "Hreinsa öll gögn",
@@ -631,7 +625,6 @@
         },
         "state_key": "Stöðulykill",
         "title": "Forritunartól",
-        "toggle_event": "víxla atburði af/á",
         "toolbox": "Verkfærakassi",
         "use_at_own_risk": "Þetta viðmót athugar EKKI tegundir gildanna. Notist á eigin ábyrgð.",
         "value": "Gildi",
@@ -698,9 +691,6 @@
             "title": "Endurheimtuaðferð fjarlægð"
         },
         "set_up_toast_title": "Setja upp varið öryggisafrit",
-        "setup_secure_backup": {
-            "explainer": "Taktu öryggisafrit af dulritunarlyklunum áður en þú skráir þig út svo þeir tapist ekki."
-        },
         "udd": {
             "interactive_verification_button": "Sannprófa gagnvirkt með táknmyndum",
             "other_ask_verify_text": "Biddu þennan notanda að sannreyna setuna sína, eða sannreyndu hana handvirkt hér fyrir neðan.",
@@ -1085,8 +1075,6 @@
         "location_share_live_description": "Bráðabirgðaútfærsla. Staðsetningar haldast í ferli spjallrása.",
         "mjolnir": "Nýjar leiðir til að hunsa fólk",
         "msc3531_hide_messages_pending_moderation": "Láta umsjónarmenn fela skilaboð sem bíða yfirferðar.",
-        "report_to_moderators": "Tilkynna til umsjónarmanna",
-        "report_to_moderators_description": "Í spjallrásum sem styðja eftirlit umsjónarmanna, mun 'Kæra'-hnappurinn gefa þér færi á að tilkynna misnotkun til umsjónarmanna spjallrása.",
         "under_active_development": "Í virkri þróun.",
         "video_rooms": "Myndspjallrásir",
         "video_rooms_a_new_way_to_chat": "Ný leið til að spjalla með tali og myndmerki í %(brand)s.",
@@ -1275,7 +1263,6 @@
         "restricted": "Takmarkað"
     },
     "powered_by_matrix": "Keyrt með Matrix",
-    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "presence": {
         "away": "Fjarverandi",
         "busy": "Upptekinn",
@@ -1306,20 +1293,9 @@
     },
     "report_content": {
         "description": "Tilkynning um þessi skilaboð mun senda einstakt 'atviksauðkenni' til stjórnanda heimaþjóns. Ef skilaboð í þessari spjallrás eru dulrituð getur stjórnandi heimaþjóns ekki lesið skilaboðatextann eða skoðað skrár eða myndir.",
-        "disagree": "Ósammála",
         "ignore_user": "Hunsa notanda",
-        "illegal_content": "Ólöglegt efni",
         "missing_reason": "Fylltu út skýringu á því hvers vegna þú ert að kæra.",
-        "nature": "Veldu ástæðu og lýstu því hvað gerir þessi skilaboð ótæk.",
-        "nature_disagreement": "Það sem notandinn er að skrifa sem er rangt.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar.",
-        "nature_illegal": "Þessi notandi er að sýna ólöglega hegðun, til dæmis með því að hrella aðra notendur eða hóta ofbeldi.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar, sem gætu þurft að tilkynna þetta til viðeigandi yfirvalda.",
-        "nature_other": "Einhver önnur ástæða. Lýstu vandamálinu.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar.",
-        "nature_spam": "Þessi notandi er að dreifa auglýsingum inn á spjallrásina, tenglum á auglýsingar eða áróður.\nÞetta verður tilkynnt til umsjónarmanna spjallrásarinnar.",
-        "other_label": "Annað",
-        "report_content_to_homeserver": "Kæra efni til kerfisstjóra heimaþjónsins þíns",
-        "report_entire_room": "Kæra alla spjallrásina",
-        "spam_or_propaganda": "Ruslpóstur eða áróður",
-        "toxic_behaviour": "Eitruð hegðun"
+        "report_content_to_homeserver": "Kæra efni til kerfisstjóra heimaþjónsins þíns"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Mistókst að afkóða %(failedCount)s setur!",
@@ -1544,8 +1520,6 @@
             "aliases_section": "Vistföng spjallrása",
             "avatar_field_label": "Auðkennismynd spjallrásar",
             "canonical_alias_field_label": "Aðalvistfang",
-            "default_url_previews_off": "Forskoðun vefslóða er sjálfgefið óvirk fyrir þátttakendur í þessari spjallrás.",
-            "default_url_previews_on": "Forskoðun vefslóða er sjálfgefið virk fyrir þátttakendur í þessari spjallrás.",
             "description_space": "Breyta stillingum viðkomandi svæðinu þínu.",
             "error_creating_alias_title": "Villa við að búa til vistfang",
             "error_deleting_alias_description_forbidden": "Þú hefur ekki heimild til að eyða vistfanginu.",
@@ -1565,11 +1539,7 @@
             "publish_toggle": "Birta þessa spjallrás opinberlega á skrá %(domain)s yfir spjallrásir?",
             "published_aliases_section": "Birt vistföng",
             "save": "Vista breytingar",
-            "topic_field_label": "Umfjöllunarefni spjallrásar",
-            "url_preview_encryption_warning": "Í dulrituðum spjallrásum, eins og þessari, er sjálfgefið slökkt á forskoðun vefslóða til að tryggja að heimaþjónn þinn (þar sem forskoðunin myndast) geti ekki safnað upplýsingum um tengla sem þú sérð í þessari spjallrás.",
-            "url_previews_section": "Forskoðun vefslóða",
-            "user_url_previews_default_off": "Þú hefur <a>óvirkt</a> forskoðun vefslóða sjálfgefið.",
-            "user_url_previews_default_on": "Þú hefur <a>virkt</a> forskoðun vefslóða sjálfgefið."
+            "topic_field_label": "Umfjöllunarefni spjallrásar"
         },
         "notifications": {
             "browse_button": "Skoða",
@@ -1810,8 +1780,6 @@
             "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",
-        "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
-        "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",
         "insert_trailing_colon_mentions": "Setja tvípunkt á eftir þar sem minnst er á notanda í upphafi skilaboða",
         "jump_to_bottom_on_send": "Hoppa neðst á tímalínuna þegar þú sendir skilaboð",
         "key_backup": {
@@ -2304,7 +2272,6 @@
         },
         "creation_summary_dm": "%(creator)s bjó til oþessi beinu skilaboð.",
         "creation_summary_room": "%(creator)s bjó til og stillti spjallrásina.",
-        "download_action_decrypting": "Afkóðun",
         "download_action_downloading": "Sæki",
         "edits": {
             "tooltip_label": "Breytt þann %(date)s. Smelltu hér til að skoða breytingar.",
@@ -2385,9 +2352,7 @@
         "m.poll.start": "%(senderName)s hefur sett í gang könnun - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar.",
-            "changed_img": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar í <img/>",
-            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s",
-            "removed": "%(senderDisplayName)s fjarlægði auðkennismynd spjallrásarinnar."
+            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2490,10 +2455,7 @@
             "removed": "%(widgetName)s viðmótshluti var fjarlægður af %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Fella saman tilvitnanir",
             "copy_link_thread": "Afrita tengil á spjallþráð",
-            "expand_reply_chain": "Fletta út tilvitnunum",
-            "label": "Aðgerðir skilaboða",
             "view_in_room": "Skoða á spjallrás"
         },
         "mjolnir": {
@@ -2505,7 +2467,6 @@
             "created_rule_rooms": "%(senderName)s bjó til reglu sem bannar spjallrásir sem samsvara %(glob)s, vegna %(reason)s",
             "created_rule_servers": "%(senderName)s bjó til reglu sem bannar netþjóna sem samsvara %(glob)s, vegna %(reason)s",
             "created_rule_users": "%(senderName)s bjó til reglu sem bannar notendur sem samsvara %(glob)s, vegna %(reason)s",
-            "message_hidden": "Þú hefur hunsað þennan notanda, þannig að skilaboð frá honum eru falin. <a>Birta samts.</a>",
             "removed_rule": "%(senderName)s fjarlægði bannreglu sem samsvarar %(glob)s",
             "removed_rule_rooms": "%(senderName)s fjarlægði regluna sem bannar spjallrásir sem samsvara %(glob)s",
             "removed_rule_servers": "%(senderName)s fjarlægði regluna sem bannar netþjóna sem samsvara %(glob)s",
@@ -2752,11 +2713,6 @@
         "unban_space_warning": "Viðkomandi munu ekki hafa aðgang að því sem þú ert ekki stjórnandi fyrir.",
         "verify_button": "Sannreyna notanda"
     },
-    "user_menu": {
-        "settings": "Allar stillingar",
-        "switch_theme_dark": "Skiptu yfir í dökkan ham",
-        "switch_theme_light": "Skiptu yfir í ljósan ham"
-    },
     "voip": {
         "already_in_call": "Nú þegar í símtali",
         "already_in_call_person": "Þú ert nú þegar í símtali við þennan aðila.",
@@ -2838,12 +2794,10 @@
         "user_busy_description": "Notandinn sem þú hringdir í er upptekinn.",
         "user_is_presenting": "%(sharerName)s er að kynna",
         "video_call": "Myndsímtal",
-        "video_call_started": "Myndsímtal er byrjað",
         "voice_call": "Raddsímtal",
         "you_are_presenting": "Þú ert að kynna"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

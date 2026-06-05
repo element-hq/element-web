@@ -1,0 +1,70 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ViewSourceEventView > renders the default story 1`] = `
+<div>
+  <span
+    class="ViewSourceEventView-module_content"
+  >
+    <code
+      class="ViewSourceEventView-module_source"
+    >
+      { "type": m.room.message }
+    </code>
+    <button
+      aria-label="toggle event"
+      class="ViewSourceEventView-module_toggle"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M21 3.997a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a1 1 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0z"
+        />
+      </svg>
+    </button>
+  </span>
+</div>
+`;
+
+exports[`ViewSourceEventView > renders the expanded story 1`] = `
+<div>
+  <span
+    class="ViewSourceEventView-module_content ViewSourceEventView-module_expanded"
+  >
+    <pre
+      class="ViewSourceEventView-module_source"
+    >
+      {
+    "type": "m.room.message",
+    "sender": "@alice:example.org",
+    "content": {
+        "msgtype": "m.text",
+        "body": "Hello"
+    }
+}
+    </pre>
+    <button
+      aria-label="toggle event"
+      class="ViewSourceEventView-module_toggle"
+      type="button"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 11.034a1 1 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 0 0 0-2h-5.586L22 3.445a1 1 0 0 0-1.414-1.414L14 8.617V3.031a1 1 0 1 0-2 0zm0 1.963a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 11 12H3a1 1 0 1 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 0 0 2 0z"
+        />
+      </svg>
+    </button>
+  </span>
+</div>
+`;

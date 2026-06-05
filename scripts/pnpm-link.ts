@@ -28,28 +28,40 @@ try {
     const configFile = await fs.readFile(configPath, "utf-8");
     for (const line of configFile.trim().split("\n")) {
         if (!line || line.startsWith("#")) continue;
-        const [dependency, path] = line.split("=");
-        const dependencyPath = join(nodeModulesPath, dependency);
+        const [dependency, path, dir] = line.split("=");
+        const nodeModules = dir ? join(dir, "node_modules") : nodeModulesPath;
+        const dependencyPath = join(nodeModules, dependency);
 
         try {
-            const stat = await fs.stat(dependencyPath);
-            if (stat.isSymbolicLink()) {
-                const linkPath = await fs.readlink(dependencyPath);
-                if (linkPath === path) {
-                    // already done
-                    continue;
+            try {
+                const stat = await fs.lstat(dependencyPath);
+                console.log(`Existing is ${stat.isSymbolicLink() ? "symlink" : "directory"}`);
+                if (stat.isSymbolicLink()) {
+                    const linkPath = await fs.readlink(dependencyPath);
+                    if (linkPath === path) {
+                        // already done
+                        continue;
+                    } else {
+                        await fs.unlink(dependencyPath);
+                    }
                 } else {
-                    await fs.unlink(dependencyPath);
+                    await fs.rm(dependencyPath, { recursive: true });
                 }
-            } else {
-                await fs.rm(dependencyPath, { recursive: true });
+            } catch (e: any) {
+                // fs.lstat throws ENOENT if the path doesn't exist (on Windows)
+                if (e.code === "ENOENT") {
+                    console.log("Received ENOENT error on dependency path - assuming it doesn't exist");
+                } else {
+                    throw e;
+                }
             }
 
             console.log(`Linking ${dependency} to ${path}`);
-            await fs.symlink(path, dependencyPath);
+            await fs.symlink(path, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
 
-            const pkgJson = await fs.readFile(join(path, "package.json"), "utf-8");
-            const pkgManager = JSON.parse(pkgJson)["packageManager"]?.split("@").at(0) ?? "yarn";
+            const pkgJson = JSON.parse(await fs.readFile(join(path, "package.json"), "utf-8"));
+            const pkgManager =
+                pkgJson.devEngines?.packageManager?.name ?? pkgJson.packageManager?.split("@").at(0) ?? "yarn";
             // pnpm install may have wiped out the `node_modules` dir so we have to restore it
             execSync(`${pkgManager} install --ignore-scripts --frozen-lockfile`, {
                 cwd: dependencyPath,

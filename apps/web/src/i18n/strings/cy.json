@@ -17,8 +17,7 @@
         "room_name": "Ystafell %(matere)s",
         "room_status_bar": "Bar statws ystafell",
         "seek_bar_label": "Bar chwilio sain",
-        "unread_messages": "Negeseuon heb eu darllen.",
-        "user_menu": "Dewislen defnyddiwr"
+        "unread_messages": "Negeseuon heb eu darllen."
     },
     "a11y_jump_first_unread_room": "Symud i'r ystafell gyntaf heb ei darllen.",
     "action": {
@@ -34,7 +33,6 @@
         "cancel": "Canslo",
         "change": "Newid",
         "clear": "Clirio",
-        "click": "Clicio",
         "click_to_copy": "Clicio i gopïo",
         "close": "Cau",
         "collapse": "Cau",
@@ -68,7 +66,6 @@
         "go": "Mynd",
         "go_back": "Nôl",
         "got_it": "Iawn",
-        "hide": "Cuddio",
         "hide_advanced": "Cuddio uwch",
         "hold": "Dal",
         "ignore": "Anwybyddu",
@@ -102,7 +99,6 @@
         "rename": "Ailenwi",
         "reply": "Ateb",
         "reply_in_thread": "Ateb i edefyn",
-        "report_content": "Cynnwys yr Adroddiad",
         "report_room": "Ystafell adrodd",
         "resend": "Ailanfon",
         "reset": "Ailosod",
@@ -224,10 +220,7 @@
         "log_in_new_account": "<a>Mewngofnodwch</a> i'ch cyfrif newydd.",
         "logout_dialog": {
             "description": "Ydych chi'n siŵr eich bod am allgofnodi?",
-            "megolm_export": "Allforio allweddi â llaw",
             "setup_key_backup_title": "Byddwch yn colli mynediad i'ch negeseuon wedi'u hamgryptio",
-            "setup_secure_backup_description_1": "Mae negeseuon wedi'u hamgryptio yn cael eu diogelu gydag amgryptio o'r dechrau i'r diwedd. Dim ond chi a'r derbynwyr sydd â'r allweddi i ddarllen y negeseuon hyn.",
-            "setup_secure_backup_description_2": "Pan fyddwch yn allgofnodi, bydd yr allweddi hyn yn cael eu dileu o'r ddyfais hon, sy'n golygu na fyddwch yn gallu darllen negeseuon wedi'u hamgryptio oni bai bod gennych yr allweddi ar eu cyfer ar eich dyfeisiau eraill, neu eu bod wedi'u gwneud wrth gefn i'r gweinydd.",
             "skip_key_backup": "Dydw i ddim eisiau fy negeseuon wedi'u hamgryptio"
         },
         "misconfigured_body": "Gofynnwch i'ch gweinyddwr %(brand)s wirio'ch <a>ffurfweddiad</a> am gofnodion anghywir neu ddyblyg.",
@@ -279,7 +272,6 @@
             "point_the_camera": "Sganiwch y cod QR sy'n cael ei ddangos yma",
             "scan_code_instruction": "Sganiwch y cod QR gyda dyfais arall",
             "scan_qr_code": "Mewngofnodwch gyda chod QR",
-            "security_code": "Cod diogelwch",
             "security_code_prompt": "Os gofynnir i chi, nodwch y cod isod ar eich dyfais arall.",
             "select_qr_code": "Dewiswch \"%(scanQRCode)s\"",
             "unsupported_explainer": "Nid yw darparwr eich cyfrif yn cefnogi mewngofnodi i ddyfais newydd gyda chod QR.",
@@ -345,7 +337,6 @@
         "sign_in_instead_prompt": "Oes gennych chi gyfrif yn barod? <a>Mewngofnodwch yma</a>",
         "sign_in_or_register": "Mewngofnodi neu Creu Cyfrif",
         "sign_in_or_register_description": "Defnyddiwch eich cyfrif neu crëwch un newydd i barhau.",
-        "sign_in_prompt": "Oes gennych chi gyfrif? <a>Mewngofnodwch</a>",
         "sign_in_with_sso": "Mewngofnodwch gyda mewngofnod sengl",
         "signing_in": "Wrthi'n mewngofnodi…",
         "soft_logout": {
@@ -593,7 +584,6 @@
         "video": "Fideo",
         "video_room": "Ystafell fideo",
         "view_message": "Gweld neges",
-        "voice": "Llais",
         "warning": "Rhybudd"
     },
     "composer": {
@@ -882,7 +872,6 @@
         "thread_root_id": "ID Gwraidd Edefyn: %(threadRootId)s",
         "threads_timeline": "Llinell amser edafedd",
         "title": "Offer datblygwr",
-        "toggle_event": "toglo digwyddiad",
         "toolbox": "Blwch offer",
         "use_at_own_risk": "NID yw'r UI hwn yn gwirio'r mathau o werthoedd. Defnyddiwch ar eich menter eich hun.",
         "user_avatar": "Afatar: %(avatar)s",
@@ -970,7 +959,6 @@
         "import_invalid_passphrase": "Methodd y gwiriad dilysu: cyfrinair anghywir?",
         "key_storage_out_of_sync": "Nid yw eich storfa allweddi wedi'i gydweddu.",
         "key_storage_out_of_sync_description": "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.",
-        "message_shared_by": "Rhannodd %(displayName)s (%(userId)s) y neges hon gan nad oeddech chi yn yr ystafell pan gafodd ei hanfon.",
         "messages_not_secure": {
             "cause_1": "Eich gweinydd cartref",
             "cause_2": "Y gweinydd cartref y mae'r defnyddiwr rydych chi'n ei wirio wedi'i gysylltu ag ef",
@@ -996,9 +984,6 @@
         "set_up_recovery": "Gosod  adfer",
         "set_up_recovery_toast_description": "Cynhyrchwch allwedd adfer y mae modd ei defnyddio i adfer hanes eich neges wedi'i hamgryptio rhag ofn i chi golli mynediad i'ch dyfeisiau.",
         "set_up_toast_title": "Gosod Copi Wrth Gefn Diogel",
-        "setup_secure_backup": {
-            "explainer": "Gwnewch gopi wrth gefn o'ch allweddi cyn allgofnodi er mwyn osgoi eu colli."
-        },
         "turn_on_key_storage": "Troi storfa allweddi ymlaen",
         "turn_on_key_storage_description": "Cadwch eich hunaniaeth cryptograffig a'ch allweddi neges yn ddiogel ar y gweinydd. Bydd hyn yn caniatáu ichi weld hanes eich neges ar unrhyw ddyfeisiau newydd. %1$s.",
         "udd": {
@@ -1364,9 +1349,6 @@
         "impossible_dialog_title": "Nid yw integreiddiadau yn cael eu caniatâu"
     },
     "invite": {
-        "ask_anyway_description": "Methu dod o hyd i broffiliau ar gyfer yr IDau Matrics a restrir isod - a hoffech chi ddechrau DM beth bynnag?",
-        "ask_anyway_label": "Dechreuwch DM beth bynnag",
-        "ask_anyway_never_warn_label": "Dechreuwch DM beth bynnag a pheidiwch byth â fy rhybuddio eto",
         "email_caption": "Gwahodd trwy e-bost",
         "email_limit_one": "Dim ond un ar y tro y mae moddanfon gwahoddiadau trwy e-bost",
         "email_use_default_is": "Defnyddiwch weinydd hunaniaeth i wahodd trwy e-bost.<default> Defnyddiwch y rhagosodiad (%(defaultIdentityServerName)s)</default> neu reoli mewn<settings> Gosodiadau</settings>.",
@@ -1566,11 +1548,6 @@
         "notifications": "Galluogi'r panel hysbysiadau ym mhennyn yr ystafell",
         "render_reaction_images": "Rendro delweddau personol mewn adweithiau",
         "render_reaction_images_description": "Weithiau'n cael eu hadnabod fel \"emojis cyfaddas\".",
-        "report_to_moderators": "Adrodd i cymedrolwyr",
-        "report_to_moderators_description": "Mewn ystafelloedd sy'n cefnogi cymedroli, bydd y botwm “Adrodd” yn gadael i chi adrodd ar gam-drin i gymedrolwyr ystafelloedd.",
-        "share_history_on_invite": "Rhannwch hanes wedi'i amgryptio gydag aelodau newydd",
-        "share_history_on_invite_description": "Wrth wahodd defnyddiwr i ystafell wedi'i hamgryptio sydd â gwelededd hanes wedi'i osod i \"rhannu\", rhannwch hanes wedi'i amgryptio gyda'r defnyddiwr hwnnw, a derbyniwch hanes wedi'i amgryptio pan gewch eich gwahodd i ystafell o'r fath.",
-        "share_history_on_invite_warning": "Mae'r nodwedd hon yn ARBROFOL ac nid yw pob rhagofal diogelwch wedi'i weithredu. Peidiwch â'i galluogi ar gyfrifon cynhyrchu.",
         "sliding_sync": "Modd Cydweddu Llithro",
         "sliding_sync_description": "Wrthi'n datblygu, nid oes modd ei analluogi.",
         "sliding_sync_disabled_notice": "Allgofnodwch a mewngofnodi i analluogi",
@@ -1806,7 +1783,6 @@
         "restricted": "Cyfyngedig"
     },
     "powered_by_matrix": "Wedi'i bweru gan Matrix",
-    "powered_by_matrix_with_logo": "Sgwrs ddatganoledig, wedi'i hamgryptio &amp; cydweithrediad wedi'i bweru gan $matrixLogo",
     "presence": {
         "away": "I ffwrdd",
         "busy": "Prysur",
@@ -1840,25 +1816,10 @@
     },
     "report_content": {
         "description": "Bydd adrodd y neges hon yn anfon ei 'ID digwyddiad' unigryw at weinyddwr eich gweinyddwr cartref. Os yw negeseuon yn yr ystafell hon wedi'u hamgryptio, ni fydd gweinyddwr eich gweinydd cartref yn gallu darllen testun y neges na gweld unrhyw ffeiliau neu ddelweddau.",
-        "disagree": "Anghytuno",
-        "error_create_room_moderation_bot": "Methu creu ystafell gyda bot cymedroli",
         "hide_messages_from_user": "Gwiriwch a ydych am guddio'r holl negeseuon presennol ac yn y dyfodol gan y defnyddiwr hwn.",
         "ignore_user": "Anwybyddu defnyddiwr",
-        "illegal_content": "Cynnwys Anghyfreithlon",
         "missing_reason": "Dywedwch pam eich bod yn adrodd.",
-        "nature": "Dewiswch natur a disgrifiwch beth sy'n gwneud y neges hon yn ddifrïol.",
-        "nature_disagreement": "Mae'r hyn y mae'r defnyddiwr hwn yn ei ysgrifennu yn anghywir.\nBydd hyn yn cael ei adrodd i gymedrolwyr yr ystafell.",
-        "nature_illegal": "Mae'r defnyddiwr hwn yn dangos ymddygiad anghyfreithlon, er enghraifft trwy fygwth pobl neu fygwth trais.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell a all uwchgyfeirio hyn i awdurdodau cyfreithiol.",
-        "nature_nonstandard_admin": "Mae'r ystafell hon wedi'i neilltuo ar gyfer cynnwys anghyfreithlon neu wenwynig neu mae'r cymedrolwyr yn methu â chymedroli cynnwys anghyfreithlon neu wenwynig.\nBydd hyn yn cael ei adrodd i weinyddwyr %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Mae'r ystafell hon wedi'i neilltuo ar gyfer cynnwys anghyfreithlon neu wenwynig neu mae'r cymedrolwyr yn methu â chymedroli cynnwys anghyfreithlon neu wenwynig.\nBydd hyn yn cael ei adrodd i weinyddwyr %(homeserver)s. NI fydd y gweinyddwyr yn gallu darllen cynnwys yr ystafell hon wedi'i amgryptio.",
-        "nature_other": "Unrhyw reswm arall. Disgrifiwch y broblem.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell.",
-        "nature_spam": "Mae'r defnyddiwr hwn yn sbamio'r ystafell gyda hysbysebion, dolenni i hysbysebion neu i bropaganda.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell.",
-        "nature_toxic": "Mae'r defnyddiwr hwn yn arddangos ymddygiad gwenwynig, er enghraifft trwy sarhau defnyddwyr eraill neu rannu cynnwys oedolion yn unig mewn ystafell sy'n gyfeillgar i deuluoedd neu dorri rheolau'r ystafell hon fel arall.\nBydd hyn yn cael ei adrodd i'r cymedrolwyr ystafell.",
-        "other_label": "Arall",
-        "report_content_to_homeserver": "Adrodd Cynnwys i'ch Gweinyddwr Homeserver",
-        "report_entire_room": "Rhoi gwybod am yr ystafell gyfan",
-        "spam_or_propaganda": "Sbam neu bropaganda",
-        "toxic_behaviour": "Ymddygiad Gwenwynig"
+        "report_content_to_homeserver": "Adrodd Cynnwys i'ch Gweinyddwr Homeserver"
     },
     "report_room": {
         "description": "Rhowch wybod am yr ystafell hon i ddarparwr eich cyfrif. Os yw'r neges wedi'i amgryptio, ni fydd eich gweinyddwr yn gallu eu darllen.",
@@ -2232,8 +2193,6 @@
             "aliases_section": "Cyfeiriadau Ystafell",
             "avatar_field_label": "Afatar ystafell",
             "canonical_alias_field_label": "Prif gyfeiriad",
-            "default_url_previews_off": "Mae rhagolygon URL wedi'u hanalluogi fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon.",
-            "default_url_previews_on": "Mae rhagolygon URL wedi'u galluogi fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon.",
             "description_space": "Golygu gosodiadau sy'n ymwneud â'ch gofod.",
             "error_creating_alias_description": "Bu gwall wrth greu'r cyfeiriad hwnnw. Mae'n bosib na chaiff ei ganiatáu gan y gweinydd neu fe ddigwyddodd methiant dros dro.",
             "error_creating_alias_title": "Gwall wrth greu cyfeiriad",
@@ -2264,12 +2223,7 @@
             "published_aliases_explainer_space": "Gall unrhyw un ar unrhyw weinydd ddefnyddio cyfeiriadau cyhoeddedig i ymuno â'ch gofod.",
             "published_aliases_section": "Cyfeiriadau Cyhoeddedig",
             "save": "Cadw'r Newidiadau",
-            "topic_field_label": "Pwnc yr Ystafell",
-            "url_preview_encryption_warning": "Mewn ystafelloedd wedi'u hamgryptio, fel yr un hon, mae rhagolygon URL yn cael eu hanalluogi fel rhagosodiad i sicrhau na all eich gweinydd cartref (lle mae'r rhagolygon yn cael eu cynhyrchu) gasglu gwybodaeth am ddolenni welwch yn yr ystafell hon.",
-            "url_preview_explainer": "Pan fydd rhywun yn rhoi URL yn eu neges, mae modd dangos rhagolwg URL i roi mwy o wybodaeth am y ddolen honno fel y teitl, disgrifiad, a delwedd o'r wefan.",
-            "url_previews_section": "Rhagolygon URL",
-            "user_url_previews_default_off": "Rydych wedi <a>analluogi</a> rhagolygon URL fel rhagosodiad.",
-            "user_url_previews_default_on": "Rydych chi wedi <a>galluogi</a> rhagolygon URL fel rhagosodiad."
+            "topic_field_label": "Pwnc yr Ystafell"
         },
         "notifications": {
             "browse_button": "Pori",
@@ -2690,8 +2644,6 @@
             "username": "Enw defnyddiwr"
         },
         "inline_url_previews_default": "Galluogi rhagolygon URL mewnol fel rhagosodiad",
-        "inline_url_previews_room": "Galluogi rhagolygon URL fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon",
-        "inline_url_previews_room_account": "Galluogi rhagolygon URL ar gyfer yr ystafell hon (yn effeithio arnoch chi yn unig)",
         "insert_trailing_colon_mentions": "Mewnosod colon sy'n llusgo ar ôl i'r defnyddiwr sôn amdano ar ddechrau neges",
         "invite_controls": {
             "default_label": "Caniatáu i ddefnyddwyr eich gwahodd i ystafelloedd"
@@ -3298,7 +3250,6 @@
         },
         "empty_description": "Defnyddio “%(replyInThread)s” wrth hofran dros neges.",
         "empty_title": "Mae edafedd yn helpu i gadw'ch sgyrsiau ar y pwnc ac yn hawdd eu holrhain.",
-        "error_start_thread_existing_relation": "Methu â chreu edefyn o ddigwyddiad gyda pherthynas sy'n bodoli eisoes",
         "mark_all_read": "Marcio'r cyfan wedi'u darllen",
         "my_threads": "Fy edafedd",
         "my_threads_description": "Yn dangos pob edefyn rydych chi wedi cymryd rhan ynddo",
@@ -3342,11 +3293,9 @@
             "unable_to_decrypt": "Methu dadgryptio'r neges"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dadgryptio",
         "download_action_downloading": "Yn llwytho i lawr",
         "download_failed": "Methodd y llwytho i lawr",
         "download_failed_description": "Bu gwall wrth lawrlwytho'r ffeil hon",
-        "e2e_state": "Cyflwr yr amgryptio o'r dechrau i'r diwedd",
         "edits": {
             "tooltip_label": "Wedi'i olygu am %(date)s. Cliciwch i weld golygiadau.",
             "tooltip_sub": "Cliciwch i weld golygiadau",
@@ -3427,9 +3376,7 @@
         "m.poll.start": "Mae %(senderName)s wedi dechrau arolwg - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "Mae %(senderDisplayName)s wedi newid afatar yr ystafell.",
-            "changed_img": "Mae %(senderDisplayName)s wedi newid yr afatar ystafell i<img/>",
-            "lightbox_title": "Newidiodd %(senderDisplayName)s yr afatar ar gyfer %(roomName)s",
-            "removed": "Mae %(senderDisplayName)s wedi tynnu afatar yr ystafell."
+            "lightbox_title": "Newidiodd %(senderDisplayName)s yr afatar ar gyfer %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3539,10 +3486,7 @@
             "removed": "Tynnwyd y teclyn %(widgetName)s gan %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Crebachu dyfyniadau",
             "copy_link_thread": "Copïo dolen i'r edefyn",
-            "expand_reply_chain": "Ehangu dyfyniadau",
-            "label": "Camau Gweithredu Neges",
             "view_in_room": "Golwg yn yr ystafell"
         },
         "mjolnir": {
@@ -3554,7 +3498,6 @@
             "created_rule_rooms": "Creodd %(senderName)s reol yn gwahardd ystafelloedd sy'n cyfateb i %(glob)s am %(reason)s",
             "created_rule_servers": "Creodd %(senderName)s reol yn gwahardd gweinyddwyr sy'n cyfateb i %(glob)s am %(reason)s",
             "created_rule_users": "Creodd %(senderName)s reol yn gwahardd defnyddwyr rhag paru %(glob)s am %(reason)s",
-            "message_hidden": "Rydych chi wedi anwybyddu'r defnyddiwr hwn, felly mae eu neges wedi'i chuddio. <a>Dangos beth bynnag.</a>",
             "removed_rule": "Mae %(senderName)s wedi dileu rheol gwahardd sy'n cyfateb i %(glob)s",
             "removed_rule_rooms": "Mae %(senderName)s wedi dileu'r rheol sy'n gwahardd ystafelloedd sy'n cyfateb i %(glob)s",
             "removed_rule_servers": "Mae %(senderName)s wedi dileu'r rheol sy'n gwahardd gweinyddwyr sy'n cyfateb i %(glob)s",
@@ -3865,12 +3808,6 @@
         "verify_button": "Dilysu Defnyddiwr",
         "verify_explainer": "Ar gyfer diogelwch ychwanegol, gwiriwch y defnyddiwr hwn trwy wirio cod un-amser ar eich dwy ddyfais."
     },
-    "user_menu": {
-        "link_new_device": "Cysylltu'r ddyfais newydd",
-        "settings": "Pob gosodiad",
-        "switch_theme_dark": "Newid i'r modd tywyll",
-        "switch_theme_light": "Newid i'r modd golau"
-    },
     "voip": {
         "already_in_call": "Eisoes mewn galwad",
         "already_in_call_person": "Rydych chi eisoes mewn galwad gyda'r person hwn.",
@@ -3895,7 +3832,6 @@
         "connection_lost": "Mae cysylltedd â'r gweinydd wedi'i golli",
         "connection_lost_description": "Allwch chi ddim osod galwadau heb gysylltiad â'r gweinydd.",
         "consulting": "Ymgynghori â %(transferTarget)s. <a>Trosglwyddo i %(transferee)s</a>",
-        "decline_call": "Gwrthod",
         "default_device": "Dyfais Rhagosodedig",
         "dial": "Deial",
         "dialpad": "Pad Deialu",
@@ -3946,7 +3882,6 @@
         "show_sidebar_button": "Dangos y bar ochr",
         "silence": "Distewi galwad",
         "silenced": "Hysbysiadau wedi'u distewi",
-        "skip_lobby_toggle_option": "Ymunwch ar unwaith",
         "start_screenshare": "Dechreuwch rannu'ch sgrin",
         "stop_screenshare": "Stopiwch rannu'ch sgrin",
         "too_many_calls": "Gormod o Alwadau",
@@ -3968,7 +3903,6 @@
         "user_is_presenting": "Mae %(sharerName)s yn cyflwyno",
         "video_call": "Galwad fideo",
         "video_call_incoming": "Galwad fideo i mewn",
-        "video_call_started": "Galwad fideo wedi dechrau",
         "video_call_using": "Galwad fideo gan ddefnyddio:",
         "voice_call": "Galwad llais",
         "voice_call_incoming": "Galwad llais i mewn",
@@ -3976,7 +3910,6 @@
         "you_are_presenting": "Rydych chi'n cyflwyno"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s ar %(osName)s",
-    "welcome_to_element": "Croeso i Element",
     "widget": {
         "added_by": "Ychwanegwyd teclyn gan",
         "capabilities_dialog": {

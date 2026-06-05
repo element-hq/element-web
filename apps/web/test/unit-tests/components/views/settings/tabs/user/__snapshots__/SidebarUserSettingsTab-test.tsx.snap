@@ -20,11 +20,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Spaces to show
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_description"
@@ -39,19 +39,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
               class="mx_SettingsSubsection_content"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_1_"
+                        aria-describedby="react-use-id-1"
                         checked=""
                         class="_input_153f2_18"
                         disabled=""
@@ -77,10 +77,10 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_vY7Q4uEh9K"
                     >
                       <svg
@@ -98,8 +98,8 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                       Home
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_1_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-1"
                     >
                       Home is useful for getting an overview of everything.
                     </span>
@@ -107,19 +107,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                 </div>
               </form>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_5_"
+                        aria-describedby="react-use-id-2"
                         class="_input_153f2_18"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         id="checkbox_38QgU2Pomx"
@@ -144,17 +144,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_38QgU2Pomx"
                     >
                       Show all rooms
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_5_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-2"
                     >
                       Show all your rooms in Home, even if they're in a space.
                     </span>
@@ -162,19 +162,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                 </div>
               </form>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_9_"
+                        aria-describedby="react-use-id-3"
                         class="_input_153f2_18"
                         id="checkbox_wKpa6hpi3Y"
                         type="checkbox"
@@ -198,17 +198,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_wKpa6hpi3Y"
                     >
                       Rooms outside of a space
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_9_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-3"
                     >
                       Group all your rooms that aren't part of a space in one place.
                     </span>
@@ -216,19 +216,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                 </div>
               </form>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_d_"
+                        aria-describedby="react-use-id-4"
                         class="_input_153f2_18"
                         id="checkbox_EetmBG4yVC"
                         type="checkbox"
@@ -252,10 +252,10 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_EetmBG4yVC"
                     >
                       <svg
@@ -273,8 +273,8 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                       Video rooms and conferences
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_d_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-4"
                     >
                       Group all private video rooms and conferences. In conferences you can invite people outside of matrix.
                     </span>
@@ -310,11 +310,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Spaces to show
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_description"
@@ -329,19 +329,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
               class="mx_SettingsSubsection_content"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_h_"
+                        aria-describedby="react-use-id-1"
                         checked=""
                         class="_input_153f2_18"
                         disabled=""
@@ -367,10 +367,10 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_vY7Q4uEh9K"
                     >
                       <svg
@@ -388,8 +388,8 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                       Home
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_h_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-1"
                     >
                       Home is useful for getting an overview of everything.
                     </span>
@@ -397,19 +397,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                 </div>
               </form>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_l_"
+                        aria-describedby="react-use-id-2"
                         class="_input_153f2_18"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         id="checkbox_38QgU2Pomx"
@@ -434,17 +434,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_38QgU2Pomx"
                     >
                       Show all rooms
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_l_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-2"
                     >
                       Show all your rooms in Home, even if they're in a space.
                     </span>
@@ -452,19 +452,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                 </div>
               </form>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_p_"
+                        aria-describedby="react-use-id-3"
                         class="_input_153f2_18"
                         id="checkbox_wKpa6hpi3Y"
                         type="checkbox"
@@ -488,17 +488,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_wKpa6hpi3Y"
                     >
                       Rooms outside of a space
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_p_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-3"
                     >
                       Group all your rooms that aren't part of a space in one place.
                     </span>
@@ -506,19 +506,19 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                 </div>
               </form>
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_SidebarUserSettingsTab_checkbox"
+                  class="_inline-field_1o4d9_33 mx_SidebarUserSettingsTab_checkbox"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_t_"
+                        aria-describedby="react-use-id-4"
                         class="_input_153f2_18"
                         id="checkbox_EetmBG4yVC"
                         type="checkbox"
@@ -542,10 +542,10 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_EetmBG4yVC"
                     >
                       <svg
@@ -563,8 +563,8 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                       Video rooms and conferences
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_t_"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="react-use-id-4"
                     >
                       Group all private video rooms and conferences.
                     </span>

@@ -10,8 +10,8 @@ import fsProm from "node:fs/promises";
 import pacote from "pacote";
 import path from "node:path";
 
-import type HakEnv from "./hakEnv.js";
-import type { DependencyInfo } from "./dep.js";
+import type HakEnv from "./hakEnv.ts";
+import type { DependencyInfo } from "./dep.ts";
 
 export default async function fetch(hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
     let haveModuleBuildDir;

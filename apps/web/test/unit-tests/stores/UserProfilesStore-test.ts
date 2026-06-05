@@ -86,11 +86,6 @@ describe("UserProfilesStore", () => {
                 expect(profile).toBeNull();
             });
 
-            it("should cache the error and result", () => {
-                expect(userProfilesStore.getProfile(userIdDoesNotExist)).toBeNull();
-                expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBe(userDoesNotExistError);
-            });
-
             describe("when the profile does not exist and fetching it again", () => {
                 beforeEach(async () => {
                     mockClient.getProfileInfo.mockResolvedValue(user1Profile);
@@ -99,10 +94,6 @@ describe("UserProfilesStore", () => {
 
                 it("should return the profile", () => {
                     expect(profile).toBe(user1Profile);
-                });
-
-                it("should clear the error", () => {
-                    expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBeUndefined();
                 });
             });
         });
@@ -116,22 +107,6 @@ describe("UserProfilesStore", () => {
             expect(await userProfilesStore.getOrFetchProfile(user1Id)).toBe(user1Profile);
             // assert that the profile is cached
             expect(userProfilesStore.getProfile(user1Id)).toBe(user1Profile);
-        });
-    });
-
-    describe("getProfileLookupError", () => {
-        it("should return undefined if a profile was not fetched", () => {
-            expect(userProfilesStore.getProfileLookupError(user1Id)).toBeUndefined();
-        });
-
-        it("should return undefined if a profile was successfully fetched", async () => {
-            await userProfilesStore.fetchProfile(user1Id);
-            expect(userProfilesStore.getProfileLookupError(user1Id)).toBeUndefined();
-        });
-
-        it("should return the error if there was one", async () => {
-            await userProfilesStore.fetchProfile(userIdDoesNotExist);
-            expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBe(userDoesNotExistError);
         });
     });
 
@@ -195,7 +170,6 @@ describe("UserProfilesStore", () => {
 
             expect(userProfilesStore.getProfile(user1Id)).toBeUndefined();
             expect(userProfilesStore.getOnlyKnownProfile(user1Id)).toBeUndefined();
-            expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBeUndefined();
         });
     });
 });

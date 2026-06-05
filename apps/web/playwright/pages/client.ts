@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type JSHandle, type Page } from "@playwright/test";
-import { type PageFunctionOn } from "playwright-core/types/structs";
+import { type ElementHandle } from "playwright-core";
 
 import { Network } from "./network";
 import type {
@@ -29,6 +29,34 @@ import type {
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { type CredentialsOptionalAccessToken } from "./bot";
+
+/** Types cribbed from playwright-core/types/structs as they are not importable */
+export type NoHandles<Arg> = Arg extends JSHandle
+    ? never
+    : Arg extends object
+      ? { [Key in keyof Arg]: NoHandles<Arg[Key]> }
+      : Arg;
+export type Unboxed<Arg> =
+    Arg extends ElementHandle<infer T>
+        ? T
+        : Arg extends JSHandle<infer T>
+          ? T
+          : Arg extends NoHandles<Arg>
+            ? Arg
+            : Arg extends [infer A0]
+              ? [Unboxed<A0>]
+              : Arg extends [infer A0, infer A1]
+                ? [Unboxed<A0>, Unboxed<A1>]
+                : Arg extends [infer A0, infer A1, infer A2]
+                  ? [Unboxed<A0>, Unboxed<A1>, Unboxed<A2>]
+                  : Arg extends [infer A0, infer A1, infer A2, infer A3]
+                    ? [Unboxed<A0>, Unboxed<A1>, Unboxed<A2>, Unboxed<A3>]
+                    : Arg extends Array<infer T>
+                      ? Array<Unboxed<T>>
+                      : Arg extends object
+                        ? { [Key in keyof Arg]: Unboxed<Arg[Key]> }
+                        : Arg;
+export type PageFunctionOn<On, Arg2, R> = string | ((on: On, arg2: Unboxed<Arg2>) => R | Promise<R>);
 
 export class Client {
     public network: Network;

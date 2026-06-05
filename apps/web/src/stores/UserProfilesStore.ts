@@ -10,7 +10,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import {
     type IMatrixProfile,
     type MatrixClient,
-    MatrixError,
     type MatrixEvent,
     type RoomMember,
     RoomMemberEvent,
@@ -33,7 +32,6 @@ interface GetOptions {
  */
 export class UserProfilesStore {
     private profiles = new LruCache<string, IMatrixProfile | null>(cacheSize);
-    private profileLookupErrors = new LruCache<string, MatrixError>(cacheSize);
     private knownProfiles = new LruCache<string, IMatrixProfile | null>(cacheSize);
 
     public constructor(private client: MatrixClient) {
@@ -67,16 +65,6 @@ export class UserProfilesStore {
         if (cachedProfile) return cachedProfile;
 
         return this.fetchProfile(userId, options);
-    }
-
-    /**
-     * Get a profile lookup error.
-     *
-     * @param userId - User Id for which to get the lookup error
-     * @returns The lookup error or undefined if there was no error or the profile was not fetched.
-     */
-    public getProfileLookupError(userId: string): MatrixError | undefined {
-        return this.profileLookupErrors.get(userId);
     }
 
     /**
@@ -129,7 +117,6 @@ export class UserProfilesStore {
 
     public flush(): void {
         this.profiles = new LruCache<string, IMatrixProfile | null>(cacheSize);
-        this.profileLookupErrors = new LruCache<string, MatrixError>(cacheSize);
         this.knownProfiles = new LruCache<string, IMatrixProfile | null>(cacheSize);
     }
 
@@ -140,17 +127,10 @@ export class UserProfilesStore {
      * @returns The profile information or null on errors
      */
     private async fetchProfileFromApi(userId: string, options?: GetOptions): Promise<IMatrixProfile | null> {
-        // invalidate cached profile errors
-        this.profileLookupErrors.delete(userId);
-
         try {
             return (await this.client.getProfileInfo(userId)) ?? null;
         } catch (e) {
             logger.warn(`Error retrieving profile for userId ${userId}`, e);
-
-            if (e instanceof MatrixError) {
-                this.profileLookupErrors.set(userId, e);
-            }
 
             if (options?.shouldThrow) {
                 throw e;

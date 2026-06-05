@@ -23,6 +23,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from "matrix-js-sdk/src/utils";
 import { type PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { _t } from "./languageHandler";
 import * as Roles from "./Roles";
@@ -60,26 +61,47 @@ function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => strin
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-function textForCallInviteEvent(event: MatrixEvent, client: MatrixClient): (() => string) | null {
-    const senderName = getSenderName(event);
-    // FIXME: Find a better way to determine this from the event?
-    const isVoice = !event.getContent().offer?.sdp?.includes("m=video");
-    const isSupported = client.supportsVoip();
-
-    // This ladder could be reduced down to a couple string variables, however other languages
+function getCallInviteText(isVoice: boolean, isSupported: boolean, senderName: string): () => string {
+    // This logic could be reduced down to dynamic string keys, however other languages
     // can have a hard time translating those strings. In an effort to make translations easier
-    // and more accurate, we break out the string-based variables to a couple booleans.
-    if (isVoice && isSupported) {
-        return () => _t("timeline|m.call.invite|voice_call", { senderName });
-    } else if (isVoice && !isSupported) {
-        return () => _t("timeline|m.call.invite|voice_call_unsupported", { senderName });
-    } else if (!isVoice && isSupported) {
-        return () => _t("timeline|m.call.invite|video_call", { senderName });
-    } else if (!isVoice && !isSupported) {
-        return () => _t("timeline|m.call.invite|video_call_unsupported", { senderName });
+    // and more accurate, we use explicit strings for each combination.
+    if (isVoice) {
+        return isSupported
+            ? () => _t("timeline|m.call.invite|voice_call", { senderName })
+            : () => _t("timeline|m.call.invite|voice_call_unsupported", { senderName });
     }
 
-    return null;
+    return isSupported
+        ? () => _t("timeline|m.call.invite|video_call", { senderName })
+        : () => _t("timeline|m.call.invite|video_call_unsupported", { senderName });
+}
+
+/**
+ * Resolves the textual content for incoming legacy WebRTC call events.
+ */
+function textForCallInviteEvent(event: MatrixEvent, client: MatrixClient): (() => string) | null {
+    const senderName = getSenderName(event);
+    const content = event.getContent();
+
+    // Fallback for legacy WebRTC signaling
+    // FIXME: Find a better way to determine this from the event?
+    const isVoice = !content.offer?.sdp?.includes("m=video");
+    const isSupported = client.supportsVoip();
+
+    return getCallInviteText(isVoice, isSupported, senderName);
+}
+
+/**
+ * Resolves the textual content for incoming MatrixRTC notifications (MSC4075).
+ */
+function textForRTCNotificationEvent(event: MatrixEvent, client: MatrixClient): (() => string) | null {
+    const senderName = getSenderName(event);
+    const content = event.getContent<IRTCNotificationContent>();
+
+    const isVoice = content["m.call.intent"] === "audio";
+    const isSupported = client.supportsVoip();
+
+    return getCallInviteText(isVoice, isSupported, senderName);
 }
 
 enum Modification {
@@ -881,6 +903,7 @@ const handlers: IHandlers = {
     [EventType.RoomMessage]: textForMessageEvent,
     [EventType.Sticker]: textForMessageEvent,
     [EventType.CallInvite]: textForCallInviteEvent,
+    [EventType.RTCNotification]: textForRTCNotificationEvent,
     [M_POLL_START.name]: textForPollStartEvent,
     [M_POLL_END.name]: textForPollEndEvent,
     [M_POLL_START.altName]: textForPollStartEvent,

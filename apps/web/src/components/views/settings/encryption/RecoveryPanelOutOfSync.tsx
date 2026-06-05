@@ -62,11 +62,11 @@ export function RecoveryPanelOutOfSync({
             data-testid="recoveryPanel"
         >
             <div className="mx_RecoveryPanelOutOfSync">
-                <Button size="sm" kind="secondary" onClick={onForgotRecoveryKey}>
+                <Button size="md" kind="secondary" onClick={onForgotRecoveryKey}>
                     {_t("settings|encryption|recovery|forgot_recovery_key")}
                 </Button>
                 <Button
-                    size="sm"
+                    size="md"
                     kind="primary"
                     Icon={KeyIcon}
                     onClick={async () => {

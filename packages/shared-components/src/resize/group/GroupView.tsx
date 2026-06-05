@@ -8,7 +8,7 @@
 import React, { type PropsWithChildren } from "react";
 import { Group, type Layout } from "react-resizable-panels";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { LEFT_PANEL_ID } from "..";
 
 export interface GroupViewActions {

@@ -3,7 +3,7 @@
 So you want to contribute to Element Web? That is awesome!
 
 If you're not sure where to start, make sure you read
-[CONTRIBUTING.md](../CONTRIBUTING.md), and the
+[CONTRIBUTING.md](https://github.com/element-hq/element-web/blob/develop/CONTRIBUTING.md), and the
 [Development](../README.md#development) and
 [Setting up a dev environment](../README.md#setting-up-a-dev-environment)
 sections of the README.

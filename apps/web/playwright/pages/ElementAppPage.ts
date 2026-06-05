@@ -7,6 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Locator, type Page, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import { basename } from "node:path";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -93,8 +96,35 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
-        // We get the room list by test-id which is a listbox and matching title=name
-        return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
+        // Make sure the room list is actually present before we try closing toasts,
+        // otherwise we may race with page loading
+        await this.page.getByTestId("room-list").waitFor();
+
+        const dismissToasts = async (): Promise<void> => {
+            await rejectToastIfExists(this.page, "Verify this device", { timeout: 50 });
+            const keyStorageToastRejected = await rejectToastIfExists(this.page, "Turn on key storage", {
+                timeout: 50,
+            });
+            if (keyStorageToastRejected) {
+                await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+            }
+            await rejectToastIfExists(this.page, "Notifications", { timeout: 50 });
+        };
+
+        await dismissToasts();
+
+        // We get the room list by test-id which is a listbox and matching title=name.
+        // Retry, closing toasts each time, as otherwise it can race and the toast can appear after we try to close them
+        const roomTile = this.page.getByTestId("room-list").locator(`[title="${name}"]`).first();
+        for (let attemptsLeft = 10; attemptsLeft > 0; attemptsLeft--) {
+            try {
+                await roomTile.click({ timeout: 500 });
+                return;
+            } catch (e) {
+                if (attemptsLeft === 1) throw e;
+                await dismissToasts();
+            }
+        }
     }
 
     /**
@@ -154,6 +184,99 @@ export class ElementAppPage {
         const composer = this.getComposer(isRightPanel);
         await composer.getByRole("button", { name: "More options", exact: true }).click();
         return this.page.getByRole("menu");
+    }
+
+    /**
+     * Sets the files on the composers file input, causing it to open the file
+     * upload dialog.
+     * @param location Should the main room input or the thread view input be used.
+     */
+    public setComposerInputFiles(
+        location: "room" | "thread",
+        ...params: Parameters<Locator["setInputFiles"]>
+    ): ReturnType<Locator["setInputFiles"]> {
+        const input = this.page
+            .locator(location === "room" ? ".mx_RoomView_body" : ".mx_RightPanel")
+            .getByTestId("room-upload-context-input");
+        return input.setInputFiles(...params);
+    }
+
+    /**
+     * Sets the files on the composers file input, causing it to open the file
+     * upload dialog, and then automaticlly submits the dialog that pops up which
+     * causes the file to be uploaded.
+     * @param location Should the main room input or the thread view input be used.
+     */
+    public async composerUploadFiles(
+        location: "room" | "thread",
+        ...params: Parameters<Locator["setInputFiles"]>
+    ): Promise<void> {
+        await this.setComposerInputFiles(location, ...params);
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    /**
+     * Drags a "file" into the specified composer and automatically uploads it.
+     * @param location Should the drop target the main room or the thread.
+     * @param path The path to the sample file so it can be read.
+     * @param type The mimetype of the file.
+     */
+    public async composerDragAndUploadFiles(location: "room" | "thread", path: string, type: string): Promise<void> {
+        // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
+        // This read a file, encodes it into base64 and then sends it along to the page to be treated
+        // as a DataTransfer (the mechanism for drag and dropped files).
+        const buffer = await readFile(path);
+        const name = basename(path);
+
+        const dataTransfer = await this.page.evaluateHandle(
+            async ([buffer, name, type]) => {
+                const dt = new DataTransfer();
+                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                    type,
+                });
+                dt.items.add(file);
+                return dt;
+            },
+            [buffer.toString("base64"), name, type],
+        );
+        await this.page.dispatchEvent(location === "room" ? ".mx_RoomView_body" : ".mx_ThreadPanel", "drop", {
+            dataTransfer,
+        });
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    /**
+     * Paste a "file" into the specified locator and automatically uploads it.
+     * @param location Should the drop target the main room or the thread.
+     * @param path The path to the sample file so it can be read.
+     * @param type The mimetype of the file.
+     */
+    public async composerDragAndPasteFile(location: "room" | "thread", path: string, type: string): Promise<void> {
+        // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
+        // This read a file, encodes it into base64 and then sends it along to the page to be treated
+        // as a DataTransfer (the mechanism for drag and dropped files).
+        const buffer = await readFile(path);
+        const name = basename(path);
+        const composer = this.getComposerField(location === "thread");
+
+        await composer.evaluate(
+            async (element, [buffer, name, type]) => {
+                const clipboardData = new DataTransfer();
+                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                    type,
+                });
+                clipboardData.items.add(file);
+                element.dispatchEvent(
+                    new ClipboardEvent("paste", {
+                        clipboardData,
+                        bubbles: true,
+                        cancelable: true,
+                    }),
+                );
+            },
+            [buffer.toString("base64"), name, type],
+        );
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
     }
 
     /**
@@ -233,26 +356,42 @@ export class ElementAppPage {
      * Open the room info panel, and use it to send an invite to the given user.
      *
      * @param userId - The user to invite to the room.
+     * @param options - Options object
      */
-    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+    public async inviteUserToCurrentRoom(
+        userId: string,
+        options?: {
+            /** If true, expect and acknowledge "Confirm inviting new users" page */
+            confirmUnknownUser?: boolean;
+        },
+    ): Promise<void> {
         const rightPanel = await this.openRoomInfoPanel();
         await rightPanel.getByRole("menuitem", { name: "Invite" }).click();
 
-        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
+        const dialogLocator = this.page.getByRole("dialog");
+        const input = dialogLocator.getByTestId("invite-dialog-input");
         await input.fill(userId);
         await input.press("Enter");
-        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
+        await dialogLocator.getByRole("button", { name: "Invite" }).click();
+
+        if (options?.confirmUnknownUser) {
+            await expect(
+                dialogLocator.getByRole("heading", { name: "Invite new contacts to this room?" }),
+            ).toBeVisible();
+            await dialogLocator.getByRole("button", { name: "Invite" }).click();
+        }
     }
 
     /**
-     * Close the notification toast
+     * Dismiss the "Turn on key storage" toast and dismiss the confirmation
+     * dialog.
+     *
+     * Note: to dismiss normal toasts, use the {@link rejectToast} function
+     * directly.
      */
-    public closeNotificationToast(): Promise<void> {
-        // Dismiss "Notification" toast
-        return this.page
-            .locator(".mx_Toast_toast", { hasText: "Notifications" })
-            .getByRole("button", { name: "Dismiss" })
-            .click();
+    public async closeKeyStorageToast() {
+        await rejectToast(this.page, "Turn on key storage");
+        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
     }
 
     /**

@@ -27,14 +27,14 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
             aria-label="Options"
             class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
             data-state="closed"
-            id="radix-_r_0_"
+            id="radix-react-use-id-1"
             role="button"
             tabindex="0"
             type="button"
           />
         </div>
         <button
-          aria-labelledby="_r_2_"
+          aria-labelledby="react-use-id-2"
           class="_icon-button_1215g_8"
           data-kind="secondary"
           data-testid="base-card-close-button"
@@ -106,7 +106,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -115,7 +115,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
           >
             <img
               alt=""
-              class="_image_zysgz_43"
+              class="_image_va14e_43"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -177,7 +177,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           data-state="closed"
-          id="radix-_r_1k_"
+          id="radix-react-use-id-1"
           role="button"
           tabindex="0"
           type="button"
@@ -222,7 +222,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -231,7 +231,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           >
             <img
               alt=""
-              class="_image_zysgz_43"
+              class="_image_va14e_43"
               data-type="round"
               height="20px"
               loading="lazy"
@@ -293,7 +293,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           data-state="closed"
-          id="radix-_r_30_"
+          id="radix-react-use-id-1"
           role="button"
           tabindex="0"
           type="button"
@@ -329,7 +329,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           </div>
           <div>
             <span
-              class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+              class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
               data-color="1"
               data-testid="avatar-img"
               data-type="round"
@@ -349,8 +349,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="_r_33_"
-                aria-labelledby="_r_32_"
+                aria-describedby="react-use-id-2"
+                aria-labelledby="react-use-id-3"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg
@@ -417,7 +417,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
               <span>
                 <span
                   aria-label="Avatar"
-                  class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
+                  class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
                   data-color="1"
                   data-testid="avatar-img"
                   data-type="round"
@@ -426,7 +426,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 >
                   <img
                     alt=""
-                    class="_image_zysgz_43"
+                    class="_image_va14e_43"
                     data-type="round"
                     height="20px"
                     loading="lazy"
@@ -488,7 +488,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 aria-label="Options"
                 class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
                 data-state="closed"
-                id="radix-_r_10_"
+                id="radix-react-use-id-1"
                 role="button"
                 tabindex="0"
                 type="button"
@@ -525,7 +525,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                  
                 <svg
                   aria-label="Loading…"
-                  class="_icon_11k6c_18"
+                  class="_icon_1855a_18"
                   data-testid="spinner"
                   fill="currentColor"
                   height="1em"

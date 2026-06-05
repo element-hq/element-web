@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { type LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
+import { type CryptoApi, CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -17,6 +17,7 @@ import {
     RoomStateEvent,
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { type DeviceListener, type DeviceState } from ".";
 import {
@@ -24,22 +25,25 @@ import {
     showToast as showSetupEncryptionToast,
 } from "../toasts/SetupEncryptionToast";
 import { isSecretStorageBeingAccessed } from "../SecurityManager";
-import { asyncSomeParallel } from "../utils/arrays";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
 /**
- * Unfortunately-named account data key used by Element X to indicate that the user
- * has chosen to disable server side key backups.
- *
- * We need to set and honour this to prevent Element X from automatically turning key backup back on.
+ * Account data key used to indicate that the user has chosen to enable or
+ * disable server side key backups.
  */
-export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
+export const ACCOUNT_DATA_KEY_M_KEY_BACKUP = "m.key_backup";
+export const ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE = "m.org.matrix.custom.backup_disabled";
 
 /**
  * Account data key to indicate whether the user has chosen to enable or disable recovery.
  */
 export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
+
+/**
+ * We remind the user to verify their device 2 days after they dismiss the toast.
+ */
+const DEVICE_VERIFICATION_NAG_INTERVAL = 2 * 24 * 60 * 60 * 1000;
 
 /**
  * Handles all of DeviceListener's work that relates to the current device.
@@ -125,15 +129,30 @@ export class DeviceListenerCurrentDevice {
      * them again until they refresh or restart the app.
      */
     public dismissEncryptionSetup(): void {
+        // If the user dismissed the "verify this session" toast, then we will
+        // re-show it later if the device still isn't verified.
+        if (this.deviceState === "verify_this_session") {
+            setTimeout(() => {
+                if (this.deviceState === "verify_this_session") {
+                    const logSpan = new LogSpan(this.logger, "nag_" + secureRandomString(4));
+                    logSpan.info("Re-showing device verification toast");
+                    this.dismissedThisDeviceToast = false;
+                    this.setDeviceState("verify_this_session", logSpan);
+                }
+            }, DEVICE_VERIFICATION_NAG_INTERVAL);
+        }
+
         this.dismissedThisDeviceToast = true;
         this.deviceListener.recheck();
     }
 
     /**
-     * Set the account data "m.org.matrix.custom.backup_disabled" to `{ "disabled": true }`.
+     * Set the account data indicate that the user has chosen to disable key
+     * backup.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
-        await this.client.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
+        await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: false });
+        await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, { disabled: true });
     }
 
     /**
@@ -153,100 +172,34 @@ export class DeviceListenerCurrentDevice {
             return;
         }
 
-        const crossSigningReady = await crypto.isCrossSigningReady();
-        const secretStorageStatus = await crypto.getSecretStorageStatus();
-        const crossSigningStatus = await crypto.getCrossSigningStatus();
-        const allCrossSigningSecretsCached =
-            crossSigningStatus.privateKeysCachedLocally.masterKey &&
-            crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
-            crossSigningStatus.privateKeysCachedLocally.userSigningKey;
-
-        const recoveryDisabled = await this.recheckRecoveryDisabled(this.client);
-
-        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled;
-
-        const isCurrentDeviceTrusted = Boolean(
-            (await crypto.getDeviceVerificationStatus(this.client.getSafeUserId(), this.client.deviceId!))
-                ?.crossSigningVerified,
-        );
-
-        const keyBackupUploadActive = await this.isKeyBackupUploadActive(logSpan);
-        const backupDisabled = await this.recheckBackupDisabled();
-
-        // We warn if key backup upload is turned off and we have not explicitly
-        // said we are OK with that.
-        const keyBackupUploadIsOk = keyBackupUploadActive || backupDisabled;
-
-        // We warn if key backup is set up, but we don't have the decryption
-        // key, so can't fetch keys from backup.
-        const keyBackupDownloadIsOk =
-            !keyBackupUploadActive || backupDisabled || (await crypto.getSessionBackupPrivateKey()) !== null;
-
-        const allSystemsReady =
-            isCurrentDeviceTrusted &&
-            allCrossSigningSecretsCached &&
-            keyBackupUploadIsOk &&
-            recoveryIsOk &&
-            keyBackupDownloadIsOk;
-
-        if (allSystemsReady) {
-            logSpan.info("No toast needed");
-            await this.setDeviceState("ok", logSpan);
-        } else {
-            // make sure our keys are finished downloading
-            await crypto.getUserDeviceInfo([this.client.getSafeUserId()]);
-
-            if (!isCurrentDeviceTrusted) {
-                // the current device is not trusted: prompt the user to verify
-                logSpan.info("Current device not verified: setting state to VERIFY_THIS_SESSION");
-                await this.setDeviceState("verify_this_session", logSpan);
-            } else if (!allCrossSigningSecretsCached) {
-                // cross signing ready & device trusted, but we are missing secrets from our local cache.
-                // prompt the user to enter their recovery key.
-                logSpan.info(
-                    "Some secrets not cached: setting state to KEY_STORAGE_OUT_OF_SYNC",
-                    crossSigningStatus.privateKeysCachedLocally,
-                    crossSigningStatus.privateKeysInSecretStorage,
-                );
-                await this.setDeviceState(
-                    crossSigningStatus.privateKeysInSecretStorage ? "key_storage_out_of_sync" : "identity_needs_reset",
-                    logSpan,
-                );
-            } else if (!keyBackupUploadIsOk) {
-                logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
-                await this.setDeviceState("turn_on_key_storage", logSpan);
-            } else if (secretStorageStatus.defaultKeyId === null) {
-                // The user just hasn't set up 4S yet: if they have key
-                // backup, prompt them to turn on recovery too. (If not, they
-                // have explicitly opted out, so don't hassle them.)
-                if (recoveryDisabled) {
-                    logSpan.info("Recovery disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                } else if (keyBackupUploadActive) {
-                    logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
-                    await this.setDeviceState("set_up_recovery", logSpan);
-                } else {
-                    logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                }
-            } else {
-                // If we get here, then we are verified, have key backup, and
-                // 4S, but allSystemsReady is false, which means that either
-                // secretStorageStatus.ready is false (which means that 4S
-                // doesn't have all the secrets), or we don't have the backup
-                // key cached locally. If any of the cross-signing keys are
-                // missing locally, that is handled by the
-                // `!allCrossSigningSecretsCached` branch above.
-                logSpan.warn("4S is missing secrets or backup key not cached", {
-                    crossSigningReady,
-                    secretStorageStatus,
-                    allCrossSigningSecretsCached,
-                    isCurrentDeviceTrusted,
-                    keyBackupDownloadIsOk,
-                });
-                await this.setDeviceState("key_storage_out_of_sync", logSpan);
-            }
+        let failed = await this.failIfCurrentDeviceNotTrusted(crypto, logSpan);
+        if (failed) {
+            return;
         }
+
+        failed = await this.failIfCrossSigningSecretsNotCached(crypto, logSpan);
+        if (failed) {
+            return;
+        }
+
+        const keyBackupStatus = await this.failIfKeyBackupUploadIsFailing(logSpan);
+        if (keyBackupStatus.failed) {
+            return;
+        }
+
+        failed = await this.failIfRecoveryIsFailing(crypto, logSpan, keyBackupStatus);
+        if (failed) {
+            return;
+        }
+
+        failed = await this.failIfKeyBackupDownloadIsFailing(crypto, logSpan, keyBackupStatus);
+        if (failed) {
+            return;
+        }
+
+        // Everything is OK - no need to show a toast
+        logSpan.info("No toast needed");
+        this.setDeviceState("ok", logSpan);
     }
 
     /**
@@ -259,31 +212,194 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
+     * If the current device is not trusted (verified via cross-signing), show a
+     * toast and return true. Otherwise, return false.
+     */
+    private async failIfCurrentDeviceNotTrusted(crypto: CryptoApi, logSpan: LogSpan): Promise<boolean> {
+        const status = await crypto.getDeviceVerificationStatus(this.client.getSafeUserId(), this.client.deviceId!);
+
+        if (status?.crossSigningVerified) {
+            return false;
+        } else {
+            // The current device is not trusted: prompt the user to verify
+            await this.failedCheck("verify_this_session", logSpan, "info", "Current device not verified");
+            return true;
+        }
+    }
+
+    /**
+     * If the master, device-signing and user-signing keys are not all cached
+     * locally, show a toast and return true. Otherwise, return false.
+     */
+    private async failIfCrossSigningSecretsNotCached(crypto: CryptoApi, logSpan: LogSpan): Promise<boolean> {
+        const crossSigningStatus = await crypto.getCrossSigningStatus();
+
+        const secretsCached =
+            crossSigningStatus.privateKeysCachedLocally.masterKey &&
+            crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
+            crossSigningStatus.privateKeysCachedLocally.userSigningKey;
+
+        if (secretsCached) {
+            return false;
+        } else {
+            // cross signing ready & device trusted, but we are missing secrets from our local cache.
+            // prompt the user to enter their recovery key.
+            const newState = crossSigningStatus.privateKeysInSecretStorage
+                ? "key_storage_out_of_sync"
+                : "identity_needs_reset";
+
+            await this.failedCheck(
+                newState,
+                logSpan,
+                "info",
+                "Some secrets not cached",
+                crossSigningStatus.privateKeysCachedLocally,
+                crossSigningStatus.privateKeysInSecretStorage,
+            );
+            return true;
+        }
+    }
+
+    /**
+     * If the upload of the key backup is not working when it should, show a
+     * toast and return true. Otherwise, return false.
+     */
+    private async failIfKeyBackupUploadIsFailing(logSpan: LogSpan): Promise<KeyBackupStatus> {
+        const uploadActive = await this.isKeyBackupUploadActive(logSpan);
+        const disabled = await this.recheckBackupDisabled();
+        let failed;
+
+        // We warn if key backup upload is turned off and we have not explicitly
+        // said we are OK with that.
+        const keyBackupUploadIsOk = uploadActive || disabled;
+
+        if (!keyBackupUploadIsOk) {
+            await this.failedCheck(
+                "turn_on_key_storage",
+                logSpan,
+                "info",
+                "Key backup upload is unexpectedly turned off",
+            );
+            failed = true;
+        } else {
+            failed = false;
+        }
+
+        return { uploadActive, disabled, failed };
+    }
+
+    /**
+     * If the Recovery is enable but not working, show a toast and return true.
+     * Otherwise, return false.
+     */
+    private async failIfRecoveryIsFailing(
+        crypto: CryptoApi,
+        logSpan: LogSpan,
+        keyBackupStatus: KeyBackupStatus,
+    ): Promise<boolean> {
+        const secretStorageStatus = await crypto.getSecretStorageStatus();
+        const recoveryDisabled = await this.recheckRecoveryDisabled(this.client);
+        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled || keyBackupStatus.disabled;
+
+        if (recoveryIsOk) {
+            return false;
+        } else {
+            if (secretStorageStatus.defaultKeyId === null) {
+                await this.failedCheck("set_up_recovery", logSpan, "info", "No default 4S key");
+            } else {
+                await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "4S is missing secrets", {
+                    secretStorageStatus,
+                });
+            }
+            return true;
+        }
+    }
+
+    /**
+     * If the download of the key backup is not working when it should, show a
+     * toast and return true. Otherwise, return false.
+     */
+    private async failIfKeyBackupDownloadIsFailing(
+        crypto: CryptoApi,
+        logSpan: LogSpan,
+        keyBackupStatus: KeyBackupStatus,
+    ): Promise<boolean> {
+        // We warn if key backup is set up, but we don't have the decryption
+        // key, so can't fetch keys from backup.
+        const keyBackupDownloadIsOk =
+            !keyBackupStatus.uploadActive ||
+            keyBackupStatus.disabled ||
+            (await crypto.getSessionBackupPrivateKey()) !== null;
+
+        if (keyBackupDownloadIsOk) {
+            return false;
+        } else {
+            await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
+            return true;
+        }
+    }
+
+    /**
+     * recheck failed - update our local device keys, log a message and set the
+     * state to display to the user.
+     */
+    private async failedCheck(
+        newState: DeviceState,
+        logSpan: LogSpan,
+        level: "info" | "warn",
+        message: string,
+        ...logItems: Array<any>
+    ): Promise<void> {
+        // Make sure our keys are finished downloading
+        await this.client.getCrypto()?.getUserDeviceInfo([this.client.getSafeUserId()]);
+
+        const fullMessage = `${message}: setting state to ${newState.toLowerCase()}`;
+        if (level === "info") {
+            logSpan.info(fullMessage, ...logItems);
+        } else {
+            logSpan.warn(fullMessage, ...logItems);
+        }
+
+        this.setDeviceState(newState, logSpan);
+    }
+
+    /**
      * Set the state of the device, and perform any actions necessary in
      * response to the state changing.
      */
-    private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
+    private setDeviceState(newState: DeviceState, logSpan: LogSpan): void {
         this.deviceState = newState;
 
         this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
 
         if (newState === "ok" || this.dismissedThisDeviceToast) {
             hideSetupEncryptionToast();
-        } else if (await this.shouldShowSetupEncryptionToast()) {
+        } else if (!isSecretStorageBeingAccessed()) {
             showSetupEncryptionToast(newState);
         } else {
-            logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
+            // If we're in the middle of a secret storage operation, we're likely
+            // modifying the state involved here, so don't add new toasts to setup.
+            logSpan.info("Device is not yet ready, but secret storage is being accessed, so not showing toast.");
         }
     }
 
     /**
-     * Fetch the account data for `backup_disabled`. If this is the first time,
+     * Fetch the account data for `m.key_backup`. If this is the first time,
      * fetch it from the server (in case the initial sync has not finished).
      * Otherwise, fetch it from the store as normal.
+     *
+     * Returns true if `m.key_backup` has `enabled: false`.
      */
     public async recheckBackupDisabled(): Promise<boolean> {
-        const backupDisabled = await this.client.getAccountDataFromServer(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
-        return !!backupDisabled?.disabled;
+        const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
+        if (keyBackup) {
+            return keyBackup.enabled === false;
+        }
+
+        const keyBackupDisabledUnstable = await this.client.getAccountDataFromServer(
+            ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
+        );
+        return !!keyBackupDisabledUnstable?.disabled;
     }
 
     /**
@@ -332,7 +448,8 @@ export class DeviceListenerCurrentDevice {
             ev.getType().startsWith("m.secret_storage.") ||
             ev.getType().startsWith("m.cross_signing.") ||
             ev.getType() === "m.megolm_backup.v1" ||
-            ev.getType() === BACKUP_DISABLED_ACCOUNT_DATA_KEY ||
+            ev.getType() === ACCOUNT_DATA_KEY_M_KEY_BACKUP ||
+            ev.getType() === ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE ||
             ev.getType() === RECOVERY_ACCOUNT_DATA_KEY
         ) {
             this.deviceListener.recheck();
@@ -385,23 +502,6 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
-     * Is the user in at least one encrypted room?
-     */
-    private async shouldShowSetupEncryptionToast(): Promise<boolean> {
-        // If we're in the middle of a secret storage operation, we're likely
-        // modifying the state involved here, so don't add new toasts to setup.
-        if (isSecretStorageBeingAccessed()) return false;
-
-        // Show setup toasts once the user is in at least one encrypted room.
-        const cryptoApi = this.client.getCrypto();
-        if (!cryptoApi) return false;
-
-        return await asyncSomeParallel(this.client.getRooms(), ({ roomId }) =>
-            cryptoApi.isEncryptionEnabledInRoom(roomId),
-        );
-    }
-
-    /**
      * Is key backup enabled? Use a cached answer if we have one.
      */
     private isKeyBackupUploadActive = async (logger: BaseLogger): Promise<boolean> => {
@@ -423,4 +523,13 @@ export class DeviceListenerCurrentDevice {
 
         return this.cachedKeyBackupUploadActive;
     };
+}
+
+/**
+ * The current state of Key backup.
+ */
+interface KeyBackupStatus {
+    uploadActive: boolean;
+    disabled: boolean;
+    failed: boolean;
 }

@@ -13,8 +13,7 @@
         "room_name": "%(name)s 방",
         "room_status_bar": "방 상태 표시줄",
         "seek_bar_label": "오디오 탐색 바",
-        "unread_messages": "읽지 않은 메시지",
-        "user_menu": "사용자 메뉴"
+        "unread_messages": "읽지 않은 메시지"
     },
     "a11y_jump_first_unread_room": "읽지 않은 첫 채팅방으로 건너뜁니다.",
     "action": {
@@ -30,7 +29,6 @@
         "cancel": "취소",
         "change": "변경",
         "clear": "지우기",
-        "click": "클릭",
         "click_to_copy": "복사하려면 클릭하세요.",
         "close": "닫기",
         "collapse": "접기",
@@ -64,7 +62,6 @@
         "go": "이동",
         "go_back": "돌아가기",
         "got_it": "확인",
-        "hide": "숨기기",
         "hide_advanced": "고급 숨기기",
         "hold": "대기",
         "ignore": "무시",
@@ -98,7 +95,6 @@
         "rename": "이름 변경",
         "reply": "답장",
         "reply_in_thread": "스레드에 답장",
-        "report_content": "내용 신고",
         "report_room": "방 신고",
         "resend": "다시 보내기",
         "reset": "되돌리기",
@@ -220,11 +216,9 @@
         "log_in_new_account": "새 계정으로 <a>로그인</a>하기.",
         "logout_dialog": {
             "description": "정말로 이 기기를 제거하시겠습니까?",
-            "megolm_export": "수동으로 키 내보내기",
-            "setup_key_backup_title": "암호화된 메시지에 접근할 수 없게 됩니다",
-            "setup_secure_backup_description_1": "암호화된 메시지는 종단간 암호화로 보호됩니다. 오직 당신과 상대방만 이 메시지를 읽을 수 있는 키를 갖습니다.",
-            "setup_secure_backup_description_2": "이 기기를 제거하면 다른 기기에 암호화 키가 있거나 서버에 백업해 두지 않은 경우, 암호화된 메시지를 읽을 수 없게 됩니다.",
-            "skip_key_backup": "저는 제 암호화된 메시지를 원하지 않아요"
+            "setup_key_backup_title": "암호화된 채팅에 대한 접근 권한을 잃게 됩니다.",
+            "setup_secure_backup_description": "현재 유일하게 등록된 기기입니다. 이 기기를 제거하면 다음 로그인 시 디지털 신원을 인증하고 암호화된 대화를 복구하기 위해 복구 키가 필요합니다.",
+            "skip_key_backup": "그래도 이 기기 삭제"
         },
         "misconfigured_body": "%(brand)s 관리자에게 <a>당신의 설정</a>에 잘못되거나 중복된 항목이 있는지 확인하도록 요청하세요.",
         "misconfigured_title": "%(brand)s이 잘못 설정됨",
@@ -275,7 +269,6 @@
             "point_the_camera": "여기에 표시된 QR 코드를 스캔하세요",
             "scan_code_instruction": "다른 기기로 QR 코드를 스캔하세요",
             "scan_qr_code": "QR 코드로 로그인",
-            "security_code": "보안 코드",
             "security_code_prompt": "요청 시, 다른 기기에서 아래 코드를 입력하세요.",
             "select_qr_code": "\"%(scanQRCode)s\"를 선택하십시오.",
             "unsupported_explainer": "귀하의 계정 제공업체는 QR 코드를 사용한 새 기기 로그인을 지원하지 않습니다.",
@@ -341,7 +334,6 @@
         "sign_in_instead_prompt": "이미 계정이 있으신가요? <a>여기서 로그인하세요</a>",
         "sign_in_or_register": "로그인 또는 계정 생성",
         "sign_in_or_register_description": "계속하려면 기존 계정을 사용하거나 새 계정을 만드세요.",
-        "sign_in_prompt": "계정이 있으신가요?<a> 로그인</a>",
         "sign_in_with_sso": "통합 인증(SSO)으로 로그인",
         "signing_in": "로그인 중…",
         "soft_logout": {
@@ -475,6 +467,7 @@
         "description": "설명",
         "deselect_all": "전체 선택 해제",
         "device": "기기",
+        "disabled_by_homeserver": "홈서버에 의해 비활성화됨",
         "edited": "편집됨",
         "email_address": "이메일 주소",
         "emoji": "이모지",
@@ -585,7 +578,6 @@
         "video": "비디오",
         "video_room": "비디오 room",
         "view_message": "메시지 보기",
-        "voice": "음성",
         "warning": "경고"
     },
     "composer": {
@@ -677,6 +669,14 @@
         "unfederated_label_default_off": "홈서버에서 내부 팀과의 협업에만 방을 사용할 경우 이 옵션을 활성화할 수 있습니다. 이 설정은 나중에 변경할 수 없습니다.",
         "unfederated_label_default_on": "해당 방이 자체 홈서버를 보유한 외부 팀과의 협업에 사용될 경우 이 기능을 비활성화할 수 있습니다. 이 설정은 나중에 변경할 수 없습니다.",
         "unsupported_version": "서버가 지정된 방 버전을 지원하지 않습니다."
+    },
+    "create_section_dialog": {
+        "create_section": "섹션 생성",
+        "description": "이 섹션은 당신만을 위한 공간입니다.",
+        "edit_section": "섹션 편집",
+        "label": "섹션 이름",
+        "title": "섹션 만들기",
+        "title_edition": "섹션을 편집하세요"
     },
     "create_space": {
         "add_details_prompt": "사람들이 알아볼 수 있도록 세부 사항을 추가하세요.",
@@ -826,7 +826,7 @@
         "invalid_json": "유효한 JSON이 아닌 것 같습니다.",
         "level": "레벨",
         "low_bandwidth_mode": "저대역폭 모드",
-        "low_bandwidth_mode_description": "호환되는 홈 서버가 필요합니다.",
+        "low_bandwidth_mode_description": "암호화, 상태 표시, 프로필 이미지, 읽음 확인, 타이핑 알림 기능이 비활성화됩니다.",
         "main_timeline": "주 타임라인",
         "manual_device_verification": "수동 기기 검증",
         "no_receipt_found": "영수증을 찾을 수 없습니다",
@@ -881,7 +881,6 @@
         "thread_root_id": "스레드 Root ID: %(threadRootId)s",
         "threads_timeline": "스레드 타임라인",
         "title": "개발자 도구",
-        "toggle_event": "이벤트 토글",
         "toolbox": "도구 상자",
         "use_at_own_risk": "이 UI는 값의 유형을 확인하지 않습니다. 사용 시 주의하십시오.",
         "user_avatar": "아바타: %(avatar)s",
@@ -969,7 +968,6 @@
         "import_invalid_passphrase": "인증 확인 실패: 비밀번호를 틀리셨나요?",
         "key_storage_out_of_sync": "키 저장소가 동기화되지 않았습니다.",
         "key_storage_out_of_sync_description": "키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요.",
-        "message_shared_by": "메시지가 전송될 당시 방에 계시지 않아, %(displayName)s(%(userId)s)님이 이 메시지를 공유했습니다.",
         "messages_not_secure": {
             "cause_1": "당신의 홈 서버",
             "cause_2": "사용자가 확인 중인 홈 서버에 연결된 사용자",
@@ -995,9 +993,6 @@
         "set_up_recovery": "대화 백업하기",
         "set_up_recovery_toast_description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
         "set_up_toast_title": "보안 백업 설정",
-        "setup_secure_backup": {
-            "explainer": "키를 잃어버리지 않도록 이 기기에서 로그아웃하기 전에 미리 백업해 두세요."
-        },
         "turn_on_key_storage": "키 저장 기능 켜기",
         "turn_on_key_storage_description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다.",
         "udd": {
@@ -1352,9 +1347,14 @@
         "impossible_dialog_title": "통합이 허용되지 않습니다"
     },
     "invite": {
-        "ask_anyway_description": "아래에 나열된 매트릭스 ID에 대한 프로필을 찾을 수 없습니다 - 그래도 DM을 시작하시겠습니까?",
-        "ask_anyway_label": "그래도 DM 시작하기",
-        "ask_anyway_never_warn_label": "어쨌든 DM을 시작하고 다시는 경고하지 마세요",
+        "confirm_unknown_users": {
+            "invite_subtitle": "이 연락처들과는 기존 대화 기록이 없습니다. 계속하기 전에 이 방에 초대하는 것이 맞는지 확인해 주세요",
+            "invite_title": "이 방에 새 사용자를 초대할까요?",
+            "start_chat_subtitle_multiple_users": "이 사람들과는 기존 대화 기록이 없습니다. 계속하기 전에 초대를 진행할지 확인해 주세요.",
+            "start_chat_subtitle_one_user": "이 사람과는 기존 대화 기록이 없습니다. 계속하기 전에 초대를 진행할지 확인해 주세요.",
+            "start_chat_title_multiple_users": "이 새 연락처들과 대화를 시작하시겠습니까?",
+            "start_chat_title_one_user": "이 사용자와 대화를 시작하시겠습니까?"
+        },
         "email_caption": "이메일로 초대",
         "email_limit_one": "이메일 초대는 한 번에 하나씩만 보낼 수 있습니다",
         "email_use_default_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
@@ -1516,6 +1516,11 @@
         "experimental_section": "조기 시연",
         "extended_profiles_msc_support": "서버가 MSC4133을 지원해야 합니다.",
         "feature_disable_call_per_sender_encryption": "Element 통화에서 발신자별 암호화 비활성화",
+        "feature_user_status": {
+            "description": "현재 상태를 확인하고 설정할 수 있도록 합니다.",
+            "display_name": "사용자 상태",
+            "required_msc_support": "레거시 동기화 프로필 업데이트를 위해 MSC4429 규격이 필요합니다."
+        },
         "feature_wysiwyg_composer_description": "메시지 작성기에서 Markdown 대신 서식 있는 텍스트를 사용하세요",
         "group_calls": "그룹 통화 새 기능",
         "group_developer": "개발자",
@@ -1551,11 +1556,7 @@
         "notifications": "방 헤더에서 알림 패널 활성화",
         "render_reaction_images": "반응에 사용자 정의 이미지 렌더링",
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
-        "report_to_moderators": "관리자에게 신고하기",
-        "report_to_moderators_description": "운영자가 관리하는 방에서는 '신고' 버튼으로 관리자에게 문제를 신고할 수 있습니다.",
-        "share_history_on_invite": "새 멤버에게 암호화 된 기록을 공유합니다.",
-        "share_history_on_invite_description": "기록 공개 설정이 '공유'로 설정된 암호화된 방으로 사용자를 초대할 때, 해당 사용자와 암호화된 기록을 공유하고, 그러한 방에 초대받았을 때는 암호화된 기록을 수락하세요.",
-        "share_history_on_invite_warning": "이 기능은 실험용 기능으로, 모든 보안 조치가 구현되어 있지는 않습니다. 실제 운영 계정에서는 활성화하지 마십시오.",
+        "room_list_sections": "대화방 목록 섹션",
         "sliding_sync": "슬라이딩 동기화 모드",
         "sliding_sync_description": "개발 진행 중인 기능이며 비활성화는 불가능합니다. 현재 Element Call 기능은 지원하지 않습니다.",
         "sliding_sync_disabled_notice": "기능을 해제하려면 다시 로그인하세요",
@@ -1786,7 +1787,6 @@
         "restricted": "제한됨"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "분산형, 암호화된 채팅 및 협업 플랫폼 $matrixLogo",
     "presence": {
         "away": "자리 비움",
         "busy": "다른 용무 중",
@@ -1818,27 +1818,18 @@
         "ongoing": "제거 중…",
         "reason_label": "이유(선택 사항)"
     },
+    "remove_section_dialog": {
+        "confirmation": "이 섹션을 정말로 삭제하시겠습니까?",
+        "description": "섹션의 대화방들은 전체 채팅 목록에서 계속 확인할 수 있습니다.",
+        "remove_section": "섹션 제거",
+        "title": "이 섹션을 삭제하시겠습니까?"
+    },
     "report_content": {
         "description": "이 메시지를 신고하면 고유 '이벤트 ID'를 홈서버의 관리자에게 보내게 됩니다. 이 방의 메시지가 암호화되어 있다면, 홈서버 관리자는 메시지 문자를 읽거나 파일 혹은 사진을 볼 수 없습니다.",
-        "disagree": "동의 안 함",
-        "error_create_room_moderation_bot": "모더레이션 봇과 함께 채팅방을 생성할 수 없습니다",
         "hide_messages_from_user": "이 사용자로부터 현재 및 향후 모든 메시지를 숨기려면 선택하십시오.",
         "ignore_user": "사용자 무시",
-        "illegal_content": "불법 콘텐츠",
         "missing_reason": "왜 신고하는 지 이유를 적어주세요.",
-        "nature": "부적절한 메시지의 유형을 선택하고, 해당 메시지가 왜 부적절한지 설명해 주세요.",
-        "nature_disagreement": "이 사용자가 작성한 내용은 잘못되었습니다.\n이 내용은 채팅방 관리자에게 신고될 것입니다.",
-        "nature_illegal": "이 사용자는 개인 정보를 유출하거나 폭력을 행사하겠다고 위협하는 등 불법적인 행동을 보이고 있습니다. 이 사실은 채팅방 운영자에게 신고되며, 운영자는 사법 당국에 신고할 수 있습니다.",
-        "nature_nonstandard_admin": "이 방은 불법 또는 유해한 콘텐츠를 게시하거나, 운영진이 불법 또는 유해한 콘텐츠를 적절히 관리하지 못하는 경우에 해당됩니다.\n해당 사항은 %(homeserver)s 관리자에게 신고될 예정입니다.",
-        "nature_nonstandard_admin_encrypted": "이 채팅방은 불법 또는 유해한 콘텐츠를 다루거나, 관리자가 불법/유해 콘텐츠를 적절히 관리하지 못하는 방입니다. 이는 %(homeserver)s 관리자로 신고됩니다. 관리자는 이 채팅방의 암호화된 내용을 열람할 수 없습니다.",
-        "nature_other": "기타 사유. 문제를 설명해 주세요.\n이 내용은 채팅방 관리자에게 보고될 예정입니다.",
-        "nature_spam": "이 사용자는 광고, 광고 링크 또는 선전성 링크로 채팅방을 스팸하고 있습니다. 이는 채팅방 관리자에게 신고될 예정입니다.",
-        "nature_toxic": "이 사용자는 다른 사용자를 모욕하거나 가족 친화적인 채팅방에서 성인 전용 콘텐츠를 공유하는 등 채팅방 규칙을 위반하는 유해한 행동을 하고 있습니다. 이는 채팅방 관리자에게 신고될 예정입니다.",
-        "other_label": "기타",
-        "report_content_to_homeserver": "홈서버 관리자에게 내용 신고하기",
-        "report_entire_room": "채팅방 전체 신고",
-        "spam_or_propaganda": "스팸 또는 광고",
-        "toxic_behaviour": "유해한 행동"
+        "report_content_to_homeserver": "홈서버 관리자에게 내용 신고하기"
     },
     "report_room": {
         "description": "이 채팅방을 계정 제공자에게 신고하세요. 메시지가 암호화된 경우, 관리자는 내용을 확인할 수 없습니다",
@@ -2123,6 +2114,11 @@
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
         },
+        "section": {
+            "chats": "채팅",
+            "favourites": "즐겨찾기",
+            "low_priority": "낮은 우선순위"
+        },
         "show_less": "간단히 표시",
         "show_n_more": {
             "other": "%(count)s개 더 보기"
@@ -2195,8 +2191,6 @@
             "aliases_section": "방 주소",
             "avatar_field_label": "방 아바타",
             "canonical_alias_field_label": "기본 주소",
-            "default_url_previews_off": "기본으로 URL 미리 보기가 이 방에 참여한 사람들 모두에게 꺼졌습니다.",
-            "default_url_previews_on": "기본으로 URL 미리 보기가 이 방에 참여한 사람들 모두에게 켜졌습니다.",
             "description_space": "스페이스와 관련된 설정을 편집하세요.",
             "error_creating_alias_description": "해당 주소를 생성하는 과정에서 오류가 발생했습니다. 서버에서 허용하지 않거나 일시적인 오류가 발생했을 수 있습니다.",
             "error_creating_alias_title": "주소 생성 중 오류 발생",
@@ -2225,12 +2219,7 @@
             "published_aliases_explainer_space": "공개된 주소는 어떤 서버의 누구든지 귀하의 공간에 참여하는 데 사용할 수 있습니다.",
             "published_aliases_section": "공개된 주소",
             "save": "변경 사항 저장",
-            "topic_field_label": "방 주제",
-            "url_preview_encryption_warning": "지금 이 방처럼, 암호화된 방에서는 홈서버 (미리 보기가 만들어지는 곳)에서 이 방에서 보여지는 링크에 대해 알 수 없도록 기본으로 URL 미리 보기가 꺼집니다.",
-            "url_preview_explainer": "누군가 메시지에 URL을 넣으면, URL 미리 보기로 웹사이트에서 온 제목, 설명, 그리고 이미지 등 그 링크에 대한 정보가 표시됩니다.",
-            "url_previews_section": "URL 미리보기",
-            "user_url_previews_default_off": "기본으로 URL 미리 보기를 <a>껐습니다</a>.",
-            "user_url_previews_default_on": "기본으로 URL 미리 보기를 <a>켰습니다</a>."
+            "topic_field_label": "방 주제"
         },
         "notifications": {
             "browse_button": "찾기",
@@ -2647,8 +2636,7 @@
             "username": "사용자 이름"
         },
         "inline_url_previews_default": "기본으로 인라인 URL 미리 보기 사용하기",
-        "inline_url_previews_room": "이 방에 참여한 모두에게 기본으로 URL 미리보기 사용하기",
-        "inline_url_previews_room_account": "이 방에서 URL 미리보기 사용하기 (오직 나만 영향을 받음)",
+        "inline_url_previews_encrypted": "암호화된 방에서 미리 보기 기능 활성화",
         "insert_trailing_colon_mentions": "메시지 시작 부분에 사용자 언급 뒤에 콜론을 추가합니다",
         "invite_controls": {
             "default_label": "사용자가 방에 초대할 수 있도록 허용"
@@ -2786,6 +2774,8 @@
             "enable_tray_icon": "트레이 아이콘을 표시하고 닫을 때 창을 최소화합니다.",
             "keyboard_heading": "키보드 단축키",
             "keyboard_view_shortcuts_button": "모든 키보드 단축키를 보려면 <a>여기를 클릭하세요</a>.",
+            "link_previews_description": "메시지 아래에 링크 정보를 표시합니다.",
+            "link_previews_heading": "링크 미리보기",
             "media_heading": "이미지, GIF 및 동영상",
             "presence_description": "귀하의 활동과 상태를 다른 사람들과 공유하세요.",
             "publish_timezone": "공개 프로필에 시간대 게시",
@@ -3076,6 +3066,14 @@
         "server_error_detail": "서버를 쓸 수 없거나 과부하거나, 다른 문제가 있습니다.",
         "shrug": "¯\\_(ツ)_/¯ 앞에 일반 문자 메시지를 놓으세요",
         "spoiler": "스포일러로서 주어진 메시지를 전송",
+        "status": {
+            "description": "현재 상태 설정",
+            "no_args": "인자가 제공되지 않았습니다. 이모지와 선택 사항인 텍스트 컴포넌트를 입력해야 합니다.",
+            "no_emoji": "이모티콘을 제공하지 않으셨습니다.",
+            "no_text": "상태 메시지를 제공하지 않으셨습니다.",
+            "too_long_emoji": "첫 번째 인수는 이모티콘이어야 합니다.",
+            "too_long_text": "입력하신 텍스트가 너무 깁니다."
+        },
         "tableflip": "평문 텍스트 메시지 앞에 (╯°□°）╯︵ ┻━┻ 를 덧붙임",
         "topic": "방 주제를 얻거나 설정하기",
         "topic_none": "이 방은 주제가 없습니다.",
@@ -3248,7 +3246,6 @@
         },
         "empty_description": "메시지 위에 마우스를 올렸을 때 \"%(replyInThread)s\"를 사용하세요.",
         "empty_title": "스레드는 대화를 주제 중심으로 유지하고 쉽게 추적할 수 있도록 도와줍니다.",
-        "error_start_thread_existing_relation": "기존 관계가 있는 이벤트로부터 스레드를 생성할 수 없습니다",
         "mark_all_read": "모두 읽음으로 표시",
         "my_threads": "내 스레드",
         "my_threads_description": "참여한 모든 스레드를 표시합니다",
@@ -3292,11 +3289,9 @@
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "복호화 중",
         "download_action_downloading": "다운로드 중",
         "download_failed": "다운로드 실패",
         "download_failed_description": "이 파일을 다운로드하는 동안 오류가 발생했습니다.",
-        "e2e_state": "종단 간 암호화 현황",
         "edits": {
             "tooltip_label": "%(date)s에 편집함. 클릭해서 편집 보기.",
             "tooltip_sub": "편집 내용을 보려면 클릭하세요",
@@ -3377,9 +3372,7 @@
         "m.poll.start": "%(senderName)s님이 설문을 시작했습니다 - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 방 아바타를 변경했습니다.",
-            "changed_img": "%(senderDisplayName)s님이 방 아바타를 <img/>(으)로 바꿈",
-            "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈",
-            "removed": "%(senderDisplayName)s님이 방 아바타를 제거했습니다."
+            "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3489,10 +3482,7 @@
             "removed": "%(senderName)s님이 제거한 %(widgetName)s 위젯"
         },
         "mab": {
-            "collapse_reply_chain": "인용문 접기",
             "copy_link_thread": "스레드 링크 복사",
-            "expand_reply_chain": "인용문 확장",
-            "label": "메시지 동작",
             "view_in_room": "방에서 보기"
         },
         "mjolnir": {
@@ -3504,7 +3494,6 @@
             "created_rule_rooms": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 채팅방 차단 규칙을 '%(reason)s' 사유로 생성했습니다.",
             "created_rule_servers": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 서버 차단 규칙을 '%(reason)s' 사유로 생성했습니다.",
             "created_rule_users": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 사용자 차단 규칙을 '%(reason)s' 사유로 생성했습니다.",
-            "message_hidden": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>",
             "removed_rule": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 차단 규칙을 삭제했습니다.",
             "removed_rule_rooms": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 채팅방 차단 규칙을 삭제했습니다.",
             "removed_rule_servers": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 서버 차단 규칙을 삭제했습니다.",
@@ -3772,12 +3761,6 @@
         "verify_button": "사용자 확인",
         "verify_explainer": "추가 보안을 위해 양쪽 기기에서 일회용 인증 코드를 확인하여 이 사용자를 인증하세요."
     },
-    "user_menu": {
-        "link_new_device": "새 기기 연결",
-        "settings": "전체 설정",
-        "switch_theme_dark": "다크 모드로 전환",
-        "switch_theme_light": "라이트 모드로 전환"
-    },
     "voip": {
         "already_in_call": "이미 전화중",
         "already_in_call_person": "이미 이 사람과 통화 중입니다.",
@@ -3793,6 +3776,14 @@
         "call_held": "%(peerName)s님이 통화를 보류했습니다",
         "call_held_resume": "통화를 보류했습니다. <a>다시 시작</a>",
         "call_held_switch": "통화를 보류했습니다. <a>전환</a>",
+        "call_members": {
+            "exhaustive": {
+                "other": "<avatars/> 통화 참여 중"
+            },
+            "overflow": {
+                "other": "<avatars/> +%(overflowCount)s명 통화 중"
+            }
+        },
         "call_toast_unknown_room": "알 수 없는 채팅방",
         "camera_disabled": "카메라가 꺼져 있습니다",
         "camera_enabled": "카메라가 여전히 활성화되어 있습니다",
@@ -3802,7 +3793,6 @@
         "connection_lost": "서버와의 연결이 끊어졌습니다.",
         "connection_lost_description": "서버에 연결되지 않으면 전화를 걸 수 없습니다.",
         "consulting": "%(transferTarget)s와 상담 중입니다. <a>%(transferee)s에게 통화 이전</a>",
-        "decline_call": "거부",
         "default_device": "기본 기기",
         "dial": "전화걸기",
         "dialpad": "다이얼패드",
@@ -3816,10 +3806,12 @@
         "enable_microphone": "마이크 음소거 해제",
         "expand": "통화로 돌아가기",
         "get_call_link": "통화 링크 공유하기",
+        "group_call_started": "그룹 통화 시작됨",
         "hangup": "전화 끊기",
         "hide_sidebar_button": "사이드바 숨기기",
         "input_devices": "입력 장치",
         "jitsi_call": "Jitsi 화상 회의",
+        "join_with_video": "동영상으로 참여하기",
         "legacy_call": "레거시 콜",
         "maximise": "화면 채우기",
         "maximise_call": "통화 최대화",
@@ -3852,7 +3844,6 @@
         "show_sidebar_button": "사이드바 표시",
         "silence": "통화 음소거",
         "silenced": "알림 음소거됨",
-        "skip_lobby_toggle_option": "즉시 가입하세요",
         "start_screenshare": "화면 공유를 시작하세요",
         "stop_screenshare": "화면 공유 중지",
         "too_many_calls": "전화가 너무 많아요",
@@ -3874,14 +3865,17 @@
         "user_is_presenting": "%(sharerName)s님이 화면을 공유중입니다.",
         "video_call": "영상 통화",
         "video_call_incoming": "수신 영상 통화",
-        "video_call_started": "영상통화가 시작되었습니다",
         "video_call_using": "사용 중인 영상 통화:",
         "voice_call": "음성 통화",
         "voice_call_incoming": "수신 음성 통화",
         "you_are_presenting": "화면을 공유 중입니다."
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Element에 오신 것을 환영합니다",
+    "welcome": {
+        "tagline_element": "압도적인 속도와 간결함.",
+        "title_element": "가장 나다운 공간, 엘리먼트에서",
+        "title_generic": "%(brand)s에 오신 것을 환영합니다"
+    },
     "widget": {
         "added_by": "위젯을 추가했습니다",
         "capabilities_dialog": {
@@ -3903,6 +3897,7 @@
             "change_name_this_room": "이 채팅방의 이름을 변경하세요",
             "change_topic_active_room": "현재 사용 중인 채팅방의 주제를 변경하세요",
             "change_topic_this_room": "이 채팅방의 주제를 변경하세요",
+            "download_file": "미디어 저장소에서 파일 다운로드",
             "receive_membership_active_room": "현재 채팅방의 멤버 변동 내역 보기",
             "receive_membership_this_room": "채팅방 멤버 변동 내역 보기",
             "remove_ban_invite_leave_active_room": "다른 사용자를 현재 채팅방에서 내보내거나, 차단하거나, 초대할 수 있으며, 회원님 자신도 강제로 퇴장시킬 수 있습니다.",

@@ -52,6 +52,7 @@ import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
+import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -651,7 +652,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
         // If all the rules are inhibited, don't show anything.
         if (this.isInhibited) {
-            return masterSwitch;
+            return <Form.Root onSubmit={onSubmitPreventDefault}>{masterSwitch}</Form.Root>;
         }
 
         const emailSwitches = (this.state.threepids || [])
@@ -669,19 +670,21 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
         return (
             <SettingsSubsection>
-                {masterSwitch}
+                <Form.Root onSubmit={onSubmitPreventDefault}>
+                    {masterSwitch}
 
-                <SettingsFlag name="deviceNotificationsEnabled" level={SettingLevel.DEVICE} />
+                    <SettingsFlag name="deviceNotificationsEnabled" level={SettingLevel.DEVICE} />
 
-                {this.state.deviceNotificationsEnabled && (
-                    <>
-                        <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
-                        <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
-                        <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
-                    </>
-                )}
+                    {this.state.deviceNotificationsEnabled && (
+                        <>
+                            <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
+                            <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
+                            <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
+                        </>
+                    )}
 
-                {emailSwitches}
+                    {emailSwitches}
+                </Form.Root>
             </SettingsSubsection>
         );
     }

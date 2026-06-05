@@ -42,7 +42,7 @@ import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
-} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -647,15 +647,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
     useEffect(() => {
-        vm.setTimestamp(props.ts);
-        vm.setDisplayOptions({
-            showTwelveHour: props.showTwelveHour,
-            showFullDate: props.showFullDate,
-            showSeconds: props.showSeconds,
-        });
-        vm.setTooltipInhibited(props.inhibitTooltip);
-        vm.setHref(props.href);
-        vm.setHandlers({ onClick: props.onClick });
+        vm.setProps(props);
     }, [vm, props]);
     return <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />;
 }

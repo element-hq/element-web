@@ -17,8 +17,7 @@
         "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
-        "unread_messages": "Nepročitane poruke.",
-        "user_menu": "Korisnički izbornik"
+        "unread_messages": "Nepročitane poruke."
     },
     "a11y_jump_first_unread_room": "Skoči na prvu sobu s nepročitanim porukama.",
     "action": {
@@ -34,7 +33,6 @@
         "cancel": "Otkazati",
         "change": "Promijeni",
         "clear": "Očisti",
-        "click": "Klikni",
         "click_to_copy": "Klikni za kopiranje",
         "close": "Zatvori",
         "collapse": "Sažmi",
@@ -68,7 +66,6 @@
         "go": "Idi",
         "go_back": "Idi natrag",
         "got_it": "Shvaćam",
-        "hide": "Sakrij",
         "hide_advanced": "Sakrij napredno",
         "hold": "Čekanje",
         "ignore": "Ignoriraj",
@@ -102,7 +99,6 @@
         "rename": "Preimenuj",
         "reply": "Odgovori",
         "reply_in_thread": "Odgovori u niti",
-        "report_content": "Prijavi sadržaj",
         "report_room": "Prijavi sobu",
         "resend": "Ponovno pošalji",
         "reset": "Poništi",
@@ -224,10 +220,7 @@
         "log_in_new_account": "<a>Prijavite se</a> na svoj novi račun.",
         "logout_dialog": {
             "description": "Jeste li sigurni da se želite odjaviti?",
-            "megolm_export": "Ručno izvezi ključeve",
             "setup_key_backup_title": "Izgubit ćete pristup svojim šifriranim porukama",
-            "setup_secure_backup_description_1": "Šifrirane poruke zaštićene su sveobuhvatnim šifriranjem. Samo vi i primatelji imate ključeve za čitanje tih poruka.",
-            "setup_secure_backup_description_2": "Kada se odjavite, ovi će se ključevi izbrisati s ovog uređaja, što znači da nećete moći čitati šifrirane poruke osim ako nemate ključeve za njih na drugim uređajima ili ih niste sigurnosno kopirali na poslužitelj.",
             "skip_key_backup": "Ne želim svoje šifrirane poruke"
         },
         "misconfigured_body": "Upitajte svog administratora za %(brand)s da provjeri ima li u <a>vašoj konfiguraciji</a> netočnih ili dupliciranih unosa.",
@@ -279,7 +272,6 @@
             "point_the_camera": "Skenirajte QR kod koji je ovdje prikazan",
             "scan_code_instruction": "Skenirajte QR kod drugim uređajem",
             "scan_qr_code": "Prijavi se pomoću QR koda",
-            "security_code": "Sigurnosni kod",
             "security_code_prompt": "Ako se to od vas zatraži, unesite ispod navedeni kod na drugi uređaj.",
             "select_qr_code": "Odaberite „%(scanQRCode)s”",
             "unsupported_explainer": "Vaš davatelj usluga računa ne podržava prijavu na novi uređaj pomoću QR koda.",
@@ -345,7 +337,6 @@
         "sign_in_instead_prompt": "Već imate račun? <a>Prijavi se ovdje</a>",
         "sign_in_or_register": "Prijavite se ili izradite račun",
         "sign_in_or_register_description": "Za nastavak upotrijebite svoj račun ili izradite novi.",
-        "sign_in_prompt": "Imate li račun? <a>Prijava</a>",
         "sign_in_with_sso": "Prijavite se pomoću jedinstvene prijave (SSO)",
         "signing_in": "U tijeku je prijava…",
         "soft_logout": {
@@ -595,7 +586,6 @@
         "video": "Videozapis",
         "video_room": "Videosoba",
         "view_message": "Prikaži poruku",
-        "voice": "Glas",
         "warning": "Upozorenje"
     },
     "composer": {
@@ -884,7 +874,6 @@
         "thread_root_id": "ID korijena niti: %(threadRootId)s",
         "threads_timeline": "Vremenska traka niti",
         "title": "Alati za razvojne inženjere",
-        "toggle_event": "uključi/isključi događaj",
         "toolbox": "Alatni okvir",
         "use_at_own_risk": "Ovo korisničko sučelje NE provjerava vrste vrijednosti. Upotrebljavajte na vlastitu odgovornost.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -997,9 +986,6 @@
         "set_up_recovery": "Postavljanje oporavka",
         "set_up_recovery_toast_description": "Generirajte ključ za oporavak koji se može upotrijebiti za vraćanje vaše šifrirane povijesti poruka u slučaju da izgubite pristup svojim uređajima.",
         "set_up_toast_title": "Postavljanje zaštićene sigurnosne kopije",
-        "setup_secure_backup": {
-            "explainer": "Prije odjave napravite sigurnosnu kopiju ključeva kako biste izbjegli njihov gubitak."
-        },
         "turn_on_key_storage": "Uključi pohranu ključeva",
         "turn_on_key_storage_description": "Sigurno pohranite svoj identitet šifriranja i ključeve poruka na poslužitelju. To će vam omogućiti pregled povijesti poruka na svim novim uređajima.",
         "udd": {
@@ -1364,9 +1350,6 @@
         "impossible_dialog_title": "Integracije nisu dopuštene"
     },
     "invite": {
-        "ask_anyway_description": "Nije moguće pronaći profile za ispod navedene Matrixove ID-ove. Želite li ipak poslati izravnu poruku?",
-        "ask_anyway_label": "Svejedno pokreni izravnu poruku",
-        "ask_anyway_never_warn_label": "Svejedno pokreni izravnu poruku i nemoj me nikad više upozoriti",
         "email_caption": "Pozovi e-poštom",
         "email_limit_one": "Pozivnice koje se šalju e-poštom mogu se slati samo jedna po jedna",
         "email_use_default_is": "Upotrebljavate poslužitelj identiteta za slanje pozivnica e-poštom. <default>Upotrijebite zadani (%(defaultIdentityServerName)s)</default> ili ga promijenite u odjeljku <settings>Postavke</settings>.",
@@ -1567,11 +1550,6 @@
         "notifications": "Omogući ploču s obavijestima u zaglavlju sobe",
         "render_reaction_images": "Prikaži prilagođene slike u reakcijama",
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
-        "report_to_moderators": "Prijavi moderatorima",
-        "report_to_moderators_description": "U sobama koje podržavaju moderiranje gumb „Prijavi” omogućit će vam da moderatorima sobe prijavite svako neprimjereno ponašanje.",
-        "share_history_on_invite": "Podijeli šifriranu povijest s novim članovima",
-        "share_history_on_invite_description": "Prilikom pozivanja korisnika u šifriranu sobu čija je vidljivost povijesti postavljena na podijeljenu, podijelite šifriranu povijest s tim korisnikom i prihvatite šifriranu povijest kada budete pozvani u takvu sobu.",
-        "share_history_on_invite_warning": "Ova je značajka u EKSPERIMENTALNOJ FAZI i nisu implementirane sve sigurnosne mjere. Ne omogućavajte je na produkcijskim računima.",
         "sliding_sync": "Način rada Sliding Sync",
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
         "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
@@ -1821,7 +1799,6 @@
         "restricted": "Ograničeno"
     },
     "powered_by_matrix": "Pokreće Matrix",
-    "powered_by_matrix_with_logo": "Decentralizirani, šifrirani razgovori i suradnja koje pokreće $matrixLogo",
     "presence": {
         "away": "Odsutan/na",
         "busy": "Zauzeto",
@@ -1855,25 +1832,10 @@
     },
     "report_content": {
         "description": "Prijavljivanjem ove poruke administratoru matičnog poslužitelja poslat će se njezin jedinstveni ID događaja. Ako su poruke u ovoj sobi šifrirane, administrator matičnog poslužitelja neće moći pročitati tekst poruke niti pregledati datoteke ili slike.",
-        "disagree": "Ne slažem se",
-        "error_create_room_moderation_bot": "Nije moguće izraditi sobu botom za moderiranje",
         "hide_messages_from_user": "Označite ako želite sakriti sve trenutačne i buduće poruke od ovog korisnika.",
         "ignore_user": "Ignoriraj korisnika",
-        "illegal_content": "Nezakonit sadržaj",
         "missing_reason": "Navedite razlog prijave.",
-        "nature": "Odaberite sadržaj poruke i objasnite zašto je uvredljiva.",
-        "nature_disagreement": "Ono što ovaj korisnik piše nije u redu.\nTo će se prijaviti moderatorima sobe.",
-        "nature_illegal": "Ovaj korisnik se ponaša nezakonito, npr. otkriva osobne podatke drugih korisnika ili prijeti nasiljem.\nTo će se prijaviti moderatorima sobe, koji taj slučaj mogu prijaviti nadležnim organima.",
-        "nature_nonstandard_admin": "Ova je soba namijenjena nezakonitom ili neprimjerenom sadržaju ili moderatori ne moderiraju nezakonit ili neprimjeren sadržaj.\nTo će se prijaviti administratorima poslužitelja %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Ova je soba namijenjena nezakonitom ili neprimjerenom sadržaju ili moderatori ne moderiraju nezakonit ili neprimjeren sadržaj.\nTo će se prijaviti administratorima poslužitelja %(homeserver)s. Administratori NEĆE moći čitati šifrirani sadržaj ove sobe.",
-        "nature_other": "Bilo koji drugi razlog. Opišite problem.\nTo će se prijaviti moderatorima sobe.",
-        "nature_spam": "Ovaj korisnik zasipa sobu oglasima, poveznicama na oglase ili propagandom.\nTo će se prijaviti moderatorima sobe.",
-        "nature_toxic": "Ovaj se korisnik neprimjereno ponaša, na primjer vrijeđa druge korisnike ili dijeli sadržaj za odrasle u sobi prihvatljivoj za obitelji ili na drugi način krši pravila ove sobe.\nTo će se prijaviti moderatorima sobe.",
-        "other_label": "Ostalo",
-        "report_content_to_homeserver": "Prijavite sadržaj administratoru matičnog poslužitelja",
-        "report_entire_room": "Prijavi cijelu sobu",
-        "spam_or_propaganda": "Neželjeni sadržaj ili propaganda",
-        "toxic_behaviour": "Neprimjereno ponašanje"
+        "report_content_to_homeserver": "Prijavite sadržaj administratoru matičnog poslužitelja"
     },
     "report_room": {
         "description": "Prijavite ovu sobu svom davatelju usluga računa. Ako su poruke šifrirane, administrator ih neće moći pročitati.",
@@ -2255,8 +2217,6 @@
             "aliases_section": "Adrese soba",
             "avatar_field_label": "Avatar sobe",
             "canonical_alias_field_label": "Glavna adresa",
-            "default_url_previews_off": "Pregledi URL-ova zadano su onemogućeni za sudionike u ovoj sobi.",
-            "default_url_previews_on": "Pregledi URL-ova zadano su omogućeni za sudionike u ovoj sobi.",
             "description_space": "Uredite postavke koje se odnose na vaš prostor.",
             "error_creating_alias_description": "Došlo je do pogreške prilikom izrade te adrese. Poslužitelj to možda ne dopušta ili je došlo do privremenog kvara.",
             "error_creating_alias_title": "Pogreška prilikom izrade adrese",
@@ -2287,12 +2247,7 @@
             "published_aliases_explainer_space": "Objavljene adrese može upotrebljavati svatko na svakom poslužitelju kako bi se pridružio vašem prostoru.",
             "published_aliases_section": "Objavljene adrese",
             "save": "Spremi promjene",
-            "topic_field_label": "Tema sobe",
-            "url_preview_encryption_warning": "U šifriranim sobama, poput ove, pregledi URL-ova zadano su onemogućeni kako bi se osiguralo da vaš matični poslužitelj (na kojem se generiraju pregledi) ne može prikupljati informacije o poveznicama koje vidite u ovoj sobi.",
-            "url_preview_explainer": "Kada netko u svoju poruku unese URL, može se prikazati pregled URL-a kako bi se dobile dodatne informacije o toj poveznici, kao što su naslov, opis i slika s mrežnog mjesta.",
-            "url_previews_section": "Pregledi URL-ova",
-            "user_url_previews_default_off": "Zadano <a>onemogućili</a> preglede URL-ova.",
-            "user_url_previews_default_on": "Zadano ste <a>omogućili</a> preglede URL-ova."
+            "topic_field_label": "Tema sobe"
         },
         "notifications": {
             "browse_button": "Pregledaj",
@@ -2718,8 +2673,6 @@
             "username": "Korisničko ime"
         },
         "inline_url_previews_default": "Zadano omogući umetnute pretpreglede URL-ova",
-        "inline_url_previews_room": "Omogući preglede URL-ova prema zadanim postavkama za sudionike u ovoj sobi",
-        "inline_url_previews_room_account": "Omogući preglede URL-ova za ovu sobu (utječe samo na vas)",
         "insert_trailing_colon_mentions": "Umetni dvotočku nakon što spominjanja korisnika na početku poruke",
         "invite_controls": {
             "default_label": "Dopustite korisnicima da vas pozovu u sobe"
@@ -3340,7 +3293,6 @@
         },
         "empty_description": "Upotrijebite „%(replyInThread)s” prilikom zadržavanja pokazivača iznad poruke.",
         "empty_title": "Niti pomažu da vaši razgovori ostanu usmjereni na temu i da ih je lako pratiti.",
-        "error_start_thread_existing_relation": "Nije moguće stvoriti nit iz događaja s postojećom povezanosti",
         "mark_all_read": "Označi sve kao pročitano",
         "my_threads": "Moje niti",
         "my_threads_description": "Prikazuje sve niti u kojima ste sudjelovali",
@@ -3384,11 +3336,9 @@
             "unable_to_decrypt": "Nije moguće dešifrirati poruku"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifriranje",
         "download_action_downloading": "Preuzimanje",
         "download_failed": "Preuzimanje nije uspjelo",
         "download_failed_description": "Došlo je do pogreške prilikom preuzimanja ove datoteke",
-        "e2e_state": "Stanje sveobuhvatnog šifriranja",
         "edits": {
             "tooltip_label": "Uređeno dana %(date)s. Kliknite za pregled uređenih stavki.",
             "tooltip_sub": "Kliknite za pregled uređenih stavki",
@@ -3471,9 +3421,7 @@
         "m.poll.start": "%(senderName)s započeo/la je anketu – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s promijenio/la je avatar sobe.",
-            "changed_img": "%(senderDisplayName)s promijenio/la je avatar sobe u <img/>",
-            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s",
-            "removed": "%(senderDisplayName)s uklonio/la je avatar sobe."
+            "lightbox_title": "%(senderDisplayName)s promijenio/la je avatar za %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3585,10 +3533,7 @@
             "removed": "%(senderName)s uklonio/la je widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Sažmi navode",
             "copy_link_thread": "Kopiraj poveznicu u nit",
-            "expand_reply_chain": "Proširi navode",
-            "label": "Radnje s porukama",
             "view_in_room": "Pregled u sobi"
         },
         "mjolnir": {
@@ -3600,7 +3545,6 @@
             "created_rule_rooms": "%(senderName)s izradio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s za %(reason)s",
             "created_rule_servers": "%(senderName)s izradio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s za %(reason)s",
             "created_rule_users": "%(senderName)s izradio/la je pravilo kojim se zabranjuju korisnici koji odgovaraju %(glob)s za %(reason)s",
-            "message_hidden": "Ignorirali ste ovog korisnika, pa je njegova poruka skrivena. <a>Svejedno prikaži.</a>",
             "removed_rule": "%(senderName)s uklonio/la je pravilo za zabranu koje odgovara %(glob)s",
             "removed_rule_rooms": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju sobe koje odgovaraju %(glob)s",
             "removed_rule_servers": "%(senderName)s uklonio/la je pravilo kojim se zabranjuju poslužitelji koji odgovaraju %(glob)s",
@@ -3944,12 +3888,6 @@
         "verify_button": "Potvrdi korisnika",
         "verify_explainer": "Radi dodatne sigurnosti potvrdite ovog korisnika provjerom jednokratnog koda na oba uređaja."
     },
-    "user_menu": {
-        "link_new_device": "Poveži novi uređaj",
-        "settings": "Sve postavke",
-        "switch_theme_dark": "Prebaci na tamni način rada",
-        "switch_theme_light": "Prebaci na svijetli način rada"
-    },
     "voip": {
         "already_in_call": "Već u pozivu",
         "already_in_call_person": "Već ste u pozivu sa tom osobom.",
@@ -3974,7 +3912,6 @@
         "connection_lost": "Veza s poslužiteljem je prekinuta",
         "connection_lost_description": "Ne možete upućivati ​​pozive ako niste povezani s poslužiteljem.",
         "consulting": "Savjetovanje s %(transferTarget)s. <a>Prijenos na %(transferee)s</a>",
-        "decline_call": "Odbij",
         "default_device": "Zadani uređaj",
         "dial": "Biranje",
         "dialpad": "Brojčanik",
@@ -4026,7 +3963,6 @@
         "show_sidebar_button": "Prikaži bočnu traku",
         "silence": "Utišaj poziv",
         "silenced": "Obavijesti su utišane",
-        "skip_lobby_toggle_option": "Pridruži se odmah",
         "start_screenshare": "Započni dijeljenje zaslona",
         "stop_screenshare": "Zaustavi dijeljenje zaslona",
         "too_many_calls": "Previše poziva",
@@ -4048,7 +3984,6 @@
         "user_is_presenting": "%(sharerName)s dijeli zaslon",
         "video_call": "Videopoziv",
         "video_call_incoming": "Dolazni videopoziv",
-        "video_call_started": "Videopoziv je započeo",
         "video_call_using": "Videopoziv putem:",
         "voice_call": "Glasovni poziv",
         "voice_call_incoming": "Dolazni glasovni poziv",
@@ -4056,7 +3991,6 @@
         "you_are_presenting": "Dijelite zaslon"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Dobro došli u Element",
     "widget": {
         "added_by": "Widget je dodao/la",
         "capabilities_dialog": {

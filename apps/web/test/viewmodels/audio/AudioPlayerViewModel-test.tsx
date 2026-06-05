@@ -9,7 +9,7 @@ import { type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "reac
 import { waitFor } from "@testing-library/dom";
 
 import { type Playback, PlaybackState } from "../../../src/audio/Playback";
-import { AudioPlayerViewModel } from "../../../src/viewmodels/audio/AudioPlayerViewModel";
+import { AudioPlayerViewModel } from "../../../src/viewmodels/room/timeline/event-tile/body/AudioPlayerViewModel";
 import { MockedPlayback } from "../../unit-tests/audio/MockedPlayback";
 
 describe("AudioPlayerViewModel", () => {
@@ -63,6 +63,18 @@ describe("AudioPlayerViewModel", () => {
         event = new KeyboardEvent("keydown", { key: "ArrowRight" }) as unknown as ReactKeyboardEvent<HTMLDivElement>;
         vm.onKeyDown(event);
         expect(playback.skipTo).toHaveBeenCalledWith(10 + 5); // 5 seconds forward
+    });
+
+    it("does not stop propagation for unhandled key down events", () => {
+        const vm = new AudioPlayerViewModel({ playback, mediaName: "mediaName" });
+        const event = new KeyboardEvent("keydown", { key: "a" });
+        const stopPropagationSpy = jest.spyOn(event, "stopPropagation");
+
+        vm.onKeyDown(event as unknown as ReactKeyboardEvent<HTMLDivElement>);
+
+        expect(stopPropagationSpy).not.toHaveBeenCalled();
+        expect(playback.toggle).not.toHaveBeenCalled();
+        expect(playback.skipTo).not.toHaveBeenCalled();
     });
 
     it("should update snapshot when setProps is called with new mediaName", () => {

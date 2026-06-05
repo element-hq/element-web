@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useState } from "react";
 import classNames from "classnames";
-import { type DOMNode, Element as ParserElement, domToReact } from "html-react-parser";
+import { type DOMNode, type Element as ParserElement, domToReact } from "html-react-parser";
 import { textContent, getInnerHTML } from "domutils";
 import { CollapseIcon, CopyIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -113,7 +113,7 @@ const CodeBlock: React.FC<Props> = ({ preNode }) => {
     let content = domToReact(preNode.children as DOMNode[]);
 
     // Add code element if it's missing since we depend on it
-    if (!preNode.children.some((child) => child instanceof ParserElement && child.tagName.toUpperCase() === "CODE")) {
+    if (!preNode.children.some((child) => child.type === "tag" && child.tagName.toUpperCase() === "CODE")) {
         content = <code>{content}</code>;
     }
 

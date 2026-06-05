@@ -15,8 +15,7 @@
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de status da sala",
         "seek_bar_label": "Barra de busca de áudio",
-        "unread_messages": "Mensagens não lidas.",
-        "user_menu": "Menu do usuário"
+        "unread_messages": "Mensagens não lidas."
     },
     "a11y_jump_first_unread_room": "Ir para a primeira sala não lida.",
     "action": {
@@ -32,7 +31,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click": "Clicar",
         "click_to_copy": "Clique para copiar",
         "close": "Fechar",
         "collapse": "Recolher",
@@ -66,7 +64,6 @@
         "go": "Próximo",
         "go_back": "Voltar",
         "got_it": "Ok, entendi",
-        "hide": "Ocultar",
         "hide_advanced": "Esconder configurações avançadas",
         "hold": "Pausar",
         "ignore": "Bloquear",
@@ -100,7 +97,6 @@
         "rename": "Renomear",
         "reply": "Responder",
         "reply_in_thread": "Responder no tópico",
-        "report_content": "Denunciar conteúdo",
         "report_room": "Reportar sala",
         "resend": "Reenviar",
         "reset": "Redefinir",
@@ -222,10 +218,7 @@
         "log_in_new_account": "<a>Entrar</a> em sua nova conta.",
         "logout_dialog": {
             "description": "Deseja mesmo sair?",
-            "megolm_export": "Exportar chaves manualmente",
             "setup_key_backup_title": "Você perderá acesso às suas mensagens criptografadas",
-            "setup_secure_backup_description_1": "As mensagens estão protegidas com a criptografia de ponta a ponta. Somente você e o(s) destinatário(s) têm as chaves para ler essas mensagens.",
-            "setup_secure_backup_description_2": "Quando você se desconectar, essas chaves serão excluídas desse dispositivo, o que significa que você não poderá ler mensagens criptografadas, a menos que tenha as chaves delas em seus outros dispositivos ou tenha feito backup delas no servidor.",
             "skip_key_backup": "Não quero minhas mensagens criptografadas"
         },
         "misconfigured_body": "Entre em contato com o administrador do %(brand)s para verificar se há entradas inválidas ou duplicadas nas <a>suas configurações</a>.",
@@ -277,7 +270,6 @@
             "point_the_camera": "Escaneie o código QR mostrado aqui",
             "scan_code_instruction": "Digitalize o código QR com outro dispositivo",
             "scan_qr_code": "Iniciar sessão com código QR",
-            "security_code": "Código de segurança",
             "security_code_prompt": "Se solicitado, insira o código abaixo em seu outro dispositivo.",
             "select_qr_code": "Selecione \"%(scanQRCode)s”",
             "unsupported_explainer": "Seu provedor de conta não suporta o login em um novo dispositivo com um código QR.",
@@ -343,7 +335,6 @@
         "sign_in_instead_prompt": "Já tem uma conta? <a>Entre aqui</a>",
         "sign_in_or_register": "Faça login ou crie uma conta",
         "sign_in_or_register_description": "Use sua conta ou crie uma nova para continuar.",
-        "sign_in_prompt": "Já tem uma conta? <a>Login</a>",
         "sign_in_with_sso": "Entre com o logon único",
         "signing_in": "Entrando…",
         "soft_logout": {
@@ -589,7 +580,6 @@
         "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
-        "voice": "Voz",
         "warning": "Atenção"
     },
     "composer": {
@@ -873,7 +863,6 @@
         "thread_root_id": "ID raiz do tópico: %(threadRootId)s",
         "threads_timeline": "Linha do tempo dos tópicos",
         "title": "Ferramentas de desenvolvimento",
-        "toggle_event": "alternar evento",
         "toolbox": "Ferramentas",
         "use_at_own_risk": "Esta interface de usuário NÃO verifica os tipos de valores. Use por sua conta e risco.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -984,9 +973,6 @@
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gere uma chave de recuperação que possa ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos.",
         "set_up_toast_title": "Configurar o backup online",
-        "setup_secure_backup": {
-            "explainer": "Faça o backup das suas chaves antes de sair, para evitar perdê-las."
-        },
         "turn_on_key_storage": "Ativar o armazenamento de chaves",
         "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
         "udd": {
@@ -1346,9 +1332,6 @@
         "impossible_dialog_title": "As integrações não estão permitidas"
     },
     "invite": {
-        "ask_anyway_description": "Não foi possível encontrar perfis para os Matrix IDs listados abaixo - você gostaria de iniciar um DM mesmo assim?",
-        "ask_anyway_label": "Inicie o DM de qualquer maneira",
-        "ask_anyway_never_warn_label": "Inicie o DM mesmo assim e nunca mais me avise",
         "email_caption": "Convidar por e-mail",
         "email_limit_one": "Os convites por e-mail só podem ser enviados um de cada vez",
         "email_use_default_is": "Use um servidor de identidade para convidar por e-mail. <default>Use o padrão (%(defaultIdentityServerName)s)</default> ou um servidor personalizado em <settings>Configurações</settings>.",
@@ -1545,11 +1528,6 @@
         "notifications": "Ative o painel de notificações no cabeçalho da sala",
         "render_reaction_images": "Renderizar imagens personalizadas em reações",
         "render_reaction_images_description": "Às vezes chamados de “emojis personalizados”.",
-        "report_to_moderators": "Reportar aos moderadores",
-        "report_to_moderators_description": "Em salas que aceitam moderação, o botão \"Denunciar\" permitirá que você denuncie abusos aos moderadores da sala.",
-        "share_history_on_invite": "Compartilhe o histórico criptografado com novos membros",
-        "share_history_on_invite_description": "Quando você convidar alguém para uma sala criptografada com o histórico visível para todos, compartilhe o histórico criptografado com essa pessoa e aceite o histórico criptografado quando for convidado para uma sala assim.",
-        "share_history_on_invite_warning": "Este recurso é EXPERIMENTAL e nem todas as precauções de segurança estão implementadas. Não o habilite em contas de produção.",
         "sliding_sync": "Modo Sliding Sync",
         "sliding_sync_description": "Em desenvolvimento ativo, não pode ser desativado.",
         "sliding_sync_disabled_notice": "Saia e entre novamente para desativar",
@@ -1783,7 +1761,6 @@
         "restricted": "Restrito"
     },
     "powered_by_matrix": "Desenvolvido por Matrix",
-    "powered_by_matrix_with_logo": "Chat descentralizado e encriptado & colaboração, powered by $matrixLogo",
     "presence": {
         "away": "Ausente",
         "busy": "Ocupado",
@@ -1817,25 +1794,10 @@
     },
     "report_content": {
         "description": "Denunciar essa mensagem enviará seu “ID de evento” exclusivo ao administrador do seu servidor doméstico. Se as mensagens nesta sala forem criptografadas, o administrador do servidor doméstico não poderá ler o texto da mensagem nem visualizar arquivos ou imagens.",
-        "disagree": "Discordo",
-        "error_create_room_moderation_bot": "Não é possível criar espaço com o bot de moderação",
         "hide_messages_from_user": "Marque se você deseja ocultar todas as mensagens atuais e futuras desse usuário.",
         "ignore_user": "Ignorar usuário",
-        "illegal_content": "Conteúdo ilegal",
         "missing_reason": "Por favor, descreva porque você está reportando.",
-        "nature": "Escolha uma natureza e descreva o que torna essa mensagem abusiva.",
-        "nature_disagreement": "O que esse usuário está escrevendo está errado.\nIsso será relatado aos moderadores da sala.",
-        "nature_illegal": "Este usuário está exibindo comportamento ilegal, por exemplo, expondo pessoas (doxxing) ou ameaçando de violência.\nIsso será relatado aos moderadores da sala, que podem encaminhar isso às autoridades legais.",
-        "nature_nonstandard_admin": "Esta sala é dedicada a conteúdo ilegal ou tóxico ou os moderadores não conseguem moderar conteúdo ilegal ou tóxico.\nIsso será relatado aos administradores do %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Esta sala é dedicada a conteúdo ilegal ou tóxico ou os moderadores não conseguem moderar conteúdo ilegal ou tóxico.\nIsso será relatado aos administradores do %(homeserver)s. Os administradores NÃO poderão ler o conteúdo criptografado desta sala.",
-        "nature_other": "Qualquer outro motivo. Descreva o problema.\nIsso será relatado aos moderadores da sala.",
-        "nature_spam": "Esse usuário está enviando spam para a sala com anúncios, links para anúncios ou propaganda.\nIsso será relatado aos moderadores da sala.",
-        "nature_toxic": "Esse usuário está exibindo comportamento tóxico, por exemplo, insultando outros usuários ou compartilhando conteúdo somente para adultos em um sala para menores de idade ou violando as regras desta sala. Isso será relatado aos moderadores da sala.",
-        "other_label": "Outros",
-        "report_content_to_homeserver": "Denunciar conteúdo ao administrador do seu servidor principal",
-        "report_entire_room": "Denunciar a sala inteira",
-        "spam_or_propaganda": "Spam ou propaganda",
-        "toxic_behaviour": "Comportamento tóxico"
+        "report_content_to_homeserver": "Denunciar conteúdo ao administrador do seu servidor principal"
     },
     "report_room": {
         "description": "Denuncie esta sala ao administrador do seu servidor. Isso enviará a ID exclusiva da sala, mas se as mensagens forem criptografadas, o administrador não poderá lê-las nem visualizar os arquivos compartilhados.",
@@ -2200,8 +2162,6 @@
             "aliases_section": "Endereços da sala",
             "avatar_field_label": "Foto da sala",
             "canonical_alias_field_label": "Endereço principal",
-            "default_url_previews_off": "Pré-visualizações de links estão desativadas por padrão para participantes desta sala.",
-            "default_url_previews_on": "Pré-visualizações de links estão ativadas por padrão para participantes desta sala.",
             "description_space": "Editar configurações relacionadas ao seu espaço.",
             "error_creating_alias_description": "Ocorreu um erro ao criar esse endereço. Isso pode não ser permitido pelo servidor ou houve um problema temporário.",
             "error_creating_alias_title": "Erro ao criar o endereço",
@@ -2230,12 +2190,7 @@
             "published_aliases_explainer_space": "Endereços publicados podem ser usados por qualquer um em qualquer servidor para entrar em seu espaço.",
             "published_aliases_section": "Endereços publicados",
             "save": "Salvar alterações",
-            "topic_field_label": "Descrição da sala",
-            "url_preview_encryption_warning": "Em salas criptografadas, como esta, as pré-visualizações de links estão desativadas por padrão para garantir que o seu servidor local (onde as visualizações são geradas) não possa coletar informações sobre os links que você vê nesta sala.",
-            "url_preview_explainer": "Quando alguém inclui um link em uma mensagem, a pré-visualização do link pode ser exibida para fornecer mais informações sobre esse link, como o título, a descrição e uma imagem do site.",
-            "url_previews_section": "Pré-visualização de links",
-            "user_url_previews_default_off": "Você <a>desativou</a> pré-visualizações de links por padrão.",
-            "user_url_previews_default_on": "Você <a>ativou</a> pré-visualizações de links por padrão."
+            "topic_field_label": "Descrição da sala"
         },
         "notifications": {
             "browse_button": "Buscar",
@@ -2655,8 +2610,6 @@
             "username": "Nome de usuário"
         },
         "inline_url_previews_default": "Ativar, por padrão, a visualização de resumo de links",
-        "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
-        "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",
         "insert_trailing_colon_mentions": "Insira dois pontos à direita após o usuário mencionar no início de uma mensagem",
         "invite_controls": {
             "default_label": "Permitir que usuários convidem você para salas"
@@ -3265,7 +3218,6 @@
         },
         "empty_description": "Use “%(replyInThread)s” ao passar o mouse sobre uma mensagem.",
         "empty_title": "Os tópicos ajudam a manter suas conversas dentro do tópico e fáceis de acompanhar.",
-        "error_start_thread_existing_relation": "Não é possível criar um tópico a partir de um evento com uma relação existente",
         "mark_all_read": "Marcar tudo como lido",
         "my_threads": "Meus tópicos",
         "my_threads_description": "Mostra todos os tópicos em que você participou",
@@ -3309,11 +3261,9 @@
             "unable_to_decrypt": "Não foi possível descriptografar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decriptando",
         "download_action_downloading": "Baixando",
         "download_failed": "Falha no download",
         "download_failed_description": "Ocorreu um erro ao baixar esse arquivo",
-        "e2e_state": "Estado da criptografia de ponta a ponta",
         "edits": {
             "tooltip_label": "Editado em %(date)s. Clique para ver edições.",
             "tooltip_sub": "Clicar para ver edições",
@@ -3395,9 +3345,7 @@
         "m.poll.start": "%(senderName)s começou uma enquete - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mudou a foto da sala.",
-            "changed_img": "%(senderDisplayName)s alterou a foto da sala para <img/>",
-            "lightbox_title": "%(senderDisplayName)s alterou a foto da sala %(roomName)s",
-            "removed": "%(senderDisplayName)s removeu a foto da sala."
+            "lightbox_title": "%(senderDisplayName)s alterou a foto da sala %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3507,10 +3455,7 @@
             "removed": "O widget %(widgetName)s foi removido por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Recolher citações",
             "copy_link_thread": "Copiar ligação para o tópico",
-            "expand_reply_chain": "Expandir citações",
-            "label": "Ações da mensagem",
             "view_in_room": "Ver na sala"
         },
         "mjolnir": {
@@ -3522,7 +3467,6 @@
             "created_rule_rooms": "%(senderName)s criou uma regra que bane salas que correspondem a %(glob)s devido à %(reason)s",
             "created_rule_servers": "%(senderName)s criou uma regra que bane servidores que correspondem a %(glob)s devido à %(reason)s",
             "created_rule_users": "%(senderName)s criou uma regra que bane usuários que correspondem a %(glob)s devido à %(reason)s",
-            "message_hidden": "Você bloqueou este usuário, portanto, a mensagem dele foi escondida. <a>Mostrar mesmo assim.</a>",
             "removed_rule": "%(senderName)s removeu uma regra de banimento correspondendo a %(glob)s",
             "removed_rule_rooms": "%(senderName)s removeu a regra que bane salas que correspondem a %(glob)s",
             "removed_rule_servers": "%(senderName)s removeu a regra que bane servidores que correspondem a %(glob)s",
@@ -3827,12 +3771,6 @@
         "verify_button": "Confirmar usuário",
         "verify_explainer": "Para maior segurança, confirme este usuário comparando um código único em ambos os aparelhos."
     },
-    "user_menu": {
-        "link_new_device": "Vincular novo dispositivo",
-        "settings": "Todas as configurações",
-        "switch_theme_dark": "Alternar para o modo escuro",
-        "switch_theme_light": "Alternar para o modo claro"
-    },
     "voip": {
         "already_in_call": "Já em um chamada",
         "already_in_call_person": "Você já está em uma chamada com essa pessoa.",
@@ -3857,7 +3795,6 @@
         "connection_lost": "A conectividade com o servidor foi perdida",
         "connection_lost_description": "Você não pode fazer chamadas sem uma conexão com o servidor.",
         "consulting": "Consultar com %(transferTarget)s. Tranferir para <a> %(transferee)s</a>",
-        "decline_call": "Recusar",
         "default_device": "Aparelho padrão",
         "dial": "Discar",
         "dialpad": "Teclado de discagem",
@@ -3908,7 +3845,6 @@
         "show_sidebar_button": "Exibir a barra lateral",
         "silence": "Silenciar chamado",
         "silenced": "Notificações silenciadas",
-        "skip_lobby_toggle_option": "Junte-se imediatamente",
         "start_screenshare": "Começar a compartilhar sua tela",
         "stop_screenshare": "Parar de compartilhar sua tela",
         "too_many_calls": "Muitas chamadas",
@@ -3930,14 +3866,12 @@
         "user_is_presenting": "%(sharerName)s está apresentando",
         "video_call": "Chamada de vídeo",
         "video_call_incoming": "Chamada de vídeo recebida",
-        "video_call_started": "Videochamada iniciada",
         "video_call_using": "Chamada de vídeo usando:",
         "voice_call": "Chamada de voz",
         "voice_call_incoming": "Chamada de voz recebida",
         "you_are_presenting": "Você está apresentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
-    "welcome_to_element": "Boas-vindas a Element",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {

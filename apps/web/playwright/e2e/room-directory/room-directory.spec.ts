@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import type { Preset, Visibility } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 
@@ -48,9 +50,9 @@ test.describe("Room Directory", () => {
             await app.closeDialog();
 
             const resp = await bot.publicRooms({});
-            expect(resp.total_room_count_estimate).toEqual(1);
-            expect(resp.chunk).toHaveLength(1);
-            expect(resp.chunk[0].room_id).toEqual(roomId);
+            expect(resp.total_room_count_estimate).toBeGreaterThanOrEqual(1);
+            expect(resp.chunk).toHaveLength(resp.total_room_count_estimate);
+            expect(resp.chunk.find((r) => r.room_id === roomId)).toBeTruthy();
         },
     );
 
@@ -65,6 +67,7 @@ test.describe("Room Directory", () => {
                 room_alias_name: "test1234",
             });
 
+            await rejectToast(page, "Verify this device");
             await page.getByRole("button", { name: "Explore rooms" }).click();
 
             const dialog = page.locator(".mx_SpotlightDialog");

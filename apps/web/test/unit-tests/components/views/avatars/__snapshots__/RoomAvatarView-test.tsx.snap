@@ -4,7 +4,7 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
 <DocumentFragment>
   <span
     aria-label="Avatar"
-    class="_avatar_zysgz_8 mx_BaseAvatar"
+    class="_avatar_va14e_8 mx_BaseAvatar"
     data-color="1"
     data-testid="avatar-img"
     data-type="round"
@@ -12,7 +12,7 @@ exports[`<RoomAvatarView /> should not render a decoration 1`] = `
   >
     <img
       alt=""
-      class="_image_zysgz_43"
+      class="_image_va14e_43"
       data-type="round"
       height="32px"
       loading="lazy"
@@ -32,7 +32,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -40,7 +40,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -51,7 +51,7 @@ exports[`<RoomAvatarView /> should render a low priority room decoration 1`] = `
     </span>
     <svg
       aria-label="This is a low priority room"
-      aria-labelledby="_r_0_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -76,7 +76,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -84,7 +84,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -95,7 +95,7 @@ exports[`<RoomAvatarView /> should render a public room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is public"
-      aria-labelledby="_r_c_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-info-primary)"
       fill="currentColor"
@@ -120,7 +120,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_icon"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -128,7 +128,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -139,7 +139,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
     </span>
     <svg
       aria-label="This room is a video room"
-      aria-labelledby="_r_6_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_icon"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -164,7 +164,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -172,7 +172,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -183,7 +183,7 @@ exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
     </span>
     <svg
       aria-label="Away"
-      aria-labelledby="_r_14_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"
@@ -221,7 +221,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -229,7 +229,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -240,7 +240,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
     </span>
     <svg
       aria-label="Busy"
-      aria-labelledby="_r_u_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -280,7 +280,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -288,7 +288,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -299,7 +299,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
     </span>
     <svg
       aria-label="Offline"
-      aria-labelledby="_r_o_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-tertiary)"
       fill="currentColor"
@@ -339,7 +339,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
   >
     <span
       aria-label="Avatar"
-      class="_avatar_zysgz_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
       data-color="1"
       data-testid="avatar-img"
       data-type="round"
@@ -347,7 +347,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
     >
       <img
         alt=""
-        class="_image_zysgz_43"
+        class="_image_va14e_43"
         data-type="round"
         height="32px"
         loading="lazy"
@@ -358,7 +358,7 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
     </span>
     <svg
       aria-label="Online"
-      aria-labelledby="_r_i_"
+      aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
       fill="currentColor"

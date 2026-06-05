@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { sleep } from "matrix-js-sdk/src/utils";
 import React, { type ReactNode } from "react";
 import { EventStatus, MatrixEventEvent, type Room, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal, { type IHandle } from "../Modal";
 import Spinner from "../components/views/elements/Spinner";
@@ -25,6 +26,8 @@ import { type AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoo
 import { bulkSpaceBehaviour } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
 import SettingsStore from "../settings/SettingsStore";
+import { CallStore } from "../stores/CallStore";
+import LegacyCallHandler from "../LegacyCallHandler";
 
 export async function leaveRoomBehaviour(
     matrixClient: MatrixClient,
@@ -57,6 +60,23 @@ export async function leaveRoomBehaviour(
     // should not encounter this
     if (!room) {
         throw new Error(`Expected to find room for id ${roomId}`);
+    }
+
+    // attempt to hang up legacy based calls
+    try {
+        LegacyCallHandler.instance.hangupOrReject(roomId);
+    } catch (e) {
+        logger.warn("Failed to hangup call before leaving room: ", e);
+    }
+
+    // hang up widget based calls
+    const activeCall = CallStore.instance.getActiveCall(roomId);
+    if (activeCall) {
+        try {
+            await activeCall.disconnect();
+        } catch (e) {
+            logger.warn("Failed to disconnect call before leaving room: ", e);
+        }
     }
 
     // await any queued messages being sent so that they do not fail

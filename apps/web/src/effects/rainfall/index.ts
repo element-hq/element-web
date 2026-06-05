@@ -5,11 +5,12 @@ Copyright 2021 Josias Allestad
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
+
 import type ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
-export type RainfallOptions = {
+type RainfallOptions = {
     /**
      * The maximum number of raindrops to render at a given time
      */
@@ -38,7 +39,7 @@ const KEY_FRAME_INTERVAL = 15;
 export default class Rainfall implements ICanvasEffect {
     private readonly options: RainfallOptions;
 
-    public constructor(options: { [key: string]: any }) {
+    public constructor(options: Partial<RainfallOptions>) {
         this.options = { ...DefaultOptions, ...options };
     }
 

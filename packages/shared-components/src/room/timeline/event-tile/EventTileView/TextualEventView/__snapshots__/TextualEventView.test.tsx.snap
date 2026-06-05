@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextualEventView > renders a textual event 1`] = `
+<div>
+  <div
+    class="TextualEventView-module_textualEvent"
+    data-event-density="default"
+    data-event-layout="group"
+  >
+    Dummy textual event text
+  </div>
+</div>
+`;
+
+exports[`TextualEventView > renders a textual event with link 1`] = `
+<div>
+  <div
+    class="TextualEventView-module_textualEvent"
+    data-event-density="default"
+    data-event-layout="group"
+  >
+    <span>
+      Dummy [🤒] textual event text 
+    </span>
+    <a
+      href="~"
+    >
+      with link
+    </a>
+  </div>
+</div>
+`;

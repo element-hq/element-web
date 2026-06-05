@@ -25,7 +25,7 @@ test.describe("Preferences user settings tab", () => {
         labsFlags: ["feature_new_room_list"],
     });
 
-    test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user, axe }) => {
         await page.setViewportSize({ width: 1024, height: 4000 });
         const tab = await app.settings.openUserSettings("Preferences");
         // Assert that the top heading is rendered
@@ -39,6 +39,8 @@ test.describe("Preferences user settings tab", () => {
                 }
             `,
         });
+
+        await expect(axe).toHaveNoViolations();
     });
 
     test("should be able to change the app language", { tag: ["@no-firefox", "@no-webkit"] }, async ({ uut, user }) => {

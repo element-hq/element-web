@@ -9,7 +9,6 @@ import React, { type ChangeEvent, useContext, useEffect, useMemo, useState } fro
 import { Pill } from "@element-hq/web-shared-components";
 import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk/src/matrix";
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
-import { v4 as uuidv4 } from "uuid";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";
 import { _t, _td, UserFriendlyError } from "../../../../languageHandler.tsx";
@@ -330,7 +329,7 @@ export const StickyEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) =
     const defaultContent = mxEvent
         ? stringify(mxEvent.getContent())
         : stringify({
-              msc4354_sticky_key: uuidv4(),
+              msc4354_sticky_key: window.crypto.randomUUID(),
           });
     return <EventEditor fieldDefs={fields} defaultContent={defaultContent} onSend={onSend} onBack={onBack} />;
 };

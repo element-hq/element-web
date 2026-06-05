@@ -5,22 +5,26 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "react";
-import { type ScrollIntoViewLocation } from "react-virtuoso";
+import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
+import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
+import { DragDropProvider, DragOverlay, useDragOperation } from "@dnd-kit/react";
+import { KeyboardSensor, PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 
-import { type Room } from "../RoomListItemView";
-import { useViewModel } from "../../viewmodel";
-import { _t } from "../../utils/i18n";
+import { type Room } from "./RoomListItemWrapper/RoomListItemView";
+import { useViewModel } from "../../core/viewmodel";
+import { _t } from "../../core/i18n/i18n";
 import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
     type VirtualizedListContext,
-} from "../../utils/VirtualizedList";
+} from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList } from "../../utils/VirtualizedList";
-import { RoomListSectionHeaderView } from "../RoomListSectionHeaderView";
-import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWrapper";
+import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
+import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListItemWrapper } from "./RoomListItemWrapper";
+import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
+import styles from "./VirtualizedRoomListView.module.css";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -37,6 +41,8 @@ export interface RoomListViewState {
     spaceId?: string;
     /** Active filter keys for context tracking */
     filterKeys?: FilterKey[];
+    /** Tag of a newly created section header to scroll into view */
+    scrollToSectionTag?: string;
 }
 
 /**
@@ -109,8 +115,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     const snapshot = useViewModel(vm);
     const { roomListState, sections, isFlatList } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;
+    const scrollToSectionTag = roomListState.scrollToSectionTag;
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
+    const virtuosoHandleRef = useRef<VirtuosoHandle | null>(null);
+    const setVirtuosoHandle = useCallback((handle: VirtuosoHandle | null) => {
+        virtuosoHandleRef.current = handle;
+    }, []);
     const roomIds = useMemo(() => sections.flatMap((section) => section.roomIds), [sections]);
     const roomCount = roomIds.length;
     const sectionCount = sections.length;
@@ -139,6 +150,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     /**
      * Get the item component for a specific index
      * Gets the room's view model and passes it to RoomListItemView
+     *
+     * @param index - The index of the item in the list
+     * @param roomId - The ID of the room for this item
+     * @param context - The virtualization context containing list state
+     * @param onFocus - Callback to call when the item is focused
+     * @param isInLastSection - Whether this item is in the last section
+     * @param roomIndexInSection - The index of this room within its section
      */
     const getItemComponent = useCallback(
         (
@@ -146,21 +164,27 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             roomId: string,
             context: VirtualizedListContext<Context>,
             onFocus: (item: string, e: React.FocusEvent) => void,
-            roomIndexInSection: number,
+            isInLastSection?: boolean,
+            roomIndexInSection?: number,
         ): JSX.Element => {
             const { activeRoomIndex, roomCount, vm, isFlatList } = context.context;
             const isSelected = activeRoomIndex === index;
             const roomItemVM = vm.getRoomItemViewModel(roomId);
 
+            // If we don't have a view model for this room, it means the room has been removed since the list was rendered - return an empty placeholder
+            if (!roomItemVM) {
+                return <React.Fragment key={`stale-${index}`} />;
+            }
+
             // Item is focused when the list has focus AND this item's key matches tabIndexKey
             // This matches the old RoomList implementation's roving tabindex pattern
             const isFocused = context.focused && context.tabIndexKey === roomId;
 
-            const isFirstItem = index === 0;
-            const isLastItem = index === roomCount - 1;
+            const isFirstItem = isFlatList && index === 0;
+            const isLastItem = Boolean((isFlatList || isInLastSection) && index === roomCount - 1);
 
             return (
-                <RoomListItemAccessibilityWrapper
+                <RoomListItemWrapper
                     key={roomId}
                     vm={roomItemVM}
                     renderAvatar={renderAvatar}
@@ -168,7 +192,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     isFocused={isFocused}
                     onFocus={onFocus}
                     roomIndex={index}
-                    roomIndexInSection={roomIndexInSection}
+                    // For a flat list, we don't have sections, so roomIndexInSection is unused and can be set to 0
+                    roomIndexInSection={roomIndexInSection || 0}
                     roomCount={roomCount}
                     isFirstItem={isFirstItem}
                     isLastItem={isLastItem}
@@ -181,7 +206,6 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
 
     /**
      * Get the item component for a specific index in a grouped list
-     * Since we have sections, we can calculate the room's index within its section and pass it to getItemComponent
      * Gets the room's view model and passes it to RoomListItemView
      */
     const getItemComponentForGroupedList = useCallback(
@@ -194,14 +218,14 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         ): JSX.Element => {
             const { sections } = context.context;
             const roomIndexInSection = sections[groupIndex].roomIds.findIndex((id) => id === roomId);
-            return getItemComponent(index, roomId, context, onFocus, roomIndexInSection);
+            const isInLastSection = groupIndex === sections.length - 1;
+            return getItemComponent(index, roomId, context, onFocus, isInLastSection, roomIndexInSection);
         },
         [getItemComponent],
     );
 
     /**
      * Get the item component for a specific index in a flat list
-     * Since we don't have sections, we can pass 0 for the room's index within its section to getItemComponent
      * Gets the room's view model and passes it to RoomListItemView
      */
     const getItemComponentForFlatList = useCallback(
@@ -211,8 +235,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             context: VirtualizedListContext<Context>,
             onFocus: (item: string, e: React.FocusEvent) => void,
         ): JSX.Element => {
-            // For a flat list, we don't have sections, so roomIndexInSection is unused and can be set to 0
-            return getItemComponent(index, roomId, context, onFocus, 0);
+            return getItemComponent(index, roomId, context, onFocus);
         },
         [getItemComponent],
     );
@@ -241,6 +264,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
 
             return (
                 <RoomListSectionHeaderView
+                    // Stable key per section avoids a @dnd-kit registration race when a new section is inserted.
+                    key={headerId}
                     vm={sectionHeaderVM}
                     isFocused={isFocused}
                     onFocus={onFocus}
@@ -315,6 +340,16 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         [activeRoomIndex],
     );
 
+    // Imperatively scroll to a newly created section header.
+    // scrollIntoView on virtuoso handle is more reliable in this case vs scrollIntoViewOnChange
+    useLayoutEffect(() => {
+        if (scrollToSectionTag === undefined) return;
+        const sectionIndex = sections.findIndex((s) => s.id === scrollToSectionTag);
+        if (sectionIndex === -1) return;
+        const flatIndex = sections.slice(0, sectionIndex).reduce((acc, s) => acc + s.roomIds.length + 1, 0);
+        virtuosoHandleRef.current?.scrollIntoView({ index: flatIndex, align: "start", behavior: "auto" });
+    }, [scrollToSectionTag, sections]);
+
     const isItemFocusable = useCallback(() => true, []);
     const isGroupHeaderFocusable = useCallback(() => true, []);
     const increaseViewportBy = useMemo(
@@ -338,6 +373,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         rangeChanged,
         onKeyDown,
         increaseViewportBy,
+        className: styles.roomList,
     };
 
     if (isFlatList) {
@@ -352,14 +388,78 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     }
 
     return (
-        <GroupedVirtualizedList<string, string, Context>
-            {...commonProps}
-            {...getContainerAccessibleProps("treegrid", totalCount)}
-            groups={groups}
-            getHeaderKey={getHeaderKey}
-            getGroupHeaderComponent={getGroupHeaderComponent}
-            getItemComponent={getItemComponentForGroupedList}
-            isGroupHeaderFocusable={isGroupHeaderFocusable}
-        />
+        <DragDropProvider
+            onDragEnd={(event) => {
+                if (event.canceled) return;
+                const { target, source } = event.operation;
+                if (!source || !target) return;
+
+                vm.changeRoomSection(source.id as string, target.id as string);
+            }}
+            sensors={[
+                // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
+                // So we start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
+                PointerSensor.configure({
+                    activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
+                }),
+                // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
+                KeyboardSensor.configure({
+                    keyboardCodes: {
+                        start: ["Space"],
+                        cancel: ["Escape"],
+                        end: ["Space"],
+                        up: ["ArrowUp"],
+                        down: ["ArrowDown"],
+                        left: ["ArrowLeft"],
+                        right: ["ArrowRight"],
+                    },
+                }),
+            ]}
+        >
+            <DragOverlay dropAnimation={null}>
+                <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />
+            </DragOverlay>
+            <GroupedRoomList
+                {...commonProps}
+                {...getContainerAccessibleProps("treegrid", totalCount)}
+                scrollHandleRef={setVirtuosoHandle}
+                groups={groups}
+                getHeaderKey={getHeaderKey}
+                getGroupHeaderComponent={getGroupHeaderComponent}
+                getItemComponent={getItemComponentForGroupedList}
+                isGroupHeaderFocusable={isGroupHeaderFocusable}
+            />
+        </DragDropProvider>
     );
+}
+
+/**
+ * Inner component rendered inside DragDropProvider that renders the grouped virtualized list.
+ * Uses useDragOperation to detect active keyboard drags and disable the list's own keyboard
+ * navigation shortcuts while a drag is in progress, preventing unwanted list scrolling.
+ */
+function GroupedRoomList(props: GroupedVirtualizedListProps<string, string, Context>): JSX.Element {
+    const { source } = useDragOperation();
+
+    return <GroupedVirtualizedList<string, string, Context> {...props} disableKeyboardNavigation={source !== null} />;
+}
+
+interface DragOverlayContentProps {
+    /**  The room list view model */
+    vm: RoomListViewModel;
+    /** Function to render the room avatar */
+    renderAvatar: (room: Room) => ReactNode;
+}
+
+/**
+ * Component rendered in the drag overlay when dragging a room item. Renders a copy of the dragged item to avoid dragging the actual element out of virtualization.
+ */
+function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
+    const { source } = useDragOperation();
+    if (!source) return null;
+
+    const itemVm = vm.getRoomItemViewModel(source.id as string);
+    if (!itemVm) return null;
+
+    return <RoomListItemDragOverlayView vm={itemVm} renderAvatar={renderAvatar} />;
 }

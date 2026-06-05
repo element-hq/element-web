@@ -50,7 +50,7 @@ test.describe("Editing", () => {
         const eventTile = page.locator(".mx_EventTile", { hasText: edited });
         await expect(eventTile).toBeVisible();
         // Click to display the message edit history dialog
-        await eventTile.getByText("(edited)").click();
+        await eventTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ }).click();
     };
 
     const clickButtonViewSource = async (locator: Locator) => {
@@ -89,7 +89,7 @@ test.describe("Editing", () => {
             await editLastMessage(page, "Massage");
 
             // Assert that the edit label is visible
-            await expect(page.locator(".mx_EventTile_edited")).toBeVisible();
+            await expect(page.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
 
             await clickEditedMessage(page, "Massage");
 
@@ -213,7 +213,7 @@ test.describe("Editing", () => {
         await editLastMessage(page, "Massage");
 
         // Assert that the edit label is visible
-        await expect(page.locator(".mx_EventTile_edited")).toBeVisible();
+        await expect(page.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
 
         await clickEditedMessage(page, "Massage");
 
@@ -369,6 +369,6 @@ test.describe("Editing", () => {
 
         // nevertheless, the event should be updated
         await expect(messageTile.locator(".mx_EventTile_body")).toHaveText("Edited body");
-        await expect(messageTile.locator(".mx_EventTile_edited")).toBeVisible();
+        await expect(messageTile.getByRole("button", { name: /Edited at .*? Click to view edits\./ })).toBeVisible();
     });
 });

@@ -6,17 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef } from "react";
+import React, { createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { EventContentBodyView } from "@element-hq/web-shared-components";
+import { ActionBarView, EventContentBodyView, MessageTimestampView } from "@element-hq/web-shared-components";
 
+import { EditHistoryActionBarViewModel } from "../../../viewmodels/message-body/EditHistoryActionBarViewModel";
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
+import { MessageTimestampViewModel } from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
-import { formatTime } from "../../../DateUtils";
-import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -46,7 +45,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
-    private EventContentBodyViewModel: EventContentBodyViewModel;
+    private readonly eventContentBodyViewModel: EventContentBodyViewModel;
+    private readonly editHistoryActionBarViewModel: EditHistoryActionBarViewModel;
+    private readonly messageTimestampViewModel: MessageTimestampViewModel;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -60,7 +61,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
 
         const mxEventContent = getReplacedContent(event);
-        this.EventContentBodyViewModel = new EventContentBodyViewModel({
+        this.eventContentBodyViewModel = new EventContentBodyViewModel({
             mxEvent: event,
             content: mxEventContent,
             highlights: [],
@@ -72,13 +73,40 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             linkify: true,
             client: cli,
         });
+        this.messageTimestampViewModel = new MessageTimestampViewModel({
+            ts: event.getTs(),
+            showTwelveHour: props.isTwelveHour,
+            inhibitTooltip: true,
+        });
+
+        this.editHistoryActionBarViewModel = new EditHistoryActionBarViewModel({
+            canRemove: !props.mxEvent.isRedacted() && !props.isBaseEvent && canRedact,
+            showViewSource: SettingsStore.getValue("developerMode"),
+            onRemoveClick: this.onRedactClick,
+            onViewSourceClick: this.onViewSourceClick,
+        });
     }
 
     public componentDidUpdate(prevProps: IProps): void {
         if (prevProps.mxEvent !== this.props.mxEvent) {
             const mxEventContent = getReplacedContent(this.props.mxEvent);
-            this.EventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
+            this.eventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
         }
+
+        if (prevProps.mxEvent !== this.props.mxEvent || prevProps.isTwelveHour !== this.props.isTwelveHour) {
+            this.messageTimestampViewModel.setProps({
+                ts: this.props.mxEvent.getTs(),
+                showTwelveHour: this.props.isTwelveHour,
+                inhibitTooltip: true,
+            });
+        }
+
+        this.editHistoryActionBarViewModel.setProps({
+            canRemove: !this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact,
+            showViewSource: SettingsStore.getValue("developerMode"),
+            onRemoveClick: this.onRedactClick,
+            onViewSourceClick: this.onViewSourceClick,
+        });
     }
 
     private onAssociatedStatusChanged = (): void => {
@@ -115,35 +143,15 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     public componentWillUnmount(): void {
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
-        this.EventContentBodyViewModel.dispose();
+        this.eventContentBodyViewModel.dispose();
+        this.editHistoryActionBarViewModel.dispose();
+        this.messageTimestampViewModel.dispose();
     }
 
     private renderActionBar(): React.ReactNode {
-        // hide the button when already redacted
-        let redactButton: JSX.Element | undefined;
-        if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
-            redactButton = <AccessibleButton onClick={this.onRedactClick}>{_t("action|remove")}</AccessibleButton>;
-        }
-
-        let viewSourceButton: JSX.Element | undefined;
-        if (SettingsStore.getValue("developerMode")) {
-            viewSourceButton = (
-                <AccessibleButton onClick={this.onViewSourceClick}>{_t("action|view_source")}</AccessibleButton>
-            );
-        }
-
-        if (!redactButton && !viewSourceButton) {
-            // Hide the empty MessageActionBar
-            return null;
-        } else {
-            // disabled remove button when not allowed
-            return (
-                <div className="mx_MessageActionBar">
-                    {redactButton}
-                    {viewSourceButton}
-                </div>
-            );
-        }
+        return (
+            <ActionBarView vm={this.editHistoryActionBarViewModel} className="mx_ThreadActionBar mx_HistoryActionBar" />
+        );
     }
 
     public render(): React.ReactNode {
@@ -157,14 +165,14 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = <EventContentBodyView vm={this.EventContentBodyViewModel} as="span" />;
+                contentElements = <EventContentBodyView vm={this.eventContentBodyViewModel} as="span" />;
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 contentContainer = (
                     <div className="mx_EventTile_content" ref={this.content}>
                         *&nbsp;
-                        <span className="mx_MEmoteBody_sender">{name}</span>
+                        <span className="mx_EditHistoryMessage_emoteSender">{name}</span>
                         &nbsp;{contentElements}
                     </div>
                 );
@@ -177,7 +185,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             }
         }
 
-        const timestamp = formatTime(new Date(mxEvent.getTs()), this.props.isTwelveHour);
         const isSending = ["sending", "queued", "encrypting"].includes(this.state.sendStatus!);
         const classes = classNames("mx_EventTile", {
             // Note: we keep the `sending` state class for tests, not for our styles
@@ -187,7 +194,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             <li>
                 <div className={classes}>
                     <div className="mx_EventTile_line">
-                        <span className="mx_MessageTimestamp">{timestamp}</span>
+                        <MessageTimestampView vm={this.messageTimestampViewModel} className="mx_MessageTimestamp" />
                         {contentContainer}
                         {this.renderActionBar()}
                     </div>

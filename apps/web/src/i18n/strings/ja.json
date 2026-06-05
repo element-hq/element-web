@@ -10,8 +10,7 @@
             "other": "メンションを含む未読メッセージ%(count)s件。"
         },
         "room_name": "ルーム %(name)s",
-        "unread_messages": "未読メッセージ。",
-        "user_menu": "ユーザーメニュー"
+        "unread_messages": "未読メッセージ。"
     },
     "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
     "action": {
@@ -26,7 +25,6 @@
         "cancel": "キャンセル",
         "change": "変更",
         "clear": "消去",
-        "click": "クリック",
         "click_to_copy": "クリックでコピー",
         "close": "閉じる",
         "collapse": "折りたたむ",
@@ -87,7 +85,6 @@
         "rename": "表示名を変更",
         "reply": "返信",
         "reply_in_thread": "スレッドで返信",
-        "report_content": "コンテンツを報告",
         "resend": "再送信",
         "reset": "リセット",
         "resume": "再開",
@@ -202,10 +199,7 @@
         "log_in_new_account": "新しいアカウントに<a>ログイン</a>しましょう。",
         "logout_dialog": {
             "description": "サインアウトしてよろしいですか？",
-            "megolm_export": "手動で鍵をエクスポート",
             "setup_key_backup_title": "暗号化されたメッセージにアクセスできなくなります",
-            "setup_secure_backup_description_1": "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。",
-            "setup_secure_backup_description_2": "サインアウトすると、これらの鍵はこの端末から削除されます。使用できる鍵が他の端末にあったり、サーバーにバックアップされたりしているのでない限り、暗号化されたメッセージは読むことができなくなります。",
             "skip_key_backup": "暗号化されたメッセージは不要です"
         },
         "misconfigured_body": "<a>設定</a>が間違っているか重複しているか確認するよう、%(brand)sの管理者に問い合わせてください。",
@@ -291,7 +285,6 @@
         "sign_in_instead_prompt": "サインイン",
         "sign_in_or_register": "サインインするか、アカウントを作成してください",
         "sign_in_or_register_description": "続行するには、作成済のアカウントを使用するか、新しいアカウントを作成してください。",
-        "sign_in_prompt": "アカウントがありますか？<a>サインインしてください</a>",
         "sign_in_with_sso": "シングルサインオンを使用してサインイン",
         "signing_in": "サインインしています…",
         "soft_logout": {
@@ -709,7 +702,6 @@
         "state_key": "ステートキー",
         "threads_timeline": "スレッドのタイムライン",
         "title": "開発者ツール",
-        "toggle_event": "イベントを切り替える",
         "toolbox": "ツールボックス",
         "use_at_own_risk": "このユーザーインターフェースは、値の種類を確認しません。自己責任で使用してください。",
         "user_read_up_to": "ユーザーの既読状況： ",
@@ -789,9 +781,6 @@
             "warning": "復元方法を削除しなかった場合、攻撃者があなたのアカウントにアクセスしようとしている可能性があります。設定画面でアカウントのパスワードを至急変更し、新しい復元方法を設定してください。"
         },
         "set_up_toast_title": "セキュアバックアップを設定",
-        "setup_secure_backup": {
-            "explainer": "鍵を失くさないよう、サインアウトする前にバックアップしてください。"
-        },
         "udd": {
             "interactive_verification_button": "絵文字で認証",
             "other_ask_verify_text": "このユーザーにセッションを認証するよう依頼するか、以下から手動で認証してください。",
@@ -1224,8 +1213,6 @@
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
         "mjolnir": "参加者を無視する新しい方法",
         "msc3531_hide_messages_pending_moderation": "モデレーターに、保留中のモデレーションのメッセージを非表示にすることを許可。",
-        "report_to_moderators": "モデレーターに報告",
-        "report_to_moderators_description": "モデレートをサポートするルームで「報告」ボタンを使用すると、ルームのモデレーターに問題を報告できます。",
         "sliding_sync": "スライド式同期モード",
         "sliding_sync_description": "開発中です。無効にできません。",
         "sliding_sync_server_no_support": "あなたのサーバーはネイティブでサポートしていません",
@@ -1432,7 +1419,6 @@
         "moderator": "モデレーター",
         "restricted": "制限"
     },
-    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "presence": {
         "away": "離席中",
         "busy": "取り込み中",
@@ -1463,20 +1449,10 @@
     },
     "report_content": {
         "description": "このメッセージを報告すると、このメッセージの一意の「イベントID」があなたのホームサーバーの管理者に送信されます。このルーム内のメッセージが暗号化されている場合、ホームサーバーの管理者はメッセージのテキストを読んだり、ファイルや画像を表示したりすることはできません。",
-        "disagree": "同意しない",
         "hide_messages_from_user": "このユーザーのメッセージを非表示にするかどうか確認してください。",
         "ignore_user": "ユーザーを無視",
-        "illegal_content": "不法なコンテンツ",
         "missing_reason": "報告する理由を記入してください。",
-        "nature": "特徴を選び、このメッセージを報告する理由を記入してください。",
-        "nature_disagreement": "ユーザーの投稿内容が正しくない。\nこのユーザーをルームのモデレーターに報告します。",
-        "nature_other": "その他の理由。問題を記入してください。\nルームのモデレーターに報告します。",
-        "nature_spam": "ユーザーが広告や、広告・プロパガンダへのリンクのスパムを行っている。\nこのユーザーをルームのモデレーターに報告します。",
-        "other_label": "その他",
-        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告",
-        "report_entire_room": "ルーム全体を報告",
-        "spam_or_propaganda": "スパム、プロパガンダ",
-        "toxic_behaviour": "危害を加える振る舞い"
+        "report_content_to_homeserver": "あなたのホームサーバーの管理者にコンテンツを報告"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s個のセッションの復号化に失敗しました！",
@@ -1740,8 +1716,6 @@
             "aliases_section": "ルームのアドレス",
             "avatar_field_label": "ルームのアバター",
             "canonical_alias_field_label": "メインアドレス",
-            "default_url_previews_off": "このルームの参加者には、既定でURLプレビューが無効です。",
-            "default_url_previews_on": "このルームの参加者には、既定でURLプレビューが有効です。",
             "description_space": "スペースの設定を変更します。",
             "error_creating_alias_description": "アドレスを作成する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
             "error_creating_alias_title": "アドレスを作成する際にエラーが発生しました",
@@ -1768,12 +1742,7 @@
             "published_aliases_explainer_space": "公開アドレスを設定すると、どのサーバーのユーザーでも、あなたのスペースに参加できるようになります。",
             "published_aliases_section": "公開アドレス",
             "save": "変更を保存",
-            "topic_field_label": "ルームのトピック",
-            "url_preview_encryption_warning": "このルームを含めて、暗号化されたルームでは、あなたのホームサーバー（これがプレビューを作成します）によるリンクの情報の収集を防ぐため、URLプレビューは既定で無効になっています。",
-            "url_preview_explainer": "メッセージにURLが含まれる場合、タイトル、説明、ウェブサイトの画像などがURLプレビューとして表示されます。",
-            "url_previews_section": "URLプレビュー",
-            "user_url_previews_default_off": "URLプレビューが既定で<a>無効</a>です。",
-            "user_url_previews_default_on": "URLプレビューが既定で<a>有効</a>です。"
+            "topic_field_label": "ルームのトピック"
         },
         "notifications": {
             "browse_button": "参照",
@@ -2049,8 +2018,6 @@
             "spell_check_locale_placeholder": "ロケールを選択"
         },
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",
-        "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
-        "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",
         "insert_trailing_colon_mentions": "ユーザーをメンションする際にコロンを挿入",
         "jump_to_bottom_on_send": "メッセージを送信する際にタイムラインの最下部に移動",
         "key_backup": {
@@ -2553,7 +2520,6 @@
             "other": "%(count)s件の返信",
             "one": "%(count)s件の返信"
         },
-        "error_start_thread_existing_relation": "既存の関係のあるイベントからスレッドを作成することはできません",
         "my_threads": "自分のスレッド",
         "my_threads_description": "参加している全スレッドを表示",
         "open_thread": "スレッドを開く",
@@ -2587,7 +2553,6 @@
         "creation_summary_dm": "%(creator)sがこのダイレクトメッセージを作成しました。",
         "creation_summary_room": "%(creator)sがルームを作成し設定しました。",
         "disambiguated_profile": "%(displayName)s（%(matrixId)s）",
-        "download_action_decrypting": "復号化しています",
         "download_action_downloading": "ダウンロードしています",
         "edits": {
             "tooltip_label": "%(date)sに編集済。クリックすると変更履歴を表示。",
@@ -2668,9 +2633,7 @@
         "m.poll.start": "%(senderName)sがアンケートを開始しました - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)sがルームのアバターを変更しました。",
-            "changed_img": "%(senderDisplayName)sはルームのアバターを<img/>に変更しました",
-            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました",
-            "removed": "%(senderDisplayName)sがルームのアバターを削除しました。"
+            "lightbox_title": "%(senderDisplayName)sが%(roomName)sのアバターを変更しました"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2773,10 +2736,7 @@
             "removed": "%(widgetName)sウィジェットが%(senderName)sによって削除されました"
         },
         "mab": {
-            "collapse_reply_chain": "引用を折りたたむ",
             "copy_link_thread": "スレッドへのリンクをコピー",
-            "expand_reply_chain": "引用を展開",
-            "label": "メッセージのアクション",
             "view_in_room": "ルーム内で表示"
         },
         "mjolnir": {
@@ -2788,7 +2748,6 @@
             "created_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
-            "message_hidden": "このユーザーを無視しているのでメッセージは隠されます。<a>表示する。</a>",
             "removed_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
             "removed_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
             "removed_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
@@ -3065,11 +3024,6 @@
         "verify_button": "ユーザーの認証",
         "verify_explainer": "セキュリティー強化のため、両者の端末でワンタイムコードを確認し、このユーザーを認証してください。"
     },
-    "user_menu": {
-        "settings": "全ての設定",
-        "switch_theme_dark": "ダークテーマに切り替える",
-        "switch_theme_light": "ライトテーマに切り替える"
-    },
     "voip": {
         "already_in_call": "既に通話中です",
         "already_in_call_person": "既にこの人と通話中です。",
@@ -3152,12 +3106,10 @@
         "user_busy_description": "呼び出したユーザーは通話中です。",
         "user_is_presenting": "%(sharerName)sが画面を共有しています",
         "video_call": "ビデオ通話",
-        "video_call_started": "ビデオ通話を開始しました",
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },
     "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
-    "welcome_to_element": "Elementにようこそ",
     "widget": {
         "added_by": "ウィジェットの追加者",
         "capabilities_dialog": {

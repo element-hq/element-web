@@ -10,8 +10,7 @@
             "one": "1 nelegita mencio."
         },
         "room_name": "Ĉambro %(name)s",
-        "unread_messages": "Nelegitaj mesaĝoj.",
-        "user_menu": "Menuo de uzanto"
+        "unread_messages": "Nelegitaj mesaĝoj."
     },
     "a11y_jump_first_unread_room": "Salti al unua nelegita ĉambro.",
     "action": {
@@ -75,7 +74,6 @@
         "register": "Registri",
         "remove": "Forigi",
         "reply": "Respondi",
-        "report_content": "Raporti enhavon",
         "resend": "Resendi",
         "reset": "Restarigi",
         "resume": "Daŭrigi",
@@ -179,9 +177,7 @@
         "log_in_new_account": "<a>Saluti</a> per via nova konto.",
         "logout_dialog": {
             "description": "Ĉu vi certe volas adiaŭi?",
-            "megolm_export": "Mane elporti ŝlosilojn",
             "setup_key_backup_title": "Vi perdos aliron al viaj ĉifritaj mesaĝoj",
-            "setup_secure_backup_description_1": "Ĉifritaj mesaĝoj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la ricevonto(j) havas la ŝlosilojn necesajn por legado.",
             "skip_key_backup": "Mi ne volas miajn ĉifritajn mesaĝojn"
         },
         "misconfigured_body": "Petu vian %(brand)s-administranton kontroli <a>vian agordaron</a> je malĝustaj aŭ duoblaj eroj.",
@@ -248,7 +244,6 @@
         "sign_in_instead_prompt": "Aliĝu anstataŭe",
         "sign_in_or_register": "Salutu aŭ kreu konton",
         "sign_in_or_register_description": "Por daŭrigi, uzu vian konton aŭ kreu novan.",
-        "sign_in_prompt": "Ĉu vi havas konton? <a>Salutu</a>",
         "sign_in_with_sso": "Saluti per ununura saluto",
         "soft_logout": {
             "clear_data_button": "Vakigi ĉiujn datumojn",
@@ -630,9 +625,6 @@
             "warning": "Se vi ne forigis la rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
         "set_up_toast_title": "Agordi Sekuran savkopiadon",
-        "setup_secure_backup": {
-            "explainer": "Savkopiu viajn ŝlosilojn antaŭ adiaŭo, por ilin ne perdi."
-        },
         "udd": {
             "other_ask_verify_text": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
             "other_new_session_text": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
@@ -996,7 +988,6 @@
         "leave_beta": "Ĉesi provadon",
         "location_share_live": "Viva Loka Kundivido",
         "mjolnir": "Novaj manieroj ignori personojn",
-        "report_to_moderators": "Raportu al moderigaĵoj",
         "video_rooms": "Videoĉambroj",
         "video_rooms_a_new_way_to_chat": "Nova maniero babili per voĉo kaj video en %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videoĉambroj estas ĉiam ŝaltitaj VoIP-kanaloj enkonstruitaj en ĉambro en %(brand)s.",
@@ -1142,7 +1133,6 @@
         "restricted": "Limigita"
     },
     "powered_by_matrix": "Povigata de Matrix",
-    "powered_by_matrix_with_logo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
     "presence": {
         "away": "For",
         "idle": "Senfara",
@@ -1172,19 +1162,8 @@
     },
     "report_content": {
         "description": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn.",
-        "disagree": "Malkonsento",
-        "illegal_content": "Kontraŭleĝa enhavo",
         "missing_reason": "Bonvolu skribi, kial vi raportas.",
-        "nature": "Bonvolu elekti karakteron kaj priskribi, kial la mesaĝo estas mistrakta.",
-        "nature_disagreement": "Tio, kion skribas ĉi tiu uzanto, maltaŭgas.\nTio ĉi raportiĝos al reguligistoj de la ĉambro.",
-        "nature_illegal": "Ĉi tiu uzanto kondutas kontraŭleĝe, ekzemple malkaŝante personajn informojn pri aliuloj, aŭ minacante per agreso.\nĈi tio raportiĝos al reguligistoj de la ĉambro, kiuj povos ĝin plusendi al leĝa aŭtoritato.",
-        "nature_other": "Alia kialo. Bonvolu priskribi la problemon.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
-        "nature_spam": "Ĉi tiu uzanto sendas rubmesaĝojn kun reklamoj, ligiloj al reklamoj, aŭ al propagando.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
-        "other_label": "Alia",
-        "report_content_to_homeserver": "Raporti enhavon al la administrantode via hejmservilo",
-        "report_entire_room": "Raporti la tutan ĉambron",
-        "spam_or_propaganda": "Rubmesaĝo aŭ propagando",
-        "toxic_behaviour": "Vunda konduto"
+        "report_content_to_homeserver": "Raporti enhavon al la administrantode via hejmservilo"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Malsukcesis malĉifri%(failedCount)s salutaĵojn!",
@@ -1381,8 +1360,6 @@
             "aliases_section": "Adresoj de ĉambro",
             "avatar_field_label": "Profilbildo de ĉambro",
             "canonical_alias_field_label": "Ĉefa adreso",
-            "default_url_previews_off": "Antaŭrigardoj de URL-oj estas implicite malŝaltitaj por anoj de tiu ĉi ĉambro.",
-            "default_url_previews_on": "Antaŭrigardoj de URL-oj estas implicite ŝaltitaj por anoj de tiu ĉi ĉambro.",
             "description_space": "Redaktu agordojn pri via aro.",
             "error_creating_alias_description": "Eraris kreado de tiu adreso. Eble ĝi ne estas permesata de la servilo, aŭ okazis portempa fiasko.",
             "error_creating_alias_title": "Eraris kreado de adreso",
@@ -1409,12 +1386,7 @@
             "published_aliases_explainer_space": "Publikigitajn adresojn povas uzi ajna persono sur ajna servilo por aliĝi al via aro.",
             "published_aliases_section": "Publikigitaj adresoj",
             "save": "Konservi ŝanĝojn",
-            "topic_field_label": "Temo de ĉambro",
-            "url_preview_encryption_warning": "En ĉifritaj ĉambroj, kiel ĉi tiu, antaŭrigardoj al URL-oj estas implicite malŝaltitaj por certigi, ke via hejmservilo (kie la antaŭrigardoj estas generataj) ne povas kolekti informojn pri ligiloj en ĉi tiu ĉambro.",
-            "url_preview_explainer": "Kiam iu metas URL-on en sian mesaĝon, antaŭrigardo al tiu URL povas montriĝi, por doni pliajn informojn pri tiu ligilo, kiel ekzemple la titolon, priskribon, kaj bildon el la retejo.",
-            "url_previews_section": "Antaŭrigardoj al retpaĝoj",
-            "user_url_previews_default_off": "Vi <a>malŝaltis</a> implicitajn antaŭrigardojn al retpaĝoj.",
-            "user_url_previews_default_on": "Vi <a>ŝaltis</a> implicitajn antaŭrigardojn al retpaĝoj."
+            "topic_field_label": "Temo de ĉambro"
         },
         "notifications": {
             "browse_button": "Foliumi",
@@ -1657,8 +1629,6 @@
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?"
         },
         "inline_url_previews_default": "Ŝalti entekstan antaŭrigardon al retadresoj",
-        "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
-        "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",
         "jump_to_bottom_on_send": "Salti al subo de historio sendinte mesaĝon",
         "key_backup": {
             "setup_secure_backup": {
@@ -2043,7 +2013,6 @@
         },
         "creation_summary_dm": "%(creator)s kreis ĉi tiun individuan ĉambron.",
         "creation_summary_room": "%(creator)s kreis kaj agordis la ĉambron.",
-        "download_action_decrypting": "Malĉifrante",
         "edits": {
             "tooltip_label": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
             "tooltip_sub": "Klaku por vidi redaktojn",
@@ -2108,9 +2077,7 @@
         "m.poll.start": "%(senderName)s komencis balotenketon - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ŝanĝis la profilbildon de ĉambro.",
-            "changed_img": "%(senderDisplayName)s agordis la ĉambran profilbildon al <img/>",
-            "lightbox_title": "%(senderDisplayName)s ŝanĝis la profilbildon de %(roomName)s",
-            "removed": "%(senderDisplayName)s forigis la ĉambran profilbildon."
+            "lightbox_title": "%(senderDisplayName)s ŝanĝis la profilbildon de %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2212,9 +2179,6 @@
             "modified": "Fenestraĵon %(widgetName)s ŝanĝis %(senderName)s",
             "removed": "Fenestraĵon %(widgetName)s forigis %(senderName)s"
         },
-        "mab": {
-            "label": "Mesaĝaj agoj"
-        },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ĝisdatigis forbaran regulon, kiu akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
             "changed_rule_rooms": "%(senderName)s ŝanĝis regulon forbarintan ĉambrojn, kiuj akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
@@ -2224,7 +2188,6 @@
             "created_rule_rooms": "%(senderName)s kreis regulon forbarantan ĉambrojn, kiuj akordas kun %(glob)s, pro %(reason)s",
             "created_rule_servers": "%(senderName)s kreis regulon forbarantan servilojn, kiuj akordas kun %(glob)s, pro %(reason)s",
             "created_rule_users": "%(senderName)s kreis regulon forbarantan uzantojn, kiuj akordas kun %(glob)s, pro %(reason)s",
-            "message_hidden": "Vi malatentis ĉi tiun uzanton, ĝia mesaĝo estas do kaŝita. <a>Tamen montri.</a>",
             "removed_rule": "%(senderName)s forigis forbaran regulon, kiu akordas kun %(glob)s",
             "removed_rule_rooms": "%(senderName)s forigis la regulon forbarantan ĉambrojn, kiuj akordas kun %(glob)s",
             "removed_rule_servers": "%(senderName)s forigis la regulon forbarantan servilojn, kiuj akordas kun %(glob)s",
@@ -2423,11 +2386,6 @@
         "verify_button": "Kontroli uzanton",
         "verify_explainer": "Por plia sekureco, kontrolu ĉi tiun uzanton per unufoja kodo aperonta sur ambaŭ el viaj aparatoj."
     },
-    "user_menu": {
-        "settings": "Ĉiuj agordoj",
-        "switch_theme_dark": "Ŝalti malhelan reĝimon",
-        "switch_theme_light": "Ŝalti helan reĝimon"
-    },
     "voip": {
         "already_in_call": "Jam vokanta",
         "already_in_call_person": "Vi jam vokas ĉi tiun personon.",
@@ -2499,12 +2457,10 @@
         "user_busy_description": "La uzanto, kiun vi vokis, estas okupata.",
         "user_is_presenting": "%(sharerName)s prezentas",
         "video_call": "Vidvoko",
-        "video_call_started": "Videovoko komenciĝis",
         "voice_call": "Voĉvoko",
         "you_are_presenting": "Vi prezentas"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
-    "welcome_to_element": "Bonvenon al Element",
     "widget": {
         "added_by": "Fenestraĵon aldonis",
         "capabilities_dialog": {

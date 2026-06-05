@@ -28,12 +28,12 @@ jobs:
             R2_URL: ${{ vars.CF_R2_S3_API }}
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
@@ -60,7 +60,7 @@ jobs:
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
               working-directory: apps/web
 
-            - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: webapp
                   path: apps/web/dist/develop.tar.gz
@@ -111,7 +111,7 @@ jobs:
                   running-workflow-name: "Build & Deploy develop.element.io"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload).)*$
+                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload|Netlify|Report|deploy).)*$
 
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.
@@ -127,15 +127,14 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: element-web-develop
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name element-web-develop
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
             - run: |
                   echo "Deployed to ${STEPS_CFP_OUTPUTS_URL}" >> $GITHUB_STEP_SUMMARY
               env:
-                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.url }}
+                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.deployment-url }}

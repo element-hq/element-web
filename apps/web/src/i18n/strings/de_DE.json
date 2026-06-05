@@ -15,8 +15,7 @@
         "room_name": "Chat %(name)s",
         "room_status_bar": "Chat-Statusleiste",
         "seek_bar_label": "Audio-Suchleiste",
-        "unread_messages": "Ungelesene Nachrichten.",
-        "user_menu": "Benutzermenü"
+        "unread_messages": "Ungelesene Nachrichten."
     },
     "a11y_jump_first_unread_room": "Springe zum ersten ungelesenen Chat",
     "action": {
@@ -32,7 +31,6 @@
         "cancel": "Abbrechen",
         "change": "Ändern",
         "clear": "Zurücksetzen",
-        "click": "Klick",
         "click_to_copy": "Klicken um zu kopieren",
         "close": "Schließen",
         "collapse": "Verbergen",
@@ -66,7 +64,6 @@
         "go": "Los",
         "go_back": "Zurück",
         "got_it": "Verstanden",
-        "hide": "Verstecken",
         "hide_advanced": "Erweiterte Einstellungen ausblenden",
         "hold": "Halten",
         "ignore": "Ignorieren",
@@ -100,7 +97,6 @@
         "rename": "Umbenennen",
         "reply": "Antworten",
         "reply_in_thread": "In Thread antworten",
-        "report_content": "Inhalt melden",
         "report_room": "Chat melden",
         "resend": "Erneut senden",
         "reset": "Zurücksetzen",
@@ -222,10 +218,7 @@
         "log_in_new_account": "Mit deinem neuen Konto <a>anmelden</a>.",
         "logout_dialog": {
             "description": "Bist du sicher, dass du dich abmelden möchtest?",
-            "megolm_export": "Schlüssel manuell exportieren",
             "setup_key_backup_title": "Du wirst den Zugang zu deinen verschlüsselten Nachrichten verlieren",
-            "setup_secure_backup_description_1": "Verschlüsselte Nachrichten sind mit Ende-zu-Ende-Verschlüsselung gesichert. Nur du und der/die Empfänger haben die Schlüssel um diese Nachrichten zu lesen.",
-            "setup_secure_backup_description_2": "Wenn du dich abmeldest, werden die Schlüssel auf diesem Gerät gelöscht. Das bedeutet, dass du keine verschlüsselten Nachrichten mehr lesen kannst, wenn du die Schlüssel nicht auf einem anderen Gerät oder eine Sicherung auf dem Server hast.",
             "skip_key_backup": "Ich möchte meine verschlüsselten Nachrichten nicht"
         },
         "misconfigured_body": "Wende dich an deinen %(brand)s-Admin um <a>deine Konfiguration</a> auf ungültige oder doppelte Einträge zu überprüfen.",
@@ -277,7 +270,6 @@
             "point_the_camera": "Scanne den hier angezeigten QR-Code",
             "scan_code_instruction": "Scanne den QR-Code mit einem weiteren Gerät.",
             "scan_qr_code": "Anmeldung mit QR-Code",
-            "security_code": "Sicherheitscode",
             "security_code_prompt": "Wenn du dazu aufgefordert wirst, gib den folgenden Code auf deinem anderen Gerät ein.",
             "select_qr_code": "Wähle \"%(scanQRCode)s\"",
             "unsupported_explainer": "Dein Kontoanbieter unterstützt keine Anmeldung bei einem neuen Gerät per QR-Code.",
@@ -343,7 +335,6 @@
         "sign_in_instead_prompt": "Konto schon vorhanden? <a>Hier anmelden</a>",
         "sign_in_or_register": "Anmelden oder Konto erstellen",
         "sign_in_or_register_description": "Benutze dein Konto oder erstelle ein neues, um fortzufahren.",
-        "sign_in_prompt": "Du hast bereits ein Konto? <a>Melde dich an</a>",
         "sign_in_with_sso": "Einmalanmeldung nutzen",
         "signing_in": "Melde an …",
         "soft_logout": {
@@ -590,7 +581,6 @@
         "video": "Video",
         "video_room": "Videochat",
         "view_message": "Nachricht anzeigen",
-        "voice": "Sprachanruf",
         "warning": "Warnung"
     },
     "composer": {
@@ -877,7 +867,6 @@
         "thread_root_id": "Thread-Ursprungs-ID: %(threadRootId)s",
         "threads_timeline": "Thread-Verlauf",
         "title": "Entwicklungswerkzeuge",
-        "toggle_event": "Event umschalten",
         "toolbox": "Werkzeugkasten",
         "use_at_own_risk": "Diese Benutzeroberfläche prüft nicht auf richtige Datentypen. Benutzung auf eigene Gefahr.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -965,7 +954,6 @@
         "import_invalid_passphrase": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
         "key_storage_out_of_sync": "Ihr Schlüsselspeicher ist nicht synchronisiert.",
         "key_storage_out_of_sync_description": "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin Zugriff auf den Schlüsselspeicher und den Nachrichtenverlauf zu haben.",
-        "message_shared_by": "Diese Nachricht wurde von %(displayName)s(%(userId)s ) weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst.",
         "messages_not_secure": {
             "cause_1": "Dein Heim-Server",
             "cause_2": "Der Heim-Server der Person, die du verifizierst",
@@ -991,9 +979,6 @@
         "set_up_recovery": "Wiederherstellung einrichten",
         "set_up_recovery_toast_description": "Erzeuge einen Wiederherstellungsschlüssel. Er wird verwendet, um den verschlüsselten Nachrichtenverlauf wiederherzustellen, falls du den Zugriff auf deine Geräte verlierst.",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
-        "setup_secure_backup": {
-            "explainer": "Um deine Schlüssel nicht zu verlieren, musst du sie vor der Abmeldung sichern."
-        },
         "turn_on_key_storage": "Schlüsselspeicher einschalten",
         "turn_on_key_storage_description": "Die kryptografische Identität und die Schlüssel deiner Nachrichten sicher auf dem Server speichern. So kann der Nachrichtenverlauf auf allen neuen Geräten angezeigt werden.",
         "udd": {
@@ -1353,9 +1338,6 @@
         "impossible_dialog_title": "Integrationen sind nicht erlaubt"
     },
     "invite": {
-        "ask_anyway_description": "Konnte keine Profile für die folgenden Matrix-IDs finden – möchtest du dennoch eine Direktnachricht beginnen?",
-        "ask_anyway_label": "Dennoch DM beginnen",
-        "ask_anyway_never_warn_label": "Dennoch DM beginnen und mich nicht mehr warnen",
         "email_caption": "Via Email einladen",
         "email_limit_one": "E-Mail-Einladungen können nur nacheinander gesendet werden",
         "email_use_default_is": "Verwende einen Identitäts-Server, um per E-Mail einzuladen. <default>Nutze den Standardidentitäts-Server (%(defaultIdentityServerName)s)</default> oder konfiguriere einen in den <settings>Einstellungen</settings>.",
@@ -1554,11 +1536,6 @@
         "notifications": "Benachrichtigungen in der Chat-Kopfzeile einschalten",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
-        "report_to_moderators": "An Moderatoren melden",
-        "report_to_moderators_description": "In Chats, die Moderation unterstützen, kannst du mit der Schaltfläche „Melden“ missbräuchliche Verwendung an die Moderatoren melden.",
-        "share_history_on_invite": "Teile den verschlüsselten Nachrichtenverlauf mit neuen Mitgliedern",
-        "share_history_on_invite_description": "Wenn du einen Nutzer in einen Chat einlädst, bei dem die die Sichtbarkeit der Historie auf \"geteilt\" eingestellt ist, wird der verschlüsselte Nachrichtenverlauf mit diesem Nutzer geteilt. Du akzeptierst damit auch, einen solchen verschlüsselten Nachrichtenverlauf zu empfangen, wenn du selbst in einen solchen Chat eingeladen wirst.",
-        "share_history_on_invite_warning": "Diese Funktion ist EXPERIMENTELL und nicht alle Sicherheitsmaßnahmen sind aktiviert. Bitte nicht auf Konten verwenden, die für den Produktions-Betrieb gedacht sind.",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden. Derzeit nicht mit Element Call kompatibel.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
@@ -1803,7 +1780,6 @@
         "restricted": "Eingeschränkt"
     },
     "powered_by_matrix": "Betrieben mit Matrix",
-    "powered_by_matrix_with_logo": "Dezentraler, verschlüsselter Chat &amp; Zusammenarbeit auf Basis von $matrixLogo",
     "presence": {
         "away": "Abwesend",
         "busy": "Beschäftigt",
@@ -1837,25 +1813,10 @@
     },
     "report_content": {
         "description": "Wenn du diese Nachricht meldest, wird die eindeutige Ereignis-ID an den Administrator deines Homeserver übermittelt. Wenn die Nachrichten verschlüsselt sind, kann dein Administrator sie nicht lesen und auch keine Dateien oder Bilder einsehen.",
-        "disagree": "Ablehnen",
-        "error_create_room_moderation_bot": "Erstellen des Chats mit Moderations-Bot nicht möglich",
         "hide_messages_from_user": "Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Nutzers verstecken willst.",
         "ignore_user": "Nutzer ignorieren",
-        "illegal_content": "Illegale Inhalte",
         "missing_reason": "Bitte gib an, weshalb du einen Fehler meldest.",
-        "nature": "Bitte wähle eine Kategorie aus und beschreibe, was die Nachricht missbräuchlich macht.",
-        "nature_disagreement": "Dieser Nutzer verbreitet Falschinformation.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "nature_illegal": "Dieser Nutzer verhält sich illegal, beispielsweise durch das Veröffentlichen persönlicher Daten oder Gewaltdrohungen.\nDies wird an die Moderatoren des Chats gemeldet, welche dies an die Behörden weitergeben können.",
-        "nature_nonstandard_admin": "Dieser Chat wurde wegen illegalem oder toxischem Inhalt oder fehlender Moderation an den Administrator von %(homeserver)s gemeldet.",
-        "nature_nonstandard_admin_encrypted": "Dieser Chat wurde wegen illegalem oder toxischem Inhalt oder fehlender Moderation an den Administrator von %(homeserver)s gemeldet. Der Administrator wird KEINE verschlüsselten Inhalte in diesem Chat lesen können.",
-        "nature_other": "Anderer Grund. Bitte beschreibe das Problem.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "nature_spam": "Dieser Nutzer spammt den Chat mit Werbung, Links zu Werbung oder Propaganda.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "nature_toxic": "Dieser Benutzer zeigt toxisches Verhalten, etwa durch Beleidigen anderer Personen, Teilen von Erwachseneninhalten in familienfreundlichen Chat oder anderweitiges Missachten von Regeln.\nDies wird an die Moderatoren des Chats gemeldet.",
-        "other_label": "Sonstiges",
-        "report_content_to_homeserver": "Inhalte an die Administration deines Heim-Servers melden",
-        "report_entire_room": "Den ganzen Chat melden",
-        "spam_or_propaganda": "Spam oder Propaganda",
-        "toxic_behaviour": "Toxisches Verhalten"
+        "report_content_to_homeserver": "Inhalte an die Administration deines Heim-Servers melden"
     },
     "report_room": {
         "description": "Melde diesen Chat deinem Konto-Anbieter. Wenn die Nachrichten verschlüsselt sind, kann dein Administrator sie nicht lesen.",
@@ -2224,8 +2185,6 @@
             "aliases_section": "Chatadressen",
             "avatar_field_label": "Chat Avatar",
             "canonical_alias_field_label": "Primäre Adresse",
-            "default_url_previews_off": "URL-Vorschau ist für Mitglieder des Chats standardmäßig deaktiviert.",
-            "default_url_previews_on": "URL-Vorschau ist für Mitglieder des Chats standardmäßig aktiviert.",
             "description_space": "Einstellungen vom Space bearbeiten.",
             "error_creating_alias_description": "Es gab einen Fehler beim Anlegen der Adresse. Entweder erlaubt es der Server nicht oder es gab ein temporäres Problem.",
             "error_creating_alias_title": "Fehler beim Anlegen der Adresse",
@@ -2256,12 +2215,7 @@
             "published_aliases_explainer_space": "Veröffentlichte Adressen erlauben jedem, den Space zu betreten.",
             "published_aliases_section": "Öffentliche Adresse",
             "save": "Speichern",
-            "topic_field_label": "Chat-Thema",
-            "url_preview_encryption_warning": "In verschlüsselten Chats wie diesem ist die Linkvorschau standardmäßig deaktiviert, damit dein Homeserver (der die Vorschau erzeugt) keine Informationen über Links in diesem Chat erhält.",
-            "url_preview_explainer": "Die URL-Vorschau kann Informationen wie den Titel, die Beschreibung sowie ein Vorschaubild der Website enthalten.",
-            "url_previews_section": "URL-Vorschau",
-            "user_url_previews_default_off": "Du hast die URL-Vorschau <a>standardmäßig deaktiviert</a>.",
-            "user_url_previews_default_on": "Du hast die URL-Vorschau <a>standardmäßig aktiviert</a>."
+            "topic_field_label": "Chat-Thema"
         },
         "notifications": {
             "browse_button": "Durchsuchen",
@@ -2683,8 +2637,6 @@
             "username": "Benutzername"
         },
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
-        "inline_url_previews_room": "URL-Vorschau für Chat Mitglieder",
-        "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Chat",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "invite_controls": {
             "default_label": "Nutzern erlauben, dich in Chats einzuladen"
@@ -3296,7 +3248,6 @@
         },
         "empty_description": "Verwende \"%(replyInThread)s\" beim Hovern über eine Nachricht.",
         "empty_title": "Threads helfen, Unterhaltungen beim Thema zu halten und sie leichter zu verfolgen.",
-        "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "mark_all_read": "Alle als gelesen markieren",
         "my_threads": "Meine Threads",
         "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
@@ -3340,11 +3291,9 @@
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
         "download_failed": "Herunterladen fehlgeschlagen",
         "download_failed_description": "Beim Herunterladen dieser Datei ist ein Fehler aufgetreten",
-        "e2e_state": "Status der Ende zu Ende Verschlüssellung",
         "edits": {
             "tooltip_label": "Am %(date)s geändert. Klicke, um Änderungen anzuzeigen.",
             "tooltip_sub": "Klicke, um Änderungen anzuzeigen",
@@ -3426,9 +3375,7 @@
         "m.poll.start": "%(senderName)s hat eine Umfrage begonnen – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s hat den Avatar des Chats geändert.",
-            "changed_img": "%(senderDisplayName)s hat den Avatar des Chats zu <img/> geändert",
-            "lightbox_title": "%(senderDisplayName)s hat den Avatar des Chats %(roomName)s geändert",
-            "removed": "%(senderDisplayName)s hat den Avatar des Chats entfernt."
+            "lightbox_title": "%(senderDisplayName)s hat den Avatar des Chats %(roomName)s geändert"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3538,10 +3485,7 @@
             "removed": "%(senderName)s hat das Widget %(widgetName)s entfernt"
         },
         "mab": {
-            "collapse_reply_chain": "Zitate einklappen",
             "copy_link_thread": "Link zu Thread kopieren",
-            "expand_reply_chain": "Zitate ausklappen",
-            "label": "Nachrichtenaktionen",
             "view_in_room": "Im Chat anzeigen"
         },
         "mjolnir": {
@@ -3553,7 +3497,6 @@
             "created_rule_rooms": "%(senderName)s hat eine Sperr-Regel für Chats erstellt, die %(glob)s aufgrund von %(reason)s entspricht",
             "created_rule_servers": "%(senderName)s erstellte eine Ausschlussregel für Server, die aufgrund von %(reason)s %(glob)s entsprechen",
             "created_rule_users": "%(senderName)s hat eine Ausschlussregel für Nutzer erstellt, die aufgrund %(reason)s %(glob)s entsprechen",
-            "message_hidden": "Du ignorierst diesen Nutzer, so dass dessen Nachrichten verborgen werden. <a>Trotzdem anzeigen.</a>",
             "removed_rule": "%(senderName)s entfernte die Ausschlussregel, die %(glob)s entspricht",
             "removed_rule_rooms": "%(senderName)s hat die Sperr-Regel für Chats entfernt, die %(glob)s entsprechen",
             "removed_rule_servers": "%(senderName)s entfernte die Ausschlussregel für Server, die %(glob)s entsprechen",
@@ -3858,12 +3801,6 @@
         "verify_button": "Nutzer verifizieren",
         "verify_explainer": "Für zusätzliche Sicherheit, verifiziere diesen Nutzer, durch Vergleichen eines Einmal-Codes auf euren beiden Geräten."
     },
-    "user_menu": {
-        "link_new_device": "Neues Gerät verknüpfen",
-        "settings": "Alle Einstellungen",
-        "switch_theme_dark": "Zum dunklen Thema wechseln",
-        "switch_theme_light": "Zum hellen Thema wechseln"
-    },
     "voip": {
         "already_in_call": "Schon im Anruf",
         "already_in_call_person": "Du bist schon in einem Anruf mit dieser Person.",
@@ -3888,7 +3825,6 @@
         "connection_lost": "Verbindung zum Server unterbrochen",
         "connection_lost_description": "Du kannst ohne Verbindung zum Server keine Anrufe tätigen.",
         "consulting": "%(transferTarget)s wird angefragt. <a>Übertragung zu %(transferee)s</a>",
-        "decline_call": "Ablehnen",
         "default_device": "Standardgerät",
         "dial": "Wählen",
         "dialpad": "Telefontastatur",
@@ -3939,7 +3875,6 @@
         "show_sidebar_button": "Seitenleiste anzeigen",
         "silence": "Anruf stummschalten",
         "silenced": "Benachrichtigungen stummgeschaltet",
-        "skip_lobby_toggle_option": "Sofort beitreten",
         "start_screenshare": "Bildschirmfreigabe starten",
         "stop_screenshare": "Bildschirmfreigabe beenden",
         "too_many_calls": "Zu viele Anrufe",
@@ -3961,7 +3896,6 @@
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
         "video_call_incoming": "Eingehender Videoanruf",
-        "video_call_started": "Videoanruf hat begonnen",
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
         "voice_call_incoming": "Eingehender Anruf",
@@ -3969,7 +3903,6 @@
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
-    "welcome_to_element": "Willkommen bei Element",
     "widget": {
         "added_by": "Widget hinzugefügt von",
         "capabilities_dialog": {

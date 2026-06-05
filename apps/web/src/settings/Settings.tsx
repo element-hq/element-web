@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2018-2024 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
@@ -51,6 +52,9 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
+import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
+import { type NotificationSound } from "../Notifier.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -204,13 +208,11 @@ export interface Settings {
     "feature_video_rooms": IFeature;
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
-    "feature_report_to_moderators": IFeature;
     "feature_latex_maths": IFeature;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
-    "feature_share_history_on_invite": IFeature;
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -223,9 +225,12 @@ export interface Settings {
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_new_room_list": IFeature;
+    "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
+    "feature_user_status": IFeature;
+    "feature_login_with_qr": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -307,15 +312,7 @@ export interface Settings {
     "urlPreviewsEnabled_e2ee": IBaseSetting<boolean>;
     "notificationsEnabled": IBaseSetting<boolean>;
     "deviceNotificationsEnabled": IBaseSetting<boolean>;
-    "notificationSound": IBaseSetting<
-        | {
-              name: string;
-              type: string;
-              size: number;
-              url: string;
-          }
-        | false
-    >;
+    "notificationSound": IBaseSetting<NotificationSound | false>;
     "notificationBodyEnabled": IBaseSetting<boolean>;
     "audioNotificationsEnabled": IBaseSetting<boolean>;
     "enableWidgetScreenshots": IBaseSetting<boolean>;
@@ -326,6 +323,10 @@ export interface Settings {
     }>;
     "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
+    /**
+     * This is the 2019-era low bandwidth that deals with disabling features of the
+     * client. It does NOT make any API or spec changes.
+     */
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
@@ -367,6 +368,8 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
+    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
 }
 
 export type SettingKey = keyof Settings;
@@ -460,15 +463,6 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: false,
     },
-    "feature_report_to_moderators": {
-        isFeature: true,
-        labsGroup: LabGroup.Moderation,
-        displayName: _td("labs|report_to_moderators"),
-        description: _td("labs|report_to_moderators_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
     "feature_latex_maths": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -509,29 +503,6 @@ export const SETTINGS: Settings = {
         controller: new DeviceIsolationModeController(),
         displayName: _td("labs|exclude_insecure_devices"),
         description: _td("labs|exclude_insecure_devices_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
-    "feature_share_history_on_invite": {
-        isFeature: true,
-        labsGroup: LabGroup.Encryption,
-        displayName: _td("labs|share_history_on_invite"),
-        description: () => (
-            <>
-                {_t("labs|share_history_on_invite_description")}
-                <div className="mx_SettingsFlag_microcopy">
-                    {_t(
-                        "settings|warning",
-                        {},
-                        {
-                            w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
-                            description: _t("labs|share_history_on_invite_warning"),
-                        },
-                    )}
-                </div>
-            </>
-        ),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -695,6 +666,23 @@ export const SETTINGS: Settings = {
         default: true,
         controller: new ReloadOnChangeController(),
     },
+    "feature_room_list_sections": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|room_list_sections"),
+        description: _td("labs|under_active_development"),
+        isFeature: true,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_login_with_qr": {
+        supportedLevels: [SettingLevel.CONFIG],
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|login_with_qr"),
+        description: _td("labs|config_only"),
+        isFeature: true,
+        default: false,
+    },
     /**
      * With the transition to Compound we are moving to a base font size
      * of 16px. We're taking the opportunity to move away from the `baseFontSize`
@@ -793,6 +781,30 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         shouldWarn: true,
+        default: false,
+    },
+    "feature_user_status": {
+        isFeature: true,
+        labsGroup: LabGroup.Profile,
+        displayName: _td("labs|feature_user_status|display_name"),
+        description: _td("labs|feature_user_status|description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_user_status",
+            defaultWatchManager,
+            [["org.matrix.msc4429"], ["org.matrix.msc4429.stable"]],
+            undefined,
+            _td("labs|feature_user_status|required_msc_support"),
+            false,
+            // We have to assume it's available during early startup because of a race:
+            // The feature is used to enable extra sync filters during MatrixClient setup
+            // and we can't check for serverside support until the client has finished setting up.
+            // Once the client has setup, (so by the time the user actually opens the labs menu) we can
+            // enforce proper checks.
+            true,
+            true,
+        ),
         default: false,
     },
     "useCompactLayout": {
@@ -1126,22 +1138,28 @@ export const SETTINGS: Settings = {
         controller: new UIFeatureController(UIFeature.AdvancedEncryption),
     },
     "urlPreviewsEnabled": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: {
-            "default": _td("settings|inline_url_previews_default"),
-            "room-account": _td("settings|inline_url_previews_room_account"),
-            "room": _td("settings|inline_url_previews_room"),
-        },
+        // Enabled by default and client configurable as this setting only allows unencrypted
+        // messages to be previewed.
+        supportedLevels: [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_default"),
         default: true,
-        controller: new UIFeatureController(UIFeature.URLPreviews),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews], false, (c) => {
+            if (c["io.element.msc4452.preview_url"]?.enabled !== false) {
+                // If the capability is not listed, or explicitly true then do not disable.
+                return false;
+            }
+            return _t("common|disabled_by_homeserver");
+        }),
     },
     "urlPreviewsEnabled_e2ee": {
-        supportedLevels: [SettingLevel.ROOM_DEVICE],
-        displayName: {
-            "room-device": _td("settings|inline_url_previews_room_account"),
-        },
+        // Can only be enabled per-device to ensure neither the homeserver nor client config
+        // can impact the user's choices.
+        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_encrypted"),
         default: false,
-        controller: new UIFeatureController(UIFeature.URLPreviews),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -1355,6 +1373,22 @@ export const SETTINGS: Settings = {
     "releaseAnnouncementData": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the custom section data for the room list
+     */
+    "RoomList.CustomSectionData": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the ordering of the custom sections for the room list
+     */
+    "RoomList.OrderedCustomSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: [],
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

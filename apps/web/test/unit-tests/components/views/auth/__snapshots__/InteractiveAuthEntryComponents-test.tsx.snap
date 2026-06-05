@@ -19,14 +19,14 @@ exports[`<EmailIdentityAuthEntry/> should render 1`] = `
     >
       <span>
         Did not receive it? 
-        <div
+        <a
           aria-label="Resend"
           class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           role="button"
           tabindex="0"
         >
           Resend it
-        </div>
+        </a>
       </span>
     </p>
   </div>
@@ -42,8 +42,9 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
@@ -73,7 +74,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_13vu4_8 mx_Dialog_nonDialogButton _has-icon_13vu4_60"
+        class="_button_1nw83_8 mx_Dialog_nonDialogButton _has-icon_1nw83_60"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -97,7 +98,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
         Continue to account
       </button>
       <button
-        class="_button_13vu4_8 mx_Dialog_nonDialogButton"
+        class="_button_1nw83_8 mx_Dialog_nonDialogButton"
         data-kind="tertiary"
         data-size="lg"
         role="button"

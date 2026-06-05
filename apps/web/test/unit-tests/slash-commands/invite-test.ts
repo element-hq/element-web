@@ -24,7 +24,7 @@ describe("/invite", () => {
 
         await command.run(client, roomId, null, args).promise;
 
-        expect(client.invite).toHaveBeenCalledWith(roomId, "@u:s.co", {});
+        expect(client.invite).toHaveBeenCalledWith(roomId, "@u:s.co", { shareEncryptedHistory: true });
     });
 
     it("should provide the invite reason if we supply it", async () => {
@@ -35,6 +35,9 @@ describe("/invite", () => {
 
         await command.run(client, roomId, null, args).promise;
 
-        expect(client.invite).toHaveBeenCalledWith(roomId, "@u:s.co", { reason: "They are a very nice person" });
+        expect(client.invite).toHaveBeenCalledWith(roomId, "@u:s.co", {
+            reason: "They are a very nice person",
+            shareEncryptedHistory: true,
+        });
     });
 });

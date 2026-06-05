@@ -21,7 +21,7 @@ import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper
 import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
+import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
 
 interface IProps {
     // a list of strings to be highlighted in the results

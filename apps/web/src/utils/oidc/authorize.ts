@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { type IdTokenClaims } from "oidc-client-ts";
 
 import { OidcClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
+import { type URLParams } from "../../vector/url_utils.ts";
 
 /**
  * Start OIDC authorization code flow
@@ -23,6 +23,7 @@ import PlatformPeg from "../../PlatformPeg";
  * @param clientId this client's id as registered with configured issuer
  * @param homeserverUrl target homeserver
  * @param identityServerUrl OPTIONAL target identity server
+ * @param isRegistration if true will set the prompt to "create"
  * @returns Promise that resolves after we have navigated to auth endpoint
  */
 export const startOidcLogin = async (
@@ -47,56 +48,87 @@ export const startOidcLogin = async (
         nonce,
         prompt,
         urlState: PlatformPeg.get()?.getOidcClientState(),
+        responseMode: delegatedAuthConfig.response_modes_supported?.includes("fragment") ? "fragment" : "query",
     });
 
     window.location.href = authorizationUrl;
 };
 
 /**
- * Gets `code` and `state` query params
+ * Gets `code` and `state` response params
  *
- * @param queryParams
+ * @param urlParams - the parameters to read
+ * @param responseMode - the response_mode used in the auth request
  * @returns code and state
  * @throws when code and state are not valid strings
  */
-const getCodeAndStateFromQueryParams = (queryParams: QueryDict): { code: string; state: string } => {
-    const code = queryParams["code"];
-    const state = queryParams["state"];
-
+const getCodeAndStateFromParams = (
+    { code, state }: NonNullable<URLParams["oidc_fragment"]>,
+    responseMode: "fragment" | "query",
+): { code: string; state: string } => {
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
-        throw new Error(OidcClientError.InvalidQueryParameters);
+        if (responseMode === "fragment") {
+            throw new Error(OidcClientError.InvalidFragmentParameters);
+        } else {
+            throw new Error(OidcClientError.InvalidQueryParameters);
+        }
     }
     return { code, state };
 };
 
-type CompleteOidcLoginResponse = {
-    // url of the homeserver selected during login
+/**
+ * Return type for {@link completeOidcLogin}
+ * Contains all the credentials gathered from a successful OIDC login
+ */
+export type CompleteOidcLoginResponse = {
+    /**
+     * URL of the homeserver selected during login
+     */
     homeserverUrl: string;
-    // identity server url as discovered during login
+    /**
+     * Identity server URL as discovered during login
+     */
     identityServerUrl?: string;
-    // accessToken gained from OIDC token issuer
+    /**
+     * Access Token gained from OIDC token issuer
+     */
     accessToken: string;
-    // refreshToken gained from OIDC token issuer, when falsy token cannot be refreshed
+    /**
+     * Refresh Token gained from OIDC token issuer, when falsy token cannot be refreshed
+     */
     refreshToken?: string;
-    // idToken gained from OIDC token issuer
-    idToken: string;
-    // this client's id as registered with the OIDC issuer
+    /**
+     * ID Token gained from OIDC token issuer
+     */
+    idToken?: string;
+    /**
+     * This client's ID as registered with the OIDC issuer
+     */
     clientId: string;
-    // issuer used during authentication
+    /**
+     * Issuer used during authentication
+     */
     issuer: string;
-    // claims of the given access token; used during token refresh to validate new tokens
+    /**
+     * Claims of the given access token; used during token refresh to validate new tokens
+     */
     idTokenClaims: IdTokenClaims;
 };
+
 /**
  * Attempt to complete authorization code flow to get an access token
- * @param queryParams the query-parameters extracted from the real query-string of the starting URI.
+ * @param urlParams the parameters extracted from the app-load URI.
+ * @param responseMode - the response_mode used in the auth request
  * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
-export const completeOidcLogin = async (queryParams: QueryDict): Promise<CompleteOidcLoginResponse> => {
-    const { code, state } = getCodeAndStateFromQueryParams(queryParams);
+export const completeOidcLogin = async (
+    urlParams: NonNullable<URLParams["oidc_fragment"]>,
+    responseMode: "fragment" | "query",
+): Promise<CompleteOidcLoginResponse> => {
+    const { code, state } = getCodeAndStateFromParams(urlParams, responseMode);
     const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
-        await completeAuthorizationCodeGrant(code, state);
+        await completeAuthorizationCodeGrant(code, state, responseMode);
 
     return {
         homeserverUrl,

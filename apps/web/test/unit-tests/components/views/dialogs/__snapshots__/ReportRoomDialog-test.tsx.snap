@@ -26,14 +26,14 @@ exports[`ReportRoomDialog displays admin message 1`] = `
       </h1>
     </div>
     <form
-      class="_root_19upo_16"
+      class="_root_1o4d9_17"
       id="mx_ReportEventDialog"
     >
       <div
-        class="_field_19upo_26"
+        class="_field_1o4d9_27"
       >
         <label
-          class="_label_19upo_59"
+          class="_label_1o4d9_60"
           for="mx_ReportRoomDialog_reason"
         >
           Describe the reason
@@ -43,8 +43,8 @@ exports[`ReportRoomDialog displays admin message 1`] = `
           rows="5"
         />
         <span
-          class="_message_19upo_85 _help-message_19upo_91"
-          id="radix-_r_9_"
+          class="_message_1o4d9_86 _help-message_1o4d9_92"
+          id="radix-react-use-id-1"
         >
           Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.
         </span>
@@ -66,17 +66,17 @@ exports[`ReportRoomDialog displays admin message 1`] = `
 
       </p>
       <div
-        class="_inline-field_19upo_32"
+        class="_inline-field_1o4d9_33"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_inline-field-control_1o4d9_45"
         >
           <div
             class="_container_udcm8_10"
           >
             <input
               class="_input_udcm8_24"
-              id="_r_a_"
+              id="react-use-id-2"
               role="switch"
               type="checkbox"
             />
@@ -86,11 +86,11 @@ exports[`ReportRoomDialog displays admin message 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_19upo_38"
+          class="_inline-field-body_1o4d9_39"
         >
           <label
-            class="_label_19upo_59"
-            for="_r_a_"
+            class="_label_1o4d9_60"
+            for="react-use-id-2"
           >
             Leave room
           </label>

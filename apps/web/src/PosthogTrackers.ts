@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -11,11 +12,15 @@ import { type WebScreen as ScreenEvent } from "@matrix-org/analytics-events/type
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 import { type RoomListSortingAlgorithmChanged } from "@matrix-org/analytics-events/types/typescript/RoomListSortingAlgorithmChanged";
+import { type UrlPreviewRendered } from "@matrix-org/analytics-events/types/typescript/UrlPreviewRendered";
+import { type SectionCreation } from "@matrix-org/analytics-events/types/typescript/SectionCreation";
+import { type ExpandCollapseSection } from "@matrix-org/analytics-events/types/typescript/ExpandCollapseSection";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { SortingAlgorithm } from "./stores/room-list-v3/skip-list/sorters";
+import { LruCache } from "./utils/LruCache";
 
 export type ScreenName = ScreenEvent["$current_url"];
 export type InteractionName = InteractionEvent["name"];
@@ -48,6 +53,8 @@ const SortingAlgorithmMap: Record<SortingAlgorithm, RoomListSortingAlgorithmChan
 
 export default class PosthogTrackers {
     private static internalInstance: PosthogTrackers;
+
+    private readonly previewedEventIds = new LruCache<string, true>(1000);
 
     public static get instance(): PosthogTrackers {
         if (!PosthogTrackers.internalInstance) {
@@ -134,6 +141,56 @@ export default class PosthogTrackers {
             eventName: "RoomListSortingAlgorithmChanged",
             oldAlgorithm: SortingAlgorithmMap[oldAlgorithm],
             newAlgorithm: SortingAlgorithmMap[newAlgorithm],
+        });
+    }
+
+    /**
+     * Track if an event has had a previewed rendered in the client.
+     * This function makes a best-effort attempt to prevent double counting.
+     *
+     * @param eventId EventID for deduplication.
+     * @param isEncrypted Whether the event (and effectively the room) was encrypted.
+     * @param previews The previews generated from the event.
+     */
+    public trackUrlPreview(eventId: string, isEncrypted: boolean, previews: { image?: unknown }[]): void {
+        // Discount any previews that we have already tracked.
+        if (this.previewedEventIds.get(eventId)) {
+            return;
+        }
+        PosthogAnalytics.instance.trackEvent<UrlPreviewRendered>({
+            eventName: "UrlPreviewRendered",
+            previewKind: "LegacyCard",
+            hasThumbnail: previews.some((p) => !!p.image),
+            previewCount: previews.length,
+            encryptedRoom: isEncrypted,
+        });
+        this.previewedEventIds.set(eventId, true);
+    }
+
+    /**
+     * Track when the user creates a section in the room list.
+     * @param from The source from which the section creation was triggered.
+     */
+    public static trackSectionCreation(from: SectionCreation["from"]): void {
+        PosthogAnalytics.instance.trackEvent<SectionCreation>({
+            eventName: "SectionCreation",
+            from,
+        });
+    }
+
+    /**
+     * Track when the user collapses or expands a section in the room list.
+     * @param kind Is expand or collapse.
+     * @param from From where the action is triggered.
+     */
+    public static trackCollapseOrExpandSection(
+        kind: ExpandCollapseSection["kind"],
+        from: ExpandCollapseSection["from"],
+    ): void {
+        PosthogAnalytics.instance.trackEvent<ExpandCollapseSection>({
+            eventName: "ExpandCollapseSection",
+            kind,
+            from,
         });
     }
 }

@@ -79,7 +79,7 @@ export const LEVEL_ORDER = [
     SettingLevel.DEFAULT,
 ];
 
-function getLevelOrder(setting: ISetting): SettingLevel[] {
+function getLevelOrder(setting: Settings[keyof Settings]): SettingLevel[] {
     // Settings which support only a single setting level are inherently ordered
     if (setting.supportedLevelsAreOrdered || setting.supportedLevels.length === 1) {
         // return a copy to prevent callers from modifying the array
@@ -88,12 +88,12 @@ function getLevelOrder(setting: ISetting): SettingLevel[] {
     return LEVEL_ORDER;
 }
 
-export type CallbackFn = (
-    settingName: SettingKey,
+export type CallbackFn<S extends SettingKey> = (
+    settingName: S,
     roomId: string | null,
     atLevel: SettingLevel,
-    newValAtLevel: any,
-    newVal: any,
+    newValAtLevel: Settings[S]["default"] | null,
+    newVal: Settings[S]["default"] | null,
 ) => void;
 
 type HandlerMap = Partial<{
@@ -167,7 +167,11 @@ export default class SettingsStore {
      * if the change in value is worthwhile enough to react upon.
      * @returns {string} A reference to the watcher that was employed.
      */
-    public static watchSetting(settingName: SettingKey, roomId: string | null, callbackFn: CallbackFn): string {
+    public static watchSetting<S extends SettingKey>(
+        settingName: S,
+        roomId: string | null,
+        callbackFn: CallbackFn<S>,
+    ): string {
         const setting = SETTINGS[settingName];
         if (!setting) throw new Error(`${settingName} is not a setting`);
 
@@ -175,7 +179,11 @@ export default class SettingsStore {
 
         const watcherId = `${new Date().getTime()}_${SettingsStore.watcherCount++}_${finalSettingName}_${roomId}`;
 
-        const localizedCallback = (changedInRoomId: string | null, atLevel: SettingLevel, newValAtLevel: any): void => {
+        const localizedCallback = (
+            changedInRoomId: string | null,
+            atLevel: SettingLevel,
+            newValAtLevel: Settings[S]["default"],
+        ): void => {
             if (!SettingsStore.doesSettingSupportLevel(settingName, atLevel)) {
                 logger.warn(
                     `Setting handler notified for an update of an invalid setting level: ` +
@@ -220,7 +228,7 @@ export default class SettingsStore {
      * @param {string} settingName The setting name to monitor.
      * @param {String} roomId The room ID to monitor for changes in. Use null for all rooms.
      */
-    public static monitorSetting(settingName: SettingKey, roomId: string | null): void {
+    public static monitorSetting<S extends SettingKey>(settingName: S, roomId: string | null): void {
         roomId = roomId || null; // the thing wants null specifically to work, so appease it.
 
         if (!this.monitors.has(settingName)) this.monitors.set(settingName, new Map());
@@ -228,7 +236,7 @@ export default class SettingsStore {
         const registerWatcher = (): void => {
             this.monitors.get(settingName)!.set(
                 roomId,
-                SettingsStore.watchSetting(
+                SettingsStore.watchSetting<S>(
                     settingName,
                     roomId,
                     (settingName, inRoomId, level, newValueAtLevel, newValue) => {
@@ -449,11 +457,10 @@ export default class SettingsStore {
 
     /**
      * Gets the default value of a setting.
-     * @param {string} settingName The name of the setting to read the value of.
-     * @param {String} roomId The room ID to read the setting value in, may be null.
-     * @return {*} The default value
+     * @param settingName The name of the setting to read the value of.
+     * @return The default value
      */
-    public static getDefaultValue(settingName: SettingKey): any {
+    public static getDefaultValue<S extends SettingKey>(settingName: S): Settings[S]["default"] {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
@@ -462,13 +469,13 @@ export default class SettingsStore {
         return SETTINGS[settingName].default;
     }
 
-    private static getFinalValue(
-        setting: ISetting,
+    private static getFinalValue<S extends SettingKey>(
+        setting: Settings[S],
         level: SettingLevel,
         roomId: string | null,
-        calculatedValue: any,
+        calculatedValue: Settings[S]["default"],
         calculatedAtLevel: SettingLevel | null,
-    ): any {
+    ): Settings[S]["default"] {
         let resultingValue = calculatedValue;
 
         if (setting.controller) {
@@ -480,25 +487,22 @@ export default class SettingsStore {
         return resultingValue;
     }
 
-    /* eslint-disable valid-jsdoc */ //https://github.com/eslint/eslint/issues/7307
     /**
      * Sets the value for a setting. The room ID is optional if the setting is not being
      * set for a particular room, otherwise it should be supplied. The value may be null
      * to indicate that the level should no longer have an override.
-     * @param {string} settingName The name of the setting to change.
-     * @param {String} roomId The room ID to change the value in, may be null.
-     * @param {SettingLevel} level The level
+     * @param settingName The name of the setting to change.
+     * @param roomId The room ID to change the value in, may be null.
+     * @param level The level
      * to change the value at.
-     * @param {*} value The new value of the setting, may be null.
-     * @return {Promise} Resolves when the setting has been changed.
+     * @param value The new value of the setting, may be null.
+     * @return Resolves when the setting has been changed.
      */
-
-    /* eslint-enable valid-jsdoc */
-    public static async setValue(
-        settingName: SettingKey,
+    public static async setValue<S extends SettingKey>(
+        settingName: S,
         roomId: string | null,
         level: SettingLevel,
-        value: any,
+        value: Settings[S]["default"] | null,
     ): Promise<void> {
         // Verify that the setting is actually a setting
         const setting = SETTINGS[settingName];
@@ -655,40 +659,6 @@ export default class SettingsStore {
     }
 
     /**
-     * Migrate the setting for URL previews in e2e rooms from room account
-     * data to the room device level.
-     *
-     * @param isFreshLogin True if the user has just logged in, false if a previous session is being restored.
-     */
-    private static async migrateURLPreviewsE2EE(isFreshLogin: boolean): Promise<void> {
-        const MIGRATION_DONE_FLAG = "url_previews_e2ee_migration_done";
-        if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
-        if (isFreshLogin) return;
-
-        const client = MatrixClientPeg.safeGet();
-
-        while (!client.isInitialSyncComplete()) {
-            await new Promise((r) => client.once(ClientEvent.Sync, r));
-        }
-
-        logger.info("Performing one-time settings migration of URL previews in E2EE rooms");
-
-        const roomAccounthandler = LEVEL_HANDLERS[SettingLevel.ROOM_ACCOUNT];
-
-        for (const room of client.getRooms()) {
-            // We need to use the handler directly because this setting is no longer supported
-            // at this level at all
-            const val = roomAccounthandler.getValue("urlPreviewsEnabled_e2ee", room.roomId);
-
-            if (val !== undefined) {
-                await SettingsStore.setValue("urlPreviewsEnabled_e2ee", room.roomId, SettingLevel.ROOM_DEVICE, val);
-            }
-        }
-
-        localStorage.setItem(MIGRATION_DONE_FLAG, "true");
-    }
-
-    /**
      * Migrate the setting for visible images to a setting.
      */
     private static migrateShowImagesToSettings(): void {
@@ -739,15 +709,6 @@ export default class SettingsStore {
      * Runs or queues any setting migrations needed.
      */
     public static runMigrations(isFreshLogin: boolean): void {
-        // This can be removed once enough users have run a version of Element with
-        // this migration. A couple of months after its release should be sufficient
-        // (so around October 2024).
-        // The consequences of missing the migration are only that URL previews will
-        // be disabled in E2EE rooms.
-        SettingsStore.migrateURLPreviewsE2EE(isFreshLogin).catch((e) => {
-            logger.error("Failed to migrate URL previews in E2EE rooms:", e);
-        });
-
         // This can be removed once enough users have run a version of Element with
         // this migration.
         // The consequences of missing the migration are that previously shown images

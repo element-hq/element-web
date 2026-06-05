@@ -11,8 +11,7 @@
             "one": "1 則未讀的提及。"
         },
         "room_name": "聊天室 %(name)s",
-        "unread_messages": "未讀的訊息。",
-        "user_menu": "使用者選單"
+        "unread_messages": "未讀的訊息。"
     },
     "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
     "action": {
@@ -28,7 +27,6 @@
         "cancel": "取消",
         "change": "變更",
         "clear": "清除",
-        "click": "點擊",
         "click_to_copy": "點擊複製",
         "close": "關閉",
         "collapse": "收折",
@@ -62,7 +60,6 @@
         "go": "前往",
         "go_back": "返回",
         "got_it": "了解",
-        "hide": "隱藏",
         "hide_advanced": "隱藏進階設定",
         "hold": "保留",
         "ignore": "忽略",
@@ -96,7 +93,6 @@
         "rename": "重新命名",
         "reply": "回覆",
         "reply_in_thread": "在討論串中回覆",
-        "report_content": "回報內容",
         "resend": "重新傳送",
         "reset": "重設",
         "resume": "繼續",
@@ -213,10 +209,7 @@
         "log_in_new_account": "<a>登入</a>到您的新帳號。",
         "logout_dialog": {
             "description": "您確定要登出嗎？",
-            "megolm_export": "手動匯出金鑰",
             "setup_key_backup_title": "您將會失去您的加密訊息",
-            "setup_secure_backup_description_1": "加密訊息是使用端對端加密。只有您和接收者才有金鑰可以閱讀這些訊息。",
-            "setup_secure_backup_description_2": "當您登出時，這些金鑰將會從此裝置被刪除，這代表您將無法再閱讀加密的訊息，除非您在其他裝置上有那些訊息的金鑰，或是將它們備份到伺服器上。",
             "skip_key_backup": "我不要我的加密訊息了"
         },
         "misconfigured_body": "請要求您的 %(brand)s 管理員檢查<a>您的設定</a>是否有不正確或重覆的項目。",
@@ -303,7 +296,6 @@
         "sign_in_instead_prompt": "改為登入",
         "sign_in_or_register": "登入或建立帳號",
         "sign_in_or_register_description": "使用您的帳號或建立新的以繼續。",
-        "sign_in_prompt": "有帳號了嗎？<a>登入</a>",
         "sign_in_with_sso": "以單一登入來登入",
         "signing_in": "正在登入…",
         "soft_logout": {
@@ -747,7 +739,6 @@
         "thread_root_id": "討論串 Root ID：%(threadRootId)s",
         "threads_timeline": "討論串時間軸",
         "title": "開發者工具",
-        "toggle_event": "切換事件",
         "toolbox": "工具箱",
         "use_at_own_risk": "此使用者介面不會檢查值的類型。使用風險自負。",
         "user_read_up_to": "使用者讀取至： ",
@@ -836,9 +827,6 @@
         "set_up_recovery": "設定復原",
         "set_up_recovery_toast_description": "產生一把復原金鑰，以便在您無法存取裝置時恢復您的加密訊息歷史記錄。",
         "set_up_toast_title": "設定安全備份",
-        "setup_secure_backup": {
-            "explainer": "請在登出前備份您的金鑰，以免遺失。"
-        },
         "turn_on_key_storage_description": "在伺服器安全地儲存您的加密身分及訊息金鑰。如此一來，您便能在任何新裝置上檢視訊息歷史紀錄。",
         "udd": {
             "interactive_verification_button": "透過表情符號互動來驗證",
@@ -1126,9 +1114,6 @@
         "impossible_dialog_title": "不允許整合"
     },
     "invite": {
-        "ask_anyway_description": "找不到下方列出的 Matrix ID 個人檔案，您是否仍要開始直接訊息？",
-        "ask_anyway_label": "開始直接訊息",
-        "ask_anyway_never_warn_label": "開始直接訊息且不要再次警告",
         "email_caption": "透過電子郵件邀請",
         "email_limit_one": "透過電子郵件傳送的邀請一次只能傳送一個",
         "email_use_default_is": "使用身分伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
@@ -1304,8 +1289,6 @@
         "notification_settings": "新通知設定",
         "notification_settings_beta_caption": "全新推出更簡便的通知設定調整方式。隨心所欲地自訂您的%(brand)s ，打造專屬體驗。",
         "notification_settings_beta_title": "通知設定",
-        "report_to_moderators": "回報給版主",
-        "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
         "sliding_sync": "滑動同步模式",
         "sliding_sync_description": "正在積極開發中，無法停用。",
         "sliding_sync_disabled_notice": "登出並重新登入以停用",
@@ -1522,7 +1505,6 @@
         "restricted": "已限制"
     },
     "powered_by_matrix": "由Matrix支持",
-    "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "presence": {
         "away": "離開",
         "busy": "忙碌",
@@ -1555,22 +1537,10 @@
     },
     "report_content": {
         "description": "回報此訊息將會傳送其獨特的「活動 ID」給您家伺服器的管理員。如果此聊天室中的訊息已加密，您的家伺服器管理員將無法閱讀訊息文字或檢視任何檔案或圖片。",
-        "disagree": "不同意",
         "hide_messages_from_user": "若想隱藏來自該使用者所有目前與未來的訊息，請打勾。",
         "ignore_user": "忽略使用者",
-        "illegal_content": "違法內容",
         "missing_reason": "請填寫為什麼您要回報。",
-        "nature": "請挑選性質並描述此訊息為什麼是濫用。",
-        "nature_disagreement": "該使用者所寫的內容是錯誤的。\n這將會回報給聊天室管理員。",
-        "nature_illegal": "該使用者進行違法行為，例如洩漏他人個資，或威脅使用暴力。\n將會回報給聊天室版主，他們可能會將其回報給執法單位。",
-        "nature_other": "任何其他理由。請描述問題。\n將會回報給聊天室版主。",
-        "nature_spam": "該使用者傳送廣告、廣告連結或宣傳等垃圾訊息至聊天室。\n將會回報給聊天室版主。",
-        "nature_toxic": "該使用者表現出不良行為，例如侮辱其他使用者，或在適合家庭的聊天室中分享成人內容，又或是以其他方式違反該聊天室的規則。\n將回報給聊天室版主。",
-        "other_label": "其他",
-        "report_content_to_homeserver": "回報內容給您的家伺服器管理員",
-        "report_entire_room": "回報整個聊天室",
-        "spam_or_propaganda": "垃圾郵件或宣傳",
-        "toxic_behaviour": "有問題的行為"
+        "report_content_to_homeserver": "回報內容給您的家伺服器管理員"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "無法解密 %(failedCount)s 個工作階段！",
@@ -1879,8 +1849,6 @@
             "aliases_section": "聊天室位址",
             "avatar_field_label": "聊天室大頭照",
             "canonical_alias_field_label": "主要位址",
-            "default_url_previews_off": "此聊天室已預設對參與者停用網址預覽。",
-            "default_url_previews_on": "此聊天室已預設對參與者啟用網址預覽。",
             "description_space": "編輯您的聊天空間的設定。",
             "error_creating_alias_description": "建立該位址時發生錯誤。伺服器可能不允許這麼做，或是有暫時性的問題。",
             "error_creating_alias_title": "建立位址錯誤",
@@ -1907,12 +1875,7 @@
             "published_aliases_explainer_space": "任何伺服器上的人都可以使用已發佈的位址加入您的聊天空間。",
             "published_aliases_section": "已發佈的位址",
             "save": "儲存變更",
-            "topic_field_label": "聊天室主題",
-            "url_preview_encryption_warning": "在加密的聊天室中（這個就是），會預設停用網址預覽以確保您的家伺服器（產生預覽資訊的地方）無法透過這個聊天室收集您看到的連結的相關資訊。",
-            "url_preview_explainer": "當某人在他們的訊息中放置網址時，可以顯示如標題、描述與網頁上的圖片等等來給您更多關於該連結的資訊。",
-            "url_previews_section": "網址預覽",
-            "user_url_previews_default_off": "您已預設<a>停用</a>網址預覽。",
-            "user_url_previews_default_on": "您已預設<a>停用</a>網址預覽。"
+            "topic_field_label": "聊天室主題"
         },
         "notifications": {
             "browse_button": "瀏覽",
@@ -2247,8 +2210,6 @@
             "spell_check_locale_placeholder": "選擇語系"
         },
         "inline_url_previews_default": "預設啟用行內網址預覽",
-        "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
-        "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",
         "insert_trailing_colon_mentions": "在使用者於訊息開頭提及之後插入跟隨冒號",
         "jump_to_bottom_on_send": "傳送訊息時，跳到時間軸底部",
         "key_backup": {
@@ -2805,7 +2766,6 @@
             "one": "%(count)s 回覆",
             "other": "%(count)s 回覆"
         },
-        "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動",
         "my_threads": "我的討論串",
         "my_threads_description": "顯示您參與的所有討論串",
         "open_thread": "開啟討論串",
@@ -2838,7 +2798,6 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
-        "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {
             "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。",
@@ -2920,9 +2879,7 @@
         "m.poll.start": "%(senderName)s 啟動了投票 - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s 變更了聊天室大頭照。",
-            "changed_img": "%(senderDisplayName)s 將聊天室大頭照更改為 <img/>",
-            "lightbox_title": "%(senderDisplayName)s 將聊天室的大頭照改為 %(roomName)s",
-            "removed": "%(senderDisplayName)s 移除了聊天室的大頭照。"
+            "lightbox_title": "%(senderDisplayName)s 將聊天室的大頭照改為 %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3029,10 +2986,7 @@
             "removed": "%(widgetName)s 小工具是由 %(senderName)s 所移除"
         },
         "mab": {
-            "collapse_reply_chain": "收折引號",
             "copy_link_thread": "複製討論串連結",
-            "expand_reply_chain": "展開引號",
-            "label": "訊息動作",
             "view_in_room": "在聊天室中檢視"
         },
         "mjolnir": {
@@ -3044,7 +2998,6 @@
             "created_rule_rooms": "%(senderName)s 建立了封鎖符合 %(glob)s 聊天室的規則，因為 %(reason)s",
             "created_rule_servers": "%(senderName)s 建立了封鎖符合 %(glob)s 伺服器的規則，因為 %(reason)s",
             "created_rule_users": "%(senderName)s 建立了封鎖符合 %(glob)s 的使用者規則，因為 %(reason)s",
-            "message_hidden": "您已忽略這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>",
             "removed_rule": "%(senderName)s 移除了封鎖符合 %(glob)s 的規則",
             "removed_rule_rooms": "%(senderName)s 移除了封鎖符合 %(glob)s 聊天室的規則",
             "removed_rule_servers": "%(senderName)s 移除了封鎖符合 %(glob)s 伺服器的規則",
@@ -3330,11 +3283,6 @@
         "verify_button": "驗證使用者",
         "verify_explainer": "為了提高安全性，請透過檢查您兩個裝置上的一次性代碼來驗證此使用者。"
     },
-    "user_menu": {
-        "settings": "所有設定",
-        "switch_theme_dark": "切換至深色模式",
-        "switch_theme_light": "切換至淺色模式"
-    },
     "voip": {
         "already_in_call": "已在通話中",
         "already_in_call_person": "您正在與此人通話。",
@@ -3419,12 +3367,10 @@
         "user_busy_description": "您想要通話的使用者目前忙碌中。",
         "user_is_presenting": "%(sharerName)s 正在投影",
         "video_call": "視訊通話",
-        "video_call_started": "視訊通話已開始",
         "voice_call": "語音通話",
         "you_are_presenting": "您正在投影"
     },
     "web_default_device_name": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "welcome_to_element": "歡迎使用 Element",
     "widget": {
         "added_by": "小工具新增者為",
         "capabilities_dialog": {

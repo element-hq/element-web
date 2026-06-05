@@ -46,6 +46,7 @@ module.exports = {
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
                 "quotes": "off",
+                "n/file-extension-in-import": "off",
 
                 "@typescript-eslint/no-explicit-any": "off",
                 // We're okay with assertion errors when we ask for them
@@ -62,6 +63,7 @@ module.exports = {
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
                 "quotes": "off",
+                "n/file-extension-in-import": "off",
 
                 "@typescript-eslint/no-explicit-any": "off",
                 // We're okay with assertion errors when we ask for them
@@ -82,6 +84,13 @@ module.exports = {
                 "@typescript-eslint/no-explicit-any": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
+            },
+        },
+        {
+            files: ["src/**/*.test.ts", "electron-builder.ts", "vitest.config.ts"],
+            extends: ["plugin:matrix-org/typescript"],
+            parserOptions: {
+                project: ["tsconfig.node.json"],
             },
         },
     ],

@@ -26,6 +26,7 @@ import {
     showSpaceSettings,
 } from "../../utils/space";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import type { RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
@@ -77,6 +78,10 @@ export class RoomListHeaderViewModel
         if (this.activeSpace) {
             this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.onSpaceNameChange);
         }
+
+        // Listen for section collapse state changes from RoomListViewModel
+        const dispatcherRef = defaultDispatcher.register(this.onDispatch);
+        this.disposables.track(() => defaultDispatcher.unregister(dispatcherRef));
     }
 
     /**
@@ -199,8 +204,32 @@ export class RoomListHeaderViewModel
         SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
         this.snapshot.merge({ isMessagePreviewEnabled });
     };
-}
 
+    public createSection = (): void => {
+        RoomListStoreV3.instance.createSection();
+        PosthogTrackers.trackSectionCreation("RoomListHeader");
+    };
+
+    public collapseOrExpandSections = (): void => {
+        const action =
+            this.snapshot.current.collapseSections === "expand"
+                ? Action.RoomListExpandAllSections
+                : Action.RoomListCollapseAllSections;
+        defaultDispatcher.fire(action);
+
+        const kind = action === Action.RoomListExpandAllSections ? "Expand" : "Collapse";
+        PosthogTrackers.trackCollapseOrExpandSection(kind, "RoomListHeader");
+    };
+
+    private readonly onDispatch = (payload: { action: string }): void => {
+        if (payload.action === Action.RoomListSectionsCollapseStateChanged) {
+            const { collapseSections } = payload as RoomListSectionsCollapseStateChangedPayload;
+            this.snapshot.merge({
+                collapseSections: collapseSections && (collapseSections === "collapse" ? "expand" : "collapse"),
+            });
+        }
+    };
+}
 /**
  * Get the initial snapshot for the RoomListHeaderViewModel.
  * @param spaceStore - The space store instance.
@@ -260,17 +289,22 @@ function computeHeaderSpaceState(
     spaceStore: SpaceStoreClass,
     matrixClient: MatrixClient,
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
+    const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
+
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
 
     const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
     const canCreateVideoRoom = getCanCreateVideoRoom(canCreateRoom);
-    const displayComposeMenu = canCreateRoom;
+    const displayComposeMenu = isSectionFeatureEnabled || canCreateRoom;
     const displaySpaceMenu = Boolean(activeSpace);
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
     );
     const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
+
+    const useComposeIcon = !isSectionFeatureEnabled;
+    const canCreateSection = isSectionFeatureEnabled;
 
     return {
         title,
@@ -280,5 +314,7 @@ function computeHeaderSpaceState(
         displaySpaceMenu,
         canInviteInSpace,
         canAccessSpaceSettings,
+        canCreateSection,
+        useComposeIcon,
     };
 }

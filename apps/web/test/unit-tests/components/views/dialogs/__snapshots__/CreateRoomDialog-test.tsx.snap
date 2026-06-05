@@ -28,7 +28,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
       class="mx_Dialog_content"
     >
       <form
-        class="_root_19upo_16"
+        class="_root_1o4d9_17"
       >
         <div
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
@@ -116,10 +116,10 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           </p>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -127,7 +127,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_72_"
+                id="react-use-id-1"
                 role="switch"
                 type="checkbox"
               />
@@ -137,17 +137,17 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
-              for="_r_72_"
+              class="_label_1o4d9_60"
+              for="react-use-id-1"
             >
               Enable end-to-end encryption
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_74_"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              id="radix-react-use-id-2"
             >
               You can't disable this later. Bridges & most bots won't work yet.
             </span>
@@ -162,17 +162,17 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             Show advanced
           </summary>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
               >
                 <input
                   class="_input_udcm8_24"
-                  id="_r_75_"
+                  id="react-use-id-3"
                   role="switch"
                   type="checkbox"
                 />
@@ -182,17 +182,17 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
-                for="_r_75_"
+                class="_label_1o4d9_60"
+                for="react-use-id-3"
               >
                 Block anyone not part of server.org from ever joining this room.
               </label>
               <span
-                class="_message_19upo_85 _help-message_19upo_91"
-                id="radix-_r_77_"
+                class="_message_1o4d9_86 _help-message_1o4d9_92"
+                id="radix-react-use-id-4"
               >
                 You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
               </span>
@@ -277,7 +277,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
       class="mx_Dialog_content"
     >
       <form
-        class="_root_19upo_16"
+        class="_root_1o4d9_17"
       >
         <div
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
@@ -365,10 +365,10 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           </p>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -376,7 +376,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_7k_"
+                id="react-use-id-1"
                 role="switch"
                 type="checkbox"
               />
@@ -386,34 +386,34 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
-              for="_r_7k_"
+              class="_label_1o4d9_60"
+              for="react-use-id-1"
             >
               Enable end-to-end encryption
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_7m_"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              id="radix-react-use-id-2"
             >
               You can't disable this later. Bridges & most bots won't work yet.
             </span>
           </div>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
             >
               <input
                 class="_input_udcm8_24"
-                id="_r_7n_"
+                id="react-use-id-3"
                 role="switch"
                 type="checkbox"
               />
@@ -423,17 +423,17 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
-              for="_r_7n_"
+              class="_label_1o4d9_60"
+              for="react-use-id-3"
             >
               Encrypt state events
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_7p_"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              id="radix-react-use-id-4"
             >
               Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
             </span>
@@ -517,7 +517,7 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
       class="mx_Dialog_content"
     >
       <form
-        class="_root_19upo_16"
+        class="_root_1o4d9_17"
       >
         <div
           class="mx_Field mx_Field_input mx_CreateRoomDialog_name"
@@ -607,10 +607,10 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
           </p>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -618,7 +618,7 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_86_"
+                id="react-use-id-1"
                 role="switch"
                 type="checkbox"
               />
@@ -628,34 +628,34 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
-              for="_r_86_"
+              class="_label_1o4d9_60"
+              for="react-use-id-1"
             >
               Enable end-to-end encryption
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_88_"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              id="radix-react-use-id-2"
             >
               You can't disable this later. Bridges & most bots won't work yet.
             </span>
           </div>
         </div>
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
             >
               <input
                 class="_input_udcm8_24"
-                id="_r_89_"
+                id="react-use-id-3"
                 role="switch"
                 type="checkbox"
               />
@@ -665,17 +665,17 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
-              for="_r_89_"
+              class="_label_1o4d9_60"
+              for="react-use-id-3"
             >
               Encrypt state events
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_8b_"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
+              id="radix-react-use-id-4"
             >
               Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
             </span>

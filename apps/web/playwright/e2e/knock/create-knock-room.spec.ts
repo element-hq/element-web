@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
 import { Filter } from "../../pages/Spotlight";
@@ -19,6 +21,8 @@ test.describe("Create Knock Room", () => {
     });
 
     test("should create a knock room", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
         const dialog = await app.openCreateRoomDialog();
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Room visibility" }).click();
@@ -37,6 +41,8 @@ test.describe("Create Knock Room", () => {
     });
 
     test("should create a room and change a join rule to knock", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
         const dialog = await app.openCreateRoomDialog();
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Create room" }).click();
@@ -59,6 +65,8 @@ test.describe("Create Knock Room", () => {
     });
 
     test("should create a public knock room", async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
+
         const dialog = await app.openCreateRoomDialog();
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Room visibility" }).click();

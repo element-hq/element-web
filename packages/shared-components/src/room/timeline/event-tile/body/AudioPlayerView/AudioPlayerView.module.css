@@ -1,0 +1,36 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.audioPlayer {
+    padding: var(--cpd-space-4x) var(--cpd-space-3x) var(--cpd-space-3x) var(--cpd-space-3x);
+}
+
+.mediaInfo {
+    /* Makes the ellipsis on the file name work */
+    overflow: hidden;
+}
+
+.mediaName {
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-md-regular);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.byline {
+    font: var(--cpd-font-body-xs-regular);
+}
+
+.clock {
+    white-space: nowrap;
+}
+
+.error {
+    color: var(--cpd-color-text-critical-primary);
+}

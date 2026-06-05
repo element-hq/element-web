@@ -37,7 +37,7 @@ on:
                 type: string
                 required: false
                 description: |
-                    The name of the prepare artifact to use, defaults to 'webapp'.
+                    The name of the prepare artifact to use, defaults to 'desktop-prepare'.
                     The artifact must contain the following:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
                     + electronVersion - the version of electron to use for cache keying
@@ -46,7 +46,7 @@ on:
 
                     The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
                     for example icons in the `build/` directory to override the app icons.
-                default: "webapp"
+                default: "desktop-prepare"
             test:
                 type: boolean
                 required: false
@@ -70,14 +70,14 @@ permissions: {} # No permissions required
 jobs:
     build:
         name: Build macOS Universal
-        runs-on: macos-15 # M1
+        runs-on: macos-26 # M1
         environment: ${{ inputs.sign && 'Desktop Apple' || '' }}
         steps:
-            - uses: maxim-lobanov/setup-xcode@60606e260d2fc5762a71e64e74b2174e8ea3c8bd # v1
+            - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
               with:
                   xcode-version: latest-stable
 
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
@@ -90,9 +90,9 @@ jobs:
 
             - name: Cache .hak
               id: cache
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
-                  key: ${{ runner.os }}-${{ hashFiles('hakHash', 'electronVersion') }}
+                  key: ${{ runner.os }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion') }}
                   path: |
                       apps/desktop/.hak
 
@@ -113,15 +113,15 @@ jobs:
             # https://github.com/electron-userland/electron-builder/issues/9511#issuecomment-3774092888
             - run: sudo pip3 install pyobjc-framework-Quartz
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'
@@ -194,7 +194,7 @@ jobs:
 
             # We exclude mac-universal as the unpacked app takes forever to upload and zip and dmg already contains it
             - name: Upload Artifacts
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: ${{ inputs.artifact-prefix }}macos
                   path: |

@@ -9,10 +9,10 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "../RoomListItemView";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { RoomListView, type RoomListViewSnapshot, type RoomListViewActions } from "./RoomListView";
-import { useMockedViewModel } from "../../viewmodel";
+import type { Room } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
     renderAvatar,
@@ -39,6 +39,8 @@ const RoomListViewWrapperImpl = ({
     getSectionHeaderViewModel,
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
+    closeToast,
+    changeRoomSection,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -48,6 +50,8 @@ const RoomListViewWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        closeToast,
+        changeRoomSection,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -98,6 +102,9 @@ const meta = {
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,
+        toast: undefined,
+        closeToast: fn(),
+        changeRoomSection: fn(),
     },
     parameters: {
         design: {
@@ -243,5 +250,11 @@ export const LargeSectionList: Story = {
         sections: mockLargeListSections,
         getRoomItemViewModel: createGetRoomItemViewModel(mockLargeListRoomIds),
         getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockLargeListSections.map((section) => section.id)),
+    },
+};
+
+export const Toast: Story = {
+    args: {
+        toast: "section_created",
     },
 };

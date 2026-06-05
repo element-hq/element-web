@@ -34,7 +34,7 @@ import { useFeatureEnabled } from "../../hooks/useSettings";
 import { useStateArray } from "../../hooks/useStateArray";
 import { _t } from "../../languageHandler";
 import PosthogTrackers from "../../PosthogTrackers";
-import { inviteMultipleToRoom, showRoomInviteDialog } from "../../RoomInvite";
+import { showRoomInviteDialog } from "../../RoomInvite";
 import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
@@ -76,6 +76,7 @@ import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import SpacePillButton from "./SpacePillButton.tsx";
 import { useRoomName } from "../../hooks/useRoomName.ts";
+import MultiInviter from "../../utils/MultiInviter.ts";
 
 interface IProps {
     space: Room;
@@ -538,11 +539,12 @@ const SpaceSetupPrivateInvite: React.FC<{
         setBusy(true);
         const targetIds = emailAddresses.map((name) => name.trim()).filter(Boolean);
         try {
-            const result = await inviteMultipleToRoom(space.client, space.roomId, targetIds);
+            const inviter = new MultiInviter(space.client, space.roomId);
+            const states = await inviter.invite(targetIds);
 
-            const failedUsers = Object.keys(result.states).filter((a) => result.states[a] === "error");
+            const failedUsers = Object.keys(states).filter((a) => states[a] === "error");
             if (failedUsers.length > 0) {
-                logger.log("Failed to invite users to space: ", result);
+                logger.log("Failed to invite users to space:", states);
                 setError(
                     _t("create_space|failed_invite_users", {
                         csvUsers: failedUsers.join(", "),

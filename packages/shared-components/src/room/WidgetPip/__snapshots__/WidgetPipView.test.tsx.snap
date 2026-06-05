@@ -3,14 +3,14 @@
 exports[`WidgetPipView > detects back click action 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
-        aria-labelledby="_r_6_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-back-button"
@@ -41,7 +41,7 @@ exports[`WidgetPipView > detects back click action 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"
@@ -54,14 +54,14 @@ exports[`WidgetPipView > detects back click action 1`] = `
 exports[`WidgetPipView > detects double click triggers back 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
-        aria-labelledby="_r_c_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-back-button"
@@ -92,7 +92,7 @@ exports[`WidgetPipView > detects double click triggers back 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"
@@ -105,14 +105,14 @@ exports[`WidgetPipView > detects double click triggers back 1`] = `
 exports[`WidgetPipView > detects on mouse down for drag 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
-        aria-labelledby="_r_i_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-back-button"
@@ -143,7 +143,7 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"
@@ -156,14 +156,14 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
 exports[`WidgetPipView > renders with gray widget 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
-        aria-labelledby="_r_0_"
+        aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-back-button"
@@ -194,7 +194,7 @@ exports[`WidgetPipView > renders with gray widget 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"

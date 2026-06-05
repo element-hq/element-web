@@ -12,9 +12,9 @@ import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/searc
 import DialPadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dial-pad";
 
 import styles from "./RoomListSearchView.module.css";
-import { type ViewModel, useViewModel } from "../../viewmodel";
-import { Flex } from "../../utils/Flex";
-import { useI18n } from "../../utils/i18nContext";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
+import { Flex } from "../../core/utils/Flex";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 export interface RoomListSearchViewSnapshot {
     /**
@@ -84,7 +84,7 @@ export function RoomListSearchView({ vm }: Readonly<RoomListSearchViewProps>): J
                 id="room-list-search-button"
                 className={styles.search}
                 kind="secondary"
-                size="sm"
+                size="md"
                 Icon={SearchIcon}
                 onClick={vm.onSearchClick}
             >
@@ -96,7 +96,7 @@ export function RoomListSearchView({ vm }: Readonly<RoomListSearchViewProps>): J
             {displayDialButton && (
                 <Button
                     kind="secondary"
-                    size="sm"
+                    size="md"
                     Icon={DialPadIcon}
                     iconOnly={true}
                     aria-label={_t("left_panel|open_dial_pad")}
@@ -106,7 +106,7 @@ export function RoomListSearchView({ vm }: Readonly<RoomListSearchViewProps>): J
             {displayExploreButton && (
                 <Button
                     kind="secondary"
-                    size="sm"
+                    size="md"
                     Icon={ExploreIcon}
                     iconOnly={true}
                     aria-label={_t("action|explore_rooms")}

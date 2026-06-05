@@ -57,13 +57,13 @@ HTMLCollection [
             class="mx_DeviceSecurityCard_description"
           >
             Verify your current session for enhanced secure messaging.
-            <div
+            <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
               tabindex="0"
             >
               Learn more
-            </div>
+            </button>
           </p>
           <div
             class="mx_DeviceSecurityCard_actions"
@@ -137,11 +137,11 @@ exports[`<CurrentDeviceSection /> handles when device is falsy 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Current session
-      </h3>
+      </h2>
       <div
         aria-disabled="true"
         aria-expanded="false"
@@ -183,11 +183,11 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Current session
-      </h3>
+      </h2>
       <div
         aria-expanded="false"
         aria-haspopup="true"
@@ -257,11 +257,11 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
         <div
           class="mx_DeviceTile_info"
         >
-          <h4
+          <h3
             class="mx_Heading_h4"
           >
             alices_device
-          </h4>
+          </h3>
           <div
             class="mx_DeviceTile_metadata"
           >
@@ -334,13 +334,13 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             class="mx_DeviceSecurityCard_description"
           >
             Verify your current session for enhanced secure messaging.
-            <div
+            <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
               tabindex="0"
             >
               Learn more
-            </div>
+            </button>
           </p>
           <div
             class="mx_DeviceSecurityCard_actions"
@@ -370,11 +370,11 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Current session
-      </h3>
+      </h2>
       <div
         aria-expanded="false"
         aria-haspopup="true"
@@ -444,11 +444,11 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
         <div
           class="mx_DeviceTile_info"
         >
-          <h4
+          <h3
             class="mx_Heading_h4"
           >
             alices_device
-          </h4>
+          </h3>
           <div
             class="mx_DeviceTile_metadata"
           >
@@ -521,13 +521,13 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             class="mx_DeviceSecurityCard_description"
           >
             Verify your current session for enhanced secure messaging.
-            <div
+            <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
               tabindex="0"
             >
               Learn more
-            </div>
+            </button>
           </p>
           <div
             class="mx_DeviceSecurityCard_actions"

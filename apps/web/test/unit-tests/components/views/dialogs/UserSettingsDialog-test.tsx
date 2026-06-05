@@ -28,6 +28,7 @@ import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
+import { mockOpenIdConfiguration } from "../../../../test-utils/oidc.ts";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -48,6 +49,7 @@ jest.mock("../../../../../src/settings/SettingsStore", () => ({
     shouldHaveWarning: jest.fn(),
     disabledMessage: jest.fn(),
     settingIsOveriddenAtConfigLevel: jest.fn(),
+    doesSettingSupportLevel: jest.fn(),
 }));
 
 describe("<UserSettingsDialog />", () => {
@@ -71,6 +73,8 @@ describe("<UserSettingsDialog />", () => {
             getIgnoredUsers: jest.fn().mockResolvedValue([]),
             getPushers: jest.fn().mockResolvedValue([]),
             getProfileInfo: jest.fn().mockResolvedValue({}),
+            getMediaConfig: jest.fn(),
+            getAuthMetadata: jest.fn().mockResolvedValue(mockOpenIdConfiguration()),
         });
         sdkContext = new SdkContextClass();
         sdkContext.client = mockClient;
@@ -225,7 +229,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("watches settings", async () => {
-        const watchSettingCallbacks: Record<string, CallbackFn> = {};
+        const watchSettingCallbacks: Record<string, CallbackFn<any>> = {};
 
         mockSettingsStore.watchSetting.mockImplementation((settingName, roomId, callback) => {
             watchSettingCallbacks[settingName] = callback;

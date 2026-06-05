@@ -43,6 +43,11 @@ export enum Action {
     ViewUserDeviceSettings = "view_user_device_settings",
 
     /**
+     * Opens the QR login flow. Only valid during authentication. No additional payload information required.
+     */
+    ViewQrLogin = "view_qr_login",
+
+    /**
      * Opens the room directory. No additional payload information required.
      */
     ViewRoomDirectory = "view_room_directory",
@@ -194,6 +199,11 @@ export enum Action {
      * Inserts content into the active composer. Should be used with ComposerInsertPayload.
      */
     ComposerInsert = "composer_insert",
+
+    /**
+     * Inserts a file into a target composer.
+     */
+    ComposerFileInsert = "composer_insert_file",
 
     /**
      * Switches space. Should be used with SwitchSpacePayload.
@@ -403,4 +413,20 @@ export enum Action {
      * or keyboard event).
      */
     UserActivity = "user_activity",
+
+    /**
+     * Fired to request collapsing all room list sections.
+     */
+    RoomListCollapseAllSections = "room_list_collapse_all_sections",
+
+    /**
+     * Fired to request expanding all room list sections.
+     */
+    RoomListExpandAllSections = "room_list_expand_all_sections",
+
+    /**
+     * Fired to report the collapse state of a given room list section.
+     * Payload: {@link RoomListSectionsCollapseStateChangedPayload}
+     */
+    RoomListSectionsCollapseStateChanged = "room_list_sections_collapse_state_changed",
 }

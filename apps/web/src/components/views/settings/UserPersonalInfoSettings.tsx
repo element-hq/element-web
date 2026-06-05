@@ -18,6 +18,7 @@ import { type ThirdPartyIdentifier } from "../../../AddThreepid";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { AddRemoveThreepids } from "./AddRemoveThreepids";
+import { SettingsSection } from "./shared/SettingsSection.tsx";
 
 type LoadingState = "loading" | "loaded" | "error";
 
@@ -81,8 +82,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
     if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;
 
     return (
-        <div>
-            <h2>{_t("settings|general|personal_info")}</h2>
+        <SettingsSection heading={_t("settings|general|personal_info")} className="mx_UserPersonalInfoSettings">
             <SettingsSubsection
                 heading={_t("settings|general|emails_heading")}
                 stretchContent
@@ -122,6 +122,6 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
                     />
                 </ThreepidSectionWrapper>
             </SettingsSubsection>
-        </div>
+        </SettingsSection>
     );
 };

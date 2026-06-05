@@ -18,7 +18,7 @@ export interface SettingsSubsectionHeadingProps extends HTMLAttributes<HTMLDivEl
 
 export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({
     heading,
-    as = "h3",
+    as = "h2",
     children,
     ...rest
 }) => {

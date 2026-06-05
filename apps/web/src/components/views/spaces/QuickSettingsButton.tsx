@@ -58,6 +58,8 @@ const QuickSettingsButton: React.FC<{
                 onFinished={closeMenu}
                 managed={false}
                 focusLock={true}
+                role="region"
+                aria-label={_t("quick_settings|title")}
             >
                 <h2>{_t("quick_settings|title")}</h2>
 

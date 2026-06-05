@@ -12,7 +12,7 @@ import _ from "lodash";
 import {
     _t,
     normalizeLanguageKey,
-    type IVariables,
+    type StringVariables,
     KEY_SEPARATOR,
     getLangsJson,
     registerTranslations,
@@ -72,7 +72,7 @@ export class UserFriendlyError extends Error {
 
     public constructor(
         message: TranslationKey,
-        substitutionVariablesAndCause?: Omit<IVariables, keyof ErrorOptions> | ErrorOptions,
+        substitutionVariablesAndCause?: Omit<StringVariables, keyof ErrorOptions> | ErrorOptions,
     ) {
         // Prevent "Could not find /%\(cause\)s/g in x" logs to the console by removing it from the list
         const { cause, ...substitutionVariables } = substitutionVariablesAndCause ?? {};

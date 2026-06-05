@@ -122,7 +122,7 @@ function warningBanner(
             <div className="mx_UserIdentityWarning_row">
                 {avatar}
                 <span className={classNames("mx_UserIdentityWarning_main", { critical: isCritical })}>{title}</span>
-                <Button kind="secondary" size="sm" onClick={onButtonClick}>
+                <Button kind="secondary" size="md" onClick={onButtonClick}>
                     {action}
                 </Button>
             </div>

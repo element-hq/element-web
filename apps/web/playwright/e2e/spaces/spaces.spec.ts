@@ -6,12 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { UIFeature } from "../../../src/settings/UIFeature";
+import { getSampleFilePath } from "../../sample-files";
 
 async function openSpaceCreateMenu(page: Page): Promise<Locator> {
     await page.getByRole("button", { name: "Create a space" }).click();
@@ -67,6 +70,7 @@ test.describe("Spaces", () => {
         "should allow user to create public space",
         { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, user }) => {
+            await rejectToast(page, "Verify this device");
             const contextMenu = await openSpaceCreateMenu(page);
             await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
 
@@ -74,7 +78,7 @@ test.describe("Spaces", () => {
 
             await contextMenu
                 .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-                .setInputFiles("playwright/sample-files/riot.png");
+                .setInputFiles(getSampleFilePath("riot.png"));
             await contextMenu.getByRole("textbox", { name: "Name" }).fill("Let's have a Riot");
             await expect(contextMenu.getByRole("textbox", { name: "Address" })).toHaveValue("lets-have-a-riot");
             await contextMenu
@@ -103,12 +107,13 @@ test.describe("Spaces", () => {
     );
 
     test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        await rejectToast(page, "Verify this device");
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
         await menu
             .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-            .setInputFiles("playwright/sample-files/riot.png");
+            .setInputFiles(getSampleFilePath("riot.png"));
         await menu.getByRole("textbox", { name: "Name" }).fill("This is not a Riot");
         await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
         await menu.getByRole("textbox", { name: "Description" }).fill("This is a private space of mourning Riot.im...");
@@ -149,12 +154,13 @@ test.describe("Spaces", () => {
             name: "Sample Room",
         });
 
+        await rejectToast(page, "Verify this device");
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
         await menu
             .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-            .setInputFiles("playwright/sample-files/riot.png");
+            .setInputFiles(getSampleFilePath("riot.png"));
         await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
         await menu.getByRole("textbox", { name: "Description" }).fill("This is a personal space to mourn Riot.im...");
         await menu.getByRole("textbox", { name: "Name" }).fill("This is my Riot");
@@ -183,12 +189,13 @@ test.describe("Spaces", () => {
                 name: "A Room that will not be selected",
             });
 
+            await rejectToast(page, "Verify this device");
             const menu = await openSpaceCreateMenu(page);
             await menu.getByRole("button", { name: "Private" }).click();
 
             await menu
                 .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-                .setInputFiles("playwright/sample-files/riot.png");
+                .setInputFiles(getSampleFilePath("riot.png"));
             await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
             await menu
                 .getByRole("textbox", { name: "Description" })
@@ -282,6 +289,8 @@ test.describe("Spaces", () => {
         "should render subspaces in the space panel only when expanded",
         { tag: "@screenshot" },
         async ({ page, app, user, axe }) => {
+            await rejectToast(page, "Verify this device");
+
             axe.disableRules([
                 // Disable this check as it triggers on nested roving tab index elements which are in practice fine
                 "nested-interactive",
@@ -310,6 +319,9 @@ test.describe("Spaces", () => {
             // button with the same name with different class name "mx_SpacePanel_toggleCollapse".
             await spaceTree.getByRole("button", { name: "Expand" }).click();
             await expect(page.locator(".mx_SpacePanel:not(.collapsed)")).toBeVisible(); // TODO: replace :not() selector
+
+            // focus the quick settings button to ensure the spaces aren't being hovered over for consistent screenshots
+            await page.getByRole("button", { name: "Quick settings" }).focus();
 
             const item = page.locator(".mx_SpaceItem", { hasText: "Root Space" });
             await expect(item).toBeVisible();
@@ -403,10 +415,11 @@ test.describe("Spaces", () => {
         });
 
         test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app }) => {
+            await rejectToast(page, "Verify this device");
             const menu = await openSpaceCreateMenu(page);
             await menu
                 .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-                .setInputFiles("playwright/sample-files/riot.png");
+                .setInputFiles(getSampleFilePath("riot.png"));
             await menu.getByRole("textbox", { name: "Name" }).fill("This is a private space");
             await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
             await menu

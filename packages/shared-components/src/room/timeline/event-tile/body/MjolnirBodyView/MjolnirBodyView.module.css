@@ -1,0 +1,26 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.content {
+    /* Avoid reducing opacity here: it lowers the effective contrast of both text and inline controls, failing axe tests. */
+    color: var(--cpd-color-text-secondary);
+}
+
+.allowButton {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--cpd-color-text-action-accent);
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+}
+
+.allowButton:hover,
+.allowButton:focus-visible {
+    text-decoration-thickness: var(--cpd-space-0-5x);
+}

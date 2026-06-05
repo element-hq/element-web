@@ -10,7 +10,7 @@ import classNames from "classnames";
 
 import { type SasEmoji, tEmoji } from "./SasEmojiTranslate.ts";
 import styles from "./SasEmoji.module.css";
-import { useI18n } from "../../utils/i18nContext.ts";
+import { useI18n } from "../../core/i18n/i18nContext.ts";
 
 export type Props = {
     /**

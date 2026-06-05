@@ -1,10 +1,16 @@
 # @element-hq/element-web-playwright-common
 
-Set of Playwright utilities to make it easier to write tests for Element Web, Element Web Modules & Element Desktop.
+Set of Playwright & testcontainers utilities to make it easier to write tests for Element Web, Element Web Modules & Element Desktop.
 
-# This is a partial clone of https://github.com/element-hq/element-modules/tree/main/packages/element-web-playwright-common
+The main export includes a number of fixtures and custom assertions as documented in JSDoc.
 
-In the future the rest of the package will be brought into this monorepo, for now it serves as an experimental alternative to https://github.com/element-hq/element-modules/pull/188
+The `lib/testcontainers` export contains the following modules:
+
+- `SynapseContainer` - A testcontainer for running a Synapse server
+- `MatrixAuthenticationServiceContainer` - A testcontainer for running a Matrix Authentication Service
+- `MailpitContainer` - A testcontainer for running a Mailpit SMTP server
+
+There are a number of utils available in the `lib/utils` export.
 
 ## Releases
 

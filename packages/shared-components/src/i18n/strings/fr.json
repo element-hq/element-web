@@ -4,6 +4,8 @@
     },
     "action": {
         "back": "Retour",
+        "click": "Clic",
+        "close": "Fermer",
         "collapse": "Réduire",
         "delete": "Supprimer",
         "dismiss": "Ignorer",
@@ -11,27 +13,52 @@
         "edit": "Modifier",
         "explore_rooms": "Parcourir les salons",
         "go": "C’est parti",
+        "hide": "Masquer",
         "invite": "Inviter",
         "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
+        "new_section": "Nouvelle section",
         "new_video_room": "Nouveau salon visio",
         "open_menu": "Ouvrir le menu",
         "pause": "Pause",
+        "pin": "Épingler",
         "play": "Lecture",
+        "react": "Réagir",
         "remove": "Supprimer",
+        "reply": "Répondre",
+        "reply_in_thread": "Répondre dans le fil de discussion",
         "retry": "Réessayer",
         "search": "Rechercher",
-        "start_chat": "Démarrer une discussion"
+        "start_chat": "Démarrer une discussion",
+        "unpin": "Désépingler",
+        "view_source": "Voir la source"
     },
     "common": {
         "attachment": "Pièce jointe",
         "encryption_enabled": "Chiffrement activé",
+        "loading": "Chargement…",
+        "options": "Options",
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
+    },
+    "devtools": {
+        "toggle_event": "afficher/masquer l’évènement"
+    },
+    "keyboard": {
+        "shift": "Maj"
     },
     "left_panel": {
         "open_dial_pad": "Ouvrir le pavé de numérotation",
         "separator_label": "Cliquez ou glissez pour agrandir"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Créer un compte",
+            "got_an_account": "Tu as un compte ?",
+            "manage_account": "Gérer le compte",
+            "sign_in": "Se connecter",
+            "title": "Menu utilisateur"
+        }
     },
     "notifications": {
         "all_messages": "Tous les messages",
@@ -79,9 +106,13 @@
                 "one": "Ouvrir le salon %(roomName)s avec 1 message non lu.",
                 "other": "Ouvrir le salon %(roomName)s avec %(count)s message non lus."
             },
-            "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé."
+            "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé.",
+            "video_call": "Ouvrir le salon %(roomName)s contenant un appel vidéo",
+            "voice_call": "Ouvrir le salon %(roomName)s contenant un appel vocal."
         },
         "appearance": "Apparence",
+        "chat_moved": "La conversation a été déplacée",
+        "collapse_all_sections": "Réduire toutes les sections",
         "collapse_filters": "Réduire la liste des filtres",
         "empty": {
             "no_chats": "Pas encore de discussions",
@@ -100,6 +131,7 @@
             "show_activity": "Voir toutes les activités",
             "show_chats": "Afficher toutes les discussions"
         },
+        "expand_all_sections": "Développer toutes les sections",
         "expand_filters": "Développer la liste des filtres",
         "filters": {
             "favourite": "Favoris",
@@ -117,7 +149,8 @@
             "leave_room": "Quitter le salon",
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
-            "mark_unread": "Marquer comme non lu"
+            "mark_unread": "Marquer comme non lu",
+            "move_to_section": "Déplacer vers"
         },
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",
@@ -126,8 +159,13 @@
             "more_options": "Plus d’options"
         },
         "room_options": "Options du salon",
+        "section_created": "Section créée",
         "section_header": {
-            "toggle": "Afficher/masquer la section %(section)s"
+            "edit_section": "Modifier la section",
+            "more_options": "Plus d’options",
+            "remove_section": "Supprimer la section",
+            "toggle": "Afficher/masquer la section %(section)s",
+            "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"
         },
         "show_message_previews": "Afficher les aperçus des messages",
         "sort": "Trier",
@@ -143,6 +181,9 @@
     },
     "terms": {
         "tac_button": "Voir les conditions générales"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante"
     },
     "time": {
         "about_day_ago": "il y a environ un jour",
@@ -161,6 +202,14 @@
         "n_minutes_ago": "il y a %(num)s minutes"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Appel refusé",
+                "call_declined_by_us": "Vous avez rejeté un appel"
+            },
+            "video_call_title": "Appel vidéo",
+            "voice_call_title": "Appel audio"
+        },
         "decryption_failure": {
             "blocked": "L'expéditeur vous a empêché de recevoir ce message car votre appareil n'est pas vérifié",
             "historical_event_no_key_backup": "L'historique des messages n'est pas disponible sur cet appareil",
@@ -170,6 +219,9 @@
             "sender_unsigned_device": "Envoyé depuis un appareil non sécurisé.",
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
+        "download_action_decrypting": "Déchiffrement",
+        "download_action_downloading": "Téléchargement en cours",
+        "e2e_state": "État du chiffrement de bout en bout",
         "m.audio": {
             "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
@@ -177,6 +229,10 @@
         },
         "m.file": {
             "error_invalid": "Fichier invalide"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s a changé l'avatar du salon en <img/>",
+            "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
         },
         "m.room.encryption": {
             "disable_attempt": "Essai de désactiver le chiffrement ignoré",
@@ -188,16 +244,37 @@
             "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier dans leur profil en cliquant sur leur photo de profil.",
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
         },
+        "mab": {
+            "collapse_reply_chain": "Réduire les citations",
+            "copy_link_thread": "Copier le lien du fil de discussion",
+            "expand_reply_chain": "Étendre les citations",
+            "label": "Actions de message",
+            "view_in_room": "Voir dans le salon"
+        },
+        "message_shared_by": "%(displayName)s(%(userId)s ) a partagé ce message car vous n'étiez pas dans le salon lors de son envoi.",
         "message_timestamp_received_at": "Reçu à : %(dateTime)s",
         "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Vous avez ignoré cet utilisateur, son message est donc masqué. <a> Afficher quand même. </a>"
+        },
+        "pending_moderation": "Message en attente de modération",
+        "pending_moderation_reason": "Message en attente de modération : %(reason)s",
         "url_preview": {
             "close": "Fermer l’aperçu",
+            "open_link": "Ouvrir le lien",
             "show_n_more": {
                 "one": "Montrer %(count)s autre preview",
                 "other": "Montrer %(count)s autres previews"
             },
             "view_image": "Afficher l'image"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Associer un nouvel appareil",
+        "open_feedback": "Commentaire",
+        "open_home": "Accueil",
+        "open_security": "Sécurité et confidentialité",
+        "open_settings": "Tous les paramètres"
     },
     "widget": {
         "context_menu": {

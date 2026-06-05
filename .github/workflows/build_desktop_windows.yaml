@@ -42,7 +42,7 @@ on:
                 type: string
                 required: false
                 description: |
-                    The name of the prepare artifact to use, defaults to 'webapp'.
+                    The name of the prepare artifact to use, defaults to 'desktop-prepare'.
                     The artifact must contain the following:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
                     + electronVersion - the version of electron to use for cache keying
@@ -52,7 +52,7 @@ on:
 
                     The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
                     for example icons in the `build/` directory to override the app icons.
-                default: "webapp"
+                default: "desktop-prepare"
             test:
                 type: boolean
                 required: false
@@ -108,7 +108,13 @@ jobs:
                         }
                       }
 
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            # Tweak line endings to make nx happy, workaround for https://github.com/nrwl/nx/issues/35828
+            - name: Configure git line endings
+              run: |
+                  git config --system core.autocrlf false
+                  git config --system core.eol lf
+
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
@@ -121,9 +127,9 @@ jobs:
 
             - name: Cache .hak
               id: cache
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
-                  key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion') }}
+                  key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion') }}
                   path: |
                       apps/desktop/.hak
 
@@ -152,15 +158,15 @@ jobs:
               env:
                   TARGET: ${{ steps.config.outputs.target }}
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Insert config snippet
               if: steps.config.outputs.extra_config != ''
@@ -274,7 +280,7 @@ jobs:
                   | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
 
             - name: Upload Artifacts
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
                   path: |

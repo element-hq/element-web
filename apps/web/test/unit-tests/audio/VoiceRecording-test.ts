@@ -120,6 +120,29 @@ describe("VoiceRecording", () => {
                 }),
             );
         });
+
+        it("should request the selected microphone as an exact device constraint", async () => {
+            MediaDeviceHandlerMock.getAudioInput.mockReturnValue("selected-mic");
+            await recording.start();
+
+            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    audio: expect.objectContaining({ deviceId: { exact: "selected-mic" } }),
+                }),
+            );
+        });
+
+        it("should not force an exact microphone when default device is selected", async () => {
+            MediaDeviceHandlerMock.getAudioInput.mockReturnValue("default");
+            await recording.start();
+
+            const constraints = mocked(navigator.mediaDevices.getUserMedia).mock.calls[0][0] as MediaStreamConstraints;
+            expect(constraints.audio).toEqual(
+                expect.not.objectContaining({
+                    deviceId: expect.anything(),
+                }),
+            );
+        });
     });
 
     describe("when recording", () => {

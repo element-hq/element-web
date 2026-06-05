@@ -45,7 +45,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({
     if (!canChangePassword) return <></>;
 
     return (
-        <>
+        <SettingsSection>
             <SettingsSubsection
                 heading={_t("settings|general|account_section")}
                 stretchContent
@@ -59,7 +59,7 @@ const AccountSection: React.FC<AccountSectionProps> = ({
                     onFinished={onPasswordChanged}
                 />
             </SettingsSubsection>
-        </>
+        </SettingsSection>
     );
 };
 
@@ -179,21 +179,19 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
 
     return (
         <SettingsTab data-testid="mx_AccountUserSettingsTab">
-            <SettingsSection>
-                <UserProfileSettings
-                    externalAccountManagementUrl={externalAccountManagementUrl}
-                    canSetDisplayName={canSetDisplayName}
-                    canSetAvatar={canSetAvatar}
-                />
-                {(!isAccountManagedExternally || canMake3pidChanges) && (
-                    <UserPersonalInfoSettings canMake3pidChanges={canMake3pidChanges} />
-                )}
-                <AccountSection
-                    canChangePassword={canChangePassword}
-                    onPasswordChanged={onPasswordChanged}
-                    onPasswordChangeError={onPasswordChangeError}
-                />
-            </SettingsSection>
+            <UserProfileSettings
+                externalAccountManagementUrl={externalAccountManagementUrl}
+                canSetDisplayName={canSetDisplayName}
+                canSetAvatar={canSetAvatar}
+            />
+            {(!isAccountManagedExternally || canMake3pidChanges) && (
+                <UserPersonalInfoSettings canMake3pidChanges={canMake3pidChanges} />
+            )}
+            <AccountSection
+                canChangePassword={canChangePassword}
+                onPasswordChanged={onPasswordChanged}
+                onPasswordChangeError={onPasswordChangeError}
+            />
             {accountManagementSection}
         </SettingsTab>
     );

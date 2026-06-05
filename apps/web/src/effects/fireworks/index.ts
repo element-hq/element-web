@@ -6,11 +6,11 @@ Copyright 2020 Nordeck IT + Consulting GmbH.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
 
 import type ICanvasEffect from "../ICanvasEffect";
 
-export type FireworksOptions = {
+type FireworksOptions = {
     /**
      * max fireworks count
      */
@@ -55,7 +55,7 @@ export const DefaultOptions: FireworksOptions = {
 export default class Fireworks implements ICanvasEffect {
     private readonly options: FireworksOptions;
 
-    public constructor(options: { [key: string]: any }) {
+    public constructor(options: Partial<FireworksOptions>) {
         this.options = { ...DefaultOptions, ...options };
     }
 

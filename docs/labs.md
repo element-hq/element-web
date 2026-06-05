@@ -10,11 +10,6 @@ If a labs features gets more stable, it _may_ be promoted to a beta feature
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
-## Submit Abuse Report to Moderators [MSC3215](https://github.com/matrix-org/matrix-doc/pull/3215) support (`feature_report_to_moderators`)
-
-A new version of the "Report" dialog that lets users send abuse reports directly to room moderators,
-if the room supports it.
-
 ## Render LaTeX maths in messages (`feature_latex_maths`)
 
 Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
@@ -119,14 +114,6 @@ Do not send or receive messages to/from devices that are not properly verified. 
 receive your messages at all on those devices, and if they send messages, you will not be able to read them, but you
 will be aware that a message exists.
 
-## Share encrypted history with new members (`feature_share_history_on_invite`) [In Development]
-
-When inviting users to an encrypted room with shared history (i.e. a room with the "Who can read history?" setting set
-to "Members only (since the point in time of selecting this option)"), send the keys for previous messages to the
-invitee so they can read them.
-
-Both the inviter and the invitee must set this labs flag, before the invitation is sent.
-
 ## Encrypted state events (MSC4362) (`feature_msc4362_encrypted_state_events`)
 
 Encrypt most of the state events in the room, including the room name and topic.
@@ -139,5 +126,17 @@ joining a room.
 
 Replaces the legacy notification settings with a new one to manage push rules.
 
+## User status (`feature_user_status`)
+
+Enables setting a status message in your profile and to be able to view other's statuses.
+Requires [MSC4429](https://github.com/matrix-org/matrix-spec-proposals/pull/4429) and [MSC4426](https://github.com/matrix-org/matrix-spec-proposals/pull/4426).
+
 **Warning** This feature has options which are not backwards compatible, disabling
 it may have unintended consequences.
+
+## Log in with QR (`feature_login_with_qr`)
+
+Enables logging in to Element Web/Desktop by using Element X to scan a QR code.
+Requires server support, based on the v2024 edition of [MSC4108](https://github.com/matrix-org/matrix-spec-proposals/pull/4108).
+Can only be configured via config.json, as labs flags cannot be set until after login, and are cleared on log out. The UI option is disabled.
+Note, this does not affect the existing `Link new device` flow using the same MSC.

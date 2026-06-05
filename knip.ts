@@ -1,18 +1,20 @@
 import { KnipConfig } from "knip";
 
-// Specify this as knip loads config files which may conditionally add reporters, e.g. `@casualbot/jest-sonar-reporter'
+// Specify this as knip loads config files which may conditionally load plugins
 process.env.GITHUB_ACTIONS = "1";
 
 export default {
     workspaces: {
         "packages/shared-components": {},
         "packages/playwright-common": {
+            entry: ["src/fixtures/index.ts", "src/testcontainers/index.ts"],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
-            ignoreBinaries: ["awk"],
+            ignoreBinaries: ["awk", "printf"],
         },
+        "packages/module-api": {},
         "apps/web": {
             entry: [
                 "src/serviceworker/index.ts",
@@ -43,7 +45,6 @@ export default {
                 // dependency so that // we can run `tsc` (since we import the typescript
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
-                "@types/content-type",
                 "@types/sdp-transform",
             ],
         },
@@ -60,20 +61,26 @@ export default {
             entry: ["scripts/**", "docs/**"],
         },
     },
+    ignoreDependencies: [
+        // Used by multiple packages, raises a false positive for some reason
+        "events",
+    ],
     ignoreExportsUsedInFile: true,
+    ignoreBinaries: [
+        // Optional for coverage:diff development script
+        "diff-cover",
+    ],
     compilers: {
         pcss: (text: string) =>
-            [...text.matchAll(/(?<=@)import[^;]+/g)]
-                .map(([line]) => {
-                    if (line.startsWith("import url(")) {
-                        return line.replace("url(", "").slice(0, -1);
-                    }
-                    return line;
-                })
+            [...text.matchAll(/@import\s+(?:url\()?["']([^"']+)["']\)?[^;]*;/g)]
+                .map(([, specifier]) => `import "${specifier}";`)
                 .join("\n"),
     },
     nx: {
         config: ["{nx,package,project}.json", "{apps,packages,modules}/**/{package,project}.json"],
+    },
+    playwright: {
+        config: ["playwright.config.ts", "playwright-merge.config.ts"],
     },
     tags: ["-knipignore"],
 } satisfies KnipConfig;

@@ -1,6 +1,7 @@
 # Docker image to facilitate building Element Desktop's native bits using a glibc version (2.31)
 # with broader compatibility, down to Debian bullseye & Ubuntu focal.
-FROM rust:bullseye@sha256:16950191527a4cb9e0762d9d48b705a6315158e4035e64f7a93ce8656a1b053c
+
+FROM rust:bullseye@sha256:ae411a6ed4812ea54668cf819566e950b162d59a94fde0fa298cf7bb400f6b3f
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -15,8 +16,9 @@ RUN ln -s /usr/bin/python3 /usr/bin/python & ln -s /usr/bin/pip3 /usr/bin/pip
 
 ENV DEBUG_COLORS=true
 ENV FORCE_COLOR=true
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
-WORKDIR /project
+WORKDIR /project/apps/desktop
 
 ARG TARGETOS
 ARG TARGETARCH

@@ -4,7 +4,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
   class="_tooltip_1nqnq_8"
   data-floating-ui-focusable=""
-  id="_r_6_"
+  id="react-use-id-1"
   role="tooltip"
   style="position: absolute; left: 0px; top: 0px; transform: translate(5px, -6px);"
   tabindex="-1"
@@ -22,7 +22,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
       stroke="none"
     />
     <clippath
-      id="_r_9_"
+      id="react-use-id-2"
     >
       <rect
         height="10"
@@ -33,13 +33,13 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
     </clippath>
   </svg>
   <span
-    id="_r_4_"
+    id="react-use-id-3"
   >
     Alice
   </span>
   <span
     class="_caption_1nqnq_28 cpd-theme-dark"
-    id="_r_5_"
+    id="react-use-id-4"
   >
     @alice:example.org
   </span>
@@ -59,7 +59,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should fall back to userId if ro
       <span
         aria-hidden="true"
         aria-live="off"
-        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -99,7 +99,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         aria-hidden="true"
         aria-label="Profile picture"
         aria-live="off"
-        class="_avatar_zysgz_8 mx_BaseAvatar"
+        class="_avatar_va14e_8 mx_BaseAvatar"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -107,7 +107,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
       >
         <img
           alt=""
-          class="_image_zysgz_43"
+          class="_image_va14e_43"
           data-type="round"
           height="24px"
           loading="lazy"

@@ -184,14 +184,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                     </Form.Root>
                 </SettingsFieldset>
 
-                <Form.Root
-                    onSubmit={(evt) => {
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                    }}
-                >
-                    {addressesSection}
-                </Form.Root>
+                {addressesSection}
             </SettingsSection>
         </SettingsTab>
     );

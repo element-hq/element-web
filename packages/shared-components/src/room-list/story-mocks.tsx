@@ -13,9 +13,9 @@ import {
     type RoomListItemViewModel,
     type RoomListItemViewSnapshot,
     RoomNotifState,
-} from "./RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
-import { MockViewModel } from "../viewmodel";
+} from "./VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "./VirtualizedRoomListView/RoomListSectionHeaderView";
+import { MockViewModel } from "../core/viewmodel";
 
 /**
  * Mock avatar component for stories
@@ -105,6 +105,8 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
+    canMoveToSection: true,
+    sections: [],
 });
 
 export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
@@ -121,6 +123,8 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
         onCopyRoomLink: fn(),
         onLeaveRoom: fn(),
         onSetRoomNotifState: fn(),
+        onCreateSection: fn(),
+        onToggleSection: fn(),
     };
 }
 

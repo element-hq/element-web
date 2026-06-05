@@ -18,7 +18,6 @@ import {
     decodeBase64,
 } from "matrix-js-sdk/src/matrix";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
@@ -59,7 +58,7 @@ import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
-import { completeOidcLogin } from "./utils/oidc/authorize";
+import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oidc/authorize";
 import { getOidcErrorMessage } from "./utils/oidc/error";
 import { type OidcClientStore } from "./stores/oidc/OidcClientStore";
 import {
@@ -81,6 +80,7 @@ import {
 } from "./utils/tokens/tokens";
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
+import { type URLParams } from "./vector/url_utils.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -148,7 +148,7 @@ interface ILoadSessionOpts {
     guestIsUrl?: string;
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
-    fragmentQueryParams?: QueryDict;
+    urlParams?: URLParams;
     abortSignal?: AbortSignal;
 }
 
@@ -187,7 +187,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         let enableGuest = opts.enableGuest || false;
         const guestHsUrl = opts.guestHsUrl;
         const guestIsUrl = opts.guestIsUrl;
-        const fragmentQueryParams = opts.fragmentQueryParams || {};
+        const urlParams = opts.urlParams;
         const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
         if (enableGuest && !guestHsUrl) {
@@ -195,12 +195,12 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             enableGuest = false;
         }
 
-        if (enableGuest && guestHsUrl && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
+        if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
             logger.log("Using guest access credentials");
             await doSetLoggedIn(
                 {
-                    userId: fragmentQueryParams.guest_user_id as string,
-                    accessToken: fragmentQueryParams.guest_access_token as string,
+                    userId: urlParams.guest.guest_user_id,
+                    accessToken: urlParams.guest.guest_access_token,
                     homeserverUrl: guestHsUrl,
                     identityServerUrl: guestIsUrl,
                     guest: true,
@@ -264,59 +264,54 @@ export async function getStoredSessionOwner(): Promise<[string, boolean] | [null
  * If query string includes OIDC authorization code flow parameters attempt to login using oidc flow
  * Else, we may be returning from SSO - attempt token login
  *
- * @param {Object} queryParams    string->string map of the
- *     query-parameters extracted from the real query-string of the starting
- *     URI.
+ * @param urlParams the parameters read in at app load time from the url
  *
- * @param {string} defaultDeviceDisplayName
- * @param {string} fragmentAfterLogin path to go to after a successful login, only used for "Try again"
+ * @param defaultDeviceDisplayName
+ * @param fragmentAfterLogin path to go to after a successful login, only used for "Try again"
  *
- * @returns {Promise} promise which resolves to true if we completed the delegated auth login
+ * @returns promise which resolves to true if we completed the delegated auth login
  *      else false
  */
 export async function attemptDelegatedAuthLogin(
-    queryParams: QueryDict,
+    urlParams: URLParams,
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
-    if (queryParams.code && queryParams.state) {
-        console.log("We have OIDC params - attempting OIDC login");
-        return attemptOidcNativeLogin(queryParams);
+    if (urlParams.oidc_fragment) {
+        return attemptOidcNativeLogin(urlParams.oidc_fragment, "fragment");
+    } else if (urlParams.oidc_query) {
+        return attemptOidcNativeLogin(urlParams.oidc_query, "query");
     }
 
-    return attemptTokenLogin(queryParams, defaultDeviceDisplayName, fragmentAfterLogin);
+    return attemptTokenLogin(urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
 }
 
 /**
  * Attempt to login by completing OIDC authorization code flow
- * @param queryParams string->string map of the query-parameters extracted from the real query-string of the starting URI.
- * @returns Promise that resolves to true when login succceeded, else false
+ * @param urlParams subset of app-load url parameters relating to oidc auth
+ * @param responseMode - the response_mode used in the auth request
+ * @returns Promise that resolves to true when login succeeded, else false
  */
-async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> {
+async function attemptOidcNativeLogin(
+    urlParams: NonNullable<URLParams["oidc_fragment"]>,
+    responseMode: "fragment" | "query",
+): Promise<boolean> {
+    console.log("We have OIDC params - attempting OIDC login");
+
     try {
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
-            await completeOidcLogin(queryParams);
+            await completeOidcLogin(urlParams, responseMode);
 
-        const {
-            user_id: userId,
-            device_id: deviceId,
-            is_guest: isGuest,
-        } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
-
-        const credentials = {
+        await configureFromCompletedOAuthLogin({
             accessToken,
             refreshToken,
             homeserverUrl,
             identityServerUrl,
-            deviceId,
-            userId,
-            isGuest,
-        };
+            clientId,
+            issuer,
+            idToken,
+        });
 
-        logger.debug("Logged in via OIDC native flow");
-        await onSuccessfulDelegatedAuthLogin(credentials);
-        // this needs to happen after success handler which clears storages
-        persistOidcAuthenticatedSettings(clientId, issuer, idToken);
         return true;
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
@@ -324,6 +319,42 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
+}
+
+/**
+ * Exchange the given OIDC credentials for {@link IMatrixClientCreds}, additionally persisting them to storage.
+ * @param creds the credentials from the OIDC flow
+ */
+export async function configureFromCompletedOAuthLogin({
+    accessToken,
+    refreshToken,
+    homeserverUrl,
+    identityServerUrl,
+    clientId,
+    issuer,
+    idToken,
+}: Omit<CompleteOidcLoginResponse, "idTokenClaims">): Promise<IMatrixClientCreds> {
+    const {
+        user_id: userId,
+        device_id: deviceId,
+        is_guest: isGuest,
+    } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
+
+    const credentials = {
+        accessToken,
+        refreshToken,
+        homeserverUrl,
+        identityServerUrl,
+        deviceId,
+        userId,
+        isGuest,
+    };
+
+    logger.debug("Logged in via OIDC native flow");
+    await onSuccessfulDelegatedAuthLogin(credentials);
+    // this needs to happen after success handler which clears storages
+    persistOidcAuthenticatedSettings(clientId, issuer, idToken);
+    return credentials;
 }
 
 /**
@@ -354,22 +385,20 @@ async function getUserIdFromAccessToken(
 }
 
 /**
- * @param {QueryDict} queryParams    string->string map of the
- *     query-parameters extracted from the real query-string of the starting
- *     URI.
+ @param urlParams subset of app-load url parameters relating to legacy sso auth
  *
- * @param {string} defaultDeviceDisplayName
- * @param {string} fragmentAfterLogin path to go to after a successful login, only used for "Try again"
+ * @param defaultDeviceDisplayName
+ * @param fragmentAfterLogin path to go to after a successful login, only used for "Try again"
  *
- * @returns {Promise} promise which resolves to true if we completed the token
+ * @returns promise which resolves to true if we completed the token
  *    login, else false
  */
 export function attemptTokenLogin(
-    queryParams: QueryDict,
+    urlParams: URLParams["legacy_sso"],
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
-    if (!queryParams.loginToken) {
+    if (!urlParams?.loginToken) {
         return Promise.resolve(false);
     }
 
@@ -384,7 +413,7 @@ export function attemptTokenLogin(
     }
 
     return sendLoginRequest(homeserver, identityServer, "m.login.token", {
-        token: queryParams.loginToken as string,
+        token: urlParams.loginToken,
         initial_device_display_name: defaultDeviceDisplayName,
     })
         .then(async function (creds) {
@@ -1040,7 +1069,7 @@ export function isLoggingOut(): boolean {
  * By the time this method is called, we have successfully logged in if necessary, and the client has been set up with
  * the access token.
  *
- * Emits {@link Acction.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
+ * Emits {@link Action.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
  * been started.
  *
  * @param client the matrix client to start
@@ -1130,7 +1159,7 @@ export async function onLoggedOut(): Promise<void> {
     // customisations got the memo.
     if (SdkConfig.get().logout_redirect_url) {
         logger.log("Redirecting to external provider to finish logout");
-        // XXX: Defer this so that it doesn't race with MatrixChat unmounting the world by going to /#/login
+        // XXX: Defer this so that it doesn't race with MatrixChat unmounting the world by going to /#/welcome
         window.setTimeout(() => {
             window.location.href = SdkConfig.get().logout_redirect_url!;
         }, 100);

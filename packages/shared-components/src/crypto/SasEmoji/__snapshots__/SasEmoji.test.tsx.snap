@@ -3,109 +3,109 @@
 exports[`<SasEmoji/> > should match snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="container"
+    class="SasEmoji-module_container"
   >
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         🦋
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Butterfly
       </div>
     </div>
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         🍄
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Mushroom
       </div>
     </div>
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         ⚽
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Ball
       </div>
     </div>
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         🌏
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Globe
       </div>
     </div>
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         🦄
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Unicorn
       </div>
     </div>
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         🚀
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Rocket
       </div>
     </div>
     <div
-      class="segment"
+      class="SasEmoji-module_segment"
     >
       <div
         aria-hidden="true"
-        class="emoji"
+        class="SasEmoji-module_emoji"
       >
         🔧
       </div>
       <div
-        class="label"
+        class="SasEmoji-module_label"
       >
         Spanner
       </div>

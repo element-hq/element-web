@@ -15,7 +15,6 @@ import {
     type ResizerViewSnapshot,
 } from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
-import whatInput from "what-input";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
@@ -25,13 +24,11 @@ function getInitialState(): ResizerViewSnapshot {
         return {
             isCollapsed: true,
             initialSize: 0,
-            isFocusedViaKeyboard: false,
         };
     }
     return {
         isCollapsed: false,
         initialSize: SettingsStore.getValue("RoomList.panelSize") ?? undefined,
-        isFocusedViaKeyboard: false,
     };
 }
 
@@ -47,8 +44,15 @@ export class ResizerViewModel
      */
     private panelHandle?: PanelImperativeHandle;
 
+    /**
+     * Needed to distinguish between a drag and a click on the separator.
+     */
+    private readonly mouseClickHandler: MouseClickHandler;
+
     public constructor() {
         super(undefined, getInitialState());
+        // Run onSeparatorClick when the separator is clicked.
+        this.mouseClickHandler = new MouseClickHandler(this.onSeparatorClick);
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {
@@ -57,6 +61,12 @@ export class ResizerViewModel
     }, 50);
 
     public onLeftPanelResized = (newSize: number): void => {
+        // We don't want the panels to have fractional widths as that can cause blurry UI elements.
+        if (!Number.isInteger(newSize)) {
+            this.panelHandle?.resize(`${Math.round(newSize)}%`);
+            return;
+        }
+
         const isCollapsed = newSize === 0;
         // Store the size if the panel isn't collapsed.
         if (!isCollapsed) {
@@ -73,31 +83,51 @@ export class ResizerViewModel
         this.panelHandle = handle;
     };
 
-    public onSeparatorClick = (): void => {
+    private onSeparatorClick = (): void => {
+        // When panel is collapsed, single click should expand the panel.
         if (this.panelHandle?.isCollapsed()) {
-            this.panelHandle.resize(`100%`);
+            const lastSize = SettingsStore.getValue("RoomList.panelSize");
+            this.panelHandle.resize(`${lastSize ?? 100}%`);
         }
     };
 
-    public onFocus = (): void => {
-        /**
-         * The intention here is to make the separator visible when it is focused by keyboard
-         * navigation i.e tabbing through the app.
-         *
-         * There's a good reason to take this approach instead of just relying on the focus-visible
-         * selector:
-         * When exactly an element gets focus-visible is determined by browser heuristics and usually
-         * interacting with the mouse will not give an element focus-visible.
-         * However with this separator on chrome, mouse interaction occasionally gives it focus-visible.
-         * The leads to flakey separator behaviour.
-         */
-        const currentNavigation = whatInput.ask();
-        if (currentNavigation === "keyboard") {
-            this.snapshot.merge({ isFocusedViaKeyboard: true });
-        }
+    public onDoubleClick = (): void => {
+        // When the panel is expanded, double click should collapse.
+        if (!this.panelHandle?.isCollapsed()) this.panelHandle?.collapse();
     };
 
-    public onBlur = (): void => {
-        if (this.getSnapshot().isFocusedViaKeyboard) this.snapshot.merge({ isFocusedViaKeyboard: false });
+    public onPointerUp = (): void => {
+        this.mouseClickHandler.onPointerUp();
+    };
+
+    public onPointerMove = (): void => {
+        this.mouseClickHandler.onPointerMove();
+    };
+
+    public onPointerDown = (): void => {
+        this.mouseClickHandler.onPointerDown();
+    };
+}
+
+/**
+ * Dragging the separator will emit a click event.
+ * This class uses pointer event handlers to distinguish between a drag and a click
+ * on the separator.
+ */
+class MouseClickHandler {
+    public constructor(private readonly onClick: () => void) {}
+
+    private isResize = false;
+
+    public onPointerUp = (): void => {
+        if (!this.isResize) this.onClick();
+    };
+
+    public onPointerDown = (): void => {
+        this.isResize = false;
+    };
+
+    public onPointerMove = (): void => {
+        this.isResize = true;
     };
 }

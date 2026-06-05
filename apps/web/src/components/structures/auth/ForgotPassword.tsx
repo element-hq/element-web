@@ -12,7 +12,7 @@ import React, { type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { Button } from "@vector-im/compound-web";
+import { Button, Form } from "@vector-im/compound-web";
 
 import { _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -380,7 +380,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
             <>
                 <LockSolidIcon className="mx_AuthBody_lockIcon" />
                 <h1>{_t("auth|reset_password_title")}</h1>
-                <form onSubmit={this.onSubmitForm}>
+                <Form.Root onSubmit={this.onSubmitForm}>
                     <fieldset disabled={this.state.phase === Phase.ResettingPassword}>
                         <div className="mx_AuthBody_fieldRow">
                             <PassphraseField
@@ -413,16 +413,17 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             <StyledCheckbox
                                 onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })}
                                 checked={this.state.logoutDevices}
+                                formWrap={false}
                             >
                                 {_t("auth|reset_password|sign_out_other_devices")}
                             </StyledCheckbox>
                         </div>
                         {this.state.errorText && <ErrorMessage message={this.state.errorText} />}
-                        <Button type="submit" className="mx_Login_submit" size="sm">
+                        <Button type="submit" className="mx_Login_submit" size="md">
                             {submitButtonChild}
                         </Button>
                     </fieldset>
-                </form>
+                </Form.Root>
             </>
         );
     }
@@ -433,7 +434,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 <CheckIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
                 <h1>{_t("auth|reset_password|reset_successful")}</h1>
                 {this.state.logoutDevices ? <p>{_t("auth|reset_password|devices_logout_success")}</p> : null}
-                <Button className="mx_Login_submit" size="sm" type="button" onClick={this.props.onComplete}>
+                <Button className="mx_Login_submit" size="md" type="button" onClick={this.props.onComplete}>
                     {_t("auth|reset_password|return_to_login")}
                 </Button>
             </>

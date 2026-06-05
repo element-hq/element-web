@@ -3,15 +3,15 @@
 exports[`<RoomListPrimaryFilters /> stories > snapshots > renders Default story 1`] = `
 <div>
   <div
-    class="flex roomListPrimaryFilters"
+    class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
     data-testid="primary-filters"
     style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
     <button
-      aria-controls="_r_0_"
+      aria-controls="react-use-id-1"
       aria-expanded="false"
       aria-label="Expand filter list"
-      class="_icon-button_1215g_8 iconButton"
+      class="_icon-button_1215g_8 RoomListPrimaryFilters-module_iconButton"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -36,8 +36,8 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders Default story 
     </button>
     <div
       aria-label="Room list filters"
-      class="flex list"
-      id="_r_0_"
+      class="Flex-module_flex RoomListPrimaryFilters-module_list"
+      id="react-use-id-1"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >
@@ -115,15 +115,15 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowContaine
     style="width: 180px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
   >
     <div
-      class="flex roomListPrimaryFilters"
+      class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
       data-testid="primary-filters"
       style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
-        aria-controls="_r_3_"
+        aria-controls="react-use-id-1"
         aria-expanded="false"
         aria-label="Expand filter list"
-        class="_icon-button_1215g_8 iconButton"
+        class="_icon-button_1215g_8 RoomListPrimaryFilters-module_iconButton"
         data-kind="secondary"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -148,8 +148,8 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowContaine
       </button>
       <div
         aria-label="Room list filters"
-        class="flex list"
-        id="_r_3_"
+        class="Flex-module_flex RoomListPrimaryFilters-module_list"
+        id="react-use-id-1"
         role="listbox"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
       >
@@ -192,15 +192,15 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowWithActi
     style="width: 180px; border: 1px dashed var(--cpd-color-border-interactive-secondary);"
   >
     <div
-      class="flex roomListPrimaryFilters"
+      class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
       data-testid="primary-filters"
       style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
-        aria-controls="_r_4_"
+        aria-controls="react-use-id-1"
         aria-expanded="false"
         aria-label="Expand filter list"
-        class="_icon-button_1215g_8 iconButton"
+        class="_icon-button_1215g_8 RoomListPrimaryFilters-module_iconButton"
         data-kind="secondary"
         role="button"
         style="--cpd-icon-button-size: 28px;"
@@ -225,8 +225,8 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowWithActi
       </button>
       <div
         aria-label="Room list filters"
-        class="flex list"
-        id="_r_4_"
+        class="Flex-module_flex RoomListPrimaryFilters-module_list"
+        id="react-use-id-1"
         role="listbox"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
       >
@@ -263,14 +263,14 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NarrowWithActi
 exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NoFilters story 1`] = `
 <div>
   <div
-    class="flex roomListPrimaryFilters"
+    class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
     data-testid="primary-filters"
     style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
     <div
       aria-label="Room list filters"
-      class="flex list"
-      id="_r_2_"
+      class="Flex-module_flex RoomListPrimaryFilters-module_list"
+      id="react-use-id-1"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     />
@@ -281,15 +281,15 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders NoFilters stor
 exports[`<RoomListPrimaryFilters /> stories > snapshots > renders PeopleSelected story 1`] = `
 <div>
   <div
-    class="flex roomListPrimaryFilters"
+    class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
     data-testid="primary-filters"
     style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
     <button
-      aria-controls="_r_1_"
+      aria-controls="react-use-id-1"
       aria-expanded="false"
       aria-label="Expand filter list"
-      class="_icon-button_1215g_8 iconButton"
+      class="_icon-button_1215g_8 RoomListPrimaryFilters-module_iconButton"
       data-kind="secondary"
       role="button"
       style="--cpd-icon-button-size: 28px;"
@@ -314,8 +314,8 @@ exports[`<RoomListPrimaryFilters /> stories > snapshots > renders PeopleSelected
     </button>
     <div
       aria-label="Room list filters"
-      class="flex list"
-      id="_r_1_"
+      class="Flex-module_flex RoomListPrimaryFilters-module_list"
+      id="react-use-id-1"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
     >

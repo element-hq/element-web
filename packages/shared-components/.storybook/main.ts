@@ -8,11 +8,13 @@ Please see LICENSE files in the repository root for full details.
 import type { StorybookConfig } from "@storybook/react-vite";
 import fs from "node:fs";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { mergeConfig } from "vite";
+import { mergeConfig, normalizePath, type Plugin } from "vite";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const srcRoot = normalizePath(join(__dirname, "..", "src"));
+const sharedComponentsLayer = "shared-components";
 
 // Get a list of available languages so the language selector can display them at runtime
 const languageFiles = fs.readdirSync(join(__dirname, "..", "src", "i18n", "strings")).map((f) => f.slice(0, -5));
@@ -34,6 +36,24 @@ for (const lang of languageFiles) {
  */
 function getAbsolutePath(value: string): any {
     return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}
+
+function layerSharedComponentCssModules(): Plugin {
+    return {
+        name: "element-web-shared-components-storybook-css-layer",
+        enforce: "pre",
+        transform(code, id) {
+            const cssPath = normalizePath(id.split("?")[0]);
+            if (!cssPath.startsWith(srcRoot) || !cssPath.endsWith(".module.css")) {
+                return;
+            }
+
+            return {
+                code: `@layer ${sharedComponentsLayer} {\n${code}\n}\n`,
+                map: null,
+            };
+        },
+    };
 }
 
 const config: StorybookConfig = {
@@ -61,6 +81,7 @@ const config: StorybookConfig = {
     async viteFinal(config) {
         return mergeConfig(config, {
             plugins: [
+                layerSharedComponentCssModules(),
                 // Needed for counterpart to work
                 nodePolyfills({ include: ["util"], globals: { global: false } }),
                 {

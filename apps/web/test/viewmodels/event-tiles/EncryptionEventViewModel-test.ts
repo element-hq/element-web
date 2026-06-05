@@ -11,7 +11,7 @@ import { RoomStateEvent, type MatrixClient, type MatrixEvent, type Room } from "
 import { EncryptionEventState } from "@element-hq/web-shared-components";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
-import { EncryptionEventViewModel } from "../../../src/viewmodels/event-tiles/EncryptionEventViewModel";
+import { EncryptionEventViewModel } from "../../../src/viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
 import { LocalRoom } from "../../../src/models/LocalRoom";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { mkEvent, stubClient } from "../../test-utils";

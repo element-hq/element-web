@@ -7,12 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, findByText } from "jest-matrix-react";
+import { findByText, fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixError, Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mocked, type Mocked } from "jest-mock";
+import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";
 import { InviteKind } from "../../../../../src/components/views/dialogs/InviteDialogTypes";
@@ -32,7 +33,6 @@ import { type IConfigOptions } from "../../../../../src/IConfigOptions";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { type IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
 jest.mock("../../../../../src/IdentityAuthClient", () =>
@@ -104,6 +104,11 @@ describe("InviteDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
+            getCrypto: jest.fn().mockReturnValue({
+                getUserVerificationStatus: jest
+                    .fn()
+                    .mockResolvedValue(new UserVerificationStatus(false, false, true, false)),
+            }),
             getDomain: jest.fn().mockReturnValue(serverDomain),
             getUserId: jest.fn().mockReturnValue(bobId),
             getSafeUserId: jest.fn().mockReturnValue(bobId),
@@ -120,7 +125,7 @@ describe("InviteDialog", () => {
                 if (userId === bobId) return bobProfileInfo;
 
                 throw new MatrixError({
-                    errcode: "M_NOT_FOUND",
+                    errcode: "M_UNKNOWN",
                     error: "Profile not found",
                 });
             }),
@@ -419,63 +424,12 @@ describe("InviteDialog", () => {
 
     describe("when inviting a user with an unknown profile", () => {
         beforeEach(async () => {
-            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
-            await enterIntoSearchField(carolId);
-            await userEvent.click(screen.getByRole("button", { name: "Go" }));
-            // Wait for the »invite anyway« modal to show up
-            await screen.findByText("The following users may not exist");
-        });
-
-        it("should not start the DM", () => {
-            expect(startDmOnFirstMessage).not.toHaveBeenCalled();
-        });
-
-        it("should show the »invite anyway« dialog if the profile is not available", () => {
-            expect(screen.getByText("The following users may not exist")).toBeInTheDocument();
-            expect(screen.getByText(`${carolId}: Profile not found`)).toBeInTheDocument();
-        });
-
-        describe("when clicking »Start DM anyway«", () => {
-            beforeEach(async () => {
-                await userEvent.click(screen.getByRole("button", { name: "Start DM anyway" }));
-            });
-
-            it("should start the DM", () => {
-                expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
-                    new DirectoryMember({
-                        user_id: carolId,
-                    }),
-                ]);
-            });
-        });
-
-        describe("when clicking »Close«", () => {
-            beforeEach(async () => {
-                mocked(startDmOnFirstMessage).mockClear();
-                await userEvent.click(screen.getByRole("button", { name: "Close" }));
-            });
-
-            it("should not start the DM", () => {
-                expect(startDmOnFirstMessage).not.toHaveBeenCalled();
-            });
-        });
-    });
-
-    describe("when inviting a user with an unknown profile and »promptBeforeInviteUnknownUsers« setting = false", () => {
-        beforeEach(async () => {
             mocked(startDmOnFirstMessage).mockClear();
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName !== "promptBeforeInviteUnknownUsers",
-            );
             render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
             await enterIntoSearchField(carolId);
             await userEvent.click(screen.getByRole("button", { name: "Go" }));
             // modal rendering has some weird sleeps - fake timers will mess up the entire test
             await sleep(100);
-        });
-
-        it("should not show the »invite anyway« dialog", () => {
-            expect(screen.queryByText("The following users may not exist")).not.toBeInTheDocument();
         });
 
         it("should start the DM directly", () => {
@@ -500,5 +454,45 @@ describe("InviteDialog", () => {
         );
         await flushPromises();
         expect(screen.queryByText("@localpart:server.tld")).not.toBeInTheDocument();
+    });
+
+    describe("when inviting a user whose cryptographic identity we do not know", () => {
+        beforeEach(() => {
+            mocked(mockClient.getCrypto()!.getUserVerificationStatus).mockImplementation(async (u) => {
+                return new UserVerificationStatus(false, false, false, false);
+            });
+        });
+
+        describe.each([InviteKind.Invite, InviteKind.Dm])("with invitekind '%s'", (kind) => {
+            const goButtonName = kind == InviteKind.Invite ? "Invite" : "Go";
+
+            beforeEach(() => {
+                render(
+                    <InviteDialog
+                        kind={kind as InviteKind.Invite | InviteKind.Dm}
+                        roomId={roomId}
+                        onFinished={jest.fn()}
+                    />,
+                );
+            });
+
+            it("should show a warning when inviting by user id", async () => {
+                await enterIntoSearchField(aliceId);
+                await userEvent.click(screen.getByRole("button", { name: goButtonName }));
+                await screen.findByText("Confirm inviting them", { exact: false });
+
+                expect(mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledTimes(1);
+                expect(mocked(mockClient.getCrypto()!.getUserVerificationStatus)).toHaveBeenCalledWith(aliceId);
+            });
+
+            it("should show a warning when inviting by email address", async () => {
+                await enterIntoSearchField("aaa@bbb");
+                await userEvent.click(screen.getByRole("button", { name: goButtonName }));
+                await screen.findByText("Confirm inviting them", { exact: false });
+
+                // We shouldn't call getUserVerificationStatus on an email address
+                expect(mocked(mockClient.getCrypto()!.getUserVerificationStatus)).not.toHaveBeenCalled();
+            });
+        });
     });
 });

@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx tsx
+#!/usr/bin/env node
 
 /**
  * Script to generate incremental Nightly build versions, based on the latest Nightly build version of that kind.

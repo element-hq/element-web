@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback } from "react";
-import { InlineField, InlineSpinner, Label, Root, ToggleControl } from "@vector-im/compound-web";
+import { InlineField, InlineSpinner, Label, Link, Root, ToggleControl } from "@vector-im/compound-web";
 
 import type { FormEvent } from "react";
 import { SettingsSection } from "../shared/SettingsSection";
@@ -56,9 +56,9 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
             }
             subHeading={_t("settings|encryption|key_storage|description", undefined, {
                 a: (sub) => (
-                    <a href={SdkConfig.get("help_key_storage_url")} target="_blank" rel="noreferrer noopener">
+                    <Link href={SdkConfig.get("help_key_storage_url")} target="_blank">
                         {sub}
-                    </a>
+                    </Link>
                 ),
             })}
         >

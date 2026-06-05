@@ -47,7 +47,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
                     className="mx_MemberListHeaderView_invite_small"
                     kind="secondary"
                     onClick={vm.onInviteButtonClick}
-                    size="sm"
+                    size="md"
                     iconOnly={true}
                     Icon={InviteIcon}
                     disabled={disabled}
@@ -63,7 +63,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
         <InviteTooltip canInvite={vm.canInvite}>
             <Button
                 kind="secondary"
-                size="sm"
+                size="md"
                 Icon={UserAddIcon}
                 className="mx_MemberListHeaderView_invite_large"
                 disabled={!vm.canInvite}

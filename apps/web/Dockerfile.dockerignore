@@ -10,6 +10,7 @@
 **/.pnpm-store
 **/tsconfig.node.tsbuildinfo
 **/*.md
+!**/*.api.md
 **/*.rst
 
 .idea/
@@ -22,6 +23,8 @@ apps/web/webpack-stats.json
 apps/web/playwright/
 apps/web/webapp/
 apps/web/debian/
+apps/desktop
+!apps/desktop/package.json
 
 packages/shared-components/__vis__/
 packages/shared-components/storybook-static/

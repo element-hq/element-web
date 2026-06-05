@@ -1,9 +1,10 @@
 /*
-Copyright 2026 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
 import { test, expect } from "../../element-web-test";
 
 test.describe("Message links", () => {
@@ -14,7 +15,7 @@ test.describe("Message links", () => {
             await use({ roomId });
         },
     });
-    for (const link of ["https://example.org", "example.org", "ftp://example.org"]) {
+    for (const link of ["https://example.org", "ftp://example.org"]) {
         test(`should linkify a regular link '${link}'`, async ({ page, user, app, room }) => {
             await page.goto(`#/room/${room.roomId}`);
             // Needs to be unformatted so we test linkifing
@@ -24,6 +25,13 @@ test.describe("Message links", () => {
             await expect(linkElement).toBeVisible();
         });
     }
+    test("should NOT linkify a bare domain", async ({ page, user, app, room }) => {
+        await page.goto(`#/room/${room.roomId}`);
+        // Needs to be unformatted so we test linkifing
+        await app.client.sendMessage(room.roomId, `Check out example.org`);
+        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "example.org" });
+        await expect(linkElement).not.toBeVisible();
+    });
     test("should linkify a User ID", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing

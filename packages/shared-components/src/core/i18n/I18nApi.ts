@@ -1,0 +1,60 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import {
+    type I18nApi as II18nApi,
+    type Variables,
+    type StringVariables,
+    type Translations,
+    type Tags,
+} from "@element-hq/element-web-module-api";
+
+import { humanizeTime } from "../utils/humanize";
+import { _t, getLocale, registerTranslations } from "./i18n";
+
+export class I18nApi implements II18nApi {
+    /**
+     * Read the current language of the user in IETF Language Tag format
+     */
+    public get language(): string {
+        return getLocale();
+    }
+
+    /**
+     * Register translations for the module, may override app's existing translations
+     */
+    public register(this: void, translations: Partial<Translations>): void {
+        const langs: Record<string, Record<string, string>> = {};
+
+        for (const key in translations) {
+            for (const lang in translations[key as keyof Translations]) {
+                langs[lang] = langs[lang] || {};
+                langs[lang][key] = translations[key as keyof Translations]![lang];
+            }
+        }
+
+        // Finally, tell counterpart about our translations
+        for (const lang in langs) {
+            registerTranslations(lang, langs[lang]);
+        }
+    }
+
+    /**
+     * Perform a translation, with optional variables
+     * @param key - The key to translate
+     * @param variables - Optional variables to interpolate into the translation
+     * @param tags - Optional tags to interpolate into the translation
+     */
+    public translate(this: void, key: TranslationKey, variables?: StringVariables): string;
+    public translate(this: void, key: TranslationKey, variables: Variables | undefined, tags: Tags): React.ReactNode;
+    public translate(this: void, key: TranslationKey, variables?: Variables, tags?: Tags): React.ReactNode | string {
+        if (tags) return _t(key, variables, tags);
+        return _t(key, variables as Variables);
+    }
+
+    public humanizeTime = (timeMillis: number): string => humanizeTime(timeMillis, this);
+}

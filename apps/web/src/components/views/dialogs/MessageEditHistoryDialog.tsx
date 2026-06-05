@@ -19,7 +19,7 @@ import BaseDialog from "./BaseDialog";
 import ScrollPanel from "../../structures/ScrollPanel";
 import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
-import { DateSeparatorViewModel } from "../../../viewmodels/timeline/DateSeparatorViewModel";
+import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
 
 interface IProps {
     mxEvent: MatrixEvent;

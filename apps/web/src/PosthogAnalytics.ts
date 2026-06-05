@@ -19,7 +19,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { type ScreenName } from "./PosthogTrackers";
 import { type ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
-import { type SettingUpdatedPayload } from "./dispatcher/payloads/SettingUpdatedPayload";
+import { isSettingUpdatedPayload, type SettingUpdatedPayload } from "./dispatcher/payloads/SettingUpdatedPayload";
 import dis from "./dispatcher/dispatcher";
 import { Layout } from "./settings/enums/Layout";
 
@@ -164,7 +164,9 @@ export class PosthogAnalytics {
         dis.register(this.onAction);
         SettingsStore.monitorSetting("layout", null);
         SettingsStore.monitorSetting("useCompactLayout", null);
+        SettingsStore.monitorSetting("urlPreviewsEnabled", null);
         this.onLayoutUpdated();
+        this.onUrlPreviewSettingUpdated(SettingsStore.getValue("urlPreviewsEnabled"));
         this.updateCryptoSuperProperty();
     }
 
@@ -188,11 +190,17 @@ export class PosthogAnalytics {
         this.setProperty("WebLayout", layout);
     };
 
+    private readonly onUrlPreviewSettingUpdated = (value: boolean): void => {
+        this.setProperty("URLPreviewsEnabled", value);
+    };
+
     private onAction = (payload: ActionPayload): void => {
         if (payload.action !== Action.SettingUpdated) return;
         const settingsPayload = payload as SettingUpdatedPayload;
         if (["layout", "useCompactLayout"].includes(settingsPayload.settingName)) {
             this.onLayoutUpdated();
+        } else if (isSettingUpdatedPayload(settingsPayload, "urlPreviewsEnabled") && !settingsPayload.roomId) {
+            this.onUrlPreviewSettingUpdated(settingsPayload.newValue);
         }
     };
 

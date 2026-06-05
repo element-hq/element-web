@@ -12,18 +12,19 @@ import { describe, it, expect, vi } from "vitest";
 import { userEvent } from "vitest/browser";
 
 import * as stories from "./SeparatorView.stories";
-import { BaseViewModel } from "../../viewmodel";
+import { BaseViewModel } from "../../core/viewmodel";
 import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 
-const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);
+const { Default, LeftPanelExpanded, KeyboardFocused, HoverWhenCollapsed, HoverWhenExpanded } = composeStories(stories);
 
 class MockViewModel extends BaseViewModel<ResizerViewSnapshot, unknown> implements SeparatorViewActions {
     public constructor(snapshot: ResizerViewSnapshot) {
         super(undefined, snapshot);
     }
-    public onBlur: () => void = vi.fn();
-    public onFocus: () => void = vi.fn();
-    public onSeparatorClick: () => void = vi.fn();
+    public onPointerUp: () => void = vi.fn();
+    public onPointerMove: () => void = vi.fn();
+    public onPointerDown: () => void = vi.fn();
+    public onDoubleClick: () => void = vi.fn();
 }
 
 function renderPanel(initialSnapshot?: Partial<ResizerViewSnapshot>): MockViewModel {
@@ -55,19 +56,28 @@ describe("<SeparatorView />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("should call onSeparatorClick() when clicked", async () => {
+    it("renders HoverWhenCollapsed story", () => {
+        const { container } = render(<HoverWhenCollapsed />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders HoverWhenExpanded story", () => {
+        const { container } = render(<HoverWhenExpanded />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should call onPointerDown and onPointerUp on pointer events", async () => {
         const vm = renderPanel();
         const separator = screen.getByRole("separator");
         await userEvent.click(separator);
-        expect(vm.onSeparatorClick).toHaveBeenCalledOnce();
+        expect(vm.onPointerDown).toHaveBeenCalledOnce();
+        expect(vm.onPointerUp).toHaveBeenCalledOnce();
     });
 
-    it("should call onFocus and onBlur when receiving/loosing focus", async () => {
+    it("should call onDoubleClick on double click", async () => {
         const vm = renderPanel();
         const separator = screen.getByRole("separator");
-        separator.focus();
-        expect(vm.onFocus).toHaveBeenCalled();
-        separator.blur();
-        expect(vm.onBlur).toHaveBeenCalled();
+        await userEvent.dblClick(separator);
+        expect(vm.onDoubleClick).toHaveBeenCalledOnce();
     });
 });

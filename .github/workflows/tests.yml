@@ -5,8 +5,6 @@ on:
         types: [checks_requested]
     push:
         branches: [develop, master]
-    repository_dispatch:
-        types: [element-web-notify]
     workflow_call:
         inputs:
             disable_coverage:
@@ -40,14 +38,14 @@ jobs:
                 runner: [1, 2]
         steps:
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
             - name: pnpm cache
-              uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
@@ -58,14 +56,14 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
 
             - name: Get number of CPU cores
               id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
+              uses: SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403 # v3
 
             - name: Run tests
               working-directory: apps/web
@@ -77,8 +75,6 @@ jobs:
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
-                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
-
                   # tell jest to use coloured output
                   FORCE_COLOR: true
                   MAX_WORKERS: ${{ steps.cpu-cores.outputs.count }}
@@ -93,24 +89,98 @@ jobs:
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
-                  name: coverage-${{ matrix.runner }}
+                  name: coverage-jest-${{ matrix.runner }}
                   path: |
                       apps/web/coverage
                       !apps/web/coverage/lcov-report
 
+    vitest:
+        name: Vitest
+        strategy:
+            matrix:
+                path:
+                    - apps/desktop
+                    - packages/shared-components
+                    - packages/module-api
+        runs-on: ubuntu-24.04
+        steps:
+            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
+            # so, with the one at the end too, this will let us work out how much disk has been used.
+            - name: dfbefore
+              run: df -h && df -i
+
+            - name: Checkout code
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - name: pnpm cache
+              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              with:
+                  node-version: "lts/*"
+                  cache: "pnpm"
+
+            - name: Install Deps
+              run: "pnpm install"
+
+            - name: Cache storybook & vitest
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+              with:
+                  path: |
+                      ${{ matrix.path }}/node_modules/.cache
+                      ${{ matrix.path }}/node_modules/.vite/vitest
+                  key: ${{ matrix.path }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+            - name: Setup playwright
+              uses: ./.github/actions/setup-playwright
+              if: matrix.path == 'packages/shared-components'
+              with:
+                  write-cache: ${{ github.event_name != 'merge_group' }}
+
+            - name: Run tests
+              working-directory: ${{ matrix.path }}
+              run: pnpm test:unit --coverage=$ENABLE_COVERAGE
+
+            # Dump the disk usage on failure, because this job seems to fail with disk fills sometimes
+            - name: df
+              run: df -h && df -i
+              if: ${{ failure() }}
+
+            - name: Calculate artifact name
+              if: env.ENABLE_COVERAGE == 'true'
+              id: artifact
+              run: |
+                  NAME=$(basename "$MATRIX_PATH")
+                  echo "name=$NAME" >> $GITHUB_OUTPUT
+              env:
+                  MATRIX_PATH: ${{ matrix.path }}
+
+            - name: Upload Artifact
+              if: env.ENABLE_COVERAGE == 'true'
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+              with:
+                  name: coverage-${{ steps.artifact.outputs.name }}
+                  path: |
+                      ${{ matrix.path }}/coverage
+                      !${{ matrix.path }}/coverage/lcov-report
+
     complete:
-        name: jest-tests
-        needs: [jest_ew, vitest_sc]
+        name: Tests
+        needs:
+            - jest_ew
+            - vitest
         if: always()
         runs-on: ubuntu-24.04
         permissions:
+            contents: read
+            pull-requests: read
+            checks: write
             statuses: write
         steps:
-            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              run: exit 1
-
             - name: Skip SonarCloud in merge queue
               if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
               uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
@@ -122,61 +192,36 @@ jobs:
                   sha: ${{ github.sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    vitest_sc:
-        name: Vitest (Shared Components)
-        runs-on: ubuntu-24.04
-        steps:
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
-                  repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
+                  fetch-depth: 0 # Full history, fastest for diff-cover
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
-            - name: pnpm cache
-              uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - name: Download coverage artifacts
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
-                  node-version: "lts/*"
-                  cache: "pnpm"
+                  pattern: coverage-*
+                  path: coverage
 
-            - name: Install Shared Component Deps
-              working-directory: "packages/shared-components"
-              run: "pnpm install"
-
-            - name: Cache storybook & vitest
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+            - name: Diff Coverage
+              id: coverage
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              uses: Affanmir/diff-cover-action@0d8c98f613bbd2428df50b3109b1e3b1d5ab59d3 # v2.1.0
               with:
-                  path: |
-                      packages/shared-components/node_modules/.cache
-                      packages/shared-components/node_modules/.vite/vitest
-                  key: ${{ hashFiles('pnpm-lock.yaml') }}
+                  compare-branch: origin/${{ github.base_ref || 'develop' }}
+                  mode: coverage
+                  coverage-files: coverage/*/*lcov.info
+                  ignore-whitespace: true
+                  show-uncovered: true
+                  post-comment: false
+                  create-annotations: true
+                  annotation-type: warning
+                  fail-on-threshold: ${{ contains(github.event.pull_request.labels.*.name, 'Z-Skip-Coverage') && 'false' || 'true' }}
+                  fail-under: 80
 
-            - name: Get installed Playwright version
-              working-directory: packages/shared-components
-              id: playwright
-              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
-
-            - name: Cache playwright binaries
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
-              id: playwright-cache
-              with:
-                  path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
-
-            - name: Install Playwright browsers
-              working-directory: packages/shared-components
-              if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: "pnpm playwright install --with-deps --only-shell"
-
-            - name: Run tests
-              working-directory: "packages/shared-components"
-              run: pnpm test:unit --coverage=$ENABLE_COVERAGE
-
-            - name: Upload Artifact
-              if: env.ENABLE_COVERAGE == 'true'
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
-              with:
-                  name: coverage-sharedcomponents
-                  path: |
-                      packages/shared-components/coverage
-                      !packages/shared-components/coverage/lcov-report
+            - name: Check status of tests
+              if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              run: exit 1

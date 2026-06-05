@@ -17,9 +17,9 @@ import {
     type LeftResizablePanelViewActions,
     type ResizerViewSnapshot,
 } from "..";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 
 type LeftResizablePanelViewProps = ResizerViewSnapshot & LeftResizablePanelViewActions;
 
@@ -41,14 +41,9 @@ const meta = {
     component: LeftResizablePanelViewWrapper,
     // This is a structural component, so nothing to visually test.
     tags: ["autodocs", "!snapshot"],
-    argTypes: {
-        // This snapshot state is not relevant for this View.
-        isFocusedViaKeyboard: { table: { disable: true } },
-    },
     args: {
         initialSize: 20,
         isCollapsed: false,
-        isFocusedViaKeyboard: false,
         onLeftPanelResize: fn(),
         setPanelHandle: fn(),
     },

@@ -126,7 +126,7 @@ exports[`VerificationRequestDialog After we started verification here, says we a
       Once accepted you'll be able to continue with the verification.
     </div>
     <div
-      aria-describedby="_r_6_"
+      aria-describedby="react-use-id-1"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"
@@ -197,7 +197,7 @@ exports[`VerificationRequestDialog Initially, asks how you would like to verify 
             >
               <svg
                 aria-label="Loading…"
-                class="_icon_11k6c_18"
+                class="_icon_1855a_18"
                 data-testid="spinner"
                 fill="currentColor"
                 height="1em"

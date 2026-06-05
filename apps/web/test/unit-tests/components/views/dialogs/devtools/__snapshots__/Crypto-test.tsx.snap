@@ -5,7 +5,13 @@ exports[`<Crypto /> <CrossSigning /> should display when the cross-signing data 
   aria-label="Cross-signing"
 >
   <thead>
-    Cross-signing
+    <tr>
+      <th
+        colspan="2"
+      >
+        Cross-signing
+      </th>
+    </tr>
   </thead>
   <tbody>
     <tr>
@@ -77,7 +83,13 @@ exports[`<Crypto /> <CrossSigning /> should display when the cross-signing data 
   aria-label="Cross-signing"
 >
   <thead>
-    Cross-signing
+    <tr>
+      <th
+        colspan="2"
+      >
+        Cross-signing
+      </th>
+    </tr>
   </thead>
   <tbody>
     <tr>
@@ -149,7 +161,13 @@ exports[`<Crypto /> <KeyStorage /> should display when the key storage data are 
   aria-label="Key Storage"
 >
   <thead>
-    Key Storage
+    <tr>
+      <th
+        colspan="2"
+      >
+        Key Storage
+      </th>
+    </tr>
   </thead>
   <tbody>
     <tr>
@@ -221,7 +239,13 @@ exports[`<Crypto /> <KeyStorage /> should display when the key storage data are 
   aria-label="Key Storage"
 >
   <thead>
-    Key Storage
+    <tr>
+      <th
+        colspan="2"
+      >
+        Key Storage
+      </th>
+    </tr>
   </thead>
   <tbody>
     <tr>

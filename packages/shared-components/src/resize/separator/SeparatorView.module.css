@@ -6,23 +6,79 @@
  */
 
 .separator {
-    display: flex;
-    align-items: center;
-    /* Hide the separator by default */
-    width: 0px;
-    opacity: 0;
     /* Necessary to avoid weird focus outlines (doubled on one side, absent on one side etc...) */
     outline-offset: -2px;
+
+    /* We set the separator container to relative so that the child container (activeSeparatorContainer)
+    can be absolutely positioned */
+    position: relative;
+
+    display: flex;
+    justify-content: center;
 }
 
-.separator[data-separator="hover"],
+/* When type=border, we just render a 1px border */
+.separator[data-separator-type="border"] {
+    /*
+    We reserve 1px of space even though the actual separator is absolute positioned.
+    This keeps the panel looking the same as when the border was part of the panel.
+    */
+    width: 1px;
+
+    /* We can disable the browser focus ring since we show a thicker separator on focus */
+    outline: none;
+
+    .activeSeparatorContainer {
+        .activeSeparator {
+            width: 0px;
+            border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+            outline: none;
+        }
+    }
+}
+
+/* When type=bar, we render the 12px separator */
+.separator[data-separator-type="bar"] {
+    width: 12px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+}
+
+.separator[data-separator-type="bar"][data-separator="hover"],
 .separator:focus-visible {
     background: var(--cpd-color-bg-action-tertiary-hovered);
 }
 
-.visible {
-    /* Show the separator when the left panel is collapsed */
-    opacity: 100%;
-    width: 12px;
-    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+/* When type=border and the user hovers/focuses the separator, we make the separator thicker */
+.separator[data-separator-type="border"]:is([data-separator="hover"], [data-separator="active"]),
+.separator[data-separator-type="border"]:focus-visible {
+    .activeSeparatorContainer {
+        .activeSeparator {
+            width: 0px;
+            border-right: 2px solid var(--cpd-color-border-interactive-secondary);
+            outline: none;
+        }
+    }
+}
+
+/* Container for the separator when the left panel is expanded */
+.activeSeparatorContainer {
+    display: flex;
+    justify-content: center;
+
+    /*
+    By making this container absolutely positioned an wide enough to cover the entire hit region,
+    we're able to intercept all the pointer events.
+    Without this, we'd only capture the events within a narrow 2px/1px border.
+    */
+    position: absolute;
+    width: 20px;
+    z-index: 100;
+    height: 100%;
+
+    .activeSeparator {
+        /* Fade in/ fade out the border */
+        transition: border 0.15s ease-in-out 0.3s;
+    }
 }

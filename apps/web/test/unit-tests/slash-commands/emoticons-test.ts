@@ -20,6 +20,11 @@ describe.each(["shrug", "tableflip", "unflip", "lenny"])("/%s", (commandName: st
     it("should match snapshot with args", async () => {
         const { client, command } = setUpCommandTest(roomId, `/${commandName}`);
 
-        await expect(command.run(client, roomId, null, "this is a test message").promise).resolves.toMatchSnapshot();
+        const initialResult = await command.run(client, roomId, null, "this is a test message").promise;
+        expect(initialResult).toMatchSnapshot();
+        // We run this twice to ensure it doesn't stack the buffer
+        await expect(command.run(client, roomId, null, "this is a test message").promise).resolves.toEqual(
+            initialResult,
+        );
     });
 });

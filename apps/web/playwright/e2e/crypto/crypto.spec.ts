@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import type { Page } from "@playwright/test";
 import { expect, test } from "../../element-web-test";
 import { autoJoin, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
@@ -27,6 +29,9 @@ const startDMWithBob = async (page: Page, bob: Bot) => {
     await page.getByRole("option", { name: bob.credentials.displayName }).click();
     await expect(page.getByTestId("invite-dialog-input-wrapper").getByText("Bob")).toBeVisible();
     await page.getByRole("button", { name: "Go" }).click();
+
+    await expect(page.getByRole("heading", { name: "Start a chat with this new contact?" })).toBeVisible();
+    await page.getByRole("button", { name: "Continue" }).click();
 };
 
 const testMessages = async (page: Page, bob: Bot, bobRoomId: string) => {
@@ -44,7 +49,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
         const bobRooms = cli.getRooms();
         if (!bobRooms.length) {
             await new Promise<void>((resolve) => {
-                const onMembership = (_event) => {
+                const onMembership = () => {
                     cli.off(window.matrixcs.RoomMemberEvent.Membership, onMembership);
                     resolve();
                 };
@@ -169,6 +174,7 @@ test.describe("Cryptography", function () {
         "creating a DM should work, being e2e-encrypted / user verification",
         { tag: "@screenshot" },
         async ({ page, app, bot: bob, user: aliceCredentials }) => {
+            await rejectToast(page, "Verify this device");
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await startDMWithBob(page, bob);
             // send first message

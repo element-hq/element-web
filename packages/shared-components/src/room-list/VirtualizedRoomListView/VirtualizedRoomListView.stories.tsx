@@ -9,10 +9,10 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "../RoomListItemView";
+import type { Room } from "./RoomListItemWrapper/RoomListItemView";
 import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
 import type { RoomListViewSnapshot, RoomListViewActions } from "../RoomListView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import {
@@ -34,7 +34,9 @@ const RoomListWrapperImpl = ({
     getRoomItemViewModel,
     getSectionHeaderViewModel,
     updateVisibleRooms,
+    closeToast,
     renderAvatar: renderAvatarProp,
+    changeRoomSection,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -44,6 +46,8 @@ const RoomListWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        closeToast,
+        changeRoomSection,
     });
 
     return (
@@ -82,6 +86,8 @@ const meta = {
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,
+        closeToast: fn(),
+        changeRoomSection: fn(),
     },
     parameters: {
         design: {

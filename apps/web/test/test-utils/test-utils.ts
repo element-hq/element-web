@@ -249,6 +249,7 @@ export function createTestClient(): MatrixClient {
         decryptEventIfNeeded: () => Promise.resolve(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         getCapabilities: jest.fn().mockResolvedValue({}),
+        getCachedCapabilities: jest.fn().mockReturnValue({}),
         supportsThreads: jest.fn().mockReturnValue(false),
         supportsIntentionalMentions: jest.fn().mockReturnValue(false),
         getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
@@ -358,6 +359,7 @@ export function createTestClient(): MatrixClient {
         sendTextMessage: jest.fn(),
         deleteRoomTag: jest.fn().mockResolvedValue({}),
         setRoomTag: jest.fn().mockResolvedValue({}),
+        getExtendedProfileProperty: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -381,6 +383,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
         session.getOldestMembership = () => undefined;
+        session.getConsensusCallIntent = () => "video";
         return session;
     });
     return {
@@ -657,8 +660,8 @@ export function mkMessage({
 
 export function mkStubRoom(
     roomId: string | null | undefined = null,
-    name: string | undefined,
-    client: MatrixClient | undefined,
+    name?: string | undefined,
+    client?: MatrixClient | undefined,
     state?: RoomState | undefined,
 ): Room {
     const stubTimeline = {

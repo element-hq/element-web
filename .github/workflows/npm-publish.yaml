@@ -1,0 +1,43 @@
+name: Publish npm package
+run-name: Publish ${{ inputs.package }}
+on:
+    workflow_dispatch:
+        inputs:
+            package:
+                description: Which package to release
+                required: true
+                type: choice
+                options:
+                    - playwright-common
+                    - shared-components
+                    - module-api
+
+concurrency: release
+jobs:
+    publish:
+        name: "Publish"
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+
+        steps:
+            - name: 🧮 Checkout code
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              with:
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - name: 🔧 Set up node environment
+              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              with:
+                  cache: "pnpm"
+                  node-version-file: ".node-version"
+                  registry-url: "https://registry.npmjs.org"
+
+            - name: 🛠️ Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: 🚀 Publish to npm
+              working-directory: packages/${{ inputs.package }}
+              run: npm publish --access public --provenance

@@ -5,25 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { test, expect } from "../../../element-web-test";
-import type { Page } from "@playwright/test";
+import { getHeaderSection } from "./utils";
 
 test.describe("Header section of the room list", () => {
     test.use({
         labsFlags: ["feature_new_room_list"],
     });
 
-    /**
-     * Get the header section of the room list
-     * @param page
-     */
-    function getHeaderSection(page: Page) {
-        return page.getByTestId("room-list-header");
-    }
-
     test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
     });
 
     test("should render the header section", { tag: "@screenshot" }, async ({ page, app, user }) => {

@@ -6,19 +6,19 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
     class="mx_LabelledCheckbox"
   >
     <form
-      class="_root_19upo_16"
+      class="_root_1o4d9_17"
     >
       <div
-        class="_inline-field_19upo_32"
+        class="_inline-field_1o4d9_33"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_inline-field-control_1o4d9_45"
         >
           <div
             class="_container_153f2_10"
           >
             <input
-              aria-describedby="_r_4_"
+              aria-describedby="react-use-id-1"
               checked=""
               class="_input_153f2_18"
               id="checkbox_vY7Q4uEh9K"
@@ -43,10 +43,10 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
           </div>
         </div>
         <div
-          class="_inline-field-body_19upo_38"
+          class="_inline-field-body_1o4d9_39"
         >
           <label
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="checkbox_vY7Q4uEh9K"
           >
             <span
@@ -56,8 +56,8 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
             </span>
           </label>
           <span
-            class="_message_19upo_85 _help-message_19upo_91"
-            id="_r_4_"
+            class="_message_1o4d9_86 _help-message_1o4d9_92"
+            id="react-use-id-1"
           >
             this is a byline
           </span>
@@ -74,13 +74,13 @@ exports[`<LabelledCheckbox /> should render with byline of undefined 1`] = `
     class="mx_LabelledCheckbox"
   >
     <form
-      class="_root_19upo_16"
+      class="_root_1o4d9_17"
     >
       <div
-        class="_inline-field_19upo_32"
+        class="_inline-field_1o4d9_33"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_inline-field-control_1o4d9_45"
         >
           <div
             class="_container_153f2_10"
@@ -110,10 +110,10 @@ exports[`<LabelledCheckbox /> should render with byline of undefined 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field-body_19upo_38"
+          class="_inline-field-body_1o4d9_39"
         >
           <label
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="checkbox_vY7Q4uEh9K"
           >
             <span

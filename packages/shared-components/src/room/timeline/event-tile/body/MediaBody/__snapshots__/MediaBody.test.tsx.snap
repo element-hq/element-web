@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MediaBody > renders the media body 1`] = `
+<div>
+  <div
+    class="mx_MediaBody MediaBody-module_mediaBody"
+  >
+    Media content goes here
+  </div>
+</div>
+`;

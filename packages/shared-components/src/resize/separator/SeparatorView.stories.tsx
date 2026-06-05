@@ -10,14 +10,20 @@ import { expect, fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 
 type SeparatorViewProps = ResizerViewSnapshot & SeparatorViewActions;
 
-const Wrapper = ({ onFocus, onBlur, onSeparatorClick, ...snapshot }: SeparatorViewProps): JSX.Element => {
-    const vm = useMockedViewModel(snapshot, { onFocus, onBlur, onSeparatorClick });
+const Wrapper = ({
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onDoubleClick,
+    ...snapshot
+}: SeparatorViewProps): JSX.Element => {
+    const vm = useMockedViewModel(snapshot, { onPointerDown, onPointerMove, onPointerUp, onDoubleClick });
     return <SeparatorView className="Separator" vm={vm} />;
 };
 
@@ -28,11 +34,11 @@ const meta = {
     component: SeparatorViewWrapper,
     tags: ["autodocs"],
     args: {
-        onFocus: fn(),
-        onBlur: fn(),
-        onSeparatorClick: fn(),
+        onPointerUp: fn(),
+        onPointerMove: fn(),
+        onPointerDown: fn(),
+        onDoubleClick: fn(),
         isCollapsed: true,
-        isFocusedViaKeyboard: false,
     },
     parameters: {
         design: {
@@ -109,16 +115,17 @@ export const KeyboardFocused: Story = {
     decorators: [(Story) => commonDecorator(Story)],
     args: {
         isCollapsed: false,
-        isFocusedViaKeyboard: true,
     },
     play: async ({ canvas, canvasElement }) => {
         const separator = canvas.getByRole("separator");
         separator.focus();
+        // Wait for animations to finish
+        await new Promise((r) => setTimeout(r, 500));
         await expect(canvasElement).toMatchImageSnapshot();
     },
 };
 
-export const Hover: Story = {
+export const HoverWhenCollapsed: Story = {
     // We'll manually take a screenshot for this story
     tags: ["autodocs", "!snapshot"],
     decorators: [
@@ -147,6 +154,50 @@ export const Hover: Story = {
     play: async ({ canvas, canvasElement }) => {
         const separator = canvas.getByRole("separator");
         separator.dataset.separator = "hover";
+        await expect(canvasElement).toMatchImageSnapshot();
+    },
+};
+
+export const HoverWhenExpanded: Story = {
+    // We'll manually take a screenshot for this story
+    tags: ["autodocs", "!snapshot"],
+    args: {
+        isCollapsed: false,
+    },
+    decorators: [
+        (Story) => (
+            <div
+                style={{
+                    height: "600px",
+                }}
+            >
+                <ResizableGroup>
+                    <div
+                        style={{
+                            height: "600px",
+                            width: "200px",
+                        }}
+                    />
+                    <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
+                        <Flex tabIndex={0} align="center" justify="center">
+                            LEFT CONTENT
+                        </Flex>
+                    </Panel>
+                    <Story />
+                    <Panel>
+                        <Flex align="center" justify="center">
+                            MAIN CONTENT
+                        </Flex>
+                    </Panel>
+                </ResizableGroup>
+            </div>
+        ),
+    ],
+    play: async ({ canvas, canvasElement }) => {
+        const separator = canvas.getByRole("separator");
+        separator.dataset.separator = "hover";
+        // Wait for animations to finish
+        await new Promise((r) => setTimeout(r, 500));
         await expect(canvasElement).toMatchImageSnapshot();
     },
 };

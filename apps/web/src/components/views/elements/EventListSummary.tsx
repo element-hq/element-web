@@ -174,7 +174,7 @@ export default class EventListSummary extends React.Component<Props, State> {
 
     private unbindSentinelListeners(events: MatrixEvent[]): void {
         for (const event of events) {
-            event.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
+            event.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
         }
     }
 

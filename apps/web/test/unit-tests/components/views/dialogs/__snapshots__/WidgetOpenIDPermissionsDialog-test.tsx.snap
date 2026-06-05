@@ -43,20 +43,20 @@ exports[`WidgetOpenIDPermissionsDialog should render 1`] = `
         class="mx_Dialog_buttons_additive"
       >
         <form
-          class="_root_19upo_16"
+          class="_root_1o4d9_17"
         >
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
               >
                 <input
                   class="_input_udcm8_24"
-                  id="_r_0_"
+                  id="react-use-id-1"
                   role="switch"
                   type="checkbox"
                 />
@@ -66,11 +66,11 @@ exports[`WidgetOpenIDPermissionsDialog should render 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
-                for="_r_0_"
+                class="_label_1o4d9_60"
+                for="react-use-id-1"
               >
                 Remember this
               </label>

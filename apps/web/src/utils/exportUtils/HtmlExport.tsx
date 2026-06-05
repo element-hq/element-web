@@ -31,7 +31,7 @@ import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
-import { DateSeparatorViewModel } from "../../viewmodels/timeline/DateSeparatorViewModel";
+import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 
 import exportJS from "!!raw-loader!./exportJS";
 

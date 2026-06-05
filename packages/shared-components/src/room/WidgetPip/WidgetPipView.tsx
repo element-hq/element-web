@@ -10,7 +10,7 @@ import { ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/ic
 import { IconButton } from "@vector-im/compound-web";
 
 import styles from "./WidgetPipView.module.css";
-import { useViewModel, type ViewModel } from "../../viewmodel";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { useI18n } from "../..";
 
 export interface WidgetPipViewActions {

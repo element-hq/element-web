@@ -15,8 +15,7 @@
         "room_name": "Stanza %(name)s",
         "room_status_bar": "Barra di stato della stanza",
         "seek_bar_label": "Barra di ricerca audio",
-        "unread_messages": "Messaggi non letti.",
-        "user_menu": "Menu utente"
+        "unread_messages": "Messaggi non letti."
     },
     "a11y_jump_first_unread_room": "Salta alla prima stanza non letta.",
     "action": {
@@ -32,7 +31,6 @@
         "cancel": "Annulla",
         "change": "Cambia",
         "clear": "Svuota",
-        "click": "Clicca",
         "click_to_copy": "Clicca per copiare",
         "close": "Chiudi",
         "collapse": "Riduci",
@@ -97,7 +95,6 @@
         "rename": "Rinomina",
         "reply": "Rispondi",
         "reply_in_thread": "Rispondi nella conversazione",
-        "report_content": "Segnala contenuto",
         "resend": "Reinvia",
         "reset": "Ripristina",
         "resume": "Riprendi",
@@ -215,10 +212,7 @@
         "log_in_new_account": "<a>Accedi</a> al tuo nuovo account.",
         "logout_dialog": {
             "description": "Sei sicuro di volerti disconnettere?",
-            "megolm_export": "Esporta le chiavi manualmente",
             "setup_key_backup_title": "Perderai l'accesso ai tuoi messaggi cifrati",
-            "setup_secure_backup_description_1": "I messaggi cifrati sono resi sicuri con una crittografia end-to-end. Solo tu e il/i destinatario/i avete le chiavi per leggere questi messaggi.",
-            "setup_secure_backup_description_2": "Quando ti disconnetti queste chiavi verranno eliminate dal dispositivo, quindi non potrai leggere i messaggi cifrati a meno che tu non abbia le chiavi su altri dispositivi, o salvate in backup sul server.",
             "skip_key_backup": "Non voglio i miei messaggi cifrati"
         },
         "misconfigured_body": "Chiedi al tuo amministratore di %(brand)s di controllare <a>la tua configurazione</a> per voci non valide o doppie.",
@@ -307,7 +301,6 @@
         "sign_in_instead_prompt": "Oppure accedi",
         "sign_in_or_register": "Accedi o crea account",
         "sign_in_or_register_description": "Usa il tuo account o creane uno nuovo per continuare.",
-        "sign_in_prompt": "Hai un account? <a>Accedi</a>",
         "sign_in_with_sso": "Accedi con single sign-on",
         "signing_in": "Accesso…",
         "soft_logout": {
@@ -747,7 +740,6 @@
         "thread_root_id": "ID root del thread: %(threadRootId)s",
         "threads_timeline": "Linea temporale conversazioni",
         "title": "Strumenti per sviluppatori",
-        "toggle_event": "commuta evento",
         "toolbox": "Strumenti",
         "use_at_own_risk": "Questa interfaccia NON controlla i tipi dei valori. Usa a tuo rischio.",
         "user_read_up_to": "L'utente ha letto fino: ",
@@ -833,9 +825,6 @@
             "warning": "Se non hai rimosso il metodo di ripristino, è possibile che un aggressore stia cercando di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni."
         },
         "set_up_toast_title": "Imposta il Backup Sicuro",
-        "setup_secure_backup": {
-            "explainer": "Fai una copia delle tue chiavi prima di disconnetterti per evitare di perderle."
-        },
         "udd": {
             "interactive_verification_button": "Verifica interattivamente con emoji",
             "other_ask_verify_text": "Chiedi a questo utente di verificare la sua sessione o verificala manualmente sotto.",
@@ -1130,9 +1119,6 @@
         "impossible_dialog_title": "Integrazioni non permesse"
     },
     "invite": {
-        "ask_anyway_description": "Impossibile trovare profili per gli ID Matrix elencati sotto - vuoi comunque iniziare un messaggio diretto?",
-        "ask_anyway_label": "Inizia il messaggio lo stesso",
-        "ask_anyway_never_warn_label": "Inizia il messaggio lo stesso e non avvisarmi più",
         "email_caption": "Invita per email",
         "email_limit_one": "Gli inviti per email possono essere inviati uno per volta",
         "email_use_default_is": "Usa un server d'identità per invitare via email. <default>Usa quello predefinito (%(defaultIdentityServerName)s)</default> o gestiscilo nelle <settings>impostazioni</settings>.",
@@ -1317,8 +1303,6 @@
         "notifications": "Attiva il pannello delle notifiche nell'intestazione della stanza",
         "render_reaction_images": "Mostra immagini personalizzate nelle reazioni",
         "render_reaction_images_description": "A volte chiamati \"emoji personalizzati\".",
-        "report_to_moderators": "Segnala ai moderatori",
-        "report_to_moderators_description": "Nelle stanze che supportano la moderazione, il pulsante \"Segnala\" ti permetterà di segnalare abusi ai moderatori della stanza.",
         "sliding_sync": "Modalità di sincr. con slide",
         "sliding_sync_description": "In sviluppo attivo, non può essere disattivato.",
         "sliding_sync_disabled_notice": "Disconnettiti e riconnettiti per disattivare",
@@ -1542,7 +1526,6 @@
         "restricted": "Limitato"
     },
     "powered_by_matrix": "Offerto da Matrix",
-    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
     "presence": {
         "away": "Assente",
         "busy": "Occupato",
@@ -1576,25 +1559,10 @@
     },
     "report_content": {
         "description": "La segnalazione di questo messaggio invierà il suo 'ID evento' univoco all'amministratore del tuo homeserver. Se i messaggi della stanza sono cifrati, l'amministratore non potrà leggere il messaggio o vedere file e immagini.",
-        "disagree": "Rifiuta",
-        "error_create_room_moderation_bot": "Impossibile creare una stanza con il bot di moderazione",
         "hide_messages_from_user": "Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente.",
         "ignore_user": "Ignora utente",
-        "illegal_content": "Contenuto illegale",
         "missing_reason": "Inserisci il motivo della segnalazione.",
-        "nature": "Scegli la natura del problema e descrivi cosa rende questo messaggio un abuso.",
-        "nature_disagreement": "Questo utente sta scrivendo cose sbagliate.\nVerrà segnalato ai moderatori della stanza.",
-        "nature_illegal": "Questo utente sta mostrando un comportamento illegale, ad esempio facendo doxing o minacciando violenza.\nVerrà segnalato ai moderatori della stanza che potrebbero portarlo in ambito legale.",
-        "nature_nonstandard_admin": "Questa stanza è dedicata a contenuti illegali o dannosi, oppure i moderatori non riescono a fermarli.\nVerrà segnalato agli amministratori di %(homeserver)s.",
-        "nature_nonstandard_admin_encrypted": "Questa stanza è dedicata a contenuti illegali o dannosi, oppure i moderatori non riescono a fermarli.\nVerrà segnalato agli amministratori di %(homeserver)s. Gli amministratori NON potranno leggere il contenuto criptato di questa stanza.",
-        "nature_other": "Altri motivi. Si prega di descrivere il problema.\nVerrà segnalato ai moderatori della stanza.",
-        "nature_spam": "Questo utente sta facendo spam nella stanza con pubblicità, collegamenti ad annunci o a propagande.\nVerrà segnalato ai moderatori della stanza.",
-        "nature_toxic": "Questo utente sta mostrando un cattivo comportamento, ad esempio insultando altri utenti o condividendo contenuti per adulti in una stanza per tutti, oppure violando le regole della stessa.\nVerrà segnalato ai moderatori della stanza.",
-        "other_label": "Altro",
-        "report_content_to_homeserver": "Segnala il contenuto all'amministratore dell'homeserver",
-        "report_entire_room": "Segnala l'intera stanza",
-        "spam_or_propaganda": "Spam o propaganda",
-        "toxic_behaviour": "Cattivo comportamento"
+        "report_content_to_homeserver": "Segnala il contenuto all'amministratore dell'homeserver"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Decifrazione di %(failedCount)s sessioni fallita!",
@@ -1912,8 +1880,6 @@
             "aliases_section": "Indirizzi stanza",
             "avatar_field_label": "Avatar della stanza",
             "canonical_alias_field_label": "Indirizzo principale",
-            "default_url_previews_off": "Le anteprime degli URL sono inattive in modo predefinito per i partecipanti di questa stanza.",
-            "default_url_previews_on": "Le anteprime degli URL sono attive in modo predefinito per i partecipanti di questa stanza.",
             "description_space": "Modifica le impostazioni relative al tuo spazio.",
             "error_creating_alias_description": "Si è verificato un errore creando l'indirizzo. Potrebbe non essere permesso dal server o un problema temporaneo.",
             "error_creating_alias_title": "Errore creazione indirizzo",
@@ -1940,12 +1906,7 @@
             "published_aliases_explainer_space": "Gli indirizzi pubblicati possono essere usati da chiunque su tutti i server per entrare nel tuo spazio.",
             "published_aliases_section": "Indirizzi pubblicati",
             "save": "Salva modifiche",
-            "topic_field_label": "Argomento stanza",
-            "url_preview_encryption_warning": "Nelle stanze criptate, come questa, le anteprime degli URL sono disattivate in modo predefinito per garantire che il tuo homeserver (dove vengono generate le anteprime) non possa raccogliere informazioni sui collegamenti che vedi in questa stanza.",
-            "url_preview_explainer": "Quando qualcuno inserisce un URL nel proprio messaggio, è possibile mostrare un'anteprima dell'URL per fornire maggiori informazioni su quel collegamento, come il titolo, la descrizione e un'immagine dal sito web.",
-            "url_previews_section": "Anteprime URL",
-            "user_url_previews_default_off": "Hai <a>disattivato</a> le anteprime degli URL in modo predefinito.",
-            "user_url_previews_default_on": "Hai <a>attivato</a> le anteprime degli URL in modo predefinito."
+            "topic_field_label": "Argomento stanza"
         },
         "notifications": {
             "browse_button": "Sfoglia",
@@ -2251,8 +2212,6 @@
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
-        "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
-        "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",
         "insert_trailing_colon_mentions": "Inserisci dei due punti dopo le citazioni degli utenti all'inizio di un messaggio",
         "jump_to_bottom_on_send": "Salta in fondo alla linea temporale quando invii un messaggio",
         "key_backup": {
@@ -2804,7 +2763,6 @@
             "one": "%(count)s risposta",
             "other": "%(count)s risposte"
         },
-        "error_start_thread_existing_relation": "Impossibile creare una conversazione da un evento con una relazione esistente",
         "my_threads": "Le mie conversazioni",
         "my_threads_description": "Mostra tutte le conversazioni a cui hai partecipato",
         "open_thread": "Apri conversazione",
@@ -2841,7 +2799,6 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
             "tooltip_label": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
@@ -2924,9 +2881,7 @@
         "m.poll.start": "%(senderName)s ha iniziato un sondaggio - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ha cambiato l'avatar della stanza.",
-            "changed_img": "%(senderDisplayName)s ha cambiato l'avatar della stanza a <img/>",
-            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s",
-            "removed": "%(senderDisplayName)s ha rimosso l'avatar della stanza."
+            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -3033,10 +2988,7 @@
             "removed": "Widget %(widgetName)s rimosso da %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Riduci le citazioni",
             "copy_link_thread": "Copia link nella conversazione",
-            "expand_reply_chain": "Espandi le citazioni",
-            "label": "Azioni messaggio",
             "view_in_room": "Vedi nella stanza"
         },
         "mjolnir": {
@@ -3048,7 +3000,6 @@
             "created_rule_rooms": "%(senderName)s ha creato una regola che bandisce stanze corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_servers": "%(senderName)s ha creato una regola che bandisce server corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_users": "%(senderName)s ha creato una regola che bandisce utenti corrispondenti a %(glob)s perchè %(reason)s",
-            "message_hidden": "Hai ignorato questo utente, perciò il suo messaggio è nascosto. <a>Mostra comunque.</a>",
             "removed_rule": "%(senderName)s ha rimosso una regola di ban corrispondente a %(glob)s",
             "removed_rule_rooms": "%(senderName)s ha rimosso la regola che bandisce stanze corrispondenti a %(glob)s",
             "removed_rule_servers": "%(senderName)s ha rimosso la regola che bandisce server corrispondenti a %(glob)s",
@@ -3336,11 +3287,6 @@
         "verify_button": "Verifica utente",
         "verify_explainer": "Per maggiore sicurezza, verifica questo utente controllando un codice univoco sui vostri dispositivi."
     },
-    "user_menu": {
-        "settings": "Tutte le impostazioni",
-        "switch_theme_dark": "Passa alla modalità scura",
-        "switch_theme_light": "Passa alla modalità chiara"
-    },
     "voip": {
         "already_in_call": "Già in una chiamata",
         "already_in_call_person": "Sei già in una chiamata con questa persona.",
@@ -3431,13 +3377,11 @@
         "user_busy_description": "L'utente che hai chiamato è occupato.",
         "user_is_presenting": "%(sharerName)s sta presentando",
         "video_call": "Videochiamata",
-        "video_call_started": "Videochiamata iniziata",
         "video_call_using": "Videochiamata usando:",
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {

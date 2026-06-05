@@ -10,8 +10,7 @@
             "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
         },
         "room_name": "חדר %(name)s",
-        "unread_messages": "הודעות שלא נקראו.",
-        "user_menu": "תפריט משתמש"
+        "unread_messages": "הודעות שלא נקראו."
     },
     "a11y_jump_first_unread_room": "קפצו לחדר הראשון שלא נקרא.",
     "action": {
@@ -78,7 +77,6 @@
         "rename": "שנה שם",
         "reply": "תשובה",
         "reply_in_thread": "מענה בשרשור",
-        "report_content": "דווח על תוכן",
         "resend": "שלח מחדש",
         "reset": "אתחל",
         "resume": "תקציר",
@@ -176,9 +174,7 @@
         "log_in_new_account": "<a> היכנס </a> לחשבונך החדש.",
         "logout_dialog": {
             "description": "האם אתה בטוח שברצונך לצאת?",
-            "megolm_export": "ייצא ידנית מפתחות",
             "setup_key_backup_title": "תאבד את הגישה להודעות המוצפנות שלך",
-            "setup_secure_backup_description_1": "הודעות מוצפנות מאובטחות באמצעות הצפנה מקצה לקצה. רק לך ולמקבל / ים יש / ה מקשים לקריאת הודעות אלה.",
             "skip_key_backup": "אני לא רוצה את ההודעות המוצפנות שלי"
         },
         "misconfigured_body": "בקשו מהאדמין של %(brand)s לבדוק <a>קונפיגורציה</a> לרשומות כפולות שגויות.",
@@ -240,7 +236,6 @@
         "sign_in_instead_prompt": "התחבר במקום זאת",
         "sign_in_or_register": "התחברו או צרו חשבון",
         "sign_in_or_register_description": "השתמשו בחשבונכם או צרו חשבון חדש.",
-        "sign_in_prompt": "יש לך חשבון? <a> היכנס </a>",
         "sign_in_with_sso": "היכנס באמצעות כניסה יחידה",
         "soft_logout": {
             "clear_data_button": "נקה את כל הנתונים",
@@ -600,9 +595,6 @@
             "warning": "אם לא הסרת את שיטת השחזור, ייתכן שתוקף מנסה לגשת לחשבונך. שנה את סיסמת החשבון שלך והגדר מיד שיטת שחזור חדשה בהגדרות."
         },
         "set_up_toast_title": "צור גיבוי מאובטח",
-        "setup_secure_backup": {
-            "explainer": "גבה את המפתחות שלך לפני היציאה כדי להימנע מלאבד אותם."
-        },
         "udd": {
             "other_ask_verify_text": "בקש ממשתמש זה לאמת את ההתחברות שלו, או לאמת אותה באופן ידני למטה.",
             "other_new_session_text": "%(name)s %(userId)s נכנס דרך התחברות חדשה מבלי לאמת אותה:",
@@ -1108,7 +1100,6 @@
         "restricted": "מחוץ לתחום"
     },
     "powered_by_matrix": "מופעל על ידי מטריקס",
-    "powered_by_matrix_with_logo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo",
     "presence": {
         "away": "מרוחק",
         "idle": "לא פעיל",
@@ -1139,7 +1130,6 @@
     "report_content": {
         "description": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות.",
         "missing_reason": "אנא מלאו מדוע אתם מדווחים.",
-        "other_label": "אחר",
         "report_content_to_homeserver": "דווח על תוכן למנהל שרת הבית שלך"
     },
     "restore_key_backup_dialog": {
@@ -1325,8 +1315,6 @@
             "aliases_section": "כתובות חדרים",
             "avatar_field_label": "אוואטר של החדר",
             "canonical_alias_field_label": "כתובת ראשית",
-            "default_url_previews_off": "תצוגות מקדימות של כתובות אתרים מושבתות כברירת מחדל עבור משתתפים בחדר זה.",
-            "default_url_previews_on": "תצוגות מקדימות של כתובות אתרים מופעלות כברירת מחדל עבור משתתפים בחדר זה.",
             "description_space": "שינוי הגדרות הנוגעות למרחב העבודה שלכם.",
             "error_creating_alias_description": "אירעה שגיאה ביצירת כתובת זו. ייתכן שהשרת אינו מאפשר זאת או שהתרחש כשל זמני.",
             "error_creating_alias_title": "שגיאה ביצירת כתובת",
@@ -1353,12 +1341,7 @@
             "published_aliases_explainer_space": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף למרחב העבודה שלכם.",
             "published_aliases_section": "כתובות מפורסמות",
             "save": "שמור שינוייים",
-            "topic_field_label": "נושא החדר",
-            "url_preview_encryption_warning": "בחדרים מוצפנים, כמו זה, תצוגות מקדימות של כתובות אתרים מושבתות כברירת מחדל כדי להבטיח ששרת הבית שלך (במקום בו נוצרות התצוגות המקדימות) אינו יכול לאסוף מידע על קישורים שאתה רואה בחדר זה.",
-            "url_preview_explainer": "כאשר מישהו מכניס כתובת URL להודעה שלו, ניתן להציג תצוגה מקדימה של כתובת אתר כדי לתת מידע נוסף על קישור זה, כמו הכותרת, התיאור והתמונה מהאתר.",
-            "url_previews_section": "תצוגת קישורים",
-            "user_url_previews_default_off": "יש לך <a> השבת </a> תצוגות מקדימות של כתובות אתרים כברירת מחדל.",
-            "user_url_previews_default_on": "כברירת מחדל, <a> הפעלת </a> תצוגה מקדימה של כתובות אתרים."
+            "topic_field_label": "נושא החדר"
         },
         "notifications": {
             "browse_button": "דפדף",
@@ -1587,8 +1570,6 @@
             "remove_msisdn_prompt": "הסר מספרי %(phone)s ?"
         },
         "inline_url_previews_default": "אפשר צפייה של תצוגת קישורים בצאט כברירת מחדל",
-        "inline_url_previews_room": "אפשר לחברים בחדר זה לצפות בתצוגת קישורים",
-        "inline_url_previews_room_account": "הראה תצוגה מקדימה של קישורים בחדר זה (משפיע רק עליכם)",
         "insert_trailing_colon_mentions": "הוסף נקודתיים לאחר אזכור המשתמש בתחילת ההודעה",
         "jump_to_bottom_on_send": "קפוץ לתחתית השיחה בעת שליחת הודעה",
         "key_backup": {
@@ -1921,7 +1902,6 @@
     "threads": {
         "all_threads": "כל הקישורים",
         "all_threads_description": "הצג את כל הקישורים מחדר זה",
-        "error_start_thread_existing_relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
         "my_threads": "הקישורים שלי",
         "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
         "open_thread": "פתיחת שרשור",
@@ -1945,7 +1925,6 @@
         },
         "creation_summary_dm": "%(creator)s יצר את DM הזה.",
         "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר.",
-        "download_action_decrypting": "מפענח",
         "download_action_downloading": "מוריד",
         "edits": {
             "tooltip_label": "נערך ב-%(date)s. לחץ לצפייה בעריכות.",
@@ -1991,9 +1970,7 @@
         "m.poll.start": "%(senderName)s התחיל סקר - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s שינה את תמונת החדר.",
-            "changed_img": "%(senderDisplayName)s שינה את האווטאר של החדר ל- <img/>",
-            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s",
-            "removed": "%(senderDisplayName)s הסיר את האווטאר של החדר."
+            "lightbox_title": "%(senderDisplayName)s שינה את האווטר עבור חדר %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
@@ -2086,8 +2063,7 @@
             "removed": "היישומון %(widgetName)s הוסר על ידי %(senderName)s"
         },
         "mab": {
-            "copy_link_thread": "העתק קישור לשרשור",
-            "label": "פעולות הודעה"
+            "copy_link_thread": "העתק קישור לשרשור"
         },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
@@ -2098,7 +2074,6 @@
             "created_rule_rooms": "%(senderName)s יצר כלל החוסם חדרים התואמים ל%(glob)s עבור %(reason)s",
             "created_rule_servers": "%(senderName)s יצר כלל החוסם שרתים התואמים ל%(glob)s עבור %(reason)s",
             "created_rule_users": "%(senderName)s יצר כלל החוסם משתמשים התואמים ל%(glob)s עבור %(reason)s",
-            "message_hidden": "התעלמת ממשתמש זה, ולכן המסר שלו מוסתר. <a> הצג בכל מקרה. </a>",
             "removed_rule": "%(senderName)s הסיר כלל חסימה התואם ל%(glob)s",
             "removed_rule_rooms": "%(senderName)s הסיר את הכלל שחוסם חדרים התואמים ל%(glob)s",
             "removed_rule_servers": "%(senderName)s הסיר את הכלל החוסם שרתים התואמים ל%(glob)s",
@@ -2316,11 +2291,6 @@
         "verify_button": "אמת משתמש",
         "verify_explainer": "ליתר ביטחון, אמת משתמש זה על ידי בדיקת קוד חד פעמי בשני המכשירים שלך."
     },
-    "user_menu": {
-        "settings": "כל ההגדרות",
-        "switch_theme_dark": "שנה למצב כהה",
-        "switch_theme_light": "שנה למצב בהיר"
-    },
     "voip": {
         "already_in_call": "כבר בשיחה",
         "already_in_call_person": "אתה כבר בשיחה עם האדם הזה.",
@@ -2386,7 +2356,6 @@
         "you_are_presenting": "אתה מציג"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
-    "welcome_to_element": "ברוכים הבאים ל Element",
     "widget": {
         "added_by": "ישומון נוסף על ידי",
         "capabilities_dialog": {

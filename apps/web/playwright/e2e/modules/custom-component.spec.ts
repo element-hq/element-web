@@ -6,9 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
-import fs from "node:fs";
 
 import { test, expect } from "../../element-web-test";
+import { getSampleFilePath, readSampleFileSync } from "../../sample-files";
 
 const screenshotOptions = (page: Page) => ({
     // Hide the jump to bottom button in the timeline to avoid flakiness
@@ -26,7 +26,7 @@ const screenshotOptions = (page: Page) => ({
     `,
 });
 
-const IMAGE_FILE = fs.readFileSync("playwright/sample-files/element.png");
+const IMAGE_FILE = readSampleFileSync("element.png", null);
 
 test.describe("Custom Component API", () => {
     test.use({
@@ -36,7 +36,7 @@ test.describe("Custom Component API", () => {
         },
         page: async ({ page }, use) => {
             await page.route("/modules/custom-component-module.js", async (route) => {
-                await route.fulfill({ path: "playwright/sample-files/custom-component-module.js" });
+                await route.fulfill({ path: getSampleFilePath("custom-component-module.js") });
             });
             await use(page);
         },
@@ -105,12 +105,16 @@ test.describe("Custom Component API", () => {
             });
 
             await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
+            const imgTile = page.locator(".mx_ImageBody").first();
             await expect(imgTile).toBeVisible();
+            const image = imgTile.getByRole("img", { name: "bad.png" });
+            await expect(image).toBeVisible();
             await imgTile.hover();
             await expect(page.getByRole("button", { name: "Download" })).not.toBeVisible();
-            await imgTile.click();
-            await expect(page.getByLabel("Image view").getByLabel("Download")).not.toBeVisible();
+            await image.click();
+            const imageView = page.getByLabel("Image view");
+            await expect(imageView).toBeVisible();
+            await expect(imageView.getByLabel("Download")).not.toBeVisible();
         });
         test("should allow downloading media when the allowDownloading hint is set to true", async ({
             page,
@@ -127,12 +131,16 @@ test.describe("Custom Component API", () => {
             });
 
             await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
+            const imgTile = page.locator(".mx_ImageBody").first();
             await expect(imgTile).toBeVisible();
+            const image = imgTile.getByRole("img", { name: "good.png" });
+            await expect(image).toBeVisible();
             await imgTile.hover();
             await expect(page.getByRole("button", { name: "Download" })).toBeVisible();
-            await imgTile.click();
-            await expect(page.getByLabel("Image view").getByLabel("Download")).toBeVisible();
+            await image.click();
+            const imageView = page.getByLabel("Image view");
+            await expect(imageView).toBeVisible();
+            await expect(imageView.getByLabel("Download")).toBeVisible();
         });
         test(
             "should render the next registered component if the filter function throws",
