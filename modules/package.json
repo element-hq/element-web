@@ -1,0 +1,61 @@
+{
+    "private": true,
+    "type": "module",
+    "workspaces": [
+        "packages/*",
+        "modules/*/element-web",
+        "modules/*/synapse"
+    ],
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "scripts": {
+        "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) | xargs -I {} sh -c 'echo \"Linting {}\"; action-validator \"{}\"'",
+        "lint:prettier": "prettier --check .",
+        "lint:prettier:fix": "prettier --write .",
+        "lint:eslint": "eslint --max-warnings 0 modules/*/element-web/src",
+        "lint:types": "yarn workspaces run lint:types",
+        "lint:codestyle": "yarn workspaces run lint:codestyle",
+        "lint:knip": "knip",
+        "test": "yarn workspaces run test",
+        "test:playwright": "playwright test",
+        "test:playwright:open": "yarn test:playwright --ui",
+        "test:playwright:screenshots": "playwright-screenshots yarn test:playwright --update-snapshots --grep @screenshot",
+        "prepare": "patch-package && husky && yarn workspaces run prepare"
+    },
+    "devDependencies": {
+        "@action-validator/cli": "^0.6.0",
+        "@action-validator/core": "^0.6.0",
+        "@element-hq/element-web-module-api": "1.14.0",
+        "@element-hq/element-web-playwright-common": "^6.0.0",
+        "@playwright/test": "^1.52.0",
+        "@stylistic/eslint-plugin": "^5.0.0",
+        "@types/node": "^22.12.0",
+        "@typescript-eslint/eslint-plugin": "^8.22.0",
+        "@typescript-eslint/parser": "^8.22.0",
+        "eslint": "^8.26.0",
+        "eslint-config-google": "^0.14.0",
+        "eslint-config-prettier": "^10.0.0",
+        "eslint-plugin-deprecate": "^0.9.0",
+        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
+        "eslint-plugin-matrix-org": "^3.0.0",
+        "eslint-plugin-react": "^7.37.4",
+        "eslint-plugin-react-compiler": "^19.0.0-beta-27714ef-20250124",
+        "eslint-plugin-react-hooks": "^7.0.0",
+        "eslint-plugin-unicorn": "^56.0.0",
+        "husky": "^9.1.7",
+        "knip": "^6.0.0",
+        "lint-staged": "^17.0.0",
+        "patch-package": "^8.0.1",
+        "prettier": "^3.4.2",
+        "typescript": "^6.0.0"
+    },
+    "resolutions": {
+        "vite": "8.0.15",
+        "@vitest/browser-playwright": "4.1.8",
+        "@vitest/coverage-v8": "4.1.8",
+        "vitest": "4.1.8"
+    },
+    "packageManager": "yarn@1.22.22"
+}

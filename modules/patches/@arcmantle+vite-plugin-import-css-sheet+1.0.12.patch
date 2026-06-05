@@ -1,0 +1,10 @@
+diff --git a/node_modules/@arcmantle/vite-plugin-import-css-sheet/client.d.ts b/node_modules/@arcmantle/vite-plugin-import-css-sheet/client.d.ts
+index d884a7e..533850e 100644
+--- a/node_modules/@arcmantle/vite-plugin-import-css-sheet/client.d.ts
++++ b/node_modules/@arcmantle/vite-plugin-import-css-sheet/client.d.ts
+@@ -1,3 +1,4 @@
+ declare module '*.css' {
+-	export default styles as CSSStyleSheet;
++    const styles: CSSStyleSheet;
++	export default styles;
+ }

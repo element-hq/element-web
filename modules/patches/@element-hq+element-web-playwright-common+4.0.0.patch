@@ -1,0 +1,22 @@
+diff --git a/node_modules/@element-hq/element-web-playwright-common/playwright-screenshots.sh b/node_modules/@element-hq/element-web-playwright-common/playwright-screenshots.sh
+index d860e34..d252f3a 100755
+--- a/node_modules/@element-hq/element-web-playwright-common/playwright-screenshots.sh
++++ b/node_modules/@element-hq/element-web-playwright-common/playwright-screenshots.sh
+@@ -16,7 +16,7 @@ function build_image() {
+ WS_PORT=3000
+ 
+ # Check the playwright version
+-PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
++PW_VERSION=$(yarn --silent run playwright --version | awk '{print $2}')
+ IMAGE_NAME="ghcr.io/element-hq/element-web/playwright-server:$PW_VERSION"
+ 
+ # If the image exists in the repository, pull it; otherwise, build it.
+@@ -42,7 +42,7 @@ trap clean_up EXIT
+ 
+ # Wait for playwright-server to be ready
+ echo "playwright-screenshots: Waiting for playwright-server"
+-pnpm --dir "$SCRIPT_DIR" exec wait-on "tcp:$WS_PORT"
++npx -y wait-on "tcp:$WS_PORT"
+ 
+ # Playwright seems to overwrite the last line from the console, so add an
+ # extra newline to make sure this doesn't get lost.

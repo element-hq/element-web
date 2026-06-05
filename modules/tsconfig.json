@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "lib": ["dom", "es2022", "esnext"],
+        "moduleResolution": "bundler",
+        "esModuleInterop": true,
+        "allowImportingTsExtensions": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "declaration": true
+    }
+}
