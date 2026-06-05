@@ -29,6 +29,8 @@ export interface RoomListSectionHeaderContentProps {
     isDropTarget?: boolean;
     /** Whether the section header is a drop target for another section */
     isDraggingSection?: boolean;
+    /** Whether the dragged section originates from below this header */
+    isSourceBelow?: boolean;
 }
 
 /**
@@ -40,6 +42,7 @@ export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderC
     isDragging = false,
     isDropTarget = false,
     isDraggingSection = false,
+    isSourceBelow = false,
 }: RoomListSectionHeaderContentProps): JSX.Element {
     const { title, displaySectionMenu } = useViewModel(vm);
     return (
@@ -47,7 +50,8 @@ export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderC
             className={classNames(styles.container, {
                 [styles.border]: isDropTarget && !isDraggingSection,
                 [styles.dragging]: isDragging,
-                [styles.borderBottom]: isDropTarget && isDraggingSection,
+                [styles.borderBottom]: isDropTarget && isDraggingSection && !isSourceBelow,
+                [styles.borderTop]: isDropTarget && isDraggingSection && isSourceBelow,
             })}
             align="center"
             justify="space-between"

@@ -257,10 +257,11 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
 }
 
 /**
- * Reorders sections by moving sourceTag after targetTag.
+ * Reorders sections by moving sourceTag relative to targetTag.
+ * If the source was below the target, it is inserted before the target; otherwise after.
  * Works for both default and custom sections.
  * @param sourceTag - The tag of the section to move.
- * @param targetTag - The tag of the section to move after.
+ * @param targetTag - The tag of the section to move relative to.
  */
 export async function reorderSection(sourceTag: string, targetTag: string): Promise<void> {
     const ordered = getOrderedSections();
@@ -268,8 +269,11 @@ export async function reorderSection(sourceTag: string, targetTag: string): Prom
 
     if (fromIndex === -1 || !ordered.includes(targetTag as SectionTag) || sourceTag === targetTag) return;
 
+    const toIndex = ordered.indexOf(targetTag as SectionTag);
+    const insertBefore = fromIndex > toIndex;
+
     ordered.splice(fromIndex, 1);
     const newToIndex = ordered.indexOf(targetTag as SectionTag);
-    ordered.splice(newToIndex + 1, 0, sourceTag as SectionTag);
+    ordered.splice(insertBefore ? newToIndex : newToIndex + 1, 0, sourceTag as SectionTag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, ordered);
 }

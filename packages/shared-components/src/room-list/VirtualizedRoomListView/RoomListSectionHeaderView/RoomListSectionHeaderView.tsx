@@ -109,13 +109,17 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         isDragSource,
     } = useDraggable({
         id,
-        data: { type: "section" },
+        data: { type: "section", index: sectionIndex },
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
     });
     const { ref: droppableRef, isDropTarget } = useDroppable({ id, disabled: isDragSource });
+
     const { source } = useDragOperation();
-    const isDraggingSection = (source?.data as { type?: string })?.type === "section";
+    const draggedData = source?.data as { type?: string; index?: number } | undefined;
+    const isDraggingSection = draggedData?.type === "section";
+    const sourceSectionIndex = isDraggingSection ? (draggedData.index ?? -1) : -1;
+    const isSourceBelow = isDraggingSection && sourceSectionIndex > sectionIndex;
 
     const buttonRef = useMergeRefs([draggableRef, handleRef, droppableRef]) as React.Ref<HTMLButtonElement>;
     return (
@@ -148,6 +152,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         vm={vm}
                         isDraggingSection={isDraggingSection}
                         isDropTarget={isDropTarget}
+                        isSourceBelow={isSourceBelow}
                     />
                 </button>
             </div>
