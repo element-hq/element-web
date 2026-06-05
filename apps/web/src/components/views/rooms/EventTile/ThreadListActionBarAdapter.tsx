@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, type JSX } from "react";
 import { ActionBarView } from "@element-hq/web-shared-components";
 
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { type ThreadListActionBarViewModel } from "../../../../viewmodels/room/ThreadListActionBarViewModel";
 
 /**
  * Props for the {@link ThreadListActionBarAdapter} component.
  */
 interface ThreadListActionBarAdapterProps {
-    /** View model backing the thread list action bar. */
-    eventTileViewModel: EventTileViewModel;
+    /** View model owned by the parent event tile container. */
+    vm: ThreadListActionBarViewModel;
     /** Opens the event in the room timeline. */
     onViewInRoomClick: (anchor: HTMLElement | null) => void;
     /** Copies the event permalink to the clipboard. */
@@ -28,16 +28,11 @@ interface ThreadListActionBarAdapterProps {
  * Renders the action bar used by the thread list view.
  */
 export function ThreadListActionBarAdapter({
-    eventTileViewModel,
+    vm,
     onViewInRoomClick,
     onCopyLinkClick,
     className,
 }: Readonly<ThreadListActionBarAdapterProps>): JSX.Element {
-    const vm = eventTileViewModel.getThreadListActionBarViewModel({
-        onViewInRoomClick,
-        onCopyLinkClick,
-    });
-
     useEffect(() => {
         vm.setProps({
             onViewInRoomClick,

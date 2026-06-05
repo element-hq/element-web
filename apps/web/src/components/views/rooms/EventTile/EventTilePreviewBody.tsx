@@ -9,19 +9,16 @@ import React, { type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../../messages/MBodyFactory";
+import { type EventPreviewViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
 import { EventPreviewAdapter } from "./EventPreviewAdapter";
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 interface EventTilePreviewBodyProps {
-    eventTileViewModel: EventTileViewModel;
     mxEvent: MatrixEvent;
+    eventPreviewVm: EventPreviewViewModel;
 }
 
 /** Renders the compact body preview used by notification and thread-list tiles. */
-export function EventTilePreviewBody({
-    eventTileViewModel,
-    mxEvent,
-}: Readonly<EventTilePreviewBodyProps>): JSX.Element {
+export function EventTilePreviewBody({ mxEvent, eventPreviewVm }: Readonly<EventTilePreviewBodyProps>): JSX.Element {
     let body: JSX.Element;
 
     if (mxEvent.isRedacted()) {
@@ -29,7 +26,7 @@ export function EventTilePreviewBody({
     } else if (mxEvent.isDecryptionFailure()) {
         body = <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
     } else {
-        body = <EventPreviewAdapter eventTileViewModel={eventTileViewModel} mxEvent={mxEvent} />;
+        body = <EventPreviewAdapter vm={eventPreviewVm} />;
     }
 
     return <div className="mx_EventTile_body">{body}</div>;

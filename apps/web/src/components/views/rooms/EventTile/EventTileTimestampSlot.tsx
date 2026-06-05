@@ -7,34 +7,25 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
-import { type MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
+import { type MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 import { MessageTimestampAdapter } from "./MessageTimestampAdapter";
 
 interface EventTileTimestampSlotProps {
-    eventTileViewModel: EventTileViewModel;
-    kind: "plain" | "linked";
-    timestampProps: MessageTimestampViewModelProps;
+    vm: MessageTimestampViewModel;
+    showLateIcon: boolean;
     showTimestamp: boolean;
     showDummy: boolean;
 }
 
 /** Renders a real or placeholder timestamp slot for an EventTile. */
 export function EventTileTimestampSlot({
-    eventTileViewModel,
-    kind,
-    timestampProps,
+    vm,
+    showLateIcon,
     showTimestamp,
     showDummy,
 }: Readonly<EventTileTimestampSlotProps>): JSX.Element | null {
     if (showTimestamp) {
-        return (
-            <MessageTimestampAdapter
-                eventTileViewModel={eventTileViewModel}
-                kind={kind}
-                timestampProps={timestampProps}
-            />
-        );
+        return <MessageTimestampAdapter vm={vm} showLateIcon={showLateIcon} />;
     }
 
     if (showDummy) {

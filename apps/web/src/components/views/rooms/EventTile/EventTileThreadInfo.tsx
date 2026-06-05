@@ -6,26 +6,28 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { type EventTileThreadState } from "../../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
+import {
+    type ThreadMessagePreviewViewModel,
+    type ThreadSummaryViewModel,
+} from "../../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel.tsx";
 import { ThreadMessagePreviewAdapter } from "./ThreadMessagePreviewAdapter";
 import { ThreadSummaryAdapter } from "./ThreadSummaryAdapter";
 
 interface EventTileThreadInfoProps {
-    eventTileViewModel: EventTileViewModel;
-    mxEvent: MatrixEvent;
     threadState: EventTileThreadState;
+    threadSummaryVm: ThreadSummaryViewModel;
+    threadMessagePreviewVm: ThreadMessagePreviewViewModel;
 }
 
 /** Renders the thread-panel reply summary shown under a preview tile. */
 export function EventTileThreadPanelSummary({
-    eventTileViewModel,
     threadState,
-}: Readonly<Omit<EventTileThreadInfoProps, "mxEvent">>): JSX.Element | null {
+    threadMessagePreviewVm,
+}: Readonly<Pick<EventTileThreadInfoProps, "threadState" | "threadMessagePreviewVm">>): JSX.Element | null {
     if (!threadState.shouldShowThreadPanelSummary || !threadState.thread) {
         return null;
     }
@@ -34,26 +36,19 @@ export function EventTileThreadPanelSummary({
         <div className="mx_ThreadPanel_replies">
             <ThreadsIcon />
             <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-            <ThreadMessagePreviewAdapter eventTileViewModel={eventTileViewModel} thread={threadState.thread} />
+            <ThreadMessagePreviewAdapter vm={threadMessagePreviewVm} />
         </div>
     );
 }
 
 /** Renders thread summary or search thread affordances for an EventTile. */
 export function EventTileThreadInfo({
-    eventTileViewModel,
-    mxEvent,
     threadState,
+    threadSummaryVm,
+    threadMessagePreviewVm,
 }: Readonly<EventTileThreadInfoProps>): ReactNode {
     if (threadState.shouldShowThreadSummary && threadState.thread) {
-        return (
-            <ThreadSummaryAdapter
-                eventTileViewModel={eventTileViewModel}
-                mxEvent={mxEvent}
-                thread={threadState.thread}
-                data-testid="thread-summary"
-            />
-        );
+        return <ThreadSummaryAdapter vm={threadSummaryVm} data-testid="thread-summary" />;
     }
 
     if (threadState.searchThreadInfo.kind === "link") {

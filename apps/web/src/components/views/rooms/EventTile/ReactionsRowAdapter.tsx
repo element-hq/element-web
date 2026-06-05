@@ -21,9 +21,9 @@ import RoomContext from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { isContentActionable } from "../../../../utils/EventUtils";
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import { type ReactionsRowViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 
 /**
  * Props for the {@link ReactionsRowButtonAdapter} component.
@@ -115,8 +115,8 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
  * Props for the {@link ReactionsRowAdapter} component.
  */
 interface ReactionsRowAdapterProps {
-    /** View model backing the event tile reaction row. */
-    eventTileViewModel: EventTileViewModel;
+    /** View model owned by the parent event tile container. */
+    vm: ReactionsRowViewModel;
     /** Matrix event whose reactions are being rendered. */
     mxEvent: MatrixEvent;
     /** Current reaction relations for the event, if available. */
@@ -127,7 +127,7 @@ interface ReactionsRowAdapterProps {
  * Renders the reaction row and reaction picker for an event tile.
  */
 export function ReactionsRowAdapter({
-    eventTileViewModel,
+    vm,
     mxEvent,
     reactions,
 }: Readonly<ReactionsRowAdapterProps>): JSX.Element | null {
@@ -137,18 +137,6 @@ export function ReactionsRowAdapter({
     const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-
-    const vm = eventTileViewModel.getReactionsRowViewModel({
-        isActionable: isContentActionable(mxEvent),
-        reactionGroupCount: reactionGroups.length,
-        canReact: roomContext.canReact,
-        addReactionButtonActive: false,
-    });
-
-    useEffect(() => {
-        // This child VM is owned by EventTileViewModel, but scoped to this rendered adapter surface.
-        return () => eventTileViewModel.releaseReactionsRowViewModel();
-    }, [eventTileViewModel]);
 
     const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
         setMenuAnchorRect(event.currentTarget.getBoundingClientRect());

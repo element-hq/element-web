@@ -334,18 +334,27 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Lazily creates and returns the plain timestamp child view model. */
     public getMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
         this.messageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        this.messageTimestampViewModel.setProps(props);
         return this.messageTimestampViewModel;
     }
 
     /** Lazily creates and returns the permalink timestamp child view model. */
     public getLinkedMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
         this.linkedMessageTimestampViewModel ??= new MessageTimestampViewModel(props);
+        this.linkedMessageTimestampViewModel.setProps(props);
         return this.linkedMessageTimestampViewModel;
     }
 
     /** Lazily creates and returns the thread message preview child view model. */
     public getThreadMessagePreviewViewModel(props: ThreadMessagePreviewViewModelProps): ThreadMessagePreviewViewModel {
         this.threadMessagePreviewViewModel ??= new ThreadMessagePreviewViewModel(props);
+        this.threadMessagePreviewViewModel.setClient(props.cli);
+        this.threadMessagePreviewViewModel.setThread(props.thread);
+        this.threadMessagePreviewViewModel.setRoom(props.room);
+        this.threadMessagePreviewViewModel.setTimelineRenderingType(props.timelineRenderingType);
+        this.threadMessagePreviewViewModel.setLowBandwidth(props.lowBandwidth);
+        this.threadMessagePreviewViewModel.setUseOnlyCurrentProfiles(props.useOnlyCurrentProfiles);
+        this.threadMessagePreviewViewModel.setShowDisplayName(props.showDisplayName);
         return this.threadMessagePreviewViewModel;
     }
 
@@ -358,6 +367,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Lazily creates and returns the thread summary child view model. */
     public getThreadSummaryViewModel(props: ThreadSummaryViewModelProps): ThreadSummaryViewModel {
         this.threadSummaryViewModel ??= new ThreadSummaryViewModel(props);
+        this.threadSummaryViewModel.setRootEvent(props.mxEvent);
+        this.threadSummaryViewModel.setClient(props.cli);
+        this.threadSummaryViewModel.setThread(props.thread);
+        this.threadSummaryViewModel.setRoom(props.room);
+        this.threadSummaryViewModel.setTimelineRenderingType(props.timelineRenderingType);
+        this.threadSummaryViewModel.setLowBandwidth(props.lowBandwidth);
+        this.threadSummaryViewModel.setUseOnlyCurrentProfiles(props.useOnlyCurrentProfiles);
+        this.threadSummaryViewModel.setNarrow(props.narrow);
+        this.threadSummaryViewModel.setIsCard(props.isCard);
         return this.threadSummaryViewModel;
     }
 
@@ -370,12 +388,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Lazily creates and returns the thread-list action bar child view model. */
     public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
         this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
+        this.threadListActionBarViewModel.setProps(props);
         return this.threadListActionBarViewModel;
     }
 
     /** Lazily creates and returns the E2E message-shared icon child view model. */
     public getE2eMessageSharedIconViewModel(props: E2eMessageSharedIconViewModelProps): E2eMessageSharedIconViewModel {
         this.e2eMessageSharedIconViewModel ??= new E2eMessageSharedIconViewModel(props);
+        this.e2eMessageSharedIconViewModel.setClient(props.client);
+        this.e2eMessageSharedIconViewModel.setRoomId(props.roomId);
+        this.e2eMessageSharedIconViewModel.setKeyForwardingUserId(props.keyForwardingUserId);
         return this.e2eMessageSharedIconViewModel;
     }
 
@@ -388,6 +410,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Lazily creates and returns the event preview child view model. */
     public getEventPreviewViewModel(props: EventPreviewViewModelProps): EventPreviewViewModel {
         this.eventPreviewViewModel ??= new EventPreviewViewModel(props);
+        this.eventPreviewViewModel.setClient(props.cli);
+        this.eventPreviewViewModel.setEvent(props.mxEvent);
         return this.eventPreviewViewModel;
     }
 
@@ -400,6 +424,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Lazily creates and returns the event action bar child view model. */
     public getActionBarViewModel(props: EventTileActionBarViewModelProps): EventTileActionBarViewModel {
         this.actionBarViewModel ??= new EventTileActionBarViewModel(props);
+        this.actionBarViewModel.setProps(props);
         return this.actionBarViewModel;
     }
 
@@ -412,6 +437,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Lazily creates and returns the reactions row child view model. */
     public getReactionsRowViewModel(props: ReactionsRowViewModelProps): ReactionsRowViewModel {
         this.reactionsRowViewModel ??= new ReactionsRowViewModel(props);
+        this.reactionsRowViewModel.setActionable(props.isActionable);
+        this.reactionsRowViewModel.setReactionGroupCount(props.reactionGroupCount);
+        this.reactionsRowViewModel.setCanReact(props.canReact);
+        this.reactionsRowViewModel.setAddReactionButtonActive(props.addReactionButtonActive ?? false);
+        this.reactionsRowViewModel.setAddReactionHandlers({
+            onAddReactionClick: props.onAddReactionClick,
+            onAddReactionContextMenu: props.onAddReactionContextMenu,
+        });
         return this.reactionsRowViewModel;
     }
 
