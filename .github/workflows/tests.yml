@@ -37,13 +37,8 @@ jobs:
                 # Run multiple instances in parallel to speed up the tests
                 runner: [1, 2]
         steps:
-            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
-            # so, with the one at the end too, this will let us work out how much disk has been used.
-            - name: dfbefore
-              run: df -h && df -i
-
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
@@ -111,8 +106,13 @@ jobs:
                     - packages/module-api
         runs-on: ubuntu-24.04
         steps:
+            # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
+            # so, with the one at the end too, this will let us work out how much disk has been used.
+            - name: dfbefore
+              run: df -h && df -i
+
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   repository: ${{ inputs.matrix-js-sdk-sha && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
@@ -193,22 +193,22 @@ jobs:
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
             - name: Checkout code
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-              if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
                   persist-credentials: false
                   fetch-depth: 0 # Full history, fastest for diff-cover
 
             - name: Download coverage artifacts
               uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-              if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               with:
                   pattern: coverage-*
                   path: coverage
 
             - name: Diff Coverage
               id: coverage
-              if: needs.test.result == 'success' && env.ENABLE_COVERAGE == 'true'
+              if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
               uses: Affanmir/diff-cover-action@0d8c98f613bbd2428df50b3109b1e3b1d5ab59d3 # v2.1.0
               with:
                   compare-branch: origin/${{ github.base_ref || 'develop' }}

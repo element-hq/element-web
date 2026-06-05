@@ -200,10 +200,7 @@
         "log_in_new_account": "<a>Bëni hyrjen</a> te llogaria juaj e re.",
         "logout_dialog": {
             "description": "Jeni i sigurt se doni të dilni?",
-            "megolm_export": "Eksporto dorazi kyçet",
             "setup_key_backup_title": "Do të humbni hyrje te mesazhet tuaj të fshehtëzuar",
-            "setup_secure_backup_description_1": "Mesazhet e fshehtëzuar sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) kanë kyçet për të lexuar këto mesazhe.",
-            "setup_secure_backup_description_2": "Kur dilni nga llogaria, këto kyçe do të fshihen te kjo pajisje, që do të thotë se s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar, veç në paçi kyçet për ta në pajisjet tuaja të tjera, ose të kopjeruajtur te shërbyesi.",
             "skip_key_backup": "Nuk i dua mesazhet e mia të fshehtëzuar"
         },
         "misconfigured_body": "Kërkojini përgjegjësit të %(brand)s-it tuaj të kontrollojë <a>formësimin tuaj</a> për zëra të pasaktë ose të përsëdytur.",
@@ -786,9 +783,6 @@
             "warning": "Nëse metodën e re të rimarrjeve s’e keni hequr ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
         "set_up_toast_title": "Ujdisni Kopjeruajtje të Sigurt",
-        "setup_secure_backup": {
-            "explainer": "Kopjeruajini kyçet tuaj, përpara se të dilni, që të shmangni humbjen e tyre."
-        },
         "udd": {
             "interactive_verification_button": "Verifikojeni në mënyrë ndërvepruese përmes emoji-sh",
             "other_ask_verify_text": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",

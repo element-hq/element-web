@@ -39,6 +39,7 @@ import { Action } from "../../../../src/dispatcher/actions";
 import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
 import ToastStore from "../../../../src/stores/ToastStore";
+import { ModuleApi } from "../../../../src/modules/Api";
 
 // Create a mock resizer instance that can be shared across tests
 const mockResizerInstance = {
@@ -611,6 +612,42 @@ describe("<LoggedInView />", () => {
 
             // Verify localStorage was set to the minimum width (224), not 0
             expect(window.localStorage.getItem("mx_lhs_size")).toBe("224");
+        });
+    });
+
+    describe("module-rendered fullscreen view (e.g. multiroom)", () => {
+        // A page_type for which a module registers a custom full-screen renderer.
+        const modulePageType = "io.element.test_fullscreen";
+
+        beforeEach(async () => {
+            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
+            ModuleApi.instance.navigation.registerLocationRenderer(modulePageType, () => (
+                <div data-testid="module-content" />
+            ));
+        });
+
+        afterEach(async () => {
+            ModuleApi.instance.navigation.locationRenderers.delete(modulePageType);
+            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, false);
+        });
+
+        it("renders the resizable separator for a normal room view with the new room list", () => {
+            const { container } = getComponent({ page_type: "room" });
+
+            // With the new room list and no module renderer, the resizable left panel and its separator are used.
+            expect(container.querySelector(".mx_Separator")).toBeInTheDocument();
+        });
+
+        it("does not render the resizer for a module-rendered fullscreen view, but keeps the space panel", () => {
+            const { container, getByTestId } = getComponent({ page_type: modulePageType });
+
+            // The module's full-screen content is shown...
+            expect(getByTestId("module-content")).toBeInTheDocument();
+            // ...without the resizable separator or the legacy resize handle...
+            expect(container.querySelector(".mx_Separator")).not.toBeInTheDocument();
+            expect(container.querySelector(".mx_ResizeHandle")).not.toBeInTheDocument();
+            // ...while the space panel rail remains visible.
+            expect(container.querySelector(".mx_SpacePanel")).toBeInTheDocument();
         });
     });
 

@@ -18,7 +18,6 @@ import React, {
 } from "react";
 import {
     type EventStatus,
-    EventType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -29,10 +28,8 @@ import {
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { uniqueId } from "lodash";
-import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel, PinnedMessageBadge, TileErrorView } from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, TileErrorView } from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -57,7 +54,12 @@ import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
+import {
+    haveRendererForEvent,
+    isMessageEvent,
+    renderTile,
+    type EventTileTypeProps,
+} from "../../../events/EventTileFactory";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
@@ -65,14 +67,13 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
-import { EventPreviewAdapter } from "./EventTile/EventPreviewAdapter";
-import { MessageTimestampAdapter } from "./EventTile/MessageTimestampAdapter";
-import { ReactionsRowAdapter } from "./EventTile/ReactionsRowAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
-import { ThreadMessagePreviewAdapter } from "./EventTile/ThreadMessagePreviewAdapter";
-import { ThreadSummaryAdapter } from "./EventTile/ThreadSummaryAdapter";
+import { EventTileFooter } from "./EventTile/EventTileFooter";
+import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
+import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/EventTileThreadInfo";
+import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
     type EventTileViewModelProps,
@@ -107,8 +108,9 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { useSettingValue } from "../../../hooks/useSettings";
-import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
+import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
+import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
 
 /** Relation lookup type retained for EventTile consumers. */
 export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
@@ -124,134 +126,136 @@ export type { GetRelationsForEvent } from "../../../viewmodels/room/timeline/eve
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
+/** Read receipt entry rendered beside an EventTile. */
 export interface IReadReceiptProps {
+    /** User ID that owns the receipt. */
     userId: string;
+    /** Room member profile for the receipt user, if available. */
     roomMember: RoomMember | null;
+    /** Receipt timestamp in milliseconds. */
     ts: number;
 }
 
+/** Operations exposed by specialized event tile body renderers. */
 export interface IEventTileOps {
+    /** Whether the body renderer is currently hiding a widget. */
     isWidgetHidden(): boolean;
+    /** Reveal a hidden widget in the body renderer. */
     unhideWidget(): void;
 }
 
+/** Ref surface exposed by concrete event tile body components. */
 export interface IEventTileType extends React.Component<HTMLDivElement> {
+    /** Optional body-specific operations for context menu actions. */
     getEventTileOps?(): IEventTileOps;
+    /** Media helper owned by the body renderer, when the event has media. */
     getMediaHelper(): MediaEventHelper | undefined;
 }
 
+/** Props used to render an event in a room timeline surface. */
 export interface EventTileProps {
-    // the MatrixEvent to show
+    /** Matrix event to render. */
     mxEvent: MatrixEvent;
 
-    // true if mxEvent is redacted. This is a prop because using mxEvent.isRedacted()
-    // might not be enough when deciding shouldComponentUpdate - prevProps.mxEvent
-    // references the same this.props.mxEvent.
+    /**
+     * Whether the event is redacted.
+     * This mirrors `mxEvent.isRedacted()` because `mxEvent` may retain object identity across updates.
+     */
     isRedacted?: boolean;
 
-    // true if this is a continuation of the previous event (which has the
-    // effect of not showing another avatar/displayname
+    /** Whether this event continues the previous sender block. */
     continuation?: boolean;
 
-    // true if this is the last event in the timeline (which has the effect
-    // of always showing the timestamp)
+    /** Whether this is the last event in the timeline. */
     last?: boolean;
 
-    // true if the event is the last event in a section (adds a css class for
-    // targeting)
+    /** Whether this is the last event in a timeline section. */
     lastInSection?: boolean;
 
-    // True if the event is the last successful (sent) event.
+    /** Whether this is the most recent successfully sent event. */
     lastSuccessful?: boolean;
 
-    // true if this is search context (which has the effect of greying out
-    // the text
+    /** Whether this tile is rendered with search-context styling. */
     contextual?: boolean;
 
-    // a list of words to highlight, ordered by longest first
+    /** Words to highlight in the event body, ordered longest first. */
     highlights?: string[];
 
-    // link URL for the highlights
+    /** Link URL used for highlighted terms. */
     highlightLink?: string;
 
-    // should show URL previews for this event
+    /** Whether URL previews should be shown for this event. */
     showUrlPreview?: boolean;
 
-    // is this the focused event
+    /** Whether this is the currently selected event. */
     isSelectedEvent?: boolean;
 
+    /** Resize observer used by the parent timeline, if any. */
     resizeObserver?: ResizeObserver;
 
-    // a list of read-receipts we should show. Each object has a 'roomMember' and 'ts'.
+    /** Read receipts to show for this event. */
     readReceipts?: IReadReceiptProps[];
 
-    // opaque readreceipt info for each userId; used by ReadReceiptMarker
-    // to manage its animations. Should be an empty object when the room
-    // first loads
+    /** Opaque read receipt animation state keyed by user ID. */
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
 
-    // A function which is used to check if the parent panel is being
-    // unmounted, to avoid unnecessary work. Should return true if we
-    // are being unmounted.
+    /** Returns whether the parent panel is unmounting and tile work should be skipped. */
     checkUnmounting?: () => boolean;
 
-    // the status of this event - ie, mxEvent.status. Denormalised to here so
-    // that we can tell when it changes.
+    /** Denormalized `mxEvent.status` so status changes can trigger tile updates. */
     eventSendStatus?: EventStatus;
 
+    /** Whether this tile is being rendered for export. */
     forExport?: boolean;
 
-    // show twelve hour timestamps
+    /** Whether timestamps should use twelve-hour formatting. */
     isTwelveHour?: boolean;
 
-    // helper function to access relations for this event
+    /** Helper used to access relations for this event. */
     getRelationsForEvent?: GetRelationsForEvent;
 
-    // whether to show reactions for this event
+    /** Whether reactions should be shown for this event. */
     showReactions?: boolean;
 
-    // which layout to use
+    /** Timeline layout used by this tile. */
     layout?: Layout;
 
-    // whether or not to show read receipts
+    /** Whether read receipts should be shown for this event. */
     showReadReceipts?: boolean;
 
-    // Used while editing, to pass the event, and to preserve editor state
-    // from one editor instance to another when remounting the editor
-    // upon receiving the remote echo for an unsent event.
+    /** Editor state used while editing and across remote echo remounts. */
     editState?: EditorStateTransfer;
 
-    // Event ID of the event replacing the content of this event, if any
+    /** Event ID replacing this event's content, if any. */
     replacingEventId?: string;
 
-    // Helper to build permalinks for the room
+    /** Helper used to build room and event permalinks. */
     permalinkCreator?: RoomPermalinkCreator;
 
-    // LegacyCallEventGrouper for this event
+    /** Legacy call event grouping state for this event. */
     callEventGrouper?: LegacyCallEventGrouper;
 
-    // Symbol of the root node
+    /** Element type used for the root node. */
     as?: string;
 
-    // whether or not to always show timestamps
+    /** Whether timestamps should always be visible. */
     alwaysShowTimestamps?: boolean;
 
-    // whether or not to display the sender
+    /** Whether sender identity should be hidden. */
     hideSender?: boolean;
 
-    // whether or not to display thread info
+    /** Whether thread information should be shown. */
     showThreadInfo?: boolean;
 
-    // if specified and `true`, the message is being
-    // hidden for moderation from other users but is
-    // displayed to the current user either because they're
-    // the author or they are a moderator
+    /** Whether the current user can see a message hidden from other users for moderation. */
     isSeeingThroughMessageHiddenForModeration?: boolean;
 
-    // The following properties are used by EventTilePreview to disable tab indexes within the event tile
+    /** Whether the timestamp should be hidden for preview rendering. */
     hideTimestamp?: boolean;
+    /** Whether interactive controls inside the tile should be inhibited. */
     inhibitInteraction?: boolean;
 
+    /** Ref for imperative access to the unwrapped tile instance. */
     ref?: Ref<UnwrappedEventTile>;
 }
 
@@ -274,7 +278,13 @@ interface EventTileRenderInputs {
     isOwnEvent: boolean;
 }
 
-// MUST be rendered within a RoomContext with a set timelineRenderingType
+interface EventTileRootRenderState {
+    tileClasses: string;
+    tileAriaLive?: "off";
+    scrollToken?: string;
+}
+
+/** EventTile implementation rendered inside a RoomContext with `timelineRenderingType` set. */
 export class UnwrappedEventTile extends React.Component<EventTileProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
@@ -467,51 +477,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     }
 
-    private renderThreadPanelSummary(threadState: EventTileThreadState): JSX.Element | null {
-        if (!threadState.shouldShowThreadPanelSummary || !threadState.thread) {
-            return null;
-        }
-
-        return (
-            <div className="mx_ThreadPanel_replies">
-                <ThreadsIcon />
-                <span className="mx_ThreadPanel_replies_amount">{threadState.thread.length}</span>
-                <ThreadMessagePreviewAdapter eventTileViewModel={this.viewModel} thread={threadState.thread} />
-            </div>
-        );
-    }
-
-    private renderThreadInfo(threadState: EventTileThreadState): React.ReactNode {
-        if (threadState.shouldShowThreadSummary && threadState.thread) {
-            return (
-                <ThreadSummaryAdapter
-                    eventTileViewModel={this.viewModel}
-                    mxEvent={this.props.mxEvent}
-                    thread={threadState.thread}
-                    data-testid="thread-summary"
-                />
-            );
-        }
-
-        if (threadState.searchThreadInfo.kind === "link") {
-            return (
-                <a className="mx_ThreadSummary_icon" href={threadState.searchThreadInfo.href}>
-                    <ThreadsIcon />
-                    {_t("timeline|thread_info_basic")}
-                </a>
-            );
-        }
-
-        if (threadState.searchThreadInfo.kind === "text") {
-            return (
-                <p className="mx_ThreadSummary_icon">
-                    <ThreadsIcon />
-                    {_t("timeline|thread_info_basic")}
-                </p>
-            );
-        }
-    }
-
     private readonly onViewInRoomClick = (_anchor: HTMLElement | null): void => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -608,42 +573,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
         return true;
-    }
-
-    /**
-     * Determine whether an event should be highlighted
-     * For edited events, if a previous version of the event was highlighted
-     * the event should remain highlighted as the user may have been notified
-     * (Clearer explanation of why an event is highlighted is planned -
-     * https://github.com/vector-im/element-web/issues/24927)
-     * @returns boolean
-     */
-    private shouldHighlight(): boolean {
-        if (this.props.forExport) return false;
-        if (this.context.timelineRenderingType === TimelineRenderingType.Notification) return false;
-        if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
-
-        if (this.props.isRedacted) return false;
-
-        // This event is a room mention but we don't want the call tile to have a highlight.
-        if (this.props.mxEvent.getType() === EventType.RTCNotification) return false;
-
-        const cli = MatrixClientPeg.safeGet();
-        const actions = cli.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
-        // get the actions for the previous version of the event too if it is an edit
-        const previousActions = this.props.mxEvent.replacingEvent()
-            ? cli.getPushActionsForEvent(this.props.mxEvent)
-            : undefined;
-        if (!actions?.tweaks && !previousActions?.tweaks) {
-            return false;
-        }
-
-        // don't show self-highlights from another of our clients
-        if (this.props.mxEvent.getSender() === cli.credentials.userId) {
-            return false;
-        }
-
-        return !!(actions?.tweaks.highlight || previousActions?.tweaks.highlight);
     }
 
     private readonly onSenderProfileClick = (): void => {
@@ -821,18 +750,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    /**
-     * In some cases we can't use shouldHideEvent() since whether or not we hide
-     * an event depends on other things that the event itself
-     * @returns {boolean} true if event should be hidden
-     */
-    private shouldHideEvent(): boolean {
-        // If the call was replaced we don't render anything since we render the other call
-        if (this.props.callEventGrouper?.hangupReason === CallErrorCode.Replaced) return true;
-
-        return false;
-    }
-
     private createMessageTimestampProps(ts: number): MessageTimestampViewModelProps {
         return {
             showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,
@@ -861,12 +778,57 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return "#";
     }
 
+    private createRootAttributes({
+        tileClasses,
+        tileAriaLive,
+        scrollToken,
+    }: EventTileRootRenderState): Record<string, unknown> {
+        return {
+            "className": tileClasses,
+            "aria-live": tileAriaLive,
+            "aria-atomic": true,
+            "data-scroll-tokens": scrollToken,
+        };
+    }
+
+    private createInteractiveRootAttributes(rootRenderState: EventTileRootRenderState): Record<string, unknown> {
+        return {
+            ...this.createRootAttributes(rootRenderState),
+            ref: this.ref,
+            onMouseEnter: this.onMouseEnter,
+            onMouseLeave: this.onMouseLeave,
+            onFocus: this.onFocusWithin,
+            onBlur: this.onBlurWithin,
+        };
+    }
+
+    private createRenderTileProps({
+        replacingEventId,
+        isSeeingThroughMessageHiddenForModeration,
+        permalinkCreator = this.props.permalinkCreator,
+    }: {
+        replacingEventId?: string;
+        isSeeingThroughMessageHiddenForModeration?: boolean;
+        permalinkCreator?: RoomPermalinkCreator;
+    }): EventTileTypeProps {
+        return {
+            ...this.props,
+            ref: this.tile,
+            ...(replacingEventId === undefined ? {} : { replacingEventId }),
+            isSeeingThroughMessageHiddenForModeration,
+            highlights: this.props.highlights,
+            highlightLink: this.props.highlightLink,
+            permalinkCreator,
+            showHiddenEvents: this.context.showHiddenEvents,
+        };
+    }
+
     private createRenderInputs(
         displayInfo = getEventDisplayInfo(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
-            this.shouldHideEvent(),
+            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
         ),
     ): EventTileRenderInputs {
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
@@ -910,7 +872,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 isInfoMessage: displayInfo.isInfoMessage,
                 noBubbleEvent: displayInfo.noBubbleEvent,
                 isTwelveHour: this.props.isTwelveHour,
-                isHighlighted: this.shouldHighlight(),
+                isHighlighted: shouldHighlightEventTile({
+                    cli: MatrixClientPeg.safeGet(),
+                    mxEvent: this.props.mxEvent,
+                    timelineRenderingType: this.context.timelineRenderingType,
+                    forExport: this.props.forExport,
+                    isRedacted: this.props.isRedacted,
+                }),
                 isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
                 isLast: this.props.last,
                 isLastInSection: this.props.lastInSection,
@@ -973,7 +941,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.showHiddenEvents,
-            this.shouldHideEvent(),
+            shouldHideEventTile({ callEventGrouper: this.props.callEventGrouper }),
         );
         const { hasRenderer, isSeeingThroughMessageHiddenForModeration } = displayInfo;
         const { isQuoteExpanded } = this.state;
@@ -992,7 +960,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const renderInputs = this.createRenderInputs(displayInfo);
         const { hasPinnedMessageBadge, hasReactionsRow, threadState, isOwnEvent } = renderInputs;
 
-        const eventTileRenderState = EventTileViewModel.createRenderState(this.createViewModelProps(renderInputs));
+        this.viewModel.setProps(this.createViewModelProps(renderInputs));
+        const eventTileRenderState = this.viewModel.getSnapshot();
         const eventTileSnapshot = eventTileRenderState.snapshot;
 
         const lineClasses = eventTileRenderState.line.className;
@@ -1002,9 +971,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const permalink = this.getPermalink();
 
-        // we can't use local echoes as scroll tokens, because their event IDs change.
-        // Local echos have a send "status".
         const scrollToken = eventTileRenderState.root.scrollToken;
+        const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
 
         const avatar = (
             <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
@@ -1032,51 +1000,29 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         ) : undefined;
 
-        // Thread panel shows the timestamp of the last reply in that thread
         const ts = eventTileRenderState.timestamp.value;
 
         const messageTimestampProps = this.createMessageTimestampProps(ts);
         const linkedMessageTimestampProps = this.createLinkedMessageTimestampProps(messageTimestampProps);
 
-        // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
-        const dummyTimestamp = eventTileRenderState.timestamp.showDummy ? (
-            <span className="mx_MessageTimestamp" />
-        ) : null;
-        const timestamp = eventTileRenderState.timestamp.displayState.showRealTimestamp ? (
-            <MessageTimestampAdapter
+        const timestamp = (
+            <EventTileTimestampSlot
                 eventTileViewModel={this.viewModel}
                 kind="plain"
                 timestampProps={messageTimestampProps}
+                showTimestamp={eventTileRenderState.timestamp.displayState.showRealTimestamp}
+                showDummy={eventTileRenderState.timestamp.showDummy}
             />
-        ) : (
-            dummyTimestamp
         );
-        const linkedTimestamp = eventTileRenderState.timestamp.displayState.showLinkedTimestamp ? (
-            <MessageTimestampAdapter
+        const linkedTimestamp = (
+            <EventTileTimestampSlot
                 eventTileViewModel={this.viewModel}
                 kind="linked"
                 timestampProps={linkedMessageTimestampProps}
+                showTimestamp={eventTileRenderState.timestamp.displayState.showLinkedTimestamp}
+                showDummy={eventTileRenderState.timestamp.showDummy}
             />
-        ) : (
-            dummyTimestamp
         );
-
-        let pinnedMessageBadge: JSX.Element | undefined;
-        if (hasPinnedMessageBadge) {
-            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={this.id} tabIndex={0} />;
-        }
-
-        let reactionsRow: JSX.Element | undefined;
-        if (hasReactionsRow) {
-            reactionsRow = (
-                <ReactionsRowAdapter
-                    eventTileViewModel={this.viewModel}
-                    mxEvent={this.props.mxEvent}
-                    reactions={this.state.reactions}
-                    key="mx_EventTile_reactionsRow"
-                />
-            );
-        }
 
         const groupTimestamp = eventTileRenderState.timestamp.showInGroupLine ? linkedTimestamp : null;
         const ircTimestamp = eventTileRenderState.timestamp.showInIrcLine ? linkedTimestamp : null;
@@ -1128,19 +1074,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "ref": this.ref,
-                        "className": tileClasses,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": true,
-                        "data-scroll-tokens": scrollToken,
+                        ...this.createInteractiveRootAttributes(rootRenderState),
                         "data-has-reply": !!replyChain,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
                         "data-event-id": this.props.mxEvent.getId(),
-                        "onMouseEnter": this.onMouseEnter,
-                        "onMouseLeave": this.onMouseLeave,
-                        "onFocus": this.onFocusWithin,
-                        "onBlur": this.onBlurWithin,
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
@@ -1155,55 +1093,46 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         >
                             {this.renderContextMenu()}
                             {replyChain}
-                            {renderTile(TimelineRenderingType.Thread, {
-                                ...this.props,
-
-                                // overrides
-                                ref: this.tile,
-                                replacingEventId,
-                                isSeeingThroughMessageHiddenForModeration,
-
-                                // appease TS
-                                highlights: this.props.highlights,
-                                highlightLink: this.props.highlightLink,
-                                permalinkCreator: this.props.permalinkCreator!,
-                                showHiddenEvents: this.context.showHiddenEvents,
-                            })}
+                            {renderTile(
+                                TimelineRenderingType.Thread,
+                                this.createRenderTileProps({
+                                    replacingEventId,
+                                    isSeeingThroughMessageHiddenForModeration,
+                                    permalinkCreator: this.props.permalinkCreator!,
+                                }),
+                            )}
                             {actionBar}
                             {linkedTimestamp}
                             {msgOption}
                         </div>,
-                        hasFooter && (
-                            <div className="mx_EventTile_footer" key="mx_EventTile_footer">
-                                {showMainPinnedMessageBadge && pinnedMessageBadge}
-                                {reactionsRow}
-                                {showBubblePinnedMessageBadge && pinnedMessageBadge}
-                            </div>
-                        ),
+                        <EventTileFooter
+                            key="mx_EventTile_footer"
+                            eventTileViewModel={this.viewModel}
+                            mxEvent={this.props.mxEvent}
+                            reactions={this.state.reactions}
+                            hasFooter={hasFooter}
+                            hasPinnedMessageBadge={hasPinnedMessageBadge}
+                            hasReactionsRow={hasReactionsRow}
+                            pinnedMessageBadgeAriaDescribedBy={this.id}
+                            placement="default"
+                            showMainPinnedMessageBadge={showMainPinnedMessageBadge}
+                            showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
+                        />,
                     ],
                 );
             }
             case TimelineRenderingType.Notification:
             case TimelineRenderingType.ThreadsList: {
                 const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
-                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "ref": this.ref,
-                        "className": tileClasses,
+                        ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": "true",
-                        "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
                         "data-shape": this.context.timelineRenderingType,
                         "data-self": isOwnEvent,
                         "data-has-reply": !!replyChain,
-                        "onMouseEnter": this.onMouseEnter,
-                        "onMouseLeave": this.onMouseLeave,
-                        "onFocus": this.onFocusWithin,
-                        "onBlur": this.onBlurWithin,
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
@@ -1253,19 +1182,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                            <div className="mx_EventTile_body">
-                                {this.props.mxEvent.isRedacted() ? (
-                                    <RedactedBodyFactory mxEvent={this.props.mxEvent} />
-                                ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
-                                ) : (
-                                    <EventPreviewAdapter
-                                        eventTileViewModel={this.viewModel}
-                                        mxEvent={this.props.mxEvent}
-                                    />
-                                )}
-                            </div>
-                            {this.renderThreadPanelSummary(threadState)}
+                            <EventTilePreviewBody eventTileViewModel={this.viewModel} mxEvent={this.props.mxEvent} />
+                            <EventTileThreadPanelSummary
+                                eventTileViewModel={this.viewModel}
+                                threadState={threadState}
+                            />
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
                             <ThreadListActionBarAdapter
@@ -1281,67 +1202,42 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 );
             }
             case TimelineRenderingType.File: {
-                return React.createElement(
-                    this.props.as || "li",
-                    {
-                        "className": tileClasses,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": true,
-                        "data-scroll-tokens": scrollToken,
-                    },
-                    [
-                        <a
-                            className="mx_EventTile_senderDetailsLink"
-                            key="mx_EventTile_senderDetailsLink"
-                            href={permalink}
-                            onClick={this.onPermalinkClicked}
-                        >
-                            <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
-                                {avatar}
-                                {sender}
-                                {timestamp}
-                            </div>
-                        </a>,
-                        <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
-                            {this.renderContextMenu()}
-                            {renderTile(TimelineRenderingType.File, {
-                                ...this.props,
-
-                                // overrides
-                                ref: this.tile,
+                return React.createElement(this.props.as || "li", this.createRootAttributes(rootRenderState), [
+                    <a
+                        className="mx_EventTile_senderDetailsLink"
+                        key="mx_EventTile_senderDetailsLink"
+                        href={permalink}
+                        onClick={this.onPermalinkClicked}
+                    >
+                        <div className="mx_EventTile_senderDetails" onContextMenu={this.onTimestampContextMenu}>
+                            {avatar}
+                            {sender}
+                            {timestamp}
+                        </div>
+                    </a>,
+                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        {this.renderContextMenu()}
+                        {renderTile(
+                            TimelineRenderingType.File,
+                            this.createRenderTileProps({
                                 isSeeingThroughMessageHiddenForModeration,
-
-                                // appease TS
-                                highlights: this.props.highlights,
-                                highlightLink: this.props.highlightLink,
-                                permalinkCreator: this.props.permalinkCreator,
-                                showHiddenEvents: this.context.showHiddenEvents,
-                            })}
-                        </div>,
-                    ],
-                );
+                            }),
+                        )}
+                    </div>,
+                ]);
             }
 
             default: {
                 // Pinned, Room, Search
-                // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return React.createElement(
                     this.props.as || "li",
                     {
-                        "ref": this.ref,
-                        "className": tileClasses,
+                        ...this.createInteractiveRootAttributes(rootRenderState),
                         "tabIndex": -1,
-                        "aria-live": tileAriaLive,
-                        "aria-atomic": "true",
-                        "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
                         "data-event-id": this.props.mxEvent.getId(),
                         "data-has-reply": !!replyChain,
-                        "onMouseEnter": this.onMouseEnter,
-                        "onMouseLeave": this.onMouseLeave,
-                        "onFocus": this.onFocusWithin,
-                        "onBlur": this.onBlurWithin,
                     },
                     <>
                         {ircTimestamp}
@@ -1358,42 +1254,52 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {groupTimestamp}
                             {groupPadlock}
                             {replyChain}
-                            {renderTile(this.context.timelineRenderingType, {
-                                ...this.props,
-
-                                // overrides
-                                ref: this.tile,
-                                isSeeingThroughMessageHiddenForModeration,
-
-                                // appease TS
-                                highlights: this.props.highlights,
-                                highlightLink: this.props.highlightLink,
-                                permalinkCreator: this.props.permalinkCreator,
-                                showHiddenEvents: this.context.showHiddenEvents,
-                            })}
+                            {renderTile(
+                                this.context.timelineRenderingType,
+                                this.createRenderTileProps({
+                                    isSeeingThroughMessageHiddenForModeration,
+                                }),
+                            )}
                             {actionBar}
                             {eventTileRenderState.footer.showInIrcLayout && (
                                 <>
-                                    {hasFooter && (
-                                        <div className="mx_EventTile_footer">
-                                            {pinnedMessageBadge}
-                                            {reactionsRow}
-                                        </div>
-                                    )}
-                                    {this.renderThreadInfo(threadState)}
+                                    <EventTileFooter
+                                        eventTileViewModel={this.viewModel}
+                                        mxEvent={this.props.mxEvent}
+                                        reactions={this.state.reactions}
+                                        hasFooter={hasFooter}
+                                        hasPinnedMessageBadge={hasPinnedMessageBadge}
+                                        hasReactionsRow={hasReactionsRow}
+                                        pinnedMessageBadgeAriaDescribedBy={this.id}
+                                        placement="irc"
+                                    />
+                                    <EventTileThreadInfo
+                                        eventTileViewModel={this.viewModel}
+                                        mxEvent={this.props.mxEvent}
+                                        threadState={threadState}
+                                    />
                                 </>
                             )}
                         </div>
                         {eventTileRenderState.footer.showInDefaultLayout && (
                             <>
-                                {hasFooter && (
-                                    <div className="mx_EventTile_footer">
-                                        {showMainPinnedMessageBadge && pinnedMessageBadge}
-                                        {reactionsRow}
-                                        {showBubblePinnedMessageBadge && pinnedMessageBadge}
-                                    </div>
-                                )}
-                                {this.renderThreadInfo(threadState)}
+                                <EventTileFooter
+                                    eventTileViewModel={this.viewModel}
+                                    mxEvent={this.props.mxEvent}
+                                    reactions={this.state.reactions}
+                                    hasFooter={hasFooter}
+                                    hasPinnedMessageBadge={hasPinnedMessageBadge}
+                                    hasReactionsRow={hasReactionsRow}
+                                    pinnedMessageBadgeAriaDescribedBy={this.id}
+                                    placement="default"
+                                    showMainPinnedMessageBadge={showMainPinnedMessageBadge}
+                                    showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
+                                />
+                                <EventTileThreadInfo
+                                    eventTileViewModel={this.viewModel}
+                                    mxEvent={this.props.mxEvent}
+                                    threadState={threadState}
+                                />
                             </>
                         )}
                         {msgOption}
@@ -1455,7 +1361,7 @@ class EventTileErrorBoundary extends React.Component<EventTileErrorBoundaryProps
     }
 }
 
-// Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
+/** EventTile wrapped in an error boundary so render and construction failures show a tile fallback. */
 const SafeEventTile = (props: EventTileProps): JSX.Element => {
     return (
         <EventTileErrorBoundary mxEvent={props.mxEvent}>

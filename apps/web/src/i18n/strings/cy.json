@@ -220,10 +220,7 @@
         "log_in_new_account": "<a>Mewngofnodwch</a> i'ch cyfrif newydd.",
         "logout_dialog": {
             "description": "Ydych chi'n siŵr eich bod am allgofnodi?",
-            "megolm_export": "Allforio allweddi â llaw",
             "setup_key_backup_title": "Byddwch yn colli mynediad i'ch negeseuon wedi'u hamgryptio",
-            "setup_secure_backup_description_1": "Mae negeseuon wedi'u hamgryptio yn cael eu diogelu gydag amgryptio o'r dechrau i'r diwedd. Dim ond chi a'r derbynwyr sydd â'r allweddi i ddarllen y negeseuon hyn.",
-            "setup_secure_backup_description_2": "Pan fyddwch yn allgofnodi, bydd yr allweddi hyn yn cael eu dileu o'r ddyfais hon, sy'n golygu na fyddwch yn gallu darllen negeseuon wedi'u hamgryptio oni bai bod gennych yr allweddi ar eu cyfer ar eich dyfeisiau eraill, neu eu bod wedi'u gwneud wrth gefn i'r gweinydd.",
             "skip_key_backup": "Dydw i ddim eisiau fy negeseuon wedi'u hamgryptio"
         },
         "misconfigured_body": "Gofynnwch i'ch gweinyddwr %(brand)s wirio'ch <a>ffurfweddiad</a> am gofnodion anghywir neu ddyblyg.",
@@ -988,9 +985,6 @@
         "set_up_recovery": "Gosod  adfer",
         "set_up_recovery_toast_description": "Cynhyrchwch allwedd adfer y mae modd ei defnyddio i adfer hanes eich neges wedi'i hamgryptio rhag ofn i chi golli mynediad i'ch dyfeisiau.",
         "set_up_toast_title": "Gosod Copi Wrth Gefn Diogel",
-        "setup_secure_backup": {
-            "explainer": "Gwnewch gopi wrth gefn o'ch allweddi cyn allgofnodi er mwyn osgoi eu colli."
-        },
         "turn_on_key_storage": "Troi storfa allweddi ymlaen",
         "turn_on_key_storage_description": "Cadwch eich hunaniaeth cryptograffig a'ch allweddi neges yn ddiogel ar y gweinydd. Bydd hyn yn caniatáu ichi weld hanes eich neges ar unrhyw ddyfeisiau newydd. %1$s.",
         "udd": {

@@ -170,6 +170,12 @@ export const GuestOpen: Story = {
     tags: ["!dev", "!autodocs"],
 };
 
+export const WithStatusEmoji: Story = {
+    args: {
+        statusEmoji: "🐹",
+    },
+};
+
 export const AllOptions: Story = {
     args: {
         displayName: "Alice",

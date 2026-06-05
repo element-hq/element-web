@@ -188,10 +188,7 @@
         "log_in_new_account": "<a>Accede</a> usando a conta nova.",
         "logout_dialog": {
             "description": "Tes a certeza de querer saír?",
-            "megolm_export": "Exportar manualmente as chaves",
             "setup_key_backup_title": "Perderás o acceso as túas mensaxes cifradas",
-            "setup_secure_backup_description_1": "As mensaxes cifradas están seguras con cifrado de extremo-a-extremo. Só ti e o correpondente(s) tedes as chaves para ler as mensaxes.",
-            "setup_secure_backup_description_2": "Ao saír, estas chaves serán eliminadas deste dispositivo, o que significa que non poderás ler as mensaxes cifradas a menos que teñas as chaves noutro dos teus dispositivos, ou unha copia de apoio no servidor.",
             "skip_key_backup": "Non quero as miñas mensaxes cifradas"
         },
         "misconfigured_body": "Pídelle a administración do teu %(brand)s que comprobe a <a>configuración</a> para entradas duplicadas ou incorrectas.",
@@ -700,9 +697,6 @@
             "warning": "Se non eliminaches o método de recuperación, un atacante podería estar a intentar acceder á túa conta. Cambia inmediatamente o contrasinal da conta e establece un novo método de recuperación nos Axustes."
         },
         "set_up_toast_title": "Configurar Copia de apoio Segura",
-        "setup_secure_backup": {
-            "explainer": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas."
-        },
         "udd": {
             "interactive_verification_button": "Verificar interactivamente usando emoji",
             "other_ask_verify_text": "Pídelle a usuaria que verifique a súa sesión, ou verificaa manualmente aquí.",

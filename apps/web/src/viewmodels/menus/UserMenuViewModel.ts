@@ -42,6 +42,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             expanded: !isPanelCollapsed,
             manageAccountHref: accountManagementEndpoint,
             showAvatar: isAuthenticated,
+            statusEmoji: OwnProfileStore.instance.userStatus?.emoji,
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,
@@ -72,7 +73,8 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     public readonly recalculateProfile = (): void => {
         const displayName = OwnProfileStore.instance.displayName || this.snapshot.current.userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
-        this.snapshot.merge({ displayName, avatarUrl });
+        const statusEmoji = OwnProfileStore.instance.userStatus?.emoji;
+        this.snapshot.merge({ displayName, avatarUrl, statusEmoji });
     };
 
     public readonly setOpen = (isOpen: boolean): void => {

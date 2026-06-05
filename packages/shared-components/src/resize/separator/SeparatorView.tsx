@@ -33,14 +33,9 @@ export interface SeparatorViewActions {
     onPointerDown: () => void;
 
     /**
-     * onFocus handler for the separator.
+     * onDoubleClick handler for the separator.
      */
-    onFocus: () => void;
-
-    /**
-     * onBlur handler for the separator.
-     */
-    onBlur: () => void;
+    onDoubleClick: () => void;
 }
 
 interface Props {
@@ -53,14 +48,14 @@ interface Props {
  */
 export function SeparatorView({ vm, className }: Props): React.ReactNode {
     const { translate: _t } = useI18n();
-    const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
+    const { isCollapsed } = useViewModel(vm);
 
     /**
      * There are two types of separator:
      * - bar: This shows a thick bar separator with a resize icon in the middle; shown when the panel is collapsed.
-     * - border: This is just a 1px wide separator; shown when the panel is expanded.
+     * - border: This is just a thin separator; shown when the panel is expanded.
      */
-    const type = isCollapsed || isFocusedViaKeyboard ? "bar" : "border";
+    const type = isCollapsed ? "bar" : "border";
 
     const barContent = (
         <Tooltip description={_t("left_panel|separator_label")} placement="right">
@@ -75,19 +70,29 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
         </Tooltip>
     );
 
+    /**
+     * This border is:
+     * - a 1px border that separates the left panel and main content.
+     * - a 2px border when the panel is expanded and the user is interacting with the separator.
+     */
+    const border = (
+        <div className={styles.activeSeparatorContainer}>
+            <div className={styles.activeSeparator} />
+        </div>
+    );
+
     return (
         <Separator
             className={classNames(styles.separator, className)}
             onPointerUp={vm.onPointerUp}
             onPointerMove={vm.onPointerMove}
             onPointerDown={vm.onPointerDown}
-            onFocus={vm.onFocus}
-            onBlur={vm.onBlur}
             aria-label={_t("left_panel|separator_label")}
             data-separator-type={type}
+            onDoubleClick={vm.onDoubleClick}
             disableDoubleClick
         >
-            {type === "bar" ? barContent : null}
+            {type === "bar" ? barContent : border}
         </Separator>
     );
 }

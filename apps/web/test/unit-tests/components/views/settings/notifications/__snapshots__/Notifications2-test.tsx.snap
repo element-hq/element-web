@@ -12,13 +12,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
         class="mx_SettingsSection_subSections"
       >
         <form
-          class="_root_19upo_16 mx_SettingsSubsection_content"
+          class="_root_1o4d9_17 mx_SettingsSubsection_content"
         >
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -37,10 +37,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="react-use-id-1"
               >
                 Enable notifications for this account
@@ -48,10 +48,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -68,10 +68,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="mx_SettingsFlag_vY7Q4uEh9K38"
               >
                 Enable desktop notifications for this session
@@ -79,10 +79,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -99,10 +99,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="mx_SettingsFlag_QgU2PomxwKpa"
               >
                 Show message preview in desktop notification
@@ -110,10 +110,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -131,10 +131,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="mx_SettingsFlag_6hpi3YEetmBG"
               >
                 Enable audible notifications for this session
@@ -263,13 +263,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -300,10 +300,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_4yVCeEefiP"
                     >
                       <span
@@ -320,13 +320,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -357,10 +357,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_qpMRMwbPDm"
                     >
                       <span
@@ -377,13 +377,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -414,10 +414,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_fGtmGQvdMW"
                     >
                       <span
@@ -451,13 +451,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -488,10 +488,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_e954DVIAu5"
                     >
                       <span
@@ -508,13 +508,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -544,10 +544,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_CsiHRD7nyr"
                     >
                       <span
@@ -564,13 +564,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -601,10 +601,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_A2ohjWVJIP"
                     >
                       <span
@@ -659,13 +659,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -696,10 +696,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_auy1OmnTid"
                     >
                       <span
@@ -717,13 +717,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               id="mx_NotificationSettings2_MentionCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -754,10 +754,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_X4ePDS0OpW"
                     >
                       <span
@@ -774,13 +774,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -812,10 +812,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_wAHG75JNTN"
                     >
                       <span
@@ -825,7 +825,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       </span>
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="react-use-id-2"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
@@ -874,13 +874,13 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
               />
             </div>
             <form
-              class="_root_19upo_16"
+              class="_root_1o4d9_17"
             >
               <div
-                class="_inline-field_19upo_32"
+                class="_inline-field_1o4d9_33"
               >
                 <div
-                  class="_inline-field-control_19upo_44"
+                  class="_inline-field-control_1o4d9_45"
                 >
                   <div
                     class="_container_udcm8_10"
@@ -898,10 +898,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_19upo_38"
+                  class="_inline-field-body_1o4d9_39"
                 >
                   <label
-                    class="_label_19upo_59"
+                    class="_label_1o4d9_60"
                     for="mx_SettingsFlag_kNU64raTLcRs"
                   >
                     Show all activity in the room list (dots or number of unread messages)
@@ -909,10 +909,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                 </div>
               </div>
               <div
-                class="_inline-field_19upo_32"
+                class="_inline-field_1o4d9_33"
               >
                 <div
-                  class="_inline-field-control_19upo_44"
+                  class="_inline-field-control_1o4d9_45"
                 >
                   <div
                     class="_container_udcm8_10"
@@ -930,10 +930,10 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_19upo_38"
+                  class="_inline-field-body_1o4d9_39"
                 >
                   <label
-                    class="_label_19upo_59"
+                    class="_label_1o4d9_60"
                     for="mx_SettingsFlag_QRlYy75nfv5b"
                   >
                     Only show notifications in the thread activity centre
@@ -1037,13 +1037,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
         class="mx_SettingsSection_subSections"
       >
         <form
-          class="_root_19upo_16 mx_SettingsSubsection_content"
+          class="_root_1o4d9_17 mx_SettingsSubsection_content"
         >
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -1061,10 +1061,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="react-use-id-1"
               >
                 Enable notifications for this account
@@ -1072,10 +1072,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -1092,10 +1092,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="mx_SettingsFlag_vY7Q4uEh9K38"
               >
                 Enable desktop notifications for this session
@@ -1103,10 +1103,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -1123,10 +1123,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="mx_SettingsFlag_QgU2PomxwKpa"
               >
                 Show message preview in desktop notification
@@ -1134,10 +1134,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field_19upo_32"
+            class="_inline-field_1o4d9_33"
           >
             <div
-              class="_inline-field-control_19upo_44"
+              class="_inline-field-control_1o4d9_45"
             >
               <div
                 class="_container_udcm8_10"
@@ -1155,10 +1155,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               </div>
             </div>
             <div
-              class="_inline-field-body_19upo_38"
+              class="_inline-field-body_1o4d9_39"
             >
               <label
-                class="_label_19upo_59"
+                class="_label_1o4d9_60"
                 for="mx_SettingsFlag_6hpi3YEetmBG"
               >
                 Enable audible notifications for this session
@@ -1284,13 +1284,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1320,10 +1320,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_OEPN1su1JY"
                     >
                       <span
@@ -1340,13 +1340,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1376,10 +1376,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_VtOyR5kbu3"
                     >
                       <span
@@ -1396,13 +1396,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1432,10 +1432,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_pEwuLn9Enn"
                     >
                       <span
@@ -1469,13 +1469,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1505,10 +1505,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_YuxfFEpOsz"
                     >
                       <span
@@ -1525,13 +1525,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1560,10 +1560,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_tWhQkBerF1"
                     >
                       <span
@@ -1580,13 +1580,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1616,10 +1616,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_ejc4GFes1U"
                     >
                       <span
@@ -1674,13 +1674,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1710,10 +1710,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_FzOK2nvfGF"
                     >
                       <span
@@ -1731,13 +1731,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               id="mx_NotificationSettings2_MentionCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1767,10 +1767,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_MldL2r2vbs"
                     >
                       <span
@@ -1787,13 +1787,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               class="mx_LabelledCheckbox"
             >
               <form
-                class="_root_19upo_16"
+                class="_root_1o4d9_17"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_153f2_10"
@@ -1824,10 +1824,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="checkbox_SwicmKUiOB"
                     >
                       <span
@@ -1837,7 +1837,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       </span>
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="react-use-id-2"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
@@ -2100,13 +2100,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
               </div>
             </div>
             <form
-              class="_root_19upo_16"
+              class="_root_1o4d9_17"
             >
               <div
-                class="_inline-field_19upo_32"
+                class="_inline-field_1o4d9_33"
               >
                 <div
-                  class="_inline-field-control_19upo_44"
+                  class="_inline-field-control_1o4d9_45"
                 >
                   <div
                     class="_container_udcm8_10"
@@ -2124,10 +2124,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_19upo_38"
+                  class="_inline-field-body_1o4d9_39"
                 >
                   <label
-                    class="_label_19upo_59"
+                    class="_label_1o4d9_60"
                     for="mx_SettingsFlag_kNU64raTLcRs"
                   >
                     Show all activity in the room list (dots or number of unread messages)
@@ -2135,10 +2135,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="_inline-field_19upo_32"
+                class="_inline-field_1o4d9_33"
               >
                 <div
-                  class="_inline-field-control_19upo_44"
+                  class="_inline-field-control_1o4d9_45"
                 >
                   <div
                     class="_container_udcm8_10"
@@ -2156,10 +2156,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field-body_19upo_38"
+                  class="_inline-field-body_1o4d9_39"
                 >
                   <label
-                    class="_label_19upo_59"
+                    class="_label_1o4d9_60"
                     for="mx_SettingsFlag_QRlYy75nfv5b"
                   >
                     Only show notifications in the thread activity centre
@@ -2215,13 +2215,13 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                 class="mx_LabelledCheckbox"
               >
                 <form
-                  class="_root_19upo_16"
+                  class="_root_1o4d9_17"
                 >
                   <div
-                    class="_inline-field_19upo_32"
+                    class="_inline-field_1o4d9_33"
                   >
                     <div
-                      class="_inline-field-control_19upo_44"
+                      class="_inline-field-control_1o4d9_45"
                     >
                       <div
                         class="_container_153f2_10"
@@ -2250,10 +2250,10 @@ exports[`<Notifications /> matches the snapshot 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_inline-field-body_19upo_38"
+                      class="_inline-field-body_1o4d9_39"
                     >
                       <label
-                        class="_label_19upo_59"
+                        class="_label_1o4d9_60"
                         for="checkbox_dvqsxEaZtl"
                       >
                         <span
