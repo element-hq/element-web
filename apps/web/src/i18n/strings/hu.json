@@ -270,7 +270,6 @@
             "point_the_camera": "Irányítsa a kamerát az itt látható QR-kódra",
             "scan_code_instruction": "Olvassa be a QR-kódot egy másik eszközzel",
             "scan_qr_code": "Bejelentkezés QR-kóddal",
-            "security_code": "Biztonsági kód",
             "security_code_prompt": "Ha a rendszer kéri, írja be az alábbi kódot a másik eszközön.",
             "select_qr_code": "Válassza a „%(scanQRCode)s” lehetőséget",
             "unsupported_explainer": "Fiókszolgáltatója nem támogatja a bejelentkezést egy új eszközre QR-kóddal.",

@@ -9,6 +9,13 @@ on:
 permissions: {} # No permissions needed
 jobs:
     upload:
-        uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_upload.yaml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
-        secrets:
-            LOCALAZY_WRITE_KEY: ${{ secrets.LOCALAZY_WRITE_KEY }}
+        environment: Localazy
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              with:
+                  persist-credentials: false
+
+            - uses: localazy/upload@27e6b5c0fddf4551596b42226b1c24124335d24a # v1
+              with:
+                  write_key: ${{ secrets.LOCALAZY_WRITE_KEY }}
