@@ -5,9 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig, mergeConfig } from "vitest/config";
+import { defineConfig, mergeConfig, type Plugin } from "vitest/config";
 import dts from "unplugin-dts/vite";
 import externalGlobals from "rollup-plugin-external-globals";
 import baseConfig from "@element-hq/vite-common/vite.config";
@@ -15,6 +16,35 @@ import baseConfig from "@element-hq/vite-common/vite.config";
 import packageJson from "./package.json" with { type: "json" };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const apiTypesFileName = "element-web-module-api-alpha.d.ts";
+
+function copyPackageTypesEntry(): Plugin {
+    return {
+        name: "element-web-module-api-types-entry",
+        writeBundle(options): void {
+            const outDir = options.dir ?? resolve(__dirname, "lib");
+            const entryTypesPath = resolve(outDir, "index.d.ts");
+            const packageTypesPath = resolve(outDir, apiTypesFileName);
+
+            if (!existsSync(entryTypesPath)) return;
+
+            const source = readFileSync(entryTypesPath, "utf-8");
+            writeFileSync(
+                packageTypesPath,
+                source.replace("sourceMappingURL=index.d.ts.map", `sourceMappingURL=${apiTypesFileName}.map`),
+            );
+
+            const entryTypesMapPath = resolve(outDir, "index.d.ts.map");
+            if (!existsSync(entryTypesMapPath)) return;
+
+            const sourceMap = readFileSync(entryTypesMapPath, "utf-8");
+            writeFileSync(
+                `${packageTypesPath}.map`,
+                sourceMap.replace('"file":"index.d.ts"', `"file":"${apiTypesFileName}"`),
+            );
+        },
+    };
+}
 
 export default mergeConfig(
     baseConfig,
@@ -31,6 +61,7 @@ export default mergeConfig(
         },
         plugins: [
             dts(),
+            copyPackageTypesEntry(),
             externalGlobals({
                 // Reuse React from the host app
                 react: "window.React",
