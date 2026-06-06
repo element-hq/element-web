@@ -2131,7 +2131,7 @@
         "upgrade_error_title": "升级房间时出错",
         "upgrade_warning_bar": "升级此房间将关闭当前的房间实例，并创建一个同名的已升级房间。",
         "upgrade_warning_bar_admins": "仅房间管理员可以看到此警告",
-        "upgrade_warning_bar_unstable": "此房间正在运行房间版本 <roomVersion />，此主服务器已将其标记为<i>不稳定</i>。",
+        "upgrade_warning_bar_nonstable": "此房间正在运行房间版本 <roomVersion />，此主服务器已将其标记为<kind />。",
         "upgrade_warning_bar_upgraded": "此房间已升级过。",
         "upload": {
             "uploading_multiple_file": {

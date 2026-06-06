@@ -2446,7 +2446,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 );
             }
         } else if (showRoomUpgradeBar) {
-            aux = <RoomUpgradeWarningBar room={this.state.room} />;
+            aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={this.state.upgradeRecommendation} />;
         } else if (myMembership !== KnownMembership.Join) {
             // We do have a room object for this room, but we're not currently in it.
             // We may have a 3rd party invite to it.

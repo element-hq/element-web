@@ -1603,7 +1603,7 @@
         "upgrade_error_title": "Lỗi khi nâng cấp phòng",
         "upgrade_warning_bar": "Việc nâng cấp phòng này sẽ đóng phiên bản hiện tại của phòng và tạo một phòng được nâng cấp có cùng tên.",
         "upgrade_warning_bar_admins": "Chỉ quản trị viên phòng mới thấy cảnh báo này",
-        "upgrade_warning_bar_unstable": "Phòng này đang chạy phiên bản phòng <roomVersion /> mà máy chủ này đã đánh dấu là không ổn định <i>unstable</i>.",
+        "upgrade_warning_bar_nonstable": "Phòng này đang chạy phiên bản phòng <roomVersion /> mà máy chủ này đã đánh dấu là không ổn định <kind />.",
         "upgrade_warning_bar_upgraded": "Phòng này đã được nâng cấp.",
         "upload": {
             "uploading_multiple_file": {

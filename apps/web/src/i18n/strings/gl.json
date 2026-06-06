@@ -1487,7 +1487,7 @@
         "upgrade_error_title": "Fallo ao actualizar a sala",
         "upgrade_warning_bar": "Ao actualizar a sala pecharás a instancia actual da sala e crearás unha versión mellorada co mesmo nome.",
         "upgrade_warning_bar_admins": "Só a administración da sala pode ver este aviso",
-        "upgrade_warning_bar_unstable": "A sala está usando a versión <roomVersion />, que este servidor considera como <i>non estable</i>.",
+        "upgrade_warning_bar_nonstable": "A sala está usando a versión <roomVersion />, que este servidor considera como <kind />.",
         "upgrade_warning_bar_upgraded": "Esta sala xa foi actualizada.",
         "upload": {
             "uploading_multiple_file": {

@@ -1239,7 +1239,7 @@
         "upgrade_error_title": "שגיאה בשדרוג חדר",
         "upgrade_warning_bar": "שדרוג חדר זה יסגור את המופע הנוכחי של החדר וייצור חדר משודרג עם אותו שם.",
         "upgrade_warning_bar_admins": "רק מנהלי חדרים יראו את האזהרה הזו",
-        "upgrade_warning_bar_unstable": "חדר זה מריץ את גרסת החדר <roomVersion/>, ששרת הבית הזה סימן כ- <i> לא יציב </i>.",
+        "upgrade_warning_bar_nonstable": "חדר זה מריץ את גרסת החדר <roomVersion/>, ששרת הבית הזה סימן כ- <kind />.",
         "upgrade_warning_bar_upgraded": "החדר הזה כבר שודרג.",
         "upload": {
             "uploading_multiple_file": {

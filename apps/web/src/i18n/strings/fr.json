@@ -2117,7 +2117,7 @@
         "upgrade_error_title": "Erreur lors de la mise à niveau du salon",
         "upgrade_warning_bar": "La mise à niveau du salon désactivera cette instance du salon et créera un salon mis à niveau avec le même nom.",
         "upgrade_warning_bar_admins": "Seuls les administrateurs du salon verront cet avertissement",
-        "upgrade_warning_bar_unstable": "Ce salon utilise la version <roomVersion />, que ce serveur d’accueil a marqué comme <i>instable</i>.",
+        "upgrade_warning_bar_nonstable": "Ce salon utilise la version <roomVersion />, que ce serveur d’accueil a marqué comme <kind />.",
         "upgrade_warning_bar_upgraded": "Ce salon a déjà été mis à niveau.",
         "upload": {
             "uploading_multiple_file": {

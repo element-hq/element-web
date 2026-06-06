@@ -2002,7 +2002,7 @@
         "upgrade_error_title": "Սենյակի թարմացման սխալ",
         "upgrade_warning_bar": "Այս սենյակի արդիականացումը կփակի սենյակի ներկայիս օրինակը և կստեղծի արդիականացված սենյակ նույն անունով։",
         "upgrade_warning_bar_admins": "Միայն սենյակի ադմինիստրատորները կտեսնեն այս նախազգուշացումը",
-        "upgrade_warning_bar_unstable": "Այս սենյակում աշխատում է <roomVersion /> սենյակի տարբերակը, որը այս սերվերը նշել է որպես <i>անկայուն</i>:",
+        "upgrade_warning_bar_nonstable": "Այս սենյակում աշխատում է <roomVersion /> սենյակի տարբերակը, որը այս սերվերը նշել է որպես <kind />:",
         "upgrade_warning_bar_upgraded": "Այս սենյակն արդեն արդիականացվել է։",
         "upload": {
             "uploading_multiple_file": {

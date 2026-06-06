@@ -1723,7 +1723,7 @@
         "upgrade_error_title": "Fallo al mejorar la sala",
         "upgrade_warning_bar": "Actualizar esta sala cerrará la instancia actual de la sala y creará una sala actualizada con el mismo nombre.",
         "upgrade_warning_bar_admins": "Sólo los administradores de la sala verán esta advertencia",
-        "upgrade_warning_bar_unstable": "Esta sala está ejecutando la versión de sala <roomVersion />, la cual ha sido marcado por este servidor base como <i>inestable</i>.",
+        "upgrade_warning_bar_nonstable": "Esta sala está ejecutando la versión de sala <roomVersion />, la cual ha sido marcado por este servidor base como <kind />.",
         "upgrade_warning_bar_upgraded": "Esta sala ya ha sido actualizada.",
         "upload": {
             "uploading_multiple_file": {

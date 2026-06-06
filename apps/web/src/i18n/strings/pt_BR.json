@@ -2053,7 +2053,7 @@
         "upgrade_error_title": "Erro atualizando a sala",
         "upgrade_warning_bar": "Atualizar esta sala irá fechar a instância atual da sala e criar uma sala atualizada com o mesmo nome.",
         "upgrade_warning_bar_admins": "Somente administradores de sala verão esse alerta",
-        "upgrade_warning_bar_unstable": "Esta sala está executando a versão <roomVersion />, que este servidor marcou como <i>instável</i>.",
+        "upgrade_warning_bar_nonstable": "Esta sala está executando a versão <roomVersion />, que este servidor marcou como <kind />.",
         "upgrade_warning_bar_upgraded": "Esta sala já foi atualizada.",
         "upload": {
             "uploading_multiple_file": {

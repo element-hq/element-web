@@ -1172,7 +1172,7 @@
         "upgrade_error_title": "خطا در ارتقاء نسخه اتاق",
         "upgrade_warning_bar": "با ارتقا این اتاق نسخه فعلی اتاق خاموش شده و یک اتاق ارتقا یافته به همین نام ایجاد می شود.",
         "upgrade_warning_bar_admins": "فقط مدیران اتاق این هشدار را مشاهده خواهند کرد",
-        "upgrade_warning_bar_unstable": "این اتاق از نسخه اتاق <roomVersion /> استفاده می کند، که این سرور آن را به عنوان <i> ناپایدار</i> علامت گذاری کرده است.",
+        "upgrade_warning_bar_nonstable": "این اتاق از نسخه اتاق <roomVersion /> استفاده می کند، که این سرور آن را به عنوان <kind /> علامت گذاری کرده است.",
         "upgrade_warning_bar_upgraded": "این اتاق قبلاً ارتقا یافته است.",
         "upload": {
             "uploading_multiple_file": {

@@ -1455,7 +1455,7 @@
         "upgrade_error_title": "ເກີດຄວາມຜິດພາດໃນການຍົກລະດັບຫ້ອງ",
         "upgrade_warning_bar": "ການຍົກລະດັບຫ້ອງນີ້ຈະປິດຕົວຢ່າງປັດຈຸບັນຂອງຫ້ອງ ແລະ ຍົກລະດັບການສ້າງຫ້ອງທີ່ມີຊື່ດຽວກັນ.",
         "upgrade_warning_bar_admins": "ມີແຕ່ຜູ້ຄຸ້ມຄອງຫ້ອງເທົ່ານັ້ນທີ່ເຫັນຄຳເຕືອນນີ້",
-        "upgrade_warning_bar_unstable": "ຫ້ອງນີ້ກຳລັງດຳເນິນເວີຊັ້ນຫ້ອງ <roomVersion />, ເຊິ່ງ homeserver ນີ້ໄດ້ສ້າງເຄື່ອງໝາຍເປັນ <i>unstable</i>.",
+        "upgrade_warning_bar_nonstable": "ຫ້ອງນີ້ກຳລັງດຳເນິນເວີຊັ້ນຫ້ອງ <roomVersion />, ເຊິ່ງ homeserver ນີ້ໄດ້ສ້າງເຄື່ອງໝາຍເປັນ <kind />.",
         "upgrade_warning_bar_upgraded": "ຫ້ອງນີ້ໄດ້ຖືກປັບປຸງແລ້ວ.",
         "upload": {
             "uploading_multiple_file": {

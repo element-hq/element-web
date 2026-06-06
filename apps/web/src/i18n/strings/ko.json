@@ -2081,7 +2081,7 @@
         "upgrade_error_title": "방 업그레이드 오류",
         "upgrade_warning_bar": "이 방을 업그레이드하면 현재 방의 인스턴스는 문을 닫고 같은 이름의 업그레이드된 방을 만듭니다.",
         "upgrade_warning_bar_admins": "방 관리자만이 이 경고를 볼 수 있음",
-        "upgrade_warning_bar_unstable": "이 방은 방 버전 <roomVersion />에서 실행 중이고, 이 홈서버가 <i>불안정</i>으로 표시됩니다.",
+        "upgrade_warning_bar_nonstable": "이 방은 방 버전 <roomVersion />에서 실행 중이고, 이 홈서버가 <kind />으로 표시됩니다.",
         "upgrade_warning_bar_upgraded": "이 방은 이미 업그레이드됬습니다.",
         "upload": {
             "uploading_multiple_file": {

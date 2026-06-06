@@ -1659,7 +1659,7 @@
         "upgrade_error_title": "Gabim në përditësim dhome",
         "upgrade_warning_bar": "Përmirësimi i kësaj dhome do të asgjësojë instancën e tanishme të dhomës dhe do të krijojë një dhomë të përmirësuar me të njëjtin emër.",
         "upgrade_warning_bar_admins": "Këtë sinjalizim mund ta shohin vetëm përgjegjësit e dhomës",
-        "upgrade_warning_bar_unstable": "Kjo dhomë gjendet nën versionin <roomVersion /> e dhomës, të cilit shërbyesi Home i ka vënë shenjë si <i>i paqëndrueshëm</i>.",
+        "upgrade_warning_bar_nonstable": "Kjo dhomë gjendet nën versionin <roomVersion /> e dhomës, të cilit shërbyesi Home i ka vënë shenjë si <kind />.",
         "upgrade_warning_bar_upgraded": "Kjo dhomë është përmirësuar tashmë.",
         "upload": {
             "uploading_multiple_file": {

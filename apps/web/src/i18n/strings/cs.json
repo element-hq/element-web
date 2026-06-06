@@ -2137,7 +2137,7 @@
         "upgrade_error_title": "Chyba při aktualizaci místnosti",
         "upgrade_warning_bar": "Aktualizace místnosti uzavře její aktuální verzi a vyrobí novou místnost se stejným názvem a novou verzí.",
         "upgrade_warning_bar_admins": "Toto upozornění uvidí jen správci místnosti",
-        "upgrade_warning_bar_unstable": "Tato místnost běží na verzi <roomVersion />, což domovský server označuje za <i>nestabilní</i>.",
+        "upgrade_warning_bar_nonstable": "Tato místnost běží na verzi <roomVersion />, což domovský server označuje za <kind />.",
         "upgrade_warning_bar_upgraded": "Tato místnost byla již aktualizována.",
         "upload": {
             "uploading_multiple_file": {

@@ -1707,7 +1707,7 @@
         "upgrade_error_title": "Atjauninot istabu, radās kļūda",
         "upgrade_warning_bar": "Atjauninot šo istabu, tiks slēgta pašreizējā istabas instance un izveidota atjaunināta istaba ar tādu pašu nosaukumu.",
         "upgrade_warning_bar_admins": "Tikai istabas administratori redzēs šo brīdinājumu",
-        "upgrade_warning_bar_unstable": "Šī istaba darbojas ar istabas versiju <roomVersion />, kuru šis mājasserveris ir atzīmējis kā <i>nenoturīgu</i>.",
+        "upgrade_warning_bar_nonstable": "Šī istaba darbojas ar istabas versiju <roomVersion />, kuru šis mājasserveris ir atzīmējis kā <kind />.",
         "upgrade_warning_bar_upgraded": "Šī istaba jau ir atjaunināta.",
         "upload": {
             "uploading_multiple_file": {
