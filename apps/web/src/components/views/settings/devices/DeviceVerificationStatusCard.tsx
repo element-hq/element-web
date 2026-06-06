@@ -45,7 +45,7 @@ const getCardProps = (
     }
     if (device.isVerified === null) {
         return {
-            variation: DeviceSecurityVariation.Unverified,
+            variation: DeviceSecurityVariation.Unverifiable,
             heading: _t("settings|sessions|unverified_session"),
             description: (
                 <>

@@ -52,11 +52,22 @@ const getInactiveMetadata = (device: ExtendedDevice): { id: string; value: React
 const DeviceMetaDatum: React.FC<{ value: string | React.ReactNode; id: string }> = ({ value, id }) =>
     value ? <span data-testid={`device-metadata-${id}`}>{value}</span> : null;
 
+function getVerifiedTextStatus(isVerified: boolean | null): string {
+    switch (isVerified) {
+        case true:
+            return _t("common|verified");
+        case false:
+            return _t("common|unverified");
+        case null:
+            return _t("common|unverifiable");
+    }
+}
+
 export const DeviceMetaData: React.FC<Props> = ({ device }) => {
     const inactive = getInactiveMetadata(device);
     const lastActivity =
         device.last_seen_ts && `${_t("settings|sessions|last_activity")} ${formatLastActivity(device.last_seen_ts)}`;
-    const verificationStatus = device.isVerified ? _t("common|verified") : _t("common|unverified");
+    const verificationStatus = getVerifiedTextStatus(device.isVerified);
     // if device is inactive, don't display last activity or verificationStatus
     const metadata = inactive
         ? [inactive, { id: "lastSeenIp", value: device.last_seen_ip }]
