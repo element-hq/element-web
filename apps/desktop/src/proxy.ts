@@ -11,19 +11,35 @@ Please see LICENSE files in the repository root for full details.
 
 import { session, app } from "electron";
 
+/**
+ * Configuration options for the proxy.
+ */
 export interface DesktopProxyConfig {
+    /** The proxy mode to use. */
     mode: "system" | "direct" | "custom";
+    /** The protocol scheme for the proxy server. */
     scheme?: "http" | "https" | "socks5" | "socks5h";
+    /** The hostname or IP address of the proxy server. */
     host?: string;
+    /** The port number of the proxy server. */
     port?: number;
+    /** The username for proxy authentication. */
     username?: string;
+    /** The password for proxy authentication. */
     password?: string;
+    /** A comma-separated list of hosts to bypass the proxy. */
     bypass?: string;
 }
 
+/**
+ * Fixed configuration options passed to Electron.
+ */
 interface ElectronFixedConfig {
+    /** The proxy mode for Electron. */
     mode: "system" | "direct" | "fixed_servers" | "auto_detect";
+    /** The rules for proxying requests. */
     proxyRules?: string;
+    /** The rules for bypassing the proxy. */
     proxyBypassRules?: string;
 }
 

@@ -55,7 +55,8 @@
     },
     "settings": {
         "network_proxy": {
-            "title": "Network Proxy"
+            "title": "Network Proxy",
+            "title_ellipsis": "Network Proxy…"
         }
     },
     "right_click_menu": {

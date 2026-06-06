@@ -16,16 +16,27 @@ import styles from "./NetworkProxyView.module.css";
  * The snapshot representing the current state of the NetworkProxy configuration.
  */
 export interface NetworkProxyViewSnapshot {
+    /** The configured proxy mode. */
     mode: "system" | "direct" | "custom";
+    /** The protocol scheme for custom proxy. */
     scheme: string;
+    /** The host for custom proxy. */
     host: string;
+    /** The port for custom proxy. */
     port: string;
+    /** The username for proxy authentication. */
     username: string;
+    /** The password for proxy authentication. */
     password: string;
+    /** A comma-separated list of hosts to bypass the proxy. */
     bypass: string;
+    /** Whether there are unsaved changes. */
     hasChanges: boolean;
+    /** Whether the current configuration is valid and can be saved. */
     isValid: boolean;
+    /** Whether a save operation is currently in progress. */
     loading: boolean;
+    /** An error message if saving failed, otherwise null. */
     error: string | null;
 }
 
@@ -33,14 +44,23 @@ export interface NetworkProxyViewSnapshot {
  * Actions that can be performed on the NetworkProxyView.
  */
 export interface NetworkProxyViewActions {
+    /** Updates the proxy mode. */
     updateMode: (mode: "system" | "direct" | "custom") => void;
+    /** Updates the proxy scheme. */
     updateScheme: (scheme: string) => void;
+    /** Updates the proxy host. */
     updateHost: (host: string) => void;
+    /** Updates the proxy port. */
     updatePort: (port: string) => void;
+    /** Updates the proxy username. */
     updateUsername: (username: string) => void;
+    /** Updates the proxy password. */
     updatePassword: (password: string) => void;
+    /** Updates the proxy bypass rules. */
     updateBypass: (bypass: string) => void;
+    /** Saves the current proxy configuration. */
     save: () => Promise<void>;
+    /** Cancels the proxy configuration and closes the view. */
     cancel: () => void;
 }
 

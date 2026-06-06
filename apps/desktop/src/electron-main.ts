@@ -553,8 +553,6 @@ app.on("ready", async () => {
                         console.error("Wayland: failed to get user-selected source:", err);
                         callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
                     });
-            } else {
-                global.mainWindow?.webContents.send("openProxySettings");
             }
             setDisplayMediaCallback(callback);
         },
