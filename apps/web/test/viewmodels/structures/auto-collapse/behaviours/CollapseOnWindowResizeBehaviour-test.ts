@@ -16,7 +16,8 @@ describe("CollapseOnWindowResizeBehaviour", () => {
         const expandPanel = jest.fn();
         const collapsePanel = jest.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
-        // @ts-expect-error unused variable
+        // @ts-ignore
+        // eslint-disable-next-line
         const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
         // Making the window smaller should collapse the panel.
         UIStore.instance.emit(UI_EVENTS.WidthDecreased, 750);
@@ -39,7 +40,8 @@ describe("CollapseOnWindowResizeBehaviour", () => {
 
     it("should return correct shouldStartCollapsed", () => {
         const collapseHandler = new CollapseHandler(jest.fn(), jest.fn(), 0);
-        // @ts-expect-error unused variable
+        // @ts-ignore
+        // eslint-disable-next-line
         const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
         // When the window is smaller than 768px, start collapsed.
         UIStore.instance.windowWidth = 750;
