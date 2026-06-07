@@ -52,10 +52,27 @@ export class ResizerViewModel
      */
     private readonly mouseClickHandler: MouseClickHandler;
 
+    /**
+     * Orchestrator for auto collapse behaviour.
+     */
+    private readonly autoCollapse: AutoCollapse;
+
+    /**
+     * Tracks whether we've seen the first resized event.
+     */
+    private firstResizedEventSeen = false;
+
     public constructor() {
         super(undefined, getInitialState());
+
         // Run onSeparatorClick when the separator is clicked.
         this.mouseClickHandler = new MouseClickHandler(this.onSeparatorClick);
+        this.autoCollapse = this.disposables.track(
+            new AutoCollapse(this.onSeparatorClick, () => {
+                this.panelHandle?.collapse();
+                this.snapshot.merge({ isCollapsed: true });
+            }),
+        );
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {
@@ -64,6 +81,19 @@ export class ResizerViewModel
     }, 50);
 
     public onLeftPanelResized = (newSize: number): void => {
+        if (!this.firstResizedEventSeen) {
+            // When the panel is first rendered, we get a resized event.
+            // This should be ignored to prevent rewriting the setting value and
+            // to avoid confusing the collapse behaviour code.
+            this.firstResizedEventSeen = true;
+            return;
+        }
+
+        // Early return if we should be ignoring this event due to some auto-collapse behaviour.
+        if (this.autoCollapse.shouldIgnoreResize) return;
+
+        this.autoCollapse.onLeftPanelResized();
+
         // We don't want the panels to have fractional widths as that can cause blurry UI elements.
         if (!Number.isInteger(newSize)) {
             this.panelHandle?.resize(`${Math.round(newSize)}%`);
@@ -91,6 +121,7 @@ export class ResizerViewModel
         if (this.panelHandle?.isCollapsed()) {
             const lastSize = SettingsStore.getValue("RoomList.panelSize");
             this.panelHandle.resize(`${lastSize ?? 100}%`);
+            this.autoCollapse.onLeftPanelResized();
         }
     };
 
