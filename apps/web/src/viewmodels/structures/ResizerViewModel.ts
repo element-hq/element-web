@@ -18,9 +18,12 @@ import { debounce } from "lodash";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { AutoCollapse } from "./auto-collapse/AutoCollapse";
 
 function getInitialState(): ResizerViewSnapshot {
-    if (SettingsStore.getValue("RoomList.isPanelCollapsed")) {
+    const shouldStartCollapsed =
+        SettingsStore.getValue("RoomList.isPanelCollapsed") || AutoCollapse.shouldStartCollapsed();
+    if (shouldStartCollapsed) {
         return {
             isCollapsed: true,
             initialSize: 0,
