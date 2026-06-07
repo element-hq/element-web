@@ -5,9 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { CollapseOnCallResizeBehaviour } from "./CollapseOnCallResizeBehaviour";
 import { CollapseOnWindowResizeBehaviour } from "./CollapseOnWindowResizeBehaviour";
 
 /**
  * The auto-collapse behaviours used by the app.
  */
-export const Behaviours = [CollapseOnWindowResizeBehaviour];
+export const Behaviours = [CollapseOnWindowResizeBehaviour, CollapseOnCallResizeBehaviour];
