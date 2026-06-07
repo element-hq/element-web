@@ -13,6 +13,7 @@ import { getRoomListView } from "./utils";
 test.describe("Room list panel", () => {
     test.use({
         labsFlags: ["feature_new_room_list"],
+        displayName: "Eve",
     });
 
     test.beforeEach(async ({ page, app, user }) => {
@@ -40,8 +41,7 @@ test.describe("Room list panel", () => {
         test.use({ lockLeftPanelWidth: false });
         test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
             await page.setViewportSize({ width: 575, height: 600 });
-            const roomListPanel = getRoomListView(page);
-            await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
+            await expect(page).toMatchScreenshot("room-list-panel-smallscreen.png");
         });
     });
 });
