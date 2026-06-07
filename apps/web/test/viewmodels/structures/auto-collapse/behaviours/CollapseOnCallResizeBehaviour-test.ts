@@ -24,7 +24,8 @@ describe("CollapseOnCallResizeBehaviour", () => {
         const expandPanel = jest.fn();
         const collapsePanel = jest.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
-        // @ts-ignore unused variable
+        // @ts-ignore
+        // eslint-disable-next-line
         const behaviour = new CollapseOnCallResizeBehaviour(collapseHandler);
 
         // No calls yet
