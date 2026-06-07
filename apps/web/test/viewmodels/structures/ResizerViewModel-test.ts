@@ -12,7 +12,8 @@ import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerView
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
-jest.mock("what-input");
+// CallStore has a circular dependency, CallStore -> Call -> ... -> Algorithm -> CallStore
+jest.mock("../../../src/models/Call");
 
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
@@ -74,6 +75,10 @@ describe("LeftPanelResizerViewModel", () => {
         const mockHandle = {
             resize: jest.fn(),
             isCollapsed: jest.fn().mockReturnValue(true),
+            getSize: jest.fn().mockReturnValue({
+                inPixels: 0,
+            }),
+            collapse: jest.fn(),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -92,6 +97,7 @@ describe("LeftPanelResizerViewModel", () => {
             const mockHandle = {
                 resize: jest.fn(),
                 isCollapsed: jest.fn().mockReturnValue(true),
+                getSize: jest.fn().mockReturnValue(0),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -105,6 +111,7 @@ describe("LeftPanelResizerViewModel", () => {
             const mockHandle = {
                 resize: jest.fn(),
                 isCollapsed: jest.fn().mockReturnValue(true),
+                getSize: jest.fn().mockReturnValue(0),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -126,14 +133,30 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.collapse).toHaveBeenCalled();
     });
 
+    it("should ignore first resized event", () => {
+        const vm = new ResizerViewModel();
+        const mockHandle = {
+            resize: jest.fn(),
+            getSize: jest.fn().mockReturnValue(0),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        vm.onLeftPanelResized(50);
+        expect(mockHandle.resize).not.toHaveBeenCalled();
+    });
+
     it("should resize to nearest whole number", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
             resize: jest.fn(),
+            getSize: jest.fn().mockReturnValue(0),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
+        // Initial call is ignored
+        vm.onLeftPanelResized(70);
+        // This should be processed
         vm.onLeftPanelResized(25.515);
-        expect(mockHandle.resize).toHaveBeenCalledWith("26%");
+        expect(mockHandle.resize).toHaveBeenLastCalledWith("26%");
     });
 });
