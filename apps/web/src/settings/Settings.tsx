@@ -799,7 +799,6 @@ export const SETTINGS: Settings = {
         ),
         default: false,
     },
-    // TODO: NOTE THIS IS INCOMPATIBLE WITH SLIDING SYNC.
     "feature_retention": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -807,7 +806,13 @@ export const SETTINGS: Settings = {
         description: _td("labs|feature_retention|description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        controller: new ReloadOnChangeController(),
+        controller: new IncompatibleController(
+            "feature_sliding_sync",
+            false,
+            true,
+            _td("labs|feature_retention|disabled_sliding_sync"),
+            true,
+        ),
         default: false,
     },
     "useCompactLayout": {
