@@ -21,14 +21,4 @@ export default mergeConfig(baseConfig, {
             formats: ["es"],
         },
     },
-    test: {
-        include: ["tests/**/*.test.ts"],
-        exclude: ["./e2e/**/*", "./node_modules/**/*"],
-        reporters: ["default"],
-        coverage: {
-            provider: "v8",
-            include: ["src/**/*.ts"],
-            reporter: [["lcov", { projectRoot: "../../" }], "text"],
-        },
-    },
 });

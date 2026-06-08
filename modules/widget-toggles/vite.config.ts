@@ -12,7 +12,6 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 import svgr from "vite-plugin-svgr";
 import { importCSSSheet } from "@arcmantle/vite-plugin-import-css-sheet";
 import { mergeConfig } from "vitest/config";
-import { playwright } from "@vitest/browser-playwright";
 import baseConfig from "@element-hq/element-web-module-api/vite.base.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -25,6 +24,7 @@ export default mergeConfig(baseConfig, {
             fileName: "index",
             formats: ["es"],
         },
+        minify: false,
     },
     plugins: [
         importCSSSheet(),
@@ -34,21 +34,4 @@ export default mergeConfig(baseConfig, {
             include: ["events"],
         }),
     ],
-    test: {
-        include: ["tests/**/*.test.{ts,tsx}"],
-        exclude: ["./e2e/**/*", "./node_modules/**/*"],
-        reporters: ["default"],
-        coverage: {
-            provider: "v8",
-            include: ["src/**/*.ts"],
-            reporter: [["lcov", { projectRoot: "../../" }], "text"],
-        },
-        browser: {
-            enabled: true,
-            headless: true,
-            provider: playwright({}),
-            instances: [{ browser: "chromium" }],
-        },
-        setupFiles: ["tests/setupTests.ts"],
-    },
 });
