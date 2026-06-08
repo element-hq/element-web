@@ -6,17 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, waitFor } from "jest-matrix-react";
+import { act, render, renderHook, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { type MatrixClient, PendingEventOrdering, Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, PendingEventOrdering, Room, RoomMember, User, UserEvent } from "matrix-js-sdk/src/matrix";
 import React from "react";
-import userEvent from "@testing-library/user-event";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { stubClient } from "../../../../test-utils";
+import { getMockClientWithEventEmitter, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import WithPresenceIndicator from "../../../../../src/components/views/avatars/WithPresenceIndicator";
+import WithPresenceIndicator, {
+    Presence,
+    usePresence,
+} from "../../../../../src/components/views/avatars/WithPresenceIndicator";
 import { isPresenceEnabled } from "../../../../../src/utils/presence";
+import { getJoinedNonFunctionalMembers } from "../../../../../src/utils/room/getJoinedNonFunctionalMembers";
 
 jest.mock("../../../../../src/utils/presence");
 
@@ -87,51 +90,136 @@ describe("WithPresenceIndicator", () => {
 
         expect(asFragment()).toMatchSnapshot();
     });
+});
+
+describe("usePresence", () => {
+    const ROOM_ID = "roomId";
+    const DM_USER_ID = "@bob:foo.bar";
+
+    let mockClient: ReturnType<typeof getMockClientWithEventEmitter>;
+    let room: Room;
+    let member: RoomMember;
+    let user: User;
+
+    beforeEach(() => {
+        mockClient = getMockClientWithEventEmitter({
+            getUserId: jest.fn().mockReturnValue("@alice:foo.bar"),
+            getUser: jest.fn().mockReturnValue(null),
+            store: { getPendingEvents: jest.fn().mockResolvedValue([]) },
+        });
+        room = new Room(ROOM_ID, mockClient as unknown as MatrixClient, mockClient.getUserId() ?? "");
+
+        mocked(isPresenceEnabled).mockReturnValue(true);
+        mocked(getJoinedNonFunctionalMembers).mockReturnValue([1, 2] as any);
+
+        user = new User(DM_USER_ID);
+        user.presence = "online";
+        member = new RoomMember(ROOM_ID, DM_USER_ID);
+        member.user = user;
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it("returns null when presence is disabled", () => {
+        mocked(isPresenceEnabled).mockReturnValue(false);
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBeNull();
+    });
+
+    it("returns null when room does not have exactly 2 members", () => {
+        mocked(getJoinedNonFunctionalMembers).mockReturnValue([1] as any);
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBeNull();
+    });
+
+    it("returns null when member is null", () => {
+        const { result } = renderHook(() => usePresence(room, null));
+        expect(result.current).toBeNull();
+    });
 
     it.each([
-        ["online", "Online"],
-        ["offline", "Offline"],
-        ["unavailable", "Away"],
-    ])(
-        "renders presence indicator when member.user is not linked but client has user data",
-        async (presenceStr, renderedStr) => {
-            mocked(isPresenceEnabled).mockReturnValue(true);
+        ["online", Presence.Online],
+        ["offline", Presence.Offline],
+        ["unavailable", Presence.Away],
+        ["busy", Presence.Busy],
+    ])("returns correct presence for user with '%s' presence state", (presenceStr, expectedPresence) => {
+        user.presence = presenceStr;
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(expectedPresence);
+    });
 
-            const DM_USER_ID = "@bob:foo.bar";
-            const dmRoomMap = {
-                getUserIdForRoomId: () => {
-                    return DM_USER_ID;
-                },
-            } as unknown as DMRoomMap;
+    it("returns Online when user.currentlyActive is true regardless of presence string", () => {
+        user.presence = "offline";
+        user.currentlyActive = true;
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(Presence.Online);
+    });
 
-            jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+    it("updates when UserEvent.Presence fires on member.user", async () => {
+        user.presence = "online";
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(Presence.Online);
 
-            // member.user is not set: simulates the race condition on fresh login with no cache
-            // where the room list renders before member.user is linked
-            room.getMember = jest.fn((userId) => {
-                return new RoomMember(room.roomId, userId);
-            });
+        act(() => {
+            user.presence = "offline";
+            user.emit(UserEvent.Presence, null as any, user);
+        });
 
-            // But client.getUser() has the presence data
-            const user = new User(DM_USER_ID);
-            user.presence = presenceStr;
-            mockClient.getUser = jest.fn((userId) => (userId === DM_USER_ID ? user : null));
+        await waitFor(() => expect(result.current).toBe(Presence.Offline));
+    });
 
-            const { container } = renderComponent();
+    it("updates when UserEvent.CurrentlyActive fires on member.user", async () => {
+        user.presence = "offline";
+        user.currentlyActive = false;
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(Presence.Offline);
 
-            const presence = container.querySelector(".mx_WithPresenceIndicator_icon")!;
-            expect(presence).toBeVisible();
-            await userEvent.hover(presence!);
+        act(() => {
+            user.currentlyActive = true;
+            user.emit(UserEvent.CurrentlyActive, null as any, user);
+        });
 
-            const tooltip = await waitFor(() => {
-                const tooltip = document.getElementById(presence.getAttribute("aria-labelledby")!);
-                expect(tooltip).toBeVisible();
-                return tooltip;
-            });
+        await waitFor(() => expect(result.current).toBe(Presence.Online));
+    });
 
-            // component should fall back to reading client.getUser() which does have the presence data
-            // so it should render correctly
-            expect(tooltip).toHaveTextContent(renderedStr);
-        },
-    );
+    it("returns correct presence when member.user is not linked but client has user data", () => {
+        member.user = undefined;
+        mocked(mockClient.getUser).mockImplementation((userId) => (userId === DM_USER_ID ? user : null));
+
+        user.presence = "online";
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe("online");
+    });
+
+    it("updates via client-level UserEvent.Presence when member.user is not yet linked", async () => {
+        member.user = undefined;
+        mocked(mockClient.getUser).mockImplementation((userId) => (userId === DM_USER_ID ? user : null));
+        user.presence = "online";
+
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(Presence.Online);
+
+        act(() => {
+            user.presence = "offline";
+            mockClient.emit(UserEvent.Presence, null as any, user);
+        });
+
+        await waitFor(() => expect(result.current).toBe(Presence.Offline));
+    });
+
+    it("does not update when client emits UserEvent.Presence for a different user", async () => {
+        user.presence = "online";
+        const { result } = renderHook(() => usePresence(room, member));
+        expect(result.current).toBe(Presence.Online);
+
+        act(() => {
+            const otherUser = new User("@other:foo.bar");
+            otherUser.presence = "offline";
+            mockClient.emit(UserEvent.Presence, null as any, otherUser);
+        });
+
+        expect(result.current).toBe(Presence.Online);
+    });
 });
