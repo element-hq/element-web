@@ -10,7 +10,7 @@ import { expect } from "@jest/globals";
 import type { MockedObject } from "jest-mock";
 import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 import {
-    SHOW_URL_PREVIEWS_FLAG,
+    BUNDLED_LINK_PREVIEWS,
     UrlPreviewGroupViewModel,
 } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
 import type { UrlPreview } from "@element-hq/web-shared-components";
@@ -47,7 +47,7 @@ function getViewModel(
             user: "@foo:bar",
             type: "m.room.message",
             content: {
-                [SHOW_URL_PREVIEWS_FLAG]: showPreview,
+                ...(showPreview ? undefined : { [BUNDLED_LINK_PREVIEWS]: [] }),
             },
             id: "$id",
         }),
