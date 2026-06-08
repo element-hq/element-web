@@ -13,7 +13,7 @@
         "i18n": "pnpm -r i18n",
         "i18n:sort": "pnpm -r i18n:sort",
         "i18n:lint": "pnpm -r i18n:lint",
-        "lint": "pnpm -r lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
+        "lint": "pnpm -r --workspace-concurrency=1 lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
         "lint:prettier": "prettier --check .",
         "lint:prettier-fix": "prettier --log-level=warn --write .",
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
