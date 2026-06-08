@@ -301,8 +301,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             opts.unstableMSC4429SyncUserProfileFields = ["org.matrix.msc4426.status"];
         }
 
-        opts.unstableMSC1763Retention = SettingsStore.getValue("feature_retention");
-
         if (SettingsStore.getValue("feature_sliding_sync")) {
             throw new UserFriendlyError("sliding_sync_legacy_no_longer_supported");
         }
@@ -443,6 +441,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             // can toggle on without reloading and also be accessed immediately after login.
             cryptoCallbacks: { ...crossSigningCallbacks },
             enableEncryptedStateEvents: SettingsStore.getValue("feature_msc4362_encrypted_state_events"),
+            unstableMSC1763Retention: SettingsStore.getValue("feature_retention"),
             roomNameGenerator: (_: string, state: RoomNameState) => {
                 switch (state.type) {
                     case RoomNameType.Generated:
