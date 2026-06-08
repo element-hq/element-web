@@ -6,9 +6,9 @@
     "main": "lib/index.js",
     "license": "SEE LICENSE IN README.md",
     "scripts": {
-        "build": "vite build",
-        "lint:types": "tsc --noEmit",
-        "test:unit": "vitest run"
+        "build": "nx build",
+        "lint:types": "nx lint:types",
+        "test:unit": "nx test:unit"
     },
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
