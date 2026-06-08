@@ -41,6 +41,7 @@ export type AutoHideScrollbarProps<T extends keyof JSX.IntrinsicElements = "div"
 
 /**
  * Scroll container that hides native scrollbars until hovered.
+ * Any overflow-x is hidden and scrollbar-gutter is applied.
  */
 export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">(
     props: AutoHideScrollbarProps<T>,

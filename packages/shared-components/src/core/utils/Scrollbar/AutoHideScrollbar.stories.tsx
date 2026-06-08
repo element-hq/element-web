@@ -13,7 +13,7 @@ import { AutoHideScrollbar } from "./AutoHideScrollbar";
 const containerStyle: React.CSSProperties = {
     border: "1px solid",
     width: "200px",
-    height: "100px",
+    height: "150px",
 };
 
 const meta = {
@@ -44,3 +44,33 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const NoOverflowY: Story = {
+    args: {
+        children: (
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            </ul>
+        ),
+    },
+};
+
+export const NoOverflowX: Story = {
+    args: {
+        children: (
+            <ul>
+                <li>Item 1 with a very long text</li>
+                <li>Item 2 with a very long text</li>
+                <li>Item 3 with a very long text</li>
+                <li>Item 4 with a very long text</li>
+                <li>Item 5 with a very long text</li>
+                <li>Item 6 with a very long text</li>
+                <li>Item 7 with a very long text</li>
+                <li>Item 8 with a very long text</li>
+                <li>Item 9 with a very long text</li>
+            </ul>
+        ),
+    },
+};

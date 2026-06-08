@@ -10,6 +10,7 @@
     overflow-y: auto;
     overflow-y: overlay; /* where supported */
     -ms-overflow-style: -ms-autohiding-scrollbar;
+    scrollbar-gutter: stable;
 
     &::-webkit-scrollbar {
         background-color: transparent;
