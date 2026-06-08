@@ -83,19 +83,7 @@ describe("WithPresenceIndicator", () => {
             return member;
         });
 
-        const { container, asFragment } = renderComponent();
-
-        const presence = container.querySelector(".mx_WithPresenceIndicator_icon")!;
-        expect(presence).toBeVisible();
-        await userEvent.hover(presence!);
-
-        // wait for the tooltip to open
-        const tooltip = await waitFor(() => {
-            const tooltip = document.getElementById(presence.getAttribute("aria-labelledby")!);
-            expect(tooltip).toBeVisible();
-            return tooltip;
-        });
-        expect(tooltip).toHaveTextContent(renderedStr);
+        const { asFragment } = renderComponent();
 
         expect(asFragment()).toMatchSnapshot();
     });

@@ -173,3 +173,44 @@ exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreacha
   </div>
 </div>
 `;
+
+exports[`<PresenceIconView/> renders the tooltip 1`] = `
+<DocumentFragment>
+  <span
+    tabindex="0"
+  >
+    <div
+      aria-labelledby="react-use-id-1"
+      class="mx_PresenceIconView"
+    >
+      <svg
+        class="mx_PresenceIconView_dnd"
+        fill="currentColor"
+        height="8px"
+        viewBox="0 0 8 8"
+        width="8px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g
+          clip-path="url(#cpd_PresenceStrikethrough8X8Icon_a)"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0M5.435 6.048A2.5 2.5 0 0 1 1.687 3.05zm.914-1.19L2.648 1.897a2.5 2.5 0 0 1 3.701 2.961"
+            fill-rule="evenodd"
+          />
+        </g>
+        <defs>
+          <clippath
+            id="cpd_PresenceStrikethrough8X8Icon_a"
+          >
+            <path
+              d="M0 0h8v8H0z"
+            />
+          </clippath>
+        </defs>
+      </svg>
+    </div>
+  </span>
+</DocumentFragment>
+`;
