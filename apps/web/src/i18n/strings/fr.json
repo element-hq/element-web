@@ -270,11 +270,11 @@
             "point_the_camera": "Scannez le QR code affiché ici",
             "scan_code_instruction": "Scannez le code QR",
             "scan_qr_code": "Se connecter avec un QR code",
-            "security_code_prompt": "Si vous y êtes invité, saisissez le code ci-dessous sur votre autre appareil.",
+            "security_code_prompt": "Votre fournisseur de compte peut vous demander le code suivant pour vérifier la connexion.",
             "select_qr_code": "Sélectionnez « %(scanQRCode)s »",
             "unsupported_explainer": "Votre fournisseur de compte ne prend pas en charge la connexion à un nouvel appareil à l’aide d’un code QR.",
             "unsupported_heading": "Le code QR n'est pas pris en charge",
-            "waiting_for_device": "En attente de connexion de l’appareil"
+            "waiting_for_device": "En attente de votre autre appareil"
         },
         "register_action": "Créer un compte",
         "registration": {
