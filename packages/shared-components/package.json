@@ -131,7 +131,7 @@
         "typedoc-plugin-markdown": "^4.9.0",
         "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "catalog:",
-        "unplugin-dts": "1.0.1",
+        "unplugin-dts": "catalog:",
         "vite": "catalog:",
         "vite-plugin-node-polyfills": "^0.28.0",
         "vitest": "catalog:"

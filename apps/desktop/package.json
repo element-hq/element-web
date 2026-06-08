@@ -31,7 +31,7 @@
         "start": "nx start",
         "lint": "pnpm lint:types && pnpm lint:js",
         "lint:js": "eslint --max-warnings 0 src hak playwright scripts",
-        "lint:js-fix": "eslint --fix --max-warnings 0 src hak playwright scripts && prettier --log-level=warn --write .",
+        "lint:js-fix": "eslint --fix --max-warnings 0 src hak playwright scripts",
         "lint:types": "pnpm lint:types:src && pnpm lint:types:node && pnpm lint:types:test && pnpm lint:types:scripts && pnpm lint:types:hak",
         "lint:types:src": "tsc --noEmit",
         "lint:types:node": "tsc --noEmit -p tsconfig.node.json",
@@ -80,7 +80,7 @@
         "@types/auto-launch": "^5.0.1",
         "@types/counterpart": "^0.18.1",
         "@types/minimist": "^1.2.1",
-        "@types/node": "18.19.130",
+        "@types/node": "22",
         "@types/pacote": "^11.1.1",
         "@typescript-eslint/eslint-plugin": "^8.0.0",
         "@typescript-eslint/parser": "^8.0.0",
@@ -107,7 +107,7 @@
         "prettier": "^3.0.0",
         "rimraf": "^6.0.0",
         "tar": "^7.5.8",
-        "typescript": "6.0.3",
+        "typescript": "catalog:",
         "vitest": "catalog:"
     },
     "hakDependencies": {
