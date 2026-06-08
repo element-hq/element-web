@@ -7,12 +7,7 @@
     "license": "SEE LICENSE IN README.md",
     "scripts": {
         "build": "vite build",
-        "lint": "pnpm lint:types && pnpm lint:js",
-        "lint:types": "tsc --noEmit",
-        "lint:js": "eslint --max-warnings 0 src -c ../.eslintrc.cjs",
-        "test:playwright": "playwright test -c ../playwright.config.ts",
-        "test:playwright:open": "yarn test:playwright -c ../playwright.config.ts --ui",
-        "test:playwright:screenshots": "playwright-screenshots yarn test:playwright --update-snapshots --grep @screenshot"
+        "lint:types": "tsc --noEmit"
     },
     "devDependencies": {
         "@element-hq/element-web-module-api": "workspace:*",

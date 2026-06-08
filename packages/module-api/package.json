@@ -19,10 +19,15 @@
             "types": "./lib/element-web-module-api-alpha.d.ts",
             "import": "./lib/element-web-plugin-engine.js",
             "require": "./lib/element-web-plugin-engine.umd.cjs"
+        },
+        "./vite.base.ts": {
+            "types": "./vite.base.ts",
+            "import": "./vite.base.ts"
         }
     },
     "files": [
-        "lib"
+        "lib",
+        "vite.base.ts"
     ],
     "scripts": {
         "prepack": "nx build",

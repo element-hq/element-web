@@ -5,6 +5,7 @@ ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
+    - "modules"
     - "modules/*"
 
 catalog:

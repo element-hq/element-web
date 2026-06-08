@@ -2,7 +2,7 @@ module.exports = {
     plugins: ["matrix-org", "eslint-plugin-react-compiler"],
     extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     parserOptions: {
-        project: ["./tsconfig.json"],
+        project: true,
     },
     env: {
         browser: true,

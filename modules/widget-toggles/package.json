@@ -7,13 +7,8 @@
     "license": "SEE LICENSE IN README.md",
     "scripts": {
         "build": "vite build",
-        "lint": "pnpm lint:types && pnpm lint:js",
         "lint:types": "tsc --noEmit",
-        "lint:js": "eslint --max-warnings 0 src -c ../.eslintrc.cjs",
-        "test": "vitest run --coverage",
-        "test:playwright": "playwright test -c ../playwright.config.ts",
-        "test:playwright:open": "yarn test:playwright -c ../playwright.config.ts --ui",
-        "test:playwright:screenshots": "playwright-screenshots yarn test:playwright --update-snapshots --grep @screenshot"
+        "test": "vitest run --coverage"
     },
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
@@ -28,7 +23,6 @@
         "@vitest/coverage-v8": "catalog:",
         "react": "catalog:",
         "typescript": "catalog:",
-        "rollup-plugin-external-globals": "^0.13.0",
         "vite": "catalog:",
         "vite-plugin-node-polyfills": "catalog:",
         "vite-plugin-svgr": "catalog:",

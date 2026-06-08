@@ -208,6 +208,9 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Build modules
+              run: pnpm -r --filter "./modules/**" run build
+
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
               with:

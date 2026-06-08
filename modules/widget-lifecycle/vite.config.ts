@@ -7,11 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { mergeConfig } from "vitest/config";
+import baseConfig from "@element-hq/element-web-module-api/vite.base.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig({
+export default mergeConfig(baseConfig, {
     build: {
         lib: {
             entry: resolve(__dirname, "src/index.ts"),
@@ -19,10 +20,6 @@ export default defineConfig({
             fileName: "index",
             formats: ["es"],
         },
-        outDir: "lib",
-        target: "esnext",
-        sourcemap: true,
-        minify: false,
     },
     test: {
         include: ["tests/**/*.test.ts"],
@@ -31,7 +28,7 @@ export default defineConfig({
         coverage: {
             provider: "v8",
             include: ["src/**/*.ts"],
-            reporter: [["lcov", { projectRoot: "../../../" }], "text"],
+            reporter: [["lcov", { projectRoot: "../../" }], "text"],
         },
     },
 });
