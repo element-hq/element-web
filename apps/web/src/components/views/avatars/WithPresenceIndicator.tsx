@@ -15,10 +15,8 @@ import {
     type User,
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
-import { Tooltip } from "@vector-im/compound-web";
 
 import { isPresenceEnabled } from "../../../utils/presence";
-import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
@@ -39,19 +37,6 @@ export enum Presence {
     Away = "unavailable",
     Offline = "offline",
     Busy = "busy",
-}
-
-function tooltipText(variant: Presence): string {
-    switch (variant) {
-        case Presence.Online:
-            return _t("presence|online");
-        case Presence.Away:
-            return _t("presence|away");
-        case Presence.Offline:
-            return _t("presence|offline");
-        case Presence.Busy:
-            return _t("presence|busy");
-    }
 }
 
 function getDmMember(room: Room): RoomMember | null {
@@ -123,7 +108,7 @@ const WithPresenceIndicator: React.FC<Props> = ({ room, children }) => {
 
     let icon: JSX.Element | undefined;
     if (presence) {
-        icon = <AvatarPresenceIconView presenceState={presence} className="mx_WithPresenceIndicator_icon" />;
+        icon = <AvatarPresenceIconView presenceState={presence} />;
     }
 
     if (!presence) return <>{children}</>;
@@ -131,9 +116,7 @@ const WithPresenceIndicator: React.FC<Props> = ({ room, children }) => {
     return (
         <div className="mx_WithPresenceIndicator">
             {children}
-            <Tooltip label={tooltipText(presence)} placement="bottom">
-                {icon}
-            </Tooltip>
+            <div className="mx_WithPresenceIndicator_icon">{icon}</div>
         </div>
     );
 };
