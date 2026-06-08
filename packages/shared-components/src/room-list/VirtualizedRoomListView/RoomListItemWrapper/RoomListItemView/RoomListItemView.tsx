@@ -150,6 +150,8 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     isLastItem: boolean;
     /** Function to render the room avatar */
     renderAvatar: (room: Room) => ReactNode;
+    /** Whether this item is the source of an active drag operation */
+    isDragSource?: boolean;
     ref?: Ref<Element>;
 }
 
@@ -165,6 +167,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     isFirstItem,
     isLastItem,
     renderAvatar,
+    isDragSource = false,
     ref,
     ...props
 }: RoomListItemViewProps): JSX.Element {
@@ -191,6 +194,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                     [styles.bold]: item.isBold,
                     [styles.firstItem]: isFirstItem,
                     [styles.lastItem]: isLastItem,
+                    [styles.dragSource]: isDragSource,
                     mx_RoomListItemView_selected: isSelected,
                 })}
                 gap="var(--cpd-space-3x)"
