@@ -37,6 +37,7 @@ export const PREVIEW_WIDTH_PX = 478;
 export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
+export const SHOW_URL_PREVIEWS_FLAG = "uk.half-shot.unstable.show_url_previews";
 
 export enum PreviewVisibility {
     /**
@@ -387,6 +388,14 @@ export class UrlPreviewGroupViewModel
      * for the previously-calculated links.
      */
     private async computeSnapshot(): Promise<void> {
+        if (this.props.mxEvent.getContent()[SHOW_URL_PREVIEWS_FLAG] === false) {
+            return this.snapshot.merge({
+                previews: [],
+                totalPreviewCount: 0,
+                previewsLimited: false,
+                overPreviewLimit: false,
+            });
+        }
         const previews =
             this.visibility <= PreviewVisibility.UserHidden
                 ? []

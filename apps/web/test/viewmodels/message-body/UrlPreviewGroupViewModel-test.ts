@@ -9,7 +9,10 @@ import { expect } from "@jest/globals";
 
 import type { MockedObject } from "jest-mock";
 import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
-import { UrlPreviewGroupViewModel } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
+import {
+    SHOW_URL_PREVIEWS_FLAG,
+    UrlPreviewGroupViewModel,
+} from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
 import type { UrlPreview } from "@element-hq/web-shared-components";
 import { getMockClientWithEventEmitter, mkEvent } from "../../test-utils";
 
@@ -22,7 +25,9 @@ const BASIC_PREVIEW_OGDATA = {
     "og:site_name": "Example.org",
 };
 
-function getViewModel({ mediaVisible, visible } = { mediaVisible: true, visible: true }): {
+function getViewModel(
+    { mediaVisible, visible, showPreview } = { mediaVisible: true, visible: true, showPreview: true },
+): {
     vm: UrlPreviewGroupViewModel;
     client: MockedObject<MatrixClient>;
     onImageClicked: jest.Mock<void, [UrlPreview]>;
@@ -41,7 +46,9 @@ function getViewModel({ mediaVisible, visible } = { mediaVisible: true, visible:
             event: true,
             user: "@foo:bar",
             type: "m.room.message",
-            content: {},
+            content: {
+                [SHOW_URL_PREVIEWS_FLAG]: showPreview,
+            },
             id: "$id",
         }),
     });
@@ -94,7 +101,7 @@ describe("UrlPreviewGroupViewModel", () => {
         ]);
     });
     it("should hide preview when invisible", async () => {
-        const { vm, client } = getViewModel({ visible: false, mediaVisible: true });
+        const { vm, client } = getViewModel({ visible: false, mediaVisible: true, showPreview: true });
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
@@ -152,7 +159,7 @@ describe("UrlPreviewGroupViewModel", () => {
         expect(vm.getSnapshot().previews[0].siteIcon).toBeTruthy();
     });
     it("should ignore media when mediaVisible is false", async () => {
-        const { vm, client } = getViewModel({ mediaVisible: false, visible: true });
+        const { vm, client } = getViewModel({ mediaVisible: false, visible: true, showPreview: true });
         client.getUrlPreview.mockResolvedValueOnce({
             "og:title": "This is an example!",
             "og:type": "document",
@@ -224,6 +231,21 @@ describe("UrlPreviewGroupViewModel", () => {
 
         await vm.onShowClick();
         expect(vm.getSnapshot()).toMatchSnapshot();
+    });
+    it("should hide a preview if the message requests it", async () => {
+        const { vm, client } = getViewModel({ showPreview: false, mediaVisible: true, visible: true });
+        client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
+        const msg = document.createElement("div");
+        msg.innerHTML = '<a href="https://example.org">Test</a>';
+        await vm.updateEventElement(msg);
+        expect(vm.getSnapshot()).toMatchInlineSnapshot(`
+{
+  "overPreviewLimit": false,
+  "previews": [],
+  "previewsLimited": false,
+  "totalPreviewCount": 0,
+}
+`);
     });
 
     describe("calculates author", () => {
