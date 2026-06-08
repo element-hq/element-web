@@ -270,7 +270,6 @@
             "point_the_camera": "Skanna QR-koden som visas här",
             "scan_code_instruction": "Skanna QR-koden med en annan enhet",
             "scan_qr_code": "Logga in med QR-kod",
-            "security_code": "Säkerhetskod",
             "security_code_prompt": "Om du blir ombedd anger du koden nedan på din andra enhet.",
             "select_qr_code": "Välj \"%(scanQRCode)s”",
             "unsupported_explainer": "Din kontoleverantör stöder inte inloggning på en ny enhet med en QR-kod.",

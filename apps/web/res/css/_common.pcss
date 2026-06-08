@@ -602,9 +602,10 @@ legend {
         .mx_UnknownIdentityUsersWarningDialog button,
         .mx_ThreadActionBar button,
         .mx_HistoryActionBar button,
+        [data-kind],
         [class|="maplibregl"]
     ),
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton),
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton, [data-kind]),
 .mx_Dialog input[type="submit"],
 .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
@@ -630,7 +631,8 @@ legend {
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
+        .mx_UnknownIdentityUsersWarningDialog button,
+        [data-kind]
     ):last-child {
     margin-right: 0px;
 }
@@ -647,15 +649,16 @@ legend {
         .mx_EncryptionUserSettingsTab button,
         .mx_InviteDialog_section button,
         .mx_InviteDialog_editor button,
-        .mx_UnknownIdentityUsersWarningDialog button
+        .mx_UnknownIdentityUsersWarningDialog button,
+        [data-kind]
     ):focus,
 .mx_Dialog input[type="submit"]:focus,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):focus,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton, [data-kind]):focus,
 .mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
+.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"], [data-kind]),
 .mx_Dialog input[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons
     button:not(
@@ -666,7 +669,8 @@ legend {
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
+        .mx_UnknownIdentityUsersWarningDialog button,
+        [data-kind]
     ),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: var(--cpd-color-text-on-solid-primary);
@@ -710,7 +714,8 @@ legend {
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button,
-        .mx_UnknownIdentityUsersWarningDialog button
+        .mx_UnknownIdentityUsersWarningDialog button,
+        [data-kind]
     ):disabled,
 .mx_Dialog input[type="submit"]:disabled,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):disabled,

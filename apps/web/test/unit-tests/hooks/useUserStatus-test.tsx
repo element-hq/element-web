@@ -9,10 +9,11 @@ import React from "react";
 import { renderHook, waitFor } from "jest-matrix-react";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 
-import { useUserStatus, userStatusTextWithinMaxLength } from "../../../src/hooks/useUserStatus";
+import { useUserStatus } from "../../../src/hooks/useUserStatus";
 import { getMockClientWithEventEmitter, mockClientMethodsUser, mockClientMethodsServer } from "../../test-utils";
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { userStatusTextWithinMaxLength } from "../../../src/utils/userStatus";
 
 const userId = "@alice:example.com";
 
