@@ -270,7 +270,6 @@
             "point_the_camera": "Arahkan kamera ke kode QR yang ditampilkan di sini",
             "scan_code_instruction": "Pindai kode QR dengan perangkat lain",
             "scan_qr_code": "Masuk dengan kode QR",
-            "security_code": "Kode keamanan",
             "security_code_prompt": "Jika diminta, masukkan kode di bawah ini pada perangkat Anda yang lain.",
             "select_qr_code": "Pilih \"%(scanQRCode)s\"",
             "unsupported_explainer": "Penyedia akun Anda tidak mendukung masuk ke perangkat baru dengan kode QR.",

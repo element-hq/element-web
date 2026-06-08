@@ -270,7 +270,6 @@
             "point_the_camera": "Սկանավորեք այստեղ ցուցադրված QR կոդը",
             "scan_code_instruction": "Սկանավորեք QR կոդը մեկ այլ սարքով",
             "scan_qr_code": "Մուտք գործեք QR կոդով",
-            "security_code": "Անվտանգության կոդ",
             "security_code_prompt": "Եթե պահանջվի, մուտքագրեք ստորև նշված կոդը ձեր մյուս սարքում։",
             "select_qr_code": "Ընտրեք “%(scanQRCode)s”",
             "unsupported_explainer": "Ձեր հաշվի մատակարարը չի աջակցում նոր սարքում QR կոդով մուտք գործելուն։",

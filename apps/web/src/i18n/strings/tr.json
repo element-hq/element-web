@@ -266,7 +266,6 @@
             "point_the_camera": "Burada gösterilen QR kodunu tarayın",
             "scan_code_instruction": "QR kodunu başka bir cihazla tarayın",
             "scan_qr_code": "QR kod ile oturum aç",
-            "security_code": "Güvenlik kodu",
             "security_code_prompt": "İstenirse, diğer cihazınızda aşağıdaki kodu girin.",
             "select_qr_code": "Seç \"%(scanQRCode)s”",
             "unsupported_explainer": "Hesap sağlayıcınız, QR koduyla yeni bir cihazda oturum açmayı desteklemiyor.",

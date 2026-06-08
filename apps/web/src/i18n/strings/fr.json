@@ -1,7 +1,7 @@
 {
     "a11y": {
         "emoji_picker": "Sélecteur d'emoji",
-        "jump_first_invite": "Sauter à la première invitation.",
+        "jump_first_invite": "Aller à la première invitation.",
         "message_composer": "Rédaction des messages",
         "n_unread_messages": {
             "other": "%(count)s messages non lus.",
@@ -17,7 +17,7 @@
         "seek_bar_label": "Barre de recherche audio",
         "unread_messages": "Messages non lus."
     },
-    "a11y_jump_first_unread_room": "Sauter au premier salon non lu.",
+    "a11y_jump_first_unread_room": "Aller au premier salon non lu.",
     "action": {
         "accept": "Accepter",
         "add": "Ajouter",
@@ -25,7 +25,7 @@
         "add_people": "Ajouter des personnes",
         "apply": "Appliquer",
         "approve": "Approuver",
-        "ask_to_join": "Demander à venir",
+        "ask_to_join": "Demander à rejoindre",
         "back": "Retour",
         "call": "Appel",
         "cancel": "Annuler",
@@ -218,8 +218,8 @@
         "log_in_new_account": "<a>Connectez-vous</a> à votre nouveau compte.",
         "logout_dialog": {
             "description": "Êtes-vous sûr de vouloir supprimer cet appareil ?",
-            "setup_key_backup_title": "Vous perdrez l’accès à vos messages chiffrés",
-            "skip_key_backup": "Je ne veux pas de mes messages chiffrés"
+            "setup_key_backup_title": "Vous êtes sur le point de perdre l'accès à vos discussions chiffrées.",
+            "skip_key_backup": "Supprimer cet appareil quand même"
         },
         "misconfigured_body": "Demandez à votre administrateur %(brand)s de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
         "misconfigured_title": "Votre %(brand)s est mal configuré",
@@ -268,9 +268,8 @@
             "follow_remaining_instructions": "Suivez les instructions restantes",
             "open_element_other_device": "Ouvrez %(brand)s sur votre autre appareil",
             "point_the_camera": "Scannez le QR code affiché ici",
-            "scan_code_instruction": "Scannez le QR code avec un autre appareil",
+            "scan_code_instruction": "Scannez le code QR",
             "scan_qr_code": "Se connecter avec un QR code",
-            "security_code": "Code de sécurité",
             "security_code_prompt": "Si vous y êtes invité, saisissez le code ci-dessous sur votre autre appareil.",
             "select_qr_code": "Sélectionnez « %(scanQRCode)s »",
             "unsupported_explainer": "Votre fournisseur de compte ne prend pas en charge la connexion à un nouvel appareil à l’aide d’un code QR.",

@@ -112,7 +112,7 @@ overrides:
     config-file-ts: 0.2.8-rc1
     node-abi: 4.31.0
     "@types/pg-pool": 2.0.7
-    axios@>1.0.0 <=1.15.0: 1.15.2
+    axios@>1.0.0 <=1.15.0: 1.16.1
     esbuild@<=0.24.2: 0.27.4
     esbuild@~0.27.0: 0.27.4
     follow-redirects@1.15.11: 1.16.0

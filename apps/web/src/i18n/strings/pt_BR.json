@@ -270,7 +270,6 @@
             "point_the_camera": "Escaneie o código QR mostrado aqui",
             "scan_code_instruction": "Digitalize o código QR com outro dispositivo",
             "scan_qr_code": "Iniciar sessão com código QR",
-            "security_code": "Código de segurança",
             "security_code_prompt": "Se solicitado, insira o código abaixo em seu outro dispositivo.",
             "select_qr_code": "Selecione \"%(scanQRCode)s”",
             "unsupported_explainer": "Seu provedor de conta não suporta o login em um novo dispositivo com um código QR.",
