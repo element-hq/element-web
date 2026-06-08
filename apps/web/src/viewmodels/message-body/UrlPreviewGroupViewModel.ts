@@ -16,6 +16,7 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEv
 import { decode } from "html-entities";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
+import type { RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import PlatformPeg from "../../PlatformPeg";
@@ -390,7 +391,7 @@ export class UrlPreviewGroupViewModel
     private async computeSnapshot(): Promise<void> {
         // This uses MSC4095. If the sender has sent us an empty URL previews bundle
         // then they do not want to have URL previews be visible.
-        const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
+        const bundledLinkPreviews = this.props.mxEvent.getContent<RoomMessageTextEventContent>()[BUNDLED_LINK_PREVIEWS];
         if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
             return this.snapshot.merge({
                 previews: [],

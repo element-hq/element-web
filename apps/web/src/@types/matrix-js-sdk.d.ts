@@ -19,6 +19,10 @@ import { type INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } fro
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
+    export interface RoomMessageTextEventContent {
+        ["com.beeper.linkpreviews"]: unknown[];
+    }
+
     export interface FileInfo {
         /**
          * @see https://github.com/matrix-org/matrix-spec-proposals/pull/2448
