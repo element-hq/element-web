@@ -22,7 +22,7 @@ export default class IncompatibleController extends SettingController {
         private settingName: BooleanSettingKey,
         private forcedValue: any = false,
         private incompatibleValue: any | ((v: any) => boolean) = true,
-        private disabledMessage?: string,
+        private readonly disabledMessage?: string,
         private readonly forceReload = false,
     ) {
         super();
