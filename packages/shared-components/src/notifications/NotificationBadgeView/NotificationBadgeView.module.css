@@ -11,6 +11,7 @@
 
 .notificationBadge.visible {
     background-color: var(--roomtile-default-badge-bg-color, var(--cpd-color-icon-secondary));
+    color: var(--cpd-color-text-on-solid-primary);
     outline: 1px solid transparent;
     display: flex;
     align-items: center;
