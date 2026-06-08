@@ -54,7 +54,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     </div>
     <ul
       aria-label="Spaces"
-      class="mx_AutoHideScrollbar mx_SpaceTreeLevel"
+      class="_scrollbar_1gx3o_8 mx_AutoHideScrollbar mx_SpaceTreeLevel"
       data-rbd-droppable-context-id="0"
       data-rbd-droppable-id="top-level-spaces"
       role="tree"
