@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, type RenderResult, screen } from "@testing-library/react";
 import { type Api } from "@element-hq/element-web-module-api";
 import { type IWidget } from "matrix-widget-api";
 
@@ -98,6 +98,25 @@ describe("WidgetToggleModule", () => {
             return (api.extras.addRoomHeaderButtonCallback as ReturnType<typeof vi.fn>).mock.calls[0][0];
         };
 
+        const mockAndRender = async (api: Api): Promise<RenderResult> => {
+            (api.i18n.translate as ReturnType<typeof vi.fn>).mockImplementation(
+                (key: string, vars?: Record<string, string>) => {
+                    let result = key;
+                    if (vars) {
+                        for (const [k, v] of Object.entries(vars)) {
+                            result = result.replace(`%(${k})s`, v);
+                        }
+                    }
+                    return result;
+                },
+            );
+            const callback = await getCallback(api);
+
+            const result = callback(roomId);
+            expect(result).toBeDefined();
+            return render(result!);
+        };
+
         test("returns undefined when there are no widgets in the room", async () => {
             const api = makeApi([]);
             const callback = await getCallback(api);
@@ -119,22 +138,7 @@ describe("WidgetToggleModule", () => {
                 mockWidget({ id: "w1", type: "m.custom", name: "Widget One" }),
                 mockWidget({ id: "w2", type: "m.custom", name: "Widget Two" }),
             ]);
-            (api.i18n.translate as ReturnType<typeof vi.fn>).mockImplementation(
-                (key: string, vars?: Record<string, string>) => {
-                    let result = key;
-                    if (vars) {
-                        for (const [k, v] of Object.entries(vars)) {
-                            result = result.replace(`%(${k})s`, v);
-                        }
-                    }
-                    return result;
-                },
-            );
-            const callback = await getCallback(api);
-
-            const result = callback(roomId);
-            expect(result).toBeDefined();
-            render(result!);
+            await mockAndRender(api);
 
             expect(screen.getAllByRole("button").length).toBe(2);
         });
@@ -144,22 +148,7 @@ describe("WidgetToggleModule", () => {
                 mockWidget({ id: "w1", type: "m.custom", name: "Widget One" }),
                 mockWidget({ id: "w2", type: "m.other", name: "Widget Other" }),
             ]);
-            (api.i18n.translate as ReturnType<typeof vi.fn>).mockImplementation(
-                (key: string, vars?: Record<string, string>) => {
-                    let result = key;
-                    if (vars) {
-                        for (const [k, v] of Object.entries(vars)) {
-                            result = result.replace(`%(${k})s`, v);
-                        }
-                    }
-                    return result;
-                },
-            );
-            const callback = await getCallback(api);
-
-            const result = callback(roomId);
-            expect(result).toBeDefined();
-            render(result!);
+            await mockAndRender(api);
 
             expect(screen.getAllByRole("button").length).toBe(1);
         });
