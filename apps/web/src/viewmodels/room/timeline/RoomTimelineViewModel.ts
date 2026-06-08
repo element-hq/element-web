@@ -1165,6 +1165,13 @@ export class RoomTimelineViewModel
         let lastDate: string | null = null;
         let prevEvent: MatrixEvent | null = null;
         let filteredCount = 0;
+        // Tracks which date keys have already had a separator emitted. Rooms
+        // with out-of-order server-clock events can produce a timeline where the
+        // same calendar date appears in multiple non-contiguous runs. Without
+        // this guard, `buildItems` would emit a second separator with the same
+        // key, causing a React key collision and Virtuoso rendering the same
+        // separator slot multiple times in the DOM.
+        const emittedDateKeys = new Set<string>();
 
         const showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
         // Suppress the leading date separator when more history is available
@@ -1197,7 +1204,7 @@ export class RoomTimelineViewModel
             const eventDate = new Date(event.getTs());
             const dateKey = eventDate.toDateString();
             const isLeadingEvent = lastDate === null;
-            if (dateKey !== lastDate && !(isLeadingEvent && suppressLeadingSeparator)) {
+            if (dateKey !== lastDate && !emittedDateKeys.has(dateKey) && !(isLeadingEvent && suppressLeadingSeparator)) {
                 items.push({
                     key: `date-${dateKey}`,
                     kind: "date-separator",
@@ -1208,6 +1215,7 @@ export class RoomTimelineViewModel
                         year: "numeric",
                     }),
                 });
+                emittedDateKeys.add(dateKey);
                 prevEvent = null; // date separator breaks continuation
             }
             // Track the most recently seen day even when we suppressed the
