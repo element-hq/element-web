@@ -7,7 +7,8 @@
     "license": "SEE LICENSE IN README.md",
     "scripts": {
         "build": "vite build",
-        "lint:types": "tsc --noEmit"
+        "lint:types": "tsc --noEmit",
+        "test:unit": "vitest run"
     },
     "devDependencies": {
         "@element-hq/element-web-module-api": "workspace:*",

@@ -8,7 +8,7 @@
     "scripts": {
         "build": "vite build",
         "lint:types": "tsc --noEmit",
-        "test": "vitest run --coverage"
+        "test:unit": "vitest run"
     },
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
