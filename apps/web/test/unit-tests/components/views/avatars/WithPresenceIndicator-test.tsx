@@ -32,7 +32,7 @@ describe("WithPresenceIndicator", () => {
 
     function renderComponent() {
         return render(
-            <WithPresenceIndicator room={room} size="32px">
+            <WithPresenceIndicator room={room}>
                 <span />
             </WithPresenceIndicator>,
         );
