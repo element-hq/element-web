@@ -61,7 +61,7 @@ const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
                 onSearch={setQuery}
                 autoFocus={true}
             />
-            <AutoHideScrollbar>
+            <AutoHideScrollbar className="mx_AutoHideScrollbar">
                 {filteredRooms.map((room) => {
                     return (
                         <Entry

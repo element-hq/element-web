@@ -100,7 +100,7 @@ const BaseCard: React.FC<IProps> = ({
     }
 
     if (!withoutScrollContainer) {
-        children = <AutoHideScrollbar>{children}</AutoHideScrollbar>;
+        children = <AutoHideScrollbar className="mx_AutoHideScrollbar">{children}</AutoHideScrollbar>;
     }
 
     const shouldRenderHeader = header || !hideHeaderButtons;

@@ -940,7 +940,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             <AutoHideScrollbar
                 wrappedRef={this.collectScroll}
                 onScroll={this.onScroll}
-                className={`mx_ScrollPanel ${this.props.className}`}
+                className={`mx_AutoHideScrollbar mx_ScrollPanel ${this.props.className}`}
                 style={this.props.style}
             >
                 {this.props.fixedChildren}

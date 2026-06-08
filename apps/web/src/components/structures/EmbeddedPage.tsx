@@ -121,6 +121,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
         const classes = classnames(className, {
+            mx_AutoHideScrollbar: this.props.scrollbar,
             [`${className}_guest`]: isGuest,
             [`${className}_loggedIn`]: !!client,
         });

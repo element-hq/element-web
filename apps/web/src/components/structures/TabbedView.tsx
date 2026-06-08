@@ -74,7 +74,9 @@ function TabPanel<T extends string>({ tab }: ITabPanelProps<T>): JSX.Element {
             id={domIDForTabID(tab.id)}
             aria-labelledby={`${domIDForTabID(tab.id)}_label`}
         >
-            <AutoHideScrollbar className="mx_TabbedView_tabPanelContent">{tab.body}</AutoHideScrollbar>
+            <AutoHideScrollbar className="mx_AutoHideScrollbar mx_TabbedView_tabPanelContent">
+                {tab.body}
+            </AutoHideScrollbar>
         </div>
     );
 }

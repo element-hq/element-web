@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { AutoHideScrollbar, type AutoHideScrollbarProps } from "@element-hq/web-shared-components";
+import classNames from "classnames";
 
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
@@ -169,7 +170,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
 
     public render(): React.ReactNode {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
+        const { children, trackHorizontalOverflow, verticalScrollsHorizontally, className, ...otherProps } = this.props;
 
         const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };
         const rightIndicatorStyle = { right: this.state.rightIndicatorOffset };
@@ -181,7 +182,12 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         ) : null;
 
         return (
-            <AutoHideScrollbar {...otherProps} wrappedRef={this.collectScroller} onWheel={this.onMouseWheel}>
+            <AutoHideScrollbar
+                {...otherProps}
+                className={classNames("mx_AutoHideScrollbar", className)}
+                wrappedRef={this.collectScroller}
+                onWheel={this.onMouseWheel}
+            >
                 {leftOverflowIndicator}
                 {children}
                 {rightOverflowIndicator}

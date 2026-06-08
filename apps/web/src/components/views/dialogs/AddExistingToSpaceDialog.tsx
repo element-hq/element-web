@@ -329,7 +329,11 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 onSearch={setQuery}
                 autoFocus={true}
             />
-            <AutoHideScrollbar className="mx_AddExistingToSpace_content" onScroll={onScroll} wrappedRef={wrappedRef}>
+            <AutoHideScrollbar
+                className="mx_AutoHideScrollbar mx_AddExistingToSpace_content"
+                onScroll={onScroll}
+                wrappedRef={wrappedRef}
+            >
                 {rooms.length > 0 && roomsRenderer
                     ? roomsRenderer(rooms, selectedToAdd, roomsScrollState, onChange)
                     : undefined}
