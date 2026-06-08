@@ -104,6 +104,8 @@ jobs:
                     - apps/desktop
                     - packages/shared-components
                     - packages/module-api
+                    - modules/widget-lifecycle
+                    - modules/widget-toggles
         runs-on: ubuntu-24.04
         steps:
             # Dump the disk usage before we start: this job frequently flakes with "No space left on device"

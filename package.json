@@ -28,6 +28,7 @@
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
+        "@element-hq/element-web-playwright-common": "workspace:*",
         "@nx-tools/nx-container": "^7.2.1",
         "@playwright/test": "catalog:",
         "@types/node": "22",

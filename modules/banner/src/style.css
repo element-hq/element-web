@@ -1,0 +1,15 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/* Styles to ensure the banner does not push the app out of the viewport */
+body {
+    display: flex;
+    flex-direction: column;
+}
+#matrixchat {
+    flex: 1;
+}

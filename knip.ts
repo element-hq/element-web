@@ -57,6 +57,9 @@ export default {
             ],
             ignoreBinaries: ["scripts/in-docker.sh"],
         },
+        "modules/*": {
+            entry: "src/index.ts{x,}",
+        },
         ".": {
             entry: ["scripts/**", "docs/**"],
         },
