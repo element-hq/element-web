@@ -11,8 +11,8 @@ import { Command, CommandCategories, splitAtFirstSpace } from "./SlashCommands";
 import SettingsStore from "../settings/SettingsStore";
 import { reject, success } from "./utils";
 import { UserFriendlyError } from "../languageHandler";
-import { userStatusTextWithinMaxLength } from "../hooks/useUserStatus";
 import { TimelineRenderingType } from "../contexts/RoomContext";
+import { userStatusTextWithinMaxLength } from "../utils/userStatus";
 
 export const statusCommand = new Command({
     command: "status",

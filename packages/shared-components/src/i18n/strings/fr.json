@@ -251,6 +251,7 @@
             "label": "Actions de message",
             "view_in_room": "Voir dans le salon"
         },
+        "message_shared_by": "%(displayName)s(%(userId)s ) a partagé ce message car vous n'étiez pas dans le salon lors de son envoi.",
         "message_timestamp_received_at": "Reçu à : %(dateTime)s",
         "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
         "mjolnir": {

@@ -201,7 +201,7 @@ exports[`<AdvancedPanel /> <EncryptionDetails /> should display the device keys 
 
 exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unverified devices settings 1`] = `
 <form
-  class="_root_19upo_16 mx_OtherSettings"
+  class="_root_1o4d9_17 mx_OtherSettings"
   data-testid="otherSettings"
 >
   <h3
@@ -210,10 +210,10 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
     Other people’s devices
   </h3>
   <div
-    class="_inline-field_19upo_32"
+    class="_inline-field_1o4d9_33"
   >
     <div
-      class="_inline-field-control_19upo_44"
+      class="_inline-field-control_1o4d9_45"
     >
       <div
         class="_container_udcm8_10"
@@ -234,16 +234,16 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
       </div>
     </div>
     <div
-      class="_inline-field-body_19upo_38"
+      class="_inline-field-body_1o4d9_39"
     >
       <label
-        class="_label_19upo_59"
+        class="_label_1o4d9_60"
         for="radix-react-use-id-2"
       >
         In encrypted rooms, only send messages to verified users
       </label>
       <span
-        class="_message_19upo_85 _help-message_19upo_91"
+        class="_message_1o4d9_86 _help-message_1o4d9_92"
         id="radix-react-use-id-1"
       >
         Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.

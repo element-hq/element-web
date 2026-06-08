@@ -218,11 +218,9 @@
         "log_in_new_account": "<a>Zaloguj się</a> do nowego konta.",
         "logout_dialog": {
             "description": "Czy na pewno chcesz usunąć to urządzenie?",
-            "megolm_export": "Ręcznie eksportuj klucze",
-            "setup_key_backup_title": "Utracisz dostęp do swoich wiadomości szyfrowanych",
-            "setup_secure_backup_description_1": "Wiadomości szyfrowane są zabezpieczone szyfrowaniem end-to-end. Tylko Ty i Twój odbiorca mają klucze, aby je wyświetlić.",
-            "setup_secure_backup_description_2": "Po usunięciu tego urządzenia nie będziesz mógł czytać wiadomości szyfrowanych, chyba że posiadasz klucze do nich na innych urządzeniach lub kopię na serwerze.",
-            "skip_key_backup": "Nie chcę moich zaszyfrowanych wiadomości"
+            "setup_key_backup_title": "Zamierzasz utracić dostęp do swoich zaszyfrowanych czatów",
+            "setup_secure_backup_description": "To jest twoje jedyne urządzenie. Jeśli je usuniesz, będziesz potrzebować klucza przywracania, aby potwierdzić swoją tożsamość cyfrową i przywrócić zaszyfrowane czaty przy następnym logowaniu.",
+            "skip_key_backup": "Usuń urządzenie mimo to"
         },
         "misconfigured_body": "Poproś swojego administratora %(brand)s by sprawdzić <a>Twoją konfigurację</a> względem niewłaściwych lub zduplikowanych elementów.",
         "misconfigured_title": "Twój %(brand)s jest źle skonfigurowany",
@@ -273,7 +271,6 @@
             "point_the_camera": "Skieruj kamerę na pokazany tutaj kod QR",
             "scan_code_instruction": "Skanuj kod QR za pomocą innego urządzenia",
             "scan_qr_code": "Zaloguj się kodem QR",
-            "security_code": "Kod bezpieczeństwa",
             "security_code_prompt": "Jeśli zostaniesz poproszony, wprowadź poniższy kod na drugim urządzeniu.",
             "select_qr_code": "Wybierz '%(scanQRCode)s'",
             "unsupported_explainer": "Twój dostawca konta nie obsługuje logowania nowego urządzenia za pomocą kodu QR.",
@@ -482,7 +479,7 @@
         "error": "Błąd",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
-        "feedback": "Feedback",
+        "feedback": "Opinia użytkownika",
         "filter_results": "Filtruj wyniki",
         "forward_message": "Przekaż wiadomość",
         "general": "Ogólne",
@@ -1007,9 +1004,6 @@
         "set_up_recovery": "Utwórz kopię zapasową swoich czatów",
         "set_up_recovery_toast_description": "Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić tę kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania.",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
-        "setup_secure_backup": {
-            "explainer": "Utwórz kopię zapasową kluczy przed usunięciem tego urządzenia, by ich nie stracić."
-        },
         "turn_on_key_storage": "Włącz magazyn kluczy",
         "turn_on_key_storage_description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej.",
         "udd": {
@@ -1970,7 +1964,7 @@
         }
     },
     "room": {
-        "3pid_invite_email_not_found_account": "To zaproszenie zostało wysłane do %(email)s, które nie jest powiązane z Twoim kontem",
+        "3pid_invite_email_not_found_account": "Zaproszenie zostało wysłane do %(email)s, które nie jest powiązane z Twoim kontem",
         "3pid_invite_email_not_found_account_room": "To zaproszenie do %(roomName)s zostało wysłane na adres %(email)s, który nie jest przypisany do Twojego konta",
         "3pid_invite_error_description": "Wystąpił błąd (%(errcode)s) podczas próby weryfikacji zaproszenia. Spróbuj skontaktować się z osobą, od której otrzymano zaproszenie.",
         "3pid_invite_error_invite_action": "Spróbuj dołączyć mimo tego",
@@ -2256,7 +2250,7 @@
             "aliases_section": "Adresy pokoju",
             "avatar_field_label": "Awatar pokoju",
             "canonical_alias_field_label": "Główny adres",
-            "description_space": "Edytuj ustawienia powiązane z twoją przestrzenią.",
+            "description_space": "Edytuj ustawienia powiązane z Twoją przestrzenią.",
             "error_creating_alias_description": "Wystąpił błąd podczas aktualizowania tego adresu. Serwer mógł odrzucić żądanie lub wystąpił błąd tymczasowy.",
             "error_creating_alias_title": "Wystąpił błąd podczas tworzenia adresu",
             "error_deleting_alias_description": "Wystąpił błąd podczas usuwania tego adresu. Może już nie istnieć lub wystąpił tymczasowy błąd.",
@@ -3235,7 +3229,7 @@
         "no_search_result_hint": "Możesz spróbować inną frazę lub sprawdzić błędy pisowni.",
         "preferences": {
             "sections_section": "Sekcje do pokazania",
-            "show_people_in_space": "Ta funkcja grupuje Twoje czaty z członkami tej przestrzeni. Wyłączenie jej, ukryje następujące czaty %(spaceName)s."
+            "show_people_in_space": "Ta funkcja grupuje Twoje czaty z członkami przestrzeni. Wyłączenie jej, ukryje następujące czaty: %(spaceName)s."
         },
         "room_filter_placeholder": "Szukaj pokoi",
         "search_children": "Przeszukaj %(spaceName)s",

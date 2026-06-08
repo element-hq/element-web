@@ -218,11 +218,9 @@
         "log_in_new_account": "<a>Logi sisse</a> oma uuele kasutajakontole.",
         "logout_dialog": {
             "description": "Kas sa oled kindel, et soovid selle seadme eemaldada?",
-            "megolm_export": "Ekspordi võtmed käsitsi",
-            "setup_key_backup_title": "Sa kaotad ligipääsu oma krüptitud sõnumitele",
-            "setup_secure_backup_description_1": "Krüptitud sõnumid kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.",
-            "setup_secure_backup_description_2": "Kui sa logid välja, siis krüptovõtmed kustutatakse sellest seadmest. Seega, kui sul pole krüptovõtmeid varundatud teistes seadmetes või kasutusel serveripoolset varundust, siis sa krüptitud sõnumeid hiljem lugeda ei saa.",
-            "skip_key_backup": "Ma ei soovi oma krüptitud sõnumeid"
+            "setup_key_backup_title": "Sa oled kaotamas ligipääsu oma krüptitud sõnumitele",
+            "setup_secure_backup_description": "See on sinu ainus seade. Kui sa selle eemaldad, vajad taastamisvõtit, et kinnitada oma digitaalset identiteeti ja taastada järgmisel sisselogimisel oma krüptitud vestlused.",
+            "skip_key_backup": "Eemalda see seade ikkagi"
         },
         "misconfigured_body": "Palu, et sinu %(brand)s'u haldur kontrolliks <a>sinu seadistusi</a> võimalike vigaste või topeltkirjete osas.",
         "misconfigured_title": "Sinu %(brand)s'i seadistused on paigast ära",
@@ -273,7 +271,6 @@
             "point_the_camera": "Suuna kaamera siin näidatud QR-koodi peale",
             "scan_code_instruction": "Skaneeri QR-koodi teise seadmega",
             "scan_qr_code": "Logi sisse QR-koodi alusel",
-            "security_code": "Turvakood",
             "security_code_prompt": "Kui seda küsitakse, sisesta teises seadmes allolev kood.",
             "select_qr_code": "Val i „%(scanQRCode)s“",
             "unsupported_explainer": "Sinu teenusepakkuja ei toeta võimalust logida sisse QR-koodi abil.",
@@ -296,7 +293,7 @@
             "confirm_new_password": "Kinnita oma uus salasõna",
             "devices_logout_success": "Kõik sinu seadmed on eemaldatud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse igas oma soovitud seadmetes.",
             "other_devices_logout_warning_1": "Kõikide sinu seadmete eemaldamine kustutab ka nendes salvestatud krüptovõtmed ja sellega muutuvad ka krüptitud vestlused loetamatuteks.",
-            "other_devices_logout_warning_2": "Kui sa soovid ligipääsu varasematele krüptitud vestlustele, palun seadista võtmete varundus või enne jätkamist ekspordi mõnest seadmest krüptovõtmed.",
+            "other_devices_logout_warning_2": "Kui sa soovid säilitada ligipääsu varasematele krüptitud vestlustele, palun seadista taastevõti või ekspordi mõnest muust seadmest oma sõnumite krüptovõtmed.",
             "password_not_entered": "Palun sisesta uus salasõna.",
             "passwords_mismatch": "Uued salasõnad peavad omavahel klappima.",
             "rate_limit_error": "Liiga palju päringuid napis ajavahemikus. Enne uuesti proovimist palun oota veidi.",
@@ -366,7 +363,7 @@
             "email_resent": "Uuesti saadetud!",
             "fallback_button": "Alusta autentimist",
             "mas_cross_signing_reset_cta": "Mine oma kasutajakonto andmete juurde",
-            "mas_cross_signing_reset_description": "Lähtesta oma võrguidentiteet oma teenusepakkuja abil ning tule siis siia tagasi ja vajuta „Proovi uuesti“.",
+            "mas_cross_signing_reset_description": "Oled lähtestamas oma %(serverName)s kasutajakonto digitaalset identiteeti. Kui oled seda teinud, siis tule siis siia tagasi ja vajuta „Proovi uuesti“.",
             "mas_cross_signing_reset_title": "Oma võrguidentiteedi lähtestamiseks ava oma kasutajakonto vaade",
             "msisdn": "Saatsime tekstisõnumi telefoninumbrile %(msisdn)s",
             "msisdn_token_incorrect": "Vigane tunnusluba",
@@ -678,6 +675,14 @@
         "unfederated_label_default_on": "Sa võid sellise võimaluse jätta kasutusele võtmata, kui seda jututuba kasutatakse erinevate väliste tiimide ühistööks kasutades erinevaid koduservereid. Seda ei saa hiljem muuta.",
         "unsupported_version": "See server ei toeta antud jututoa versiooni."
     },
+    "create_section_dialog": {
+        "create_section": "Lisa jaotis",
+        "description": "Jaotised on vaid sinu jaoks",
+        "edit_section": "Muuda jaotist",
+        "label": "Jaotise nimi",
+        "title": "Lisa jaotis",
+        "title_edition": "Muuda jaotist"
+    },
     "create_space": {
         "add_details_prompt": "Tegemaks teiste jaoks äratundmise lihtsamaks, palun lisa natuke teavet.",
         "add_details_prompt_2": "Sa võid neid alati muuta.",
@@ -726,7 +731,7 @@
         "subspace_join_rule_invite_only": "Privaatne kogukond (kutse alusel)",
         "subspace_join_rule_label": "Kogukonna nähtavus",
         "subspace_join_rule_public_description": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda kogukonda leida ja võivad temaga liituda.",
-        "subspace_join_rule_restricted_description": "Kõik <SpaceName/> kogukonna liikmed saavad seda leida ning võivad temaga liituda."
+        "subspace_join_rule_restricted_description": "Kõik <SpaceName/> kogukonna liikmed saavad liituda."
     },
     "credits": {
         "default_cover_photo": "<photo>Vaikimisi kasutatava kaanepildi</photo> autoriõiguste omanik on <author>Jesús Roncero</author> ja seda fotot kasutame vastavalt <terms>CC-BY-SA 4.0</terms> litsentsi tingimustele.",
@@ -746,6 +751,7 @@
         "category_other": "Muud",
         "category_room": "Jututuba",
         "caution_colon": "Hoiatus:",
+        "checking_sticky_events_support": "Määratud kestusega sõnumite tugi on tuvastamisel...",
         "client_versions": "Klientrakenduste versioonid",
         "crypto": {
             "4s_public_key_in_account_data": "kasutajakonto andmete juures",
@@ -804,6 +810,8 @@
         "edit_setting": "Muuda seadistust",
         "edit_values": "Muuda väärtusi",
         "empty_string": "<tühi string>",
+        "error_sticky_duration_must_be_a_number": "„stickyDuration“ meetodi väärtus peab olema number",
+        "error_sticky_duration_out_of_range": "„stickyDuration“ meetodi väärtus peab olema vahemikus 0 kuni 36 000 millisekundit (1 tund)",
         "event_content": "Sündmuse sisu",
         "event_id": "Sündmuse tunnus: %(eventId)s",
         "event_sent": "Sündmus on saadetud!",
@@ -813,6 +821,7 @@
         "explore_account_data": "Uuri konto andmeid",
         "explore_room_account_data": "Uuri kasutajakonto olekut",
         "explore_room_state": "Uuri jututoa olekut",
+        "explore_sticky_state": "Tuvasta määratud kestusega sõnumite olek",
         "failed_to_find_widget": "Selle vidina leidmisel tekkis viga.",
         "failed_to_load": "Laadimine ei õnnestunud.",
         "failed_to_save": "Seadistuste salvestamine ei õnnestunud.",
@@ -826,6 +835,7 @@
         "main_timeline": "Peamine ajajoon",
         "manual_device_verification": "Seadme käsitsi verifitseerimine",
         "no_receipt_found": "Lugemisteatist ei leidu",
+        "no_sticky_events": "Selles jututoas pole määratud kestusega sõnumeid",
         "notification_state": "Teavituste olek: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Teavituste silumine",
         "number_of_users": "Kasutajate arv",
@@ -852,6 +862,7 @@
         "send_custom_account_data_event": "Saada kohandatud kontoandmete päring",
         "send_custom_room_account_data_event": "Saada kohandatud jututoa kontoandmete päring",
         "send_custom_state_event": "Saada kohandatud olekusündmus",
+        "send_custom_sticky_event": "Saada sinuloodud määratud kestusega sõnum/sündmus",
         "send_custom_timeline_event": "Saada kohandatud sündmus ajajoonele",
         "server_info": "Serveri teave",
         "server_versions": "Serveri versioonid",
@@ -871,6 +882,9 @@
             "one": "<kogukond>"
         },
         "state_key": "Oleku võti",
+        "sticky_duration": "Määratud kestusega sõnumi eluiga (ms)",
+        "sticky_events_not_supported": "Sinu koduserver veel ei toeta määratud kestusega sõnumeid",
+        "sticky_key": "Määratud kestusega sõnumi võti",
         "thread_root_id": "Jutulõnga esimese kirje tunnus: %(threadRootId)s",
         "threads_timeline": "Jutulõngade ajajoon",
         "title": "Arendusvahendid",
@@ -984,13 +998,10 @@
             "warning": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
         },
         "set_up_recovery": "Varunda oma vestlused",
-        "set_up_recovery_toast_description": "Kui peaksid kaotama ligipääsu oma seadmetele, siis siinloodava taastevõtmega saad taastada ligipääsu oma krüptitud sõnumitele.",
+        "set_up_recovery_toast_description": "Sinu vestlused on automaatselt varundatud kasutades läbivat krüptimist. Kui peaksid kaotama ligipääsu kõikidele oma seadmetele, siis selle varukoopia taastamiseks ja oma digitaalse identiteedi säilitamiseks, on vaja taastevõtit.",
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
-        "setup_secure_backup": {
-            "explainer": "Vältimaks nende kaotamist, varunda krüptovõtmed enne seadme eemaldamist."
-        },
         "turn_on_key_storage": "Võta krüptovõtmete hoidla kasutusele",
-        "turn_on_key_storage_description": "Salvesta oma krüptoidentiteet ja sõnumite krüptovõtmed turvaliselt serveris. See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes.",
+        "turn_on_key_storage_description": "See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes ning on nõutav vestluste ja digitaalse identiteedi varundamiseks.",
         "udd": {
             "interactive_verification_button": "Verifitseeri interaktiivselt emoji abil",
             "other_ask_verify_text": "Palu nimetatud kasutajal verifitseerida see sessioon või tee seda alljärgnevaga käsitsi.",
@@ -1128,13 +1139,13 @@
         "session_restore": {
             "clear_storage_button": "Eemalda see seade",
             "clear_storage_description": "Kas eemaldad selle seadme koos tema krüptimisvõtmetega?",
-            "description_1": "Meil tekkis eelmise sessiooni taastamisel viga.",
+            "description_1": "Meil tekkis sinu sessiooni taastamisel viga.",
             "description_2": "Kui sa varem oled kasutanud uuemat %(brand)s'i versiooni, siis sinu pragune sessioon ei pruugi olla sellega ühilduv. Sulge see aken ja jätka selle uuema versiooni kasutamist.",
             "description_3": "Brauseri andmeruumi tühjendamine võib selle vea lahendada, kui samas eemaldad ka selle seadme ning kogu krüptitud vestlusajalugu muutub loetamatuks.",
             "title": "Sessiooni taastamine ei õnnestunud"
         },
         "something_went_wrong": "Midagi läks nüüd valesti!",
-        "storage_evicted_description_1": "Osa sessiooniandmetest, sealhulgas sõnumi krüptovõtmed, on puudu. Vea parandamiseks logi välja ja sisse, vajadusel taasta võtmed varundusest.",
+        "storage_evicted_description_1": "Osa sessiooniandmetest, sealhulgas sõnumi krüptovõtmed, on puudu. Vea parandamiseks eemalda see seade ja taasta võtmed varundusest.",
         "storage_evicted_description_2": "On võimalik et sinu brauser kustutas need andmed, sest kõvakettaruumist jäi puudu.",
         "storage_evicted_title": "Sessiooni andmed on puudu",
         "sync": "Ei saa ühendust koduserveriga. Proovin uuesti…",
@@ -1521,7 +1532,8 @@
         "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
         "feature_user_status": {
             "description": "Võimaldab näha praegust olekut ja muuta seda",
-            "display_name": "Kasutaja olek"
+            "display_name": "Kasutaja olek",
+            "required_msc_support": "Eeldab MSC4429 kasutamist (Profiilide uuendused pärandsünkroonimisel)"
         },
         "feature_wysiwyg_composer_description": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
         "group_calls": "Uus rühmakõnede lahendus",
@@ -1558,6 +1570,7 @@
         "notifications": "Kasuta jututoa päises teavituste riba",
         "render_reaction_images": "Kujuta reaktsioonides ka kohandatud pilte",
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
+        "room_list_sections": "Jututubade loendi jaotised",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
@@ -1832,6 +1845,12 @@
         "error": "Sa ei saa seda sõnumit kustutada. (%(code)s)",
         "ongoing": "Eemaldan…",
         "reason_label": "Põhjus (kui soovid lisada)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Kas oled kindel, et soovid selle jaotise eemaldada?",
+        "description": "Selle jaotise vestlused on sinu vestluste loendis endiselt saadaval.",
+        "remove_section": "Eemalda jaotis",
+        "title": "Kas eemaldad jaotise?"
     },
     "report_content": {
         "description": "Sellest sõnumist teatamine saadab tema unikaalse sõnumi tunnuse sinu koduserveri haldurile. Kui selle jututoa sõnumid on krüptitud, siis sinu koduserveri haldur ei saa lugeda selle sõnumi teksti ega vaadata seal leiduvaid faile ja pilte.",
@@ -2538,7 +2557,7 @@
                 "confirm": "Kustuta krüptovõtmete hoidla",
                 "description": "Krüptovõtmete hoidla hoidla kustutamisega eemaldad serverist oma krüptoidentiteedi ja sõnumite võtmed ning lülitad välja järgnevad turvalisusega seotud funktsionaalsused:",
                 "list_first": "Sa ei saa uutes seadmetes lugeda varasemaid krüptitud sõnumeid",
-                "list_second": "Kui logid kõikjal %(brand)s rakendusest välja, siis kaotad ligipääsu kõikidele oma krüptitud sõnumitele",
+                "list_second": "Kui sa pole ühtegi seadmesse sisse loginud, siis kaotad ligipääsu kõikidele oma krüptitud sõnumitele",
                 "title": "Kas sa oled kindel, et soovid krüptovõtmete hoidla välja lülitada ning seejärel kustutada?"
             },
             "device_not_verified_button": "Verifitseeri see seade",
@@ -2547,7 +2566,7 @@
             "dialog_title": "<strong>Seadistused:</strong>Krüptimine",
             "key_storage": {
                 "allow_key_storage": "Kasuta krüptovõtmete hoidlat",
-                "description": "Hoia oma krüptoidentiteeti ja sõnumite krüptovõtmeid turvaliselt serveris. See võimaldab sul lugeda oma varasemaid sõnumeid kõikides uutes seadmetes. <a>Lisateave</a>",
+                "description": "See võimaldab sul vaadata oma vestluste ajalugu kõigis uutes seadmetes ning on vajalik vestluste ja digitaalse identiteedi varundamiseks. <a> Lisateave</a>",
                 "title": "Krüptovõtmete hoidla"
             },
             "recovery": {
@@ -2557,7 +2576,7 @@
                 "change_recovery_key": "Muuda taastevõtit",
                 "change_recovery_key_description": "Palun salvesta see taastevõti turvalisel viisil. Muutuse kinnitamiseks klõpsi „Jätka“.",
                 "change_recovery_key_title": "Kas muudame taastevõtit?",
-                "description": "Kui sa oled kaotanud ligipääsu kõikidele oma olemasolevatele seadmetele, siis sa saad taastevõtme abil taastada ligipääsu oma krüptoidentiteedile ja sõnumite ajaloole.",
+                "description": "Sinu vestlused on automaatselt varundatud kasutades läbivat krüptimist. Kui sa oled kaotanud ligipääsu kõikidele oma olemasolevatele seadmetele, siis sa saad taastevõtme abil taastada ligipääsu oma digitaalsele identiteedile ja sõnumite ajaloole.",
                 "enter_key_error": "Sinu sisestatud taastevõti pole korrektne.",
                 "enter_recovery_key": "Sisesta taastevõti",
                 "forgot_recovery_key": "Kas unustasid taastevõtme?",
@@ -2878,8 +2897,8 @@
                 "other": "Eemalda seadmed"
             },
             "confirm_sign_out_sso": {
-                "one": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita selle seadme väljalogimine.",
-                "other": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita nende seadmete väljalogimine."
+                "one": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita selle seadme eemaldamine.",
+                "other": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita nende seadmete eemaldamine."
             },
             "current_session": "Praegune sessioon",
             "desktop_session": "Töölauarakendus",
@@ -2956,7 +2975,7 @@
             "url": "URL",
             "verified_session": "Verifitseeritud sessioon",
             "verified_sessions": "Verifitseeritud sessioonid",
-            "verified_sessions_explainer_1": "Verifitseeritud sessioonideks loetakse Element'is või mõnes muus Matrix'i rakenduses selliseid sessioone, kus sa kas oled sisestanud oma salafraasi või tuvastanud end mõne teise oma verifitseeritud sessiooni abil.",
+            "verified_sessions_explainer_1": "Verifitseeritud sessioonid in kinnitanud sinu digitaalse identiteedi.",
             "verified_sessions_explainer_2": "See tähendab, et selles sessioonis on ka kõik vajalikud võtmed krüptitud sõnumite lugemiseks ja teistele kasutajatele kinnitamiseks, et sa usaldad seda sessiooni.",
             "verified_sessions_list_description": "Parima turvalisuse nimel eemalda need sessioonid, mida sa enam ei kasuta või ei tunne ära.",
             "verify_session": "Verifitseeri sessioon",
@@ -3107,6 +3126,7 @@
         "spoiler": "Saadab selle sõnumi rõõmurikkujana",
         "status": {
             "description": "Määratle oma praegune olek",
+            "no_args": "Sa pole argumente lisanud. Peaksid lisama emoji ja kui tahad, siis ka tekstikomponendi.",
             "no_emoji": "Sa ei lisanud emojit",
             "no_text": "Sa ei lisanud mitte mingit olekuteksti",
             "too_long_emoji": "Esimene argument peab olema emoji",
@@ -3780,7 +3800,7 @@
         "ban_space_everything": "Määra kasutajale suhtluskeeld kõikjal, kus ma saan",
         "ban_space_specific": "Määra kasutajale suhtluskeeld valitud kohtades, kust ma saan",
         "deactivate_confirm_action": "Deaktiveeri kasutaja",
-        "deactivate_confirm_description": "Kasutaja deaktiveerimisel logitakse ta automaatselt välja ning ei lubata enam sisse logida. Lisaks lahkub ta kõikidest jututubadest, mille liige ta parasjagu on. Seda tegevust ei saa tagasi pöörata. Kas sa oled ikka kindel, et soovid selle kasutaja kõijkalt eemaldada?",
+        "deactivate_confirm_description": "Kasutaja deaktiveerimisel eemaldatakse kõik tema seadmed ning ei lubata enam sisse logida. Lisaks lahkub ta kõikidest jututubadest, mille liige ta parasjagu on. Seda tegevust ei saa tagasi pöörata. Kas sa oled ikka kindel, et soovid selle kasutaja kõijkalt eemaldada?",
         "deactivate_confirm_title": "Kas deaktiveerime kasutajakonto?",
         "demote_button": "Vähenda enda õigusi",
         "demote_self_confirm_description_space": "Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja kogukonnas, siis hiljem on võimatu samu õigusi tagasi saada.",

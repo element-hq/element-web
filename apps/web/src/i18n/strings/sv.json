@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Logga in</a> i ditt nya konto.",
         "logout_dialog": {
             "description": "Är du säker på att du vill logga ut?",
-            "megolm_export": "Exportera nycklar manuellt",
             "setup_key_backup_title": "Du kommer att förlora åtkomst till dina krypterade meddelanden",
-            "setup_secure_backup_description_1": "Krypterade meddelanden är säkrade med totalsträckskryptering. Bara du och mottagaren/na har nycklarna för att läsa dessa meddelanden.",
-            "setup_secure_backup_description_2": "När du loggar ut kommer nycklarna att raderas från den här enheten, vilket betyder att du inte kommer kunna läsa krypterade meddelanden om du inte har nycklarna för dem på dina andra enheter, eller säkerhetskopierade dem till servern.",
             "skip_key_backup": "Jag vill inte ha mina krypterade meddelanden"
         },
         "misconfigured_body": "Be din %(brand)s-administratör att kolla <a>din konfiguration</a> efter felaktiga eller duplicerade poster.",
@@ -273,7 +270,6 @@
             "point_the_camera": "Skanna QR-koden som visas här",
             "scan_code_instruction": "Skanna QR-koden med en annan enhet",
             "scan_qr_code": "Logga in med QR-kod",
-            "security_code": "Säkerhetskod",
             "security_code_prompt": "Om du blir ombedd anger du koden nedan på din andra enhet.",
             "select_qr_code": "Välj \"%(scanQRCode)s”",
             "unsupported_explainer": "Din kontoleverantör stöder inte inloggning på en ny enhet med en QR-kod.",
@@ -949,9 +945,6 @@
         "set_up_recovery": "Ställ in återställning",
         "set_up_recovery_toast_description": "Generera en återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.",
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
-        "setup_secure_backup": {
-            "explainer": "Säkerhetskopiera dina nycklar innan du loggar ut för att undvika att du blir av med dem."
-        },
         "turn_on_key_storage": "Slå på nyckellagring",
         "turn_on_key_storage_description": "Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter.",
         "udd": {

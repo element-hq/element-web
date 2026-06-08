@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 interface ErrorMessageProps {
     message: string | ReactNode | null;
@@ -18,7 +18,7 @@ interface ErrorMessageProps {
  * Reserves two lines to display errors to prevent layout shifts when the error pops up.
  */
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
-    const icon = message ? <WarningIcon className="mx_Icon mx_Icon_16" /> : null;
+    const icon = message ? <ErrorSolidIcon width="20px" height="20px" /> : null;
 
     return (
         <div className="mx_ErrorMessage">
