@@ -64,26 +64,35 @@ export class EventTileChildViewModelFactory {
     }
 
     public getMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
-        this.messageTimestampViewModel ??= new MessageTimestampViewModel(props);
-        this.messageTimestampViewModel.setProps(props);
+        if (this.messageTimestampViewModel) {
+            this.messageTimestampViewModel.setProps(props);
+        } else {
+            this.messageTimestampViewModel = new MessageTimestampViewModel(props);
+        }
         return this.messageTimestampViewModel;
     }
 
     public getLinkedMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
-        this.linkedMessageTimestampViewModel ??= new MessageTimestampViewModel(props);
-        this.linkedMessageTimestampViewModel.setProps(props);
+        if (this.linkedMessageTimestampViewModel) {
+            this.linkedMessageTimestampViewModel.setProps(props);
+        } else {
+            this.linkedMessageTimestampViewModel = new MessageTimestampViewModel(props);
+        }
         return this.linkedMessageTimestampViewModel;
     }
 
     public getThreadMessagePreviewViewModel(props: ThreadMessagePreviewViewModelProps): ThreadMessagePreviewViewModel {
-        this.threadMessagePreviewViewModel ??= new ThreadMessagePreviewViewModel(props);
-        this.threadMessagePreviewViewModel.setClient(props.cli);
-        this.threadMessagePreviewViewModel.setThread(props.thread);
-        this.threadMessagePreviewViewModel.setRoom(props.room);
-        this.threadMessagePreviewViewModel.setTimelineRenderingType(props.timelineRenderingType);
-        this.threadMessagePreviewViewModel.setLowBandwidth(props.lowBandwidth);
-        this.threadMessagePreviewViewModel.setUseOnlyCurrentProfiles(props.useOnlyCurrentProfiles);
-        this.threadMessagePreviewViewModel.setShowDisplayName(props.showDisplayName);
+        if (this.threadMessagePreviewViewModel) {
+            this.threadMessagePreviewViewModel.setClient(props.cli);
+            this.threadMessagePreviewViewModel.setThread(props.thread);
+            this.threadMessagePreviewViewModel.setRoom(props.room);
+            this.threadMessagePreviewViewModel.setTimelineRenderingType(props.timelineRenderingType);
+            this.threadMessagePreviewViewModel.setLowBandwidth(props.lowBandwidth);
+            this.threadMessagePreviewViewModel.setUseOnlyCurrentProfiles(props.useOnlyCurrentProfiles);
+            this.threadMessagePreviewViewModel.setShowDisplayName(props.showDisplayName);
+        } else {
+            this.threadMessagePreviewViewModel = new ThreadMessagePreviewViewModel(props);
+        }
         return this.threadMessagePreviewViewModel;
     }
 
@@ -93,16 +102,19 @@ export class EventTileChildViewModelFactory {
     }
 
     public getThreadSummaryViewModel(props: ThreadSummaryViewModelProps): ThreadSummaryViewModel {
-        this.threadSummaryViewModel ??= new ThreadSummaryViewModel(props);
-        this.threadSummaryViewModel.setRootEvent(props.mxEvent);
-        this.threadSummaryViewModel.setClient(props.cli);
-        this.threadSummaryViewModel.setThread(props.thread);
-        this.threadSummaryViewModel.setRoom(props.room);
-        this.threadSummaryViewModel.setTimelineRenderingType(props.timelineRenderingType);
-        this.threadSummaryViewModel.setLowBandwidth(props.lowBandwidth);
-        this.threadSummaryViewModel.setUseOnlyCurrentProfiles(props.useOnlyCurrentProfiles);
-        this.threadSummaryViewModel.setNarrow(props.narrow);
-        this.threadSummaryViewModel.setIsCard(props.isCard);
+        if (this.threadSummaryViewModel) {
+            this.threadSummaryViewModel.setRootEvent(props.mxEvent);
+            this.threadSummaryViewModel.setClient(props.cli);
+            this.threadSummaryViewModel.setThread(props.thread);
+            this.threadSummaryViewModel.setRoom(props.room);
+            this.threadSummaryViewModel.setTimelineRenderingType(props.timelineRenderingType);
+            this.threadSummaryViewModel.setLowBandwidth(props.lowBandwidth);
+            this.threadSummaryViewModel.setUseOnlyCurrentProfiles(props.useOnlyCurrentProfiles);
+            this.threadSummaryViewModel.setNarrow(props.narrow);
+            this.threadSummaryViewModel.setIsCard(props.isCard);
+        } else {
+            this.threadSummaryViewModel = new ThreadSummaryViewModel(props);
+        }
         return this.threadSummaryViewModel;
     }
 
@@ -112,8 +124,11 @@ export class EventTileChildViewModelFactory {
     }
 
     public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
-        this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
-        this.threadListActionBarViewModel.setProps(props);
+        if (this.threadListActionBarViewModel) {
+            this.threadListActionBarViewModel.setProps(props);
+        } else {
+            this.threadListActionBarViewModel = new ThreadListActionBarViewModel(props);
+        }
         return this.threadListActionBarViewModel;
     }
 
@@ -123,10 +138,13 @@ export class EventTileChildViewModelFactory {
     }
 
     public getE2eMessageSharedIconViewModel(props: E2eMessageSharedIconViewModelProps): E2eMessageSharedIconViewModel {
-        this.e2eMessageSharedIconViewModel ??= new E2eMessageSharedIconViewModel(props);
-        this.e2eMessageSharedIconViewModel.setClient(props.client);
-        this.e2eMessageSharedIconViewModel.setRoomId(props.roomId);
-        this.e2eMessageSharedIconViewModel.setKeyForwardingUserId(props.keyForwardingUserId);
+        if (this.e2eMessageSharedIconViewModel) {
+            this.e2eMessageSharedIconViewModel.setClient(props.client);
+            this.e2eMessageSharedIconViewModel.setRoomId(props.roomId);
+            this.e2eMessageSharedIconViewModel.setKeyForwardingUserId(props.keyForwardingUserId);
+        } else {
+            this.e2eMessageSharedIconViewModel = new E2eMessageSharedIconViewModel(props);
+        }
         return this.e2eMessageSharedIconViewModel;
     }
 
@@ -136,9 +154,12 @@ export class EventTileChildViewModelFactory {
     }
 
     public getEventPreviewViewModel(props: EventPreviewViewModelProps): EventPreviewViewModel {
-        this.eventPreviewViewModel ??= new EventPreviewViewModel(props);
-        this.eventPreviewViewModel.setClient(props.cli);
-        this.eventPreviewViewModel.setEvent(props.mxEvent);
+        if (this.eventPreviewViewModel) {
+            this.eventPreviewViewModel.setClient(props.cli);
+            this.eventPreviewViewModel.setEvent(props.mxEvent);
+        } else {
+            this.eventPreviewViewModel = new EventPreviewViewModel(props);
+        }
         return this.eventPreviewViewModel;
     }
 
@@ -148,8 +169,11 @@ export class EventTileChildViewModelFactory {
     }
 
     public getActionBarViewModel(props: EventTileActionBarViewModelProps): EventTileActionBarViewModel {
-        this.actionBarViewModel ??= new EventTileActionBarViewModel(props);
-        this.actionBarViewModel.setProps(props);
+        if (this.actionBarViewModel) {
+            this.actionBarViewModel.setProps(props);
+        } else {
+            this.actionBarViewModel = new EventTileActionBarViewModel(props);
+        }
         return this.actionBarViewModel;
     }
 
@@ -159,15 +183,18 @@ export class EventTileChildViewModelFactory {
     }
 
     public getReactionsRowViewModel(props: ReactionsRowViewModelProps): ReactionsRowViewModel {
-        this.reactionsRowViewModel ??= new ReactionsRowViewModel(props);
-        this.reactionsRowViewModel.setActionable(props.isActionable);
-        this.reactionsRowViewModel.setReactionGroupCount(props.reactionGroupCount);
-        this.reactionsRowViewModel.setCanReact(props.canReact);
-        this.reactionsRowViewModel.setAddReactionButtonActive(props.addReactionButtonActive ?? false);
-        this.reactionsRowViewModel.setAddReactionHandlers({
-            onAddReactionClick: props.onAddReactionClick,
-            onAddReactionContextMenu: props.onAddReactionContextMenu,
-        });
+        if (this.reactionsRowViewModel) {
+            this.reactionsRowViewModel.setActionable(props.isActionable);
+            this.reactionsRowViewModel.setReactionGroupCount(props.reactionGroupCount);
+            this.reactionsRowViewModel.setCanReact(props.canReact);
+            this.reactionsRowViewModel.setAddReactionButtonActive(props.addReactionButtonActive ?? false);
+            this.reactionsRowViewModel.setAddReactionHandlers({
+                onAddReactionClick: props.onAddReactionClick,
+                onAddReactionContextMenu: props.onAddReactionContextMenu,
+            });
+        } else {
+            this.reactionsRowViewModel = new ReactionsRowViewModel(props);
+        }
         return this.reactionsRowViewModel;
     }
 
