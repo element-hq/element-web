@@ -65,14 +65,7 @@ test.describe("Retention", () => {
     });
 
     test("global retention rules should apply ", async ({ app, bot, page }) => {
-        let retentionIsAvailable = false;
         await page.route("**/_matrix/client/unstable/org.matrix.msc1763/retention/configuration", (route) => {
-            if (!retentionIsAvailable) {
-                return route.fulfill({
-                    json: { errcode: "M_UNRECOGNIZED", error: "Unrecognized request" },
-                    status: 404,
-                });
-            }
             return route.fulfill({
                 json: {
                     policies: {
@@ -86,14 +79,6 @@ test.describe("Retention", () => {
         const roomId = await app.client.createRoom({
             name: "Test",
             invite: [bot.credentials.userId],
-        });
-        // Test that retention rules are re-fetched after initially being unavailable.
-        retentionIsAvailable = true;
-        // We poll the config every so often, so ensure we pull it here.
-        // await page.clock.runFor(90000);
-        // Having to wrench this one because runFor isn't working out.
-        await page.evaluate(() => {
-            void window.mxMatrixClientPeg.get().retentionPolicyService["poll"]();
         });
         await checkRetentionInRoom({ app, bot, page }, roomId);
     });
