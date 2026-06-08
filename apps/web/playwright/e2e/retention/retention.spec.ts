@@ -16,9 +16,8 @@ async function checkRetentionInRoom(
     { bot, app, page }: Pick<TestFixtures, "app" | "bot"> & { page: Page },
     roomId: string,
 ) {
-    // When the bot joins the room
     await bot.joinRoom(roomId);
-    await app.viewRoomByName("Test");
+    await app.viewRoomById(roomId);
     const tiles = (
         await Promise.all(Array.from({ length: 5 }).map((_o, index) => bot.sendMessage(roomId, `Message ${index}`)))
     ).map(({ event_id: evtId }) => page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${evtId}']`));
@@ -60,27 +59,36 @@ test.describe("Retention", () => {
                 },
             ],
         });
-        // When the bot joins the room
+        // When the bot joins the room=
+        await bot.joinRoom(roomId);
+        await app.viewRoomByName("Test");
         await checkRetentionInRoom({ app, bot, page }, roomId);
     });
 
-    test("global retention rules should apply ", async ({ app, bot, page }) => {
-        await page.route("**/_matrix/client/unstable/org.matrix.msc1763/retention/configuration", (route) => {
-            return route.fulfill({
-                json: {
-                    policies: {
-                        "*": {
-                            max_lifetime: ONE_MINUTE,
+    test.describe("global retention rules", () => {
+        test.use({
+            page: async ({ page }, runFixture) => {
+                await page.route("**/_matrix/client/unstable/org.matrix.msc1763/retention/configuration", (route) => {
+                    return route.fulfill({
+                        json: {
+                            policies: {
+                                "*": {
+                                    max_lifetime: ONE_MINUTE,
+                                },
+                            },
                         },
-                    },
-                },
+                    });
+                });
+                await runFixture(page);
+            },
+        });
+        test("should apply", async ({ app, bot, page }) => {
+            const roomId = await app.client.createRoom({
+                name: "Test",
+                invite: [bot.credentials.userId],
             });
+            await checkRetentionInRoom({ app, bot, page }, roomId);
         });
-        const roomId = await app.client.createRoom({
-            name: "Test",
-            invite: [bot.credentials.userId],
-        });
-        await checkRetentionInRoom({ app, bot, page }, roomId);
     });
 
     test("retention rules should apply after restart", async ({ app, bot, page }) => {
@@ -133,9 +141,7 @@ test.describe("Retention", () => {
                 },
             ],
         });
-        // When the bot joins the room
         await checkRetentionInRoom({ app, bot, page }, roomId);
-
         // Check that retention rules no longer apply.
         await page.clock.setFixedTime(currentTime);
         const { event_id: eventId } = await bot.sendMessage(roomId, `Message afterwards`);
