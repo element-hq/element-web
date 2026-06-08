@@ -108,9 +108,10 @@ async function getBoundingBox(
 
 /**
  * Drag and drop a section header onto another section header. The dragged section is moved
- * to the position immediately after the target section. Because the dnd start handler collapses
- * every section, the layout changes once the drag activates — so the target position is
- * recomputed after activation rather than cached up-front.
+ * relative to the target: dropped before the target when dragging up, after the target when
+ * dragging down. Because the dnd start handler collapses every section, the layout changes
+ * once the drag activates — so the target position is recomputed after activation rather
+ * than cached up-front.
  */
 export async function dragSectionToSection(
     page: Page,

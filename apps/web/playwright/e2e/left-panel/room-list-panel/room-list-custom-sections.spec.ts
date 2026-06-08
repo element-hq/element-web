@@ -305,6 +305,18 @@ test.describe("Room list custom sections", () => {
             await dragSectionToSection(page, "Work", "Chats");
             await assertSectionsOrder(page, ["Personal", "Chats", "Work"]);
         });
+
+        test("should insert a section before the target when dragging up", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            await assertSectionsOrder(page, ["Work", "Personal", "Chats"]);
+
+            // Personal sits below Work, so dragging it onto Work inserts it before Work.
+            await dragSectionToSection(page, "Personal", "Work");
+            await assertSectionsOrder(page, ["Personal", "Work", "Chats"]);
+        });
     });
 
     test.describe("Adding a room to a custom section", () => {
