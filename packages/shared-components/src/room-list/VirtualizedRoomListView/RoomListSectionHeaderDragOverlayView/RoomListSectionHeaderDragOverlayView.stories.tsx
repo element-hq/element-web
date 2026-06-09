@@ -50,6 +50,7 @@ const meta = {
         isExpanded: true,
         isUnread: false,
         displaySectionMenu: true,
+        canBeReordered: true,
         onClick: fn(),
         editSection: fn(),
         removeSection: fn(),

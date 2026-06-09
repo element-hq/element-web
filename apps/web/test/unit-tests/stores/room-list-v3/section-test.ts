@@ -329,7 +329,8 @@ describe("section", () => {
             await deleteSection(tag, false);
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
-            expect(orderedCall![3]).toEqual([otherTag]);
+            // CHATS_TAG is appended because the stored order didn't include it (legacy default position).
+            expect(orderedCall![3]).toEqual([otherTag, CHATS_TAG]);
 
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             expect(customDataCall![3]).not.toHaveProperty(tag);
@@ -338,6 +339,7 @@ describe("section", () => {
 
     describe("reorderSection", () => {
         const customTag = `${CUSTOM_SECTION_TAG_PREFIX}abc`;
+        const customTag2 = `${CUSTOM_SECTION_TAG_PREFIX}def`;
 
         function mockSettings(
             orderedTags: string[],
@@ -359,20 +361,48 @@ describe("section", () => {
             expected: string[];
         }>([
             {
-                description: "a default section after another default",
-                initial: [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority],
-                customData: {},
-                source: DefaultTagID.Favourite,
-                target: CHATS_TAG,
-                expected: [CHATS_TAG, DefaultTagID.Favourite, DefaultTagID.LowPriority],
+                description: "a custom section after another custom section",
+                initial: [customTag, customTag2],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: customTag,
+                target: customTag2,
+                expected: [customTag2, customTag, CHATS_TAG],
             },
             {
-                description: "a custom section after a default",
-                initial: [DefaultTagID.Favourite, customTag, CHATS_TAG, DefaultTagID.LowPriority],
-                customData: { [customTag]: { tag: customTag, name: "Custom" } },
+                description: "a custom section before another when dragging up",
+                initial: [customTag2, customTag],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
                 source: customTag,
-                target: DefaultTagID.LowPriority,
-                expected: [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority, customTag],
+                target: customTag2,
+                expected: [customTag, customTag2, CHATS_TAG],
+            },
+            {
+                description: "a custom section past the Chats tag",
+                initial: [customTag, customTag2, CHATS_TAG],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: customTag,
+                target: CHATS_TAG,
+                expected: [customTag2, CHATS_TAG, customTag],
+            },
+            {
+                description: "the Chats tag above a custom section",
+                initial: [customTag, customTag2, CHATS_TAG],
+                customData: {
+                    [customTag]: { tag: customTag, name: "A" },
+                    [customTag2]: { tag: customTag2, name: "B" },
+                },
+                source: CHATS_TAG,
+                target: customTag,
+                expected: [CHATS_TAG, customTag, customTag2],
             },
         ])(
             "moves $description and saves the new order at ACCOUNT level",
@@ -394,21 +424,26 @@ describe("section", () => {
         it.each([
             {
                 description: "source and target are the same",
-                source: CHATS_TAG,
-                target: CHATS_TAG,
+                source: customTag,
+                target: customTag,
             },
             {
-                description: "source is not in the ordered list",
+                description: "source custom section is not in the ordered list",
                 source: `${CUSTOM_SECTION_TAG_PREFIX}unknown`,
-                target: CHATS_TAG,
+                target: customTag,
             },
             {
-                description: "target is not in the ordered list",
-                source: DefaultTagID.Favourite,
+                description: "target custom section is not in the ordered list",
+                source: customTag,
                 target: `${CUSTOM_SECTION_TAG_PREFIX}unknown`,
             },
+            {
+                description: "source is a default section",
+                source: DefaultTagID.Favourite,
+                target: customTag,
+            },
         ])("does nothing when $description", async ({ source, target }) => {
-            mockSettings([DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority]);
+            mockSettings([customTag], { [customTag]: { tag: customTag, name: "A" } });
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
             await reorderSection(source, target);

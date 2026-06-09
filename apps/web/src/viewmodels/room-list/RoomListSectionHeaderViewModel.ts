@@ -17,7 +17,12 @@ import { NotificationStateEvents } from "../../stores/notifications/Notification
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
-import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
+import {
+    CHATS_TAG,
+    getCustomSectionData,
+    isCustomSectionTag,
+    isDefaultSectionTag,
+} from "../../stores/room-list-v3/section";
 import PosthogTrackers from "../../PosthogTrackers";
 
 interface RoomListSectionHeaderViewModelProps {
@@ -53,6 +58,7 @@ export class RoomListSectionHeaderViewModel
             isExpanded: true,
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
+            canBeReordered: !isDefaultSection || props.tag === CHATS_TAG,
         });
         const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),

@@ -32,6 +32,8 @@ export interface RoomListSectionHeaderViewSnapshot {
     isUnread: boolean;
     /** Wether to display the section menu  */
     displaySectionMenu: boolean;
+    /** Whether the section can be reordered via drag-and-drop  */
+    canBeReordered: boolean;
 }
 
 /**
@@ -100,7 +102,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     roomCountInSection,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { id, title, isExpanded, isUnread } = useViewModel(vm);
+    const { id, title, isExpanded, isUnread, canBeReordered } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
     const {
@@ -112,13 +114,22 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         data: { type: "section", index: sectionIndex },
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
+        disabled: !canBeReordered,
     });
-    const { ref: droppableRef, isDropTarget } = useDroppable({ id, disabled: isDragSource });
-
     const { source } = useDragOperation();
     const draggedData = source?.data as { type?: string; index?: number } | undefined;
+    const isDraggingSectionSource = draggedData?.type === "section";
+
+    // Keep the droppable enabled so rooms can still be dropped on default sections
+    // (Favourite / Low Priority). Only disable it for section drags on non-reorderable
+    // headers so they can't be used as reorder targets.
+    const { ref: droppableRef, isDropTarget } = useDroppable({
+        id,
+        disabled: isDragSource || (isDraggingSectionSource && !canBeReordered),
+    });
+
     const isDraggingRoom = isDropTarget && draggedData?.type === "room";
-    const isDraggingSection = isDropTarget && draggedData?.type === "section";
+    const isDraggingSection = isDropTarget && isDraggingSectionSource;
 
     const sourceSectionIndex = isDraggingSection ? (draggedData.index ?? -1) : -1;
     const isSourceAbove = isDraggingSection && sourceSectionIndex > sectionIndex;
