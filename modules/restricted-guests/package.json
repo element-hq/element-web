@@ -16,6 +16,7 @@
         "@types/react": "catalog:",
         "@vitejs/plugin-react": "catalog:",
         "react": "catalog:",
+        "testcontainers": "^12.0.1",
         "typescript": "catalog:",
         "vite": "catalog:",
         "vite-plugin-node-polyfills": "catalog:"

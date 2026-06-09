@@ -9,10 +9,8 @@ import {
     StartedSynapseContainer,
     SynapseContainer,
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
-import path, { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { Readable } from "node:stream";
+import { GenericContainer, Wait } from "testcontainers";
 
 // We use the SynapseContainer as a base to have all of its utilities for config setting
 export class RestrictedGuestsSynapseContainer extends SynapseContainer {
@@ -21,14 +19,22 @@ export class RestrictedGuestsSynapseContainer extends SynapseContainer {
     }
 
     public override async start(): Promise<StartedSynapseContainer> {
-        this.withCopyDirectoriesToContainer([
+        // Download the synapse module
+        const initContainer = await new GenericContainer("ghcr.io/element-hq/synapse-guest-module:861f7ee")
+            .withWaitStrategy(Wait.forOneShotStartup())
+            .start();
+        const tarStream = await initContainer.copyArchiveFromContainer(`/src/synapse_guest_module`);
+        await initContainer.stop();
+
+        this.withCopyArchivesToContainer([
             {
-                source: path.resolve(__dirname, "..", "..", "synapse", "synapse_guest_module"),
-                target: "/modules/synapse_guest_module/",
+                tar: Readable.from(tarStream),
+                target: "/",
             },
         ]).withEnvironment({
             PYTHONPATH: "/modules",
         });
+
         this.config.modules.push({
             module: "synapse_guest_module.GuestModule",
             config: this.getModuleConfig(),
