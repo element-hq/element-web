@@ -6212,17 +6212,6 @@ packages:
       vite:
         optional: true
 
-  '@vitest/mocker@4.1.8':
-    resolution: {integrity: sha512-LEiN/xe4OSIbKe9HQIp5OC24agGD9J5CnmMgsLohVVoOPWL9a2sBoR6VBx43jQZb7Kr1l4RCuyCJzcAa0+dojw==}
-    peerDependencies:
-      msw: ^2.4.9
-      vite: ^6.0.0 || ^7.0.0 || ^8.0.0
-    peerDependenciesMeta:
-      msw:
-        optional: true
-      vite:
-        optional: true
-
   '@vitest/pretty-format@3.2.4':
     resolution: {integrity: sha512-IVNZik8IVRJRTr9fxlitMKeJeXFFFN0JaB9PHPGQ8NKQbGpfjlTx9zO4RefN8gp7eqjNy8nyK3NZmBzOPeIxtA==}
 
@@ -10221,7 +10210,7 @@ packages:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
   matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a48c8fe8a1a5f18a517e9b27552c73b6a7d210ee:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a48c8fe8a1a5f18a517e9b27552c73b6a7d210ee}
+    resolution: {gitHosted: true, integrity: sha512-50higP2NdMGv9TIxZv1Mkr0tfqDNfHT19/WLaoOLYQcoZ3H3fCV5Nge9n8C+ARkMwTgjuDLdNBnOUo2g+iZRMg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a48c8fe8a1a5f18a517e9b27552c73b6a7d210ee}
     version: 41.6.0
     engines: {node: '>=22.0.0'}
 
