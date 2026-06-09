@@ -736,10 +736,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewLogin();
                 break;
             case "start_password_recovery":
-                this.setStateForNewView({
-                    view: Views.FORGOT_PASSWORD,
-                });
-                this.notifyNewScreen("forgot_password");
+                if (SettingsStore.getValue(UIFeature.PasswordReset)) {
+                    this.setStateForNewView({
+                        view: Views.FORGOT_PASSWORD,
+                    });
+                    this.notifyNewScreen("forgot_password");
+                }
                 break;
             case "start_chat":
                 createRoom(MatrixClientPeg.safeGet(), {
@@ -2211,126 +2213,126 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return fragmentAfterLogin;
     }
 
-    public render(): React.ReactNode {
+    private getView(): JSX.Element {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
-        let view: JSX.Element;
 
-        if (this.state.view === Views.LOADING) {
-            view = (
-                <div className="mx_MatrixChat_splash">
-                    <Spinner />
-                </div>
-            );
-        } else if (this.state.view === Views.CONFIRM_LOCK_THEFT) {
-            view = (
-                <ConfirmSessionLockTheftView
-                    onConfirm={() => {
-                        this.setState({ view: Views.LOADING });
-                        this.startInitSession();
-                    }}
-                />
-            );
-        } else if (this.state.view === Views.COMPLETE_SECURITY) {
-            view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
-        } else if (this.state.view === Views.E2E_SETUP) {
-            view = <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
-        } else if (this.state.view === Views.PENDING_CLIENT_START) {
-            // we think we are logged in, but are still waiting for the /sync to complete
-            view = (
-                <LoginSplashView
-                    matrixClient={MatrixClientPeg.safeGet()}
-                    onLogoutClick={this.onLogoutClick}
-                    syncError={this.state.syncError}
-                />
-            );
-        } else if (this.state.view === Views.LOGGED_IN) {
-            // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
-            // latter is set via the dispatcher). If we don't yet have a `page_type`,
-            // keep showing the spinner for now.
-            if (this.state.ready && this.state.page_type) {
-                /* for now, we stuff the entirety of our props and state into the LoggedInView.
-                 * we should go through and figure out what we actually need to pass down, as well
-                 * as using something like redux to avoid having a billion bits of state kicking around.
-                 */
-                view = (
-                    <LoggedInView
-                        {...this.props}
-                        {...this.state}
-                        ref={this.loggedInView}
-                        matrixClient={MatrixClientPeg.safeGet()}
-                        onRegistered={this.onRegistered}
-                        currentRoomId={this.state.currentRoomId}
+        switch (this.state.view) {
+            case Views.LOADING:
+                return (
+                    <div className="mx_MatrixChat_splash">
+                        <Spinner />
+                    </div>
+                );
+            case Views.CONFIRM_LOCK_THEFT:
+                return (
+                    <ConfirmSessionLockTheftView
+                        onConfirm={() => {
+                            this.setState({ view: Views.LOADING });
+                            this.startInitSession();
+                        }}
                     />
                 );
-            } else {
+            case Views.COMPLETE_SECURITY:
+                return <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
+            case Views.E2E_SETUP:
+                return <E2eSetup onCancelled={this.onCompleteSecurityE2eSetupFinished} />;
+            case Views.PENDING_CLIENT_START:
                 // we think we are logged in, but are still waiting for the /sync to complete
-                view = (
+                return (
                     <LoginSplashView
                         matrixClient={MatrixClientPeg.safeGet()}
                         onLogoutClick={this.onLogoutClick}
                         syncError={this.state.syncError}
                     />
                 );
-            }
-        } else if (this.state.view === Views.WELCOME) {
-            view = <Welcome {...this.getServerProperties()} />;
-        } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
-            const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
-            view = (
-                <Registration
-                    clientSecret={this.state.register_client_secret}
-                    sessionId={this.state.register_session_id}
-                    idSid={this.state.register_id_sid}
-                    email={email}
-                    brand={this.props.config.brand}
-                    onLoggedIn={this.onRegisterFlowComplete}
-                    onLoginClick={this.onLoginClick}
-                    onServerConfigChange={this.onServerConfigChange}
-                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    fragmentAfterLogin={fragmentAfterLogin}
-                    mobileRegister={this.state.isMobileRegistration}
-                    {...this.getServerProperties()}
-                />
-            );
-        } else if (this.state.view === Views.FORGOT_PASSWORD && SettingsStore.getValue(UIFeature.PasswordReset)) {
-            view = (
-                <ForgotPassword
-                    onComplete={this.onLoginClick}
-                    onLoginClick={this.onLoginClick}
-                    {...this.getServerProperties()}
-                />
-            );
-        } else if (this.state.view === Views.LOGIN) {
-            const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
-            view = (
-                <Login
-                    isSyncing={this.state.pendingInitialSync}
-                    onLoggedIn={this.onUserCompletedLoginFlow}
-                    onRegisterClick={this.onRegisterClick}
-                    fallbackHsUrl={this.getFallbackHsUrl()}
-                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
-                    onServerConfigChange={this.onServerConfigChange}
-                    fragmentAfterLogin={fragmentAfterLogin}
-                    defaultUsername={this.props.urlParams?.defaults?.defaultUsername}
-                    {...this.getServerProperties()}
-                />
-            );
-        } else if (this.state.view === Views.SOFT_LOGOUT) {
-            view = (
-                <SoftLogout
-                    urlParams={this.props.urlParams}
-                    onTokenLoginCompleted={this.props.onTokenLoginCompleted}
-                    fragmentAfterLogin={fragmentAfterLogin}
-                />
-            );
-        } else if (this.state.view === Views.LOCK_STOLEN) {
-            view = <SessionLockStolenView />;
-        } else {
-            // TODO
-            logger.error(`Unknown view ${this.state.view}`);
-            return null;
+            case Views.LOGGED_IN:
+                // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
+                // latter is set via the dispatcher). If we don't yet have a `page_type`,
+                // keep showing the spinner for now.
+                if (this.state.ready && this.state.page_type) {
+                    /* for now, we stuff the entirety of our props and state into the LoggedInView.
+                     * we should go through and figure out what we actually need to pass down, as well
+                     * as using something like redux to avoid having a billion bits of state kicking around.
+                     */
+                    return (
+                        <LoggedInView
+                            {...this.props}
+                            {...this.state}
+                            ref={this.loggedInView}
+                            matrixClient={MatrixClientPeg.safeGet()}
+                            onRegistered={this.onRegistered}
+                            currentRoomId={this.state.currentRoomId}
+                        />
+                    );
+                } else {
+                    // we think we are logged in, but are still waiting for the /sync to complete
+                    return (
+                        <LoginSplashView
+                            matrixClient={MatrixClientPeg.safeGet()}
+                            onLogoutClick={this.onLogoutClick}
+                            syncError={this.state.syncError}
+                        />
+                    );
+                }
+            case Views.WELCOME:
+                return <Welcome {...this.getServerProperties()} />;
+            case Views.REGISTER:
+                return (
+                    <Registration
+                        clientSecret={this.state.register_client_secret}
+                        sessionId={this.state.register_session_id}
+                        idSid={this.state.register_id_sid}
+                        email={ThreepidInviteStore.instance.pickBestInvite()?.toEmail}
+                        brand={this.props.config.brand}
+                        onLoggedIn={this.onRegisterFlowComplete}
+                        onLoginClick={this.onLoginClick}
+                        onServerConfigChange={this.onServerConfigChange}
+                        defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
+                        fragmentAfterLogin={fragmentAfterLogin}
+                        mobileRegister={this.state.isMobileRegistration}
+                        {...this.getServerProperties()}
+                    />
+                );
+            case Views.FORGOT_PASSWORD:
+                return (
+                    <ForgotPassword
+                        onComplete={this.onLoginClick}
+                        onLoginClick={this.onLoginClick}
+                        {...this.getServerProperties()}
+                    />
+                );
+            case Views.LOGIN:
+                return (
+                    <Login
+                        isSyncing={this.state.pendingInitialSync}
+                        onLoggedIn={this.onUserCompletedLoginFlow}
+                        onRegisterClick={this.onRegisterClick}
+                        fallbackHsUrl={this.getFallbackHsUrl()}
+                        defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
+                        onForgotPasswordClick={
+                            SettingsStore.getValue(UIFeature.PasswordReset) ? this.onForgotPasswordClick : undefined
+                        }
+                        onServerConfigChange={this.onServerConfigChange}
+                        fragmentAfterLogin={fragmentAfterLogin}
+                        defaultUsername={this.props.urlParams?.defaults?.defaultUsername}
+                        {...this.getServerProperties()}
+                    />
+                );
+            case Views.SOFT_LOGOUT:
+                return (
+                    <SoftLogout
+                        urlParams={this.props.urlParams}
+                        onTokenLoginCompleted={this.props.onTokenLoginCompleted}
+                        fragmentAfterLogin={fragmentAfterLogin}
+                    />
+                );
+            case Views.LOCK_STOLEN:
+                return <SessionLockStolenView />;
         }
+    }
+
+    public render(): React.ReactNode {
+        const view = this.getView();
 
         return (
             <ErrorBoundary>
