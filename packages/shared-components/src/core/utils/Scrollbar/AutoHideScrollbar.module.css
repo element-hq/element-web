@@ -23,6 +23,11 @@
 
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
+
+    > * {
+        /* also set on first level children in case this scrollbar is used as container */
+        scrollbar-width: thin;
+    }
 }
 
 .scrollbar:hover {
