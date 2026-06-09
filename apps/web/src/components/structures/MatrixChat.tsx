@@ -145,9 +145,6 @@ import { type URLParams } from "../../vector/url_utils.ts";
 import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
 import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
 
-// legacy export
-export { default as Views } from "../../Views";
-
 const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
 // Actions that are redirected through the onboarding process prior to being
@@ -2028,6 +2025,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         } else if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
             this.setState({ page_type: screen });
+        } else {
+            // TODO
         }
     }
 
@@ -2328,6 +2327,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.LOCK_STOLEN) {
             view = <SessionLockStolenView />;
         } else {
+            // TODO
             logger.error(`Unknown view ${this.state.view}`);
             return null;
         }
