@@ -1125,8 +1125,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.3
       unplugin-dts:
-        specifier: 1.0.2
-        version: 1.0.2(@microsoft/api-extractor@7.58.7(@types/node@18.19.130))(esbuild@0.27.4)(rolldown@1.0.3)(rollup@4.60.1)(typescript@6.0.3)(vite@8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15))
+        specifier: 1.0.1
+        version: 1.0.1(@microsoft/api-extractor@7.58.7(@types/node@18.19.130))(esbuild@0.27.4)(rolldown@1.0.3)(rollup@4.60.1)(typescript@6.0.3)(vite@8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15))
       vite:
         specifier: 'catalog:'
         version: 8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4)
@@ -1385,8 +1385,8 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
       unplugin-dts:
-        specifier: 1.0.2
-        version: 1.0.2(@microsoft/api-extractor@7.58.7(@types/node@18.19.130))(esbuild@0.27.4)(rolldown@1.0.3)(rollup@4.60.1)(typescript@6.0.3)(vite@8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15))
+        specifier: 1.0.1
+        version: 1.0.1(@microsoft/api-extractor@7.58.7(@types/node@18.19.130))(esbuild@0.27.4)(rolldown@1.0.3)(rollup@4.60.1)(typescript@6.0.3)(vite@8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15))
       vite:
         specifier: 'catalog:'
         version: 8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4)
@@ -13090,8 +13090,8 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  unplugin-dts@1.0.2:
-    resolution: {integrity: sha512-VbNiMD0LMl/t6nJueGtrCp79N7ZO1nquxj/FUybJDnKwZGsnW2wjdwBSzA3QEHujoxmxZIptsG43hL7LzXE96w==}
+  unplugin-dts@1.0.1:
+    resolution: {integrity: sha512-EdJZxdWP4Tm/xhe58/zAge3Tu0OKDYygm8rucRrcCZ4XzgA31jexUKhaJuEMddOPBDs9ONnq6vwigbjeBqkfuw==}
     peerDependencies:
       '@microsoft/api-extractor': '>=7'
       '@rspack/core': ^1
@@ -27347,7 +27347,7 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-dts@1.0.2(@microsoft/api-extractor@7.58.7(@types/node@18.19.130))(esbuild@0.27.4)(rolldown@1.0.3)(rollup@4.60.1)(typescript@6.0.3)(vite@8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)):
+  unplugin-dts@1.0.1(@microsoft/api-extractor@7.58.7(@types/node@18.19.130))(esbuild@0.27.4)(rolldown@1.0.3)(rollup@4.60.1)(typescript@6.0.3)(vite@8.0.15(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)):
     dependencies:
       '@rollup/pluginutils': 5.3.0(rollup@4.60.1)
       '@volar/typescript': 2.4.28
