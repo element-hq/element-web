@@ -36,7 +36,6 @@ catalog:
     "@vitejs/plugin-react": 6.0.2
     unplugin-dts: 1.0.1
 
-
 packageExtensions:
     fdir:
         dependencies:
