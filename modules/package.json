@@ -5,8 +5,8 @@
     "scripts": {
         "lint:js": "eslint --max-warnings 0 */src -c ./.eslintrc.cjs",
         "lint:ts": "tsc --noEmit",
-        "test:playwright": "playwright test -c ./playwright.config.ts",
-        "test:playwright:open": "yarn test:playwright -c ./playwright.config.ts --ui",
+        "test:playwright": "playwright test",
+        "test:playwright:open": "yarn test:playwright --ui",
         "test:playwright:screenshots": "playwright-screenshots yarn test:playwright --update-snapshots --grep @screenshot"
     },
     "devDependencies": {

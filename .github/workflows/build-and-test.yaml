@@ -218,7 +218,7 @@ jobs:
                   write-cache: ${{ github.event_name != 'merge_group' }}
 
             - name: Run Playwright tests
-              run: pnpm test:playwright --reporter=blob
+              run: pnpm test:playwright
               working-directory: modules
               env:
                   WEBAPP_PATH: ../webapp

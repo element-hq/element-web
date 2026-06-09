@@ -91,12 +91,7 @@ export default defineConfig<Options>({
     workers: 1,
     retries: process.env.CI ? 2 : 0,
     reporter: process.env.CI
-        ? [
-              ["list"],
-              ["html"],
-              ["github"],
-              ["@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js"],
-          ]
+        ? [["list"], ["blob"], ["github"]]
         : [["list"], ["html", { outputFolder: "playwright-html-report" }]],
     // When running the browser in docker, set the platform to `linux` as that is the platform where the browser is running
     snapshotPathTemplate: `{snapshotDir}/{testFilePath}/{arg}-${process.env.PW_TEST_CONNECT_WS_ENDPOINT ? "linux" : "{platform}"}{ext}`,
