@@ -76,7 +76,7 @@ describe("RolesRoomSettingsTab", () => {
     describe("Element Call", () => {
         const setGroupCallsEnabled = (val: boolean): void => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
-                if (name === "feature_group_calls") return val;
+                if (name === "enableElementCallVoip") return val;
             });
         };
 

@@ -45,10 +45,11 @@ import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
-import SettingsStore from "./settings/SettingsStore";
+
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallMemberEventType } from "./call-types";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
+import SdkConfig from "./SdkConfig";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -186,7 +187,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 },
             };
         }
-    } else if (SettingsStore.getValue("feature_group_calls")) {
+    } else if (!SdkConfig.get("element_call").disable) {
         createOpts.power_level_content_override = {
             events: {
                 ...DEFAULT_EVENT_POWER_LEVELS,

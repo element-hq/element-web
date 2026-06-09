@@ -409,11 +409,7 @@ describe("RoomHeader", () => {
 
     describe("group call enabled", () => {
         beforeEach(async () => {
-            SdkConfig.put({
-                features: {
-                    feature_group_calls: true,
-                },
-            });
+            SdkConfig.put({});
             // Enable Element Call
             client._unstable_getRTCTransports = jest
                 .fn()
@@ -480,9 +476,6 @@ describe("RoomHeader", () => {
             SdkConfig.add({
                 setting_defaults: {
                     [UIFeature.Widgets]: true,
-                },
-                features: {
-                    feature_group_calls: false,
                 },
             });
             // allow calls

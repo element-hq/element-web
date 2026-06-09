@@ -157,16 +157,14 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 ),
             );
         }
-        if (SettingsStore.getValue("feature_group_calls")) {
-            tabs.push(
-                new Tab(
-                    RoomSettingsTab.Voip,
-                    _td("settings|voip|title"),
-                    <VoiceCallIcon />,
-                    <VoipRoomSettingsTab room={this.state.room} />,
-                ),
-            );
-        }
+        tabs.push(
+            new Tab(
+                RoomSettingsTab.Voip,
+                _td("settings|voip|title"),
+                <VoiceCallIcon />,
+                <VoipRoomSettingsTab room={this.state.room} />,
+            ),
+        );
         tabs.push(
             new Tab(
                 RoomSettingsTab.Security,

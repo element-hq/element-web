@@ -64,7 +64,7 @@ describe("useRoomCall", () => {
         );
         const origGetValue = SettingsStore.getValue;
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name, ...params): any => {
-            if (name === "feature_group_calls") return true;
+            if (name === "enableElementCallVoip") return true;
             return origGetValue(name, ...params);
         });
     });

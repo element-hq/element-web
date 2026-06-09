@@ -105,9 +105,6 @@ test.describe("Element Call", () => {
             element_call: {
                 use_exclusively: false,
             },
-            features: {
-                feature_group_calls: true,
-            },
         },
         displayName: "Alice",
         botCreateOpts: {
