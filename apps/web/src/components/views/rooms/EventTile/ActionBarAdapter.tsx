@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useState, type JSX } from "react";
+import React, { useCallback, useEffect, useState, type JSX } from "react";
 import { type MatrixEvent, type Relations } from "matrix-js-sdk/src/matrix";
 import { ActionBarView } from "@element-hq/web-shared-components";
 
@@ -13,8 +13,6 @@ import type ReplyChain from "../../elements/ReplyChain";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
-import RoomContext from "../../../../contexts/RoomContext";
-import { CardContext } from "../../right_panel/context";
 import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { type GetRelationsForEvent } from "../../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { type EventTileActionBarViewModel } from "../../../../viewmodels/room/EventTileActionBarViewModel";
@@ -116,7 +114,7 @@ interface ActionBarAdapterProps {
     getReplyChain: () => ReplyChain | null;
     /** Notifies the parent when the action bar gains or loses focus. */
     onFocusChange?: (focused: boolean) => void;
-    /** Indicates whether the event quote is currently expanded. */
+    /** Indicates whether the quoted reply chain is expanded. */
     isQuoteExpanded?: boolean;
     /** Toggles the thread expansion state for this tile. */
     toggleThreadExpanded: () => void;
@@ -135,49 +133,32 @@ export function ActionBarAdapter({
     getTile,
     getReplyChain,
     onFocusChange,
-    isQuoteExpanded,
-    toggleThreadExpanded,
+    isQuoteExpanded: _isQuoteExpanded,
+    toggleThreadExpanded: _toggleThreadExpanded,
     getRelationsForEvent,
 }: Readonly<ActionBarAdapterProps>): JSX.Element {
-    const roomContext = useContext(RoomContext);
-    const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const isSearch = Boolean(roomContext.search);
     const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
         setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
     const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
         setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
+
     useEffect(() => {
-        vm.setProps({
-            mxEvent,
-            timelineRenderingType: roomContext.timelineRenderingType,
-            canSendMessages: roomContext.canSendMessages,
-            canReact: roomContext.canReact,
-            isSearch,
-            isCard,
-            isQuoteExpanded,
-            getRelationsForEvent,
-            onToggleThreadExpanded: toggleThreadExpanded,
+        vm.setMenuClickHandlers({
             onOptionsClick: handleOptionsClick,
             onReactionsClick: handleReactionsClick,
         });
-    }, [
-        vm,
-        mxEvent,
-        roomContext.timelineRenderingType,
-        roomContext.canSendMessages,
-        roomContext.canReact,
-        isSearch,
-        isCard,
-        isQuoteExpanded,
-        getRelationsForEvent,
-        toggleThreadExpanded,
-        handleOptionsClick,
-        handleReactionsClick,
-    ]);
+
+        return () => {
+            vm.setMenuClickHandlers({
+                onOptionsClick: undefined,
+                onReactionsClick: undefined,
+            });
+        };
+    }, [vm, handleOptionsClick, handleReactionsClick]);
 
     useEffect(() => {
         onFocusChange?.(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));

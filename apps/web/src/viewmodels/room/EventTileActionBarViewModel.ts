@@ -76,6 +76,11 @@ interface LocalActionBarState {
     isDownloadLoading: boolean;
 }
 
+interface ActionBarMenuClickHandlers {
+    onOptionsClick?: (anchor: HTMLElement | null) => void;
+    onReactionsClick?: (anchor: HTMLElement | null) => void;
+}
+
 interface DerivedEventState {
     showCancel: boolean;
     showEdit: boolean;
@@ -104,6 +109,7 @@ export class EventTileActionBarViewModel
     implements ActionBarViewActions
 {
     private listenerCleanups: Array<() => void> = [];
+    private menuClickHandlers: ActionBarMenuClickHandlers = {};
     private downloadPermissionRequestId = 0;
     private downloadRequestId = 0;
     private canDownload = true;
@@ -382,6 +388,17 @@ export class EventTileActionBarViewModel
         this.refreshSnapshot();
     }
 
+    /**
+     * Registers adapter-specific menu handlers without overwriting the
+     * externally supplied action callbacks stored in `props`.
+     */
+    public setMenuClickHandlers(newHandlers: Partial<ActionBarMenuClickHandlers>): void {
+        this.menuClickHandlers = {
+            ...this.menuClickHandlers,
+            ...newHandlers,
+        };
+    }
+
     /** Removes listeners and releases resources owned by the view model. */
     public override dispose(): void {
         this.teardownListeners();
@@ -470,11 +487,13 @@ export class EventTileActionBarViewModel
 
     /** Forwards the overflow options action using the triggering button as the anchor. */
     public onOptionsClick = (anchor: HTMLElement | null): void => {
+        this.menuClickHandlers.onOptionsClick?.(anchor);
         this.props.onOptionsClick?.(anchor);
     };
 
     /** Forwards the reactions action using the triggering button as the anchor. */
     public onReactionsClick = (anchor: HTMLElement | null): void => {
+        this.menuClickHandlers.onReactionsClick?.(anchor);
         this.props.onReactionsClick?.(anchor);
     };
 

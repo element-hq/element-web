@@ -524,6 +524,31 @@ describe("EventTileActionBarViewModel", () => {
         expect(onToggleThreadExpanded).toHaveBeenCalledWith(null);
     });
 
+    it("keeps external click callbacks when adapter menu handlers are registered", () => {
+        const onOptionsClick = jest.fn();
+        const onReactionsClick = jest.fn();
+        const onMenuOptionsClick = jest.fn();
+        const onMenuReactionsClick = jest.fn();
+
+        const vm = createVm({
+            onOptionsClick,
+            onReactionsClick,
+        });
+
+        vm.setMenuClickHandlers({
+            onOptionsClick: onMenuOptionsClick,
+            onReactionsClick: onMenuReactionsClick,
+        });
+
+        vm.onOptionsClick(null);
+        vm.onReactionsClick(null);
+
+        expect(onMenuOptionsClick).toHaveBeenCalledWith(null);
+        expect(onMenuReactionsClick).toHaveBeenCalledWith(null);
+        expect(onOptionsClick).toHaveBeenCalledWith(null);
+        expect(onReactionsClick).toHaveBeenCalledWith(null);
+    });
+
     describe("business logic parity", () => {
         it.each([
             {

@@ -163,7 +163,7 @@ export function ReactionsRowAdapter({
     }, [roomContext.canReact, menuDisplayed, vm]);
 
     useEffect(() => {
-        vm.setAddReactionHandlers({
+        vm.setAddReactionMenuHandlers({
             onAddReactionClick: openReactionMenu,
             onAddReactionContextMenu: openReactionMenu,
         });
@@ -236,7 +236,12 @@ export function ReactionsRowAdapter({
                 (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact);
 
             let buttonVm = buttonVmMapRef.current.get(content);
-            if (!buttonVm) {
+            if (buttonVm) {
+                buttonVm.setReactionData(content, deduplicatedEvents, customReactionImagesEnabled);
+                buttonVm.setCount(deduplicatedEvents.length);
+                buttonVm.setMyReactionEvent(myReactionEvent);
+                buttonVm.setDisabled(disabled);
+            } else {
                 buttonVm = new ReactionsRowButtonViewModel({
                     client,
                     mxEvent,
@@ -248,11 +253,6 @@ export function ReactionsRowAdapter({
                     customReactionImagesEnabled,
                 });
                 buttonVmMapRef.current.set(content, buttonVm);
-            } else {
-                buttonVm.setReactionData(content, deduplicatedEvents, customReactionImagesEnabled);
-                buttonVm.setCount(deduplicatedEvents.length);
-                buttonVm.setMyReactionEvent(myReactionEvent);
-                buttonVm.setDisabled(disabled);
             }
 
             nextKeys.add(content);
