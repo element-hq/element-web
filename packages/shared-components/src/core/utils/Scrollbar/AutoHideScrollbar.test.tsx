@@ -103,4 +103,39 @@ describe("AutoHideScrollbar", () => {
         expect(calls).toEqual(["wrapped-ref", "parent-did-mount"]);
         expect(screen.getByTestId("scrollbar")).toBeInTheDocument();
     });
+
+    it("does not re-enter wrappedRef when the parent rerenders from the callback", async () => {
+        class RefUpdateProbe extends React.Component<any, { armed: boolean }> {
+            public state = { armed: false };
+
+            public wrappedRefCalls = 0;
+
+            private readonly wrappedRef = (node: HTMLDivElement | null): void => {
+                this.wrappedRefCalls += 1;
+
+                if (node && !this.state.armed) {
+                    this.setState({ armed: true });
+                }
+            };
+
+            public render(): React.ReactNode {
+                return (
+                    <>
+                        <AutoHideScrollbar data-testid="scrollbar" wrappedRef={this.wrappedRef}>
+                            <div>Item 1</div>
+                        </AutoHideScrollbar>
+                        <div data-testid="status">{this.state.armed ? "armed" : "idle"}</div>
+                    </>
+                );
+            }
+        }
+
+        const probeRef = React.createRef<RefUpdateProbe>();
+
+        render(<RefUpdateProbe ref={probeRef} />);
+
+        await waitFor(() => expect(screen.getByTestId("status")).toHaveTextContent("armed"));
+        expect(probeRef.current?.wrappedRefCalls).toBe(1);
+        expect(screen.getByTestId("scrollbar")).toBeInTheDocument();
+    });
 });

@@ -47,20 +47,28 @@ export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">
     props: AutoHideScrollbarProps<T>,
 ): React.ReactNode {
     const { as = "div" as T, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = props;
-    const [container, setContainer] = React.useState<HTMLDivElement | null>(null);
+    const containerRef = React.useRef<HTMLDivElement | null>(null);
+    const wrappedRefRef = React.useRef(wrappedRef);
+    wrappedRefRef.current = wrappedRef;
+
     const collectContainer = React.useCallback(
         (node: HTMLDivElement | null): void => {
-            if (node) {
-                setContainer(node);
-                wrappedRef?.(node);
-            } else {
-                wrappedRef?.(null);
-            }
+            containerRef.current = node;
         },
-        [wrappedRef],
+        [],
     );
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
+        wrappedRefRef.current?.(containerRef.current);
+
+        return (): void => {
+            wrappedRefRef.current?.(null);
+        };
+    }, []);
+
+    React.useLayoutEffect(() => {
+        const container = containerRef.current;
+
         if (!container || !onScroll) {
             return;
         }
@@ -72,7 +80,7 @@ export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">
         return (): void => {
             container.removeEventListener("scroll", onScroll);
         };
-    }, [container, onScroll]);
+    }, [onScroll]);
 
     return React.createElement(
         as,
