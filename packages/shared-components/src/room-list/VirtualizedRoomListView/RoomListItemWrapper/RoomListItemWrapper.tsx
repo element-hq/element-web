@@ -55,12 +55,16 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
  */
 function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
     const item = useViewModel(props.vm);
-    const { ref: draggableRef, handleRef } = useDraggable({
+    const {
+        ref: draggableRef,
+        handleRef,
+        isDragSource,
+    } = useDraggable({
         id: item.id,
         // We clone the item in the dnd overlay to avoid putting a hole in the list
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
     });
     const dndRef = useMergeRefs([draggableRef, handleRef]);
-    return <RoomListItemView {...props} ref={dndRef} />;
+    return <RoomListItemView {...props} ref={dndRef} isDragSource={isDragSource} />;
 }
