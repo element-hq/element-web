@@ -1542,6 +1542,11 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_retention": {
+            "description": "Automatically remove messages from a room when they reach a configured retention period. Currently only supports reading settings.",
+            "disabled_sliding_sync": "Retention cannot be enabled when Sliding Sync is enabled.",
+            "display_name": "Message retention"
+        },
         "feature_user_status": {
             "description": "Enables being able to see and set a current status.",
             "display_name": "User status",
