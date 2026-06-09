@@ -131,6 +131,7 @@ function StatusButton({ status, clearStatus }: { status: UserStatus; clearStatus
                 onClick={clearStatus}
                 aria-label={_t("menus|user_menu|clear_status")}
                 tooltip={_t("menus|user_menu|clear_status")}
+                size="28px"
             >
                 <CloseIcon />
             </IconButton>
