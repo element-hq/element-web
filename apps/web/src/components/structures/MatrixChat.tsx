@@ -401,7 +401,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when:
      *
      *  - We successfully completed an OIDC or token login, via {@link initSession}.
-     *  - The {@link Login} or {@link Register} components notify us that we successfully completed a non-OIDC login or
+     *  - The {@link Login} or {@link Registration} components notify us that we successfully completed a non-OIDC login or
      *    registration.
      *
      * In both cases, {@link Action.OnLoggedIn} will already have been emitted, but the call to {@link onShowPostLoginScreen} will
