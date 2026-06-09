@@ -7,9 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineConfig, devices, type Project } from "@playwright/test";
 import fs, { globSync } from "node:fs";
-import path from "node:path";
+import path, { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type { Options } from "./playwright/element-web-test.ts";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const chromeProject = {
     ...devices["Desktop Chrome"],
@@ -42,7 +45,7 @@ playwright project.
 const projects: Project<Options>[] = [];
 
 // Get all the directories that hold playwright tests
-const moduleTestDirectories = globSync("modules/*/e2e", {});
+const moduleTestDirectories = globSync("*/e2e", { cwd: __dirname });
 
 // Process each directory
 for (const testDirectory of moduleTestDirectories) {
