@@ -220,10 +220,7 @@
         "log_in_new_account": "<a>Prijavite se</a> na svoj novi račun.",
         "logout_dialog": {
             "description": "Jeste li sigurni da se želite odjaviti?",
-            "megolm_export": "Ručno izvezi ključeve",
             "setup_key_backup_title": "Izgubit ćete pristup svojim šifriranim porukama",
-            "setup_secure_backup_description_1": "Šifrirane poruke zaštićene su sveobuhvatnim šifriranjem. Samo vi i primatelji imate ključeve za čitanje tih poruka.",
-            "setup_secure_backup_description_2": "Kada se odjavite, ovi će se ključevi izbrisati s ovog uređaja, što znači da nećete moći čitati šifrirane poruke osim ako nemate ključeve za njih na drugim uređajima ili ih niste sigurnosno kopirali na poslužitelj.",
             "skip_key_backup": "Ne želim svoje šifrirane poruke"
         },
         "misconfigured_body": "Upitajte svog administratora za %(brand)s da provjeri ima li u <a>vašoj konfiguraciji</a> netočnih ili dupliciranih unosa.",
@@ -275,7 +272,6 @@
             "point_the_camera": "Skenirajte QR kod koji je ovdje prikazan",
             "scan_code_instruction": "Skenirajte QR kod drugim uređajem",
             "scan_qr_code": "Prijavi se pomoću QR koda",
-            "security_code": "Sigurnosni kod",
             "security_code_prompt": "Ako se to od vas zatraži, unesite ispod navedeni kod na drugi uređaj.",
             "select_qr_code": "Odaberite „%(scanQRCode)s”",
             "unsupported_explainer": "Vaš davatelj usluga računa ne podržava prijavu na novi uređaj pomoću QR koda.",
@@ -990,9 +986,6 @@
         "set_up_recovery": "Postavljanje oporavka",
         "set_up_recovery_toast_description": "Generirajte ključ za oporavak koji se može upotrijebiti za vraćanje vaše šifrirane povijesti poruka u slučaju da izgubite pristup svojim uređajima.",
         "set_up_toast_title": "Postavljanje zaštićene sigurnosne kopije",
-        "setup_secure_backup": {
-            "explainer": "Prije odjave napravite sigurnosnu kopiju ključeva kako biste izbjegli njihov gubitak."
-        },
         "turn_on_key_storage": "Uključi pohranu ključeva",
         "turn_on_key_storage_description": "Sigurno pohranite svoj identitet šifriranja i ključeve poruka na poslužitelju. To će vam omogućiti pregled povijesti poruka na svim novim uređajima.",
         "udd": {

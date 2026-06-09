@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Masuk</a> ke akun yang baru.",
         "logout_dialog": {
             "description": "Apakah Anda yakin ingin keluar?",
-            "megolm_export": "Ekspor kunci secara manual",
             "setup_key_backup_title": "Anda akan kehilangan akses ke pesan terenkripsi Anda",
-            "setup_secure_backup_description_1": "Pesan terenkripsi diamankan dengan enkripsi ujung ke ujung. Hanya Anda dan penerima punya kuncinya untuk membaca pesan ini.",
-            "setup_secure_backup_description_2": "Ketika Anda keluar, kunci-kunci ini akan dihapus dari perangkat ini, yang berarti Anda tidak dapat membaca pesan-pesan terenkripsi kecuali jika Anda mempunyai kuncinya di perangkat Anda yang lain, atau telah mencadangkannya ke server.",
             "skip_key_backup": "Saya tidak ingin pesan-pesan terenkripsi saya"
         },
         "misconfigured_body": "Tanyakan admin %(brand)s Anda untuk memeriksa <a>konfigurasi Anda</a> untuk entri yang tidak benar atau entri duplikat.",
@@ -273,7 +270,6 @@
             "point_the_camera": "Arahkan kamera ke kode QR yang ditampilkan di sini",
             "scan_code_instruction": "Pindai kode QR dengan perangkat lain",
             "scan_qr_code": "Masuk dengan kode QR",
-            "security_code": "Kode keamanan",
             "security_code_prompt": "Jika diminta, masukkan kode di bawah ini pada perangkat Anda yang lain.",
             "select_qr_code": "Pilih \"%(scanQRCode)s\"",
             "unsupported_explainer": "Penyedia akun Anda tidak mendukung masuk ke perangkat baru dengan kode QR.",
@@ -982,9 +978,6 @@
         "set_up_recovery": "Siapkan pemulihan",
         "set_up_recovery_toast_description": "Buat kunci pemulihan yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi jika Anda kehilangan akses ke perangkat Anda.",
         "set_up_toast_title": "Siapkan Cadangan Aman",
-        "setup_secure_backup": {
-            "explainer": "Cadangkan kunci Anda sebelum keluar untuk menghindari kehilangannya."
-        },
         "turn_on_key_storage": "Aktifkan penyimpanan kunci",
         "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
         "udd": {

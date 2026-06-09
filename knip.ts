@@ -45,7 +45,6 @@ export default {
                 // dependency so that // we can run `tsc` (since we import the typescript
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
-                "@types/content-type",
                 "@types/sdp-transform",
             ],
         },
@@ -56,7 +55,15 @@ export default {
                 // Brought in via hak scripts
                 "matrix-seshat",
             ],
-            ignoreBinaries: ["scripts/in-docker.sh"],
+            ignoreBinaries: [
+                "scripts/in-docker.sh",
+                // Used to build seshat (optional)
+                "rustc",
+                // Used by the fetch-package script (optional)
+                "gpg",
+                // Used for the macOS universal builds
+                "lipo",
+            ],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],

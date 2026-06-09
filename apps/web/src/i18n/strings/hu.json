@@ -218,10 +218,7 @@
         "log_in_new_account": "<a>Belépés</a> az új fiókjába.",
         "logout_dialog": {
             "description": "Biztosan eltávolítja ezt az eszközt?",
-            "megolm_export": "Kulcsok kézi mentése",
             "setup_key_backup_title": "Elveszíti a hozzáférést a titkosított üzeneteihez",
-            "setup_secure_backup_description_1": "A titkosított üzenetek végpontok közti titkosítással védettek. Csak Önnek és a címzetteknek lehet meg a kulcsuk az üzenet visszafejtéséhez.",
-            "setup_secure_backup_description_2": "Ha eltávolítja ezt az eszközt, nem fogja tudni elolvasni a titkosított üzeneteket, hacsak nincs meg a kulcsuk a többi eszközén, vagy ha nem készített róluk biztonsági másolatot a kiszolgálóra.",
             "skip_key_backup": "Nincs szükségem a titkosított üzeneteimre"
         },
         "misconfigured_body": "Kérje meg a(z) %(brand)s adminisztrátorát, hogy ellenőrizze a <a>beállításait</a>, hibás vagy duplikált bejegyzéseket keresve.",
@@ -273,7 +270,6 @@
             "point_the_camera": "Irányítsa a kamerát az itt látható QR-kódra",
             "scan_code_instruction": "Olvassa be a QR-kódot egy másik eszközzel",
             "scan_qr_code": "Bejelentkezés QR-kóddal",
-            "security_code": "Biztonsági kód",
             "security_code_prompt": "Ha a rendszer kéri, írja be az alábbi kódot a másik eszközön.",
             "select_qr_code": "Válassza a „%(scanQRCode)s” lehetőséget",
             "unsupported_explainer": "Fiókszolgáltatója nem támogatja a bejelentkezést egy új eszközre QR-kóddal.",
@@ -1000,9 +996,6 @@
         "set_up_recovery": "Csevegések biztonsági mentése",
         "set_up_recovery_toast_description": "A csevegései automatikusan mentve vannak, végpontok közti titkosítással Ahhoz, hogy az eszközei elvesztése esetén helyre tudja állítani a biztonsági mentést és megtartsa a digitális személyazonosságát, egy helyreállítási kulcsra van szüksége.",
         "set_up_toast_title": "Biztonsági mentés beállítása",
-        "setup_secure_backup": {
-            "explainer": "Az eszköz eltávolítása előtt készítsen biztonsági másolatot a kulcsairól, hogy elkerülje azok elvesztését."
-        },
         "turn_on_key_storage": "A kulcstárolás bekapcsolása",
         "turn_on_key_storage_description": "Ez lehetővé teszi az üzenetelőzmények megtekintését bármely új eszközön, és szükséges a csevegések és a digitális személyazonossága biztonsági mentéséhez.",
         "udd": {

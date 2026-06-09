@@ -24,6 +24,7 @@ export * from "./room/timeline/event-tile/body/HiddenMediaPlaceholder";
 export * from "./room/timeline/event-tile/body/RedactedBodyView";
 export * from "./room/timeline/event-tile/body/MFileBodyView";
 export * from "./room/timeline/event-tile/body/MImageBodyView";
+export * from "./room/timeline/event-tile/body/MImageReplyBodyView";
 export * from "./room/timeline/event-tile/body/MjolnirBodyView";
 export * from "./room/timeline/event-tile/body/MVideoBodyView";
 export * from "./room/timeline/event-tile/body/TextualBodyView";

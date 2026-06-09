@@ -235,7 +235,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                 </section>
             </Menu>
             {expanded && (
-                <Text type="heading" size="sm" as="span" weight="semibold">
+                <Text type="heading" size="sm" as="span" weight="semibold" className={styles.displayName}>
                     {displayName}
                 </Text>
             )}

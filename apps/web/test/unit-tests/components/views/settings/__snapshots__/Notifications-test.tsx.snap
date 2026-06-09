@@ -3,13 +3,13 @@
 exports[`<Notifications /> main notification switches renders only enable notifications switch when notifications are disabled 1`] = `
 <div>
   <form
-    class="_root_19upo_16"
+    class="_root_1o4d9_17"
   >
     <div
-      class="_inline-field_19upo_32"
+      class="_inline-field_1o4d9_33"
     >
       <div
-        class="_inline-field-control_19upo_44"
+        class="_inline-field-control_1o4d9_45"
       >
         <div
           class="_container_udcm8_10"
@@ -26,16 +26,16 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         </div>
       </div>
       <div
-        class="_inline-field-body_19upo_38"
+        class="_inline-field-body_1o4d9_39"
       >
         <label
-          class="_label_19upo_59"
+          class="_label_1o4d9_60"
           for="react-use-id-1"
         >
           Enable notifications for this account
         </label>
         <span
-          class="_message_19upo_85 _help-message_19upo_91"
+          class="_message_1o4d9_86 _help-message_1o4d9_92"
           id="radix-react-use-id-2"
         >
           Turn off to disable notifications on all your devices and sessions
@@ -44,13 +44,13 @@ exports[`<Notifications /> main notification switches renders only enable notifi
     </div>
   </form>
   <form
-    class="_root_19upo_16"
+    class="_root_1o4d9_17"
   >
     <div
-      class="_inline-field_19upo_32"
+      class="_inline-field_1o4d9_33"
     >
       <div
-        class="_inline-field-control_19upo_44"
+        class="_inline-field-control_1o4d9_45"
       >
         <div
           class="_container_udcm8_10"
@@ -68,10 +68,10 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         </div>
       </div>
       <div
-        class="_inline-field-body_19upo_38"
+        class="_inline-field-body_1o4d9_39"
       >
         <label
-          class="_label_19upo_59"
+          class="_label_1o4d9_60"
           for="mx_SettingsFlag_testid_0"
         >
           Show all activity in the room list (dots or number of unread messages)
@@ -79,10 +79,10 @@ exports[`<Notifications /> main notification switches renders only enable notifi
       </div>
     </div>
     <div
-      class="_inline-field_19upo_32"
+      class="_inline-field_1o4d9_33"
     >
       <div
-        class="_inline-field-control_19upo_44"
+        class="_inline-field-control_1o4d9_45"
       >
         <div
           class="_container_udcm8_10"
@@ -100,10 +100,10 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         </div>
       </div>
       <div
-        class="_inline-field-body_19upo_38"
+        class="_inline-field-body_1o4d9_39"
       >
         <label
-          class="_label_19upo_59"
+          class="_label_1o4d9_60"
           for="mx_SettingsFlag_testid_1"
         >
           Only show notifications in the thread activity centre

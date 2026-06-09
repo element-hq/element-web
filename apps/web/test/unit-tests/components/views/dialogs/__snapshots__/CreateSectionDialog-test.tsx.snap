@@ -34,13 +34,13 @@ exports[`CreateSectionDialog renders the dialog 1`] = `
         Sections are only for you
       </span>
       <form
-        class="_root_19upo_16 mx_CreateSectionDialog_form"
+        class="_root_1o4d9_17 mx_CreateSectionDialog_form"
       >
         <div
-          class="_field_19upo_26"
+          class="_field_1o4d9_27"
         >
           <label
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="radix-react-use-id-1"
           >
              

@@ -7,7 +7,6 @@
 
 import { waitFor } from "jest-matrix-react";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
-import whatInput from "what-input";
 
 import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -27,7 +26,6 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: true,
                 initialSize: 0,
-                isFocusedViaKeyboard: false,
             });
         });
 
@@ -37,7 +35,6 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: 34,
-                isFocusedViaKeyboard: false,
             });
         });
 
@@ -46,7 +43,6 @@ describe("LeftPanelResizerViewModel", () => {
             expect(vm.getSnapshot()).toStrictEqual({
                 isCollapsed: false,
                 initialSize: undefined,
-                isFocusedViaKeyboard: false,
             });
         });
     });
@@ -89,7 +85,7 @@ describe("LeftPanelResizerViewModel", () => {
         expect(mockHandle.resize).not.toHaveBeenCalledWith("34%");
     });
 
-    describe("should expand panel on click()", () => {
+    describe("should expand panel on double click when panel is collapsed", () => {
         it("to last non-zero width that the user set", () => {
             const vm = new ResizerViewModel();
             SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
@@ -98,11 +94,9 @@ describe("LeftPanelResizerViewModel", () => {
                 isCollapsed: jest.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
-
             // Simulate click
             vm.onPointerDown();
             vm.onPointerUp();
-
             expect(mockHandle.resize).toHaveBeenCalledWith("34%");
         });
 
@@ -113,22 +107,23 @@ describe("LeftPanelResizerViewModel", () => {
                 isCollapsed: jest.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
-
             // Simulate click
             vm.onPointerDown();
             vm.onPointerUp();
-
             expect(mockHandle.resize).toHaveBeenCalledWith("100%");
         });
     });
 
-    it("should set isFocusedViaKeyboard state correctly", () => {
-        whatInput.ask = jest.fn().mockReturnValue("keyboard");
+    it("should collapse panel on click when panel is expanded", () => {
         const vm = new ResizerViewModel();
-        vm.onFocus();
-        expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(true);
-        vm.onBlur();
-        expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(false);
+        const mockHandle = {
+            collapse: jest.fn(),
+            isCollapsed: jest.fn().mockReturnValue(false),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        vm.onDoubleClick();
+        expect(mockHandle.collapse).toHaveBeenCalled();
     });
 
     it("should resize to nearest whole number", () => {

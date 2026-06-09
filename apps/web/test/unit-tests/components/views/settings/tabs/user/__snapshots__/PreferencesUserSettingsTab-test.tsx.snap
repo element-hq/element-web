@@ -16,7 +16,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
           class="mx_SettingsSection_subSections"
         >
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -69,7 +69,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -87,10 +87,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -107,10 +107,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_vY7Q4uEh9K38"
                     >
                       Show message previews
@@ -121,7 +121,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -139,10 +139,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -160,16 +160,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_QgU2PomxwKpa"
                     >
                       Show all rooms in Home
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-1"
                     >
                       All rooms you're in will appear in Home.
@@ -180,7 +180,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -217,10 +217,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -238,10 +238,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_6hpi3YEetmBG"
                     >
                       Use Ctrl + F to search timeline
@@ -252,7 +252,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -308,10 +308,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -329,10 +329,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_4yVCeEefiPqp"
                     >
                       Show timestamps in 12 hour format (e.g. 2:30pm)
@@ -340,10 +340,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -361,10 +361,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_MRMwbPDmfGtm"
                     >
                       Always show message timestamps
@@ -372,10 +372,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -393,16 +393,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_GQvdMWe954DV"
                     >
                       Publish timezone on public profile
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-2"
                     >
                       Requires your server to support MSC4133
@@ -413,7 +413,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -440,10 +440,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -462,16 +462,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_IAu5CsiHRD7n"
                     >
                       Send read receipts
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-3"
                     >
                       Your server doesn't support disabling sending read receipts.
@@ -479,10 +479,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -501,10 +501,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_yrA2ohjWVJIP"
                     >
                       Send typing notifications
@@ -515,7 +515,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -533,10 +533,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -554,10 +554,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_auy1OmnTidX4"
                     >
                       Automatically replace plain text Emoji
@@ -565,10 +565,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -587,16 +587,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_ePDS0OpWwAHG"
                     >
                       Enable Markdown
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-4"
                     >
                       <span>
@@ -610,10 +610,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -632,10 +632,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_75JNTNkNU64r"
                     >
                       Enable Emoji suggestions while typing
@@ -643,10 +643,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -664,10 +664,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_aTLcRsQRlYy7"
                     >
                       Use Ctrl + Enter to send a message
@@ -675,10 +675,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -696,10 +696,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_5nfv5bOEPN1s"
                     >
                       Surround selected text when typing special characters
@@ -707,10 +707,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -729,10 +729,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_u1JYVtOyR5kb"
                     >
                       Show stickers button
@@ -740,10 +740,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -762,10 +762,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_u3pEwuLn9Enn"
                     >
                       Insert a trailing colon after user mentions at the start of a message
@@ -776,7 +776,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -794,10 +794,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -815,10 +815,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_YuxfFEpOsztW"
                     >
                       Enable automatic language detection for syntax highlighting
@@ -826,10 +826,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -847,10 +847,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_hQkBerF1ejc4"
                     >
                       Expand code blocks by default
@@ -858,10 +858,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -880,10 +880,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_GFes1UFzOK2n"
                     >
                       Show line numbers in code blocks
@@ -894,7 +894,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -921,10 +921,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -942,10 +942,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_vfGFMldL2r2v"
                     >
                       Enable previews
@@ -953,10 +953,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -973,10 +973,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_bsSwicmKUiOB"
                     >
                       Enable previews in encrypted rooms
@@ -987,7 +987,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -1005,10 +1005,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1026,10 +1026,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_dvqsxEaZtl3A"
                     >
                       Autoplay GIFs
@@ -1037,10 +1037,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1058,10 +1058,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_NIiWzqsApP1c"
                     >
                       Autoplay videos
@@ -1072,7 +1072,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -1090,10 +1090,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1112,10 +1112,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_q1SIAPqLMVXh"
                     >
                       Show typing notifications
@@ -1123,10 +1123,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1145,10 +1145,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_dXFDGgBsKXay"
                     >
                       Show a placeholder for removed messages
@@ -1156,10 +1156,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1178,10 +1178,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_7Az0xw4Bs4Tt"
                     >
                       Show read receipts sent by other users
@@ -1189,10 +1189,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1211,10 +1211,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_8jmzPIlPoBCv"
                     >
                       Show join/leave messages (invites/removes/bans unaffected)
@@ -1222,10 +1222,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1244,10 +1244,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_enFRaTjdsFou"
                     >
                       Show display name changes
@@ -1255,10 +1255,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1277,10 +1277,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_bfwnd5rz4XNX"
                     >
                       Show chat effects (animations when receiving e.g. confetti)
@@ -1288,10 +1288,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1310,10 +1310,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_gs5uWEzYzZrS"
                     >
                       Show profile picture changes
@@ -1321,10 +1321,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1343,10 +1343,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_qWg7OgID1yRR"
                     >
                       Show avatars in user, room and event mentions
@@ -1354,10 +1354,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1376,10 +1376,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_pOPewl7rtMbV"
                     >
                       Enable big emoji in chat
@@ -1387,10 +1387,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1409,10 +1409,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_cmt3PZSyNp3v"
                     >
                       Jump to the bottom of the timeline when you send a message
@@ -1420,10 +1420,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1442,10 +1442,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_dJJz3lHUv9XX"
                     >
                       Show current profile picture and name for users in message history
@@ -1471,13 +1471,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_19upo_16 mx_MediaPreviewAccountSetting_Form"
+                class="_root_1o4d9_17 mx_MediaPreviewAccountSetting_Form"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1494,10 +1494,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="react-use-id-5"
                     >
                       Hide avatars of room and inviter
@@ -1506,27 +1506,27 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 </div>
                 <div
                   aria-label="Show media in timeline"
-                  class="_field_19upo_26"
+                  class="_field_1o4d9_27"
                   id="mx_media_previews"
                   role="radiogroup"
                 >
                   <label
-                    class="_label_19upo_59"
+                    class="_label_1o4d9_60"
                     for="radix-react-use-id-6"
                   >
                     Show media in timeline
                   </label>
                   <span
-                    class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
+                    class="_message_1o4d9_86 _help-message_1o4d9_92 mx_MediaPreviewAccountSetting_RadioHelp"
                     id="radix-react-use-id-7"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
                   <div
-                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
+                    class="_inline-field_1o4d9_33 mx_MediaPreviewAccountSetting_Radio"
                   >
                     <div
-                      class="_inline-field-control_19upo_44"
+                      class="_inline-field-control_1o4d9_45"
                     >
                       <div
                         class="_container_1ug7n_10"
@@ -1542,10 +1542,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_inline-field-body_19upo_38"
+                      class="_inline-field-body_1o4d9_39"
                     >
                       <label
-                        class="_label_19upo_59"
+                        class="_label_1o4d9_60"
                         for="mx_media_previews_off"
                       >
                         Always hide
@@ -1553,10 +1553,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
+                    class="_inline-field_1o4d9_33 mx_MediaPreviewAccountSetting_Radio"
                   >
                     <div
-                      class="_inline-field-control_19upo_44"
+                      class="_inline-field-control_1o4d9_45"
                     >
                       <div
                         class="_container_1ug7n_10"
@@ -1572,10 +1572,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_inline-field-body_19upo_38"
+                      class="_inline-field-body_1o4d9_39"
                     >
                       <label
-                        class="_label_19upo_59"
+                        class="_label_1o4d9_60"
                         for="mx_media_previews_private"
                       >
                         In private rooms
@@ -1583,10 +1583,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_Radio"
+                    class="_inline-field_1o4d9_33 mx_MediaPreviewAccountSetting_Radio"
                   >
                     <div
-                      class="_inline-field-control_19upo_44"
+                      class="_inline-field-control_1o4d9_45"
                     >
                       <div
                         class="_container_1ug7n_10"
@@ -1603,10 +1603,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_inline-field-body_19upo_38"
+                      class="_inline-field-body_1o4d9_39"
                     >
                       <label
-                        class="_label_19upo_59"
+                        class="_label_1o4d9_60"
                         for="mx_media_previews_on"
                       >
                         Always show
@@ -1616,13 +1616,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 </div>
               </form>
               <form
-                class="_root_19upo_16 mx_MediaPreviewAccountSetting_Form"
+                class="_root_1o4d9_17 mx_MediaPreviewAccountSetting_Form"
               >
                 <div
-                  class="_inline-field_19upo_32 mx_MediaPreviewAccountSetting_ToggleSwitch"
+                  class="_inline-field_1o4d9_33 mx_MediaPreviewAccountSetting_ToggleSwitch"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1641,16 +1641,16 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="react-use-id-8"
                     >
                       Allow users to invite you to rooms
                     </label>
                     <span
-                      class="_message_19upo_85 _help-message_19upo_91"
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
                       id="radix-react-use-id-9"
                     >
                       Your server does not implement this feature.
@@ -1667,7 +1667,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             />
           </div>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -1685,10 +1685,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1706,10 +1706,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_SBSSOZDRlzlA"
                     >
                       Show NSFW content
@@ -1720,7 +1720,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
             </div>
           </form>
           <form
-            class="_root_19upo_16"
+            class="_root_1o4d9_17"
           >
             <div
               class="mx_SettingsSubsection"
@@ -1738,10 +1738,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
               >
                 <div
-                  class="_inline-field_19upo_32"
+                  class="_inline-field_1o4d9_33"
                 >
                   <div
-                    class="_inline-field-control_19upo_44"
+                    class="_inline-field-control_1o4d9_45"
                   >
                     <div
                       class="_container_udcm8_10"
@@ -1760,10 +1760,10 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_19upo_38"
+                    class="_inline-field-body_1o4d9_39"
                   >
                     <label
-                      class="_label_19upo_59"
+                      class="_label_1o4d9_60"
                       for="mx_SettingsFlag_FLEpLCb0jpp6"
                     >
                       Prompt before sending invites to potentially invalid matrix IDs

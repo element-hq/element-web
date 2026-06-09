@@ -230,6 +230,7 @@ export interface Settings {
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
+    "feature_login_with_qr": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -673,6 +674,14 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
         controller: new ReloadOnChangeController(),
+    },
+    "feature_login_with_qr": {
+        supportedLevels: [SettingLevel.CONFIG],
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|login_with_qr"),
+        description: _td("labs|config_only"),
+        isFeature: true,
+        default: false,
     },
     /**
      * With the transition to Compound we are moving to a base font size
@@ -1131,7 +1140,7 @@ export const SETTINGS: Settings = {
     "urlPreviewsEnabled": {
         // Enabled by default and client configurable as this setting only allows unencrypted
         // messages to be previewed.
-        supportedLevels: [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_default"),
         default: true,
