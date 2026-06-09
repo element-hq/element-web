@@ -221,7 +221,7 @@ jobs:
               run: pnpm test:playwright
               working-directory: modules
               env:
-                  WEBAPP_PATH: ../webapp
+                  WEBAPP_PATH: ../apps/web/webapp
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
