@@ -45,7 +45,6 @@ import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
-
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallMemberEventType } from "./call-types";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";

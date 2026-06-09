@@ -990,7 +990,7 @@ export const SETTINGS: Settings = {
     "enableLegacyCallsVoip": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|voip|enable_legacy_calls"),
-        default: false,
+        default: true,
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
