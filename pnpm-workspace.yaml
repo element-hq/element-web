@@ -28,6 +28,7 @@ catalog:
     vite: 8.0.16
     vitest: 4.1.8
     "@vitest/coverage-v8": 4.1.8
+    "@vitest/browser-playwright": 4.1.8
 
 packageExtensions:
     fdir:
