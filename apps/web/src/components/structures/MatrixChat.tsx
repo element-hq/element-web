@@ -2028,7 +2028,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (ModuleApi.instance.navigation.locationRenderers.get(screen)) {
             this.setState({ page_type: screen });
         } else {
-            // TODO
+            // Unknown screen requested
+            return this.showScreen(isLoggedOutOrGuest ? "welcome" : "home");
         }
     }
 
