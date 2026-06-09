@@ -36,7 +36,7 @@ import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSet
 import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
 import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
-
+import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
 import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab";
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
@@ -96,6 +96,7 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 }
 
 export default function UserSettingsDialog(props: IProps): JSX.Element {
+    const voipEnabled = useSettingValue(UIFeature.Voip);
     const mjolnirEnabled = useSettingValue("feature_mjolnir");
     // store these props in state as changing tabs back and forth should clear them
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
@@ -187,15 +188,18 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 "UserSettingsSidebar",
             ),
         );
-        tabs.push(
-            new Tab(
-                UserTab.Voice,
-                _td("settings|voip|title"),
-                <MicOnIcon />,
-                <VoiceUserSettingsTab />,
-                "UserSettingsVoiceVideo",
-            ),
-        );
+
+        if (voipEnabled) {
+            tabs.push(
+                new Tab(
+                    UserTab.Voice,
+                    _td("settings|voip|title"),
+                    <MicOnIcon />,
+                    <VoiceUserSettingsTab />,
+                    "UserSettingsVoiceVideo",
+                ),
+            );
+        }
 
         tabs.push(
             new Tab(

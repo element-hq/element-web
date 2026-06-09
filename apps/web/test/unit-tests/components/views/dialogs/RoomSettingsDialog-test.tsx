@@ -147,9 +147,6 @@ describe("<RoomSettingsDialog />", () => {
         });
 
         it("always renders voip settings tab when enabled", () => {
-            // jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            //     (settingName) => settingName === "feature_group_calls",
-            // );
             getComponent();
             expect(screen.getByTestId("settings-tab-ROOM_VOIP_TAB")).toBeInTheDocument();
         });

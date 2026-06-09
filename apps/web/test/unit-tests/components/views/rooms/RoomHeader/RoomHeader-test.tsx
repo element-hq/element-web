@@ -474,6 +474,7 @@ describe("RoomHeader", () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
             SdkConfig.add({
+                element_call: { disable: true }, // This test is about Jitsi widget re-pinning, not Element Call
                 setting_defaults: {
                     [UIFeature.Widgets]: true,
                 },
@@ -788,6 +789,7 @@ describe("RoomHeader", () => {
                 features: {
                     feature_notifications: false,
                 },
+                element_call: { disable: true },
             });
             const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
 

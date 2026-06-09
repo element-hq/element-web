@@ -176,11 +176,11 @@ export const useRoomCall = (
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
-        if (!SdkConfig.get("element_call").disable && mayCreateElementCalls) {
+        if (!SdkConfig.get("element_call").disable) {
             if (useElementCallExclusively && !hasJitsiWidget) {
                 return [PlatformCallType.ElementCall];
             }
-            if (hasGroupCall) {
+            if (hasGroupCall || mayCreateElementCalls) {
                 options.push(PlatformCallType.ElementCall);
             }
         }

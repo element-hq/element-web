@@ -36,22 +36,28 @@ import createRoom, {
     canEncryptToAllUsers,
     waitForRoomEncryption,
 } from "../../src/createRoom";
-import SettingsStore from "../../src/settings/SettingsStore";
 import { ElementCallMemberEventType } from "../../src/call-types";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { PreferredRoomVersions } from "../../src/utils/PreferredRoomVersions";
+import SdkConfig from "../../src/SdkConfig";
 
 describe("createRoom", () => {
     mockPlatformPeg();
 
     let client: Mocked<MatrixClient>;
     beforeEach(() => {
+        SdkConfig.add({
+            element_call: { disable: true },
+        });
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(client);
     });
 
-    afterEach(() => jest.clearAllMocks());
+    afterEach(() => {
+        jest.clearAllMocks();
+        SdkConfig.reset();
+    });
 
     it("creates a private room", async () => {
         await createRoom(client, { createOpts: { preset: Preset.PrivateChat } });
@@ -324,10 +330,9 @@ describe("createRoom", () => {
     });
 
     it("correctly sets up MSC3401 power levels", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
-            if (name === "enableElementCallVoip") return true;
+        SdkConfig.add({
+            element_call: { disable: false },
         });
-
         await createRoom(client, {});
 
         const callMemberPower =

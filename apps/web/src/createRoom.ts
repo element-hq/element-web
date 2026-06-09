@@ -86,7 +86,7 @@ export interface IOpts {
     joinRule?: JoinRule;
 }
 
-const DEFAULT_EVENT_POWER_LEVELS = {
+const DEFAULT_VIDEO_ROOM_EVENT_POWER_LEVELS = {
     [EventType.RoomName]: 50,
     [EventType.RoomAvatar]: 50,
     [EventType.RoomPowerLevels]: 100,
@@ -173,7 +173,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
-                    ...DEFAULT_EVENT_POWER_LEVELS,
+                    ...DEFAULT_VIDEO_ROOM_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
                     [opts.roomType === RoomType.ElementVideo
                         ? JitsiCall.MEMBER_EVENT_TYPE
@@ -189,7 +189,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     } else if (!SdkConfig.get("element_call").disable) {
         createOpts.power_level_content_override = {
             events: {
-                ...DEFAULT_EVENT_POWER_LEVELS,
                 // It should always (including non video rooms) be possible to join a group call.
                 [ElementCallMemberEventType.name]: 0,
             },

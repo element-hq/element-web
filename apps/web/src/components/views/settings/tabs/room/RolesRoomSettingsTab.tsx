@@ -272,13 +272,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
         };
-
         // MSC3401: Native Group VoIP signaling
         if (!SdkConfig.get("element_call").disable) {
             plEventsToLabels[ElementCallEventType.name] = _td("room_settings|permissions|m.call");
             plEventsToLabels[ElementCallMemberEventType.name] = _td("room_settings|permissions|m.call.member");
         }
-
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
                 desc: _t("room_settings|permissions|users_default"),

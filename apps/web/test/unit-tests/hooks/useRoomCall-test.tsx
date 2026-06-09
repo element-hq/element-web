@@ -23,7 +23,6 @@ import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomCon
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
 import type LegacyCallHandler from "../../../src/LegacyCallHandler";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
-import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
 
 describe("useRoomCall", () => {
@@ -62,11 +61,6 @@ describe("useRoomCall", () => {
         jest.spyOn(SdkContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
             callHandler as unknown as LegacyCallHandler,
         );
-        const origGetValue = SettingsStore.getValue;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name, ...params): any => {
-            if (name === "enableElementCallVoip") return true;
-            return origGetValue(name, ...params);
-        });
     });
 
     afterEach(() => {
