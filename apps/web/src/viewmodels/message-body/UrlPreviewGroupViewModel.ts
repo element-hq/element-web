@@ -38,6 +38,7 @@ export const PREVIEW_WIDTH_PX = 478;
 export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
+// From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
 
 export enum PreviewVisibility {
