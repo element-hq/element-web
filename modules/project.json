@@ -1,0 +1,16 @@
+{
+    "$schema": "../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "targets": {
+        "test:playwright": {
+            "command": "playwright test",
+            "options": { "cwd": "modules" },
+            "dependsOn": ["^build:playwright"]
+        },
+        "test:playwright:screenshots": {
+            "command": "playwright-screenshots playwright test --update-snapshots --grep @screenshot",
+            "options": { "cwd": "modules" },
+            "dependsOn": ["^build:playwright"]
+        }
+    }
+}
