@@ -51,12 +51,9 @@ export function AutoHideScrollbar<T extends keyof JSX.IntrinsicElements = "div">
     const wrappedRefRef = React.useRef(wrappedRef);
     wrappedRefRef.current = wrappedRef;
 
-    const collectContainer = React.useCallback(
-        (node: HTMLDivElement | null): void => {
-            containerRef.current = node;
-        },
-        [],
-    );
+    const collectContainer = React.useCallback((node: HTMLDivElement | null): void => {
+        containerRef.current = node;
+    }, []);
 
     React.useLayoutEffect(() => {
         wrappedRefRef.current?.(containerRef.current);
