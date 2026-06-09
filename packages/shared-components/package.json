@@ -110,7 +110,7 @@
         "@typescript-eslint/eslint-plugin": "^8.53.1",
         "@typescript-eslint/parser": "^8.53.1",
         "@vector-im/compound-web": "catalog:",
-        "@vitest/browser-playwright": "^4.0.17",
+        "@vitest/browser-playwright": "catalog:",
         "@vitest/coverage-v8": "catalog:",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",

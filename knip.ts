@@ -55,7 +55,15 @@ export default {
                 // Brought in via hak scripts
                 "matrix-seshat",
             ],
-            ignoreBinaries: ["scripts/in-docker.sh"],
+            ignoreBinaries: [
+                "scripts/in-docker.sh",
+                // Used to build seshat (optional)
+                "rustc",
+                // Used by the fetch-package script (optional)
+                "gpg",
+                // Used for the macOS universal builds
+                "lipo",
+            ],
         },
         "modules/*": {
             entry: "src/index.ts{x,}",
