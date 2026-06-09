@@ -16,7 +16,6 @@ import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEv
 import { decode } from "html-entities";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
-import type { RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import PlatformPeg from "../../PlatformPeg";
