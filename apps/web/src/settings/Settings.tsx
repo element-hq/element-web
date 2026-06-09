@@ -1140,7 +1140,7 @@ export const SETTINGS: Settings = {
     "urlPreviewsEnabled": {
         // Enabled by default and client configurable as this setting only allows unencrypted
         // messages to be previewed.
-        supportedLevels: [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_default"),
         default: true,

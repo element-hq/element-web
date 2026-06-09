@@ -37,6 +37,8 @@ export const PREVIEW_WIDTH_PX = 478;
 export const PREVIEW_HEIGHT_PX = 200;
 export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
+// From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
+export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
 
 export enum PreviewVisibility {
     /**
@@ -387,6 +389,18 @@ export class UrlPreviewGroupViewModel
      * for the previously-calculated links.
      */
     private async computeSnapshot(): Promise<void> {
+        // This uses MSC4095. If the sender has sent us an empty URL previews bundle
+        // then they do not want to have URL previews be visible.
+        const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
+        if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
+            return this.snapshot.merge({
+                previews: [],
+                totalPreviewCount: 0,
+                previewsLimited: false,
+                overPreviewLimit: false,
+            });
+        } // otherwise, we do not support bundled previews yet so will fallback to old behaviour.
+
         const previews =
             this.visibility <= PreviewVisibility.UserHidden
                 ? []
