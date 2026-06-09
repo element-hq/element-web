@@ -32,6 +32,7 @@ import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
+import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
 
 export interface Props {
     /**
@@ -82,6 +83,12 @@ export class RoomListHeaderViewModel
         // Listen for section collapse state changes from RoomListViewModel
         const dispatcherRef = defaultDispatcher.register(this.onDispatch);
         this.disposables.track(() => defaultDispatcher.unregister(dispatcherRef));
+
+        this.disposables.trackListener(
+            ReleaseAnnouncementStore.instance,
+            "releaseAnnouncementChanged",
+            this.onReleaseAnnouncementChanged,
+        );
     }
 
     /**
@@ -229,7 +236,21 @@ export class RoomListHeaderViewModel
             });
         }
     };
+
+    public closeSectionReleaseAnnouncement = (): void => {
+        ReleaseAnnouncementStore.instance.nextReleaseAnnouncement();
+        this.snapshot.merge({ displaySectionReleaseAnnouncement: false });
+    };
+
+    public onReleaseAnnouncementChanged = (): void => {
+        const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
+        const displaySectionReleaseAnnouncement =
+            isSectionFeatureEnabled &&
+            ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
+        this.snapshot.merge({ displaySectionReleaseAnnouncement });
+    };
 }
+
 /**
  * Get the initial snapshot for the RoomListHeaderViewModel.
  * @param spaceStore - The space store instance.
@@ -290,6 +311,8 @@ function computeHeaderSpaceState(
     matrixClient: MatrixClient,
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
     const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
+    const displaySectionReleaseAnnouncement =
+        isSectionFeatureEnabled && ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
 
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
@@ -316,5 +339,6 @@ function computeHeaderSpaceState(
         canAccessSpaceSettings,
         canCreateSection,
         useComposeIcon,
+        displaySectionReleaseAnnouncement,
     };
 }
