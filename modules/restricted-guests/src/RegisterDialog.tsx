@@ -1,0 +1,99 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { type FC, useState, type JSX, type FormEvent } from "react";
+import { type Api, type AccountAuthInfo, type DialogProps } from "@element-hq/element-web-module-api";
+import { Form } from "@vector-im/compound-web";
+import styled from "styled-components";
+
+import { type ModuleConfig } from "./config.ts";
+
+interface RegisterDialogProps extends DialogProps<AccountAuthInfo> {
+    api: Api;
+    config: ModuleConfig;
+    showLoginLink?: boolean;
+}
+
+const enum State {
+    Idle,
+    Busy,
+    Error,
+}
+
+const StyledFormRoot = styled(Form.Root)`
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    font-feature-settings: normal;
+`;
+
+const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubmit, showLoginLink }) => {
+    const [username, setUsername] = useState("");
+    const [state, setState] = useState<State>(State.Idle);
+
+    async function trySubmit(ev: FormEvent): Promise<void> {
+        ev.preventDefault();
+        setState(State.Busy);
+
+        try {
+            const homeserverUrl = config.guest_user_homeserver_url;
+
+            const url = new URL("/_synapse/client/register_guest", homeserverUrl);
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ displayname: username }),
+            });
+
+            if (response.ok) {
+                const accountAuthInfo = await response.json();
+                onSubmit(accountAuthInfo);
+            }
+        } catch (e) {
+            console.error("Failed to create guest account", e);
+            setState(State.Error);
+        }
+    }
+
+    let message: JSX.Element | undefined;
+    if (state === State.Error) {
+        message = <Form.ErrorMessage>{api.i18n.translate("register_dialog_error")}</Form.ErrorMessage>;
+    } else if (state === State.Busy) {
+        message = <Form.LoadingMessage>{api.i18n.translate("register_dialog_busy")}</Form.LoadingMessage>;
+    }
+
+    const disabled = state !== State.Idle;
+
+    return (
+        <StyledFormRoot onSubmit={trySubmit}>
+            <Form.Field name="name">
+                <Form.Label>{api.i18n.translate("register_dialog_register_username_label")}</Form.Label>
+                <Form.TextControl
+                    disabled={disabled}
+                    value={username}
+                    onChange={(event) => {
+                        setUsername(event.currentTarget.value);
+                    }}
+                    placeholder={api.i18n.translate("register_dialog_field_label")}
+                />
+                {message}
+            </Form.Field>
+
+            {showLoginLink && (
+                <a href={config.skip_single_sign_on ? "/#/login" : "/#/start_sso"} onClick={onCancel}>
+                    {api.i18n.translate("register_dialog_existing_account")}
+                </a>
+            )}
+
+            <Form.Submit disabled={disabled || !username}>
+                {api.i18n.translate("register_dialog_continue_label")}
+            </Form.Submit>
+        </StyledFormRoot>
+    );
+};
+
+export default RegisterDialog;
