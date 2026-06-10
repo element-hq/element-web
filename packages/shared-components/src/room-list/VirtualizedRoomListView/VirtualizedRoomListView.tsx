@@ -404,9 +404,9 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 }
                 if (event.canceled || !source || !target) return;
                 if (isSectionDragData(source.data)) {
-                    vm.changeSectionOrder(source.id as string, target.id as string);
+                    vm.changeSectionOrder(String(source.id), String(target.id));
                 } else {
-                    vm.changeRoomSection(source.id as string, target.id as string);
+                    vm.changeRoomSection(String(source.id), String(target.id));
                 }
             }}
             sensors={[
@@ -472,11 +472,11 @@ function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.
     if (!source) return null;
 
     if (isSectionDragData(source.data)) {
-        const sectionHeaderVM = vm.getSectionHeaderViewModel(source.id as string);
+        const sectionHeaderVM = vm.getSectionHeaderViewModel(String(source.id));
         return <RoomListSectionHeaderDragOverlayView vm={sectionHeaderVM} />;
     }
 
-    const itemVm = vm.getRoomItemViewModel(source.id as string);
+    const itemVm = vm.getRoomItemViewModel(String(source.id));
     if (!itemVm) return null;
 
     return <RoomListItemDragOverlayView vm={itemVm} renderAvatar={renderAvatar} />;
