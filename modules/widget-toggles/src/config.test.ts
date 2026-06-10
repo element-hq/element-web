@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, test } from "vitest";
 
-import { WidgetTogglesConfig } from "../src/config";
+import { WidgetTogglesConfig } from "./config";
 
 describe("WidgetTogglesConfig", () => {
     test("parses a valid config with an array of widget types", () => {

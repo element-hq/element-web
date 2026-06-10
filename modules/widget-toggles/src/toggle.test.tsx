@@ -13,8 +13,8 @@ import { type PropsWithChildren } from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
 import userEvent from "@testing-library/user-event";
 
-import { WidgetToggle } from "../src/toggle";
-import { mockI18nApi, mockWidget, mockWidgetApi } from "./mocks";
+import { WidgetToggle } from "./toggle";
+import { mockI18nApi, mockWidget, mockWidgetApi } from "./tests/mocks";
 
 const roomId = "!room:example.com";
 
