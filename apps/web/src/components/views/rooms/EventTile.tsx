@@ -1119,6 +1119,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                   isSearch: Boolean(this.context.search),
                   isCard: false,
                   isQuoteExpanded,
+                  onToggleThreadExpanded: () => this.setQuoteExpanded(!isQuoteExpanded),
                   getRelationsForEvent: this.props.getRelationsForEvent,
               })
             : (this.childViewModels.releaseActionBarViewModel(), undefined);
@@ -1131,8 +1132,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 getTile={this.getTile}
                 getReplyChain={this.getReplyChain}
                 onFocusChange={this.onActionBarFocusChange}
-                isQuoteExpanded={isQuoteExpanded}
-                toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
                 getRelationsForEvent={this.props.getRelationsForEvent}
             />
         ) : undefined;

@@ -114,10 +114,6 @@ interface ActionBarAdapterProps {
     getReplyChain: () => ReplyChain | null;
     /** Notifies the parent when the action bar gains or loses focus. */
     onFocusChange?: (focused: boolean) => void;
-    /** Indicates whether the quoted reply chain is expanded. */
-    isQuoteExpanded?: boolean;
-    /** Toggles the thread expansion state for this tile. */
-    toggleThreadExpanded: () => void;
     /** Looks up relation data for the current event. */
     getRelationsForEvent?: GetRelationsForEvent;
 }
@@ -133,8 +129,6 @@ export function ActionBarAdapter({
     getTile,
     getReplyChain,
     onFocusChange,
-    isQuoteExpanded: _isQuoteExpanded,
-    toggleThreadExpanded: _toggleThreadExpanded,
     getRelationsForEvent,
 }: Readonly<ActionBarAdapterProps>): JSX.Element {
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
