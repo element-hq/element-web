@@ -150,7 +150,8 @@
             "low_priority": "Vähetähtis",
             "mark_read": "Märgi loetuks",
             "mark_unread": "Märgi mitteloetuks",
-            "move_to_section": "Tõsta teise jaotisse"
+            "move_to_section": "Tõsta teise jaotisse",
+            "remove_from_section": "Eemalda jaotisest"
         },
         "notification_options": "Teavituste eelistused",
         "open_space_menu": "Ava kogukonna menüü",

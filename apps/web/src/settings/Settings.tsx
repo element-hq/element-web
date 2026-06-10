@@ -225,6 +225,7 @@ export interface Settings {
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_new_room_list": IFeature;
+    "feature_retention": IFeature;
     "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
@@ -803,6 +804,22 @@ export const SETTINGS: Settings = {
             // Once the client has setup, (so by the time the user actually opens the labs menu) we can
             // enforce proper checks.
             true,
+            true,
+        ),
+        default: false,
+    },
+    "feature_retention": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|feature_retention|display_name"),
+        description: _td("labs|feature_retention|description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        controller: new IncompatibleController(
+            "feature_sliding_sync",
+            false,
+            true,
+            _td("labs|feature_retention|disabled_sliding_sync"),
             true,
         ),
         default: false,

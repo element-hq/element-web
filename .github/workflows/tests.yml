@@ -104,6 +104,8 @@ jobs:
                     - apps/desktop
                     - packages/shared-components
                     - packages/module-api
+                    - modules/widget-lifecycle
+                    - modules/widget-toggles
         runs-on: ubuntu-24.04
         steps:
             # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
@@ -137,7 +139,7 @@ jobs:
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
-              if: matrix.path == 'packages/shared-components'
+              if: matrix.path == 'packages/shared-components' || matrix.path == 'modules/widget-toggles'
               with:
                   write-cache: ${{ github.event_name != 'merge_group' }}
 

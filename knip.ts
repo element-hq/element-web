@@ -65,6 +65,9 @@ export default {
                 "lipo",
             ],
         },
+        "modules/*": {
+            entry: "src/index.ts{x,}",
+        },
         ".": {
             entry: ["scripts/**", "docs/**"],
         },

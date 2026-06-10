@@ -29,7 +29,9 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
           >
             u
           </span>
-           
+          <div
+            class="mx_MemberTileView_presence"
+          />
         </div>
         <div
           class="mx_MemberTileView_name"
@@ -105,7 +107,9 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
           >
             u
           </span>
-           
+          <div
+            class="mx_MemberTileView_presence"
+          />
         </div>
         <div
           class="mx_MemberTileView_name"
@@ -181,7 +185,9 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
           >
             u
           </span>
-           
+          <div
+            class="mx_MemberTileView_presence"
+          />
         </div>
         <div
           class="mx_MemberTileView_name"
@@ -239,7 +245,9 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
           >
             F
           </span>
-           
+          <div
+            class="mx_MemberTileView_presence"
+          />
         </div>
         <div
           class="mx_MemberTileView_name"
