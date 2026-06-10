@@ -28,7 +28,7 @@ jobs:
             R2_URL: ${{ vars.CF_R2_S3_API }}
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   persist-credentials: false
 
@@ -127,15 +127,14 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: element-web-develop
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name element-web-develop
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
             - run: |
                   echo "Deployed to ${STEPS_CFP_OUTPUTS_URL}" >> $GITHUB_STEP_SUMMARY
               env:
-                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.url }}
+                  STEPS_CFP_OUTPUTS_URL: ${{ steps.cfp.outputs.deployment-url }}

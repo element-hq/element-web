@@ -19,14 +19,14 @@ exports[`<LayoutSwitcher /> should render 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_19upo_16 mx_LayoutSwitcher_LayoutSelector"
+        class="_root_1o4d9_17 mx_LayoutSwitcher_LayoutSelector"
       >
         <div
-          class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+          class="_field_1o4d9_27 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
         >
           <label
             aria-label="Modern"
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="radix-react-use-id-1"
           >
             <div
@@ -102,7 +102,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   id="1"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+                    class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
                   >
                     <div
                       class="mx_EventTile_body translate"
@@ -117,11 +117,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           </label>
         </div>
         <div
-          class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+          class="_field_1o4d9_27 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
         >
           <label
             aria-label="Message bubbles"
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="radix-react-use-id-2"
           >
             <div
@@ -196,7 +196,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   id="2"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+                    class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
                   >
                     <div
                       class="mx_EventTile_body translate"
@@ -211,11 +211,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           </label>
         </div>
         <div
-          class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+          class="_field_1o4d9_27 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
         >
           <label
             aria-label="IRC (experimental)"
-            class="_label_19upo_59"
+            class="_label_1o4d9_60"
             for="radix-react-use-id-3"
           >
             <div
@@ -293,7 +293,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   id="3"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
+                    class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
                   >
                     <div
                       class="mx_EventTile_body translate"
@@ -309,13 +309,13 @@ exports[`<LayoutSwitcher /> should render 1`] = `
         </div>
       </form>
       <form
-        class="_root_19upo_16"
+        class="_root_1o4d9_17"
       >
         <div
-          class="_inline-field_19upo_32"
+          class="_inline-field_1o4d9_33"
         >
           <div
-            class="_inline-field-control_19upo_44"
+            class="_inline-field-control_1o4d9_45"
           >
             <div
               class="_container_udcm8_10"
@@ -335,16 +335,16 @@ exports[`<LayoutSwitcher /> should render 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_19upo_38"
+            class="_inline-field-body_1o4d9_39"
           >
             <label
-              class="_label_19upo_59"
+              class="_label_1o4d9_60"
               for="radix-react-use-id-5"
             >
               Show compact text and messages
             </label>
             <span
-              class="_message_19upo_85 _help-message_19upo_91"
+              class="_message_1o4d9_86 _help-message_1o4d9_92"
               id="radix-react-use-id-4"
             >
               Modern layout must be selected to use this feature.

@@ -26,7 +26,7 @@
         },
         "start": {
             "command": "webpack-dev-server --output-path webapp --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js --mode development",
-            "dependsOn": ["prebuild:module_system", "prebuild:rethemendex"],
+            "dependsOn": ["prebuild:module_system", "prebuild:rethemendex", "^start"],
             "continuous": true,
             "options": { "cwd": "apps/web" }
         },

@@ -159,9 +159,7 @@
         "log_in_new_account": "<a>Prisijunkite</a> prie naujos paskyros.",
         "logout_dialog": {
             "description": "Ar tikrai norite atsijungti?",
-            "megolm_export": "Eksportuoti raktus rankiniu būdu",
             "setup_key_backup_title": "Jūs prarasite prieigą prie savo užšifruotų žinučių",
-            "setup_secure_backup_description_1": "Užšifruotos žinutės yra apsaugotos visapusiu šifravimu. Tik jūs ir gavėjas(-ai) turi raktus šioms žinutėms perskaityti.",
             "skip_key_backup": "Man nereikalingos užšifruotos žinutės"
         },
         "misconfigured_body": "Paprašykite savo %(brand)s administratoriaus patikrinti ar <a>jūsų konfigūracijoje</a> nėra neteisingų arba pasikartojančių įrašų.",
@@ -558,9 +556,6 @@
             "warning": "Jei jūs nepašalinote paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
         "set_up_toast_title": "Nustatyti Saugią Atsarginę Kopiją",
-        "setup_secure_backup": {
-            "explainer": "Prieš atsijungdami sukurkite atsarginę savo raktų kopiją, kad išvengtumėte jų praradimo."
-        },
         "udd": {
             "other_ask_verify_text": "Paprašykite šio vartotojo patvirtinti savo seansą, arba patvirtinkite jį rankiniu būdu žemiau.",
             "other_new_session_text": "%(name)s (%(userId)s) prisijungė prie naujo seanso jo nepatvirtinę:",

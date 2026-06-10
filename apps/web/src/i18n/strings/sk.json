@@ -220,10 +220,7 @@
         "log_in_new_account": "<a>Prihláste sa</a> do vášho nového účtu.",
         "logout_dialog": {
             "description": "Naozaj sa chcete odhlásiť?",
-            "megolm_export": "Ručne exportovať kľúče",
             "setup_key_backup_title": "Stratíte prístup ku zašifrovaným správam",
-            "setup_secure_backup_description_1": "Šifrované správy sú zabezpečené end-to-end šifrovaním. Kľúče na čítanie týchto správ máte len vy a príjemca (príjemcovia).",
-            "setup_secure_backup_description_2": "Po odhlásení sa tieto kľúče z tohto zariadenia vymažú, čo znamená, že nebudete môcť čítať zašifrované správy, pokiaľ k nim nemáte kľúče v iných zariadeniach alebo ich nemáte zálohované na serveri.",
             "skip_key_backup": "Nezáleží mi na zašifrovaných správach"
         },
         "misconfigured_body": "Požiadajte správcu vášho %(brand)su, aby skontroloval <a>vašu konfiguráciu</a>. Pravdepodobne obsahuje chyby alebo duplikáty.",
@@ -275,7 +272,6 @@
             "point_the_camera": "Naskenujte tu zobrazený QR kód",
             "scan_code_instruction": "Naskenujte QR kód pomocou druhého zariadenia",
             "scan_qr_code": "Prihláste sa pomocou QR kódu",
-            "security_code": "Bezpečnostný kód",
             "security_code_prompt": "Ak sa zobrazí výzva, zadajte nižšie uvedený kód na svojom druhom zariadení.",
             "select_qr_code": "Vyberte '%(scanQRCode)s'",
             "unsupported_explainer": "Poskytovateľ vášho účtu nepodporuje prihlásenie do nového zariadenia pomocou QR kódu.",
@@ -990,9 +986,6 @@
         "set_up_recovery": "Nastaviť obnovenie",
         "set_up_recovery_toast_description": "Vytvorte kľúč na obnovenie, ktorý môžete použiť na obnovenie histórie šifrovaných správ v prípade straty prístupu k zariadeniam.",
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
-        "setup_secure_backup": {
-            "explainer": "Zálohujte si šifrovacie kľúče pred odhlásením, aby ste zabránili ich strate."
-        },
         "turn_on_key_storage": "Zapnúť úložisko kľúčov",
         "turn_on_key_storage_description": "Uložte svoju kryptografickú totožnosť a kľúče správ bezpečne na serveri. To vám umožní zobraziť históriu správ na všetkých nových zariadeniach.",
         "udd": {

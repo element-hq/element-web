@@ -1,9 +1,12 @@
 linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
+ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
+    - "modules"
+    - "modules/*"
 
 catalog:
     # typescript
@@ -17,17 +20,21 @@ catalog:
     "@playwright/test": 1.60.0
     "playwright-core": 1.60.0
     # Compound
-    "@vector-im/compound-design-tokens": 10.1.1
-    "@vector-im/compound-web": 9.3.0
+    "@vector-im/compound-design-tokens": 10.2.1
+    "@vector-im/compound-web": 9.4.1
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
     "@fontsource/inter": 5.2.8
     # vite
-    vite: 8.0.13
-    vitest: 4.1.7
-    vitest-sonar-reporter: 3.0.0
-    "@vitest/coverage-v8": 4.1.7
+    vite: 8.0.16
+    vite-plugin-node-polyfills: 0.28.0
+    vite-plugin-svgr: 5.2.0
+    vitest: 4.1.8
+    "@vitest/coverage-v8": 4.1.8
+    "@vitest/browser-playwright": 4.1.8
+    "@vitejs/plugin-react": 6.0.2
+    unplugin-dts: 1.0.1
 
 packageExtensions:
     fdir:
@@ -59,22 +66,37 @@ allowBuilds:
     protobufjs: false
     # Builds optional crypto binding, which we do not need
     ssh2: false
+    # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
+    sharp: true
+    workerd: true
 
 patchedDependencies:
+    # Workaround for missing types export
     "@vector-im/matrix-wysiwyg": patches/@vector-im__matrix-wysiwyg.patch
+    # Workaround for lack of React 19 support
     react-blurhash: patches/react-blurhash.patch
+    # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
+    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
     "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
+    # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
-    "@types/mdx": patches/@types__mdx.patch
+    # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock
     await-lock: patches/await-lock.patch
+    # Workaround for global type mismatches
     jest-fixed-jsdom: patches/jest-fixed-jsdom.patch
+    # Workaround for jsdom being super opinionated and making it hard to tweak global properties
     jsdom: patches/jsdom.patch
-    rollup: patches/rollup.patch
+    # Workaround for missing return types
     postcss-mixins: patches/postcss-mixins.patch
+    # Workaround for some babel rules being false positively flagged
     knip: patches/knip.patch
+    # Workaround for being stuck on an old version of plist due to electron-builder not supporting ESM yet
     plist: patches/plist.patch
+    # Workaround for type fails
     "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
+    # Workaround for type fails
+    "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -87,7 +109,7 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.5
+    pretty-format@30>react-is: 19.2.6
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     oidc-client-ts: 3.5.0
@@ -95,11 +117,11 @@ overrides:
     caniuse-lite: 1.0.30001793
     markdown-it: 14.1.1
     matrix-widget-api: "^1.17.0"
-    "@types/node": 18.19.130
+    "@types/node": 22.13.14
     config-file-ts: 0.2.8-rc1
     node-abi: 4.31.0
     "@types/pg-pool": 2.0.7
-    axios@>1.0.0 <=1.15.0: 1.15.2
+    axios@>1.0.0 <=1.15.0: 1.16.1
     esbuild@<=0.24.2: 0.27.4
     esbuild@~0.27.0: 0.27.4
     follow-redirects@1.15.11: 1.16.0
@@ -109,6 +131,8 @@ overrides:
     yaml@>=2 <2.8.3: 2.8.4
     protobufjs@7 <7.5.8: 7.6.1
     "@protobufjs/utf8@1 <1.1.1": 1.1.1
+    # Workaround for https://github.com/electron/electron/issues/51619
+    yauzl: "^3.3.1"
 
 minimumReleaseAgeExclude:
     - "matrix-js-sdk"

@@ -1,0 +1,21 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "cache": true,
+            "command": "vite build",
+            "inputs": ["src"],
+            "outputs": ["{projectRoot}/lib"],
+            "options": { "cwd": "modules/restricted-guests" },
+            "dependsOn": ["^build"]
+        },
+        "lint:types": {
+            "command": "tsc --noEmit",
+            "options": {
+                "cwd": "modules/restricted-guests"
+            },
+            "dependsOn": ["^build"]
+        }
+    }
+}

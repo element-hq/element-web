@@ -441,6 +441,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             // can toggle on without reloading and also be accessed immediately after login.
             cryptoCallbacks: { ...crossSigningCallbacks },
             enableEncryptedStateEvents: SettingsStore.getValue("feature_msc4362_encrypted_state_events"),
+            unstableMSC1763Retention: SettingsStore.getValue("feature_retention"),
             roomNameGenerator: (_: string, state: RoomNameState) => {
                 switch (state.type) {
                     case RoomNameType.Generated:

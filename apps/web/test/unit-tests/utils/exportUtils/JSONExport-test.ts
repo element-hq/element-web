@@ -16,7 +16,7 @@ describe("JSONExport", () => {
         jest.setSystemTime(REPEATABLE_DATE);
     });
 
-    it("should have a Matrix-branded destination file name", () => {
+    it("should have an Element-branded destination file name", () => {
         const roomName = "My / Test / Room: Welcome";
         const client = createTestClient();
         const stubOptions: IExportOptions = {

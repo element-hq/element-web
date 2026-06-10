@@ -1,0 +1,24 @@
+{
+    "name": "@element-hq/element-web-module-widget-lifecycle",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "main": "lib/index.js",
+    "license": "SEE LICENSE IN README.md",
+    "scripts": {
+        "build": "nx build",
+        "lint:types": "nx lint:types",
+        "test:unit": "nx test:unit"
+    },
+    "devDependencies": {
+        "@element-hq/element-web-module-api": "workspace:*",
+        "@types/node": "^22.10.7",
+        "@vitest/coverage-v8": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:"
+    },
+    "dependencies": {
+        "zod": "^4.0.0"
+    }
+}

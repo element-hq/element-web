@@ -1,6 +1,6 @@
 import { KnipConfig } from "knip";
 
-// Specify this as knip loads config files which may conditionally add reporters, e.g. `@casualbot/jest-sonar-reporter'
+// Specify this as knip loads config files which may conditionally load plugins
 process.env.GITHUB_ACTIONS = "1";
 
 export default {
@@ -45,7 +45,6 @@ export default {
                 // dependency so that // we can run `tsc` (since we import the typescript
                 // source of js-sdk, rather than the transpiled and annotated JS like you
                 // would with a normal library).
-                "@types/content-type",
                 "@types/sdp-transform",
             ],
         },
@@ -56,7 +55,18 @@ export default {
                 // Brought in via hak scripts
                 "matrix-seshat",
             ],
-            ignoreBinaries: ["scripts/in-docker.sh"],
+            ignoreBinaries: [
+                "scripts/in-docker.sh",
+                // Used to build seshat (optional)
+                "rustc",
+                // Used by the fetch-package script (optional)
+                "gpg",
+                // Used for the macOS universal builds
+                "lipo",
+            ],
+        },
+        "modules/*": {
+            entry: "src/index.ts{x,}",
         },
         ".": {
             entry: ["scripts/**", "docs/**"],
@@ -67,6 +77,10 @@ export default {
         "events",
     ],
     ignoreExportsUsedInFile: true,
+    ignoreBinaries: [
+        // Optional for coverage:diff development script
+        "diff-cover",
+    ],
     compilers: {
         pcss: (text: string) =>
             [...text.matchAll(/@import\s+(?:url\()?["']([^"']+)["']\)?[^;]*;/g)]

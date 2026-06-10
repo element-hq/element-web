@@ -224,11 +224,13 @@ export interface Settings {
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_new_room_list": IFeature;
+    "feature_retention": IFeature;
     "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
+    "feature_login_with_qr": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -665,6 +667,14 @@ export const SETTINGS: Settings = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_login_with_qr": {
+        supportedLevels: [SettingLevel.CONFIG],
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|login_with_qr"),
+        description: _td("labs|config_only"),
+        isFeature: true,
+        default: false,
+    },
     /**
      * With the transition to Compound we are moving to a base font size
      * of 16px. We're taking the opportunity to move away from the `baseFontSize`
@@ -785,6 +795,22 @@ export const SETTINGS: Settings = {
             // Once the client has setup, (so by the time the user actually opens the labs menu) we can
             // enforce proper checks.
             true,
+            true,
+        ),
+        default: false,
+    },
+    "feature_retention": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|feature_retention|display_name"),
+        description: _td("labs|feature_retention|description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        controller: new IncompatibleController(
+            "feature_sliding_sync",
+            false,
+            true,
+            _td("labs|feature_retention|disabled_sliding_sync"),
             true,
         ),
         default: false,
@@ -1127,7 +1153,7 @@ export const SETTINGS: Settings = {
     "urlPreviewsEnabled": {
         // Enabled by default and client configurable as this setting only allows unencrypted
         // messages to be previewed.
-        supportedLevels: [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_default"),
         default: true,

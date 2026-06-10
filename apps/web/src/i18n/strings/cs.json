@@ -218,11 +218,9 @@
         "log_in_new_account": "<a>Přihlaste se</a> svým novým účtem.",
         "logout_dialog": {
             "description": "Opravdu chcete toto zařízení odstranit?",
-            "megolm_export": "Export klíčů",
-            "setup_key_backup_title": "Přijdete o přístup k šifrovaným zprávám",
-            "setup_secure_backup_description_1": "Šifrované zprávy jsou zabezpečené koncovým šifrováním. Klíče pro jejich dešifrování máte jen vy a příjemci zpráv.",
-            "setup_secure_backup_description_2": "Po odstranění tohoto zařízení nebudete moci číst šifrované zprávy, pokud k nim nemáte klíče na ostatních zařízeních nebo je nezálohujete na server.",
-            "skip_key_backup": "Už své zašifrované zprávy nechci"
+            "setup_key_backup_title": "Přijdete o přístup k šifrovaným chatům",
+            "setup_secure_backup_description": "Toto je vaše jediné zařízení. Pokud ho odstraníte, budete potřebovat klíč pro obnovení k potvrzení své digitální identity a obnovení šifrovaných chatů.",
+            "skip_key_backup": "Přesto toto zařízení odebrat"
         },
         "misconfigured_body": "Požádejte správce vašeho %(brand)su, aby zkontroloval <a>vaši konfiguraci</a>. Pravděpodobně obsahuje chyby nebo duplicity.",
         "misconfigured_title": "%(brand)s je špatně nakonfigurován",
@@ -248,7 +246,9 @@
             "check_code_heading": "Zadejte číslo zobrazené na druhém zařízení",
             "check_code_input_label": "2místný kód",
             "check_code_mismatch": "Čísla se neshodují",
+            "choose_desktop_computer": "Vyberte \"%(desktopComputer)s\"",
             "completing_setup": "Dokončování nastavení nového zařízení",
+            "desktop_computer": "Stolní počítač",
             "error_etag_missing": "Došlo k neočekávané chybě. Příčinou může být rozšíření prohlížeče, proxy server nebo chybná konfigurace serveru.",
             "error_expired": "Přihlášení vypršelo. Zkuste to prosím znovu.",
             "error_expired_title": "Přihlášení nebylo dokončeno včas",
@@ -269,16 +269,22 @@
             "error_user_declined": "Vy nebo poskytovatel účtu jste odmítli žádost o přihlášení.",
             "error_user_declined_title": "Přihlášení bylo odmítnuto",
             "follow_remaining_instructions": "Postupujte podle zbývajících pokynů",
+            "open_element_mobile_device": "Otevřete %(brand)s na svém mobilním zařízení",
             "open_element_other_device": "Otevřete %(brand)s na druhém zařízení",
             "point_the_camera": "Naskenujte zde zobrazený QR kód",
-            "scan_code_instruction": "Naskenujte QR kód jiným zařízením",
+            "ready_to_scan": "Připraveno ke skenování",
+            "scan_code_instruction": "Naskenujte QR kód",
+            "scan_code_instruction_reciprocate": "Naskenujte QR kód druhým zařízením",
             "scan_qr_code": "Přihlaste se pomocí QR kódu",
-            "security_code": "Bezpečnostní kód",
-            "security_code_prompt": "Pokud budete vyzváni, zadejte na druhém zařízení níže uvedený kód.",
+            "security_code_prompt": "Poskytovatel vašeho účtu může k ověření přihlášení požadovat následující kód.",
+            "security_code_title": "Váš ověřovací kód",
             "select_qr_code": "Vyberte \"%(scanQRCode)s\"",
+            "select_ready_to_scan": "Vyberte \"%(readyToScan)s\" a naskenujte zde zobrazený QR kód",
+            "start_over": "Začít znovu",
+            "tap_avatar_link_new_device": "Klepněte na svůj avatar a vyberte \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Váš poskytovatel účtu nepodporuje přihlášení do nového zařízení pomocí QR kódu.",
             "unsupported_heading": "QR kód není podporován",
-            "waiting_for_device": "Čekání na přihlášení zařízení"
+            "waiting_for_device": "Čekání na vaše další zařízení"
         },
         "register_action": "Vytvořit účet",
         "registration": {
@@ -337,8 +343,10 @@
         "sign_in_description": "Pro pokračování použijte svůj účet.",
         "sign_in_instead": "Namísto toho se přihlásit",
         "sign_in_instead_prompt": "Namísto toho se přihlásit",
+        "sign_in_manually": "Přihlásit se ručně",
         "sign_in_or_register": "Přihlásit nebo vytvořit nový účet",
         "sign_in_or_register_description": "Pro pokračování se přihlaste stávajícím účtem, nebo si vytvořte nový.",
+        "sign_in_with_qr": "Přihlásit se pomocí QR kódu",
         "sign_in_with_sso": "Přihlásit se přes jednotné přihlašování",
         "signing_in": "Přihlašování…",
         "soft_logout": {
@@ -1003,9 +1011,6 @@
         "set_up_recovery": "Zálohujte své chaty",
         "set_up_recovery_toast_description": "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
-        "setup_secure_backup": {
-            "explainer": "Před odebráním tohoto zařízení si zálohujte klíče, abyste o ně nepřišli."
-        },
         "turn_on_key_storage": "Zapnout úložiště klíčů",
         "turn_on_key_storage_description": "Díky tomu budete moci zobrazit historii chatu na jakémkoli novém zařízení a je to nutné pro zálohování chatů a digitální identity.",
         "udd": {
@@ -1523,6 +1528,7 @@
         "bridge_state_manager": "Toto propojení spravuje <user />.",
         "bridge_state_workspace": "Pracovní oblast: <networkLink/>",
         "click_for_info": "Klikněte pro více informací",
+        "config_only": "Lze povolit pouze přes config.json.",
         "currently_experimental": "V současnosti experimentální.",
         "custom_themes": "Umožnit přidání vlastního vzhledu",
         "dynamic_room_predecessors": "Předchůdci dynamické místnosti",
@@ -1567,6 +1573,7 @@
         "leave_beta_reload": "Po opuštění beta verze se %(brand)s znovu načte.",
         "location_share_live": "Sdílení polohy živě",
         "location_share_live_description": "Dočasná implementace. Polohy zůstanou v historii místností.",
+        "login_with_qr": "Přihlásit se pomocí QR kódu",
         "mjolnir": "Nové způsoby ignorování lidí",
         "msc3531_hide_messages_pending_moderation": "Umožnit moderátorům skrývat zprávy čekající na moderaci.",
         "new_room_list": "Povolit nový seznam místností",

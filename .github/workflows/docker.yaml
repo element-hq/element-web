@@ -20,7 +20,7 @@ jobs:
         env:
             TEST_TAG: vectorim/element-web:test
         steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
                   persist-credentials: false
@@ -30,16 +30,16 @@ jobs:
               if: github.event_name != 'pull_request'
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4
+              uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3 # v4
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+              uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
               with:
                   install: true
 
             - name: Build and load
               id: test-build
-              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
+              uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7
               with:
                   context: .
                   file: apps/web/Dockerfile
@@ -53,9 +53,9 @@ jobs:
                   set -x
 
                   # Make a fake module to test the image
-                  MODULE_PATH="modules/module_name/index.js"
-                  mkdir -p $(dirname $MODULE_PATH)
-                  echo 'alert("Testing");' > $MODULE_PATH
+                  MODULE_PATH="module_name/index.js"
+                  mkdir -p $(dirname test_modules/$MODULE_PATH)
+                  echo 'alert("Testing");' > test_modules/$MODULE_PATH
 
                   # Spin up a container of the image
                   ELEMENT_WEB_PORT=8181
@@ -64,14 +64,14 @@ jobs:
                           --rm \
                           -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
                           -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
-                          -v $(pwd)/modules:/modules \
+                          -v $(pwd)/test_modules:/modules \
                           "$IMAGEID" \
                   )
 
                   # Run some smoke tests
                   wget --retry-connrefused --tries=5 -q --wait=3 --spider "http://localhost:$ELEMENT_WEB_PORT/modules/module_name/index.js"
                   MODULE_0=$(curl "http://localhost:$ELEMENT_WEB_PORT/config.json" | jq -r .modules[0])
-                  test "$MODULE_0" = "/${MODULE_PATH}"
+                  test "$MODULE_0" = "/modules/${MODULE_PATH}"
 
                   # Check healthcheck
                   until test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"; do
@@ -83,7 +83,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6
+              uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6
               if: github.event_name != 'pull_request'
               with:
                   images: |
@@ -97,14 +97,14 @@ jobs:
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
             - name: Login to Docker Hub
-              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+              uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4
               if: github.event_name != 'pull_request'
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+              uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
@@ -140,7 +140,7 @@ jobs:
                       services/web-repositories/secret/data/oci.element.io password | OCI_PASSWORD ;
 
             - name: Login to oci.element.io Registry
-              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+              uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: oci-push.vpn.infra.element.io
@@ -149,7 +149,7 @@ jobs:
 
             - name: Build and push
               id: build-and-push
-              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
+              uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7
               if: github.event_name != 'pull_request'
               with:
                   context: .

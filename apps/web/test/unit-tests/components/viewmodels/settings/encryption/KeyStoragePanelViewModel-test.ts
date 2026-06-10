@@ -128,6 +128,10 @@ describe("KeyStoragePanelViewModel", () => {
         expect(mocked(matrixClient.setAccountData)).toHaveBeenCalledWith("m.org.matrix.custom.backup_disabled", {
             disabled: false,
         });
+
+        expect(mocked(matrixClient.setAccountData)).toHaveBeenCalledWith("m.key_backup", {
+            enabled: true,
+        });
     });
 
     it("should delete key storage when disabling", async () => {
@@ -144,6 +148,9 @@ describe("KeyStoragePanelViewModel", () => {
         expect(mocked(matrixClient.getCrypto()!.disableKeyStorage)).toHaveBeenCalled();
         expect(mocked(matrixClient.setAccountData)).toHaveBeenCalledWith("m.org.matrix.custom.backup_disabled", {
             disabled: true,
+        });
+        expect(mocked(matrixClient.setAccountData)).toHaveBeenCalledWith("m.key_backup", {
+            enabled: false,
         });
     });
 });
