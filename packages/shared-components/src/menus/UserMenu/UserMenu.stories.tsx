@@ -68,6 +68,21 @@ export const LongerName: Story = {
     },
 };
 
+// Rules needed for any story where the menu is open, for the reasons
+// given in each rule.
+const MENU_OPEN_A11Y_RULES = [
+    {
+        // Menu contains a header which is invalid
+        id: "aria-required-children",
+        enabled: false,
+    },
+    {
+        // Menu pops open by default
+        id: "aria-hidden-focus",
+        enabled: false,
+    },
+];
+
 export const Open: Story = {
     args: {
         open: true,
@@ -84,18 +99,7 @@ export const Open: Story = {
              * to learn more.
              */
             config: {
-                rules: [
-                    {
-                        // Menu contains a header which is invalid
-                        id: "aria-required-children",
-                        enabled: false,
-                    },
-                    {
-                        // Menu pops open by default
-                        id: "aria-hidden-focus",
-                        enabled: false,
-                    },
-                ],
+                rules: MENU_OPEN_A11Y_RULES,
             },
         },
     },
@@ -151,18 +155,7 @@ export const GuestOpen: Story = {
              * to learn more.
              */
             config: {
-                rules: [
-                    {
-                        // Menu contains a header which is invalid
-                        id: "aria-required-children",
-                        enabled: false,
-                    },
-                    {
-                        // Menu pops open by default
-                        id: "aria-hidden-focus",
-                        enabled: false,
-                    },
-                ],
+                rules: MENU_OPEN_A11Y_RULES,
             },
         },
     },
@@ -186,6 +179,13 @@ export const WithStatusOpen: Story = {
         userStatus: {
             emoji: "🐹",
             text: "On the wheel",
+        },
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
+            },
         },
     },
 };
