@@ -302,7 +302,7 @@ test.describe("Room list filters and sort", () => {
             );
         });
 
-        ["People", "Rooms", "Favourite"].forEach((filter) => {
+        ["People", "Rooms"].forEach((filter) => {
             test(
                 `should render the placeholder for ${filter} filter`,
                 { tag: "@screenshot" },

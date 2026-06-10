@@ -478,20 +478,6 @@ describe("RoomListViewModel", () => {
         });
     });
 
-    describe("notifyCollapseState", () => {
-        it("should dispatch collapseSections=undefined when feature_room_list_sections is disabled", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
-
-            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
-
-            expect(dispatchSpy).toHaveBeenCalledWith({
-                action: Action.RoomListSectionsCollapseStateChanged,
-                collapseSections: undefined,
-            });
-        });
-    });
-
     describe("Keyboard navigation (ViewRoomDelta)", () => {
         beforeEach(() => {
             // stubClient sets up MatrixClientPeg which is needed when ViewRoom action is dispatched
@@ -690,7 +676,7 @@ describe("RoomListViewModel", () => {
             });
         });
 
-        describe("Sections (feature_room_list_sections)", () => {
+        describe("Sections", () => {
             let favRoom1: Room;
             let favRoom2: Room;
             let lowPriorityRoom: Room;
@@ -698,11 +684,6 @@ describe("RoomListViewModel", () => {
             let regularRoom2: Room;
 
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                    if (setting === "feature_room_list_sections") return true;
-                    return false;
-                });
-
                 favRoom1 = mkStubRoom("!fav1:server", "Fav 1", matrixClient);
                 favRoom2 = mkStubRoom("!fav2:server", "Fav 2", matrixClient);
                 lowPriorityRoom = mkStubRoom("!low1:server", "Low 1", matrixClient);
@@ -996,7 +977,6 @@ describe("RoomListViewModel", () => {
                         mkStubRoom("!space:server", "My Space", matrixClient),
                     ]);
                     jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                        if (setting === "feature_room_list_sections") return true;
                         if (setting === "RoomList.CustomSectionData")
                             return {
                                 [customTag]: { tag: customTag, name: "My Section", spaceId: "!space:server" },
@@ -1007,7 +987,6 @@ describe("RoomListViewModel", () => {
 
                 it("shows an empty custom section when viewing its originating space", () => {
                     jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                        if (setting === "feature_room_list_sections") return true;
                         if (setting === "RoomList.CustomSectionData")
                             return { [customTag]: { tag: customTag, name: "My Section", spaceId: MetaSpace.Home } };
                         return false;
