@@ -39,16 +39,27 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
 }
 
 export default defineConfig({
+    oxc: {
+        // Configure the ts loader to handle all the files we may throw at it
+        include: /\.[cm]?tsx?$/,
+    },
     test: {
+        projects: [
+            "{apps,modules,packages}/*/vitest.config.ts",
+            // We run shared-components separately for now as it does not seem friendly with the rest of the tests
+            "!packages/shared-components",
+        ],
         coverage: {
             provider: "v8",
-            include: ["src/**/*.{ts,tsx}"],
-            reporter: [["lcov", { projectRoot: "../../" }]],
+            include: ["{apps,modules,packages}/*/src/**/*.{cts,ts,tsx}"],
+            exclude: [
+                // Exclude test files
+                "**/*.{stories,test}.tsx",
+                // Exclude type definition files
+                "**/*.d.ts",
+            ],
+            reporter: [["lcov"]],
         },
-        environment: "node",
         reporters,
-        pool: "threads",
-        globals: false,
-        include: ["src/**/*.test.{ts,tsx}"],
     },
 });

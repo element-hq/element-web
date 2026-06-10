@@ -10,7 +10,6 @@ import { playwright } from "@vitest/browser-playwright";
 
 export default defineProject({
     test: {
-        name: "widget-toggles",
         exclude: ["./e2e/**/*", "./node_modules/**/*"],
         browser: {
             enabled: true,
