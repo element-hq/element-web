@@ -46,7 +46,8 @@ export default defineConfig({
     test: {
         projects: [
             "{apps,modules,packages}/*/vitest.config.ts",
-            // We run shared-components separately for now as it does not seem friendly with the rest of the tests
+            // We run shared-components separately for now as vitest lacks support for nested projects
+            // https://github.com/vitest-dev/vitest/issues/8544
             "!packages/shared-components",
         ],
         coverage: {
