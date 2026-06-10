@@ -133,6 +133,7 @@ describe("WidgetLifecycleModule", () => {
         expect(await handlers.identity?.(widget)).toBe(false);
         expect(await handlers.capabilities?.(widget, new Set(["org.matrix.msc2931.navigate"]))).toBeUndefined();
     });
+
     it("fails closed on invalid config", async () => {
         const { api, handlers } = createApi({
             widget_permissions: {
