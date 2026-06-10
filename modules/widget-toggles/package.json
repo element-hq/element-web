@@ -1,0 +1,38 @@
+{
+    "name": "@element-hq/element-web-module-widget-toggle",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "main": "lib/index.js",
+    "license": "SEE LICENSE IN README.md",
+    "scripts": {
+        "build": "nx build",
+        "lint:types": "nx lint:types",
+        "test:unit": "nx test:unit"
+    },
+    "devDependencies": {
+        "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
+        "@element-hq/element-web-module-api": "workspace:*",
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/react": "^16.3.2",
+        "@testing-library/user-event": "^14.6.1",
+        "@types/node": "^22.10.7",
+        "@types/react": "^19",
+        "@vitejs/plugin-react": "catalog:",
+        "@vitest/browser-playwright": "catalog:",
+        "@vitest/coverage-v8": "catalog:",
+        "react": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vite-plugin-node-polyfills": "catalog:",
+        "vite-plugin-svgr": "catalog:",
+        "vitest": "catalog:"
+    },
+    "dependencies": {
+        "@vector-im/compound-design-tokens": "^10.0.0",
+        "@vector-im/compound-web": "^9.0.0",
+        "matrix-widget-api": "^1.17.0",
+        "styled-components": "^6.3.11",
+        "zod": "^4.3.6"
+    }
+}

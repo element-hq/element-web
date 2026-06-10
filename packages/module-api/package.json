@@ -19,10 +19,15 @@
             "types": "./lib/element-web-module-api-alpha.d.ts",
             "import": "./lib/element-web-plugin-engine.js",
             "require": "./lib/element-web-plugin-engine.umd.cjs"
+        },
+        "./vite.base.ts": {
+            "types": "./vite.base.ts",
+            "import": "./vite.base.ts"
         }
     },
     "files": [
-        "lib"
+        "lib",
+        "vite.base.ts"
     ],
     "scripts": {
         "prepack": "nx build",
@@ -36,15 +41,15 @@
         "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@microsoft/api-extractor": "^7.49.1",
         "@types/node": "^22.10.7",
-        "@types/react": "^19",
-        "@types/react-dom": "^19.0.4",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
         "@types/semver": "^7.5.8",
         "@vitest/coverage-v8": "catalog:",
         "matrix-widget-api": "^1.17.0",
         "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
-        "typescript": "^6.0.0",
-        "unplugin-dts": "1.0.1",
+        "typescript": "catalog:",
+        "unplugin-dts": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"
     },

@@ -5,6 +5,8 @@ ignoreWorkspaceRootCheck: true
 packages:
     - "apps/*"
     - "packages/*"
+    - "modules"
+    - "modules/*"
 
 catalog:
     # typescript
@@ -26,9 +28,13 @@ catalog:
     "@fontsource/inter": 5.2.8
     # vite
     vite: 8.0.16
+    vite-plugin-node-polyfills: 0.28.0
+    vite-plugin-svgr: 5.2.0
     vitest: 4.1.8
     "@vitest/coverage-v8": 4.1.8
     "@vitest/browser-playwright": 4.1.8
+    "@vitejs/plugin-react": 6.0.2
+    unplugin-dts: 1.0.1
 
 packageExtensions:
     fdir:
@@ -89,6 +95,8 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
+    # Workaround for type fails
+    "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -109,7 +117,7 @@ overrides:
     caniuse-lite: 1.0.30001793
     markdown-it: 14.1.1
     matrix-widget-api: "^1.17.0"
-    "@types/node": 18.19.130
+    "@types/node": 22.13.14
     config-file-ts: 0.2.8-rc1
     node-abi: 4.31.0
     "@types/pg-pool": 2.0.7
