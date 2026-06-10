@@ -12,5 +12,8 @@ import baseConfig from "@element-hq/vite-common/vite.config";
 export default mergeConfig(baseConfig, {
     test: {
         projects: ["widget-lifecycle", "widget-toggles"],
+        coverage: {
+            reporter: [["lcov", { projectRoot: "../" }]],
+        },
     },
 });
