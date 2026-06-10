@@ -14,6 +14,7 @@ import { useMergeRefs } from "react-merge-refs";
 import { RoomListItemView, type RoomListItemViewProps } from "./RoomListItemView";
 import { getItemAccessibleProps } from "../../../core/VirtualizedList";
 import { useViewModel } from "../../../core/viewmodel";
+import { type RoomDragData } from "../dragAndDrop";
 
 export interface RoomListItemWrapperProps extends RoomListItemViewProps {
     /** Index of this room in the list */
@@ -59,7 +60,7 @@ function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
         ref: draggableRef,
         handleRef,
         isDragSource,
-    } = useDraggable({
+    } = useDraggable<RoomDragData>({
         id: item.id,
         data: { type: "room" },
         // We clone the item in the dnd overlay to avoid putting a hole in the list

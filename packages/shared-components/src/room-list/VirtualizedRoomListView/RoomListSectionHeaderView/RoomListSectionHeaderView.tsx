@@ -17,6 +17,7 @@ import styles from "./RoomListSectionHeaderView.module.css";
 import { useI18n } from "../../../core/i18n/i18nContext";
 import { getGroupHeaderAccessibleProps } from "../../../core/VirtualizedList";
 import { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
+import { isSectionDragData, type RoomListDragData, type SectionDragData } from "../dragAndDrop";
 
 /**
  * The observable state snapshot for a room list section header.
@@ -109,16 +110,16 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         ref: draggableRef,
         handleRef,
         isDragSource,
-    } = useDraggable({
+    } = useDraggable<SectionDragData>({
         id,
         data: { type: "section", index: sectionIndex },
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
         disabled: !canBeReordered,
     });
-    const { source } = useDragOperation();
-    const draggedData = source?.data as { type?: string; index?: number } | undefined;
-    const isDraggingSectionSource = draggedData?.type === "section";
+    const { source } = useDragOperation<RoomListDragData>();
+    const draggedData = source?.data;
+    const isDraggingSectionSource = isSectionDragData(draggedData);
 
     // Keep the droppable enabled so rooms can still be dropped on default sections
     // (Favourite / Low Priority). Only disable it for section drags on non-reorderable
@@ -131,7 +132,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const isDraggingRoom = isDropTarget && draggedData?.type === "room";
     const isDraggingSection = isDropTarget && isDraggingSectionSource;
 
-    const sourceSectionIndex = isDraggingSection ? (draggedData.index ?? -1) : -1;
+    const sourceSectionIndex = isSectionDragData(draggedData) ? draggedData.index : -1;
     const isSourceAbove = isDraggingSection && sourceSectionIndex > sectionIndex;
     const hasBottomBorder = isDraggingSection && !isSourceAbove;
     const hasTopBorder = isDraggingSection && isSourceAbove;

@@ -25,6 +25,7 @@ import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
+import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
 import styles from "./VirtualizedRoomListView.module.css";
 
 /**
@@ -389,20 +390,20 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     }
 
     return (
-        <DragDropProvider
+        <DragDropProvider<RoomListDragData>
             onDragStart={(event) => {
                 const { source } = event.operation;
-                if ((source?.data as { type?: string })?.type === "section") {
+                if (isSectionDragData(source?.data)) {
                     vm.onSectionDragStart();
                 }
             }}
             onDragEnd={(event) => {
                 const { source, target } = event.operation;
-                if ((source?.data as { type?: string })?.type === "section") {
+                if (isSectionDragData(source?.data)) {
                     vm.onSectionDragEnd();
                 }
                 if (event.canceled || !source || !target) return;
-                if ((source.data as { type?: string })?.type === "section") {
+                if (isSectionDragData(source.data)) {
                     vm.changeSectionOrder(source.id as string, target.id as string);
                 } else {
                     vm.changeRoomSection(source.id as string, target.id as string);
@@ -451,7 +452,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
  * navigation shortcuts while a drag is in progress, preventing unwanted list scrolling.
  */
 function GroupedRoomList(props: GroupedVirtualizedListProps<string, string, Context>): JSX.Element {
-    const { source } = useDragOperation();
+    const { source } = useDragOperation<RoomListDragData>();
 
     return <GroupedVirtualizedList<string, string, Context> {...props} disableKeyboardNavigation={source !== null} />;
 }
@@ -467,10 +468,10 @@ interface DragOverlayContentProps {
  * Component rendered in the drag overlay when dragging a room item. Renders a copy of the dragged item to avoid dragging the actual element out of virtualization.
  */
 function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
-    const { source } = useDragOperation();
+    const { source } = useDragOperation<RoomListDragData>();
     if (!source) return null;
 
-    if ((source.data as { type?: string })?.type === "section") {
+    if (isSectionDragData(source.data)) {
         const sectionHeaderVM = vm.getSectionHeaderViewModel(source.id as string);
         return <RoomListSectionHeaderDragOverlayView vm={sectionHeaderVM} />;
     }
