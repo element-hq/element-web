@@ -9,6 +9,7 @@ import type { Api, Module, WidgetDescriptor, WidgetLifecycleApi } from "@element
 import { CONFIG_KEY, parseWidgetLifecycleConfig, type WidgetLifecycleModuleConfig } from "./config";
 import { constructWidgetPermissions } from "./utils/constructWidgetPermissions";
 import { matchPattern } from "./utils/matchPattern";
+import { name as ModuleName } from "../package.json";
 
 /** Subset of {@link WidgetLifecycleApi} used by the module for registration only. */
 export type WidgetLifecycleApiAdapter = Pick<
@@ -30,6 +31,12 @@ export default class WidgetLifecycleModule implements Module {
     public constructor(private api: ModuleApi) {}
 
     public async load(): Promise<void> {
+        const rawConfig = this.api.config.get(CONFIG_KEY);
+        if (!rawConfig) {
+            console.debug(`No configuration found for module "${ModuleName}", skipping initialization.`);
+            return;
+        }
+
         if (!this.api.widgetLifecycle) {
             throw new Error(
                 "Widget lifecycle API is not available. Update Element Web to a build that provides widget lifecycle module support.",
@@ -37,7 +44,7 @@ export default class WidgetLifecycleModule implements Module {
         }
 
         try {
-            this.config = parseWidgetLifecycleConfig(this.api.config.get(CONFIG_KEY));
+            this.config = parseWidgetLifecycleConfig(rawConfig);
         } catch (error) {
             console.error("[WidgetLifecycle] Failed to init module", error);
             this.config = {};

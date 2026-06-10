@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { describe, expect, it } from "vitest";
+import { vi, describe, expect, it } from "vitest";
 
 import WidgetLifecycleModule, { type WidgetLifecycleApiAdapter } from "./WidgetLifecycleModule";
 import type {
@@ -24,15 +24,15 @@ const createApi = (config: unknown = {}) => {
     } = {};
 
     const widgetLifecycle: WidgetLifecycleApiAdapter = {
-        registerPreloadApprover: (approver) => {
+        registerPreloadApprover: vi.fn((approver) => {
             handlers.preload = approver;
-        },
-        registerIdentityApprover: (approver) => {
+        }),
+        registerIdentityApprover: vi.fn((approver) => {
             handlers.identity = approver;
-        },
-        registerCapabilitiesApprover: (approver) => {
+        }),
+        registerCapabilitiesApprover: vi.fn((approver) => {
             handlers.capabilities = approver;
-        },
+        }),
     };
 
     return {
@@ -55,6 +55,17 @@ const widget: WidgetDescriptor = {
 };
 
 describe("WidgetLifecycleModule", () => {
+    it("does nothing when no config is present", async () => {
+        const { api } = createApi(null);
+
+        const module = new WidgetLifecycleModule(api);
+        await module.load();
+
+        expect(api.widgetLifecycle.registerPreloadApprover).not.toHaveBeenCalled();
+        expect(api.widgetLifecycle.registerIdentityApprover).not.toHaveBeenCalled();
+        expect(api.widgetLifecycle.registerCapabilitiesApprover).not.toHaveBeenCalled();
+    });
+
     it("approves preload when configured", async () => {
         const { api, handlers } = createApi({
             widget_permissions: {
@@ -122,7 +133,6 @@ describe("WidgetLifecycleModule", () => {
         expect(await handlers.identity?.(widget)).toBe(false);
         expect(await handlers.capabilities?.(widget, new Set(["org.matrix.msc2931.navigate"]))).toBeUndefined();
     });
-
     it("fails closed on invalid config", async () => {
         const { api, handlers } = createApi({
             widget_permissions: {

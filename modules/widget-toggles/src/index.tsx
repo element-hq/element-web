@@ -11,6 +11,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import { CONFIG_KEY, WidgetTogglesConfig } from "./config";
 import { WidgetToggle } from "./toggle";
+import { name as ModuleName } from "../package.json";
 
 class WidgetToggleModule implements Module {
     public static readonly moduleApiVersion = "^1.12.0";
@@ -19,8 +20,14 @@ class WidgetToggleModule implements Module {
     public constructor(private api: Api) {}
 
     public async load(): Promise<void> {
+        const rawConfig = this.api.config.get(CONFIG_KEY);
+        if (!rawConfig) {
+            console.debug(`No configuration found for module "${ModuleName}", skipping initialization.`);
+            return;
+        }
+
         try {
-            this.config = WidgetTogglesConfig.parse(this.api.config.get(CONFIG_KEY));
+            this.config = WidgetTogglesConfig.parse(rawConfig);
         } catch (e) {
             console.error("Failed to init module", e);
             throw new Error(`Errors in module configuration for widget toggles module`);
