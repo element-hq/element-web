@@ -81,7 +81,13 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                         return (
                             <div
                                 key={item.key}
-                                style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: 32,
+                                    overflow: "hidden",
+                                }}
                             >
                                 <InlineSpinner size={32} />
                             </div>
