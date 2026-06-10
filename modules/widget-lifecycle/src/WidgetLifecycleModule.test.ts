@@ -13,6 +13,7 @@ import type {
     IdentityApprover,
     PreloadApprover,
     WidgetDescriptor,
+    Api,
 } from "@element-hq/element-web-module-api";
 
 const createApi = (config: unknown = {}) => {
@@ -40,7 +41,7 @@ const createApi = (config: unknown = {}) => {
                 get: () => config,
             },
             widgetLifecycle,
-        },
+        } as Api,
         handlers,
     };
 };
@@ -49,7 +50,8 @@ const widget: WidgetDescriptor = {
     id: "widget-id",
     templateUrl: "https://example.com/",
     creatorUserId: "@user-id",
-    kind: "room",
+    type: "com.example.custom",
+    origin: "example.com",
 };
 
 describe("WidgetLifecycleModule", () => {
