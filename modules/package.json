@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "lint:js": "eslint --max-warnings 0 */src -c ./.eslintrc.cjs",
-        "lint:ts": "tsc --noEmit",
+        "lint:types": "nx lint:types --",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --"
