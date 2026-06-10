@@ -114,6 +114,9 @@
         "matrix-seshat": "4.3.0"
     },
     "nx": {
-        "includedScripts": []
+        "includedScripts": [
+            "lint:types",
+            "lint:js"
+        ]
     }
 }
