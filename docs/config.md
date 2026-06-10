@@ -390,7 +390,11 @@ The VoIP and Jitsi options are:
    at any time without notice.
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
     - `use_exclusively`: A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in
-      the app, removing the ability to start legacy 1:1 calls or Jitsi calls.
+      the app, removing the ability to enable legacy 1:1 calls or Jitsi calls.
+      It is a misconfiguration if its set to true while `element_call.disable` is also true!
+      Defaults to `false`.
+    - `disable`: A boolean specifying whether Element Call should be available.
+      It is a misconfiguration if its set to true while `element_call.use_exclusively` is also true!
       Defaults to `false`.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
