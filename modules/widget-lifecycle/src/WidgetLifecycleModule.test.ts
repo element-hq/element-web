@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it } from "vitest";
 
-import WidgetLifecycleModule, { type WidgetLifecycleApiAdapter } from "../src/WidgetLifecycleModule";
+import WidgetLifecycleModule, { type WidgetLifecycleApiAdapter } from "./WidgetLifecycleModule";
 import type {
     CapabilitiesApprover,
     IdentityApprover,

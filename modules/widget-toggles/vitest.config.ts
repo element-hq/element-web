@@ -10,15 +10,13 @@ import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
     test: {
-        include: ["tests/**/*.test.{ts,tsx}"],
         exclude: ["./e2e/**/*", "./node_modules/**/*"],
-        reporters: ["default"],
         browser: {
             enabled: true,
             headless: true,
             provider: playwright({}),
             instances: [{ browser: "chromium" }],
         },
-        setupFiles: ["tests/setupTests.ts"],
+        setupFiles: ["src/tests/setupTests.ts"],
     },
 });
