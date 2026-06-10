@@ -223,22 +223,6 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                     <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
                 </SettingsSubsection>
                 <SettingsSection heading={_t("common|advanced")}>
-                    <SettingsSubsection heading={_t("settings|voip|voice_processing")}>
-                        <SettingsToggleInput
-                            name="voice-noise-suppression"
-                            label={_t("settings|voip|noise_suppression")}
-                            helpMessage={_t("settings|voip|noise_suppression_description")}
-                            checked={this.state.audioNoiseSuppression}
-                            onChange={this.onNoiseSuppressionChanged}
-                        />
-                        <SettingsToggleInput
-                            name="voice-echo-cancellation"
-                            label={_t("settings|voip|echo_cancellation")}
-                            helpMessage={_t("settings|voip|echo_cancellation_description")}
-                            checked={this.state.audioEchoCancellation}
-                            onChange={this.onEchoCancellationChanged}
-                        />
-                    </SettingsSubsection>
                     <SettingsSubsection heading={_t("settings|voip|connection_section")}>
                         <SettingsFlag
                             name="webRtcAllowPeerToPeer"
@@ -283,6 +267,24 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                     {!allowLegacyCalls && !elementCallEnabled && (
                         // This is a broken configuration. We still try to handle this by prompting the user.
                         <p>{_t("settings|voip|no_calling_option_available_misconfigured")}</p>
+                    )}
+                    {(allowLegacyCalls || elementCallEnabled) && (
+                        <SettingsSection heading={_t("settings|voip|voice_processing")}>
+                            <SettingsToggleInput
+                                name="voice-noise-suppression"
+                                label={_t("settings|voip|noise_suppression")}
+                                helpMessage={_t("settings|voip|noise_suppression_description")}
+                                checked={this.state.audioNoiseSuppression}
+                                onChange={this.onNoiseSuppressionChanged}
+                            />
+                            <SettingsToggleInput
+                                name="voice-echo-cancellation"
+                                label={_t("settings|voip|echo_cancellation")}
+                                helpMessage={_t("settings|voip|echo_cancellation_description")}
+                                checked={this.state.audioEchoCancellation}
+                                onChange={this.onEchoCancellationChanged}
+                            />
+                        </SettingsSection>
                     )}
                 </Form.Root>
             </SettingsTab>
