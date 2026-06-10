@@ -5,12 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX, type FocusEvent, type MouseEventHandler, useState } from "react";
+import React, { memo, type JSX, type FocusEvent, useEffect, useRef, useState } from "react";
 import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-right";
 import classNames from "classnames";
 import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
 import { OverflowHorizontalIcon, EditIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { useDroppable } from "@dnd-kit/react";
+import { useMergeRefs } from "react-merge-refs";
 
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
@@ -39,8 +40,8 @@ export interface RoomListSectionHeaderViewSnapshot {
  * Actions that can be performed on a room list section header.
  */
 export interface RoomListSectionHeaderActions {
-    /** Handler invoked when the section header is clicked (toggles expand/collapse). */
-    onClick: MouseEventHandler<HTMLButtonElement>;
+    /** Handler invoked when the section header is clicked or keyboard-toggled (toggles expand/collapse). */
+    onClick: () => void;
     /** Handler invoked when the edit section button is clicked  */
     editSection: () => void;
     /** Handler invoked when the remove section button is clicked  */
@@ -104,9 +105,17 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const { id, title, isExpanded, isUnread, displaySectionMenu } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
-    const { ref, isDropTarget } = useDroppable({
+    const { ref: droppableRef, isDropTarget } = useDroppable({
         id,
     });
+    const internalRef = useRef<HTMLButtonElement>(null);
+    const mergedRef = useMergeRefs<HTMLButtonElement>([droppableRef, internalRef]);
+
+    useEffect(() => {
+        if (isFocused) {
+            internalRef.current?.focus({ preventScroll: true });
+        }
+    }, [isFocused]);
 
     return (
         <div
@@ -114,7 +123,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
             {...getGroupHeaderAccessibleProps(indexInList, sectionIndex, roomCountInSection)}
         >
             <button
-                ref={ref}
+                ref={mergedRef}
                 type="button"
                 role="gridcell"
                 className={classNames(styles.header, {
@@ -124,6 +133,13 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                     [styles.unread]: isUnread,
                 })}
                 onClick={vm.onClick}
+                onKeyDown={(e) => {
+                    if ((e.code === "ArrowRight" && !isExpanded) || (e.code === "ArrowLeft" && isExpanded)) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        vm.onClick();
+                    }
+                }}
                 aria-expanded={isExpanded}
                 onFocus={(e) => onFocus(id, e)}
                 tabIndex={isFocused ? 0 : -1}
