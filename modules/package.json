@@ -5,12 +5,14 @@
     "scripts": {
         "lint:js": "eslint --max-warnings 0 */src -c ./.eslintrc.cjs",
         "lint:ts": "tsc --noEmit",
+        "test:unit": "vitest run",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --"
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "workspace:*",
+        "@element-hq/vite-common": "workspace:*",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^10.1.8",
@@ -18,7 +20,8 @@
         "eslint-plugin-matrix-org": "^3.0.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-compiler": "^19.1.0-rc.2",
-        "eslint-plugin-unicorn": "^56.0.0"
+        "eslint-plugin-unicorn": "^56.0.0",
+        "vitest": "catalog:"
     },
     "private": true
 }

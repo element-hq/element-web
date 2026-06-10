@@ -13,11 +13,6 @@ export default defineConfig({
         include: ["tests/**/*.test.{ts,tsx}"],
         exclude: ["./e2e/**/*", "./node_modules/**/*"],
         reporters: ["default"],
-        coverage: {
-            provider: "v8",
-            include: ["src/**/*.ts"],
-            reporter: [["lcov", { projectRoot: "../../" }], "text"],
-        },
         browser: {
             enabled: true,
             headless: true,
