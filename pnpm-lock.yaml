@@ -318,6 +318,9 @@ importers:
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
       cronstrue:
         specifier: ^3.0.0
         version: 3.14.0
@@ -357,6 +360,9 @@ importers:
       vitepress-plugin-mermaid:
         specifier: ^2.0.17
         version: 2.0.17(mermaid@11.15.0)(vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@22.13.14)(@types/react@19.2.14)(axios@1.16.1)(jwt-decode@4.0.0)(lightningcss@1.32.0)(postcss@8.5.15)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(typescript@6.0.3))
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@22.13.14)(@vitest/browser-playwright@4.1.8)(@vitest/coverage-v8@4.1.8)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.16(@types/node@22.13.14)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
       yaml:
         specifier: 2.8.4
         version: 2.8.4
@@ -403,9 +409,6 @@ importers:
       '@electron/fuses':
         specifier: ^2.1.1
         version: 2.1.1
-      '@element-hq/vite-common':
-        specifier: workspace:*
-        version: link:../../packages/vite-common
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.60.0
@@ -433,9 +436,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.0.0
         version: 8.59.4(eslint@8.57.1)(typescript@6.0.3)
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
       app-builder-lib:
         specifier: 26.15.1
         version: 26.15.1(dmg-builder@26.15.1)(electron-builder-squirrel-windows@26.15.1)
@@ -913,7 +913,7 @@ importers:
         version: 7.1.4(webpack@5.107.1)
       css-minimizer-webpack-plugin:
         specifier: ^8.0.0
-        version: 8.0.0(lightningcss@1.32.0)(webpack@5.107.1)
+        version: 8.0.0(esbuild@0.27.4)(lightningcss@1.32.0)(webpack@5.107.1)
       dotenv:
         specifier: ^17.0.0
         version: 17.4.2
@@ -1060,7 +1060,7 @@ importers:
         version: 6.1.1(stylelint@17.12.0(typescript@6.0.3))
       terser-webpack-plugin:
         specifier: ^5.3.9
-        version: 5.6.0(lightningcss@1.32.0)(postcss@8.5.15)(webpack@5.107.1)
+        version: 5.6.0(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack@5.107.1)
       testcontainers:
         specifier: ^12.0.0
         version: 12.0.1
@@ -1075,7 +1075,7 @@ importers:
         version: 4.3.0
       webpack:
         specifier: ^5.89.0
-        version: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+        version: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
       webpack-bundle-analyzer:
         specifier: ^5.0.0
         version: 5.3.0
@@ -1244,9 +1244,6 @@ importers:
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -1302,9 +1299,6 @@ importers:
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 4.1.8(playwright@1.60.0)(vite@8.0.16(@types/node@22.13.14)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(vitest@4.1.8)
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
       react:
         specifier: 'catalog:'
         version: 19.2.6
@@ -1333,9 +1327,6 @@ importers:
         specifier: ^19
         version: 19.2.6
     devDependencies:
-      '@element-hq/vite-common':
-        specifier: workspace:*
-        version: link:../vite-common
       '@matrix-org/react-sdk-module-api':
         specifier: ^2.5.0
         version: 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.6)
@@ -1354,9 +1345,6 @@ importers:
       '@types/semver':
         specifier: ^7.5.8
         version: 7.7.1
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -1497,9 +1485,6 @@ importers:
       '@element-hq/element-web-playwright-common':
         specifier: workspace:*
         version: link:../playwright-common
-      '@element-hq/vite-common':
-        specifier: workspace:*
-        version: link:../vite-common
       '@fetch-mock/vitest':
         specifier: ^0.2.18
         version: 0.2.18(vitest@4.1.8)
@@ -1569,9 +1554,6 @@ importers:
       '@vitest/browser-playwright':
         specifier: 'catalog:'
         version: 4.1.8(playwright@1.60.0)(vite@8.0.16(@types/node@22.13.14)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))(vitest@4.1.8)
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
       eslint:
         specifier: '8'
         version: 8.57.1
@@ -1641,19 +1623,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@22.13.14)(@vitest/browser-playwright@4.1.8)(@vitest/coverage-v8@4.1.8)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.16(@types/node@22.13.14)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-
-  packages/vite-common:
-    dependencies:
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 4.1.8(@vitest/browser@4.1.8)(vitest@4.1.8)
-      vitest:
-        specifier: 'catalog:'
-        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@22.13.14)(@vitest/browser-playwright@4.1.8)(@vitest/coverage-v8@4.1.8)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.16(@types/node@22.13.14)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
-    devDependencies:
-      typescript:
-        specifier: 'catalog:'
-        version: 6.0.3
 
 packages:
 
@@ -17266,7 +17235,7 @@ snapshots:
   '@principalstudio/html-webpack-inject-preload@1.2.7(html-webpack-plugin@5.6.7(webpack@5.107.1))(webpack@5.107.1)':
     dependencies:
       html-webpack-plugin: 5.6.7(webpack@5.107.1)
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   '@prisma/instrumentation@7.6.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -18008,7 +17977,7 @@ snapshots:
   '@sentry/webpack-plugin@5.3.0(webpack@5.107.1)':
     dependencies:
       '@sentry/bundler-plugin-core': 5.3.0
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -19884,7 +19853,7 @@ snapshots:
       '@babel/core': 7.29.0
       find-up: 5.0.0
     optionalDependencies:
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   babel-plugin-const-enum@1.2.0(@babel/core@7.29.0):
     dependencies:
@@ -20572,7 +20541,7 @@ snapshots:
       schema-utils: 4.3.3
       serialize-javascript: 7.0.5
       tinyglobby: 0.2.17
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   core-js-compat@3.49.0:
     dependencies:
@@ -20722,9 +20691,9 @@ snapshots:
       postcss-value-parser: 4.2.0
       semver: 7.8.1
     optionalDependencies:
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
-  css-minimizer-webpack-plugin@8.0.0(lightningcss@1.32.0)(webpack@5.107.1):
+  css-minimizer-webpack-plugin@8.0.0(esbuild@0.27.4)(lightningcss@1.32.0)(webpack@5.107.1):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       cssnano: 7.1.2(postcss@8.5.15)
@@ -20732,8 +20701,9 @@ snapshots:
       postcss: 8.5.15
       schema-utils: 4.3.3
       serialize-javascript: 7.0.5
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
     optionalDependencies:
+      esbuild: 0.27.4
       lightningcss: 1.32.0
 
   css-prefers-color-scheme@11.0.0(postcss@8.5.15):
@@ -22158,7 +22128,7 @@ snapshots:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   file-saver@2.0.5: {}
 
@@ -22668,7 +22638,7 @@ snapshots:
       pretty-error: 4.0.0
       tapable: 2.3.3
     optionalDependencies:
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   htmlparser2@10.1.0:
     dependencies:
@@ -24110,7 +24080,7 @@ snapshots:
     dependencies:
       schema-utils: 4.3.3
       tapable: 2.3.3
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   minimalistic-assert@1.0.1: {}
 
@@ -25177,7 +25147,7 @@ snapshots:
       postcss: 8.5.15
       semver: 7.8.1
     optionalDependencies:
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
     transitivePeerDependencies:
       - typescript
 
@@ -25680,7 +25650,7 @@ snapshots:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   re-resizable@6.11.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
@@ -26492,7 +26462,7 @@ snapshots:
     dependencies:
       iconv-lite: 0.6.3
       source-map-js: 1.2.1
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   source-map-support@0.5.13:
     dependencies:
@@ -27061,14 +27031,15 @@ snapshots:
       postcss: 8.5.15
     optional: true
 
-  terser-webpack-plugin@5.6.0(lightningcss@1.32.0)(postcss@8.5.15)(webpack@5.107.1):
+  terser-webpack-plugin@5.6.0(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack@5.107.1):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
       terser: 5.48.0
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
     optionalDependencies:
+      esbuild: 0.27.4
       lightningcss: 1.32.0
       postcss: 8.5.15
 
@@ -27840,7 +27811,7 @@ snapshots:
       import-local: 3.2.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
       webpack-merge: 6.0.1
     optionalDependencies:
       webpack-bundle-analyzer: 5.3.0
@@ -27855,7 +27826,7 @@ snapshots:
       range-parser: 1.2.1
       schema-utils: 4.3.3
     optionalDependencies:
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
     transitivePeerDependencies:
       - tslib
 
@@ -27890,7 +27861,7 @@ snapshots:
       webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.107.1)
       ws: 8.21.0
     optionalDependencies:
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
       webpack-cli: 7.0.2(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@5.2.4)(webpack@5.107.1)
     transitivePeerDependencies:
       - bufferutil
@@ -27908,7 +27879,7 @@ snapshots:
   webpack-retry-chunk-load-plugin@3.1.1(webpack@5.107.1):
     dependencies:
       prettier: 2.8.8
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   webpack-sources@3.5.0: {}
 
@@ -27917,7 +27888,7 @@ snapshots:
       ejs: 3.1.10
       fs: 0.0.1-security
       underscore: 1.13.8
-      webpack: 5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
+      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   webpack-virtual-modules@0.6.2: {}
 
@@ -27961,7 +27932,7 @@ snapshots:
       - uglify-js
     optional: true
 
-  webpack@5.107.1(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2):
+  webpack@5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2):
     dependencies:
       '@types/estree': 1.0.9
       '@types/json-schema': 7.0.15
@@ -27983,7 +27954,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.3
       tapable: 2.3.3
-      terser-webpack-plugin: 5.6.0(lightningcss@1.32.0)(postcss@8.5.15)(webpack@5.107.1)
+      terser-webpack-plugin: 5.6.0(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack@5.107.1)
       watchpack: 2.5.1
       webpack-sources: 3.5.0
     optionalDependencies:

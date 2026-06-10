@@ -87,7 +87,6 @@
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "workspace:*",
-        "@element-hq/vite-common": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
         "@fontsource/inter": "catalog:",
         "@matrix-org/react-sdk-module-api": "^2.5.0",
@@ -111,7 +110,6 @@
         "@typescript-eslint/parser": "^8.53.1",
         "@vector-im/compound-web": "catalog:",
         "@vitest/browser-playwright": "catalog:",
-        "@vitest/coverage-v8": "catalog:",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^10.1.8",

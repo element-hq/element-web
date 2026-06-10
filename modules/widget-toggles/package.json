@@ -20,7 +20,6 @@
         "@types/react": "^19",
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
-        "@vitest/coverage-v8": "catalog:",
         "react": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",

@@ -7,12 +7,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it } from "vitest";
 
-import WidgetLifecycleModule, { type WidgetLifecycleApiAdapter } from "../src/WidgetLifecycleModule";
+import WidgetLifecycleModule, { type WidgetLifecycleApiAdapter } from "./WidgetLifecycleModule";
 import type {
     CapabilitiesApprover,
     IdentityApprover,
     PreloadApprover,
     WidgetDescriptor,
+    Api,
 } from "@element-hq/element-web-module-api";
 
 const createApi = (config: unknown = {}) => {
@@ -40,7 +41,7 @@ const createApi = (config: unknown = {}) => {
                 get: () => config,
             },
             widgetLifecycle,
-        },
+        } as Api,
         handlers,
     };
 };
@@ -49,7 +50,8 @@ const widget: WidgetDescriptor = {
     id: "widget-id",
     templateUrl: "https://example.com/",
     creatorUserId: "@user-id",
-    kind: "room",
+    type: "com.example.custom",
+    origin: "example.com",
 };
 
 describe("WidgetLifecycleModule", () => {
