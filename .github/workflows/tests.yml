@@ -97,15 +97,12 @@ jobs:
                       !apps/web/coverage/lcov-report
 
     vitest:
-        name: Vitest
+        name: Vitest${{ case(matrix.path == '.', '', format(' {0}', matrix.path)) }}
         strategy:
             matrix:
                 path:
-                    - apps/desktop
                     - packages/shared-components
-                    - packages/module-api
-                    - modules/widget-lifecycle
-                    - modules/widget-toggles
+                    - "."
         runs-on: ubuntu-24.04
         steps:
             # Dump the disk usage before we start: this job frequently flakes with "No space left on device"
@@ -139,7 +136,6 @@ jobs:
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
-              if: matrix.path == 'packages/shared-components' || matrix.path == 'modules/widget-toggles'
               with:
                   write-cache: ${{ github.event_name != 'merge_group' }}
 
@@ -159,7 +155,7 @@ jobs:
                   NAME=$(basename "$MATRIX_PATH")
                   echo "name=$NAME" >> $GITHUB_OUTPUT
               env:
-                  MATRIX_PATH: ${{ matrix.path }}
+                  MATRIX_PATH: ${{ case(matrix.path == '.', 'vite', format(' {0}', matrix.path)) }}
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
