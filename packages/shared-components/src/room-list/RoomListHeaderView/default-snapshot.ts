@@ -9,7 +9,6 @@ import { type RoomListHeaderViewSnapshot } from "./RoomListHeaderView";
 
 export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     title: "Rooms",
-    displayComposeMenu: true,
     displaySpaceMenu: true,
     canCreateRoom: true,
     canCreateVideoRoom: true,
@@ -17,6 +16,4 @@ export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     canAccessSpaceSettings: true,
     activeSortOption: "recent",
     isMessagePreviewEnabled: true,
-    useComposeIcon: true,
-    canCreateSection: true,
 };
