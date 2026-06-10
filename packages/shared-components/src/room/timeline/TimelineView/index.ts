@@ -15,6 +15,5 @@ export type {
     TimelineViewProps,
     NavigationAnchor,
     AnchorAlign,
-    PaginationState,
     ImmediateScroll,
 } from "./types";

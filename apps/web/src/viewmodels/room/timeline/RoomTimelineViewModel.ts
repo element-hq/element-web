@@ -122,15 +122,34 @@ export class RoomTimelineViewModel
      * starting a parallel one. When the chain settles this is set back to null,
      * and the next `onStartReached` creates a fresh chain.
      *
-     * Using a stored promise as the guard (rather than checking
-     * `backwardPagination === "loading"` in the snapshot) ensures coalescing
-     * survives the async gap between when we clear the loading state and when
-     * the React render triggered by that state change fires.
+     * Using a stored promise as the guard ensures coalescing survives the async
+     * gap between when the chain finishes and when the next `onStartReached` fires.
      */
     private backwardPaginateChain: Promise<void> | null = null;
 
     /** Mirror of {@link backwardPaginateChain} for the forward direction. */
     private forwardPaginateChain: Promise<void> | null = null;
+
+    /**
+     * Canonical timeline content — never contains loading placeholders.
+     * The View consumes a projection of this (see {@link republish}) with spinners
+     * layered on top, keeping prepend bookkeeping free of spinner noise.
+     */
+    private baseItems: TimelineItem[] = [];
+
+    /**
+     * Virtuoso `firstItemIndex` for {@link baseItems}, ignoring any spinner.
+     * Decremented by the prepend count on each backward batch so real events keep
+     * stable indices. The exposed index is this minus 1 when the backward spinner
+     * is visible (it occupies the slot above the first real item).
+     */
+    private baseFirstItemIndex = INITIAL_FIRST_ITEM_INDEX;
+
+    /** Whether the leading (backward) pagination spinner is currently shown. */
+    private backwardSpinnerVisible = false;
+
+    /** Whether the trailing (forward) pagination spinner is currently shown. */
+    private forwardSpinnerVisible = false;
 
     /** The event ID for which we last sent a read receipt, to avoid redundant sends. */
     private lastSentReceiptEventId: string | null = null;
@@ -228,8 +247,6 @@ export class RoomTimelineViewModel
         super(opts, {
             items: [],
             firstItemIndex: INITIAL_FIRST_ITEM_INDEX,
-            backwardPagination: "idle",
-            forwardPagination: "idle",
             atLiveEnd: false,
             pendingAnchor: null,
             highlightedEventId: opts.initialEventId ?? null,
@@ -343,16 +360,13 @@ export class RoomTimelineViewModel
             if (!this.isAtBottom && event.getSender() !== this.opts.client.getSafeUserId()) {
                 this.unreadMessageCount++;
             }
-            this.mergeSnapshot(
-                {
-                    items,
-                    atLiveEnd,
-                    numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
-                    hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
-                    canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-                },
-                "live-event",
-            );
+            this.baseItems = items;
+            this.republish("live-event", {
+                atLiveEnd,
+                numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
+                hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
+                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+            });
         });
     };
 
@@ -404,10 +418,8 @@ export class RoomTimelineViewModel
             return;
         }
 
-        const itemsBefore = this.snapshot.current.items;
-        const firstItemIndexBefore = this.snapshot.current.firstItemIndex;
         const itemsNew = this.buildItems();
-        const delta = itemsNew.length - itemsBefore.length;
+        const delta = itemsNew.length - this.baseItems.length;
 
         const newCanJumpToReadMarker = this.computeCanJumpToReadMarker(itemsNew);
         const newHasHighlights =
@@ -427,16 +439,13 @@ export class RoomTimelineViewModel
         }
 
         // Items grew (typical: historical encrypted events newly decrypted).
-        // Compensate firstItemIndex by -delta so totalCount stays constant.
-        this.mergeSnapshot(
-            {
-                items: itemsNew,
-                firstItemIndex: firstItemIndexBefore - delta,
-                canJumpToReadMarker: newCanJumpToReadMarker,
-                hasHighlights: newHasHighlights,
-            },
-            `decrypt-flush(Δ=${delta >= 0 ? "+" : ""}${delta})`,
-        );
+        // Compensate baseFirstItemIndex by -delta so totalCount stays constant.
+        this.baseItems = itemsNew;
+        this.baseFirstItemIndex -= delta;
+        this.republish(`decrypt-flush(Δ=${delta >= 0 ? "+" : ""}${delta})`, {
+            canJumpToReadMarker: newCanJumpToReadMarker,
+            hasHighlights: newHasHighlights,
+        });
     }
 
     /**
@@ -526,14 +535,6 @@ export class RoomTimelineViewModel
 
     private async load(target: LoadTarget): Promise<void> {
         logger.debug(`[TimelineVM] load() start — kind=${target.kind}${target.kind !== "live" ? ` eventId=${target.eventId}` : ""}`);
-        this.mergeSnapshot(
-            {
-                backwardPagination: "loading",
-                forwardPagination: "loading",
-            },
-            `load(${target.kind})-start`,
-        );
-
         const sdkLoadTarget = target.kind !== "live" ? target.eventId : undefined;
 
         try {
@@ -584,25 +585,21 @@ export class RoomTimelineViewModel
             }
 
             if (!pendingAnchor && items.length > 0 && !this.timelineWindow.canPaginate(Direction.Forward)) {
-                // Live-end load (or stale restore fallback): anchor to the last rendered
-                // item so scrollIntoViewOnChange fires post-ResizeObserver and the view
-                // reliably lands at the very bottom.
+                // Live-end: anchor to the last item so the view lands at the bottom.
                 pendingAnchor = { targetKey: items[items.length - 1].key, align: "end" };
                 logger.debug(`[TimelineVM] load() — live-end anchor key=${pendingAnchor.targetKey}`);
             }
 
-            this.mergeSnapshot(
-                {
-                    items,
-                    backwardPagination: "idle",
-                    forwardPagination: "idle",
-                    atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
-                    pendingAnchor,
-                    highlightedEventId: target.kind === "permalink" ? target.eventId : null,
-                    canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-                },
-                `load(${target.kind})-done`,
-            );
+            this.baseItems = items;
+            this.baseFirstItemIndex = INITIAL_FIRST_ITEM_INDEX;
+            this.backwardSpinnerVisible = false;
+            this.forwardSpinnerVisible = false;
+            this.republish(`load(${target.kind})-done`, {
+                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+                pendingAnchor,
+                highlightedEventId: target.kind === "permalink" ? target.eventId : null,
+                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+            });
 
             // If all events in the initial window were filtered (items empty) but more
             // content exists ahead, Virtuoso won't fire onEndReached on an empty list.
@@ -613,13 +610,9 @@ export class RoomTimelineViewModel
             }
         } catch (e) {
             logger.error(`[TimelineVM] load() error`, e);
-            this.mergeSnapshot(
-                {
-                    backwardPagination: "error",
-                    forwardPagination: "error",
-                },
-                `load(${target.kind})-error`,
-            );
+            this.backwardSpinnerVisible = false;
+            this.forwardSpinnerVisible = false;
+            this.republish(`load(${target.kind})-error`);
         }
     }
 
@@ -799,7 +792,7 @@ export class RoomTimelineViewModel
         if (!this.snapshot.current.atLiveEnd) {
             // Window doesn't reach the live end yet — reload the timeline at
             // live. pendingAnchor gets set inside load() and drives the
-            // post-load scroll via scrollIntoViewOnChange.
+            // post-load scroll via scrollToIndexOnChange.
             this.load({ kind: "live" });
         } else {
             // Already have the latest events — scroll to the last item now.
@@ -990,9 +983,45 @@ export class RoomTimelineViewModel
      * changes a tile's content, never the items array.
      *
      * Differences between directions handled inline:
-     * - **Backward**: uses {@link mergePrepended} and decrements `firstItemIndex`.
+     * - **Backward**: decrements `baseFirstItemIndex` by the number of items
+     *   prepended so real events keep a stable Virtuoso index.
      * - **Forward**: rebuilds from the full window; updates `atLiveEnd` on completion.
      */
+    /**
+     * Keys for the pagination spinners. These are *projection-only* items — they
+     * are layered onto {@link baseItems} by {@link republish} and never stored in
+     * the canonical list, so a key can appear in the displayed array at most once
+     * per side by construction.
+     *
+     * We render them as real `kind:"loading"` list items (rather than Virtuoso
+     * Header/Footer components) so Virtuoso measures their height and includes it
+     * in scroll-position calculations: when a spinner is removed the
+     * `firstItemIndex` delta accounts for it exactly, avoiding the scroll jump
+     * (backward) and `alignToBottom` "bounce" (forward) that an untracked
+     * Header/Footer toggling height would cause.
+     */
+    private static readonly BACKWARD_LOADING_KEY = "backward-loading";
+    private static readonly FORWARD_LOADING_KEY = "forward-loading";
+
+    /**
+     * Publish {@link baseItems} to the View, layering spinners on top:
+     * `[ (backward?), ...baseItems, (forward?) ]`. The exposed `firstItemIndex`
+     * is {@link baseFirstItemIndex} minus 1 when the backward spinner is visible,
+     * keeping every real event at a stable Virtuoso index regardless of spinner state.
+     */
+    private republish(reason: string, extra: Partial<TimelineViewSnapshot> = {}): void {
+        const items: TimelineItem[] = [];
+        if (this.backwardSpinnerVisible) {
+            items.push({ kind: "loading", key: RoomTimelineViewModel.BACKWARD_LOADING_KEY });
+        }
+        items.push(...this.baseItems);
+        if (this.forwardSpinnerVisible) {
+            items.push({ kind: "loading", key: RoomTimelineViewModel.FORWARD_LOADING_KEY });
+        }
+        const firstItemIndex = this.baseFirstItemIndex - (this.backwardSpinnerVisible ? 1 : 0);
+        this.mergeSnapshot({ items, firstItemIndex, ...extra }, reason);
+    }
+
     private async runPaginateChain(direction: Direction, wasAnchoredLoad = false): Promise<void> {
         // Not strictly necessary — the loop already terminates when canPaginate() returns
         // false or hasMore is false. However, leaving it unbounded without user action feels a bit weird.
@@ -1000,9 +1029,14 @@ export class RoomTimelineViewModel
         const MAX_EMPTY_RETRIES = 10;
         const isBackward = direction === Direction.Backward;
         const dirLabel = isBackward ? "backward" : "forward";
-        const loadingKey = isBackward ? "backwardPagination" : "forwardPagination";
 
-        this.mergeSnapshot({ [loadingKey]: "loading" }, `paginate(${dirLabel})-start`);
+        if (isBackward) {
+            this.backwardSpinnerVisible = true;
+            this.republish("paginate(backward)-start");
+        } else {
+            this.forwardSpinnerVisible = true;
+            this.republish("paginate(forward)-start");
+        }
 
         try {
             let emptyBatches = 0;
@@ -1012,10 +1046,6 @@ export class RoomTimelineViewModel
                     logger.debug(`[TimelineVM] paginate(${dirLabel}) chain end — canPaginate=false`);
                     break;
                 }
-
-                // Re-read snapshot after each async gap: the other direction may
-                // have updated items or firstItemIndex while we were awaiting.
-                const currentItems = this.snapshot.current.items;
 
                 const eventsBefore = new Set(this.timelineWindow.getEvents());
                 const windowSizeBefore = eventsBefore.size;
@@ -1041,117 +1071,62 @@ export class RoomTimelineViewModel
                 let added: number;
 
                 if (isBackward) {
-                    // Re-read again — forward pagination may have appended during the await.
-                    const postItems = this.snapshot.current.items;
-                    const postFirstItemIndex = this.snapshot.current.firstItemIndex;
-                    const items = this.mergePrepended(postItems, rebuilt);
-                    const prepended = items.length - postItems.length;
+                    const prepended = rebuilt.length - this.baseItems.length;
                     added = prepended;
-                    // Backward pagination can cause the window to trim from the forward
-                    // (live) end once it exceeds the SDK's window limit. Recompute
-                    // atLiveEnd after every backward batch so the snapshot reflects
-                    // whether forward pagination is still possible.
+                    this.baseItems = rebuilt;
+                    this.baseFirstItemIndex -= prepended;
+                    // Backward pagination can trim the forward end once the window hits its size limit.
                     const newAtLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
                     logger.debug(
                         `[TimelineVM] paginate(backward) batch — ` +
                         `rawΔ=${rawDelta} (window: ${windowSizeBefore}→${windowSizeAfter}), ` +
                         `filtered=${filteredCount}, prepended=${prepended}, hasMore=${hasMore}, ` +
                         `emptyBatches=${emptyBatches}, ` +
-                        `firstItemIndex: ${postFirstItemIndex}→${postFirstItemIndex - prepended}, ` +
-                        `atLiveEnd=${newAtLiveEnd}`,
+                        `baseFirstItemIndex=${this.baseFirstItemIndex}, atLiveEnd=${newAtLiveEnd}`,
                     );
-                    this.mergeSnapshot(
-                        {
-                            items,
-                            firstItemIndex: postFirstItemIndex - prepended,
-                            atLiveEnd: newAtLiveEnd,
-                            canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
-                        },
-                        "paginate(backward)-batch",
-                    );
+                    this.republish("paginate(backward)-batch", {
+                        atLiveEnd: newAtLiveEnd,
+                        canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt),
+                    });
                 } else {
-                    added = rebuilt.length - currentItems.length;
+                    added = rebuilt.length - this.baseItems.length;
+                    this.baseItems = rebuilt;
                     logger.debug(
                         `[TimelineVM] paginate(forward) batch — ` +
                         `rawΔ=${rawDelta} (window: ${windowSizeBefore}→${windowSizeAfter}), ` +
                         `filtered=${filteredCount}, appended=${added}, hasMore=${hasMore}, ` +
                         `emptyBatches=${emptyBatches}`,
                     );
-                    this.mergeSnapshot(
-                        { items: rebuilt, canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt) },
-                        "paginate(forward)-batch",
-                    );
+                    this.republish("paginate(forward)-batch", {
+                        canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt),
+                    });
                 }
 
                 if (added > 0 || !hasMore) break;
-
-                // All fetched events were filtered — keep going.
                 emptyBatches++;
             }
 
-            // Always recompute atLiveEnd at chain completion. Backward chains can
-            // cause forward trimming; forward chains can reach (or leave) live end.
-            this.mergeSnapshot(
-                {
-                    [loadingKey]: "idle",
+            if (isBackward) {
+                this.backwardSpinnerVisible = false;
+                this.republish("paginate(backward)-end", {
                     atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
-                },
-                `paginate(${dirLabel})-end`,
-            );
+                });
+            } else {
+                this.forwardSpinnerVisible = false;
+                this.republish("paginate(forward)-end", {
+                    atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+                });
+            }
         } catch (e) {
             logger.error(`[TimelineVM] paginate(${dirLabel}) error`, e);
-            this.mergeSnapshot({ [loadingKey]: "error" }, `paginate(${dirLabel})-error`);
+            if (isBackward) {
+                this.backwardSpinnerVisible = false;
+                this.republish("paginate(backward)-error");
+            } else {
+                this.forwardSpinnerVisible = false;
+                this.republish("paginate(forward)-error");
+            }
         }
-    }
-
-    /**
-     * Merge a freshly-built item list with the existing one after a backward
-     * pagination, returning `[...newPrefix, ...prev]` where `newPrefix` is
-     * the slice of `next` that appears BEFORE the first key already present
-     * in `prev`.
-     *
-     * This deliberately discards any changes `next` may contain in the
-     * middle or at the tail of the list (e.g. a previously-encrypted event
-     * that is now renderable, or a newly-appended live event). Those would
-     * be middle-insertions from Virtuoso's perspective and would shift its
-     * scroll anchor by the inserted items' height. Middle changes will be
-     * picked up on the next pagination, and render-side content updates
-     * (decryption, reactions, edits) flow through the renderer directly
-     * because they key on the underlying event id.
-     *
-     * When `next` contains no keys from `prev` (e.g. the first pagination
-     * on an empty list) we use it verbatim.
-     *
-     * If the last prepended item and the first prev item are date separators
-     * for the same date, the duplicate leading the prev suffix is dropped.
-     */
-    private mergePrepended(prev: TimelineItem[], next: TimelineItem[]): TimelineItem[] {
-        if (prev.length === 0) return next;
-        const prevKeys = new Set(prev.map((it) => it.key));
-        const firstSharedIdx = next.findIndex((it) => prevKeys.has(it.key));
-        if (firstSharedIdx < 0) {
-            // Nothing shared — treat as a fresh list.
-            return next;
-        }        // Drop middle insertions: only take the new prefix (items before the first
-        // key already present in prev) and stitch it onto the existing list.
-        // This prevents newly-renderable events (e.g. late-decrypted) from causing
-        // a mid-list insertion that shifts Virtuoso's scroll anchor.
-        // Commented out to allow middle insertions for now.
-        // const prefix = next.slice(0, firstSharedIdx);
-        // // De-dup: if prefix ends with a date separator whose key matches the
-        // // first item of prev (also a date separator), prev already owns it.
-        // if (
-        //     prefix.length > 0 &&
-        //     prefix[prefix.length - 1].kind === "date-separator" &&
-        //     prev[0].kind === "date-separator" &&
-        //     prefix[prefix.length - 1].key === prev[0].key
-        // ) {
-        //     prefix.pop();
-        // }
-        // return [...prefix, ...prev];
-
-        // Middle-insertion dropping disabled — use the full rebuilt list.
-        return next;
     }
 
     // ── Snapshot construction ────────────────────────────────────────

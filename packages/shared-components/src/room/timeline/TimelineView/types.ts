@@ -81,10 +81,6 @@ export interface NavigationAnchor {
  */
 export type ImmediateScroll = (anchor: NavigationAnchor) => void;
 
-// ─── Loading & error ───────────────────────────────────────────────
-
-export type PaginationState = "idle" | "loading" | "error";
-
 // ─── Timeline view model contract ──────────────────────────────────
 
 export interface TimelineViewSnapshot {
@@ -97,10 +93,6 @@ export interface TimelineViewSnapshot {
      * atomically with `items`.
      */
     firstItemIndex: number;
-
-    /** Pagination state at each end of the loaded window. */
-    backwardPagination: PaginationState;
-    forwardPagination: PaginationState;
 
     /**
      * True when the timeline window has reached the live end — i.e. there are
