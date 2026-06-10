@@ -171,8 +171,18 @@ export const GuestOpen: Story = {
     tags: ["!dev", "!autodocs"],
 };
 
-export const WithStatusEmoji: Story = {
+export const WithStatus: Story = {
     args: {
+        userStatus: {
+            emoji: "🐹",
+            text: "On the wheel",
+        },
+    },
+};
+
+export const WithStatusOpen: Story = {
+    args: {
+        open: true,
         userStatus: {
             emoji: "🐹",
             text: "On the wheel",
