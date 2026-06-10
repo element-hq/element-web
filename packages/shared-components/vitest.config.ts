@@ -5,13 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defineProject } from "vitest/config";
+import { defineConfig } from "vitest/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
 import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+
+import rootConfig from "../../vitest.config";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,8 +30,15 @@ const commonLaunchOptions = {
     args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
 };
 
-export default defineProject({
+export default defineConfig({
     test: {
+        coverage: {
+            exclude: ["src/**/*.stories.tsx"],
+            provider: "v8",
+            include: ["src/**/*.{ts,tsx}"],
+            reporter: [["lcov", { projectRoot: "../../" }]],
+        },
+        reporters: rootConfig.test?.reporters,
         environment: "node",
         pool: "threads",
         globals: false,
