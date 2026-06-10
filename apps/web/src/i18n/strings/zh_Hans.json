@@ -1541,6 +1541,11 @@
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
+        "feature_retention": {
+            "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持设置“已读消息”。",
+            "disabled_sliding_sync": "当滑动同步启用时无法启用保留期。",
+            "display_name": "消息保留期"
+        },
         "feature_user_status": {
             "description": "启用以查看并设置当前状态。",
             "display_name": "用户状态",
