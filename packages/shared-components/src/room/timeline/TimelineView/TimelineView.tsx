@@ -7,55 +7,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect, useMemo, useRef, type JSX, type ReactNode, type PropsWithChildren } from "react";
 import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
-import { InlineSpinner } from "@vector-im/compound-web";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { ImmediateScroll, PaginationState, TimelineItem, TimelineViewProps } from "./types";
+import type { ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
 import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
 
 /**
- * Context surfaced to Virtuoso's Header/Footer components so the pagination
- * spinners can react to snapshot changes without us giving Virtuoso a new
- * Header/Footer component identity on every render (which would unmount and
- * remount the spinner each time).
  */
-interface TimelineComponentContext {
-    backwardPagination: PaginationState;
-    forwardPagination: PaginationState;
-}
-
-/**
- * Centered spinner row used at the top (backward pagination) and bottom
- * (forward pagination) of the virtuoso list. Sized to match legacy
- * `MessagePanel`'s `<Spinner />` usage (compound-web {@link InlineSpinner}
- * at 32px, horizontally centred).
- */
-function PaginationSpinner(): JSX.Element {
-    return (
-        <div
-            style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-        >
-            <InlineSpinner size={32} />
-        </div>
-    );
-}
-
-function TimelineHeader({ context }: { context?: TimelineComponentContext }): ReactNode {
-    if (context?.backwardPagination !== "loading") return null;
-    return <PaginationSpinner />;
-}
-
-function TimelineFooter({ context }: { context?: TimelineComponentContext }): ReactNode {
-    if (context?.forwardPagination !== "loading") return null;
-    return <PaginationSpinner />;
-}
-
-const VIRTUOSO_COMPONENTS = { Header: TimelineHeader, Footer: TimelineFooter };
-
 
 /**
  * Shared virtualized timeline container.
@@ -115,8 +73,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     snapshotRef.current = snapshot;
 
     // Guards onScroll from treating our own scrollToIndex calls as user navigation.
-    // Set to true before any programmatic scroll; cleared one animation frame later
-    // so that scroll events emitted by that scroll are ignored.
+    // Set to true before any programmatic scroll; cleared one animation frame later.
     const isAnchorScrollInProgressRef = useRef(false);
 
     // Wrap each item in `display: flow-root` to establish a block formatting
@@ -146,28 +103,13 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
 
     const computeItemKey = useCallback((_index: number, item: TimelineItem): string => item.key, []);
 
-    // scrollIntoViewOnChange fires on every data change (after a listRefresh cycle,
-    // meaning at least one ResizeObserver batch has run). It gives us the right
-    // timing to scroll, and we use its `done` callback to do the actual centering
-    // imperatively via scrollToIndex.
+    // scrollIntoViewOnChange fires on every data change (after a listRefresh cycle).
+    // We use its `done` callback to imperatively scrollToIndex, which bypasses
+    // defaultCalculateViewLocation's "already in view" gate (which no-ops when all
+    // sizes are 0 on a cold load) and has its own 150ms retry loop that converges
+    // as real item sizes arrive.
     //
-    // Why scrollToIndex in `done` rather than returning a location directly?
-    // Virtuoso's built-in scrollIntoView path goes through defaultCalculateViewLocation
-    // which returns null (no scroll) if the item appears "already in view". On a cold
-    // page refresh all item sizes are 0, so itemBottom=0 ≤ viewportBottom for every
-    // item — every item is "in view" — so the scroll silently no-ops. Crucially,
-    // `done` fires in both cases: after a real scroll completes, AND immediately when
-    // defaultCalculateViewLocation returns null. So `done` always fires, and inside it
-    // we call the imperative scrollToIndex which bypasses that check entirely and has
-    // its own internal retry loop (watchChangesFor 150ms on listRefresh) that converges
-    // to the correct position as real item sizes arrive.
-    //
-    // This single branch handles all initial-scroll cases (permalink, restore-position,
-    // and live-end). The VM sets pendingAnchor in load() for all three;
-    // anchor.align drives the final scroll position.
-    //
-    // Virtuoso's scrollIntoView index is zero-based (0..data.length-1), matching the
-    // internal size/offset trees. firstItemIndex is display-only (transposeItems).
+    // Virtuoso's index is zero-based (0..data.length-1); firstItemIndex is display-only.
     const scrollIntoViewOnChange = useCallback(
         (_params: { context: unknown; totalCount: number; scrollingInProgress: boolean }): ScrollIntoViewLocation | false => {
             const snap = snapshotRef.current;
@@ -184,10 +126,6 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 done: () => {
                     isAnchorScrollInProgressRef.current = true;
                     virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });
-                    // Clear the anchor now that we've issued the imperative scroll. This
-                    // prevents Virtuoso's internal scroll-compensation events (size changes,
-                    // upward compensation) from being misidentified as user scrolls by
-                    // onScroll after isAnchorScrollInProgressRef is cleared by the rAF below.
                     vm.onAnchorReached();
                     requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
                 },
@@ -197,9 +135,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         [],
     );
 
-    // Clear the pending anchor when the user scrolls. We use Virtuoso's onScroll
-    // which fires for all scroll events, combined with isAnchorScrollInProgressRef to
-    // ignore scrolls we initiated ourselves via scrollToIndex.
+    // Clear the pending anchor when the user scrolls, ignoring our own programmatic scrolls.
     const onScroll = useCallback(() => {
         if (!isAnchorScrollInProgressRef.current && snapshotRef.current.pendingAnchor !== null) {
             vm.onAnchorReached();
@@ -255,17 +191,6 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     //     [],
     // );
 
-    // Context for Header/Footer spinners. Recomputed only when the pagination
-    // states actually change so Virtuoso doesn't reconcile the header/footer
-    // tree more often than necessary.
-    const componentContext = useMemo<TimelineComponentContext>(
-        () => ({
-            backwardPagination: snapshot.backwardPagination,
-            forwardPagination: snapshot.forwardPagination,
-        }),
-        [snapshot.backwardPagination, snapshot.forwardPagination],
-    );
-
     // Don't mount Virtuoso until items are ready
     if (snapshot.items.length === 0) {
         return <div style={{ height: "100%", width: "100%" }} />;
@@ -286,8 +211,6 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 scrollIntoViewOnChange={scrollIntoViewOnChange}
                 onScroll={onScroll}
                 rangeChanged={onRangeChanged}
-                components={VIRTUOSO_COMPONENTS}
-                context={componentContext}
                 logLevel={LogLevel.ERROR}
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}

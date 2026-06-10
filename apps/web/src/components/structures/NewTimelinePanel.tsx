@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
 import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, ReadMarker } from "@element-hq/web-shared-components";
+import { InlineSpinner } from "@vector-im/compound-web";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
-import Spinner from "../views/elements/Spinner";
 
 /**
  * Minimal static VM for DateSeparatorView — no jump-to menu, label only.
@@ -79,8 +79,11 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                         return <ReadMarker key={item.key} eventId={item.key} kind="current" />;
                     case "loading":
                         return (
-                            <div key={item.key} className="mx_RoomView_messagePanelSpinner">
-                                <Spinner />
+                            <div
+                                key={item.key}
+                                style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+                            >
+                                <InlineSpinner size={32} />
                             </div>
                         );
                     case "gap":
