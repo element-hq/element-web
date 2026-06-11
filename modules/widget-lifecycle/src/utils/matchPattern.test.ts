@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it } from "vitest";
 
-import { matchPattern } from "../src/utils/matchPattern";
+import { matchPattern } from "./matchPattern";
 
 describe("matchPattern", () => {
     it.each([

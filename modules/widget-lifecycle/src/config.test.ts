@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it } from "vitest";
 
-import { parseWidgetLifecycleConfig } from "../src/config";
+import { parseWidgetLifecycleConfig } from "./config";
 
 describe("parseWidgetLifecycleConfig", () => {
     it("accepts missing configuration", () => {

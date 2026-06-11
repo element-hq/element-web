@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defineConfig, mergeConfig } from "vitest/config";
+import { defineConfig } from "vitest/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
@@ -13,7 +13,7 @@ import { storybookVis } from "storybook-addon-vis/vitest-plugin";
 import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
-import baseConfig from "@element-hq/vite-common/vite.config";
+import rootConfig from "../../vitest.config";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -30,94 +30,97 @@ const commonLaunchOptions = {
     args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
 };
 
-export default mergeConfig(
-    baseConfig,
-    defineConfig({
-        test: {
-            coverage: {
-                exclude: ["src/**/*.stories.tsx"],
-            },
-            projects: [
-                {
-                    extends: true,
-                    plugins: [
-                        // The plugin will run tests for the stories defined in your Storybook config
-                        // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-                        storybookTest({
-                            configDir: path.join(dirname, ".storybook"),
-                            storybookScript: "storybook --ci",
-                            tags: {
-                                exclude: ["skip-test"],
-                            },
-                        }),
-                        storybookVis({
-                            // 3px of difference allowed before marking as failed
-                            failureThreshold: 3,
-                            // When running in CI=1 mode, set the platform to `linux` as that is the platform where the browser-in-docker is running
-                            snapshotRootDir: ({ ci, platform }) => `__vis__/${ci ? "linux" : platform}`,
-                        }),
-                    ],
-                    test: {
-                        name: "storybook",
-                        browser: {
-                            enabled: true,
-                            headless: true,
-                            provider: playwright({
-                                contextOptions: commonContextOptions,
-                                launchOptions: commonLaunchOptions,
-                                connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
-                                    ? {
-                                          wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
-                                          exposeNetwork: "<loopback>",
-                                      }
-                                    : undefined,
-                            }),
-                            instances: [{ browser: "chromium" }],
+export default defineConfig({
+    test: {
+        coverage: {
+            exclude: ["src/**/*.stories.tsx"],
+            provider: "v8",
+            include: ["src/**/*.{ts,tsx}"],
+            reporter: [["lcov", { projectRoot: "../../" }]],
+        },
+        reporters: rootConfig.test?.reporters,
+        environment: "node",
+        pool: "threads",
+        globals: false,
+        projects: [
+            {
+                extends: true,
+                plugins: [
+                    // The plugin will run tests for the stories defined in your Storybook config
+                    // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+                    storybookTest({
+                        configDir: path.join(dirname, ".storybook"),
+                        storybookScript: "storybook --ci",
+                        tags: {
+                            exclude: ["skip-test"],
                         },
-                        setupFiles: [".storybook/vitest.setup.ts"],
+                    }),
+                    storybookVis({
+                        // 3px of difference allowed before marking as failed
+                        failureThreshold: 3,
+                        // When running in CI=1 mode, set the platform to `linux` as that is the platform where the browser-in-docker is running
+                        snapshotRootDir: ({ ci, platform }) => `__vis__/${ci ? "linux" : platform}`,
+                    }),
+                ],
+                test: {
+                    name: "storybook",
+                    browser: {
+                        enabled: true,
+                        headless: true,
+                        provider: playwright({
+                            contextOptions: commonContextOptions,
+                            launchOptions: commonLaunchOptions,
+                            connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
+                                ? {
+                                      wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
+                                      exposeNetwork: "<loopback>",
+                                  }
+                                : undefined,
+                        }),
+                        instances: [{ browser: "chromium" }],
+                    },
+                    setupFiles: [".storybook/vitest.setup.ts"],
+                },
+            },
+            {
+                extends: true,
+                // as any is workaround for https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/150
+                plugins: [nodePolyfills({ include: ["util"], globals: { global: false } }) as any],
+                test: {
+                    name: "unit",
+                    browser: {
+                        enabled: true,
+                        headless: true,
+                        provider: playwright({
+                            // These tests don't actually take screenshots (at least at time of writing)
+                            // but let's pass these options everywhere for consistency
+                            contextOptions: commonContextOptions,
+                            launchOptions: commonLaunchOptions,
+                        }),
+                        instances: [{ browser: "chromium" }],
+                    },
+                    setupFiles: ["src/test/setupTests.ts"],
+                },
+                css: {
+                    modules: {
+                        // Stabilise snapshots while keeping names distinct across CSS modules.
+                        generateScopedName: "[name]_[local]",
                     },
                 },
-                {
-                    extends: true,
-                    // as any is workaround for https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/150
-                    plugins: [nodePolyfills({ include: ["util"], globals: { global: false } }) as any],
-                    test: {
-                        name: "unit",
-                        browser: {
-                            enabled: true,
-                            headless: true,
-                            provider: playwright({
-                                // These tests don't actually take screenshots (at least at time of writing)
-                                // but let's pass these options everywhere for consistency
-                                contextOptions: commonContextOptions,
-                                launchOptions: commonLaunchOptions,
-                            }),
-                            instances: [{ browser: "chromium" }],
-                        },
-                        setupFiles: ["src/test/setupTests.ts"],
-                    },
-                    css: {
-                        modules: {
-                            // Stabilise snapshots while keeping names distinct across CSS modules.
-                            generateScopedName: "[name]_[local]",
-                        },
-                    },
-                },
-            ],
-        },
-        optimizeDeps: {
-            include: [
-                "vite-plugin-node-polyfills/shims/buffer",
-                "vite-plugin-node-polyfills/shims/process",
-                "@vector-im/compound-design-tokens/assets/web/icons",
-                "storybook/preview-api",
-            ],
-        },
-        resolve: {
-            alias: {
-                "@test-utils": path.resolve(__dirname, "./src/test/utils/index.tsx"),
             },
+        ],
+    },
+    optimizeDeps: {
+        include: [
+            "vite-plugin-node-polyfills/shims/buffer",
+            "vite-plugin-node-polyfills/shims/process",
+            "@vector-im/compound-design-tokens/assets/web/icons",
+            "storybook/preview-api",
+        ],
+    },
+    resolve: {
+        alias: {
+            "@test-utils": path.resolve(__dirname, "./src/test/utils/index.tsx"),
         },
-    }),
-    true,
-);
+    },
+});

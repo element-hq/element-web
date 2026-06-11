@@ -3,8 +3,8 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "lint:js": "eslint --max-warnings 0 */src -c ./.eslintrc.cjs",
-        "lint:ts": "tsc --noEmit",
+        "lint:js": "eslint --max-warnings 0 playwright */src -c ./.eslintrc.cjs",
+        "lint:types": "nx lint:types --",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --"

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { describe, expect, it } from "vitest";
 
-import { constructWidgetPermissions, sortLongestMatchLast } from "../src/utils/constructWidgetPermissions";
+import { constructWidgetPermissions, sortLongestMatchLast } from "./constructWidgetPermissions";
 
 describe("constructWidgetPermissions", () => {
     it("finds exact match", () => {
