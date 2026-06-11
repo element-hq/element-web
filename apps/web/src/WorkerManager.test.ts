@@ -6,11 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { WorkerManager } from "../../src/WorkerManager";
+import { vi, describe, it, expect } from "vitest";
+
+import { WorkerManager } from "./WorkerManager";
 
 describe("WorkerManager", () => {
     it("should generate consecutive sequence numbers for each call", () => {
-        const postMessage = jest.fn();
+        const postMessage = vi.fn();
         const manager = new WorkerManager({ postMessage } as unknown as Worker);
 
         manager.call({ data: "One" });
@@ -27,7 +29,7 @@ describe("WorkerManager", () => {
     });
 
     it("should support resolving out of order", async () => {
-        const postMessage = jest.fn();
+        const postMessage = vi.fn();
         const worker = { postMessage } as unknown as Worker;
         const manager = new WorkerManager(worker);
 

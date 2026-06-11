@@ -48,7 +48,7 @@
         },
         "test:unit": {
             // We avoid the jest executor because it doesn't seem to give any benefit, and it mangles the summary of failing tests.
-            "command": "jest",
+            "command": "jest && vitest run",
             "options": { "cwd": "apps/web" },
             "dependsOn": ["^build"]
         },

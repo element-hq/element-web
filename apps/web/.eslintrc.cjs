@@ -232,7 +232,7 @@ module.exports = {
             },
         },
         {
-            files: ["test/**/*.{ts,tsx}", "playwright/**/*.ts"],
+            files: ["src/**/*.test.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts"],
             extends: ["plugin:matrix-org/jest"],
             rules: {
                 // We don't need super strict typing in test utilities
