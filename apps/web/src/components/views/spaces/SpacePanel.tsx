@@ -327,7 +327,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                           }
                         : undefined
                 }
-                element="ul"
+                as="ul"
                 role="tree"
                 aria-label={_t("common|spaces")}
             >
