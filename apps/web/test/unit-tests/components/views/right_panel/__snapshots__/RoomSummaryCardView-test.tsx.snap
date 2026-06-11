@@ -42,7 +42,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <header
@@ -781,7 +781,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <header
@@ -1478,7 +1478,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <header
