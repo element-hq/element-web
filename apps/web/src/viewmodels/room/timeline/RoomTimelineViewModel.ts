@@ -39,6 +39,14 @@ const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
 
 /**
+ * Maximum number of events the {@link TimelineWindow} retains. When a paginate
+ * would push past this, the SDK trims the opposite end. We pass it explicitly
+ * (rather than rely on the SDK default) so {@link RoomTimelineViewModel.makeRoomBeforeExtending}
+ * can predict exactly when a trim is imminent and stage it as its own update.
+ */
+const WINDOW_LIMIT = 1000;
+
+/**
  * Maximum time {@link RoomTimelineViewModel.waitForDecryption} blocks the
  * paginate chain on newly-fetched events. Decryption usually completes in
  * tens of milliseconds; this cap stops a slow/failed decryption from holding
@@ -257,7 +265,9 @@ export class RoomTimelineViewModel
         });
 
         this.opts = opts;
-        this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet());
+        this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet(), {
+            windowLimit: WINDOW_LIMIT,
+        });
 
         // Initialise the read marker from room account data.
         this.readMarkerEventId =
@@ -392,17 +402,16 @@ export class RoomTimelineViewModel
     };
 
     /**
-     * Rebuild items in response to a settled burst of decryptions, with
-     * firstItemIndex compensation to keep totalCount constant (matches the
-     * back-paginate path; virtuoso's upward scroll compensation is gated on
-     * `prev totalCount === current totalCount`).
+     * Rebuild items in response to a settled burst of decryptions, routing the
+     * swap through {@link commitItems} so firstItemIndex stays consistent with
+     * the new array (a revealed event inserts mid-list, leaving the index alone).
      *
      * **Gated against in-flight paginate chains.** If a chain is running, we
      * defer: the chain's terminal {@link buildItems} will pick up everything
      * these decrypts revealed, and a concurrent rebuild here would race the
-     * chain's `prepended` count computation. We re-arm the debounce timer so
-     * we try again after the chain finishes — that way a decrypt that fires
-     * deep inside a chain doesn't get lost if no further decrypts arrive.
+     * chain's own {@link commitItems} call. We re-arm the debounce timer so we
+     * try again after the chain finishes — that way a decrypt that fires deep
+     * inside a chain doesn't get lost if no further decrypts arrive.
      */
     private flushDecryptRebuild(): void {
         if (this.isDisposed) return;
@@ -419,30 +428,33 @@ export class RoomTimelineViewModel
         }
 
         const itemsNew = this.buildItems();
-        const delta = itemsNew.length - this.baseItems.length;
+        const prevLength = this.baseItems.length;
 
         const newCanJumpToReadMarker = this.computeCanJumpToReadMarker(itemsNew);
         const newHasHighlights =
             this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0;
 
-        if (delta === 0) {
+        // Swap in the rebuilt list with firstItemIndex compensation. A decrypt
+        // that reveals a previously-filtered event inserts it in place — the
+        // anchor above it is unmoved, so commitItems leaves firstItemIndex alone,
+        // which is exactly right for a mid-list insertion.
+        const newlyShown = this.commitItems(itemsNew);
+        const changed = newlyShown > 0 || itemsNew.length !== prevLength;
+
+        if (!changed) {
             // No structural change (decrypts that resolved to already-filtered
             // types like reactions/edits, or events whose state didn't move
             // them in/out of the inclusion set). Refresh derived flags only;
-            // mergeSnapshot drops the merge entirely if nothing actually
-            // changed.
+            // mergeSnapshot drops the merge entirely if nothing actually changed.
             this.mergeSnapshot(
                 { canJumpToReadMarker: newCanJumpToReadMarker, hasHighlights: newHasHighlights },
-                "decrypt-flush(Δ=0)",
+                "decrypt-flush(no-op)",
             );
             return;
         }
 
         // Items grew (typical: historical encrypted events newly decrypted).
-        // Compensate baseFirstItemIndex by -delta so totalCount stays constant.
-        this.baseItems = itemsNew;
-        this.baseFirstItemIndex -= delta;
-        this.republish(`decrypt-flush(Δ=${delta >= 0 ? "+" : ""}${delta})`, {
+        this.republish(`decrypt-flush(+${newlyShown})`, {
             canJumpToReadMarker: newCanJumpToReadMarker,
             hasHighlights: newHasHighlights,
         });
@@ -982,10 +994,12 @@ export class RoomTimelineViewModel
      * {@link buildItems}). Decryption is invisible to this chain: it only
      * changes a tile's content, never the items array.
      *
-     * Differences between directions handled inline:
-     * - **Backward**: decrements `baseFirstItemIndex` by the number of items
-     *   prepended so real events keep a stable Virtuoso index.
-     * - **Forward**: rebuilds from the full window; updates `atLiveEnd` on completion.
+     * Both directions swap the rebuilt list in through {@link commitItems},
+     * which keeps every surviving event's Virtuoso index stable regardless of
+     * which end the SDK trims at windowLimit — so there is no direction-specific
+     * index bookkeeping here. The only remaining per-direction difference is
+     * cosmetic: backward recomputes `atLiveEnd` per batch (a backward batch can
+     * trim the forward end), forward only on completion.
      */
     /**
      * Keys for the pagination spinners. These are *projection-only* items — they
@@ -1022,6 +1036,113 @@ export class RoomTimelineViewModel
         this.mergeSnapshot({ items, firstItemIndex, ...extra }, reason);
     }
 
+    /**
+     * Swap {@link baseItems} for a freshly-built array while holding every
+     * surviving event's Virtuoso virtual index (`firstItemIndex + arrayIndex`)
+     * constant — the invariant Virtuoso relies on to preserve scroll position.
+     *
+     * The SDK's {@link TimelineWindow} never tells us when it trims: `paginate()`
+     * silently `unpaginate()`s the opposite end once the window passes its size
+     * limit, so the only witness is that {@link buildItems} returns a shifted
+     * set. We recover the shift by diffing in *item* space (by key) — not event
+     * space — because `firstItemIndex` counts date separators and the read-marker
+     * too, not just events.
+     *
+     * Every surviving item shifted by the same amount, so one anchor fixes the
+     * whole front shift: `newFirstItemIndex = oldFirstItemIndex + (oldIdx - newIdx)`.
+     *   - prepend (back-paginate)        → anchor moved down → delta < 0 → index ↓
+     *   - front-trim (fwd-paginate@cap)  → anchor moved up   → delta > 0 → index ↑
+     *   - append / mid-insert (decrypt)  → anchor unmoved     → delta 0  → unchanged
+     *
+     * Virtuoso handles both directions (a decreasing `firstItemIndex` drives its
+     * prepend path, an increasing one its front-trim path), so this is a single
+     * rule with no per-direction branching.
+     *
+     * We anchor on the first surviving *event*, never the first surviving item: a
+     * leading date separator is re-emitted at the top regardless of how many
+     * events were trimmed beneath it, making it a false witness of the shift.
+     *
+     * @returns the number of events that newly entered the list — the only
+     *   reliable progress signal for the paginate loop once trimming has made net
+     *   array length meaningless.
+     */
+    private commitItems(rebuilt: TimelineItem[]): number {
+        const oldEventIndex = new Map<string, number>();
+        this.baseItems.forEach((item, i) => {
+            if (item.kind === "event") oldEventIndex.set(item.key, i);
+        });
+
+        let anchored = false;
+        let newlyShown = 0;
+        rebuilt.forEach((item, i) => {
+            if (item.kind !== "event") return;
+            const oldIdx = oldEventIndex.get(item.key);
+            if (oldIdx === undefined) {
+                newlyShown++;
+            } else if (!anchored) {
+                this.baseFirstItemIndex += oldIdx - i;
+                anchored = true;
+            }
+        });
+
+        this.baseItems = rebuilt;
+        return newlyShown;
+    }
+
+    /**
+     * Stage the window's far-end trim as its own update *before* extending the
+     * near end, so Virtuoso never sees an add-at-one-end + trim-at-the-other in a
+     * single change.
+     *
+     * Virtuoso only holds scroll position when an update is "pure": items added
+     * or removed at the top (it compensates scrollTop) or added at the bottom (no
+     * compensation needed). A combined extend+trim changes its total-count
+     * bookkeeping in a way that *gates off* the top compensation, shoving the
+     * viewport by the trimmed height. At the window cap the SDK's `paginate()`
+     * does exactly that combination, which is the on-append scroll jump.
+     *
+     * So when a paginate is about to overflow {@link WINDOW_LIMIT}, we first
+     * `unpaginate()` the far end ourselves and publish that as a standalone,
+     * compensated trim, then yield a frame. The subsequent `paginate()` now has
+     * room and lands as a pure extend. Both directions are covered by the shared
+     * chain: forward extends the end so we trim the start; backward is the mirror.
+     *
+     * Below the cap `toTrim <= 0` and this is a no-op — the normal pure-append /
+     * pure-prepend path is untouched.
+     */
+    private async makeRoomBeforeExtending(direction: Direction, dirLabel: string): Promise<void> {
+        const windowSize = this.timelineWindow.getEvents().length;
+        const toTrim = windowSize + PAGINATE_SIZE - WINDOW_LIMIT;
+        if (toTrim <= 0) return;
+
+        // Forward extends the end, so the SDK would trim the start (startOfTimeline=true);
+        // backward extends the start, so it would trim the end. Mirror that here.
+        const trimStartOfTimeline = direction === Direction.Forward;
+        try {
+            this.timelineWindow.unpaginate(toTrim, trimStartOfTimeline);
+        } catch (e) {
+            // Defensive: if the window can't give back this many events we simply
+            // skip the pre-trim and let paginate() do its combined extend+trim.
+            logger.warn(`[TimelineVM] makeRoomBeforeExtending — unpaginate(${toTrim}) failed, falling back`, e);
+            return;
+        }
+
+        const newlyShown = this.commitItems(this.buildItems());
+        logger.debug(
+            `[TimelineVM] paginate(${dirLabel}) pre-trim — unpaginated=${toTrim} ` +
+            `(window→${this.timelineWindow.getEvents().length}), newlyShown=${newlyShown}, ` +
+            `baseFirstItemIndex=${this.baseFirstItemIndex}`,
+        );
+        this.republish(`paginate(${dirLabel})-trim`, {
+            atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+            canJumpToReadMarker: this.computeCanJumpToReadMarker(this.baseItems),
+        });
+
+        // Yield a frame so React commits the trim and Virtuoso applies its scroll
+        // compensation before we publish the extend in the next update.
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    }
+
     private async runPaginateChain(direction: Direction, wasAnchoredLoad = false): Promise<void> {
         // Not strictly necessary — the loop already terminates when canPaginate() returns
         // false or hasMore is false. However, leaving it unbounded without user action feels a bit weird.
@@ -1047,6 +1168,13 @@ export class RoomTimelineViewModel
                     break;
                 }
 
+                // If this paginate would overflow the window cap, stage the
+                // far-end trim as its own compensated update first so the extend
+                // below lands as a pure add (no on-append scroll jump). No-op
+                // below the cap.
+                await this.makeRoomBeforeExtending(direction, dirLabel);
+                if (this.isDisposed) return;
+
                 const eventsBefore = new Set(this.timelineWindow.getEvents());
                 const windowSizeBefore = eventsBefore.size;
                 const hasMore = await this.timelineWindow.paginate(direction, PAGINATE_SIZE);
@@ -1068,19 +1196,21 @@ export class RoomTimelineViewModel
 
                 const rebuilt = this.buildItems();
                 const filteredCount = this.lastBuildFilteredCount;
-                let added: number;
+
+                // Swap in the rebuilt list, holding every surviving event's
+                // Virtuoso index stable across whatever front/back trim the SDK
+                // applied at windowLimit (see {@link commitItems}). `newlyShown`
+                // is how many events newly entered the list — the only reliable
+                // progress signal once trimming makes net array length meaningless.
+                const newlyShown = this.commitItems(rebuilt);
 
                 if (isBackward) {
-                    const prepended = rebuilt.length - this.baseItems.length;
-                    added = prepended;
-                    this.baseItems = rebuilt;
-                    this.baseFirstItemIndex -= prepended;
                     // Backward pagination can trim the forward end once the window hits its size limit.
                     const newAtLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
                     logger.debug(
                         `[TimelineVM] paginate(backward) batch — ` +
                         `rawΔ=${rawDelta} (window: ${windowSizeBefore}→${windowSizeAfter}), ` +
-                        `filtered=${filteredCount}, prepended=${prepended}, hasMore=${hasMore}, ` +
+                        `filtered=${filteredCount}, newlyShown=${newlyShown}, hasMore=${hasMore}, ` +
                         `emptyBatches=${emptyBatches}, ` +
                         `baseFirstItemIndex=${this.baseFirstItemIndex}, atLiveEnd=${newAtLiveEnd}`,
                     );
@@ -1089,20 +1219,18 @@ export class RoomTimelineViewModel
                         canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt),
                     });
                 } else {
-                    added = rebuilt.length - this.baseItems.length;
-                    this.baseItems = rebuilt;
                     logger.debug(
                         `[TimelineVM] paginate(forward) batch — ` +
                         `rawΔ=${rawDelta} (window: ${windowSizeBefore}→${windowSizeAfter}), ` +
-                        `filtered=${filteredCount}, appended=${added}, hasMore=${hasMore}, ` +
-                        `emptyBatches=${emptyBatches}`,
+                        `filtered=${filteredCount}, newlyShown=${newlyShown}, hasMore=${hasMore}, ` +
+                        `emptyBatches=${emptyBatches}, baseFirstItemIndex=${this.baseFirstItemIndex}`,
                     );
                     this.republish("paginate(forward)-batch", {
                         canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt),
                     });
                 }
 
-                if (added > 0 || !hasMore) break;
+                if (newlyShown > 0 || !hasMore) break;
                 emptyBatches++;
             }
 
