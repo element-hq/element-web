@@ -126,7 +126,7 @@ class SafeStorageWriter extends StorageWriter {
     }
 }
 
-const enum Mode {
+export const enum Mode {
     Encrypted = "encrypted", // default
     AllowPlaintext = "allow-plaintext",
     ForcePlaintext = "force-plaintext",

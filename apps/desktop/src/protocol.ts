@@ -12,6 +12,8 @@ import path from "node:path";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
 
+import { type Args, getArgsForProtocolRegistration } from "./args.js";
+
 const LEGACY_PROTOCOL = "element";
 const SEARCH_PARAM = "element-desktop-ssoid";
 const STORE_FILE_NAME = "sso-sessions.json";
@@ -24,32 +26,19 @@ export default class ProtocolHandler {
     private readonly sessionId: string;
 
     public constructor(private readonly protocol: string) {
-        // get all args except `hidden` as it'd mean the app would not get focused
-        // XXX: passing args to protocol handlers only works on Windows, so unpackaged deep-linking
-        // --profile/--profile-dir are passed via the SEARCH_PARAM var in the callback url
-        const args = process.argv.slice(1).filter((arg) => arg !== "--hidden" && arg !== "-hidden");
-        if (app.isPackaged) {
-            app.setAsDefaultProtocolClient(this.protocol, process.execPath, args);
-            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, args);
-        } else if (process.platform === "win32") {
-            // on Mac/Linux this would just cause the electron binary to open
-            // special handler for running without being packaged, e.g `electron .` by passing our app path to electron
-            app.setAsDefaultProtocolClient(this.protocol, process.execPath, [app.getAppPath(), ...args]);
-            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
-        }
-
         if (process.platform === "darwin") {
             // Protocol handler for macos
             app.on("open-url", (ev, url) => {
                 ev.preventDefault();
-                this.processUrl(url);
+                this.handleDeeplink(url);
             });
         } else {
             // Protocol handler for win32/Linux
             app.on("second-instance", (ev, commandLine) => {
-                const url = commandLine[commandLine.length - 1];
-                if (!url.startsWith(`${this.protocol}:/`) && !url.startsWith(`${LEGACY_PROTOCOL}://`)) return;
-                this.processUrl(url);
+                const url = commandLine.at(-1);
+                if (url && this.checkArgIsUrl(url)) {
+                    this.handleDeeplink(url);
+                }
             });
         }
 
@@ -59,6 +48,23 @@ export default class ProtocolHandler {
         ipcMain.handle("getProtocol", this.onGetProtocol);
     }
 
+    private checkArgIsUrl = (arg: string): boolean => {
+        return arg.startsWith(`${this.protocol}:/`) || arg.startsWith(`${LEGACY_PROTOCOL}://`);
+    };
+
+    private setAsDefaultProtocolClient(parsedArgs: Args): void {
+        const args = getArgsForProtocolRegistration(parsedArgs);
+        if (app.isPackaged) {
+            app.setAsDefaultProtocolClient(this.protocol, process.execPath, args);
+            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, args);
+        } else if (process.platform === "win32") {
+            // on Mac/Linux this would just cause the electron binary to open
+            // special handler for running without being packaged, e.g `electron .` by passing our app path to electron
+            app.setAsDefaultProtocolClient(this.protocol, process.execPath, [app.getAppPath(), ...args]);
+            app.setAsDefaultProtocolClient(LEGACY_PROTOCOL, process.execPath, [app.getAppPath(), ...args]);
+        }
+    }
+
     private readonly onGetProtocol = (): { protocol: string; sessionId: string } => {
         return {
             protocol: this.protocol,
@@ -66,7 +72,7 @@ export default class ProtocolHandler {
         };
     };
 
-    private processUrl(url: string): void {
+    private handleDeeplink(url: string): void {
         if (!global.mainWindow) return;
 
         const parsed = new URL(url);
@@ -107,15 +113,22 @@ export default class ProtocolHandler {
         fs.writeFileSync(storePath, JSON.stringify(this.store));
     }
 
-    public initialise(userDataPath: string): void {
+    public initialise(args: Args): void {
+        this.setAsDefaultProtocolClient(args);
+
+        const url = args.positional.find(this.checkArgIsUrl);
+        if (url) {
+            this.handleDeeplink(url);
+        }
+
         for (const key in this.store) {
             // ensure each instance only has one (the latest) session ID to prevent the file growing unbounded
-            if (this.store[key] === userDataPath) {
+            if (this.store[key] === args.userDataPath) {
                 delete this.store[key];
                 break;
             }
         }
-        this.store[this.sessionId] = userDataPath;
+        this.store[this.sessionId] = args.userDataPath;
         this.writeStore();
     }
 
