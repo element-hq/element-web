@@ -99,6 +99,7 @@ describe("RoomListViewModel", () => {
 
             expect(viewModel.getSnapshot().sections).toEqual([]);
             expect(viewModel.getSnapshot().isRoomListEmpty).toBe(true);
+            expect(viewModel.getSnapshot().isFlatList).toBe(true);
         });
 
         it("should set canCreateRoom based on user rights", () => {
@@ -754,6 +755,22 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().sections[0].id).toBe(CHATS_TAG);
             });
 
+            it("should be a flat list when the room list is empty", () => {
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [] },
+                        { tag: CHATS_TAG, rooms: [] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                expect(viewModel.getSnapshot().isFlatList).toBe(true);
+                expect(viewModel.getSnapshot().sections).toHaveLength(0);
+            });
+
             it("should exclude favourite and low_priority from filter list", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
@@ -1133,12 +1150,15 @@ describe("RoomListViewModel", () => {
                     });
                 });
 
-                it("should dispatch collapseSection=undefined when it is a flat list", () => {
+                it.each([
+                    { label: "flat list", chatsRooms: true },
+                    { label: "empty room list", chatsRooms: false },
+                ])("should dispatch collapseSection=undefined when it is a $label", ({ chatsRooms }) => {
                     jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                         spaceId: "home",
                         sections: [
                             { tag: DefaultTagID.Favourite, rooms: [] },
-                            { tag: CHATS_TAG, rooms: [regularRoom1] },
+                            { tag: CHATS_TAG, rooms: chatsRooms ? [regularRoom1] : [] },
                             { tag: DefaultTagID.LowPriority, rooms: [] },
                         ],
                     });
