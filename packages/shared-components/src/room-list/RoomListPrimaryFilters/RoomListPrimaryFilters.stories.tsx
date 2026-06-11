@@ -31,7 +31,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // All available filter IDs
-const allFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite", "mentions", "invites", "low_priority"];
+const allFilterIds: FilterId[] = ["unread", "people", "rooms", "mentions", "invites"];
 
 // Subset of filters for narrow container tests
 const fewFilterIds: FilterId[] = ["people", "rooms", "unread"];

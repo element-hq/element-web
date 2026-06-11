@@ -24,13 +24,11 @@ const {
     LargeFlatList,
     SmallSectionList,
     LargeSectionList,
-    EmptyFavouriteFilter,
     EmptyPeopleFilter,
     EmptyRoomsFilter,
     EmptyUnreadFilter,
     EmptyInvitesFilter,
     EmptyMentionsFilter,
-    EmptyLowPriorityFilter,
     Toast,
 } = composeStories(stories);
 
@@ -90,11 +88,6 @@ describe("<RoomListView />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders EmptyFavouriteFilter story", () => {
-        const { container } = renderWithMockContext(<EmptyFavouriteFilter />);
-        expect(container).toMatchSnapshot();
-    });
-
     it("renders EmptyPeopleFilter story", () => {
         const { container } = renderWithMockContext(<EmptyPeopleFilter />);
         expect(container).toMatchSnapshot();
@@ -117,11 +110,6 @@ describe("<RoomListView />", () => {
 
     it("renders EmptyMentionsFilter story", () => {
         const { container } = renderWithMockContext(<EmptyMentionsFilter />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders EmptyLowPriorityFilter story", () => {
-        const { container } = renderWithMockContext(<EmptyLowPriorityFilter />);
         expect(container).toMatchSnapshot();
     });
 
@@ -184,21 +172,12 @@ describe("<RoomListView />", () => {
         expect(EmptyMentionsFilter.args.onToggleFilter).toHaveBeenCalled();
     });
 
-    it("should call onToggleFilter when See all activity is clicked in low priority empty state", async () => {
-        const user = userEvent.setup();
-        renderWithMockContext(<EmptyLowPriorityFilter />);
-
-        await user.click(screen.getByRole("button", { name: "See all activity" }));
-
-        expect(EmptyLowPriorityFilter.args.onToggleFilter).toHaveBeenCalled();
-    });
-
     it("should call closeToast when close button is clicked on toast", async () => {
         const user = userEvent.setup();
         renderWithMockContext(<Toast />);
 
         await user.click(screen.getByRole("button", { name: "Close" }));
 
-        expect(EmptyLowPriorityFilter.args.closeToast).toHaveBeenCalled();
+        expect(Toast.args.closeToast).toHaveBeenCalled();
     });
 });
