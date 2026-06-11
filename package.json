@@ -59,5 +59,6 @@
             "onFail": "error"
         }
     },
-    "private": true
+    "private": true,
+    "nx": {}
 }

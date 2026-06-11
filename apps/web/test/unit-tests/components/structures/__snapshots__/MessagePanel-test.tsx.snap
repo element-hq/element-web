@@ -3,7 +3,7 @@
 exports[`MessagePanel should handle large numbers of hidden events quickly 1`] = `
 <DocumentFragment>
   <div
-    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel cls"
     tabindex="-1"
   >
     <div
@@ -22,7 +22,7 @@ exports[`MessagePanel should handle large numbers of hidden events quickly 1`] =
 exports[`MessagePanel should handle lots of membership events quickly 1`] = `
 <DocumentFragment>
   <div
-    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel cls"
     tabindex="-1"
   >
     <div
@@ -137,7 +137,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
 exports[`MessagePanel should handle lots of room creation events quickly 1`] = `
 <DocumentFragment>
   <div
-    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_ScrollPanel cls"
     tabindex="-1"
   >
     <div
