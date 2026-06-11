@@ -61,23 +61,17 @@ jobs:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
 
-            - name: Get number of CPU cores
-              id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403 # v3
-
             - name: Run tests
               working-directory: apps/web
               run: |
                   pnpm test \
                       --coverage=$ENABLE_COVERAGE \
                       --ci \
-                      --max-workers $MAX_WORKERS \
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
                   # tell jest to use coloured output
                   FORCE_COLOR: true
-                  MAX_WORKERS: ${{ steps.cpu-cores.outputs.count }}
                   SHARD: ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
 
             - name: Move coverage files into place
