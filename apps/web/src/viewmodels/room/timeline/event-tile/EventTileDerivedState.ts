@@ -5,11 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, EventType, type MatrixEvent, MsgType, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { ElementCallEventType } from "../../../../call-types";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { Layout } from "../../../../settings/enums/Layout";
+
+/** Event send status values used by EventTile render derivation. */
+export type EventTileSendStatus = "queued" | "sending" | "sent" | "not_sent" | "cancelled" | "encrypting";
 
 /**
  * Pure EventTile derivations extracted ahead of EventTileViewModel.
@@ -17,18 +20,26 @@ import { Layout } from "../../../../settings/enums/Layout";
  */
 
 /** Whether the event send status represents a pending send state. */
-export function isSendingStatus(eventSendStatus?: EventStatus): boolean {
-    return [EventStatus.SENDING, EventStatus.QUEUED, EventStatus.ENCRYPTING].includes(eventSendStatus!);
+export function isSendingStatus(eventSendStatus?: EventTileSendStatus): boolean {
+    return ["sending", "queued", "encrypting"].includes(eventSendStatus!);
 }
 
 /** The aria-live setting used by EventTile for the current send status. */
-export function getAriaLive(eventSendStatus?: EventStatus | null): "off" | undefined {
+export function getAriaLive(eventSendStatus?: EventTileSendStatus | null): "off" | undefined {
     return eventSendStatus === null ? undefined : "off";
 }
 
+/** Inputs for EventTile scroll-token derivation. */
+export interface EventTileScrollTokenInput {
+    /** The stable event ID, when available. */
+    eventId?: string;
+    /** Whether the event is still a local echo. */
+    isLocalEcho: boolean;
+}
+
 /** The stable scroll token for a non-local-echo event. */
-export function getScrollToken(mxEvent: MatrixEvent): string | undefined {
-    return mxEvent.status ? undefined : mxEvent.getId();
+export function getScrollToken({ eventId, isLocalEcho }: EventTileScrollTokenInput): string | undefined {
+    return isLocalEcho ? undefined : eventId;
 }
 
 /** Whether EventTile should render as a continuation in the current layout/rendering mode. */
@@ -146,15 +157,6 @@ export function getEventTileSenderProfileState({
     }
 
     return { avatarSize: "30px", needsSenderProfile: true };
-}
-
-/** The room member whose avatar should render for the EventTile. */
-export function getEventTileAvatarMember(mxEvent: MatrixEvent): RoomMember | null {
-    if (mxEvent.getContent().third_party_invite) {
-        return mxEvent.target;
-    }
-
-    return mxEvent.sender;
 }
 
 /** Whether clicking the avatar should open the user profile. */

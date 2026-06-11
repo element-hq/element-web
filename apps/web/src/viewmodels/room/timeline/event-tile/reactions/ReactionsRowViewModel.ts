@@ -47,10 +47,17 @@ interface InternalProps extends ReactionsRowViewModelProps {
     showAll: boolean;
 }
 
+interface AddReactionMenuHandlers {
+    onAddReactionClick?: MouseEventHandler<HTMLButtonElement>;
+    onAddReactionContextMenu?: MouseEventHandler<HTMLButtonElement>;
+}
+
 export class ReactionsRowViewModel
     extends BaseViewModel<ReactionsRowViewSnapshot, InternalProps>
     implements ReactionsRowViewModelInterface
 {
+    private menuHandlers: AddReactionMenuHandlers = {};
+
     private static readonly computeDerivedSnapshot = (
         props: InternalProps,
     ): Pick<
@@ -134,6 +141,17 @@ export class ReactionsRowViewModel
         };
     }
 
+    /**
+     * Registers adapter-owned menu handlers without overwriting the button's
+     * externally supplied reaction handlers.
+     */
+    public setAddReactionMenuHandlers(newHandlers: Partial<AddReactionMenuHandlers>): void {
+        this.menuHandlers = {
+            ...this.menuHandlers,
+            ...newHandlers,
+        };
+    }
+
     public onShowAllClick = (): void => {
         this.props = {
             ...this.props,
@@ -143,10 +161,12 @@ export class ReactionsRowViewModel
     };
 
     public onAddReactionClick = (event: MouseEvent<HTMLButtonElement>): void => {
+        this.menuHandlers.onAddReactionClick?.(event);
         this.props.onAddReactionClick?.(event);
     };
 
     public onAddReactionContextMenu = (event: MouseEvent<HTMLButtonElement>): void => {
+        this.menuHandlers.onAddReactionContextMenu?.(event);
         this.props.onAddReactionContextMenu?.(event);
     };
 }

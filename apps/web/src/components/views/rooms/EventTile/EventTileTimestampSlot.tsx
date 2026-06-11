@@ -6,34 +6,33 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import { MessageTimestampView } from "@element-hq/web-shared-components";
 
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
-import { type MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
-import { MessageTimestampAdapter } from "./MessageTimestampAdapter";
+import { type MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
+import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
 interface EventTileTimestampSlotProps {
-    eventTileViewModel: EventTileViewModel;
-    kind: "plain" | "linked";
-    timestampProps: MessageTimestampViewModelProps;
+    vm: MessageTimestampViewModel;
+    showLateIcon: boolean;
     showTimestamp: boolean;
     showDummy: boolean;
 }
 
 /** Renders a real or placeholder timestamp slot for an EventTile. */
 export function EventTileTimestampSlot({
-    eventTileViewModel,
-    kind,
-    timestampProps,
+    vm,
+    showLateIcon,
     showTimestamp,
     showDummy,
 }: Readonly<EventTileTimestampSlotProps>): JSX.Element | null {
     if (showTimestamp) {
         return (
-            <MessageTimestampAdapter
-                eventTileViewModel={eventTileViewModel}
-                kind={kind}
-                timestampProps={timestampProps}
-            />
+            <>
+                {showLateIcon ? (
+                    <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
+                ) : undefined}
+                <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
+            </>
         );
     }
 

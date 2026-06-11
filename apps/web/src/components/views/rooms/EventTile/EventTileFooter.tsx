@@ -9,16 +9,16 @@ import React, { type JSX } from "react";
 import { type MatrixEvent, type Relations } from "matrix-js-sdk/src/matrix";
 import { PinnedMessageBadge } from "@element-hq/web-shared-components";
 
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { type ReactionsRowViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 import { ReactionsRowAdapter } from "./ReactionsRowAdapter";
 
 interface EventTileFooterProps {
-    eventTileViewModel: EventTileViewModel;
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
     hasFooter: boolean;
     hasPinnedMessageBadge: boolean;
     hasReactionsRow: boolean;
+    reactionsRowVm: ReactionsRowViewModel;
     pinnedMessageBadgeAriaDescribedBy: string;
     placement: "default" | "irc";
     showMainPinnedMessageBadge?: boolean;
@@ -27,12 +27,12 @@ interface EventTileFooterProps {
 
 /** Renders the pinned-message badge and reactions row for an EventTile. */
 export function EventTileFooter({
-    eventTileViewModel,
     mxEvent,
     reactions,
     hasFooter,
     hasPinnedMessageBadge,
     hasReactionsRow,
+    reactionsRowVm,
     pinnedMessageBadgeAriaDescribedBy,
     placement,
     showMainPinnedMessageBadge,
@@ -47,7 +47,7 @@ export function EventTileFooter({
     ) : undefined;
     const reactionsRow = hasReactionsRow ? (
         <ReactionsRowAdapter
-            eventTileViewModel={eventTileViewModel}
+            vm={reactionsRowVm}
             mxEvent={mxEvent}
             reactions={reactions}
             key="mx_EventTile_reactionsRow"

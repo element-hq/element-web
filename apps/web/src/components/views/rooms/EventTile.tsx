@@ -17,6 +17,7 @@ import React, {
     type ReactNode,
 } from "react";
 import {
+    EventType,
     type EventStatus,
     type MatrixEvent,
     MatrixEventEvent,
@@ -29,7 +30,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
-import { useCreateAutoDisposedViewModel, TileErrorView } from "@element-hq/web-shared-components";
+import {
+    ActionBarView,
+    E2eMessageSharedIconView,
+    useCreateAutoDisposedViewModel,
+    TileErrorView,
+    E2ePadlock,
+} from "@element-hq/web-shared-components";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -64,20 +71,29 @@ import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadP
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import PinningUtils from "../../../utils/PinningUtils";
+import SettingsStore from "../../../settings/SettingsStore";
+import { isContentActionable } from "../../../utils/EventUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
-import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
-import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
 import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
-import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { EventTileFooter } from "./EventTile/EventTileFooter";
-import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
+import { EventTilePreviewBody, type EventTilePreviewBodyKind } from "./EventTile/EventTilePreviewBody";
 import { EventTileThreadInfo, EventTileThreadPanelSummary } from "./EventTile/EventTileThreadInfo";
 import { EventTileTimestampSlot } from "./EventTile/EventTileTimestampSlot";
 import {
     EventTileViewModel,
+    type EventTileEventInput,
     type EventTileViewModelProps,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import {
+    createEventTileChildViewModelFactory,
+    type EventTileChildViewModelFactory,
+} from "../../../viewmodels/room/timeline/event-tile/EventTileChildViewModelFactory";
+import { type EventPreviewViewModel } from "../../../viewmodels/room/timeline/event-tile/EventPreviewViewModel";
+import {
+    type ThreadMessagePreviewViewModel,
+    type ThreadSummaryViewModel,
+} from "../../../viewmodels/room/timeline/event-tile/ThreadSummaryViewModel";
 import {
     getEventTileReceiptState,
     type EventTileReceiptState,
@@ -88,6 +104,7 @@ import {
     type EventTileThreadState,
 } from "../../../viewmodels/room/timeline/event-tile/EventTileThreadState";
 import { getEventTileReplyChainState } from "../../../viewmodels/room/timeline/event-tile/EventTileReplyChainState";
+import { getScrollToken } from "../../../viewmodels/room/timeline/event-tile/EventTileDerivedState";
 import {
     eventTileActionBarFocusChange,
     eventTileBlurWithin,
@@ -291,6 +308,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private tile = createRef<IEventTileType>();
     private replyChain = createRef<ReplyChain>();
     private readonly viewModel: EventTileViewModel;
+    private readonly childViewModels = createEventTileChildViewModelFactory();
     private readonly e2eViewModel: EventTileE2eViewModel;
     private e2eViewModelSubscription?: () => void;
 
@@ -419,6 +437,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.e2eViewModelSubscription?.();
         this.e2eViewModelSubscription = undefined;
         this.e2eViewModel.dispose();
+        this.childViewModels.dispose();
         this.viewModel.dispose();
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
@@ -599,20 +618,28 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private renderE2EPadlock(): ReactNode {
         const e2ePadlockViewState = this.e2eViewModel.getSnapshot();
+        const e2eMessageSharedIconVm =
+            e2ePadlockViewState.kind === "messageShared"
+                ? this.childViewModels.getE2eMessageSharedIconViewModel({
+                      client: MatrixClientPeg.safeGet(),
+                      roomId: e2ePadlockViewState.roomId,
+                      keyForwardingUserId: e2ePadlockViewState.keyForwardingUserId,
+                  })
+                : (this.childViewModels.releaseE2eMessageSharedIconViewModel(), undefined);
 
         switch (e2ePadlockViewState.kind) {
             case "none":
                 return null;
             case "messageShared":
+                return <E2eMessageSharedIconView vm={e2eMessageSharedIconVm!} className="mx_EventTile_e2eIcon" />;
+            case "icon":
                 return (
-                    <E2eMessageSharedIconAdapter
-                        eventTileViewModel={this.viewModel}
-                        keyForwardingUserId={e2ePadlockViewState.keyForwardingUserId}
-                        roomId={e2ePadlockViewState.roomId}
+                    <E2ePadlock
+                        title={e2ePadlockViewState.title}
+                        icon={e2ePadlockViewState.icon}
+                        className="mx_EventTile_e2eIcon"
                     />
                 );
-            case "icon":
-                return <E2eStandardPadlockIcon icon={e2ePadlockViewState.icon} title={e2ePadlockViewState.title} />;
         }
     }
 
@@ -681,6 +708,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private readonly getTile: () => IEventTileType | null = () => this.tile.current;
 
     private readonly getReplyChain = (): ReplyChain | null => this.replyChain.current;
+
+    private getAvatarMember(): RoomMember | null {
+        if (this.props.mxEvent.getContent().third_party_invite) {
+            return this.props.mxEvent.target;
+        }
+
+        return this.props.mxEvent.sender;
+    }
 
     private readonly getReactions = (): Relations | null => {
         return getEventTileReactionRelations({
@@ -778,6 +813,88 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return "#";
     }
 
+    private getPreviewKind(): EventTilePreviewBodyKind {
+        if (this.props.isRedacted || this.props.mxEvent.isRedacted()) {
+            return "redacted";
+        }
+
+        if (this.props.mxEvent.isDecryptionFailure()) {
+            return "decryptionFailure";
+        }
+
+        return "preview";
+    }
+
+    private getEventPreviewViewModel(previewKind: EventTilePreviewBodyKind): EventPreviewViewModel | undefined {
+        if (previewKind !== "preview") {
+            this.childViewModels.releaseEventPreviewViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getEventPreviewViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            mxEvent: this.props.mxEvent,
+        });
+    }
+
+    private getThreadMessagePreviewViewModel(
+        thread: Thread | null | undefined,
+        useOnlyCurrentProfiles: boolean,
+    ): ThreadMessagePreviewViewModel | undefined {
+        if (!thread) {
+            this.childViewModels.releaseThreadMessagePreviewViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getThreadMessagePreviewViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            thread,
+            room: this.context.room,
+            timelineRenderingType: this.context.timelineRenderingType,
+            lowBandwidth: this.context.lowBandwidth,
+            useOnlyCurrentProfiles,
+            showDisplayName: false,
+            avatarClassName: "mx_BaseAvatar",
+        });
+    }
+
+    private getThreadSummaryViewModel(
+        thread: Thread | null | undefined,
+        useOnlyCurrentProfiles: boolean,
+    ): ThreadSummaryViewModel | undefined {
+        if (!thread) {
+            this.childViewModels.releaseThreadSummaryViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getThreadSummaryViewModel({
+            cli: MatrixClientPeg.safeGet(),
+            mxEvent: this.props.mxEvent,
+            thread,
+            narrow: this.context.narrow,
+            isCard: false,
+            room: this.context.room,
+            timelineRenderingType: this.context.timelineRenderingType,
+            lowBandwidth: this.context.lowBandwidth,
+            useOnlyCurrentProfiles,
+            avatarClassName: "mx_BaseAvatar",
+        });
+    }
+
+    private getThreadListActionBarViewModel():
+        | ReturnType<EventTileChildViewModelFactory["getThreadListActionBarViewModel"]>
+        | undefined {
+        if (this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList) {
+            this.childViewModels.releaseThreadListActionBarViewModel();
+            return undefined;
+        }
+
+        return this.childViewModels.getThreadListActionBarViewModel({
+            onViewInRoomClick: this.onViewInRoomClick,
+            onCopyLinkClick: this.onCopyLinkToThreadClick,
+        });
+    }
+
     private createRootAttributes({
         tileClasses,
         tileAriaLive,
@@ -852,11 +969,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
         const isEditing = !!this.props.editState;
+        const content = this.props.mxEvent.getContent();
 
         return {
             event: {
-                mxEvent: this.props.mxEvent,
-                eventSendStatus: this.props.eventSendStatus,
+                eventType: this.props.mxEvent.getType(),
+                msgtype: typeof content.msgtype === "string" ? content.msgtype : undefined,
+                eventTs: this.props.mxEvent.getTs() ?? 0,
+                scrollToken: getScrollToken({
+                    eventId: this.props.mxEvent.getId() ?? undefined,
+                    isLocalEcho: !!this.props.mxEvent.status,
+                }),
+                hasSender: !!this.props.mxEvent.sender,
+                forceHistoricalAvatar: this.props.mxEvent.getType() === EventType.RoomMember,
+                eventSendStatus: this.props.eventSendStatus as EventTileEventInput["eventSendStatus"],
                 isEditing,
                 isEncryptionFailure,
                 forExport: this.props.forExport,
@@ -973,10 +1099,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const scrollToken = eventTileRenderState.root.scrollToken;
         const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
+        const avatarMember = this.getAvatarMember();
 
-        const avatar = (
-            <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
-        );
+        const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
         const sender = (
             <EventTileSenderAdapter
                 mxEvent={this.props.mxEvent}
@@ -985,17 +1110,28 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const actionBar = eventTileSnapshot.actionBar.show ? (
+        const actionBarVm = eventTileSnapshot.actionBar.show
+            ? this.childViewModels.getActionBarViewModel({
+                  mxEvent: this.props.mxEvent,
+                  timelineRenderingType: this.context.timelineRenderingType,
+                  canSendMessages: this.context.canSendMessages,
+                  canReact: this.context.canReact,
+                  isSearch: Boolean(this.context.search),
+                  isCard: false,
+                  isQuoteExpanded,
+                  onToggleThreadExpanded: () => this.setQuoteExpanded(!isQuoteExpanded),
+                  getRelationsForEvent: this.props.getRelationsForEvent,
+              })
+            : (this.childViewModels.releaseActionBarViewModel(), undefined);
+        const actionBar = actionBarVm ? (
             <ActionBarAdapter
-                eventTileViewModel={this.viewModel}
+                vm={actionBarVm}
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
                 permalinkCreator={this.props.permalinkCreator}
                 getTile={this.getTile}
                 getReplyChain={this.getReplyChain}
                 onFocusChange={this.onActionBarFocusChange}
-                isQuoteExpanded={isQuoteExpanded}
-                toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
                 getRelationsForEvent={this.props.getRelationsForEvent}
             />
         ) : undefined;
@@ -1004,21 +1140,22 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const messageTimestampProps = this.createMessageTimestampProps(ts);
         const linkedMessageTimestampProps = this.createLinkedMessageTimestampProps(messageTimestampProps);
+        const messageTimestampVm = this.childViewModels.getMessageTimestampViewModel(messageTimestampProps);
+        const linkedMessageTimestampVm =
+            this.childViewModels.getLinkedMessageTimestampViewModel(linkedMessageTimestampProps);
 
         const timestamp = (
             <EventTileTimestampSlot
-                eventTileViewModel={this.viewModel}
-                kind="plain"
-                timestampProps={messageTimestampProps}
+                vm={messageTimestampVm}
+                showLateIcon={messageTimestampProps.receivedTs !== undefined}
                 showTimestamp={eventTileRenderState.timestamp.displayState.showRealTimestamp}
                 showDummy={eventTileRenderState.timestamp.showDummy}
             />
         );
         const linkedTimestamp = (
             <EventTileTimestampSlot
-                eventTileViewModel={this.viewModel}
-                kind="linked"
-                timestampProps={linkedMessageTimestampProps}
+                vm={linkedMessageTimestampVm}
+                showLateIcon={linkedMessageTimestampProps.receivedTs !== undefined}
                 showTimestamp={eventTileRenderState.timestamp.displayState.showLinkedTimestamp}
                 showDummy={eventTileRenderState.timestamp.showDummy}
             />
@@ -1041,6 +1178,22 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 isTwelveHour={this.props.isTwelveHour}
             />
         );
+
+        const useOnlyCurrentProfiles = Boolean(SettingsStore.getValue("useOnlyCurrentProfiles"));
+        const previewKind = this.getPreviewKind();
+        const eventPreviewVm = this.getEventPreviewViewModel(previewKind);
+        const reactionsRowVm = this.childViewModels.getReactionsRowViewModel({
+            isActionable: isContentActionable(this.props.mxEvent),
+            reactionGroupCount: this.state.reactions?.getSortedAnnotationsByKey()?.length ?? 0,
+            canReact: this.context.canReact,
+            addReactionButtonActive: false,
+        });
+        const threadMessagePreviewVm = this.getThreadMessagePreviewViewModel(
+            threadState.thread,
+            useOnlyCurrentProfiles,
+        );
+        const threadSummaryVm = this.getThreadSummaryViewModel(threadState.thread, useOnlyCurrentProfiles);
+        const threadListActionBarVm = this.getThreadListActionBarViewModel();
 
         const replyChainState = getEventTileReplyChainState({
             mxEvent: this.props.mxEvent,
@@ -1107,12 +1260,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         </div>,
                         <EventTileFooter
                             key="mx_EventTile_footer"
-                            eventTileViewModel={this.viewModel}
                             mxEvent={this.props.mxEvent}
                             reactions={this.state.reactions}
                             hasFooter={hasFooter}
                             hasPinnedMessageBadge={hasPinnedMessageBadge}
                             hasReactionsRow={hasReactionsRow}
+                            reactionsRowVm={reactionsRowVm}
                             pinnedMessageBadgeAriaDescribedBy={this.id}
                             placement="default"
                             showMainPinnedMessageBadge={showMainPinnedMessageBadge}
@@ -1182,20 +1335,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                            <EventTilePreviewBody eventTileViewModel={this.viewModel} mxEvent={this.props.mxEvent} />
+                            <EventTilePreviewBody
+                                previewKind={previewKind}
+                                mxEvent={this.props.mxEvent}
+                                eventPreviewVm={eventPreviewVm}
+                            />
                             <EventTileThreadPanelSummary
-                                eventTileViewModel={this.viewModel}
                                 threadState={threadState}
+                                threadMessagePreviewVm={threadMessagePreviewVm!}
                             />
                         </div>
-                        {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <ThreadListActionBarAdapter
-                                eventTileViewModel={this.viewModel}
-                                onViewInRoomClick={this.onViewInRoomClick}
-                                onCopyLinkClick={this.onCopyLinkToThreadClick}
-                                className="mx_ThreadActionBar"
-                            />
-                        )}
+                        {threadListActionBarVm ? (
+                            <ActionBarView vm={threadListActionBarVm} className="mx_ThreadActionBar" />
+                        ) : null}
 
                         {msgOption}
                     </>,
@@ -1264,42 +1416,34 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {eventTileRenderState.footer.showInIrcLayout && (
                                 <>
                                     <EventTileFooter
-                                        eventTileViewModel={this.viewModel}
                                         mxEvent={this.props.mxEvent}
                                         reactions={this.state.reactions}
                                         hasFooter={hasFooter}
                                         hasPinnedMessageBadge={hasPinnedMessageBadge}
                                         hasReactionsRow={hasReactionsRow}
+                                        reactionsRowVm={reactionsRowVm}
                                         pinnedMessageBadgeAriaDescribedBy={this.id}
                                         placement="irc"
                                     />
-                                    <EventTileThreadInfo
-                                        eventTileViewModel={this.viewModel}
-                                        mxEvent={this.props.mxEvent}
-                                        threadState={threadState}
-                                    />
+                                    <EventTileThreadInfo threadState={threadState} threadSummaryVm={threadSummaryVm!} />
                                 </>
                             )}
                         </div>
                         {eventTileRenderState.footer.showInDefaultLayout && (
                             <>
                                 <EventTileFooter
-                                    eventTileViewModel={this.viewModel}
                                     mxEvent={this.props.mxEvent}
                                     reactions={this.state.reactions}
                                     hasFooter={hasFooter}
                                     hasPinnedMessageBadge={hasPinnedMessageBadge}
                                     hasReactionsRow={hasReactionsRow}
+                                    reactionsRowVm={reactionsRowVm}
                                     pinnedMessageBadgeAriaDescribedBy={this.id}
                                     placement="default"
                                     showMainPinnedMessageBadge={showMainPinnedMessageBadge}
                                     showBubblePinnedMessageBadge={showBubblePinnedMessageBadge}
                                 />
-                                <EventTileThreadInfo
-                                    eventTileViewModel={this.viewModel}
-                                    mxEvent={this.props.mxEvent}
-                                    threadState={threadState}
-                                />
+                                <EventTileThreadInfo threadState={threadState} threadSummaryVm={threadSummaryVm!} />
                             </>
                         )}
                         {msgOption}

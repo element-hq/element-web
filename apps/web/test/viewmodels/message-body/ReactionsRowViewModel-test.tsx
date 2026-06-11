@@ -86,6 +86,34 @@ describe("ReactionsRowViewModel", () => {
         expect(onAddReactionContextMenu).toHaveBeenCalledWith(clickEvent);
     });
 
+    it("keeps adapter menu handlers separate from external add-reaction handlers", () => {
+        const vm = createVm();
+        const onAddReactionClick = jest.fn();
+        const onAddReactionContextMenu = jest.fn();
+        const onMenuClick = jest.fn();
+        const onMenuContextMenu = jest.fn();
+
+        vm.setAddReactionHandlers({
+            onAddReactionClick,
+            onAddReactionContextMenu,
+        });
+        vm.setAddReactionMenuHandlers({
+            onAddReactionClick: onMenuClick,
+            onAddReactionContextMenu: onMenuContextMenu,
+        });
+
+        const clickEvent = {
+            currentTarget: document.createElement("button"),
+        } as unknown as MouseEvent<HTMLButtonElement>;
+        vm.onAddReactionClick(clickEvent);
+        vm.onAddReactionContextMenu(clickEvent);
+
+        expect(onMenuClick).toHaveBeenCalledWith(clickEvent);
+        expect(onMenuContextMenu).toHaveBeenCalledWith(clickEvent);
+        expect(onAddReactionClick).toHaveBeenCalledWith(clickEvent);
+        expect(onAddReactionContextMenu).toHaveBeenCalledWith(clickEvent);
+    });
+
     it("doesn't emit only setters that always merge when values are unchanged", () => {
         const vm = createVm();
         const previousSnapshot = vm.getSnapshot();

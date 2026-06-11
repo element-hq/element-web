@@ -5,14 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useMemo, useState, type JSX } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState, type JSX } from "react";
 import { MatrixEventEvent, type MatrixEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import {
     ReactionsRowButtonView,
     ReactionsRowView,
-    useCreateAutoDisposedViewModel,
     useViewModel,
+    type ReactionsRowViewSnapshot,
 } from "@element-hq/web-shared-components";
 
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
@@ -21,67 +21,61 @@ import RoomContext from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { isContentActionable } from "../../../../utils/EventUtils";
-import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import { type ReactionsRowViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 
-/**
- * Props for the {@link ReactionsRowButtonAdapter} component.
- */
-interface ReactionsRowButtonAdapterProps {
-    /** Matrix event whose reaction button is being rendered. */
+interface ReactionsRowContextMenuProps {
     mxEvent: MatrixEvent;
-    /** Reaction emoji or custom content key for this button. */
-    content: string;
-    /** Total number of reactions in this group. */
-    count: number;
-    /** Reaction events belonging to this group. */
-    reactionEvents: MatrixEvent[];
-    /** The current user's reaction event, if present. */
-    myReactionEvent?: MatrixEvent;
-    /** Disables interaction when true. */
-    disabled?: boolean;
-    /** Enables rendering custom reaction images. */
-    customReactionImagesEnabled?: boolean;
+    reactions?: Relations | null;
+    menuDisplayed: boolean;
+    menuAnchorRect: DOMRect | null;
+    closeReactionMenu: () => void;
 }
 
-/**
- * Renders a single reaction button within the event tile reaction row.
- */
-function ReactionsRowButtonAdapter(props: Readonly<ReactionsRowButtonAdapterProps>): JSX.Element {
-    const client = useMatrixClientContext();
+function ReactionsRowContextMenu({
+    mxEvent,
+    reactions,
+    menuDisplayed,
+    menuAnchorRect,
+    closeReactionMenu,
+}: Readonly<ReactionsRowContextMenuProps>): JSX.Element | null {
+    if (!menuDisplayed || !menuAnchorRect || !reactions) {
+        return null;
+    }
 
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowButtonViewModel({
-                client,
-                mxEvent: props.mxEvent,
-                content: props.content,
-                count: props.count,
-                reactionEvents: props.reactionEvents,
-                myReactionEvent: props.myReactionEvent,
-                disabled: props.disabled,
-                customReactionImagesEnabled: props.customReactionImagesEnabled,
-            }),
+    return (
+        <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
+            <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
+        </ContextMenu>
     );
+}
 
-    useEffect(() => {
-        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
-    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
+interface ReactionsRowContentProps {
+    vm: ReactionsRowViewModel;
+    snapshot: ReactionsRowViewSnapshot;
+    items?: JSX.Element[];
+    contextMenu?: JSX.Element;
+}
 
-    useEffect(() => {
-        vm.setCount(props.count);
-    }, [props.count, vm]);
+function ReactionsRowContent({
+    vm,
+    snapshot,
+    items,
+    contextMenu,
+}: Readonly<ReactionsRowContentProps>): JSX.Element | null {
+    if (!snapshot.isVisible || !items?.length) {
+        return null;
+    }
 
-    useEffect(() => {
-        vm.setMyReactionEvent(props.myReactionEvent);
-    }, [props.myReactionEvent, vm]);
-
-    useEffect(() => {
-        vm.setDisabled(props.disabled);
-    }, [props.disabled, vm]);
-
-    return <ReactionsRowButtonView vm={vm} />;
+    return (
+        <>
+            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
+                {items}
+            </ReactionsRowView>
+            {contextMenu}
+        </>
+    );
 }
 
 interface ReactionGroup {
@@ -115,8 +109,8 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
  * Props for the {@link ReactionsRowAdapter} component.
  */
 interface ReactionsRowAdapterProps {
-    /** View model backing the event tile reaction row. */
-    eventTileViewModel: EventTileViewModel;
+    /** View model owned by the parent event tile container. */
+    vm: ReactionsRowViewModel;
     /** Matrix event whose reactions are being rendered. */
     mxEvent: MatrixEvent;
     /** Current reaction relations for the event, if available. */
@@ -127,28 +121,19 @@ interface ReactionsRowAdapterProps {
  * Renders the reaction row and reaction picker for an event tile.
  */
 export function ReactionsRowAdapter({
-    eventTileViewModel,
+    vm,
     mxEvent,
     reactions,
 }: Readonly<ReactionsRowAdapterProps>): JSX.Element | null {
+    const client = useMatrixClientContext();
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
     const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-
-    const vm = eventTileViewModel.getReactionsRowViewModel({
-        isActionable: isContentActionable(mxEvent),
-        reactionGroupCount: reactionGroups.length,
-        canReact: roomContext.canReact,
-        addReactionButtonActive: false,
-    });
-
-    useEffect(() => {
-        // This child VM is owned by EventTileViewModel, but scoped to this rendered adapter surface.
-        return () => eventTileViewModel.releaseReactionsRowViewModel();
-    }, [eventTileViewModel]);
+    const buttonVmMapRef = useRef(new Map<string, ReactionsRowButtonViewModel>());
+    const buttonVmContextRef = useRef<{ client: typeof client; mxEvent: MatrixEvent } | null>(null);
 
     const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
         setMenuAnchorRect(event.currentTarget.getBoundingClientRect());
@@ -178,7 +163,7 @@ export function ReactionsRowAdapter({
     }, [roomContext.canReact, menuDisplayed, vm]);
 
     useEffect(() => {
-        vm.setAddReactionHandlers({
+        vm.setAddReactionMenuHandlers({
             onAddReactionClick: openReactionMenu,
             onAddReactionContextMenu: openReactionMenu,
         });
@@ -223,6 +208,20 @@ export function ReactionsRowAdapter({
     const snapshot = useViewModel(vm);
     const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
     const items = useMemo((): JSX.Element[] | undefined => {
+        const contextChanged =
+            !buttonVmContextRef.current ||
+            buttonVmContextRef.current.client !== client ||
+            buttonVmContextRef.current.mxEvent !== mxEvent;
+
+        if (contextChanged) {
+            for (const buttonVm of buttonVmMapRef.current.values()) {
+                buttonVm.dispose();
+            }
+            buttonVmMapRef.current.clear();
+            buttonVmContextRef.current = { client, mxEvent };
+        }
+
+        const nextKeys = new Set<string>();
         const mappedItems = reactionGroups.map(({ content, events }) => {
             // Deduplicate reaction events by sender per Matrix spec.
             const deduplicatedEvents = uniqBy(events, (event: MatrixEvent) => event.getSender());
@@ -232,23 +231,41 @@ export function ReactionsRowAdapter({
                 }
                 return reactionEvent.getRelation()?.key === content;
             });
+            const disabled =
+                !roomContext.canReact ||
+                (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact);
 
-            return (
-                <ReactionsRowButtonAdapter
-                    key={content}
-                    content={content}
-                    count={deduplicatedEvents.length}
-                    mxEvent={mxEvent}
-                    reactionEvents={deduplicatedEvents}
-                    myReactionEvent={myReactionEvent}
-                    customReactionImagesEnabled={customReactionImagesEnabled}
-                    disabled={
-                        !roomContext.canReact ||
-                        (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
-                    }
-                />
-            );
+            let buttonVm = buttonVmMapRef.current.get(content);
+            if (buttonVm) {
+                buttonVm.setReactionData(content, deduplicatedEvents, customReactionImagesEnabled);
+                buttonVm.setCount(deduplicatedEvents.length);
+                buttonVm.setMyReactionEvent(myReactionEvent);
+                buttonVm.setDisabled(disabled);
+            } else {
+                buttonVm = new ReactionsRowButtonViewModel({
+                    client,
+                    mxEvent,
+                    content,
+                    count: deduplicatedEvents.length,
+                    reactionEvents: deduplicatedEvents,
+                    myReactionEvent,
+                    disabled,
+                    customReactionImagesEnabled,
+                });
+                buttonVmMapRef.current.set(content, buttonVm);
+            }
+
+            nextKeys.add(content);
+
+            return <ReactionsRowButtonView key={content} vm={buttonVm} />;
         });
+
+        for (const [content, buttonVm] of buttonVmMapRef.current) {
+            if (!nextKeys.has(content)) {
+                buttonVm.dispose();
+                buttonVmMapRef.current.delete(content);
+            }
+        }
 
         if (!mappedItems.length) {
             return undefined;
@@ -256,6 +273,7 @@ export function ReactionsRowAdapter({
 
         return snapshot.showAllButtonVisible ? mappedItems.slice(0, MAX_ITEMS_WHEN_LIMITED) : mappedItems;
     }, [
+        client,
         reactionGroups,
         myReactions,
         mxEvent,
@@ -265,25 +283,26 @@ export function ReactionsRowAdapter({
         snapshot.showAllButtonVisible,
     ]);
 
-    if (!snapshot.isVisible || !items?.length) {
-        return null;
-    }
-
-    let contextMenu: JSX.Element | undefined;
-    if (menuDisplayed && menuAnchorRect && reactions && roomContext.canReact) {
-        contextMenu = (
-            <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
-                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
-            </ContextMenu>
-        );
-    }
-
-    return (
-        <>
-            <ReactionsRowView vm={vm} className="mx_ReactionsRow">
-                {items}
-            </ReactionsRowView>
-            {contextMenu}
-        </>
+    useEffect(
+        () => () => {
+            for (const buttonVm of buttonVmMapRef.current.values()) {
+                buttonVm.dispose();
+            }
+            buttonVmMapRef.current.clear();
+        },
+        [],
     );
+
+    const contextMenu =
+        roomContext.canReact && menuDisplayed && menuAnchorRect && reactions ? (
+            <ReactionsRowContextMenu
+                mxEvent={mxEvent}
+                reactions={reactions}
+                menuDisplayed={menuDisplayed}
+                menuAnchorRect={menuAnchorRect}
+                closeReactionMenu={closeReactionMenu}
+            />
+        ) : undefined;
+
+    return <ReactionsRowContent vm={vm} snapshot={snapshot} items={items} contextMenu={contextMenu} />;
 }

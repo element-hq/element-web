@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
@@ -13,7 +12,6 @@ import {
     type EventTileSenderProfileState,
     type FooterDisplayState,
     getAriaLive,
-    getEventTileAvatarMember,
     getEventTileClassState,
     getEventTileLineClassState,
     getEventTileSenderProfileState,
@@ -21,43 +19,34 @@ import {
     getFooterDisplayState,
     getIsContinuation,
     getReplyChainAlwaysShowTimestamps,
-    getScrollToken,
     getSenderProfileMode,
     getShouldShowMessageActionBar,
     getShouldShowTimestamp,
     getShouldViewUserOnClick,
     getTimestampDisplayState,
     isSendingStatus,
+    type EventTileSendStatus,
     type SenderProfileMode,
     type TimestampDisplayState,
 } from "./EventTileDerivedState";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
-import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
-import {
-    ThreadMessagePreviewViewModel,
-    type ThreadMessagePreviewViewModelProps,
-    ThreadSummaryViewModel,
-    type ThreadSummaryViewModelProps,
-} from "./ThreadSummaryViewModel.tsx";
-import {
-    E2eMessageSharedIconViewModel,
-    type E2eMessageSharedIconViewModelProps,
-} from "./E2eMessageSharedIconViewModel";
-import { EventPreviewViewModel, type EventPreviewViewModelProps } from "./EventPreviewViewModel";
-import {
-    ThreadListActionBarViewModel,
-    type ThreadListActionBarViewModelProps,
-} from "../../ThreadListActionBarViewModel";
-import { EventTileActionBarViewModel, type EventTileActionBarViewModelProps } from "../../EventTileActionBarViewModel";
-import { ReactionsRowViewModel, type ReactionsRowViewModelProps } from "./reactions/ReactionsRowViewModel";
-
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
-    /** The Matrix event rendered by the tile. */
-    mxEvent: MatrixEvent;
+    /** The Matrix event type. */
+    eventType: string;
+    /** The Matrix message type. */
+    msgtype?: string;
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** The stable scroll token for the event, when available. */
+    scrollToken?: string;
+    /** Whether the tile has a sender avatar candidate. */
+    hasSender: boolean;
+    /** Whether the event avatar should use historical member details. */
+    forceHistoricalAvatar: boolean;
     /** The event send status supplied by EventTile. */
-    eventSendStatus?: EventStatus | null;
+    eventSendStatus?: EventTileSendStatus | null;
     /** Whether the event is currently being edited. */
     isEditing: boolean;
     /** Whether the event failed decryption. */
@@ -196,8 +185,10 @@ export interface EventTileLineSnapshot {
 export interface EventTileSenderSnapshot {
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
-    /** The room member whose avatar should render. */
-    avatarMember: RoomMember | null;
+    /** Whether EventTile should render an avatar slot. */
+    hasSender: boolean;
+    /** Whether the avatar should use historical member details. */
+    forceHistoricalAvatar: boolean;
     /** Whether clicking the avatar should open the user profile. */
     viewUserOnClick: boolean;
     /** SenderProfile rendering mode. */
@@ -296,16 +287,6 @@ export interface EventTileRenderState {
 
 /** Derives the current EventTile snapshot from component-owned inputs. */
 export class EventTileViewModel extends BaseViewModel<EventTileRenderState, EventTileViewModelProps> {
-    private messageTimestampViewModel?: MessageTimestampViewModel;
-    private linkedMessageTimestampViewModel?: MessageTimestampViewModel;
-    private threadMessagePreviewViewModel?: ThreadMessagePreviewViewModel;
-    private threadSummaryViewModel?: ThreadSummaryViewModel;
-    private threadListActionBarViewModel?: ThreadListActionBarViewModel;
-    private e2eMessageSharedIconViewModel?: E2eMessageSharedIconViewModel;
-    private eventPreviewViewModel?: EventPreviewViewModel;
-    private actionBarViewModel?: EventTileActionBarViewModel;
-    private reactionsRowViewModel?: ReactionsRowViewModel;
-
     public constructor(props: EventTileViewModelProps) {
         const initialRenderState = EventTileViewModel.createRenderState(props);
 
@@ -316,109 +297,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     public setProps(props: EventTileViewModelProps): void {
         this.props = props;
         this.snapshot.set(EventTileViewModel.createRenderState(props));
-    }
-
-    public override dispose(): void {
-        this.messageTimestampViewModel?.dispose();
-        this.linkedMessageTimestampViewModel?.dispose();
-        this.threadMessagePreviewViewModel?.dispose();
-        this.threadSummaryViewModel?.dispose();
-        this.threadListActionBarViewModel?.dispose();
-        this.e2eMessageSharedIconViewModel?.dispose();
-        this.eventPreviewViewModel?.dispose();
-        this.actionBarViewModel?.dispose();
-        this.reactionsRowViewModel?.dispose();
-        super.dispose();
-    }
-
-    /** Lazily creates and returns the plain timestamp child view model. */
-    public getMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
-        this.messageTimestampViewModel ??= new MessageTimestampViewModel(props);
-        return this.messageTimestampViewModel;
-    }
-
-    /** Lazily creates and returns the permalink timestamp child view model. */
-    public getLinkedMessageTimestampViewModel(props: MessageTimestampViewModelProps): MessageTimestampViewModel {
-        this.linkedMessageTimestampViewModel ??= new MessageTimestampViewModel(props);
-        return this.linkedMessageTimestampViewModel;
-    }
-
-    /** Lazily creates and returns the thread message preview child view model. */
-    public getThreadMessagePreviewViewModel(props: ThreadMessagePreviewViewModelProps): ThreadMessagePreviewViewModel {
-        this.threadMessagePreviewViewModel ??= new ThreadMessagePreviewViewModel(props);
-        return this.threadMessagePreviewViewModel;
-    }
-
-    /** Releases the thread message preview child view model when its adapter unmounts. */
-    public releaseThreadMessagePreviewViewModel(): void {
-        this.threadMessagePreviewViewModel?.dispose();
-        this.threadMessagePreviewViewModel = undefined;
-    }
-
-    /** Lazily creates and returns the thread summary child view model. */
-    public getThreadSummaryViewModel(props: ThreadSummaryViewModelProps): ThreadSummaryViewModel {
-        this.threadSummaryViewModel ??= new ThreadSummaryViewModel(props);
-        return this.threadSummaryViewModel;
-    }
-
-    /** Releases the thread summary child view model when its adapter unmounts. */
-    public releaseThreadSummaryViewModel(): void {
-        this.threadSummaryViewModel?.dispose();
-        this.threadSummaryViewModel = undefined;
-    }
-
-    /** Lazily creates and returns the thread-list action bar child view model. */
-    public getThreadListActionBarViewModel(props: ThreadListActionBarViewModelProps): ThreadListActionBarViewModel {
-        this.threadListActionBarViewModel ??= new ThreadListActionBarViewModel(props);
-        return this.threadListActionBarViewModel;
-    }
-
-    /** Lazily creates and returns the E2E message-shared icon child view model. */
-    public getE2eMessageSharedIconViewModel(props: E2eMessageSharedIconViewModelProps): E2eMessageSharedIconViewModel {
-        this.e2eMessageSharedIconViewModel ??= new E2eMessageSharedIconViewModel(props);
-        return this.e2eMessageSharedIconViewModel;
-    }
-
-    /** Releases the E2E message-shared icon child view model when its adapter unmounts. */
-    public releaseE2eMessageSharedIconViewModel(): void {
-        this.e2eMessageSharedIconViewModel?.dispose();
-        this.e2eMessageSharedIconViewModel = undefined;
-    }
-
-    /** Lazily creates and returns the event preview child view model. */
-    public getEventPreviewViewModel(props: EventPreviewViewModelProps): EventPreviewViewModel {
-        this.eventPreviewViewModel ??= new EventPreviewViewModel(props);
-        return this.eventPreviewViewModel;
-    }
-
-    /** Releases the event preview child view model when its adapter unmounts. */
-    public releaseEventPreviewViewModel(): void {
-        this.eventPreviewViewModel?.dispose();
-        this.eventPreviewViewModel = undefined;
-    }
-
-    /** Lazily creates and returns the event action bar child view model. */
-    public getActionBarViewModel(props: EventTileActionBarViewModelProps): EventTileActionBarViewModel {
-        this.actionBarViewModel ??= new EventTileActionBarViewModel(props);
-        return this.actionBarViewModel;
-    }
-
-    /** Releases the event action bar child view model when its adapter unmounts. */
-    public releaseActionBarViewModel(): void {
-        this.actionBarViewModel?.dispose();
-        this.actionBarViewModel = undefined;
-    }
-
-    /** Lazily creates and returns the reactions row child view model. */
-    public getReactionsRowViewModel(props: ReactionsRowViewModelProps): ReactionsRowViewModel {
-        this.reactionsRowViewModel ??= new ReactionsRowViewModel(props);
-        return this.reactionsRowViewModel;
-    }
-
-    /** Releases the reactions row child view model when its adapter unmounts. */
-    public releaseReactionsRowViewModel(): void {
-        this.reactionsRowViewModel?.dispose();
-        this.reactionsRowViewModel = undefined;
     }
 
     /** Derives render-ready EventTile state from component-owned inputs. */
@@ -459,8 +337,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Creates an EventTile view model snapshot. */
     public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;
-        const eventType = event.mxEvent.getType();
-        const msgtype = event.mxEvent.getContent().msgtype;
+        const { eventType, msgtype } = event;
         const isSending = isSendingStatus(event.eventSendStatus ?? undefined);
         const isContinuation = getIsContinuation(display.continuation, display.timelineRenderingType, display.layout);
         const isRenderingNotification = display.timelineRenderingType === TimelineRenderingType.Notification;
@@ -482,7 +359,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             layout: display.layout,
         });
         const showTimestamp = getShouldShowTimestamp({
-            eventTs: event.mxEvent.getTs(),
+            eventTs: event.eventTs,
             eventType,
             hideTimestamp: timestamp.hideTimestamp,
             alwaysShowTimestamps: timestamp.alwaysShowTimestamps,
@@ -494,7 +371,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         });
         const timestampValue = getEventTileTimestamp({
             timelineRenderingType: display.timelineRenderingType,
-            eventTs: event.mxEvent.getTs(),
+            eventTs: event.eventTs,
             threadReplyEventTs: timestamp.threadReplyEventTs,
         });
 
@@ -502,7 +379,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             event: eventSnapshot,
             root: {
                 ariaLive: getAriaLive(event.eventSendStatus),
-                scrollToken: getScrollToken(event.mxEvent),
+                scrollToken: event.scrollToken,
                 classState: EventTileViewModel.getClassState({
                     event,
                     display,
@@ -524,7 +401,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             },
             sender: {
                 profileState: senderProfileState,
-                avatarMember: getEventTileAvatarMember(event.mxEvent),
+                hasSender: event.hasSender,
+                forceHistoricalAvatar: event.forceHistoricalAvatar,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,
                     display.timelineRenderingType,
