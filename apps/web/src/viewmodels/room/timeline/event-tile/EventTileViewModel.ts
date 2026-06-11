@@ -5,15 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type EventStatus, type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import {
     type EventTileSenderProfileState,
     type FooterDisplayState,
-    getAriaLive,
-    getEventTileAvatarMember,
     getEventTileClassState,
     getEventTileLineClassState,
     getEventTileSenderProfileState,
@@ -27,7 +24,6 @@ import {
     getShouldShowTimestamp,
     getShouldViewUserOnClick,
     getTimestampDisplayState,
-    isSendingStatus,
     type SenderProfileMode,
     type TimestampDisplayState,
 } from "./EventTileDerivedState";
@@ -54,10 +50,26 @@ import { ReactionsRowViewModel, type ReactionsRowViewModelProps } from "./reacti
 
 /** Event-level inputs for deriving the EventTile snapshot. */
 export interface EventTileEventInput {
-    /** The Matrix event rendered by the tile. */
-    mxEvent: MatrixEvent;
-    /** The event send status supplied by EventTile. */
-    eventSendStatus?: EventStatus | null;
+    /** The event type rendered by the tile. */
+    eventType: string;
+    /** The Matrix message type rendered by the tile. */
+    msgtype?: string;
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** The stable event identifier, when available. */
+    eventId?: string;
+    /** Whether the event is a local echo. */
+    isLocalEcho: boolean;
+    /** Whether the event is in a pending send state. */
+    isSending: boolean;
+    /** Whether EventTile should announce updates in an aria-live region. */
+    ariaLive?: "off";
+    /** Whether the event is a room create event. */
+    isRoomCreate: boolean;
+    /** Whether the event is a call invite. */
+    isCallInvite: boolean;
+    /** Whether the event is an RTC notification. */
+    isRtcNotification: boolean;
     /** Whether the event is currently being edited. */
     isEditing: boolean;
     /** Whether the event failed decryption. */
@@ -196,12 +208,12 @@ export interface EventTileLineSnapshot {
 export interface EventTileSenderSnapshot {
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
-    /** The room member whose avatar should render. */
-    avatarMember: RoomMember | null;
     /** Whether clicking the avatar should open the user profile. */
     viewUserOnClick: boolean;
     /** SenderProfile rendering mode. */
     profileMode: SenderProfileMode;
+    /** Whether the avatar should use historical room member details. */
+    forceHistoricalAvatar: boolean;
 }
 
 /** Action bar state derived for the EventTile snapshot. */
@@ -459,15 +471,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
     /** Creates an EventTile view model snapshot. */
     public static createSnapshot(props: EventTileViewModelProps): EventTileViewModelSnapshot {
         const { event, display, interaction, sender, timestamp, footer } = props;
-        const eventType = event.mxEvent.getType();
-        const msgtype = event.mxEvent.getContent().msgtype;
-        const isSending = isSendingStatus(event.eventSendStatus ?? undefined);
         const isContinuation = getIsContinuation(display.continuation, display.timelineRenderingType, display.layout);
         const isRenderingNotification = display.timelineRenderingType === TimelineRenderingType.Notification;
         const eventSnapshot: EventTileEventSnapshot = {
-            eventType,
-            msgtype,
-            isSending,
+            eventType: event.eventType,
+            msgtype: event.msgtype,
+            isSending: event.isSending,
             isEditing: event.isEditing,
             isContinuation,
             isRenderingNotification,
@@ -477,13 +486,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             isInfoMessage: display.isInfoMessage,
             timelineRenderingType: display.timelineRenderingType,
             continuation: display.continuation,
-            eventType,
+            eventType: event.eventType,
             isBubbleMessage: display.isBubbleMessage,
             layout: display.layout,
+            isRoomCreate: event.isRoomCreate,
+            isCallInvite: event.isCallInvite,
+            isRtcNotification: event.isRtcNotification,
         });
         const showTimestamp = getShouldShowTimestamp({
-            eventTs: event.mxEvent.getTs(),
-            eventType,
+            eventTs: event.eventTs,
+            isRtcNotification: event.isRtcNotification,
             hideTimestamp: timestamp.hideTimestamp,
             alwaysShowTimestamps: timestamp.alwaysShowTimestamps,
             last: display.isLast,
@@ -494,23 +506,27 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         });
         const timestampValue = getEventTileTimestamp({
             timelineRenderingType: display.timelineRenderingType,
-            eventTs: event.mxEvent.getTs(),
+            eventTs: event.eventTs,
             threadReplyEventTs: timestamp.threadReplyEventTs,
         });
 
         return {
             event: eventSnapshot,
             root: {
-                ariaLive: getAriaLive(event.eventSendStatus),
-                scrollToken: getScrollToken(event.mxEvent),
+                ariaLive: event.ariaLive,
+                scrollToken: getScrollToken({
+                    eventId: event.eventId,
+                    isLocalEcho: event.isLocalEcho,
+                }),
                 classState: EventTileViewModel.getClassState({
                     event,
                     display,
                     interaction,
                     sender,
-                    eventType,
-                    msgtype,
-                    isSending,
+                    eventType: event.eventType,
+                    msgtype: event.msgtype,
+                    isSending: event.isSending,
+                    isCallInvite: event.isCallInvite,
                     isContinuation,
                     isRenderingNotification,
                 }),
@@ -518,13 +534,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             line: {
                 classState: getEventTileLineClassState({
                     isProbablyMedia: display.isProbablyMedia,
-                    eventType,
-                    msgtype,
+                    eventType: event.eventType,
+                    msgtype: event.msgtype,
                 }),
             },
             sender: {
                 profileState: senderProfileState,
-                avatarMember: getEventTileAvatarMember(event.mxEvent),
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,
                     display.timelineRenderingType,
@@ -534,6 +549,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     hideSender: sender.hideSender,
                     timelineRenderingType: display.timelineRenderingType,
                 }),
+                forceHistoricalAvatar: event.eventType === "m.room.member",
             },
             actionBar: {
                 show: getShouldShowMessageActionBar({
@@ -580,6 +596,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         eventType,
         msgtype,
         isSending,
+        isCallInvite,
         isContinuation,
         isRenderingNotification,
     }: {
@@ -590,6 +607,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
         eventType: string;
         msgtype?: string;
         isSending: boolean;
+        isCallInvite: boolean;
         isContinuation?: boolean;
         isRenderingNotification: boolean;
     }): ReturnType<typeof getEventTileClassState> {
@@ -605,6 +623,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             isSelected: display.isSelected,
             isContinuation,
             eventType,
+            isCallInvite,
             isLast: display.isLast,
             isLastInSection: display.isLastInSection,
             isContextual: display.isContextual,
