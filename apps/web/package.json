@@ -30,6 +30,7 @@
         "lint:types": "nx lint:types",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
         "test": "nx test:unit",
+        "test:vitest": "nx test:vitest",
         "test:playwright": "nx test:playwright --",
         "test:playwright:open": "nx test:playwright -- --ui",
         "test:playwright:screenshots": "nx test:playwright:screenshots --",
