@@ -15,6 +15,7 @@ import { type ConfigOptions } from "./config.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 vi.mock("node:fs", () => ({ default: memfs }));
+vi.mock("node:fs/promises", () => ({ default: memfs.promises }));
 
 vi.mock("electron", () => ({
     app: {
