@@ -13,15 +13,11 @@ import { LruCache } from "./LruCache";
 
 describe("LruCache", () => {
     it("when creating a cache with negative capacity it should raise an error", () => {
-        expect(() => {
-            new LruCache(-23);
-        }).toThrow("Cache capacity must be at least 1");
+        expect(() => new LruCache(-23)).toThrow("Cache capacity must be at least 1");
     });
 
     it("when creating a cache with 0 capacity it should raise an error", () => {
-        expect(() => {
-            new LruCache(0);
-        }).toThrow("Cache capacity must be at least 1");
+        expect(() => new LruCache(0)).toThrow("Cache capacity must be at least 1");
     });
 
     describe("when there is a cache with a capacity of 3", () => {

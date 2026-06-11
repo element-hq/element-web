@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 // @vitest-environment happy-dom
 
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 
 import UserActivity from "./UserActivity";
 
