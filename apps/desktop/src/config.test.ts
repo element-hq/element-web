@@ -36,6 +36,7 @@ describe("loadConfig", () => {
             {
                 "../webapp.asar/config.json": JSON.stringify({
                     web_base_url: "https://chat.org.com",
+                    default_hs_url: "https://matrix.org.com",
                 }),
             },
             __dirname,
@@ -49,6 +50,7 @@ describe("loadConfig", () => {
         const config = await loadConfig(resolve(__dirname, "../custom-config.json"));
         expect(config.brand).toBe("Element");
         expect(config.web_base_url).toBe("https://chat.org.com");
+        expect(config.default_hs_url).toBe("https://matrix.org.com");
     });
 
     it("should read localConfigPath if exists", async () => {
@@ -83,5 +85,32 @@ describe("loadConfig", () => {
         const config = await loadConfig("/home/custom-config.json");
         expect(config.help_url).toBe("https://element.io/help");
         expect(config.web_base_url).toBe("https://chat.org.com");
+    });
+
+    it("should support all config files missing", async () => {
+        vol.reset();
+        vol.fromJSON(
+            {
+                "../webapp.asar/version": "v1.2.3",
+            },
+            __dirname,
+        );
+
+        const config = await loadConfig(undefined);
+        expect(config.help_url).toBe("https://element.io/help");
+        expect(config.web_base_url).toBe("https://app.element.io/");
+    });
+
+    it("should handle key conflicts around default homeserver config", async () => {
+        vol.fromJSON({
+            "/home/custom-config.json": JSON.stringify({
+                default_server_name: "other-org.com",
+            }),
+        });
+
+        const config = await loadConfig("/home/custom-config.json");
+        expect(config.default_server_name).toBe("other-org.com");
+        expect(config.default_hs_url).toBeUndefined();
+        expect(config.default_server_config).toBeUndefined();
     });
 });
