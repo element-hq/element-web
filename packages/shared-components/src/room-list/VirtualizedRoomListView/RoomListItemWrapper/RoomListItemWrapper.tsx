@@ -41,7 +41,7 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
         return <RoomListItemView {...rest} {...getItemAccessibleProps("listbox", roomIndex, roomCount)} />;
     }
 
-    const isFirstInSection = !isInFlatList && roomIndexInSection === 0;
+    const isFirstInSection = roomIndexInSection === 0;
     return (
         <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>
             <div role="gridcell" aria-selected={rest.isSelected}>
