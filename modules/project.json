@@ -3,6 +3,11 @@
     "projectType": "library",
     "implicitDependencies": ["modules/*"],
     "targets": {
+        "lint:types": {
+            "command": "tsc --noEmit",
+            "options": { "cwd": "modules" },
+            "dependsOn": ["^build:playwright"]
+        },
         "test:playwright": {
             "command": "playwright test",
             "options": { "cwd": "modules" },
