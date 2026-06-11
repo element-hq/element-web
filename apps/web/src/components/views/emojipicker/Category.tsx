@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject } from "react";
 import { type DATA_BY_CATEGORY, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import { ViewportList } from "@element-hq/web-shared-components";
 
 import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
-import LazyRenderList from "../elements/LazyRenderList";
 import Emoji from "./Emoji";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 
@@ -98,7 +98,7 @@ class Category extends React.PureComponent<IProps> {
         const listBottom = listTop + rows.length * EMOJI_HEIGHT;
         const top = Math.max(viewportTop, listTop);
         const bottom = Math.min(viewportBottom, listBottom);
-        // the viewport height and scrollTop passed to the LazyRenderList
+        // the viewport height and scrollTop passed to the ViewportList
         // is capped at the intersection with the real viewport, so lists
         // out of view are passed height 0, so they won't render any items.
         const localHeight = Math.max(0, bottom - top);
@@ -113,7 +113,7 @@ class Category extends React.PureComponent<IProps> {
                 aria-label={name}
             >
                 <h2 className="mx_EmojiPicker_category_label">{name}</h2>
-                <LazyRenderList
+                <ViewportList
                     className="mx_EmojiPicker_list"
                     itemHeight={EMOJI_HEIGHT}
                     items={rows}

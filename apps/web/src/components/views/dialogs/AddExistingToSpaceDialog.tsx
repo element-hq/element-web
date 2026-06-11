@@ -13,6 +13,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CheckIcon, ErrorIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ViewportList } from "@element-hq/web-shared-components";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -31,7 +32,6 @@ import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/Rece
 import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
-import LazyRenderList from "../elements/LazyRenderList";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { filterBoolean } from "../../../utils/arrays";
 import { type NonEmptyArray } from "../../../@types/common";
@@ -113,7 +113,7 @@ const getScrollState = (
     const listBottom = listTop + numItems * ROW_HEIGHT;
     const top = Math.max(viewportTop, listTop);
     const bottom = Math.min(viewportBottom, listBottom);
-    // the viewport height and scrollTop passed to the LazyRenderList
+    // the viewport height and scrollTop passed to the ViewportList
     // is capped at the intersection with the real viewport, so lists
     // out of view are passed height 0, so they won't render any items.
     return {
@@ -359,8 +359,8 @@ const defaultRendererFactory =
     (rooms, selectedToAdd, { scrollTop, height }, onChange) => (
         <div className="mx_AddExistingToSpace_section">
             <h3>{_t(title)}</h3>
-            <LazyRenderList
-                element="ul"
+            <ViewportList
+                as="ul"
                 itemHeight={ROW_HEIGHT}
                 items={rooms}
                 scrollTop={scrollTop}
