@@ -13,5 +13,6 @@ export default defineProject({
         environment: "node",
         pool: "threads",
         globals: false,
+        setupFiles: ["src/test/setupTests.ts"],
     },
 });

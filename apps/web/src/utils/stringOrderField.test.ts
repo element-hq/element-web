@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect } from "vitest";
 import { sortBy } from "lodash";
 import { averageBetweenStrings, DEFAULT_ALPHABET } from "matrix-js-sdk/src/utils";
 
-import { midPointsBetweenStrings, reorderLexicographically } from "../../../src/utils/stringOrderField";
+import { midPointsBetweenStrings, reorderLexicographically } from "./stringOrderField";
 
 const moveLexicographicallyTest = (
     orders: Array<string | undefined>,

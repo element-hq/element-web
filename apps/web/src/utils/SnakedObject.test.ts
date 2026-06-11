@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SnakedObject, snakeToCamel } from "../../../src/utils/SnakedObject";
+import { describe, it, expect } from "vitest";
+
+import { SnakedObject, snakeToCamel } from "./SnakedObject";
 
 describe("snakeToCamel", () => {
     it("should convert snake_case to camelCase in simple scenarios", () => {
