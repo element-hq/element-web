@@ -16,7 +16,6 @@ describe("/status", () => {
 
     beforeEach(() => {
         client = stubClient();
-        client.setExtendedProfileProperty = jest.fn().mockResolvedValue(undefined);
     });
 
     function run(args?: string) {
