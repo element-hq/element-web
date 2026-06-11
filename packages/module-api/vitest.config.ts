@@ -1,5 +1,5 @@
 /*
-Copyright 2026 Element Creations Ltd.
+Copyright 2025 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -7,8 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineProject } from "vitest/config";
 
+import viteConfig from "./vite.config";
+
 export default defineProject({
     test: {
-        exclude: ["./e2e/**/*", "./node_modules/**/*"],
+        environment: "node",
+        pool: "threads",
+        globals: false,
+        include: ["src/**/*.test.{ts,tsx}"],
     },
+    define: viteConfig.define,
 });

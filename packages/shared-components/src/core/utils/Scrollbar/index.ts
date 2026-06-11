@@ -5,14 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.list {
-    position: relative;
-    flex: 1;
-}
-
-.scrollbar {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    width: 100%;
-}
+export { AutoHideScrollbar, type AutoHideScrollbarProps } from "./AutoHideScrollbar";

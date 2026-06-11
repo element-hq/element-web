@@ -10,9 +10,9 @@ import { render, type RenderResult, screen } from "@testing-library/react";
 import { type Api } from "@element-hq/element-web-module-api";
 import { type IWidget } from "matrix-widget-api";
 
-import WidgetToggleModule from "../src/index";
-import { CONFIG_KEY, WidgetTogglesConfig } from "../src/config";
-import { mockWidget, mockWidgetApi } from "./mocks";
+import WidgetToggleModule from "./index";
+import { CONFIG_KEY, WidgetTogglesConfig } from "./config";
+import { mockWidget, mockWidgetApi } from "./tests/mocks";
 
 const makeApi = (widgets: IWidget[] = []): Api => {
     const addRoomHeaderButtonCallback = vi.fn();

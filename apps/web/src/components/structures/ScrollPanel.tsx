@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type CSSProperties, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { SDKContext } from "../../contexts/SDKContext";
@@ -940,7 +940,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             <AutoHideScrollbar
                 wrappedRef={this.collectScroll}
                 onScroll={this.onScroll}
-                className={`mx_ScrollPanel ${this.props.className}`}
+                className={`mx_AutoHideScrollbar mx_ScrollPanel ${this.props.className}`}
                 style={this.props.style}
             >
                 {this.props.fixedChildren}
