@@ -67,6 +67,7 @@ jobs:
                   pnpm test \
                       --coverage=$ENABLE_COVERAGE \
                       --ci \
+                      --max-workers "50%" \
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
