@@ -59,7 +59,7 @@ const config: Config = {
         // Coverage chokes on type definition files
         "!<rootDir>/src/**/*.d.ts",
     ],
-    coverageReporters: ["text-summary", "lcov"],
+    coverageReporters: ["text-summary", ["lcov", { projectRoot: "../../" }]],
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
 };
