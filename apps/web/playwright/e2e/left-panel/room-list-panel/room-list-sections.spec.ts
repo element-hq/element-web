@@ -385,5 +385,36 @@ test.describe("Room list sections", () => {
 
             await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
         });
+
+        test("Arrow Right on an expanded section with rooms moves focus to its first room", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoomButton = getRoomList(page).getByRole("button", { name: "Open room favourite room" });
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+
+            await favouritesHeader.focus();
+            await expect(favouritesHeader).toBeFocused();
+
+            await page.keyboard.press("ArrowRight");
+
+            // Focus must move to the first room in the section, not the next section header.
+            await expect(favRoomButton).toBeFocused();
+            // The section should remain expanded.
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+        });
+
+        test("Arrow Left on the first room of a section moves focus back to the section header", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoomButton = getRoomList(page).getByRole("button", { name: "Open room favourite room" });
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+
+            await favRoomButton.focus();
+            await expect(favRoomButton).toBeFocused();
+
+            await page.keyboard.press("ArrowLeft");
+
+            await expect(favouritesHeader).toBeFocused();
+        });
     });
 });
