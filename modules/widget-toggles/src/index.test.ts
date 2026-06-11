@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, test, vi } from "vitest";
 import { render, type RenderResult, screen } from "@testing-library/react";
 import { type Api } from "@element-hq/element-web-module-api";
 import { type IWidget } from "matrix-widget-api";
