@@ -138,6 +138,17 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         e.preventDefault();
                         e.stopPropagation();
                         vm.onClick();
+                    } else if (e.code === "ArrowRight" && isExpanded && roomCountInSection > 0) {
+                        // Move focus to the first room in the section
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.currentTarget.dispatchEvent(
+                            new KeyboardEvent("keydown", {
+                                code: "ArrowDown",
+                                key: "ArrowDown",
+                                bubbles: true,
+                            }),
+                        );
                     }
                 }}
                 aria-expanded={isExpanded}

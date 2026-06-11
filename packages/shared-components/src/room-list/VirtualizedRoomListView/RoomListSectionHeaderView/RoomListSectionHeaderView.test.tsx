@@ -8,7 +8,7 @@
 import React from "react";
 import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
-import { describe, it, expect, type Mock, afterEach } from "vitest";
+import { describe, it, expect, type Mock, afterEach, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./RoomListSectionHeaderView.stories";
@@ -70,5 +70,25 @@ describe("<RoomListSectionHeaderView /> stories", () => {
         render(<Collapsed isFocused={true} />);
         await user.keyboard("{ArrowLeft}");
         expect(Collapsed.args.onClick).not.toHaveBeenCalled();
+    });
+
+    it("ArrowRight on an expanded section re-dispatches as ArrowDown", async () => {
+        const user = userEvent.setup();
+        const onKeyDown = vi.fn();
+        render(
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+            <div onKeyDown={onKeyDown}>
+                <Default isFocused={true} />
+            </div>,
+        );
+        await user.keyboard("{ArrowRight}");
+
+        // The re-dispatched ArrowDown should bubble up to the parent listener.
+        const arrowDownEvents = onKeyDown.mock.calls.filter(([event]) => event.code === "ArrowDown");
+        expect(arrowDownEvents).toHaveLength(1);
+
+        // The original ArrowRight handler called preventDefault/stopPropagation, so
+        // it should not have called onClick (which is reserved for the toggle branch).
+        expect(Default.args.onClick).not.toHaveBeenCalled();
     });
 });
