@@ -17,7 +17,8 @@ import React, {
     type ReactNode,
 } from "react";
 import {
-    type EventStatus,
+    EventStatus,
+    EventType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -690,6 +691,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
+    private readonly getAvatarMember = (): RoomMember | null => {
+        if (this.props.mxEvent.getContent().third_party_invite) {
+            return this.props.mxEvent.target;
+        }
+
+        return this.props.mxEvent.sender;
+    };
+
     private readonly onReactionsCreated = (relationType: string, eventType: string): void => {
         if (!isEventTileReactionRelation(relationType, eventType)) {
             return;
@@ -852,11 +861,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
         const isEditing = !!this.props.editState;
+        const eventType = this.props.mxEvent.getType();
+        const msgtype = this.props.mxEvent.getContent().msgtype;
+        const isSending =
+            this.props.eventSendStatus === EventStatus.SENDING ||
+            this.props.eventSendStatus === EventStatus.QUEUED ||
+            this.props.eventSendStatus === EventStatus.ENCRYPTING;
 
         return {
             event: {
-                mxEvent: this.props.mxEvent,
-                eventSendStatus: this.props.eventSendStatus,
+                eventType,
+                msgtype,
+                eventTs: this.props.mxEvent.getTs(),
+                eventId: this.props.mxEvent.getId() ?? undefined,
+                isLocalEcho: !!this.props.mxEvent.status,
+                isSending,
+                ariaLive: this.props.eventSendStatus === null ? undefined : "off",
+                isRoomCreate: eventType === EventType.RoomCreate,
+                isCallInvite: eventType === EventType.CallInvite,
+                isRtcNotification: eventType === EventType.RTCNotification,
                 isEditing,
                 isEncryptionFailure,
                 forExport: this.props.forExport,
@@ -974,9 +997,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const scrollToken = eventTileRenderState.root.scrollToken;
         const rootRenderState = { tileClasses, tileAriaLive, scrollToken };
 
-        const avatar = (
-            <EventTileAvatarAdapter mxEvent={this.props.mxEvent} senderSnapshot={eventTileSnapshot.sender} />
-        );
+        const avatarMember = this.getAvatarMember();
+        const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
         const sender = (
             <EventTileSenderAdapter
                 mxEvent={this.props.mxEvent}

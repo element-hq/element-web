@@ -17,6 +17,7 @@ import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/
 import { type ToastType, RoomListToast } from "./RoomListToast";
 import styles from "./RoomListView.module.css";
 import { Flex } from "../../core/utils/Flex";
+import { AutoHideScrollbar } from "../../core/utils/Scrollbar";
 
 export type RoomListSection = {
     /** Unique identifier for the section */
@@ -120,8 +121,10 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
                 />
             </div>
             <Flex direction="column" className={styles.list}>
-                {listBody}
-                {snapshot.toast && <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />}
+                <AutoHideScrollbar className={styles.scrollbar}>
+                    {listBody}
+                    {snapshot.toast && <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />}
+                </AutoHideScrollbar>
             </Flex>
         </>
     );
