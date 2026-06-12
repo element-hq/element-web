@@ -113,4 +113,22 @@ describe("loadConfig", () => {
         expect(config.default_hs_url).toBeUndefined();
         expect(config.default_server_config).toBeUndefined();
     });
+
+    it("should map module paths correctly", async () => {
+        vol.fromJSON(
+            {
+                "../webapp.asar/config.json": JSON.stringify({
+                    web_base_url: "https://chat.org.com",
+                    default_hs_url: "https://matrix.org.com",
+                    modules: ["/modules/banner"],
+                }),
+            },
+            __dirname,
+        );
+
+        const config = await loadConfig("/home/custom-config.json");
+        expect(config.help_url).toBe("https://element.io/help");
+        expect(config.web_base_url).toBe("https://chat.org.com");
+        expect(config.modules).toStrictEqual(["/webapp/modules/banner"]);
+    });
 });
