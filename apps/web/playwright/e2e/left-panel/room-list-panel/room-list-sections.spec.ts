@@ -217,29 +217,92 @@ test.describe("Room list sections", () => {
         });
     });
 
-    test("should show unread indicator on section header", async ({ page, app, bot }) => {
-        // Create a favourite room
-        const favouriteId = await app.client.createRoom({ name: "favourite room" });
-        await app.client.evaluate(async (client, roomId) => {
-            await client.setRoomTag(roomId, "m.favourite");
-        }, favouriteId);
+    test.describe("Section header notification", () => {
+        test("should show unread indicator on section header", async ({ page, app, bot }) => {
+            // Create a favourite room
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
 
-        const roomList = getRoomList(page);
+            const roomList = getRoomList(page);
 
-        // Invite the bot and have it send a message to generate an unread
-        await app.client.inviteUser(favouriteId, bot.credentials.userId);
-        await bot.joinRoom(favouriteId);
-        await bot.sendMessage(favouriteId, "Hello from bot!");
+            // Invite the bot and have it send a message to generate an unread
+            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await bot.joinRoom(favouriteId);
+            await bot.sendMessage(favouriteId, "Hello from bot!");
 
-        let sectionHeader = getSectionHeader(page, "Favourites", true);
-        await expect(sectionHeader).toBeVisible();
+            let sectionHeader = getSectionHeader(page, "Favourites", true);
+            await expect(sectionHeader).toBeVisible();
 
-        // Open the room to mark it as read
-        await roomList.getByRole("row", { name: "Open room favourite room" }).click();
+            // Open the room to mark it as read
+            await roomList.getByRole("row", { name: "Open room favourite room" }).click();
 
-        // The section should no longer be unread
-        sectionHeader = getSectionHeader(page, "Favourites", false);
-        await expect(sectionHeader).toBeVisible();
+            // The section should no longer be unread
+            sectionHeader = getSectionHeader(page, "Favourites", false);
+            await expect(sectionHeader).toBeVisible();
+        });
+
+        test(
+            "should aggregate notification decorations on the collapsed section header",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                // A favourite room to keep the room list in section mode (otherwise it renders as a flat list)
+                const favouriteId = await app.client.createRoom({ name: "favourite room" });
+                await app.client.evaluate(async (client, roomId) => {
+                    await client.setRoomTag(roomId, "m.favourite");
+                }, favouriteId);
+
+                // A room with a mention, landing in the Chats section
+                const mentionId = await app.client.createRoom({ name: "mention room" });
+                await app.client.inviteUser(mentionId, bot.credentials.userId);
+                await bot.joinRoom(mentionId);
+                const clientBot = await bot.prepareClient();
+                await clientBot.evaluate(
+                    async (client, { roomId, userId }) => {
+                        await client.sendMessage(roomId, {
+                            // @ts-ignore ignore usage of MsgType.text
+                            "msgtype": "m.text",
+                            "body": "User",
+                            "format": "org.matrix.custom.html",
+                            "formatted_body": `<a href="https://matrix.to/#/${userId}">User</a>`,
+                            "m.mentions": {
+                                user_ids: [userId],
+                            },
+                        });
+                    },
+                    { roomId: mentionId, userId: user.userId },
+                );
+
+                // A room we are invited to, landing in the Chats section
+                await bot.createRoom({
+                    name: "invited room",
+                    invite: [user.userId],
+                    is_direct: true,
+                });
+
+                const roomList = getRoomList(page);
+
+                // Wait for the mention decoration to sync onto the mention room before collapsing, so the
+                // section header aggregation has the room states available.
+                await expect(
+                    roomList.getByRole("row", { name: /mention room/ }).getByTestId("notification-decoration"),
+                ).toBeVisible();
+
+                // Collapse the Chats section so the aggregated decoration is displayed on its header
+                const chatsHeader = getSectionHeader(page, "Chats", true);
+                await expect(chatsHeader).toBeVisible();
+                await chatsHeader.click();
+
+                // The header hides its decoration while hovered/focused, so move the pointer away
+                await page.mouse.move(0, 0);
+
+                // The collapsed header aggregates the mention and the invitation
+                await expect(chatsHeader.getByTestId("notification-decoration")).toBeVisible();
+
+                await expect(chatsHeader).toMatchScreenshot("room-list-section-header-notification.png");
+            },
+        );
     });
 
     test.describe("Sections and filters interaction", () => {

@@ -34,6 +34,12 @@
         .menu {
             display: initial;
         }
+
+        /* When a menu is present and revealed on hover, hide the decoration to avoid clutter.
+           Default sections have no menu, so their decoration stays visible on hover. */
+        .notificationDecoration {
+            display: none;
+        }
     }
 
     .chevron {
