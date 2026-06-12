@@ -284,7 +284,9 @@ describe("EmojiPicker", function () {
         expect(input).toHaveFocus();
 
         await waitFor(() => {
-            expect(container.querySelectorAll('.mx_EmojiPicker_item_wrapper [role="button"]').length).toBeGreaterThan(1);
+            expect(container.querySelectorAll('.mx_EmojiPicker_item_wrapper [role="button"]').length).toBeGreaterThan(
+                1,
+            );
         });
 
         const emojiButtons = container.querySelectorAll('.mx_EmojiPicker_item_wrapper [role="button"]');
