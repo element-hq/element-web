@@ -30,7 +30,7 @@ export function getRoomListHeader(page: Page): Locator {
  * @param isUnread Whether to look for the unread version of the section header
  */
 export function getSectionHeader(page: Page, sectionName: string, isUnread = false): Locator {
-    return getRoomList(page).getByRole("gridcell", {
+    return getRoomList(page).getByRole("button", {
         name: isUnread ? `Toggle ${sectionName} section with unread room(s)` : `Toggle ${sectionName} section`,
     });
 }
