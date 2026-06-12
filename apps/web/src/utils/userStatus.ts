@@ -8,6 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import { type UserStatus } from "@element-hq/web-shared-components";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
+// MSC4426 defines the maximum length of a status to be 256 bytes of UTF-8,
+// so we truncate anything longer than that.
 const MAX_STATUS_TEXT_BYTES = 256;
 
 export function userStatusTextWithinMaxLength(text: string): boolean {

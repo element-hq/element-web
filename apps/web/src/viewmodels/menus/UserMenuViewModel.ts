@@ -19,6 +19,7 @@ import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { clearUserStatus } from "../../utils/userStatus";
+import { logger } from "matrix-js-sdk/src/logger";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
@@ -133,7 +134,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     public readonly clearStatus = (): void => {
         this.setOpen(false);
         clearUserStatus(this.client).catch((err) => {
-            console.warn("Failed to clear user status", err);
+            logger.warn("Failed to clear user status", err);
         });
     };
 }
