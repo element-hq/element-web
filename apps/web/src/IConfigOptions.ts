@@ -129,6 +129,7 @@ export interface IConfigOptions {
     element_call: {
         guest_spa_url?: string;
         use_exclusively?: boolean;
+        disable?: boolean;
         brand?: string;
     };
 

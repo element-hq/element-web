@@ -12,8 +12,7 @@ import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type React from "react";
-import { useFeatureEnabled, useSettingValue } from "../useSettings";
-import SdkConfig from "../../SdkConfig";
+import { useSettingValue } from "../useSettings";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { useWidgets } from "../../utils/WidgetUtils";
@@ -39,6 +38,7 @@ import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import SdkConfig from "../../SdkConfig";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -109,12 +109,13 @@ export const useRoomCall = (
 } => {
     const roomViewStore = useScopedRoomContext("roomViewStore").roomViewStore;
     // settings
-    const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
     const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
-    const useElementCallExclusively = useMemo(() => {
+    const enableLegacyCallsVoip = useSettingValue("enableLegacyCallsVoip");
+    const sdkConfigEcOnly = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
+    const useElementCallExclusively = !enableLegacyCallsVoip || sdkConfigEcOnly;
 
     const serverIsConfiguredForElementCall = useEventEmitterState(
         CallStore.instance,
@@ -175,12 +176,12 @@ export const useRoomCall = (
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
-        if (groupCallsEnabled) {
-            if (hasGroupCall || mayCreateElementCalls) {
-                options.push(PlatformCallType.ElementCall);
-            }
+        if (!SdkConfig.get("element_call").disable) {
             if (useElementCallExclusively && !hasJitsiWidget) {
                 return [PlatformCallType.ElementCall];
+            }
+            if (hasGroupCall || mayCreateElementCalls) {
+                options.push(PlatformCallType.ElementCall);
             }
         }
         if (memberCount <= 2) {
@@ -197,7 +198,6 @@ export const useRoomCall = (
         memberCount,
         mayEditWidgets,
         hasJitsiWidget,
-        groupCallsEnabled,
         hasGroupCall,
         mayCreateElementCalls,
         useElementCallExclusively,

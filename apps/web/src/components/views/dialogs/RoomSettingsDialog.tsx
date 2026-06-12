@@ -43,6 +43,7 @@ import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
+import SdkConfig from "../../../SdkConfig";
 
 export const enum RoomSettingsTab {
     General = "ROOM_GENERAL_TAB",
@@ -157,7 +158,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 ),
             );
         }
-        if (SettingsStore.getValue("feature_group_calls")) {
+        if (!SdkConfig.get("element_call").disable) {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.Voip,
