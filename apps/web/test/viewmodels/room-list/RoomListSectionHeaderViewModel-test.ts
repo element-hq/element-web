@@ -114,6 +114,23 @@ describe("RoomListSectionHeaderViewModel", () => {
         });
     });
 
+    describe("canBeReordered", () => {
+        it.each([
+            [DefaultTagID.Favourite, false],
+            [DefaultTagID.LowPriority, false],
+            [CHATS_TAG, true],
+            ["element.io.section.custom", true],
+        ])("should be %s for tag %s", (tag, expected) => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            expect(vm.getSnapshot().canBeReordered).toBe(expected);
+        });
+    });
+
     describe("onCustomSectionDataChange", () => {
         let watchCallback: () => void;
 

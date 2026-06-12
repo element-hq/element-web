@@ -69,8 +69,11 @@ describe("<VirtualizedRoomListView />", () => {
     describe("drag and drop", () => {
         beforeEach(() => {
             // Storybook fn() spies are shared across tests; vi.clearAllMocks() may not
-            // reach them, so explicitly reset call history for the spy under test.
+            // reach them, so explicitly reset call history for the spies under test.
             (Sections.args.changeRoomSection as any).mockClear?.();
+            (Sections.args.changeSectionOrder as any).mockClear?.();
+            (Sections.args.onSectionDragStart as any).mockClear?.();
+            (Sections.args.onSectionDragEnd as any).mockClear?.();
         });
 
         it("should call changeRoomSection when drag ends successfully", async () => {
@@ -94,6 +97,31 @@ describe("<VirtualizedRoomListView />", () => {
 
             await waitFor(() => {
                 expect(Sections.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", "low-priority");
+            });
+        });
+
+        it("should fire section drag callbacks when reordering sections via keyboard", async () => {
+            // KeyboardSensor: Space=start, ArrowDown moves drag position 10px/press, Space=drop.
+            // Starting from the "Favourites" section header and pressing ArrowDown 20 times moves
+            // far enough down to land on the "low-priority" section header — a valid section reorder.
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const favouritesHeader = await screen.findByLabelText("Toggle Favourites section");
+            favouritesHeader.focus();
+
+            await user.keyboard(" "); // start drag
+
+            for (let i = 0; i < 20; i++) {
+                await user.keyboard("{ArrowDown}");
+            }
+
+            await user.keyboard(" "); // drop
+
+            await waitFor(() => {
+                expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
+                expect(Sections.args.changeSectionOrder).toHaveBeenCalledWith("favourites", "low-priority");
+                expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
             });
         });
     });

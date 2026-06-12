@@ -60,6 +60,7 @@ const meta = {
         isFocused: false,
         isUnread: false,
         displaySectionMenu: true,
+        canBeReordered: true,
         onClick: fn(),
         onFocus: fn(),
         editSection: fn(),

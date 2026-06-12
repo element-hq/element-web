@@ -33,14 +33,14 @@ describe("<RoomListSectionHeaderView /> stories", () => {
         const user = userEvent.setup();
 
         render(<Default />);
-        const button = screen.getByRole("gridcell", { name: HEADER_NAME });
+        const button = screen.getByRole("button", { name: HEADER_NAME });
         await user.click(button);
         expect(Default.args.onClick).toHaveBeenCalled();
     });
 
     it("focuses the button when isFocused is true", () => {
         render(<Default isFocused={true} />);
-        const button = screen.getByRole("gridcell", { name: HEADER_NAME });
+        const button = screen.getByRole("button", { name: HEADER_NAME });
         expect(document.activeElement).toBe(button);
     });
 

@@ -94,6 +94,11 @@ export class RoomListViewModel
     private roomsMap = new Map<string, Room>();
     // Don't clear section vm because we want to keep the expand/collapse state even during space changes.
     private readonly roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
+    /**
+     * When dragging sections, we want to temporarily expand all sections to make it easier to move rooms between sections.
+     * This map stores the original expansion state of each section before the drag starts, so we can restore it after the drag ends.
+     */
+    private readonly savedExpansionStates = new Map<string, boolean>();
 
     /**
      * Reference to the currently displayed toast, used to automatically close the toast after a timeout.
@@ -662,6 +667,28 @@ export class RoomListViewModel
             this.closeToast();
         }, 15 * 1000);
     }
+
+    public changeSectionOrder = (sourceTag: string, targetTag: string): void => {
+        RoomListStoreV3.instance.reorderSection(sourceTag, targetTag);
+    };
+
+    public onSectionDragStart = (): void => {
+        this.savedExpansionStates.clear();
+        for (const [tag, sectionVM] of this.roomSectionHeaderViewModels) {
+            this.savedExpansionStates.set(tag, sectionVM.isExpanded);
+            sectionVM.isExpanded = false;
+        }
+        this.updateRoomListData();
+    };
+
+    public onSectionDragEnd = (): void => {
+        for (const [tag, expanded] of this.savedExpansionStates) {
+            const sectionVM = this.roomSectionHeaderViewModels.get(tag);
+            if (sectionVM) sectionVM.isExpanded = expanded;
+        }
+        this.savedExpansionStates.clear();
+        this.updateRoomListData();
+    };
 
     public changeRoomSection = (roomId: string, tag: string): void => {
         const room = this.props.client.getRoom(roomId);

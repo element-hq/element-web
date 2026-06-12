@@ -53,7 +53,7 @@ import InviteRulesConfigController from "./controllers/InviteRulesConfigControll
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
-import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
+import { type ReorderableSection, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
 import { type NotificationSound } from "../Notifier.ts";
 
 export const defaultWatchManager = new WatchManager();
@@ -370,7 +370,7 @@ export interface Settings {
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
-    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
+    "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
 }
 
 export type SettingKey = keyof Settings;
