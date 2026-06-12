@@ -1006,6 +1006,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const sender = (
             <EventTileSenderAdapter
                 senderId={eventTileSnapshot.sender.senderId}
+                member={avatarMember}
                 senderSnapshot={eventTileSnapshot.sender}
                 isEmote={eventTileSnapshot.sender.isEmote}
                 onSenderProfileClick={this.onSenderProfileClick}

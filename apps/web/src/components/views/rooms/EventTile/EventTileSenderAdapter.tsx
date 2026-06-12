@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 
 import SenderProfile from "../../messages/SenderProfile";
 import { type EventTileSenderSnapshot } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { type MemberInfo } from "../../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 
 /**
  * Props for the {@link EventTileSenderAdapter} component.
@@ -16,6 +17,8 @@ import { type EventTileSenderSnapshot } from "../../../../viewmodels/room/timeli
 interface EventTileSenderAdapterProps {
     /** Stable sender ID for the event. */
     senderId?: string;
+    /** Resolved room memberInfo for sender/profile rendering. */
+    member?: MemberInfo | null;
     /** Snapshot of the sender identity state for this tile. */
     senderSnapshot: EventTileSenderSnapshot;
     /** Whether the body renders as an emote. */
@@ -29,17 +32,20 @@ interface EventTileSenderAdapterProps {
  */
 export function EventTileSenderAdapter({
     senderId,
+    member,
     senderSnapshot,
     isEmote,
     onSenderProfileClick,
 }: Readonly<EventTileSenderAdapterProps>): JSX.Element | null {
     switch (senderSnapshot.profileMode) {
         case "clickable":
-            return <SenderProfile onClick={onSenderProfileClick} senderId={senderId} isEmote={isEmote} />;
+            return (
+                <SenderProfile onClick={onSenderProfileClick} senderId={senderId} member={member} isEmote={isEmote} />
+            );
         case "tooltip":
-            return <SenderProfile senderId={senderId} isEmote={isEmote} withTooltip />;
+            return <SenderProfile senderId={senderId} member={member} isEmote={isEmote} withTooltip />;
         case "default":
-            return <SenderProfile senderId={senderId} isEmote={isEmote} />;
+            return <SenderProfile senderId={senderId} member={member} isEmote={isEmote} />;
         default:
             return null;
     }

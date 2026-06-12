@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import SenderProfile from "../../../../../src/components/views/messages/SenderProfile";
 import { EventTileSenderAdapter } from "../../../../../src/components/views/rooms/EventTile/EventTileSenderAdapter";
@@ -41,11 +42,19 @@ describe("EventTileSenderAdapter", () => {
 
     it("passes clickable sender state to SenderProfile", () => {
         const onSenderProfileClick = jest.fn();
+        const member = new RoomMember("!room:example.org", "@alice:example.org");
         const senderSnapshot = makeSenderSnapshot({ profileMode: "clickable" });
+        const memberInfo = {
+            userId: "@alice:example.org",
+            roomId: "!room:example.org",
+            rawDisplayName: member.rawDisplayName,
+            disambiguate: member.disambiguate,
+        };
 
         render(
             <EventTileSenderAdapter
                 senderId="@alice:example.org"
+                member={member}
                 senderSnapshot={senderSnapshot}
                 isEmote={false}
                 onSenderProfileClick={onSenderProfileClick}
@@ -55,6 +64,7 @@ describe("EventTileSenderAdapter", () => {
         expect(screen.getByTestId("sender-profile")).toBeInTheDocument();
         expect(mockedSenderProfile.mock.calls[0][0]).toMatchObject({
             senderId: "@alice:example.org",
+            member: memberInfo,
             isEmote: false,
             onClick: onSenderProfileClick,
         });
