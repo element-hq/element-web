@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { Buffer } from "node:buffer";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render, screen, waitFor, fireEvent, act } from "jest-matrix-react";
 import { type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -76,6 +77,7 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
         renderComponent();
 
         await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
+        expect(screen.getByRole("heading", { level: 2, name: "Key Backup Diagnostics" })).toBeInTheDocument();
         expect(screen.getByLabelText("Overall Status")).toHaveTextContent("OK");
     });
 
@@ -235,10 +237,15 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
         await waitFor(() => expect(screen.getByText("Failed to copy diagnostic summary")).toBeInTheDocument());
     });
 
-    it("should re-run diagnostics when the Refresh button is clicked", async () => {
+    it("should show the loading state while diagnostics are refreshed", async () => {
+        let resolveRefreshedBackupInfo = (_backupInfo: KeyBackupInfo): void => {};
+        const refreshedBackupInfo = new Promise<KeyBackupInfo>((resolve) => {
+            resolveRefreshedBackupInfo = resolve;
+        });
         const getKeyBackupInfoSpy = jest
             .spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo")
-            .mockResolvedValue(HEALTHY_BACKUP_INFO);
+            .mockResolvedValueOnce(HEALTHY_BACKUP_INFO)
+            .mockReturnValueOnce(refreshedBackupInfo);
         jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(new Uint8Array(32));
         jest.spyOn(matrixClient.getCrypto()!, "isKeyBackupTrusted").mockResolvedValue({
             trusted: true,
@@ -255,13 +262,24 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
             fireEvent.click(screen.getByRole("button", { name: "Refresh diagnostics" }));
         });
 
-        // getKeyBackupInfo should be called again after refresh
-        await waitFor(() => expect(getKeyBackupInfoSpy.mock.calls.length).toBeGreaterThan(callCountBefore));
+        expect(getKeyBackupInfoSpy).toHaveBeenCalledTimes(callCountBefore + 1);
+        expect(screen.getByLabelText("Key Backup Diagnostics")).toBeInTheDocument();
+        expect(screen.queryByLabelText("Overall Status")).not.toBeInTheDocument();
+
+        resolveRefreshedBackupInfo(HEALTHY_BACKUP_INFO);
+
+        await waitFor(() => expect(screen.getByLabelText("Overall Status")).toBeInTheDocument());
     });
 
     it("should NOT expose any private key material in the rendered DOM", async () => {
         // Use a recognisable private key pattern that should never appear in UI
         const MOCK_PRIVATE_KEY = new Uint8Array(32).fill(0xab);
+        const privateKeySerializations = [
+            Array.from(MOCK_PRIVATE_KEY).join(","),
+            Array.from(MOCK_PRIVATE_KEY, (byte) => byte.toString(16).padStart(2, "0")).join(""),
+            Buffer.from(MOCK_PRIVATE_KEY).toString("base64"),
+            JSON.stringify(MOCK_PRIVATE_KEY),
+        ];
         jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(HEALTHY_BACKUP_INFO);
         jest.spyOn(matrixClient.getCrypto()!, "getSessionBackupPrivateKey").mockResolvedValue(MOCK_PRIVATE_KEY);
         jest.spyOn(matrixClient.getCrypto()!, "isKeyBackupTrusted").mockResolvedValue({
@@ -277,6 +295,9 @@ describe("<KeyBackupDiagnosticsPanel />", () => {
         const domText = container.textContent ?? "";
         expect(domText).not.toContain("171"); // 0xab = 171 decimal
         expect(domText).not.toContain("0xab");
+        for (const serialization of privateKeySerializations) {
+            expect(domText).not.toContain(serialization);
+        }
         expect(domText).not.toContain("access_token");
     });
 

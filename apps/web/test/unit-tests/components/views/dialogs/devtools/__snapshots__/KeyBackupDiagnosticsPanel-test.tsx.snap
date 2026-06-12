@@ -5,9 +5,11 @@ exports[`<KeyBackupDiagnosticsPanel /> should match snapshot for the complete pa
   <div
     class="mx_KeyBackupDiagnosticsPanel"
   >
-    <h3>
+    <h2
+      class="mx_KeyBackupDiagnosticsPanel_heading"
+    >
       Key Backup Diagnostics
-    </h3>
+    </h2>
     <output
       aria-label="Overall Status"
       class="mx_KeyBackupDiagnosticsPanel_statusBanner mx_KeyBackupDiagnosticsPanel_ok"
@@ -167,7 +169,7 @@ exports[`<KeyBackupDiagnosticsPanel /> should match snapshot for the complete pa
             </span>
           </td>
           <td>
-            m.megolm_backup.v1.curve25519-aes-sha2
+            Algorithm: m.megolm_backup.v1.curve25519-aes-sha2
           </td>
         </tr>
         <tr

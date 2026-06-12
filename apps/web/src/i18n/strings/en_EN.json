@@ -781,38 +781,75 @@
             "cross_signing_untrusted": "Your account has a digital identity in secret storage, but it is not yet trusted by this session.",
             "crypto_not_available": "Cryptographic module is not available",
             "device_id": "Device ID",
-            "diagnostics_algorithm_not_supported": "Unsupported algorithm",
-            "diagnostics_algorithm_supported": "Algorithm supported",
+            "diagnostics_algorithm_status": {
+                "not_supported": "Unsupported algorithm",
+                "supported": "Algorithm supported"
+            },
             "diagnostics_check": "Check",
+            "diagnostics_check_detail": {
+                "algorithm": "Algorithm: %(algorithm)s",
+                "cached_locally": "Cached locally",
+                "cannot_verify_unsupported_algorithm": "Cannot verify - unsupported algorithm",
+                "key_match_failed": "Failed to verify key match",
+                "keys_match": "Local private key matches server public key",
+                "keys_mismatch": "Local private key does NOT match server public key - backup state is inconsistent",
+                "missing_from_auth_data": "Missing from auth_data",
+                "not_found_locally": "Not found locally",
+                "present_in_auth_data": "Present in auth_data",
+                "unknown_algorithm": "Unknown algorithm",
+                "unsupported_algorithm": "Not applicable for unsupported backup algorithm",
+                "version": "Version: %(version)s"
+            },
+            "diagnostics_check_label": {
+                "algorithm_supported": "Backup algorithm supported",
+                "keys_match": "Local key matches server key",
+                "local_private_key_available": "Local backup private key available",
+                "server_backup_exists": "Server backup exists",
+                "server_public_key_present": "Server public key present"
+            },
             "diagnostics_consistency_checks": "Consistency Checks",
-            "diagnostics_copy_failure": "Failed to copy diagnostic summary",
-            "diagnostics_copy_success": "Diagnostic summary copied",
+            "diagnostics_copy_status": {
+                "failure": "Failed to copy diagnostic summary",
+                "success": "Diagnostic summary copied"
+            },
             "diagnostics_copy_summary": "Copy diagnostic summary",
             "diagnostics_detail": "Detail",
             "diagnostics_fetch_error": "Unable to fetch backup info",
-            "diagnostics_keys_match": "Keys match",
-            "diagnostics_keys_match_no": "Local key does NOT match server key",
-            "diagnostics_keys_match_yes": "Local key matches server key",
+            "diagnostics_keys_match": {
+                "label": "Keys match",
+                "no": "Local key does NOT match server key",
+                "yes": "Local key matches server key"
+            },
             "diagnostics_local_backup": "Local Backup",
-            "diagnostics_local_private_key": "Local private key",
-            "diagnostics_local_private_key_available": "Available",
-            "diagnostics_local_private_key_unavailable": "Not available",
+            "diagnostics_local_private_key": {
+                "available": "Available",
+                "label": "Local private key",
+                "unavailable": "Not available"
+            },
             "diagnostics_no_server_backup": "No backup found on server",
             "diagnostics_not_applicable": "Not applicable",
             "diagnostics_overall_status": "Overall Status",
             "diagnostics_refresh": "Refresh diagnostics",
-            "diagnostics_server_algorithm": "Algorithm",
-            "diagnostics_server_backup": "Server Backup",
-            "diagnostics_server_exists": "Server backup exists",
-            "diagnostics_server_public_key": "Server public key",
-            "diagnostics_server_public_key_absent": "Missing",
-            "diagnostics_server_public_key_present": "Present",
-            "diagnostics_severity_error": "Error",
-            "diagnostics_severity_ok": "OK",
-            "diagnostics_severity_unknown": "Unknown",
-            "diagnostics_severity_warning": "Warning",
+            "diagnostics_server": {
+                "algorithm": "Algorithm",
+                "backup": "Server Backup",
+                "exists": "Server backup exists"
+            },
+            "diagnostics_server_public_key": {
+                "absent": "Missing",
+                "label": "Server public key",
+                "present": "Present"
+            },
+            "diagnostics_severity": {
+                "error": "Error",
+                "ok": "OK",
+                "unknown": "Unknown",
+                "warning": "Warning"
+            },
             "diagnostics_status": "Status",
-            "diagnostics_value_yes": "Yes",
+            "diagnostics_value": {
+                "yes": "Yes"
+            },
             "key_backup_active_version": "Active backup version:",
             "key_backup_active_version_none": "None",
             "key_backup_diagnostics": "Key Backup Diagnostics",

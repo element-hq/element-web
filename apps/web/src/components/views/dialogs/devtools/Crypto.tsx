@@ -37,7 +37,7 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
                     <CrossSigning />
                     <Session />
 
-                    {/* Key Backup Diagnostics panel — extended read-only diagnostics for issue #31883 */}
+                    {/* Extended read-only key backup diagnostics for E2EE DevTools. */}
                     <KeyBackupDiagnosticsPanel />
 
                     <button

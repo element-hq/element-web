@@ -9,10 +9,12 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { createTestClient } from "../../../test-utils";
+import { _t } from "../../../../src/languageHandler";
 import {
     computeKeyBackupDiagnostics,
     buildSanitizedDiagnosticSummary,
     DiagnosticSeverity,
+    type DiagnosticMessage,
 } from "../../../../src/utils/crypto/KeyBackupDiagnostics";
 
 /** A realistic Curve25519 backup info object for tests. */
@@ -42,6 +44,10 @@ const NO_PUBLIC_KEY_BACKUP_INFO: KeyBackupInfo = {
         signatures: {},
     } as KeyBackupInfo["auth_data"],
 };
+
+function translateDiagnosticMessage(message: DiagnosticMessage): string {
+    return _t(message.key, message.variables);
+}
 
 describe("KeyBackupDiagnostics", () => {
     let matrixClient: MatrixClient;
@@ -80,8 +86,9 @@ describe("KeyBackupDiagnostics", () => {
             expect(result.serverBackup.exists).toBe(false);
             expect(result.serverBackup.fetchError).toBe(true);
             expect(existsCheck!.severity).toBe(DiagnosticSeverity.Unknown);
-            expect(existsCheck!.detail).toBe("Unable to fetch backup info");
-            expect(existsCheck!.detail).not.toBe("No backup found on server");
+            expect(existsCheck!.detail).toEqual({
+                key: "devtools|crypto|diagnostics_fetch_error",
+            });
         });
 
         it("should return OK for server-backup-exists check when backup exists", async () => {
@@ -114,7 +121,9 @@ describe("KeyBackupDiagnostics", () => {
             const publicKeyCheck = result.checks.find((c) => c.id === "server-public-key-present");
             expect(result.serverBackup.publicKeyPresent).toBe(false);
             expect(publicKeyCheck!.severity).toBe(DiagnosticSeverity.Unknown);
-            expect(publicKeyCheck!.detail).toBe("Not applicable for unsupported backup algorithm");
+            expect(publicKeyCheck!.detail).toEqual({
+                key: "devtools|crypto|diagnostics_check_detail|unsupported_algorithm",
+            });
             expect(result.overallSeverity).not.toBe(DiagnosticSeverity.Error);
         });
 
@@ -294,7 +303,7 @@ describe("KeyBackupDiagnostics", () => {
             });
 
             const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
-            const summary = buildSanitizedDiagnosticSummary(result);
+            const summary = buildSanitizedDiagnosticSummary(result, translateDiagnosticMessage);
 
             expect(summary).toContain("Version: 3");
             expect(summary).toContain("m.megolm_backup.v1.curve25519-aes-sha2");
@@ -311,7 +320,7 @@ describe("KeyBackupDiagnostics", () => {
             });
 
             const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
-            const summary = buildSanitizedDiagnosticSummary(result);
+            const summary = buildSanitizedDiagnosticSummary(result, translateDiagnosticMessage);
 
             // The summary must never include the raw private key bytes or recovery keys
             // The Uint8Array(32) is all zeros — check that raw numeric values from the key are not present
@@ -331,7 +340,7 @@ describe("KeyBackupDiagnostics", () => {
             });
 
             const result = await computeKeyBackupDiagnostics(matrixClient.getCrypto()!);
-            const summary = buildSanitizedDiagnosticSummary(result);
+            const summary = buildSanitizedDiagnosticSummary(result, translateDiagnosticMessage);
 
             expect(summary).toContain("Matches Server Key: No");
             expect(summary).toContain("Overall Status: ERROR");

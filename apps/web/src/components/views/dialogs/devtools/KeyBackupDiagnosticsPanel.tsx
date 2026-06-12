@@ -5,11 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useState } from "react";
 import { InlineSpinner } from "@vector-im/compound-web";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { _t } from "../../../../languageHandler";
 import { copyPlaintext } from "../../../../utils/strings";
 import {
@@ -18,11 +17,14 @@ import {
     DiagnosticSeverity,
     type KeyBackupDiagnosticResult,
     type DiagnosticCheck,
+    type DiagnosticMessage,
     type ServerBackupInfo,
 } from "../../../../utils/crypto/KeyBackupDiagnostics";
 
-function assertNever(value: never): never {
-    throw new Error(`Unexpected diagnostic severity: ${String(value)}`);
+class UnexpectedDiagnosticSeverityError extends Error {
+    public constructor(severity: never) {
+        super(`Unexpected diagnostic severity: ${String(severity)}`);
+    }
 }
 
 /**
@@ -39,7 +41,7 @@ function severityClass(severity: DiagnosticSeverity): string {
         case DiagnosticSeverity.Unknown:
             return "mx_KeyBackupDiagnosticsPanel_unknown";
         default:
-            return assertNever(severity);
+            throw new UnexpectedDiagnosticSeverityError(severity);
     }
 }
 
@@ -57,7 +59,7 @@ function severityIcon(severity: DiagnosticSeverity): string {
         case DiagnosticSeverity.Unknown:
             return "?";
         default:
-            return assertNever(severity);
+            throw new UnexpectedDiagnosticSeverityError(severity);
     }
 }
 
@@ -67,15 +69,15 @@ function severityIcon(severity: DiagnosticSeverity): string {
 function severityLabel(severity: DiagnosticSeverity): string {
     switch (severity) {
         case DiagnosticSeverity.OK:
-            return _t("devtools|crypto|diagnostics_severity_ok");
+            return _t("devtools|crypto|diagnostics_severity|ok");
         case DiagnosticSeverity.Warning:
-            return _t("devtools|crypto|diagnostics_severity_warning");
+            return _t("devtools|crypto|diagnostics_severity|warning");
         case DiagnosticSeverity.Error:
-            return _t("devtools|crypto|diagnostics_severity_error");
+            return _t("devtools|crypto|diagnostics_severity|error");
         case DiagnosticSeverity.Unknown:
-            return _t("devtools|crypto|diagnostics_severity_unknown");
+            return _t("devtools|crypto|diagnostics_severity|unknown");
         default:
-            return assertNever(severity);
+            throw new UnexpectedDiagnosticSeverityError(severity);
     }
 }
 
@@ -85,7 +87,7 @@ function serverBackupExistsLabel(serverBackup: ServerBackupInfo): string {
     }
 
     if (serverBackup.exists) {
-        return `${_t("devtools|crypto|diagnostics_value_yes")} (${serverBackup.version})`;
+        return `${_t("devtools|crypto|diagnostics_value|yes")} (${serverBackup.version})`;
     }
 
     return _t("devtools|crypto|diagnostics_no_server_backup");
@@ -97,8 +99,12 @@ function serverPublicKeyLabel(serverBackup: ServerBackupInfo): string {
     }
 
     return serverBackup.publicKeyPresent
-        ? _t("devtools|crypto|diagnostics_server_public_key_present")
-        : _t("devtools|crypto|diagnostics_server_public_key_absent");
+        ? _t("devtools|crypto|diagnostics_server_public_key|present")
+        : _t("devtools|crypto|diagnostics_server_public_key|absent");
+}
+
+function translateDiagnosticMessage(message: DiagnosticMessage): string {
+    return _t(message.key, message.variables);
 }
 
 /**
@@ -107,13 +113,13 @@ function serverPublicKeyLabel(serverBackup: ServerBackupInfo): string {
 function CheckRow({ check }: Readonly<{ check: DiagnosticCheck }>): JSX.Element {
     return (
         <tr className={severityClass(check.severity)}>
-            <td>{check.label}</td>
+            <td>{_t(check.label)}</td>
             <td>
                 <span className={severityClass(check.severity)}>
                     {severityIcon(check.severity)} {severityLabel(check.severity)}
                 </span>
             </td>
-            <td>{check.detail ?? ""}</td>
+            <td>{check.detail ? translateDiagnosticMessage(check.detail) : ""}</td>
         </tr>
     );
 }
@@ -147,25 +153,29 @@ function StatusBanner({ severity }: Readonly<{ severity: DiagnosticSeverity }>):
  */
 export function KeyBackupDiagnosticsPanel(): JSX.Element {
     const matrixClient = useMatrixClientContext();
-    const [refreshCounter, setRefreshCounter] = useState(0);
+    const [diagnosticResult, setDiagnosticResult] = useState<KeyBackupDiagnosticResult | null | undefined>();
     const [copyStatus, setCopyStatus] = useState<string | null>(null);
 
-    // Compute diagnostics asynchronously, re-running when refresh is triggered
-    const diagnosticResult = useAsyncMemo(async (): Promise<KeyBackupDiagnosticResult | null> => {
+    const computeDiagnosticResult = useCallback(async (): Promise<void> => {
+        setDiagnosticResult(undefined);
         const crypto = matrixClient.getCrypto();
-        if (!crypto) return null;
+        const result = crypto ? await computeKeyBackupDiagnostics(crypto) : null;
 
-        return computeKeyBackupDiagnostics(crypto);
-    }, [matrixClient, refreshCounter]);
+        setDiagnosticResult(result);
+    }, [matrixClient]);
+
+    useEffect(() => {
+        void computeDiagnosticResult();
+    }, [computeDiagnosticResult]);
 
     const onRefresh = useCallback((): void => {
-        setRefreshCounter((c) => c + 1);
+        void computeDiagnosticResult();
         setCopyStatus(null);
-    }, []);
+    }, [computeDiagnosticResult]);
 
     const onCopy = useCallback(async (): Promise<void> => {
         if (!diagnosticResult) return;
-        const summary = buildSanitizedDiagnosticSummary(diagnosticResult);
+        const summary = buildSanitizedDiagnosticSummary(diagnosticResult, translateDiagnosticMessage);
         let success = false;
         try {
             success = await copyPlaintext(summary);
@@ -173,7 +183,9 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
             success = false;
         }
         setCopyStatus(
-            success ? _t("devtools|crypto|diagnostics_copy_success") : _t("devtools|crypto|diagnostics_copy_failure"),
+            success
+                ? _t("devtools|crypto|diagnostics_copy_status|success")
+                : _t("devtools|crypto|diagnostics_copy_status|failure"),
         );
     }, [diagnosticResult]);
 
@@ -189,41 +201,41 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
 
     return (
         <div className="mx_KeyBackupDiagnosticsPanel">
-            <h3>{_t("devtools|crypto|key_backup_diagnostics")}</h3>
+            <h2 className="mx_KeyBackupDiagnosticsPanel_heading">{_t("devtools|crypto|key_backup_diagnostics")}</h2>
 
             <StatusBanner severity={diagnosticResult.overallSeverity} />
 
             {/* Server Backup Section */}
-            <table aria-label={_t("devtools|crypto|diagnostics_server_backup")}>
+            <table aria-label={_t("devtools|crypto|diagnostics_server|backup")}>
                 <thead>
                     <tr>
-                        <th colSpan={2}>{_t("devtools|crypto|diagnostics_server_backup")}</th>
+                        <th colSpan={2}>{_t("devtools|crypto|diagnostics_server|backup")}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">{_t("devtools|crypto|diagnostics_server_exists")}</th>
+                        <th scope="row">{_t("devtools|crypto|diagnostics_server|exists")}</th>
                         <td>{serverBackupExistsLabel(diagnosticResult.serverBackup)}</td>
                     </tr>
                     {diagnosticResult.serverBackup.exists && (
                         <>
                             <tr>
-                                <th scope="row">{_t("devtools|crypto|diagnostics_server_algorithm")}</th>
+                                <th scope="row">{_t("devtools|crypto|diagnostics_server|algorithm")}</th>
                                 <td>
                                     {diagnosticResult.serverBackup.algorithm ??
-                                        _t("devtools|crypto|diagnostics_severity_unknown")}
+                                        _t("devtools|crypto|diagnostics_severity|unknown")}
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row">{_t("devtools|crypto|diagnostics_algorithm_supported")}</th>
+                                <th scope="row">{_t("devtools|crypto|diagnostics_algorithm_status|supported")}</th>
                                 <td>
                                     {diagnosticResult.serverBackup.algorithmSupported
-                                        ? _t("devtools|crypto|diagnostics_value_yes")
-                                        : _t("devtools|crypto|diagnostics_algorithm_not_supported")}
+                                        ? _t("devtools|crypto|diagnostics_value|yes")
+                                        : _t("devtools|crypto|diagnostics_algorithm_status|not_supported")}
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row">{_t("devtools|crypto|diagnostics_server_public_key")}</th>
+                                <th scope="row">{_t("devtools|crypto|diagnostics_server_public_key|label")}</th>
                                 <td>{serverPublicKeyLabel(diagnosticResult.serverBackup)}</td>
                             </tr>
                         </>
@@ -240,16 +252,16 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">{_t("devtools|crypto|diagnostics_local_private_key")}</th>
+                        <th scope="row">{_t("devtools|crypto|diagnostics_local_private_key|label")}</th>
                         <td>
                             {diagnosticResult.localBackup.privateKeyAvailable
-                                ? _t("devtools|crypto|diagnostics_local_private_key_available")
-                                : _t("devtools|crypto|diagnostics_local_private_key_unavailable")}
+                                ? _t("devtools|crypto|diagnostics_local_private_key|available")
+                                : _t("devtools|crypto|diagnostics_local_private_key|unavailable")}
                         </td>
                     </tr>
                     {diagnosticResult.localBackup.matchesServerKey !== null && (
                         <tr>
-                            <th scope="row">{_t("devtools|crypto|diagnostics_keys_match")}</th>
+                            <th scope="row">{_t("devtools|crypto|diagnostics_keys_match|label")}</th>
                             <td
                                 className={
                                     diagnosticResult.localBackup.matchesServerKey
@@ -258,8 +270,8 @@ export function KeyBackupDiagnosticsPanel(): JSX.Element {
                                 }
                             >
                                 {diagnosticResult.localBackup.matchesServerKey
-                                    ? _t("devtools|crypto|diagnostics_keys_match_yes")
-                                    : _t("devtools|crypto|diagnostics_keys_match_no")}
+                                    ? _t("devtools|crypto|diagnostics_keys_match|yes")
+                                    : _t("devtools|crypto|diagnostics_keys_match|no")}
                             </td>
                         </tr>
                     )}

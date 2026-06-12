@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { type CryptoApi, type KeyBackupInfo, type Curve25519AuthData } from "matrix-js-sdk/src/crypto-api";
 
+import { _td } from "../../languageHandler";
+
 /** The supported backup algorithm for diagnostics. */
 const SUPPORTED_ALGORITHM = "m.megolm_backup.v1.curve25519-aes-sha2";
 
@@ -26,12 +28,22 @@ export enum DiagnosticSeverity {
 export interface DiagnosticCheck {
     /** A machine-readable identifier for this check. */
     id: string;
-    /** A human-readable description of what this check verifies. */
-    label: string;
+    /** Translation key describing what this check verifies. */
+    label: TranslationKey;
     /** The severity result for this check. */
     severity: DiagnosticSeverity;
-    /** Optional detail string providing more information about the result. */
-    detail?: string;
+    /** Optional translated message providing more information about the result. */
+    detail?: DiagnosticMessage;
+}
+
+/**
+ * A translatable diagnostic message and its string-safe interpolation variables.
+ */
+export interface DiagnosticMessage {
+    /** Translation key for the message. */
+    key: TranslationKey;
+    /** Optional variables to interpolate into the translated message. */
+    variables?: Record<string, string | number>;
 }
 
 /**
@@ -87,6 +99,8 @@ export interface KeyBackupDiagnosticResult {
  * Computes the overall severity as the worst severity found in a list of checks.
  *
  * Severity ordering (worst to best): Error > Warning > Unknown > OK.
+ * Unknown ranks below Warning because it represents an inconclusive check,
+ * while Warning represents a known degraded backup state.
  *
  * @param checks - The list of diagnostic checks.
  * @returns The worst severity across all checks, or OK if the list is empty.
@@ -144,26 +158,42 @@ function buildServerBackupExistsCheck(
     if (fetchError) {
         return {
             id: "server-backup-exists",
-            label: "Server backup exists",
+            label: _td("devtools|crypto|diagnostics_check_label|server_backup_exists"),
             severity: DiagnosticSeverity.Unknown,
-            detail: "Unable to fetch backup info",
+            detail: {
+                key: _td("devtools|crypto|diagnostics_fetch_error"),
+            },
         };
     }
 
     return {
         id: "server-backup-exists",
-        label: "Server backup exists",
+        label: _td("devtools|crypto|diagnostics_check_label|server_backup_exists"),
         severity: serverExists ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
-        detail: serverExists ? `Version: ${serverVersion}` : "No backup found on server",
+        detail: serverExists
+            ? {
+                  key: _td("devtools|crypto|diagnostics_check_detail|version"),
+                  variables: { version: serverVersion ?? "" },
+              }
+            : {
+                  key: _td("devtools|crypto|diagnostics_no_server_backup"),
+              },
     };
 }
 
 function buildAlgorithmCheck(algorithmSupported: boolean, serverAlgorithm: string | undefined): DiagnosticCheck {
     return {
         id: "algorithm-supported",
-        label: "Backup algorithm supported",
+        label: _td("devtools|crypto|diagnostics_check_label|algorithm_supported"),
         severity: algorithmSupported ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
-        detail: serverAlgorithm ?? "Unknown algorithm",
+        detail: serverAlgorithm
+            ? {
+                  key: _td("devtools|crypto|diagnostics_check_detail|algorithm"),
+                  variables: { algorithm: serverAlgorithm },
+              }
+            : {
+                  key: _td("devtools|crypto|diagnostics_check_detail|unknown_algorithm"),
+              },
     };
 }
 
@@ -171,26 +201,36 @@ function buildServerPublicKeyCheck(algorithmSupported: boolean, publicKeyPresent
     if (!algorithmSupported) {
         return {
             id: "server-public-key-present",
-            label: "Server public key present",
+            label: _td("devtools|crypto|diagnostics_check_label|server_public_key_present"),
             severity: DiagnosticSeverity.Unknown,
-            detail: "Not applicable for unsupported backup algorithm",
+            detail: {
+                key: _td("devtools|crypto|diagnostics_check_detail|unsupported_algorithm"),
+            },
         };
     }
 
     return {
         id: "server-public-key-present",
-        label: "Server public key present",
+        label: _td("devtools|crypto|diagnostics_check_label|server_public_key_present"),
         severity: publicKeyPresent ? DiagnosticSeverity.OK : DiagnosticSeverity.Error,
-        detail: publicKeyPresent ? "Present in auth_data" : "Missing from auth_data",
+        detail: {
+            key: publicKeyPresent
+                ? _td("devtools|crypto|diagnostics_check_detail|present_in_auth_data")
+                : _td("devtools|crypto|diagnostics_check_detail|missing_from_auth_data"),
+        },
     };
 }
 
 function buildLocalPrivateKeyCheck(localPrivateKeyAvailable: boolean): DiagnosticCheck {
     return {
         id: "local-private-key-exists",
-        label: "Local backup private key available",
+        label: _td("devtools|crypto|diagnostics_check_label|local_private_key_available"),
         severity: localPrivateKeyAvailable ? DiagnosticSeverity.OK : DiagnosticSeverity.Warning,
-        detail: localPrivateKeyAvailable ? "Cached locally" : "Not found locally",
+        detail: {
+            key: localPrivateKeyAvailable
+                ? _td("devtools|crypto|diagnostics_check_detail|cached_locally")
+                : _td("devtools|crypto|diagnostics_check_detail|not_found_locally"),
+        },
     };
 }
 
@@ -213,9 +253,11 @@ async function buildKeyMatchCheck(
             matchesServerKey: null,
             check: {
                 id: "keys-match",
-                label: "Local key matches server key",
+                label: _td("devtools|crypto|diagnostics_check_label|keys_match"),
                 severity: DiagnosticSeverity.Unknown,
-                detail: "Cannot verify - unsupported algorithm",
+                detail: {
+                    key: _td("devtools|crypto|diagnostics_check_detail|cannot_verify_unsupported_algorithm"),
+                },
             },
         };
     }
@@ -232,11 +274,13 @@ async function buildKeyMatchCheck(
             matchesServerKey,
             check: {
                 id: "keys-match",
-                label: "Local key matches server key",
+                label: _td("devtools|crypto|diagnostics_check_label|keys_match"),
                 severity: matchesServerKey ? DiagnosticSeverity.OK : DiagnosticSeverity.Error,
-                detail: matchesServerKey
-                    ? "Local private key matches server public key"
-                    : "Local private key does NOT match server public key - backup state is inconsistent",
+                detail: {
+                    key: matchesServerKey
+                        ? _td("devtools|crypto|diagnostics_check_detail|keys_match")
+                        : _td("devtools|crypto|diagnostics_check_detail|keys_mismatch"),
+                },
             },
         };
     } catch {
@@ -244,12 +288,22 @@ async function buildKeyMatchCheck(
             matchesServerKey: null,
             check: {
                 id: "keys-match",
-                label: "Local key matches server key",
+                label: _td("devtools|crypto|diagnostics_check_label|keys_match"),
                 severity: DiagnosticSeverity.Error,
-                detail: "Failed to verify key match",
+                detail: {
+                    key: _td("devtools|crypto|diagnostics_check_detail|key_match_failed"),
+                },
             },
         };
     }
+}
+
+/**
+ * Checks whether a local backup private key is cached without retaining the key
+ * material in the diagnostics result or the caller's scope.
+ */
+async function hasLocalPrivateKey(crypto: CryptoApi): Promise<boolean> {
+    return (await crypto.getSessionBackupPrivateKey()) !== null;
 }
 
 /**
@@ -271,8 +325,7 @@ export async function computeKeyBackupDiagnostics(crypto: CryptoApi): Promise<Ke
     const serverPublicKey = backupInfo ? extractServerPublicKey(backupInfo) : undefined;
     const publicKeyPresent = serverPublicKey !== undefined && serverPublicKey.length > 0;
 
-    const localPrivateKey = await crypto.getSessionBackupPrivateKey();
-    const localPrivateKeyAvailable = localPrivateKey !== null;
+    const localPrivateKeyAvailable = await hasLocalPrivateKey(crypto);
     const keyMatch = await buildKeyMatchCheck(
         crypto,
         serverExists ? backupInfo : null,
@@ -319,13 +372,18 @@ export async function computeKeyBackupDiagnostics(crypto: CryptoApi): Promise<Ke
  * or secret storage private material.
  *
  * @param result - The diagnostic result to summarize.
+ * @param translateMessage - Resolves a diagnostic message into localized text.
  * @returns A plain-text summary string.
  */
-export function buildSanitizedDiagnosticSummary(result: KeyBackupDiagnosticResult): string {
+export function buildSanitizedDiagnosticSummary(
+    result: KeyBackupDiagnosticResult,
+    translateMessage: (message: DiagnosticMessage) => string,
+): string {
     const consistencyChecks = result.checks.map((check) => {
         const status = check.severity.toUpperCase();
-        const detail = check.detail ? ` - ${check.detail}` : "";
-        return `[${status}] ${check.label}${detail}`;
+        const label = translateMessage({ key: check.label });
+        const detail = check.detail ? ` - ${translateMessage(check.detail)}` : "";
+        return `[${status}] ${label}${detail}`;
     });
 
     const lines: string[] = [
