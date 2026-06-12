@@ -59,6 +59,17 @@ const meta = {
         isExpanded: true,
         isFocused: false,
         isUnread: false,
+        notification: {
+            hasAnyNotificationOrActivity: false,
+            isUnsentMessage: false,
+            invited: false,
+            isMention: false,
+            isActivityNotification: false,
+            isNotification: false,
+            hasUnreadCount: false,
+            count: 0,
+            muted: false,
+        },
         displaySectionMenu: true,
         onClick: fn(),
         onFocus: fn(),
@@ -117,5 +128,24 @@ export const LastHeaderCollapsed: Story = {
 export const Unread: Story = {
     args: {
         isUnread: true,
+    },
+};
+
+export const WithNotificationDecoration: Story = {
+    args: {
+        isUnread: true,
+        notification: {
+            hasAnyNotificationOrActivity: true,
+            isUnsentMessage: true,
+            invited: true,
+            isMention: true,
+            isActivityNotification: false,
+            isNotification: true,
+            hasUnreadCount: true,
+            count: 12,
+            muted: false,
+            callType: "video",
+        },
+        isExpanded: false,
     },
 };
