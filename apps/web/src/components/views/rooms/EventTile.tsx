@@ -37,6 +37,7 @@ import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
+import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
@@ -111,6 +112,10 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { useSettingValue } from "../../../hooks/useSettings";
+import {
+    resolveRoomMemberProfile,
+    roomMemberToMemberInfo,
+} from "../../../hooks/room/useRoomMemberProfile";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
@@ -919,7 +924,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             },
             sender: {
                 senderId: this.props.mxEvent.getSender() ?? undefined,
-                member: this.getAvatarMember(),
+                member: roomMemberToMemberInfo(
+                    resolveRoomMemberProfile({
+                        room: MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId() ?? ""),
+                        userId: this.props.mxEvent.getSender() ?? undefined,
+                        member: this.getAvatarMember(),
+                        useOnlyCurrentProfiles: SettingsStore.getValue("useOnlyCurrentProfiles"),
+                        timelineRenderingType: this.context.timelineRenderingType,
+                    }),
+                ),
                 hideSender: this.props.hideSender,
                 isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,
             },
