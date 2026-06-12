@@ -516,7 +516,7 @@ describe("EventTile", () => {
     });
 
     describe("sender and avatar rendering", () => {
-        it("shows sender and avatar in room timelines", () => {
+        it("keeps the sender/avatar composition in room timelines", () => {
             const { container } = getComponent();
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
