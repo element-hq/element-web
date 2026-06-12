@@ -7,10 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
-import {
-    resolveRoomMemberProfile,
-    roomMemberToMemberInfo,
-} from "../../../../src/hooks/room/useRoomMemberProfile";
+import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../../src/hooks/room/useRoomMemberProfile";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 
 describe("resolveRoomMemberProfile", () => {

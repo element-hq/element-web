@@ -112,10 +112,7 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { useSettingValue } from "../../../hooks/useSettings";
-import {
-    resolveRoomMemberProfile,
-    roomMemberToMemberInfo,
-} from "../../../hooks/room/useRoomMemberProfile";
+import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../hooks/room/useRoomMemberProfile";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
