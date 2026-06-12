@@ -181,7 +181,7 @@ const AvatarSetting: React.FC<IProps> = ({
             <BaseAvatar
                 idName={placeholderId}
                 name={placeholderName}
-                size="90px"
+                size="120px"
                 url={avatarURL}
                 altText={avatarAccessibleName}
             />
