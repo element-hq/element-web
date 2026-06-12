@@ -5,7 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { keepIfSame } from "../../../src/utils/keepIfSame";
+import { describe, it, expect } from "vitest";
+
+import { keepIfSame } from "./keepIfSame";
 
 describe("keepIfSame", () => {
     it("returns the next value if the current and next values are not deeply equal", () => {

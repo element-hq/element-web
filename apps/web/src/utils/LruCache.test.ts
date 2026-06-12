@@ -6,21 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { LruCache } from "../../../src/utils/LruCache";
+import { LruCache } from "./LruCache";
 
 describe("LruCache", () => {
     it("when creating a cache with negative capacity it should raise an error", () => {
-        expect(() => {
-            new LruCache(-23);
-        }).toThrow("Cache capacity must be at least 1");
+        expect(() => new LruCache(-23)).toThrow("Cache capacity must be at least 1");
     });
 
     it("when creating a cache with 0 capacity it should raise an error", () => {
-        expect(() => {
-            new LruCache(0);
-        }).toThrow("Cache capacity must be at least 1");
+        expect(() => new LruCache(0)).toThrow("Cache capacity must be at least 1");
     });
 
     describe("when there is a cache with a capacity of 3", () => {
@@ -72,7 +69,7 @@ describe("LruCache", () => {
             });
 
             it("when an error occurs while setting an item the cache should be cleard", () => {
-                jest.spyOn(logger, "warn");
+                vi.spyOn(logger, "warn");
                 const err = new Error("Something weng wrong :(");
 
                 // @ts-ignore

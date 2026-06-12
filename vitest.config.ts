@@ -55,7 +55,9 @@ export default defineConfig({
             include: ["{apps,modules,packages}/*/src/**/*.{cts,ts,tsx}"],
             exclude: [
                 // Exclude test files
-                "**/*.{stories,test}.tsx",
+                "**/*.{stories,test}.{ts,tsx}",
+                // Exclude test utilities
+                "**/src/test/**",
                 // Exclude type definition files
                 "**/*.d.ts",
             ],

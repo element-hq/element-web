@@ -6,7 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { abbreviateUrl, parseUrl, unabbreviateUrl } from "../../../src/utils/UrlUtils";
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
+
+import { abbreviateUrl, parseUrl, unabbreviateUrl } from "./UrlUtils";
 
 describe("abbreviateUrl", () => {
     it("should return empty string if passed falsey", () => {

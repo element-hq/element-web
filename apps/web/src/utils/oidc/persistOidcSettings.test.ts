@@ -6,9 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type IdTokenClaims } from "oidc-client-ts";
 import { decodeIdToken } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
 
 import {
     getStoredOidcClientId,
@@ -16,13 +18,13 @@ import {
     getStoredOidcIdTokenClaims,
     getStoredOidcTokenIssuer,
     persistOidcAuthenticatedSettings,
-} from "../../../../src/utils/oidc/persistOidcSettings";
+} from "./persistOidcSettings";
 
-jest.mock("matrix-js-sdk/src/matrix");
+vi.mock("matrix-js-sdk/src/matrix");
 
 describe("persist OIDC settings", () => {
-    jest.spyOn(Storage.prototype, "getItem");
-    jest.spyOn(Storage.prototype, "setItem");
+    vi.spyOn(localStorage, "getItem");
+    vi.spyOn(localStorage, "setItem");
 
     beforeEach(() => {
         localStorage.clear();
@@ -101,7 +103,7 @@ describe("persist OIDC settings", () => {
 
         it("should return claims extracted from id_token in localStorage", () => {
             localStorage.setItem("mx_oidc_id_token", idToken);
-            mocked(decodeIdToken).mockReturnValue(idTokenClaims);
+            vi.mocked(decodeIdToken).mockReturnValue(idTokenClaims);
             expect(getStoredOidcIdTokenClaims()).toEqual(idTokenClaims);
             expect(decodeIdToken).toHaveBeenCalledWith(idToken);
             expect(localStorage.getItem).toHaveBeenCalledWith("mx_oidc_id_token_claims");

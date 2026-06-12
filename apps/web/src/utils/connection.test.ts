@@ -6,16 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, describe, it, expect, beforeEach, type Mock } from "vitest";
 import { type ClientEvent, type ClientEventHandlerMap, SyncState } from "matrix-js-sdk/src/matrix";
 
-import { createReconnectedListener } from "../../../src/utils/connection";
+import { createReconnectedListener } from "./connection";
 
 describe("createReconnectedListener", () => {
     let reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
-    let onReconnect: jest.Mock;
+    let onReconnect: Mock;
 
     beforeEach(() => {
-        onReconnect = jest.fn();
+        onReconnect = vi.fn();
         reconnectedListener = createReconnectedListener(onReconnect);
     });
 
