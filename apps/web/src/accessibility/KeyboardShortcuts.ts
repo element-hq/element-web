@@ -270,6 +270,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.ArrowUp,
             KeyBindingAction.ArrowRight,
             KeyBindingAction.ArrowDown,
+            KeyBindingAction.Tab,
             KeyBindingAction.Comma,
             KeyBindingAction.Save,
         ],
