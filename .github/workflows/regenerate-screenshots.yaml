@@ -2,6 +2,10 @@ name: Regenerate Playwright Screenshots
 on:
     workflow_dispatch:
         inputs:
+            ref:
+                description: "Branch to regenerate screenshots for"
+                required: false
+                default: "develop"
             grep:
                 description: "Test filter (grep pattern) - defaults to all @screenshot tests"
                 required: false
@@ -23,6 +27,8 @@ jobs:
             contents: write
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  ref: ${{ inputs.ref }}
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
@@ -61,7 +67,7 @@ jobs:
                   git config user.email "github-actions[bot]@users.noreply.github.com"
                   git add apps/web/playwright/snapshots/
                   git commit -m "${{ inputs.commit-message }}"
-                  git push
+                  git push origin HEAD:${{ inputs.ref }}
 
             - name: No changes detected
               if: steps.git-check.outputs.changes != 'true'
