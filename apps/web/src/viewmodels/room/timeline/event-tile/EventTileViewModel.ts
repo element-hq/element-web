@@ -27,6 +27,7 @@ import {
     type SenderProfileMode,
     type TimestampDisplayState,
 } from "./EventTileDerivedState";
+import { type MemberInfo } from "./DisambiguatedProfileViewModel";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
@@ -130,8 +131,14 @@ export interface EventTileInteractionInput {
 
 /** Sender inputs for deriving the EventTile snapshot. */
 export interface EventTileSenderInput {
+    /** The Matrix sender ID, when available. */
+    senderId?: string;
+    /** Plain member info for sender/profile rendering. */
+    member?: MemberInfo | null;
     /** Whether sender details should be hidden. */
     hideSender?: boolean;
+    /** Whether the event body renders as an emote. */
+    isEmote: boolean;
 }
 
 /** Timestamp inputs for deriving the EventTile snapshot. */
@@ -206,6 +213,10 @@ export interface EventTileLineSnapshot {
 
 /** Sender state derived for the EventTile snapshot. */
 export interface EventTileSenderSnapshot {
+    /** The Matrix sender ID, when available. */
+    senderId?: string;
+    /** Plain member info for sender/profile rendering. */
+    member?: MemberInfo | null;
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
     /** Whether clicking the avatar should open the user profile. */
@@ -214,6 +225,8 @@ export interface EventTileSenderSnapshot {
     profileMode: SenderProfileMode;
     /** Whether the avatar should use historical room member details. */
     forceHistoricalAvatar: boolean;
+    /** Whether the event body renders as an emote. */
+    isEmote: boolean;
 }
 
 /** Action bar state derived for the EventTile snapshot. */
@@ -539,6 +552,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 }),
             },
             sender: {
+                senderId: sender.senderId,
+                member: sender.member,
                 profileState: senderProfileState,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,
@@ -550,6 +565,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     timelineRenderingType: display.timelineRenderingType,
                 }),
                 forceHistoricalAvatar: event.eventType === "m.room.member",
+                isEmote: sender.isEmote,
             },
             actionBar: {
                 show: getShouldShowMessageActionBar({

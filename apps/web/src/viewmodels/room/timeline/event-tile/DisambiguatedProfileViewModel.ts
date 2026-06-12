@@ -20,7 +20,7 @@ import { type UserStatus } from "../../../../utils/userStatus";
 /**
  * Information about a member for disambiguation purposes.
  */
-interface MemberInfo {
+export interface MemberInfo {
     /**
      * The user's Matrix ID.
      */

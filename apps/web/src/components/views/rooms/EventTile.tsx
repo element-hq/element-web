@@ -19,6 +19,7 @@ import React, {
 import {
     EventStatus,
     EventType,
+    MsgType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -36,6 +37,7 @@ import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
+import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
@@ -68,8 +70,9 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
+import { EventTileAvatarAdapter } from "./EventTile/EventTileAvatarAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
-import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
+import { EventTileSenderAdapter } from "./EventTile/EventTileSenderAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { EventTileFooter } from "./EventTile/EventTileFooter";
 import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
@@ -109,6 +112,7 @@ import {
 } from "../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../hooks/room/useRoomMemberProfile";
 import { EventTileE2eViewModel } from "../../../viewmodels/room/timeline/event-tile/EventTileE2eViewModel";
 import { shouldHighlightEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileHighlightState";
 import { shouldHideEventTile } from "../../../viewmodels/room/timeline/event-tile/EventTileVisibilityState";
@@ -250,6 +254,9 @@ export interface EventTileProps {
 
     /** Whether the current user can see a message hidden from other users for moderation. */
     isSeeingThroughMessageHiddenForModeration?: boolean;
+
+    /** Whether sender profile rendering should use the event-time member snapshot. */
+    forceHistoricalSender?: boolean;
 
     /** Whether the timestamp should be hidden for preview rendering. */
     hideTimestamp?: boolean;
@@ -916,7 +923,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 inhibitInteraction: this.props.inhibitInteraction,
             },
             sender: {
+                senderId: this.props.mxEvent.getSender() ?? undefined,
+                member: roomMemberToMemberInfo(
+                    this.props.forceHistoricalSender
+                        ? this.getAvatarMember()
+                        : resolveRoomMemberProfile({
+                              room: MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId() ?? ""),
+                              userId: this.props.mxEvent.getSender() ?? undefined,
+                              member: this.getAvatarMember(),
+                              useOnlyCurrentProfiles: SettingsStore.getValue("useOnlyCurrentProfiles"),
+                              timelineRenderingType: this.context.timelineRenderingType,
+                          }),
+                ),
                 hideSender: this.props.hideSender,
+                isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,
             },
             timestamp: {
                 alwaysShowTimestamps: this.props.alwaysShowTimestamps,
@@ -1001,8 +1021,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
         const sender = (
             <EventTileSenderAdapter
-                mxEvent={this.props.mxEvent}
-                senderSnapshot={eventTileSnapshot.sender}
+                sender={eventTileSnapshot.sender}
                 onSenderProfileClick={this.onSenderProfileClick}
             />
         );

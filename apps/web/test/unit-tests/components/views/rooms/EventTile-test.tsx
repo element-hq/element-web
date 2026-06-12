@@ -22,6 +22,7 @@ import {
     RelationType,
     type Relations,
     Room,
+    RoomMember,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
@@ -516,7 +517,7 @@ describe("EventTile", () => {
     });
 
     describe("sender and avatar rendering", () => {
-        it("shows sender and avatar in room timelines", () => {
+        it("keeps the sender/avatar composition in room timelines", () => {
             const { container } = getComponent();
 
             expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
@@ -1053,6 +1054,25 @@ describe("EventTile", () => {
                 expect(screen.getByText("Pinned message")).toBeInTheDocument();
             },
         );
+
+        it("uses the current room member when current profiles are enabled", async () => {
+            const senderId = mxEvent.getSender()!;
+            const currentMember = new RoomMember(room.roomId, senderId);
+            currentMember.rawDisplayName = "Alan (away)";
+
+            jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === senderId ? currentMember : null));
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) =>
+                settingName === "useOnlyCurrentProfiles" ? true : false,
+            );
+
+            const { container } = getComponent();
+
+            await waitFor(() =>
+                expect(container.querySelector(".mx_DisambiguatedProfile_displayName")).toHaveTextContent(
+                    "Alan (away)",
+                ),
+            );
+        });
 
         it("renders the tile error fallback when tile rendering throws", async () => {
             jest.spyOn(console, "error").mockImplementation(() => {});
