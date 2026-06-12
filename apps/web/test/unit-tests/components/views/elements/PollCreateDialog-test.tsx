@@ -270,6 +270,88 @@ describe("PollCreateDialog", () => {
             M_POLL_KIND_DISCLOSED.name,
         );
     });
+
+    it("renders max selections UI and sends max_selections in event", () => {
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelections")).toBeTruthy();
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("1");
+
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+
+        fireEvent.click(dialog.container.querySelectorAll(".mx_PollCreateDialog_maxSelectionsButton")[1]);
+
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("2");
+
+        fireEvent.click(dialog.container.querySelector("button")!);
+        const [, , , sentEventContent] = mockClient.sendEvent.mock.calls[0] as any;
+        expect((sentEventContent as any)[M_POLL_START.name].max_selections).toBe(2);
+    });
+
+    it("decrements max selections", () => {
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+
+        fireEvent.click(dialog.container.querySelectorAll(".mx_PollCreateDialog_maxSelectionsButton")[1]);
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("2");
+
+        fireEvent.click(dialog.container.querySelectorAll(".mx_PollCreateDialog_maxSelectionsButton")[0]);
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("1");
+    });
+
+    it("disables decrement button when max selections is 1", () => {
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        const decrementButton = dialog.container.querySelectorAll(
+            ".mx_PollCreateDialog_maxSelectionsButton",
+        )[0] as HTMLButtonElement;
+        expect(decrementButton).toHaveAttribute("disabled");
+    });
+
+    it("disables increment button when max selections equals number of options", () => {
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+
+        const incrementButton = dialog.container.querySelectorAll(
+            ".mx_PollCreateDialog_maxSelectionsButton",
+        )[1] as HTMLButtonElement;
+        expect(incrementButton).not.toHaveAttribute("disabled");
+
+        fireEvent.click(incrementButton);
+        expect(incrementButton).toHaveAttribute("disabled");
+    });
+
+    it("loads max_selections from existing poll when editing", () => {
+        const previousEvent: MatrixEvent = new MatrixEvent(
+            PollStartEvent.from("Poll Q", ["Answer 1", "Answer 2"], M_POLL_KIND_DISCLOSED, 2).serialize(),
+        );
+
+        const dialog = render(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} editingMxEvent={previousEvent} />,
+        );
+
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("2");
+    });
+
+    it("adjusts max selections when options are removed", () => {
+        const dialog = render(<PollCreateDialog room={createRoom()} onFinished={jest.fn()} />);
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+        changeValue(dialog, "Option 3", "A3");
+
+        fireEvent.click(dialog.container.querySelectorAll(".mx_PollCreateDialog_maxSelectionsButton")[1]);
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("2");
+
+        const removeButtons = dialog.container.querySelectorAll(".mx_PollCreateDialog_optionRemove");
+        fireEvent.click(removeButtons[2]);
+
+        expect(dialog.container.querySelector(".mx_PollCreateDialog_maxSelectionsValue")).toHaveTextContent("1");
+    });
 });
 
 function createRoom(): Room {

@@ -10,11 +10,14 @@ import React, { useId, type ReactNode, type Ref } from "react";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CheckboxInput, Form, HelpMessage, InlineField, Label } from "@vector-im/compound-web";
 
+import { type JSX } from "react";
+
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     inputRef?: Ref<HTMLInputElement>;
     id?: string;
     description?: ReactNode;
     formWrap?: boolean;
+    icon?: JSX.Element;
 }
 
 const StyledCheckbox: React.FC<IProps> = ({
@@ -24,6 +27,8 @@ const StyledCheckbox: React.FC<IProps> = ({
     inputRef,
     description,
     formWrap = true,
+    // icon prop is accepted for type compatibility but not used
+    // compound-web CheckboxInput handles checked state natively
     ...otherProps
 }) => {
     const id = initialId || "checkbox_" + secureRandomString(10);
