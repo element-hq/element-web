@@ -719,6 +719,11 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
             key: Key.ARROW_DOWN,
         },
     },
+    [KeyBindingAction.Tab]: {
+        default: {
+            key: Key.TAB,
+        },
+    },
     [KeyBindingAction.Comma]: {
         default: {
             key: Key.COMMA,
