@@ -34,7 +34,7 @@ export type WidgetLifecycleModuleConfig = Record<string, WidgetConfiguration>;
 
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
-        [CONFIG_KEY]: z.input<typeof ModuleConfigSchema>;
+        [CONFIG_KEY]?: z.input<typeof ModuleConfigSchema>;
     }
 }
 
