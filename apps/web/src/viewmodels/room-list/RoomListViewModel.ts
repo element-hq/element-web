@@ -699,7 +699,7 @@ function computeSections(
             ...section,
             rooms: isSectionExpanded(section.tag) ? section.rooms : [],
         }));
-    const isFlatList = sections.length === 1 && sections[0].tag === CHATS_TAG;
+    const isFlatList = sections.length === 0 || (sections.length === 1 && sections[0].tag === CHATS_TAG);
 
     return { sections, isFlatList };
 }
