@@ -103,9 +103,6 @@ if (!gotLock) {
     app.exit();
 }
 
-// do this after we know we are the primary instance of the app
-protocolHandler.initialise(args);
-
 // Register the scheme the app is served from as 'standard'
 // which allows things like relative URLs and IndexedDB to
 // work.
@@ -282,7 +279,11 @@ app.on("ready", async () => {
         app.exit(1);
     }
 
-    void global.mainWindow.loadURL("vector://vector/webapp/");
+    // do this after we know we are the primary instance of the app
+    const hasDeeplink = protocolHandler.initialise(args);
+    if (!hasDeeplink) {
+        void global.mainWindow.loadURL("vector://vector/webapp/");
+    }
 
     if (process.platform === "darwin") {
         setupMacosTitleBar(global.mainWindow);

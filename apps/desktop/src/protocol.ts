@@ -72,8 +72,8 @@ export default class ProtocolHandler {
         };
     };
 
-    private handleDeeplink(url: string): void {
-        if (!global.mainWindow) return;
+    private handleDeeplink(url: string): boolean {
+        if (!global.mainWindow) return false;
 
         const parsed = new URL(url);
         // sanity check: we only register for the one protocol, so we shouldn't
@@ -81,7 +81,7 @@ export default class ProtocolHandler {
         // with the Element app.
         if (parsed.protocol !== `${this.protocol}:` && parsed.protocol !== `${LEGACY_PROTOCOL}:`) {
             console.log("Ignoring unexpected protocol: ", parsed.protocol);
-            return;
+            return false;
         }
 
         const urlToLoad = new URL("vector://vector/webapp/");
@@ -96,6 +96,7 @@ export default class ProtocolHandler {
 
         console.log("Opening URL: ", urlToLoad.href);
         void global.mainWindow.loadURL(urlToLoad.href);
+        return true;
     }
 
     private readStore(): Record<string, string> {
@@ -113,13 +114,18 @@ export default class ProtocolHandler {
         fs.writeFileSync(storePath, JSON.stringify(this.store));
     }
 
-    public initialise(args: Args): void {
+    /**
+     * Initialises the ProtocolHandler
+     * Registers the app as the default protocol client for deeplink handling.
+     * Handles any deeplink passed in via args on app start.
+     * Must be called after mainWindow is set up and any initial navigation is fired.
+     * @returns whether a deeplink was present in args and navigated to.
+     */
+    public initialise(args: Args): boolean {
         this.setAsDefaultProtocolClient(args);
 
         const url = args.positional.find(this.checkArgIsUrl);
-        if (url) {
-            this.handleDeeplink(url);
-        }
+        const hasDeeplink = url ? this.handleDeeplink(url) : false;
 
         for (const key in this.store) {
             // ensure each instance only has one (the latest) session ID to prevent the file growing unbounded
@@ -130,6 +136,8 @@ export default class ProtocolHandler {
         }
         this.store[this.sessionId] = args.userDataPath;
         this.writeStore();
+
+        return hasDeeplink;
     }
 
     public getProfileFromDeeplink(args: string[]): string | undefined {
