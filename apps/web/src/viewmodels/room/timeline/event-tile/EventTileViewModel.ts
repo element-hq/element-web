@@ -130,8 +130,12 @@ export interface EventTileInteractionInput {
 
 /** Sender inputs for deriving the EventTile snapshot. */
 export interface EventTileSenderInput {
+    /** The Matrix sender ID, when available. */
+    senderId?: string;
     /** Whether sender details should be hidden. */
     hideSender?: boolean;
+    /** Whether the event body renders as an emote. */
+    isEmote: boolean;
 }
 
 /** Timestamp inputs for deriving the EventTile snapshot. */
@@ -206,6 +210,8 @@ export interface EventTileLineSnapshot {
 
 /** Sender state derived for the EventTile snapshot. */
 export interface EventTileSenderSnapshot {
+    /** The Matrix sender ID, when available. */
+    senderId?: string;
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
     /** Whether clicking the avatar should open the user profile. */
@@ -214,6 +220,8 @@ export interface EventTileSenderSnapshot {
     profileMode: SenderProfileMode;
     /** Whether the avatar should use historical room member details. */
     forceHistoricalAvatar: boolean;
+    /** Whether the event body renders as an emote. */
+    isEmote: boolean;
 }
 
 /** Action bar state derived for the EventTile snapshot. */
@@ -539,6 +547,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                 }),
             },
             sender: {
+                senderId: sender.senderId,
                 profileState: senderProfileState,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,
@@ -550,6 +559,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
                     timelineRenderingType: display.timelineRenderingType,
                 }),
                 forceHistoricalAvatar: event.eventType === "m.room.member",
+                isEmote: sender.isEmote,
             },
             actionBar: {
                 show: getShouldShowMessageActionBar({

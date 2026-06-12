@@ -19,6 +19,7 @@ import React, {
 import {
     EventStatus,
     EventType,
+    MsgType,
     type MatrixEvent,
     MatrixEventEvent,
     type Relations,
@@ -916,7 +917,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 inhibitInteraction: this.props.inhibitInteraction,
             },
             sender: {
+                senderId: this.props.mxEvent.getSender() ?? undefined,
                 hideSender: this.props.hideSender,
+                isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,
             },
             timestamp: {
                 alwaysShowTimestamps: this.props.alwaysShowTimestamps,
