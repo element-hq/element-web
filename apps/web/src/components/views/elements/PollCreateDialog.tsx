@@ -267,7 +267,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 >
                     {_t("poll|options_add_button")}
                 </AccessibleButton>
-                <h2>{_t("poll|max_selections_heading")}</h2>
+                <h2 className="mx_PollCreateDialog_maxSelectionsHeading">{_t("poll|max_selections_heading")}</h2>
                 <div className="mx_PollCreateDialog_maxSelections">
                     <AccessibleButton
                         onClick={() => this.onMaxSelectionsChange(-1)}

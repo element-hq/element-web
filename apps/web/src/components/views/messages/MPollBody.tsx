@@ -218,7 +218,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const maxSelections = pollEvent?.maxSelections ?? 1;
 
         let newSelected: string[];
-        const currentSelected = this.state.selected ?? [];
+        const currentSelected = this.state.selected?.length
+            ? this.state.selected
+            : this.collectUserVotes().get(this.context.getSafeUserId())?.answers ?? [];
 
         if (currentSelected.includes(answerId)) {
             newSelected = currentSelected.filter((id) => id !== answerId);
@@ -266,7 +268,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     /**
      * If we've just received a new event that we hadn't seen
      * before, and that event is me voting (e.g. from a different
-     * device) then forget when the local user selected.
+     * device) then update the local selection from the event.
      *
      * Either way, calls setState to update our list of events we
      * have already seen.
@@ -281,7 +283,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         if (newEvents.length > 0) {
             for (const mxEvent of newEvents) {
                 if (mxEvent.getSender() === this.context.getUserId()) {
-                    newSelected = [];
+                    const responseEvent = mxEvent.unstableExtensibleEvent as PollResponseEvent | undefined;
+                    newSelected = responseEvent?.answerIds ?? [];
                 }
             }
         }
@@ -384,6 +387,11 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     {totalText}
                     {isFetchingResponses && <Spinner size={16} />}
                 </div>
+                {!poll.isEnded && pollEvent.maxSelections > 1 && (
+                    <div className="mx_MPollBody_maxSelectionsInfo">
+                        {_t("poll|vote_for_up_to", { count: pollEvent.maxSelections })}
+                    </div>
+                )}
             </fieldset>
         );
     }

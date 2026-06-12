@@ -1814,7 +1814,11 @@
         "type_open": "Open poll",
         "unable_edit_description": "Sorry, you can't edit a poll after votes have been cast.",
         "unable_edit_title": "Can't edit poll",
-        "max_selections_heading": "Maximum selections"
+        "max_selections_heading": "Votes allowed per person",
+        "vote_for_up_to": {
+            "one": "Vote for up to %(count)s option",
+            "other": "Vote for up to %(count)s options"
+        }
     },
     "power_level": {
         "admin": "Admin",

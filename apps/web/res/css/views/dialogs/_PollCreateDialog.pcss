@@ -68,7 +68,7 @@ Please see LICENSE files in the repository root for full details.
     .mx_PollCreateDialog_maxSelections {
         display: flex;
         align-items: center;
-        gap: var(--cpd-space-4x);
+        gap: var(--cpd-space-1x);
 
         .mx_PollCreateDialog_maxSelectionsButton {
             width: var(--cpd-space-8x);
@@ -96,9 +96,15 @@ Please see LICENSE files in the repository root for full details.
         .mx_PollCreateDialog_maxSelectionsValue {
             font-weight: var(--cpd-font-weight-semibold);
             font-size: $font-15px;
-            min-width: var(--cpd-space-15x);
+            min-width: var(--cpd-space-8x);
             text-align: center;
         }
+    }
+
+    .mx_PollCreateDialog_maxSelectionsHeading {
+        font: var(--cpd-font-body-md-medium);
+        margin-top: var(--cpd-space-5x);
+        margin-bottom: var(--cpd-space-2x);
     }
 
     .mx_AccessibleButton_disabled {
