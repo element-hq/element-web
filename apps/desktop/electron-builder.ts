@@ -133,6 +133,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         category: "Network;InstantMessaging;Chat",
         icon: "icon.png",
         executableName: variant.name, // element-desktop or element-desktop-nightly
+        desktop: {
+            entry: {
+                // By default, electron builder will set this to variant.productName.
+                // But electron builder also sets the WM_CLASS of the window to variant.name.
+                // This difference will cause the app to launch with no icon and sometimes
+                // prevents app grouping in the taskbar.
+                StartupWMClass: variant.name,
+            },
+        },
     },
     deb: {
         packageCategory: "net",
