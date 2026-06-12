@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import SenderProfile from "../../../../../src/components/views/messages/SenderProfile";
 import { EventTileSenderAdapter } from "../../../../../src/components/views/rooms/EventTile/EventTileSenderAdapter";
+import { type MemberInfo } from "../../../../../src/viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 import { type EventTileSenderSnapshot } from "../../../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 jest.mock("../../../../../src/components/views/messages/SenderProfile", () =>
@@ -21,6 +21,12 @@ jest.mock("../../../../../src/components/views/messages/SenderProfile", () =>
 function makeSenderSnapshot(overrides: Partial<EventTileSenderSnapshot> = {}): EventTileSenderSnapshot {
     return {
         senderId: "@alice:example.org",
+        member: {
+            userId: "@alice:example.org",
+            roomId: "!room:example.org",
+            rawDisplayName: "Alice",
+            disambiguate: false,
+        },
         viewUserOnClick: true,
         profileMode: "clickable",
         forceHistoricalAvatar: false,
@@ -42,24 +48,10 @@ describe("EventTileSenderAdapter", () => {
 
     it("passes clickable sender state to SenderProfile", () => {
         const onSenderProfileClick = jest.fn();
-        const member = new RoomMember("!room:example.org", "@alice:example.org");
         const senderSnapshot = makeSenderSnapshot({ profileMode: "clickable" });
-        const memberInfo = {
-            userId: "@alice:example.org",
-            roomId: "!room:example.org",
-            rawDisplayName: member.rawDisplayName,
-            disambiguate: member.disambiguate,
-        };
+        const memberInfo: MemberInfo = senderSnapshot.member!;
 
-        render(
-            <EventTileSenderAdapter
-                senderId="@alice:example.org"
-                member={member}
-                senderSnapshot={senderSnapshot}
-                isEmote={false}
-                onSenderProfileClick={onSenderProfileClick}
-            />,
-        );
+        render(<EventTileSenderAdapter sender={senderSnapshot} onSenderProfileClick={onSenderProfileClick} />);
 
         expect(screen.getByTestId("sender-profile")).toBeInTheDocument();
         expect(mockedSenderProfile.mock.calls[0][0]).toMatchObject({
@@ -73,19 +65,12 @@ describe("EventTileSenderAdapter", () => {
     it("enables tooltip rendering for tooltip mode", () => {
         const senderSnapshot = makeSenderSnapshot({ profileMode: "tooltip" });
 
-        render(
-            <EventTileSenderAdapter
-                senderId="@alice:example.org"
-                senderSnapshot={senderSnapshot}
-                isEmote={true}
-                onSenderProfileClick={jest.fn()}
-            />,
-        );
+        render(<EventTileSenderAdapter sender={senderSnapshot} onSenderProfileClick={jest.fn()} />);
 
         expect(screen.getByTestId("sender-profile")).toBeInTheDocument();
         expect(mockedSenderProfile.mock.calls[0][0]).toMatchObject({
             senderId: "@alice:example.org",
-            isEmote: true,
+            isEmote: false,
             withTooltip: true,
         });
     });
@@ -94,12 +79,7 @@ describe("EventTileSenderAdapter", () => {
         const senderSnapshot = makeSenderSnapshot({ profileMode: "hidden" });
 
         const { container } = render(
-            <EventTileSenderAdapter
-                senderId="@alice:example.org"
-                senderSnapshot={senderSnapshot}
-                isEmote={false}
-                onSenderProfileClick={jest.fn()}
-            />,
+            <EventTileSenderAdapter sender={senderSnapshot} onSenderProfileClick={jest.fn()} />,
         );
 
         expect(container).toBeEmptyDOMElement();

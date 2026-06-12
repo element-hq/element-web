@@ -9,20 +9,13 @@ import React, { type JSX } from "react";
 
 import SenderProfile from "../../messages/SenderProfile";
 import { type EventTileSenderSnapshot } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
-import { type MemberInfo } from "../../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 
 /**
  * Props for the {@link EventTileSenderAdapter} component.
  */
 interface EventTileSenderAdapterProps {
-    /** Stable sender ID for the event. */
-    senderId?: string;
-    /** Resolved room memberInfo for sender/profile rendering. */
-    member?: MemberInfo | null;
-    /** Snapshot of the sender identity state for this tile. */
-    senderSnapshot: EventTileSenderSnapshot;
-    /** Whether the body renders as an emote. */
-    isEmote: boolean;
+    /** The sender identity state for this tile. */
+    sender: EventTileSenderSnapshot;
     /** Invoked when the sender profile is clicked. */
     onSenderProfileClick: () => void;
 }
@@ -31,21 +24,25 @@ interface EventTileSenderAdapterProps {
  * Renders the sender identity display for an event tile.
  */
 export function EventTileSenderAdapter({
-    senderId,
-    member,
-    senderSnapshot,
-    isEmote,
+    sender,
     onSenderProfileClick,
 }: Readonly<EventTileSenderAdapterProps>): JSX.Element | null {
-    switch (senderSnapshot.profileMode) {
+    switch (sender.profileMode) {
         case "clickable":
             return (
-                <SenderProfile onClick={onSenderProfileClick} senderId={senderId} member={member} isEmote={isEmote} />
+                <SenderProfile
+                    onClick={onSenderProfileClick}
+                    senderId={sender.senderId}
+                    member={sender.member}
+                    isEmote={sender.isEmote}
+                />
             );
         case "tooltip":
-            return <SenderProfile senderId={senderId} member={member} isEmote={isEmote} withTooltip />;
+            return (
+                <SenderProfile senderId={sender.senderId} member={sender.member} isEmote={sender.isEmote} withTooltip />
+            );
         case "default":
-            return <SenderProfile senderId={senderId} member={member} isEmote={isEmote} />;
+            return <SenderProfile senderId={sender.senderId} member={sender.member} isEmote={sender.isEmote} />;
         default:
             return null;
     }

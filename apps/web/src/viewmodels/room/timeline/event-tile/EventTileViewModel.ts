@@ -27,6 +27,7 @@ import {
     type SenderProfileMode,
     type TimestampDisplayState,
 } from "./EventTileDerivedState";
+import { type MemberInfo } from "./DisambiguatedProfileViewModel";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
@@ -132,6 +133,8 @@ export interface EventTileInteractionInput {
 export interface EventTileSenderInput {
     /** The Matrix sender ID, when available. */
     senderId?: string;
+    /** Plain member info for sender/profile rendering. */
+    member?: MemberInfo | null;
     /** Whether sender details should be hidden. */
     hideSender?: boolean;
     /** Whether the event body renders as an emote. */
@@ -212,6 +215,8 @@ export interface EventTileLineSnapshot {
 export interface EventTileSenderSnapshot {
     /** The Matrix sender ID, when available. */
     senderId?: string;
+    /** Plain member info for sender/profile rendering. */
+    member?: MemberInfo | null;
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
     /** Whether clicking the avatar should open the user profile. */
@@ -548,6 +553,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             },
             sender: {
                 senderId: sender.senderId,
+                member: sender.member,
                 profileState: senderProfileState,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,

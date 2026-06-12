@@ -919,6 +919,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             },
             sender: {
                 senderId: this.props.mxEvent.getSender() ?? undefined,
+                member: this.getAvatarMember(),
                 hideSender: this.props.hideSender,
                 isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,
             },
@@ -1005,10 +1006,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const avatar = <EventTileAvatarAdapter avatarMember={avatarMember} senderSnapshot={eventTileSnapshot.sender} />;
         const sender = (
             <EventTileSenderAdapter
-                senderId={eventTileSnapshot.sender.senderId}
-                member={avatarMember}
-                senderSnapshot={eventTileSnapshot.sender}
-                isEmote={eventTileSnapshot.sender.isEmote}
+                sender={eventTileSnapshot.sender}
                 onSenderProfileClick={this.onSenderProfileClick}
             />
         );
