@@ -139,9 +139,10 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const hasTopBorder = isDraggingSection && isSourceAbove;
 
     const internalRef = useRef<HTMLButtonElement>(null);
+    // Only wire up draggable refs when the section can be dragged. Otherwise dndkit will put incorrect and misleading a11y attributes
+    // on the default section (aka aria-disabled=true and aria-draggable=false)
     const buttonRef = useMergeRefs([
-        draggableRef,
-        handleRef,
+        ...(canBeReordered ? [draggableRef, handleRef] : []),
         droppableRef,
         internalRef,
     ]) as React.Ref<HTMLButtonElement>;
