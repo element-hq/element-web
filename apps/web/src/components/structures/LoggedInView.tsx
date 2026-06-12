@@ -202,8 +202,18 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         this.refreshBackgroundImage();
+    }
 
-        this.resizerViewModel = new ResizerViewModel();
+    private getResizerViewModel(): ResizerViewModel {
+        if (!this.resizerViewModel) {
+            this.resizerViewModel = new ResizerViewModel();
+        }
+        return this.resizerViewModel;
+    }
+
+    private disposeResizerViewModel(): void {
+        this.resizerViewModel?.dispose();
+        this.resizerViewModel = undefined;
     }
 
     /**
@@ -739,6 +749,8 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
             default: {
                 if (moduleRenderer) {
+                    // Since the view will be removed, remove the vm as well
+                    this.disposeResizerViewModel();
                     pageElement = moduleRenderer();
                 } else {
                     console.warn(`Couldn't render page type "${this.props.page_type}"`);
@@ -797,14 +809,15 @@ class LoggedInView extends React.Component<IProps, IState> {
         const roomView = <div className="mx_RoomView_wrapper">{pageElement}</div>;
 
         let content: React.ReactNode;
-        if (useNewRoomList && this.resizerViewModel && !moduleRenderer) {
+        const resizerViewModel = !moduleRenderer ? this.getResizerViewModel() : undefined;
+        if (useNewRoomList && resizerViewModel && !moduleRenderer) {
             // New room list owned by element-web: resizable layout with a draggable separator.
             // The SpacePanel lives inside GroupView (leftPanel omits it when the new room list is enabled).
             content = (
-                <GroupView vm={this.resizerViewModel}>
+                <GroupView vm={resizerViewModel}>
                     <SpacePanel />
                     <LeftResizablePanelView
-                        vm={this.resizerViewModel}
+                        vm={resizerViewModel}
                         className="mx_LeftPanel_panel"
                         minSize="200px"
                         maxSize="370px"
@@ -812,7 +825,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     >
                         {leftPanel}
                     </LeftResizablePanelView>
-                    <SeparatorView className="mx_Separator" vm={this.resizerViewModel} />
+                    <SeparatorView className="mx_Separator" vm={resizerViewModel} />
                     <Panel className="mx_LeftPanel_panel">{roomView}</Panel>
                 </GroupView>
             );

@@ -45,7 +45,7 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
         },
         {
             tag: "element.io.section.work",
-            name: "Work",
+            name: "Work with a very long name that should be truncated",
             isSelected: true,
         },
         {

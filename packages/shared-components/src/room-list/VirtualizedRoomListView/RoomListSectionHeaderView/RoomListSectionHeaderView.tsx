@@ -5,12 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX, type FocusEvent, type MouseEventHandler } from "react";
+import React, { memo, type JSX, type FocusEvent, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { useDraggable, useDragOperation, useDroppable } from "@dnd-kit/react";
+import { useMergeRefs } from "react-merge-refs";
 import { Feedback } from "@dnd-kit/dom";
 import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
-import { useMergeRefs } from "react-merge-refs";
 
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
@@ -41,8 +41,8 @@ export interface RoomListSectionHeaderViewSnapshot {
  * Actions that can be performed on a room list section header.
  */
 export interface RoomListSectionHeaderActions {
-    /** Handler invoked when the section header is clicked (toggles expand/collapse). */
-    onClick: MouseEventHandler<HTMLButtonElement>;
+    /** Handler invoked when the section header is clicked or keyboard-toggled (toggles expand/collapse). */
+    onClick: () => void;
     /** Handler invoked when the edit section button is clicked  */
     editSection: () => void;
     /** Handler invoked when the remove section button is clicked  */
@@ -117,6 +117,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         modifiers: [RestrictToVerticalAxis],
         disabled: !canBeReordered,
     });
+
     const { source } = useDragOperation<RoomListDragData>();
     const draggedData = source?.data;
     const isDraggingSectionSource = isSectionDragData(draggedData);
@@ -137,7 +138,19 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const hasBottomBorder = isDraggingSection && !isSourceAbove;
     const hasTopBorder = isDraggingSection && isSourceAbove;
 
-    const buttonRef = useMergeRefs([draggableRef, handleRef, droppableRef]) as React.Ref<HTMLButtonElement>;
+    const internalRef = useRef<HTMLButtonElement>(null);
+    const buttonRef = useMergeRefs([
+        draggableRef,
+        handleRef,
+        droppableRef,
+        internalRef,
+    ]) as React.Ref<HTMLButtonElement>;
+
+    useEffect(() => {
+        if (isFocused) {
+            internalRef.current?.focus({ preventScroll: true });
+        }
+    }, [isFocused]);
 
     return (
         <div
@@ -159,6 +172,24 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         [styles.dropTargetTop]: hasTopBorder,
                     })}
                     onClick={vm.onClick}
+                    onKeyDown={(e) => {
+                        if ((e.code === "ArrowRight" && !isExpanded) || (e.code === "ArrowLeft" && isExpanded)) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            vm.onClick();
+                        } else if (e.code === "ArrowRight" && isExpanded && roomCountInSection > 0) {
+                            // Move focus to the first room in the section
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.dispatchEvent(
+                                new KeyboardEvent("keydown", {
+                                    code: "ArrowDown",
+                                    key: "ArrowDown",
+                                    bubbles: true,
+                                }),
+                            );
+                        }
+                    }}
                     aria-expanded={isExpanded}
                     onFocus={(e) => onFocus(id, e)}
                     tabIndex={isFocused ? 0 : -1}

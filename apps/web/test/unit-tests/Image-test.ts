@@ -32,28 +32,28 @@ describe("Image", () => {
 
     describe("blobIsAnimated", () => {
         it("Animated GIF", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.gif"))], {
+            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.gif")).slice()], {
                 type: "image/gif",
             });
             expect(await blobIsAnimated(img)).toBeTruthy();
         });
 
         it("Static GIF", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo.gif"))], {
+            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo.gif")).slice()], {
                 type: "image/gif",
             });
             expect(await blobIsAnimated(img)).toBeFalsy();
         });
 
         it("Animated WEBP", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.webp"))], {
+            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.webp")).slice()], {
                 type: "image/webp",
             });
             expect(await blobIsAnimated(img)).toBeTruthy();
         });
 
         it("Static WEBP", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo.webp"))], {
+            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo.webp")).slice()], {
                 type: "image/webp",
             });
             expect(await blobIsAnimated(img)).toBeFalsy();
@@ -61,14 +61,14 @@ describe("Image", () => {
 
         it("Static WEBP in extended file format", async () => {
             const img = new Blob(
-                [fs.readFileSync(path.resolve(__dirname, "images", "static-logo-extended-file-format.webp"))],
+                [fs.readFileSync(path.resolve(__dirname, "images", "static-logo-extended-file-format.webp")).slice()],
                 { type: "image/webp" },
             );
             expect(await blobIsAnimated(img)).toBeFalsy();
         });
 
         it("Animated PNG", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.apng"))]);
+            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "animated-logo.apng")).slice()]);
             const pngBlob = img.slice(0, img.size, "image/png");
             const apngBlob = img.slice(0, img.size, "image/apng");
             expect(await blobIsAnimated(pngBlob)).toBeTruthy();
@@ -76,7 +76,7 @@ describe("Image", () => {
         });
 
         it("Static PNG", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo.png"))]);
+            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo.png")).slice()]);
             const pngBlob = img.slice(0, img.size, "image/png");
             const apngBlob = img.slice(0, img.size, "image/apng");
             expect(await blobIsAnimated(pngBlob)).toBeFalsy();

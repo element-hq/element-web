@@ -406,5 +406,33 @@ test.describe("Room list custom sections", () => {
             // Room is back in the Chats section
             await assertRoomInSection(page, "Chats", "my room");
         });
+
+        test("should remove a room from a custom section via the 'Remove from section' menu entry", async ({
+            page,
+            app,
+        }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            const roomList = getRoomList(page);
+
+            // Move the room to the Work section
+            let roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Work" }).click();
+
+            await assertRoomInSection(page, "Work", "my room");
+
+            // Open the More Options menu and click "Remove from section"
+            roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Remove from section" }).click();
+
+            // Room is back in the Chats section
+            await assertRoomInSection(page, "Chats", "my room");
+        });
     });
 });

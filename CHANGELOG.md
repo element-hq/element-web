@@ -1,3 +1,22 @@
+Changes in [1.12.21](https://github.com/element-hq/element-web/releases/tag/v1.12.21) (2026-06-09)
+==================================================================================================
+## ✨ Features
+
+* Bump module API to 1.14.0 ([#33685](https://github.com/element-hq/element-web/pull/33685)). Contributed by @Half-Shot.
+* Apply new design and display logic to logout confirmation dialog ([#33426](https://github.com/element-hq/element-web/pull/33426)). Contributed by @uhoreg.
+* Room list: improve custom sections in Spaces  ([#33523](https://github.com/element-hq/element-web/pull/33523)). Contributed by @florianduros.
+* Periodically nag the user if their device remains unverified ([#33346](https://github.com/element-hq/element-web/pull/33346)). Contributed by @uhoreg.
+* Use the separator as border between roomlist and main panel ([#33598](https://github.com/element-hq/element-web/pull/33598)). Contributed by @MidhunSureshR.
+* Add support for `m.recent_emoji` account data event ([#33172](https://github.com/element-hq/element-web/pull/33172)). Contributed by @t3chguy.
+* Room list: reduce font size of sections ([#33580](https://github.com/element-hq/element-web/pull/33580)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* Remove resizer from fullscreen modules(like multiroom) ([#33684](https://github.com/element-hq/element-web/pull/33684)). Contributed by @langleyd.
+* fix: use configured brand name in JSON and PlainText chat export filenames ([#33680](https://github.com/element-hq/element-web/pull/33680)). Contributed by @RoySerbi.
+* Fix pinned message banner disappearing when a pinned message event is unkown ([#33534](https://github.com/element-hq/element-web/pull/33534)). Contributed by @florianduros.
+
+
 Changes in [1.12.20](https://github.com/element-hq/element-web/releases/tag/v1.12.20) (2026-05-27)
 ==================================================================================================
 ## 🐛 Bug Fixes

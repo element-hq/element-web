@@ -125,6 +125,7 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
         onSetRoomNotifState: fn(),
         onCreateSection: fn(),
         onToggleSection: fn(),
+        onRemoveFromSection: fn(),
     };
 }
 

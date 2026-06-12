@@ -17,7 +17,6 @@
     letter-spacing: var(--cpd-font-letter-spacing-body-sm);
     color: var(--cpd-color-text-secondary);
     padding: var(--cpd-space-1x) 0;
-    background-color: var(--cpd-color-bg-canvas-default);
 
     &:hover,
     &:focus-visible,
@@ -83,6 +82,12 @@
 
 .firstHeader {
     padding-top: 0;
+
+    /* The first item sits flush with the scroller's top edge, so the default outline
+       would be clipped by overflow:auto. Inset it so it stays inside the button. */
+    &:focus-visible {
+        outline-offset: -2px;
+    }
 }
 
 .lastHeader {

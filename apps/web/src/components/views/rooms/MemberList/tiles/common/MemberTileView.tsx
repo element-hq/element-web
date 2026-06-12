@@ -51,7 +51,8 @@ export function MemberTileView(props: Props): JSX.Element {
             >
                 <div aria-hidden className="mx_MemberTileView_left">
                     <div className="mx_MemberTileView_avatar">
-                        {props.avatarJsx} {props.presenceJsx}
+                        {props.avatarJsx}
+                        <div className="mx_MemberTileView_presence">{props.presenceJsx}</div>
                     </div>
                     <div className="mx_MemberTileView_name">{props.nameJsx}</div>
                 </div>
