@@ -19,6 +19,8 @@ import {
     type Room,
 } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel } from "@element-hq/web-shared-components";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import type {
     TimelineViewSnapshot,
     TimelineViewActions,
@@ -29,7 +31,6 @@ import type {
 import { haveRendererForEvent, pickFactory } from "../../../events/EventTileFactory";
 import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
-import { logger } from "matrix-js-sdk/src/logger";
 import { clearRoomNotification } from "../../../utils/notifications";
 
 /** How long after the last scroll event to wait before sending a read receipt (ms). */
@@ -37,6 +38,18 @@ const READ_RECEIPT_DEBOUNCE_MS = 500;
 
 const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
+
+/**
+ * Minimum renderable events the initial window must hold before {@link RoomTimelineViewModel.load}
+ * publishes its first snapshot (unless the timeline is exhausted both sides) — enough to overflow
+ * any plausible viewport so the first paint is scrollable.
+ *
+ * Load-bearing because Virtuoso can only hold content still via scrollTop compensation, which
+ * doesn't exist while the list is shorter than the viewport: in that regime layout alone
+ * (`alignToBottom`) decides row positions and anything loading in around an anchored event shoves
+ * it about. Filling first routes every later change through the compensated prepend/append paths.
+ */
+const MIN_INITIAL_EVENTS = 40;
 
 /**
  * Maximum number of events the {@link TimelineWindow} retains. When a paginate
@@ -113,13 +126,6 @@ export class RoomTimelineViewModel
 
     /** Set by {@link start} so a double-start (e.g. via StrictMode) is a no-op. */
     private started = false;
-
-    /**
-     * Set on `permalink` and `restore` loads; cleared on the first `onEndReached`.
-     * Allows that first call to bypass the `pendingAnchor` guard so the initial
-     * window fills while the anchor scroll is still pending.
-     */
-    private anchoredLoad = false;
 
     /**
      * In-flight backward pagination chain, or null when idle.
@@ -552,6 +558,12 @@ export class RoomTimelineViewModel
         try {
             await this.timelineWindow.load(sdkLoadTarget, INITIAL_SIZE);
             if (this.isDisposed) return;
+            // Grow the window until the first paint fills the viewport. Everything
+            // before the first republish is invisible, so these extra batches cost
+            // nothing visually. A permalink centres on its target and needs content
+            // both sides; everything else lands at the bottom and only needs history.
+            await this.fillInitialWindow(target.kind === "permalink" ? sdkLoadTarget : undefined);
+            if (this.isDisposed) return;
             const windowEvents = this.timelineWindow.getEvents();
             logger.debug(
                 `[TimelineVM] load() window — ${windowEvents.length} events in window, ` +
@@ -572,18 +584,18 @@ export class RoomTimelineViewModel
                 `[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering`,
             );
 
-            if (target.kind === "permalink" || target.kind === "restore") {
-                // Both cases start with a small centred window. Allow the first automatic
-                // onEndReached to forward-paginate (filling the window) but prevent that
-                // chain from setting atLiveEnd=true and jumping the view to the bottom.
-                this.anchoredLoad = true;
-                logger.debug(`[TimelineVM] load() — anchoredLoad=true (kind=${target.kind})`);
-            }
-
             let pendingAnchor: NavigationAnchor | null = null;
 
+            // Only anchor to a target that is actually in `items` — otherwise the
+            // anchor could never settle in view. A permalink/restore target that was
+            // filtered (state event, redaction, unrenderable type) falls through to
+            // the live-end anchor below.
             if (target.kind === "permalink") {
-                pendingAnchor = { targetKey: target.eventId, align: "center", highlight: true };
+                if (items.some((i) => i.key === target.eventId)) {
+                    pendingAnchor = { targetKey: target.eventId, align: "center" };
+                } else {
+                    logger.debug(`[TimelineVM] load() — permalink target ${target.eventId} not in items, falling back to live end`);
+                }
             } else if (target.kind === "restore") {
                 if (items.some((i) => i.key === target.eventId)) {
                     pendingAnchor = { targetKey: target.eventId, align: "end" };
@@ -628,6 +640,76 @@ export class RoomTimelineViewModel
         }
     }
 
+    /**
+     * Extend the freshly-loaded window so {@link load}'s first publish overflows the
+     * viewport (see {@link MIN_INITIAL_EVENTS}). Runs entirely before the first publish.
+     *
+     * Two modes:
+     *  - `centreOn` set (permalink): the centred target needs content on BOTH sides, so
+     *    fill each to ~half {@link MIN_INITIAL_EVENTS}. Without the forward fill the target
+     *    is the last event and `align: "center"` collapses to the bottom edge.
+     *  - `centreOn` undefined (live / restore): the view lands at the bottom, so fill only
+     *    history backward until the window overflows.
+     *
+     * Often free — a permalink's `/context` response usually leaves the surrounding events
+     * in the timeline already; the network is hit only when the SDK has nothing local that
+     * side. Bounded per direction so a room returning all-filtered events can't stall the
+     * paint; if we paint short, the first user scroll paginates as normal.
+     */
+    private async fillInitialWindow(centreOn: string | undefined): Promise<void> {
+        const MAX_FILL_REQUESTS_PER_DIRECTION = 2;
+        const perDirectionTarget = centreOn ? Math.ceil(MIN_INITIAL_EVENTS / 2) : MIN_INITIAL_EVENTS;
+
+        for (const direction of [Direction.Backward, Direction.Forward]) {
+            // Unanchored loads only need history above the bottom-anchored view.
+            if (!centreOn && direction === Direction.Forward) break;
+
+            let requests = 0;
+            while (
+                requests < MAX_FILL_REQUESTS_PER_DIRECTION &&
+                this.renderableEventCount(centreOn, direction) < perDirectionTarget &&
+                this.timelineWindow.canPaginate(direction)
+            ) {
+                requests++;
+                const before = this.timelineWindow.getEvents().length;
+                await this.timelineWindow.paginate(direction, PAGINATE_SIZE);
+                if (this.isDisposed) return;
+                logger.debug(
+                    `[TimelineVM] fillInitialWindow — paginate(${direction === Direction.Backward ? "backward" : "forward"}) ` +
+                    `window: ${before}→${this.timelineWindow.getEvents().length}, ` +
+                    `renderable(side)=${this.renderableEventCount(centreOn, direction)}`,
+                );
+            }
+        }
+    }
+
+    /**
+     * Count renderable events in the window. With `centreOn` set, counts only
+     * those strictly on `direction`'s side of that event (so each side of a
+     * centred target can be filled independently); without it, counts the whole
+     * window. Side-effect-free — does not touch the continuation cache.
+     */
+    private renderableEventCount(centreOn: string | undefined, direction: Direction): number {
+        const events = this.timelineWindow.getEvents();
+        const showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
+
+        let from = 0;
+        let to = events.length;
+        if (centreOn) {
+            const idx = events.findIndex((e) => e.getId() === centreOn);
+            if (idx !== -1) {
+                if (direction === Direction.Backward) to = idx;
+                else from = idx + 1;
+            }
+        }
+
+        let count = 0;
+        for (let i = from; i < to; i++) {
+            if (this.shouldIncludeEvent(events[i], showHiddenEvents)) count++;
+        }
+        return count;
+    }
+
     // ── TimelineViewActions ──────────────────────────────────────────
 
     public onStartReached = (): void => {
@@ -642,13 +724,16 @@ export class RoomTimelineViewModel
         this.triggerForwardPaginate();
     };
 
+    /**
+     * The View reports the anchor placement has settled. We clear `pendingAnchor`,
+     * re-enabling `followOutput` and resuming scroll-position / read-receipt tracking.
+     * Held until now so the cold-loading list stays pinned to the anchor instead of
+     * being snapped to the bottom by Virtuoso's grow-to-bottom trap (see the View's onSettled).
+     */
     public onAnchorReached = (): void => {
-        const anchor = this.snapshot.current.pendingAnchor;
-        logger.debug(
-            `[TimelineVM] onAnchorReached — anchor=${anchor ? `key=${anchor.targetKey} align=${anchor.align}` : "null"}, ` +
-            `anchoredLoad=${this.anchoredLoad}`,
-        );
-        this.mergeSnapshot({ pendingAnchor: null }, "anchor-reached");
+        if (this.snapshot.current.pendingAnchor === null) return;
+        logger.debug(`[TimelineVM] onAnchorReached — placement settled, clearing pendingAnchor`);
+        this.mergeSnapshot({ pendingAnchor: null }, "anchor-settled");
     };
 
     public onAtBottomStateChange = (atBottom: boolean): void => {
@@ -671,9 +756,10 @@ export class RoomTimelineViewModel
      * then stores its ID for scroll-position persistence on dispose.
      */
     public onVisibleRangeChanged = (startIndex: number, endIndex: number): void => {
-        // Don't update while an anchor scroll is in progress — the range reflects the
-        // view mid-scroll, not the user's actual reading position. Once the anchor is
-        // reached and pendingAnchor is cleared, normal tracking resumes.
+        // Don't record position while an anchor is pending — the range reflects
+        // auto-placement, not the user's reading position. The View clears the
+        // anchor (via onAnchorReached) once placement settles, after which normal
+        // tracking resumes.
         if (this.snapshot.current.pendingAnchor !== null) return;
 
         const items = this.snapshot.current.items;
@@ -918,6 +1004,16 @@ export class RoomTimelineViewModel
             return;
         }
 
+        // Don't paginate while still placing the initial anchor. On a cold load
+        // unmeasured (0-height) items can make Virtuoso fire startReached/endReached
+        // spuriously; pagination then is wasteful and can disturb placement. Once
+        // the anchor settles (pendingAnchor cleared) the user's own scroll re-fires
+        // these naturally.
+        if (this.snapshot.current.pendingAnchor !== null) {
+            logger.debug(`[TimelineVM] paginate(backward) skipped — anchor placement pending`);
+            return;
+        }
+
         if (!this.timelineWindow.canPaginate(Direction.Backward)) {
             logger.debug(`[TimelineVM] paginate(backward) skipped — canPaginate=false`);
             return;
@@ -931,14 +1027,6 @@ export class RoomTimelineViewModel
     /**
      * Entry point for forward pagination. Coalesces concurrent `onEndReached`
      * calls behind a single in-flight chain.
-     *
-     * Handles two cross-cutting concerns before delegating to the shared chain:
-     * - `anchoredLoad`: consumed exactly once on the first `onEndReached` after
-     *   a non-live initial load, so it is cleared here (instance state) rather
-     *   than inside the async chain.
-     * - `pendingAnchor` guard: while an anchor is pending we suppress any
-     *   `onEndReached` that was NOT the initial load's own first call, which
-     *   would otherwise paginate all the way to the live end and jump the view.
      */
     private triggerForwardPaginate(): void {
         if (this.forwardPaginateChain) {
@@ -946,25 +1034,17 @@ export class RoomTimelineViewModel
             return;
         }
 
-        // Consume the anchored-load flag — always safe to clear, harmless if already false.
-        const wasAnchoredLoad = this.anchoredLoad;
-        this.anchoredLoad = false;
-        if (wasAnchoredLoad) {
-            logger.debug(`[TimelineVM] paginate(forward) — consuming anchoredLoad`);
+        // Don't paginate while still placing the initial anchor — see
+        // triggerBackwardPaginate for why.
+        if (this.snapshot.current.pendingAnchor !== null) {
+            logger.debug(`[TimelineVM] paginate(forward) skipped — anchor placement pending`);
+            return;
         }
 
         logger.debug(
             `[TimelineVM] paginate(forward) check — canPaginate=${this.timelineWindow.canPaginate(Direction.Forward)}, ` +
-            `atLiveEnd=${this.snapshot.current.atLiveEnd}, items=${this.snapshot.current.items.length}, ` +
-            `wasAnchoredLoad=${wasAnchoredLoad}`,
+            `atLiveEnd=${this.snapshot.current.atLiveEnd}, items=${this.snapshot.current.items.length}`,
         );
-
-        // Suppress further forward pagination while an anchor is pending — except
-        // for the initial anchored load's own first onEndReached (wasAnchoredLoad).
-        if (!wasAnchoredLoad && this.snapshot.current.pendingAnchor !== null) {
-            logger.debug(`[TimelineVM] paginate(forward) skipped — pendingAnchor still set`);
-            return;
-        }
 
         if (!this.timelineWindow.canPaginate(Direction.Forward)) {
             logger.debug(`[TimelineVM] paginate(forward) skipped — canPaginate=false`);
@@ -975,7 +1055,7 @@ export class RoomTimelineViewModel
             return;
         }
 
-        this.forwardPaginateChain = this.runPaginateChain(Direction.Forward, wasAnchoredLoad).finally(() => {
+        this.forwardPaginateChain = this.runPaginateChain(Direction.Forward).finally(() => {
             this.forwardPaginateChain = null;
         });
     }
@@ -1143,7 +1223,7 @@ export class RoomTimelineViewModel
         await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     }
 
-    private async runPaginateChain(direction: Direction, wasAnchoredLoad = false): Promise<void> {
+    private async runPaginateChain(direction: Direction): Promise<void> {
         // Not strictly necessary — the loop already terminates when canPaginate() returns
         // false or hasMore is false. However, leaving it unbounded without user action feels a bit weird.
         // This is a bit more defensive in that after 10 we give up and require the user to scroll again to trigger another chain.

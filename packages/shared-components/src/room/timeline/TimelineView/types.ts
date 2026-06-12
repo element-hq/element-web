@@ -63,8 +63,6 @@ export interface NavigationAnchor {
     targetKey: string;
     /** Where in the viewport to place the target. */
     align: AnchorAlign;
-    /** Whether to visually highlight the target item after scrolling. */
-    highlight?: boolean;
 }
 
 /**
@@ -103,8 +101,12 @@ export interface TimelineViewSnapshot {
     atLiveEnd: boolean;
 
     /**
-     * If set, the container should scroll to this anchor on the
-     * next render. The container clears it after executing the scroll.
+     * Placement target for the current load. The View maps it to Virtuoso's
+     * `initialTopMostItemIndex` on first mount, then re-asserts it on later loads via
+     * the patched `scrollToIndexOnChange` (in-place, no remount). While set,
+     * `followOutput` is disabled — which also keeps a cold-loading list pinned to the
+     * anchor instead of snapping to the bottom as heights are measured. Cleared when
+     * the View reports settle via {@link TimelineViewActions.onAnchorReached}.
      */
     pendingAnchor: NavigationAnchor | null;
 
@@ -149,7 +151,11 @@ export interface TimelineViewActions {
     /** Called when Virtuoso fires endReached; VM decides whether to paginate. */
     onEndReached(): void;
 
-    /** Report that the container has scrolled to the pending anchor. */
+    /**
+     * Report that the anchor placement has settled (the target has stabilised in
+     * the visible range). The VM clears `pendingAnchor`, re-enabling
+     * `followOutput` and normal scroll-position tracking.
+     */
     onAnchorReached(): void;
 
     /**

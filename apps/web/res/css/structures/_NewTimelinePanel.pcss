@@ -1,0 +1,44 @@
+/*
+Copyright 2026 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * New-timeline-only height stabilisation for image tiles.
+ *
+ * When an image event carries no intrinsic dimensions (info.w / info.h absent),
+ * ImageBodyViewModel returns no sizing and ImageBodyView sets no inline
+ * width / aspect-ratio / max-* on the media frame. The frame then has no
+ * reserved height and grows when the image finally loads — a ~180px timeline
+ * jump (confirmed by the per-tile height audit: event:m.image, ~17% of images,
+ * maxNetGrowth ≈ 186px).
+ *
+ * We reserve a stable fallback box using width + aspect-ratio — the same
+ * mechanism sized images already use. Sized images receive those properties as
+ * *inline* styles from the view model, which win over this stylesheet, so this
+ * rule only takes effect for the unsized case. `object-fit: contain` then
+ * letterboxes the loaded image inside the fixed box, so it can never grow it:
+ * the box height is identical before and after load → zero jump.
+ *
+ * Reply-tile height stabilisation lives alongside the reply components in
+ * _ReplyChain.pcss / _ReplyTile.pcss. All of these are interim measures pending
+ * dedicated media / reply designs.
+ */
+.mx_NewTimelinePanel {
+    /* Matches SIZE_NORMAL_LANDSCAPE.w in src/settings/enums/ImageSize.ts so the
+       fallback box lines up with normally-sized thumbnails. */
+    --mx-image-fallback-width: 324px;
+
+    .mx_ImageBody_container {
+        width: min(100%, var(--mx-image-fallback-width));
+        aspect-ratio: 3 / 2;
+    }
+
+    /* Harmless for sized images (their box already matches the image aspect, so
+       contain is a no-op); essential for the fallback box above. */
+    .mx_ImageBody_image {
+        object-fit: contain;
+    }
+}
