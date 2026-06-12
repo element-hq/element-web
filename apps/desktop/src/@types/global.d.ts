@@ -12,11 +12,8 @@ import { type AppLocalization } from "../language-helper.js";
 // global type extensions need to use var for whatever reason
 /* eslint-disable no-var */
 declare global {
-    type IConfigOptions = Record<string, any>;
-
     var mainWindow: BrowserWindow | null;
     var appQuitting: boolean;
     var appLocalization: AppLocalization;
-    var vectorConfig: IConfigOptions;
 }
 /* eslint-enable no-var */

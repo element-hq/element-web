@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // This file is compiled to CommonJS rather than ESM otherwise the browser chokes on the import statement.
 
 import { ipcRenderer, contextBridge, IpcRendererEvent } from "electron";
+import type { ConfigOptions } from "./config.js" with { "resolution-mode": "import" };
 
 // Expose only expected IPC wrapper APIs to the renderer process to avoid
 // handing out generalised messaging access.
@@ -54,7 +55,7 @@ contextBridge.exposeInMainWorld("electron", {
     async initialise(): Promise<{
         protocol: string;
         sessionId: string;
-        config: IConfigOptions;
+        config: ConfigOptions;
         supportedSettings: Record<string, boolean>;
         /**
          * Do we need to render badge overlays for new notifications?

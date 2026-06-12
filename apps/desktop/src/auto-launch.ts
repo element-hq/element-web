@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import BaseAutoLaunch from "auto-launch";
 
 import Store from "./store.js";
+import { getConfig } from "./config.js";
 
 export type AutoLaunchState = "enabled" | "minimised" | "disabled";
 
@@ -19,7 +20,7 @@ export class AutoLaunch extends BaseAutoLaunch {
         if (!AutoLaunch.internalInstance) {
             if (!Store.instance) throw new Error("Store not initialized");
             AutoLaunch.internalInstance = new AutoLaunch({
-                name: global.vectorConfig.brand || "Element",
+                name: getConfig().brand,
                 isHidden: Store.instance.get("openAtLoginMinimised"),
                 mac: {
                     useLaunchAgent: true,
