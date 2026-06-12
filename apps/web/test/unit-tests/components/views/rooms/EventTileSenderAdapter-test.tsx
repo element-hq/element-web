@@ -17,25 +17,24 @@ jest.mock("../../../../../src/components/views/messages/SenderProfile", () =>
     jest.fn(() => <div data-testid="sender-profile" />),
 );
 
+function makeSenderSnapshot(overrides: Partial<EventTileSenderSnapshot> = {}): EventTileSenderSnapshot {
+    return {
+        senderId: "@alice:example.org",
+        viewUserOnClick: true,
+        profileMode: "clickable",
+        forceHistoricalAvatar: false,
+        isEmote: false,
+        ...overrides,
+        profileState: {
+            avatarSize: "30px",
+            needsSenderProfile: true,
+            ...overrides.profileState,
+        },
+    };
+}
+
 describe("EventTileSenderAdapter", () => {
     const mockedSenderProfile = mocked(SenderProfile);
-
-    function makeSenderSnapshot(overrides: Partial<EventTileSenderSnapshot> = {}): EventTileSenderSnapshot {
-        return {
-            senderId: "@alice:example.org",
-            viewUserOnClick: true,
-            profileMode: "clickable",
-            forceHistoricalAvatar: false,
-            isEmote: false,
-            ...overrides,
-            profileState: {
-                avatarSize: "30px",
-                needsSenderProfile: true,
-                ...overrides.profileState,
-            },
-        };
-    }
-
     beforeEach(() => {
         jest.clearAllMocks();
     });

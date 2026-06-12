@@ -61,9 +61,10 @@ export default function SenderProfile(props: IProps): JSX.Element {
     useEffect(() => {
         disambiguatedProfileVM.setMember(senderId ?? "", resolvedMember);
     }, [disambiguatedProfileVM, resolvedMember, senderId]);
-    return !isEmote ? (
-        <DisambiguatedProfileView vm={disambiguatedProfileVM} className="mx_DisambiguatedProfile" />
-    ) : (
+
+    return isEmote ? (
         <></>
+    ) : (
+        <DisambiguatedProfileView vm={disambiguatedProfileVM} className="mx_DisambiguatedProfile" />
     );
 }
