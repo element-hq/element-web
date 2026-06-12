@@ -831,7 +831,6 @@ describe("RoomListStoreV3", () => {
     describe("Sections", () => {
         function enableSections(): void {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
                 if (setting === "RoomList.CustomSectionData") return {};
                 return false;
@@ -850,26 +849,7 @@ describe("RoomListStoreV3", () => {
             return { client, rooms };
         }
 
-        it("returns a single chats section when sections feature is disabled", async () => {
-            const { rooms } = getClientAndRooms();
-            // Mark some rooms as favourite so we can verify they are NOT split out
-            [0, 1, 2].forEach((i) => {
-                rooms[i].tags[DefaultTagID.Favourite] = {};
-            });
-
-            const store = new RoomListStoreV3Class(dispatcher);
-            await store.start();
-
-            const result = store.getSortedRoomsInActiveSpace();
-            expect(result.sections).toHaveLength(1);
-            expect(result.sections[0].tag).toBe(CHATS_TAG);
-            // All rooms, including favourites, are in the single section
-            for (const i of [0, 1, 2]) {
-                expect(result.sections[0].rooms).toContain(rooms[i]);
-            }
-        });
-
-        it("returns three sections in the correct order when enabled", async () => {
+        it("returns three sections in the correct order", async () => {
             enableSections();
             getClientAndRooms();
 
@@ -1131,7 +1111,6 @@ describe("RoomListStoreV3", () => {
             const customTag = "element.io.section.custom";
 
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
                 if (setting === "RoomList.CustomSectionData") return {};
                 return false;
@@ -1146,7 +1125,6 @@ describe("RoomListStoreV3", () => {
             // Mark a room with the custom tag and update the settings
             rooms[0].tags = { [customTag]: { order: 0 } };
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [customTag];
                 if (setting === "RoomList.CustomSectionData")
                     return { [customTag]: { tag: customTag, name: "Custom" } };

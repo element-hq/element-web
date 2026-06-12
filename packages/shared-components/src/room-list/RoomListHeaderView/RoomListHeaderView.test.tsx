@@ -12,16 +12,11 @@ import React from "react";
 
 import * as stories from "./RoomListHeaderView.stories";
 
-const { Default, NoComposeMenu, NoSpaceMenu, CollapseSections, ExpandSections } = composeStories(stories);
+const { Default, NoSpaceMenu, CollapseSections, ExpandSections } = composeStories(stories);
 
 describe("RoomListHeaderView", () => {
     it("renders the default state", () => {
         const { container } = render(<Default />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders without compose menu", () => {
-        const { container } = render(<NoComposeMenu />);
         expect(container).toMatchSnapshot();
     });
 

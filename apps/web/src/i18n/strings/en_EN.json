@@ -1588,7 +1588,6 @@
         "notifications": "Enable the notifications panel in the room header",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
-        "room_list_sections": "Room list sections",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Sign in again to disable",
