@@ -290,17 +290,13 @@ describe("export", function () {
         );
     });
 
-    it("tests the file extension splitter", function () {
-        const exporter = new PlainTextExporter(mockRoom, ExportType.Beginning, mockExportOptions, setProgressText);
-        const fileNameWithExtensions: Record<string, [string, string]> = {
-            "": ["", ""],
-            "name": ["name", ""],
-            "name.txt": ["name", ".txt"],
-            ".htpasswd": ["", ".htpasswd"],
-            "name.with.many.dots.myext": ["name.with.many.dots", ".myext"],
-        };
-        for (const fileName in fileNameWithExtensions) {
-            expect(exporter.splitFileName(fileName)).toStrictEqual(fileNameWithExtensions[fileName]);
+    it("tests uniqueness of getFilePath exporter function output", function () {
+        const exporter = new HTMLExporter(mockRoom, ExportType.Beginning, mockExportOptions, setProgressText);
+        const filePaths: Array<string> = [];
+        for (const event of events) {
+            const filePath = exporter.getFilePath(event);
+            expect(filePaths.indexOf(filePath)).toBeLessThan(0);
+            filePaths.push(filePath);
         }
     });
 
