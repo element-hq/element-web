@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
+import { NotificationBadgeView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import { useUnreadNotifications } from "../../../../hooks/useUnreadNotifications";
-import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
+import { UnreadNotificationBadgeViewModel } from "../../../../viewmodels/room/notification-badge/UnreadNotificationBadgeViewModel";
 
 interface Props {
     room?: Room;
@@ -23,7 +23,26 @@ interface Props {
 }
 
 export function UnreadNotificationBadge({ room, threadId, forceDot }: Props): JSX.Element {
-    const { symbol, count, level } = useUnreadNotifications(room, threadId);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new UnreadNotificationBadgeViewModel({
+                room,
+                threadId,
+                forceDot,
+            }),
+    );
 
-    return <StatelessNotificationBadge symbol={symbol} count={count} level={level} forceDot={forceDot} />;
+    useEffect(() => {
+        vm.setRoom(room);
+    }, [room, vm]);
+
+    useEffect(() => {
+        vm.setThreadId(threadId);
+    }, [threadId, vm]);
+
+    useEffect(() => {
+        vm.setForceDot(forceDot);
+    }, [forceDot, vm]);
+
+    return <NotificationBadgeView vm={vm} />;
 }
