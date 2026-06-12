@@ -71,11 +71,11 @@ test.describe("Room list", () => {
 
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
-            const roomItem = roomListView.getByRole("option", { name: "Open room room29" });
+            let roomItem = roomListView.getByRole("option", { name: "Open room room29" });
             await roomItem.hover();
 
             await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
-            const roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
+            let roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page).toMatchScreenshot("room-list-item-open-more-options.png");
 
@@ -83,7 +83,9 @@ test.describe("Room list", () => {
             await page.getByRole("menuitemcheckbox", { name: "Favourited" }).click();
 
             // Check that the room is favourited
+            roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
             await roomItem.hover();
+            roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).toBeChecked();
             // It should show the invite dialog
@@ -296,13 +298,14 @@ test.describe("Room list", () => {
             // @ts-ignore Visibility enum is not accessible
             await app.client.createRoom({ name: "low priority room", visibility: "public" });
             const roomListView = getRoomList(page);
-            const publicRoom = roomListView.getByRole("option", { name: "low priority room" });
+            let publicRoom = roomListView.getByRole("option", { name: "low priority room" });
 
             // Make room low priority
             await publicRoom.click({ button: "right" });
             await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
+            publicRoom = roomListView.getByRole("gridcell", { name: "low priority room" });
             await expect(publicRoom.locator(".mx_RoomAvatarView_icon")).toHaveAccessibleName(
                 "This is a low priority room",
             );
