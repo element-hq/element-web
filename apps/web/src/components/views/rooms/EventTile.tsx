@@ -69,8 +69,9 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { ActionBarAdapter } from "./EventTile/ActionBarAdapter";
 import { E2eStandardPadlockIcon } from "./EventTile/E2eStandardPadlockIcon";
 import { E2eMessageSharedIconAdapter } from "./EventTile/E2eMessageSharedIconAdapter";
+import { EventTileAvatarAdapter } from "./EventTile/EventTileAvatarAdapter";
 import { ReceiptAdapter } from "./EventTile/ReceiptAdapter";
-import { EventTileAvatarAdapter, EventTileSenderAdapter } from "./EventTile/SenderIdentityAdapter";
+import { EventTileSenderAdapter } from "./EventTile/EventTileSenderAdapter";
 import { ThreadListActionBarAdapter } from "./EventTile/ThreadListActionBarAdapter";
 import { EventTileFooter } from "./EventTile/EventTileFooter";
 import { EventTilePreviewBody } from "./EventTile/EventTilePreviewBody";
@@ -1005,7 +1006,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const sender = (
             <EventTileSenderAdapter
                 senderId={eventTileSnapshot.sender.senderId}
-                member={avatarMember}
                 senderSnapshot={eventTileSnapshot.sender}
                 isEmote={eventTileSnapshot.sender.isEmote}
                 onSenderProfileClick={this.onSenderProfileClick}
