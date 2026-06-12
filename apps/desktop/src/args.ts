@@ -29,8 +29,8 @@ export function getArgsForProtocolRegistration(parsedArgs: Args): string[] {
         args.push("--no-update");
     }
 
-    if (parsedArgs.configPath) {
-        args.push("--config", parsedArgs.configPath);
+    if (parsedArgs.localConfigPath) {
+        args.push("--config", parsedArgs.localConfigPath);
     }
 
     if (parsedArgs.userDataPath != defaultUserDataDir) {
@@ -49,9 +49,9 @@ export interface Args {
      */
     userDataPath: string;
     /**
-     * Path to the config.json file.
+     * Path to local override config.json file.
      */
-    configPath?: string;
+    localConfigPath?: string;
     /**
      * The store {@link Mode} to use.
      */
@@ -154,7 +154,7 @@ export function getArgs(protocolHandler: ProtocolHandler): Args {
 
     return {
         userDataPath: getUserDataPath(argv, protocolHandler),
-        configPath: argv["config"] ?? process.env.ELEMENT_DESKTOP_CONFIG_JSON,
+        localConfigPath: argv["config"] ?? process.env.ELEMENT_DESKTOP_CONFIG_JSON,
         storageMode,
         devtools: argv["devtools"] || false,
         // Minimist parses `--no-`-prefixed arguments as booleans with value `false` rather than verbatim.

@@ -54,7 +54,7 @@ const buildConfig = getBuildConfig();
 const protocolHandler = new ProtocolHandler(buildConfig.protocol);
 const args = getArgs(protocolHandler);
 
-const LocalConfigLocation = args.configPath;
+const LocalConfigLocation = args.localConfigPath;
 const LocalConfigFilename = "config.json";
 
 app.setPath("userData", args.userDataPath);
