@@ -270,6 +270,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.ArrowUp,
             KeyBindingAction.ArrowRight,
             KeyBindingAction.ArrowDown,
+            KeyBindingAction.Tab,
             KeyBindingAction.Comma,
             KeyBindingAction.Save,
         ],
@@ -716,6 +717,11 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.ArrowDown]: {
         default: {
             key: Key.ARROW_DOWN,
+        },
+    },
+    [KeyBindingAction.Tab]: {
+        default: {
+            key: Key.TAB,
         },
     },
     [KeyBindingAction.Comma]: {
