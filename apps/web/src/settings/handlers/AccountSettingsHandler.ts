@@ -135,14 +135,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         }
 
         const settings = this.getSettings();
-        let preferredValue = settings?.[settingName];
-
-        if (preferredValue === null || preferredValue === undefined) {
-            // Honour the old setting on read only
-            if (settingName === "hideAvatarChanges" || settingName === "hideDisplaynameChanges") {
-                preferredValue = settings?.["hideAvatarDisplaynameChanges"];
-            }
-        }
+        const preferredValue = settings?.[settingName];
 
         return preferredValue;
     }

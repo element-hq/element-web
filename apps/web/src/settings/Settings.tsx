@@ -253,9 +253,6 @@ export interface Settings {
     "Notifications.tac_only_notifications": IBaseSetting<boolean>;
     "useCompactLayout": IBaseSetting<boolean>;
     "showRedactions": IBaseSetting<boolean>;
-    "showJoinLeaves": IBaseSetting<boolean>;
-    "showAvatarChanges": IBaseSetting<boolean>;
-    "showDisplaynameChanges": IBaseSetting<boolean>;
     "showReadReceipts": IBaseSetting<boolean>;
     "showTwelveHourTimestamps": IBaseSetting<boolean>;
     "alwaysShowTimestamps": IBaseSetting<boolean>;
@@ -835,24 +832,6 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|show_redaction_placeholder"),
         default: true,
         invertedSettingName: "hideRedactions",
-    },
-    "showJoinLeaves": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("settings|show_join_leave"),
-        default: true,
-        invertedSettingName: "hideJoinLeaves",
-    },
-    "showAvatarChanges": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("settings|show_avatar_changes"),
-        default: true,
-        invertedSettingName: "hideAvatarChanges",
-    },
-    "showDisplaynameChanges": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("settings|show_displayname_changes"),
-        default: true,
-        invertedSettingName: "hideDisplaynameChanges",
     },
     "showReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,
