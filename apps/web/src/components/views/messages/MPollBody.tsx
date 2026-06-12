@@ -210,7 +210,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     };
 
     private selectOption(answerId: string): void {
-        if (this.state.poll?.isEnded || this.state.isVoting) {
+        if (this.state.poll?.isEnded) {
             return;
         }
 
