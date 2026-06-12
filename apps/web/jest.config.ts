@@ -57,6 +57,9 @@ const config: Config = {
         "!<rootDir>/src/utils/SessionLock.ts",
         // Coverage chokes on type definition files
         "!<rootDir>/src/**/*.d.ts",
+        // Ignore vitest tests
+        "!<rootDir>/src/**/*.test.{ts,tsx}",
+        "!<rootDir>/src/test/**",
     ],
     coverageReporters: ["text-summary", ["lcov", { projectRoot: "../../" }]],
     prettierPath: null,
