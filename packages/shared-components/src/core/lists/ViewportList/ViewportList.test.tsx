@@ -66,7 +66,7 @@ describe("ViewportList", () => {
         expect(list.className).toContain("custom-viewport-list");
         expect(list.getAttribute("role")).toBe("grid");
         expect(list.getAttribute("aria-label")).toBe("Viewport list");
-        expect(list.getAttribute("data-testid")).toBe("viewport-list");
+        expect(list.dataset.testid).toBe("viewport-list");
         expect(list.getAttribute("style")).toContain("background-color: rgb(1, 2, 3);");
         expect(list.getAttribute("style")).toContain("padding-top: 0px;");
     });

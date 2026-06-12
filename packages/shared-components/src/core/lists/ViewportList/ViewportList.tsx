@@ -18,7 +18,7 @@ class ItemRange {
         // don't contain empty ranges
         // as it will prevent clearing the list
         // once it is scrolled far enough out of view
-        if (!range.renderCount && this.renderCount) {
+        if (range.renderCount === 0 && this.renderCount !== 0) {
             return false;
         }
         return (
@@ -71,7 +71,7 @@ export interface ViewportListProps<T> extends HTMLAttributes<HTMLElement> {
 
 const getVisibleRangeFromProps = <T,>(props: ViewportListProps<T>): ItemRange => {
     const { items, itemHeight, scrollTop, height } = props;
-    const length = items ? items.length : 0;
+    const length = items?.length ?? 0;
     const topCount = Math.min(Math.max(0, Math.floor(scrollTop / itemHeight)), length);
     const itemsAfterTop = length - topCount;
     const visibleItems = height !== 0 ? Math.ceil(height / itemHeight) : 0;
@@ -116,9 +116,6 @@ export function ViewportList<T = unknown>(props: ViewportListProps<T>): JSX.Elem
         style,
         ...restProps
     } = props;
-    // These props drive virtualization only and should not be forwarded to the DOM.
-    void scrollTop;
-    void height;
     const [renderRange, setRenderRange] = useState<ItemRange>(() => {
         const initialRenderRange = getDerivedRenderRangeFromProps(
             {
