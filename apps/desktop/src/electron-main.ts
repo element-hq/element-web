@@ -54,14 +54,11 @@ const buildConfig = getBuildConfig();
 const protocolHandler = new ProtocolHandler(buildConfig.protocol);
 const args = getArgs(protocolHandler);
 
-const LocalConfigLocation = args.configPath;
-const LocalConfigFilename = "config.json";
-
 app.setPath("userData", args.userDataPath);
 
 // Configure Electron Sentry and crashReporter using sentry.dsn in config.json if one is present.
 async function configureSentry(): Promise<void> {
-    const config = await loadConfig(LocalConfigLocation);
+    const config = await loadConfig(args.localConfigPath);
     const { dsn, environment } = config.sentry || {};
     if (dsn) {
         console.log(`Enabling Sentry with dsn=${dsn} environment=${environment}`);
@@ -155,7 +152,7 @@ app.on("ready", async () => {
 
     try {
         asarPath = await getAsarPath();
-        config = await loadConfig(args.configPath);
+        config = await loadConfig(args.localConfigPath);
     } catch (e) {
         console.log("App setup failed: exiting", e);
         process.exit(1);

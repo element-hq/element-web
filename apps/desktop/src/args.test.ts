@@ -49,7 +49,7 @@ describe("getArgsForProtocolRegistration", () => {
         expect(
             getArgsForProtocolRegistration({
                 userDataPath: "/Users/name/Library/Application Support/Custom",
-                configPath: "/root/config.json",
+                localConfigPath: "/root/config.json",
                 devtools: true,
                 update: false,
                 hidden: false,
@@ -277,7 +277,7 @@ describe("getArgs", () => {
         });
     });
 
-    describe("configPath", () => {
+    describe("localConfigPath", () => {
         it("should handle '--config'", () => {
             const args = run("--config", "/path/to/config.json");
             expect(args).toEqual({
@@ -286,7 +286,7 @@ describe("getArgs", () => {
                 update: true,
                 hidden: false,
                 positional: ["/path/to/app"],
-                configPath: "/path/to/config.json",
+                localConfigPath: "/path/to/config.json",
             });
         });
 
@@ -301,7 +301,7 @@ describe("getArgs", () => {
                 update: true,
                 hidden: false,
                 positional: ["/path/to/app"],
-                configPath: "/path/for/config.json",
+                localConfigPath: "/path/for/config.json",
             });
         });
 
@@ -316,7 +316,7 @@ describe("getArgs", () => {
                 update: true,
                 hidden: false,
                 positional: ["/path/to/app"],
-                configPath: "/path/to/config.json",
+                localConfigPath: "/path/to/config.json",
             });
         });
     });
