@@ -9,6 +9,9 @@ declare module "matrix-seshat" {
     interface IConfig {
         language?: string;
         passphrase?: string;
+        tokenizerMode?: "ngram" | "language";
+        ngramMinSize?: number;
+        ngramMaxSize?: number;
     }
 
     /* eslint-disable camelcase */

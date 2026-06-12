@@ -17,6 +17,7 @@ import type {
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
 import Store from "./store.js";
+import { initEventIndex } from "./seshat-index.js";
 
 let seshatSupported = false;
 let Seshat: typeof SeshatType;
@@ -103,39 +104,28 @@ ipcMain.on("seshat", async function (_ev: IpcMainEvent, payload): Promise<void> 
             if (eventIndex === null) {
                 const userId = args[0];
                 const deviceId = args[1];
+                const tokenizerMode = args[2] as string | undefined;
                 const passphraseKey = `seshat|${userId}|${deviceId}`;
 
                 const passphrase = await getOrCreatePassphrase(store, passphraseKey);
 
                 try {
-                    await afs.mkdir(eventStorePath, { recursive: true });
-                    eventIndex = new Seshat(eventStorePath, { passphrase });
-                } catch (e) {
-                    if (e instanceof ReindexError) {
-                        // If this is a reindex error, the index schema
-                        // changed. Try to open the database in recovery mode,
-                        // reindex the database and finally try to open the
-                        // database again.
-                        const recoveryIndex = new SeshatRecovery(eventStorePath, {
-                            passphrase,
-                        });
+                    const result = await initEventIndex(eventStorePath, passphrase, tokenizerMode, {
+                        mkdir: afs.mkdir,
+                        deleteContents,
+                        createSeshat: (indexPath, config) => new Seshat(indexPath, config),
+                        createSeshatRecovery: (indexPath, config) => new SeshatRecovery(indexPath, config),
+                        isReindexError: (error) => error instanceof ReindexError,
+                    });
 
-                        const userVersion = await recoveryIndex.getUserVersion();
-
-                        // If our user version is 0 we'll delete the db
-                        // anyways so reindexing it is a waste of time.
-                        if (userVersion === 0) {
-                            await recoveryIndex.shutdown();
-                            await deleteContents(eventStorePath);
-                        } else {
-                            await recoveryIndex.reindex();
-                        }
-
-                        eventIndex = new Seshat(eventStorePath, { passphrase });
-                    } else {
-                        sendError(payload.id, <Error>e);
-                        return;
+                    eventIndex = result.eventIndex;
+                    if (result.wasRecreated) {
+                        // Tell element-web to force re-adding initial checkpoints.
+                        ret = { wasRecreated: true };
                     }
+                } catch (e) {
+                    sendError(payload.id, <Error>e);
+                    return;
                 }
             }
             break;
