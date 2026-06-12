@@ -255,6 +255,9 @@ export interface EventTileProps {
     /** Whether the current user can see a message hidden from other users for moderation. */
     isSeeingThroughMessageHiddenForModeration?: boolean;
 
+    /** Whether sender profile rendering should use the event-time member snapshot. */
+    forceHistoricalSender?: boolean;
+
     /** Whether the timestamp should be hidden for preview rendering. */
     hideTimestamp?: boolean;
     /** Whether interactive controls inside the tile should be inhibited. */
@@ -922,13 +925,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             sender: {
                 senderId: this.props.mxEvent.getSender() ?? undefined,
                 member: roomMemberToMemberInfo(
-                    resolveRoomMemberProfile({
-                        room: MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId() ?? ""),
-                        userId: this.props.mxEvent.getSender() ?? undefined,
-                        member: this.getAvatarMember(),
-                        useOnlyCurrentProfiles: SettingsStore.getValue("useOnlyCurrentProfiles"),
-                        timelineRenderingType: this.context.timelineRenderingType,
-                    }),
+                    this.props.forceHistoricalSender
+                        ? this.getAvatarMember()
+                        : resolveRoomMemberProfile({
+                              room: MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId() ?? ""),
+                              userId: this.props.mxEvent.getSender() ?? undefined,
+                              member: this.getAvatarMember(),
+                              useOnlyCurrentProfiles: SettingsStore.getValue("useOnlyCurrentProfiles"),
+                              timelineRenderingType: this.context.timelineRenderingType,
+                          }),
                 ),
                 hideSender: this.props.hideSender,
                 isEmote: this.props.mxEvent.getContent().msgtype === MsgType.Emote,

@@ -15,7 +15,6 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import SettingsStore from "../../../settings/SettingsStore";
 import SenderProfile from "../messages/SenderProfile";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import { isVoiceMessage } from "../../../utils/EventUtils";
@@ -28,7 +27,7 @@ import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type IBodyProps } from "../messages/IBodyProps";
 import { FileBodyFactory, VideoBodyFactory, renderMBody } from "../messages/MBodyFactory";
-import { resolveRoomMemberProfile, roomMemberToMemberInfo } from "../../../hooks/room/useRoomMemberProfile";
+import { roomMemberToMemberInfo } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -129,14 +128,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                     <MemberAvatar member={mxEvent.sender} fallbackUserId={mxEvent.getSender()} size="16px" />
                     <SenderProfile
                         senderId={mxEvent.getSender() ?? undefined}
-                        member={roomMemberToMemberInfo(
-                            resolveRoomMemberProfile({
-                                room: MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId() ?? ""),
-                                userId: mxEvent.getSender() ?? undefined,
-                                member: mxEvent.sender,
-                                useOnlyCurrentProfiles: SettingsStore.getValue("useOnlyCurrentProfiles"),
-                            }),
-                        )}
+                        member={roomMemberToMemberInfo(mxEvent.sender)}
                         isEmote={msgType === MsgType.Emote}
                     />
                 </div>
