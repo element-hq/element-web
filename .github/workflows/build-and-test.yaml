@@ -188,7 +188,7 @@ jobs:
     modules:
         name: Modules Playwright tests
         needs: prepare
-        if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules
+        if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
         runs-on: ubuntu-24.04-arm
         steps:
             - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -250,7 +250,7 @@ jobs:
         name: "Desktop Windows"
         uses: ./.github/workflows/build_desktop_windows.yaml
         # Skip Windows builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
-        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
+        if: needs.prepare.outputs.run-all-desktop == 'true'
         strategy:
             matrix:
                 arch: [x64, ia32, arm64]
@@ -286,7 +286,7 @@ jobs:
         uses: ./.github/workflows/build_desktop_macos.yaml
         # Skip macOS builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
         # and we have a very low limit of concurrent macos runners (5) across the Github org.
-        if: needs.prepare.outputs.run-all-desktop
+        if: needs.prepare.outputs.run-all-desktop == 'true'
         with:
             blob_report: true
 
