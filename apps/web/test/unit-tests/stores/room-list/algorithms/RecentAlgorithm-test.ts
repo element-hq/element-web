@@ -69,6 +69,56 @@ describe("RecentAlgorithm", () => {
             room.getMyMembership.mockReturnValue(KnownMembership.Invite);
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
         });
+
+        it("prefers the newer live timeline event over a stale bump stamp", () => {
+            const room = new Room("room123", cli, "@john:matrix.org");
+
+            const event1 = mkMessage({
+                room: room.roomId,
+                msg: "Hello world!",
+                user: "@alice:matrix.org",
+                ts: 5,
+                event: true,
+            });
+            const event2 = mkMessage({
+                room: room.roomId,
+                msg: "Howdy!",
+                user: "@bob:matrix.org",
+                ts: 10,
+                event: true,
+            });
+
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            jest.spyOn(room, "getBumpStamp").mockReturnValue(8);
+            room.addLiveEvents([event1, event2], { addToState: true });
+
+            expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(10);
+        });
+
+        it("still uses bump stamp when it is newer than the live timeline", () => {
+            const room = new Room("room123", cli, "@john:matrix.org");
+
+            const event1 = mkMessage({
+                room: room.roomId,
+                msg: "Hello world!",
+                user: "@alice:matrix.org",
+                ts: 5,
+                event: true,
+            });
+            const event2 = mkMessage({
+                room: room.roomId,
+                msg: "Howdy!",
+                user: "@bob:matrix.org",
+                ts: 10,
+                event: true,
+            });
+
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+            jest.spyOn(room, "getBumpStamp").mockReturnValue(314);
+            room.addLiveEvents([event1, event2], { addToState: true });
+
+            expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(314);
+        });
     });
 
     describe("sortRooms", () => {
