@@ -1553,6 +1553,11 @@
         "experimental_section": "Wczesny podgląd",
         "extended_profiles_msc_support": "Wymaga, aby Twój serwer obsługiwał MSC4133",
         "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
+        "feature_retention": {
+            "description": "Automatycznie usuwaj wiadomości po upływie ustawionego czasu wygaśnięcia. Obecnie obsługiwane są tylko ustawienia czytania.",
+            "disabled_sliding_sync": "Nie można ustawić czasu wygaśnięcia wiadomości, gdy opcja Sliding Sync jest włączona.",
+            "display_name": "Limit czasu wiadomości"
+        },
         "feature_user_status": {
             "description": "Pozwala wyświetlić i ustawić aktualny status.",
             "display_name": "Status użytkownika",
@@ -1929,7 +1934,9 @@
                 "many": "%(count)s przypiętych wiadomości"
             },
             "limits": {
-                "other": "Możesz przypiąć do %(count)s widżetów"
+                "one": "Możesz przypiąć maksymalnie %(count)s widżet",
+                "few": "Możesz przypiąć maksymalnie %(count)s widżety",
+                "many": "Możesz przypiąć maksymalnie %(count)s widżetów"
             },
             "menu": "Otwórz menu",
             "reply_thread": "Odpowiedz na <link>wiadomość w wątku</link>",
@@ -3651,18 +3658,24 @@
                 "other": "zostało zbanowanych %(count)s razy"
             },
             "changed_avatar": {
-                "other": "%(oneUser)szmienił swoje zdjęcie profilowe %(count)s razy"
+                "one": "%(oneUser)szmienił swoje zdjęcie profilowe",
+                "few": "%(oneUser)szmienił swoje zdjęcie profilowe %(count)s razy",
+                "many": "%(oneUser)szmienił swoje zdjęcie profilowe %(count)s razy"
             },
             "changed_avatar_multiple": {
-                "other": "%(severalUsers)szmieniło swoje zdjęcie profilowe %(count)s razy"
+                "one": "%(severalUsers)szmieniło swoje zdjęcie profilowe",
+                "few": "%(severalUsers)szmieniło swoje zdjęcie profilowe %(count)s razy",
+                "many": "%(severalUsers)szmieniło swoje zdjęcie profilowe %(count)s razy"
             },
             "changed_name": {
                 "one": "%(oneUser)szmienił swoją nazwę",
-                "other": "%(oneUser)szmienił swoją nazwę %(count)s razy"
+                "few": "%(oneUser)szmienił swoją nazwę %(count)s razy",
+                "many": "%(oneUser)szmienił swoją nazwę %(count)s razy"
             },
             "changed_name_multiple": {
-                "other": "%(severalUsers)szmieniło ich nazwę %(count)s razy",
-                "one": "%(severalUsers)szmieniło ich nazwę"
+                "one": "%(severalUsers)szmieniło swoją nazwę",
+                "few": "%(severalUsers)szmieniło swoją nazwę %(count)s razy",
+                "many": "%(severalUsers)szmieniło swoją nazwę %(count)s razy"
             },
             "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
@@ -3718,12 +3731,14 @@
                 "other": "zostało usuniętych %(count)s razy"
             },
             "left": {
-                "one": "%(oneUser)s wyszedł",
-                "other": "%(oneUser)sopuścił %(count)s razy"
+                "one": "%(oneUser)sopuścił pokój",
+                "few": "%(oneUser)sopuścił pokój %(count)s razy",
+                "many": "%(oneUser)sopuścił pokój %(count)s razy"
             },
             "left_multiple": {
-                "one": "%(severalUsers)s wyszło",
-                "other": "%(severalUsers)swyszło %(count)s razy"
+                "one": "%(severalUsers)sopuściło pokój",
+                "few": "%(severalUsers)sopuściło pokój %(count)s razy",
+                "many": "%(severalUsers)sopuściło pokój %(count)s razy"
             },
             "no_change": {
                 "other": "%(oneUser)snie wykonał zmian %(count)s razy",
@@ -3734,12 +3749,14 @@
                 "one": "%(severalUsers)snie wykonało zmian"
             },
             "pinned_events": {
-                "one": "%(oneUser)szmienił <a>przypięte wiadomości</a> pokoju",
-                "other": "%(oneUser)szmienił <a>przypięte wiadomości</a> pokoju %(count)s razy"
+                "one": "%(oneUser)szmienił <a>przypięte wiadomości</a> w pokoju",
+                "few": "%(oneUser)szmienił <a>przypięte wiadomości</a> w pokoju %(count)s razy",
+                "many": "%(oneUser)szmienił <a>przypięte wiadomości</a> w pokoju %(count)s razy"
             },
             "pinned_events_multiple": {
-                "one": "%(severalUsers)szmieniło <a>przypięte wiadomości</a> pokoju",
-                "other": "%(severalUsers)szmieniło <a>przypięte wiadomości</a> pokoju %(count)s razy"
+                "one": "%(severalUsers)szmienili <a>przypięte wiadomości</a> pokoju",
+                "few": "%(severalUsers)szmienili <a>przypięte wiadomości</a> pokoju %(count)s razy",
+                "many": "%(severalUsers)szmienili <a>przypięte wiadomości</a> pokoju %(count)s razy"
             },
             "redacted": {
                 "one": "%(oneUser)susunął wiadomość",
@@ -3750,12 +3767,14 @@
                 "other": "%(severalUsers)susunęło %(count)s wiadomości"
             },
             "rejected_invite": {
-                "other": "%(oneUser)sodrzucił ich zaproszenie %(count)s razy",
-                "one": "%(oneUser)sodrzucił ich zaproszenie"
+                "one": "%(oneUser)sodrzucił zaproszenie",
+                "few": "%(oneUser)sodrzucił zaproszenie %(count)s razy",
+                "many": "%(oneUser)sodrzucił zaproszenie %(count)s razy"
             },
             "rejected_invite_multiple": {
-                "one": "%(severalUsers)sodrzuciło ich zaproszenia",
-                "other": "%(severalUsers)sodrzuciło ich zaproszenia %(count)s razy"
+                "one": "%(severalUsers)sodrzuciło zaproszenie",
+                "few": "%(severalUsers)sodrzuciło zaproszenie %(count)s razy",
+                "many": "%(severalUsers)sodrzuciło zaproszenie %(count)s razy"
             },
             "rejoined": {
                 "one": "%(oneUser)s wyszedł i dołączył ponownie",
@@ -3809,7 +3828,7 @@
         "release_notes_toast_title": "Co nowego",
         "see_changes_button": "Co nowego?",
         "toast_description": "Dostępna jest nowa wersja %(brand)s",
-        "toast_title": "Aktualizuj %(brand)s",
+        "toast_title": "Aktualizacja %(brand)s",
         "unavailable": "Niedostępny"
     },
     "update_room_access_modal": {
