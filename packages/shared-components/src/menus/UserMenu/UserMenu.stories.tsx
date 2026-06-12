@@ -189,21 +189,3 @@ export const WithStatusOpen: Story = {
         },
     },
 };
-
-export const AllOptions: Story = {
-    args: {
-        displayName: "Alice",
-        userId: "@alice:example.org",
-        manageAccountHref: "#",
-        showAvatar: true,
-        actions: {
-            createAccount: true,
-            signIn: true,
-            linkNewDevice: true,
-            openSecurity: true,
-            openHomePage: true,
-            openFeedback: true,
-            openSettings: true,
-        } satisfies Record<keyof UserMenuViewSnapshot["actions"], true>,
-    },
-};
