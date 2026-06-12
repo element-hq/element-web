@@ -113,6 +113,12 @@ export default class ProtocolHandler {
         fs.writeFileSync(storePath, JSON.stringify(this.store));
     }
 
+    /**
+     * Initialises the ProtocolHandler
+     * Registers the app as the default protocol client for deeplink handling.
+     * Handles any deeplink passed in via args on app start.
+     * Must be called after mainWindow is set up and any initial navigation is fired.
+     */
     public initialise(args: Args): void {
         this.setAsDefaultProtocolClient(args);
 
