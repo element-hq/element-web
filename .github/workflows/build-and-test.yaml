@@ -58,6 +58,8 @@ jobs:
             skip: ${{ inputs.skip || (github.event_name == 'pull_request' && startsWith(github.head_ref, 'renovate/')) }}
             # If the A-Electron label is present on a PR, build & test all desktop platforms.
             run-all-desktop: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'A-Electron') }}
+            # If the A-Modules label is present on a PR, run the modules tests.
+            run-modules: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'A-Modules') }}
         steps:
             - name: Checkout code
               uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -186,7 +188,7 @@ jobs:
     modules:
         name: Modules Playwright tests
         needs: prepare
-        if: needs.prepare.outputs.skip == 'false' && github.event_name == 'merge_group'
+        if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules
         runs-on: ubuntu-24.04-arm
         steps:
             - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
