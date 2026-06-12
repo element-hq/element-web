@@ -66,6 +66,11 @@
         "mentions_keywords": "Mentions and keywords",
         "mute_room": "Mute room"
     },
+    "release_announcement": {
+        "room_list_section_close": "Ok",
+        "room_list_section_description": "Group your chats into sections to keep things structured and easy to navigate.",
+        "room_list_section_title": "Organise with Sections"
+    },
     "room": {
         "context_menu": {
             "title": "Room options"
