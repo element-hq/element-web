@@ -67,13 +67,14 @@ jobs:
                   pnpm test \
                       --coverage=$ENABLE_COVERAGE \
                       --ci \
-                      --runInBand \
+                      --maxWorkers="50%" \
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
                   # tell jest to use coloured output
                   FORCE_COLOR: true
                   SHARD: ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
+                  NODE_OPTIONS: "--max_old_space_size=8192"
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'
