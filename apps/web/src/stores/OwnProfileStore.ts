@@ -16,6 +16,7 @@ import {
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -24,7 +25,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import { mediaFromMxc } from "../customisations/Media";
 import SettingsStore from "../settings/SettingsStore";
-import { type UserStatus, validateUserStatus } from "../utils/userStatus";
+import { validateUserStatus } from "../utils/userStatus";
 
 interface IState {
     displayName?: string;

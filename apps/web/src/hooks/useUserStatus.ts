@@ -8,11 +8,12 @@ Please see LICENSE files in the repository root for full details.
 import { useEffect, useState } from "react";
 import { ClientEvent, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { type UserStatus, validateUserStatus } from "../utils/userStatus";
+import { validateUserStatus } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
 
@@ -32,9 +33,8 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
         if (syncedUserId !== userId) {
             return;
         }
-        if (syncProfile["org.matrix.msc4426.status"]) {
-            setRawUserStatus(syncProfile["org.matrix.msc4426.status"]);
-        }
+
+        setRawUserStatus(syncProfile["org.matrix.msc4426.status"]);
     });
     useEffect(() => {
         (async () => {

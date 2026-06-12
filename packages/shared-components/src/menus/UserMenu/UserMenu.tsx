@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX } from "react";
-import { Avatar, Button, Link, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
+import { Avatar, Button, IconButton, Link, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
 import {
     ChatProblemIcon,
     DevicesIcon,
@@ -14,12 +14,15 @@ import {
     LockIcon,
     PopOutIcon,
     SettingsIcon,
+    CloseIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import classNames from "classnames";
 
 import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
+import { type UserStatus } from "../../core/userStatus";
+import { _t } from "../..";
 
 export interface UserMenuViewSnapshot {
     /**
@@ -51,9 +54,9 @@ export interface UserMenuViewSnapshot {
      */
     manageAccountHref?: string;
     /**
-     * The user status emoji to display, or undefined for no icon.
+     * The user status to display, or undefined for no icon / status.
      */
-    statusEmoji?: string;
+    userStatus?: UserStatus;
     /**
      * A set of actions that the user can perform from the menu.
      */
@@ -101,6 +104,10 @@ export declare interface UserMenuViewActions {
      * Called to open the settings dialog.
      */
     openSettings: () => void;
+    /**
+     * Called when the user clicks the button to clear theirt status.
+     */
+    clearStatus: () => void;
 }
 
 export type UserMenuViewProps = {
@@ -111,15 +118,40 @@ export type UserMenuViewProps = {
     className?: string;
 };
 
+function StatusButton({ status, clearStatus }: { status: UserStatus; clearStatus: () => void }): JSX.Element {
+    return (
+        <div className={styles.statusButton}>
+            <Text as="span" className={styles.menuStatusEmoji}>
+                {status.emoji}
+            </Text>
+            <Text as="span" className={styles.menuStatusText}>
+                {status.text}
+            </Text>
+            <IconButton
+                onClick={clearStatus}
+                aria-label={_t("menus|user_menu|clear_status")}
+                tooltip={_t("menus|user_menu|clear_status")}
+                size="28px"
+            >
+                <CloseIcon />
+            </IconButton>
+        </div>
+    );
+}
+
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar, statusEmoji } =
+    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar, userStatus } =
         useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
             <div className={styles.avatarWrapper}>
                 <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
-                {statusEmoji && <span className={styles.statusEmoji}>{statusEmoji}</span>}
+                {userStatus && (
+                    <Text as="div" className={styles.iconStatusEmoji}>
+                        {userStatus.emoji}
+                    </Text>
+                )}
             </div>
         </button>
     );
@@ -143,6 +175,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
+                    {userStatus && <StatusButton status={userStatus} clearStatus={vm.clearStatus} />}
                     <Text data-testid="userId" size="md" as="span" type="body">
                         {userId}
                     </Text>

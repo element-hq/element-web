@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Clear",
             "create_an_account": "Create an account",
             "got_an_account": "Got an account?",
             "manage_account": "Manage account",
