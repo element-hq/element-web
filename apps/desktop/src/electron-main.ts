@@ -32,7 +32,6 @@ import minimist from "minimist";
 
 import "./ipc.js";
 import "./seshat.js";
-import "./settings.js";
 import "./badge.js";
 import * as tray from "./tray.js";
 import Store from "./store.js";
@@ -48,6 +47,8 @@ import { setupMediaAuth } from "./media-auth.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
+import { getLastAppliedConfig } from "./proxy.js";
+import { initProxy } from "./settings.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -286,6 +287,19 @@ app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling,Media
 
 const store = Store.initialize(argv["storage-mode"]); // must be called before any async actions
 
+app.on("login", (event, _webContents, _request, authInfo, callback) => {
+    if (authInfo.isProxy) {
+        const proxyConfig = getLastAppliedConfig();
+        if (proxyConfig?.mode === "custom" && proxyConfig.username && proxyConfig.password) {
+            event.preventDefault();
+            callback(proxyConfig.username, proxyConfig.password);
+            console.log(`[proxy] Authenticating to ${authInfo.host}:${authInfo.port}`);
+        }
+    }
+});
+
+void initProxy();
+
 // Disable hardware acceleration if the setting has been set.
 if (store.get("disableHardwareAcceleration")) {
     console.log("Disabling hardware acceleration.");
@@ -430,7 +444,7 @@ app.on("ready", async () => {
         app.exit(1);
     }
 
-    void global.mainWindow.loadURL("vector://vector/webapp/");
+    global.mainWindow.loadURL("vector://vector/webapp/");
 
     if (process.platform === "darwin") {
         setupMacosTitleBar(global.mainWindow);
@@ -539,8 +553,6 @@ app.on("ready", async () => {
                         console.error("Wayland: failed to get user-selected source:", err);
                         callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
                     });
-            } else {
-                global.mainWindow?.webContents.send("openDesktopCapturerSourcePicker");
             }
             setDisplayMediaCallback(callback);
         },

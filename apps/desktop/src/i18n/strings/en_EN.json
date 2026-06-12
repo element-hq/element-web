@@ -53,6 +53,12 @@
         "services": "Services",
         "unhide": "Unhide"
     },
+    "settings": {
+        "network_proxy": {
+            "title": "Network Proxy",
+            "title_ellipsis": "Network Proxy…"
+        }
+    },
     "right_click_menu": {
         "add_to_dictionary": "Add to dictionary",
         "copy_email": "Copy email address",

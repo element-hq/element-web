@@ -64,6 +64,7 @@ type ElectronChannel =
     | "userDownloadCompleted"
     | "userDownloadAction"
     | "openDesktopCapturerSourcePicker"
+    | "openProxySettings"
     | "userAccessToken"
     | "homeserverUrl"
     | "serverSupportedVersions"

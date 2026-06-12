@@ -56,7 +56,19 @@ function relaunchApp(): void {
  * Clear all data and relaunch the app.
  */
 export async function clearDataAndRelaunch(electronSession: Session): Promise<void> {
+    const proxyConfig = Store.instance?.get("desktopProxyConfig");
+    const proxyPassword = await Store.instance?.getSecret("proxy_password");
+
     Store.instance?.clear();
+
+    // Restore proxy settings after clear so they survive logout
+    if (proxyConfig) {
+        Store.instance?.set("desktopProxyConfig", proxyConfig);
+    }
+    if (proxyPassword) {
+        await Store.instance?.setSecret("proxy_password", proxyPassword);
+    }
+
     electronSession.flushStorageData();
     await electronSession.clearStorageData();
     relaunchApp();

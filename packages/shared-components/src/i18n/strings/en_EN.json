@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Back",
+        "cancel": "Cancel",
         "click": "Click",
         "close": "Close",
         "collapse": "Collapse",
@@ -28,6 +29,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "retry": "Retry",
+        "save": "Save",
         "search": "Search",
         "start_chat": "Start chat",
         "unpin": "Unpin",
@@ -35,11 +37,15 @@
     },
     "common": {
         "attachment": "Attachment",
+        "configuration": "Configuration",
         "encryption_enabled": "Encryption enabled",
         "loading": "Loading…",
         "options": "Options",
+        "password": "Password",
         "preferences": "Preferences",
-        "state_encryption_enabled": "Experimental state encryption enabled"
+        "protocol": "Protocol",
+        "state_encryption_enabled": "Experimental state encryption enabled",
+        "username": "Username"
     },
     "devtools": {
         "toggle_event": "toggle event"
@@ -178,6 +184,20 @@
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
+        }
+    },
+    "settings": {
+        "network_proxy": {
+            "connection_mode": "Connection mode",
+            "manual_configuration": "Manual configuration",
+            "no_proxy_direct": "No proxy (direct connection)",
+            "no_proxy_for_comma_separated": "No proxy for",
+            "port": "Port",
+            "proxy_config_encrypted_system_storage": "Proxy password is stored in the system credential store when available.",
+            "proxy_host": "Proxy host",
+            "proxy_settings_updates_warning": "Changes apply to new network requests after saving.",
+            "title": "Network Proxy",
+            "use_system_proxy": "Use system proxy"
         }
     },
     "terms": {

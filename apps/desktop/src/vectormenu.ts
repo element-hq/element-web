@@ -87,13 +87,18 @@ export function buildMenuTemplate(): Menu {
                     label: _t("action|zoom_out"),
                 },
                 { type: "separator" },
-                // in macOS the Preferences menu item goes in the first menu
                 ...(!isMac
                     ? [
                           {
                               label: _t("common|preferences"),
                               click(): void {
                                   global.mainWindow?.webContents.send("preferences");
+                              },
+                          },
+                          {
+                              label: _t("settings|network_proxy|title_ellipsis"),
+                              click(): void {
+                                  global.mainWindow?.webContents.send("openProxySettings");
                               },
                           },
                       ]
@@ -156,6 +161,12 @@ export function buildMenuTemplate(): Menu {
                     accelerator: "Command+,", // Mac-only accelerator
                     click(): void {
                         global.mainWindow?.webContents.send("preferences");
+                    },
+                },
+                {
+                    label: _t("settings|network_proxy|title_ellipsis"),
+                    click(): void {
+                        global.mainWindow?.webContents.send("openProxySettings");
                     },
                 },
                 { type: "separator" },

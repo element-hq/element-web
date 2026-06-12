@@ -11,6 +11,9 @@ import React, { type JSX, type ReactElement } from "react";
 
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
+import PlatformPeg from "../../../PlatformPeg";
+import Modal from "../../../Modal";
+import { NetworkProxyModal } from "../settings/NetworkProxyModal";
 
 const AuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
@@ -25,6 +28,21 @@ const AuthFooter = (): ReactElement => {
         authFooterLinks.push(
             <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noreferrer noopener">
                 {linkEntry.text}
+            </a>,
+        );
+    }
+
+    if (PlatformPeg.get().supportsProxyConfiguration()) {
+        authFooterLinks.push(
+            <a
+                href="#"
+                key="proxy"
+                onClick={(e) => {
+                    e.preventDefault();
+                    Modal.createDialog(NetworkProxyModal, {});
+                }}
+            >
+                {_t("settings|network_proxy|title")}
             </a>,
         );
     }
