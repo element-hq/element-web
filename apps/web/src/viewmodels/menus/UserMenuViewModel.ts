@@ -6,6 +6,7 @@
  */
 
 import { BaseViewModel, type UserMenuSnapshot, type UserMenuViewActions } from "@element-hq/web-shared-components";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -19,7 +20,6 @@ import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { clearUserStatus } from "../../utils/userStatus";
-import { logger } from "matrix-js-sdk/src/logger";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
