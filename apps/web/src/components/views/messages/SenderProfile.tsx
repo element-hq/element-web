@@ -8,34 +8,46 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import React, { type JSX, useEffect } from "react";
-import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MsgType, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
 import { DisambiguatedProfileViewModel } from "../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 import { useUserStatus } from "../../../hooks/useUserStatus";
 
-interface IProps {
+interface PureProps {
+    senderId?: string;
+    member?: RoomMember | null;
+    isEmote: boolean;
+    onClick?(this: void): void;
+    withTooltip?: boolean;
+}
+
+interface LegacyProps {
     mxEvent: MatrixEvent;
     onClick?(this: void): void;
     withTooltip?: boolean;
 }
 
-export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps): JSX.Element {
-    const sender = mxEvent.getSender();
+type IProps = PureProps | LegacyProps;
 
-    const member = useRoomMemberProfile({
-        userId: sender,
-        member: mxEvent.sender,
+export default function SenderProfile(props: IProps): JSX.Element {
+    const senderId = "mxEvent" in props ? props.mxEvent.getSender() : props.senderId;
+    const resolvedMember = useRoomMemberProfile({
+        userId: senderId,
+        member: "mxEvent" in props ? props.mxEvent.sender : props.member,
     });
-    const userStatus = useUserStatus(sender);
+    const userStatus = useUserStatus(senderId);
+    const isEmote = "mxEvent" in props ? props.mxEvent.getContent().msgtype === MsgType.Emote : props.isEmote;
+    const onClick = props.onClick;
+    const withTooltip = props.withTooltip;
 
     const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
         () =>
             new DisambiguatedProfileViewModel({
-                fallbackName: sender ?? "",
+                fallbackName: senderId ?? "",
                 onClick,
-                member,
+                member: resolvedMember,
                 colored: true,
                 emphasizeDisplayName: true,
                 withTooltip,
@@ -47,9 +59,9 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         disambiguatedProfileVM.setUserStatus(userStatus);
     }, [disambiguatedProfileVM, userStatus]);
     useEffect(() => {
-        disambiguatedProfileVM.setMember(sender ?? "", member);
-    }, [disambiguatedProfileVM, member, sender]);
-    return mxEvent.getContent().msgtype !== MsgType.Emote ? (
+        disambiguatedProfileVM.setMember(senderId ?? "", resolvedMember);
+    }, [disambiguatedProfileVM, resolvedMember, senderId]);
+    return !isEmote ? (
         <DisambiguatedProfileView vm={disambiguatedProfileVM} className="mx_DisambiguatedProfile" />
     ) : (
         <></>

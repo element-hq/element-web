@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import MemberAvatar from "../../avatars/MemberAvatar";
 import SenderProfile from "../../messages/SenderProfile";
@@ -51,10 +51,14 @@ export function EventTileAvatarAdapter({
  * Props for the {@link EventTileSenderAdapter} component.
  */
 interface EventTileSenderAdapterProps {
-    /** Matrix event whose sender identity is being rendered. */
-    mxEvent: MatrixEvent;
+    /** Stable sender ID for the event. */
+    senderId?: string;
+    /** Historical room member for the sender, when available. */
+    member?: RoomMember | null;
     /** Snapshot of the sender identity state for this tile. */
     senderSnapshot: EventTileSenderSnapshot;
+    /** Whether the body renders as an emote. */
+    isEmote: boolean;
     /** Invoked when the sender profile is clicked. */
     onSenderProfileClick: () => void;
 }
@@ -63,17 +67,19 @@ interface EventTileSenderAdapterProps {
  * Renders the sender identity display for an event tile.
  */
 export function EventTileSenderAdapter({
-    mxEvent,
+    senderId,
+    member,
     senderSnapshot,
+    isEmote,
     onSenderProfileClick,
 }: Readonly<EventTileSenderAdapterProps>): JSX.Element | null {
     switch (senderSnapshot.profileMode) {
         case "clickable":
-            return <SenderProfile onClick={onSenderProfileClick} mxEvent={mxEvent} />;
+            return <SenderProfile onClick={onSenderProfileClick} senderId={senderId} member={member} isEmote={isEmote} />;
         case "tooltip":
-            return <SenderProfile mxEvent={mxEvent} withTooltip />;
+            return <SenderProfile senderId={senderId} member={member} isEmote={isEmote} withTooltip />;
         case "default":
-            return <SenderProfile mxEvent={mxEvent} />;
+            return <SenderProfile senderId={senderId} member={member} isEmote={isEmote} />;
         default:
             return null;
     }
