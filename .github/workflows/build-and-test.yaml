@@ -267,7 +267,7 @@ jobs:
                 sqlcipher: [system, static]
                 arch: [amd64, arm64]
                 runAllTests:
-                    - ${{ needs.prepare.outputs.run-all-desktop }}
+                    - ${{ needs.prepare.outputs.run-all-desktop == 'true' }}
                 exclude:
                     # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
                     - runAllTests: false
