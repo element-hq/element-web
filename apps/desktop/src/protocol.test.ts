@@ -119,6 +119,20 @@ describe("ProtocolHandler", () => {
         expect(global.mainWindow!.loadURL).toHaveBeenCalledWith(expectedUri);
     });
 
+    it("should safely deal with wrong protocol deeplinks", () => {
+        vi.spyOn(process, "platform", "get").mockReturnValue("darwin");
+        vi.stubGlobal("mainWindow", {
+            loadURL: vi.fn(),
+        });
+
+        const handler = new ProtocolHandler(TEST_PROTOCOL);
+        expect(handler).toBeTruthy();
+
+        app.emit("open-url", new Event("test"), "random.proto:/#/room/#matrix:matrix.org");
+
+        expect(global.mainWindow!.loadURL).not.toHaveBeenCalled();
+    });
+
     describe("initialise", () => {
         beforeEach(() => {
             vi.spyOn(process, "execPath", "get").mockReturnValue("/bin/element-desktop");
