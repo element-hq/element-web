@@ -15,6 +15,7 @@ import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
 import { ManualDeviceKeyVerificationDialog } from "../ManualDeviceKeyVerificationDialog";
 import RestoreKeyBackupDialog from "../../dialogs/security/RestoreKeyBackupDialog";
+import { KeyBackupDiagnosticsPanel } from "./KeyBackupDiagnosticsPanel";
 
 interface KeyBackupProps {
     /**
@@ -35,6 +36,9 @@ export function Crypto({ onBack }: KeyBackupProps): JSX.Element {
                     <KeyStorage />
                     <CrossSigning />
                     <Session />
+
+                    {/* Extended read-only key backup diagnostics for E2EE DevTools. */}
+                    <KeyBackupDiagnosticsPanel />
 
                     <button
                         type="button"

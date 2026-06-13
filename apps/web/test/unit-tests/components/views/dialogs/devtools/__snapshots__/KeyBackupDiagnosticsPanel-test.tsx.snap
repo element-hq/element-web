@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`<KeyBackupDiagnosticsPanel /> should match snapshot for the complete panel in healthy state 1`] = `
+<div>
+  <div
+    class="mx_KeyBackupDiagnosticsPanel"
+  >
+    <h2
+      class="mx_KeyBackupDiagnosticsPanel_heading"
+    >
+      Key Backup Diagnostics
+    </h2>
+    <output
+      aria-label="Overall Status"
+      class="mx_KeyBackupDiagnosticsPanel_statusBanner mx_KeyBackupDiagnosticsPanel_ok"
+    >
+      <span
+        class="mx_KeyBackupDiagnosticsPanel_statusIcon"
+      >
+        ✓
+      </span>
+      <span>
+        Overall Status
+        : 
+        OK
+      </span>
+    </output>
+    <table
+      aria-label="Server Backup"
+    >
+      <thead>
+        <tr>
+          <th
+            colspan="2"
+          >
+            Server Backup
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th
+            scope="row"
+          >
+            Server backup exists
+          </th>
+          <td>
+            Yes (3)
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Algorithm
+          </th>
+          <td>
+            m.megolm_backup.v1.curve25519-aes-sha2
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Algorithm supported
+          </th>
+          <td>
+            Yes
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Server public key
+          </th>
+          <td>
+            Present
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table
+      aria-label="Local Backup"
+    >
+      <thead>
+        <tr>
+          <th
+            colspan="2"
+          >
+            Local Backup
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th
+            scope="row"
+          >
+            Local private key
+          </th>
+          <td>
+            Available
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Keys match
+          </th>
+          <td
+            class="mx_KeyBackupDiagnosticsPanel_ok"
+          >
+            Local key matches server key
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table
+      aria-label="Consistency Checks"
+    >
+      <thead>
+        <tr>
+          <th>
+            Check
+          </th>
+          <th>
+            Status
+          </th>
+          <th>
+            Detail
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="mx_KeyBackupDiagnosticsPanel_ok"
+        >
+          <td>
+            Server backup exists
+          </td>
+          <td>
+            <span
+              class="mx_KeyBackupDiagnosticsPanel_ok"
+            >
+              ✓
+               
+              OK
+            </span>
+          </td>
+          <td>
+            Version: 3
+          </td>
+        </tr>
+        <tr
+          class="mx_KeyBackupDiagnosticsPanel_ok"
+        >
+          <td>
+            Backup algorithm supported
+          </td>
+          <td>
+            <span
+              class="mx_KeyBackupDiagnosticsPanel_ok"
+            >
+              ✓
+               
+              OK
+            </span>
+          </td>
+          <td>
+            Algorithm: m.megolm_backup.v1.curve25519-aes-sha2
+          </td>
+        </tr>
+        <tr
+          class="mx_KeyBackupDiagnosticsPanel_ok"
+        >
+          <td>
+            Server public key present
+          </td>
+          <td>
+            <span
+              class="mx_KeyBackupDiagnosticsPanel_ok"
+            >
+              ✓
+               
+              OK
+            </span>
+          </td>
+          <td>
+            Present in auth_data
+          </td>
+        </tr>
+        <tr
+          class="mx_KeyBackupDiagnosticsPanel_ok"
+        >
+          <td>
+            Local backup private key available
+          </td>
+          <td>
+            <span
+              class="mx_KeyBackupDiagnosticsPanel_ok"
+            >
+              ✓
+               
+              OK
+            </span>
+          </td>
+          <td>
+            Cached locally
+          </td>
+        </tr>
+        <tr
+          class="mx_KeyBackupDiagnosticsPanel_ok"
+        >
+          <td>
+            Local key matches server key
+          </td>
+          <td>
+            <span
+              class="mx_KeyBackupDiagnosticsPanel_ok"
+            >
+              ✓
+               
+              OK
+            </span>
+          </td>
+          <td>
+            Local private key matches server public key
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      class="mx_KeyBackupDiagnosticsPanel_actions"
+    >
+      <button
+        type="button"
+      >
+        Refresh diagnostics
+      </button>
+      <button
+        type="button"
+      >
+        Copy diagnostic summary
+      </button>
+    </div>
+  </div>
+</div>
+`;
