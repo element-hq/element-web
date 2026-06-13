@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, useState } from "react";
+import React, { type ReactNode, useCallback, useState } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { Text } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -15,14 +16,13 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
 import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
+import QuestionDialog from "../dialogs/QuestionDialog.tsx";
 import SdkConfig from "../../../SdkConfig";
 import SettingsFlag from "../elements/SettingsFlag";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import InlineSpinner from "../elements/InlineSpinner";
 import { shouldShowFeedback } from "../../../utils/Feedback";
 import { type FeatureSettingKey } from "../../../settings/Settings.tsx";
-
-// XXX: Keep this around for re-use in future Betas
 
 interface IProps {
     title?: string;
@@ -61,9 +61,52 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
     const info = SettingsStore.getBetaInfo(featureId);
     const value = useFeatureEnabled(featureId);
     const [busy, setBusy] = useState(false);
+
+    const onClick = useCallback(() => {
+        if (!info) {
+            return;
+        }
+        void (async () => {
+            // Warn if we're about to disable the setting, the beta has gone back to labs
+            // and the user has no access to labs.
+            if (value && info.removed && !SdkConfig.get("show_labs_settings")) {
+                const { finished } = Modal.createDialog(QuestionDialog, {
+                    title: _t("labs|beta_leave_warning|title"),
+                    description: <Text>{_t("labs|beta_leave_warning|description")}</Text>,
+                    danger: true,
+                    button: _t("labs|leave_beta"),
+                });
+                const [confirmed] = await finished;
+                if (!confirmed) {
+                    return;
+                }
+            }
+            if (info?.requiresRefresh) {
+                await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
+                return;
+            }
+            setBusy(true);
+            // make it look like we're doing something for two seconds,
+            // otherwise users think clicking did nothing
+            await sleep(2000);
+            await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
+            setBusy(false);
+        })();
+    }, [info, featureId, value]);
+
     if (!info) return null; // Beta is invalid/disabled
 
-    const { title, caption, faq, image, feedbackLabel, feedbackSubheading, extraSettings, requiresRefresh } = info;
+    const {
+        title,
+        removed: labsOnly,
+        caption,
+        faq,
+        image,
+        feedbackLabel,
+        feedbackSubheading,
+        extraSettings,
+        requiresRefresh,
+    } = info;
 
     let feedbackButton;
     if (value && feedbackLabel && feedbackSubheading && shouldShowFeedback()) {
@@ -106,18 +149,7 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
                     <div className="mx_BetaCard_buttons">
                         {feedbackButton}
                         <AccessibleButton
-                            onClick={async (): Promise<void> => {
-                                setBusy(true);
-                                // make it look like we're doing something for two seconds,
-                                // otherwise users think clicking did nothing
-                                if (!requiresRefresh) {
-                                    await sleep(2000);
-                                }
-                                await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
-                                if (!requiresRefresh) {
-                                    setBusy(false);
-                                }
-                            }}
+                            onClick={onClick}
                             kind={feedbackButton ? "primary_outline" : "primary"}
                             disabled={busy}
                         >
@@ -125,6 +157,11 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
                         </AccessibleButton>
                     </div>
                     {refreshWarning && <div className="mx_BetaCard_refreshWarning">{refreshWarning}</div>}
+                    {labsOnly && (
+                        <Text style={{ color: "var(--cpd-color-text-critical-primary)" }} size="sm">
+                            {_t("labs|beta_removal_warning")}
+                        </Text>
+                    )}
                     {faq && <div className="mx_BetaCard_faq">{faq(value)}</div>}
                 </div>
                 <div className="mx_BetaCard_columns_image_wrapper">
