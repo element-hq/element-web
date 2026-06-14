@@ -25,12 +25,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
-import {
-    DeviceListener,
-    ACCOUNT_DATA_KEY_M_KEY_BACKUP,
-    ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
-    RECOVERY_ACCOUNT_DATA_KEY,
-} from "../../src/device-listener";
+import { DeviceListener, ACCOUNT_DATA_KEY_M_KEY_BACKUP, RECOVERY_ACCOUNT_DATA_KEY } from "../../src/device-listener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import * as SetupEncryptionToast from "../../src/toasts/SetupEncryptionToast";
 import * as UnverifiedSessionToast from "../../src/toasts/UnverifiedSessionToast";
@@ -327,9 +322,7 @@ describe("DeviceListener", () => {
 
             // @ts-ignore implementing a function with complex return type
             mockClient!.getAccountDataFromServer.mockImplementation(async (key) => {
-                if (key === ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE) {
-                    return { disabled: true };
-                } else if (key == ACCOUNT_DATA_KEY_M_KEY_BACKUP) {
+                if (key == ACCOUNT_DATA_KEY_M_KEY_BACKUP) {
                     return { enabled: false };
                 } else if (key === RECOVERY_ACCOUNT_DATA_KEY) {
                     return null;
@@ -650,10 +643,6 @@ describe("DeviceListener", () => {
             const instance = await createAndStart();
             await instance.recordKeyBackupDisabled();
 
-            expect(mockClient.setAccountData).toHaveBeenCalledWith("m.org.matrix.custom.backup_disabled", {
-                disabled: true,
-            });
-
             expect(mockClient.setAccountData).toHaveBeenCalledWith("m.key_backup", {
                 enabled: false,
             });
@@ -688,7 +677,7 @@ describe("DeviceListener", () => {
 
                 it("shows the 'Turn on key storage' toast if we never explicitly turned off key storage", async () => {
                     // Given key backup is off but the account data saying we turned it off is not set
-                    // (m.key_backup or m.org.matrix.custom.backup_disabled)
+                    // (m.key_backup)
                     mockClient.getAccountData.mockReturnValue(undefined);
 
                     // When we launch the DeviceListener
@@ -705,8 +694,6 @@ describe("DeviceListener", () => {
                         switch (eventType) {
                             case ACCOUNT_DATA_KEY_M_KEY_BACKUP:
                                 return new MatrixEvent({ content: { enabled: true } });
-                            case ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE:
-                                return new MatrixEvent({ content: { disabled: false } });
                             default:
                                 return undefined;
                         }
@@ -754,8 +741,6 @@ describe("DeviceListener", () => {
                         switch (eventType) {
                             case ACCOUNT_DATA_KEY_M_KEY_BACKUP:
                                 return new MatrixEvent({ content: { enabled: true } });
-                            case ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE:
-                                return new MatrixEvent({ content: { disabled: false } });
                             default:
                                 return undefined;
                         }
@@ -775,8 +760,6 @@ describe("DeviceListener", () => {
                         switch (eventType) {
                             case ACCOUNT_DATA_KEY_M_KEY_BACKUP:
                                 return new MatrixEvent({ content: { enabled: false } });
-                            case ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE:
-                                return new MatrixEvent({ content: { disabled: true } });
                             default:
                                 return undefined;
                         }
@@ -1329,9 +1312,6 @@ describe("DeviceListener", () => {
             it("does not show the 'set up recovery' toast if the user has chosen to disable key storage", async () => {
                 mockClient!.getAccountData.mockImplementation((k: string) => {
                     switch (k) {
-                        case "m.org.matrix.custom.backup_disabled":
-                            return new MatrixEvent({ content: { disabled: true } });
-
                         case "m.key_backup":
                             return new MatrixEvent({ content: { enabled: false } });
 
@@ -1473,8 +1453,6 @@ function mockKeyBackupFromServer(client: MockedObject<MatrixClient>, enabled: bo
         switch (eventType) {
             case ACCOUNT_DATA_KEY_M_KEY_BACKUP:
                 return { enabled } as any;
-            case ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE:
-                return { disabled: !enabled } as any;
             default:
                 return null;
         }
