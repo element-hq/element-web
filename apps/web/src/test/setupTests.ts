@@ -7,6 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { beforeEach } from "vitest";
 import fetchMock, { manageFetchMockGlobally } from "@fetch-mock/vitest";
+import "vitest-canvas-mock";
+
+import SdkConfig, { DEFAULTS } from "../SdkConfig";
 
 manageFetchMockGlobally();
 
@@ -16,3 +19,7 @@ beforeEach(() => {
     fetchMock.catch(404);
     fetchMock.mockGlobal();
 });
+
+// uninitialised SdkConfig causes lots of warnings in console
+// init with defaults
+SdkConfig.put(DEFAULTS);

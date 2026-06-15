@@ -26,7 +26,7 @@ const config: Config = {
     },
     testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
-    setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
+    setupFiles: ["web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
     moduleNameMapper: {
         // Support CSS module
@@ -42,7 +42,7 @@ const config: Config = {
         "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
         "context-filter-polyfill": "<rootDir>/__mocks__/empty.js",
-        "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
+        "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock-jest.js",
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "@vector-im/compound-web": "<rootDir>/node_modules/@vector-im/compound-web",

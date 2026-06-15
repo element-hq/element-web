@@ -7,9 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect } from "vitest";
 import { PushRuleActionName, type TweakHighlight, TweakName, type TweakSound } from "matrix-js-sdk/src/matrix";
 
-import { PushRuleVectorState } from "../../../src/notifications";
+import { PushRuleVectorState } from "./PushRuleVectorState";
 
 describe("PushRuleVectorState", function () {
     describe("contentRuleVectorStateKind", function () {

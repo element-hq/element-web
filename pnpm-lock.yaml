@@ -977,9 +977,6 @@ importers:
       jest:
         specifier: ^30.0.0
         version: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)
-      jest-canvas-mock:
-        specifier: ^2.5.2
-        version: 2.5.2
       jest-environment-jsdom:
         specifier: ^30.2.0
         version: 30.4.1
@@ -1079,6 +1076,9 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@4.1.8)(@vitest/coverage-v8@4.1.8)(happy-dom@20.10.2)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.16(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
+      vitest-canvas-mock:
+        specifier: ^1.1.4
+        version: 1.1.4(vitest@4.1.8)
       web-streams-polyfill:
         specifier: ^4.0.0
         version: 4.3.0
@@ -9880,9 +9880,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  jest-canvas-mock@2.5.2:
-    resolution: {integrity: sha512-vgnpPupjOL6+L5oJXzxTxFrlGEIbHdZqFU+LFNdtLxZ3lRDCl17FlTMM7IatoRQkrcyOTMlDinjUguqmQ6bR2A==}
-
   jest-changed-files@30.4.1:
     resolution: {integrity: sha512-IuctmYrxi21iOSOaIXpJWalHyPAsVv0GeBHKDn8C1CA4W5htHn7INL+wdnL4Bo0+olEndvAFkmb++tIQJG+vvg==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
@@ -13602,6 +13599,11 @@ packages:
         optional: true
       postcss:
         optional: true
+
+  vitest-canvas-mock@1.1.4:
+    resolution: {integrity: sha512-4boWHY+STwAxGl1+uwakNNoQky5EjPLC8HuponXNoAscYyT1h/F7RUvTkl4IyF/MiWr3V8Q626je3Iel3eArqA==}
+    peerDependencies:
+      vitest: ^3.0.0 || ^4.0.0
 
   vitest-plugin-vis@5.1.1:
     resolution: {integrity: sha512-A/MEvQhDpNAj/5b53GiN139glgWUe0Qh5cDupm25G+06FA/2K85bd3tK+Hi4fTaolNbL5WiLNgnQ8dOL+kC7Pw==}
@@ -23308,11 +23310,6 @@ snapshots:
       filelist: 1.0.4
       picocolors: 1.1.1
 
-  jest-canvas-mock@2.5.2:
-    dependencies:
-      cssfontparser: 1.2.1
-      moo-color: 1.0.3
-
   jest-changed-files@30.4.1:
     dependencies:
       execa: 5.1.1
@@ -27872,6 +27869,12 @@ snapshots:
       - terser
       - typescript
       - universal-cookie
+
+  vitest-canvas-mock@1.1.4(vitest@4.1.8):
+    dependencies:
+      cssfontparser: 1.2.1
+      moo-color: 1.0.3
+      vitest: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@4.1.8)(@vitest/coverage-v8@4.1.8)(happy-dom@20.10.2)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.0.16(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.15))(terser@5.48.0)(yaml@2.8.4))
 
   vitest-plugin-vis@5.1.1(@vitest/browser-playwright@4.1.8)(@vitest/browser@4.1.8)(babel-plugin-macros@3.1.0)(typescript@6.0.3)(vitest@4.1.8):
     dependencies:

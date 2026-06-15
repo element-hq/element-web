@@ -6,13 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi } from "vitest";
 import { type Room, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { type UpdateCallback } from "../../../src/editor/autocomplete";
-import type AutocompleteWrapperModel from "../../../src/editor/autocomplete";
-import { type Caret } from "../../../src/editor/caret";
-import { type PillPart, type Part, PartCreator } from "../../../src/editor/parts";
-import DocumentPosition from "../../../src/editor/position";
+import { type UpdateCallback } from "../autocomplete";
+import type AutocompleteWrapperModel from "../autocomplete";
+import { type Caret } from "../caret";
+import { type PillPart, type Part, PartCreator } from "../parts";
+import DocumentPosition from "../position";
 
 export class MockAutoComplete {
     public _updateCallback;
@@ -68,8 +69,8 @@ export function createPartCreator(completions: PillPart[] = []) {
     };
     const room = new MockRoom() as unknown as Room;
     const client = {
-        getRooms: jest.fn().mockReturnValue([]),
-        getRoom: jest.fn().mockReturnValue(null),
+        getRooms: vi.fn().mockReturnValue([]),
+        getRoom: vi.fn().mockReturnValue(null),
     } as unknown as MatrixClient;
     return new PartCreator(room, client, autoCompleteCreator);
 }

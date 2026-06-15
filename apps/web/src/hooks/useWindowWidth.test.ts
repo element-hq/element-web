@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect, beforeEach } from "vitest";
 import { renderHook, act } from "jest-matrix-react";
 
-import UIStore, { UI_EVENTS } from "../../../src/stores/UIStore";
-import { useWindowWidth } from "../../../src/hooks/useWindowWidth";
+import UIStore, { UI_EVENTS } from "../stores/UIStore";
+import { useWindowWidth } from "./useWindowWidth";
 
 describe("useWindowWidth", () => {
     beforeEach(() => {
