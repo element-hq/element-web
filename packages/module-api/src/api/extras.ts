@@ -72,6 +72,11 @@ export type RoomBannerCallback = (roomId: string) => JSX.Element | undefined;
 export type RoomSettingsSecurityCallback = (roomId: string) => JSX.Element | undefined;
 
 /**
+ * Callback that returns JSX
+ */
+export type AppSettingsSecurityCallback = () => React.ReactNode;
+
+/**
  * API for inserting extra UI into Element Web.
  * @alpha Subject to change.
  */
@@ -117,4 +122,12 @@ export interface ExtrasApi {
      * @param cb - A callback that returns a JSX element (see {@link RoomSettingsSecurityCallback}).
      */
     addRoomSettingsSecurityCallback(cb: RoomSettingsSecurityCallback): void;
+
+    /**
+     * Adds a callback to render a component in the Security & Privacy section
+     * of App Settings.
+     *
+     * @param cb - A callback that returns a JSX element (see {@link AppSettingsSecurityCallback}).
+     */
+    addAppSettingsSecurityCallback(cb: AppSettingsSecurityCallback): void;
 }
