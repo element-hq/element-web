@@ -120,7 +120,7 @@ describe("loadConfig", () => {
                 "../webapp.asar/config.json": JSON.stringify({
                     web_base_url: "https://chat.org.com",
                     default_hs_url: "https://matrix.org.com",
-                    modules: ["/modules/banner"],
+                    modules: ["/modules/banner", "module2"],
                 }),
             },
             __dirname,
@@ -129,6 +129,35 @@ describe("loadConfig", () => {
         const config = await loadConfig("/home/custom-config.json");
         expect(config.help_url).toBe("https://element.io/help");
         expect(config.web_base_url).toBe("https://chat.org.com");
-        expect(config.modules).toStrictEqual(["/webapp/modules/banner"]);
+        expect(config.modules).toStrictEqual(["/webapp/modules/banner", "module2"]);
+    });
+});
+
+describe("getConfig", () => {
+    let loadConfig: (localConfigPath: string | undefined) => Promise<ConfigOptions>;
+    let getConfig: () => ConfigOptions;
+
+    beforeEach(async () => {
+        vol.fromJSON(
+            {
+                "../webapp.asar/config.json": JSON.stringify({
+                    web_base_url: "https://chat.org.com",
+                }),
+            },
+            __dirname,
+        );
+
+        vi.resetModules();
+        ({ loadConfig, getConfig } = await import("./config.js"));
+    });
+
+    it("should return undefined if loadConfig has not been called", () => {
+        expect(getConfig()).toBeUndefined();
+    });
+
+    it("should return the config once it is loaded", async () => {
+        const config = await loadConfig(undefined);
+        expect(config.web_base_url).toBe("https://chat.org.com");
+        expect(config).toStrictEqual(getConfig());
     });
 });
