@@ -31,6 +31,8 @@ import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
 import { removeElement } from "matrix-js-sdk/src/utils";
+import type { AttachmentSend } from "@matrix-org/analytics-events/types/typescript/AttachmentSend";
+import type { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
 
 import dis from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";
@@ -56,6 +58,7 @@ import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./utils/messages.ts";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { blobIsAnimated } from "./utils/Image.ts";
+import { PosthogAnalytics } from "./PosthogAnalytics.ts";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -487,6 +490,7 @@ export default class ContentMessages {
         // Promise to complete before sending next file into room, used for synchronisation of file-sending
         // to match the order the files were specified in
         let promBefore: Promise<any> = Promise.resolve();
+        let sentFileTypes = [];
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             const loopPromiseBefore = promBefore;
@@ -503,6 +507,7 @@ export default class ContentMessages {
                     uploadAll = true;
                 }
             }
+            sentFileTypes.push(file.type.split("/")[0]);
 
             promBefore = doMaybeLocalRoomAction(
                 roomId,
@@ -517,6 +522,27 @@ export default class ContentMessages {
                     ),
                 matrixClient,
             );
+        }
+        if (sentFileTypes) {
+            const [type] = sentFileTypes.sort(
+                (a, b) => sentFileTypes.filter((v) => v === a).length - sentFileTypes.filter((v) => v === b).length,
+            );
+            PosthogAnalytics.instance.trackEvent<AttachmentSend>({
+                eventName: "AttachmentSend",
+                isReply: !!replyToEvent,
+                inThread: relation?.rel_type === "m.thread",
+                count: okFiles.length,
+                kind: "local",
+                type,
+            });
+        } else {
+            PosthogAnalytics.instance.trackEvent<AttachmentCancel>({
+                eventName: "AttachmentCancel",
+                isReply: !!replyToEvent,
+                inThread: relation?.rel_type === "m.thread",
+                kind: "local",
+                stage: "Confirmation",
+            });
         }
 
         if (replyToEvent) {
