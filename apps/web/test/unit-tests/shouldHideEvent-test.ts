@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 Element Creations Ltd.
+ * Copyright 2026 bxdxnn <267911624+bxdxnn@users.noreply.github.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
@@ -34,59 +34,6 @@ describe("shouldHideEvent", () => {
     describe("member events in invite-only rooms", () => {
         beforeEach(() => {
             makeRoomWithJoinRule(JoinRule.Invite);
-        });
-
-        it("hides join events", () => {
-            const event = mkMembership({
-                event: true,
-                room: roomId,
-                user: userId,
-                mship: KnownMembership.Join,
-                prevMship: KnownMembership.Leave,
-            });
-            expect(shouldHideEvent(event)).toBe(true);
-        });
-
-        it("hides leave events", () => {
-            const event = mkMembership({
-                event: true,
-                room: roomId,
-                user: userId,
-                mship: KnownMembership.Leave,
-                prevMship: KnownMembership.Join,
-            });
-            expect(shouldHideEvent(event)).toBe(true);
-        });
-
-        it("hides avatar change events", () => {
-            const event = mkMembership({
-                event: true,
-                room: roomId,
-                user: userId,
-                mship: KnownMembership.Join,
-                prevMship: KnownMembership.Join,
-                name: "Alice",
-                url: "mxc://new_avatar",
-            });
-            expect(shouldHideEvent(event)).toBe(true);
-        });
-
-        it("hides displayname change events", () => {
-            const event = mkMembership({
-                event: true,
-                room: roomId,
-                user: userId,
-                mship: KnownMembership.Join,
-                prevMship: KnownMembership.Join,
-                name: "New Alice",
-            });
-            expect(shouldHideEvent(event)).toBe(true);
-        });
-    });
-
-    describe("member events in public rooms", () => {
-        beforeEach(() => {
-            makeRoomWithJoinRule(JoinRule.Public);
         });
 
         it("does not hide join events", () => {
@@ -137,12 +84,12 @@ describe("shouldHideEvent", () => {
         });
     });
 
-    describe("member events in knockable rooms", () => {
+    describe("member events in public rooms", () => {
         beforeEach(() => {
-            makeRoomWithJoinRule(JoinRule.Knock);
+            makeRoomWithJoinRule(JoinRule.Public);
         });
 
-        it("does not hide join events in knock rooms", () => {
+        it("hide join events", () => {
             const event = mkMembership({
                 event: true,
                 room: roomId,
@@ -150,7 +97,60 @@ describe("shouldHideEvent", () => {
                 mship: KnownMembership.Join,
                 prevMship: KnownMembership.Leave,
             });
-            expect(shouldHideEvent(event)).toBe(false);
+            expect(shouldHideEvent(event)).toBe(true);
+        });
+
+        it("hide leave events", () => {
+            const event = mkMembership({
+                event: true,
+                room: roomId,
+                user: userId,
+                mship: KnownMembership.Leave,
+                prevMship: KnownMembership.Join,
+            });
+            expect(shouldHideEvent(event)).toBe(true);
+        });
+
+        it("hide avatar change events", () => {
+            const event = mkMembership({
+                event: true,
+                room: roomId,
+                user: userId,
+                mship: KnownMembership.Join,
+                prevMship: KnownMembership.Join,
+                name: "Alice",
+                url: "mxc://new_avatar",
+            });
+            expect(shouldHideEvent(event)).toBe(true);
+        });
+
+        it("hide displayname change events", () => {
+            const event = mkMembership({
+                event: true,
+                room: roomId,
+                user: userId,
+                mship: KnownMembership.Join,
+                prevMship: KnownMembership.Join,
+                name: "New Alice",
+            });
+            expect(shouldHideEvent(event)).toBe(true);
+        });
+    });
+
+    describe("member events in knockable rooms", () => {
+        beforeEach(() => {
+            makeRoomWithJoinRule(JoinRule.Knock);
+        });
+
+        it("hides join events in knock rooms", () => {
+            const event = mkMembership({
+                event: true,
+                room: roomId,
+                user: userId,
+                mship: KnownMembership.Join,
+                prevMship: KnownMembership.Leave,
+            });
+            expect(shouldHideEvent(event)).toBe(true);
         });
     });
 
@@ -159,7 +159,7 @@ describe("shouldHideEvent", () => {
             client.getRoom.mockReturnValue(null);
         });
 
-        it("does not hide member events when room is not found", () => {
+        it("hides member events when room is not found", () => {
             const event = mkMembership({
                 event: true,
                 room: roomId,
@@ -167,7 +167,7 @@ describe("shouldHideEvent", () => {
                 mship: KnownMembership.Join,
                 prevMship: KnownMembership.Leave,
             });
-            expect(shouldHideEvent(event)).toBe(false);
+            expect(shouldHideEvent(event)).toBe(true);
         });
 
         it("does not hide non-member events when room is not found", () => {

@@ -115,7 +115,7 @@ test.describe("Knock Into Room", () => {
         // It will be not needed when homeserver implements auto accept knock requests.
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
-        await expect(page.getByText("Alice was invited, was removed, was invited")).toBeVisible();
+        await expect(page.getByText("Alice was invited, was removed, and was invited")).toBeVisible();
     });
 
     test("should knock into the room then knock is approved and user joins the room then user is banned/unbanned and joins again", async ({
@@ -199,7 +199,7 @@ test.describe("Knock Into Room", () => {
         // It will be not needed when homeserver implements auto accept knock requests.
         await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
-        await expect(page.getByText("Alice was invited, was banned, was unbanned, was invited")).toBeVisible();
+        await expect(page.getByText("Alice was invited, was banned, was unbanned, and was invited")).toBeVisible();
     });
 
     test("should knock into the room and knock is cancelled by user himself", async ({ page, app, bot, room }) => {

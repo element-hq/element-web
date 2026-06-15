@@ -162,7 +162,6 @@ describe("MessagePanel", function () {
                     ts: ts0 + i * 1000,
                     mship: KnownMembership.Join,
                     prevMship: KnownMembership.Join,
-                    name: "A user",
                 }),
             );
         }
@@ -196,7 +195,6 @@ describe("MessagePanel", function () {
                     ts: ts0 + i * 1000,
                     mship: KnownMembership.Join,
                     prevMship: KnownMembership.Join,
-                    name: "A user",
                 }),
             );
         }
