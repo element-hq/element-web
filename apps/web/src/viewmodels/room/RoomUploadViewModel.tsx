@@ -17,6 +17,7 @@ import { AttachmentIcon } from "@vector-im/compound-design-tokens/assets/web/ico
 import React, {
     type ChangeEventHandler,
     createContext,
+    EventHandler,
     type ReactNode,
     useCallback,
     useContext,
@@ -45,6 +46,9 @@ import { Action } from "../../dispatcher/actions";
 import type { ComposerInsertFilesPayload } from "../../dispatcher/payloads/ComposerInsertFilePayload";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
+import { type AttachmentOpen } from "@matrix-org/analytics-events/types/typescript/AttachmentOpen";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
+import { AttachmentCancel } from "@matrix-org/analytics-events/types/typescript/AttachmentCancel";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
@@ -143,7 +147,6 @@ export class RoomUploadViewModel
         const { roomId } = this.room;
         logger.info("initiateViaInputFiles for", roomId);
         if (!files?.length) return;
-
         try {
             await ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(files),
@@ -190,6 +193,12 @@ export class RoomUploadViewModel
         if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(this.timelineRenderingType)) {
             throw new Error("TimelineRenderingType must be Room or Thread");
         }
+        PosthogAnalytics.instance.trackEvent<AttachmentOpen>({
+            eventName: "AttachmentOpen",
+            isReply: !!this.replyToEvent,
+            inThread: !!this.threadRelation,
+            kind: type,
+        });
         fn(
             this.room.roomId,
             {
@@ -283,6 +292,23 @@ export function RoomUploadContextProvider({
         },
         [vm],
     );
+
+    useEffect(() => {
+        if (!uploadInput.current) {
+            return;
+        }
+        const fn = () => {
+            PosthogAnalytics.instance.trackEvent<AttachmentCancel>({
+                eventName: "AttachmentCancel",
+                stage: "Picker",
+                isReply: !!replyToEvent,
+                inThread: !!threadRelation,
+                kind: "local",
+            });
+        };
+        uploadInput.current.addEventListener("cancel", fn);
+        return () => uploadInput.current?.removeEventListener("cancel", fn);
+    });
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
         if (payload.action !== Action.ComposerFileInsert) {
