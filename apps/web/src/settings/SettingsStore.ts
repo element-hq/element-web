@@ -395,6 +395,11 @@ export default class SettingsStore {
         return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
     }
 
+    public static registerSetting(name: string, setting: unknown): void {
+        //@ts-expect-error
+        SETTINGS[name] = { ...setting, supportedLevels: [SettingLevel.DEVICE] };
+    }
+
     /**
      * Gets a setting's value at a particular level, ignoring all levels that are more specific.
      * @param {SettingLevel|"config"|"default"} level The

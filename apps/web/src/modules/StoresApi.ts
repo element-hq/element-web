@@ -7,12 +7,17 @@ Please see LICENSE files in the repository root for full details.
 import {
     type StoresApi as IStoresApi,
     type RoomListStoreApi as IRoomListStore,
+    type SettingsStoreApi as ISettingsStore,
+    type SettingsLevel as ISettingsLevel,
     type Room,
     Watchable,
+    Setting,
 } from "@element-hq/element-web-module-api";
 
 import type { RoomListStoreV3Class, RoomListStoreV3Event } from "../stores/room-list-v3/RoomListStoreV3";
 import { Room as ModuleRoom } from "./models/Room";
+import SettingsStore from "../settings/SettingsStore";
+import type { SettingLevel } from "../settings/SettingLevel";
 
 interface RlsEvents {
     LISTS_LOADED_EVENT: RoomListStoreV3Event.ListsLoaded;
@@ -102,5 +107,53 @@ export class StoresApi implements IStoresApi {
             this.roomListStoreApi = new RoomListStoreApi();
         }
         return this.roomListStoreApi;
+    }
+
+    public settingsStore = new SettingsStoreApi();
+}
+
+export class SettingsStoreApi implements ISettingsStore {
+    public getValue = (settingName: string): Watchable<unknown> => {
+        return new SettingsWatchable(settingName);
+    };
+
+    public setValue = (settingName: string, level: ISettingsLevel, value: unknown): Promise<void> => {
+        //@ts-expect-error: settingsName is strictly typed but we want relaxed type here.
+        return SettingsStore.setValue(settingName, null, level, value);
+    };
+
+    public registerSettings = (settings: Setting<unknown>[]): void => {
+        for (const setting of settings) {
+            SettingsStore.registerSetting(setting.name, setting.info);
+        }
+    };
+}
+
+export class SettingsWatchable extends Watchable<unknown> {
+    private watcherReference?: string;
+
+    public constructor(private readonly settingName: string) {
+        //@ts-expect-error: settingsName is strictly typed but we want relaxed type here.
+        super(SettingsStore.getValue(settingName));
+    }
+
+    private onSettingUpdate = (
+        settingsName: string,
+        roomId: string | null,
+        atLevel: SettingLevel,
+        newValAtLevel: unknown,
+        newVal: unknown,
+    ): void => {
+        // This only needs to checks atLevel when we add a getValueAtLevel to the API
+        this.value = newVal;
+    };
+
+    protected onFirstWatch(): void {
+        //@ts-expect-error: settingsName is strictly typed but we want relaxed type here.
+        this.watcherReference = SettingsStore.watchSetting(this.settingName, null, this.onSettingUpdate);
+    }
+
+    protected onLastWatch(): void {
+        if (this.watcherReference) SettingsStore.unwatchSetting(this.watcherReference);
     }
 }

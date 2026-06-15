@@ -14,6 +14,7 @@ import {
     type RoomBannerCallback,
     type EventContentTransformCallback,
     type RoomSettingsSecurityCallback,
+    AppSettingsSecurityCallback,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
@@ -39,6 +40,7 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public eventContentTransformCallbacks: EventContentTransformCallback[] = [];
     public encryptedEnvelopeTransformCallbacks: EventContentTransformCallback[] = [];
     public roomSettingsSecurityCallbacks: RoomSettingsSecurityCallback[] = [];
+    public appSettingsSecurityCallbacks: AppSettingsSecurityCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -67,6 +69,10 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
 
     public addRoomSettingsSecurityCallback(cb: RoomSettingsSecurityCallback): void {
         this.roomSettingsSecurityCallbacks.push(cb);
+    }
+
+    public addAppSettingsSecurityCallback(cb: AppSettingsSecurityCallback): void {
+        this.appSettingsSecurityCallbacks.push(cb);
     }
 }
 
