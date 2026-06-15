@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { NotificationBadgeViewModel } from "../../../../src/viewmodels/notifications/NotificationBadgeViewModel";
+import { NotificationBadgeViewModel } from "../../../../src/viewmodels/room/notification-badge/NotificationBadgeViewModel";
 import { NotificationLevel } from "../../../../src/stores/notifications/NotificationLevel";
 
 describe("NotificationBadgeViewModel", () => {

@@ -47,7 +47,7 @@ import ContextMenu, {
 } from "../../structures/ContextMenu";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import type ExtraTile from "./ExtraTile";
-import NotificationBadge from "./NotificationBadge";
+import { NotificationBadgeAdapter } from "./NotificationBadge/NotificationBadgeAdapter";
 import RoomTile from "./RoomTile";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
@@ -634,7 +634,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     }
 
                     const badge = (
-                        <NotificationBadge
+                        <NotificationBadgeAdapter
                             hideIfDot={true}
                             notification={this.notificationState}
                             onClick={this.onBadgeClick}

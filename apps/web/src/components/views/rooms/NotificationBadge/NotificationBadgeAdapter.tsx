@@ -10,12 +10,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useEffect, type MouseEventHandler } from "react";
 import { NotificationBadgeView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import { useSettingValue } from "../../../hooks/useSettings";
-import { type NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
+import { useSettingValue } from "../../../../hooks/useSettings";
+import { type NotificationState, NotificationStateEvents } from "../../../../stores/notifications/NotificationState";
 import {
     notificationBadgeDataFromNotification,
     NotificationBadgeViewModel,
-} from "../../../viewmodels/notifications/NotificationBadgeViewModel";
+} from "../../../../viewmodels/room/notification-badge/NotificationBadgeViewModel";
 
 interface Props {
     "notification": NotificationState;
@@ -26,20 +26,13 @@ interface Props {
      */
     "hideIfDot"?: boolean;
 
-    /**
-     * The room ID, if any, the badge represents.
-     *
-     * @deprecated retained for compatibility with existing callers.
-     */
-    "roomId"?: string;
-
     "showUnsentTooltip"?: boolean;
     "tabIndex"?: number;
     "aria-label"?: string;
     "onClick"?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function NotificationBadge({
+export function NotificationBadgeAdapter({
     notification,
     hideIfDot,
     showUnsentTooltip,

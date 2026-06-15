@@ -30,7 +30,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { type SpaceKey } from "../../../stores/spaces";
 import SpaceTreeLevelLayoutStore from "../../../stores/spaces/SpaceTreeLevelLayoutStore";
-import NotificationBadge from "../rooms/NotificationBadge";
+import { NotificationBadgeAdapter } from "../rooms/NotificationBadge/NotificationBadgeAdapter";
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -113,7 +113,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
 
         notifBadge = (
             <div className="mx_SpacePanel_badgeContainer">
-                <NotificationBadge
+                <NotificationBadgeAdapter
                     onClick={jumpToNotification}
                     notification={notificationState}
                     aria-label={ariaLabel}

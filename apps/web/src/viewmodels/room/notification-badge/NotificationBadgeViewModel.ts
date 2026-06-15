@@ -13,10 +13,10 @@ import {
     type NotificationBadgeViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-import { _t } from "../../languageHandler";
-import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
-import { type NotificationState } from "../../stores/notifications/NotificationState";
-import { formatCount } from "../../utils/FormattingUtils";
+import { _t } from "../../../languageHandler";
+import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
+import { formatCount } from "../../../utils/FormattingUtils";
 
 export interface NotificationBadgeData {
     symbol: string | null;

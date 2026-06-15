@@ -23,7 +23,7 @@ import RecordingPlayback, { PlaybackLayout } from "../audio_messages/RecordingPl
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
-import NotificationBadge from "./NotificationBadge";
+import { NotificationBadgeAdapter } from "./NotificationBadge/NotificationBadgeAdapter";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -296,7 +296,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 <span className="mx_VoiceRecordComposerTile_failedState">
                     <span className="mx_VoiceRecordComposerTile_uploadState_badge">
                         {/* Need to stick the badge in a span to ensure it doesn't create a block component */}
-                        <NotificationBadge
+                        <NotificationBadgeAdapter
                             notification={StaticNotificationState.forSymbol("!", NotificationLevel.Highlight)}
                         />
                     </span>

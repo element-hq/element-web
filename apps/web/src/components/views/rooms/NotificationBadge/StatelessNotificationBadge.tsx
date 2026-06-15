@@ -12,7 +12,7 @@ import { NotificationBadgeView, useCreateAutoDisposedViewModel } from "@element-
 
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
-import { NotificationBadgeViewModel } from "../../../../viewmodels/notifications/NotificationBadgeViewModel";
+import { NotificationBadgeViewModel } from "../../../../viewmodels/room/notification-badge/NotificationBadgeViewModel";
 
 interface Props {
     "symbol": string | null;

@@ -22,7 +22,7 @@ import { Tooltip } from "@vector-im/compound-web";
 import { PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import RoomAvatar from "./RoomAvatar";
-import NotificationBadge from "../rooms/NotificationBadge";
+import { NotificationBadgeAdapter } from "../rooms/NotificationBadge/NotificationBadgeAdapter";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { isPresenceEnabled } from "../../../utils/presence";
@@ -193,10 +193,9 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         let badge: React.ReactNode;
         if (this.props.displayBadge && this.state.notificationState) {
             badge = (
-                <NotificationBadge
+                <NotificationBadgeAdapter
                     notification={this.state.notificationState}
                     hideIfDot={this.props.hideIfDot}
-                    roomId={this.props.room.roomId}
                 />
             );
         }
