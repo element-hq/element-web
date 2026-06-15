@@ -5,9 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
 import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import styles from "./NotificationBadgeView.module.css";
@@ -47,23 +48,66 @@ export interface NotificationBadgeViewSnapshot {
      * Accessible label for the knock icon.
      */
     knockLabel?: string;
+    /**
+     * Whether to render the badge as an interactive control.
+     */
+    isClickable?: boolean;
+    /**
+     * Accessible label for clickable badges.
+     */
+    ariaLabel?: string;
+    /**
+     * Tab index for clickable badges.
+     */
+    tabIndex?: number;
+    /**
+     * Optional tooltip label.
+     */
+    tooltipLabel?: string;
 }
 
-export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot>;
+export interface NotificationBadgeViewActions {
+    /**
+     * Called when an interactive badge is activated.
+     */
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+}
+
+export type NotificationBadgeViewModel = ViewModel<NotificationBadgeViewSnapshot> & NotificationBadgeViewActions;
 
 interface NotificationBadgeViewProps {
     vm: NotificationBadgeViewModel;
 }
 
 export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProps>): JSX.Element {
-    const { shouldRender, isVisible, isNotification, isHighlight, isKnocked, badgeType, symbol, knockLabel } =
-        useViewModel(vm);
+    const {
+        shouldRender,
+        isVisible,
+        isNotification,
+        isHighlight,
+        isKnocked,
+        badgeType,
+        symbol,
+        knockLabel,
+        isClickable,
+        ariaLabel,
+        tabIndex,
+        tooltipLabel,
+    } = useViewModel(vm);
 
     if (!shouldRender) {
         return <></>;
     }
 
-    const classes = classNames(styles.notificationBadge, {
+    const classes = classNames("mx_NotificationBadge", styles.notificationBadge, {
+        "mx_AccessibleButton": isClickable,
+        "mx_NotificationBadge_visible": isVisible,
+        "mx_NotificationBadge_level_notification": isNotification,
+        "mx_NotificationBadge_level_highlight": isHighlight,
+        "mx_NotificationBadge_knocked": isKnocked,
+        "mx_NotificationBadge_dot": badgeType === "dot",
+        "mx_NotificationBadge_2char": badgeType === "badge_2char",
+        "mx_NotificationBadge_3char": badgeType === "badge_3char",
         [styles.visible]: isVisible,
         [styles.notification]: isNotification,
         [styles.highlight]: isHighlight,
@@ -79,10 +123,23 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         isKnocked && knockLabel ? (
             <AskToJoinIcon aria-label={knockLabel} />
         ) : (
-            <span className={styles.count}>{symbol}</span>
+            <span className={classNames("mx_NotificationBadge_count", styles.count)}>{symbol}</span>
         );
 
-    return (
+    const badge = isClickable ? (
+        <button
+            type="button"
+            data-testid="notification-badge"
+            data-badge-type={badgeType}
+            data-notification-level={notificationLevel}
+            className={classes}
+            aria-label={ariaLabel}
+            tabIndex={tabIndex}
+            onClick={vm.onClick}
+        >
+            {content}
+        </button>
+    ) : (
         <div
             data-testid="notification-badge"
             data-badge-type={badgeType}
@@ -92,4 +149,14 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
             {content}
         </div>
     );
+
+    if (tooltipLabel) {
+        return (
+            <Tooltip label={tooltipLabel} placement="right">
+                {badge}
+            </Tooltip>
+        );
+    }
+
+    return badge;
 }

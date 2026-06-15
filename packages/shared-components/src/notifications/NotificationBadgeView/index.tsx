@@ -8,6 +8,7 @@
 export {
     NotificationBadgeView,
     type NotificationBadgeType,
+    type NotificationBadgeViewActions,
     type NotificationBadgeViewModel,
     type NotificationBadgeViewSnapshot,
 } from "./NotificationBadgeView";
