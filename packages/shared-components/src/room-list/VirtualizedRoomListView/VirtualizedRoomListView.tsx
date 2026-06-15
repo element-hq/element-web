@@ -9,11 +9,17 @@ import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type Re
 import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
 import { DragDropProvider, DragOverlay, useDragOperation } from "@dnd-kit/react";
-import { KeyboardSensor, PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
+import {
+    Accessibility,
+    type Draggable,
+    type Droppable,
+    KeyboardSensor,
+    PointerActivationConstraints,
+    PointerSensor,
+} from "@dnd-kit/dom";
 
 import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
-import { _t } from "../../core/i18n/i18n";
 import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
@@ -27,6 +33,7 @@ import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
 import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
 import styles from "./VirtualizedRoomListView.module.css";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -103,6 +110,14 @@ type Context = {
  */
 const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
 
+type A11yData = {
+    operation: {
+        source: Draggable<RoomListDragData> | null;
+        target: Droppable<RoomListDragData> | null;
+    };
+    canceled: boolean;
+};
+
 /**
  * A virtualized list of rooms.
  * This component provides efficient rendering of large room lists using virtualization,
@@ -114,6 +129,7 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  * ```
  */
 export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: VirtualizedRoomListViewProps): JSX.Element {
+    const { translate: _t } = useI18n();
     const snapshot = useViewModel(vm);
     const { roomListState, sections, isFlatList } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;
@@ -425,6 +441,66 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                         down: ["ArrowDown"],
                         left: ["ArrowLeft"],
                         right: ["ArrowRight"],
+                    },
+                }),
+            ]}
+            plugins={(defaults) => [
+                ...defaults,
+                Accessibility.configure({
+                    screenReaderInstructions: { draggable: "" },
+                    announcements: {
+                        dragstart({ operation: { source } }: A11yData) {
+                            if (!source) return;
+
+                            if (isSectionDragData(source?.data)) {
+                                const section = vm.getSectionHeaderViewModel(source.id as string);
+                                return _t("room_list|a11y|drag_start", { source: section.getSnapshot().title });
+                            } else {
+                                const item = vm.getRoomItemViewModel(source.id as string);
+                                if (!item) return;
+                                return _t("room_list|a11y|drag_start", { source: item.getSnapshot().name });
+                            }
+                        },
+                        dragover({ operation: { source, target } }: A11yData) {
+                            if (!source || !target) return;
+
+                            const targetSection = vm.getSectionHeaderViewModel(target.id as string);
+                            if (isSectionDragData(source?.data)) {
+                                const section = vm.getSectionHeaderViewModel(source.id as string);
+                                return _t("room_list|a11y|drag_over", {
+                                    source: section.getSnapshot().title,
+                                    target: targetSection.getSnapshot().title,
+                                });
+                            } else {
+                                const item = vm.getRoomItemViewModel(source.id as string);
+                                if (!item) return;
+                                return _t("room_list|a11y|drag_over", {
+                                    source: item.getSnapshot().name,
+                                    target: targetSection.getSnapshot().title,
+                                });
+                            }
+                        },
+                        dragend({ operation: { source, target }, canceled }: A11yData) {
+                            if (!source || !target) return;
+                            if (canceled) return _t("room_list|a11y|drag_cancelled");
+
+                            const targetSection = vm.getSectionHeaderViewModel(target.id as string);
+
+                            if (isSectionDragData(source?.data)) {
+                                const section = vm.getSectionHeaderViewModel(source.id as string);
+                                return _t("room_list|a11y|drag_end", {
+                                    source: section.getSnapshot().title,
+                                    target: targetSection.getSnapshot().title,
+                                });
+                            } else {
+                                const item = vm.getRoomItemViewModel(source.id as string);
+                                if (!item) return;
+                                return _t("room_list|a11y|drag_end", {
+                                    source: item.getSnapshot().name,
+                                    target: targetSection.getSnapshot().title,
+                                });
+                            }
+                        },
                     },
                 }),
             ]}

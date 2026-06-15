@@ -97,6 +97,10 @@
     "room_list": {
         "a11y": {
             "default": "Open room %(roomName)s",
+            "drag_cancelled": "Dragging cancelled",
+            "drag_end": "%(source)s was dropped on %(target)s",
+            "drag_over": "%(source)s is over %(target)s",
+            "drag_start": "Dragging %(source)s",
             "invitation": "Open room %(roomName)s invitation.",
             "mention": {
                 "one": "Open room %(roomName)s with 1 unread mention.",
