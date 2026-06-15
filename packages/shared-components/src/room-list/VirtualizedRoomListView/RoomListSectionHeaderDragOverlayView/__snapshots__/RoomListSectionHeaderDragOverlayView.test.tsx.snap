@@ -6,6 +6,7 @@ exports[`<RoomListSectionHeaderDragOverlayView /> stories > renders Default stor
     style="width: 320px; padding: 8px;"
   >
     <div
+      aria-hidden="true"
       class="RoomListSectionHeaderView-module_header RoomListSectionHeaderDragOverlayView-module_dragOverlay"
     >
       <div

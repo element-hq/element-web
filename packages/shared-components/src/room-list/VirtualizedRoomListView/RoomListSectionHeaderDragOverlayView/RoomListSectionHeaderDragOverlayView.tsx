@@ -31,7 +31,10 @@ export const RoomListSectionHeaderDragOverlayView = memo(function RoomListSectio
     vm,
 }: RoomListSectionHeaderDragOverlayViewProps): JSX.Element {
     return (
-        <div className={classNames(headerStyles.header, styles.dragOverlay)}>
+        // Purely a visual clone that follows the drag. Hide it from the accessibility tree so the
+        // dragged section's title isn't duplicated (the real, still-focused header already exposes
+        // it, and drag feedback is narrated via the dnd live-region announcements).
+        <div aria-hidden={true} className={classNames(headerStyles.header, styles.dragOverlay)}>
             <RoomListSectionHeaderContent vm={vm} isDragging={true} />
         </div>
     );
