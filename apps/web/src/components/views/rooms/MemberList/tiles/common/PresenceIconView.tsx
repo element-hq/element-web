@@ -6,11 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import classNames from "classnames";
 import OnlineOrUnavailableIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-solid-8x8";
 import OfflineIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-outline-8x8";
 import DNDIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-strikethrough-8x8";
-import classNames from "classnames";
+import { Tooltip } from "@vector-im/compound-web";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+
+import { _t } from "../../../../../../languageHandler";
 
 interface Props {
     className?: string;
@@ -36,9 +39,30 @@ function getIconForPresenceState(state: string): JSX.Element {
     }
 }
 
+function getTooltipText(state: string): string {
+    switch (state) {
+        case "online":
+            return _t("presence|online");
+        case "offline":
+            return _t("presence|offline");
+        case "unavailable":
+        case "io.element.unreachable":
+            return _t("presence|away");
+        case BUSY_PRESENCE_NAME.name:
+        case BUSY_PRESENCE_NAME.altName:
+            return _t("presence|busy");
+        default:
+            throw new Error(`Presence state "${state}" is unknown.`);
+    }
+}
+
 const AvatarPresenceIconView: React.FC<Props> = ({ className, presenceState }) => {
     const names = classNames("mx_PresenceIconView", className);
-    return <div className={names}>{getIconForPresenceState(presenceState)}</div>;
+    return (
+        <Tooltip label={getTooltipText(presenceState)} placement="bottom" isTriggerInteractive={false}>
+            <div className={names}>{getIconForPresenceState(presenceState)}</div>
+        </Tooltip>
+    );
 };
 
 export default AvatarPresenceIconView;

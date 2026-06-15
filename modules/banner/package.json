@@ -1,0 +1,35 @@
+{
+    "name": "@element-hq/element-web-module-banner",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "main": "lib/index.js",
+    "license": "SEE LICENSE IN README.md",
+    "scripts": {
+        "build": "nx build",
+        "lint:types": "nx lint:types"
+    },
+    "devDependencies": {
+        "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
+        "@element-hq/element-web-module-api": "workspace:*",
+        "@types/node": "^22.10.7",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
+        "matrix-web-i18n": "^3.6.0",
+        "matrix-widget-api": "^1.17.0",
+        "react": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vite-plugin-node-polyfills": "catalog:",
+        "vite-plugin-svgr": "catalog:"
+    },
+    "dependencies": {
+        "@radix-ui/react-dialog": "^1.1.6",
+        "@vector-im/compound-design-tokens": "^10.0.0",
+        "@vector-im/compound-web": "^9.0.0",
+        "framer-motion": "^12.4.10",
+        "styled-components": "^6.1.18",
+        "zod": "^4.0.0"
+    }
+}

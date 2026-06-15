@@ -10,9 +10,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import classNames from "classnames";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../languageHandler";
-import AutoHideScrollbar from "./AutoHideScrollbar";
 import { PosthogScreenTracker, type ScreenName } from "../../PosthogTrackers";
 import { type NonEmptyArray } from "../../@types/common";
 import { RovingAccessibleButton, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
@@ -74,7 +74,9 @@ function TabPanel<T extends string>({ tab }: ITabPanelProps<T>): JSX.Element {
             id={domIDForTabID(tab.id)}
             aria-labelledby={`${domIDForTabID(tab.id)}_label`}
         >
-            <AutoHideScrollbar className="mx_TabbedView_tabPanelContent">{tab.body}</AutoHideScrollbar>
+            <AutoHideScrollbar className="mx_AutoHideScrollbar mx_TabbedView_tabPanelContent">
+                {tab.body}
+            </AutoHideScrollbar>
         </div>
     );
 }

@@ -75,6 +75,7 @@ export * from "./room-list/VirtualizedRoomListView/RoomListItemWrapper";
 export * from "./core/utils/Box";
 export * from "./core/utils/Flex";
 export * from "./core/utils/LinkedText";
+export * from "./core/utils/Scrollbar";
 export * from "./core/VirtualizedList";
 export * from "./resize";
 

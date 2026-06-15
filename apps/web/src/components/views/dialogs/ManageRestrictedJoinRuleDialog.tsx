@@ -10,6 +10,7 @@ import React, { useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -17,7 +18,6 @@ import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { filterBoolean } from "../../../utils/arrays";
@@ -158,7 +158,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     onSearch={setQuery}
                     autoFocus={true}
                 />
-                <AutoHideScrollbar className="mx_ManageRestrictedJoinRuleDialog_content">
+                <AutoHideScrollbar className="mx_AutoHideScrollbar mx_ManageRestrictedJoinRuleDialog_content">
                     {filteredSpacesContainingRoom.length > 0 ? (
                         <div className="mx_ManageRestrictedJoinRuleDialog_section">
                             <h3>

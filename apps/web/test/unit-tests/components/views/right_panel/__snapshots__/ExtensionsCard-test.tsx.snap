@@ -46,7 +46,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <button
@@ -147,7 +147,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <button

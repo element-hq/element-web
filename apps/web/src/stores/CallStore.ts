@@ -62,7 +62,10 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             transports.forEach((t) => this.configuredMatrixRTCTransports.add(t));
         } catch (ex) {
             // Expected, MSC not implemented.
-            if (ex instanceof MatrixError === false || ex.errcode !== "M_NOT_FOUND") {
+            //
+            // Homeservers will return a 404 M_UNRECOGNIZED matrix error if they
+            // don't implement a requested endpoint.
+            if (ex instanceof MatrixError === false || ex.errcode !== "M_UNRECOGNIZED") {
                 logger.warn("Unexpected error when trying to fetch RTC transports", ex);
             }
         }

@@ -41,6 +41,9 @@
         "preferences": "Beállítások",
         "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
     },
+    "devtools": {
+        "toggle_event": "esemény be/ki"
+    },
     "keyboard": {
         "shift": "Shift"
     },
@@ -147,7 +150,8 @@
             "low_priority": "Alacsony prioritás",
             "mark_read": "Megjelölés olvasottként",
             "mark_unread": "Megjelölés olvasatlanként",
-            "move_to_section": "Áthelyezés ide:"
+            "move_to_section": "Áthelyezés ide:",
+            "remove_from_section": "Eltávolítás a szakaszból"
         },
         "notification_options": "Értesítési beállítások",
         "open_space_menu": "Tér menü megnyitása",
@@ -199,6 +203,14 @@
         "n_minutes_ago": "%(num)s perccel ezelőtt"
     },
     "timeline": {
+        "call_tile": {
+            "declined": {
+                "call_declined": "Hívás elutasítva",
+                "call_declined_by_us": "Elutasított egy hívást"
+            },
+            "video_call_title": "Videóhívás",
+            "voice_call_title": "Hanghívás"
+        },
         "decryption_failure": {
             "blocked": "A feladó megakadályozta, hogy megkapja ezt az üzenetet, mert az eszköze nincs ellenőrizve.",
             "historical_event_no_key_backup": "A korábbi üzenetek nem érhetők el ezen az eszközön",
@@ -210,6 +222,7 @@
         },
         "download_action_decrypting": "Visszafejtés",
         "download_action_downloading": "Letöltés",
+        "e2e_state": "A végpontok közti titkosítás állapota",
         "m.audio": {
             "audio_player": "Hanglejátszó",
             "error_downloading_audio": "Hiba a hang letöltésekor",
@@ -217,6 +230,10 @@
         },
         "m.file": {
             "error_invalid": "Érvénytelen fájl"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s erre változtatta a szoba profilképét: <img/>",
+            "removed": "%(senderDisplayName)s törölte a szoba profilképét."
         },
         "m.room.encryption": {
             "disable_attempt": "A titkosítás kikapcsolására tett kísérlet figyelmen kívül lett hagyva",
@@ -235,6 +252,7 @@
             "label": "Üzenetműveletek",
             "view_in_room": "Megjelenítés a szobában"
         },
+        "message_shared_by": "%(displayName)s (%(userId)s) megosztotta ezt az üzenetet, mivel nem volt a szobában, amikor elküldték.",
         "message_timestamp_received_at": "Érkezett: %(dateTime)s",
         "message_timestamp_sent_at": "Elküldve: %(dateTime)s",
         "mjolnir": {

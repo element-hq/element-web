@@ -150,7 +150,8 @@
             "low_priority": "Low priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
-            "move_to_section": "Move to"
+            "move_to_section": "Move to",
+            "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",

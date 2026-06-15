@@ -218,8 +218,9 @@
         "log_in_new_account": "<a>Belépés</a> az új fiókjába.",
         "logout_dialog": {
             "description": "Biztosan eltávolítja ezt az eszközt?",
-            "setup_key_backup_title": "Elveszíti a hozzáférést a titkosított üzeneteihez",
-            "skip_key_backup": "Nincs szükségem a titkosított üzeneteimre"
+            "setup_key_backup_title": "Hamarosan elveszíti a hozzáférését a titkosított csevegéseihez",
+            "setup_secure_backup_description": "Ez az egyetlen eszköze. Ha eltávolítja, a következő bejelentkezéskor szüksége lesz egy helyreállítási kulcsra a digitális személyazonossága megerősítéséhez és a titkosított csevegések helyreállításához.",
+            "skip_key_backup": "Eszköz eltávolítása mindenképpen"
         },
         "misconfigured_body": "Kérje meg a(z) %(brand)s adminisztrátorát, hogy ellenőrizze a <a>beállításait</a>, hibás vagy duplikált bejegyzéseket keresve.",
         "misconfigured_title": "Az %(brand)s hibásan van beállítva",
@@ -245,7 +246,9 @@
             "check_code_heading": "Adja meg a másik készüléken megjelenő számot",
             "check_code_input_label": "2 számjegyű kód",
             "check_code_mismatch": "A számok nem egyeznek meg",
+            "choose_desktop_computer": "A(z) „%(desktopComputer)s” választása",
             "completing_setup": "Új eszköz beállításának elvégzése",
+            "desktop_computer": "Asztali számítógép",
             "error_etag_missing": "Váratlan hiba történt. Ennek oka lehet egy böngészőbővítmény, proxykiszolgáló vagy kiszolgáló hibás konfigurációja.",
             "error_expired": "A bejelentkezés lejárt. Próbálja újra.",
             "error_expired_title": "A bejelentkezés nem fejeződött be időben",
@@ -266,15 +269,22 @@
             "error_user_declined": "Elutasította a másik eszközéről érkező bejelentkezési kérést.",
             "error_user_declined_title": "A bejelentkezés elutasítva",
             "follow_remaining_instructions": "Kövesse az utasításokat a másik eszköz összekapcsolásához",
+            "open_element_mobile_device": "Nyissa meg az %(brand)set a mobileszközén",
             "open_element_other_device": "Nyissa meg a másik eszközön ezt: %(brand)s",
             "point_the_camera": "Irányítsa a kamerát az itt látható QR-kódra",
-            "scan_code_instruction": "Olvassa be a QR-kódot egy másik eszközzel",
+            "ready_to_scan": "Készen áll a beolvasásra",
+            "scan_code_instruction": "Olvassa be a QR-kódot",
+            "scan_code_instruction_reciprocate": "Olvassa be a QR-kódot egy másik eszközzel",
             "scan_qr_code": "Bejelentkezés QR-kóddal",
-            "security_code_prompt": "Ha a rendszer kéri, írja be az alábbi kódot a másik eszközön.",
+            "security_code_prompt": "A fiókszolgáltatója kérheti a következő kódot a bejelentkezése ellenőrzéséhez.",
+            "security_code_title": "Az Ön ellenőrzőkódja",
             "select_qr_code": "Válassza a „%(scanQRCode)s” lehetőséget",
+            "select_ready_to_scan": "Válassza a „%(readyToScan)s” lehetőséget, majd olvassa be az itt látható QR-kódot",
+            "start_over": "Újrakezdés",
+            "tap_avatar_link_new_device": "Koppints a profilképére, és válassza az „%(linkNewDevice)s” lehetőséget",
             "unsupported_explainer": "Fiókszolgáltatója nem támogatja a bejelentkezést egy új eszközre QR-kóddal.",
             "unsupported_heading": "A QR-kód nem támogatott",
-            "waiting_for_device": "Várakozás a másik eszköz bejelentkezésére"
+            "waiting_for_device": "Várakozás a másik eszközre"
         },
         "register_action": "Fiók létrehozása",
         "registration": {
@@ -333,8 +343,10 @@
         "sign_in_description": "Használja a fiókját a továbblépéshez.",
         "sign_in_instead": "Bejelentkezés inkább",
         "sign_in_instead_prompt": "Már van fiókja? <a>Jelentkezzen be itt</a>",
+        "sign_in_manually": "Kézi bejelentkezés",
         "sign_in_or_register": "Bejelentkezés vagy fiók létrehozása",
         "sign_in_or_register_description": "A folytatáshoz használja a fiókját, vagy hozzon létre egy újat.",
+        "sign_in_with_qr": "Bejelentkezés QR-kóddal",
         "sign_in_with_sso": "Bejelentkezés „egyszeri bejelentkezéssel”",
         "signing_in": "Bejelentkezés…",
         "soft_logout": {
@@ -1508,6 +1520,7 @@
         "bridge_state_manager": "Ezt a hidat a következő kezeli: <user />.",
         "bridge_state_workspace": "Munkaterület: <networkLink/>",
         "click_for_info": "Kattintson a további információkhoz",
+        "config_only": "Csak a config.json fájlon keresztül engedélyezhető.",
         "currently_experimental": "Jelenleg kísérleti állapotban van.",
         "custom_themes": "Egyéni témák támogatásának hozzáadása",
         "dynamic_room_predecessors": "A dinamikus szoba előfutárai",
@@ -1521,6 +1534,11 @@
         "experimental_section": "Korai előzetesek",
         "extended_profiles_msc_support": "A kiszolgálónak támogatnia kell az MSC4133-at",
         "feature_disable_call_per_sender_encryption": "Küldőnkénti titkosítás letiltása Element Callhoz",
+        "feature_retention": {
+            "description": "Az üzenetek automatikus eltávolítása egy szobából, ha elérik a beállított megőrzési időszakot. Jelenleg csak a beállítások olvasását támogatja.",
+            "disabled_sliding_sync": "A megőrzés nem kapcsolható be, ha a csúszóablakos szinkronizálás be van kapcsolva.",
+            "display_name": "Üzenetek megőrzése"
+        },
         "feature_user_status": {
             "description": "Lehetővé teszi az aktuális állapot megtekintését és beállítását.",
             "display_name": "Felhasználói állapot",
@@ -1552,6 +1570,7 @@
         "leave_beta_reload": "A béta kikapcsolása újratölti ezt: %(brand)s.",
         "location_share_live": "Élő földrajzi hely megosztása",
         "location_share_live_description": "Átmeneti megvalósítás. A helyadatok megmaradnak a szoba naplójában.",
+        "login_with_qr": "Bejelentkezés QR-kóddal",
         "mjolnir": "Új lehetőség emberek figyelmen kívül hagyására",
         "msc3531_hide_messages_pending_moderation": "A moderátorok kitakarhatják a még nem moderált üzeneteket.",
         "new_room_list": "Új szobalista engedélyezése",
