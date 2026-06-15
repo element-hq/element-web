@@ -269,7 +269,9 @@ test.describe("Threads", () => {
         // Check the number of the replies
         await expect(locator.locator(".mx_ThreadPanel_replies_amount").getByText("2")).toBeAttached();
         // Make sure the notification dot is visible
-        await expect(locator.locator(".mx_NotificationBadge_visible")).toBeVisible();
+        const notificationBadge = locator.getByTestId("notification-badge");
+        await expect(notificationBadge).toBeVisible();
+        await expect(notificationBadge).toHaveAttribute("data-badge-type", "dot");
         // User opens thread via threads list
         await locator.locator(".mx_EventTile_line").click();
 

@@ -52,16 +52,19 @@ const config: Config = {
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
-        "<rootDir>/packages/**/*.{js,ts,tsx}",
         // getSessionLock is piped into a different JS context via stringification, and the coverage functionality is
         // not available in that contest. So, turn off coverage instrumentation for it.
         "!<rootDir>/src/utils/SessionLock.ts",
         // Coverage chokes on type definition files
         "!<rootDir>/src/**/*.d.ts",
+        // Ignore vitest tests
+        "!<rootDir>/src/**/*.test.{ts,tsx}",
+        "!<rootDir>/src/test/**",
     ],
-    coverageReporters: ["text-summary", "lcov"],
+    coverageReporters: ["text-summary", ["lcov", { projectRoot: "../../" }]],
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
+    workerIdleMemoryLimit: "512MB",
 };
 
 // if we're running under GHA, enable relevant reporters

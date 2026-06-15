@@ -4,12 +4,14 @@
         "jump_first_invite": "Przejdź do pierwszego zaproszenia.",
         "message_composer": "Kompozytor wiadomości",
         "n_unread_messages": {
-            "other": "%(count)s nieprzeczytanych wiadomości.",
-            "one": "1 nieprzeczytana wiadomość."
+            "one": "1 nieprzeczytana wiadomość.",
+            "few": "%(count)s nieprzeczytane wiadomości.",
+            "many": "%(count)s nieprzeczytanych wiadomości."
         },
         "n_unread_messages_mentions": {
-            "other": "%(count)s nieprzeczytanych wiadomości, wliczając wzmianki.",
-            "one": "1 nieprzeczytana wzmianka."
+            "one": "1 nieprzeczytana wzmianka.",
+            "few": "%(count)s nieprzeczytane wiadomości lub wzmianki.",
+            "many": "%(count)s nieprzeczytanych wiadomości lub wzmianek."
         },
         "recent_rooms": "Ostatnie pokoje",
         "room_name": "Pokój %(name)s",
@@ -59,7 +61,7 @@
         "expand": "Rozwiń",
         "explore_public_rooms": "Przeglądaj pokoje publiczne",
         "explore_rooms": "Przeglądaj pokoje",
-        "export": "Eksport",
+        "export": "Eksportuj",
         "forward": "Przekaż",
         "go": "Przejdź",
         "go_back": "Wróć",
@@ -173,7 +175,7 @@
         "autodiscovery_unexpected_error_hs": "Nieoczekiwany błąd przy ustalaniu konfiguracji serwera domowego",
         "autodiscovery_unexpected_error_is": "Nieoczekiwany błąd przy ustalaniu konfiguracji serwera tożsamości",
         "captcha_description": "Serwer domowy prosi o potwierdzenie, że nie jesteś robotem.",
-        "change_password_action": "Zmień Hasło",
+        "change_password_action": "Zmień hasło",
         "change_password_confirm_invalid": "Hasła nie zgadzają się",
         "change_password_confirm_label": "Potwierdź hasło",
         "change_password_current_label": "Aktualne hasło",
@@ -203,7 +205,7 @@
         "failed_connect_identity_server_other": "Możesz się zalogować, lecz niektóre funkcje nie będą dostępne dopóki Serwer Tożsamości nie będzie znów online. Jeśli ciągle widzisz to ostrzeżenie, sprawdź swoją konfigurację lub skontaktuj się z administratorem serwera.",
         "failed_connect_identity_server_register": "Możesz się zarejestrować, lecz niektóre funkcje nie będą dostępne dopóki Serwer Tożsamości nie będzie znów online. Jeśli ciągle widzisz to ostrzeżenie, sprawdź swoją konfigurację lub skontaktuj się z administratorem serwera.",
         "failed_connect_identity_server_reset_password": "Możesz zresetować hasło, lecz niektóre funkcje nie będą dostępne dopóki Serwer Tożsamości nie będzie znów online. Jeśli ciągle widzisz to ostrzeżenie, sprawdź swoją konfigurację lub skontaktuj się z administratorem serwera.",
-        "failed_homeserver_discovery": "Nie udało się rozpocząć odkrywania serwerów domowych",
+        "failed_homeserver_discovery": "Nie udało się odkryć serwerów domowych",
         "failed_query_registration_methods": "Nie można uzyskać wspieranych metod rejestracji.",
         "failed_soft_logout_auth": "Nie udało się uwierzytelnić ponownie",
         "failed_soft_logout_homeserver": "Nie udało się uwierzytelnić ponownie z powodu błędu serwera domowego",
@@ -243,7 +245,7 @@
         "phone_optional_label": "Telefon (opcjonalny)",
         "qr_code_login": {
             "check_code_explainer": "Bezpieczeństwo połączenia z urządzeniem zostanie sprawdzone.",
-            "check_code_heading": "Wprowadź numer wyświetlany na drugim urządzeniu",
+            "check_code_heading": "Wprowadź numer widoczny na drugim urządzeniu",
             "check_code_input_label": "2-cyfrowy kod",
             "check_code_mismatch": "Liczby się nie zgadzają",
             "choose_desktop_computer": "Wybierz \"%(desktopComputer)s\"",
@@ -270,11 +272,11 @@
             "error_user_declined_title": "Logowanie odrzucone",
             "follow_remaining_instructions": "Postępuj zgodnie z pozostałymi instrukcjami, aby zweryfikować Twoje inne urządzenie",
             "open_element_mobile_device": "Otwórz %(brand)s na swoim urządzeniu mobilnym",
-            "open_element_other_device": "Otwórz %(brand)s na innym urządzeniu",
+            "open_element_other_device": "Otwórz %(brand)s na drugim urządzeniu",
             "point_the_camera": "Skieruj kamerę na pokazany tutaj kod QR",
             "ready_to_scan": "Gotowy do skanowania",
             "scan_code_instruction": "Skanuj kod QR",
-            "scan_code_instruction_reciprocate": "Zeskanuj kod QR innym urządzeniem",
+            "scan_code_instruction_reciprocate": "Zeskanuj kod QR drugim urządzeniem",
             "scan_qr_code": "Zaloguj się kodem QR",
             "security_code_prompt": "Twój dostawca konta może poprosić o podany kod w celu weryfikacji logowania.",
             "security_code_title": "Twój kod weryfikacyjny",
@@ -408,7 +410,7 @@
         "create_new_issue": "<newIssueLink>Utwórz nowe zgłoszenie</newIssueLink> na GitHubie, abyśmy mogli zbadać ten błąd.",
         "description": "Dzienniki debugowania zawierają dane o korzystaniu z aplikacji, w tym nazwę użytkownika, identyfikatory lub aliasy odwiedzonych pokoi, elementy interfejsu użytkownika, z którymi ostatnio wchodziłeś w interakcje oraz nazwy innych użytkowników. Nie zawierają treści wiadomości.",
         "download_logs": "Pobierz dzienniki",
-        "downloading_logs": "Pobieranie logów",
+        "downloading_logs": "Pobieram dzienniki",
         "error_empty": "Powiedz nam, co poszło nie tak, lub nawet lepiej - utwórz zgłoszenie na platformie GitHub, które opisuje problem.",
         "failed_download_logs": "Nie udało się pobrać dzienników debugowania: ",
         "failed_send_logs_causes": {
@@ -486,7 +488,7 @@
         "edited": "edytowane",
         "email_address": "Adres e-mail",
         "emoji": "Emoji",
-        "encrypted": "Szyfrowanie",
+        "encrypted": "Szyfrowany",
         "error": "Błąd",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
@@ -526,7 +528,8 @@
         },
         "n_rooms": {
             "one": "%(count)s pokój",
-            "other": "%(count)s pokojów"
+            "few": "%(count)s pokoje",
+            "many": "%(count)s pokoi"
         },
         "name": "Nazwa",
         "no_results": "Brak wyników",
@@ -700,7 +703,7 @@
         "add_details_prompt": "Dodaj trochę szczegółów, aby ludzie mogli ją łatwo rozpoznać.",
         "add_details_prompt_2": "Możesz to zmienić w każdej chwili.",
         "add_existing_rooms_description": "Wybierz pokoje lub konwersacje do dodania. Ta przestrzeń jest wyłącznie dla Ciebie, nikt o niej nie wie. Możesz dodać więcej później.",
-        "add_existing_rooms_heading": "Co chcesz organizować?",
+        "add_existing_rooms_heading": "Co chcesz zorganizować?",
         "address_label": "Adres",
         "address_placeholder": "np. moja-przestrzen",
         "creating": "Tworzenie…",
@@ -987,7 +990,7 @@
         "forgot_recovery_key": "Nie pamiętasz klucza przywracania?",
         "identity_needs_reset_description": "Zresetuj swoją tożsamość cyfrową, by utrzymać dostęp do historii czatów.",
         "import_invalid_keyfile": "Niepoprawny plik klucza %(brand)s",
-        "import_invalid_passphrase": "Próba autentykacji nieudana: nieprawidłowe hasło?",
+        "import_invalid_passphrase": "Próba uwierzytelnienia nieudana: błędne hasło?",
         "key_storage_out_of_sync": "Twój magazyn kluczy nie jest zsynchronizowany.",
         "key_storage_out_of_sync_description": "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.",
         "messages_not_secure": {
@@ -1553,6 +1556,11 @@
         "experimental_section": "Wczesny podgląd",
         "extended_profiles_msc_support": "Wymaga, aby Twój serwer obsługiwał MSC4133",
         "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
+        "feature_retention": {
+            "description": "Automatycznie usuwaj wiadomości po upływie ustawionego czasu wygaśnięcia. Obecnie obsługiwane są tylko ustawienia czytania.",
+            "disabled_sliding_sync": "Nie można ustawić czasu wygaśnięcia wiadomości, gdy opcja Sliding Sync jest włączona.",
+            "display_name": "Limit czasu wiadomości"
+        },
         "feature_user_status": {
             "description": "Pozwala wyświetlić i ustawić aktualny status.",
             "display_name": "Status użytkownika",
@@ -1584,7 +1592,7 @@
         "leave_beta_reload": "Opuszczenie bety, wczyta ponownie %(brand)s.",
         "location_share_live": "Udostępnianie lokalizacji na żywo",
         "location_share_live_description": "Implementacja tymczasowa. Lokalizacje są zapisywane w historii pokoju.",
-        "login_with_qr": "Zaloguj się za pomocą kodu QR",
+        "login_with_qr": "Zaloguj się kodem QR",
         "mjolnir": "Nowe sposoby na ignorowanie osób",
         "msc3531_hide_messages_pending_moderation": "Daj moderatorom ukrycie wiadomości które są sprawdzane.",
         "new_room_list": "Włącz nową listę pokojów",
@@ -1817,11 +1825,13 @@
         "total_decryption_errors": "Ze względu na błędy rozszyfrowywania, niektóre głosy mogły nie zostać policzone",
         "total_n_votes": {
             "one": "Oddano %(count)s głos. Zagłosuj, aby zobaczyć wyniki",
-            "other": "Oddano %(count)s głosów. Zagłosuj, aby zobaczyć wyniki"
+            "few": "Oddano %(count)s głosy. Zagłosuj, aby zobaczyć wyniki",
+            "many": "Oddano %(count)s głosów. Zagłosuj, aby zobaczyć wyniki"
         },
         "total_n_votes_voted": {
             "one": "Oparte na %(count)s głosie",
-            "other": "Oparte na %(count)s głosach"
+            "few": "Oparte na %(count)s głosach",
+            "many": "Oparte na %(count)s głosach"
         },
         "total_no_votes": "Brak głosów",
         "total_not_ended": "Wyniki będą widoczne po zakończeniu ankiety",
@@ -1929,7 +1939,9 @@
                 "many": "%(count)s przypiętych wiadomości"
             },
             "limits": {
-                "other": "Możesz przypiąć do %(count)s widżetów"
+                "one": "Możesz przypiąć maksymalnie %(count)s widżet",
+                "few": "Możesz przypiąć maksymalnie %(count)s widżety",
+                "many": "Możesz przypiąć maksymalnie %(count)s widżetów"
             },
             "menu": "Otwórz menu",
             "reply_thread": "Odpowiedz na <link>wiadomość w wątku</link>",
@@ -1946,18 +1958,21 @@
             "empty_active": "Brak aktywnych ankiet w tym pokoju",
             "empty_active_load_more": "Nie znaleziono aktywnych ankiet. Wczytaj więcej ankiet, aby wyświetlić poprzednie miesiące",
             "empty_active_load_more_n_days": {
-                "one": "Nie znaleziono aktywnych ankiet w ostatnim dniu. Wczytaj więcej ankiet, aby wyświetlić poprzednie miesiące",
-                "other": "Nie znaleziono aktywnych ankiet w ostatnich %(count)s dniach. Wczytaj więcej ankiet, aby wyświetlić ankiety z poprzednich miesięcy"
+                "one": "Nie znaleziono aktywnych ankiet z ostatniej doby. Załaduj więcej ankiet, aby wyświetlić poprzednie miesiące",
+                "few": "Nie znaleziono aktywnych ankiet z ostatnich %(count)s dni. Załaduj więcej ankiet, aby wyświetlić poprzednie miesiące",
+                "many": "Nie znaleziono aktywnych ankiet z ostatnich %(count)s dni. Załaduj więcej ankiet, aby wyświetlić poprzednie miesiące"
             },
             "empty_past": "Brak przeszłych ankiet w tym pokoju",
             "empty_past_load_more": "Nie znaleziono przeszłych ankiet. Wczytaj więcej ankiet, aby wyświetlić poprzednie miesiące",
             "empty_past_load_more_n_days": {
-                "one": "Nie znaleziono przeszłych ankiet w ostatnim dniu. Wczytaj więcej ankiet, aby wyświetlić ankiety z poprzednich miesięcy",
-                "other": "Nie znaleziono przeszłych ankiet w ostatnich %(count)s dniach. Wczytaj więcej ankiet, aby wyświetlić poprzednie miesiące"
+                "one": "Nie znaleziono zakończonych ankiet z ostatniej doby. Załaduj więcej ankiet, aby wyświetlić poprzednie miesiące",
+                "few": "Nie znaleziono zakończonych ankiet z ostatnich %(count)s dni. Załaduj więcej ankiet, aby wyświetlić poprzednie miesiące",
+                "many": "Nie znaleziono zakończonych ankiet z ostatnich %(count)s dni. Załaduj więcej ankiet, aby wyświetlić poprzednie miesiące"
             },
             "final_result": {
                 "one": "Ostateczny wynik na podstawie %(count)s głosu",
-                "other": "Ostateczne wyniki na podstawie %(count)s głosów"
+                "few": "Ostateczny wynik na podstawie %(count)s głosów",
+                "many": "Ostateczny wynik na podstawie %(count)s głosów"
             },
             "load_more": "Wczytaj więcej ankiet",
             "loading": "Wczytywanie ankiet",
@@ -2024,12 +2039,14 @@
         "error_jump_to_date_send_logs_prompt": "Wyślij <debugLogsLink>dzienniki debugowania</debugLogsLink>, aby pomóc nam znaleźć problem.",
         "error_jump_to_date_title": "Nie można znaleźć wydarzenia w tym dniu",
         "face_pile_summary": {
-            "one": "%(count)s osoba, którą znasz, już dołączyła",
-            "other": "%(count)s osób, które znasz, już dołączyło"
+            "one": "%(count)s osoba, którą znasz już dołączyła",
+            "few": "%(count)s osoby, które znasz już dołączyło",
+            "many": "%(count)s osób, które znasz już dołączyło"
         },
         "face_pile_tooltip_label": {
             "one": "Wyświetl 1 członka",
-            "other": "Wyświetl wszystkich %(count)s członków"
+            "few": "Wyświetl wszystkich %(count)s członków",
+            "many": "Wyświetl wszystkich %(count)s członków"
         },
         "face_pile_tooltip_shortcut": "Włączając %(commaSeparatedMembers)s",
         "face_pile_tooltip_shortcut_joined": "Włączając Ciebie, %(commaSeparatedMembers)s",
@@ -2141,8 +2158,9 @@
         },
         "unknown_status_code_for_timeline_jump": "nieznany kod statusu",
         "unread_notifications_predecessor": {
-            "one": "Masz %(count)s nieprzeczytanych powiadomień we wcześniejszej wersji tego pokoju.",
-            "other": "Masz %(count)s nieprzeczytane powiadomienie we wcześniejszej wersji tego pokoju."
+            "one": "Masz %(count)s nieprzeczytane powiadomienie w poprzedniej wersji pokoju.",
+            "few": "Masz %(count)s nieprzeczytane powiadomienia w poprzedniej wersji pokoju.",
+            "many": "Masz %(count)s nieprzeczytanych powiadomień w poprzedniej wersji pokoju."
         },
         "upgrade_error_description": "Sprawdź ponownie czy Twój serwer wspiera wybraną wersję pokoju i spróbuj ponownie.",
         "upgrade_error_title": "Błąd podczas aktualizacji pokoju",
@@ -2152,8 +2170,9 @@
         "upgrade_warning_bar_upgraded": "Ten pokój został już ulepszony.",
         "upload": {
             "uploading_multiple_file": {
-                "one": "Przesyłanie %(filename)s oraz %(count)s innych",
-                "other": "Przesyłanie %(filename)s oraz %(count)s innych"
+                "one": "Przesyłanie %(filename)s oraz %(count)s inne",
+                "few": "Przesyłanie %(filename)s oraz %(count)s inne",
+                "many": "Przesyłanie %(filename)s oraz %(count)s innych"
             },
             "uploading_single_file": "Przesyłanie %(filename)s"
         },
@@ -2172,8 +2191,9 @@
         "home_menu_label": "Opcje głównej",
         "join_public_room_label": "Dołącz do publicznego pokoju",
         "joining_rooms_status": {
-            "one": "Aktualnie dołączanie do %(count)s pokoju",
-            "other": "Aktualnie dołączanie do %(count)s pokoi"
+            "one": "Aktualnie dołącza do %(count)s pokoju",
+            "few": "Aktualnie dołącza do %(count)s pokojów",
+            "many": "Aktualnie dołącza do %(count)s pokojów"
         },
         "list_title": "Lista pokojów",
         "more_options": {
@@ -2181,8 +2201,9 @@
         },
         "notification_options": "Opcje powiadomień",
         "redacting_messages_status": {
-            "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
-            "other": "Aktualnie usuwanie wiadomości z %(count)s pokoi"
+            "one": "Aktualnie usuwa wiadomości z %(count)s pokoju",
+            "few": "Aktualnie usuwa wiadomości z %(count)s pokojów",
+            "many": "Aktualnie usuwa wiadomości z %(count)s pokojów"
         },
         "section": {
             "chats": "Czaty",
@@ -2248,8 +2269,8 @@
         },
         "delete_avatar_label": "Usuń awatar",
         "general": {
-            "alias_field_has_domain_invalid": "Brakuje separatora domeny np. (:domena.org)",
-            "alias_field_has_localpart_invalid": "Brakuje nazwy pokoju lub separatora np. (mój-pokój:domena.org)",
+            "alias_field_has_domain_invalid": "Brakuje separatora domeny np. (:domain.org)",
+            "alias_field_has_localpart_invalid": "Brakuje nazwy pokoju lub separatora np. (mój-pokój:domain.org)",
             "alias_field_matches_invalid": "Ten adres nie wskazuje na ten pokój",
             "alias_field_placeholder_default": "np. mój-pokój",
             "alias_field_required_invalid": "Podaj adres",
@@ -2405,7 +2426,8 @@
             "join_rule_restricted_dialog_title": "Zarządzaj przestrzeniami",
             "join_rule_restricted_n_more": {
                 "one": "i %(count)s więcej",
-                "other": "i %(count)s więcej"
+                "few": "i %(count)s więcej",
+                "many": "i %(count)s więcej"
             },
             "join_rule_restricted_summary": {
                 "one": "Obecnie jedna przestrzeń jest autoryzowana",
@@ -2418,11 +2440,13 @@
             "join_rule_upgrade_required": "Aktualizacja wymagana",
             "join_rule_upgrade_sending_invites": {
                 "one": "Wysyłanie zaproszenia...",
-                "other": "Wysyłanie zaproszeń... (%(progress)s z %(count)s)"
+                "few": "Wysyłanie zaproszeń... (%(progress)s z %(count)s)",
+                "many": "Wysyłanie zaproszeń... (%(progress)s z %(count)s)"
             },
             "join_rule_upgrade_updating_spaces": {
                 "one": "Aktualizowanie przestrzeni...",
-                "other": "Aktualizowanie przestrzeni... (%(progress)s z %(count)s)"
+                "few": "Aktualizowanie przestrzeni... (%(progress)s z %(count)s)",
+                "many": "Aktualizowanie przestrzeni... (%(progress)s z %(count)s)"
             },
             "join_rule_upgrade_upgrading_room": "Aktualizowanie pokoju",
             "join_rule_world_readable_description": "Zmiana osób, które mogą dołączyć do pokoju, wpłynie również na widoczność przyszłych wiadomości.",
@@ -2890,8 +2914,9 @@
             "message_search_disable_warning": "Jeśli wyłączone, wiadomości z szyfrowanych pokojów nie pojawią się w wynikach wyszukiwania.",
             "message_search_disabled": "Bezpiecznie przechowuj lokalnie wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania.",
             "message_search_enabled": {
-                "one": "Bezpiecznie przechowuj lokalnie wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania. Zostanie użyte %(size)s do przechowywania wiadomości z %(rooms)s pokoju.",
-                "other": "Bezpiecznie przechowuj lokalnie wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania. Zostanie użyte %(size)s do przechowywania wiadomości z %(rooms)s pokoi."
+                "one": "Bezpiecznie i lokalnie przechowuj wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania wykorzystując %(size)s z %(rooms)s pokoju.",
+                "few": "Bezpiecznie i lokalnie przechowuj wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania wykorzystując %(size)s z %(rooms)s pokojów.",
+                "many": "Bezpiecznie i lokalnie przechowuj wiadomości szyfrowane, aby mogły się wyświetlać w wynikach wyszukiwania wykorzystując %(size)s z %(rooms)s pokojów."
             },
             "message_search_failed": "Inicjalizacja wyszukiwania wiadomości nie powiodła się",
             "message_search_indexed_messages": "Wiadomości indeksowane:",
@@ -2905,7 +2930,7 @@
             "message_search_sleep_time": "Jak szybko powinny być pobierane wiadomości.",
             "message_search_space_used": "Wykorzystane miejsce:",
             "message_search_unsupported": "%(brand)s brakuje niektórych komponentów wymaganych do bezpiecznego przechowywania wiadomości szyfrowanych lokalnie. Jeśli chcesz eksperymentować z tą funkcją, zbuduj własny %(brand)s Desktop z <nativeLink> dodanymi komponentami wyszukiwania</nativeLink>.",
-            "message_search_unsupported_web": "%(brand)s nie jest w stanie bezpiecznie przechowywać wiadomości szyfrowanych lokalnie, gdy działa w przeglądarce. Użyj <desktopLink> Desktop</desktopLink>, aby wiadomości pojawiły się w wynikach wyszukiwania.",
+            "message_search_unsupported_web": "%(brand)s nie jest w stanie bezpiecznie przechowywać wiadomości szyfrowanych lokalnie, gdy działa w przeglądarce. Użyj <desktopLink>%(brand)s Desktop</desktopLink>, aby wiadomości pojawiły się w wynikach wyszukiwania.",
             "record_session_details": "Zapisz nazwę klienta, wersję i URL, aby łatwiej rozpoznawać sesje w menedżerze sesji",
             "send_analytics": "Wysyłaj dane analityczne",
             "strict_encryption": "Wysyłaj wiadomości tylko do zweryfikowanych użytkowników"
@@ -2964,7 +2989,8 @@
             "mobile_session": "Sesja mobilna",
             "n_sessions_selected": {
                 "one": "Zaznaczono %(count)s sesję",
-                "other": "Zaznaczono %(count)s sesji"
+                "few": "Zaznaczono %(count)s sesje",
+                "many": "Zaznaczono %(count)s sesji"
             },
             "no_inactive_sessions": "Nie znaleziono nieaktywnych sesji.",
             "no_sessions": "Nie znaleziono sesji.",
@@ -3200,8 +3226,9 @@
             "dm_heading": "Wiadomości prywatne",
             "error_heading": "Nie dodano wszystkiego, co było zaznaczone",
             "progress_text": {
-                "other": "Dodawanie pokojów... (%(progress)s z %(count)s)",
-                "one": "Dodawanie pokoju..."
+                "one": "Dodawanie pokoju...",
+                "few": "Dodawanie pokoi... (%(progress)s z %(count)s)",
+                "many": "Dodawanie pokoi... (%(progress)s z %(count)s)"
             },
             "space_dropdown_label": "Wybór przestrzeni",
             "space_dropdown_title": "Dodaj istniejące pokoje",
@@ -3342,7 +3369,8 @@
         "all_threads_description": "Pokazuje wszystkie wątki z bieżącego pokoju",
         "count_of_reply": {
             "one": "%(count)s odpowiedź",
-            "other": "%(count)s odpowiedzi"
+            "few": "%(count)s odpowiedzi",
+            "many": "%(count)s odpowiedzi"
         },
         "empty_description": "Użyj „%(replyInThread)s” podczas najechania kursorem na wiadomość.",
         "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo je śledzić.",
@@ -3464,7 +3492,8 @@
         "m.poll": {
             "count_of_votes": {
                 "one": "%(count)s głos",
-                "other": "%(count)s głosów"
+                "few": "%(count)s głosy",
+                "many": "%(count)s głosów"
             }
         },
         "m.poll.end": {
@@ -3477,12 +3506,14 @@
         },
         "m.room.canonical_alias": {
             "alt_added": {
-                "other": "%(senderName)s dodał alternatywne adresy %(addresses)s dla tego pokoju.",
-                "one": "%(senderName)s dodał alternatywny adres %(addresses)s dla tego pokoju."
+                "one": "%(senderName)s dodał alternatywny adres %(addresses)s dla tego pokoju.",
+                "few": "%(senderName)s dodał alternatywne adresy %(addresses)s dla tego pokoju.",
+                "many": "%(senderName)s dodał alternatywne adresy %(addresses)s dla tego pokoju."
             },
             "alt_removed": {
-                "one": "%(senderName)s usunął alternatywny adres %(addresses)s tego pokoju.",
-                "other": "%(senderName)s usunął alternatywny adres %(addresses)s tego pokoju."
+                "one": "%(senderName)s usunął alternatywny adres %(addresses)s pokoju.",
+                "few": "%(senderName)s usunął alternatywne adresy %(addresses)s pokoju.",
+                "many": "%(senderName)s usunął alternatywne adresy %(addresses)s pokoju."
             },
             "changed": "%(senderName)s zmienił adresy dla tego pokoju.",
             "changed_alternative": "%(senderName)s zmienił alternatywne adresy dla tego pokoju.",
@@ -3644,50 +3675,64 @@
         "summary": {
             "banned": {
                 "one": "został zbanowany",
-                "other": "został zbanowany %(count)s razy"
+                "few": "został zbanowany %(count)s razy",
+                "many": "został zbanowany %(count)s razy"
             },
             "banned_multiple": {
                 "one": "zostało zbanowanych",
-                "other": "zostało zbanowanych %(count)s razy"
+                "few": "zostało zbanowanych %(count)s razy",
+                "many": "zostało zbanowanych %(count)s razy"
             },
             "changed_avatar": {
-                "other": "%(oneUser)szmienił swoje zdjęcie profilowe %(count)s razy"
+                "one": "%(oneUser)szmienił swoje zdjęcie profilowe",
+                "few": "%(oneUser)szmienił swoje zdjęcie profilowe %(count)s razy",
+                "many": "%(oneUser)szmienił swoje zdjęcie profilowe %(count)s razy"
             },
             "changed_avatar_multiple": {
-                "other": "%(severalUsers)szmieniło swoje zdjęcie profilowe %(count)s razy"
+                "one": "%(severalUsers)szmieniło swoje zdjęcie profilowe",
+                "few": "%(severalUsers)szmieniło swoje zdjęcie profilowe %(count)s razy",
+                "many": "%(severalUsers)szmieniło swoje zdjęcie profilowe %(count)s razy"
             },
             "changed_name": {
                 "one": "%(oneUser)szmienił swoją nazwę",
-                "other": "%(oneUser)szmienił swoją nazwę %(count)s razy"
+                "few": "%(oneUser)szmienił swoją nazwę %(count)s razy",
+                "many": "%(oneUser)szmienił swoją nazwę %(count)s razy"
             },
             "changed_name_multiple": {
-                "other": "%(severalUsers)szmieniło ich nazwę %(count)s razy",
-                "one": "%(severalUsers)szmieniło ich nazwę"
+                "one": "%(severalUsers)szmieniło swoją nazwę",
+                "few": "%(severalUsers)szmieniło swoją nazwę %(count)s razy",
+                "many": "%(severalUsers)szmieniło swoją nazwę %(count)s razy"
             },
             "format": "%(nameList)s %(transitionList)s",
             "hidden_event": {
                 "one": "%(oneUser)swysłał ukrytą wiadomość",
-                "other": "%(oneUser)swysłał %(count)s ukrytych wiadomości"
+                "few": "%(oneUser)swysłał %(count)s ukryte wiadomości",
+                "many": "%(oneUser)swysłał %(count)s ukrytych wiadomości"
             },
             "hidden_event_multiple": {
-                "other": "%(severalUsers)swysłało %(count)s ukrytych wiadomości",
-                "one": "%(severalUsers)swysłało ukrytą wiadomość"
+                "one": "%(severalUsers)swysłało ukrytą wiadomość",
+                "few": "%(severalUsers)swysłało %(count)s ukryte wiadomości",
+                "many": "%(severalUsers)swysłało %(count)s ukrytych wiadomości"
             },
             "invite_withdrawn": {
-                "other": "%(oneUser)swycofał zaproszenie %(count)s razy",
-                "one": "%(oneUser)swycofał zaproszenie"
+                "one": "%(oneUser)sutracił swoje zaproszenie",
+                "few": "%(oneUser)sutracił swoje zaproszenie %(count)s razy",
+                "many": "%(oneUser)sutracił swoje zaproszenie %(count)s razy"
             },
             "invite_withdrawn_multiple": {
-                "other": "%(severalUsers)swycofało zaproszenie %(count)s razy",
-                "one": "%(severalUsers)swycofało zaproszenie"
+                "one": "%(severalUsers)sutraciły swoje zaproszenie",
+                "few": "%(severalUsers)sutraciły swoje zaproszenie %(count)s razy",
+                "many": "%(severalUsers)sutraciły swoje zaproszenie %(count)s razy"
             },
             "invited": {
-                "other": "został zaproszony %(count)s razy",
-                "one": "został zaproszony"
+                "one": "został zaproszony",
+                "few": "został zaproszony %(count)s razy",
+                "many": "został zaproszony %(count)s razy"
             },
             "invited_multiple": {
                 "one": "zostało zaproszonych",
-                "other": "zostało zaproszonych %(count)s razy"
+                "few": "zostało zaproszonych %(count)s razy",
+                "many": "zostało zaproszonych %(count)s razy"
             },
             "joined": {
                 "one": "%(oneUser)s dołączył",
@@ -3710,52 +3755,64 @@
                 "many": "%(severalUsers)s dołączyło %(count)s razy"
             },
             "kicked": {
-                "one": "zostało usunięte",
-                "other": "zostało usunięte %(count)s raz"
+                "one": "został usunięty",
+                "few": "został usunięty %(count)s razy",
+                "many": "został usunięty %(count)s razy"
             },
             "kicked_multiple": {
                 "one": "zostało usuniętych",
-                "other": "zostało usuniętych %(count)s razy"
+                "few": "zostało usuniętych %(count)s razy",
+                "many": "zostało usuniętych %(count)s razy"
             },
             "left": {
-                "one": "%(oneUser)s wyszedł",
-                "other": "%(oneUser)sopuścił %(count)s razy"
+                "one": "%(oneUser)sopuścił pokój",
+                "few": "%(oneUser)sopuścił pokój %(count)s razy",
+                "many": "%(oneUser)sopuścił pokój %(count)s razy"
             },
             "left_multiple": {
-                "one": "%(severalUsers)s wyszło",
-                "other": "%(severalUsers)swyszło %(count)s razy"
+                "one": "%(severalUsers)sopuściło pokój",
+                "few": "%(severalUsers)sopuściło pokój %(count)s razy",
+                "many": "%(severalUsers)sopuściło pokój %(count)s razy"
             },
             "no_change": {
-                "other": "%(oneUser)snie wykonał zmian %(count)s razy",
-                "one": "%(oneUser)snie wykonał zmian"
+                "one": "%(oneUser)snie dokonał zmian",
+                "few": "%(oneUser)snie dokonał zmian %(count)s razy",
+                "many": "%(oneUser)snie dokonał zmian %(count)s razy"
             },
             "no_change_multiple": {
-                "other": "%(severalUsers)snie wykonało zmian %(count)s razy",
-                "one": "%(severalUsers)snie wykonało zmian"
+                "one": "%(severalUsers)snie dokonało zmian",
+                "few": "%(severalUsers)snie dokonało zmian %(count)s razy",
+                "many": "%(severalUsers)snie dokonało zmian %(count)s razy"
             },
             "pinned_events": {
-                "one": "%(oneUser)szmienił <a>przypięte wiadomości</a> pokoju",
-                "other": "%(oneUser)szmienił <a>przypięte wiadomości</a> pokoju %(count)s razy"
+                "one": "%(oneUser)szmienił <a>przypięte wiadomości</a> w pokoju",
+                "few": "%(oneUser)szmienił <a>przypięte wiadomości</a> w pokoju %(count)s razy",
+                "many": "%(oneUser)szmienił <a>przypięte wiadomości</a> w pokoju %(count)s razy"
             },
             "pinned_events_multiple": {
-                "one": "%(severalUsers)szmieniło <a>przypięte wiadomości</a> pokoju",
-                "other": "%(severalUsers)szmieniło <a>przypięte wiadomości</a> pokoju %(count)s razy"
+                "one": "%(severalUsers)szmienili <a>przypięte wiadomości</a> pokoju",
+                "few": "%(severalUsers)szmienili <a>przypięte wiadomości</a> pokoju %(count)s razy",
+                "many": "%(severalUsers)szmienili <a>przypięte wiadomości</a> pokoju %(count)s razy"
             },
             "redacted": {
                 "one": "%(oneUser)susunął wiadomość",
-                "other": "%(oneUser)susunął %(count)s wiadomości"
+                "few": "%(oneUser)susunął %(count)s wiadomości",
+                "many": "%(oneUser)susunął %(count)s wiadomości"
             },
             "redacted_multiple": {
                 "one": "%(severalUsers)susunęło wiadomość",
-                "other": "%(severalUsers)susunęło %(count)s wiadomości"
+                "few": "%(severalUsers)susunęło %(count)s wiadomości",
+                "many": "%(severalUsers)susunęło %(count)s wiadomości"
             },
             "rejected_invite": {
-                "other": "%(oneUser)sodrzucił ich zaproszenie %(count)s razy",
-                "one": "%(oneUser)sodrzucił ich zaproszenie"
+                "one": "%(oneUser)sodrzucił zaproszenie",
+                "few": "%(oneUser)sodrzucił zaproszenie %(count)s razy",
+                "many": "%(oneUser)sodrzucił zaproszenie %(count)s razy"
             },
             "rejected_invite_multiple": {
-                "one": "%(severalUsers)sodrzuciło ich zaproszenia",
-                "other": "%(severalUsers)sodrzuciło ich zaproszenia %(count)s razy"
+                "one": "%(severalUsers)sodrzuciło zaproszenie",
+                "few": "%(severalUsers)sodrzuciło zaproszenie %(count)s razy",
+                "many": "%(severalUsers)sodrzuciło zaproszenie %(count)s razy"
             },
             "rejoined": {
                 "one": "%(oneUser)s wyszedł i dołączył ponownie",
@@ -3769,11 +3826,13 @@
             },
             "unbanned": {
                 "one": "został odbanowany",
-                "other": "został odbanowany %(count)s razy"
+                "few": "został odbanowany %(count)s razy",
+                "many": "został odbanowany %(count)s razy"
             },
             "unbanned_multiple": {
-                "one": "zostali odbanowani",
-                "other": "zostali odbanowani %(count)s razy"
+                "one": "zostało odbanowanych",
+                "few": "zostało odbanowanych %(count)s razy",
+                "many": "zostało odbanowanych %(count)s razy"
             }
         },
         "thread_info_basic": "Z wątku",
@@ -3789,7 +3848,9 @@
         "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana"
     },
     "truncated_list_n_more": {
-        "other": "I %(count)s więcej…"
+        "one": "",
+        "few": "i jeszcze %(count)s...",
+        "many": "i jeszcze %(count)s..."
     },
     "unsupported_browser": {
         "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
@@ -3809,7 +3870,7 @@
         "release_notes_toast_title": "Co nowego",
         "see_changes_button": "Co nowego?",
         "toast_description": "Dostępna jest nowa wersja %(brand)s",
-        "toast_title": "Aktualizuj %(brand)s",
+        "toast_title": "Aktualizacja %(brand)s",
         "unavailable": "Niedostępny"
     },
     "update_room_access_modal": {
@@ -3833,8 +3894,9 @@
         "title_progress": "Prześlij pliki (%(current)s z %(total)s)",
         "upload_all_button": "Prześlij wszystko",
         "upload_n_others_button": {
-            "other": "Prześlij %(count)s innych plików",
-            "one": "Prześlij %(count)s inny plik"
+            "one": "Prześlij %(count)s inny plik",
+            "few": "Prześlij %(count)s inne pliki",
+            "many": "Prześlij %(count)s innych plików"
         }
     },
     "user_info": {
@@ -3874,12 +3936,14 @@
         "promote_warning": "Nie będziesz mógł cofnąć tej zmiany, ponieważ nadajesz użytkownikowi uprawnienia administratorskie równe Twoim.",
         "redact": {
             "confirm_button": {
-                "other": "Usuń %(count)s wiadomości",
-                "one": "Usuń 1 wiadomość"
+                "one": "Usuń 1 wiadomość",
+                "few": "Usuń %(count)s wiadomości",
+                "many": "Usuń %(count)s wiadomości"
             },
             "confirm_description_1": {
-                "one": "Zamierzasz usunąć %(count)s wiadomość przez %(user)s. To usunie ją permanentnie dla wszystkich w konwersacji. Czy chcesz kontynuować?",
-                "other": "Zamierzasz usunąć %(count)s wiadomości przez %(user)s. To usunie je permanentnie dla wszystkich w konwersacji. Czy chcesz kontynuować?"
+                "one": "Zamierzasz usunąć %(count)s wiadomość użytkownika %(user)s. Zniknie nieodwracalnie dla wszystkich osób w rozmowie. Kontynuować?",
+                "few": "Zamierzasz usunąć %(count)s wiadomości użytkownika %(user)s. Znikną nieodwracalnie dla wszystkich osób w rozmowie. Kontynuować?",
+                "many": "Zamierzasz usunąć %(count)s wiadomości użytkownika %(user)s. Znikną nieodwracalnie dla wszystkich osób w rozmowie. Kontynuować?"
             },
             "confirm_description_2": "Dla większej liczby wiadomości, może to zająć trochę czasu. Nie odświeżaj klienta w tym czasie.",
             "confirm_keep_state_explainer": "Odznacz, jeśli chcesz również usunąć wiadomości systemowe tego użytkownika (np. zmiana członkostwa, profilu…)",
@@ -3924,9 +3988,9 @@
         "call_held_switch": "Zawieszono rozmowę <a>Przełącz</a>",
         "call_members": {
             "exhaustive": {
-                "one": "<avatars/> w połączeniu",
-                "few": "<avatars/> w połączeniu",
-                "many": "<avatars/> w połączeniu"
+                "one": "<avatars/> w trakcie połączenia",
+                "few": "<avatars/> w trakcie połączenia",
+                "many": "<avatars/> w trakcie połączenia"
             },
             "overflow": {
                 "one": "<avatars/> +%(overflowCount)s w połączeniu",
@@ -4084,9 +4148,9 @@
             "send_event_type_active_room": "Wysyłaj wydarzenia <b>%(eventType)s</b> jako Ty w obecnym pokoju",
             "send_event_type_this_room": "Wysyłaj zdarzenia <b>%(eventType)s</b> jako Ty w tym pokoju",
             "send_files_active_room": "Wyślij pliki jako ty do aktywnego pokoju",
-            "send_files_this_room": "Wyślij pliki jako ty do tego pokoju",
-            "send_images_active_room": "Wysyłaj obrazki jako ty w aktywnym pokoju",
-            "send_images_this_room": "Wysyłaj obrazki jako ty w tym pokoju",
+            "send_files_this_room": "Wyślij pliki jako Ty do tego pokoju",
+            "send_images_active_room": "Wysyłaj obrazki jako Ty w obecnym pokoju",
+            "send_images_this_room": "Wysyłaj obrazki jako Ty w tym pokoju",
             "send_messages_active_room": "Wysyłaj wiadomości jako Ty w obecnym pokoju",
             "send_messages_this_room": "Wysyłaj wiadomości jako Ty w tym pokoju",
             "send_msgtype_active_room": "Wysyłaj wiadomości <b>%(msgtype)s</b> jako Ty w bieżącym pokoju",
@@ -4179,8 +4243,8 @@
             "similarToCommon": "Jest to podobne do powszechnie stosowanego hasła",
             "simpleRepeat": "Powtórzenia takie jak \"aaa\" są łatwe do odgadnięcia",
             "straightRow": "Proste rzędy klawiszy są łatwe do odgadnięcia",
-            "topHundred": "To jest 100 najpopularniejszych haseł",
-            "topTen": "To jest 10 najpopularniejszych haseł",
+            "topHundred": "Jest to jedno ze stu najpopularniejszych haseł",
+            "topTen": "Jest to jedno z dziesięciu najpopularniejszych haseł",
             "userInputs": "Nie powinny się tu znajdować żadne dane osobiste lub związane ze stroną.",
             "wordByItself": "Samo słowo jest łatwe do odgadnięcia"
         }
