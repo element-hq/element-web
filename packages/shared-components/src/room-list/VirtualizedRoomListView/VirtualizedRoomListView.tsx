@@ -373,7 +373,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         rangeChanged,
         onKeyDown,
         increaseViewportBy,
-        className: styles.roomList,
+        "className": styles.roomList,
     };
 
     if (isFlatList) {

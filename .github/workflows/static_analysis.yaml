@@ -25,9 +25,9 @@ jobs:
                     - name: Typescript Syntax Check
                       install: layered
                       command: "lint:types"
-                    - name: Prettier
+                    - name: Oxfmt
                       install: normal
-                      command: "lint:prettier"
+                      command: "lint:fmt"
                     - name: ESLint
                       install: normal
                       command: "lint:js"
