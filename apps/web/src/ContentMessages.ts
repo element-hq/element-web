@@ -523,7 +523,8 @@ export default class ContentMessages {
                 matrixClient,
             );
         }
-        if (sentFileTypes) {
+        if (sentFileTypes.length) {
+            // Find the most common type.
             const [type] = sentFileTypes.sort(
                 (a, b) => sentFileTypes.filter((v) => v === a).length - sentFileTypes.filter((v) => v === b).length,
             );
