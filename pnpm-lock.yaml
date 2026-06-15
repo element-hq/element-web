@@ -324,9 +324,6 @@ importers:
       cronstrue:
         specifier: ^3.0.0
         version: 3.14.0
-      eslint-plugin-matrix-org:
-        specifier: ^3.0.0
-        version: 3.0.0(dec748d6f9ed07a90528c1f3fd60f6fa)
       husky:
         specifier: ^9.0.0
         version: 9.1.7

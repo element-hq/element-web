@@ -34,7 +34,6 @@
         "@types/node": "22",
         "@vitest/coverage-v8": "catalog:",
         "cronstrue": "^3.0.0",
-        "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
         "knip": "6.16.0",
         "lint-staged": "^17.0.0",
