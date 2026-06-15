@@ -11,7 +11,7 @@ import React, { type JSX, type MouseEventHandler, useEffect } from "react";
 import { NotificationBadgeView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { useSettingValue } from "../../../../hooks/useSettings";
-import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+import { type NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { NotificationBadgeViewModel } from "../../../../viewmodels/room/notification-badge/NotificationBadgeViewModel";
 
 interface Props {
