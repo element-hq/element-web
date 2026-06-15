@@ -9,6 +9,7 @@ import { expect, describe, it, beforeEach, vi } from "vitest";
 import { fs as memfs, vol } from "memfs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { dialog } from "electron";
 
 import { type ConfigOptions } from "./config.js";
 
@@ -20,6 +21,10 @@ vi.mock("node:fs/promises", () => ({ default: memfs.promises }));
 vi.mock("electron", () => ({
     app: {
         getPath: vi.fn().mockReturnValue("/Users/name/Library/Application Support/Element"),
+        whenReady: (): Promise<void> => Promise.resolve(),
+    },
+    dialog: {
+        showMessageBox: vi.fn(),
     },
 }));
 
@@ -130,6 +135,21 @@ describe("loadConfig", () => {
         expect(config.help_url).toBe("https://element.io/help");
         expect(config.web_base_url).toBe("https://chat.org.com");
         expect(config.modules).toStrictEqual(["/webapp/modules/banner", "module2"]);
+    });
+
+    it("should show a dialog when encountering a SyntaxError", async () => {
+        vol.fromJSON({
+            "/home/custom-config.json": "NOT_JSON",
+        });
+
+        await loadConfig("/home/custom-config.json");
+        expect(dialog.showMessageBox).toHaveBeenCalledWith({
+            detail: "Unexpected token 'N', \"NOT_JSON\" is not valid JSON",
+            message:
+                "Your custom Element configuration contains invalid JSON. Please correct the problem and reopen Element.",
+            title: "Your Element is misconfigured",
+            type: "error",
+        });
     });
 });
 

@@ -29,6 +29,7 @@ vi.mock("electron", () => ({
     },
 }));
 
+vi.mock("./icon.js");
 vi.mock("./config.js");
 
 describe("create", () => {
