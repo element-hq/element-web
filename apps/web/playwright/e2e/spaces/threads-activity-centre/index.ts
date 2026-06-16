@@ -312,11 +312,6 @@ export class Helpers {
      * @param content - the expected rooms and their notification levels
      */
     async assertRoomsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
-        const getBadgeClass = (notificationLevel: "highlight" | "notification") =>
-            notificationLevel === "highlight"
-                ? "mx_NotificationBadge_level_highlight"
-                : "mx_NotificationBadge_level_notification";
-
         // Ensure that we have the right number of rooms
         await expect(this.getTacPanel().getByRole("menuitem")).toHaveCount(content.length);
 
@@ -327,7 +322,7 @@ export class Helpers {
             // Ensure that the room name are correct
             await expect(roomLocator).toHaveText(new RegExp(room));
             // There is no accessibility marker for the StatelessNotificationBadge
-            await expect(roomLocator.locator(`.${getBadgeClass(notificationLevel)}`)).toBeVisible();
+            await expect(roomLocator.locator(`[data-notification-level="${notificationLevel}"]`)).toBeVisible();
         }
     }
 
