@@ -79,6 +79,11 @@ export interface VirtualizedRoomListViewProps {
 const ROOM_LIST_ITEM_HEIGHT = 52;
 
 /**
+ * Number of pixels the keyboard sensor moves the dragged element per arrow keypress.
+ */
+const KEYBOARD_DRAG_OFFSET = 30;
+
+/**
  * Type for context used in ListView
  */
 type Context = {
@@ -448,6 +453,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 }),
                 // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
                 KeyboardSensor.configure({
+                    // The default 10px-per-keypress offset makes keyboard dragging feel sluggish.
+                    offset: KEYBOARD_DRAG_OFFSET,
                     keyboardCodes: {
                         start: ["Space"],
                         cancel: ["Escape"],
