@@ -13,6 +13,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
+import { KEYBOARD_DRAG_OFFSET, VirtualizedRoomListView } from "./VirtualizedRoomListView";
 
 const { Default, Sections } = composeStories(stories);
 
@@ -77,10 +78,11 @@ describe("<VirtualizedRoomListView />", () => {
         });
 
         it("should call changeRoomSection when drag ends successfully", async () => {
-            // KeyboardSensor: Space=start, ArrowDown moves position 10px/press, Space=drop.
-            // "General" (room 0) center is ~78px below the container top; "chats" section
-            // header starts ~130px below that. 15 presses × 10px = 150px → drag position
-            // enters the "chats" header area, making it the active droppable target.
+            // KeyboardSensor: Space=start, each ArrowDown moves the drag position by
+            // KEYBOARD_DRAG_OFFSET px, Space=drop. We need to travel ~150px down from "General"
+            // (room 0) so the drag position enters the target section header's droppable area;
+            // derive the keypress count from the offset so this stays correct if the offset changes.
+            const presses = Math.round(150 / KEYBOARD_DRAG_OFFSET);
             const user = userEvent.setup();
             renderWithMockContext(<Sections />);
 
@@ -89,8 +91,8 @@ describe("<VirtualizedRoomListView />", () => {
 
             await user.keyboard(" "); // start drag
 
-            for (let i = 0; i < 15; i++) {
-                await user.keyboard("{ArrowDown}"); // move down 10px per press
+            for (let i = 0; i < presses; i++) {
+                await user.keyboard("{ArrowDown}");
             }
 
             await user.keyboard(" "); // drop onto current target
@@ -101,9 +103,12 @@ describe("<VirtualizedRoomListView />", () => {
         });
 
         it("should fire section drag callbacks when reordering sections via keyboard", async () => {
-            // KeyboardSensor: Space=start, ArrowDown moves drag position 10px/press, Space=drop.
-            // Starting from the "Favourites" section header and pressing ArrowDown 20 times moves
-            // far enough down to land on the "low-priority" section header — a valid section reorder.
+            // KeyboardSensor: Space=start, each ArrowDown moves the drag position by
+            // KEYBOARD_DRAG_OFFSET px, Space=drop. We need to travel ~200px down from the
+            // "Favourites" section header to land on the "low-priority" section header — a valid
+            // section reorder; derive the keypress count from the offset so this stays correct
+            // if the offset changes.
+            const presses = Math.round(200 / KEYBOARD_DRAG_OFFSET);
             const user = userEvent.setup();
             renderWithMockContext(<Sections />);
 
@@ -112,7 +117,7 @@ describe("<VirtualizedRoomListView />", () => {
 
             await user.keyboard(" "); // start drag
 
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < presses; i++) {
                 await user.keyboard("{ArrowDown}");
             }
 

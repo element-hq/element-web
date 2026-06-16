@@ -81,7 +81,7 @@ const ROOM_LIST_ITEM_HEIGHT = 52;
 /**
  * Number of pixels the keyboard sensor moves the dragged element per arrow keypress.
  */
-const KEYBOARD_DRAG_OFFSET = 30;
+export const KEYBOARD_DRAG_OFFSET = 30;
 
 /**
  * Type for context used in ListView
