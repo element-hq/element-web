@@ -5,7 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { parseAppUrl, parseQsFromFragment, searchParamsToQueryDict } from "../../../src/vector/url_utils";
+import { describe, it, expect } from "vitest";
+
+import { parseAppUrl, parseQsFromFragment, searchParamsToQueryDict } from "./url_utils";
 
 // @ts-ignore
 const location: Location = {

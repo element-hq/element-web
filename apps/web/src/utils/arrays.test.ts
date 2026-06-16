@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, describe, it, expect } from "vitest";
+
 import {
     arrayDiff,
     arrayFastClone,
@@ -25,7 +27,7 @@ import {
     asyncSome,
     asyncSomeParallel,
     asyncFilter,
-} from "../../../src/utils/arrays";
+} from "./arrays";
 
 type TestParams = { input: number[]; output: number[] };
 type TestCase = [string, TestParams];
@@ -412,11 +414,11 @@ describe("arrays", () => {
 
     describe("asyncEvery", () => {
         it("when called with an empty array, it should return true", async () => {
-            expect(await asyncEvery([], jest.fn().mockResolvedValue(true))).toBe(true);
+            expect(await asyncEvery([], vi.fn().mockResolvedValue(true))).toBe(true);
         });
 
         it("when called with some items and the predicate resolves to true for all of them, it should return true", async () => {
-            const predicate = jest.fn().mockResolvedValue(true);
+            const predicate = vi.fn().mockResolvedValue(true);
             expect(await asyncEvery([1, 2, 3], predicate)).toBe(true);
             expect(predicate).toHaveBeenCalledTimes(3);
             expect(predicate).toHaveBeenCalledWith(1);
@@ -425,14 +427,14 @@ describe("arrays", () => {
         });
 
         it("when called with some items and the predicate resolves to false for all of them, it should return false", async () => {
-            const predicate = jest.fn().mockResolvedValue(false);
+            const predicate = vi.fn().mockResolvedValue(false);
             expect(await asyncEvery([1, 2, 3], predicate)).toBe(false);
             expect(predicate).toHaveBeenCalledTimes(1);
             expect(predicate).toHaveBeenCalledWith(1);
         });
 
         it("when called with some items and the predicate resolves to false for one of them, it should return false", async () => {
-            const predicate = jest.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+            const predicate = vi.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false);
             expect(await asyncEvery([1, 2, 3], predicate)).toBe(false);
             expect(predicate).toHaveBeenCalledTimes(2);
             expect(predicate).toHaveBeenCalledWith(1);
@@ -442,11 +444,11 @@ describe("arrays", () => {
 
     describe("asyncSome", () => {
         it("when called with an empty array, it should return false", async () => {
-            expect(await asyncSome([], jest.fn().mockResolvedValue(true))).toBe(false);
+            expect(await asyncSome([], vi.fn().mockResolvedValue(true))).toBe(false);
         });
 
         it("when called with some items and the predicate resolves to false for all of them, it should return false", async () => {
-            const predicate = jest.fn().mockResolvedValue(false);
+            const predicate = vi.fn().mockResolvedValue(false);
             expect(await asyncSome([1, 2, 3], predicate)).toBe(false);
             expect(predicate).toHaveBeenCalledTimes(3);
             expect(predicate).toHaveBeenCalledWith(1);
@@ -455,7 +457,7 @@ describe("arrays", () => {
         });
 
         it("when called with some items and the predicate resolves to true, it should short-circuit and return true", async () => {
-            const predicate = jest.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+            const predicate = vi.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true);
             expect(await asyncSome([1, 2, 3], predicate)).toBe(true);
             expect(predicate).toHaveBeenCalledTimes(2);
             expect(predicate).toHaveBeenCalledWith(1);
@@ -465,30 +467,30 @@ describe("arrays", () => {
 
     describe("asyncSomeParallel", () => {
         it("when called with an empty array, it should return false", async () => {
-            expect(await asyncSomeParallel([], jest.fn().mockResolvedValue(true))).toBe(false);
+            expect(await asyncSomeParallel([], vi.fn().mockResolvedValue(true))).toBe(false);
         });
 
         it("when all the predicates return false", async () => {
-            expect(await asyncSomeParallel([1, 2, 3], jest.fn().mockResolvedValue(false))).toBe(false);
+            expect(await asyncSomeParallel([1, 2, 3], vi.fn().mockResolvedValue(false))).toBe(false);
         });
 
         it("when all the predicates return true", async () => {
-            expect(await asyncSomeParallel([1, 2, 3], jest.fn().mockResolvedValue(true))).toBe(true);
+            expect(await asyncSomeParallel([1, 2, 3], vi.fn().mockResolvedValue(true))).toBe(true);
         });
 
         it("when one of the predicate return true", async () => {
-            const predicate = jest.fn().mockImplementation((value) => Promise.resolve(value === 2));
+            const predicate = vi.fn().mockImplementation((value) => Promise.resolve(value === 2));
             expect(await asyncSomeParallel([1, 2, 3], predicate)).toBe(true);
         });
     });
 
     describe("asyncFilter", () => {
         it("when called with an empty array, it should return an empty array", async () => {
-            expect(await asyncFilter([], jest.fn().mockResolvedValue(true))).toEqual([]);
+            expect(await asyncFilter([], vi.fn().mockResolvedValue(true))).toEqual([]);
         });
 
         it("should filter the content", async () => {
-            const predicate = jest.fn().mockImplementation((value) => Promise.resolve(value === 2));
+            const predicate = vi.fn().mockImplementation((value) => Promise.resolve(value === 2));
             expect(await asyncFilter([1, 2, 3], predicate)).toEqual([2]);
         });
     });

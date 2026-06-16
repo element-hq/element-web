@@ -55,6 +55,7 @@ import BlockInvitesConfigController from "./controllers/BlockInvitesConfigContro
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
 import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
 import { type NotificationSound } from "../Notifier.ts";
+import VideoRoomsBetaImage from "../../res/img/betas/video_rooms.png";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -413,8 +414,7 @@ export const SETTINGS: Settings = {
             ),
             feedbackLabel: "video-room-feedback",
             feedbackSubheading: _td("labs|video_rooms_feedbackSubheading"),
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            image: require("../../res/img/betas/video_rooms.png"),
+            image: VideoRoomsBetaImage,
             requiresRefresh: true,
         },
     },

@@ -5,7 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { getManageDeviceUrl } from "../../../../src/utils/oidc/urls";
+import { describe, it, expect } from "vitest";
+
+import { getManageDeviceUrl } from "./urls";
 
 describe("OIDC urls", () => {
     const accountManagementEndpoint = "https://auth.com/manage";

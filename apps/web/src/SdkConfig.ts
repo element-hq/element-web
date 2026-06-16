@@ -13,6 +13,7 @@ import { SnakedObject } from "./utils/SnakedObject";
 import { type IConfigOptions } from "./IConfigOptions";
 import { isObject, objectClone } from "./utils/objects";
 import { type DeepPartial, type DeepReadonly, type Defaultize } from "./@types/common";
+import ElementDesktopLogoSvg from "../res/img/element-desktop-logo.svg";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
 export const DEFAULTS: DeepReadonly<IConfigOptions> = {
@@ -44,8 +45,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     // be preferred over their config.
     desktopBuilds: {
         available: true,
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        logo: require("../res/img/element-desktop-logo.svg").default,
+        logo: ElementDesktopLogoSvg,
         url: "https://element.io/get-started",
     },
 

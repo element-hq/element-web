@@ -6,16 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { getInitialScreenAfterLogin, init, onNewScreen } from "../../../src/vector/routing";
-import type MatrixChat from "../../../src/components/structures/MatrixChat.tsx";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
+
+import { getInitialScreenAfterLogin, init, onNewScreen } from "./routing";
+import type MatrixChat from "../components/structures/MatrixChat.tsx";
 
 describe("onNewScreen", () => {
     it("should replace history if stripping via fields", () => {
         Object.defineProperty(window, "location", {
             value: {
                 hash: "#/room/!room:server?via=abc",
-                replace: jest.fn(),
-                assign: jest.fn(),
+                replace: vi.fn(),
+                assign: vi.fn(),
             },
             writable: true,
         });
@@ -28,8 +32,8 @@ describe("onNewScreen", () => {
         Object.defineProperty(window, "location", {
             value: {
                 hash: "#/room/!room1:server?via=abc",
-                replace: jest.fn(),
-                assign: jest.fn(),
+                replace: vi.fn(),
+                assign: vi.fn(),
             },
             writable: true,
         });
@@ -41,8 +45,8 @@ describe("onNewScreen", () => {
 
 describe("getInitialScreenAfterLogin", () => {
     beforeEach(() => {
-        jest.spyOn(sessionStorage.__proto__, "getItem").mockClear().mockReturnValue(null);
-        jest.spyOn(sessionStorage.__proto__, "setItem").mockClear();
+        vi.spyOn(sessionStorage, "getItem").mockClear().mockReturnValue(null);
+        vi.spyOn(sessionStorage, "setItem").mockClear();
     });
 
     const makeMockLocation = (hash = "") => {
@@ -65,7 +69,7 @@ describe("getInitialScreenAfterLogin", () => {
             const screen = {
                 screen: "/room/!test",
             };
-            jest.spyOn(sessionStorage.__proto__, "getItem").mockReturnValue(JSON.stringify(screen));
+            vi.spyOn(sessionStorage, "getItem").mockReturnValue(JSON.stringify(screen));
             expect(getInitialScreenAfterLogin(makeMockLocation())).toEqual(screen);
         });
     });
@@ -111,7 +115,7 @@ describe("init", () => {
         });
 
         window.matrixChat = {
-            showScreen: jest.fn(),
+            showScreen: vi.fn(),
         } as unknown as MatrixChat;
 
         init();

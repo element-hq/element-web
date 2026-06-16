@@ -5,11 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { batch } from "../../../src/utils/promise.ts";
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import { batch } from "./promise.ts";
 
 describe("promise.ts", () => {
     describe("batch", () => {
-        afterEach(() => jest.useRealTimers());
+        afterEach(() => vi.useRealTimers());
 
         it("should batch promises into groups of a given size", async () => {
             const promises = [() => Promise.resolve(1), () => Promise.resolve(2), () => Promise.resolve(3)];
@@ -19,7 +21,7 @@ describe("promise.ts", () => {
         });
 
         it("should wait for the current batch to finish to request the next one", async () => {
-            jest.useFakeTimers();
+            vi.useFakeTimers();
 
             let promise1Called = false;
             const promise1 = () =>
@@ -49,7 +51,7 @@ describe("promise.ts", () => {
             expect(promise2Called).toBe(true);
             expect(promise3Called).toBe(false);
 
-            jest.advanceTimersByTime(11);
+            vi.advanceTimersByTime(11);
             expect(await batchPromise).toEqual([1, 2, 3]);
         });
     });

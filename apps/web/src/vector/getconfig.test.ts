@@ -6,9 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
+// @vitest-environment happy-dom
 
-import { getVectorConfig } from "../../../src/vector/getconfig";
+import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+
+import { getVectorConfig } from "./getconfig";
 
 describe("getVectorConfig()", () => {
     const elementDomain = "app.element.io";
@@ -27,13 +30,13 @@ describe("getVectorConfig()", () => {
         });
 
         // stable value for cachebuster
-        jest.spyOn(Date, "now").mockReturnValue(now);
-        jest.clearAllMocks();
+        vi.spyOn(Date, "now").mockReturnValue(now);
+        vi.clearAllMocks();
         fetchMock.removeRoutes();
     });
 
     afterAll(() => {
-        jest.spyOn(Date, "now").mockRestore();
+        vi.spyOn(Date, "now").mockRestore();
     });
 
     it("requests specific config for document domain", async () => {

@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { FixedRollingArray } from "../../../src/utils/FixedRollingArray";
+import { describe, it, expect } from "vitest";
+
+import { FixedRollingArray } from "./FixedRollingArray";
 
 describe("FixedRollingArray", () => {
     it("should seed the array with the given value", () => {
