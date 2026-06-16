@@ -27,6 +27,7 @@ describe("UserMenuViewModel", () => {
             ...mockClientMethodsUser(),
             ...mockClientMethodsServer(),
             getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
+            setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         });
         SdkContextClass.instance.client = client;
     });
@@ -150,6 +151,15 @@ describe("UserMenuViewModel", () => {
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
             }),
+        );
+    });
+
+    it("can clear a user status", async () => {
+        const vm = new UserMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
+        vm.clearStatus();
+        await waitFor(() =>
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
         );
     });
 
