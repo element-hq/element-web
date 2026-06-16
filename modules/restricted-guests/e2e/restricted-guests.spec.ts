@@ -236,13 +236,29 @@ for (const auth of ["mas", "legacy"] as const) {
         });
 
         test.describe(`Restricted guests auth=${auth} guests=${guestsEnabled}`, () => {
-            test("should error if config is missing", async ({ page }) => {
+            test("should not error if config is missing", async ({ page }) => {
                 await page.goto("/");
-                await expect(page.getByText("Your Element is misconfigured")).toBeVisible();
-                await expect(page.getByText("Errors in module configuration")).toBeVisible();
+                await expect(page.getByText("Your Element is misconfigured")).not.toBeVisible();
+                await expect(page.getByText("Errors in module configuration")).not.toBeVisible();
             });
 
-            test.describe("with config", () => {
+            test.describe("with invalid config", () => {
+                test.use({
+                    config: {
+                        "io.element.element-web-modules.restricted-guests": {
+                            hs_url: "foo",
+                        },
+                    },
+                });
+
+                test("should render error", async ({ page }) => {
+                    await page.goto("/");
+                    await expect(page.getByText("Your Element is misconfigured")).toBeVisible();
+                    await expect(page.getByText("Errors in module configuration")).toBeVisible();
+                });
+            });
+
+            test.describe("with valid config", () => {
                 test.beforeEach(async ({ config, guestHomeserver, page, testRoomId }) => {
                     config["io.element.element-web-modules.restricted-guests"] = {
                         guest_user_homeserver_url: guestHomeserver.baseUrl,
