@@ -619,6 +619,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                     ],
                 },
+                {
+                    // Match imports containing the ?raw query string
+                    resourceQuery: /raw/,
+                    // Instruct Webpack to emit the file source as a string
+                    type: "asset/source",
+                },
             ].filter(Boolean),
         },
 
