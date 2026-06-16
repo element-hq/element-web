@@ -257,19 +257,19 @@ Please see LICENSE files in the repository root for full details.
         right: -3px;
         top: -3px;
 
-        .mx_NotificationBadge {
+        [data-component="notification-badge"] {
             margin: 0 2px; /* centering */
             background-clip: padding-box;
         }
 
-        .mx_NotificationBadge_dot {
+        [data-badge-type="dot"] {
             /* make the smaller dot occupy the same width for centering */
             margin: 0 -1px 0 0;
             border: 3px solid $spacePanel-bg-color;
         }
 
-        .mx_NotificationBadge_2char,
-        .mx_NotificationBadge_3char {
+        [data-badge-type="badge_2char"],
+        [data-badge-type="badge_3char"] {
             margin: -5px -5px 0 0;
             border: 2px solid $spacePanel-bg-color;
         }

@@ -125,7 +125,7 @@ describe("SpaceButton", () => {
                 />,
             );
 
-            expect(container.querySelector(".mx_NotificationBadge_count")).toHaveTextContent("8");
+            expect(getByTestId(container, "notification-badge")).toHaveTextContent("8");
             expect(asFragment()).toMatchSnapshot();
         });
     });

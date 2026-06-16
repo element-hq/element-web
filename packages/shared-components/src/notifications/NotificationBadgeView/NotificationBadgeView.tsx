@@ -99,15 +99,7 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         return <></>;
     }
 
-    const classes = classNames("mx_NotificationBadge", styles.notificationBadge, {
-        "mx_AccessibleButton": isClickable,
-        "mx_NotificationBadge_visible": isVisible,
-        "mx_NotificationBadge_level_notification": isNotification,
-        "mx_NotificationBadge_level_highlight": isHighlight,
-        "mx_NotificationBadge_knocked": isKnocked,
-        "mx_NotificationBadge_dot": badgeType === "dot",
-        "mx_NotificationBadge_2char": badgeType === "badge_2char",
-        "mx_NotificationBadge_3char": badgeType === "badge_3char",
+    const classes = classNames(styles.notificationBadge, {
         [styles.visible]: isVisible,
         [styles.notification]: isNotification,
         [styles.highlight]: isHighlight,
@@ -123,12 +115,13 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         isKnocked && knockLabel ? (
             <AskToJoinIcon aria-label={knockLabel} />
         ) : (
-            <span className={classNames("mx_NotificationBadge_count", styles.count)}>{symbol}</span>
+            <span className={styles.count}>{symbol}</span>
         );
 
     const badge = isClickable ? (
         <button
             type="button"
+            data-component="notification-badge"
             data-testid="notification-badge"
             data-badge-type={badgeType}
             data-notification-level={notificationLevel}
@@ -141,6 +134,7 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         </button>
     ) : (
         <div
+            data-component="notification-badge"
             data-testid="notification-badge"
             data-badge-type={badgeType}
             data-notification-level={notificationLevel}

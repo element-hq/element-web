@@ -25,17 +25,22 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
         <div
           class="mx_SpacePanel_badgeContainer"
         >
-          <div
-            class="mx_AccessibleButton mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
-            role="button"
+          <button
+            aria-label="Jump to first unread room."
+            class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _notification_kb9ny_8 _badge2Char_kb9ny_56 cpd-theme-light"
+            data-badge-type="badge_2char"
+            data-component="notification-badge"
+            data-notification-level="notification"
+            data-testid="notification-badge"
             tabindex="-1"
+            type="button"
           >
             <span
-              class="mx_NotificationBadge_count"
+              class="_count_kb9ny_39"
             >
               8
             </span>
-          </div>
+          </button>
         </div>
       </div>
       <span

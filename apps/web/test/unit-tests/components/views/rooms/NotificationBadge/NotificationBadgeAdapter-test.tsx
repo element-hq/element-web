@@ -27,24 +27,24 @@ describe("NotificationBadgeAdapter", () => {
         const notif = new DummyNotificationState(NotificationLevel.Activity);
 
         const { container } = render(<NotificationBadgeAdapter notification={notif} />);
-        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeInTheDocument();
-        expect(container.querySelector(".mx_NotificationBadge")).toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
+        expect(container.querySelector('[data-testid="notification-badge"]')).toBeInTheDocument();
     });
 
     it("does not show a dot if the level is activity and hideIfDot is true", () => {
         const notif = new DummyNotificationState(NotificationLevel.Activity);
 
         const { container } = render(<NotificationBadgeAdapter notification={notif} hideIfDot={true} />);
-        expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
-        expect(container.querySelector(".mx_NotificationBadge")).not.toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
+        expect(container.querySelector('[data-testid="notification-badge"]')).not.toBeInTheDocument();
     });
 
     it("still shows an empty badge if hideIfDot us true", () => {
         const notif = new DummyNotificationState(NotificationLevel.Notification);
 
         const { container } = render(<NotificationBadgeAdapter notification={notif} hideIfDot={true} />);
-        expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
-        expect(container.querySelector(".mx_NotificationBadge")).toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
+        expect(container.querySelector('[data-testid="notification-badge"]')).toBeInTheDocument();
     });
 
     describe("StatelessNotificationBadge", () => {

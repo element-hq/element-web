@@ -153,10 +153,13 @@ exports[`RoomTile when message previews are enabled and there is a message in th
       class="mx_RoomTile_badgeContainer"
     >
       <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_dot"
+        class="_notificationBadge_kb9ny_8 _visible_kb9ny_15 _dot_kb9ny_32"
+        data-badge-type="dot"
+        data-component="notification-badge"
+        data-testid="notification-badge"
       >
         <span
-          class="mx_NotificationBadge_count"
+          class="_count_kb9ny_39"
         />
       </div>
     </div>

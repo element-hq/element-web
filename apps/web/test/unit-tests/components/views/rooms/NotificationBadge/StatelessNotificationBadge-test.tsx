@@ -17,14 +17,14 @@ describe("StatelessNotificationBadge", () => {
         const { container } = render(
             <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Unsent} />,
         );
-        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).not.toBe(null);
+        expect(container.querySelector('[data-notification-level="highlight"]')).toBeInTheDocument();
     });
 
     it("has knock style", () => {
         const { container } = render(
             <StatelessNotificationBadge symbol="!" count={0} level={NotificationLevel.Highlight} knocked={true} />,
         );
-        expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
         expect(container.querySelector("svg")).toHaveAccessibleName("Request to join sent");
     });
 
@@ -32,14 +32,14 @@ describe("StatelessNotificationBadge", () => {
         const { container } = render(
             <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Activity} />,
         );
-        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
     });
 
     it("has badge style for notification", () => {
         const { container } = render(
             <StatelessNotificationBadge symbol={null} count={3} level={NotificationLevel.Notification} />,
         );
-        expect(container.querySelector(".mx_NotificationBadge_dot")).not.toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
     });
 
     it("has dot style for notification when forced", () => {
@@ -51,6 +51,6 @@ describe("StatelessNotificationBadge", () => {
                 forceDot={true}
             />,
         );
-        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeInTheDocument();
+        expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
     });
 });
