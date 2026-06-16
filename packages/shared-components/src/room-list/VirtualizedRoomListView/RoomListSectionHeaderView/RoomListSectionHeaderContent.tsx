@@ -16,6 +16,7 @@ import { _t } from "../../../core/i18n/i18n";
 import { Flex } from "../../../core/utils/Flex";
 import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
 import styles from "./RoomListSectionHeaderView.module.css";
+import { NotificationDecoration } from "../RoomListItemWrapper/RoomListItemView";
 
 /**
  * Props for {@link RoomListSectionHeaderContent}.
@@ -35,7 +36,7 @@ export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderC
     vm,
     isDragging = false,
 }: RoomListSectionHeaderContentProps): JSX.Element {
-    const { title, displaySectionMenu } = useViewModel(vm);
+    const { title, displaySectionMenu, notification, isExpanded } = useViewModel(vm);
     return (
         <Flex
             className={classNames(styles.container, {
@@ -54,6 +55,11 @@ export const RoomListSectionHeaderContent = memo(function RoomListSectionHeaderC
                 />
                 <span className={styles.title}>{title}</span>
             </Flex>
+            {!isExpanded && notification && (
+                <div className={styles.notificationDecoration} aria-hidden={true}>
+                    <NotificationDecoration {...notification} />
+                </div>
+            )}
             {displaySectionMenu && !isDragging && <MenuComponent vm={vm} />}
         </Flex>
     );

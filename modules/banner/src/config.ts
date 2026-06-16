@@ -115,6 +115,6 @@ export const CONFIG_KEY = "io.element.element-web-modules.banner";
 
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
-        [CONFIG_KEY]: input<ConfigSchema>;
+        [CONFIG_KEY]?: input<ConfigSchema>;
     }
 }

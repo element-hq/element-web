@@ -47,7 +47,7 @@ env:
 permissions: {} # No permissions required
 
 jobs:
-    build_ew:
+    prepare:
         name: "Build Element Web"
         runs-on: ubuntu-24.04
         if: inputs.skip != true
@@ -56,6 +56,10 @@ jobs:
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
             # Skip pull_request runs on renovate PRs to speed up CI time, delegating to the full run in merge queue
             skip: ${{ inputs.skip || (github.event_name == 'pull_request' && startsWith(github.head_ref, 'renovate/')) }}
+            # If the A-Electron label is present on a PR, build & test all desktop platforms.
+            run-all-desktop: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'A-Electron') }}
+            # If the A-Modules label is present on a PR, run the modules tests.
+            run-modules: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'A-Modules') }}
         steps:
             - name: Checkout code
               uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -63,7 +67,7 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
@@ -102,9 +106,9 @@ jobs:
                       core.setOutput("matrix", JSON.stringify(matrix));
 
     playwright_ew:
-        name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build_ew.outputs.num-runners }}"
-        needs: build_ew
-        if: needs.build_ew.outputs.skip == 'false'
+        name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.prepare.outputs.num-runners }}"
+        needs: prepare
+        if: needs.prepare.outputs.skip == 'false'
         runs-on: ubuntu-24.04
         permissions:
             actions: read
@@ -114,7 +118,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: ${{ fromJSON(needs.build_ew.outputs.runners-matrix) }}
+                runner: ${{ fromJSON(needs.prepare.outputs.runners-matrix) }}
                 project:
                     - Chrome
                     - Firefox
@@ -145,7 +149,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
@@ -170,7 +174,7 @@ jobs:
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
               env:
-                  SHARD: ${{ format('{0}/{1}', matrix.runner, needs.build_ew.outputs.num-runners) }}
+                  SHARD: ${{ format('{0}/{1}', matrix.runner, needs.prepare.outputs.num-runners) }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
@@ -183,8 +187,8 @@ jobs:
 
     modules:
         name: Modules Playwright tests
-        needs: build_ew
-        if: needs.build_ew.outputs.skip == 'false' && github.event_name == 'merge_group'
+        needs: prepare
+        if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
         runs-on: ubuntu-24.04-arm
         steps:
             - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -198,7 +202,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
@@ -232,8 +236,8 @@ jobs:
     prepare_ed:
         name: "Prepare Element Desktop"
         uses: ./.github/workflows/build_desktop_prepare.yaml
-        needs: build_ew
-        if: needs.build_ew.outputs.skip == 'false'
+        needs: prepare
+        if: needs.prepare.outputs.skip == 'false'
         permissions:
             contents: read
         with:
@@ -242,11 +246,11 @@ jobs:
             webapp-artifact: webapp
 
     build_ed_windows:
-        needs: prepare_ed
+        needs: [prepare, prepare_ed]
         name: "Desktop Windows"
         uses: ./.github/workflows/build_desktop_windows.yaml
         # Skip Windows builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
-        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
+        if: needs.prepare.outputs.run-all-desktop == 'true'
         strategy:
             matrix:
                 arch: [x64, ia32, arm64]
@@ -255,7 +259,7 @@ jobs:
             blob_report: true
 
     build_ed_linux:
-        needs: prepare_ed
+        needs: [prepare, prepare_ed]
         name: "Desktop Linux"
         uses: ./.github/workflows/build_desktop_linux.yaml
         strategy:
@@ -263,7 +267,7 @@ jobs:
                 sqlcipher: [system, static]
                 arch: [amd64, arm64]
                 runAllTests:
-                    - ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests') }}
+                    - ${{ needs.prepare.outputs.run-all-desktop == 'true' }}
                 exclude:
                     # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
                     - runAllTests: false
@@ -277,19 +281,19 @@ jobs:
             blob_report: true
 
     build_ed_macos:
-        needs: prepare_ed
+        needs: [prepare, prepare_ed]
         name: "Desktop macOS"
         uses: ./.github/workflows/build_desktop_macos.yaml
         # Skip macOS builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
         # and we have a very low limit of concurrent macos runners (5) across the Github org.
-        if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
+        if: needs.prepare.outputs.run-all-desktop == 'true'
         with:
             blob_report: true
 
     complete:
         name: end-to-end-tests
         needs:
-            - build_ew
+            - prepare
             - playwright_ew
             - modules
             - prepare_ed
@@ -300,25 +304,25 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-              if: needs.build_ew.outputs.skip == 'false'
+              if: needs.prepare.outputs.skip == 'false'
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
-              if: needs.build_ew.outputs.skip == 'false'
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+              if: needs.prepare.outputs.skip == 'false'
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
-              if: needs.build_ew.outputs.skip == 'false'
+              if: needs.prepare.outputs.skip == 'false'
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
 
             - name: Install dependencies
-              if: needs.build_ew.outputs.skip == 'false'
+              if: needs.prepare.outputs.skip == 'false'
               run: pnpm install --frozen-lockfile
 
             - name: Download blob reports from GitHub Actions Artifacts
-              if: needs.build_ew.outputs.skip == 'false'
+              if: needs.prepare.outputs.skip == 'false'
               uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   pattern: blob-report-*
@@ -326,7 +330,7 @@ jobs:
                   merge-multiple: true
 
             - name: Merge into HTML Report
-              if: needs.build_ew.outputs.skip == 'false'
+              if: needs.prepare.outputs.skip == 'false'
               run: |
                   pnpm playwright merge-reports \
                       --config=playwright-merge.config.ts \
@@ -338,7 +342,7 @@ jobs:
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
-              if: always() && needs.build_ew.outputs.skip == 'false'
+              if: always() && needs.prepare.outputs.skip == 'false'
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: html-report

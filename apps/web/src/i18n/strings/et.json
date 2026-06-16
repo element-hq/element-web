@@ -1542,6 +1542,11 @@
         "experimental_section": "Varased arendusjärgud",
         "extended_profiles_msc_support": "See eeldab, et koduserver toetab MSC4133 spetsifikatsiooni",
         "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
+        "feature_retention": {
+            "description": "Selle seadistusega saad jututoast sõnumeid automaatselt eemaldada etteantud ajavahemiku möödumisel. Hetkel on toetatud vaid lugemise seadistused.",
+            "disabled_sliding_sync": "Kui järkjärgulise sünkroonimine on kasutusel, siis sõnumise säilitamise reegleid ei saa sisse lülitada.",
+            "display_name": "Sõnumite säilitamine"
+        },
         "feature_user_status": {
             "description": "Võimaldab näha praegust olekut ja muuta seda",
             "display_name": "Kasutaja olek",
@@ -1584,7 +1589,7 @@
         "render_reaction_images": "Kujuta reaktsioonides ka kohandatud pilte",
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
         "room_list_sections": "Jututubade loendi jaotised",
-        "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
+        "sliding_sync": "Järkjärgulise sünkroonimise režiim",
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
@@ -3167,7 +3172,7 @@
         "view": "Vaata sellise aadressiga jututuba",
         "whois": "Näitab teavet kasutaja kohta"
     },
-    "sliding_sync_legacy_no_longer_supported": "Järkjärgulise sünkroniseerimise (Sliding sync) varasem lahendus pole enam toetatud: uue lahenduse kasutamiseks palun logi rakendusesse uuesti sisse",
+    "sliding_sync_legacy_no_longer_supported": "Järkjärgulise sünkroonimise (Sliding sync) varasem lahendus pole enam toetatud: uue lahenduse kasutamiseks palun logi rakendusesse uuesti sisse",
     "space": {
         "add_existing_room_space": {
             "create": "Kas sa selle asemel soovid lisada jututuba?",

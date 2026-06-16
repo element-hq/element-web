@@ -18,6 +18,7 @@ import { useI18n } from "../../../core/i18n/i18nContext";
 import { getGroupHeaderAccessibleProps } from "../../../core/VirtualizedList";
 import { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
 import { isSectionDragData, type RoomListDragData, type SectionDragData } from "../dragAndDrop";
+import { type NotificationDecorationData } from "../RoomListItemWrapper/RoomListItemView/NotificationDecoration";
 
 /**
  * The observable state snapshot for a room list section header.
@@ -31,6 +32,8 @@ export interface RoomListSectionHeaderViewSnapshot {
     isExpanded: boolean;
     /** Whether the section is unread (has any unread rooms) */
     isUnread: boolean;
+    /** The merged notification decoration aggregating the notifications of the rooms in the section */
+    notification?: NotificationDecorationData;
     /** Wether to display the section menu  */
     displaySectionMenu: boolean;
     /** Whether the section can be reordered via drag-and-drop  */
