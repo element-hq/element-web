@@ -109,6 +109,7 @@
         "@typescript-eslint/eslint-plugin": "^8.53.1",
         "@typescript-eslint/parser": "^8.53.1",
         "@vector-im/compound-web": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
@@ -138,6 +139,7 @@
     },
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
+        "react-dom": "catalog:",
         "react": "catalog:"
     }
 }
