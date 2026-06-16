@@ -19,6 +19,10 @@ import { Flex } from "../../../core/utils/Flex";
 import { useI18n } from "../../../core/i18n/i18nContext";
 import { getGroupHeaderAccessibleProps } from "../../../core/VirtualizedList";
 import { _t } from "../../../core/i18n/i18n";
+import {
+    NotificationDecoration,
+    type NotificationDecorationData,
+} from "../RoomListItemWrapper/RoomListItemView/NotificationDecoration";
 
 /**
  * The observable state snapshot for a room list section header.
@@ -32,6 +36,8 @@ export interface RoomListSectionHeaderViewSnapshot {
     isExpanded: boolean;
     /** Whether the section is unread (has any unread rooms) */
     isUnread: boolean;
+    /** The merged notification decoration aggregating the notifications of the rooms in the section */
+    notification?: NotificationDecorationData;
     /** Wether to display the section menu  */
     displaySectionMenu: boolean;
 }
@@ -102,7 +108,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     roomCountInSection,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { id, title, isExpanded, isUnread, displaySectionMenu } = useViewModel(vm);
+    const { id, title, isExpanded, isUnread, notification, displaySectionMenu } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
     const { ref: droppableRef, isDropTarget } = useDroppable({
@@ -177,6 +183,11 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         />
                         <span className={styles.title}>{title}</span>
                     </Flex>
+                    {!isExpanded && notification && (
+                        <div className={styles.notificationDecoration} aria-hidden={true}>
+                            <NotificationDecoration {...notification} />
+                        </div>
+                    )}
                     {displaySectionMenu && <MenuComponent vm={vm} />}
                 </Flex>
             </button>
