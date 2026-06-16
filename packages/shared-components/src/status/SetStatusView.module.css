@@ -1,0 +1,29 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.setStatusTrigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline solid;
+    display: flex;
+    align-items: center;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 1.5px;
+    }
+}
+
+.menuItem {
+    place-items: start;
+    gap: var(--cpd-space-1x);
+    color: var(--cpd-color-text-secondary);
+    font-weight: var(--cpd-font-weight-medium);
+    font-size: var(--cpd-font-size-body-md);
+}
