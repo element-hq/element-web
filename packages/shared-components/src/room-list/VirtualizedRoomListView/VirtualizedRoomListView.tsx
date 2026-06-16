@@ -166,6 +166,21 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     );
 
     /**
+     * Get the display name of a draggable source for accessibility announcements:
+     * the section title for a section, or the room name for a room.
+     * @returns the name, or `undefined` if the source can't be resolved.
+     */
+    const getDragSourceName = useCallback(
+        (source: Draggable<RoomListDragData>): string | undefined => {
+            if (isSectionDragData(source.data)) {
+                return vm.getSectionHeaderViewModel(source.id as string).getSnapshot().title;
+            }
+            return vm.getRoomItemViewModel(source.id as string)?.getSnapshot().name;
+        },
+        [vm],
+    );
+
+    /**
      * Get the item component for a specific index
      * Gets the room's view model and passes it to RoomListItemView
      *
@@ -452,54 +467,32 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                         dragstart({ operation: { source } }: A11yData) {
                             if (!source) return;
 
-                            if (isSectionDragData(source?.data)) {
-                                const section = vm.getSectionHeaderViewModel(source.id as string);
-                                return _t("room_list|a11y|drag_start", { source: section.getSnapshot().title });
-                            } else {
-                                const item = vm.getRoomItemViewModel(source.id as string);
-                                if (!item) return;
-                                return _t("room_list|a11y|drag_start", { source: item.getSnapshot().name });
-                            }
+                            const sourceName = getDragSourceName(source);
+                            if (sourceName === undefined) return;
+                            return _t("room_list|a11y|drag_start", { source: sourceName });
                         },
                         dragover({ operation: { source, target } }: A11yData) {
                             if (!source || !target) return;
 
+                            const sourceName = getDragSourceName(source);
+                            if (sourceName === undefined) return;
                             const targetSection = vm.getSectionHeaderViewModel(target.id as string);
-                            if (isSectionDragData(source?.data)) {
-                                const section = vm.getSectionHeaderViewModel(source.id as string);
-                                return _t("room_list|a11y|drag_over", {
-                                    source: section.getSnapshot().title,
-                                    target: targetSection.getSnapshot().title,
-                                });
-                            } else {
-                                const item = vm.getRoomItemViewModel(source.id as string);
-                                if (!item) return;
-                                return _t("room_list|a11y|drag_over", {
-                                    source: item.getSnapshot().name,
-                                    target: targetSection.getSnapshot().title,
-                                });
-                            }
+                            return _t("room_list|a11y|drag_over", {
+                                source: sourceName,
+                                target: targetSection.getSnapshot().title,
+                            });
                         },
                         dragend({ operation: { source, target }, canceled }: A11yData) {
                             if (!source || !target) return;
                             if (canceled) return _t("room_list|a11y|drag_cancelled");
 
+                            const sourceName = getDragSourceName(source);
+                            if (sourceName === undefined) return;
                             const targetSection = vm.getSectionHeaderViewModel(target.id as string);
-
-                            if (isSectionDragData(source?.data)) {
-                                const section = vm.getSectionHeaderViewModel(source.id as string);
-                                return _t("room_list|a11y|drag_end", {
-                                    source: section.getSnapshot().title,
-                                    target: targetSection.getSnapshot().title,
-                                });
-                            } else {
-                                const item = vm.getRoomItemViewModel(source.id as string);
-                                if (!item) return;
-                                return _t("room_list|a11y|drag_end", {
-                                    source: item.getSnapshot().name,
-                                    target: targetSection.getSnapshot().title,
-                                });
-                            }
+                            return _t("room_list|a11y|drag_end", {
+                                source: sourceName,
+                                target: targetSection.getSnapshot().title,
+                            });
                         },
                     },
                 }),
