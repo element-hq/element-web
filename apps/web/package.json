@@ -52,7 +52,7 @@
         "@types/png-chunks-extract": "^1.0.2",
         "@vector-im/compound-design-tokens": "catalog:",
         "@vector-im/compound-web": "catalog:",
-        "@vector-im/matrix-wysiwyg": "2.40.0",
+        "@vector-im/matrix-wysiwyg": "2.42.0",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-en": "^3.0.2",
