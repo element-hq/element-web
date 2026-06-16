@@ -99,6 +99,7 @@
             "default": "Open room %(roomName)s",
             "drag_cancelled": "Dragging cancelled",
             "drag_end": "%(source)s was dropped on %(target)s",
+            "drag_instructions": "Press space to start dragging, arrow keys to move, and escape to cancel.",
             "drag_over": "%(source)s is over %(target)s",
             "drag_start": "Dragging %(source)s",
             "invitation": "Open room %(roomName)s invitation.",

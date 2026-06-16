@@ -469,7 +469,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             plugins={(defaults) => [
                 ...defaults,
                 Accessibility.configure({
-                    screenReaderInstructions: { draggable: "" },
+                    screenReaderInstructions: { draggable: _t("room_list|a11y|drag_instructions") },
                     announcements: {
                         dragstart({ operation: { source } }: A11yData) {
                             if (!source) return;
