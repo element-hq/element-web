@@ -15,18 +15,18 @@ import { type NotificationLevel } from "../../../../stores/notifications/Notific
 import { NotificationBadgeViewModel } from "../../../../viewmodels/room/notification-badge/NotificationBadgeViewModel";
 
 interface Props {
-    "symbol": string | null;
-    "count": number;
-    "level": NotificationLevel;
-    "knocked"?: boolean;
+    symbol: string | null;
+    count: number;
+    level: NotificationLevel;
+    knocked?: boolean;
     /**
      * If true, where we would normally show a badge, we instead show a dot. No numeric count will
      * be displayed (but may affect whether the dot is displayed).
      */
-    "forceDot"?: boolean;
-    "tabIndex"?: number;
-    "aria-label"?: string;
-    "onClick"?: MouseEventHandler<HTMLButtonElement>;
+    forceDot?: boolean;
+    tabIndex?: number;
+    ariaLabel?: string;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const StatelessNotificationBadge = ({
@@ -36,7 +36,7 @@ export const StatelessNotificationBadge = ({
     knocked,
     forceDot,
     tabIndex,
-    "aria-label": ariaLabel,
+    ariaLabel,
     onClick,
 }: Readonly<Props>): JSX.Element => {
     const hideBold = useSettingValue("feature_hidebold");

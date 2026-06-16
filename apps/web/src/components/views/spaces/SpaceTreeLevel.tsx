@@ -116,7 +116,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
                 <NotificationBadgeAdapter
                     onClick={jumpToNotification}
                     notification={notificationState}
-                    aria-label={ariaLabel}
+                    ariaLabel={ariaLabel}
                     tabIndex={tabIndex}
                     showUnsentTooltip={true}
                 />

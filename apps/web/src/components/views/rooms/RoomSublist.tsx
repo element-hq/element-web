@@ -639,7 +639,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             notification={this.notificationState}
                             onClick={this.onBadgeClick}
                             tabIndex={tabIndex}
-                            aria-label={ariaLabel}
+                            ariaLabel={ariaLabel}
                             showUnsentTooltip={true}
                         />
                     );

@@ -18,18 +18,18 @@ import {
 } from "../../../../viewmodels/room/notification-badge/NotificationBadgeViewModel";
 
 interface Props {
-    "notification": NotificationState;
+    notification: NotificationState;
 
     /**
      * If true, show nothing if the notification would only cause a dot to be shown rather than
      * a badge. That is: only display badges and not dots. Default: false.
      */
-    "hideIfDot"?: boolean;
+    hideIfDot?: boolean;
 
-    "showUnsentTooltip"?: boolean;
-    "tabIndex"?: number;
-    "aria-label"?: string;
-    "onClick"?: MouseEventHandler<HTMLButtonElement>;
+    showUnsentTooltip?: boolean;
+    tabIndex?: number;
+    ariaLabel?: string;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export function NotificationBadgeAdapter({
@@ -37,7 +37,7 @@ export function NotificationBadgeAdapter({
     hideIfDot,
     showUnsentTooltip,
     tabIndex,
-    "aria-label": ariaLabel,
+    ariaLabel,
     onClick,
 }: Readonly<Props>): JSX.Element {
     const hideBold = useSettingValue("feature_hidebold");
