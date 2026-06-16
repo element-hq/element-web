@@ -8,7 +8,7 @@
 .statusButton {
     border-radius: 30px;
     background: var(--cpd-color-bg-subtle-secondary);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     padding-inline-start: var(--cpd-space-2x);
     gap: 6px;

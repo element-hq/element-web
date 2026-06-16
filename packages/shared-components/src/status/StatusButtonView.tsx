@@ -12,15 +12,15 @@ import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { _t, type UserStatus } from "..";
 import styles from "./StatusButtonView.module.css";
 
-export function StatusButtonView({
-    status,
-    clearStatus,
-}: {
-    status: UserStatus;
-    clearStatus: () => void;
-}): JSX.Element {
+export const StatusButtonView = React.forwardRef<
+    HTMLDivElement,
+    {
+        status: UserStatus;
+        clearStatus: () => void;
+    } & React.HTMLAttributes<HTMLDivElement>
+>(function StatusButtonView({ status, clearStatus, ...props }, ref): JSX.Element {
     return (
-        <div className={styles.statusButton}>
+        <div ref={ref} {...props} className={styles.statusButton}>
             <Text as="span" className={styles.menuStatusEmoji}>
                 {status.emoji}
             </Text>
@@ -37,4 +37,4 @@ export function StatusButtonView({
             </IconButton>
         </div>
     );
-}
+});
