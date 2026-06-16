@@ -1043,9 +1043,6 @@ importers:
       process:
         specifier: ^0.11.10
         version: 0.11.10
-      raw-loader:
-        specifier: ^4.0.2
-        version: 4.0.2(webpack@5.107.1)
       semver:
         specifier: ^7.5.2
         version: 7.8.4
@@ -11882,12 +11879,6 @@ packages:
   raw-body@3.0.2:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
-
-  raw-loader@4.0.2:
-    resolution: {integrity: sha512-ZnScIV3ag9A4wPX/ZayxL/jZH+euYb6FcUinPcgiQW0+UBtEv0O6Q3lGd3cqJ+GHH+rksEv3Pj99oxJ3u3VIKA==}
-    engines: {node: '>= 10.13.0'}
-    peerDependencies:
-      webpack: ^4.0.0 || ^5.0.0
 
   re-resizable@6.11.2:
     resolution: {integrity: sha512-2xI2P3OHs5qw7K0Ud1aLILK6MQxW50TcO+DetD9eIV58j84TqYeHoZcL9H4GXFXXIh7afhH8mv5iUCXII7OW7A==}
@@ -25852,12 +25843,6 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.2
       unpipe: 1.0.0
-
-  raw-loader@4.0.2(webpack@5.107.1):
-    dependencies:
-      loader-utils: 2.0.4
-      schema-utils: 3.3.0
-      webpack: 5.107.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.15)(webpack-cli@7.0.2)
 
   re-resizable@6.11.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
