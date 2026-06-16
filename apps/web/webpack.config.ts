@@ -254,9 +254,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
                 "oidc-client-ts": getPackageRoot("oidc-client-ts"),
 
-                // Define a variable so the i18n stuff can load
-                "$webapp": path.resolve(__dirname, "webapp"),
-
                 // Make shared-components imports resolve to EW deps
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
             },
