@@ -13,7 +13,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
-import { KEYBOARD_DRAG_OFFSET, VirtualizedRoomListView } from "./VirtualizedRoomListView";
+import { KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
 
 const { Default, Sections } = composeStories(stories);
 
