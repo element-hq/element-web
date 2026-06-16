@@ -31,7 +31,7 @@ const config: Config = {
     moduleNameMapper: {
         // Support CSS module
         "\\.(module.css)$": "identity-obj-proxy",
-        "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
+        "\\.(css|scss|pcss)(\\?raw)?$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
         "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
