@@ -141,6 +141,17 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const hasBottomBorder = isDraggingSection && !isSourceAbove;
     const hasTopBorder = isDraggingSection && isSourceAbove;
 
+    // Keep the last expanded state we rendered while NOT dragging.
+    const lastExpandedRef = useRef(isExpanded);
+    if (!isDragSource) {
+        lastExpandedRef.current = isExpanded;
+    }
+    // While this header is the drag source, freeze aria-expanded at its pre-drag value. Section
+    // drag start collapses every section, flipping this focused header's aria-expanded true→false;
+    // announcing that state change is a second, redundant screen-reader announcement on top of the
+    // dnd "Dragging X" live-region announcement. The collapse is still reflected visually.
+    const ariaExpanded = isDragSource ? lastExpandedRef.current : isExpanded;
+
     const internalRef = useRef<HTMLButtonElement>(null);
     // Only wire up draggable refs when the section can be dragged. Otherwise dndkit will put incorrect and misleading a11y attributes
     // on the default section (aka aria-disabled=true and aria-draggable=false)
@@ -158,10 +169,10 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
 
     return (
         <div
-            aria-expanded={isExpanded}
+            aria-expanded={ariaExpanded}
             {...getGroupHeaderAccessibleProps(indexInList, sectionIndex, roomCountInSection)}
         >
-            <div role="gridcell" aria-expanded={isExpanded}>
+            <div role="gridcell" aria-expanded={ariaExpanded}>
                 <button
                     ref={buttonRef}
                     type="button"
@@ -194,7 +205,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                             );
                         }
                     }}
-                    aria-expanded={isExpanded}
+                    aria-expanded={ariaExpanded}
                     onFocus={(e) => onFocus(id, e)}
                     tabIndex={isFocused ? 0 : -1}
                     aria-label={
