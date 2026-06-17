@@ -224,6 +224,9 @@ test.describe("Composer", () => {
             test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
                 // Shrink the viewport
                 await page.setViewportSize({ width: 750, height: 1080 });
+                // Expand the left panel
+                await app.resizeLeftPanel(150);
+                /// Now take the screenshot
                 await expect(page.locator(".mx_MessageComposer_wrapper")).toMatchScreenshot("narrow.png");
             });
         });
