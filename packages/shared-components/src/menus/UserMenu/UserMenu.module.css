@@ -60,7 +60,7 @@
     overflow: visible;
 }
 
-.statusEmoji {
+.iconStatusEmoji {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -75,6 +75,33 @@
     /* center of circle on the right edge of the avatar */
     right: -10px;
     background-color: var(--cpd-color-bg-canvas-default);
+}
+
+.statusButton {
+    border-radius: 30px;
+    background: var(--cpd-color-bg-subtle-secondary);
+    display: flex;
+    align-items: center;
+    padding-inline-start: var(--cpd-space-2x);
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+
+    .menuStatusEmoji {
+        flex-shrink: 0;
+    }
+
+    .menuStatusText {
+        overflow: hidden;
+        min-width: 0;
+        text-overflow: ellipsis;
+    }
+
+    span {
+        font: var(--cpd-font-body-md-medium);
+        color: var(--cpd-color-text-secondary);
+    }
 }
 
 .triggerButton {

@@ -100,9 +100,9 @@ export interface IProps extends MenuProps {
     "closeOnInteraction"?: boolean;
 
     // Function to be called on menu close
-    onFinished(this: void): void;
+    "onFinished"(this: void): void;
     // on resize callback
-    windowResize?(this: void): void;
+    "windowResize"?(this: void): void;
 
     // Role & label for accessibility
     "role"?: AriaRole;
@@ -269,8 +269,8 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
             focusLock,
             managed,
             wrapperClassName,
-            "chevronFace": propsChevronFace,
-            "chevronOffset": propsChevronOffset,
+            chevronFace: propsChevronFace,
+            chevronOffset: propsChevronOffset,
             mountAsChild,
             role,
             "aria-label": ariaLabel,
