@@ -28,7 +28,7 @@
         "@radix-ui/react-dialog": "^1.1.6",
         "@vector-im/compound-design-tokens": "^10.0.0",
         "@vector-im/compound-web": "^9.0.0",
-        "framer-motion": "^12.4.10",
+        "motion": "^12.4.10",
         "styled-components": "^6.1.18",
         "zod": "^4.0.0"
     }
