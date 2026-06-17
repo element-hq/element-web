@@ -21,6 +21,7 @@ jest.mock("../../../../../src/components/views/avatars/MemberAvatar", () =>
 function makeSenderSnapshot(overrides: Partial<EventTileSenderSnapshot> = {}): EventTileSenderSnapshot {
     return {
         senderId: "@alice:example.org",
+        member: null,
         viewUserOnClick: true,
         profileMode: "clickable",
         forceHistoricalAvatar: false,

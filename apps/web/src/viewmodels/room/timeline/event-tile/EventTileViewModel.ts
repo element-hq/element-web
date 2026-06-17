@@ -134,7 +134,7 @@ export interface EventTileSenderInput {
     /** The Matrix sender ID, when available. */
     senderId?: string;
     /** Plain member info for sender/profile rendering. */
-    member?: MemberInfo | null;
+    member: MemberInfo | null;
     /** Whether sender details should be hidden. */
     hideSender?: boolean;
     /** Whether the event body renders as an emote. */
@@ -216,7 +216,7 @@ export interface EventTileSenderSnapshot {
     /** The Matrix sender ID, when available. */
     senderId?: string;
     /** Plain member info for sender/profile rendering. */
-    member?: MemberInfo | null;
+    member: MemberInfo | null;
     /** EventTile avatar and sender profile display state. */
     profileState: EventTileSenderProfileState;
     /** Whether clicking the avatar should open the user profile. */
@@ -553,7 +553,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileRenderState, Even
             },
             sender: {
                 senderId: sender.senderId,
-                member: sender.member,
+                member: sender.member ?? null,
                 profileState: senderProfileState,
                 viewUserOnClick: getShouldViewUserOnClick(
                     interaction.inhibitInteraction,

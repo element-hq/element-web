@@ -63,6 +63,7 @@ describe("EventTileViewModel", () => {
             },
             sender: {
                 senderId: "@alice:example.org",
+                member: null,
                 isEmote: false,
                 ...overrides.sender,
             },
