@@ -13,7 +13,7 @@ import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 import { Flex } from "../../core/utils/Flex";
 import { _t } from "../../core/i18n/i18n";
 import { useViewModel } from "../../core/viewmodel";
-import type { RoomListViewModel } from "./RoomListView.types";
+import type { RoomListViewModel } from "./RoomListView";
 import styles from "./RoomListEmptyStateView.module.css";
 
 /**

@@ -6,13 +6,13 @@
  */
 
 export { RoomListView } from "./RoomListView";
-export type { RoomListViewProps } from "./RoomListView";
 export type {
+    RoomListViewProps,
     RoomListViewModel,
     RoomListViewSnapshot,
     RoomListViewActions,
     RoomListSection,
-} from "./RoomListView.types";
+} from "./RoomListView";
 export { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 export { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 export type { RoomListEmptyStateViewProps } from "./RoomListEmptyStateView";
