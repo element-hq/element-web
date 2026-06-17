@@ -47,15 +47,12 @@ export interface RoomListAccessibilityOptions {
     instructions?: string;
 }
 
-const LIVE_REGION_ID = "mx_RoomList_dragLiveRegion";
-const INSTRUCTIONS_ID = "mx_RoomList_dragInstructions";
-
 /**
  * Create the visually-hidden `aria-live` region used to announce drag progress.
  */
-function createLiveRegion(): HTMLDivElement {
+function createLiveRegion(id: string): HTMLDivElement {
     const element = document.createElement("div");
-    element.id = LIVE_REGION_ID;
+    element.id = id;
     element.setAttribute("role", "status");
     element.setAttribute("aria-live", "polite");
     element.setAttribute("aria-atomic", "true");
@@ -78,9 +75,9 @@ function createLiveRegion(): HTMLDivElement {
  * Create the hidden element holding the keyboard drag instructions. Only referenced via
  * `aria-describedby` (never announced), so `display: none` is enough to hide it.
  */
-function createInstructions(text: string): HTMLDivElement {
+function createInstructions(id: string, text: string): HTMLDivElement {
     const element = document.createElement("div");
-    element.id = INSTRUCTIONS_ID;
+    element.id = id;
     element.style.display = "none";
     element.textContent = text;
     return element;
@@ -107,9 +104,12 @@ export class RoomListAccessibilityPlugin extends Plugin<Manager, RoomListAccessi
     public constructor(manager: Manager, options?: RoomListAccessibilityOptions) {
         super(manager, options);
 
+        const liveRegionId = crypto.randomUUID();
+        const instructionsId = crypto.randomUUID();
+
         // Create the live region up front so it exists in the DOM before any text change,
         // which assistive technologies require to reliably announce the first message.
-        this.liveRegion = createLiveRegion();
+        this.liveRegion = createLiveRegion(liveRegionId);
         document.body.append(this.liveRegion);
 
         const announcements = options?.announcements ?? {};
@@ -135,7 +135,7 @@ export class RoomListAccessibilityPlugin extends Plugin<Manager, RoomListAccessi
         }
 
         if (options?.instructions) {
-            this.instructions = createInstructions(options.instructions);
+            this.instructions = createInstructions(instructionsId, options.instructions);
             document.body.append(this.instructions);
 
             // Point every draggable at the instructions via aria-describedby. The effect re-runs
@@ -146,7 +146,7 @@ export class RoomListAccessibilityPlugin extends Plugin<Manager, RoomListAccessi
                 for (const draggable of this.manager.registry.draggables.value) {
                     const activator = draggable.handle ?? draggable.element;
                     if (activator && !activator.hasAttribute("aria-describedby")) {
-                        activator.setAttribute("aria-describedby", INSTRUCTIONS_ID);
+                        activator.setAttribute("aria-describedby", instructionsId);
                     }
                 }
             });

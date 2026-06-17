@@ -74,11 +74,11 @@ function createPlugin(
 }
 
 function getLiveRegion(): HTMLElement | null {
-    return document.getElementById("mx_RoomList_dragLiveRegion");
+    return document.querySelector<HTMLElement>("[role='status'][aria-live='polite']");
 }
 
 function getInstructions(): HTMLElement | null {
-    return document.getElementById("mx_RoomList_dragInstructions");
+    return document.querySelector<HTMLElement>("[style*='display: none']");
 }
 
 // ---------------------------------------------------------------------------
@@ -139,7 +139,10 @@ describe("RoomListAccessibilityPlugin", () => {
 
             const plugin = createPlugin(manager, { instructions: "Press Space to drag" });
 
-            expect(button).toHaveAttribute("aria-describedby", "mx_RoomList_dragInstructions");
+            // The ID is a generated UUID — verify the button points to the instructions element.
+            const instructionsId = button.getAttribute("aria-describedby");
+            expect(instructionsId).toBeTruthy();
+            expect(document.getElementById(instructionsId!)).toBe(getInstructions());
 
             button.remove();
             plugin.destroy();
