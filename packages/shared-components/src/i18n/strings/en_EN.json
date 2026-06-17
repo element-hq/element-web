@@ -171,7 +171,7 @@
             "more_options": "More options",
             "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
-            "toggle_unread": "Toggle %(section)s section with unread room(s)"
+            "toggle_unread": "Toggle %(section)s section with unread rooms"
         },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
