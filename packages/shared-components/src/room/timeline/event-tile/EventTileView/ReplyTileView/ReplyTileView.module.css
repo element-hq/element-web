@@ -1,0 +1,101 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ * Copyright 2024 New Vector Ltd.
+ * Copyright 2020 Tulir Asokan <tulir@maunium.net>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.replyTile {
+    position: relative;
+    padding: 2px 0;
+    font: var(--cpd-font-body-md-regular);
+}
+
+.replyTile > a {
+    display: grid;
+    grid-template:
+        "sender" auto
+        "message" auto
+        / 100%;
+    max-width: 100%;
+    gap: 2px;
+    color: var(--cpd-color-text-secondary);
+    text-decoration: none;
+    transition: color ease 0.15s;
+}
+
+.replyTile > a:hover {
+    color: var(--cpd-color-text-primary);
+}
+
+.notice {
+    color: var(--cpd-color-text-secondary);
+}
+
+.body {
+    grid-area: message;
+    min-width: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+}
+
+.body > * {
+    max-width: 100%;
+}
+
+.body :global([data-textual-body-annotation-wrapper]) {
+    display: contents;
+}
+
+.body :global([data-textual-body-edited-marker]) {
+    display: none;
+}
+
+.body :global(.markdown-body blockquote),
+.body :global(.markdown-body dl),
+.body :global(.markdown-body ol),
+.body :global(.markdown-body p),
+.body :global(.markdown-body pre),
+.body :global(.markdown-body table),
+.body :global(.markdown-body ul) {
+    margin-bottom: 4px;
+}
+
+.info {
+    padding-top: 0;
+}
+
+.inline > a {
+    grid-template:
+        "sender        message" auto
+        / max-content auto;
+    gap: 4px;
+}
+
+.sender {
+    grid-area: sender;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sender > :first-child {
+    flex-shrink: 0;
+}
+
+.sender :global([data-reply-tile-sender-profile]) {
+    display: inline-block;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    color: inherit;
+    font: var(--cpd-font-body-md-regular);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

@@ -1,0 +1,109 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ReplyTileView > renders the default reply tile 1`] = `
+<div>
+  <div
+    class="ReplyTileView-module_replyTile"
+    data-reply-tile=""
+  >
+    <a
+      href="#"
+    >
+      <div
+        class="ReplyTileView-module_sender"
+        data-reply-tile-sender=""
+      >
+        <span
+          data-reply-tile-avatar=""
+        >
+          A
+        </span>
+        <span
+          data-reply-tile-sender-profile=""
+        >
+          Alice
+        </span>
+      </div>
+      <div
+        class="ReplyTileView-module_body"
+        data-reply-tile-body=""
+      >
+        <span
+          data-reply-body-content=""
+        >
+          <span>
+            This is the replied-to message preview.
+          </span>
+        </span>
+      </div>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ReplyTileView > renders the info reply tile 1`] = `
+<div>
+  <div
+    class="ReplyTileView-module_replyTile ReplyTileView-module_info"
+    data-reply-tile=""
+  >
+    <a
+      href="#"
+    >
+      <div
+        class="ReplyTileView-module_body"
+        data-reply-tile-body=""
+      >
+        <span
+          data-reply-body-content=""
+        >
+          <span>
+            This is the replied-to message preview.
+          </span>
+        </span>
+      </div>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ReplyTileView > renders the inline reply tile 1`] = `
+<div>
+  <div
+    class="ReplyTileView-module_replyTile ReplyTileView-module_inline"
+    data-reply-tile=""
+  >
+    <a
+      href="#"
+    >
+      <div
+        class="ReplyTileView-module_sender"
+        data-reply-tile-sender=""
+      >
+        <span
+          data-reply-tile-avatar=""
+        >
+          A
+        </span>
+        <span
+          data-reply-tile-sender-profile=""
+        >
+          Alice
+        </span>
+      </div>
+      <div
+        class="ReplyTileView-module_body"
+        data-reply-tile-body=""
+      >
+        <span
+          data-reply-body-content=""
+        >
+          <span>
+            This is the replied-to message preview.
+          </span>
+        </span>
+      </div>
+    </a>
+  </div>
+</div>
+`;
