@@ -26,9 +26,7 @@ import {
 import * as Sentry from "@sentry/electron/main";
 import path, { dirname } from "node:path";
 import windowStateKeeper from "electron-window-state";
-import fs from "node:fs";
 import { URL, fileURLToPath } from "node:url";
-import minimist from "minimist";
 
 import "./ipc.js";
 import "./seshat.js";
@@ -48,77 +46,18 @@ import { setupMediaAuth } from "./media-auth.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
+import { getArgs } from "./args.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const argv = minimist(process.argv, {
-    alias: { help: "h" },
-});
-
-if (argv["help"]) {
-    console.log("Options:");
-    console.log("  --profile-dir {path}: Path to where to store the profile.");
-    console.log(
-        `  --profile {name}:     Name of alternate profile to use, allows for running multiple accounts.\n` +
-            `                         Ignored if --profile-dir is specified.\n` +
-            `                         The ELEMENT_PROFILE_DIR environment variable may be used to change the default profile path.\n` +
-            `                         It is overridden by --profile-dir, but can be combined with --profile.`,
-    );
-    console.log("  --devtools:           Install and use react-devtools and react-perf.");
-    console.log(
-        `  --config:             Path to the config.json file. May also be specified via the ELEMENT_DESKTOP_CONFIG_JSON environment variable.\n` +
-            `                         Otherwise use the default user location '${app.getPath("userData")}'`,
-    );
-    console.log("  --no-update:          Disable automatic updating.");
-    console.log("  --hidden:             Start the application hidden in the system tray.");
-    console.log("  --help:               Displays this help message.");
-    console.log("And more such as --proxy, see: https://electronjs.org/docs/api/command-line-switches");
-    app.exit();
-}
-
-const LocalConfigLocation = process.env.ELEMENT_DESKTOP_CONFIG_JSON ?? argv["config"];
-const LocalConfigFilename = "config.json";
-
-// Electron creates the user data directory (with just an empty 'Dictionaries' directory...)
-// as soon as the app path is set, so pick a random path in it that must exist if it's a
-// real user data directory.
-function isRealUserDataDir(d: string): boolean {
-    return fs.existsSync(path.join(d, "IndexedDB"));
-}
-
 const buildConfig = getBuildConfig();
 const protocolHandler = new ProtocolHandler(buildConfig.protocol);
+const args = getArgs(protocolHandler);
 
-// check if we are passed a profile in the SSO callback url
-let userDataPath: string;
+const LocalConfigLocation = args.localConfigPath;
+const LocalConfigFilename = "config.json";
 
-const userDataPathInProtocol = protocolHandler.getProfileFromDeeplink(argv["_"]);
-if (userDataPathInProtocol) {
-    userDataPath = userDataPathInProtocol;
-} else if (argv["profile-dir"]) {
-    userDataPath = argv["profile-dir"];
-} else {
-    let newUserDataPath = process.env.ELEMENT_PROFILE_DIR ?? app.getPath("userData");
-    if (argv["profile"]) {
-        newUserDataPath += "-" + argv["profile"];
-    }
-    const newUserDataPathExists = isRealUserDataDir(newUserDataPath);
-    let oldUserDataPath = path.join(app.getPath("appData"), app.getName().replace("Element", "Riot"));
-    if (argv["profile"]) {
-        oldUserDataPath += "-" + argv["profile"];
-    }
-
-    const oldUserDataPathExists = isRealUserDataDir(oldUserDataPath);
-    console.log(newUserDataPath + " exists: " + (newUserDataPathExists ? "yes" : "no"));
-    console.log(oldUserDataPath + " exists: " + (oldUserDataPathExists ? "yes" : "no"));
-    if (!newUserDataPathExists && oldUserDataPathExists) {
-        console.log("Using legacy user data path: " + oldUserDataPath);
-        userDataPath = oldUserDataPath;
-    } else {
-        userDataPath = newUserDataPath;
-    }
-}
-app.setPath("userData", userDataPath);
+app.setPath("userData", args.userDataPath);
 
 const homeserverProps = ["default_is_url", "default_hs_url", "default_server_name", "default_server_config"] as const;
 
@@ -251,9 +190,6 @@ if (!gotLock) {
     app.exit();
 }
 
-// do this after we know we are the primary instance of the app
-protocolHandler.initialise(userDataPath);
-
 // Register the scheme the app is served from as 'standard'
 // which allows things like relative URLs and IndexedDB to
 // work.
@@ -284,7 +220,7 @@ app.enableSandbox();
 // We disable media controls here. We do this because calls use audio and video elements and they sometimes capture the media keys. See https://github.com/vector-im/element-web/issues/15704
 app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling,MediaSessionService");
 
-const store = Store.initialize(argv["storage-mode"]); // must be called before any async actions
+const store = Store.initialize(args.storageMode); // must be called before any async actions
 
 // Disable hardware acceleration if the setting has been set.
 if (store.get("disableHardwareAcceleration")) {
@@ -310,7 +246,7 @@ app.on("ready", async () => {
         return;
     }
 
-    if (argv["devtools"]) {
+    if (args.devtools) {
         try {
             const { installExtension, REACT_DEVELOPER_TOOLS } = await import("electron-devtools-installer");
             installExtension(REACT_DEVELOPER_TOOLS)
@@ -373,8 +309,7 @@ app.on("ready", async () => {
         });
     });
 
-    // Minimist parses `--no-`-prefixed arguments as booleans with value `false` rather than verbatim.
-    if (argv["update"] === false) {
+    if (!args.update) {
         console.log("Auto update disabled via command line flag");
     } else if (global.vectorConfig["update_base_url"]) {
         void updater.start(global.vectorConfig["update_base_url"]);
@@ -430,7 +365,11 @@ app.on("ready", async () => {
         app.exit(1);
     }
 
-    void global.mainWindow.loadURL("vector://vector/webapp/");
+    // do this after we know we are the primary instance of the app
+    const hasDeeplink = protocolHandler.initialise(args);
+    if (!hasDeeplink) {
+        void global.mainWindow.loadURL("vector://vector/webapp/");
+    }
 
     if (process.platform === "darwin") {
         setupMacosTitleBar(global.mainWindow);
@@ -447,7 +386,7 @@ app.on("ready", async () => {
         if (!global.mainWindow) return;
         mainWindowState.manage(global.mainWindow);
 
-        if (!argv["hidden"]) {
+        if (!args.hidden) {
             global.mainWindow.show();
         } else {
             // hide here explicitly because window manage above sometimes shows it
