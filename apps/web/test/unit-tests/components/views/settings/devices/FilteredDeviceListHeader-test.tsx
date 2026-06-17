@@ -13,10 +13,10 @@ import FilteredDeviceListHeader from "../../../../../../src/components/views/set
 
 describe("<FilteredDeviceListHeader />", () => {
     const defaultProps = {
-        selectedDeviceCount: 0,
-        isAllSelected: false,
-        toggleSelectAll: jest.fn(),
-        children: <div>test</div>,
+        "selectedDeviceCount": 0,
+        "isAllSelected": false,
+        "toggleSelectAll": jest.fn(),
+        "children": <div>test</div>,
         ["data-testid"]: "test123",
     };
     const getComponent = (props = {}) => <FilteredDeviceListHeader {...defaultProps} {...props} />;

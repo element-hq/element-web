@@ -14,6 +14,7 @@ import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwrigh
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 import rootConfig from "../../vitest.config";
+import react from "@vitejs/plugin-react";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -123,4 +124,5 @@ export default defineConfig({
             "@test-utils": path.resolve(__dirname, "./src/test/utils/index.tsx"),
         },
     },
+    plugins: [react()],
 });
