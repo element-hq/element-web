@@ -102,13 +102,13 @@ $left-gutter: 64px;
 
     .mx_ReplyChain--expanded {
         .mx_EventTile_body {
-            /* !important needed to override .mx_ReplyTile .mx_EventTile_content .mx_EventTile_body */
+            /* !important needed to override the collapsed reply body treatment. */
             display: block !important;
             overflow-y: scroll;
         }
 
         .mx_EventTile_collapsedCodeBlock {
-            /* !important needed due to .mx_ReplyTile .mx_EventTile_content .mx_EventTile_pre_container > pre */
+            /* !important keeps expanded replies from inheriting collapsed reply constraints. */
             display: block !important;
         }
     }
@@ -348,7 +348,7 @@ $left-gutter: 64px;
                 display: inline-block;
             }
 
-            .mx_ReplyTile {
+            [data-reply-tile] {
                 .mx_MTextBody {
                     display: -webkit-box; /* Enable -webkit-line-clamp */
                 }
@@ -394,7 +394,7 @@ $left-gutter: 64px;
             }
         }
 
-        .mx_ReplyTile .mx_EventTileBubble {
+        [data-reply-tile] .mx_EventTileBubble {
             left: unset; /* Cancel the value specified above for the tile inside ReplyTile */
         }
 

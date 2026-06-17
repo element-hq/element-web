@@ -135,10 +135,10 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    /* inside mx_RoomView_MessageList, outside of mx_ReplyTile */
+    /* inside mx_RoomView_MessageList, outside of the reply tile */
     /* (on the main panel and the chat panel with a maximized widget) */
     > .mx_DisambiguatedProfile,
-    /* inside a thread, outside of mx_ReplyTile */
+    /* inside a thread, outside of the reply tile */
     .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
         position: relative;
         top: -2px;
@@ -244,7 +244,7 @@ Please see LICENSE files in the repository root for full details.
             display: none;
         }
 
-        .mx_ReplyTile .mx_DisambiguatedProfile {
+        [data-reply-tile] .mx_DisambiguatedProfile {
             display: block;
             max-width: 100%;
         }
