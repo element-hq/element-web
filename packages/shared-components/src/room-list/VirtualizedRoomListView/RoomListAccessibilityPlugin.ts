@@ -200,7 +200,6 @@ export class RoomListAccessibilityPlugin extends Plugin<Manager, RoomListAccessi
     }
 }
 
-
 /**
  * Configures {@link RoomListAccessibilityPlugin} for the room list and returns a `plugins`
  * callback for `DragDropProvider`.
