@@ -1061,8 +1061,8 @@ describe("EventTile", () => {
             currentMember.rawDisplayName = "Alan (away)";
 
             jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === senderId ? currentMember : null));
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) =>
-                settingName === "useOnlyCurrentProfiles" ? true : false,
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "useOnlyCurrentProfiles",
             );
 
             const { container } = getComponent();
