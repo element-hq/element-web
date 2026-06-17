@@ -96,9 +96,12 @@ export function getUserLanguage(): string {
     }
 }
 
-// Allow overriding the text displayed when no translation exists
-// Currently only used in unit tests to avoid having to load
-// the translations in element-web
+/**
+ * Allow overriding the text displayed when no translation exists
+ * Currently only used in unit tests to avoid having to load
+ * the translations in element-web
+ * @knipignore
+ */
 export function setMissingEntryGenerator(f: (value: string) => void): void {
     setMissingEntryGeneratorSharedComponents(f);
 }

@@ -104,7 +104,7 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
 /**
  * Gets keyboard shortcuts that should be presented to the user in the UI.
  */
-export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
+const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
     const entries = [...Object.entries(getUIOnlyShortcuts()), ...Object.entries(getKeyboardShortcuts())] as [
         KeyBindingAction,
         KeyboardShortcutSetting,
