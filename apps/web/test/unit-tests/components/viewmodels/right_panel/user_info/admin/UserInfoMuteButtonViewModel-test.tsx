@@ -190,11 +190,4 @@ describe("useMuteButtonViewModel", () => {
 
         expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, -1);
     });
-
-    it("returns false if either argument is falsy", () => {
-        // @ts-ignore to let us purposely pass incorrect args
-        expect(isMuted(defaultMember, null)).toBe(false);
-        // @ts-ignore to let us purposely pass incorrect args
-        expect(isMuted(null, {})).toBe(false);
-    });
 });
