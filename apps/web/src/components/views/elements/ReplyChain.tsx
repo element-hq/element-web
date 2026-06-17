@@ -19,7 +19,7 @@ import { type Layout } from "../../../settings/enums/Layout";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
-import ReplyTile from "../rooms/ReplyTile";
+import { ReplyTileAdapter } from "../rooms/ReplyTileAdapter";
 import { Pill, PillType } from "./Pill";
 import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
@@ -267,7 +267,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             });
             return (
                 <blockquote ref={this.blockquoteRef} className={classname} key={ev.getId()}>
-                    <ReplyTile
+                    <ReplyTileAdapter
                         mxEvent={ev}
                         permalinkCreator={this.props.permalinkCreator}
                         toggleExpandedQuote={() => this.props.setQuoteExpanded(!this.props.isQuoteExpanded)}

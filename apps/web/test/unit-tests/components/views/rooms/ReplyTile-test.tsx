@@ -9,7 +9,7 @@ import React from "react";
 import { render } from "jest-matrix-react";
 import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 
-import ReplyTile from "../../../../../src/components/views/rooms/ReplyTile";
+import { ReplyTileAdapter } from "../../../../../src/components/views/rooms/ReplyTileAdapter";
 import { renderReplyTile } from "../../../../../src/events/EventTileFactory";
 import { VideoBodyFactory } from "../../../../../src/components/views/messages/MBodyFactory";
 import { mkEvent, stubClient } from "../../../../test-utils";
@@ -24,7 +24,7 @@ jest.mock("../../../../../src/events/EventTileFactory", () => {
 jest.mock("../../../../../src/components/views/messages/SenderProfile", () => jest.fn(() => null));
 jest.mock("../../../../../src/components/views/avatars/MemberAvatar", () => jest.fn(() => null));
 
-describe("ReplyTile", () => {
+describe("ReplyTileAdapter", () => {
     beforeEach(() => {
         stubClient();
         jest.mocked(renderReplyTile).mockClear().mockReturnValue(null);
@@ -49,7 +49,7 @@ describe("ReplyTile", () => {
             },
         });
 
-        render(<ReplyTile mxEvent={mxEvent} />);
+        render(<ReplyTileAdapter mxEvent={mxEvent} />);
 
         expect(renderReplyTile).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -58,6 +58,7 @@ describe("ReplyTile", () => {
                 }),
             }),
             false,
+            expect.anything(),
         );
     });
 });

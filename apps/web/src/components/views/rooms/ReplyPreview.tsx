@@ -13,7 +13,7 @@ import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import ReplyTile from "./ReplyTile";
+import { ReplyTileAdapter } from "./ReplyTileAdapter";
 import RoomContext, { type TimelineRenderingType } from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 
@@ -49,7 +49,10 @@ export default class ReplyPreview extends React.Component<IProps> {
                             <CloseIcon />
                         </AccessibleButton>
                     </div>
-                    <ReplyTile mxEvent={this.props.replyToEvent} permalinkCreator={this.props.permalinkCreator} />
+                    <ReplyTileAdapter
+                        mxEvent={this.props.replyToEvent}
+                        permalinkCreator={this.props.permalinkCreator}
+                    />
                 </div>
             </div>
         );

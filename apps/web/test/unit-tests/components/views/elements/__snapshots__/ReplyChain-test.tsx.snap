@@ -11,13 +11,15 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
         class="mx_ReplyChain mx_ReplyChain_color2"
       >
         <div
-          class="mx_ReplyTile"
+          class="_replyTile_14wql_10"
+          data-reply-tile=""
         >
           <a
             href="#"
           >
             <div
-              class="mx_ReplyTile_sender"
+              class="_sender_14wql_80"
+              data-reply-tile-sender=""
             >
               <span
                 class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
@@ -30,29 +32,38 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
               >
                 u
               </span>
-              <div
-                class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
-                role="button"
-                tabindex="0"
+              <span
+                data-reply-tile-sender-profile=""
               >
-                <span
-                  class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
-                  dir="auto"
+                <div
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
+                  role="button"
+                  tabindex="0"
                 >
-                  @userId:matrix.org
-                </span>
-              </div>
+                  <span
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                    dir="auto"
+                  >
+                    @userId:matrix.org
+                  </span>
+                </div>
+              </span>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
+              class="_body_14wql_37"
+              data-reply-tile-body=""
             >
               <div
-                class="mx_EventTile_body translate"
-                dir="auto"
+                class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"
               >
-                A
+                <div
+                  class="mx_EventTile_body translate"
+                  dir="auto"
+                >
+                  A
 B
 C
+                </div>
               </div>
             </div>
           </a>

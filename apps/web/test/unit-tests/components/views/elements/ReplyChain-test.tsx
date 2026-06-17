@@ -126,7 +126,7 @@ describe("ReplyChain", () => {
         await waitFor(() => expect(setQuoteExpanded).toHaveBeenCalledWith(false));
         await waitFor(() => expect(container).toHaveTextContent(editedLongBody));
 
-        const replyTile = container.querySelector(".mx_ReplyTile");
+        const replyTile = container.querySelector("[data-reply-tile]");
         expect(replyTile).not.toBeNull();
         const annotationWrapper = replyTile!.querySelector("[data-textual-body-annotation-wrapper]");
         expect(annotationWrapper).not.toBeNull();
