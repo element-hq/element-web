@@ -9,14 +9,7 @@ import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type Re
 import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
 import { DragDropProvider, DragOverlay, useDragOperation } from "@dnd-kit/react";
-import {
-    Accessibility,
-    type Draggable,
-    type Droppable,
-    KeyboardSensor,
-    PointerActivationConstraints,
-    PointerSensor,
-} from "@dnd-kit/dom";
+import { KeyboardSensor, PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 
 import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
@@ -32,6 +25,7 @@ import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDra
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
 import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
+import { useRoomListAccessibilityPlugin } from "./RoomListAccessibilityPlugin";
 import styles from "./VirtualizedRoomListView.module.css";
 import { useI18n } from "../../core/i18n/i18nContext";
 
@@ -115,14 +109,6 @@ type Context = {
  */
 const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
 
-type A11yData = {
-    operation: {
-        source: Draggable<RoomListDragData> | null;
-        target: Droppable<RoomListDragData> | null;
-    };
-    canceled: boolean;
-};
-
 /**
  * A virtualized list of rooms.
  * This component provides efficient rendering of large room lists using virtualization,
@@ -170,20 +156,9 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         [vm],
     );
 
-    /**
-     * Get the display name of a draggable source for accessibility announcements:
-     * the section title for a section, or the room name for a room.
-     * @returns the name, or `undefined` if the source can't be resolved.
-     */
-    const getDragSourceName = useCallback(
-        (source: Draggable<RoomListDragData>): string | undefined => {
-            if (isSectionDragData(source.data)) {
-                return vm.getSectionHeaderViewModel(source.id as string).getSnapshot().title;
-            }
-            return vm.getRoomItemViewModel(source.id as string)?.getSnapshot().name;
-        },
-        [vm],
-    );
+    // Builds the accessibility plugin (live-region announcements) for keyboard/pointer drags,
+    // replacing dnd-kit's built-in Accessibility plugin.
+    const a11yPlugins = useRoomListAccessibilityPlugin(vm);
 
     /**
      * Get the item component for a specific index
@@ -429,6 +404,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         <DragDropProvider<RoomListDragData>
             onDragStart={(event) => {
                 const { source } = event.operation;
+                // Changing the state of sections (collapsed/expanded) while dragging a section header causes a double readback for the a11y announcement.
                 if (isSectionDragData(source?.data)) {
                     vm.onSectionDragStart();
                 }
@@ -466,44 +442,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     },
                 }),
             ]}
-            plugins={(defaults) => [
-                ...defaults,
-                Accessibility.configure({
-                    screenReaderInstructions: { draggable: _t("room_list|a11y|drag_instructions") },
-                    announcements: {
-                        dragstart({ operation: { source } }: A11yData) {
-                            if (!source) return;
-
-                            const sourceName = getDragSourceName(source);
-                            if (sourceName === undefined) return;
-                            return _t("room_list|a11y|drag_start", { source: sourceName });
-                        },
-                        dragover({ operation: { source, target } }: A11yData) {
-                            if (!source || !target) return;
-
-                            const sourceName = getDragSourceName(source);
-                            if (sourceName === undefined) return;
-                            const targetSection = vm.getSectionHeaderViewModel(target.id as string);
-                            return _t("room_list|a11y|drag_over", {
-                                source: sourceName,
-                                target: targetSection.getSnapshot().title,
-                            });
-                        },
-                        dragend({ operation: { source, target }, canceled }: A11yData) {
-                            if (!source || !target) return;
-                            if (canceled) return _t("room_list|a11y|drag_cancelled");
-
-                            const sourceName = getDragSourceName(source);
-                            if (sourceName === undefined) return;
-                            const targetSection = vm.getSectionHeaderViewModel(target.id as string);
-                            return _t("room_list|a11y|drag_end", {
-                                source: sourceName,
-                                target: targetSection.getSnapshot().title,
-                            });
-                        },
-                    },
-                }),
-            ]}
+            plugins={a11yPlugins}
         >
             <DragOverlay dropAnimation={null}>
                 <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />

@@ -102,7 +102,52 @@ describe("<VirtualizedRoomListView />", () => {
             });
         });
 
-        it("should fire section drag callbacks when reordering sections via keyboard", async () => {
+        it("does not reflect aria-pressed onto draggable room items or section headers", async () => {
+            // dnd-kit's built-in Accessibility plugin reflects aria-pressed onto the draggable
+            // <button>, which VoiceOver reads as "selected" when a keyboard drag starts. We drop
+            // that plugin, so the attribute must never appear (before or during a drag).
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+            const sectionHeader = await screen.findByLabelText("Toggle Favourites section");
+            expect(roomButton).not.toHaveAttribute("aria-pressed");
+            expect(sectionHeader).not.toHaveAttribute("aria-pressed");
+
+            roomButton.focus();
+            await user.keyboard(" "); // start drag
+            expect(roomButton).not.toHaveAttribute("aria-pressed");
+            await user.keyboard("{Escape}"); // cancel drag
+        });
+
+        it("announces drag progress in a live region", async () => {
+            const user = userEvent.setup();
+            renderWithMockContext(<Sections />);
+
+            const status = screen.getByRole("status");
+            expect(status).toHaveTextContent("");
+
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+            roomButton.focus();
+
+            await user.keyboard(" "); // start drag
+            await waitFor(() => expect(status).toHaveTextContent("Dragging General"));
+
+            await user.keyboard("{Escape}"); // cancel
+        });
+
+        it("exposes keyboard drag instructions referenced by draggable items", async () => {
+            renderWithMockContext(<Sections />);
+
+            // The plugin creates a hidden instructions element and wires draggables to it.
+            const instructions = screen.getByText(
+                "Press space to start dragging, arrow keys to move, and escape to cancel.",
+            );
+            const roomButton = await screen.findByRole("button", { name: "Open room General" });
+            await waitFor(() => expect(roomButton).toHaveAttribute("aria-describedby", instructions.id));
+        });
+
+        it("should reorder sections via keyboard without auto-collapsing them", async () => {
             // KeyboardSensor: Space=start, each ArrowDown moves the drag position by
             // KEYBOARD_DRAG_OFFSET px, Space=drop. We need to travel ~200px down from the
             // "Favourites" section header to land on the "low-priority" section header — a valid
@@ -124,10 +169,12 @@ describe("<VirtualizedRoomListView />", () => {
             await user.keyboard(" "); // drop
 
             await waitFor(() => {
-                expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
                 expect(Sections.args.changeSectionOrder).toHaveBeenCalledWith("favourites", "low-priority");
-                expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
             });
+            // Keyboard drags must not auto-collapse the sections, so the collapse/restore
+            // callbacks should never fire (unlike pointer drags).
+            expect(Sections.args.onSectionDragStart).not.toHaveBeenCalled();
+            expect(Sections.args.onSectionDragEnd).not.toHaveBeenCalled();
         });
     });
 
