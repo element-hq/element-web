@@ -125,7 +125,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                     as="div"
                     hideTimestamp
                     inhibitInteraction
-                    forceHistoricalSender
+                    useEventSenderSnapshot
                 />
             </div>
         );

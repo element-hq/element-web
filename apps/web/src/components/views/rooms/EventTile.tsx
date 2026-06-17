@@ -256,7 +256,7 @@ export interface EventTileProps {
     isSeeingThroughMessageHiddenForModeration?: boolean;
 
     /** Whether sender profile rendering should use the event-time member snapshot. */
-    forceHistoricalSender?: boolean;
+    useEventSenderSnapshot?: boolean;
 
     /** Whether the timestamp should be hidden for preview rendering. */
     hideTimestamp?: boolean;
@@ -925,7 +925,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             sender: {
                 senderId: this.props.mxEvent.getSender() ?? undefined,
                 member: roomMemberToMemberInfo(
-                    this.props.forceHistoricalSender
+                    this.props.useEventSenderSnapshot
                         ? this.getAvatarMember()
                         : resolveRoomMemberProfile({
                               room: MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId() ?? ""),
