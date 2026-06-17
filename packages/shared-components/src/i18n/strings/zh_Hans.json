@@ -47,6 +47,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "清除",
             "create_an_account": "创建账户",
             "got_an_account": "已有账户？",
             "manage_account": "管理账户",
