@@ -15,10 +15,10 @@ import { describe, it, expect, vi } from "vitest";
 import * as stories from "./RoomListView.stories";
 
 // Stable UUIDs so snapshots don't change between runs.
-// let uuidCounter = 0;
-// vi.spyOn(crypto, "randomUUID").mockImplementation(
-//     () => `00000000-0000-0000-0000-${String(++uuidCounter).padStart(12, "0")}` as ReturnType<typeof crypto.randomUUID>,
-// );
+let uuidCounter = 0;
+vi.spyOn(crypto, "randomUUID").mockImplementation(
+    () => `00000000-0000-0000-0000-${String(++uuidCounter).padStart(12, "0")}` as ReturnType<typeof crypto.randomUUID>,
+);
 
 const {
     Default,
