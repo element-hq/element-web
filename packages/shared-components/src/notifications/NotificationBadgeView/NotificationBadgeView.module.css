@@ -1,0 +1,62 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.notificationBadge:not(.visible) {
+    display: none;
+}
+
+.notificationBadge.visible {
+    background-color: var(--roomtile-default-badge-bg-color, var(--cpd-color-icon-secondary));
+    color: var(--cpd-color-text-on-solid-primary);
+    outline: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notificationBadge.visible.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background-color: var(--cpd-color-icon-primary);
+}
+
+.notificationBadge.visible.dot .count {
+    display: none;
+}
+
+.notificationBadge.visible.dot.notification {
+    background-color: var(--cpd-color-icon-success-primary);
+}
+
+.notificationBadge.visible.highlight {
+    background-color: var(--cpd-color-icon-critical-primary);
+}
+
+.notificationBadge.visible > svg {
+    width: 16px;
+    height: 16px;
+}
+
+.notificationBadge.visible.badge2Char {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 1rem;
+}
+
+.notificationBadge.visible.badge3Char {
+    width: 1.625rem;
+    height: 1rem;
+    border-radius: 1rem;
+}
+
+.notificationBadge.visible .count {
+    font-size: 0.625rem;
+    line-height: 0.875rem;
+    font-weight: var(--cpd-font-weight-semibold);
+    color: var(--cpd-color-text-on-solid-primary);
+}

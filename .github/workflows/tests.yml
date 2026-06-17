@@ -35,7 +35,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: [1, 2]
+                runner: [1, 2, 3]
         steps:
             - name: Checkout code
               uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -61,24 +61,20 @@ jobs:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
 
-            - name: Get number of CPU cores
-              id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@97330871fe1b7d3529392ea000e3d2c4b357e403 # v3
-
             - name: Run tests
               working-directory: apps/web
               run: |
                   pnpm test \
                       --coverage=$ENABLE_COVERAGE \
                       --ci \
-                      --max-workers $MAX_WORKERS \
+                      --maxWorkers="50%" \
                       --shard "$SHARD" \
                       --cacheDirectory /tmp/jest_cache
               env:
                   # tell jest to use coloured output
                   FORCE_COLOR: true
-                  MAX_WORKERS: ${{ steps.cpu-cores.outputs.count }}
                   SHARD: ${{ format('{0}/{1}', matrix.runner, strategy.job-total) }}
+                  NODE_OPTIONS: "--max_old_space_size=8192"
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'

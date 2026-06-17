@@ -89,11 +89,18 @@ export function unicodeToShortcode(char: string): string {
 /*
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
+ * @param insaneHtml - the input to sanitize
+ * @param className - an optional class name to apply to the element
+ * @param sanitizeParams - the params to use for sanitization
  */
-export function sanitizedHtmlNode(insaneHtml: string): ReactNode {
-    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+export function sanitizedHtmlNode(
+    insaneHtml: string,
+    className?: string,
+    sanitizeParams = sanitizeHtmlParams,
+): ReactNode {
+    const saneHtml = sanitizeHtml(insaneHtml, sanitizeParams);
 
-    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
+    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" className={className} />;
 }
 
 export function getHtmlText(insaneHtml: string): string {

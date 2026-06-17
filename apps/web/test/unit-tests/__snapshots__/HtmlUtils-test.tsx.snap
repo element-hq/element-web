@@ -91,3 +91,20 @@ exports[`bodyToNode should handle inline media when mediaIsVisible is true 1`] =
   </span>
 </DocumentFragment>
 `;
+
+exports[`sanitizedHtmlNode should respect className 1`] = `
+<DocumentFragment>
+  <div
+    class="testClass"
+    dir="auto"
+  >
+    <a
+      href="https://google.com"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      Link
+    </a>
+  </div>
+</DocumentFragment>
+`;

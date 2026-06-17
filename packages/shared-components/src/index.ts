@@ -16,6 +16,7 @@ export * from "./room/composer/Banner";
 export * from "./room/composer/UploadButton";
 export * from "./crypto/SasEmoji";
 export * from "./menus/UserMenu";
+export * from "./notifications/NotificationBadgeView";
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/EventPresentation";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
