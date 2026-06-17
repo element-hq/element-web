@@ -94,8 +94,6 @@ patchedDependencies:
     # Workaround for being stuck on an old version of plist due to electron-builder not supporting ESM yet
     plist: patches/plist.patch
     # Workaround for type fails
-    "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
-    # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
 
 peerDependencyRules:
