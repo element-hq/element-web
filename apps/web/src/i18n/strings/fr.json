@@ -279,6 +279,9 @@
             "security_code_prompt": "Votre fournisseur de compte peut vous demander le code suivant pour vérifier la connexion.",
             "security_code_title": "Votre code de vérification",
             "select_qr_code": "Sélectionnez « %(scanQRCode)s »",
+            "select_ready_to_scan": "Sélectionnez « %(readyToScan)s » et scannez le QR code affiché ici.",
+            "start_over": "Recommencer",
+            "tap_avatar_link_new_device": "Cliquez sur votre avatar et sélectionnez « %(linkNewDevice)s »",
             "unsupported_explainer": "Votre fournisseur de compte ne prend pas en charge la connexion à un nouvel appareil à l’aide d’un code QR.",
             "unsupported_heading": "Le code QR n'est pas pris en charge",
             "waiting_for_device": "En attente de votre autre appareil"
@@ -340,8 +343,10 @@
         "sign_in_description": "Utilisez votre compte pour continuer.",
         "sign_in_instead": "Me connecter avec mon compte existant",
         "sign_in_instead_prompt": "Vous avez déjà un compte ? <a>Connectez-vous ici</a>",
+        "sign_in_manually": "Se connecter manuellement",
         "sign_in_or_register": "Se connecter ou créer un compte",
         "sign_in_or_register_description": "Utilisez votre compte ou créez en un pour continuer.",
+        "sign_in_with_qr": "Se connecter avec un QR code",
         "sign_in_with_sso": "Se connecter avec l’authentification unique",
         "signing_in": "Authentification…",
         "soft_logout": {
@@ -1523,6 +1528,7 @@
         "bridge_state_manager": "Cette passerelle est gérée par <user />.",
         "bridge_state_workspace": "Espace de travail : <networkLink/>",
         "click_for_info": "Cliquez pour en savoir plus",
+        "config_only": "Ne peut être activé que via le fichier config.json.",
         "currently_experimental": "Actuellement expérimental.",
         "custom_themes": "Autoriser l’ajout de thèmes personnalisés",
         "dynamic_room_predecessors": "Prédécesseurs de salon dynamique",
@@ -1536,6 +1542,11 @@
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
         "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
+        "feature_retention": {
+            "description": "Suppression automatique des messages d'un salon lorsq'ils atteignent la période de conservation configurée. Actuellement, seules les options de lecture sont prises en charge.",
+            "disabled_sliding_sync": "La conservation des données ne peut pas être activée lorsque Sliding sync est activé.",
+            "display_name": "Rétention des messages"
+        },
         "feature_user_status": {
             "description": "Permet de visualiser et de définir un statut actuel.",
             "display_name": "Statut de l'utilisateur",
@@ -1567,6 +1578,7 @@
         "leave_beta_reload": "Quitter la bêta va recharger %(brand)s.",
         "location_share_live": "Partage de la position en direct",
         "location_share_live_description": "Implémentation temporaire. Les positions sont persistantes dans l’historique du salon.",
+        "login_with_qr": "Se connecter avec un code QR",
         "mjolnir": "Nouvelles manières d’ignorer des gens",
         "msc3531_hide_messages_pending_moderation": "Permettre aux modérateurs de cacher des messages en attente de modération.",
         "new_room_list": "Activer la nouvelle liste de salons",

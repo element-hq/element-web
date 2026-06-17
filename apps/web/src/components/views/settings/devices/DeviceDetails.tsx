@@ -104,10 +104,8 @@ const DeviceDetails: React.FC<Props> = ({
             ],
         },
     ]
-        .map((section) =>
-            // filter out falsy values
-            ({ ...section, values: section.values.filter((row) => !!row.value) }),
-        )
+        .map((section) => // filter out falsy values
+        ({ ...section, values: section.values.filter((row) => !!row.value) }))
         .filter(
             (section) =>
                 // then filter out sections with no values

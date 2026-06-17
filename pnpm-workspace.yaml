@@ -30,9 +30,9 @@ catalog:
     vite: 8.0.16
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
-    vitest: 4.1.8
-    "@vitest/coverage-v8": 4.1.8
-    "@vitest/browser-playwright": 4.1.8
+    vitest: 4.1.9
+    "@vitest/coverage-v8": 4.1.9
+    "@vitest/browser-playwright": 4.1.9
     "@vitejs/plugin-react": 6.0.2
     unplugin-dts: 1.0.1
 
@@ -94,8 +94,6 @@ patchedDependencies:
     # Workaround for being stuck on an old version of plist due to electron-builder not supporting ESM yet
     plist: patches/plist.patch
     # Workaround for type fails
-    "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
-    # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
 
 peerDependencyRules:
@@ -114,7 +112,7 @@ overrides:
     "@types/react-dom": "catalog:"
     oidc-client-ts: 3.5.0
     jwt-decode: 4.0.0
-    caniuse-lite: 1.0.30001793
+    caniuse-lite: 1.0.30001799
     markdown-it: 14.1.1
     matrix-widget-api: "^1.17.0"
     "@types/node": ts6.0
