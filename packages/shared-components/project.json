@@ -19,7 +19,7 @@
         "typedoc": {
             "cache": "true",
             "command": "typedoc",
-            "inputs": ["src"],
+            "inputs": ["src", "{projectRoot}/typedoc.json"],
             "outputs": ["{projectRoot}/typedoc"],
             "options": { "cwd": "packages/shared-components" },
             "dependsOn": ["^build"]

@@ -76,8 +76,8 @@ export default abstract class ScrollableBaseModal<
                 <FocusLock
                     returnFocus={true}
                     lockProps={{
-                        onKeyDown: this.onKeyDown,
-                        role: "dialog",
+                        "onKeyDown": this.onKeyDown,
+                        "role": "dialog",
                         ["aria-labelledby"]: "mx_CompoundDialog_title",
 
                         // Like BaseDialog, we'll just point this at the whole content

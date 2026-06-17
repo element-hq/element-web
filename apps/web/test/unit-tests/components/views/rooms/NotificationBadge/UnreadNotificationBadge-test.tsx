@@ -38,6 +38,10 @@ describe("UnreadNotificationBadge", () => {
         return <UnreadNotificationBadge room={room} threadId={threadId} />;
     }
 
+    function getBadge(container: HTMLElement): Element | null {
+        return container.querySelector('[data-testid="notification-badge"]');
+    }
+
     beforeEach(() => {
         client = stubClient();
         client.supportsThreads = () => true;
@@ -84,27 +88,27 @@ describe("UnreadNotificationBadge", () => {
     it("renders unread notification badge", () => {
         const { container } = render(getComponent());
 
-        expect(container.querySelector(".mx_NotificationBadge_visible")).toBeTruthy();
-        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).toBeFalsy();
+        expect(getBadge(container)).toHaveTextContent("1");
+        expect(getBadge(container)).toHaveAttribute("data-notification-level", "notification");
 
         act(() => {
             room.setUnreadNotificationCount(NotificationCountType.Highlight, 1);
         });
 
-        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).toBeTruthy();
+        expect(getBadge(container)).toHaveAttribute("data-notification-level", "highlight");
     });
 
     it("renders unread thread notification badge", () => {
         const { container } = render(getComponent(THREAD_ID));
 
-        expect(container.querySelector(".mx_NotificationBadge_visible")).toBeTruthy();
-        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).toBeFalsy();
+        expect(getBadge(container)).toHaveTextContent("1");
+        expect(getBadge(container)).toHaveAttribute("data-notification-level", "notification");
 
         act(() => {
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Highlight, 1);
         });
 
-        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).toBeTruthy();
+        expect(getBadge(container)).toHaveAttribute("data-notification-level", "highlight");
     });
 
     it("hides unread notification badge", () => {
@@ -112,7 +116,7 @@ describe("UnreadNotificationBadge", () => {
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Total, 0);
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Highlight, 0);
             const { container } = render(getComponent(THREAD_ID));
-            expect(container.querySelector(".mx_NotificationBadge_visible")).toBeFalsy();
+            expect(getBadge(container)).toBeNull();
         });
     });
 
@@ -142,7 +146,7 @@ describe("UnreadNotificationBadge", () => {
         muteRoom(room);
 
         const { container } = render(getComponent());
-        expect(container.querySelector(".mx_NotificationBadge")).toBeNull();
+        expect(getBadge(container)).toBeNull();
     });
 
     it("activity renders unread notification badge", () => {
@@ -168,8 +172,8 @@ describe("UnreadNotificationBadge", () => {
         room.addLiveEvents([event], { addToState: true });
 
         const { container } = render(getComponent(THREAD_ID));
-        expect(container.querySelector(".mx_NotificationBadge_dot")).toBeTruthy();
-        expect(container.querySelector(".mx_NotificationBadge_visible")).toBeTruthy();
-        expect(container.querySelector(".mx_NotificationBadge_level_highlight")).toBeFalsy();
+        expect(getBadge(container)).toBeInTheDocument();
+        expect(getBadge(container)).toHaveAttribute("data-badge-type", "dot");
+        expect(getBadge(container)).not.toHaveAttribute("data-notification-level", "highlight");
     });
 });
