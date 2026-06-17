@@ -11,7 +11,7 @@ import { Accessibility, type Draggable, type DragDropManager, type Droppable } f
 
 import { useI18n } from "../../core/i18n/i18nContext";
 import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
-import type { RoomListViewModel } from "../RoomListView";
+import type { RoomListViewModel } from "../RoomListView/RoomListView.types";
 
 type Manager = DragDropManager;
 

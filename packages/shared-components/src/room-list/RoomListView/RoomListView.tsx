@@ -7,88 +7,17 @@
 
 import React, { type JSX, type ReactNode } from "react";
 
-import { useViewModel, type ViewModel } from "../../core/viewmodel";
-import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters";
+import { useViewModel } from "../../core/viewmodel";
+import { RoomListPrimaryFilters } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
-import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomListItemViewModel } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
-import { type ToastType, RoomListToast } from "./RoomListToast";
+import { VirtualizedRoomListView } from "../VirtualizedRoomListView";
+import { type Room } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
+import { RoomListToast } from "./RoomListToast";
+import { type RoomListViewModel } from "./RoomListView.types";
 import styles from "./RoomListView.module.css";
 import { Flex } from "../../core/utils/Flex";
 import { AutoHideScrollbar } from "../../core/utils/Scrollbar";
-
-export type RoomListSection = {
-    /** Unique identifier for the section */
-    id: string;
-    /** Array of room IDs that belong to this section */
-    roomIds: string[];
-};
-
-/**
- * Snapshot for the room list view
- */
-export type RoomListViewSnapshot = {
-    /** Whether the rooms are currently loading */
-    isLoadingRooms: boolean;
-    /** Whether the room list is empty */
-    isRoomListEmpty: boolean;
-    /** Array of filter IDs */
-    filterIds: FilterId[];
-    /** Currently active filter ID (if any) */
-    activeFilterId?: FilterId;
-    /** Room list state */
-    roomListState: RoomListViewState;
-    /** Array of sections in the room list */
-    sections: RoomListSection[];
-    /** Optional description for the empty state */
-    emptyStateDescription?: string;
-    /** Optional action element for the empty state */
-    emptyStateAction?: ReactNode;
-    /** Whether the user can create rooms */
-    canCreateRoom?: boolean;
-    /** Whether the room list is displayed as a flat list */
-    isFlatList: boolean;
-    /** Optional toast to display */
-    toast?: ToastType;
-};
-
-/**
- * Actions interface for room list operations
- */
-export interface RoomListViewActions {
-    /** Called when a filter is toggled */
-    onToggleFilter: (filterId: FilterId) => void;
-    /** Called to create a new chat room */
-    createChatRoom: () => void;
-    /** Called to create a new room */
-    createRoom: () => void;
-    /**
-     * Get view model for a specific room (virtualization API)
-     * Allow undefined to be returned if we don't have a view model for the room. In this case the room will not be rendered.
-     */
-    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
-    /** Called when the visible range changes (virtualization API) */
-    updateVisibleRooms: (startIndex: number, endIndex: number) => void;
-    /** Get view model for a specific section header (virtualization API) */
-    getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
-    /** Called to close the toast message */
-    closeToast: () => void;
-    /** Called to change the section of a room */
-    changeRoomSection: (roomId: string, tag: string) => void;
-    /** Called to change the order of sections */
-    changeSectionOrder: (sourceTag: string, targetTag: string) => void;
-    /** Called when a section drag starts — collapses all sections */
-    onSectionDragStart: () => void;
-    /** Called when a section drag ends (drop or cancel) — restores expansion states */
-    onSectionDragEnd: () => void;
-}
-
-/**
- * The view model type for the room list view
- */
-export type RoomListViewModel = ViewModel<RoomListViewSnapshot, RoomListViewActions>;
 
 /**
  * Props for RoomListView component

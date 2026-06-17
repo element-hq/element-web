@@ -18,7 +18,12 @@ import {
     getContainerAccessibleProps,
     type VirtualizedListContext,
 } from "../../core/VirtualizedList";
-import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
+import type {
+    RoomListViewSnapshot,
+    RoomListViewModel,
+    RoomListViewState,
+    FilterKey,
+} from "../RoomListView/RoomListView.types";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
@@ -29,24 +34,7 @@ import { useRoomListAccessibilityPlugin } from "./RoomListAccessibilityPlugin";
 import styles from "./VirtualizedRoomListView.module.css";
 import { useI18n } from "../../core/i18n/i18nContext";
 
-/**
- * Filter key type - opaque string type for filter identifiers
- */
-export type FilterKey = string;
-
-/**
- * State for the room list data (nested within RoomListViewSnapshot)
- */
-export interface RoomListViewState {
-    /** Optional active room index for keyboard navigation */
-    activeRoomIndex?: number;
-    /** Space ID for context tracking */
-    spaceId?: string;
-    /** Active filter keys for context tracking */
-    filterKeys?: FilterKey[];
-    /** Tag of a newly created section header to scroll into view */
-    scrollToSectionTag?: string;
-}
+export type { RoomListViewState, FilterKey };
 
 /**
  * Props for the VirtualizedRoomListView component
