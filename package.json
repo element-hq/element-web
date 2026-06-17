@@ -35,7 +35,7 @@
         "@vitest/coverage-v8": "catalog:",
         "cronstrue": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "6.16.0",
+        "knip": "6.16.1",
         "lint-staged": "^17.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
