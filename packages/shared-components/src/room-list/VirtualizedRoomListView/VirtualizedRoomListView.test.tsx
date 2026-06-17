@@ -147,7 +147,7 @@ describe("<VirtualizedRoomListView />", () => {
             await waitFor(() => expect(roomButton).toHaveAttribute("aria-describedby", instructions.id));
         });
 
-        it("should reorder sections via keyboard without auto-collapsing them", async () => {
+        it("should reorder sections via keyboard", async () => {
             // KeyboardSensor: Space=start, each ArrowDown moves the drag position by
             // KEYBOARD_DRAG_OFFSET px, Space=drop. We need to travel ~200px down from the
             // "Favourites" section header to land on the "low-priority" section header — a valid
@@ -171,10 +171,8 @@ describe("<VirtualizedRoomListView />", () => {
             await waitFor(() => {
                 expect(Sections.args.changeSectionOrder).toHaveBeenCalledWith("favourites", "low-priority");
             });
-            // Keyboard drags must not auto-collapse the sections, so the collapse/restore
-            // callbacks should never fire (unlike pointer drags).
-            expect(Sections.args.onSectionDragStart).not.toHaveBeenCalled();
-            expect(Sections.args.onSectionDragEnd).not.toHaveBeenCalled();
+            expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
+            expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
         });
     });
 
