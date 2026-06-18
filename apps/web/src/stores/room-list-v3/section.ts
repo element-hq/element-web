@@ -135,6 +135,8 @@ export function getCustomSectionData(): CustomSectionsData {
 /**
  * Retrieves the ordered list of custom section tags from the settings.
  * If the settings contain tags that are not present in the custom section data, they will be filtered out and the settings will be updated to remove the unknown tags.
+ *
+ * @knipignore - exported for tests
  */
 export function getOrderedCustomSections(): OrderedCustomSections {
     const sectionData = getCustomSectionData();
