@@ -108,9 +108,11 @@ test.describe("Roles & Permissions room settings tab", () => {
 
             // Close and await power level
             await app.settings.closeDialog();
-            const timeline = page.getByTestId('timeline');
+            const timeline = page.getByTestId("timeline");
             await timeline.getByRole("button", { name: "expand" }).click();
-            await expect(timeline.getByText("Alice changed the power level of Alice from Admin to Moderator.")).toBeInViewport();
+            await expect(
+                timeline.getByText("Alice changed the power level of Alice from Admin to Moderator."),
+            ).toBeInViewport();
 
             settings = await app.settings.openRoomSettings("Security & Privacy");
 
