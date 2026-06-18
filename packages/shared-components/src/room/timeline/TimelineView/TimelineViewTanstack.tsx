@@ -12,6 +12,7 @@ import { InlineSpinner } from "@vector-im/compound-web";
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
 import type { AnchorAlign, ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
 import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
+import { DEBUG_SIZES, HeightAuditProbe } from "./heightAudit";
 
 /**
  * Experimental TanStack-Virtual implementation of the shared timeline.
@@ -75,6 +76,11 @@ const AT_BOTTOM_THRESHOLD_PX = 4;
 const COLD_STABLE_FRAMES = 3;
 /** …or this many frames pass regardless, so we can never strand behind the cover. */
 const COLD_CAP_FRAMES = 60;
+/** Backward-prepend re-pin: stop once the anchor holds its captured offset for
+ * this many consecutive frames… */
+const REPIN_STABLE_FRAMES = 3;
+/** …or this many frames elapse, so the settle loop can never run away. */
+const REPIN_CAP_FRAMES = 40;
 
 // ─── Content-jump detector (debug only) ────────────────────────────
 //
@@ -119,7 +125,7 @@ function useContentJumpDetector(scrollerRef: React.MutableRefObject<HTMLElement 
                         // eslint-disable-next-line no-console
                         console.debug(
                             `[TimelineViewTanstack] CONTENT-JUMP ${Math.round(jump)}px — rows moved ${Math.round(median)}px, ` +
-                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, frameGap=${sample.t - prev.t}ms`,
+                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, frameGap=${sample.t - prev.t}ms, ts=${sample.t}`,
                         );
                     }
                 }
@@ -356,6 +362,93 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
     const startSigRef = useRef("");
     const endSigRef = useRef("");
     const prevCountRef = useRef(0);
+
+    // ─── Backward-prepend re-pin (measurement-based before-paint correction) ────
+    //
+    // anchorTo:"end" compensates a prepend by placing the captured anchor from the
+    // measurements available at setOptions time — but the just-prepended rows are
+    // unmeasured then, so their height comes from estimateSize. Only the rows that
+    // actually render get corrected (resizeItem's above-viewport adjustment); the
+    // off-screen ones beyond overscan never measure, so their estimate error stays
+    // baked into scrollOffset and the anchor lands mis-placed. Empirically this is
+    // a sustained ±200-350px shift, worst when flung to the very top (every
+    // prepended row is off-screen, hence estimated) — matching "fling-to-top
+    // jumps, slow scroll fine". anchorTo alone is therefore insufficient; this is
+    // the TanStack analogue of the Virtuoso maintainVisibleContentPosition re-pin.
+    //
+    // Fix: remember the top real row + its on-screen offset every settled frame,
+    // and when a backward prepend lands (firstItemIndex dropped) restore that row
+    // to its captured offset from its ACTUAL post-commit position — vi.start minus
+    // scrollOffset, which equals what the user sees, independent of the off-screen
+    // estimate. Done synchronously first (before paint, so no 1-frame flash) then
+    // over a few rAF frames as late measurements (images, reply previews) settle.
+    const pinRef = useRef<{ key: string; offset: number } | null>(null);
+    const repinRafRef = useRef(0);
+    const prevFirstItemIndexRef = useRef<number | null>(null);
+    useEffect(() => () => cancelAnimationFrame(repinRafRef.current), []);
+
+    // The top real (non-loading) rendered row and its on-screen offset. We read
+    // the row's MEASURED rect (getBoundingClientRect), not vi.start - scrollOffset:
+    // the latter goes stale at a prepend commit because anchorTo writes the DOM
+    // scrollTop synchronously but the virtualizer's own scrollOffset only catches
+    // up on the async scroll event — so reading its geometry there would yield the
+    // pre-correction value. The rect is what the user actually sees, and matches
+    // what repinToPin restores to, so capture and restore stay consistent.
+    const readTopAnchor = useCallback((): { key: string; offset: number } | null => {
+        const scroller = scrollerRef.current;
+        if (!scroller) return null;
+        const scrollerTop = scroller.getBoundingClientRect().top;
+        for (const node of scroller.querySelectorAll<HTMLElement>("[data-key]")) {
+            const key = node.dataset.key!;
+            if (key !== "backward-loading" && key !== "forward-loading") {
+                return { key, offset: node.getBoundingClientRect().top - scrollerTop };
+            }
+        }
+        return null;
+    }, []);
+
+    // Snap scrollTop so the captured anchor row returns to its captured on-screen
+    // offset, measured from its REAL rect (see readTopAnchor — vi.start-scrollOffset
+    // is stale at the prepend commit by exactly the placement error we're undoing).
+    // Reading the rect here lets the synchronous call land the anchor before the
+    // commit paints, so there is no 1-frame flash. Returns true when already
+    // aligned (nothing to do / anchor scrolled out of the rendered window).
+    const repinToPin = useCallback((): boolean => {
+        const target = pinRef.current;
+        const scroller = scrollerRef.current;
+        if (!target || !scroller) return true;
+        const scrollerTop = scroller.getBoundingClientRect().top;
+        for (const node of scroller.querySelectorAll<HTMLElement>("[data-key]")) {
+            if (node.dataset.key === target.key) {
+                const delta = node.getBoundingClientRect().top - scrollerTop - target.offset;
+                if (Math.abs(delta) >= 1) {
+                    scroller.scrollTop += delta;
+                    return false;
+                }
+                return true;
+            }
+        }
+        return true;
+    }, []);
+
+    // Keep correcting for a few frames after the synchronous snap, until the
+    // anchor holds steady (late measurements landed) or the cap elapses.
+    const startRepinSettle = useCallback((): void => {
+        if (repinRafRef.current) cancelAnimationFrame(repinRafRef.current);
+        let stable = 0;
+        let cap = REPIN_CAP_FRAMES;
+        const tick = (): void => {
+            stable = repinToPin() ? stable + 1 : 0;
+            cap -= 1;
+            if (stable >= REPIN_STABLE_FRAMES || cap <= 0) {
+                repinRafRef.current = 0;
+                return;
+            }
+            repinRafRef.current = requestAnimationFrame(tick);
+        };
+        repinRafRef.current = requestAnimationFrame(tick);
+    }, [repinToPin]);
+
     useIsomorphicLayoutEffect(() => {
         if (phaseRef.current !== "live") return;
         const v = virtualizer;
@@ -366,6 +459,14 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
         // (it already decrements firstItemIndex while the backward spinner shows).
         // So no loader offset is needed now that the spinner is a real list item.
         const toAbsolute = (index: number): number => snap.firstItemIndex + index;
+
+        // Detect a backward prepend (content added at the start): the VM drops
+        // firstItemIndex when it prepends history (and by 1 when the backward
+        // spinner appears). Computed before the early-returns below so the
+        // comparison stays correct across pendingAnchor reloads.
+        const backwardPrepend =
+            prevFirstItemIndexRef.current !== null && snap.firstItemIndex < prevFirstItemIndexRef.current;
+        prevFirstItemIndexRef.current = snap.firstItemIndex;
 
         // Diagnostic: on every item-count change (prepend / trim) log the scroll
         // position and the first rendered index AFTER anchorTo has run (it applies
@@ -402,6 +503,20 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
             return;
         }
         lastPlacedRef.current = null;
+
+        // Re-pin after a backward prepend: anchorTo placed the anchor from
+        // estimated heights, so restore it from the row's real post-commit
+        // position. Synchronous first (corrects before this commit paints, so no
+        // 1-frame flash), then a short rAF settle for late measurements. While
+        // idle, keep the intended anchor fresh so the next prepend has an accurate
+        // target — but never overwrite it mid-settle.
+        if (backwardPrepend && pinRef.current) {
+            repinToPin();
+            startRepinSettle();
+        } else if (repinRafRef.current === 0) {
+            const a = readTopAnchor();
+            if (a) pinRef.current = a;
+        }
 
         // Visible range (core's `range` is the visible span, overscan excluded).
         const r = v.range;
@@ -470,6 +585,16 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
         [offsetForKey],
     );
 
+    // TEMP debug aid (gated on DEBUG_JUMPS): jump straight to scrollTop 0 so a
+    // backward pagination can be triggered deterministically — parked exactly at
+    // the spinner — and the resulting post-prepend shift read cleanly off the
+    // CONTENT-JUMP log, instead of having to fling the wheel. Instant (not smooth)
+    // so it lands in one frame. Remove together with DEBUG_JUMPS.
+    const jumpToTop = useCallback((): void => {
+        const scroller = scrollerRef.current;
+        if (scroller) scroller.scrollTop = 0;
+    }, []);
+
     const virtualItems = virtualizer.getVirtualItems();
 
     return (
@@ -511,7 +636,16 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
                                     overflowAnchor: "none",
                                 }}
                             >
-                                {renderItem(item)}
+                                {DEBUG_SIZES ? (
+                                    <HeightAuditProbe
+                                        itemKey={item.key}
+                                        baseLabel={item.kind === "event" ? "event" : item.kind}
+                                    >
+                                        {renderItem(item)}
+                                    </HeightAuditProbe>
+                                ) : (
+                                    renderItem(item)
+                                )}
                             </div>
                         );
                     })}
@@ -535,6 +669,29 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
                 </div>
             )}
             {revealed && <TimelineOverlayButtons snapshot={snapshot} vm={vm} scrollNow={scrollNow} />}
+            {/* TEMP debug-only control — disappears when DEBUG_JUMPS is turned off. */}
+            {DEBUG_JUMPS && revealed && (
+                <button
+                    type="button"
+                    onClick={jumpToTop}
+                    style={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        zIndex: 1000,
+                        padding: "4px 8px",
+                        fontSize: 12,
+                        lineHeight: 1.2,
+                        background: "var(--cpd-color-bg-action-primary-rest, #0dbd8b)",
+                        color: "var(--cpd-color-text-on-solid-primary, #fff)",
+                        border: "none",
+                        borderRadius: 4,
+                        cursor: "pointer",
+                    }}
+                >
+                    ↑ Jump to top (debug)
+                </button>
+            )}
         </div>
     );
 }

@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
+import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EventTile, { type GetRelationsForEvent, type IReadReceiptProps } from "./EventTile";
 import type { Layout } from "../../../settings/enums/Layout";
 import type { IReadReceiptPosition } from "./ReadReceiptMarker";
@@ -81,6 +81,7 @@ export function LegacyEventTileAdapter(props: LegacyEventTileAdapterProps): JSX.
             getRelationsForEvent={props.getRelationsForEvent}
             permalinkCreator={props.permalinkCreator}
             callEventGrouper={props.callEventGrouper}
+            compactReplyPreview={true}
         />
     );
 }

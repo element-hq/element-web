@@ -9,18 +9,20 @@ Please see LICENSE files in the repository root for full details.
  * New-timeline-only height stabilisation for image tiles.
  *
  * When an image event carries no intrinsic dimensions (info.w / info.h absent),
- * ImageBodyViewModel returns no sizing and ImageBodyView sets no inline
- * width / aspect-ratio / max-* on the media frame. The frame then has no
- * reserved height and grows when the image finally loads — a ~180px timeline
- * jump (confirmed by the per-tile height audit: event:m.image, ~17% of images,
- * maxNetGrowth ≈ 186px).
+ * ImageBodyViewModel has no sizing until the image loads, at which point it
+ * starts emitting inline width / aspect-ratio / max-* computed from the loaded
+ * naturalWidth/Height — resizing the frame after the row was measured and
+ * jumping the timeline (confirmed by the per-tile height audit: event:m.image
+ * rows growing 45-77px with imgsLoaded:0→1 as the only DOM change).
  *
- * We reserve a stable fallback box using width + aspect-ratio — the same
- * mechanism sized images already use. Sized images receive those properties as
- * *inline* styles from the view model, which win over this stylesheet, so this
- * rule only takes effect for the unsized case. `object-fit: contain` then
- * letterboxes the loaded image inside the fixed box, so it can never grow it:
- * the box height is identical before and after load → zero jump.
+ * We reserve a stable fallback box for those frames (ImageBodyView marks them
+ * with data-has-intrinsic-size="false") using the same width + aspect-ratio
+ * mechanism sized images use. The !important is deliberate: the rule must also
+ * beat the post-load *inline* styles, so the box is identical before and after
+ * load — the image letterboxes inside it via `object-fit: contain`. Verified
+ * against the live stylesheet cascade: 324×216 pre-load and post-load, 200×133
+ * in a 200px pane. Images that declare info.w/h reserve their real box from
+ * mount via inline styles and are untouched here.
  *
  * Reply-tile height stabilisation lives alongside the reply components in
  * _ReplyChain.pcss / _ReplyTile.pcss. All of these are interim measures pending
@@ -31,14 +33,49 @@ Please see LICENSE files in the repository root for full details.
        fallback box lines up with normally-sized thumbnails. */
     --mx-image-fallback-width: 324px;
 
-    .mx_ImageBody_container {
-        width: min(100%, var(--mx-image-fallback-width));
-        aspect-ratio: 3 / 2;
+    /* With classic (width-consuming) scrollbars — macOS "Show scroll bars:
+       Always" or an attached mouse — the timeline scrollbar appearing or
+       disappearing changes the content width, which re-wraps every text row
+       near a wrap boundary in one go and jumps the scroll position. Reserve the
+       gutter permanently so row width never depends on scrollbar visibility.
+       A no-op for overlay scrollbars. */
+    [data-virtuoso-scroller] {
+        scrollbar-gutter: stable;
     }
+
+    /* The media frame sits inside ImageBodyView's `width: fit-content` link
+       wrapper. fit-content makes percentage widths on the frame cyclic, which
+       is why the fallback width below is a definite length; clamping the
+       wrapper itself lets the frame's max-width resolve in narrow panes. */
+    .mx_ImageBody > a {
+        max-width: 100%;
+    }
+
+    /* stylelint-disable declaration-no-important -- must override the inline
+       sizing ImageBodyView applies once the image has loaded; see header. */
+    .mx_ImageBody_container[data-has-intrinsic-size="false"] {
+        width: var(--mx-image-fallback-width) !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        aspect-ratio: 3 / 2 !important;
+    }
+    /* stylelint-enable declaration-no-important */
 
     /* Harmless for sized images (their box already matches the image aspect, so
        contain is a no-op); essential for the fallback box above. */
     .mx_ImageBody_image {
         object-fit: contain;
+    }
+
+    /* An image that fails to load swaps its reserved media box for a one-line
+       error span (the root becomes a <span> in the error state), which would
+       jump every row below it. Hold the error at the height of the box it
+       replaces: sized images carry that height inline as
+       --mx-image-reserved-height; unsized ones fall back to the fallback box
+       height (aspect 3/2 of the fallback width). */
+    span.mx_ImageBody {
+        display: flex;
+        align-items: center;
+        min-height: var(--mx-image-reserved-height, calc(var(--mx-image-fallback-width) * 2 / 3));
     }
 }

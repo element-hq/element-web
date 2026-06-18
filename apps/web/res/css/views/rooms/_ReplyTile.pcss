@@ -104,6 +104,10 @@ Please see LICENSE files in the repository root for full details.
         padding-top: 0;
     }
 
+    /* The new timeline pins reply preview row heights and clamps the body to a
+       single line — see the .mx_NewTimelinePanel block in _ReplyChain.pcss
+       (kept there with the --mx-reply-row-height definition it depends on). */
+
     &.mx_ReplyTile_inline > a {
         /* Render replies to emotes inline with the sender avatar */
         grid-template:

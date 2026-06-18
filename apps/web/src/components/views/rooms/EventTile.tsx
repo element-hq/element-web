@@ -255,6 +255,14 @@ export interface EventTileProps {
     /** Whether interactive controls inside the tile should be inhibited. */
     inhibitInteraction?: boolean;
 
+    /**
+     * Render the reply preview in the new timeline's compact, height-stable form
+     * (synchronously initialised, no nested "in reply to" header, skeleton while
+     * fetching). Set by the virtualised timeline, where a reply preview growing
+     * after mount shifts the rows around it and jumps the scroll position.
+     */
+    compactReplyPreview?: boolean;
+
     /** Ref for imperative access to the unwrapped tile instance. */
     ref?: Ref<UnwrappedEventTile>;
 }
@@ -1063,6 +1071,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
                     getRelationsForEvent={this.props.getRelationsForEvent}
+                    compactPreview={this.props.compactReplyPreview}
                 />
             );
         }

@@ -11,7 +11,7 @@ exports[`ImageBodyView > matches snapshot for animated-preview story 1`] = `
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
+        style="width: 320px; max-width: 100%; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="ImageBodyView-module_mediaContent"
@@ -47,7 +47,7 @@ exports[`ImageBodyView > matches snapshot for default story 1`] = `
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
+        style="width: 320px; max-width: 100%; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="ImageBodyView-module_mediaContent"
@@ -99,7 +99,7 @@ exports[`ImageBodyView > matches snapshot for hidden story 1`] = `
   >
     <div
       class="ImageBodyView-module_thumbnailContainer"
-      style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
+      style="width: 320px; max-width: 100%; max-height: 320px; aspect-ratio: 1 / 1;"
     >
       <div
         class="ImageBodyView-module_mediaContent"
@@ -151,7 +151,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = 
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
+        style="width: 320px; max-width: 100%; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="ImageBodyView-module_placeholder ImageBodyView-module_placeholderBlurhash"
@@ -196,7 +196,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
+        style="width: 320px; max-width: 100%; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="ImageBodyView-module_placeholder"
