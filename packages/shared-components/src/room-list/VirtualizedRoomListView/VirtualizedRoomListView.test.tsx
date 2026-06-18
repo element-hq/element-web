@@ -141,7 +141,7 @@ describe("<VirtualizedRoomListView />", () => {
 
             // The plugin creates a hidden instructions element and wires draggables to it.
             const instructions = screen.getByText(
-                "Press space to start dragging, arrow keys to move, and escape to cancel.",
+                "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
             );
             const roomButton = await screen.findByRole("button", { name: "Open room General" });
             await waitFor(() => expect(roomButton).toHaveAttribute("aria-describedby", instructions.id));
