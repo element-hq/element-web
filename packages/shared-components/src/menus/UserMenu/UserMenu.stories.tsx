@@ -9,30 +9,23 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import {
-    UserMenuView,
-    type UserMenuViewSnapshot,
-    type UserMenuViewActions,
-} from "./UserMenu";
+import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
-    const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(
-        snapshot,
-        {
-            setOpen: fn(),
-            createAccount: fn(),
-            signIn: fn(),
-            linkNewDevice: fn(),
-            openFeedback: fn(),
-            openHomePage: fn(),
-            openSecurity: fn(),
-            openSettings: fn(),
-            clearStatus: fn(),
-        },
-    );
+    const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(snapshot, {
+        setOpen: fn(),
+        createAccount: fn(),
+        signIn: fn(),
+        linkNewDevice: fn(),
+        openFeedback: fn(),
+        openHomePage: fn(),
+        openSecurity: fn(),
+        openSettings: fn(),
+        clearStatus: fn(),
+    });
     return <UserMenuView vm={vm} />;
 };
 
@@ -118,8 +111,7 @@ export const Open: Story = {
 export const OpenVeryLongName: Story = {
     args: {
         open: true,
-        displayName:
-            "Sally Sanderandersonanonanonabibblybobblywooblywobblynobblynom with a name with a very long word",
+        displayName: "Sally Sanderandersonanonanonabibblybobblywooblywobblynobblynom with a name with a very long word",
         userId: "@person-whose-username-some-might-consider-to-be-a-little-overly-long-although-thats-their-choice-and-we-must-respect-it:homeserver.com",
         expanded: true,
         showAvatar: true,
