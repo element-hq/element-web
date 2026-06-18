@@ -239,10 +239,17 @@ export function useRoomListAccessibilityPlugin(
                 if (!source || !target) return;
                 const sourceName = getDragSourceName(source);
                 if (sourceName === undefined) return;
-                const targetSection = vm.getSectionHeaderViewModel(target.id as string);
+                const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
+                if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
+                    const droppedBefore = source.data.index > target.data.index;
+                    return _t(droppedBefore ? "room_list|a11y|drag_over_before" : "room_list|a11y|drag_over_after", {
+                        source: sourceName,
+                        target: targetTitle,
+                    });
+                }
                 return _t("room_list|a11y|drag_over", {
                     source: sourceName,
-                    target: targetSection.getSnapshot().title,
+                    target: targetTitle,
                 });
             },
             dragend: ({ operation: { source, target }, canceled }: A11yData) => {
@@ -250,10 +257,17 @@ export function useRoomListAccessibilityPlugin(
                 if (canceled) return _t("room_list|a11y|drag_cancelled");
                 const sourceName = getDragSourceName(source);
                 if (sourceName === undefined) return;
-                const targetSection = vm.getSectionHeaderViewModel(target.id as string);
+                const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
+                if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
+                    const droppedBefore = source.data.index > target.data.index;
+                    return _t(droppedBefore ? "room_list|a11y|drag_end_before" : "room_list|a11y|drag_end_after", {
+                        source: sourceName,
+                        target: targetTitle,
+                    });
+                }
                 return _t("room_list|a11y|drag_end", {
                     source: sourceName,
-                    target: targetSection.getSnapshot().title,
+                    target: targetTitle,
                 });
             },
         }),
