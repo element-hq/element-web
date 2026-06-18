@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Singleflight } from "../../../src/utils/Singleflight";
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import { Singleflight } from "./Singleflight";
 
 describe("Singleflight", () => {
     afterEach(() => {
@@ -28,7 +30,7 @@ describe("Singleflight", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
-        const fn = jest.fn().mockReturnValue(val);
+        const fn = vi.fn().mockReturnValue(val);
         const sf = Singleflight.for(instance, key);
         const r1 = sf.do(fn);
         expect(r1).toBe(val);
@@ -42,7 +44,7 @@ describe("Singleflight", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
-        const fn = jest.fn().mockReturnValue(val);
+        const fn = vi.fn().mockReturnValue(val);
         let sf = Singleflight.for(instance, key);
         const r1 = sf.do(fn);
         expect(r1).toBe(val);
@@ -57,7 +59,7 @@ describe("Singleflight", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
-        const fn = jest.fn().mockReturnValue(val);
+        const fn = vi.fn().mockReturnValue(val);
         const sf = Singleflight.for(instance, key);
         const r1 = sf.do(fn);
         expect(r1).toBe(val);
@@ -72,7 +74,7 @@ describe("Singleflight", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
-        const fn = jest.fn().mockReturnValue(val);
+        const fn = vi.fn().mockReturnValue(val);
         const sf = Singleflight.for(instance, key);
         const r1 = sf.do(fn);
         expect(r1).toBe(val);
@@ -87,7 +89,7 @@ describe("Singleflight", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
-        const fn = jest.fn().mockReturnValue(val);
+        const fn = vi.fn().mockReturnValue(val);
         const sf = Singleflight.for(instance, key);
         const r1 = sf.do(fn);
         expect(r1).toBe(val);

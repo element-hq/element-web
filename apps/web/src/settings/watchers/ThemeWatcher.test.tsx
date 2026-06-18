@@ -6,10 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import ThemeWatcher from "../../../../src/settings/watchers/ThemeWatcher";
-import { type SettingLevel } from "../../../../src/settings/SettingLevel";
-import { type SettingKey, type Settings } from "../../../../src/settings/Settings.tsx";
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
+
+import SettingsStore from "../SettingsStore";
+import ThemeWatcher from "./ThemeWatcher";
+import { type SettingLevel } from "../SettingLevel";
+import { type SettingKey, type Settings } from "../Settings.tsx";
 
 function makeMatchMedia(values: any) {
     class FakeMediaQueryList {
