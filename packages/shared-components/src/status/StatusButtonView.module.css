@@ -7,8 +7,11 @@
 
 .statusButton {
     border-radius: 30px;
+    border: 0px;
     background: var(--cpd-color-bg-subtle-secondary);
     display: inline-flex;
+    /* Disables filling to available width if we're in a flex container */
+    align-self: flex-start;
     align-items: center;
     padding-inline-start: var(--cpd-space-2x);
     gap: 6px;

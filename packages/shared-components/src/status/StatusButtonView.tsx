@@ -13,14 +13,14 @@ import { _t, type UserStatus } from "..";
 import styles from "./StatusButtonView.module.css";
 
 export const StatusButtonView = React.forwardRef<
-    HTMLDivElement,
+    HTMLButtonElement,
     {
         status: UserStatus;
         clearStatus: () => void;
-    } & React.HTMLAttributes<HTMLDivElement>
+    } & React.HTMLAttributes<HTMLButtonElement>
 >(function StatusButtonView({ status, clearStatus, ...props }, ref): JSX.Element {
     return (
-        <div ref={ref} {...props} className={styles.statusButton}>
+        <button ref={ref} {...props} className={styles.statusButton}>
             <Text as="span" className={styles.menuStatusEmoji}>
                 {status.emoji}
             </Text>
@@ -35,6 +35,6 @@ export const StatusButtonView = React.forwardRef<
             >
                 <CloseIcon />
             </IconButton>
-        </div>
+        </button>
     );
 });

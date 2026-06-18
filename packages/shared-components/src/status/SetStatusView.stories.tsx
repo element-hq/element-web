@@ -16,13 +16,11 @@ import { withViewDocs } from "../../.storybook/withViewDocs";
 const SetStatusViewWrapperImpl = ({
     setStatus,
     clearStatus,
-    onOpenChange,
     ...snapshot
 }: SetStatusViewSnapshot & SetStatusViewActions): JSX.Element => {
     const vm = useMockedViewModel<SetStatusViewSnapshot, SetStatusViewActions>(snapshot, {
         setStatus,
         clearStatus,
-        onOpenChange,
     });
     return <SetStatusView vm={vm} />;
 };
@@ -36,8 +34,6 @@ const meta = {
     args: {
         setStatus: fn(),
         clearStatus: fn(),
-        onOpenChange: fn(),
-        open: false,
     },
 } satisfies Meta<typeof SetStatusViewWrapper>;
 
@@ -67,9 +63,6 @@ const MENU_OPEN_A11Y_RULES = [
 ];
 
 export const Open: Story = {
-    args: {
-        open: true,
-    },
     parameters: {
         a11y: {
             config: {
