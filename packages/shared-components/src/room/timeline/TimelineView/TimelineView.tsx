@@ -5,7 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState, type JSX, type ReactNode, type PropsWithChildren } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+    type JSX,
+    type ReactNode,
+    type PropsWithChildren,
+} from "react";
 import { LogLevel, Virtuoso, type IndexLocationWithAlign, type VirtuosoHandle } from "react-virtuoso";
 import { InlineSpinner } from "@vector-im/compound-web";
 
@@ -63,16 +73,44 @@ interface ResizeStat {
     features: Map<string, number>;
 }
 
+/** Per-resize forensic record: what concretely changed in the row's DOM between
+ * mount and the height change. `changes` of "(no DOM diff…)" means the markup
+ * was identical and the row purely re-wrapped (fonts, container width, CSS) —
+ * the signal that separates content swaps from layout-level causes. */
+interface ResizeDetail {
+    key: string;
+    type: string;
+    delta: number;
+    heights: string;
+    changes: string;
+    bodyPreview: string;
+    /** performance.now() of the resize, ms — correlate against the [TimelineVM]
+     * paginate-batch log lines to see whether resizes cluster around prepends. */
+    ts: number;
+}
+
 class HeightAudit {
     private readonly stats = new Map<string, ResizeStat>();
     /** "mountType → resolvedType" → count. Surfaces placeholder→content reveals
      * (e.g. "event:? → event:m.image"), the prime post-mount growth pattern. */
     private readonly transitions = new Map<string, number>();
+    /** First N per-resize forensic records (see {@link ResizeDetail}). */
+    private readonly details: ResizeDetail[] = [];
+    private static readonly MAX_DETAILS = 50;
 
     private stat(type: string): ResizeStat {
         let s = this.stats.get(type);
         if (!s) {
-            s = { mounts: 0, resizes: 0, unstableRows: 0, maxDelta: 0, maxNetGrowth: 0, totalDelta: 0, samples: new Set(), features: new Map() };
+            s = {
+                mounts: 0,
+                resizes: 0,
+                unstableRows: 0,
+                maxDelta: 0,
+                maxNetGrowth: 0,
+                totalDelta: 0,
+                samples: new Set(),
+                features: new Map(),
+            };
             this.stats.set(type, s);
         }
         return s;
@@ -89,7 +127,15 @@ class HeightAudit {
      * (re-classified at resize time), so growth that follows a placeholder
      * resolving is attributed to what the tile became, not what it mounted as.
      */
-    public recordResize(type: string, key: string, mountHeight: number, prev: number, next: number, rowAlreadyUnstable: boolean, features: string[]): void {
+    public recordResize(
+        type: string,
+        key: string,
+        mountHeight: number,
+        prev: number,
+        next: number,
+        rowAlreadyUnstable: boolean,
+        features: string[],
+    ): void {
         const s = this.stat(type);
         s.resizes += 1;
         if (!rowAlreadyUnstable) {
@@ -110,20 +156,27 @@ class HeightAudit {
         this.transitions.set(k, (this.transitions.get(k) ?? 0) + 1);
     }
 
+    public recordDetail(detail: ResizeDetail): void {
+        if (this.details.length < HeightAudit.MAX_DETAILS) this.details.push(detail);
+    }
+
     /** Print two tables: per-type instability, and mount→resolved transitions. */
     public report(): void {
         const rows = [...this.stats.entries()]
             .map(([type, s]) => ({
                 type,
-                mounts: s.mounts,
-                unstableRows: s.unstableRows,
+                "mounts": s.mounts,
+                "unstableRows": s.unstableRows,
                 "unstable%": s.mounts ? Math.round((s.unstableRows / s.mounts) * 100) : 0,
-                resizes: s.resizes,
-                maxDelta: Math.round(s.maxDelta),
-                avgDelta: s.resizes ? Math.round(s.totalDelta / s.resizes) : 0,
-                maxNetGrowth: Math.round(s.maxNetGrowth),
-                causes: [...s.features.entries()].sort((a, b) => b[1] - a[1]).map(([f, n]) => `${f}×${n}`).join(", "),
-                samples: [...s.samples].join(", "),
+                "resizes": s.resizes,
+                "maxDelta": Math.round(s.maxDelta),
+                "avgDelta": s.resizes ? Math.round(s.totalDelta / s.resizes) : 0,
+                "maxNetGrowth": Math.round(s.maxNetGrowth),
+                "causes": [...s.features.entries()]
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([f, n]) => `${f}×${n}`)
+                    .join(", "),
+                "samples": [...s.samples].join(", "),
             }))
             .sort((a, b) => b.unstableRows * b.maxNetGrowth - a.unstableRows * a.maxNetGrowth);
         // eslint-disable-next-line no-console
@@ -136,17 +189,24 @@ class HeightAudit {
             // eslint-disable-next-line no-console
             console.table(transitionRows);
         }
+        if (this.details.length) {
+            // eslint-disable-next-line no-console
+            console.table(this.details);
+        }
         // eslint-disable-next-line no-console
         console.info(
             "[height-audit] Per-type table ranked by (unstable rows × max net growth). " +
                 "The transitions table shows tiles that changed type after mount (placeholder → content) — " +
-                "these are the reveals to stabilise by reserving space for the resolved tile.",
+                "these are the reveals to stabilise by reserving space for the resolved tile. " +
+                "The details table shows, per resize, what changed in the row's DOM since mount; " +
+                "'(no DOM diff…)' means a pure re-wrap (fonts / container width / CSS), not a content swap.",
         );
     }
 
     public reset(): void {
         this.stats.clear();
         this.transitions.clear();
+        this.details.length = 0;
         // eslint-disable-next-line no-console
         console.info("[height-audit] reset");
     }
@@ -178,30 +238,155 @@ function scrollTrace(event: string, detail: Record<string, unknown> = {}): void 
     console.debug(`[TimelineView] #${++scrollTraceSeq} +${delta}ms ${event}${fields ? " " + fields : ""}`);
 }
 
+// ─── Content-jump detector (debug only) ────────────────────────────
+//
+// The height audit catches rows that change height; this catches the other
+// class of visible jump: frames where the rendered content shifts relative to
+// the viewport by an amount that doesn't match the scroll delta — i.e.
+// virtuoso's prepend/anchor compensation was wrong, or landed a frame after
+// the content change painted.
+//
+// Every animation frame we record the viewport-relative top of each rendered
+// row (virtuoso's data-index is stable across prepends: firstItemIndex moves
+// down exactly as array indices move up). For rows present in consecutive
+// frames, plain scrolling moves them by exactly -ΔscrollTop, so
+// median(Δtop) + ΔscrollTop is the content visibly jumping under the
+// viewport. Jumps above the threshold are logged with ms-since-commit so they
+// can be correlated with [TimelineVM] paginate batches and the height audit's
+// `ts` column.
+const DEBUG_JUMPS = true;
+const JUMP_THRESHOLD_PX = 3;
+
+interface CommitInfo {
+    itemsLen: number;
+    firstItemIndex: number;
+    at: number;
+}
+
+function useContentJumpDetector(
+    scrollerRef: React.MutableRefObject<HTMLElement | null>,
+    commitRef: React.MutableRefObject<CommitInfo | null>,
+): void {
+    useEffect(() => {
+        if (!DEBUG_JUMPS) return;
+        let raf = 0;
+        interface FrameSample {
+            scrollTop: number;
+            tops: Map<string, number>;
+            /** Inline marginTop on virtuoso's item list = the live `deviation`
+             * compensation ("auto" while idle under alignToBottom). */
+            margin: string;
+            /** Inline paddingTop on the item list = virtuoso's estimated height
+             * of unrendered items above the window. */
+            pad: string;
+            t: number;
+        }
+        let prev: FrameSample | null = null;
+        const tick = (): void => {
+            raf = requestAnimationFrame(tick);
+            const scroller = scrollerRef.current;
+            if (!scroller) {
+                prev = null;
+                return;
+            }
+            const scrollerTop = scroller.getBoundingClientRect().top;
+            const tops = new Map<string, number>();
+            // Key on data-item-index (the STABLE display index), NOT data-index.
+            // data-index is virtuoso's raw position and shifts by +N when N items
+            // are prepended, so keying on it compares a different message before vs
+            // after a prepend — inflating "rows moved" into a huge artifact on the
+            // exact frames we care about. data-item-index is firstItemIndex-stable,
+            // so the same message matches across the prepend and "rows moved"
+            // reflects what the user actually saw. data-known-size narrows the
+            // match to virtuoso's own measured item wrappers.
+            for (const el of scroller.querySelectorAll<HTMLElement>("[data-item-index][data-known-size]")) {
+                tops.set(el.dataset.itemIndex!, el.getBoundingClientRect().top - scrollerTop);
+            }
+            const list = scroller.querySelector<HTMLElement>('[data-testid="virtuoso-item-list"]');
+            const sample: FrameSample = {
+                scrollTop: scroller.scrollTop,
+                tops,
+                margin: list?.style.marginTop || "0",
+                pad: list?.style.paddingTop || "0",
+                t: Math.round(performance.now()),
+            };
+            if (prev) {
+                const deltas: number[] = [];
+                for (const [key, top] of tops) {
+                    const old = prev.tops.get(key);
+                    if (old !== undefined) deltas.push(top - old);
+                }
+                if (deltas.length >= 3) {
+                    deltas.sort((a, b) => a - b);
+                    const median = deltas[Math.floor(deltas.length / 2)];
+                    const jump = median + (sample.scrollTop - prev.scrollTop);
+                    if (Math.abs(jump) >= JUMP_THRESHOLD_PX) {
+                        const commit = commitRef.current;
+                        const sinceCommit = commit
+                            ? `${Math.round(performance.now() - commit.at)}ms after commit (items=${commit.itemsLen}, firstItemIndex=${commit.firstItemIndex})`
+                            : "no commit yet";
+                        // eslint-disable-next-line no-console
+                        console.debug(
+                            `[TimelineView] CONTENT-JUMP ${Math.round(jump)}px — rows moved ${Math.round(median)}px, ` +
+                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, ${sinceCommit}, ` +
+                                `margin ${prev.margin}→${sample.margin}, pad ${prev.pad}→${sample.pad}, ` +
+                                `frameGap=${sample.t - prev.t}ms, ts=${sample.t}`,
+                        );
+                    }
+                }
+            }
+            prev = sample;
+        };
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+    }, [scrollerRef, commitRef]);
+}
+
 /** Map a `mx_…Body` DOM class onto a readable tile-type token. Falls back to
  * de-camelising any unrecognised `mx_XxxBody` class so new body types surface
  * with a sensible name instead of being lumped into `?`. */
 function bodyClassToType(cls: string): string {
     switch (cls) {
-        case "mx_MTextBody": return "m.text";
-        case "mx_MNoticeBody": return "m.notice";
-        case "mx_MEmoteBody": return "m.emote";
+        case "mx_MTextBody":
+            return "m.text";
+        case "mx_MNoticeBody":
+            return "m.notice";
+        case "mx_MEmoteBody":
+            return "m.emote";
         case "mx_MImageBody":
-        case "mx_ImageBody": return "m.image";
-        case "mx_MImageReplyBody": return "m.image(reply)";
-        case "mx_MVideoBody": return "m.video";
-        case "mx_MAudioBody": return "m.audio";
-        case "mx_MVoiceMessageBody": return "m.voice";
-        case "mx_MFileBody": return "m.file";
-        case "mx_MStickerBody": return "m.sticker";
-        case "mx_MLocationBody": return "m.location";
-        case "mx_MBeaconBody": return "m.beacon";
-        case "mx_MPollBody": return "m.poll";
-        case "mx_RedactedBody": return "redacted";
-        case "mx_DecryptionFailureBody": return "decryption-failure";
-        case "mx_UnknownBody": return "unknown";
+        case "mx_ImageBody":
+            return "m.image";
+        case "mx_MImageReplyBody":
+            return "m.image(reply)";
+        case "mx_MVideoBody":
+            return "m.video";
+        case "mx_MAudioBody":
+            return "m.audio";
+        case "mx_MVoiceMessageBody":
+            return "m.voice";
+        case "mx_MFileBody":
+            return "m.file";
+        case "mx_MStickerBody":
+            return "m.sticker";
+        case "mx_MLocationBody":
+            return "m.location";
+        case "mx_MBeaconBody":
+            return "m.beacon";
+        case "mx_MPollBody":
+            return "m.poll";
+        case "mx_RedactedBody":
+            return "redacted";
+        case "mx_DecryptionFailureBody":
+            return "decryption-failure";
+        case "mx_UnknownBody":
+            return "unknown";
         // e.g. "mx_MFooBarBody" → "m.foo-bar", "mx_FooBody" → "foo"
-        default: return cls.replace(/^mx_M?/, "").replace(/Body$/, "").replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+        default:
+            return cls
+                .replace(/^mx_M?/, "")
+                .replace(/Body$/, "")
+                .replace(/([a-z])([A-Z])/g, "$1-$2")
+                .toLowerCase();
     }
 }
 
@@ -254,6 +439,81 @@ function detectFeatures(wrapper: HTMLElement): string[] {
     return features;
 }
 
+/** Cheap structural fingerprint of a row, captured at mount and re-captured on
+ * each resize so the audit can say *what* changed, not just that height did. */
+interface RowForensics {
+    classes: string;
+    bodyLen: number;
+    bodyPreview: string;
+    nodes: number;
+    imgs: number;
+    /** Images whose bitmap has arrived. An img loading grows the row without any
+     * DOM mutation, so node/class diffs alone misreport it as a pure reflow. */
+    imgsLoaded: number;
+    pres: number;
+    pills: number;
+    replyRows: number;
+    /** Row content width. If this changes between mount and resize the cause is
+     * the *container* (scrollbar appearing, panel resize), not the row itself —
+     * every text row near a wrap boundary then gains/loses a line at once. */
+    width: number;
+    /** Serialized-markup length: catches attribute/class/src changes on any
+     * descendant that the coarse counters above can't see. */
+    htmlLen: number;
+}
+
+function snapshotRow(wrapper: HTMLElement): RowForensics {
+    const tile = wrapper.querySelector(".mx_EventTile");
+    // Info/state tiles have no mx_EventTile_body — their text lives in
+    // mx_TextualEvent. Fall back so their text changes (e.g. a member display
+    // name resolving after pagination) are visible to the diff instead of
+    // misreporting as "no DOM diff".
+    const body = wrapper.querySelector(".mx_EventTile_body") ?? wrapper.querySelector(".mx_TextualEvent") ?? tile;
+    const imgs = wrapper.querySelectorAll("img");
+    let imgsLoaded = 0;
+    for (const img of imgs) {
+        if ((img as HTMLImageElement).naturalWidth > 0) imgsLoaded += 1;
+    }
+    return {
+        classes: tile?.className ?? "",
+        bodyLen: body?.textContent?.length ?? -1,
+        bodyPreview: (body?.textContent ?? "").slice(0, 60),
+        nodes: wrapper.querySelectorAll("*").length,
+        imgs: imgs.length,
+        imgsLoaded,
+        pres: wrapper.querySelectorAll("pre").length,
+        pills: wrapper.querySelectorAll(".mx_Pill").length,
+        replyRows: wrapper.querySelectorAll(".mx_ReplyChain").length,
+        width: wrapper.clientWidth,
+        htmlLen: wrapper.innerHTML.length,
+    };
+}
+
+/** Human-readable field-by-field diff of two row fingerprints. An empty diff is
+ * the most useful outcome: the DOM didn't change, so the resize was a pure
+ * re-wrap (font load, container width change, CSS) rather than a content swap. */
+function diffForensics(a: RowForensics, b: RowForensics): string {
+    const parts: string[] = [];
+    if (a.classes !== b.classes) {
+        const before = new Set(a.classes.split(/\s+/));
+        const after = new Set(b.classes.split(/\s+/));
+        const added = [...after].filter((c) => !before.has(c));
+        const removed = [...before].filter((c) => !after.has(c));
+        if (added.length) parts.push(`+class:${added.join("|")}`);
+        if (removed.length) parts.push(`-class:${removed.join("|")}`);
+    }
+    if (a.bodyLen !== b.bodyLen) parts.push(`bodyLen:${a.bodyLen}→${b.bodyLen}`);
+    if (a.imgs !== b.imgs) parts.push(`imgs:${a.imgs}→${b.imgs}`);
+    if (a.imgsLoaded !== b.imgsLoaded) parts.push(`imgsLoaded:${a.imgsLoaded}→${b.imgsLoaded}`);
+    if (a.pres !== b.pres) parts.push(`pres:${a.pres}→${b.pres}`);
+    if (a.pills !== b.pills) parts.push(`pills:${a.pills}→${b.pills}`);
+    if (a.replyRows !== b.replyRows) parts.push(`replyRows:${a.replyRows}→${b.replyRows}`);
+    if (a.nodes !== b.nodes) parts.push(`nodes:${a.nodes}→${b.nodes}`);
+    if (a.width !== b.width) parts.push(`WIDTH:${a.width}→${b.width}`);
+    if (a.htmlLen !== b.htmlLen) parts.push(`htmlLen:${a.htmlLen}→${b.htmlLen}`);
+    return parts.join(" ") || "(no DOM diff — pure reflow: fonts/wrapping/css)";
+}
+
 /**
  * Wraps one row, applies the production flow-root box, and records its
  * post-mount height changes into the audit registry. Used only when
@@ -268,7 +528,11 @@ function detectFeatures(wrapper: HTMLElement): string[] {
  *
  * @internal
  */
-function HeightAuditProbe({ itemKey, baseLabel, children }: PropsWithChildren<{ itemKey: string; baseLabel: string }>): ReactNode {
+function HeightAuditProbe({
+    itemKey,
+    baseLabel,
+    children,
+}: PropsWithChildren<{ itemKey: string; baseLabel: string }>): ReactNode {
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -278,6 +542,7 @@ function HeightAuditProbe({ itemKey, baseLabel, children }: PropsWithChildren<{ 
         let mountHeight = 0;
         let prevHeight: number | null = null;
         let rowUnstable = false;
+        let forensics: RowForensics | null = null;
         const ro = new ResizeObserver((entries) => {
             const h = entries[entries.length - 1].borderBoxSize[0].blockSize;
             if (prevHeight === null) {
@@ -285,6 +550,7 @@ function HeightAuditProbe({ itemKey, baseLabel, children }: PropsWithChildren<{ 
                 mountType = classifyTile(el, baseLabel);
                 mountHeight = h;
                 prevHeight = h;
+                forensics = snapshotRow(el);
                 heightAudit.recordMount(mountType, itemKey);
                 return;
             }
@@ -292,8 +558,27 @@ function HeightAuditProbe({ itemKey, baseLabel, children }: PropsWithChildren<{ 
                 // Re-classify: a placeholder that resolved (e.g. decrypting → image)
                 // is now its real type, so attribute the growth to what it became.
                 const currentType = classifyTile(el, baseLabel);
-                heightAudit.recordResize(currentType, itemKey, mountHeight, prevHeight, h, rowUnstable, detectFeatures(el));
+                heightAudit.recordResize(
+                    currentType,
+                    itemKey,
+                    mountHeight,
+                    prevHeight,
+                    h,
+                    rowUnstable,
+                    detectFeatures(el),
+                );
                 if (currentType !== mountType) heightAudit.recordTransition(mountType, currentType);
+                const next = snapshotRow(el);
+                heightAudit.recordDetail({
+                    key: itemKey,
+                    type: currentType,
+                    delta: Math.round(h - prevHeight),
+                    heights: `${Math.round(mountHeight)}→${Math.round(prevHeight)}→${Math.round(h)}`,
+                    changes: forensics ? diffForensics(forensics, next) : "?",
+                    bodyPreview: next.bodyPreview,
+                    ts: Math.round(performance.now()),
+                });
+                forensics = next;
                 rowUnstable = true;
                 prevHeight = h;
             }
@@ -302,9 +587,12 @@ function HeightAuditProbe({ itemKey, baseLabel, children }: PropsWithChildren<{ 
         return () => ro.disconnect();
     }, [itemKey, baseLabel]);
 
-    return <div ref={ref} style={ITEM_WRAPPER_STYLE}>{children}</div>;
+    return (
+        <div ref={ref} style={ITEM_WRAPPER_STYLE}>
+            {children}
+        </div>
+    );
 }
-
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
@@ -349,6 +637,24 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // user actually being near the bottom (spurious re-trigger); ~0 means genuine.
     const scrollMetaRef = useRef({ scrollTop: 0, scrollHeight: 0, clientHeight: 0, lastScrollTop: 0 });
 
+    // Debug only: per-frame content-jump detection (see useContentJumpDetector).
+    // The commit marker timestamps each items/firstItemIndex publish so a logged
+    // jump can be attributed to (or ruled out from) a pagination batch.
+    const scrollerElRef = useRef<HTMLElement | null>(null);
+    const onScrollerRef = useCallback((el: HTMLElement | Window | null) => {
+        scrollerElRef.current = el instanceof HTMLElement ? el : null;
+    }, []);
+    const commitInfoRef = useRef<CommitInfo | null>(null);
+    useLayoutEffect(() => {
+        if (!DEBUG_JUMPS) return;
+        commitInfoRef.current = {
+            itemsLen: snapshot.items.length,
+            firstItemIndex: snapshot.firstItemIndex,
+            at: performance.now(),
+        };
+    }, [snapshot.items, snapshot.firstItemIndex]);
+    useContentJumpDetector(scrollerElRef, commitInfoRef);
+
     // Wrap each row in the flow-root BFC (see ITEM_WRAPPER_STYLE) so margins stay
     // contained and virtuoso measures the true laid-out height — under-reporting
     // shows up as "missing" scrollTop at the bottom and jumps during back-pagination.
@@ -378,14 +684,22 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // post-mount correction. `done` fires onSettled once Virtuoso converges.
     const { items, pendingAnchor } = snapshot;
     const initialTopMostItemIndex = useMemo<IndexLocationWithAlign>(() => {
-        const fallback: IndexLocationWithAlign = { index: Math.max(0, items.length - 1), align: "end", done: onSettled };
+        const fallback: IndexLocationWithAlign = {
+            index: Math.max(0, items.length - 1),
+            align: "end",
+            done: onSettled,
+        };
         if (!pendingAnchor) return fallback;
         const index = items.findIndex((item) => item.key === pendingAnchor.targetKey);
         if (index === -1) {
             scrollTrace("initialTopMostItemIndex:miss", { targetKey: pendingAnchor.targetKey });
             return fallback;
         }
-        scrollTrace("initialTopMostItemIndex", { index, align: pendingAnchor.align, targetKey: pendingAnchor.targetKey });
+        scrollTrace("initialTopMostItemIndex", {
+            index,
+            align: pendingAnchor.align,
+            targetKey: pendingAnchor.targetKey,
+        });
         return { index, align: pendingAnchor.align, done: onSettled };
     }, [items, pendingAnchor, onSettled]);
 
@@ -405,7 +719,10 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             if (!anchor) return false;
             const arrayIndex = snap.items.findIndex((item) => item.key === anchor.targetKey);
             if (arrayIndex === -1) {
-                scrollTrace("scrollToIndexOnChange:miss", { targetKey: anchor.targetKey, totalCount: params.totalCount });
+                scrollTrace("scrollToIndexOnChange:miss", {
+                    targetKey: anchor.targetKey,
+                    totalCount: params.totalCount,
+                });
                 return false;
             }
             scrollTrace("scrollToIndexOnChange:scroll", {
@@ -507,22 +824,19 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // trapNextSizeIncrease checks the prop's identity, not its return value, so a
     // function would let measure-driven growth during the initial load hijack the
     // anchor scroll with a snap to the last item. Disabling it outright avoids that.
-    const followOutput = useMemo<boolean | ((isAtBottom: boolean) => boolean)>(
-        () => {
-            if (snapshot.pendingAnchor !== null) {
-                scrollTrace("followOutput:disabled", { pendingAnchor: snapshot.pendingAnchor.targetKey });
-                return false;
-            }
-            return (isAtBottom: boolean) => {
-                const follow = isAtBottom && snapshot.atLiveEnd;
-                scrollTrace("followOutput:eval", { isAtBottom, atLiveEnd: snapshot.atLiveEnd, follow });
-                return follow;
-            };
-        },
-        [snapshot.atLiveEnd, snapshot.pendingAnchor],
-    );
+    const followOutput = useMemo<boolean | ((isAtBottom: boolean) => boolean)>(() => {
+        if (snapshot.pendingAnchor !== null) {
+            scrollTrace("followOutput:disabled", { pendingAnchor: snapshot.pendingAnchor.targetKey });
+            return false;
+        }
+        return (isAtBottom: boolean) => {
+            const follow = isAtBottom && snapshot.atLiveEnd;
+            scrollTrace("followOutput:eval", { isAtBottom, atLiveEnd: snapshot.atLiveEnd, follow });
+            return follow;
+        };
+    }, [snapshot.atLiveEnd, snapshot.pendingAnchor]);
 
-    const EXTENDED_VIEWPORT_HEIGHT = 2000;
+    const EXTENDED_VIEWPORT_HEIGHT = 1000;
     const increaseViewportBy = useMemo(
         () => ({
             top: EXTENDED_VIEWPORT_HEIGHT,
@@ -548,14 +862,24 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                     scrollToIndexOnChange={scrollToIndexOnChange}
                     increaseViewportBy={increaseViewportBy}
                     onScroll={onScroll}
+                    scrollerRef={onScrollerRef}
                     rangeChanged={onRangeChanged}
-                    logLevel={LogLevel.ERROR}
+                    // DEBUG level surfaces virtuoso's own "Upward scrolling
+                    // compensation" decisions next to our CONTENT-JUMP lines.
+                    logLevel={DEBUG_JUMPS ? LogLevel.DEBUG : LogLevel.ERROR}
                     alignToBottom
                     // Hidden (but still laid out, so heights measure and the
                     // anchor scroll applies) until the initial placement settles;
                     // see the `revealed` cover above.
                     style={{ height: "100%", width: "100%", visibility: revealed ? "visible" : "hidden" }}
                     skipAnimationFrameInResizeObserver={true}
+                    // Pin the visible anchor synchronously before paint on a
+                    // prepend (history pagination), rather than via Virtuoso's
+                    // frame-split deviation→scrollBy dance. With expensive event
+                    // tiles the deferred dance paints an uncompensated frame and
+                    // the timeline visibly lurches; this keeps the top-of-viewport
+                    // message fixed. Opt-in patch prop — see patches/react-virtuoso.
+                    maintainVisibleContentPosition={true}
                 />
             )}
             {!revealed && (

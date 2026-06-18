@@ -283,6 +283,7 @@ patchedDependencies:
   plist: 7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7
   postcss-mixins: 30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0
   react-blurhash: 58bc7f075478017ce27bcc252e8509876390db106246bd5b0a7446642cc4b505
+  react-virtuoso@4.18.5: c30bdca3cce3e6827f6f27518fe19e7426df9510edea469dce0102a6520dc5c9
   rollup: 603340e49399c6044e41a3998891667387d5ec1acbd38d4e5862f2ba3ef58de8
 
 importers:
@@ -1249,7 +1250,7 @@ importers:
         version: 4.9.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react-virtuoso:
         specifier: ^4.14.0
-        version: 4.18.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 4.18.5(patch_hash=c30bdca3cce3e6827f6f27518fe19e7426df9510edea469dce0102a6520dc5c9)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       temporal-polyfill:
         specifier: ^0.3.0
         version: 0.3.2
@@ -25890,7 +25891,7 @@ snapshots:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  react-virtuoso@4.18.5(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+  react-virtuoso@4.18.5(patch_hash=c30bdca3cce3e6827f6f27518fe19e7426df9510edea469dce0102a6520dc5c9)(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
