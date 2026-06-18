@@ -7,14 +7,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react";
+import React, {
+    type ChangeEventHandler,
+    type JSX,
+    type ReactNode,
+} from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
-import MediaDeviceHandler, { type IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
+import MediaDeviceHandler, {
+    type IMediaDevices,
+    MediaDeviceKindEnum,
+} from "../../../../../MediaDeviceHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
@@ -42,7 +49,9 @@ interface IState {
  * Maps deviceKind to the right get method on MediaDeviceHandler
  * Helpful for setting state
  */
-const mapDeviceKindToHandlerValue = (deviceKind: MediaDeviceKindEnum): string | null => {
+const mapDeviceKindToHandlerValue = (
+    deviceKind: MediaDeviceKindEnum,
+): string | null => {
     switch (deviceKind) {
         case MediaDeviceKindEnum.AudioOutput:
             return MediaDeviceHandler.getAudioOutput();
@@ -53,7 +62,10 @@ const mapDeviceKindToHandlerValue = (deviceKind: MediaDeviceKindEnum): string | 
     }
 };
 
-export default class VoiceUserSettingsTab extends React.Component<EmptyObject, IState> {
+export default class VoiceUserSettingsTab extends React.Component<
+    EmptyObject,
+    IState
+> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
@@ -66,9 +78,13 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
             [MediaDeviceKindEnum.AudioInput]: null,
             [MediaDeviceKindEnum.VideoInput]: null,
             audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl(),
-            audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation(),
-            audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression(),
-            enableLegacyCallsVoip: SettingsStore.getValue("enableLegacyCallsVoip"),
+            audioEchoCancellation:
+                MediaDeviceHandler.getAudioEchoCancellation(),
+            audioNoiseSuppression:
+                MediaDeviceHandler.getAudioNoiseSuppression(),
+            enableLegacyCallsVoip: SettingsStore.getValue(
+                "enableLegacyCallsVoip",
+            ),
         };
     }
 
@@ -78,10 +94,12 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         this.legacyCallsEnabledWatcherRef = SettingsStore.watchSetting(
             "enableLegacyCallsVoip",
             null,
-            (...[, , , value]) => this.setState({ enableLegacyCallsVoip: value as boolean }),
+            (...[, , , value]) =>
+                this.setState({ enableLegacyCallsVoip: value as boolean }),
         );
 
-        const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
+        const canSeeDeviceLabels =
+            await MediaDeviceHandler.hasAnyLabeledDevices();
         if (canSeeDeviceLabels) {
             await this.refreshMediaDevices();
         }
@@ -91,12 +109,20 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         SettingsStore.unwatchSetting(this.legacyCallsEnabledWatcherRef);
     }
 
-    private refreshMediaDevices = async (stream?: MediaStream): Promise<void> => {
+    private refreshMediaDevices = async (
+        stream?: MediaStream,
+    ): Promise<void> => {
         this.setState({
             mediaDevices: (await MediaDeviceHandler.getDevices()) ?? null,
-            [MediaDeviceKindEnum.AudioOutput]: mapDeviceKindToHandlerValue(MediaDeviceKindEnum.AudioOutput),
-            [MediaDeviceKindEnum.AudioInput]: mapDeviceKindToHandlerValue(MediaDeviceKindEnum.AudioInput),
-            [MediaDeviceKindEnum.VideoInput]: mapDeviceKindToHandlerValue(MediaDeviceKindEnum.VideoInput),
+            [MediaDeviceKindEnum.AudioOutput]: mapDeviceKindToHandlerValue(
+                MediaDeviceKindEnum.AudioOutput,
+            ),
+            [MediaDeviceKindEnum.AudioInput]: mapDeviceKindToHandlerValue(
+                MediaDeviceKindEnum.AudioInput,
+            ),
+            [MediaDeviceKindEnum.VideoInput]: mapDeviceKindToHandlerValue(
+                MediaDeviceKindEnum.VideoInput,
+            ),
         });
         if (stream) {
             // kill stream (after we've enumerated the devices, otherwise we'd get empty labels again)
@@ -113,7 +139,10 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         }
     };
 
-    private setDevice = async (deviceId: string, kind: MediaDeviceKindEnum): Promise<void> => {
+    private setDevice = async (
+        deviceId: string,
+        kind: MediaDeviceKindEnum,
+    ): Promise<void> => {
         // set state immediately so UI is responsive
         this.setState<any>({ [kind]: deviceId });
         try {
@@ -129,7 +158,10 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         this.context.setForceTURN(!p2p);
     };
 
-    private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {
+    private renderDeviceOptions(
+        devices: Array<MediaDeviceInfo>,
+        category: MediaDeviceKindEnum,
+    ): Array<JSX.Element> {
         return devices.map((d) => {
             return (
                 <option key={`${category}-${d.deviceId}`} value={d.deviceId}>
@@ -139,7 +171,10 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         });
     }
 
-    private renderDropdown(kind: MediaDeviceKindEnum, label: string): ReactNode {
+    private renderDropdown(
+        kind: MediaDeviceKindEnum,
+        label: string,
+    ): ReactNode {
         const devices = this.state.mediaDevices?.[kind].slice(0);
         if (!devices?.length) return null;
 
@@ -156,34 +191,50 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         );
     }
 
-    private onAutoGainChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
+    private onAutoGainChanged: ChangeEventHandler<HTMLInputElement> = async (
+        event,
+    ) => {
         const enable = event.target.checked;
         await MediaDeviceHandler.setAudioAutoGainControl(enable);
-        this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
+        this.setState({
+            audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl(),
+        });
     };
 
-    private onNoiseSuppressionChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
-        const enable = event.target.checked;
-        await MediaDeviceHandler.setAudioNoiseSuppression(enable);
-        this.setState({ audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression() });
-    };
+    private onNoiseSuppressionChanged: ChangeEventHandler<HTMLInputElement> =
+        async (event) => {
+            const enable = event.target.checked;
+            await MediaDeviceHandler.setAudioNoiseSuppression(enable);
+            this.setState({
+                audioNoiseSuppression:
+                    MediaDeviceHandler.getAudioNoiseSuppression(),
+            });
+        };
 
-    private onEchoCancellationChanged: ChangeEventHandler<HTMLInputElement> = async (event) => {
-        const enable = event.target.checked;
-        await MediaDeviceHandler.setAudioEchoCancellation(enable);
-        this.setState({ audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation() });
-    };
+    private onEchoCancellationChanged: ChangeEventHandler<HTMLInputElement> =
+        async (event) => {
+            const enable = event.target.checked;
+            await MediaDeviceHandler.setAudioEchoCancellation(enable);
+            this.setState({
+                audioEchoCancellation:
+                    MediaDeviceHandler.getAudioEchoCancellation(),
+            });
+        };
 
     public render(): JSX.Element {
         let requestButton: ReactNode | undefined;
         let speakerDropdown: ReactNode | undefined;
         let microphoneDropdown: ReactNode | undefined;
+        let microphoneRecordingDropdown: ReactNode | undefined;
         let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
             requestButton = (
                 <SettingsSubsection heading="Permissions">
                     <p>{_t("settings|voip|missing_permissions_prompt")}</p>
-                    <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
+                    <AccessibleButton
+                        onClick={this.requestMediaPermissions}
+                        kind="primary"
+                    >
                         {_t("settings|voip|request_permissions")}
                     </AccessibleButton>
                 </SettingsSubsection>
@@ -193,12 +244,18 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                 MediaDeviceKindEnum.AudioOutput,
                 _t("settings|voip|audio_output"),
             ) || <p>{_t("settings|voip|audio_output_empty")}</p>;
-            microphoneDropdown = this.renderDropdown(MediaDeviceKindEnum.AudioInput, _t("common|microphone")) || (
-                <p>{_t("settings|voip|audio_input_empty")}</p>
-            );
-            webcamDropdown = this.renderDropdown(MediaDeviceKindEnum.VideoInput, _t("common|camera")) || (
-                <p>{_t("settings|voip|video_input_empty")}</p>
-            );
+            microphoneRecordingDropdown = this.renderDropdown(
+                MediaDeviceKindEnum.AudioInput,
+                _t("common|microphone_audio_recording"),
+            ) || <p>{_t("settings|voip|audio_input_empty")}</p>;
+            microphoneDropdown = this.renderDropdown(
+                MediaDeviceKindEnum.AudioInput,
+                _t("common|microphone_legacy_call"),
+            ) || <p>{_t("settings|voip|audio_input_empty")}</p>;
+            webcamDropdown = this.renderDropdown(
+                MediaDeviceKindEnum.VideoInput,
+                _t("common|camera"),
+            ) || <p>{_t("settings|voip|video_input_empty")}</p>;
         }
 
         const elementCallEnabled = !SdkConfig.get("element_call").disable;
@@ -207,8 +264,10 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
 
         const legacySettingsComponent = (
             <>
-                {requestButton}
-                <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
+                <SettingsSubsection
+                    heading={_t("settings|voip|voice_section")}
+                    stretchContent
+                >
                     {speakerDropdown}
                     {microphoneDropdown}
                     <SettingsToggleInput
@@ -218,12 +277,20 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         onChange={this.onAutoGainChanged}
                     />
                 </SettingsSubsection>
-                <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
+                <SettingsSubsection
+                    heading={_t("settings|voip|video_section")}
+                    stretchContent
+                >
                     {webcamDropdown}
-                    <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag
+                        name="VideoView.flipVideoHorizontally"
+                        level={SettingLevel.ACCOUNT}
+                    />
                 </SettingsSubsection>
                 <SettingsSection heading={_t("common|advanced")}>
-                    <SettingsSubsection heading={_t("settings|voip|connection_section")}>
+                    <SettingsSubsection
+                        heading={_t("settings|voip|connection_section")}
+                    >
                         <SettingsFlag
                             name="webRtcAllowPeerToPeer"
                             level={SettingLevel.DEVICE}
@@ -231,9 +298,13 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         />
                         <SettingsFlag
                             name="fallbackICEServerAllowed"
-                            label={_t("settings|voip|enable_fallback_ice_server", {
-                                server: new URL(FALLBACK_ICE_SERVER).pathname,
-                            })}
+                            label={_t(
+                                "settings|voip|enable_fallback_ice_server",
+                                {
+                                    server: new URL(FALLBACK_ICE_SERVER)
+                                        .pathname,
+                                },
+                            )}
                             level={SettingLevel.DEVICE}
                             hideIfCannotSet
                         />
@@ -250,37 +321,63 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         evt.stopPropagation();
                     }}
                 >
+                    <SettingsSection
+                        heading={_t("settings|voip|voice_recording_section")}
+                    >
+                        {requestButton}
+                        {microphoneRecordingDropdown}
+                    </SettingsSection>
                     {elementCallEnabled && (
-                        <SettingsSection heading={_t("common|element_call_settings")}>
+                        <SettingsSection
+                            heading={_t("common|element_call_settings")}
+                        >
                             {_t("settings|voip|element_call_settings_desc")}
                         </SettingsSection>
                     )}
                     {allowLegacyCalls && (
-                        <SettingsSection heading={_t("common|legacy_voice_and_video_settings")}>
+                        <SettingsSection
+                            heading={_t(
+                                "common|legacy_voice_and_video_settings",
+                            )}
+                        >
                             {elementCallEnabled && (
                                 // allow configuring Legacy calls if EC is also avalibale (otherwise we always show the legacySettingsComponent)
-                                <SettingsFlag name="enableLegacyCallsVoip" level={SettingLevel.DEVICE} />
+                                <SettingsFlag
+                                    name="enableLegacyCallsVoip"
+                                    level={SettingLevel.DEVICE}
+                                />
                             )}
-                            {(!elementCallEnabled || showLegacySettings) && legacySettingsComponent}
+                            {(!elementCallEnabled || showLegacySettings) &&
+                                legacySettingsComponent}
                         </SettingsSection>
                     )}
                     {!allowLegacyCalls && !elementCallEnabled && (
                         // This is a broken configuration. We still try to handle this by prompting the user.
-                        <p>{_t("settings|voip|no_calling_option_available_misconfigured")}</p>
+                        <p>
+                            {_t(
+                                "settings|voip|no_calling_option_available_misconfigured",
+                            )}
+                        </p>
                     )}
                     {(allowLegacyCalls || elementCallEnabled) && (
-                        <SettingsSection heading={_t("settings|voip|voice_processing")}>
+                        <SettingsSection
+                            heading={_t("settings|voip|voice_processing")}
+                        >
                             <SettingsToggleInput
                                 name="voice-noise-suppression"
                                 label={_t("settings|voip|noise_suppression")}
-                                helpMessage={_t("settings|voip|noise_suppression_description")}
+                                helpMessage={_t(
+                                    "settings|voip|noise_suppression_description",
+                                )}
                                 checked={this.state.audioNoiseSuppression}
                                 onChange={this.onNoiseSuppressionChanged}
                             />
                             <SettingsToggleInput
                                 name="voice-echo-cancellation"
                                 label={_t("settings|voip|echo_cancellation")}
-                                helpMessage={_t("settings|voip|echo_cancellation_description")}
+                                helpMessage={_t(
+                                    "settings|voip|echo_cancellation_description",
+                                )}
                                 checked={this.state.audioEchoCancellation}
                                 onChange={this.onEchoCancellationChanged}
                             />

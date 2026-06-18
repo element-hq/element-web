@@ -515,7 +515,8 @@
         "message": "Message",
         "message_layout": "Message layout",
         "message_timestamp_invalid": "Invalid timestamp",
-        "microphone": "Microphone",
+        "microphone_audio_recording": "Microphone for voice messages.",
+        "microphone_legacy_call": "Microphone used for webRTC 1:1 calls. Will be synced with voice message input.",
         "model": "Model",
         "moderation_and_safety": "Moderation and safety",
         "modern": "Modern",
@@ -3059,6 +3060,7 @@
             "video_section": "Video settings",
             "voice_agc": "Automatically adjust the microphone volume",
             "voice_processing": "Voice processing",
+            "voice_recording_section": "Voice messages",
             "voice_section": "Voice settings"
         },
         "warn_quit": "Warn before quitting",
