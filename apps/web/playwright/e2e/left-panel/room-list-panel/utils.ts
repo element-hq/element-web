@@ -31,7 +31,7 @@ export function getRoomListHeader(page: Page): Locator {
  */
 export function getSectionHeader(page: Page, sectionName: string, isUnread = false): Locator {
     return getRoomList(page).getByRole("button", {
-        name: isUnread ? `Toggle ${sectionName} section with unread room(s)` : `Toggle ${sectionName} section`,
+        name: isUnread ? `Toggle ${sectionName} section with unread rooms` : `Toggle ${sectionName} section`,
     });
 }
 
