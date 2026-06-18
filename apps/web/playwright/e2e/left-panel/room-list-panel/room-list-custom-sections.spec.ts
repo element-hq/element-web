@@ -47,7 +47,7 @@ test.describe("Room list custom sections", () => {
         await rejectToast(page, "Notifications");
 
         // Close the release announcement about the new room list sections
-        await closeReleaseAnnouncement(page, "Organise with Sections");
+        await closeReleaseAnnouncement(page, "Introducing Sections");
 
         // Focus the user menu to avoid hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();

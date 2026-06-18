@@ -69,8 +69,8 @@
     },
     "release_announcement": {
         "room_list_section_close": "Ok",
-        "room_list_section_description": "Group your chats into sections to keep things structured and easy to navigate.",
-        "room_list_section_title": "Organise with Sections"
+        "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
+        "room_list_section_title": "Introducing Sections"
     },
     "room": {
         "context_menu": {

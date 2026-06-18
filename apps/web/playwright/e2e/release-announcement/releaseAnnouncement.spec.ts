@@ -33,7 +33,7 @@ test.describe("Release announcement", () => {
         "should display the room list section release announcement",
         { tag: "@screenshot" },
         async ({ page, app, room, util }) => {
-            const sectionName = "Organise with Sections";
+            const sectionName = "Introducing Sections";
             // The section release announcement should be displayed
             await util.assertReleaseAnnouncementIsVisible(sectionName);
             // Hide the section release announcement
