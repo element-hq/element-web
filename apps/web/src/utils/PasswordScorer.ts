@@ -13,7 +13,11 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 
-const baseOptions = {
+/**
+ * Base zxcvbn options
+ * @knipignore - exported for tests
+ */
+export const baseOptions = {
     dictionary: {
         ...zxcvbnCommonPackage.dictionary,
         ...zxcvbnEnPackage.dictionary,
