@@ -186,7 +186,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         [styles.dropTargetBottom]: hasBottomBorder,
                         [styles.dropTargetTop]: hasTopBorder,
                     })}
-                    onClick={vm.onClick}
+                    onClick={() => !isDragSource && vm.onClick()}
                     onKeyDown={(e) => {
                         if ((e.code === "ArrowRight" && !isExpanded) || (e.code === "ArrowLeft" && isExpanded)) {
                             e.preventDefault();
