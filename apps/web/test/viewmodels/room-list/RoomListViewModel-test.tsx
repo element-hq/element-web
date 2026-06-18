@@ -1188,14 +1188,21 @@ describe("RoomListViewModel", () => {
                     viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority);
                 });
 
-                it("should delegate changeSectionOrder to RoomListStoreV3.reorderSection", () => {
+                it("should delegate changeSectionOrder to RoomListStoreV3.reorderSection", async () => {
                     const reorderSpy = jest
                         .spyOn(RoomListStoreV3.instance, "reorderSection")
                         .mockResolvedValue(undefined);
 
-                    viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
+                    await viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
 
                     expect(reorderSpy).toHaveBeenCalledWith(DefaultTagID.Favourite, CHATS_TAG);
+                });
+
+                it("should scroll the moved section back into view after reordering", async () => {
+                    jest.spyOn(RoomListStoreV3.instance, "reorderSection").mockResolvedValue(undefined);
+
+                    await viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
+                    expect(viewModel.getSnapshot().roomListState.scrollToSectionTag).toBe(DefaultTagID.Favourite);
                 });
 
                 it("should collapse every section on drag start", () => {

@@ -668,8 +668,13 @@ export class RoomListViewModel
         }, 15 * 1000);
     }
 
-    public changeSectionOrder = (sourceTag: string, targetTag: string): void => {
-        RoomListStoreV3.instance.reorderSection(sourceTag, targetTag);
+    public changeSectionOrder = async (sourceTag: string, targetTag: string): Promise<void> => {
+        await RoomListStoreV3.instance.reorderSection(sourceTag, targetTag);
+        // Scroll to the section after it moved
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.updateRoomsMap(this.roomsResult);
+        this.updateRoomListData(false, null, sourceTag);
     };
 
     public onSectionDragStart = (): void => {
