@@ -65,7 +65,7 @@ export function TimelineOverlayButtons({ snapshot, vm, scrollNow }: TimelineOver
                         <button
                             className={styles.topUnreadBarMarkAsRead}
                             aria-label={_t("notifications|mark_all_read")}
-                            onClick={vm.onMarkAllAsRead}
+                            onClick={() => vm.onMarkAllAsRead()}
                             type="button"
                         >
                             <CloseIcon />
@@ -91,7 +91,7 @@ export function TimelineOverlayButtons({ snapshot, vm, scrollNow }: TimelineOver
                         <button
                             className={styles.belowUnreadBarMarkAsRead}
                             aria-label={_t("notifications|mark_all_read")}
-                            onClick={vm.onMarkAllAsRead}
+                            onClick={() => vm.onMarkAllAsRead()}
                             type="button"
                         >
                             <CloseIcon />

@@ -68,6 +68,7 @@
         "@dnd-kit/react": "^0.4.0",
         "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/spec": "^1.7.0",
+        "@tanstack/react-virtual": "^3.14.3",
         "@vector-im/compound-design-tokens": "catalog:",
         "classnames": "^2.5.1",
         "counterpart": "^0.18.6",

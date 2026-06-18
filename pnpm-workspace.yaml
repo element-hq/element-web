@@ -79,6 +79,7 @@ patchedDependencies:
   plist: patches/plist.patch
   "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
   react-virtuoso@4.18.5: patches/react-virtuoso@4.18.5.patch
+  '@tanstack/virtual-core@3.17.1': patches/@tanstack__virtual-core@3.17.1.patch
 
 peerDependencyRules:
   allowedVersions:

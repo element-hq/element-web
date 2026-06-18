@@ -1,0 +1,28 @@
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index 25cf5bc1aff674ecbc5b2a032fd036a91699870c..fa1ab340d456b0c483d25223006ca51ce381d3d7 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -295,7 +295,22 @@ class Virtualizer {
+         const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
+         if (didEdgeKeysChange) {
+           edgeKeysChanged = true;
+-          const item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
++          let item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
++          // element-web patch: skip anchor items the consumer marks invalid
++          // (e.g. transient loading spinners whose keys vanish on the next
++          // update — anchoring on them leaves the prepend un-compensated and the
++          // viewport jumps to the top). Walk to the nearest valid item; since
++          // such items only ever sit at the very edges, a single step away from
++          // an edge index reaches real content.
++          const isValidAnchorItem = merged.isValidAnchorItem;
++          if (item && isValidAnchorItem && !isValidAnchorItem(item)) {
++            const step = item.index === 0 ? 1 : -1;
++            let i = item.index;
++            while (i >= 0 && i < measurements.length && measurements[i] && !isValidAnchorItem(measurements[i])) {
++              i += step;
++            }
++            item = measurements[i] ?? item;
++          }
+           if (item) {
+             anchor = [item.key, this.getScrollOffset() - item.start];
+           }

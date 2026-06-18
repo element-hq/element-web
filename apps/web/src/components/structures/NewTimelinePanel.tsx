@@ -6,10 +6,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, ReadMarker } from "@element-hq/web-shared-components";
+import {
+    TimelineViewTanstack,
+    useCreateAutoDisposedViewModel,
+    useViewModel,
+    type TimelineItem,
+    DateSeparatorView,
+    type DateSeparatorViewSnapshot,
+    ReadMarker,
+} from "@element-hq/web-shared-components";
 import { InlineSpinner } from "@vector-im/compound-web";
-import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
+import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
@@ -63,6 +71,16 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
         vm.start();
         // Disposal is handled by useCreateAutoDisposedViewModel; no cleanup needed here.
     }, [vm]);
+
+    useEffect(() => {
+        // Warm the highlight.js chunk. CodeBlock applies syntax highlighting via a
+        // dynamic import inside a ref callback; with the module already in the
+        // import cache that `await` resolves in a microtask and the innerHTML swap
+        // lands before first paint. Without the warm-up the import resolves a
+        // frame or more later, the <pre> re-wraps after the row has been measured,
+        // and a code block above the viewport jumps the scroll position.
+        void import("highlight.js");
+    }, []);
 
     const snapshot = useViewModel(vm);
     const { highlightedEventId: highlightedId } = snapshot;
@@ -118,7 +136,7 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
             className="mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
             style={{ height: "100%" }}
         >
-            <TimelineView vm={vm} renderItem={renderItem} />
+            <TimelineViewTanstack vm={vm} renderItem={renderItem} />
         </div>
     );
 }
@@ -126,6 +144,6 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
 /**
  * Look up a MatrixEvent by ID from the room's timelines.
  */
-function findEventById(room: Room, eventId: string): import("matrix-js-sdk/src/matrix").MatrixEvent | undefined {
+function findEventById(room: Room, eventId: string): MatrixEvent | undefined {
     return room.findEventById(eventId) ?? undefined;
 }
