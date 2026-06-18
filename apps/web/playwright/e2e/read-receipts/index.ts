@@ -557,7 +557,7 @@ class Helpers {
      */
     async assertReadThread(rootMessage: string) {
         const tile = await this.getThreadListTile(rootMessage);
-        await expect(tile.locator(".mx_NotificationBadge")).not.toBeVisible();
+        await expect(tile.getByTestId("notification-badge")).not.toBeVisible();
     }
 
     /**
@@ -566,7 +566,7 @@ class Helpers {
      */
     async assertUnreadThread(rootMessage: string) {
         const tile = await this.getThreadListTile(rootMessage);
-        await expect(tile.locator(".mx_NotificationBadge")).toBeVisible();
+        await expect(tile.getByTestId("notification-badge")).toBeVisible();
     }
 
     /**

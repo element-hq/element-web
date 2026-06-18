@@ -6,11 +6,14 @@
  */
 
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { RoomListSectionHeaderViewModel } from "../../../src/viewmodels/room-list/RoomListSectionHeaderViewModel";
 import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
+import { CallStore } from "../../../src/stores/CallStore";
+import { type Call } from "../../../src/models/Call";
 import { createTestClient, mkRoom } from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
@@ -308,6 +311,229 @@ describe("RoomListSectionHeaderViewModel", () => {
             notificationState.emit(NotificationStateEvents.Update);
 
             expect(vm.getSnapshot().isUnread).toBe(true);
+        });
+
+        describe("notification decoration", () => {
+            it("should expose an empty decoration when no room has notifications", () => {
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: false,
+                        isMention: false,
+                        isNotification: false,
+                        isUnsentMessage: false,
+                        isActivityNotification: false,
+                        count: 0,
+                    }),
+                );
+            });
+
+            it("should not show the activity dot for an activity-only section", () => {
+                jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
+                jest.spyOn(notificationState, "isActivityNotification", "get").mockReturnValue(true);
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                // Bold, but no badge to display
+                expect(vm.getSnapshot().isUnread).toBe(true);
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: false,
+                        isActivityNotification: false,
+                    }),
+                );
+            });
+
+            it("should merge mentions, notifications and counts across rooms", () => {
+                const room2 = mkRoom(matrixClient, "!room2:server");
+                const notificationState2 = new RoomNotificationState(room2, false);
+
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState")
+                    .mockReturnValueOnce(notificationState)
+                    .mockReturnValue(notificationState2);
+
+                jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
+                jest.spyOn(notificationState, "count", "get").mockReturnValue(3);
+                jest.spyOn(notificationState, "hasUnreadCount", "get").mockReturnValue(true);
+
+                jest.spyOn(notificationState2, "isNotification", "get").mockReturnValue(true);
+                jest.spyOn(notificationState2, "count", "get").mockReturnValue(9);
+                jest.spyOn(notificationState2, "hasUnreadCount", "get").mockReturnValue(true);
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room, room2]);
+
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: true,
+                        isMention: true,
+                        isNotification: true,
+                        hasUnreadCount: true,
+                        count: 12,
+                        isActivityNotification: false,
+                    }),
+                );
+            });
+
+            it("should surface an unsent message from any room", () => {
+                jest.spyOn(notificationState, "isUnsentMessage", "get").mockReturnValue(true);
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: true,
+                        isUnsentMessage: true,
+                    }),
+                );
+            });
+
+            it("should aggregate an invitation from any room", () => {
+                jest.spyOn(notificationState, "invited", "get").mockReturnValue(true);
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: true,
+                        invited: true,
+                    }),
+                );
+            });
+
+            it("should aggregate an active call, preferring video over voice", () => {
+                const room2 = mkRoom(matrixClient, "!room2:server");
+                const notificationState2 = new RoomNotificationState(room2, false);
+
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState")
+                    .mockReturnValueOnce(notificationState)
+                    .mockReturnValue(notificationState2);
+
+                const voiceCall = {
+                    participants: new Map([["@a:server", new Set(["DEVICE"])]]),
+                    callType: CallType.Voice,
+                    on: jest.fn(),
+                    off: jest.fn(),
+                } as unknown as Call;
+                const videoCall = {
+                    participants: new Map([["@b:server", new Set(["DEVICE"])]]),
+                    callType: CallType.Video,
+                    on: jest.fn(),
+                    off: jest.fn(),
+                } as unknown as Call;
+                jest.spyOn(CallStore.instance, "getCall").mockImplementation((roomId) =>
+                    roomId === room.roomId ? voiceCall : videoCall,
+                );
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room, room2]);
+
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: true,
+                        callType: "video",
+                    }),
+                );
+            });
+
+            it("should ignore a call without participants", () => {
+                const call = {
+                    participants: new Map(),
+                    callType: CallType.Video,
+                    on: jest.fn(),
+                    off: jest.fn(),
+                } as unknown as Call;
+                jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                expect(vm.getSnapshot().notification?.callType).toBeUndefined();
+            });
+
+            it("should show a notification without a count badge for a mark-as-unread room", () => {
+                // "Mark as unread" sets level=Notification with count=0 (no real notification events).
+                jest.spyOn(notificationState, "hasAnyNotificationOrActivity", "get").mockReturnValue(true);
+                jest.spyOn(notificationState, "isNotification", "get").mockReturnValue(true);
+                jest.spyOn(notificationState, "count", "get").mockReturnValue(0);
+                jest.spyOn(notificationState, "hasUnreadCount", "get").mockReturnValue(false);
+
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                expect(vm.getSnapshot().isUnread).toBe(true);
+                expect(vm.getSnapshot().notification).toEqual(
+                    expect.objectContaining({
+                        hasAnyNotificationOrActivity: true,
+                        isNotification: true,
+                        hasUnreadCount: false,
+                        // The || 1 fallback gives a count of 1 even though no real count exists
+                        count: 1,
+                    }),
+                );
+            });
+
+            it("should update the decoration when a notification state update event fires", () => {
+                const vm = new RoomListSectionHeaderViewModel({
+                    tag: "m.favourite",
+                    title: "Favourites",
+                    spaceId: "!space:server",
+                    onToggleExpanded,
+                });
+                vm.setRooms([room]);
+
+                expect(vm.getSnapshot().notification?.isMention).toBe(false);
+
+                jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
+                notificationState.emit(NotificationStateEvents.Update);
+
+                expect(vm.getSnapshot().notification?.isMention).toBe(true);
+            });
         });
 
         it("should unsubscribe from all notification states on dispose", () => {

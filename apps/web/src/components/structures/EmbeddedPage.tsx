@@ -19,6 +19,9 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions.ts";
+import { sanitizedHtmlNode } from "../../HtmlUtils.tsx";
+import { sanitizeHtmlParams, transformTags } from "../../Linkify.ts";
+import { objectExcluding } from "../../utils/objects.ts";
 
 interface IProps {
     // URL to request embedded page content from
@@ -126,7 +129,15 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
             [`${className}_loggedIn`]: !!client,
         });
 
-        const content = <div className={`${className}_body`} dangerouslySetInnerHTML={{ __html: this.state.page }} />;
+        const content = sanitizedHtmlNode(this.state.page, `${className}_body`, {
+            ...sanitizeHtmlParams,
+            transformTags: objectExcluding(transformTags, [
+                // Disable the transformer for `img` as it only allows mxc resources
+                "img",
+                // Disable the default transformer as it forbids inline styles
+                "*",
+            ]),
+        });
 
         if (this.props.scrollbar) {
             return <AutoHideScrollbar className={classes}>{content}</AutoHideScrollbar>;

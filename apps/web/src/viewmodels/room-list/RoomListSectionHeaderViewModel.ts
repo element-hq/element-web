@@ -6,8 +6,10 @@
  */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import {
     BaseViewModel,
+    type NotificationDecorationData,
     type RoomListSectionHeaderActions,
     type RoomListSectionHeaderViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -19,6 +21,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import PosthogTrackers from "../../PosthogTrackers";
+import { CallStore, CallStoreEvent } from "../../stores/CallStore";
+import { type Call, CallEvent } from "../../models/Call";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -45,6 +49,11 @@ export class RoomListSectionHeaderViewModel
      */
     private readonly expandedBySpace = new Map<string, boolean>();
 
+    /**
+     * The calls of the rooms currently in this section that we are listening to, used to aggregate the call decoration.
+     */
+    private currentCalls = new Set<Call>();
+
     public constructor(props: RoomListSectionHeaderViewModelProps) {
         const isDefaultSection = isDefaultSectionTag(props.tag);
         super(props, {
@@ -58,6 +67,9 @@ export class RoomListSectionHeaderViewModel
             this.onCustomSectionDataChange(),
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(sectionWatherRef));
+
+        // Recompute the decoration when a call starts or ends in any room
+        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChanged);
     }
 
     public onClick = (): void => {
@@ -107,7 +119,7 @@ export class RoomListSectionHeaderViewModel
         // Unsubscribe from rooms no longer in the section
         for (const state of this.roomNotificationStates) {
             if (!newStates.has(state)) {
-                state.off(NotificationStateEvents.Update, this.updateUnreadState);
+                state.off(NotificationStateEvents.Update, this.updateNotificationState);
             }
         }
 
@@ -115,27 +127,112 @@ export class RoomListSectionHeaderViewModel
         for (const state of newStates) {
             if (!this.roomNotificationStates.has(state)) {
                 // We don't use trackListener because we don't want to grow the disposables indefinitely as rooms are added and removed from the section
-                state.on(NotificationStateEvents.Update, this.updateUnreadState);
+                state.on(NotificationStateEvents.Update, this.updateNotificationState);
             }
         }
 
         this.roomNotificationStates = newStates;
-        this.updateUnreadState();
+        this.updateCallListeners();
+        this.updateNotificationState();
     }
 
     /**
-     * Update the unread state of the section header based on the notification states of the tracked rooms.
+     * Subscribe to participant/type changes of the calls in the section's rooms, and unsubscribe
+     * from calls that are no longer present. Mirrors the call tracking done per room list item.
      */
-    private updateUnreadState = (): void => {
-        const isUnread = [...this.roomNotificationStates].some((state) => state.hasAnyNotificationOrActivity);
-        this.snapshot.merge({ isUnread });
+    private updateCallListeners(): void {
+        const newCalls = new Set<Call>();
+        for (const state of this.roomNotificationStates) {
+            const call = state.room && CallStore.instance.getCall(state.room.roomId);
+            if (call) newCalls.add(call);
+        }
+
+        // Unsubscribe from calls no longer present
+        for (const call of this.currentCalls) {
+            if (!newCalls.has(call)) {
+                call.off(CallEvent.Participants, this.updateNotificationState);
+                call.off(CallEvent.CallTypeChanged, this.updateNotificationState);
+            }
+        }
+
+        // Subscribe to newly added calls
+        for (const call of newCalls) {
+            if (!this.currentCalls.has(call)) {
+                call.on(CallEvent.Participants, this.updateNotificationState);
+                call.on(CallEvent.CallTypeChanged, this.updateNotificationState);
+            }
+        }
+
+        this.currentCalls = newCalls;
+    }
+
+    private onCallChanged = (): void => {
+        this.updateCallListeners();
+        this.updateNotificationState();
+    };
+
+    /**
+     * Update the section header from the notification states of the tracked rooms.
+     * Computes both the unread (bold) state and a merged notification decoration that aggregates
+     * the rooms' notifications. The activity "dot" is intentionally excluded from the decoration.
+     */
+    private updateNotificationState = (): void => {
+        let isUnread = false;
+        let isMention = false;
+        let isNotification = false;
+        let isUnsentMessage = false;
+        let hasUnreadCount = false;
+        let invited = false;
+        let count = 0;
+        let callType: "video" | "voice" | undefined = undefined;
+
+        for (const state of this.roomNotificationStates) {
+            if (state.hasAnyNotificationOrActivity) isUnread = true;
+            if (state.isMention) isMention = true;
+            if (state.isNotification) isNotification = true;
+            if (state.isUnsentMessage) isUnsentMessage = true;
+            if (state.hasUnreadCount) hasUnreadCount = true;
+            if (state.invited) invited = true;
+            // Mention, notification, Mark as unread are aggregated
+            if (state.isMention || state.isNotification) count += state.count || 1;
+
+            // Aggregate active calls, preferring a video call over a voice call
+            const call = state.room && CallStore.instance.getCall(state.room.roomId);
+            if (call && call.participants.size > 0) {
+                if (call.callType === CallType.Video) callType = "video";
+                else if (call.callType === CallType.Voice && callType !== "video") callType = "voice";
+            }
+        }
+
+        const notification: NotificationDecorationData = {
+            // Drives the decoration's early-return: an activity-only section stays bold but shows no badge
+            hasAnyNotificationOrActivity:
+                isMention || isNotification || isUnsentMessage || invited || Boolean(callType),
+            isUnsentMessage,
+            isMention,
+            isNotification,
+            hasUnreadCount,
+            count,
+            invited,
+            callType,
+            // The activity dot and muted bell are intentionally not aggregated onto the section header
+            isActivityNotification: false,
+            muted: false,
+        };
+
+        this.snapshot.merge({ isUnread, notification });
     };
 
     public dispose(): void {
         for (const state of this.roomNotificationStates) {
-            state.off(NotificationStateEvents.Update, this.updateUnreadState);
+            state.off(NotificationStateEvents.Update, this.updateNotificationState);
         }
         this.roomNotificationStates.clear();
+        for (const call of this.currentCalls) {
+            call.off(CallEvent.Participants, this.updateNotificationState);
+            call.off(CallEvent.CallTypeChanged, this.updateNotificationState);
+        }
+        this.currentCalls.clear();
         super.dispose();
     }
 

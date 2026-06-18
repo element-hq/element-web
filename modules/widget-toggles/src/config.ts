@@ -22,6 +22,6 @@ export const CONFIG_KEY = "io.element.element-web-modules.widget-toggles";
 
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
-        [CONFIG_KEY]: input<WidgetTogglesConfig>;
+        [CONFIG_KEY]?: input<WidgetTogglesConfig>;
     }
 }

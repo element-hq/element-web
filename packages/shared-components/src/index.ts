@@ -16,6 +16,7 @@ export * from "./room/composer/Banner";
 export * from "./room/composer/UploadButton";
 export * from "./crypto/SasEmoji";
 export * from "./menus/UserMenu";
+export * from "./notifications/NotificationBadgeView";
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/EventPresentation";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
@@ -87,5 +88,6 @@ export * from "./core/utils/numbers";
 export * from "./core/utils/FormattingUtils";
 export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
+export type * from "./core/userStatus.ts";
 // MVVM
 export * from "./core/viewmodel";

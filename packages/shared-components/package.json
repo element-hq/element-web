@@ -47,7 +47,7 @@
     "scripts": {
         "i18n": "matrix-gen-i18n src && pnpm i18n:sort && pnpm i18n:lint",
         "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
-        "i18n:lint": "matrix-i18n-lint && prettier --log-level=silent --write src/i18n/strings/ --ignore-path /dev/null",
+        "i18n:lint": "matrix-i18n-lint && oxfmt src/i18n/strings/",
         "test:unit": "nx test:unit",
         "test:storybook": "nx test:storybook",
         "test:storybook:update": "nx test:storybook:update",
@@ -63,9 +63,9 @@
         "lint:types": "nx lint:types"
     },
     "dependencies": {
-        "@dnd-kit/abstract": "^0.4.0",
-        "@dnd-kit/dom": "^0.4.0",
-        "@dnd-kit/react": "^0.4.0",
+        "@dnd-kit/abstract": "^0.5.0",
+        "@dnd-kit/dom": "^0.5.0",
+        "@dnd-kit/react": "^0.5.0",
         "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "catalog:",
@@ -109,10 +109,10 @@
         "@typescript-eslint/eslint-plugin": "^8.53.1",
         "@typescript-eslint/parser": "^8.53.1",
         "@vector-im/compound-web": "catalog:",
+        "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
         "eslint": "8",
         "eslint-config-google": "^0.14.0",
-        "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-deprecate": "^0.9.0",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -122,7 +122,7 @@
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-storybook": "^10.0.7",
         "eslint-plugin-unicorn": "^56.0.0",
-        "prettier": "^3.6.2",
+        "oxfmt": "^0.54.0",
         "storybook": "^10.0.7",
         "storybook-addon-vis": "^4.0.0",
         "typedoc": "^0.28.16",
@@ -139,6 +139,7 @@
     },
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
+        "react-dom": "catalog:",
         "react": "catalog:"
     }
 }

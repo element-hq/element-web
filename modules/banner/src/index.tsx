@@ -23,13 +23,19 @@ class BannerModule implements Module {
     public constructor(private api: Api) {}
 
     public async load(): Promise<void> {
+        const rawConfig = this.api.config.get(CONFIG_KEY);
+        if (!rawConfig) {
+            console.debug(`No configuration found for module "${ModuleName}", skipping initialization.`);
+            return;
+        }
+
         document.adoptedStyleSheets.push(compound);
         document.adoptedStyleSheets.push(style);
 
         this.api.i18n.register(Translations);
 
         try {
-            this.config = ModuleConfig.parse(this.api.config.get(CONFIG_KEY));
+            this.config = ModuleConfig.parse(rawConfig);
         } catch (e) {
             console.error("Failed to init module", e);
             throw new Error(`Errors in module configuration for "${ModuleName}"`);

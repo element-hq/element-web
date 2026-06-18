@@ -38,7 +38,7 @@ adjacent to.
 
 Unless otherwise specified, the following applies to all code:
 
-1. Files must be formatted with Prettier.
+1. Files must be formatted with Oxfmt.
 2. 120 character limit per line. Match existing code in the file if it is using a lower guide.
 3. A tab/indentation is 4 spaces.
 4. Newlines are Unix.
