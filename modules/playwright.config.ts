@@ -45,7 +45,7 @@ playwright project.
 const projects: Project<Options>[] = [];
 
 // Get all the directories that hold playwright tests
-const moduleTestDirectories = globSync("*/e2e", { cwd: __dirname });
+const moduleTestDirectories = globSync("*/e2e", { cwd: __dirname }).map((d) => path.join(__dirname, d));
 
 // Process each directory
 for (const testDirectory of moduleTestDirectories) {

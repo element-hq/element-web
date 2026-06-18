@@ -13,6 +13,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CheckIcon, ErrorIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -22,7 +23,6 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
@@ -142,7 +142,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         [cli, msc3946ProcessDynamicPredecessor],
     );
 
-    const scrollRef = useRef<AutoHideScrollbar<"div">>(null);
+    const scrollRef = useRef<HTMLDivElement | null>(null);
     const [scrollState, setScrollState] = useState<IScrollState>({
         // these are estimates which update as soon as it mounts
         scrollTop: 0,
@@ -300,7 +300,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     }
 
     const onScroll = (): void => {
-        const body = scrollRef.current?.containerRef.current;
+        const body = scrollRef.current;
         if (!body) return;
         setScrollState({
             scrollTop: body.scrollTop,
@@ -309,6 +309,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     };
 
     const wrappedRef = (body: HTMLDivElement | null): void => {
+        scrollRef.current = body;
         if (!body) return;
         setScrollState({
             scrollTop: body.scrollTop,
@@ -329,10 +330,9 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 autoFocus={true}
             />
             <AutoHideScrollbar
-                className="mx_AddExistingToSpace_content"
+                className="mx_AutoHideScrollbar mx_AddExistingToSpace_content"
                 onScroll={onScroll}
                 wrappedRef={wrappedRef}
-                ref={scrollRef}
             >
                 {rooms.length > 0 && roomsRenderer
                     ? roomsRenderer(rooms, selectedToAdd, roomsScrollState, onChange)

@@ -11,8 +11,8 @@ import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { _t } from "../../../languageHandler";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { backLabelForPhase } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -100,7 +100,7 @@ const BaseCard: React.FC<IProps> = ({
     }
 
     if (!withoutScrollContainer) {
-        children = <AutoHideScrollbar>{children}</AutoHideScrollbar>;
+        children = <AutoHideScrollbar className="mx_AutoHideScrollbar">{children}</AutoHideScrollbar>;
     }
 
     const shouldRenderHeader = header || !hideHeaderButtons;

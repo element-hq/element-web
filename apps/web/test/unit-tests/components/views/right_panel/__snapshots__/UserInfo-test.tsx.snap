@@ -46,7 +46,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
@@ -348,7 +348,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div

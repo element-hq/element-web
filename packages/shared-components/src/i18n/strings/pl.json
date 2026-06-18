@@ -152,7 +152,8 @@
             "low_priority": "Niski priorytet",
             "mark_read": "Oznacz jako przeczytane",
             "mark_unread": "Oznacz jako nieprzeczytane",
-            "move_to_section": "Przenieś do"
+            "move_to_section": "Przenieś do",
+            "remove_from_section": "Usuń z sekcji"
         },
         "notification_options": "Opcje powiadomień",
         "open_space_menu": "Otwórz menu przestrzeni",

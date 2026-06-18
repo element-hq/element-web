@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Effacer",
             "create_an_account": "Créer un compte",
             "got_an_account": "Tu as un compte ?",
             "manage_account": "Gérer le compte",
@@ -150,7 +151,8 @@
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
             "mark_unread": "Marquer comme non lu",
-            "move_to_section": "Déplacer vers"
+            "move_to_section": "Déplacer vers",
+            "remove_from_section": "Supprimer de la section"
         },
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",

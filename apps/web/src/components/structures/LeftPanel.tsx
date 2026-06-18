@@ -329,7 +329,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <IndicatorScrollbar
                     role="navigation"
                     aria-label={_t("a11y|recent_rooms")}
-                    className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
+                    className="mx_LeftPanel_breadcrumbsContainer"
                     verticalScrollsHorizontally={true}
                 >
                     <RoomBreadcrumbs />

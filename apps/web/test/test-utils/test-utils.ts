@@ -360,6 +360,7 @@ export function createTestClient(): MatrixClient {
         deleteRoomTag: jest.fn().mockResolvedValue({}),
         setRoomTag: jest.fn().mockResolvedValue({}),
         getExtendedProfileProperty: jest.fn(),
+        setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -648,8 +649,8 @@ export function mkMessage({
         ...opts,
         type: "m.room.message",
         content: {
-            msgtype: "m.text",
-            body: message,
+            "msgtype": "m.text",
+            "body": message,
             ...(format && formattedMsg ? { format, formatted_body: formattedMsg } : {}),
             ["m.relates_to"]: relatesTo,
         },

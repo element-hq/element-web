@@ -42,7 +42,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ["playwright/**/*.ts", "modules/*/e2e/**/*.{ts,tsx}"],
+            files: ["playwright/**/*.ts", "*/e2e/**/*.{ts,tsx}", "*/src/**/*.test.{ts,tsx}"],
             rules: {
                 // This is necessary for Playwright fixtures
                 "no-empty-pattern": "off",
@@ -55,7 +55,7 @@ module.exports = {
     ],
     settings: {
         react: {
-            version: "detect",
+            version: "19",
         },
     },
 };

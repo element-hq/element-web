@@ -24,6 +24,7 @@ const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
         openHomePage: fn(),
         openSecurity: fn(),
         openSettings: fn(),
+        clearStatus: fn(),
     });
     return <UserMenuView vm={vm} />;
 };
@@ -67,6 +68,21 @@ export const LongerName: Story = {
     },
 };
 
+// Rules needed for any story where the menu is open, for the reasons
+// given in each rule.
+const MENU_OPEN_A11Y_RULES = [
+    {
+        // Menu contains a header which is invalid
+        id: "aria-required-children",
+        enabled: false,
+    },
+    {
+        // Menu pops open by default
+        id: "aria-hidden-focus",
+        enabled: false,
+    },
+];
+
 export const Open: Story = {
     args: {
         open: true,
@@ -83,18 +99,7 @@ export const Open: Story = {
              * to learn more.
              */
             config: {
-                rules: [
-                    {
-                        // Menu contains a header which is invalid
-                        id: "aria-required-children",
-                        enabled: false,
-                    },
-                    {
-                        // Menu pops open by default
-                        id: "aria-hidden-focus",
-                        enabled: false,
-                    },
-                ],
+                rules: MENU_OPEN_A11Y_RULES,
             },
         },
     },
@@ -150,18 +155,7 @@ export const GuestOpen: Story = {
              * to learn more.
              */
             config: {
-                rules: [
-                    {
-                        // Menu contains a header which is invalid
-                        id: "aria-required-children",
-                        enabled: false,
-                    },
-                    {
-                        // Menu pops open by default
-                        id: "aria-hidden-focus",
-                        enabled: false,
-                    },
-                ],
+                rules: MENU_OPEN_A11Y_RULES,
             },
         },
     },
@@ -170,26 +164,28 @@ export const GuestOpen: Story = {
     tags: ["!dev", "!autodocs"],
 };
 
-export const WithStatusEmoji: Story = {
+export const WithStatus: Story = {
     args: {
-        statusEmoji: "🐹",
+        userStatus: {
+            emoji: "🐹",
+            text: "On the wheel",
+        },
     },
 };
 
-export const AllOptions: Story = {
+export const WithStatusOpen: Story = {
     args: {
-        displayName: "Alice",
-        userId: "@alice:example.org",
-        manageAccountHref: "#",
-        showAvatar: true,
-        actions: {
-            createAccount: true,
-            signIn: true,
-            linkNewDevice: true,
-            openSecurity: true,
-            openHomePage: true,
-            openFeedback: true,
-            openSettings: true,
-        } satisfies Record<keyof UserMenuViewSnapshot["actions"], true>,
+        open: true,
+        userStatus: {
+            emoji: "🐹",
+            text: "On the wheel",
+        },
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
+            },
+        },
     },
 };

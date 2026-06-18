@@ -31,10 +31,9 @@ const config: Config = {
     moduleNameMapper: {
         // Support CSS module
         "\\.(module.css)$": "identity-obj-proxy",
-        "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
+        "\\.(css|scss|pcss)(\\?raw)?$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
-        "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
         "^matrix-js-sdk(.*)$": "<rootDir>/node_modules/matrix-js-sdk$1",
         "^react$": "<rootDir>/node_modules/react",
         "^react-dom$": "<rootDir>/node_modules/react-dom",
@@ -43,7 +42,7 @@ const config: Config = {
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
         "context-filter-polyfill": "<rootDir>/__mocks__/empty.js",
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
-        "^!!raw-loader!.*": "jest-raw-loader",
+        ".*\\?raw": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "@vector-im/compound-web": "<rootDir>/node_modules/@vector-im/compound-web",
     },
@@ -52,16 +51,19 @@ const config: Config = {
     ],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
-        "<rootDir>/packages/**/*.{js,ts,tsx}",
         // getSessionLock is piped into a different JS context via stringification, and the coverage functionality is
         // not available in that contest. So, turn off coverage instrumentation for it.
         "!<rootDir>/src/utils/SessionLock.ts",
         // Coverage chokes on type definition files
         "!<rootDir>/src/**/*.d.ts",
+        // Ignore vitest tests
+        "!<rootDir>/src/**/*.test.{ts,tsx}",
+        "!<rootDir>/src/test/**",
     ],
-    coverageReporters: ["text-summary", "lcov"],
+    coverageReporters: ["text-summary", ["lcov", { projectRoot: "../../" }]],
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
+    workerIdleMemoryLimit: "512MB",
 };
 
 // if we're running under GHA, enable relevant reporters

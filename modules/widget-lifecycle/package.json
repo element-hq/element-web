@@ -13,7 +13,6 @@
     "devDependencies": {
         "@element-hq/element-web-module-api": "workspace:*",
         "@types/node": "^22.10.7",
-        "@vitest/coverage-v8": "catalog:",
         "typescript": "catalog:",
         "vite": "catalog:",
         "vitest": "catalog:"

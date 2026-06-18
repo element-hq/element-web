@@ -41,10 +41,27 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
         return <RoomListItemView {...rest} {...getItemAccessibleProps("listbox", roomIndex, roomCount)} />;
     }
 
+    const isFirstInSection = roomIndexInSection === 0;
     return (
         <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>
             <div role="gridcell" aria-selected={rest.isSelected}>
-                <DraggableWrapper {...rest} />
+                <DraggableWrapper
+                    {...rest}
+                    onKeyDown={(e) => {
+                        if (e.code === "ArrowLeft" && isFirstInSection) {
+                            // Move focus to the section header
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.dispatchEvent(
+                                new KeyboardEvent("keydown", {
+                                    code: "ArrowUp",
+                                    key: "ArrowUp",
+                                    bubbles: true,
+                                }),
+                            );
+                        }
+                    }}
+                />
             </div>
         </div>
     );

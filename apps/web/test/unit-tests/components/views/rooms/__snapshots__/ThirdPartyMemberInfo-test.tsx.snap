@@ -46,7 +46,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div
@@ -121,7 +121,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
       </button>
     </div>
     <div
-      class="mx_AutoHideScrollbar"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar"
       tabindex="-1"
     >
       <div

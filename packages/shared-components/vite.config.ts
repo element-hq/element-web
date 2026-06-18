@@ -11,6 +11,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin, type Plugin } from "vite";
 import dts from "unplugin-dts/vite";
+import react from "@vitejs/plugin-react";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const cssLayerOrder = "@layer compound-tokens, compound-web, shared-components, app-web;";
@@ -92,6 +93,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        react(),
         layerCssAssets(),
         dts({
             bundleTypes: true,
