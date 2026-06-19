@@ -242,18 +242,12 @@ export function useRoomListAccessibilityPlugin(
                 const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
                 if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
-                    const variables = {
-                        source: sourceName,
-                        target: targetTitle,
-                    };
+
                     return droppedBefore
-                        ? _t("room_list|a11y|drag_over_before", variables)
-                        : _t("room_list|a11y|drag_over_after", variables);
+                        ? _t("room_list|a11y|drag_over_before", { source: sourceName, target: targetTitle })
+                        : _t("room_list|a11y|drag_over_after", { source: sourceName, target: targetTitle });
                 }
-                return _t("room_list|a11y|drag_over", {
-                    source: sourceName,
-                    target: targetTitle,
-                });
+                return _t("room_list|a11y|drag_over", { source: sourceName, target: targetTitle });
             },
             dragend: ({ operation: { source, target }, canceled }: A11yData) => {
                 if (!source || !target) return;
@@ -263,18 +257,11 @@ export function useRoomListAccessibilityPlugin(
                 const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
                 if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
-                    const variables = {
-                        source: sourceName,
-                        target: targetTitle,
-                    };
                     return droppedBefore
-                        ? _t("room_list|a11y|drag_end_before", variables)
-                        : _t("room_list|a11y|drag_end_after", variables);
+                        ? _t("room_list|a11y|drag_end_before", { source: sourceName, target: targetTitle })
+                        : _t("room_list|a11y|drag_end_after", { source: sourceName, target: targetTitle });
                 }
-                return _t("room_list|a11y|drag_end", {
-                    source: sourceName,
-                    target: targetTitle,
-                });
+                return _t("room_list|a11y|drag_end", { source: sourceName, target: targetTitle });
             },
         }),
         [vm, _t, getDragSourceName],
