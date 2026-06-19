@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
+
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { checkRetentionInRoom } from "./retention.spec.ts";
 import { test } from "../../element-web-test";
-import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 const ONE_MINUTE_STR = "60s";
 
