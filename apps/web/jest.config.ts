@@ -46,6 +46,7 @@ const config: Config = {
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "@vector-im/compound-web": "<rootDir>/node_modules/@vector-im/compound-web",
         "^vitest$": "<rootDir>/__mocks__/empty.js",
+        "jest-mock-vitest-adapter": "<rootDir>/test/setup/adapter.ts",
         "test-utils-rtl": "<rootDir>/test/test-utils/jest-matrix-react.tsx",
     },
     transformIgnorePatterns: [

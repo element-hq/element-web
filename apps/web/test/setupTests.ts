@@ -10,7 +10,7 @@ import { env } from "process";
 import "@testing-library/jest-dom";
 import "blob-polyfill";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
-import { mocked } from "jest-mock";
+import { mocked } from "jest-mock-vitest-adapter";
 
 import { PredictableRandom } from "./test-utils/predictableRandom";
 import * as rageshake from "../src/rageshake/rageshake";

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { vi } from "vitest";
-import { mocked } from "jest-mock";
+import { mocked as jestMocked } from "jest-mock";
 
 const isJest = typeof jest !== "undefined";
 
@@ -16,9 +16,10 @@ const isJest = typeof jest !== "undefined";
 const adapter = {
     fn: isJest ? (jest.fn as unknown as typeof vi.fn) : vi.fn,
     spyOn: isJest ? (jest.spyOn as unknown as typeof vi.spyOn) : vi.spyOn,
-    mocked: isJest ? (mocked as typeof vi.mocked) : vi.mocked,
+    mocked: isJest ? (jestMocked as typeof vi.mocked) : vi.mocked,
 } as Pick<typeof vi, "fn" | "spyOn" | "mocked">;
 
-export { adapter as vi };
+const mocked = adapter.mocked;
+export { adapter as vi, mocked };
 
-export { type MethodLikeKeys, type PropertyLikeKeys } from "jest-mock";
+export { type Mocked, type MockedObject } from "vitest";

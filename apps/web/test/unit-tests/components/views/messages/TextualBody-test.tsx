@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentProps } from "react";
 import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import { act, render, waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 

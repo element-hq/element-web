@@ -226,6 +226,9 @@ catalogs:
     '@vitest/coverage-v8':
       specifier: 4.1.9
       version: 4.1.9
+    '@vitest/spy':
+      specifier: 4.1.9
+      version: 4.1.9
     matrix-web-i18n:
       specifier: 3.6.0
       version: 3.6.0
@@ -883,6 +886,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.19.0
         version: 8.61.0(eslint@8.57.1)(typescript@6.0.3)
+      '@vitest/spy':
+        specifier: 'catalog:'
+        version: 4.1.9
       babel-jest:
         specifier: ^30.0.0
         version: 30.4.1(@babel/core@7.29.7)

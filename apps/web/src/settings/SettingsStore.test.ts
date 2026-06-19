@@ -143,7 +143,7 @@ describe("SettingsStore", () => {
                 mockInitialSync.mockReturnValue(true);
                 client.emit(ClientEvent.Sync, SyncState.Prepared, null);
                 // Update is asynchronous
-                waitFor(() => {
+                await waitFor(() => {
                     expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
                         invite_avatars: "off",
                         media_previews: "off",

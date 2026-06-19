@@ -8,11 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { type MockedObject } from "vitest";
+import { type MethodLikeKeys, type PropertyLikeKeys } from "jest-mock";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { type MatrixClient, type Room, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { vi, type MethodLikeKeys, type PropertyLikeKeys } from "../setup/adapter.ts";
+import { vi } from "../setup/adapter.ts";
 
 /**
  * Mocked generic class with a real EventEmitter.
@@ -89,19 +91,20 @@ export const unmockClientPeg = () => {
     });
  * ```
  */
-export const mockClientMethodsUser = (userId = "@alice:domain") => ({
-    getUserId: vi.fn().mockReturnValue(userId),
-    getDomain: vi.fn().mockReturnValue(userId.split(":")[1]),
-    getSafeUserId: vi.fn().mockReturnValue(userId),
-    getUser: vi.fn().mockReturnValue(new User(userId)),
-    isGuest: vi.fn().mockReturnValue(false),
-    mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
-    credentials: { userId },
-    getThreePids: vi.fn().mockResolvedValue({ threepids: [] }),
-    getAccessToken: vi.fn(),
-    getDeviceId: vi.fn(),
-    getAccountData: vi.fn(),
-});
+export const mockClientMethodsUser = (userId = "@alice:domain") =>
+    ({
+        getUserId: vi.fn().mockReturnValue(userId),
+        getDomain: vi.fn().mockReturnValue(userId.split(":")[1]),
+        getSafeUserId: vi.fn().mockReturnValue(userId),
+        getUser: vi.fn().mockReturnValue(new User(userId)),
+        isGuest: vi.fn().mockReturnValue(false),
+        mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
+        credentials: { userId },
+        getThreePids: vi.fn().mockResolvedValue({ threepids: [] }),
+        getAccessToken: vi.fn(),
+        getDeviceId: vi.fn(),
+        getAccountData: vi.fn(),
+    }) satisfies MockedObjectDeep<any>;
 
 /**
  * Returns basic mocked client methods related to rendering events
@@ -111,20 +114,22 @@ export const mockClientMethodsUser = (userId = "@alice:domain") => ({
     });
  * ```
  */
-export const mockClientMethodsEvents = () => ({
-    decryptEventIfNeeded: vi.fn(),
-    getPushActionsForEvent: vi.fn(),
-});
+export const mockClientMethodsEvents = () =>
+    ({
+        decryptEventIfNeeded: vi.fn(),
+        getPushActionsForEvent: vi.fn(),
+    }) satisfies MockedObjectDeep<any>;
 
 /**
  * Returns basic mocked pushProcessor
  */
-export const mockClientPushProcessor = () => ({
-    pushProcessor: {
-        getPushRuleById: vi.fn(),
-        ruleMatchesEvent: vi.fn(),
-    },
-});
+export const mockClientPushProcessor = () =>
+    ({
+        pushProcessor: {
+            getPushRuleById: vi.fn(),
+            ruleMatchesEvent: vi.fn(),
+        },
+    }) satisfies MockedObjectDeep<any>;
 
 /**
  * Returns basic mocked client methods related to server support
