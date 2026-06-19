@@ -13,6 +13,7 @@ import { type SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
 import { Button } from "@vector-im/compound-web";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 import Login, { type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
@@ -33,6 +34,20 @@ import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig
 import { filterBoolean } from "../../../utils/arrays";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 import { ModuleApi } from "../../../modules/Api.ts";
+
+// PATCH-RENAISSANCE-B: normalize username
+function normalizeRenaissanceUsername(raw: string): string {
+    let username = raw.trim();
+    const defaultServer =
+        SdkConfig.get("default_server_config")?.["m.homeserver"]?.server_name || "attalpresident.fr";
+    if (!username) return username;
+    if (!username.startsWith("@") && !username.includes(":")) {
+        username = `@${username}:${defaultServer}`;
+    } else if (username.startsWith("@") && !username.includes(":")) {
+        username = `${username}:${defaultServer}`;
+    }
+    return username;
+}
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -156,6 +171,10 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
         phoneNumber: string | undefined,
         password: string,
     ): Promise<void> => {
+        // PATCH-RENAISSANCE-B: normalize username avant submit
+        if (username) {
+            username = normalizeRenaissanceUsername(username);
+        }
         if (!this.state.serverIsAlive) {
             this.setState({ busy: true });
             // Do a quick liveliness check on the URLs
