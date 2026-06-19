@@ -1,3 +1,14 @@
+# Renaissance Chat Web
+
+Fork de [Element Web](https://github.com/element-hq/element-web) (AGPLv3) pré-câblé sur le homeserver Synapse Renaissance `https://chat.attalpresident.fr` (server_name `attalpresident.fr`).
+
+Voir [PATCHES.md](PATCHES.md) pour la chaîne de patches Renaissance appliquée par-dessus Element Web, et [LICENSE-NOTICE.md](LICENSE-NOTICE.md) pour la notice de licence du fork.
+
+**Base upstream** : tag `v1.12.21`
+**Branche Renaissance** : `renaissance/main`
+
+---
+
 [![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
 ![Tests](https://github.com/element-hq/element-web/actions/workflows/tests.yaml/badge.svg)
 ![Static Analysis](https://github.com/element-hq/element-web/actions/workflows/static_analysis.yaml/badge.svg)
