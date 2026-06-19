@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
+# PATCH-RENAISSANCE-CI: override docker-package.sh upstream
+# Upstream version tente git describe / git rev-parse sur un bind-mount .git ro
+# qui ne contient pas toujours les tags (cas branch renaissance/main fork).
+# Renaissance build : VERSION lu depuis scripts/.renaissance-version (écrit par le
+# workflow GH Actions avant docker build). Fallback "renaissance-dev" si absent.
 
 set -ex
 
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
 DIR=$(dirname "$0")
 
-# If the branch comes out as HEAD then we're probably checked out to a tag, so if the thing is *not*
-# coming out as HEAD then we're on a branch. When we're on a branch, we want to resolve ourselves to
-# a few SHAs rather than a version.
-if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
-then
-    DIST_VERSION=$("$DIR"/get-version-from-git.sh)
-else
-    DIST_VERSION=$(git describe --abbrev=0 --tags)
+if [ -f "$DIR/.renaissance-version" ]; then
+    DIST_VERSION=$(cat "$DIR/.renaissance-version" | head -n 1 | tr -d '[:space:]')
 fi
 
+DIST_VERSION="${DIST_VERSION:-renaissance-dev}"
 DIST_VERSION=$("$DIR"/normalize-version.sh "$DIST_VERSION")
 
 VERSION=$DIST_VERSION pnpm --dir apps/web build

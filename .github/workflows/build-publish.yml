@@ -51,6 +51,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Write Renaissance version into build context (lu par docker-package.sh patché)
+        run: |
+          SHORT_SHA=$(git rev-parse --short=12 HEAD)
+          UPSTREAM_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "renaissance-base")
+          echo "${UPSTREAM_TAG}-renaissance-${SHORT_SHA}" > scripts/.renaissance-version
+          cat scripts/.renaissance-version
+
       - name: Build & push image (context = monorepo root, Dockerfile = apps/web/Dockerfile)
         uses: docker/build-push-action@v6
         with:
