@@ -691,13 +691,6 @@
             "title": "Endurheimtuaðferð fjarlægð"
         },
         "set_up_toast_title": "Setja upp varið öryggisafrit",
-        "udd": {
-            "interactive_verification_button": "Sannprófa gagnvirkt með táknmyndum",
-            "other_ask_verify_text": "Biddu þennan notanda að sannreyna setuna sína, eða sannreyndu hana handvirkt hér fyrir neðan.",
-            "other_new_session_text": "%(name)s (%(userId)s) skráði sig inn í nýja setu án þess að sannvotta hana:",
-            "own_new_session_text": "Þú skráðir inn í nýja setu án þess að sannvotta hana:",
-            "title": "Ekki treyst"
-        },
         "unable_to_setup_keys_error": "Tókst ekki að setja upp lykla",
         "verification": {
             "accepting": "Samþykki…",
@@ -2874,13 +2867,7 @@
         "close_to_view_right_panel": "Lokaðu þessum viðmótshluta til að sjá hann á þessu spjaldi",
         "context_menu": {
             "delete": "Eyða viðmótshluta",
-            "delete_warning": "Sé viðmótshluta eytt hverfur hann hjá öllum notendum í þessari spjallrás. Ertu viss um að þú viljir eyða þessum viðmótshluta?",
-            "move_left": "Færa til vinstri",
-            "move_right": "Færa til hægri",
-            "remove": "Fjarlægja fyrir alla",
-            "revoke": "Afturkalla heimildir",
-            "screenshot": "Taktu mynd",
-            "start_audio_stream": "Hefja hljóðstreymi"
+            "delete_warning": "Sé viðmótshluta eytt hverfur hann hjá öllum notendum í þessari spjallrás. Ertu viss um að þú viljir eyða þessum viðmótshluta?"
         },
         "cookie_warning": "Þessi viðmótshluti gæti notað vefkökur.",
         "error_hangup_description": "Þú varst aftengd/ur frá samtalinu. (Villa: %(message)s)",

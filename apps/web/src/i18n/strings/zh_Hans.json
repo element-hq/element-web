@@ -1012,14 +1012,6 @@
         "set_up_toast_title": "设置安全备份",
         "turn_on_key_storage": "启用密钥存储",
         "turn_on_key_storage_description": "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。",
-        "udd": {
-            "interactive_verification_button": "使用 Emoji 交互式验证",
-            "other_ask_verify_text": "请该用户验证其会话，或在下面手动验证。",
-            "other_new_session_text": "%(name)s（%(userId)s）在未验证的情况下登录了一个新会话：",
-            "own_ask_verify_text": "请使用以下选项之一验证你的其它会话。",
-            "own_new_session_text": "你在未验证的情况下登录了新会话：",
-            "title": "未被信任"
-        },
         "unable_to_setup_keys_error": "无法设置密钥",
         "verification": {
             "accepting": "正在接受…",
@@ -1542,7 +1534,7 @@
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
         "feature_retention": {
-            "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持设置“已读消息”。",
+            "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持为“已读消息”设置。",
             "disabled_sliding_sync": "当滑动同步启用时无法启用保留期。",
             "display_name": "消息保留期"
         },
@@ -4070,13 +4062,7 @@
         "close_to_view_right_panel": "关闭此小部件以在此面板查看",
         "context_menu": {
             "delete": "删除小部件",
-            "delete_warning": "删除小部件的同时会为该房间中的所有用户删除。你确定要删除此小部件？",
-            "move_left": "向左移动",
-            "move_right": "向右移动",
-            "remove": "为所有人删除",
-            "revoke": "撤销权限",
-            "screenshot": "拍照",
-            "start_audio_stream": "开始音频流"
+            "delete_warning": "删除小部件的同时会为该房间中的所有用户删除。你确定要删除此小部件？"
         },
         "cookie_warning": "此小部件可能会使用 Cookies。",
         "error_hangup_description": "通话已中断。（错误：%(message)s）",

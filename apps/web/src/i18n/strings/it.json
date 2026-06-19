@@ -825,14 +825,6 @@
             "warning": "Se non hai rimosso il metodo di ripristino, è possibile che un aggressore stia cercando di accedere al tuo account. Cambia la password del tuo account e imposta immediatamente un nuovo metodo di recupero nelle impostazioni."
         },
         "set_up_toast_title": "Imposta il Backup Sicuro",
-        "udd": {
-            "interactive_verification_button": "Verifica interattivamente con emoji",
-            "other_ask_verify_text": "Chiedi a questo utente di verificare la sua sessione o verificala manualmente sotto.",
-            "other_new_session_text": "%(name)s (%(userId)s) ha fatto l'accesso con una nuova sessione senza verificarla:",
-            "own_ask_verify_text": "Verifica la tua altra sessione usando una delle opzioni sotto.",
-            "own_new_session_text": "Hai fatto l'accesso ad una nuova sessione senza verificarla:",
-            "title": "Non fidato"
-        },
         "unable_to_setup_keys_error": "Impossibile impostare le chiavi",
         "verification": {
             "accepting": "Accettazione…",
@@ -3458,13 +3450,7 @@
         "close_to_view_right_panel": "Chiudi questo widget per vederlo in questo pannello",
         "context_menu": {
             "delete": "Elimina widget",
-            "delete_warning": "L'eliminazione di un widget lo rimuove per tutti gli utenti della stanza. Sei sicuro di eliminare il widget?",
-            "move_left": "Sposta a sinistra",
-            "move_right": "Sposta a destra",
-            "remove": "Rimuovi per tutti",
-            "revoke": "Revoca autorizzazioni",
-            "screenshot": "Scatta una foto",
-            "start_audio_stream": "Avvia stream audio"
+            "delete_warning": "L'eliminazione di un widget lo rimuove per tutti gli utenti della stanza. Sei sicuro di eliminare il widget?"
         },
         "cookie_warning": "Questo widget può usare cookie.",
         "error_hangup_description": "Sei stato disconnesso dalla chiamata. (Errore: %(message)s)",

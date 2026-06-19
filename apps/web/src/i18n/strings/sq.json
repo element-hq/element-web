@@ -783,14 +783,6 @@
             "warning": "Nëse metodën e re të rimarrjeve s’e keni hequr ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh."
         },
         "set_up_toast_title": "Ujdisni Kopjeruajtje të Sigurt",
-        "udd": {
-            "interactive_verification_button": "Verifikojeni në mënyrë ndërvepruese përmes emoji-sh",
-            "other_ask_verify_text": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",
-            "other_new_session_text": "%(name)s (%(userId)s) bëri hyrjen në një sesion të ri pa e verifikuar:",
-            "own_ask_verify_text": "Verifikoni sesionit tuaj tjetër duke përdorur një nga mundësitë më poshtë.",
-            "own_new_session_text": "Bëtë hyrjen në një sesion të ri pa e verifikuar:",
-            "title": "Jo e Besuar"
-        },
         "unable_to_setup_keys_error": "S’arrihet të ujdisen kyçe",
         "verification": {
             "accepting": "Po pranohet…",
@@ -3244,13 +3236,7 @@
         "close_to_view_right_panel": "Mbylleni këtë widget, që ta shihni te ky panel",
         "context_menu": {
             "delete": "Fshije widget-in",
-            "delete_warning": "Fshirja e një widget-i e heq atë për krejt përdoruesit në këtë dhomë. Jeni i sigurt se doni të fshihet ky widget?",
-            "move_left": "Lëvize majtas",
-            "move_right": "Lëvize djathtas",
-            "remove": "Hiqe për këdo",
-            "revoke": "Shfuqizoji lejet",
-            "screenshot": "Bëni një foto",
-            "start_audio_stream": "Nisni transmetim audio"
+            "delete_warning": "Fshirja e një widget-i e heq atë për krejt përdoruesit në këtë dhomë. Jeni i sigurt se doni të fshihet ky widget?"
         },
         "cookie_warning": "Ky <em>widget</em> mund të përdorë <em>cookies</em>.",
         "error_hangup_description": "U shkëputët nga thirrja. (Gabim: %(message)s)",

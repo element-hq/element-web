@@ -826,14 +826,6 @@
         "set_up_recovery": "Varmuuskopioi keskustelusi",
         "set_up_recovery_toast_description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
-        "udd": {
-            "interactive_verification_button": "Vahvista vuorovaikutteisesti emojilla",
-            "other_ask_verify_text": "Pyydä tätä käyttäjää vahvistamaan istuntonsa, tai vahvista se manuaalisesti alla.",
-            "other_new_session_text": "%(name)s (%(userId)s) kirjautui uudella istunnolla varmentamatta sitä:",
-            "own_ask_verify_text": "Varmenna toinen istuntosi käyttämällä yhtä seuraavista tavoista.",
-            "own_new_session_text": "Olet kirjautunut uuteen istuntoon varmentamatta sitä:",
-            "title": "Ei luotettu"
-        },
         "verification": {
             "accepting": "Hyväksytään…",
             "after_new_login": {
@@ -3414,13 +3406,7 @@
         "close_to_view_right_panel": "Sulje sovelma näyttääksesi sen tässä paneelissa",
         "context_menu": {
             "delete": "Poista sovelma",
-            "delete_warning": "Sovelman poistaminen poistaa sen kaikilta huoneen käyttäjiltä. Haluatko varmasti poistaa tämän sovelman?",
-            "move_left": "Siirry vasemmalle",
-            "move_right": "Siirry oikealle",
-            "remove": "Poista kaikilta",
-            "revoke": "Peruuta käyttöoikeudet",
-            "screenshot": "Ota kuva",
-            "start_audio_stream": "Käynnistä äänen suoratoisto"
+            "delete_warning": "Sovelman poistaminen poistaa sen kaikilta huoneen käyttäjiltä. Haluatko varmasti poistaa tämän sovelman?"
         },
         "cookie_warning": "Tämä sovelma saattaa käyttää evästeitä.",
         "error_hangup_description": "Yhteytesi puheluun katkaistiin. (Virhe: %(message)s)",

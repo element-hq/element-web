@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Tühjenda",
             "create_an_account": "Loo kasutajakonto",
             "got_an_account": "Kas sul on kasutajakonto juba olemas?",
             "manage_account": "Halda kasutajakontot",

@@ -981,14 +981,6 @@
         "set_up_toast_title": "Sett opp sikker sikkerhetskopiering",
         "turn_on_key_storage": "Slå på nøkkeloppbevaring",
         "turn_on_key_storage_description": "Lagre din kryptografiske identitet og nøkler til meldinger sikkert på serveren. Dette gjør at du kan se historikken for meldinger på alle nye enheter.",
-        "udd": {
-            "interactive_verification_button": "Interaktiv verifisering ved hjelp av emoji",
-            "other_ask_verify_text": "Be denne brukeren om å bekrefte sesjonen sin, eller bekreft den manuelt nedenfor.",
-            "other_new_session_text": "%(name)s (%(userId)s) logget på en ny sesjon uten å bekrefte den:",
-            "own_ask_verify_text": "Verifiser den andre økten din med en av metodene nedenfor.",
-            "own_new_session_text": "Du logget på en ny økt uten å bekrefte den:",
-            "title": "Ikke betrodd"
-        },
         "unable_to_setup_keys_error": "Kan ikke sette opp nøkler",
         "verification": {
             "accepting": "Aksepterer …",
@@ -3973,13 +3965,7 @@
         "close_to_view_right_panel": "Lukk denne widgeten for å se den i dette panelet",
         "context_menu": {
             "delete": "Slett modul",
-            "delete_warning": "Hvis du sletter en widget, fjernes den for alle brukere i dette rommet. Er du sikker på at du vil slette denne widgeten?",
-            "move_left": "Gå til venstre",
-            "move_right": "Gå til høyre",
-            "remove": "Fjern for alle",
-            "revoke": "Trekk tilbake rettigheter",
-            "screenshot": "Ta et bilde",
-            "start_audio_stream": "Start lydstrøm"
+            "delete_warning": "Hvis du sletter en widget, fjernes den for alle brukere i dette rommet. Er du sikker på at du vil slette denne widgeten?"
         },
         "cookie_warning": "Denne modulen bruker kanskje infokapsler.",
         "error_hangup_description": "Du ble koblet fra samtalen. (Feil:%(message)s)",

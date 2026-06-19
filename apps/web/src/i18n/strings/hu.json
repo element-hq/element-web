@@ -1010,14 +1010,6 @@
         "set_up_toast_title": "Biztonsági mentés beállítása",
         "turn_on_key_storage": "A kulcstárolás bekapcsolása",
         "turn_on_key_storage_description": "Ez lehetővé teszi az üzenetelőzmények megtekintését bármely új eszközön, és szükséges a csevegések és a digitális személyazonossága biztonsági mentéséhez.",
-        "udd": {
-            "interactive_verification_button": "Interaktív ellenőrzés emodzsikkal",
-            "other_ask_verify_text": "Kérje meg a felhasználót, hogy hitelesítse a munkamenetét, vagy ellenőrizze kézzel lentebb.",
-            "other_new_session_text": "%(name)s (%(userId)s) új munkamenetbe lépett be, anélkül, hogy ellenőrizte volna:",
-            "own_ask_verify_text": "Ellenőrizze a másik munkamenetét a lenti lehetőségek egyikével.",
-            "own_new_session_text": "Ellenőrzés nélkül jelentkezett be egy új munkamenetbe:",
-            "title": "Nem megbízható"
-        },
         "unable_to_setup_keys_error": "Nem sikerült a kulcsok beállítása",
         "verification": {
             "accepting": "Elfogadás…",
@@ -4049,13 +4041,7 @@
         "close_to_view_right_panel": "Kisalkalmazás bezárása ezen a panelen való megjelenítéshez",
         "context_menu": {
             "delete": "Kisalkalmazás törlése",
-            "delete_warning": "A kisalkalmazás törlése minden felhasználót érint a szobában. Biztos, hogy törli a kisalkalmazást?",
-            "move_left": "Mozgatás balra",
-            "move_right": "Mozgatás jobbra",
-            "remove": "Visszavonás mindenkitől",
-            "revoke": "Jogosultságok visszavonása",
-            "screenshot": "Fénykép készítése",
-            "start_audio_stream": "Hangközvetítés indítása"
+            "delete_warning": "A kisalkalmazás törlése minden felhasználót érint a szobában. Biztos, hogy törli a kisalkalmazást?"
         },
         "cookie_warning": "Ez a kisalkalmazás sütiket használhat.",
         "error_hangup_description": "A híváskapcsolat megszakadt (Hiba: %(message)s)",

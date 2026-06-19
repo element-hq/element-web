@@ -975,14 +975,6 @@
         "set_up_toast_title": "Configurar o backup online",
         "turn_on_key_storage": "Ativar o armazenamento de chaves",
         "turn_on_key_storage_description": "Armazene sua identidade criptográfica e as chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em qualquer novo dispositivo.",
-        "udd": {
-            "interactive_verification_button": "Verificar interativamente por emoji",
-            "other_ask_verify_text": "Peça a este usuário para confirmar a sessão dele, ou confirme-a manualmente abaixo.",
-            "other_new_session_text": "%(name)s (%(userId)s) entrou em uma nova sessão sem confirmá-la:",
-            "own_ask_verify_text": "Confirme suas outras sessões usando uma das opções abaixo.",
-            "own_new_session_text": "Você entrou em uma nova sessão sem confirmá-la:",
-            "title": "Não confiável"
-        },
         "unable_to_setup_keys_error": "Não foi possível configurar as chaves",
         "verification": {
             "accepting": "Aceitando…",
@@ -3948,13 +3940,7 @@
         "close_to_view_right_panel": "Feche este widget para visualizá-lo neste painel",
         "context_menu": {
             "delete": "Remover widget",
-            "delete_warning": "Remover um widget o remove para todas as pessoas desta sala. Tem certeza que quer remover este widget?",
-            "move_left": "Mover para a esquerda",
-            "move_right": "Mover para a direita",
-            "remove": "Remover para todos",
-            "revoke": "Revogar permissões",
-            "screenshot": "Tirar uma foto",
-            "start_audio_stream": "Iniciar transmissão de áudio"
+            "delete_warning": "Remover um widget o remove para todas as pessoas desta sala. Tem certeza que quer remover este widget?"
         },
         "cookie_warning": "Este widget pode usar cookies.",
         "error_hangup_description": "Você foi desconectado da chamada. (Erro: %(message)s)",
