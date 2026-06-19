@@ -123,7 +123,7 @@ export interface SynapseConfig {
         enabled: boolean;
     };
     ui_auth?: {
-        session_timeout: `{number}s`;
+        session_timeout: `${number}s`;
     };
     background_updates: {
         min_batch_size: number;
@@ -161,7 +161,7 @@ export interface SynapseConfig {
     allow_guest_access: boolean;
     experimental_features: Record<string, boolean>;
     matrix_rtc?: {
-        transports: Array<{ type: string; [field: string]: string }>;
+        transports: Array<{ type: string;[field: string]: string }>;
     };
     oidc_providers: unknown[];
     serve_server_wellknown: boolean;
