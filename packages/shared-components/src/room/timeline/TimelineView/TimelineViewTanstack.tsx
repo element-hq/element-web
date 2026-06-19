@@ -76,11 +76,6 @@ const AT_BOTTOM_THRESHOLD_PX = 4;
 const COLD_STABLE_FRAMES = 3;
 /** …or this many frames pass regardless, so we can never strand behind the cover. */
 const COLD_CAP_FRAMES = 60;
-/** Backward-prepend re-pin: stop once the anchor holds its captured offset for
- * this many consecutive frames… */
-const REPIN_STABLE_FRAMES = 3;
-/** …or this many frames elapse, so the settle loop can never run away. */
-const REPIN_CAP_FRAMES = 40;
 
 // ─── Content-jump detector (debug only) ────────────────────────────
 //
@@ -98,6 +93,17 @@ function useContentJumpDetector(scrollerRef: React.MutableRefObject<HTMLElement 
         if (!DEBUG_JUMPS) return;
         let raf = 0;
         let prev: { scrollTop: number; tops: Map<string, number>; t: number } | null = null;
+        // Ground truth: when did the user last actually drive the scroll? A
+        // scrollTop change with NO recent input is code-driven — i.e. a real jump.
+        // A change WITH recent input is just the user flinging and is expected.
+        let lastInput = -1e9;
+        const markInput = (): void => {
+            lastInput = performance.now();
+        };
+        const inputEvents = ["wheel", "touchstart", "touchmove", "keydown", "pointerdown"] as const;
+        for (const ev of inputEvents) {
+            window.addEventListener(ev, markInput, { passive: true, capture: true });
+        }
         const tick = (): void => {
             raf = requestAnimationFrame(tick);
             const scroller = scrollerRef.current;
@@ -120,12 +126,20 @@ function useContentJumpDetector(scrollerRef: React.MutableRefObject<HTMLElement 
                 if (deltas.length >= 3) {
                     deltas.sort((a, b) => a - b);
                     const median = deltas[Math.floor(deltas.length / 2)];
+                    const maxDelta = deltas.reduce((m, d) => (Math.abs(d) > Math.abs(m) ? d : m), 0);
                     const jump = median + (sample.scrollTop - prev.scrollTop);
                     if (Math.abs(jump) >= JUMP_THRESHOLD_PX) {
+                        // userScroll=yes means a wheel/touch/key fired within 120ms of
+                        // this frame, so any scrollTop change is the user's own input.
+                        // userScroll=no on a frame with a scrollTop change = code wrote
+                        // scrollTop = a real jump/lurch the user did not ask for.
+                        const userScroll = sample.t - lastInput < 120;
                         // eslint-disable-next-line no-console
                         console.debug(
                             `[TimelineViewTanstack] CONTENT-JUMP ${Math.round(jump)}px — rows moved ${Math.round(median)}px, ` +
-                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, frameGap=${sample.t - prev.t}ms, ts=${sample.t}`,
+                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, ` +
+                                `userScroll=${userScroll ? "yes" : "NO"}, common=${deltas.length}, maxRowΔ=${Math.round(maxDelta)}px, ` +
+                                `frameGap=${sample.t - prev.t}ms, ts=${sample.t}`,
                         );
                     }
                 }
@@ -133,7 +147,12 @@ function useContentJumpDetector(scrollerRef: React.MutableRefObject<HTMLElement 
             prev = sample;
         };
         raf = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(raf);
+        return () => {
+            cancelAnimationFrame(raf);
+            for (const ev of inputEvents) {
+                window.removeEventListener(ev, markInput, { capture: true } as EventListenerOptions);
+            }
+        };
     }, [scrollerRef]);
 }
 
@@ -161,9 +180,32 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
     // leaving the prepend un-compensated (the original "jump to top"). We solve it
     // by wrapping getVirtualItemForOffset to skip loading items, i.e. anchoring on
     // the first real item below the spinner (see the override effect below).
-    const items = snapshot.items;
+    // ─── Measure-and-reveal buffer ──────────────────────────────────────────────
+    // The virtualizer is driven by `committed`, NOT directly by snapshot.items.
+    // For a backward history prepend we hold the freshly-fetched batch back one
+    // cycle: render it off-screen in the sidecar, measure its real heights into
+    // sizeByKeyRef, and only THEN commit it. So when anchorTo processes the prepend
+    // it places against real heights (via estimateSize reading the seeded cache)
+    // instead of the 48px guess — removing the fling-to-top jump AND the resize
+    // "resistance" while scrolling up (no estimate→actual delta left to
+    // compensate). All other updates (cold load, reloads, tail appends, trims,
+    // spinner toggles) commit straight through. See the reconcile/measure effects.
+    const [committed, setCommitted] = useState<{ items: TimelineItem[]; firstItemIndex: number }>(() => ({
+        items: snapshot.items,
+        firstItemIndex: snapshot.firstItemIndex,
+    }));
+    const committedRef = useRef(committed);
+    committedRef.current = committed;
+    const items = committed.items;
     const itemsRef = useRef(items);
     itemsRef.current = items;
+
+    // The batch currently being measured off-screen (non-empty only between a VM
+    // prepend and our commit of it). `pendingCommitRef` holds the snapshot to
+    // commit once those heights are seeded.
+    const [sidecarItems, setSidecarItems] = useState<TimelineItem[]>([]);
+    const sidecarRef = useRef<HTMLDivElement | null>(null);
+    const pendingCommitRef = useRef<{ items: TimelineItem[]; firstItemIndex: number } | null>(null);
 
     const scrollerRef = useRef<HTMLDivElement | null>(null);
 
@@ -223,13 +265,34 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
     const virtualizer = useVirtualizer({
         count: items.length,
         getScrollElement: () => scrollerRef.current,
-        estimateSize: () => Math.round(estimateRef.current),
+        estimateSize: (index) => {
+            // Use the row's real measured height when known — crucially including
+            // heights seeded by the sidecar measure pass BEFORE the batch is
+            // committed, which is what lets anchorTo place a just-prepended batch
+            // against real heights. Falls back to the running mean for unseen rows.
+            const key = items[index]?.key;
+            const cached = key !== undefined ? sizeByKeyRef.current.get(key) : undefined;
+            return Math.round(cached ?? estimateRef.current);
+        },
         measureElement: (element, entry, instance) => {
             const size = defaultMeasureElement(element, entry, instance);
             if (size > 0) {
                 const key = String(instance.options.getItemKey(instance.indexFromElement(element)));
                 const map = sizeByKeyRef.current;
                 const prev = map.get(key);
+                if (DEBUG_JUMPS && prev !== undefined && Math.abs(size - prev) > 50) {
+                    // A row re-measuring far from its cached/seeded height is what
+                    // anchorTo compensates with a scrollTop write — the post-commit
+                    // lurch. Naming the row (key → event id) and the kind tells us
+                    // WHAT grows late (encrypted image load, reply resolve, etc.).
+                    const idx = instance.indexFromElement(element);
+                    const kind = itemsRef.current[idx]?.kind;
+                    // eslint-disable-next-line no-console
+                    console.debug(
+                        `[TimelineViewTanstack] RESIZE key=${key} kind=${kind} prev=${Math.round(prev)}→${Math.round(size)} ` +
+                            `Δ=${Math.round(size - prev)}px idx=${idx}`,
+                    );
+                }
                 if (prev !== undefined) sizeSumRef.current -= prev;
                 map.set(key, size);
                 sizeSumRef.current += size;
@@ -352,6 +415,124 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
         coldRafRef.current = requestAnimationFrame(tick);
     }, [items.length, virtualizer, vm]);
 
+    // ─── Measure-and-reveal reconcile: sync `committed` to the VM, routing a
+    // freshly-prepended history batch through the off-screen sidecar first ───────
+    useIsomorphicLayoutEffect(() => {
+        // Before the cold-load anchor settles, and during in-place reloads
+        // (pendingAnchor), the placement paths own the scroll and must see the VM
+        // data immediately — no measure buffer in front of them.
+        if (phaseRef.current !== "live" || snapshot.pendingAnchor !== null) {
+            if (committed.items !== snapshot.items) {
+                setCommitted({ items: snapshot.items, firstItemIndex: snapshot.firstItemIndex });
+            }
+            return;
+        }
+        if (committed.items === snapshot.items) return; // already in sync
+
+        // Measure-first invariant: a row that first paints at an estimated height
+        // and then settles taller shifts the rows above it — a jump. Hold such a
+        // row back, measure it off-screen, and commit only once its real height is
+        // seeded. The hold must catch exactly the rows that are
+        //   (a) NEW in this snapshot (a key not previously committed),
+        //   (b) at or above the viewport BOTTOM — with anchorTo:"end" the anchor
+        //       sits near the bottom, so a row growing there pushes visible content
+        //       UP; rows below only ever push content down and need no pre-measure,
+        //   (c) NOT a tail append — those stick to the bottom via followOnAppend and
+        //       must commit immediately, never wait a measure cycle.
+        //
+        // It must key off "new this snapshot", NOT "unmeasured anywhere": history
+        // that was loaded but never rendered is also unmeasured, and sweeping it
+        // through the sidecar on every unrelated update (live append, read marker,
+        // decrypt no-op) churns the commit and itself causes jumps.
+        //
+        // New rows arrive as a FRONT history prepend or — in encrypted rooms — a
+        // decrypt-flush revealing a previously-filtered event in place, which can
+        // land within the viewport above the anchor.
+        const committedItems = committed.items;
+        const committedKeys = new Set(committedItems.map((i) => i.key));
+        const rendered = virtualizer.getVirtualItems();
+        // Bottom of the rendered range, mapped into the NEW list: the lowest row
+        // whose late growth could lurch visible content. -1 if it can't be located
+        // (rendered range empty/raced) — then we bound by the last committed row.
+        const boundaryKey =
+            rendered.length > 0 ? committedItems[rendered[rendered.length - 1].index]?.key : undefined;
+        const boundaryIdx = boundaryKey !== undefined ? snapshot.items.findIndex((i) => i.key === boundaryKey) : -1;
+        // Last already-committed row in the NEW list: new rows AFTER it are tail
+        // appends (commit straight through); new rows BEFORE it are prepends or
+        // in-place reveals (measure-first candidates).
+        let lastCommittedIdx = -1;
+        for (let i = snapshot.items.length - 1; i >= 0; i--) {
+            if (committedKeys.has(snapshot.items[i].key)) {
+                lastCommittedIdx = i;
+                break;
+            }
+        }
+        const cutoff = boundaryIdx >= 0 ? Math.min(boundaryIdx, lastCommittedIdx) : lastCommittedIdx;
+        const toMeasure: TimelineItem[] = [];
+        for (let i = 0; i <= cutoff; i++) {
+            const it = snapshot.items[i];
+            if (it.kind === "loading") continue;
+            if (committedKeys.has(it.key)) continue; // only rows new this snapshot
+            if (sizeByKeyRef.current.has(it.key)) continue; // already measured earlier
+            toMeasure.push(it);
+        }
+        if (toMeasure.length === 0) {
+            // Spinner toggle / tail append / trim / already-measured — commit through.
+            setCommitted({ items: snapshot.items, firstItemIndex: snapshot.firstItemIndex });
+            return;
+        }
+        // Measure the batch off-screen first; the measure effect commits it.
+        pendingCommitRef.current = { items: snapshot.items, firstItemIndex: snapshot.firstItemIndex };
+        setSidecarItems(toMeasure);
+    }, [snapshot.items, snapshot.firstItemIndex, snapshot.pendingAnchor, committed]);
+
+    // Once the sidecar batch has laid out, measure its real heights into the
+    // cache, then commit the snapshot it came from — anchorTo now places against
+    // those heights, so the prepend lands with no jump and no resize correction.
+    useIsomorphicLayoutEffect(() => {
+        if (sidecarItems.length === 0) return;
+        const container = sidecarRef.current;
+        let measured = 0,
+            zeroH = 0,
+            total = 0;
+        const samples: number[] = [];
+        if (container) {
+            for (const node of container.querySelectorAll<HTMLElement>("[data-sidecar-key]")) {
+                const key = node.dataset.sidecarKey;
+                if (key === undefined || sizeByKeyRef.current.has(key)) continue;
+                const h = node.getBoundingClientRect().height;
+                if (h > 0) {
+                    sizeByKeyRef.current.set(key, h);
+                    sizeSumRef.current += h;
+                    estimateRef.current = sizeSumRef.current / sizeByKeyRef.current.size;
+                    measured++;
+                    total += h;
+                    if (samples.length < 6) samples.push(Math.round(h));
+                } else {
+                    zeroH++;
+                }
+            }
+        }
+        if (DEBUG_JUMPS) {
+            // Root-cause probe for the jump-to-top under-compensation: compare the
+            // total height the sidecar seeds against the `postSetOptionsOffset`
+            // anchorTo then applies (logged at the next commit). A sidecar width
+            // that differs from the real scroller width would make tiles wrap to a
+            // wrong height; zeroH>0 means rows that never got a real seed.
+            // eslint-disable-next-line no-console
+            console.debug(
+                `[TimelineViewTanstack] sidecar-measure: requested=${sidecarItems.length} measured=${measured} ` +
+                    `zeroH=${zeroH} totalH=${Math.round(total)} estimate=${Math.round(estimateRef.current)} ` +
+                    `sidecarW=${Math.round(container?.getBoundingClientRect().width ?? 0)} ` +
+                    `scrollerW=${Math.round(scrollerRef.current?.clientWidth ?? 0)} samples=[${samples.join(",")}]`,
+            );
+        }
+        const target = pendingCommitRef.current;
+        pendingCommitRef.current = null;
+        if (target) setCommitted(target);
+        setSidecarItems([]);
+    }, [sidecarItems]);
+
     // ─── Live: anchored reloads, visible range, at-bottom, pagination ──────────
     const lastPlacedRef = useRef<string | null>(null);
     const visRef = useRef<{ s: number; e: number } | null>(null);
@@ -363,110 +544,16 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
     const endSigRef = useRef("");
     const prevCountRef = useRef(0);
 
-    // ─── Backward-prepend re-pin (measurement-based before-paint correction) ────
-    //
-    // anchorTo:"end" compensates a prepend by placing the captured anchor from the
-    // measurements available at setOptions time — but the just-prepended rows are
-    // unmeasured then, so their height comes from estimateSize. Only the rows that
-    // actually render get corrected (resizeItem's above-viewport adjustment); the
-    // off-screen ones beyond overscan never measure, so their estimate error stays
-    // baked into scrollOffset and the anchor lands mis-placed. Empirically this is
-    // a sustained ±200-350px shift, worst when flung to the very top (every
-    // prepended row is off-screen, hence estimated) — matching "fling-to-top
-    // jumps, slow scroll fine". anchorTo alone is therefore insufficient; this is
-    // the TanStack analogue of the Virtuoso maintainVisibleContentPosition re-pin.
-    //
-    // Fix: remember the top real row + its on-screen offset every settled frame,
-    // and when a backward prepend lands (firstItemIndex dropped) restore that row
-    // to its captured offset from its ACTUAL post-commit position — vi.start minus
-    // scrollOffset, which equals what the user sees, independent of the off-screen
-    // estimate. Done synchronously first (before paint, so no 1-frame flash) then
-    // over a few rAF frames as late measurements (images, reply previews) settle.
-    const pinRef = useRef<{ key: string; offset: number } | null>(null);
-    const repinRafRef = useRef(0);
-    const prevFirstItemIndexRef = useRef<number | null>(null);
-    useEffect(() => () => cancelAnimationFrame(repinRafRef.current), []);
-
-    // The top real (non-loading) rendered row and its on-screen offset. We read
-    // the row's MEASURED rect (getBoundingClientRect), not vi.start - scrollOffset:
-    // the latter goes stale at a prepend commit because anchorTo writes the DOM
-    // scrollTop synchronously but the virtualizer's own scrollOffset only catches
-    // up on the async scroll event — so reading its geometry there would yield the
-    // pre-correction value. The rect is what the user actually sees, and matches
-    // what repinToPin restores to, so capture and restore stay consistent.
-    const readTopAnchor = useCallback((): { key: string; offset: number } | null => {
-        const scroller = scrollerRef.current;
-        if (!scroller) return null;
-        const scrollerTop = scroller.getBoundingClientRect().top;
-        for (const node of scroller.querySelectorAll<HTMLElement>("[data-key]")) {
-            const key = node.dataset.key!;
-            if (key !== "backward-loading" && key !== "forward-loading") {
-                return { key, offset: node.getBoundingClientRect().top - scrollerTop };
-            }
-        }
-        return null;
-    }, []);
-
-    // Snap scrollTop so the captured anchor row returns to its captured on-screen
-    // offset, measured from its REAL rect (see readTopAnchor — vi.start-scrollOffset
-    // is stale at the prepend commit by exactly the placement error we're undoing).
-    // Reading the rect here lets the synchronous call land the anchor before the
-    // commit paints, so there is no 1-frame flash. Returns true when already
-    // aligned (nothing to do / anchor scrolled out of the rendered window).
-    const repinToPin = useCallback((): boolean => {
-        const target = pinRef.current;
-        const scroller = scrollerRef.current;
-        if (!target || !scroller) return true;
-        const scrollerTop = scroller.getBoundingClientRect().top;
-        for (const node of scroller.querySelectorAll<HTMLElement>("[data-key]")) {
-            if (node.dataset.key === target.key) {
-                const delta = node.getBoundingClientRect().top - scrollerTop - target.offset;
-                if (Math.abs(delta) >= 1) {
-                    scroller.scrollTop += delta;
-                    return false;
-                }
-                return true;
-            }
-        }
-        return true;
-    }, []);
-
-    // Keep correcting for a few frames after the synchronous snap, until the
-    // anchor holds steady (late measurements landed) or the cap elapses.
-    const startRepinSettle = useCallback((): void => {
-        if (repinRafRef.current) cancelAnimationFrame(repinRafRef.current);
-        let stable = 0;
-        let cap = REPIN_CAP_FRAMES;
-        const tick = (): void => {
-            stable = repinToPin() ? stable + 1 : 0;
-            cap -= 1;
-            if (stable >= REPIN_STABLE_FRAMES || cap <= 0) {
-                repinRafRef.current = 0;
-                return;
-            }
-            repinRafRef.current = requestAnimationFrame(tick);
-        };
-        repinRafRef.current = requestAnimationFrame(tick);
-    }, [repinToPin]);
-
     useIsomorphicLayoutEffect(() => {
         if (phaseRef.current !== "live") return;
         const v = virtualizer;
         const snap = snapshotRef.current;
         const count = itemsRef.current.length;
-        // The virtualizer index IS the VM's published-array index, and the VM
-        // defines firstItemIndex so that absoluteIndex = firstItemIndex + arrayIndex
-        // (it already decrements firstItemIndex while the backward spinner shows).
-        // So no loader offset is needed now that the spinner is a real list item.
-        const toAbsolute = (index: number): number => snap.firstItemIndex + index;
-
-        // Detect a backward prepend (content added at the start): the VM drops
-        // firstItemIndex when it prepends history (and by 1 when the backward
-        // spinner appears). Computed before the early-returns below so the
-        // comparison stays correct across pendingAnchor reloads.
-        const backwardPrepend =
-            prevFirstItemIndexRef.current !== null && snap.firstItemIndex < prevFirstItemIndexRef.current;
-        prevFirstItemIndexRef.current = snap.firstItemIndex;
+        // Indices reported to the VM are relative to what is actually RENDERED =
+        // `committed`, which can lag snapshot by one measure cycle during a prepend.
+        // The VM defines firstItemIndex so absoluteIndex = firstItemIndex +
+        // arrayIndex, so we use the committed firstItemIndex here.
+        const toAbsolute = (index: number): number => committedRef.current.firstItemIndex + index;
 
         // Diagnostic: on every item-count change (prepend / trim) log the scroll
         // position and the first rendered index AFTER anchorTo has run (it applies
@@ -503,20 +590,6 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
             return;
         }
         lastPlacedRef.current = null;
-
-        // Re-pin after a backward prepend: anchorTo placed the anchor from
-        // estimated heights, so restore it from the row's real post-commit
-        // position. Synchronous first (corrects before this commit paints, so no
-        // 1-frame flash), then a short rAF settle for late measurements. While
-        // idle, keep the intended anchor fresh so the next prepend has an accurate
-        // target — but never overwrite it mid-settle.
-        if (backwardPrepend && pinRef.current) {
-            repinToPin();
-            startRepinSettle();
-        } else if (repinRafRef.current === 0) {
-            const a = readTopAnchor();
-            if (a) pinRef.current = a;
-        }
 
         // Visible range (core's `range` is the visible span, overscan excluded).
         const r = v.range;
@@ -649,6 +722,32 @@ export function TimelineViewTanstack({ vm, renderItem }: TimelineViewProps): JSX
                             </div>
                         );
                     })}
+                    {/* Sidecar measure pass: a freshly-fetched history batch is
+                        rendered here off-screen (laid out but invisible, and
+                        position:absolute so it never grows the scroll content) just
+                        long enough to measure real heights into the cache — then
+                        it's committed to the list above. Inside the same container
+                        as the real rows so its width (and thus text wrapping) match. */}
+                    {sidecarItems.length > 0 && (
+                        <div
+                            ref={sidecarRef}
+                            aria-hidden="true"
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                visibility: "hidden",
+                                pointerEvents: "none",
+                            }}
+                        >
+                            {sidecarItems.map((item) => (
+                                <div key={item.key} data-sidecar-key={item.key} style={{ width: "100%" }}>
+                                    {renderItem(item)}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
             {/* Loading spinners are real in-list items now (kind:"loading",
