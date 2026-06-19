@@ -8,7 +8,6 @@
 import { expect, type TestFixtures } from "../../element-web-test";
 import type { Page } from "@playwright/test";
 
-
 export const ONE_MINUTE = 60 * 1000;
 
 export async function checkRetentionInRoom(

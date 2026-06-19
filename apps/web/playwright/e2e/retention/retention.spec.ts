@@ -11,7 +11,6 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { test, expect } from "../../element-web-test";
 import { checkRetentionInRoom, ONE_MINUTE } from "./utils";
 
-
 const ONE_MINUTE_STR = "60s";
 
 test.use({
