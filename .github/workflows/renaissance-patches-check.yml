@@ -1,0 +1,18 @@
+name: Renaissance patches check
+
+on:
+  pull_request:
+  push:
+    branches: [renaissance/main, renaissance/staging]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run patches assertion script
+        run: bash scripts/check-patches-applied.sh
