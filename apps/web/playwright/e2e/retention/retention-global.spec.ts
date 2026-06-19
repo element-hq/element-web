@@ -8,6 +8,7 @@
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { checkRetentionInRoom } from "./retention.spec.ts";
 import { test } from "../../element-web-test";
+import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 const ONE_MINUTE_STR = "60s";
 
@@ -35,6 +36,12 @@ test.describe("global retention rules", () => {
         },
         labsFlags: ["feature_retention"],
     });
+    test.beforeEach(async ({ app, homeserver, page, user }) => {
+        await rejectToastIfExists(page, "Verify this device");
+        await rejectToastIfExists(page, "Notifications");
+        await page.clock.install();
+    });
+
     test("should apply", async ({ app, bot, page }) => {
         const roomId = await app.client.createRoom({
             name: "Test",
