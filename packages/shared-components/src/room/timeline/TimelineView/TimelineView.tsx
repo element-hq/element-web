@@ -5,283 +5,101 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, {
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useRef,
-    useState,
-    type JSX,
-    type ReactNode,
-    type PropsWithChildren,
-} from "react";
-import { LogLevel, Virtuoso, type IndexLocationWithAlign, type VirtuosoHandle } from "react-virtuoso";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState, type JSX } from "react";
+import { measureElement as defaultMeasureElement, useVirtualizer, type VirtualItem } from "@tanstack/react-virtual";
 import { InlineSpinner } from "@vector-im/compound-web";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
+import type { AnchorAlign, ImmediateScroll, TimelineItem, TimelineViewProps } from "./types";
 import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
+import { DEBUG_SIZES, HeightAuditProbe } from "./heightAudit";
 
 /**
- * Shared virtualized timeline container.
+ * TanStack-Virtual implementation of the shared timeline: a headless
+ * virtualizer we drive imperatively on the `RoomTimelineViewModel`, relying on
+ * TanStack core's own before-paint scroll-anchor system (`anchorTo: "end"`) to
+ * keep the viewport stable across prepends, trims and spinner toggles.
  *
- * Renders an ordered list of timeline items using react-virtuoso.
- * The consuming app controls what each row looks like via `renderItem`;
- * this component owns layout, scrolling, pagination triggers, and
- * stuck-at-bottom tracking.
+ * How each timeline behaviour maps onto the virtualizer:
+ *
+ *  - **Prepend keep-fixed (history pagination).** `anchorTo: "end"` makes core
+ *    detect the edge-key change, freeze the item under the current scroll
+ *    offset, and adjust scrollOffset before paint so the visible content does
+ *    not lurch. This replaces our hand-rolled re-pin entirely — no patch. The
+ *    loading spinner stays a real in-list item (reserved space), and we wrap
+ *    `getVirtualItemForOffset` so anchorTo never picks the spinner as the anchor
+ *    — its key vanishes on batch arrival — but the first real item below it (see
+ *    the override near the virtualizer and the `items` comment).
+ *  - **Stick-to-bottom (live messages).** `followOnAppend`, gated on
+ *    `atLiveEnd && !pendingAnchor`, follows new tail messages only when the
+ *    window reaches the live end and we are at the bottom (core checks
+ *    `isAtEnd` internally). Mirrors the old `followOutput` predicate.
+ *  - **startReached / endReached.** TanStack has no such callbacks; we derive
+ *    them from the rendered (overscan-expanded) virtual items — index 0 or
+ *    `count-1` being rendered means we are within overscan of an edge.
+ *  - **Anchored load / jump-to.** We resolve the target row's document offset
+ *    (`getOffsetForIndex`) and write `scrollTop` directly — NOT
+ *    `virtualizer.scrollToIndex`, whose index-keyed reconcile loop fights
+ *    `anchorTo` once history is prepended (see `offsetForKey`). The cold-load
+ *    placement converges over a few frames as heights measure; this replaces
+ *    `initialTopMostItemIndex` + the patched `scrollToIndexOnChange`/`done`.
+ *
+ * Known gaps (see review notes):
+ *  - `overscan` is an item COUNT here, not Virtuoso's px `increaseViewportBy`.
+ *  - `alignToBottom` for short rooms (content shorter than the viewport) is not
+ *    yet reproduced — items sit at the top instead of the bottom.
+ *
+ * Positioning is driven by `directDomUpdates` (see the option below): row
+ * transforms and the container height are written imperatively before paint,
+ * and React only re-renders when the rendered range changes — matching the
+ * upstream chat example so the measure→reposition path is a single frame.
  */
 
-// ─── Height-stability audit (debug only) ───────────────────────────
-//
-// Tiles that grow after mount (reply chains resolving, images loading, URL
-// previews arriving, events decrypting) shift everything below them and cause
-// scroll jumps. Set DEBUG_SIZES true to instrument every row; results aggregate
-// by tile type into a registry surfaced from the devtools console:
-//
-//     __timelineHeightAudit.report()   // ranked table of what resizes & by how much
-//     __timelineHeightAudit.reset()    // start a fresh capture
-//
-// Adds a second ResizeObserver per row, so keep it false except when profiling.
-const DEBUG_SIZES = false;
+const useIsomorphicLayoutEffect = typeof document !== "undefined" ? useLayoutEffect : useEffect;
 
-/** `flow-root` establishes a block formatting context so the row's outer vertical
- * margins don't collapse through virtuoso's border/padding-less wrapper — which
- * would make virtuoso's ResizeObserver under-report the laid-out height. */
-const ITEM_WRAPPER_STYLE = { display: "flow-root" } as const;
-
-/** Per-tile-type accumulator. */
-interface ResizeStat {
-    /** Distinct rows of this type that mounted. */
-    mounts: number;
-    /** Post-mount height changes observed across all rows of this type. */
-    resizes: number;
-    /** Rows that changed height at least once (the ones causing jumps). */
-    unstableRows: number;
-    /** Largest single |Δheight| seen, px. */
-    maxDelta: number;
-    /** Largest net (last − mount) height change for a single row, px. */
-    maxNetGrowth: number;
-    /** Sum of |Δheight| across all resizes, for averaging. */
-    totalDelta: number;
-    /** A few example row keys, for spot-checking in the DOM. */
-    samples: Set<string>;
-    /** Among rows of this type that turned out unstable, how many contained each
-     * suspect inline feature (pill, emoji, inline-image, codeblock…). Points at
-     * the *cause* of the reflow rather than just the symptom. Counted once per
-     * unstable row, not per resize. */
-    features: Map<string, number>;
-}
-
-/** Per-resize forensic record: what concretely changed in the row's DOM between
- * mount and the height change. `changes` of "(no DOM diff…)" means the markup
- * was identical and the row purely re-wrapped (fonts, container width, CSS) —
- * the signal that separates content swaps from layout-level causes. */
-interface ResizeDetail {
-    key: string;
-    type: string;
-    delta: number;
-    heights: string;
-    changes: string;
-    bodyPreview: string;
-    /** performance.now() of the resize, ms — correlate against the [TimelineVM]
-     * paginate-batch log lines to see whether resizes cluster around prepends. */
-    ts: number;
-}
-
-class HeightAudit {
-    private readonly stats = new Map<string, ResizeStat>();
-    /** "mountType → resolvedType" → count. Surfaces placeholder→content reveals
-     * (e.g. "event:? → event:m.image"), the prime post-mount growth pattern. */
-    private readonly transitions = new Map<string, number>();
-    /** First N per-resize forensic records (see {@link ResizeDetail}). */
-    private readonly details: ResizeDetail[] = [];
-    private static readonly MAX_DETAILS = 50;
-
-    private stat(type: string): ResizeStat {
-        let s = this.stats.get(type);
-        if (!s) {
-            s = {
-                mounts: 0,
-                resizes: 0,
-                unstableRows: 0,
-                maxDelta: 0,
-                maxNetGrowth: 0,
-                totalDelta: 0,
-                samples: new Set(),
-                features: new Map(),
-            };
-            this.stats.set(type, s);
-        }
-        return s;
-    }
-
-    public recordMount(type: string, key: string): void {
-        const s = this.stat(type);
-        s.mounts += 1;
-        if (s.samples.size < 5) s.samples.add(key);
-    }
-
-    /**
-     * Record a post-mount height change. `type` is the tile's *current* type
-     * (re-classified at resize time), so growth that follows a placeholder
-     * resolving is attributed to what the tile became, not what it mounted as.
-     */
-    public recordResize(
-        type: string,
-        key: string,
-        mountHeight: number,
-        prev: number,
-        next: number,
-        rowAlreadyUnstable: boolean,
-        features: string[],
-    ): void {
-        const s = this.stat(type);
-        s.resizes += 1;
-        if (!rowAlreadyUnstable) {
-            s.unstableRows += 1;
-            // Attribute the cause once per unstable row, not per resize.
-            for (const f of features) s.features.set(f, (s.features.get(f) ?? 0) + 1);
-        }
-        const delta = Math.abs(next - prev);
-        s.totalDelta += delta;
-        if (delta > s.maxDelta) s.maxDelta = delta;
-        const net = next - mountHeight;
-        if (net > s.maxNetGrowth) s.maxNetGrowth = net;
-        if (s.samples.size < 5) s.samples.add(key);
-    }
-
-    public recordTransition(from: string, to: string): void {
-        const k = `${from} → ${to}`;
-        this.transitions.set(k, (this.transitions.get(k) ?? 0) + 1);
-    }
-
-    public recordDetail(detail: ResizeDetail): void {
-        if (this.details.length < HeightAudit.MAX_DETAILS) this.details.push(detail);
-    }
-
-    /** Print two tables: per-type instability, and mount→resolved transitions. */
-    public report(): void {
-        const rows = [...this.stats.entries()]
-            .map(([type, s]) => ({
-                type,
-                "mounts": s.mounts,
-                "unstableRows": s.unstableRows,
-                "unstable%": s.mounts ? Math.round((s.unstableRows / s.mounts) * 100) : 0,
-                "resizes": s.resizes,
-                "maxDelta": Math.round(s.maxDelta),
-                "avgDelta": s.resizes ? Math.round(s.totalDelta / s.resizes) : 0,
-                "maxNetGrowth": Math.round(s.maxNetGrowth),
-                "causes": [...s.features.entries()]
-                    .sort((a, b) => b[1] - a[1])
-                    .map(([f, n]) => `${f}×${n}`)
-                    .join(", "),
-                "samples": [...s.samples].join(", "),
-            }))
-            .sort((a, b) => b.unstableRows * b.maxNetGrowth - a.unstableRows * a.maxNetGrowth);
-        // eslint-disable-next-line no-console
-        console.table(rows);
-
-        const transitionRows = [...this.transitions.entries()]
-            .map(([change, count]) => ({ change, count }))
-            .sort((a, b) => b.count - a.count);
-        if (transitionRows.length) {
-            // eslint-disable-next-line no-console
-            console.table(transitionRows);
-        }
-        if (this.details.length) {
-            // eslint-disable-next-line no-console
-            console.table(this.details);
-        }
-        // eslint-disable-next-line no-console
-        console.info(
-            "[height-audit] Per-type table ranked by (unstable rows × max net growth). " +
-                "The transitions table shows tiles that changed type after mount (placeholder → content) — " +
-                "these are the reveals to stabilise by reserving space for the resolved tile. " +
-                "The details table shows, per resize, what changed in the row's DOM since mount; " +
-                "'(no DOM diff…)' means a pure re-wrap (fonts / container width / CSS), not a content swap.",
-        );
-    }
-
-    public reset(): void {
-        this.stats.clear();
-        this.transitions.clear();
-        this.details.length = 0;
-        // eslint-disable-next-line no-console
-        console.info("[height-audit] reset");
-    }
-}
-
-const heightAudit = new HeightAudit();
-if (DEBUG_SIZES && typeof window !== "undefined") {
-    (window as unknown as { __timelineHeightAudit: HeightAudit }).__timelineHeightAudit = heightAudit;
-}
-
-// ─── Scroll/pagination tracing (debug only) ────────────────────────
-//
-// Traces Virtuoso's scroll callbacks (the VM logs its own paginate batches under
-// [TimelineVM]); interleave the two in the console to diagnose scroll/pagination
-// loops. Each line carries a sequence number and ms since the previous event, so
-// a tight re-trigger loop shows up as a run of lines a few ms apart.
-const DEBUG_SCROLL = false;
-let scrollTraceSeq = 0;
-let scrollTraceLastTs = 0;
-function scrollTrace(event: string, detail: Record<string, unknown> = {}): void {
-    if (!DEBUG_SCROLL) return;
-    const now = typeof performance !== "undefined" ? performance.now() : 0;
-    const delta = scrollTraceLastTs === 0 ? 0 : Math.round(now - scrollTraceLastTs);
-    scrollTraceLastTs = now;
-    const fields = Object.entries(detail)
-        .map(([k, v]) => `${k}=${typeof v === "string" ? v : JSON.stringify(v)}`)
-        .join(" ");
-    // eslint-disable-next-line no-console
-    console.debug(`[TimelineView] #${++scrollTraceSeq} +${delta}ms ${event}${fields ? " " + fields : ""}`);
-}
+/** Initial seed for not-yet-measured rows, before we have any real measurements
+ * to average. Deliberately near a typical chat row: too-high an estimate makes
+ * every row that scrolls into view measure *shorter*, firing a downward resize
+ * compensation that reads as stutter. Once rows measure, `estimateRef` (a running
+ * mean of measured heights) takes over and adapts to the room's real content. */
+const ESTIMATED_ITEM_HEIGHT = 48;
+/** Rendered rows beyond the visible range on each side. TanStack overscan is a
+ * COUNT (cf. Virtuoso's px increaseViewportBy); ~16 short rows ≈ a screenful. */
+const OVERSCAN = 16;
+/** px from the list bottom still counted as "at the bottom" (matches Virtuoso's default). */
+const AT_BOTTOM_THRESHOLD_PX = 4;
+/** Cold-load settle: reveal once measurement + scroll hold for this many frames… */
+const COLD_STABLE_FRAMES = 3;
+/** …or this many frames pass regardless, so we can never strand behind the cover. */
+const COLD_CAP_FRAMES = 60;
 
 // ─── Content-jump detector (debug only) ────────────────────────────
 //
-// The height audit catches rows that change height; this catches the other
-// class of visible jump: frames where the rendered content shifts relative to
-// the viewport by an amount that doesn't match the scroll delta — i.e.
-// virtuoso's prepend/anchor compensation was wrong, or landed a frame after
-// the content change painted.
-//
-// Every animation frame we record the viewport-relative top of each rendered
-// row (virtuoso's data-index is stable across prepends: firstItemIndex moves
-// down exactly as array indices move up). For rows present in consecutive
-// frames, plain scrolling moves them by exactly -ΔscrollTop, so
-// median(Δtop) + ΔscrollTop is the content visibly jumping under the
-// viewport. Jumps above the threshold are logged with ms-since-commit so they
-// can be correlated with [TimelineVM] paginate batches and the height audit's
-// `ts` column.
+// Mirror of the Virtuoso view's detector so the two can be compared on the same
+// session. Every animation frame we record each rendered row's viewport-relative
+// top, keyed on the STABLE item key (data-key) — TanStack's data-index shifts on
+// prepend, exactly like Virtuoso's. For rows present in consecutive frames plain
+// scrolling moves them by -ΔscrollTop, so median(Δtop) + ΔscrollTop is the
+// content visibly jumping under the viewport.
 const DEBUG_JUMPS = true;
 const JUMP_THRESHOLD_PX = 3;
 
-interface CommitInfo {
-    itemsLen: number;
-    firstItemIndex: number;
-    at: number;
-}
-
-function useContentJumpDetector(
-    scrollerRef: React.MutableRefObject<HTMLElement | null>,
-    commitRef: React.MutableRefObject<CommitInfo | null>,
-): void {
+function useContentJumpDetector(scrollerRef: React.MutableRefObject<HTMLElement | null>): void {
     useEffect(() => {
         if (!DEBUG_JUMPS) return;
         let raf = 0;
-        interface FrameSample {
-            scrollTop: number;
-            tops: Map<string, number>;
-            /** Inline marginTop on virtuoso's item list = the live `deviation`
-             * compensation ("auto" while idle under alignToBottom). */
-            margin: string;
-            /** Inline paddingTop on the item list = virtuoso's estimated height
-             * of unrendered items above the window. */
-            pad: string;
-            t: number;
+        let prev: { scrollTop: number; tops: Map<string, number>; t: number } | null = null;
+        // Ground truth: when did the user last actually drive the scroll? A
+        // scrollTop change with NO recent input is code-driven — i.e. a real jump.
+        // A change WITH recent input is just the user flinging and is expected.
+        let lastInput = -1e9;
+        const markInput = (): void => {
+            lastInput = performance.now();
+        };
+        const inputEvents = ["wheel", "touchstart", "touchmove", "keydown", "pointerdown"] as const;
+        for (const ev of inputEvents) {
+            window.addEventListener(ev, markInput, { passive: true, capture: true });
         }
-        let prev: FrameSample | null = null;
         const tick = (): void => {
             raf = requestAnimationFrame(tick);
             const scroller = scrollerRef.current;
@@ -291,25 +109,10 @@ function useContentJumpDetector(
             }
             const scrollerTop = scroller.getBoundingClientRect().top;
             const tops = new Map<string, number>();
-            // Key on data-item-index (the STABLE display index), NOT data-index.
-            // data-index is virtuoso's raw position and shifts by +N when N items
-            // are prepended, so keying on it compares a different message before vs
-            // after a prepend — inflating "rows moved" into a huge artifact on the
-            // exact frames we care about. data-item-index is firstItemIndex-stable,
-            // so the same message matches across the prepend and "rows moved"
-            // reflects what the user actually saw. data-known-size narrows the
-            // match to virtuoso's own measured item wrappers.
-            for (const el of scroller.querySelectorAll<HTMLElement>("[data-item-index][data-known-size]")) {
-                tops.set(el.dataset.itemIndex!, el.getBoundingClientRect().top - scrollerTop);
+            for (const el of scroller.querySelectorAll<HTMLElement>("[data-key]")) {
+                tops.set(el.dataset.key!, el.getBoundingClientRect().top - scrollerTop);
             }
-            const list = scroller.querySelector<HTMLElement>('[data-testid="virtuoso-item-list"]');
-            const sample: FrameSample = {
-                scrollTop: scroller.scrollTop,
-                tops,
-                margin: list?.style.marginTop || "0",
-                pad: list?.style.paddingTop || "0",
-                t: Math.round(performance.now()),
-            };
+            const sample = { scrollTop: scroller.scrollTop, tops, t: Math.round(performance.now()) };
             if (prev) {
                 const deltas: number[] = [];
                 for (const [key, top] of tops) {
@@ -319,17 +122,19 @@ function useContentJumpDetector(
                 if (deltas.length >= 3) {
                     deltas.sort((a, b) => a - b);
                     const median = deltas[Math.floor(deltas.length / 2)];
+                    const maxDelta = deltas.reduce((m, d) => (Math.abs(d) > Math.abs(m) ? d : m), 0);
                     const jump = median + (sample.scrollTop - prev.scrollTop);
                     if (Math.abs(jump) >= JUMP_THRESHOLD_PX) {
-                        const commit = commitRef.current;
-                        const sinceCommit = commit
-                            ? `${Math.round(performance.now() - commit.at)}ms after commit (items=${commit.itemsLen}, firstItemIndex=${commit.firstItemIndex})`
-                            : "no commit yet";
+                        // userScroll=yes means a wheel/touch/key fired within 120ms of
+                        // this frame, so any scrollTop change is the user's own input.
+                        // userScroll=no on a frame with a scrollTop change = code wrote
+                        // scrollTop = a real jump/lurch the user did not ask for.
+                        const userScroll = sample.t - lastInput < 120;
                         // eslint-disable-next-line no-console
                         console.debug(
                             `[TimelineView] CONTENT-JUMP ${Math.round(jump)}px — rows moved ${Math.round(median)}px, ` +
-                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, ${sinceCommit}, ` +
-                                `margin ${prev.margin}→${sample.margin}, pad ${prev.pad}→${sample.pad}, ` +
+                                `scrollTop Δ${Math.round(sample.scrollTop - prev.scrollTop)}px, ` +
+                                `userScroll=${userScroll ? "yes" : "NO"}, common=${deltas.length}, maxRowΔ=${Math.round(maxDelta)}px, ` +
                                 `frameGap=${sample.t - prev.t}ms, ts=${sample.t}`,
                         );
                     }
@@ -338,550 +143,613 @@ function useContentJumpDetector(
             prev = sample;
         };
         raf = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(raf);
-    }, [scrollerRef, commitRef]);
-}
-
-/** Map a `mx_…Body` DOM class onto a readable tile-type token. Falls back to
- * de-camelising any unrecognised `mx_XxxBody` class so new body types surface
- * with a sensible name instead of being lumped into `?`. */
-function bodyClassToType(cls: string): string {
-    switch (cls) {
-        case "mx_MTextBody":
-            return "m.text";
-        case "mx_MNoticeBody":
-            return "m.notice";
-        case "mx_MEmoteBody":
-            return "m.emote";
-        case "mx_MImageBody":
-        case "mx_ImageBody":
-            return "m.image";
-        case "mx_MImageReplyBody":
-            return "m.image(reply)";
-        case "mx_MVideoBody":
-            return "m.video";
-        case "mx_MAudioBody":
-            return "m.audio";
-        case "mx_MVoiceMessageBody":
-            return "m.voice";
-        case "mx_MFileBody":
-            return "m.file";
-        case "mx_MStickerBody":
-            return "m.sticker";
-        case "mx_MLocationBody":
-            return "m.location";
-        case "mx_MBeaconBody":
-            return "m.beacon";
-        case "mx_MPollBody":
-            return "m.poll";
-        case "mx_RedactedBody":
-            return "redacted";
-        case "mx_DecryptionFailureBody":
-            return "decryption-failure";
-        case "mx_UnknownBody":
-            return "unknown";
-        // e.g. "mx_MFooBarBody" → "m.foo-bar", "mx_FooBody" → "foo"
-        default:
-            return cls
-                .replace(/^mx_M?/, "")
-                .replace(/Body$/, "")
-                .replace(/([a-z])([A-Z])/g, "$1-$2")
-                .toLowerCase();
-    }
-}
-
-/**
- * Derive a stable tile-type key from the *current* rendered DOM. Non-event rows
- * use their kind; event rows are typed from the first `mx_…Body` class found,
- * plus markers for the features most likely to change height after mount (reply
- * chains, URL previews, reactions). Re-run on each resize so a tile that mounts
- * as a placeholder (no body yet) and resolves is typed by what it became.
- *
- * Couples the debug path to web CSS class names, which is acceptable for an
- * instrumentation tool that never ships enabled.
- */
-function classifyTile(wrapper: HTMLElement, baseLabel: string): string {
-    if (!baseLabel.startsWith("event")) return baseLabel;
-
-    let bodyType = "event:?";
-    // Prefer the message-body element; querySelectorAll yields document order
-    // (outermost first), so the first mx_…Body match is the row's own body.
-    for (const el of wrapper.querySelectorAll('[class*="Body"]')) {
-        const cls = [...el.classList].find((c) => /^mx_\w*Body$/.test(c));
-        if (cls) {
-            bodyType = `event:${bodyClassToType(cls)}`;
-            break;
-        }
-    }
-    if (bodyType === "event:?" && wrapper.querySelector(".mx_EventTile_info")) bodyType = "event:state";
-
-    const markers: string[] = [];
-    if (wrapper.querySelector(".mx_ReplyChain")) markers.push("+reply");
-    if (wrapper.querySelector(".mx_LinkPreviewGroup")) markers.push("+urlpreview");
-    if (wrapper.querySelector(".mx_ReactionsRow")) markers.push("+reactions");
-    return bodyType + markers.join("");
-}
-
-/**
- * Detect inline content inside a row that commonly resolves/loads *after* mount
- * and reflows the body — the likely cause of a same-type height change. Returns
- * the markers present so the audit can correlate them with unstable rows.
- */
-function detectFeatures(wrapper: HTMLElement): string[] {
-    const features: string[] = [];
-    if (wrapper.querySelector(".mx_Pill")) features.push("pill"); // mentions resolve display name/avatar
-    if (wrapper.querySelector(".mx_Emoji")) features.push("emoji"); // custom/inline emoji images
-    if (wrapper.querySelector(".mx_EventTile_body img, .mx_EventTile_body image")) features.push("inline-img");
-    if (wrapper.querySelector(".mx_EventTile_pre_container")) features.push("codeblock");
-    if (wrapper.querySelector(".mx_ReplyChain")) features.push("reply");
-    if (wrapper.querySelector(".mx_LinkPreviewGroup")) features.push("urlpreview");
-    if (wrapper.querySelector(".mx_ReactionsRow")) features.push("reactions");
-    return features;
-}
-
-/** Cheap structural fingerprint of a row, captured at mount and re-captured on
- * each resize so the audit can say *what* changed, not just that height did. */
-interface RowForensics {
-    classes: string;
-    bodyLen: number;
-    bodyPreview: string;
-    nodes: number;
-    imgs: number;
-    /** Images whose bitmap has arrived. An img loading grows the row without any
-     * DOM mutation, so node/class diffs alone misreport it as a pure reflow. */
-    imgsLoaded: number;
-    pres: number;
-    pills: number;
-    replyRows: number;
-    /** Row content width. If this changes between mount and resize the cause is
-     * the *container* (scrollbar appearing, panel resize), not the row itself —
-     * every text row near a wrap boundary then gains/loses a line at once. */
-    width: number;
-    /** Serialized-markup length: catches attribute/class/src changes on any
-     * descendant that the coarse counters above can't see. */
-    htmlLen: number;
-}
-
-function snapshotRow(wrapper: HTMLElement): RowForensics {
-    const tile = wrapper.querySelector(".mx_EventTile");
-    // Info/state tiles have no mx_EventTile_body — their text lives in
-    // mx_TextualEvent. Fall back so their text changes (e.g. a member display
-    // name resolving after pagination) are visible to the diff instead of
-    // misreporting as "no DOM diff".
-    const body = wrapper.querySelector(".mx_EventTile_body") ?? wrapper.querySelector(".mx_TextualEvent") ?? tile;
-    const imgs = wrapper.querySelectorAll("img");
-    let imgsLoaded = 0;
-    for (const img of imgs) {
-        if ((img as HTMLImageElement).naturalWidth > 0) imgsLoaded += 1;
-    }
-    return {
-        classes: tile?.className ?? "",
-        bodyLen: body?.textContent?.length ?? -1,
-        bodyPreview: (body?.textContent ?? "").slice(0, 60),
-        nodes: wrapper.querySelectorAll("*").length,
-        imgs: imgs.length,
-        imgsLoaded,
-        pres: wrapper.querySelectorAll("pre").length,
-        pills: wrapper.querySelectorAll(".mx_Pill").length,
-        replyRows: wrapper.querySelectorAll(".mx_ReplyChain").length,
-        width: wrapper.clientWidth,
-        htmlLen: wrapper.innerHTML.length,
-    };
-}
-
-/** Human-readable field-by-field diff of two row fingerprints. An empty diff is
- * the most useful outcome: the DOM didn't change, so the resize was a pure
- * re-wrap (font load, container width change, CSS) rather than a content swap. */
-function diffForensics(a: RowForensics, b: RowForensics): string {
-    const parts: string[] = [];
-    if (a.classes !== b.classes) {
-        const before = new Set(a.classes.split(/\s+/));
-        const after = new Set(b.classes.split(/\s+/));
-        const added = [...after].filter((c) => !before.has(c));
-        const removed = [...before].filter((c) => !after.has(c));
-        if (added.length) parts.push(`+class:${added.join("|")}`);
-        if (removed.length) parts.push(`-class:${removed.join("|")}`);
-    }
-    if (a.bodyLen !== b.bodyLen) parts.push(`bodyLen:${a.bodyLen}→${b.bodyLen}`);
-    if (a.imgs !== b.imgs) parts.push(`imgs:${a.imgs}→${b.imgs}`);
-    if (a.imgsLoaded !== b.imgsLoaded) parts.push(`imgsLoaded:${a.imgsLoaded}→${b.imgsLoaded}`);
-    if (a.pres !== b.pres) parts.push(`pres:${a.pres}→${b.pres}`);
-    if (a.pills !== b.pills) parts.push(`pills:${a.pills}→${b.pills}`);
-    if (a.replyRows !== b.replyRows) parts.push(`replyRows:${a.replyRows}→${b.replyRows}`);
-    if (a.nodes !== b.nodes) parts.push(`nodes:${a.nodes}→${b.nodes}`);
-    if (a.width !== b.width) parts.push(`WIDTH:${a.width}→${b.width}`);
-    if (a.htmlLen !== b.htmlLen) parts.push(`htmlLen:${a.htmlLen}→${b.htmlLen}`);
-    return parts.join(" ") || "(no DOM diff — pure reflow: fonts/wrapping/css)";
-}
-
-/**
- * Wraps one row, applies the production flow-root box, and records its
- * post-mount height changes into the audit registry. Used only when
- * DEBUG_SIZES is true; otherwise rows render through a plain flow-root div.
- *
- * The probe observes its *own* element — a sibling measurement to virtuoso's
- * own ResizeObserver (which observes the wrapper element virtuoso renders
- * around this one). They watch different elements so they don't fight, but to
- * avoid "ResizeObserver loop … undelivered notifications" warnings the callback
- * does no layout reads beyond the delivered entry and no synchronous logging —
- * results are aggregated silently and surfaced on demand via report().
- *
- * @internal
- */
-function HeightAuditProbe({
-    itemKey,
-    baseLabel,
-    children,
-}: PropsWithChildren<{ itemKey: string; baseLabel: string }>): ReactNode {
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-        let mountType: string | null = null;
-        let mountHeight = 0;
-        let prevHeight: number | null = null;
-        let rowUnstable = false;
-        let forensics: RowForensics | null = null;
-        const ro = new ResizeObserver((entries) => {
-            const h = entries[entries.length - 1].borderBoxSize[0].blockSize;
-            if (prevHeight === null) {
-                // First delivery == mount. Classify now that the tile has rendered.
-                mountType = classifyTile(el, baseLabel);
-                mountHeight = h;
-                prevHeight = h;
-                forensics = snapshotRow(el);
-                heightAudit.recordMount(mountType, itemKey);
-                return;
+        return () => {
+            cancelAnimationFrame(raf);
+            for (const ev of inputEvents) {
+                window.removeEventListener(ev, markInput, { capture: true } as EventListenerOptions);
             }
-            if (h !== prevHeight && mountType) {
-                // Re-classify: a placeholder that resolved (e.g. decrypting → image)
-                // is now its real type, so attribute the growth to what it became.
-                const currentType = classifyTile(el, baseLabel);
-                heightAudit.recordResize(
-                    currentType,
-                    itemKey,
-                    mountHeight,
-                    prevHeight,
-                    h,
-                    rowUnstable,
-                    detectFeatures(el),
-                );
-                if (currentType !== mountType) heightAudit.recordTransition(mountType, currentType);
-                const next = snapshotRow(el);
-                heightAudit.recordDetail({
-                    key: itemKey,
-                    type: currentType,
-                    delta: Math.round(h - prevHeight),
-                    heights: `${Math.round(mountHeight)}→${Math.round(prevHeight)}→${Math.round(h)}`,
-                    changes: forensics ? diffForensics(forensics, next) : "?",
-                    bodyPreview: next.bodyPreview,
-                    ts: Math.round(performance.now()),
-                });
-                forensics = next;
-                rowUnstable = true;
-                prevHeight = h;
-            }
-        });
-        ro.observe(el);
-        return () => ro.disconnect();
-    }, [itemKey, baseLabel]);
-
-    return (
-        <div ref={ref} style={ITEM_WRAPPER_STYLE}>
-            {children}
-        </div>
-    );
+        };
+    }, [scrollerRef]);
 }
+
+type Phase = "init" | "placing" | "live";
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
-    const virtuosoRef = useRef<VirtuosoHandle>(null);
 
-    // Always-current snapshot reference for callbacks that fire outside React's
-    // rendering cycle (Virtuoso's scroll/range/scrollToIndexOnChange callbacks).
+    // Always-current snapshot for the imperative callbacks/effects below, which
+    // run outside React's render and must not close over a stale items array.
     const snapshotRef = useRef(snapshot);
     snapshotRef.current = snapshot;
 
-    // Initial-load cover + anchor settle. Virtuoso mounts hidden behind a centred
-    // spinner and places its anchor; once placement settles we reveal it and tell
-    // the VM to clear pendingAnchor (re-enabling followOutput).
+    // The spinners are VM "projection-only" list items at the very edges (see
+    // RoomTimelineViewModel.republish): the VM layers them onto baseItems and
+    // already decrements firstItemIndex while the backward spinner shows, so real
+    // events keep stable absolute indices. We feed the FULL list (spinner
+    // included) to the virtualizer — that is what gives the spinner reserved space
+    // in the scroll content and lets anchorTo compensate its add/remove via core's
+    // edge-change path (the same reason the VM renders them as real list items).
     //
-    // Settle is signalled per placement path: the initial mount uses the scroll
-    // location's `done` callback (added by our patch, mirrors scrollIntoView's
-    // `done`), which fires once scrollToIndex has converged on the target's final
-    // position; in-place reloads call onSettled as soon as they issue the scroll.
-    //
-    // Holding pendingAnchor (→ followOutput === false) until then is load-bearing
-    // on a cold mount: heights are unmeasured, and clearing early flips followOutput
-    // back to a function, arming Virtuoso's trapNextSizeIncrease (it checks the
-    // prop's identity, not its return value) so the next measure-driven growth
-    // snaps the list to the bottom.
-    //
-    // `revealed` is one-shot (the panel is keyed on roomId, so it resets on room
-    // switch); the anchor clear runs for every load.
+    // The one TanStack-specific catch: anchorTo chooses the anchor as the item at
+    // the current scroll offset (getVirtualItemForOffset). At the very top that is
+    // the backward spinner, and its key vanishes when the batch replaces it,
+    // leaving the prepend un-compensated (the original "jump to top"). We solve it
+    // by wrapping getVirtualItemForOffset to skip loading items, i.e. anchoring on
+    // the first real item below the spinner (see the override effect below).
+    // ─── Measure-and-reveal buffer ──────────────────────────────────────────────
+    // The virtualizer is driven by `committed`, NOT directly by snapshot.items.
+    // For a backward history prepend we hold the freshly-fetched batch back one
+    // cycle: render it off-screen in the sidecar, measure its real heights into
+    // sizeByKeyRef, and only THEN commit it. So when anchorTo processes the prepend
+    // it places against real heights (via estimateSize reading the seeded cache)
+    // instead of the 48px guess — removing the fling-to-top jump AND the resize
+    // "resistance" while scrolling up (no estimate→actual delta left to
+    // compensate). All other updates (cold load, reloads, tail appends, trims,
+    // spinner toggles) commit straight through. See the reconcile/measure effects.
+    const [committed, setCommitted] = useState<{ items: TimelineItem[]; firstItemIndex: number }>(() => ({
+        items: snapshot.items,
+        firstItemIndex: snapshot.firstItemIndex,
+    }));
+    const committedRef = useRef(committed);
+    committedRef.current = committed;
+    const items = committed.items;
+    const itemsRef = useRef(items);
+    itemsRef.current = items;
+
+    // The batch currently being measured off-screen (non-empty only between a VM
+    // prepend and our commit of it). `pendingCommitRef` holds the snapshot to
+    // commit once those heights are seeded.
+    const [sidecarItems, setSidecarItems] = useState<TimelineItem[]>([]);
+    const sidecarRef = useRef<HTMLDivElement | null>(null);
+    const pendingCommitRef = useRef<{ items: TimelineItem[]; firstItemIndex: number } | null>(null);
+
+    const scrollerRef = useRef<HTMLDivElement | null>(null);
+
+    // Cold-load cover: the list lays out hidden, we place the anchor, and only
+    // reveal once placement settles. One-shot (the panel is keyed on roomId).
     const [revealed, setRevealed] = useState(false);
     const revealedRef = useRef(false);
-    const onSettled = useCallback(() => {
-        scrollTrace("settled");
-        if (!revealedRef.current) {
-            revealedRef.current = true;
-            setRevealed(true);
-        }
-        vm.onAnchorReached();
-    }, [vm]);
 
-    // Debug only: latest scroller pixel metrics, updated on every onScroll, so the
-    // endReached trace can report how far (in px) the viewport is from the list
-    // bottom. A large distanceFromBottom at endReached means it fired without the
-    // user actually being near the bottom (spurious re-trigger); ~0 means genuine.
-    const scrollMetaRef = useRef({ scrollTop: 0, scrollHeight: 0, clientHeight: 0, lastScrollTop: 0 });
+    // getItemKey must be a FRESH closure over the current items each render: core
+    // compares prevOptions.getItemKey(0) vs the new one to detect prepends/trims,
+    // and setOptions re-runs every render, so the previous closure is the prior
+    // items array. Stable keys (event ids, etc.) are what make anchoring work.
+    const getItemKey = useCallback((index: number): string => items[index]?.key ?? String(index), [items]);
 
-    // Debug only: per-frame content-jump detection (see useContentJumpDetector).
-    // The commit marker timestamps each items/firstItemIndex publish so a logged
-    // jump can be attributed to (or ruled out from) a pagination batch.
-    const scrollerElRef = useRef<HTMLElement | null>(null);
-    const onScrollerRef = useCallback((el: HTMLElement | Window | null) => {
-        scrollerElRef.current = el instanceof HTMLElement ? el : null;
-    }, []);
-    const commitInfoRef = useRef<CommitInfo | null>(null);
-    useLayoutEffect(() => {
-        if (!DEBUG_JUMPS) return;
-        commitInfoRef.current = {
-            itemsLen: snapshot.items.length,
-            firstItemIndex: snapshot.firstItemIndex,
-            at: performance.now(),
-        };
-    }, [snapshot.items, snapshot.firstItemIndex]);
-    useContentJumpDetector(scrollerElRef, commitInfoRef);
+    // Adaptive height estimate: a running mean of measured row heights, keyed so
+    // re-measures of the same row replace (not double-count) its contribution. A
+    // close estimate keeps the estimate→measured delta — and thus the resize
+    // compensation that fires as rows scroll into view — small, which is what stops
+    // the slow-scroll stutter.
+    const estimateRef = useRef(ESTIMATED_ITEM_HEIGHT);
+    const sizeByKeyRef = useRef<Map<string, number>>(new Map());
+    const sizeSumRef = useRef(0);
 
-    // Wrap each row in the flow-root BFC (see ITEM_WRAPPER_STYLE) so margins stay
-    // contained and virtuoso measures the true laid-out height — under-reporting
-    // shows up as "missing" scrollTop at the bottom and jumps during back-pagination.
-    // In debug builds the audit probe wraps instead, applying the same box.
-    const itemContent = useCallback(
-        (_index: number, item: TimelineItem): ReactNode => {
-            if (!DEBUG_SIZES) {
-                return <div style={ITEM_WRAPPER_STYLE}>{renderItem(item)}</div>;
+    // Keep anchorTo from ever choosing a loading spinner as the scroll anchor.
+    // anchorTo picks the item at the current scroll offset and re-pins it BY KEY
+    // after the rebuild; at the top that item is the backward spinner, whose key
+    // vanishes when the batch replaces it — so the prepend would be left
+    // un-compensated (the "jump to top"). `isValidAnchorItem` (added via our
+    // @tanstack/virtual-core patch — see patches/@tanstack__virtual-core@3.17.1.patch)
+    // makes core skip items we reject and anchor on the nearest real item, whose
+    // key survives the batch, so the prepend and the spinner's own add/remove are
+    // absorbed by core's edge-change compensation. It is not in the upstream
+    // option types, so we attach it via a typed spread below (excess-property
+    // checks don't apply to spread props; ReactVirtualizerOptions is an
+    // intersection alias and so can't be augmented).
+    const anchorPatch = {
+        isValidAnchorItem: (item: VirtualItem): boolean => {
+            // Identify spinners by their STABLE key, never by indexing into the
+            // items array: at the batch-arrival edge change the VirtualItem's
+            // `.index` is in the PRE-update measurement space (spinner at 0) while
+            // our items array is already the POST-update list (a real event at 0),
+            // so indexing tests the wrong row and the spinner slips through. The
+            // keys mirror RoomTimelineViewModel.BACKWARD_LOADING_KEY /
+            // FORWARD_LOADING_KEY (event keys are "$…", separators "date-…", so
+            // these never collide).
+            const isLoading = item.key === "backward-loading" || item.key === "forward-loading";
+            if (DEBUG_JUMPS && isLoading) {
+                // eslint-disable-next-line no-console
+                console.debug(
+                    `[TimelineView] anchor: rejecting loading item idx=${item.index} key=${item.key}`,
+                );
             }
-            const baseLabel = item.kind === "event" ? "event" : item.kind;
-            return (
-                <HeightAuditProbe itemKey={item.key} baseLabel={baseLabel}>
-                    {renderItem(item)}
-                </HeightAuditProbe>
-            );
+            return !isLoading;
         },
-        [renderItem],
-    );
+    };
 
-    const computeItemKey = useCallback((_index: number, item: TimelineItem): string => item.key, []);
-
-    // First-paint placement. Virtuoso reads this only at mount (it is not keyed on
-    // the load, so it survives jump-to-live / jump-to-read-marker data swaps —
-    // those go through scrollToIndexOnChange below). The empty-items gate keeps
-    // Virtuoso unmounted until the initial load's first publish, so the value read
-    // at mount carries that load's pendingAnchor and positions the anchor with no
-    // post-mount correction. `done` fires onSettled once Virtuoso converges.
-    const { items, pendingAnchor } = snapshot;
-    const initialTopMostItemIndex = useMemo<IndexLocationWithAlign>(() => {
-        const fallback: IndexLocationWithAlign = {
-            index: Math.max(0, items.length - 1),
-            align: "end",
-            done: onSettled,
-        };
-        if (!pendingAnchor) return fallback;
-        const index = items.findIndex((item) => item.key === pendingAnchor.targetKey);
-        if (index === -1) {
-            scrollTrace("initialTopMostItemIndex:miss", { targetKey: pendingAnchor.targetKey });
-            return fallback;
-        }
-        scrollTrace("initialTopMostItemIndex", {
-            index,
-            align: pendingAnchor.align,
-            targetKey: pendingAnchor.targetKey,
-        });
-        return { index, align: pendingAnchor.align, done: onSettled };
-    }, [items, pendingAnchor, onSettled]);
-
-    // Placement for in-place loads after the first mount (jump-to-live,
-    // jump-to-read-marker). `scrollToIndexOnChange` is added by our patch
-    // (patches/react-virtuoso@4.18.5.patch): invoked on every data/count change,
-    // and unlike scrollIntoViewOnChange the returned location routes through
-    // scrollToIndex — honouring `align` (center) with no "already visible"
-    // short-circuit. We act only while a pendingAnchor is set (just after a load);
-    // during pagination it is null, so this is a no-op. We settle as soon as the
-    // scroll is issued — the reload already has its content, and waiting for the
-    // scroll's `done` here left the spinner up noticeably too long.
-    const scrollToIndexOnChange = useCallback(
-        (params: { totalCount: number; scrollingInProgress: boolean }): IndexLocationWithAlign | false => {
-            const snap = snapshotRef.current;
-            const anchor = snap.pendingAnchor;
-            if (!anchor) return false;
-            const arrayIndex = snap.items.findIndex((item) => item.key === anchor.targetKey);
-            if (arrayIndex === -1) {
-                scrollTrace("scrollToIndexOnChange:miss", {
-                    targetKey: anchor.targetKey,
-                    totalCount: params.totalCount,
-                });
-                return false;
+    const virtualizer = useVirtualizer({
+        count: items.length,
+        getScrollElement: () => scrollerRef.current,
+        estimateSize: (index) => {
+            // Use the row's real measured height when known — crucially including
+            // heights seeded by the sidecar measure pass BEFORE the batch is
+            // committed, which is what lets anchorTo place a just-prepended batch
+            // against real heights. Falls back to the running mean for unseen rows.
+            const key = items[index]?.key;
+            const cached = key !== undefined ? sizeByKeyRef.current.get(key) : undefined;
+            return Math.round(cached ?? estimateRef.current);
+        },
+        measureElement: (element, entry, instance) => {
+            const size = defaultMeasureElement(element, entry, instance);
+            if (size > 0) {
+                const key = String(instance.options.getItemKey(instance.indexFromElement(element)));
+                const map = sizeByKeyRef.current;
+                const prev = map.get(key);
+                if (DEBUG_JUMPS && prev !== undefined && Math.abs(size - prev) > 50) {
+                    // A row re-measuring far from its cached/seeded height is what
+                    // anchorTo compensates with a scrollTop write — the post-commit
+                    // lurch. Naming the row (key → event id) and the kind tells us
+                    // WHAT grows late (encrypted image load, reply resolve, etc.).
+                    const idx = instance.indexFromElement(element);
+                    const kind = itemsRef.current[idx]?.kind;
+                    // eslint-disable-next-line no-console
+                    console.debug(
+                        `[TimelineView] RESIZE key=${key} kind=${kind} prev=${Math.round(prev)}→${Math.round(size)} ` +
+                            `Δ=${Math.round(size - prev)}px idx=${idx}`,
+                    );
+                }
+                if (prev !== undefined) sizeSumRef.current -= prev;
+                map.set(key, size);
+                sizeSumRef.current += size;
+                estimateRef.current = sizeSumRef.current / map.size;
             }
-            scrollTrace("scrollToIndexOnChange:scroll", {
-                index: arrayIndex,
-                align: anchor.align,
-                targetKey: anchor.targetKey,
-                totalCount: params.totalCount,
-                scrollingInProgress: params.scrollingInProgress,
-            });
-            onSettled();
-            return { index: arrayIndex, align: anchor.align, behavior: "auto" };
+            return size;
         },
-        [onSettled],
-    );
+        getItemKey,
+        overscan: OVERSCAN,
+        // Chat-timeline mode: keep the visible item fixed across any edge change
+        // (prepend / trim / spinner add-remove) before paint, and enable
+        // follow-on-append below.
+        anchorTo: "end",
+        // Skip loading spinners as anchor candidates (see anchorPatch above).
+        ...anchorPatch,
+        // Follow new tail messages only at the live end and not mid-anchored-load,
+        // and core additionally only follows when already at the bottom.
+        followOnAppend: snapshot.atLiveEnd && snapshot.pendingAnchor === null,
+        // Drive row positions and the container height imperatively (the lib
+        // writes `transform`/`height` directly to the DOM in a pre-paint layout
+        // effect) instead of through React. This collapses the measure→reposition
+        // path into a single synchronous frame: on a pure scroll, the
+        // first-measurement resize compensation and the row's new transform land
+        // together before paint, with no intervening React commit. Without this we
+        // paid an extra React-render frame between measuring a row and moving it,
+        // which compounded the estimate→actual transient into visible stutter.
+        // `onChange` still re-renders React when the rendered *range* changes (new
+        // items in/out), so our renderItem set stays correct. Mode defaults to
+        // "transform"; we must NOT also set transform/height in JSX (see render).
+        directDomUpdates: true,
+    });
 
-    // Debug-only: capture scroller pixel metrics for the endReached trace.
-    const onScroll = useCallback((e: React.UIEvent<HTMLElement>) => {
-        if (!DEBUG_SCROLL) return;
-        const el = e.currentTarget;
-        if (!el) return;
-        const m = scrollMetaRef.current;
-        m.lastScrollTop = m.scrollTop;
-        m.scrollTop = el.scrollTop;
-        m.scrollHeight = el.scrollHeight;
-        m.clientHeight = el.clientHeight;
-    }, []);
+    // Diagnostic: scrollOffset captured right after useVirtualizer — i.e. after
+    // setOptions ran this render, which is where anchorTo applies its eager
+    // pre-paint adjustment. If anchorTo compensated a prepend, this is already the
+    // pushed-up value; the count-change log compares it to the post-commit value.
+    const postSetOptionsOffsetRef = useRef<number | null>(null);
+    postSetOptionsOffsetRef.current = virtualizer.scrollOffset;
 
-    // Wrapped pagination + at-bottom callbacks so the View-side trigger is traced
-    // immediately before the VM's own [TimelineVM] paginate logs.
-    const onEndReached = useCallback(
-        (index: number) => {
-            const m = scrollMetaRef.current;
-            // px from the viewport bottom to the list bottom; ~0 = genuinely at the
-            // bottom, large = endReached fired without the user being near it.
-            const distanceFromBottom = Math.round(m.scrollHeight - m.clientHeight - m.scrollTop);
-            scrollTrace("endReached", {
-                index,
-                lastIndex: snapshotRef.current.items.length - 1,
-                atLiveEnd: snapshotRef.current.atLiveEnd,
-                isAtBottom: snapshotRef.current.isAtBottom,
-                distanceFromBottom,
-                scrollDelta: Math.round(m.scrollTop - m.lastScrollTop),
-                pendingAnchor: snapshotRef.current.pendingAnchor?.targetKey ?? null,
-            });
-            vm.onEndReached();
-        },
-        [vm],
-    );
+    useContentJumpDetector(scrollerRef as React.MutableRefObject<HTMLElement | null>);
 
-    const onStartReached = useCallback(
-        (index: number) => {
-            scrollTrace("startReached", {
-                index,
-                firstItemIndex: snapshotRef.current.firstItemIndex,
-            });
-            vm.onStartReached();
-        },
-        [vm],
-    );
-
-    const onAtBottomStateChange = useCallback(
-        (atBottom: boolean) => {
-            scrollTrace("atBottomStateChange", { atBottom, atLiveEnd: snapshotRef.current.atLiveEnd });
-            vm.onAtBottomStateChange(atBottom);
-        },
-        [vm],
-    );
-
-    // Imperative scroll capability handed to VM actions that may resolve to an
-    // in-window scroll (jump-to-live when already at live end, jump-to-read-marker
-    // when marker is in the loaded window). Reads from snapshotRef so the lookup
-    // always uses the current items array, not a stale closure.
-    const scrollNow = useCallback<ImmediateScroll>((anchor) => {
-        const arrayIndex = snapshotRef.current.items.findIndex((i) => i.key === anchor.targetKey);
-        if (arrayIndex === -1) return;
-        virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });
-    }, []);
-
-    // Track the visible range so the VM can persist the scroll position. Settling
-    // is handled entirely by the scroll location's `done` (see onSettled), so
-    // this no longer participates in anchor placement.
-    const onRangeChanged = useCallback(
-        (range: { startIndex: number; endIndex: number }) => {
-            scrollTrace("rangeChanged", {
-                start: range.startIndex,
-                end: range.endIndex,
-                firstItemIndex: snapshotRef.current.firstItemIndex,
-                lastIndex: snapshotRef.current.firstItemIndex + snapshotRef.current.items.length - 1,
-            });
-            vm.onVisibleRangeChanged(range.startIndex, range.endIndex);
-        },
-        [vm],
-    );
-
-    // Auto-scroll to the bottom on new messages only when the user is already at
-    // the bottom AND the window is at the live end.
+    // Document offset that puts `targetKey` at `align` in the viewport, or null
+    // when the key is not in the loaded window.
     //
-    // While pendingAnchor is set we return `false` (not a function): Virtuoso's
-    // trapNextSizeIncrease checks the prop's identity, not its return value, so a
-    // function would let measure-driven growth during the initial load hijack the
-    // anchor scroll with a snap to the last item. Disabling it outright avoids that.
-    const followOutput = useMemo<boolean | ((isAtBottom: boolean) => boolean)>(() => {
-        if (snapshot.pendingAnchor !== null) {
-            scrollTrace("followOutput:disabled", { pendingAnchor: snapshot.pendingAnchor.targetKey });
-            return false;
-        }
-        return (isAtBottom: boolean) => {
-            const follow = isAtBottom && snapshot.atLiveEnd;
-            scrollTrace("followOutput:eval", { isAtBottom, atLiveEnd: snapshot.atLiveEnd, follow });
-            return follow;
-        };
-    }, [snapshot.atLiveEnd, snapshot.pendingAnchor]);
-
-    const EXTENDED_VIEWPORT_HEIGHT = 1000;
-    const increaseViewportBy = useMemo(
-        () => ({
-            top: EXTENDED_VIEWPORT_HEIGHT,
-            bottom: EXTENDED_VIEWPORT_HEIGHT,
-        }),
-        [],
+    // We deliberately do NOT scroll via virtualizer.scrollToIndex. scrollToIndex
+    // installs a reconcile loop keyed on a FIXED array index that keeps
+    // re-scrolling to that index every frame until it settles. If history is
+    // prepended while it is still running (cold-load convergence racing the first
+    // back-pagination, or a jump just before the user scrolls up), that index now
+    // points at older content, so the loop drags the viewport toward the top —
+    // fighting anchorTo's prepend compensation and triggering runaway
+    // back-pagination. Resolving an offset and writing scrollTop ourselves leaves
+    // no such loop, so prepends are handled purely by anchorTo: "end".
+    const offsetForKey = useCallback(
+        (targetKey: string | null, align: AnchorAlign): number | null => {
+            const idx = targetKey ? itemsRef.current.findIndex((i) => i.key === targetKey) : -1;
+            if (idx < 0) return null;
+            const info = virtualizer.getOffsetForIndex(idx, align);
+            return info ? info[0] : null;
+        },
+        [virtualizer],
     );
+    // ─── Cold load: place the anchor hidden, settle, then reveal ───────────────
+    const phaseRef = useRef<Phase>("init");
+    const coldRafRef = useRef(0);
+    useEffect(() => () => cancelAnimationFrame(coldRafRef.current), []);
+    useIsomorphicLayoutEffect(() => {
+        if (phaseRef.current !== "init" || items.length === 0) return;
+        // Flip phase synchronously so re-runs (more data arriving mid-settle)
+        // early-return rather than restarting placement. No pagination fires until
+        // we reach "live", so the list does not change while we converge.
+        phaseRef.current = "placing";
+        const anchor = snapshotRef.current.pendingAnchor;
+        const list = itemsRef.current;
+        let idx = anchor ? list.findIndex((i) => i.key === anchor.targetKey) : -1;
+        if (idx < 0) idx = list.length - 1;
+        const align: AnchorAlign = anchor?.align ?? "end";
+        // Place via scrollToIndex and let TanStack own the scroll: its reconcile
+        // re-targets as estimate heights become real, and its resize compensation
+        // writes scrollTop to keep content stable. We must NOT also write scrollTop
+        // ourselves — two controllers fighting is what drifted the viewport to the
+        // top. Pagination stays gated until "live", so no prepend shifts the
+        // index-keyed reconcile mid-converge, and waiting for quiescence below means
+        // the reconcile has cleared before we go live — so it can't fight anchorTo.
+        if (idx >= 0) virtualizer.scrollToIndex(idx, { align, behavior: "auto" });
+        // Reveal once BOTH measurement (totalSize) and scroll position hold steady
+        // for a few frames — i.e. heights have settled and the placement landed.
+        let stable = 0;
+        let cap = COLD_CAP_FRAMES;
+        let lastTotal = NaN;
+        let lastScroll = NaN;
+        const tick = (): void => {
+            const total = virtualizer.getTotalSize();
+            const scroll = scrollerRef.current?.scrollTop ?? 0;
+            const totalStable = !Number.isNaN(lastTotal) && Math.abs(total - lastTotal) < 1;
+            const scrollStable = !Number.isNaN(lastScroll) && Math.abs(scroll - lastScroll) < 1;
+            lastTotal = total;
+            lastScroll = scroll;
+            if (totalStable && scrollStable) stable += 1;
+            else stable = 0;
+            cap -= 1;
+            if (stable >= COLD_STABLE_FRAMES || cap <= 0) {
+                if (DEBUG_JUMPS) {
+                    // eslint-disable-next-line no-console
+                    console.debug(
+                        `[TimelineView] cold-load reveal — scrollTop=${Math.round(scroll)}, ` +
+                            `total=${Math.round(total)}, cappedOut=${cap <= 0}`,
+                    );
+                }
+                phaseRef.current = "live";
+                if (!revealedRef.current) {
+                    revealedRef.current = true;
+                    setRevealed(true);
+                }
+                vm.onAnchorReached();
+                return;
+            }
+            coldRafRef.current = requestAnimationFrame(tick);
+        };
+        coldRafRef.current = requestAnimationFrame(tick);
+    }, [items.length, virtualizer, vm]);
+
+    // ─── Measure-and-reveal reconcile: sync `committed` to the VM, routing a
+    // freshly-prepended history batch through the off-screen sidecar first ───────
+    useIsomorphicLayoutEffect(() => {
+        // Before the cold-load anchor settles, and during in-place reloads
+        // (pendingAnchor), the placement paths own the scroll and must see the VM
+        // data immediately — no measure buffer in front of them.
+        if (phaseRef.current !== "live" || snapshot.pendingAnchor !== null) {
+            if (committed.items !== snapshot.items) {
+                setCommitted({ items: snapshot.items, firstItemIndex: snapshot.firstItemIndex });
+            }
+            return;
+        }
+        if (committed.items === snapshot.items) return; // already in sync
+
+        // Measure-first invariant: a row that first paints at an estimated height
+        // and then settles taller shifts the rows above it — a jump. Hold such a
+        // row back, measure it off-screen, and commit only once its real height is
+        // seeded. The hold must catch exactly the rows that are
+        //   (a) NEW in this snapshot (a key not previously committed),
+        //   (b) at or above the viewport BOTTOM — with anchorTo:"end" the anchor
+        //       sits near the bottom, so a row growing there pushes visible content
+        //       UP; rows below only ever push content down and need no pre-measure,
+        //   (c) NOT a tail append — those stick to the bottom via followOnAppend and
+        //       must commit immediately, never wait a measure cycle.
+        //
+        // It must key off "new this snapshot", NOT "unmeasured anywhere": history
+        // that was loaded but never rendered is also unmeasured, and sweeping it
+        // through the sidecar on every unrelated update (live append, read marker,
+        // decrypt no-op) churns the commit and itself causes jumps.
+        //
+        // New rows arrive as a FRONT history prepend or — in encrypted rooms — a
+        // decrypt-flush revealing a previously-filtered event in place, which can
+        // land within the viewport above the anchor.
+        const committedItems = committed.items;
+        const committedKeys = new Set(committedItems.map((i) => i.key));
+        const rendered = virtualizer.getVirtualItems();
+        // Bottom of the rendered range, mapped into the NEW list: the lowest row
+        // whose late growth could lurch visible content. -1 if it can't be located
+        // (rendered range empty/raced) — then we bound by the last committed row.
+        const boundaryKey =
+            rendered.length > 0 ? committedItems[rendered[rendered.length - 1].index]?.key : undefined;
+        const boundaryIdx = boundaryKey !== undefined ? snapshot.items.findIndex((i) => i.key === boundaryKey) : -1;
+        // Last already-committed row in the NEW list: new rows AFTER it are tail
+        // appends (commit straight through); new rows BEFORE it are prepends or
+        // in-place reveals (measure-first candidates).
+        let lastCommittedIdx = -1;
+        for (let i = snapshot.items.length - 1; i >= 0; i--) {
+            if (committedKeys.has(snapshot.items[i].key)) {
+                lastCommittedIdx = i;
+                break;
+            }
+        }
+        const cutoff = boundaryIdx >= 0 ? Math.min(boundaryIdx, lastCommittedIdx) : lastCommittedIdx;
+        const toMeasure: TimelineItem[] = [];
+        for (let i = 0; i <= cutoff; i++) {
+            const it = snapshot.items[i];
+            if (it.kind === "loading") continue;
+            if (committedKeys.has(it.key)) continue; // only rows new this snapshot
+            if (sizeByKeyRef.current.has(it.key)) continue; // already measured earlier
+            toMeasure.push(it);
+        }
+        if (toMeasure.length === 0) {
+            // Spinner toggle / tail append / trim / already-measured — commit through.
+            setCommitted({ items: snapshot.items, firstItemIndex: snapshot.firstItemIndex });
+            return;
+        }
+        // Measure the batch off-screen first; the measure effect commits it.
+        pendingCommitRef.current = { items: snapshot.items, firstItemIndex: snapshot.firstItemIndex };
+        setSidecarItems(toMeasure);
+    }, [snapshot.items, snapshot.firstItemIndex, snapshot.pendingAnchor, committed]);
+
+    // Once the sidecar batch has laid out, measure its real heights into the
+    // cache, then commit the snapshot it came from — anchorTo now places against
+    // those heights, so the prepend lands with no jump and no resize correction.
+    useIsomorphicLayoutEffect(() => {
+        if (sidecarItems.length === 0) return;
+        const container = sidecarRef.current;
+        let measured = 0,
+            zeroH = 0,
+            total = 0;
+        const samples: number[] = [];
+        if (container) {
+            for (const node of container.querySelectorAll<HTMLElement>("[data-sidecar-key]")) {
+                const key = node.dataset.sidecarKey;
+                if (key === undefined || sizeByKeyRef.current.has(key)) continue;
+                const h = node.getBoundingClientRect().height;
+                if (h > 0) {
+                    sizeByKeyRef.current.set(key, h);
+                    sizeSumRef.current += h;
+                    estimateRef.current = sizeSumRef.current / sizeByKeyRef.current.size;
+                    measured++;
+                    total += h;
+                    if (samples.length < 6) samples.push(Math.round(h));
+                } else {
+                    zeroH++;
+                }
+            }
+        }
+        if (DEBUG_JUMPS) {
+            // Root-cause probe for the jump-to-top under-compensation: compare the
+            // total height the sidecar seeds against the `postSetOptionsOffset`
+            // anchorTo then applies (logged at the next commit). A sidecar width
+            // that differs from the real scroller width would make tiles wrap to a
+            // wrong height; zeroH>0 means rows that never got a real seed.
+            // eslint-disable-next-line no-console
+            console.debug(
+                `[TimelineView] sidecar-measure: requested=${sidecarItems.length} measured=${measured} ` +
+                    `zeroH=${zeroH} totalH=${Math.round(total)} estimate=${Math.round(estimateRef.current)} ` +
+                    `sidecarW=${Math.round(container?.getBoundingClientRect().width ?? 0)} ` +
+                    `scrollerW=${Math.round(scrollerRef.current?.clientWidth ?? 0)} samples=[${samples.join(",")}]`,
+            );
+        }
+        const target = pendingCommitRef.current;
+        pendingCommitRef.current = null;
+        if (target) setCommitted(target);
+        setSidecarItems([]);
+    }, [sidecarItems]);
+
+    // ─── Live: anchored reloads, visible range, at-bottom, pagination ──────────
+    const lastPlacedRef = useRef<string | null>(null);
+    const visRef = useRef<{ s: number; e: number } | null>(null);
+    const atBottomRef = useRef<boolean | null>(null);
+    // Edge-trigger dedup signature: "count:visibleBoundaryIndex" while at the edge,
+    // "" when away from it. Re-fires when either count or the visible boundary
+    // moves, so scrolling into freshly-loaded history keeps pagination going.
+    const startSigRef = useRef("");
+    const endSigRef = useRef("");
+    const prevCountRef = useRef(0);
+
+    useIsomorphicLayoutEffect(() => {
+        if (phaseRef.current !== "live") return;
+        const v = virtualizer;
+        const snap = snapshotRef.current;
+        const count = itemsRef.current.length;
+        // Indices reported to the VM are relative to what is actually RENDERED =
+        // `committed`, which can lag snapshot by one measure cycle during a prepend.
+        // The VM defines firstItemIndex so absoluteIndex = firstItemIndex +
+        // arrayIndex, so we use the committed firstItemIndex here.
+        const toAbsolute = (index: number): number => committedRef.current.firstItemIndex + index;
+
+        // Diagnostic: on every item-count change (prepend / trim) log the scroll
+        // position and the first rendered index AFTER anchorTo has run (it applies
+        // in the virtualizer's own layout effect, before this one). If a prepend
+        // kept us pinned, scrollOffset jumps up by ~the batch height and
+        // firstRenderedIdx stays well above 0; if it did NOT pin, scrollOffset
+        // stays ~0 and firstRenderedIdx is 0 (we are stranded at the new top).
+        if (DEBUG_JUMPS && count !== prevCountRef.current) {
+            const vis = v.getVirtualItems();
+            // eslint-disable-next-line no-console
+            console.debug(
+                `[TimelineView] items ${prevCountRef.current}→${count} — ` +
+                    `postSetOptionsOffset=${Math.round(postSetOptionsOffsetRef.current ?? -1)}, ` +
+                    `scrollOffset=${Math.round(v.scrollOffset ?? 0)}, firstRenderedIdx=${vis.length ? vis[0].index : -1}, ` +
+                    `total=${Math.round(v.getTotalSize())}, anchorTo=${String((v.options as { anchorTo?: string }).anchorTo)}, ` +
+                    `hasScrollEl=${!!v.scrollElement}`,
+            );
+            prevCountRef.current = count;
+        }
+
+        // In-place reload (jump-to-live / jump-to-read-marker out of window): the
+        // VM set pendingAnchor again. Re-assert it, then settle immediately — the
+        // reload already has its content.
+        if (snap.pendingAnchor) {
+            const sig = snap.pendingAnchor.targetKey;
+            if (lastPlacedRef.current !== sig) {
+                const target = offsetForKey(sig, snap.pendingAnchor.align);
+                if (target !== null) {
+                    if (scrollerRef.current) scrollerRef.current.scrollTop = target;
+                    lastPlacedRef.current = sig;
+                    vm.onAnchorReached();
+                }
+            }
+            return;
+        }
+        lastPlacedRef.current = null;
+
+        // Visible range (core's `range` is the visible span, overscan excluded).
+        const r = v.range;
+        if (r && (visRef.current?.s !== r.startIndex || visRef.current?.e !== r.endIndex)) {
+            visRef.current = { s: r.startIndex, e: r.endIndex };
+            vm.onVisibleRangeChanged(toAbsolute(r.startIndex), toAbsolute(r.endIndex));
+        }
+
+        // At-bottom (from measured offset/viewport/total — no forced layout read).
+        const offset = v.scrollOffset ?? 0;
+        const viewport = v.scrollRect?.height ?? 0;
+        const total = v.getTotalSize();
+        const atBottom = viewport > 0 && offset + viewport >= total - AT_BOTTOM_THRESHOLD_PX;
+        if (atBottom !== atBottomRef.current) {
+            atBottomRef.current = atBottom;
+            vm.onAtBottomStateChange(atBottom);
+        }
+
+        // Pagination edges, from the rendered (overscan-expanded) items. Fire when
+        // index 0 / count-1 is rendered (within overscan of an edge). We key the
+        // dedup on count AND the visible-range boundary, not count alone: after a
+        // batch pins us we can still be rendering index 0 (within overscan) with an
+        // unchanged count, and the user then scrolls up *into* the freshly-loaded
+        // history — the visible range moves even though count hasn't, and that must
+        // re-fire so pagination continues instead of stalling until a manual
+        // scroll-away-and-back. The VM coalesces redundant calls.
+        const vItems = v.getVirtualItems();
+        const firstIdx = vItems.length ? vItems[0].index : -1;
+        const lastIdx = vItems.length ? vItems[vItems.length - 1].index : -1;
+        const r2 = v.range;
+        if (firstIdx === 0) {
+            const sig = `${count}:${r2 ? r2.startIndex : 0}`;
+            if (startSigRef.current !== sig) {
+                startSigRef.current = sig;
+                vm.onStartReached();
+            }
+        } else {
+            startSigRef.current = "";
+        }
+        if (count > 0 && lastIdx === count - 1) {
+            const sig = `${count}:${r2 ? r2.endIndex : 0}`;
+            if (endSigRef.current !== sig) {
+                endSigRef.current = sig;
+                vm.onEndReached();
+            }
+        } else {
+            endSigRef.current = "";
+        }
+    });
+
+    // Imperative scroll for VM actions whose target is already in the window
+    // (jump-to-live at the live end, jump-to-read-marker in range).
+    const scrollNow = useCallback<ImmediateScroll>(
+        (anchor) => {
+            const apply = (): void => {
+                const target = offsetForKey(anchor.targetKey, anchor.align);
+                if (target !== null && scrollerRef.current) scrollerRef.current.scrollTop = target;
+            };
+            apply();
+            // One more frame: the freshly-targeted rows may measure and shift the
+            // offset slightly after the first write. Direct scrollTop again — no
+            // scrollToIndex, so no index-keyed reconcile that a later prepend
+            // could turn into a runaway scroll-to-top.
+            requestAnimationFrame(apply);
+        },
+        [offsetForKey],
+    );
+
+    // TEMP debug aid (gated on DEBUG_JUMPS): jump straight to scrollTop 0 so a
+    // backward pagination can be triggered deterministically — parked exactly at
+    // the spinner — and the resulting post-prepend shift read cleanly off the
+    // CONTENT-JUMP log, instead of having to fling the wheel. Instant (not smooth)
+    // so it lands in one frame. Remove together with DEBUG_JUMPS.
+    const jumpToTop = useCallback((): void => {
+        const scroller = scrollerRef.current;
+        if (scroller) scroller.scrollTop = 0;
+    }, []);
+
+    const virtualItems = virtualizer.getVirtualItems();
 
     return (
         <div style={{ height: "100%", width: "100%", position: "relative" }}>
-            {snapshot.items.length > 0 && (
-                <Virtuoso
-                    ref={virtuosoRef}
-                    data={snapshot.items}
-                    firstItemIndex={snapshot.firstItemIndex}
-                    initialTopMostItemIndex={initialTopMostItemIndex}
-                    itemContent={itemContent}
-                    computeItemKey={computeItemKey}
-                    startReached={onStartReached}
-                    atBottomStateChange={onAtBottomStateChange}
-                    endReached={onEndReached}
-                    followOutput={followOutput}
-                    scrollToIndexOnChange={scrollToIndexOnChange}
-                    increaseViewportBy={increaseViewportBy}
-                    onScroll={onScroll}
-                    scrollerRef={onScrollerRef}
-                    rangeChanged={onRangeChanged}
-                    // DEBUG level surfaces virtuoso's own "Upward scrolling
-                    // compensation" decisions next to our CONTENT-JUMP lines.
-                    logLevel={DEBUG_JUMPS ? LogLevel.DEBUG : LogLevel.ERROR}
-                    alignToBottom
-                    // Hidden (but still laid out, so heights measure and the
-                    // anchor scroll applies) until the initial placement settles;
-                    // see the `revealed` cover above.
-                    style={{ height: "100%", width: "100%", visibility: revealed ? "visible" : "hidden" }}
-                    skipAnimationFrameInResizeObserver={true}
-                    // Pin the visible anchor synchronously before paint on a
-                    // prepend (history pagination), rather than via Virtuoso's
-                    // frame-split deviation→scrollBy dance. With expensive event
-                    // tiles the deferred dance paints an uncompensated frame and
-                    // the timeline visibly lurches; this keeps the top-of-viewport
-                    // message fixed. Opt-in patch prop — see patches/react-virtuoso.
-                    maintainVisibleContentPosition={true}
-                />
-            )}
+            <div
+                ref={scrollerRef}
+                data-testid="timeline-scroller"
+                style={{
+                    height: "100%",
+                    width: "100%",
+                    overflowY: "auto",
+                    // Disable the browser's native scroll anchoring; core owns it.
+                    overflowAnchor: "none",
+                    visibility: revealed ? "visible" : "hidden",
+                }}
+            >
+                {/* Sizer height is written imperatively by the virtualizer via
+                    containerRef (directDomUpdates); do NOT set height here. */}
+                <div ref={virtualizer.containerRef} style={{ width: "100%", position: "relative" }}>
+                    {virtualItems.map((vi) => {
+                        const item: TimelineItem | undefined = items[vi.index];
+                        if (!item) return null;
+                        return (
+                            <div
+                                key={vi.key}
+                                data-index={vi.index}
+                                data-key={item.key}
+                                ref={virtualizer.measureElement}
+                                // No `transform` here: with directDomUpdates the
+                                // virtualizer writes each row's translate3d directly
+                                // (keyed via measureElement's elementsCache) in the
+                                // pre-paint layout effect. Setting it in JSX too would
+                                // double-write and fight on re-render.
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    overflowAnchor: "none",
+                                }}
+                            >
+                                {DEBUG_SIZES ? (
+                                    <HeightAuditProbe
+                                        itemKey={item.key}
+                                        baseLabel={item.kind === "event" ? "event" : item.kind}
+                                    >
+                                        {renderItem(item)}
+                                    </HeightAuditProbe>
+                                ) : (
+                                    renderItem(item)
+                                )}
+                            </div>
+                        );
+                    })}
+                    {/* Sidecar measure pass: a freshly-fetched history batch is
+                        rendered here off-screen (laid out but invisible, and
+                        position:absolute so it never grows the scroll content) just
+                        long enough to measure real heights into the cache — then
+                        it's committed to the list above. Inside the same container
+                        as the real rows so its width (and thus text wrapping) match. */}
+                    {sidecarItems.length > 0 && (
+                        <div
+                            ref={sidecarRef}
+                            aria-hidden="true"
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                visibility: "hidden",
+                                pointerEvents: "none",
+                            }}
+                        >
+                            {sidecarItems.map((item) => (
+                                <div key={item.key} data-sidecar-key={item.key} style={{ width: "100%" }}>
+                                    {renderItem(item)}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+            {/* Loading spinners are real in-list items now (kind:"loading",
+                rendered by renderItem), so they occupy reserved space and are
+                compensated by anchorTo via the getVirtualItemForOffset override
+                above — no viewport overlay needed. */}
             {!revealed && (
                 <div
                     style={{
@@ -896,6 +764,29 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 </div>
             )}
             {revealed && <TimelineOverlayButtons snapshot={snapshot} vm={vm} scrollNow={scrollNow} />}
+            {/* TEMP debug-only control — disappears when DEBUG_JUMPS is turned off. */}
+            {DEBUG_JUMPS && revealed && (
+                <button
+                    type="button"
+                    onClick={jumpToTop}
+                    style={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        zIndex: 1000,
+                        padding: "4px 8px",
+                        fontSize: 12,
+                        lineHeight: 1.2,
+                        background: "var(--cpd-color-bg-action-primary-rest, #0dbd8b)",
+                        color: "var(--cpd-color-text-on-solid-primary, #fff)",
+                        border: "none",
+                        borderRadius: 4,
+                        cursor: "pointer",
+                    }}
+                >
+                    ↑ Jump to top (debug)
+                </button>
+            )}
         </div>
     );
 }

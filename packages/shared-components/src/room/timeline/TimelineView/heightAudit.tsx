@@ -63,7 +63,7 @@ interface ResizeDetail {
     changes: string;
     bodyPreview: string;
     /** performance.now() of the resize, ms — correlate against the
-     * [TimelineViewTanstack] CONTENT-JUMP `ts=` field to see whether resizes
+     * [TimelineView] CONTENT-JUMP `ts=` field to see whether resizes
      * cluster around the frames a jump was detected. */
     ts: number;
 }

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
 import {
-    TimelineViewTanstack,
+    TimelineView,
     useCreateAutoDisposedViewModel,
     useViewModel,
     type TimelineItem,
@@ -136,7 +136,7 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
             className="mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
             style={{ height: "100%" }}
         >
-            <TimelineViewTanstack vm={vm} renderItem={renderItem} />
+            <TimelineView vm={vm} renderItem={renderItem} />
         </div>
     );
 }
