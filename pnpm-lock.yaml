@@ -266,7 +266,7 @@ overrides:
   caniuse-lite: 1.0.30001799
   markdown-it: 14.1.1
   matrix-widget-api: ^1.17.0
-  '@types/node': ts6.0
+  '@types/node': 25.9.3
   config-file-ts: 0.2.8-rc1
   node-abi: 4.31.0
   '@types/pg-pool': 2.0.7
@@ -315,7 +315,7 @@ importers:
         specifier: 'catalog:'
         version: 1.60.0
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@vitest/coverage-v8':
         specifier: 'catalog:'
@@ -421,7 +421,7 @@ importers:
         specifier: ^1.2.1
         version: 1.2.5
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@types/pacote':
         specifier: ^11.1.1
@@ -839,7 +839,7 @@ importers:
         specifier: ^3.5.3
         version: 3.5.6
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@types/pako':
         specifier: ^2.0.0
@@ -1140,7 +1140,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/module-api
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@types/react':
         specifier: ^19.2.10
@@ -1195,7 +1195,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/module-api
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@types/react':
         specifier: ^19.2.10
@@ -1229,7 +1229,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/module-api
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       typescript:
         specifier: 'catalog:'
@@ -1275,7 +1275,7 @@ importers:
         specifier: ^14.6.1
         version: 14.6.1(@testing-library/dom@10.4.1)
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@types/react':
         specifier: ^19.2.10
@@ -1321,7 +1321,7 @@ importers:
         specifier: ^7.49.1
         version: 7.58.9(@types/node@25.9.3)
       '@types/node':
-        specifier: ts6.0
+        specifier: 25.9.3
         version: 25.9.3
       '@types/react':
         specifier: ^19.2.10
@@ -5325,7 +5325,7 @@ packages:
   '@rushstack/node-core-library@5.23.1':
     resolution: {integrity: sha512-wlKmIKIYCKuCASbITvOxLZXepPbwXvrv7S6ig6XNWFchSyhL/E2txmVXspHY49Wu2dzf7nI27a2k/yV5BA3EiA==}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': 25.9.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -5333,7 +5333,7 @@ packages:
   '@rushstack/problem-matcher@0.2.1':
     resolution: {integrity: sha512-gulfhBs6n+I5b7DvjKRfhMGyUejtSgOHTclF/eONr8hcgF1APEDjhxIsfdUYYMzC3rvLwGluqLjbwCFZ8nxrog==}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': 25.9.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -5344,7 +5344,7 @@ packages:
   '@rushstack/terminal@0.24.0':
     resolution: {integrity: sha512-8ZQS4MMaGsv27EXCBiH7WMPkRZrffeDoIevs6z9TM5dzqiY6+Hn4evfK/G+gvgBTjfvfkHIZPQQmalmI2sM4TQ==}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': 25.9.3
     peerDependenciesMeta:
       '@types/node':
         optional: true
@@ -10009,7 +10009,7 @@ packages:
     resolution: {integrity: sha512-rNHAShJQqQwFNoL0hbf3BphSBOWnpOUAKvidLS/AjNVLPfoj5mSf4jQMfW3cYOs6hXeZC7nF7mDHaBnbxELOzg==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
     peerDependencies:
-      '@types/node': '*'
+      '@types/node': 25.9.3
       esbuild-register: '>=3.4.0'
       ts-node: '>=9.0.0'
     peerDependenciesMeta:
@@ -13677,7 +13677,7 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
+      '@types/node': 25.9.3
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -13708,7 +13708,7 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^20.19.0 || >=22.12.0
+      '@types/node': 25.9.3
       '@vitejs/devtools': ^0.1.18
       esbuild: 0.27.4
       jiti: '>=1.21.0'
@@ -13784,7 +13784,7 @@ packages:
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
-      '@types/node': ^20.0.0 || ^22.0.0 || >=24.0.0
+      '@types/node': 25.9.3
       '@vitest/browser-playwright': 4.1.9
       '@vitest/browser-preview': 4.1.9
       '@vitest/browser-webdriverio': 4.1.9

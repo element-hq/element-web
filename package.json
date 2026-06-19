@@ -31,7 +31,7 @@
         "@action-validator/core": "^0.6.0",
         "@nx-tools/nx-container": "^7.2.1",
         "@playwright/test": "catalog:",
-        "@types/node": "22",
+        "@types/node": "catalog:",
         "@vitest/coverage-v8": "catalog:",
         "cronstrue": "^3.0.0",
         "husky": "^9.0.0",

@@ -2,6 +2,7 @@ linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
+minimumReleaseAgeStrict: true
 packages:
     - "apps/*"
     - "packages/*"
@@ -11,6 +12,7 @@ packages:
 catalog:
     # typescript
     typescript: 6.0.3
+    "@types/node": ts6.0
     # react
     react: ^19.0.0
     react-dom: ^19.0.0
@@ -115,7 +117,7 @@ overrides:
     caniuse-lite: 1.0.30001799
     markdown-it: 14.1.1
     matrix-widget-api: "^1.17.0"
-    "@types/node": ts6.0
+    "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.31.0
     "@types/pg-pool": 2.0.7
@@ -137,4 +139,3 @@ minimumReleaseAgeExclude:
     - "@matrix-org/*"
     - "@vector-im/*"
     - "@element-hq/*"
-    - "@types/node@25.9.3"
