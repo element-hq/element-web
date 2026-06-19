@@ -215,6 +215,14 @@ export interface IConfigOptions {
     };
 
     modules?: string[];
+
+    // PATCH-RENAISSANCE-B: extension custom Renaissance (onboarding landing link, support email)
+    custom?: {
+        renaissance_chat?: {
+            invite_link_url?: string;
+            support_email?: string;
+        };
+    };
 }
 
 export interface ISsoRedirectOptions {

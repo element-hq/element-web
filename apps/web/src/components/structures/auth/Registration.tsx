@@ -44,6 +44,7 @@ import Spinner from "../../views/elements/Spinner";
 import { AuthHeaderDisplay } from "./header/AuthHeaderDisplay";
 import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
+import SdkConfig from "../../../SdkConfig";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 
@@ -156,6 +157,12 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        // PATCH-RENAISSANCE-B: redirect vers landing onboarding Renaissance
+        const inviteLinkUrl = SdkConfig.get("custom")?.renaissance_chat?.invite_link_url;
+        if (inviteLinkUrl) {
+            window.location.href = inviteLinkUrl;
+            return;
+        }
         this.replaceClient(this.props.serverConfig);
         //triggers a confirmation dialog for data loss before page unloads/refreshes
         window.addEventListener("beforeunload", this.unloadCallback);
