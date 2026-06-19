@@ -118,57 +118,51 @@ export interface SynapseConfig {
     macaroon_secret_key: string;
     form_secret: string;
     signing_key_path: string;
-    trusted_key_servers: unknown[];
+    trusted_key_servers: never[];
     password_config: {
         enabled: boolean;
     };
-    ui_auth: Record<string, unknown>;
+    ui_auth?: {
+        session_timeout: `{number}s`,
+    }
     background_updates: {
         min_batch_size: number;
         sleep_duration_ms: number;
     };
     enable_authenticated_media: boolean;
-    email:
-        | undefined
-        | {
-              enable_notifs: boolean;
-              smtp_host: string;
-              smtp_port: number;
-              smtp_user: string;
-              smtp_pass: string;
-              require_transport_security: false;
-              notif_from: string;
-              app_name: string;
-              notif_template_html: string;
-              notif_template_text: string;
-              notif_for_new_users: boolean;
-              client_base_url: string;
-          };
-    user_consent:
-        | undefined
-        | {
-              template_dir: string;
-              version: string;
-              server_notice_content: Record<string, unknown>;
-              send_server_notice_to_guests: boolean;
-              block_events_error: string;
-              require_at_registration: boolean;
-          };
-    server_notices:
-        | undefined
-        | {
-              system_mxid_localpart: string;
-              system_mxid_display_name: string;
-              system_mxid_avatar_url: string;
-              room_name: string;
-          };
+    email?: {
+        enable_notifs: boolean;
+        smtp_host: string;
+        smtp_port: number;
+        smtp_user: string;
+        smtp_pass: string;
+        require_transport_security: false;
+        notif_from: string;
+        app_name: string;
+        notif_template_html: string;
+        notif_template_text: string;
+        notif_for_new_users: boolean;
+        client_base_url: string;
+    };
+    user_consent?: {
+        template_dir: string;
+        version: string;
+        server_notice_content: Record<string, unknown>;
+        send_server_notice_to_guests: boolean;
+        block_events_error: string;
+        require_at_registration: boolean;
+    };
+    server_notices?: {
+        system_mxid_localpart: string;
+        system_mxid_display_name: string;
+        system_mxid_avatar_url: string;
+        room_name: string;
+    };
     allow_guest_access: boolean;
     experimental_features: Record<string, boolean>;
-    matrix_rtc:
-        | undefined
-        | {
-              transports: Array<{ type: string; [field: string]: string }>;
-          };
+    matrix_rtc?: {
+        transports: Array<{ type: string;[field: string]: string }>;
+    };
     oidc_providers: unknown[];
     serve_server_wellknown: boolean;
     presence: {
@@ -177,14 +171,25 @@ export interface SynapseConfig {
     };
     room_list_publication_rules: Array<{ action: string }>;
     modules: Array<{ module: string; config?: Record<string, unknown> }>;
-    matrix_authentication_service:
-        | undefined
-        | {
-              enabled?: boolean;
-              endpoint?: string;
-              secret?: string | null;
-              secret_path?: string | null;
-          };
+    matrix_authentication_service?: {
+        enabled?: boolean;
+        endpoint?: string;
+        secret?: string | null;
+        secret_path?: string | null;
+    };
+    /**
+     * Server-wide retention rules.
+     * @see https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html?highlight=retent#retention
+     */
+    retention?: {
+        enabled: boolean;
+        default_policy?: {
+            min_lifetime?: string;
+            max_lifetime?: string;
+        };
+        allowed_lifetime_min?: string;
+        allowed_lifetime_max?: string;
+    };
 }
 
 const DEFAULT_CONFIG: SynapseConfig = {
@@ -290,16 +295,12 @@ const DEFAULT_CONFIG: SynapseConfig = {
     password_config: {
         enabled: true,
     },
-    ui_auth: {},
     background_updates: {
         // Inhibit background updates as this Synapse isn't long-lived
         min_batch_size: 100000,
         sleep_duration_ms: 100000,
     },
     enable_authenticated_media: true,
-    email: undefined,
-    user_consent: undefined,
-    server_notices: undefined,
     allow_guest_access: false,
     experimental_features: {},
     matrix_rtc: undefined,
@@ -311,7 +312,6 @@ const DEFAULT_CONFIG: SynapseConfig = {
     },
     room_list_publication_rules: [{ action: "allow" }],
     modules: [],
-    matrix_authentication_service: undefined,
 };
 
 /**
