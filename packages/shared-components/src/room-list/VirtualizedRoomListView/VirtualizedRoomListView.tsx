@@ -320,7 +320,10 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
      */
     const scrollIntoViewOnChange = useCallback(
         (params: {
-            context: VirtualizedListContext<{ spaceId: string; filterKeys: FilterKey[] | undefined }>;
+            context: VirtualizedListContext<{
+                spaceId: string;
+                filterKeys: FilterKey[] | undefined;
+            }>;
         }): ScrollIntoViewLocation | null | undefined | false => {
             const { spaceId, filterKeys } = params.context.context;
             const shouldScrollIndexIntoView =
@@ -347,7 +350,11 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         const sectionIndex = sections.findIndex((s) => s.id === scrollToSectionTag);
         if (sectionIndex === -1) return;
         const flatIndex = sections.slice(0, sectionIndex).reduce((acc, s) => acc + s.roomIds.length + 1, 0);
-        virtuosoHandleRef.current?.scrollIntoView({ index: flatIndex, align: "start", behavior: "auto" });
+        virtuosoHandleRef.current?.scrollIntoView({
+            index: flatIndex,
+            align: "start",
+            behavior: "auto",
+        });
     }, [scrollToSectionTag, sections]);
 
     const isItemFocusable = useCallback(() => true, []);

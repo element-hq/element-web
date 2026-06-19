@@ -5,10 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useMemo } from "react";
-import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import React, { type JSX, type Ref, useCallback, useMemo } from "react";
+import { type Components, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 import { useVirtualizedList, type VirtualizedListContext, type VirtualizedListProps } from "../virtualized-list";
+import styles from "./GroupedVirtualizedList.module.css";
 
 /**
  * A group of items for the grouped virtualized list.
@@ -141,7 +142,9 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         () =>
             groups.flatMap<NavigationEntry<Header, Item>>((group) => [
                 { header: group.header },
-                ...group.items.map<NavigationEntry<Header, Item>>((item) => ({ item })),
+                ...group.items.map<NavigationEntry<Header, Item>>((item) => ({
+                    item,
+                })),
             ]),
         [groups],
     );
@@ -235,6 +238,16 @@ export function GroupedVirtualizedList<Header, Item, Context>(
             itemContent={itemContent}
             data={flatEntries}
             {...virtuosoProps}
+            components={{ Item }}
         />
     );
 }
+
+const Item: Components["Item"] = React.forwardRef(({ children, ...props }, ref) => {
+    const isHeaderItem = "header" in props.item;
+    return (
+        <div {...props} className={isHeaderItem ? styles.headerItem : ""} ref={ref as Ref<HTMLDivElement>}>
+            {children}
+        </div>
+    );
+});

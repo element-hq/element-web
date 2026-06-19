@@ -162,8 +162,12 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                 tabIndex={isFocused ? 0 : -1}
                 aria-label={
                     isUnread
-                        ? _t("room_list|section_header|toggle_unread", { section: title })
-                        : _t("room_list|section_header|toggle", { section: title })
+                        ? _t("room_list|section_header|toggle_unread", {
+                              section: title,
+                          })
+                        : _t("room_list|section_header|toggle", {
+                              section: title,
+                          })
                 }
             >
                 <Flex
