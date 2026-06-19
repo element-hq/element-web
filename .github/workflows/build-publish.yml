@@ -18,6 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Detach HEAD (route docker-package.sh vers git describe, sinon il tente get-version-from-git.sh qui suppose USE_CUSTOM_SDKS=true)
+        run: |
+          git checkout --detach HEAD
+          echo "branch=$(git rev-parse --abbrev-ref HEAD)"
+          echo "describe=$(git describe --abbrev=0 --tags)"
 
       - name: Run patches assertion (gate avant build)
         run: bash scripts/check-patches-applied.sh
