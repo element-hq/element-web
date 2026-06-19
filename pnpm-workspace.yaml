@@ -49,7 +49,8 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
-    matrix-js-sdk: true
+    # Does not need to be built as we import the src directly
+    matrix-js-sdk: false
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
