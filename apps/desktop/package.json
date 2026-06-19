@@ -79,7 +79,7 @@
         "@types/auto-launch": "^5.0.1",
         "@types/counterpart": "^0.18.1",
         "@types/minimist": "^1.2.1",
-        "@types/node": "22",
+        "@types/node": "catalog:",
         "@types/pacote": "^11.1.1",
         "@typescript-eslint/eslint-plugin": "^8.0.0",
         "@typescript-eslint/parser": "^8.0.0",

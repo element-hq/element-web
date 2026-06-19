@@ -5,9 +5,23 @@ process.env.GITHUB_ACTIONS = "1";
 
 export default {
     workspaces: {
-        "packages/shared-components": {},
+        "packages/shared-components": {
+            entry: ["src/index.ts!", "scripts/**"],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "!scripts/**!",
+                "!src/test/**!",
+                "!src/**/test-*!",
+                "!src/**/*-{mock,mocks,snapshot,actions}.*!",
+            ],
+        },
         "packages/playwright-common": {
-            entry: ["src/fixtures/index.ts", "src/testcontainers/index.ts"],
+            entry: ["src/fixtures/index.ts!", "src/testcontainers/index.ts!"],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "!src/flaky-reporter.ts!",
+                "!src/stale-screenshot-reporter.ts!",
+            ],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",
@@ -17,20 +31,32 @@ export default {
         "packages/module-api": {},
         "apps/web": {
             entry: [
-                "src/serviceworker/index.ts",
-                "src/workers/*.worker.ts",
-                "src/utils/exportUtils/exportJS.js",
-                "src/vector/localstorage-fix.ts",
+                "src/serviceworker/index.ts!",
+                "src/workers/*.worker.ts!",
+                "src/utils/exportUtils/exportJS.js!",
+                "src/vector/localstorage-fix.ts!",
                 "scripts/**",
                 "playwright/**",
                 "test/**",
                 "res/decoder-ring/**",
                 "res/jitsi_external_api.min.js",
                 "res/themes/*/css/*.pcss",
-            ],
-            ignore: [
+                "I18nWebpackPlugin.ts!",
+                "module_system/**!",
                 // Keep for now
-                "src/hooks/useLocalStorageState.ts",
+                "src/hooks/useLocalStorageState.ts!",
+                "src/hooks/useIsReleaseAnnouncementOpen.ts!",
+                "src/components/structures/ReleaseAnnouncement.tsx!",
+                "src/utils/arrays.ts!",
+                "src/utils/EventPresentationContextProvider.tsx!",
+                // This is just an awful side-effect import
+                "src/stores/LifecycleStore.ts!",
+            ],
+            project: [
+                "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!",
+                "!scripts/**!",
+                "!src/test/**!",
+                "!recorder-worklet-loader.cjs!",
             ],
             ignoreDependencies: [
                 // False positive
@@ -49,7 +75,7 @@ export default {
             ],
         },
         "apps/desktop": {
-            entry: ["src/preload.cts", "electron-builder.ts", "scripts/**", "hak/**"],
+            entry: ["src/preload.cts!", "electron-builder.ts!", "scripts/**", "hak/**"],
             project: ["**/*.{js,ts}"],
             ignoreDependencies: [
                 // Brought in via hak scripts
@@ -65,9 +91,12 @@ export default {
                 "lipo",
             ],
         },
-        "modules": {},
+        "modules": {
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!playwright/**!"],
+        },
         "modules/*": {
-            entry: "src/index.ts{x,}",
+            entry: ["src/index.ts{x,}!"],
+            project: ["**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}!", "!src/tests/**!", "!e2e/**!"],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],
@@ -95,4 +124,6 @@ export default {
         config: ["playwright.config.ts", "playwright-merge.config.ts"],
     },
     tags: ["-knipignore"],
+    treatConfigHintsAsErrors: true,
+    treatTagHintsAsErrors: true,
 } satisfies KnipConfig;
