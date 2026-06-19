@@ -51,6 +51,11 @@ const onHelpClick = (): void => {
 };
 
 const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onServerConfigChange, disabled }) => {
+    // PATCH-RENAISSANCE-B: hide server picker si disable_custom_urls
+    if (SdkConfig.get("disable_custom_urls") === true) {
+        return null;
+    }
+
     const disableCustomUrls = SdkConfig.get("disable_custom_urls");
 
     let editBtn;
