@@ -44,7 +44,7 @@ const INITIAL_SIZE = 100;
  * publishes its first snapshot (unless the timeline is exhausted both sides) — enough to overflow
  * any plausible viewport so the first paint is scrollable.
  *
- * Load-bearing because Virtuoso can only hold content still via scrollTop compensation, which
+ * Load-bearing because the virtualizer can only hold content still via scrollTop compensation, which
  * doesn't exist while the list is shorter than the viewport: in that regime layout alone
  * (`alignToBottom`) decides row positions and anything loading in around an anchored event shoves
  * it about. Filling first routes every later change through the compensated prepend/append paths.
@@ -112,7 +112,7 @@ export class RoomTimelineViewModel
      * the previously-first event gains a new neighbour, which can flip its
      * continuation flag from `false` to `true`. That flip changes the rendered
      * row's height and shifts every item below it, causing a visible scroll
-     * jump because Virtuoso's scroll anchor is measured in pixels.
+     * jump because the virtualizer's scroll anchor is measured in pixels.
      *
      * To avoid that, we fix each event's continuation status the first time
      * we see it and never recompute it afterwards. The slight visual cost
@@ -152,7 +152,7 @@ export class RoomTimelineViewModel
     private baseItems: TimelineItem[] = [];
 
     /**
-     * Virtuoso `firstItemIndex` for {@link baseItems}, ignoring any spinner.
+     * The virtualizer's `firstItemIndex` for {@link baseItems}, ignoring any spinner.
      * Decremented by the prepend count on each backward batch so real events keep
      * stable indices. The exposed index is this minus 1 when the backward spinner
      * is visible (it occupies the slot above the first real item).
@@ -178,7 +178,7 @@ export class RoomTimelineViewModel
     private decryptDebounceTimer: ReturnType<typeof setTimeout> | null = null;
     private static readonly DECRYPT_FLUSH_DEBOUNCE_MS = 200;
 
-    /** True when Virtuoso reports the list is scrolled to the bottom. */
+    /** True when the view reports the list is scrolled to the bottom. */
     private isAtBottom = false;
 
     /**
@@ -394,7 +394,7 @@ export class RoomTimelineViewModel
      *
      * Debounced so a paginate-driven cascade of decrypts collapses into a
      * single rebuild instead of one per event — the per-event variant
-     * remounted virtuoso tiles repeatedly and restarted media downloads.
+     * remounted tiles repeatedly and restarted media downloads.
      */
     private onEventDecrypted = (event: MatrixEvent): void => {
         if (this.isDisposed) return;
@@ -626,7 +626,7 @@ export class RoomTimelineViewModel
             });
 
             // If all events in the initial window were filtered (items empty) but more
-            // content exists ahead, Virtuoso won't fire onEndReached on an empty list.
+            // content exists ahead, the view won't fire onEndReached on an empty list.
             // Proactively forward-paginate to find visible events.
             if (items.length === 0 && this.timelineWindow.canPaginate(Direction.Forward)) {
                 logger.debug(`[TimelineVM] load() — items empty with more content ahead, auto-triggering forward paginate`);
@@ -728,7 +728,7 @@ export class RoomTimelineViewModel
      * The View reports the anchor placement has settled. We clear `pendingAnchor`,
      * re-enabling `followOutput` and resuming scroll-position / read-receipt tracking.
      * Held until now so the cold-loading list stays pinned to the anchor instead of
-     * being snapped to the bottom by Virtuoso's grow-to-bottom trap (see the View's onSettled).
+     * being snapped to the bottom by the virtualizer's grow-to-bottom trap (see the View's onSettled).
      */
     public onAnchorReached = (): void => {
         if (this.snapshot.current.pendingAnchor === null) return;
@@ -751,7 +751,7 @@ export class RoomTimelineViewModel
     };
 
     /**
-     * Called by the View on every Virtuoso `rangeChanged` event.
+     * Called by the View on every visible-range change.
      * Walks backwards from `endIndex` to find the bottommost rendered event,
      * then stores its ID for scroll-position persistence on dispose.
      */
@@ -995,7 +995,7 @@ export class RoomTimelineViewModel
 
     /**
      * Entry point for backward pagination. Coalesces concurrent calls behind a
-     * single in-flight chain; Virtuoso will re-fire `onStartReached` naturally
+     * single in-flight chain; the view will re-fire `onStartReached` naturally
      * if more items are needed after the chain settles.
      */
     private triggerBackwardPaginate(): void {
@@ -1005,7 +1005,7 @@ export class RoomTimelineViewModel
         }
 
         // Don't paginate while still placing the initial anchor. On a cold load
-        // unmeasured (0-height) items can make Virtuoso fire startReached/endReached
+        // unmeasured (0-height) items can make the view fire startReached/endReached
         // spuriously; pagination then is wasteful and can disturb placement. Once
         // the anchor settles (pendingAnchor cleared) the user's own scroll re-fires
         // these naturally.
@@ -1075,7 +1075,7 @@ export class RoomTimelineViewModel
      * changes a tile's content, never the items array.
      *
      * Both directions swap the rebuilt list in through {@link commitItems},
-     * which keeps every surviving event's Virtuoso index stable regardless of
+     * which keeps every surviving event's virtualizer index stable regardless of
      * which end the SDK trims at windowLimit — so there is no direction-specific
      * index bookkeeping here. The only remaining per-direction difference is
      * cosmetic: backward recomputes `atLiveEnd` per batch (a backward batch can
@@ -1087,12 +1087,12 @@ export class RoomTimelineViewModel
      * the canonical list, so a key can appear in the displayed array at most once
      * per side by construction.
      *
-     * We render them as real `kind:"loading"` list items (rather than Virtuoso
-     * Header/Footer components) so Virtuoso measures their height and includes it
+     * We render them as real `kind:"loading"` list items (rather than out-of-list
+     * header/footer slots) so the virtualizer measures their height and includes it
      * in scroll-position calculations: when a spinner is removed the
      * `firstItemIndex` delta accounts for it exactly, avoiding the scroll jump
      * (backward) and `alignToBottom` "bounce" (forward) that an untracked
-     * Header/Footer toggling height would cause.
+     * out-of-list header/footer toggling height would cause.
      */
     private static readonly BACKWARD_LOADING_KEY = "backward-loading";
     private static readonly FORWARD_LOADING_KEY = "forward-loading";
@@ -1101,7 +1101,7 @@ export class RoomTimelineViewModel
      * Publish {@link baseItems} to the View, layering spinners on top:
      * `[ (backward?), ...baseItems, (forward?) ]`. The exposed `firstItemIndex`
      * is {@link baseFirstItemIndex} minus 1 when the backward spinner is visible,
-     * keeping every real event at a stable Virtuoso index regardless of spinner state.
+     * keeping every real event at a stable virtualizer index regardless of spinner state.
      */
     private republish(reason: string, extra: Partial<TimelineViewSnapshot> = {}): void {
         const items: TimelineItem[] = [];
@@ -1118,8 +1118,8 @@ export class RoomTimelineViewModel
 
     /**
      * Swap {@link baseItems} for a freshly-built array while holding every
-     * surviving event's Virtuoso virtual index (`firstItemIndex + arrayIndex`)
-     * constant — the invariant Virtuoso relies on to preserve scroll position.
+     * surviving event's virtualizer virtual index (`firstItemIndex + arrayIndex`)
+     * constant — the invariant the virtualizer relies on to preserve scroll position.
      *
      * The SDK's {@link TimelineWindow} never tells us when it trims: `paginate()`
      * silently `unpaginate()`s the opposite end once the window passes its size
@@ -1134,7 +1134,7 @@ export class RoomTimelineViewModel
      *   - front-trim (fwd-paginate@cap)  → anchor moved up   → delta > 0 → index ↑
      *   - append / mid-insert (decrypt)  → anchor unmoved     → delta 0  → unchanged
      *
-     * Virtuoso handles both directions (a decreasing `firstItemIndex` drives its
+     * The virtualizer handles both directions (a decreasing `firstItemIndex` drives its
      * prepend path, an increasing one its front-trim path), so this is a single
      * rule with no per-direction branching.
      *
@@ -1171,10 +1171,10 @@ export class RoomTimelineViewModel
 
     /**
      * Stage the window's far-end trim as its own update *before* extending the
-     * near end, so Virtuoso never sees an add-at-one-end + trim-at-the-other in a
+     * near end, so the virtualizer never sees an add-at-one-end + trim-at-the-other in a
      * single change.
      *
-     * Virtuoso only holds scroll position when an update is "pure": items added
+     * The virtualizer only holds scroll position when an update is "pure": items added
      * or removed at the top (it compensates scrollTop) or added at the bottom (no
      * compensation needed). A combined extend+trim changes its total-count
      * bookkeeping in a way that *gates off* the top compensation, shoving the
@@ -1218,7 +1218,7 @@ export class RoomTimelineViewModel
             canJumpToReadMarker: this.computeCanJumpToReadMarker(this.baseItems),
         });
 
-        // Yield a frame so React commits the trim and Virtuoso applies its scroll
+        // Yield a frame so React commits the trim and the virtualizer applies its scroll
         // compensation before we publish the extend in the next update.
         await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     }
@@ -1278,7 +1278,7 @@ export class RoomTimelineViewModel
                 const filteredCount = this.lastBuildFilteredCount;
 
                 // Swap in the rebuilt list, holding every surviving event's
-                // Virtuoso index stable across whatever front/back trim the SDK
+                // virtualizer index stable across whatever front/back trim the SDK
                 // applied at windowLimit (see {@link commitItems}). `newlyShown`
                 // is how many events newly entered the list — the only reliable
                 // progress signal once trimming makes net array length meaningless.
@@ -1352,7 +1352,7 @@ export class RoomTimelineViewModel
         // with out-of-order server-clock events can produce a timeline where the
         // same calendar date appears in multiple non-contiguous runs. Without
         // this guard, `buildItems` would emit a second separator with the same
-        // key, causing a React key collision and Virtuoso rendering the same
+        // key, causing a React key collision and the virtualizer rendering the same
         // separator slot multiple times in the DOM.
         const emittedDateKeys = new Set<string>();
 
@@ -1369,7 +1369,7 @@ export class RoomTimelineViewModel
             const eventId = event.getId();
             if (!eventId) continue;
 
-            // Pending-decryption events are excluded so virtuoso never
+            // Pending-decryption events are excluded so the virtualizer never
             // measures a UTD placeholder it would later have to swap for a
             // real body (the resulting size cache churn was the original
             // "white void" symptom). When decryption completes the next
@@ -1467,7 +1467,7 @@ export class RoomTimelineViewModel
      * each {@link buildItems} run.
      *
      * Wire-encrypted events that are still decrypting are excluded — we don't
-     * want virtuoso measuring a placeholder it will later have to resize. The
+     * want the virtualizer measuring a placeholder it will later have to resize. The
      * next paginate / live-event rebuild (which is what fires after the
      * paginate-time decrypt wait, or after stragglers eventually settle)
      * picks them up at their final height.

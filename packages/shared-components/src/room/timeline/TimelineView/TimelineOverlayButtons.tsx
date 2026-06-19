@@ -27,7 +27,7 @@ interface TimelineOverlayButtonsProps {
 }
 
 /**
- * Absolutely-positioned overlay rendered on top of the Virtuoso list.
+ * Absolutely-positioned overlay rendered on top of the timeline list.
  *
  * Contains two overlay elements:
  * - **UnreadBar**: visible when `snapshot.canJumpToReadMarker` is `"above"` or `"below"`.

@@ -68,7 +68,7 @@ export interface NavigationAnchor {
 /**
  * An imperative scroll capability provided by the View to ViewModel actions.
  *
- * The View closes over its `VirtuosoHandle` ref to scroll to a given anchor
+ * The View uses its scroll handle to scroll to a given anchor
  * immediately, without depending on a subsequent data update. The ViewModel
  * invokes it only when the target is already in the loaded window — otherwise
  * the VM falls back to setting `pendingAnchor` and letting a load() drive the
@@ -86,7 +86,7 @@ export interface TimelineViewSnapshot {
     items: TimelineItem[];
 
     /**
-     * Virtuoso firstItemIndex — starts high and decreases as backward
+     * firstItemIndex — starts high and decreases as backward
      * pagination prepends items. Kept in the snapshot so it updates
      * atomically with `items`.
      */
@@ -94,19 +94,19 @@ export interface TimelineViewSnapshot {
 
     /**
      * True when the timeline window has reached the live end — i.e. there are
-     * no more forward events to paginate to. Used to gate `followOutput` so
-     * that Virtuoso only auto-scrolls to the bottom when we are actually
+     * no more forward events to paginate to. Used to gate follow-on-append so
+     * that the view only auto-scrolls to the bottom when we are actually
      * viewing the live end of the room.
      */
     atLiveEnd: boolean;
 
     /**
-     * Placement target for the current load. The View maps it to Virtuoso's
-     * `initialTopMostItemIndex` on first mount, then re-asserts it on later loads via
-     * the patched `scrollToIndexOnChange` (in-place, no remount). While set,
-     * `followOutput` is disabled — which also keeps a cold-loading list pinned to the
-     * anchor instead of snapping to the bottom as heights are measured. Cleared when
-     * the View reports settle via {@link TimelineViewActions.onAnchorReached}.
+     * Placement target for the current load. The View scrolls the target into
+     * place on first mount and re-asserts it on later loads, without remounting.
+     * While set, follow-on-append is disabled — which also keeps a cold-loading
+     * list pinned to the anchor instead of snapping to the bottom as heights are
+     * measured. Cleared when the View reports settle via
+     * {@link TimelineViewActions.onAnchorReached}.
      */
     pendingAnchor: NavigationAnchor | null;
 
@@ -117,7 +117,7 @@ export interface TimelineViewSnapshot {
      */
     highlightedEventId: string | null;
 
-    /** True when Virtuoso reports the list is scrolled to the bottom (within the default 4px threshold). */
+    /** True when the list is scrolled to the bottom (within a 4px threshold). */
     isAtBottom: boolean;
 
     /**
@@ -145,27 +145,27 @@ export interface TimelineViewSnapshot {
 }
 
 export interface TimelineViewActions {
-    /** Called when Virtuoso fires startReached; VM decides whether to paginate. */
+    /** Called when the view reaches the start; VM decides whether to paginate. */
     onStartReached(): void;
 
-    /** Called when Virtuoso fires endReached; VM decides whether to paginate. */
+    /** Called when the view reaches the end; VM decides whether to paginate. */
     onEndReached(): void;
 
     /**
      * Report that the anchor placement has settled (the target has stabilised in
      * the visible range). The VM clears `pendingAnchor`, re-enabling
-     * `followOutput` and normal scroll-position tracking.
+     * follow-on-append and normal scroll-position tracking.
      */
     onAnchorReached(): void;
 
     /**
-     * Called by Virtuoso's rangeChanged on every visible-range update.
+     * Called on every visible-range update.
      * The VM uses this to track the bottommost visible event for scroll-position persistence.
      * Indices are 0-based into the items array.
      */
     onVisibleRangeChanged(startIndex: number, endIndex: number): void;
 
-    /** Called by Virtuoso's atBottomStateChange; VM uses this to decide whether to clear the saved scroll position on dispose. */
+    /** Called when the at-bottom state changes; VM uses this to decide whether to clear the saved scroll position on dispose. */
     onAtBottomStateChange(atBottom: boolean): void;
 
     /**

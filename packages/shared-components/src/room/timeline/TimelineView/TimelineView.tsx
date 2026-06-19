@@ -45,7 +45,7 @@ import { DEBUG_SIZES, HeightAuditProbe } from "./heightAudit";
  *    `initialTopMostItemIndex` + the patched `scrollToIndexOnChange`/`done`.
  *
  * Known gaps (see review notes):
- *  - `overscan` is an item COUNT here, not Virtuoso's px `increaseViewportBy`.
+ *  - `overscan` is an item COUNT, not a px viewport margin.
  *  - `alignToBottom` for short rooms (content shorter than the viewport) is not
  *    yet reproduced — items sit at the top instead of the bottom.
  *
@@ -64,9 +64,9 @@ const useIsomorphicLayoutEffect = typeof document !== "undefined" ? useLayoutEff
  * mean of measured heights) takes over and adapts to the room's real content. */
 const ESTIMATED_ITEM_HEIGHT = 48;
 /** Rendered rows beyond the visible range on each side. TanStack overscan is a
- * COUNT (cf. Virtuoso's px increaseViewportBy); ~16 short rows ≈ a screenful. */
+ * COUNT (not a px viewport margin); ~16 short rows ≈ a screenful. */
 const OVERSCAN = 16;
-/** px from the list bottom still counted as "at the bottom" (matches Virtuoso's default). */
+/** px from the list bottom still counted as "at the bottom". */
 const AT_BOTTOM_THRESHOLD_PX = 4;
 /** Cold-load settle: reveal once measurement + scroll hold for this many frames… */
 const COLD_STABLE_FRAMES = 3;
@@ -75,10 +75,9 @@ const COLD_CAP_FRAMES = 60;
 
 // ─── Content-jump detector (debug only) ────────────────────────────
 //
-// Mirror of the Virtuoso view's detector so the two can be compared on the same
-// session. Every animation frame we record each rendered row's viewport-relative
-// top, keyed on the STABLE item key (data-key) — TanStack's data-index shifts on
-// prepend, exactly like Virtuoso's. For rows present in consecutive frames plain
+// Debug-only. Every animation frame we record each rendered row's
+// viewport-relative top, keyed on the STABLE item key (data-key) — the
+// data-index shifts on prepend. For rows present in consecutive frames plain
 // scrolling moves them by -ΔscrollTop, so median(Δtop) + ΔscrollTop is the
 // content visibly jumping under the viewport.
 const DEBUG_JUMPS = true;
@@ -654,16 +653,6 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         [offsetForKey],
     );
 
-    // TEMP debug aid (gated on DEBUG_JUMPS): jump straight to scrollTop 0 so a
-    // backward pagination can be triggered deterministically — parked exactly at
-    // the spinner — and the resulting post-prepend shift read cleanly off the
-    // CONTENT-JUMP log, instead of having to fling the wheel. Instant (not smooth)
-    // so it lands in one frame. Remove together with DEBUG_JUMPS.
-    const jumpToTop = useCallback((): void => {
-        const scroller = scrollerRef.current;
-        if (scroller) scroller.scrollTop = 0;
-    }, []);
-
     const virtualItems = virtualizer.getVirtualItems();
 
     return (
@@ -764,29 +753,6 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 </div>
             )}
             {revealed && <TimelineOverlayButtons snapshot={snapshot} vm={vm} scrollNow={scrollNow} />}
-            {/* TEMP debug-only control — disappears when DEBUG_JUMPS is turned off. */}
-            {DEBUG_JUMPS && revealed && (
-                <button
-                    type="button"
-                    onClick={jumpToTop}
-                    style={{
-                        position: "absolute",
-                        top: 8,
-                        left: 8,
-                        zIndex: 1000,
-                        padding: "4px 8px",
-                        fontSize: 12,
-                        lineHeight: 1.2,
-                        background: "var(--cpd-color-bg-action-primary-rest, #0dbd8b)",
-                        color: "var(--cpd-color-text-on-solid-primary, #fff)",
-                        border: "none",
-                        borderRadius: 4,
-                        cursor: "pointer",
-                    }}
-                >
-                    ↑ Jump to top (debug)
-                </button>
-            )}
         </div>
     );
 }
