@@ -40,4 +40,4 @@ jobs:
 
             - name: 🚀 Publish to npm
               working-directory: packages/${{ inputs.package }}
-              run: npm publish --access public --provenance
+              run: pnpm publish --access public --provenance
