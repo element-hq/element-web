@@ -272,6 +272,8 @@ packageExtensionsChecksum: sha256-EMEi1vcyzQthk7O/0AcntvnHgJaKCoFBlzp6iX/qNYk=
 patchedDependencies:
   '@dnd-kit/abstract': a4ddfb7b2d2d0b52c6709cead2e0feef065f2a17a516496679813344f326f9c1
   '@matrix-org/react-sdk-module-api': 016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96
+  '@tanstack/react-virtual@3.14.3': a0928451f79c6dbd3af7c9b0c590387173714da1a9feb8c3f6710241a51ee428
+  '@tanstack/virtual-core@3.17.1': 0037026a53550642e686de3072aa9cced429eda8c9e3338afc527dbe6bda09cd
   '@types/auto-launch': b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538
   '@types/mdx': c209882c533714d2dcbf4cf397002125ea83677ef152eff403386611cd0f0d3a
   '@vector-im/matrix-wysiwyg': 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
@@ -1205,7 +1207,7 @@ importers:
         version: 1.16.0
       '@tanstack/react-virtual':
         specifier: ^3.14.3
-        version: 3.14.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 3.14.3(patch_hash=a0928451f79c6dbd3af7c9b0c590387173714da1a9feb8c3f6710241a51ee428)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@vector-im/compound-design-tokens':
         specifier: 'catalog:'
         version: 10.2.1(@types/react@19.2.14)(react@19.2.6)
@@ -18314,13 +18316,13 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/react-virtual@3.14.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@tanstack/react-virtual@3.14.3(patch_hash=a0928451f79c6dbd3af7c9b0c590387173714da1a9feb8c3f6710241a51ee428)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
-      '@tanstack/virtual-core': 3.17.1
+      '@tanstack/virtual-core': 3.17.1(patch_hash=0037026a53550642e686de3072aa9cced429eda8c9e3338afc527dbe6bda09cd)
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
 
-  '@tanstack/virtual-core@3.17.1': {}
+  '@tanstack/virtual-core@3.17.1(patch_hash=0037026a53550642e686de3072aa9cced429eda8c9e3338afc527dbe6bda09cd)': {}
 
   '@testcontainers/postgresql@12.0.1':
     dependencies:
