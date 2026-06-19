@@ -8,29 +8,11 @@
 import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { test, expect, type TestFixtures } from "../../element-web-test";
-import type { Page } from "@playwright/test";
+import { test, expect } from "../../element-web-test";
+import { checkRetentionInRoom, ONE_MINUTE } from "./utils";
 
-const ONE_MINUTE = 60 * 1000;
+
 const ONE_MINUTE_STR = "60s";
-
-export async function checkRetentionInRoom(
-    { bot, app, page }: Pick<TestFixtures, "app" | "bot"> & { page: Page },
-    roomId: string,
-) {
-    await bot.joinRoom(roomId);
-    await app.viewRoomById(roomId);
-    const tiles = (
-        await Promise.all(Array.from({ length: 5 }).map((_o, index) => bot.sendMessage(roomId, `Message ${index}`)))
-    ).map(({ event_id: evtId }) => page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${evtId}']`));
-    for (const tile of tiles) {
-        await expect(tile).toBeVisible();
-    }
-    await page.clock.fastForward(ONE_MINUTE + 1);
-    for (const tile of tiles) {
-        await expect(tile).toBeHidden();
-    }
-}
 
 test.use({
     synapseConfig: {

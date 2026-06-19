@@ -8,7 +8,7 @@
 import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { checkRetentionInRoom } from "./retention.spec.ts";
+import { checkRetentionInRoom } from "./utils";
 import { test } from "../../element-web-test";
 
 const ONE_MINUTE_STR = "60s";
