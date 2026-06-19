@@ -32,7 +32,6 @@ export async function checkRetentionInRoom(
     }
 }
 
-
 test.use({
     synapseConfig: {
         retention: {
@@ -42,8 +41,8 @@ test.use({
             allowed_lifetime_max: ONE_MINUTE_STR,
         },
         experimental_features: {
-            "msc1763_enabled": true,
-        }
+            msc1763_enabled: true,
+        },
     },
 });
 

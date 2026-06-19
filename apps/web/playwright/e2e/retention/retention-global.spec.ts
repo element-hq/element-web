@@ -24,8 +24,8 @@ test.use({
             allowed_lifetime_max: ONE_MINUTE_STR,
         },
         experimental_features: {
-            "msc1763_enabled": true,
-        }
+            msc1763_enabled: true,
+        },
     },
 });
 test.describe("global retention rules", () => {
