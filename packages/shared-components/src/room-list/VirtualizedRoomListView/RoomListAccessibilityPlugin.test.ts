@@ -77,6 +77,10 @@ function getLiveRegion(): HTMLElement | null {
     return document.querySelector<HTMLElement>("[role='status'][aria-live='polite']");
 }
 
+function getAssertiveRegion(): HTMLElement | null {
+    return document.querySelector<HTMLElement>("[role='alert'][aria-live='assertive']");
+}
+
 function getInstructions(): HTMLElement | null {
     return document.querySelector<HTMLElement>("[style*='display: none']");
 }
@@ -95,6 +99,7 @@ describe("RoomListAccessibilityPlugin", () => {
     afterEach(() => {
         // Clean up any DOM nodes left behind by tests that don't call destroy().
         getLiveRegion()?.remove();
+        getAssertiveRegion()?.remove();
         getInstructions()?.remove();
     });
 
@@ -107,6 +112,19 @@ describe("RoomListAccessibilityPlugin", () => {
             expect(region).toBeInTheDocument();
             expect(region).toHaveAttribute("role", "status");
             expect(region).toHaveAttribute("aria-live", "polite");
+            expect(region).toHaveAttribute("aria-atomic", "true");
+
+            plugin.destroy();
+        });
+
+        it("appends an assertive aria-live region to the document body", () => {
+            const plugin = createPlugin(manager);
+
+            const region = getAssertiveRegion();
+            expect(region).not.toBeNull();
+            expect(region).toBeInTheDocument();
+            expect(region).toHaveAttribute("role", "alert");
+            expect(region).toHaveAttribute("aria-live", "assertive");
             expect(region).toHaveAttribute("aria-atomic", "true");
 
             plugin.destroy();
@@ -233,122 +251,46 @@ describe("RoomListAccessibilityPlugin", () => {
     });
 
     describe("dragend announcement", () => {
-        beforeEach(() => {
-            vi.useFakeTimers();
-        });
-
-        afterEach(() => {
-            vi.useRealTimers();
-        });
-
-        it("swaps the source element's aria-label to the drop message and triggers blur then focus", () => {
-            const button = document.createElement("button");
-            button.setAttribute("aria-label", "Toggle Favourites section");
-            document.body.append(button);
-
-            const blurSpy = vi.spyOn(button, "blur");
-            const focusSpy = vi.spyOn(button, "focus");
-
+        it("announces the drop message in the assertive live region", () => {
             const plugin = createPlugin(manager, {
                 announcements: { dragend: () => "Favourites was dropped on Low Priority" },
             });
 
-            manager.dispatch("dragend", { operation: { source: { element: button } } });
+            manager.dispatch("dragend", { operation: { source: { id: "favourites" } } });
 
-            expect(button).toHaveAttribute("aria-label", "Favourites was dropped on Low Priority");
-            expect(blurSpy).toHaveBeenCalledOnce();
-            expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+            // The drop is announced in the assertive region: focus stays on the source element so
+            // there is no focus change to read, and an assertive region reliably announces on Chrome.
+            expect(getAssertiveRegion()?.textContent).toBe("Favourites was dropped on Low Priority");
 
-            button.remove();
             plugin.destroy();
         });
 
-        it("restores the original aria-label after 1 second", () => {
-            const button = document.createElement("button");
-            button.setAttribute("aria-label", "Toggle Favourites section");
-            document.body.append(button);
-
-            const plugin = createPlugin(manager, {
-                announcements: { dragend: () => "Favourites was dropped on Low Priority" },
-            });
-
-            manager.dispatch("dragend", { operation: { source: { element: button } } });
-            expect(button).toHaveAttribute("aria-label", "Favourites was dropped on Low Priority");
-
-            vi.advanceTimersByTime(1000);
-
-            expect(button).toHaveAttribute("aria-label", "Toggle Favourites section");
-
-            button.remove();
-            plugin.destroy();
-        });
-
-        it("prefers the handle element over the root element when both are present", () => {
-            const handle = document.createElement("button");
-            handle.setAttribute("aria-label", "Toggle Favourites section");
-            const root = document.createElement("div");
-            document.body.append(handle, root);
-
+        it("re-announces an identical message by clearing the region first", () => {
             const plugin = createPlugin(manager, {
                 announcements: { dragend: () => "Dropped" },
             });
 
-            manager.dispatch("dragend", { operation: { source: { handle, element: root } } });
+            manager.dispatch("dragend", { operation: { source: { id: "favourites" } } });
+            expect(getAssertiveRegion()?.textContent).toBe("Dropped");
 
-            expect(handle).toHaveAttribute("aria-label", "Dropped");
-            expect(root).not.toHaveAttribute("aria-label");
-
-            handle.remove();
-            root.remove();
-            plugin.destroy();
-        });
-
-        it("falls back to the live region when the source element has no aria-label", () => {
-            const div = document.createElement("div");
-            document.body.append(div);
-
-            const plugin = createPlugin(manager, {
-                announcements: { dragend: () => "Dropped" },
-            });
-
-            manager.dispatch("dragend", { operation: { source: { element: div } } });
-
-            // No label swap took place; the live region was used instead.
-            expect(div).not.toHaveAttribute("aria-label");
-            expect(getLiveRegion()?.textContent).toBe("Dropped");
-
-            div.remove();
-            plugin.destroy();
-        });
-
-        it("falls back to the live region when the source has no element", () => {
-            const plugin = createPlugin(manager, {
-                announcements: { dragend: () => "Dropped" },
-            });
-
-            manager.dispatch("dragend", { operation: { source: null } });
-
-            expect(getLiveRegion()?.textContent).toBe("Dropped");
+            // The same text set twice must still end up in the region (clear-then-set forces a change).
+            manager.dispatch("dragend", { operation: { source: { id: "favourites" } } });
+            expect(getAssertiveRegion()?.textContent).toBe("Dropped");
 
             plugin.destroy();
         });
 
-        it("does nothing when the getter returns undefined", () => {
-            const button = document.createElement("button");
-            button.setAttribute("aria-label", "Toggle Favourites section");
-            document.body.append(button);
-
+        it("does not announce when the getter returns undefined", () => {
             const plugin = createPlugin(manager, {
                 announcements: { dragend: () => undefined },
             });
 
-            manager.dispatch("dragend", { operation: { source: { element: button } } });
+            manager.dispatch("dragend", { operation: { source: { id: "favourites" } } });
 
-            // aria-label unchanged, live region empty.
-            expect(button).toHaveAttribute("aria-label", "Toggle Favourites section");
+            // Both live regions stay empty.
             expect(getLiveRegion()?.textContent).toBe("");
+            expect(getAssertiveRegion()?.textContent).toBe("");
 
-            button.remove();
             plugin.destroy();
         });
     });
@@ -361,6 +303,15 @@ describe("RoomListAccessibilityPlugin", () => {
             plugin.destroy();
 
             expect(getLiveRegion()).toBeNull();
+        });
+
+        it("removes the assertive live region from the document", () => {
+            const plugin = createPlugin(manager);
+            expect(getAssertiveRegion()).not.toBeNull();
+
+            plugin.destroy();
+
+            expect(getAssertiveRegion()).toBeNull();
         });
 
         it("removes the instructions element from the document", () => {
@@ -387,33 +338,6 @@ describe("RoomListAccessibilityPlugin", () => {
             plugin.destroy();
 
             expect(unsubscribeSpy).toHaveBeenCalled();
-        });
-
-        it("cancels pending aria-label restore timeouts", () => {
-            vi.useFakeTimers();
-
-            const button = document.createElement("button");
-            button.setAttribute("aria-label", "Toggle Favourites section");
-            document.body.append(button);
-
-            const plugin = createPlugin(manager, {
-                announcements: { dragend: () => "Favourites was dropped on Low Priority" },
-            });
-
-            manager.dispatch("dragend", { operation: { source: { element: button } } });
-
-            // Destroy before the 1-second restore fires.
-            plugin.destroy();
-
-            // Advance past the restore delay – the label should NOT have been reset because the
-            // timer was cancelled, and the plugin is gone anyway.
-            vi.advanceTimersByTime(2000);
-
-            // The label stays as the drop message since the restore was cancelled.
-            expect(button).toHaveAttribute("aria-label", "Favourites was dropped on Low Priority");
-
-            button.remove();
-            vi.useRealTimers();
         });
     });
 });

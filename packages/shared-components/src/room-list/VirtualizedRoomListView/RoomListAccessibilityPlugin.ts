@@ -49,12 +49,15 @@ export interface RoomListAccessibilityOptions {
 
 /**
  * Create the visually-hidden `aria-live` region used to announce drag progress.
+ *
+ * @param politeness - `"polite"` for progress (start/over) updates, `"assertive"` for the terminal
+ *   drop/cancel confirmation so it interrupts any pending progress chatter and is announced reliably.
  */
-function createLiveRegion(id: string): HTMLDivElement {
+function createLiveRegion(id: string, politeness: "polite" | "assertive" = "polite"): HTMLDivElement {
     const element = document.createElement("div");
     element.id = id;
-    element.setAttribute("role", "status");
-    element.setAttribute("aria-live", "polite");
+    element.setAttribute("role", politeness === "assertive" ? "alert" : "status");
+    element.setAttribute("aria-live", politeness);
     element.setAttribute("aria-atomic", "true");
     Object.assign(element.style, {
         position: "fixed",
@@ -97,34 +100,33 @@ function createInstructions(id: string, text: string): HTMLDivElement {
  */
 export class RoomListAccessibilityPlugin extends Plugin<Manager, RoomListAccessibilityOptions> {
     private liveRegion: HTMLDivElement;
+    private assertiveRegion: HTMLDivElement;
     private instructions?: HTMLDivElement;
     private readonly unsubscribers: Array<() => void> = [];
-    private readonly pendingRestores = new Set<ReturnType<typeof setTimeout>>();
 
     public constructor(manager: Manager, options?: RoomListAccessibilityOptions) {
         super(manager, options);
 
         const liveRegionId = crypto.randomUUID();
+        const assertiveRegionId = crypto.randomUUID();
         const instructionsId = crypto.randomUUID();
 
-        // Create the live region up front so it exists in the DOM before any text change,
+        // Create the live regions up front so they exist in the DOM before any text change,
         // which assistive technologies require to reliably announce the first message.
         this.liveRegion = createLiveRegion(liveRegionId);
-        document.body.append(this.liveRegion);
+        this.assertiveRegion = createLiveRegion(assertiveRegionId, "assertive");
+        document.body.append(this.liveRegion, this.assertiveRegion);
 
         const announcements = options?.announcements ?? {};
         for (const [eventName, getAnnouncement] of Object.entries(announcements)) {
             if (!getAnnouncement) continue;
             let unsubscribe: () => void;
             if (eventName === "dragend") {
-                // For dragend, override the source element's aria-label with the drop message so
-                // that the focus-return announcement the screen reader makes when the drag finishes
-                // reads the drop confirmation instead of "Toggle …". A live-region write (even
-                // assertive) always loses the race against the synchronous focus announcement.
                 unsubscribe = manager.monitor.addEventListener("dragend", (event) => {
                     const a11yEvent = event as unknown as A11yData;
                     const message = getAnnouncement(a11yEvent);
-                    this.announceOnDrop(message, a11yEvent.operation?.source);
+                    // On drop the source element stays focused (focus never actually moves), so we need to announce the drop confirmation in the assertive region to ensure it is read.
+                    this.announceAssertive(message);
                 });
             } else {
                 unsubscribe = manager.monitor.addEventListener(eventName as "dragstart", (event) => {
@@ -159,43 +161,26 @@ export class RoomListAccessibilityPlugin extends Plugin<Manager, RoomListAccessi
     }
 
     /**
-     * Announces a drop by temporarily overriding the source draggable element's `aria-label`
-     * and forcing a blur→focus cycle so the screen reader re-reads the element.
+     * Announce a terminal message (drop confirmation / cancellation) in the assertive live region.
      *
-     * During keyboard drag, focus never leaves the draggable button, so simply changing
-     * `aria-label` on an already-focused element produces no announcement. The blur→focus
-     * cycle triggers a genuine focus event, causing the screen reader to read the swapped
-     * label ("X was dropped on Y") instead of the original "Toggle …".
+     * Unlike the polite progress region, the drop happens with focus parked on the source element
+     * and no focus change to trigger a re-read, so an assertive region is required for Chrome to
+     * announce it. It also interrupts any still-pending "… will be dropped …" progress chatter.
      */
-    private announceOnDrop(message: string | undefined, source: Draggable<RoomListDragData> | null | undefined): void {
+    private announceAssertive(message: string | undefined): void {
         if (!message) return;
-        const element = (source?.handle ?? source?.element) as HTMLElement | null | undefined;
-        if (element instanceof HTMLElement && element.hasAttribute("aria-label")) {
-            const original = element.getAttribute("aria-label")!;
-            element.setAttribute("aria-label", message);
-            // Blur then re-focus so the screen reader reads the swapped label.
-            // preventScroll avoids visual jumping; the label is restored after the
-            // next render (React) or after a short fallback timeout.
-            element.blur();
-            element.focus({ preventScroll: true });
-            const id = setTimeout(() => {
-                this.pendingRestores.delete(id);
-                element.setAttribute("aria-label", original);
-            }, 1000);
-            this.pendingRestores.add(id);
-        } else {
-            // Fallback: element has no aria-label, use the live region.
-            this.announce(message);
-        }
+        // Always re-set (clearing first) so an identical message still re-announces, and so the
+        // assertive region reliably fires even right after a polite progress update.
+        this.assertiveRegion.textContent = "";
+        this.assertiveRegion.textContent = message;
     }
 
     public destroy(): void {
         super.destroy();
         for (const unsubscribe of this.unsubscribers) unsubscribe();
         this.unsubscribers.length = 0;
-        for (const id of this.pendingRestores) clearTimeout(id);
-        this.pendingRestores.clear();
         this.liveRegion.remove();
+        this.assertiveRegion.remove();
         this.instructions?.remove();
     }
 }
