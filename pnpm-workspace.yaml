@@ -51,7 +51,6 @@ packageExtensions:
 allowBuilds:
     # Does not need to be built as we import the src directly
     matrix-js-sdk: false
-    matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/*: false
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
