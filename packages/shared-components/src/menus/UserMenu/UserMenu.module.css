@@ -28,6 +28,10 @@
         gap: var(--cpd-space-2x);
         > * {
             margin: auto;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            overflow-wrap: break-word;
         }
 
         .displayname {
