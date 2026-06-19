@@ -242,10 +242,13 @@ export function useRoomListAccessibilityPlugin(
                 const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
                 if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
-                    return _t(droppedBefore ? "room_list|a11y|drag_over_before" : "room_list|a11y|drag_over_after", {
+                    const variables = {
                         source: sourceName,
                         target: targetTitle,
-                    });
+                    };
+                    return droppedBefore
+                        ? _t("room_list|a11y|drag_over_before", variables)
+                        : _t("room_list|a11y|drag_over_after", variables);
                 }
                 return _t("room_list|a11y|drag_over", {
                     source: sourceName,
@@ -260,10 +263,13 @@ export function useRoomListAccessibilityPlugin(
                 const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
                 if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
-                    return _t(droppedBefore ? "room_list|a11y|drag_end_before" : "room_list|a11y|drag_end_after", {
+                    const variables = {
                         source: sourceName,
                         target: targetTitle,
-                    });
+                    };
+                    return droppedBefore
+                        ? _t("room_list|a11y|drag_end_before", variables)
+                        : _t("room_list|a11y|drag_end_after", variables);
                 }
                 return _t("room_list|a11y|drag_end", {
                     source: sourceName,
