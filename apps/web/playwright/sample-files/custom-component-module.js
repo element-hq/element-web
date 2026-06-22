@@ -59,12 +59,26 @@ export default class CustomComponentModule {
             { allowDownloadingMedia: async (mxEvent) => mxEvent.content.body !== "bad.png" },
         );
 
+        this.api.customComponents.registerMessageRenderer(
+            (evt) => evt.content.body === "Render me below",
+            (_props, originalComponent) => {
+                return window.React.createElement(
+                    "div",
+                    null,
+                    originalComponent(),
+                    window.React.createElement("p", null, "Test text"),
+                );
+            },
+        );
+
         // Order is specific here to avoid this overriding the other renderers
         this.api.customComponents.registerMessageRenderer("m.room.message", (props, originalComponent) => {
             const body = props.mxEvent.content.body;
             if (body === "Do not replace me") {
                 return originalComponent();
             } else if (body === "Fall through here") {
+                return null;
+            } else if (body === "Render me below") {
                 return null;
             }
             return `Custom text for ${body}`;

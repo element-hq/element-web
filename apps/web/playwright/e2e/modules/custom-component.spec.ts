@@ -167,4 +167,28 @@ test.describe("Custom Component API", () => {
             },
         );
     });
+    test.describe("inserting after original component", () => {
+        for (const layout of ["group", "irc", "bubble"]) {
+            test.describe(`with ${layout}`, () => {
+                test.use({
+                    config: {
+                        modules: ["/modules/custom-component-module.js"],
+                        setting_defaults: {
+                            layout
+                        }
+                    }
+                })
+                test("should render",
+                    { tag: "@screenshot" },
+                    async ({ page, room, app }) => {
+                        await app.viewRoomById(room.roomId);
+                        await app.client.sendMessage(room.roomId, "Render me below");
+                        await expect(await page.locator(".mx_EventTile_last")).toMatchScreenshot(
+                            `custom-component-insert-after-${layout}.png`,
+                            screenshotOptions(page),
+                        );
+                    });
+                });
+            }
+        });
 });
