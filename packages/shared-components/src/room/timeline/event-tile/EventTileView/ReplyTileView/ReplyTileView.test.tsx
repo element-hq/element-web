@@ -70,7 +70,7 @@ describe("ReplyTileView", () => {
 
         render(
             <ReplyTileView vm={vm}>
-                <span data-reply-body-content="">
+                <span>
                     <span>
                         Reply body <a href="https://example.org">nested link</a>
                     </span>

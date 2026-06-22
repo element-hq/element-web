@@ -82,8 +82,34 @@ describe("ReplyTileViewModel", () => {
             isInline: true,
             isInfoMessage: false,
             showSender: true,
+            shouldClampContent: true,
             isSeeingThroughMessageHiddenForModeration: false,
         });
+    });
+
+    it("does not clamp non-text media preview bodies", () => {
+        const vm = new ReplyTileViewModel({
+            client,
+            mxEvent: createEvent({
+                msgtype: MsgType.Location,
+            }),
+        });
+
+        expect(vm.getSnapshot().shouldClampContent).toBe(false);
+    });
+
+    it("clamps media previews when they render a caption container", () => {
+        const mxEvent = createEvent({
+            msgtype: MsgType.File,
+            body: "file.txt",
+        });
+        mxEvent.getContent().filename = "captioned-file.txt";
+        const vm = new ReplyTileViewModel({
+            client,
+            mxEvent,
+        });
+
+        expect(vm.getSnapshot().shouldClampContent).toBe(true);
     });
 
     it("uses the permalink creator when one is supplied", () => {

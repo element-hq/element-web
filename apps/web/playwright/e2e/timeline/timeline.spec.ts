@@ -1018,7 +1018,7 @@ test.describe("Timeline", () => {
             await app.getComposerField().press("Enter");
 
             const eventTileLine = page.locator(".mx_RoomView_body .mx_EventTile_last .mx_EventTile_line");
-            await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
+            await expect(eventTileLine.locator("[data-reply-tile] .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
             await expect(eventTileLine.getByText(reply)).toHaveCount(1);
         });
 
@@ -1056,7 +1056,7 @@ test.describe("Timeline", () => {
                 .click();
 
             const lastEventTileLine = roomViewBody.locator(".mx_EventTile_last .mx_EventTile_line");
-            await expect(lastEventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
+            await expect(lastEventTileLine.locator("[data-reply-tile] .mx_MTextBody").getByText(MESSAGE)).toBeVisible();
 
             await expect(lastEventTileLine.locator(".mx_MVoiceMessageBody")).toHaveCount(1);
         });
@@ -1257,7 +1257,9 @@ test.describe("Timeline", () => {
 
                 // Make sure the reply tile is rendered
                 const eventTileLine = page.locator(".mx_EventTile_last .mx_EventTile_line");
-                await expect(eventTileLine.locator(".mx_ReplyTile .mx_MTextBody").getByText(LONG_STRING)).toBeVisible();
+                await expect(
+                    eventTileLine.locator("[data-reply-tile] .mx_MTextBody").getByText(LONG_STRING),
+                ).toBeVisible();
 
                 await expect(eventTileLine.getByText(reply)).toHaveCount(1);
 

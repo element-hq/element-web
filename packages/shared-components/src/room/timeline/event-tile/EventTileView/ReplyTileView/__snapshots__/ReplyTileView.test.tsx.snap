@@ -13,9 +13,7 @@ exports[`ReplyTileView > renders the default reply tile 1`] = `
         class="ReplyTileView-module_sender"
         data-reply-tile-sender=""
       >
-        <span
-          data-reply-tile-avatar=""
-        >
+        <span>
           A
         </span>
         <span
@@ -25,12 +23,10 @@ exports[`ReplyTileView > renders the default reply tile 1`] = `
         </span>
       </div>
       <div
-        class="ReplyTileView-module_body"
-        data-reply-tile-body=""
+        class="ReplyTileView-module_body ReplyTileView-module_clampedBody"
+        data-reply-tile-content=""
       >
-        <span
-          data-reply-body-content=""
-        >
+        <span>
           <span>
             This is the replied-to message preview.
           </span>
@@ -51,12 +47,10 @@ exports[`ReplyTileView > renders the info reply tile 1`] = `
       href="#"
     >
       <div
-        class="ReplyTileView-module_body"
-        data-reply-tile-body=""
+        class="ReplyTileView-module_body ReplyTileView-module_clampedBody"
+        data-reply-tile-content=""
       >
-        <span
-          data-reply-body-content=""
-        >
+        <span>
           <span>
             This is the replied-to message preview.
           </span>
@@ -80,9 +74,7 @@ exports[`ReplyTileView > renders the inline reply tile 1`] = `
         class="ReplyTileView-module_sender"
         data-reply-tile-sender=""
       >
-        <span
-          data-reply-tile-avatar=""
-        >
+        <span>
           A
         </span>
         <span
@@ -92,12 +84,10 @@ exports[`ReplyTileView > renders the inline reply tile 1`] = `
         </span>
       </div>
       <div
-        class="ReplyTileView-module_body"
-        data-reply-tile-body=""
+        class="ReplyTileView-module_body ReplyTileView-module_clampedBody"
+        data-reply-tile-content=""
       >
-        <span
-          data-reply-body-content=""
-        >
+        <span>
           <span>
             This is the replied-to message preview.
           </span>

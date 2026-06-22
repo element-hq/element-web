@@ -35,34 +35,48 @@
 }
 
 .body {
-    grid-area: message;
-    min-width: 0;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-overflow: ellipsis;
-}
-
-.body > * {
-    max-width: 100%;
-}
-
-.body :global([data-textual-body-annotation-wrapper]) {
     display: contents;
 }
 
-.body :global([data-textual-body-edited-marker]) {
+.clampedBody > * {
+    grid-area: message;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.clampedBody > * > [dir] {
+    display: inline;
+}
+
+.clampedBody :global([data-textual-body-annotation-wrapper]) {
+    display: contents;
+}
+
+.clampedBody :global([data-textual-body-edited-marker]) {
     display: none;
 }
 
-.body :global(.markdown-body blockquote),
-.body :global(.markdown-body dl),
-.body :global(.markdown-body ol),
-.body :global(.markdown-body p),
-.body :global(.markdown-body pre),
-.body :global(.markdown-body table),
-.body :global(.markdown-body ul) {
+.clampedBody pre {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    padding: 4px;
+}
+
+.clampedBody blockquote,
+.clampedBody dl,
+.clampedBody ol,
+.clampedBody p,
+.clampedBody pre,
+.clampedBody table,
+.clampedBody ul {
     margin-bottom: 4px;
 }
 
@@ -88,7 +102,7 @@
     flex-shrink: 0;
 }
 
-.sender :global([data-reply-tile-sender-profile]) {
+.sender [data-reply-tile-sender-profile] {
     display: inline-block;
     min-width: 0;
     padding: 0;

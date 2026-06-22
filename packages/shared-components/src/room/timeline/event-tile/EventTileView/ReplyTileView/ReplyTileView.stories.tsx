@@ -21,7 +21,7 @@ type WrapperProps = ReplyTileViewSnapshot &
     };
 
 const ReplyBody = (): JSX.Element => (
-    <span data-reply-body-content="">
+    <span>
         <span>This is the replied-to message preview.</span>
     </span>
 );
@@ -55,9 +55,10 @@ const meta = {
         isInline: false,
         isInfoMessage: false,
         showSender: true,
+        shouldClampContent: true,
         sender: (
             <>
-                <span data-reply-tile-avatar="">A</span>
+                <span>A</span>
                 <span data-reply-tile-sender-profile="">Alice</span>
             </>
         ),

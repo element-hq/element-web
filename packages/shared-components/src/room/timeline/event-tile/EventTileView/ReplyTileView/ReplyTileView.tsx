@@ -23,6 +23,8 @@ export interface ReplyTileViewSnapshot {
     isInfoMessage: boolean;
     /** Whether the sender slot should be rendered. */
     showSender: boolean;
+    /** Whether the body slot should be constrained to the compact text preview treatment. */
+    shouldClampContent?: boolean;
     /** Fallback text shown when the event has no renderer. */
     noRendererMessage?: string;
 }
@@ -54,12 +56,16 @@ interface ReplyTileViewProps {
  * supplies sender/body slots and handles navigation through the view model.
  */
 export function ReplyTileView({ vm, sender, children, className }: Readonly<ReplyTileViewProps>): JSX.Element {
-    const { permalink, isInline, isInfoMessage, showSender, noRendererMessage } = useViewModel(vm);
+    const { permalink, isInline, isInfoMessage, showSender, shouldClampContent = false, noRendererMessage } =
+        useViewModel(vm);
     const anchorElement = useRef<HTMLAnchorElement>(null);
 
     const classes = classNames(styles.replyTile, className, {
         [styles.inline]: isInline,
         [styles.info]: isInfoMessage,
+    });
+    const bodyClasses = classNames(styles.body, {
+        [styles.clampedBody]: shouldClampContent,
     });
 
     if (noRendererMessage) {
@@ -90,7 +96,7 @@ export function ReplyTileView({ vm, sender, children, className }: Readonly<Repl
                         {sender}
                     </div>
                 )}
-                <div className={styles.body} data-reply-tile-body="">
+                <div className={bodyClasses} data-reply-tile-content="">
                     {children}
                 </div>
             </a>

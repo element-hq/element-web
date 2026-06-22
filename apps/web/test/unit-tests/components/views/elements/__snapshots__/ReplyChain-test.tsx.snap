@@ -11,14 +11,14 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
         class="mx_ReplyChain mx_ReplyChain_color2"
       >
         <div
-          class="_replyTile_14wql_10"
+          class="_replyTile_wg9xa_10"
           data-reply-tile=""
         >
           <a
             href="#"
           >
             <div
-              class="_sender_14wql_80"
+              class="_sender_wg9xa_94"
               data-reply-tile-sender=""
             >
               <span
@@ -50,8 +50,8 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
               </span>
             </div>
             <div
-              class="_body_14wql_37"
-              data-reply-tile-body=""
+              class="_body_wg9xa_37 _clampedBody_wg9xa_41"
+              data-reply-tile-content=""
             >
               <div
                 class="mx_MTextBody mx_EventTile_content _root_dlp6w_8 _text_dlp6w_13"

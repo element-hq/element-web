@@ -39,6 +39,9 @@ interface ReplyTileViewModelSnapshot extends ReplyTileViewSnapshot {
     isSeeingThroughMessageHiddenForModeration: boolean;
 }
 
+const CAPTIONED_MEDIA_MSGTYPES = new Set<MsgType>([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video]);
+const TEXTUAL_MSGTYPES = new Set<MsgType>([MsgType.Text, MsgType.Notice, MsgType.Emote]);
+
 export class ReplyTileViewModel
     extends BaseViewModel<ReplyTileViewModelSnapshot, ReplyTileViewModelProps>
     implements ReplyTileViewModelInterface
@@ -52,6 +55,27 @@ export class ReplyTileViewModel
         const eventId = mxEvent.getId();
 
         return permalinkCreator && eventId ? permalinkCreator.forEvent(eventId) : "#";
+    };
+
+    private static readonly computeShouldClampContent = (mxEvent: MatrixEvent): boolean => {
+        if (mxEvent.isRedacted()) {
+            return false;
+        }
+
+        if (mxEvent.isDecryptionFailure()) {
+            return true;
+        }
+
+        const content = mxEvent.getContent();
+        const msgType = content.msgtype as MsgType | undefined;
+        if (!msgType) {
+            return false;
+        }
+
+        const hasCaption =
+            CAPTIONED_MEDIA_MSGTYPES.has(msgType) && !!content.filename && content.filename !== content.body;
+
+        return TEXTUAL_MSGTYPES.has(msgType) || hasCaption;
     };
 
     private static readonly computeSnapshot = (props: ReplyTileViewModelProps): ReplyTileViewModelSnapshot => {
@@ -73,6 +97,7 @@ export class ReplyTileViewModel
             isInline: msgType === MsgType.Emote,
             isInfoMessage: isInfoMessage && !mxEvent.isRedacted(),
             showSender: !(isInfoMessage || evType === EventType.RoomCreate),
+            shouldClampContent: ReplyTileViewModel.computeShouldClampContent(mxEvent),
             noRendererMessage: hasRenderer ? undefined : _t("timeline|error_no_renderer"),
             isSeeingThroughMessageHiddenForModeration,
         };
