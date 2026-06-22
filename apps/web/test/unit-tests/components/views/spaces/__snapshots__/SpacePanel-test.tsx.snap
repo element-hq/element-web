@@ -371,7 +371,6 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       role="button"
       style="--cpd-icon-button-size: 32px;"
       tabindex="0"
-      title="Quick settings"
     >
       <div
         class="_indicator-icon_147l5_17"
