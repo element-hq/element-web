@@ -1020,14 +1020,6 @@
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
         "turn_on_key_storage": "Włącz magazyn kluczy",
         "turn_on_key_storage_description": "Dzięki temu będziesz mógł przeglądać historię czatów na nowych urządzeniach. Jest to również wymagane do tworzenia kopii zapasowych i tożsamości cyfrowej.",
-        "udd": {
-            "interactive_verification_button": "Zweryfikuj interaktywnie za pomocą emoji",
-            "other_ask_verify_text": "Poproś go/ją o zweryfikowanie tej sesji bądź zweryfikuj ją osobiście poniżej.",
-            "other_new_session_text": "%(name)s%(userId)s zalogował się do nowej sesji bez zweryfikowania jej:",
-            "own_ask_verify_text": "Zweryfikuj swoje pozostałe sesje używając jednej z opcji poniżej.",
-            "own_new_session_text": "Zalogowałeś się do nowej sesji bez jej zweryfikowania:",
-            "title": "Niezaufany"
-        },
         "unable_to_setup_keys_error": "Nie można ustawić kluczy",
         "verification": {
             "accepting": "Akceptowanie…",
@@ -4170,13 +4162,7 @@
         "close_to_view_right_panel": "Zamknij widżet, aby wyświetlić go w tym panelu",
         "context_menu": {
             "delete": "Usuń widżet",
-            "delete_warning": "Usunięcie widżetu usuwa go dla wszystkich użytkowników w tym pokoju. Czy na pewno chcesz usunąć ten widżet?",
-            "move_left": "Przenieś w lewo",
-            "move_right": "Przenieś w prawo",
-            "remove": "Usuń dla wszystkich",
-            "revoke": "Odwołaj uprawnienia",
-            "screenshot": "Zrób zdjęcie",
-            "start_audio_stream": "Rozpocznij transmisję audio"
+            "delete_warning": "Usunięcie widżetu usuwa go dla wszystkich użytkowników w tym pokoju. Czy na pewno chcesz usunąć ten widżet?"
         },
         "cookie_warning": "Ten widżet może używać plików cookies.",
         "error_hangup_description": "Zostałeś rozłączony z rozmowy. (Błąd: %(message)s)",

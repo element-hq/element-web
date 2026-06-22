@@ -781,14 +781,6 @@
             "warning": "復元方法を削除しなかった場合、攻撃者があなたのアカウントにアクセスしようとしている可能性があります。設定画面でアカウントのパスワードを至急変更し、新しい復元方法を設定してください。"
         },
         "set_up_toast_title": "セキュアバックアップを設定",
-        "udd": {
-            "interactive_verification_button": "絵文字で認証",
-            "other_ask_verify_text": "このユーザーにセッションを認証するよう依頼するか、以下から手動で認証してください。",
-            "other_new_session_text": "%(name)s（%(userId)s）は未認証のセッションにサインインしました：",
-            "own_ask_verify_text": "以下のどれか一つを使って他のセッションを認証します。",
-            "own_new_session_text": "あなたのこのセッションはまだ認証されていません：",
-            "title": "信頼されていません"
-        },
         "unable_to_setup_keys_error": "鍵を設定できません",
         "verification": {
             "accepting": "承認しています…",
@@ -3186,13 +3178,7 @@
         "close_to_view_right_panel": "ウィジェットを閉じて、このパネルに表示",
         "context_menu": {
             "delete": "ウィジェットを削除",
-            "delete_warning": "ウィジェットを削除すると、このルームの全てのユーザーから削除されます。削除してよろしいですか？",
-            "move_left": "左に移動",
-            "move_right": "右に移動",
-            "remove": "全員から削除",
-            "revoke": "権限を取り消す",
-            "screenshot": "画像を撮影",
-            "start_audio_stream": "音声ストリーミングを開始"
+            "delete_warning": "ウィジェットを削除すると、このルームの全てのユーザーから削除されます。削除してよろしいですか？"
         },
         "cookie_warning": "このウィジェットはクッキーを使用する可能性があります。",
         "error_hangup_description": "通話から切断されました。（エラー：%(message)s）",
