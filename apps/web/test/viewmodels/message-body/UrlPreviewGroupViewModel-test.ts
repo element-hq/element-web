@@ -42,6 +42,7 @@ function getViewModel(
         mediaVisible,
         visible,
         onImageClicked,
+        shouldShowSpinner: false,
         mxEvent: mkEvent({
             event: true,
             user: "@foo:bar",

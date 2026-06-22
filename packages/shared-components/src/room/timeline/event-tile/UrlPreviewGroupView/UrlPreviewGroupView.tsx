@@ -27,6 +27,8 @@ export interface UrlPreviewGroupViewSnapshot {
     previewsLimited: boolean;
     /** Whether more previews exist than are currently rendered. */
     overPreviewLimit: boolean;
+    /** Whether the previews are in a loading state */
+    loading: boolean;
 }
 
 /** Props for the URL preview group view. */
@@ -63,9 +65,20 @@ export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, Ur
 export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
     const eventPresentationAttributes = useEventPresentationAttributes();
-    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit } = useViewModel(vm);
-    if (previews.length === 0) {
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit, loading } = useViewModel(vm);
+
+    let content: JSX.Element[];
+    if (loading && totalPreviewCount) {
+        // TODO: All faked.
+        content = Array.from({ length: totalPreviewCount }).map((_, idx) => (
+            <LinkPreview key={idx} showTooltipOnLink={false} link="https://example.org" title="Loading" siteName="Link preview is being fetched" />
+        ));
+    } else if (previews.length === 0) {
         return null;
+    } else {
+        content = previews.map((preview) => (
+            <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
+        ));
     }
 
     let toggleButton: JSX.Element | undefined;
@@ -82,9 +95,7 @@ export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps)
     return (
         <div className={classNames(className, styles.wrapper)} {...eventPresentationAttributes}>
             <div className={styles.previewGroup}>
-                {previews.map((preview) => (
-                    <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
-                ))}
+                {content}
                 {toggleButton}
             </div>
             <IconButton

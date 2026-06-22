@@ -32,6 +32,7 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import ImageView from "../elements/ImageView";
 import EditMessageComposer from "../rooms/EditMessageComposer";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 const logger = rootLogger.getChild("TextualBodyFactory");
 
@@ -60,6 +61,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
     const willHaveWrapper = !!props.replacingEventId || !!props.isSeeingThroughMessageHiddenForModeration || isEmote;
     const stripReply = !props.mxEvent.replacingEvent() && !!getParentEventId(props.mxEvent);
     const contentRef = useRef<TextualBodyContentElement>(null);
+    const showSpinnerOnPreview = useSettingValue("urlPreviewsEnabled_spinner");
 
     const textualBodyVm = useCreateAutoDisposedViewModel(
         () =>
@@ -98,6 +100,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible,
+                shouldShowSpinner: showSpinnerOnPreview,
                 onImageClicked: (preview: UrlPreview): void => {
                     if (!preview.image?.imageFull) {
                         return;

@@ -357,6 +357,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                             level={SettingLevel.DEVICE}
                             requires={["urlPreviewsEnabled"]}
                         />
+                        <SettingsFlag
+                            name="urlPreviewsEnabled_spinner"
+                            level={SettingLevel.DEVICE}
+                            requires={["urlPreviewsEnabled"]}
+                        />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|media_heading")} formWrap>

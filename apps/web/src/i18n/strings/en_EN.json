@@ -2697,6 +2697,10 @@
         },
         "inline_url_previews_default": "Enable previews",
         "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
+        "inline_url_previews_spinner": {
+            "name": "Show spinner when loading URLs",
+            "description": "Load all URL previews, then collapse unavailable ones"
+        },
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"

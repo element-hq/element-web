@@ -312,6 +312,7 @@ export interface Settings {
     "blacklistUnverifiedDevices": IBaseSetting<boolean>;
     "urlPreviewsEnabled": IBaseSetting<boolean>;
     "urlPreviewsEnabled_e2ee": IBaseSetting<boolean>;
+    "urlPreviewsEnabled_spinner": IBaseSetting<boolean>;
     "notificationsEnabled": IBaseSetting<boolean>;
     "deviceNotificationsEnabled": IBaseSetting<boolean>;
     "notificationSound": IBaseSetting<NotificationSound | false>;
@@ -1175,6 +1176,17 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_encrypted"),
+        default: false,
+        controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
+    },
+    // NOT to be shipped, this is for testing only.
+    "urlPreviews_spinner": {
+        // Enabled by default and client configurable as this setting only allows unencrypted
+        // messages to be previewed.
+        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_spinner|name"),
+        description: _td("settings|inline_url_previews_spinner|description"),
         default: false,
         controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
     },

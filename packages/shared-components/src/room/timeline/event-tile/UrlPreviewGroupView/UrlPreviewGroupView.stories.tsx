@@ -137,6 +137,20 @@ MultiplePreviewsVisible.args = {
     totalPreviewCount: 10,
 };
 
+export const WithLoading = Template.bind({});
+WithLoading.args = {
+    previews: [],
+    totalPreviewCount: 1,
+    loading: true,
+};
+
+export const WithLoadingMultiple = Template.bind({});
+WithLoadingMultiple.args = {
+    previews: [],
+    totalPreviewCount: 3,
+    loading: true,
+};
+
 export const WithCompactView = Template.bind({});
 WithCompactView.args = {
     ...MultiplePreviewsVisible.args,

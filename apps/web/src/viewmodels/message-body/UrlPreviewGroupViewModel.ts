@@ -27,6 +27,7 @@ const logger = rootLogger.getChild("UrlPreviewGroupViewModel");
 export interface UrlPreviewGroupViewModelProps {
     client: MatrixClient;
     mxEvent: MatrixEvent;
+    shouldShowSpinner: boolean;
     mediaVisible: boolean;
     visible: boolean;
     onImageClicked: (preview: UrlPreview) => void;
@@ -282,6 +283,7 @@ export class UrlPreviewGroupViewModel
             totalPreviewCount: 0,
             previewsLimited: true,
             overPreviewLimit: false,
+            loading: props.shouldShowSpinner,
         });
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(storageKey) !== "1";
         this.urlPreviewVisible = props.visible;
@@ -389,6 +391,12 @@ export class UrlPreviewGroupViewModel
      * for the previously-calculated links.
      */
     private async computeSnapshot(): Promise<void> {
+        if (this.props.shouldShowSpinner) {
+            this.snapshot.merge({
+                loading: true,
+                totalPreviewCount: this.links.length,
+            });
+        }
         // This uses MSC4095. If the sender has sent us an empty URL previews bundle
         // then they do not want to have URL previews be visible.
         const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
@@ -414,6 +422,7 @@ export class UrlPreviewGroupViewModel
             totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
+            loading: false,
         });
     }
 

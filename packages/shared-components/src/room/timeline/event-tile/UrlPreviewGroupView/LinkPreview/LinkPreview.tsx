@@ -16,7 +16,7 @@ import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
 
 export interface LinkPreviewActions {
-    onImageClick: () => void;
+    onImageClick?: () => void;
 }
 
 export type LinkPreviewProps = UrlPreview & LinkPreviewActions;
@@ -95,7 +95,7 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             if (!preview.image?.imageFull) {
                 return;
             }
-            onImageClick();
+            onImageClick?.();
         },
         [preview.image?.imageFull, onImageClick],
     );
@@ -107,7 +107,7 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
     let img: JSX.Element | undefined;
 
     if (preview.image) {
-        if (preview.image.playable) {
+        if (preview.image.playable || !onImageClick) {
             // Playable media do not have clickable images so we don't
             // overlay buttons atop buttons, instead we render a
             // button for them to open the media.
@@ -118,17 +118,19 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
                     }}
                     className={styles.preview}
                 >
-                    <Button
-                        as="a"
-                        href={preview.link}
-                        aria-label={_t("timeline|url_preview|open_link")}
-                        className={styles.playButton}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        kind="primary"
-                    >
-                        <PlaySolidIcon width="24px" height="24px" />
-                    </Button>
+                    {preview.image.playable && (
+                        <Button
+                            as="a"
+                            href={preview.link}
+                            aria-label={_t("timeline|url_preview|open_link")}
+                            className={styles.playButton}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            kind="primary"
+                        >
+                            <PlaySolidIcon width="24px" height="24px" />
+                        </Button>
+                    )}
                 </div>
             );
         } else {
