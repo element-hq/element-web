@@ -83,7 +83,7 @@
         "react-merge-refs": "^3.0.2",
         "react-resizable-panels": "4.9.0",
         "react-virtuoso": "^4.14.0",
-        "temporal-polyfill": "^0.3.0"
+        "temporal-polyfill": "^1.0.0"
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "workspace:*",
