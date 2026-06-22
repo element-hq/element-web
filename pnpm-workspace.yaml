@@ -81,8 +81,6 @@ patchedDependencies:
     react-blurhash: patches/react-blurhash.patch
     # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
-    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
-    "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
     # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
     # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock

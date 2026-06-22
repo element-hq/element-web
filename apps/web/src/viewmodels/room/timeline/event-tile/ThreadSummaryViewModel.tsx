@@ -38,7 +38,6 @@ import PosthogTrackers from "../../../../PosthogTrackers";
 import { determineUnreadState } from "../../../../RoomNotifs";
 import { notificationLevelToIndicator } from "../../../../utils/notifications";
 import { mediaFromMxc } from "../../../../customisations/Media";
-import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { keepIfSame } from "../../../../utils/keepIfSame";
 import {
@@ -394,10 +393,7 @@ export class ThreadMessagePreviewViewModel
                     ) ?? undefined;
             }
 
-            title =
-                UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
-                    roomId: member.roomId,
-                }) ?? fallbackUserId;
+            title = member.userId ?? fallbackUserId;
         }
 
         return {

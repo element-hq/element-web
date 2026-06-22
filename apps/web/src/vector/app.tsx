@@ -15,7 +15,6 @@ import "matrix-js-sdk/src/browser-index";
 import React, { type ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
-import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
@@ -25,7 +24,6 @@ import { type IConfigOptions } from "../IConfigOptions";
 import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
 import { type ValidatedServerConfig } from "../utils/ValidatedServerConfig";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 import { type URLParams } from "./url_utils.ts";
 import { UserFriendlyError } from "../languageHandler";
@@ -144,24 +142,19 @@ export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<Mat
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
-    const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
-    ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
-
     return (
-        <wrapperOpts.Wrapper>
-            <StrictMode>
-                <MatrixChat
-                    ref={matrixChatRef}
-                    onNewScreen={onNewScreen}
-                    config={config}
-                    urlParams={urlParams}
-                    enableGuest={!config.disable_guests}
-                    onTokenLoginCompleted={onTokenLoginCompleted}
-                    initialScreenAfterLogin={initialScreenAfterLogin}
-                    defaultDeviceDisplayName={defaultDeviceName}
-                />
-            </StrictMode>
-        </wrapperOpts.Wrapper>
+        <StrictMode>
+            <MatrixChat
+                ref={matrixChatRef}
+                onNewScreen={onNewScreen}
+                config={config}
+                urlParams={urlParams}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={initialScreenAfterLogin}
+                defaultDeviceDisplayName={defaultDeviceName}
+            />
+        </StrictMode>
     );
 }
 

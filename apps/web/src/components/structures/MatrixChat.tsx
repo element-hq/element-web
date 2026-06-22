@@ -77,7 +77,6 @@ import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast
 import { shouldUseLoginForWelcome } from "../../utils/pages";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { RoomUpdateCause } from "../../stores/room-list/models";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog from "../views/dialogs/UserSettingsDialog";
@@ -449,12 +448,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if the user has previously set up cross-signing, verify this device so we can fetch the
             // private keys.
 
-            const cryptoExtension = ModuleRunner.instance.extensions.cryptoSetup;
-            if (cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
-                this.onShowPostLoginScreen();
-            } else {
-                this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-            }
+            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (!(await shouldSkipSetupEncryption(cli))) {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(

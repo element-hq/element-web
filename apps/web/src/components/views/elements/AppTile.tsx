@@ -22,7 +22,6 @@ import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-w
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import {
     OverflowHorizontalIcon,
     MinusIcon,
@@ -57,7 +56,6 @@ import { Action } from "../../../dispatcher/actions";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
 import { parseUrl } from "../../../utils/UrlUtils";
@@ -206,11 +204,6 @@ export default class AppTile extends React.Component<IProps, IState> {
     private hasPermissionToLoadSync = (props: IProps): boolean => {
         if (this.usingLocalWidget()) return true;
         if (!props.room) return true; // user widgets always have permissions
-
-        // Legacy module API (synchronous)
-        const opts: ApprovalOpts = { approved: undefined };
-        ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(this.props.app));
-        if (opts.approved) return true;
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
         const allowed =

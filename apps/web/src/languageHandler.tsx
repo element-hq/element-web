@@ -7,7 +7,6 @@
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
-import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
 import {
     _t,
@@ -20,13 +19,13 @@ import {
     getLocale,
     setMissingEntryGenerator as setMissingEntryGeneratorSharedComponents,
 } from "@element-hq/web-shared-components";
+import { type Translation } from "matrix-web-i18n";
 
 import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
 import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 import SdkConfig from "./SdkConfig";
-import { ModuleRunner } from "./modules/ModuleRunner";
 
 export {
     _t,
@@ -236,6 +235,8 @@ async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
     return res.json();
 }
 
+export type TranslationStringsObject = { [lang: string]: { [key: string]: Translation } };
+
 let cachedCustomTranslations: TranslationStringsObject | undefined;
 let cachedCustomTranslationsExpire = 0; // zero to trigger expiration right away
 
@@ -278,9 +279,6 @@ export async function registerCustomTranslations({
 }: {
     testOnlyIgnoreCustomTranslationsCache?: boolean;
 } = {}): Promise<void> {
-    const moduleTranslations = ModuleRunner.instance.allTranslations;
-    doRegisterTranslations(moduleTranslations);
-
     const lookupUrl = SdkConfig.get().custom_translations_url;
     if (!lookupUrl) return; // easy - nothing to do
 

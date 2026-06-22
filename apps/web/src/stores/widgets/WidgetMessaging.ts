@@ -55,7 +55,6 @@ import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWa
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
-import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
@@ -236,7 +235,6 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     private runUrlTemplate(opts = { asPopout: false }): string {
-        const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
         const defaults: ITemplateParams = {
             widgetRoomId: this.roomId,
             currentUserId: this.client.getUserId()!,
@@ -248,7 +246,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
         };
-        const templated = this.widget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
+        const templated = this.widget.getCompleteUrl(defaults, opts?.asPopout);
 
         const parsed = new URL(templated);
 
@@ -463,9 +461,6 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     }
 
     public async prepare(): Promise<void> {
-        // Ensure the variables are ready for us to be rendered before continuing
-        await (WidgetVariableCustomisations?.isReady?.() ?? Promise.resolve());
-
         if (this.scalarToken) return;
         try {
             if (WidgetUtils.isScalarUrl(this.widget.templateUrl)) {

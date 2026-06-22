@@ -1047,12 +1047,6 @@ describe("RoomView", () => {
         });
     });
 
-    it("fires Action.RoomLoaded", async () => {
-        jest.spyOn(defaultDispatcher, "dispatch");
-        await mountRoomView();
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
-    });
-
     // Regression test for https://github.com/element-hq/element-web/issues/29072
     it("does not force a reload on sync unless the client is coming back online", async () => {
         cli.isInitialSyncComplete.mockReturnValue(false);

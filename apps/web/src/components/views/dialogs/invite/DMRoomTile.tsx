@@ -12,7 +12,6 @@ import { type Member, type ThreepidMember } from "../../../../utils/direct-messa
 import type { ButtonEvent } from "../../elements/AccessibleButton.tsx";
 import BaseAvatar from "../../avatars/BaseAvatar.tsx";
 import { mediaFromMxc } from "../../../../customisations/Media.ts";
-import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier.ts";
 import { _t } from "../../../../languageHandler.tsx";
 import { Icon as EmailPillAvatarIcon } from "../../../../../res/img/icon-email-pill-avatar.svg";
 
@@ -52,9 +51,7 @@ export class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             />
         );
 
-        const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.props.member.userId, {
-            withDisplayName: true,
-        });
+        const userIdentifier = this.props.member.userId;
 
         const caption = (this.props.member as ThreepidMember).isEmail
             ? _t("invite|email_caption")

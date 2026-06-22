@@ -43,18 +43,12 @@ import {
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    type ApprovalOpts,
-    type CapabilitiesOpts,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
-import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
@@ -63,7 +57,6 @@ import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import { ModuleApi } from "../../modules/Api";
 import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
 import SettingsStore from "../../settings/SettingsStore";
@@ -254,20 +247,10 @@ export class ElementWidgetDriver extends WidgetDriver {
         });
 
         // Try the new module API first, then fall back to legacy paths
-        let approved: Set<string> | undefined;
-        approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
+        const approved = await ModuleApi.instance.widgetLifecycle.preapproveCapabilities(
             toWidgetDescriptor(this.forWidget, this.inRoomId),
             requested,
         );
-        if (!approved) {
-            if (WidgetPermissionCustomisations.preapproveCapabilities) {
-                approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
-            } else {
-                const opts: CapabilitiesOpts = { approvedCapabilities: undefined };
-                ModuleRunner.instance.invoke(WidgetLifecycle.CapabilitiesRequest, opts, this.forWidget, requested);
-                approved = opts.approvedCapabilities;
-            }
-        }
         if (approved) {
             approved.forEach((cap) => {
                 allowedSoFar.add(cap);
@@ -674,16 +657,9 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
         // Try the new module API first, then fall back to legacy path
-        let approved: boolean | undefined = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
+        const approved = await ModuleApi.instance.widgetLifecycle.preapproveIdentity(
             toWidgetDescriptor(this.forWidget, this.inRoomId),
         );
-
-        if (!approved) {
-            // Legacy module API fallback
-            const legacyOpts: ApprovalOpts = { approved: undefined };
-            ModuleRunner.instance.invoke(WidgetLifecycle.IdentityRequest, legacyOpts, this.forWidget);
-            approved = legacyOpts.approved;
-        }
 
         if (approved) {
             return observer.update({

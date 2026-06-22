@@ -89,7 +89,6 @@
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/vitest": "^0.2.18",
         "@fontsource/inter": "catalog:",
-        "@matrix-org/react-sdk-module-api": "^2.5.0",
         "@microsoft/api-extractor": "^7.56.0",
         "@playwright/test": "catalog:",
         "@storybook/addon-a11y": "^10.0.7",

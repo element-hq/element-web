@@ -289,7 +289,6 @@ packageExtensionsChecksum: sha256-EMEi1vcyzQthk7O/0AcntvnHgJaKCoFBlzp6iX/qNYk=
 
 patchedDependencies:
   '@arcmantle/vite-plugin-import-css-sheet': 8019aa9feca17db6bab3483612b4150c911d70b58fddc52bf2d7258a1484a747
-  '@matrix-org/react-sdk-module-api': 016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96
   '@types/auto-launch': b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538
   '@vector-im/matrix-wysiwyg': 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
   await-lock: b767a571946a4f8710ac54b1a7bec8a7c1570f9b85d75922392fae20d0578964
@@ -528,9 +527,6 @@ importers:
       '@matrix-org/emojibase-bindings':
         specifier: ^1.5.0
         version: 1.5.0
-      '@matrix-org/react-sdk-module-api':
-        specifier: ^2.4.0
-        version: 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.7)
       '@sentry/browser':
         specifier: ^10.0.0
         version: 10.57.0
@@ -871,9 +867,6 @@ importers:
       '@types/sdp-transform':
         specifier: ^3.0.0
         version: 3.0.0
-      '@types/semver':
-        specifier: ^7.5.8
-        version: 7.7.1
       '@types/tar-js':
         specifier: ^0.3.5
         version: 0.3.5
@@ -1033,9 +1026,6 @@ importers:
       process:
         specifier: ^0.11.10
         version: 0.11.10
-      semver:
-        specifier: ^7.5.2
-        version: 7.8.4
       source-map-loader:
         specifier: ^5.0.0
         version: 5.0.0(webpack@5.107.2)
@@ -1320,9 +1310,6 @@ importers:
         specifier: ^19
         version: 19.2.7
     devDependencies:
-      '@matrix-org/react-sdk-module-api':
-        specifier: ^2.5.0
-        version: 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.7)
       '@microsoft/api-extractor':
         specifier: ^7.49.1
         version: 7.58.9(@types/node@25.9.3)
@@ -1487,9 +1474,6 @@ importers:
       '@fontsource/inter':
         specifier: 'catalog:'
         version: 5.2.8
-      '@matrix-org/react-sdk-module-api':
-        specifier: ^2.5.0
-        version: 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.7)
       '@microsoft/api-extractor':
         specifier: ^7.56.0
         version: 7.58.9(@types/node@25.9.3)
@@ -3586,11 +3570,6 @@ packages:
   '@matrix-org/matrix-sdk-crypto-wasm@18.3.1':
     resolution: {integrity: sha512-VRjWhE1UgHnPpJ3b9B5+8z71ZC/HICFngPPFIN6ktzmUBKI5RusPujzbAQUoB3CgZ0yU58L99AfSQS4YTztSWw==}
     engines: {node: '>= 18'}
-
-  '@matrix-org/react-sdk-module-api@2.5.0':
-    resolution: {integrity: sha512-l/SmiO47gPIRd6YJJGj+B6qbxyypJF6SEsfYr7j9rSW6E85ZYCqf+TpMM2LmfwZRADyKfCVkaJbbBZYpoD02VA==}
-    peerDependencies:
-      react: ^18
 
   '@matrix-org/spec@1.16.0':
     resolution: {integrity: sha512-xUKHkwGXXISMCfTrx6JW6uGEK5O8IeZVOjBm7FX1h/ihpK6l50nlSIMRYdtz4V6q3pvOVBOCft4hPYTJVeTZDA==}
@@ -16535,11 +16514,6 @@ snapshots:
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
   '@matrix-org/matrix-sdk-crypto-wasm@18.3.1': {}
-
-  '@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.7)':
-    dependencies:
-      '@babel/runtime': 7.29.7
-      react: 19.2.7
 
   '@matrix-org/spec@1.16.0': {}
 
