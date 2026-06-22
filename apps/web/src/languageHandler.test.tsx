@@ -7,43 +7,24 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import fetchMock from "@fetch-mock/jest";
-import { type Translation } from "matrix-web-i18n";
-import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
+import fetchMock from "@fetch-mock/vitest";
+import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from "vitest";
 
-import SdkConfig from "../../src/SdkConfig";
+import SdkConfig from "./SdkConfig";
+import { setLanguage } from "./i18n/settings";
 import {
     _t,
     _tDom,
-    CustomTranslationOptions,
     getAllLanguagesWithLabels,
-    registerCustomTranslations,
-    setLanguage,
     setMissingEntryGenerator,
     substitute,
     type TranslatedString,
     UserFriendlyError,
     type IVariables,
     type Tags,
-    getLanguagesFromBrowser,
-} from "../../src/languageHandler";
-import { stubClient } from "../test-utils";
-
-async function setupTranslationOverridesForTests(overrides: TranslationStringsObject) {
-    const lookupUrl = "/translations.json";
-    const fn = (url: string): TranslationStringsObject => {
-        expect(url).toEqual(lookupUrl);
-        return overrides;
-    };
-
-    SdkConfig.add({
-        custom_translations_url: lookupUrl,
-    });
-    CustomTranslationOptions.lookupFn = fn;
-    await registerCustomTranslations({
-        testOnlyIgnoreCustomTranslationsCache: true,
-    });
-}
+} from "./languageHandler";
+import { stubClient } from "../test/test-utils";
+import { setupTranslationOverridesForTests } from "./i18n/__mocks__";
 
 describe("languageHandler", () => {
     beforeEach(async () => {
@@ -52,75 +33,12 @@ describe("languageHandler", () => {
 
     afterEach(() => {
         SdkConfig.reset();
-        CustomTranslationOptions.lookupFn = undefined;
-    });
-
-    it("should support overriding translations", async () => {
-        const str: TranslationKey = "power_level|default";
-        const enOverride: Translation = "Visitor";
-        const deOverride: Translation = "Besucher";
-
-        // First test that overrides aren't being used
-        await setLanguage("en");
-        expect(_t(str)).toMatchInlineSnapshot(`"Default"`);
-        await setLanguage("de");
-        expect(_t(str)).toMatchInlineSnapshot(`"Standard"`);
-
-        await setupTranslationOverridesForTests({
-            [str]: {
-                en: enOverride,
-                de: deOverride,
-            },
-        });
-
-        // Now test that they *are* being used
-        await setLanguage("en");
-        expect(_t(str)).toEqual(enOverride);
-
-        await setLanguage("de");
-        expect(_t(str)).toEqual(deOverride);
-    });
-
-    it("should support overriding plural translations", async () => {
-        const str: TranslationKey = "voip|n_people_joined";
-        const enOverride: Translation = {
-            other: "%(count)s people in the call",
-            one: "%(count)s person in the call",
-        };
-        const deOverride: Translation = {
-            other: "%(count)s Personen im Anruf",
-            one: "%(count)s Person im Anruf",
-        };
-
-        // First test that overrides aren't being used
-        await setLanguage("en");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 person joined"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 people joined"`);
-        await setLanguage("de");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 Person beigetreten"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 Personen beigetreten"`);
-
-        await setupTranslationOverridesForTests({
-            [str]: {
-                en: enOverride,
-                de: deOverride,
-            },
-        });
-
-        // Now test that they *are* being used
-        await setLanguage("en");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 person in the call"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 people in the call"`);
-
-        await setLanguage("de");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 Person im Anruf"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 Personen im Anruf"`);
     });
 
     describe("UserFriendlyError", () => {
         const testErrorMessage = "This email address is already in use (%(email)s)" as TranslationKey;
         beforeEach(async () => {
-            // Setup some  strings with variable substituations that we can use in the tests.
+            // Setup some strings with variable substituations that we can use in the tests.
             const deOverride = "Diese E-Mail-Adresse wird bereits verwendet (%(email)s)";
             await setupTranslationOverridesForTests({
                 [testErrorMessage]: {
@@ -192,29 +110,6 @@ describe("languageHandler", () => {
                   },
                 ]
             `);
-        });
-    });
-
-    describe("getLanguagesFromBrowser", () => {
-        beforeEach(() => {
-            jest.restoreAllMocks();
-        });
-
-        it("should return navigator.languages if available", () => {
-            jest.spyOn(window.navigator, "languages", "get").mockReturnValue(["en", "de"]);
-            expect(getLanguagesFromBrowser()).toEqual(["en", "de"]);
-        });
-
-        it("should return navigator.language if available", () => {
-            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
-            jest.spyOn(window.navigator, "language", "get").mockReturnValue("de");
-            expect(getLanguagesFromBrowser()).toEqual(["de"]);
-        });
-
-        it("should return 'en' otherwise", () => {
-            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
-            jest.spyOn(window.navigator, "language", "get").mockReturnValue(undefined as any);
-            expect(getLanguagesFromBrowser()).toEqual(["en"]);
         });
     });
 });

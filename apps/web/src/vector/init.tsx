@@ -14,6 +14,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 
 import * as languageHandler from "../languageHandler";
+import { getLanguagesFromBrowser, setLanguage } from "../i18n/settings";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
@@ -68,14 +69,14 @@ export async function loadLanguage(): Promise<void> {
     let langs: string[] = [];
 
     if (!prefLang) {
-        languageHandler.getLanguagesFromBrowser().forEach((l) => {
+        getLanguagesFromBrowser().forEach((l) => {
             langs.push(...languageHandler.getNormalizedLanguageKeys(l));
         });
     } else {
         langs = [prefLang];
     }
     try {
-        await languageHandler.setLanguage(...langs);
+        await setLanguage(...langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         logger.error("Unable to set language", e);

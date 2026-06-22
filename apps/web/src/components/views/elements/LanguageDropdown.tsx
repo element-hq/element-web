@@ -11,6 +11,7 @@ import React, { type ReactElement } from "react";
 import classNames from "classnames";
 
 import * as languageHandler from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
@@ -73,7 +74,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         if (!this.props.value) {
             // If no value is given, we start with the first country selected,
             // but our parent component doesn't know this, therefore we do this.
-            const language = languageHandler.getUserLanguage();
+            const language = getUserLanguage();
             this.props.onOptionChange(language);
         }
     }

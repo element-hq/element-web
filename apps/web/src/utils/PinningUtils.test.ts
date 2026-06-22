@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-// @vitest-environment happy-dom
-
 import { vi, describe, it, test, expect, beforeEach } from "vitest";
 import { EventTimeline, EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 

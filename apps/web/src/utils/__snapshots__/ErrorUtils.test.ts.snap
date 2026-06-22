@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`messageForConnectionError should match snapshot for ConnectionError 1`] = `
+exports[`messageForConnectionError > should match snapshot for ConnectionError 1`] = `
 <DocumentFragment>
   <span>
     <span>
@@ -34,13 +34,13 @@ exports[`messageForConnectionError should match snapshot for ConnectionError 1`]
 </DocumentFragment>
 `;
 
-exports[`messageForConnectionError should match snapshot for MatrixError M_NOT_FOUND 1`] = `
+exports[`messageForConnectionError > should match snapshot for MatrixError M_NOT_FOUND 1`] = `
 <DocumentFragment>
   There was a problem communicating with the homeserver, please try again later.(M_NOT_FOUND)
 </DocumentFragment>
 `;
 
-exports[`messageForConnectionError should match snapshot for mixed content error 1`] = `
+exports[`messageForConnectionError > should match snapshot for mixed content error 1`] = `
 <DocumentFragment>
   <span>
     <span>
@@ -58,19 +58,19 @@ exports[`messageForConnectionError should match snapshot for mixed content error
 </DocumentFragment>
 `;
 
-exports[`messageForConnectionError should match snapshot for unknown error 1`] = `
+exports[`messageForConnectionError > should match snapshot for unknown error 1`] = `
 <DocumentFragment>
   There was a problem communicating with the homeserver, please try again later.
 </DocumentFragment>
 `;
 
-exports[`messageForLoginError should match snapshot for 401 1`] = `
+exports[`messageForLoginError > should match snapshot for 401 1`] = `
 <DocumentFragment>
   Incorrect username and/or password.
 </DocumentFragment>
 `;
 
-exports[`messageForLoginError should match snapshot for M_RESOURCE_LIMIT_EXCEEDED 1`] = `
+exports[`messageForLoginError > should match snapshot for M_RESOURCE_LIMIT_EXCEEDED 1`] = `
 <DocumentFragment>
   <div>
     <div>
@@ -85,19 +85,19 @@ exports[`messageForLoginError should match snapshot for M_RESOURCE_LIMIT_EXCEEDE
 </DocumentFragment>
 `;
 
-exports[`messageForLoginError should match snapshot for M_USER_DEACTIVATED 1`] = `
+exports[`messageForLoginError > should match snapshot for M_USER_DEACTIVATED 1`] = `
 <DocumentFragment>
   This account has been deactivated.
 </DocumentFragment>
 `;
 
-exports[`messageForLoginError should match snapshot for unknown error 1`] = `
+exports[`messageForLoginError > should match snapshot for unknown error 1`] = `
 <DocumentFragment>
   There was a problem communicating with the homeserver, please try again later. (HTTP 400)
 </DocumentFragment>
 `;
 
-exports[`messageForResourceLimitError should match snapshot for admin contact links 1`] = `
+exports[`messageForResourceLimitError > should match snapshot for admin contact links 1`] = `
 <DocumentFragment>
   <span>
     Please 
@@ -113,13 +113,13 @@ exports[`messageForResourceLimitError should match snapshot for admin contact li
 </DocumentFragment>
 `;
 
-exports[`messageForResourceLimitError should match snapshot for monthly_active_user 1`] = `
+exports[`messageForResourceLimitError > should match snapshot for monthly_active_user 1`] = `
 <DocumentFragment>
   This homeserver has hit its Monthly Active User limit.
 </DocumentFragment>
 `;
 
-exports[`messageForSyncError should match snapshot for M_RESOURCE_LIMIT_EXCEEDED 1`] = `
+exports[`messageForSyncError > should match snapshot for M_RESOURCE_LIMIT_EXCEEDED 1`] = `
 <DocumentFragment>
   <div>
     <div>
@@ -132,7 +132,7 @@ exports[`messageForSyncError should match snapshot for M_RESOURCE_LIMIT_EXCEEDED
 </DocumentFragment>
 `;
 
-exports[`messageForSyncError should match snapshot for other errors 1`] = `
+exports[`messageForSyncError > should match snapshot for other errors 1`] = `
 <DocumentFragment>
   <div>
     Unable to connect to Homeserver. Retrying…

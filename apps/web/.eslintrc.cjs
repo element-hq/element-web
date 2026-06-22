@@ -232,7 +232,12 @@ module.exports = {
             },
         },
         {
-            files: ["src/**/*.test.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts"],
+            files: [
+                "src/**/*.test.{ts,tsx}",
+                "src/**/__mocks__/*.{ts,tsx}",
+                "test/**/*.{ts,tsx}",
+                "playwright/**/*.ts",
+            ],
             extends: ["plugin:matrix-org/jest"],
             rules: {
                 // We don't need super strict typing in test utilities
@@ -240,6 +245,7 @@ module.exports = {
                 "@typescript-eslint/explicit-member-accessibility": "off",
                 "@typescript-eslint/no-empty-object-type": "off",
                 "@typescript-eslint/unbound-method": "off",
+                "jest/no-mocks-import": "off",
 
                 // Jest/Playwright specific
 
