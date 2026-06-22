@@ -35,12 +35,12 @@
 }
 
 .body {
-    display: contents;
-}
-
-.clampedBody > * {
     grid-area: message;
     min-width: 0;
+    color: inherit;
+}
+
+.clampedBody {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -48,8 +48,14 @@
     -webkit-line-clamp: 2;
 }
 
+.clampedBody > * {
+    display: contents;
+}
+
+.clampedBody > [dir],
 .clampedBody > * > [dir] {
     display: inline;
+    color: inherit;
 }
 
 .clampedBody :global([data-textual-body-annotation-wrapper]) {
