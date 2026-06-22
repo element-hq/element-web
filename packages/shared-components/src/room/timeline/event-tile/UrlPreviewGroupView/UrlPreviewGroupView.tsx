@@ -28,7 +28,7 @@ export interface UrlPreviewGroupViewSnapshot {
     /** Whether more previews exist than are currently rendered. */
     overPreviewLimit: boolean;
     /** Whether the previews are in a loading state */
-    loading: boolean;
+    loadingLinks?: string[];
 }
 
 /** Props for the URL preview group view. */
@@ -65,13 +65,19 @@ export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, Ur
 export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
     const eventPresentationAttributes = useEventPresentationAttributes();
-    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit, loading } = useViewModel(vm);
+    const { previews, totalPreviewCount, previewsLimited, overPreviewLimit, loadingLinks } = useViewModel(vm);
 
     let content: JSX.Element[];
-    if (loading && totalPreviewCount) {
+    if (loadingLinks?.length && totalPreviewCount) {
         // TODO: All faked.
-        content = Array.from({ length: totalPreviewCount }).map((_, idx) => (
-            <LinkPreview key={idx} showTooltipOnLink={false} link="https://example.org" title="Loading" siteName="Link preview is being fetched" />
+        content = loadingLinks.map((link, idx) => (
+            <LinkPreview
+                key={idx}
+                showTooltipOnLink={false}
+                link={link}
+                title="Loading"
+                siteName={new URL(link).origin}
+            />
         ));
     } else if (previews.length === 0) {
         return null;

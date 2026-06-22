@@ -141,14 +141,14 @@ export const WithLoading = Template.bind({});
 WithLoading.args = {
     previews: [],
     totalPreviewCount: 1,
-    loading: true,
+    loadingLinks: ["https://example.org"],
 };
 
 export const WithLoadingMultiple = Template.bind({});
 WithLoadingMultiple.args = {
     previews: [],
     totalPreviewCount: 3,
-    loading: true,
+    loadingLinks: ["https://example.org", "https://example.org/foo", "https://example.org/bar"],
 };
 
 export const WithCompactView = Template.bind({});

@@ -283,7 +283,6 @@ export class UrlPreviewGroupViewModel
             totalPreviewCount: 0,
             previewsLimited: true,
             overPreviewLimit: false,
-            loading: props.shouldShowSpinner,
         });
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(storageKey) !== "1";
         this.urlPreviewVisible = props.visible;
@@ -393,7 +392,7 @@ export class UrlPreviewGroupViewModel
     private async computeSnapshot(): Promise<void> {
         if (this.props.shouldShowSpinner) {
             this.snapshot.merge({
-                loading: true,
+                loadingLinks: this.links,
                 totalPreviewCount: this.links.length,
             });
         }
@@ -402,6 +401,7 @@ export class UrlPreviewGroupViewModel
         const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
         if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
             return this.snapshot.merge({
+                loadingLinks: undefined,
                 previews: [],
                 totalPreviewCount: 0,
                 previewsLimited: false,
@@ -422,7 +422,7 @@ export class UrlPreviewGroupViewModel
             totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
-            loading: false,
+            loadingLinks: undefined,
         });
     }
 
