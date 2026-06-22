@@ -382,10 +382,10 @@ describe("Permalinks", function () {
     });
 
     it("should generate a room permalink for room IDs with some candidate servers", function () {
-        mockClient.getRoom.mockImplementation((roomId: Room["roomId"]) => {
-            return mockRoom(roomId, [
-                makeMemberWithPL(roomId, "@alice:first", 100),
-                makeMemberWithPL(roomId, "@bob:second", 0),
+        mockClient.getRoom.mockImplementation((roomId?: string) => {
+            return mockRoom(roomId!, [
+                makeMemberWithPL(roomId!, "@alice:first", 100),
+                makeMemberWithPL(roomId!, "@bob:second", 0),
             ]);
         });
         const result = makeRoomPermalink(mockClient, "!somewhere:example.org");
@@ -399,10 +399,10 @@ describe("Permalinks", function () {
     });
 
     it("should generate a room permalink for room aliases without candidate servers", function () {
-        mockClient.getRoom.mockImplementation((roomId: Room["roomId"]) => {
-            return mockRoom(roomId, [
-                makeMemberWithPL(roomId, "@alice:first", 100),
-                makeMemberWithPL(roomId, "@bob:second", 0),
+        mockClient.getRoom.mockImplementation((roomId?: string) => {
+            return mockRoom(roomId!, [
+                makeMemberWithPL(roomId!, "@alice:first", 100),
+                makeMemberWithPL(roomId!, "@bob:second", 0),
             ]);
         });
         const result = makeRoomPermalink(mockClient, "#somewhere:example.org");

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
@@ -258,7 +258,7 @@ describe("<UserSettingsDialog />", () => {
     it("displays an indicator when user needs to set up recovery", async () => {
         // Initially, the user doesn't have secret storage, so it should display
         // an indicator.
-        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+        mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue(null);
 
         const { container } = render(getComponent());
 
@@ -271,7 +271,7 @@ describe("<UserSettingsDialog />", () => {
 
         // The user now has secret storage.  Trigger an update and check that
         // the indicator disappears.
-        mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("foo");
+        mocked(mockClient.secretStorage.getDefaultKeyId).mockResolvedValue("foo");
         mockClient.emit(ClientEvent.AccountData, new MatrixEvent({ type: "m.secret_storage.default_key" }));
 
         await waitFor(() => {

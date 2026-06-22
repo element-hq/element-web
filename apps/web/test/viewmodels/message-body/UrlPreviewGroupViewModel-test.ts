@@ -7,7 +7,7 @@
 
 import { expect } from "@jest/globals";
 
-import type { MockedObject } from "jest-mock";
+import type { MockedObject } from "jest-mock-vitest-adapter";
 import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 import {
     BUNDLED_LINK_PREVIEWS,

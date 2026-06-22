@@ -2,6 +2,7 @@ linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
+minimumReleaseAgeStrict: true
 packages:
     - "apps/*"
     - "packages/*"
@@ -11,6 +12,7 @@ packages:
 catalog:
     # typescript
     typescript: 6.0.3
+    "@types/node": ts6.0
     # react
     react: ^19.0.0
     react-dom: ^19.0.0
@@ -31,6 +33,7 @@ catalog:
     vite-plugin-node-polyfills: 0.28.0
     vite-plugin-svgr: 5.2.0
     vitest: 4.1.9
+    "@vitest/spy": 4.1.9
     "@vitest/coverage-v8": 4.1.9
     "@vitest/browser-playwright": 4.1.9
     "@vitejs/plugin-react": 6.0.2
@@ -47,6 +50,7 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
+    # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
@@ -115,7 +119,7 @@ overrides:
     caniuse-lite: 1.0.30001799
     markdown-it: 14.1.1
     matrix-widget-api: "^1.17.0"
-    "@types/node": ts6.0
+    "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
     node-abi: 4.31.0
     "@types/pg-pool": 2.0.7
@@ -137,4 +141,3 @@ minimumReleaseAgeExclude:
     - "@matrix-org/*"
     - "@vector-im/*"
     - "@element-hq/*"
-    - "@types/node@25.9.3"

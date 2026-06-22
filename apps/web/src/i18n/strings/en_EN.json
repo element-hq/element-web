@@ -1013,14 +1013,6 @@
         "set_up_toast_title": "Set up Secure Backup",
         "turn_on_key_storage": "Turn on key storage",
         "turn_on_key_storage_description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity.",
-        "udd": {
-            "interactive_verification_button": "Interactively verify by emoji",
-            "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
-            "other_new_session_text": "%(name)s (%(userId)s) signed in to a new session without verifying it:",
-            "own_ask_verify_text": "Verify your other session using one of the options below.",
-            "own_new_session_text": "You signed in to a new session without verifying it:",
-            "title": "Not Trusted"
-        },
         "unable_to_setup_keys_error": "Unable to set up keys",
         "verification": {
             "accepting": "Accepting…",
@@ -4077,13 +4069,7 @@
         "close_to_view_right_panel": "Close this widget to view it in this panel",
         "context_menu": {
             "delete": "Delete widget",
-            "delete_warning": "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?",
-            "move_left": "Move left",
-            "move_right": "Move right",
-            "remove": "Remove for everyone",
-            "revoke": "Revoke permissions",
-            "screenshot": "Take a picture",
-            "start_audio_stream": "Start audio stream"
+            "delete_warning": "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?"
         },
         "cookie_warning": "This widget may use cookies.",
         "error_hangup_description": "You were disconnected from the call. (Error: %(message)s)",

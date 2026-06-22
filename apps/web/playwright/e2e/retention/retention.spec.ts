@@ -7,30 +7,28 @@
 
 import { rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
-import { test, expect, type TestFixtures } from "../../element-web-test";
-import type { Page } from "@playwright/test";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { test, expect } from "../../element-web-test";
+import { checkRetentionInRoom, ONE_MINUTE } from "./utils";
 
-const ONE_MINUTE = 60 * 1000;
+const ONE_MINUTE_STR = "60s";
 
-async function checkRetentionInRoom(
-    { bot, app, page }: Pick<TestFixtures, "app" | "bot"> & { page: Page },
-    roomId: string,
-) {
-    await bot.joinRoom(roomId);
-    await app.viewRoomById(roomId);
-    const tiles = (
-        await Promise.all(Array.from({ length: 5 }).map((_o, index) => bot.sendMessage(roomId, `Message ${index}`)))
-    ).map(({ event_id: evtId }) => page.locator(`.mx_RoomView_MessageList .mx_EventTile[data-event-id='${evtId}']`));
-    for (const tile of tiles) {
-        await expect(tile).toBeVisible();
-    }
-    await page.clock.fastForward(ONE_MINUTE + 1);
-    for (const tile of tiles) {
-        await expect(tile).toBeHidden();
-    }
-}
+test.use({
+    synapseConfig: {
+        retention: {
+            enabled: true,
+            // deliberately no default policy.
+            allowed_lifetime_min: ONE_MINUTE_STR,
+            allowed_lifetime_max: ONE_MINUTE_STR,
+        },
+        experimental_features: {
+            msc1763_enabled: true,
+        },
+    },
+});
 
 test.describe("Retention", () => {
+    test.skip(isDendrite, "dendrite does not support retention");
     test.use({
         displayName: "Tom",
         botCreateOpts: {
@@ -63,32 +61,6 @@ test.describe("Retention", () => {
         await bot.joinRoom(roomId);
         await app.viewRoomByName("Test");
         await checkRetentionInRoom({ app, bot, page }, roomId);
-    });
-
-    test.describe("global retention rules", () => {
-        test.use({
-            page: async ({ page }, runFixture) => {
-                await page.route("**/_matrix/client/unstable/org.matrix.msc1763/retention/configuration", (route) => {
-                    return route.fulfill({
-                        json: {
-                            policies: {
-                                "*": {
-                                    max_lifetime: ONE_MINUTE,
-                                },
-                            },
-                        },
-                    });
-                });
-                await runFixture(page);
-            },
-        });
-        test("should apply", async ({ app, bot, page }) => {
-            const roomId = await app.client.createRoom({
-                name: "Test",
-                invite: [bot.credentials.userId],
-            });
-            await checkRetentionInRoom({ app, bot, page }, roomId);
-        });
     });
 
     test("retention rules should apply after restart", async ({ app, bot, page }) => {

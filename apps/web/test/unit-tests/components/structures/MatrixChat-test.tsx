@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import "fake-indexeddb/auto";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
-import { type Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";

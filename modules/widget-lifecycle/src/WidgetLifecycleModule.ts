@@ -11,7 +11,10 @@ import { constructWidgetPermissions } from "./utils/constructWidgetPermissions";
 import { matchPattern } from "./utils/matchPattern";
 import { name as ModuleName } from "../package.json";
 
-/** Subset of {@link WidgetLifecycleApi} used by the module for registration only. */
+/**
+ * Subset of {@link WidgetLifecycleApi} used by the module for registration only.
+ * @internal
+ */
 export type WidgetLifecycleApiAdapter = Pick<
     WidgetLifecycleApi,
     "registerPreloadApprover" | "registerIdentityApprover" | "registerCapabilitiesApprover"
