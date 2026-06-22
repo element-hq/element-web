@@ -22,6 +22,7 @@ import {
     M_LOCATION,
     EventType,
     TypedEventEmitter,
+    PushRuleActionName,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
@@ -39,7 +40,6 @@ import Modal from "./Modal";
 import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import { SettingLevel } from "./settings/SettingLevel";
-import { isPushNotifyDisabled } from "./settings/controllers/NotificationControllers";
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -132,6 +132,21 @@ function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
     } catch {
         return plainBody;
     }
+}
+
+// .m.rule.master being enabled means all events match that push rule
+// default action on this rule is dont_notify, but it could be something else
+export function isPushNotifyDisabled(): boolean {
+    // Return the value of the master push rule as a default
+    const masterRule = MatrixClientPeg.get()?.pushProcessor.getPushRuleById(".m.rule.master");
+
+    if (!masterRule) {
+        logger.warn("No master push rule! Notifications are disabled for this user.");
+        return true;
+    }
+
+    // If the rule is enabled then check it does not notify on everything
+    return masterRule.enabled && !masterRule.actions.includes(PushRuleActionName.Notify);
 }
 
 export const enum NotifierEvent {
