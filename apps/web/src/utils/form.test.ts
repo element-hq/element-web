@@ -5,12 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { onSubmitPreventDefault } from "../../../src/utils/form.ts";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect } from "vitest";
+
+import { onSubmitPreventDefault } from "./form.ts";
 
 describe("onSubmitPreventDefault", () => {
     it("should preventDefault", () => {
         const event = new SubmitEvent("submit");
-        const spy = jest.spyOn(event, "preventDefault");
+        const spy = vi.spyOn(event, "preventDefault");
 
         onSubmitPreventDefault(event);
         expect(spy).toHaveBeenCalled();
