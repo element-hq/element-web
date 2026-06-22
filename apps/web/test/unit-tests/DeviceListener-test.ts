@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked, mocked, type MockedObject } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 import {
     MatrixEvent,
     type Room,
@@ -591,31 +591,58 @@ describe("DeviceListener", () => {
 
         describe("key backup status", () => {
             it("checks keybackup status when cross signing and secret storage are ready", async () => {
-                // default mocks set cross signing and secret storage to ready
+                // Given our device is verified
+                mockCrypto.getDeviceVerificationStatus.mockResolvedValue({
+                    crossSigningVerified: true,
+                } as any as DeviceVerificationStatus);
+
+                // When we check the current device
                 await createAndStart();
+
+                // Then we get to the code that checks the active session backup
                 expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
             });
 
-            it("checks keybackup status when setup encryption toast has been dismissed", async () => {
-                mockCrypto!.isCrossSigningReady.mockResolvedValue(false);
-                const instance = await createAndStart();
+            it("does not check keybackup status when setup encryption toast has been dismissed", async () => {
+                // Given our device is not verified (this is the default in the mock)
 
+                // And we have run the checks once (and we were told to verify)
+                const instance = await createAndStart();
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith("verify_this_session");
+                mocked(SetupEncryptionToast.showToast).mockClear();
+                mockCrypto.getDeviceVerificationStatus.mockClear();
+
+                // When we dismiss the dialog telling us to set up encryption
                 instance.dismissEncryptionSetup();
                 await flushPromises();
 
-                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
+                // Then we have rechecked, but stopped when we found the device was not verified
+                expect(mockCrypto.getDeviceVerificationStatus).toHaveBeenCalled();
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
             });
 
             it("does not check key backup status again after check is complete", async () => {
-                mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
-                const instance = await createAndStart();
-                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
+                // Given our device is verified
+                mockCrypto.getDeviceVerificationStatus.mockResolvedValue({
+                    crossSigningVerified: true,
+                } as any as DeviceVerificationStatus);
 
-                // trigger a recheck
-                instance.dismissEncryptionSetup();
+                // And our active backup version is 1
+                mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+
+                // And we have run the checks once: no toast was shown and we
+                // checked the backup version
+                const instance = await createAndStart();
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
+                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalled();
+                mockCrypto.getActiveSessionBackupVersion.mockClear();
+
+                // When we check again
+                instance.recheck();
                 await flushPromises();
-                // not called again, check was complete last time
-                expect(mockCrypto.getActiveSessionBackupVersion).toHaveBeenCalledTimes(1);
+
+                // Then we didn't re-call getActiveSessionBackupVersion
+                expect(mockCrypto.getActiveSessionBackupVersion).not.toHaveBeenCalled();
             });
         });
 
@@ -1441,7 +1468,7 @@ describe("DeviceListener", () => {
     });
 });
 
-function mockKeyBackupFromServer(client: MockedObject<MatrixClient>, enabled: boolean) {
+function mockKeyBackupFromServer(client: Mocked<MatrixClient>, enabled: boolean) {
     client.getAccountDataFromServer.mockImplementation(async (eventType: string) => {
         switch (eventType) {
             case ACCOUNT_DATA_KEY_M_KEY_BACKUP:

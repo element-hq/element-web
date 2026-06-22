@@ -17,7 +17,6 @@
     letter-spacing: var(--cpd-font-letter-spacing-body-sm);
     color: var(--cpd-color-text-secondary);
     padding: var(--cpd-space-1x) 0;
-    background-color: var(--cpd-color-bg-canvas-default);
 
     &:hover,
     &:focus-visible,
@@ -34,6 +33,12 @@
 
         .menu {
             display: initial;
+        }
+
+        /* When a menu is present and revealed on hover, hide the decoration to avoid clutter.
+           Default sections have no menu, so their decoration stays visible on hover. */
+        .notificationDecoration {
+            display: none;
         }
     }
 
@@ -82,6 +87,12 @@
 
 .firstHeader {
     padding-top: 0;
+
+    /* The first item sits flush with the scroller's top edge, so the default outline
+       would be clipped by overflow:auto. Inset it so it stays inside the button. */
+    &:focus-visible {
+        outline-offset: -2px;
+    }
 }
 
 .lastHeader {

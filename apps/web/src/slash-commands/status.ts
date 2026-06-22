@@ -11,8 +11,8 @@ import { Command, CommandCategories, splitAtFirstSpace } from "./SlashCommands";
 import SettingsStore from "../settings/SettingsStore";
 import { reject, success } from "./utils";
 import { UserFriendlyError } from "../languageHandler";
-import { userStatusTextWithinMaxLength } from "../hooks/useUserStatus";
 import { TimelineRenderingType } from "../contexts/RoomContext";
+import { setUserStatus, userStatusTextWithinMaxLength } from "../utils/userStatus";
 
 export const statusCommand = new Command({
     command: "status",
@@ -40,7 +40,7 @@ export const statusCommand = new Command({
             return reject(new UserFriendlyError("slash_command|status|too_long_text"));
         }
         return success(
-            cli.setExtendedProfileProperty("org.matrix.msc4426.status", {
+            setUserStatus(cli, {
                 emoji: emoji.segment,
                 text,
             }),

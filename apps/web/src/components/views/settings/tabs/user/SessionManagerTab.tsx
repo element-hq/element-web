@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
@@ -263,7 +264,12 @@ const SessionManagerTab: React.FC<{
     if (signInWithQrMode) {
         return (
             <Suspense fallback={<Spinner />}>
-                <LoginWithQR mode={signInWithQrMode} onFinished={onQrFinish} client={matrixClient} />
+                <LoginWithQR
+                    mode={signInWithQrMode}
+                    onFinished={onQrFinish}
+                    client={matrixClient}
+                    intent={RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE}
+                />
             </Suspense>
         );
     }

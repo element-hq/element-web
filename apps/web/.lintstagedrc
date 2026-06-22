@@ -1,5 +1,5 @@
 {
-    "*": "prettier --write --ignore-unknown",
+    "*": "oxfmt --no-error-on-unmatched-pattern",
     "src/**/*.(ts|tsx)": ["eslint --fix"],
     "scripts/**/*.(ts|tsx)": ["eslint --fix"],
     "module_system/**/*.(ts|tsx)": ["eslint --fix"],

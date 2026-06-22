@@ -217,6 +217,7 @@
         "logout_dialog": {
             "description": "정말로 이 기기를 제거하시겠습니까?",
             "setup_key_backup_title": "암호화된 채팅에 대한 접근 권한을 잃게 됩니다.",
+            "setup_secure_backup_description": "현재 유일하게 등록된 기기입니다. 이 기기를 제거하면 다음 로그인 시 디지털 신원을 인증하고 암호화된 대화를 복구하기 위해 복구 키가 필요합니다.",
             "skip_key_backup": "그래도 이 기기 삭제"
         },
         "misconfigured_body": "%(brand)s 관리자에게 <a>당신의 설정</a>에 잘못되거나 중복된 항목이 있는지 확인하도록 요청하세요.",
@@ -268,7 +269,6 @@
             "point_the_camera": "여기에 표시된 QR 코드를 스캔하세요",
             "scan_code_instruction": "다른 기기로 QR 코드를 스캔하세요",
             "scan_qr_code": "QR 코드로 로그인",
-            "security_code": "보안 코드",
             "security_code_prompt": "요청 시, 다른 기기에서 아래 코드를 입력하세요.",
             "select_qr_code": "\"%(scanQRCode)s\"를 선택하십시오.",
             "unsupported_explainer": "귀하의 계정 제공업체는 QR 코드를 사용한 새 기기 로그인을 지원하지 않습니다.",
@@ -995,14 +995,6 @@
         "set_up_toast_title": "보안 백업 설정",
         "turn_on_key_storage": "키 저장 기능 켜기",
         "turn_on_key_storage_description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다.",
-        "udd": {
-            "interactive_verification_button": "이모지를 통한 상호 인증",
-            "other_ask_verify_text": "이 사용자에게 세션 확인을 요청하거나, 아래에서 수동으로 확인하십시오.",
-            "other_new_session_text": "%(name)s (%(userId)s)가 새 세션에 인증 없이 로그인했습니다:",
-            "own_ask_verify_text": "아래 옵션 중 하나를 사용하여 다른 세션을 확인하세요.",
-            "own_new_session_text": "인증하지 않고 새 세션에 로그인했습니다.",
-            "title": "신뢰할 수 없음"
-        },
         "unable_to_setup_keys_error": "키 설정이 불가능합니다",
         "verification": {
             "accepting": "수락 중…",
@@ -3953,13 +3945,7 @@
         "close_to_view_right_panel": "이 위젯을 닫으면 이 패널에서 볼 수 있습니다",
         "context_menu": {
             "delete": "위젯 삭제",
-            "delete_warning": "위젯을 삭제하면 이 방의 모든 사용자에게도 제거됩니다. 위젯을 삭제하겠습니까?",
-            "move_left": "왼쪽으로 이동",
-            "move_right": "오른쪽으로 이동",
-            "remove": "모두를 위해 제거하세요",
-            "revoke": "권한 취소",
-            "screenshot": "사진 찍기",
-            "start_audio_stream": "오디오 스트림 시작"
+            "delete_warning": "위젯을 삭제하면 이 방의 모든 사용자에게도 제거됩니다. 위젯을 삭제하겠습니까?"
         },
         "cookie_warning": "이 위젯은 쿠키를 사용합니다.",
         "error_hangup_description": "통화가 끊겼습니다. (오류:%(message)s )",

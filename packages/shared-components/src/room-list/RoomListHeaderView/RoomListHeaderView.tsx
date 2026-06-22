@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
-import CollapseAllIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse-all";
+import { CollapseAllIcon, ExpandAllIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -80,6 +80,10 @@ export interface RoomListHeaderViewSnapshot {
      * If undefined, no  icon are shown.
      */
     collapseSections?: CollapseSectionsOption;
+    /**
+     *  Whether to display the section release announcement
+     */
+    displaySectionReleaseAnnouncement: boolean;
 }
 
 export interface RoomListHeaderViewActions {
@@ -127,6 +131,10 @@ export interface RoomListHeaderViewActions {
      * Collapse or expand all sections in the room list depending on the current state.
      */
     collapseOrExpandSections: () => void;
+    /**
+     * Close the section release announcement
+     */
+    closeSectionReleaseAnnouncement: () => void;
 }
 
 /**
@@ -182,7 +190,11 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                                     : _t("room_list|expand_all_sections")
                             }
                         >
-                            <CollapseAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            {collapseSections === "collapse" ? (
+                                <CollapseAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            ) : (
+                                <ExpandAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            )}
                         </IconButton>
                     )}
 

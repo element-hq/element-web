@@ -47,6 +47,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "清除",
             "create_an_account": "创建账户",
             "got_an_account": "已有账户？",
             "manage_account": "管理账户",
@@ -135,7 +136,8 @@
             "low_priority": "低优先级",
             "mark_read": "设为已读",
             "mark_unread": "设为未读",
-            "move_to_section": "移动到"
+            "move_to_section": "移动到",
+            "remove_from_section": "从区域中移除"
         },
         "notification_options": "通知选项",
         "open_space_menu": "打开空间菜单",

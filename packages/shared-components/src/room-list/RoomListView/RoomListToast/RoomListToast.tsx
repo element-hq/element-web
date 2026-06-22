@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type ComponentType, type JSX, type MouseEventHandler } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import { Toast } from "@vector-im/compound-web";
-import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import styles from "./RoomListToast.module.css";
 import { useI18n } from "../../../core/i18n/i18nContext";
@@ -32,19 +31,19 @@ interface RoomListToastProps {
 export function RoomListToast({ type, onClose }: Readonly<RoomListToastProps>): JSX.Element {
     const { translate: _t } = useI18n();
 
-    let content: { text: string; icon: ComponentType<React.SVGAttributes<SVGElement>> };
+    let text: string;
     switch (type) {
         case "section_created":
-            content = { text: _t("room_list|section_created"), icon: CheckIcon };
+            text = _t("room_list|section_created");
             break;
         case "chat_moved":
-            content = { text: _t("room_list|chat_moved"), icon: CheckIcon };
+            text = _t("room_list|chat_moved");
             break;
     }
 
     return (
-        <Toast className={styles.toast} Icon={content.icon} onClose={onClose} tooltip={_t("action|close")}>
-            {content.text}
+        <Toast className={styles.toast} onClose={onClose} tooltip={_t("action|close")}>
+            {text}
         </Toast>
     );
 }

@@ -205,6 +205,10 @@
     },
     "timeline": {
         "call_tile": {
+            "declined": {
+                "call_declined": "Hovor odmítnut",
+                "call_declined_by_us": "Odmítli jste hovor"
+            },
             "video_call_title": "Videohovor",
             "voice_call_title": "Hlasový hovor"
         },
@@ -219,6 +223,7 @@
         },
         "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",
+        "e2e_state": "Stav koncového šifrování",
         "m.audio": {
             "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
@@ -248,6 +253,7 @@
             "label": "Akce zprávy",
             "view_in_room": "Zobrazit v místnosti"
         },
+        "message_shared_by": "%(displayName)s (%(userId)s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti.",
         "message_timestamp_received_at": "Přijato: %(dateTime)s",
         "message_timestamp_sent_at": "Odesláno: %(dateTime)s",
         "mjolnir": {

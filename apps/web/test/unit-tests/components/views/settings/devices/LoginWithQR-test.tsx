@@ -14,11 +14,22 @@ import {
     MSC4108FailureReason,
     MSC4108SignInWithQR,
     RendezvousError,
+    RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
-import { HTTPError, type MatrixClient, MatrixHttpApi } from "matrix-js-sdk/src/matrix";
+import { mockOpenIdConfiguration } from "matrix-js-sdk/src/testing";
+import {
+    AutoDiscovery,
+    AutoDiscoveryAction,
+    HTTPError,
+    type MatrixClient,
+    MatrixHttpApi,
+    OAuthGrantType,
+} from "matrix-js-sdk/src/matrix";
+import fetchMock from "@fetch-mock/jest";
 
 import LoginWithQR, { LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
+import { mockPlatformPeg } from "../../../../../test-utils";
 
 jest.mock("matrix-js-sdk/src/rendezvous/transports");
 jest.mock("matrix-js-sdk/src/rendezvous/channels");
@@ -50,6 +61,7 @@ function makeClient() {
         getClientWellKnown: jest.fn().mockReturnValue({}),
         getCrypto: jest.fn().mockReturnValue({}),
         getDomain: jest.fn(),
+        getAuthMetadata: jest.fn().mockReturnValue(mockOpenIdConfiguration()),
     } as unknown as MatrixClient);
 
     cli.http = new MatrixHttpApi(cli, {
@@ -80,209 +92,313 @@ describe("<LoginWithQR />", () => {
     });
 
     afterEach(() => {
-        client = makeClient();
         jest.clearAllMocks();
         jest.useRealTimers();
         cleanup();
     });
 
     describe("MSC4108", () => {
-        const getComponent = (props: {
-            client: MatrixClient;
-            onFinished?: () => void;
-            ref?: RefObject<LoginWithQR | null>;
-        }) => <LoginWithQR {...defaultProps} {...props} />;
-
-        test("render QR then back", async () => {
-            const onFinished = jest.fn();
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockReturnValue(unresolvedPromise());
-            jest.spyOn(MSC4108SignInWithQR.prototype, "generateCode");
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols");
-            jest.spyOn(MSC4108SignInWithQR.prototype, "cancel");
-            const ref = createRef<LoginWithQR>();
-            render(getComponent({ client, onFinished, ref }));
-
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.ShowingQR,
-                    onClick: expect.any(Function),
-                }),
+        describe("reciprocate", () => {
+            const getComponent = (props: {
+                client: MatrixClient;
+                onFinished?: () => void;
+                ref?: RefObject<LoginWithQR | null>;
+            }) => (
+                <LoginWithQR
+                    {...defaultProps}
+                    {...props}
+                    intent={RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE}
+                />
             );
 
-            const rendezvous = ref.current!.state.rendezvous!;
-            expect(rendezvous.generateCode).toHaveBeenCalled();
-            expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
+            test("render QR then back", async () => {
+                const onFinished = jest.fn();
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockReturnValue(unresolvedPromise());
+                jest.spyOn(MSC4108SignInWithQR.prototype, "generateCode");
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols");
+                jest.spyOn(MSC4108SignInWithQR.prototype, "cancel");
+                const ref = createRef<LoginWithQR>();
+                render(getComponent({ client, onFinished, ref }));
 
-            // back
-            const onClick = mockedFlow.mock.calls[0][0].onClick;
-            await onClick(Click.Back);
-            expect(onFinished).toHaveBeenCalledWith(false);
-            expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
-        });
-
-        test("should open a new channel if expires before qr scan", async () => {
-            const onFinished = jest.fn();
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockReturnValue(unresolvedPromise());
-            const ref = createRef<LoginWithQR>();
-            render(getComponent({ client, onFinished, ref }));
-
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.ShowingQR,
-                    onClick: expect.any(Function),
-                }),
-            );
-
-            const rendezvous = ref.current!.state.rendezvous!;
-            expect(rendezvous.generateCode).toHaveBeenCalled();
-            expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
-
-            // Expire the channel
-            rendezvous.onFailure!(ClientRendezvousFailureReason.Expired);
-            await jest.runAllTimersAsync();
-            await waitFor(() => expect(ref.current!.state.rendezvous).toBeDefined());
-            expect(ref.current!.state.rendezvous).not.toBe(rendezvous);
-        });
-
-        test("failed to connect", async () => {
-            render(getComponent({ client }));
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockRejectedValue(
-                new HTTPError("Internal Server Error", 500),
-            );
-            const fn = jest.spyOn(MSC4108SignInWithQR.prototype, "cancel");
-            await waitFor(() => expect(fn).toHaveBeenLastCalledWith(ClientRendezvousFailureReason.Unknown));
-        });
-
-        test("should show error if check code doesn't match", async () => {
-            jest.spyOn(global.window, "open");
-
-            render(getComponent({ client }));
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
-                verificationUri: "mock-verification-uri",
-            });
-
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.OutOfBandConfirmation,
-                    onClick: expect.any(Function),
-                }),
-            );
-
-            const onClick = mockedFlow.mock.calls[0][0].onClick;
-            await onClick(Click.Approve, "12");
-
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.OutOfBandConfirmation,
-                    failureReason: LoginWithQRFailureReason.CheckCodeMismatch,
-                    onClick: expect.any(Function),
-                }),
-            );
-        });
-
-        test("reciprocates login", async () => {
-            const ref = createRef<LoginWithQR>();
-            jest.spyOn(global.window, "open");
-
-            render(getComponent({ client, ref }));
-            jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
-                verificationUri: "mock-verification-uri",
-            });
-
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.OutOfBandConfirmation,
-                    onClick: expect.any(Function),
-                }),
-            );
-
-            const onClick = mockedFlow.mock.calls[0][0].onClick;
-            await onClick(Click.Approve);
-
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.WaitingForDevice,
-                    onClick: expect.any(Function),
-                }),
-            );
-            expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
-
-            const rendezvous = ref.current!.state.rendezvous!;
-            expect(rendezvous.shareSecrets).toHaveBeenCalled();
-        });
-
-        test("handles errors during protocol negotiation", async () => {
-            const ref = createRef<LoginWithQR>();
-            render(getComponent({ client, ref }));
-            jest.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
-            const err = new RendezvousError("Unknown Failure", MSC4108FailureReason.UnsupportedProtocol);
-            // @ts-ignore work-around for lazy mocks
-            err.code = MSC4108FailureReason.UnsupportedProtocol;
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockRejectedValue(err);
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith(
-                    expect.objectContaining({
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
                         phase: Phase.ShowingQR,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                     }),
-                ),
-            );
+                );
 
-            await waitFor(() => {
                 const rendezvous = ref.current!.state.rendezvous!;
-                expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UnsupportedProtocol);
+                expect(rendezvous.generateCode).toHaveBeenCalled();
+                expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
+
+                // back (cancel)
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Cancel);
+                expect(onFinished).toHaveBeenCalledWith(false);
+                expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
+            });
+
+            test("should open a new channel if expires before qr scan", async () => {
+                const onFinished = jest.fn();
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockReturnValue(unresolvedPromise());
+                const ref = createRef<LoginWithQR>();
+                render(getComponent({ client, onFinished, ref }));
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.ShowingQR,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                const rendezvous = ref.current!.state.rendezvous!;
+                expect(rendezvous.generateCode).toHaveBeenCalled();
+                expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
+
+                // Expire the channel
+                rendezvous.onFailure!(ClientRendezvousFailureReason.Expired);
+                await jest.runAllTimersAsync();
+                await waitFor(() => expect(ref.current!.state.rendezvous).toBeDefined());
+                expect(ref.current!.state.rendezvous).not.toBe(rendezvous);
+            });
+
+            test("failed to connect", async () => {
+                render(getComponent({ client }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockRejectedValue(
+                    new HTTPError("Internal Server Error", 500),
+                );
+                const fn = jest.spyOn(MSC4108SignInWithQR.prototype, "cancel");
+                await waitFor(() => expect(fn).toHaveBeenLastCalledWith(ClientRendezvousFailureReason.Unknown));
+            });
+
+            test("should show error if check code doesn't match", async () => {
+                jest.spyOn(global.window, "open");
+
+                render(getComponent({ client }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
+                    verificationUri: "mock-verification-uri",
+                });
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Approve, "12");
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        failureReason: LoginWithQRFailureReason.CheckCodeMismatch,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+            });
+
+            test("reciprocates login", async () => {
+                const ref = createRef<LoginWithQR>();
+                jest.spyOn(global.window, "open");
+
+                render(getComponent({ client, ref }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
+                    verificationUri: "mock-verification-uri",
+                });
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Approve);
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.WaitingForDevice,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+                expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
+
+                const rendezvous = ref.current!.state.rendezvous!;
+                expect(rendezvous.shareSecrets).toHaveBeenCalled();
+            });
+
+            test("handles errors during protocol negotiation", async () => {
+                const ref = createRef<LoginWithQR>();
+                render(getComponent({ client, ref }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
+                const err = new RendezvousError("Unknown Failure", MSC4108FailureReason.UnsupportedProtocol);
+                // @ts-ignore work-around for lazy mocks
+                err.code = MSC4108FailureReason.UnsupportedProtocol;
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockRejectedValue(err);
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith(
+                        expect.objectContaining({
+                            phase: Phase.ShowingQR,
+                        }),
+                    ),
+                );
+
+                await waitFor(() => {
+                    const rendezvous = ref.current!.state.rendezvous!;
+                    expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UnsupportedProtocol);
+                });
+            });
+
+            test("handles errors during reciprocation", async () => {
+                render(getComponent({ client }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockRejectedValue(
+                    new HTTPError("Internal Server Error", 500),
+                );
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Approve);
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith(
+                        expect.objectContaining({
+                            phase: Phase.Error,
+                            failureReason: ClientRendezvousFailureReason.Unknown,
+                        }),
+                    ),
+                );
+            });
+
+            test("handles user cancelling during reciprocation", async () => {
+                const ref = createRef<LoginWithQR>();
+                render(getComponent({ client, ref }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+
+                jest.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Cancel);
+
+                const rendezvous = ref.current!.state.rendezvous!;
+                expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
             });
         });
 
-        test("handles errors during reciprocation", async () => {
-            render(getComponent({ client }));
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.OutOfBandConfirmation,
-                    onClick: expect.any(Function),
-                }),
+        describe("login", () => {
+            const getComponent = (props: {
+                client: MatrixClient;
+                onFinished?: () => void;
+                onLoggedIn?: () => Promise<void>;
+                ref?: RefObject<LoginWithQR | null>;
+            }) => (
+                <LoginWithQR
+                    onLoggedIn={jest.fn()}
+                    {...defaultProps}
+                    {...props}
+                    intent={RendezvousIntent.LOGIN_ON_NEW_DEVICE}
+                />
             );
 
-            jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockRejectedValue(
-                new HTTPError("Internal Server Error", 500),
-            );
-            const onClick = mockedFlow.mock.calls[0][0].onClick;
-            await onClick(Click.Approve);
+            test("should handle qr login", async () => {
+                fetchMock.get("https://hs/_matrix/client/versions", {
+                    unstable_features: {},
+                    versions: ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"],
+                });
+                const authMetadata = {
+                    ...mockOpenIdConfiguration("https://auth.org/", [OAuthGrantType.DeviceAuthorization]),
+                    jwks_uri: undefined,
+                };
+                fetchMock.get("https://hs/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadata);
+                fetchMock.post(authMetadata.registration_endpoint!, {
+                    client_id: "!client_id!",
+                });
 
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith(
-                    expect.objectContaining({
-                        phase: Phase.Error,
-                        failureReason: ClientRendezvousFailureReason.Unknown,
+                mockPlatformPeg({
+                    getOidcClientMetadata: jest.fn().mockReturnValue({
+                        clientName: "App name",
+                        clientUri: "https://company",
+                        redirectUris: ["https://app"],
+                        logoUri: "https://company/logo.png",
+                        applicationType: "web",
                     }),
-                ),
-            );
-        });
+                });
 
-        test("handles user cancelling during reciprocation", async () => {
-            const ref = createRef<LoginWithQR>();
-            render(getComponent({ client, ref }));
-            jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
-            jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({});
-            await waitFor(() =>
-                expect(mockedFlow).toHaveBeenLastCalledWith({
-                    phase: Phase.OutOfBandConfirmation,
-                    onClick: expect.any(Function),
-                }),
-            );
+                const ref = createRef<LoginWithQR>();
 
-            jest.spyOn(MSC4108SignInWithQR.prototype, "cancel").mockResolvedValue();
-            const onClick = mockedFlow.mock.calls[0][0].onClick;
-            await onClick(Click.Cancel);
+                render(getComponent({ client, ref }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockResolvedValue({
+                    secrets: {
+                        cross_signing: {
+                            master_key: "mk",
+                            self_signing_key: "ssk",
+                            user_signing_key: "usk",
+                        },
+                    },
+                });
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({ serverName: "hs" });
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
+                    userCode: "123456",
+                });
+                jest.spyOn(MSC4108SignInWithQR.prototype, "completeLoginOnNewDevice").mockResolvedValue({
+                    access_token: "token",
+                    token_type: "Bearer",
+                });
+                jest.spyOn(AutoDiscovery, "findClientConfig").mockResolvedValue({
+                    "m.homeserver": { base_url: "https://hs", state: AutoDiscoveryAction.SUCCESS },
+                    "m.identity_server": { state: AutoDiscoveryAction.PROMPT },
+                });
 
-            const rendezvous = ref.current!.state.rendezvous!;
-            expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE,
+                    }),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Approve);
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.WaitingForDevice,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE,
+                        userCode: "123456",
+                    }),
+                );
+
+                const rendezvous = ref.current!.state.rendezvous!;
+                expect(rendezvous.shareSecrets).toHaveBeenCalled();
+            });
         });
     });
 });

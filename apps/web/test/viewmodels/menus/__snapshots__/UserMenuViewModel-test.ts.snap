@@ -18,6 +18,7 @@ exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
   "open": true,
   "showAvatar": false,
   "userId": "@alice:domain",
+  "userStatus": undefined,
 }
 `;
 
@@ -39,5 +40,6 @@ exports[`UserMenuViewModel should generate a menu options for a logged in client
   "open": true,
   "showAvatar": true,
   "userId": "@alice:domain",
+  "userStatus": undefined,
 }
 `;

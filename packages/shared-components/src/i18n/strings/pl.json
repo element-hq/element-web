@@ -152,7 +152,8 @@
             "low_priority": "Niski priorytet",
             "mark_read": "Oznacz jako przeczytane",
             "mark_unread": "Oznacz jako nieprzeczytane",
-            "move_to_section": "Przenieś do"
+            "move_to_section": "Przenieś do",
+            "remove_from_section": "Usuń z sekcji"
         },
         "notification_options": "Opcje powiadomień",
         "open_space_menu": "Otwórz menu przestrzeni",
@@ -274,7 +275,7 @@
     },
     "user_menu": {
         "link_new_device": "Powiąż nowe urządzenie",
-        "open_feedback": "Feedback",
+        "open_feedback": "Opinia użytkownika",
         "open_home": "Strona główna",
         "open_security": "Bezpieczeństwo i prywatność",
         "open_settings": "Wszystkie ustawienia"

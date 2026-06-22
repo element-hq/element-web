@@ -462,7 +462,7 @@ export default function RoomHeader({
         <>
             <CurrentRightPanelPhaseContextProvider roomId={room.roomId}>
                 <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
-                    <WithPresenceIndicator room={room} size="8px">
+                    <WithPresenceIndicator room={room}>
                         {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
                         {/* Disable on-click actions until the room is created */}
                         <RoomAvatar

@@ -5,9 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventStatus, EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-
-import { mkEvent } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
 import {
@@ -16,8 +13,6 @@ import {
 } from "../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
 
 describe("EventTileViewModel", () => {
-    const roomId = "!room:example.org";
-    const userId = "@alice:example.org";
     type EventTileViewModelPropsOverrides = {
         event?: Partial<EventTileViewModelProps["event"]>;
         display?: Partial<EventTileViewModelProps["display"]>;
@@ -27,34 +22,22 @@ describe("EventTileViewModel", () => {
         footer?: Partial<EventTileViewModelProps["footer"]>;
     };
 
-    function makeMessageEvent({
-        type = EventType.RoomMessage,
-        content = { msgtype: MsgType.Text, body: "Hello" },
-        ts = 123,
-        status,
-    }: {
-        type?: string;
-        content?: Record<string, unknown>;
-        ts?: number;
-        status?: EventStatus;
-    } = {}): MatrixEvent {
-        return mkEvent({
-            event: true,
-            type,
-            room: roomId,
-            user: userId,
-            content,
-            ts,
-            status,
-        });
-    }
-
     function makeProps(overrides: EventTileViewModelPropsOverrides = {}): EventTileViewModelProps {
         return {
             event: {
-                mxEvent: makeMessageEvent(),
+                eventType: "m.room.message",
+                msgtype: "m.text",
+                eventTs: 123,
+                eventId: "$event",
+                isLocalEcho: false,
+                isSending: false,
+                ariaLive: "off",
+                isRoomCreate: false,
+                isCallInvite: false,
+                isRtcNotification: false,
                 isEditing: false,
                 isEncryptionFailure: false,
+                forExport: false,
                 ...overrides.event,
             },
             display: {
@@ -94,14 +77,12 @@ describe("EventTileViewModel", () => {
         };
     }
 
-    it("derives sending, aria-live, and local echo scroll state", () => {
-        const mxEvent = makeMessageEvent({ status: EventStatus.SENDING });
-
+    it("derives sending, aria-live, and scroll state from plain event data", () => {
         const snapshot = EventTileViewModel.createSnapshot(
             makeProps({
                 event: {
-                    mxEvent,
-                    eventSendStatus: EventStatus.SENDING,
+                    isSending: true,
+                    isLocalEcho: true,
                 },
             }),
         );
@@ -112,14 +93,25 @@ describe("EventTileViewModel", () => {
         expect(snapshot.root.classState.mx_EventTile_sending).toBe(true);
     });
 
-    it("derives render-ready root and line state", () => {
-        const mxEvent = makeMessageEvent({ status: EventStatus.SENDING });
+    it("derives a scroll token for non-local-echo events", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                event: {
+                    eventId: "$remote-event",
+                    isLocalEcho: false,
+                },
+            }),
+        );
 
+        expect(snapshot.root.scrollToken).toBe("$remote-event");
+    });
+
+    it("derives render-ready root and line state", () => {
         const renderState = EventTileViewModel.createRenderState(
             makeProps({
                 event: {
-                    mxEvent,
-                    eventSendStatus: EventStatus.SENDING,
+                    isSending: true,
+                    isLocalEcho: true,
                 },
                 display: {
                     isHighlighted: true,
@@ -269,9 +261,7 @@ describe("EventTileViewModel", () => {
         const snapshot = EventTileViewModel.createSnapshot(
             makeProps({
                 event: {
-                    mxEvent: makeMessageEvent({
-                        content: { msgtype: MsgType.Image, body: "image" },
-                    }),
+                    msgtype: "m.image",
                 },
                 display: {
                     isProbablyMedia: true,
@@ -317,6 +307,18 @@ describe("EventTileViewModel", () => {
         expect(snapshot.sender.viewUserOnClick).toBe(true);
     });
 
+    it("marks room member avatars as historical", () => {
+        const snapshot = EventTileViewModel.createSnapshot(
+            makeProps({
+                event: {
+                    eventType: "m.room.member",
+                },
+            }),
+        );
+
+        expect(snapshot.sender.forceHistoricalAvatar).toBe(true);
+    });
+
     it("derives action bar visibility from interaction state", () => {
         const hoverSnapshot = EventTileViewModel.createSnapshot(makeProps({ interaction: { hover: true } }));
         const contextMenuSnapshot = EventTileViewModel.createSnapshot(
@@ -356,10 +358,7 @@ describe("EventTileViewModel", () => {
         const snapshot = EventTileViewModel.createSnapshot(
             makeProps({
                 event: {
-                    mxEvent: makeMessageEvent({
-                        type: EventType.RTCNotification,
-                        content: {},
-                    }),
+                    isRtcNotification: true,
                 },
                 interaction: {
                     hover: true,
@@ -479,17 +478,10 @@ describe("EventTileViewModel", () => {
     });
 
     it("does not initialize timestamp child view models for events without an origin timestamp", () => {
-        const mxEvent = new MatrixEvent({
-            type: EventType.RoomMessage,
-            room_id: roomId,
-            sender: userId,
-            content: { msgtype: MsgType.Text, body: "Hello" },
-            event_id: "$event",
-        });
         const vm = new EventTileViewModel(
             makeProps({
                 event: {
-                    mxEvent,
+                    eventTs: 0,
                 },
                 timestamp: {
                     hideTimestamp: true,

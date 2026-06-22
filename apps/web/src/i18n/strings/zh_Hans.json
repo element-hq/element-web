@@ -246,7 +246,9 @@
             "check_code_heading": "输入其它设备上显示的数字",
             "check_code_input_label": "2 位数代码",
             "check_code_mismatch": "数字不匹配",
+            "choose_desktop_computer": "选择“%(desktopComputer)s”",
             "completing_setup": "完成新设备的设置",
+            "desktop_computer": "台式计算机",
             "error_etag_missing": "发生意外错误。这可能是由于浏览器扩展、代理服务器或服务器配置错误造成的。",
             "error_expired": "登录已过期。请重试。",
             "error_expired_title": "登录未及时完成",
@@ -267,16 +269,22 @@
             "error_user_declined": "你或账户提供者拒绝了登录请求。",
             "error_user_declined_title": "登录被拒绝",
             "follow_remaining_instructions": "按剩余说明操作",
+            "open_element_mobile_device": "在移动设备上打开 %(brand)s",
             "open_element_other_device": "在你的其它设备上打开 %(brand)s",
             "point_the_camera": "扫描此处显示的二维码",
-            "scan_code_instruction": "使用其它设备扫描二维码",
+            "ready_to_scan": "准备进行扫描",
+            "scan_code_instruction": "扫描二维码",
+            "scan_code_instruction_reciprocate": "使用另一台设备扫描二维码",
             "scan_qr_code": "使用二维码登录",
-            "security_code": "安全代码",
-            "security_code_prompt": "如有要求，请在其它设备上输入以下代码。",
+            "security_code_prompt": "你的账户提供者可能会要求你提供以下代码以验证登录。",
+            "security_code_title": "你的验证码",
             "select_qr_code": "选择“%(scanQRCode)s”",
+            "select_ready_to_scan": "选择“%(readyToScan)s”并扫描此处显示的二维码",
+            "start_over": "重新开始",
+            "tap_avatar_link_new_device": "点击头像并选择“%(linkNewDevice)s”",
             "unsupported_explainer": "你的账户提供者不支持通过二维码登录到新设备。",
             "unsupported_heading": "二维码不受支持",
-            "waiting_for_device": "等待设备登录"
+            "waiting_for_device": "正在等待其它设备"
         },
         "register_action": "创建账户",
         "registration": {
@@ -335,8 +343,10 @@
         "sign_in_description": "使用你的账户以继续。",
         "sign_in_instead": "其它登录方式",
         "sign_in_instead_prompt": "已有账户？<a>登录</a>",
+        "sign_in_manually": "手动登录",
         "sign_in_or_register": "登录或创建账户",
         "sign_in_or_register_description": "使用你的现有账户或创建一个新账户继续。",
+        "sign_in_with_qr": "使用二维码登录",
         "sign_in_with_sso": "以单点模式登录",
         "signing_in": "正在登录…",
         "soft_logout": {
@@ -1002,14 +1012,6 @@
         "set_up_toast_title": "设置安全备份",
         "turn_on_key_storage": "启用密钥存储",
         "turn_on_key_storage_description": "这将允许你在新设备上查看聊天历史， 这是备份聊天与数字身份所必需的。",
-        "udd": {
-            "interactive_verification_button": "使用 Emoji 交互式验证",
-            "other_ask_verify_text": "请该用户验证其会话，或在下面手动验证。",
-            "other_new_session_text": "%(name)s（%(userId)s）在未验证的情况下登录了一个新会话：",
-            "own_ask_verify_text": "请使用以下选项之一验证你的其它会话。",
-            "own_new_session_text": "你在未验证的情况下登录了新会话：",
-            "title": "未被信任"
-        },
         "unable_to_setup_keys_error": "无法设置密钥",
         "verification": {
             "accepting": "正在接受…",
@@ -1517,6 +1519,7 @@
         "bridge_state_manager": "此桥接器由 <user /> 管理。",
         "bridge_state_workspace": "工作区: <networkLink/>",
         "click_for_info": "点击显示更多信息",
+        "config_only": "只能通过文件 config.json 启用。",
         "currently_experimental": "当前为实验性。",
         "custom_themes": "支持添加自定义主题",
         "dynamic_room_predecessors": "动态房间前身",
@@ -1530,6 +1533,11 @@
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
+        "feature_retention": {
+            "description": "当消息到达配置的保留期限时自动从房间移除该消息。当前仅支持为“已读消息”设置。",
+            "disabled_sliding_sync": "当滑动同步启用时无法启用保留期。",
+            "display_name": "消息保留期"
+        },
         "feature_user_status": {
             "description": "启用以查看并设置当前状态。",
             "display_name": "用户状态",
@@ -1559,8 +1567,9 @@
         "latex_maths": "在消息中渲染 LaTeX 数学公式",
         "leave_beta": "退出 Beta 测试",
         "leave_beta_reload": "退出 Beta 测试将重载 %(brand)s。",
-        "location_share_live": "正在共享实时位置",
+        "location_share_live": "实时位置共享",
         "location_share_live_description": "临时实现。位置将持续保留于房间历史。",
+        "login_with_qr": "使用二维码登录",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
         "new_room_list": "启用新的房间列表",
@@ -4053,13 +4062,7 @@
         "close_to_view_right_panel": "关闭此小部件以在此面板查看",
         "context_menu": {
             "delete": "删除小部件",
-            "delete_warning": "删除小部件的同时会为该房间中的所有用户删除。你确定要删除此小部件？",
-            "move_left": "向左移动",
-            "move_right": "向右移动",
-            "remove": "为所有人删除",
-            "revoke": "撤销权限",
-            "screenshot": "拍照",
-            "start_audio_stream": "开始音频流"
+            "delete_warning": "删除小部件的同时会为该房间中的所有用户删除。你确定要删除此小部件？"
         },
         "cookie_warning": "此小部件可能会使用 Cookies。",
         "error_hangup_description": "通话已中断。（错误：%(message)s）",

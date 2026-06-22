@@ -7,27 +7,31 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     class="mx_SpacePanel collapsed newUi"
   >
     <div
-      class="_wrapper_1yvpq_8 mx_UserMenu"
+      class="_wrapper_1yyfq_8 mx_UserMenu"
     >
       <button
         aria-expanded="false"
         aria-haspopup="menu"
         aria-label="User menu"
-        class="_triggerButton_1yvpq_57"
+        class="_triggerButton_1yyfq_111"
         data-state="closed"
         id="radix-react-use-id-1"
         type="button"
       >
-        <span
-          aria-label="@test:test"
-          class="_avatar_va14e_8 _avatar-imageless_va14e_55"
-          data-color="5"
-          data-type="round"
-          role="img"
-          style="--cpd-avatar-size: 36px;"
+        <div
+          class="_avatarWrapper_1yyfq_61"
         >
-          t
-        </span>
+          <span
+            aria-label="@test:test"
+            class="_avatar_va14e_8 _avatar-imageless_va14e_55"
+            data-color="5"
+            data-type="round"
+            role="img"
+            style="--cpd-avatar-size: 36px;"
+          >
+            t
+          </span>
+        </div>
       </button>
     </div>
     <div
@@ -50,7 +54,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     </div>
     <ul
       aria-label="Spaces"
-      class="mx_AutoHideScrollbar mx_SpaceTreeLevel"
+      class="_scrollbar_1d5jg_8 mx_AutoHideScrollbar mx_SpaceTreeLevel"
       data-rbd-droppable-context-id="0"
       data-rbd-droppable-id="top-level-spaces"
       role="tree"

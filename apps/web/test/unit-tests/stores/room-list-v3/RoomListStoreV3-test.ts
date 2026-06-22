@@ -976,6 +976,45 @@ describe("RoomListStoreV3", () => {
             expect(favSection.rooms).toContain(rooms[7]);
         });
 
+        it("hides empty sections when filters are applied", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            // Mark room 3 as favourite; it's the only unread room
+            rooms[3].tags[DefaultTagID.Favourite] = {};
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                const state = {
+                    hasUnreadCount: room === rooms[3],
+                } as unknown as RoomNotificationState;
+                return state;
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            // With the unread filter, only the Favourite section has matching rooms.
+            // The Chats and LowPriority sections should be hidden because they're empty.
+            const { sections } = store.getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter]);
+            expect(sections).toHaveLength(1);
+            expect(sections[0].tag).toBe(DefaultTagID.Favourite);
+            expect(sections[0].rooms).toContain(rooms[3]);
+        });
+
+        it("shows empty sections when no filters are applied", async () => {
+            enableSections();
+            getClientAndRooms();
+
+            // No rooms are tagged, so Favourite and LowPriority sections will be empty
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            // All three sections should be present even though Favourite/LowPriority are empty
+            expect(sections).toHaveLength(3);
+            expect(findSection(sections, DefaultTagID.Favourite)!.rooms).toHaveLength(0);
+            expect(findSection(sections, DefaultTagID.LowPriority)!.rooms).toHaveLength(0);
+        });
+
         it("sections respect space filtering", async () => {
             enableSections();
             const { rooms } = getClientAndRooms();
