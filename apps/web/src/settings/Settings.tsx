@@ -1180,7 +1180,7 @@ export const SETTINGS: Settings = {
         controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
     },
     // NOT to be shipped, this is for testing only.
-    "urlPreviews_spinner": {
+    "urlPreviewsEnabled_spinner": {
         // Enabled by default and client configurable as this setting only allows unencrypted
         // messages to be previewed.
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
