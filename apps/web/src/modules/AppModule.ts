@@ -10,6 +10,8 @@ import { type RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/Runtime
 
 import { type ModuleFactory } from "./ModuleFactory";
 import { ProxiedModuleApi } from "./ProxiedModuleApi";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
+import defaultDispatcher from "../dispatcher/dispatcher.ts";
 
 /**
  * Wraps a module factory into a usable module. Acts as a simple container
@@ -24,14 +26,15 @@ export class AppModule {
     /**
      * The API instance used by the module.
      */
-    public readonly api = new ProxiedModuleApi();
+    public readonly api;
 
     /**
      * Converts a factory into an AppModule. The factory will be called
      * immediately.
      * @param factory The module factory.
      */
-    public constructor(factory: ModuleFactory) {
+    public constructor(factory: ModuleFactory, sdkContext: SdkContextClass) {
+        this.api = new ProxiedModuleApi(defaultDispatcher, sdkContext);
         this.module = factory(this.api);
     }
 }

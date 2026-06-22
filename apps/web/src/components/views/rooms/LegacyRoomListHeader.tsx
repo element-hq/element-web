@@ -37,7 +37,6 @@ import {
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_SELECTED_SPACE,
 } from "../../../stores/spaces";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
     shouldShowSpaceInvite,
     showAddExistingRooms,
@@ -60,6 +59,7 @@ import IconizedContextMenu, {
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
@@ -118,16 +118,17 @@ interface IProps {
 }
 
 const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
     const [mainMenuDisplayed, mainMenuHandle, openMainMenu, closeMainMenu] = useContextMenu<HTMLDivElement>();
     const [plusMenuDisplayed, plusMenuHandle, openPlusMenu, closePlusMenu] = useContextMenu<HTMLDivElement>();
     const [spaceKey, activeSpace] = useEventEmitterState<[SpaceKey, Room | null]>(
-        SpaceStore.instance,
+        sdkContext.spaceStore,
         UPDATE_SELECTED_SPACE,
-        () => [SpaceStore.instance.activeSpace, SpaceStore.instance.activeSpaceRoom],
+        () => [sdkContext.spaceStore.activeSpace, sdkContext.spaceStore.activeSpaceRoom],
     );
-    const allRoomsInHome = useEventEmitterState(SpaceStore.instance, UPDATE_HOME_BEHAVIOUR, () => {
-        return SpaceStore.instance.allRoomsInHome;
+    const allRoomsInHome = useEventEmitterState(sdkContext.spaceStore, UPDATE_HOME_BEHAVIOUR, () => {
+        return sdkContext.spaceStore.allRoomsInHome;
     });
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");

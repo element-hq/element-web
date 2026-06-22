@@ -22,6 +22,7 @@ import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGr
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     // a list of strings to be highlighted in the results
@@ -57,7 +58,7 @@ export default class SearchResultTile extends React.Component<IProps> {
     }
 
     private buildLegacyCallEventGroupers(events?: MatrixEvent[]): void {
-        this.callEventGroupers = buildLegacyCallEventGroupers(this.callEventGroupers, events);
+        this.callEventGroupers = buildLegacyCallEventGroupers(SdkContextClass.instance, this.callEventGroupers, events);
     }
 
     public render(): React.ReactNode {

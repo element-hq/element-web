@@ -11,12 +11,10 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
-import Notifier from "../../../../../Notifier";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { type RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from "../../../../../stores/local-echo/EchoChamber";
-import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { RoomNotifState } from "../../../../../RoomNotifs";
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
@@ -26,6 +24,7 @@ import { chromeFileInputFix } from "../../../../../utils/BrowserWorkarounds";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
+import { SDKContext } from "../../../../../contexts/SDKContext.ts";
 
 interface IProps {
     roomId: string;
@@ -41,16 +40,16 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
     private readonly roomProps: RoomEchoChamber;
     private soundUpload = createRef<HTMLInputElement>();
 
-    public static contextType = MatrixClientContext;
-    declare public context: React.ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
-        this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId)!);
+        this.roomProps = EchoChamber.forRoom(context.client!.getRoom(this.props.roomId)!);
 
         let currentSound = "default";
-        const soundData = Notifier.getSoundForRoom(this.props.roomId);
+        const soundData = context.notifier.getSoundForRoom(this.props.roomId);
         if (soundData) {
             currentSound = soundData.name || soundData.url;
         }
@@ -107,7 +106,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
             type = "audio/ogg";
         }
 
-        const { content_uri: url } = await this.context.uploadContent(this.state.uploadedFile, {
+        const { content_uri: url } = await this.context.client!.uploadContent(this.state.uploadedFile, {
             type,
         });
 

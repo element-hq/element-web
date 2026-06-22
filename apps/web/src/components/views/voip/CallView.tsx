@@ -10,12 +10,10 @@ import React, { type FC, useContext, useEffect, type AriaRole, useCallback } fro
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Call, CallEvent } from "../../../models/Call";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
-import { CallStore } from "../../../stores/CallStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface JoinCallViewProps {
     room: Room;
@@ -26,7 +24,8 @@ interface JoinCallViewProps {
 }
 
 const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClose }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
     useTypedEventEmitter(call, CallEvent.Close, onClose);
 
     useEffect(() => {
@@ -37,11 +36,11 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
         // The stickyPromise has to resolve before the widget actually becomes sticky.
         // We only let the widget become sticky after disconnecting all other active calls.
-        const calls = [...CallStore.instance.connectedCalls].filter(
-            (call) => SdkContextClass.instance.roomViewStore.getRoomId() !== call.roomId,
+        const calls = [...sdkContext.callStore.connectedCalls].filter(
+            (call) => sdkContext.roomViewStore.getRoomId() !== call.roomId,
         );
         await Promise.all(calls.map(async (call) => await call.disconnect()));
-    }, []);
+    }, [sdkContext.callStore.connectedCalls, sdkContext.roomViewStore]);
 
     return (
         <div className="mx_CallView" role={role}>

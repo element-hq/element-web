@@ -9,9 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { type Room, type IEventRelation, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
-import defaultDispatcher from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { createVoiceMessageRecording, type VoiceMessageRecording } from "../audio/VoiceMessageRecording";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const SEPARATOR = "|";
 
@@ -20,18 +21,11 @@ interface IState {
 }
 
 export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
-    private static internalInstance: VoiceRecordingStore;
-
-    public constructor() {
-        super(defaultDispatcher, {});
-    }
-
-    public static get instance(): VoiceRecordingStore {
-        if (!this.internalInstance) {
-            this.internalInstance = new VoiceRecordingStore();
-            this.internalInstance.start();
-        }
-        return this.internalInstance;
+    public constructor(
+        dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
+        super(dispatcher, {});
     }
 
     protected async onAction(payload: ActionPayload): Promise<void> {
@@ -39,7 +33,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         return;
     }
 
-    public static getVoiceRecordingId(room: Room, relation?: IEventRelation): string {
+    public getVoiceRecordingId(room: Room, relation?: IEventRelation): string {
         if (relation?.rel_type === "io.element.thread" || relation?.rel_type === RelationType.Thread) {
             return room.roomId + SEPARATOR + relation.event_id;
         } else {
@@ -68,7 +62,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         if (!voiceRecordingId) throw new Error("Recording must be associated with a room");
         if (this.state[voiceRecordingId]) throw new Error("A recording is already in progress");
 
-        const recording = createVoiceMessageRecording(this.matrixClient);
+        const recording = createVoiceMessageRecording(this.sdkContext);
 
         // noinspection JSIgnoredPromiseFromCall - we can safely run this async
         this.updateState({ ...this.state, [voiceRecordingId]: recording });
@@ -94,5 +88,3 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         return this.reset(newState);
     }
 }
-
-window.mxVoiceRecordingStore = VoiceRecordingStore.instance;

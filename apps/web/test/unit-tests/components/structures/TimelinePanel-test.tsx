@@ -52,7 +52,7 @@ import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import type Timer from "../../../../src/utils/Timer";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us

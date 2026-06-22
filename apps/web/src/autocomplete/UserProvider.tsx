@@ -22,7 +22,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
 import AutocompleteProvider from "./AutocompleteProvider";
@@ -32,6 +31,7 @@ import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import MemberAvatar from "../components/views/avatars/MemberAvatar";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
 import UserIdentifierCustomisations from "../customisations/UserIdentifier";
+import type { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const USER_REGEX = /\B@\S*/g;
 
@@ -44,7 +44,11 @@ export default class UserProvider extends AutocompleteProvider {
     public users?: RoomMember[];
     public room: Room;
 
-    public constructor(room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(
+        private readonly sdkContext: SdkContextClass,
+        room: Room,
+        renderingType?: TimelineRenderingType,
+    ) {
         super({
             commandRegex: USER_REGEX,
             forcedCommandRegex: FORCED_USER_REGEX,
@@ -57,13 +61,13 @@ export default class UserProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: false,
         });
 
-        MatrixClientPeg.safeGet().on(RoomEvent.Timeline, this.onRoomTimeline);
-        MatrixClientPeg.safeGet().on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        this.sdkContext.client?.on(RoomEvent.Timeline, this.onRoomTimeline);
+        this.sdkContext.client?.on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
     public destroy(): void {
-        MatrixClientPeg.get()?.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
-        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
+        this.sdkContext.client?.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+        this.sdkContext.client?.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
     private onRoomTimeline = (
@@ -150,7 +154,7 @@ export default class UserProvider extends AutocompleteProvider {
             lastSpoken[event.getSender()!] = event.getTs();
         }
 
-        const currentUserId = MatrixClientPeg.safeGet().credentials.userId;
+        const currentUserId = this.sdkContext.client?.credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({ userId }) => userId !== currentUserId);
         this.users = this.users.concat(this.room.getMembersWithMembership(KnownMembership.Invite));
 
@@ -162,7 +166,7 @@ export default class UserProvider extends AutocompleteProvider {
     public onUserSpoke(user: RoomMember | null): void {
         if (!this.users) return;
         if (!user) return;
-        if (user.userId === MatrixClientPeg.safeGet().getSafeUserId()) return;
+        if (user.userId === this.sdkContext.client?.getSafeUserId()) return;
 
         // Move the user that spoke to the front of the array
         this.users.splice(

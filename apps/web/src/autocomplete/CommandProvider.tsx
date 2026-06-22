@@ -19,21 +19,24 @@ import { TextualCompletion } from "./Components";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import { type Command, Commands, CommandMap } from "../slash-commands/SlashCommands";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
 export default class CommandProvider extends AutocompleteProvider {
     public matcher: QueryMatcher<Command>;
-    private room: Room;
-    public constructor(room: Room, renderingType?: TimelineRenderingType) {
+
+    public constructor(
+        private readonly sdkContext: SdkContextClass,
+        private readonly room: Room,
+        renderingType?: TimelineRenderingType,
+    ) {
         super({ commandRegex: COMMAND_RE, renderingType });
         this.matcher = new QueryMatcher(Commands, {
             keys: ["command", "args", "description"],
             funcs: [({ aliases }) => aliases.join(" ")], // aliases
             context: renderingType,
         });
-        this.room = room;
     }
 
     public async getCompletions(
@@ -45,14 +48,12 @@ export default class CommandProvider extends AutocompleteProvider {
         const { command, range } = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
-        const cli = MatrixClientPeg.get();
-
         let matches: Command[] = [];
         // check if the full match differs from the first word (i.e. returns false if the command has args)
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].slice(1); // strip leading `/`
-            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled(cli, this.room.roomId)) {
+            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled(this.sdkContext, this.room.roomId)) {
                 // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name)!.hideCompletionAfterSpace) return [];
                 matches = [CommandMap.get(name)!];
@@ -71,7 +72,7 @@ export default class CommandProvider extends AutocompleteProvider {
         return matches
             .filter((cmd) => {
                 const display = !cmd.renderingTypes || cmd.renderingTypes.includes(this.renderingType);
-                return cmd.isEnabled(cli, this.room.roomId) && display;
+                return cmd.isEnabled(this.sdkContext, this.room.roomId) && display;
             })
             .map((result) => {
                 let completion = result.getCommand() + " ";

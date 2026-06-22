@@ -28,7 +28,6 @@ import Autocomplete, { generateCompletionDomId } from "../rooms/Autocomplete";
 import { getAutoCompleteCreator, type Part, type SerializedPart, Type } from "../../../editor/parts";
 import { parseEvent, parsePlainTextMessage } from "../../../editor/deserialize";
 import { renderModel } from "../../../editor/render";
-import SettingsStore from "../../../settings/SettingsStore";
 import { IS_MAC, Key } from "../../../Keyboard";
 import { CommandCategories, CommandMap, parseCommandString } from "../../../slash-commands/SlashCommands";
 import Range from "../../../editor/range";
@@ -41,9 +40,8 @@ import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";
-import { SdkContextClass } from "../../../contexts/SDKContext";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
@@ -115,6 +113,9 @@ interface IState {
 }
 
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     public readonly editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
     private formatBarRef = createRef<MessageComposerFormatBar>();
@@ -134,12 +135,12 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private surroundWithHandle?: string;
     private readonly historyManager = new HistoryManager();
 
-    public constructor(props: IProps) {
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props);
         this.state = {
-            showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
-            useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
-            surroundWith: SettingsStore.getValue("MessageComposerInput.surroundWith"),
+            showPillAvatar: context.settingsStore.getValue("Pill.shouldShowPillAvatar"),
+            useMarkdown: context.settingsStore.getValue("MessageComposerInput.useMarkdown"),
+            surroundWith: context.settingsStore.getValue("MessageComposerInput.surroundWith"),
             showVisualBell: false,
         };
 
@@ -245,17 +246,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const { cmd } = parseCommandString(this.props.model.parts[0].text);
             const command = CommandMap.get(cmd!);
             if (
-                !command?.isEnabled(MatrixClientPeg.get(), this.props.room.roomId) ||
+                !command?.isEnabled(this.context, this.props.room.roomId) ||
                 command.category !== CommandCategories.messages
             ) {
                 isTyping = false;
             }
         }
-        SdkContextClass.instance.typingStore.setSelfTyping(
-            this.props.room.roomId,
-            this.props.threadId ?? null,
-            isTyping,
-        );
+        this.context.typingStore.setSelfTyping(this.props.room.roomId, this.props.threadId ?? null, isTyping);
 
         this.props.onChange?.(selection, inputType, diff);
     };
@@ -685,7 +682,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private configureUseMarkdown = (): void => {
-        const useMarkdown = SettingsStore.getValue("MessageComposerInput.useMarkdown");
+        const useMarkdown = this.context.settingsStore.getValue("MessageComposerInput.useMarkdown");
         this.setState({ useMarkdown });
         if (!useMarkdown && this.formatBarRef.current) {
             this.formatBarRef.current.hide();
@@ -697,17 +694,17 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     private configureShouldShowPillAvatar = (): void => {
-        const showPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
+        const showPillAvatar = this.context.settingsStore.getValue("Pill.shouldShowPillAvatar");
         this.setState({ showPillAvatar });
     };
 
     private surroundWithSettingChanged = (): void => {
-        const surroundWith = SettingsStore.getValue("MessageComposerInput.surroundWith");
+        const surroundWith = this.context.settingsStore.getValue("MessageComposerInput.surroundWith");
         this.setState({ surroundWith });
     };
 
     private transform = (documentPosition: DocumentPosition): void => {
-        const shouldReplace = SettingsStore.getValue("MessageComposerInput.autoReplaceEmoji");
+        const shouldReplace = this.context.settingsStore.getValue("MessageComposerInput.autoReplaceEmoji");
         if (shouldReplace) this.replaceEmoticon(documentPosition, REGEX_EMOTICON_WHITESPACE);
     };
 
@@ -717,29 +714,29 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current?.removeEventListener("input", this.onInput, true);
         this.editorRef.current?.removeEventListener("compositionstart", this.onCompositionStart, true);
         this.editorRef.current?.removeEventListener("compositionend", this.onCompositionEnd, true);
-        SettingsStore.unwatchSetting(this.useMarkdownHandle);
-        SettingsStore.unwatchSetting(this.emoticonSettingHandle);
-        SettingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
-        SettingsStore.unwatchSetting(this.surroundWithHandle);
+        this.context.settingsStore.unwatchSetting(this.useMarkdownHandle);
+        this.context.settingsStore.unwatchSetting(this.emoticonSettingHandle);
+        this.context.settingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
+        this.context.settingsStore.unwatchSetting(this.surroundWithHandle);
     }
 
     public componentDidMount(): void {
-        this.useMarkdownHandle = SettingsStore.watchSetting(
+        this.useMarkdownHandle = this.context.settingsStore.watchSetting(
             "MessageComposerInput.useMarkdown",
             null,
             this.configureUseMarkdown,
         );
-        this.emoticonSettingHandle = SettingsStore.watchSetting(
+        this.emoticonSettingHandle = this.context.settingsStore.watchSetting(
             "MessageComposerInput.autoReplaceEmoji",
             null,
             this.configureEmoticonAutoReplace,
         );
-        this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting(
+        this.shouldShowPillAvatarSettingHandle = this.context.settingsStore.watchSetting(
             "Pill.shouldShowPillAvatar",
             null,
             this.configureShouldShowPillAvatar,
         );
-        this.surroundWithHandle = SettingsStore.watchSetting(
+        this.surroundWithHandle = this.context.settingsStore.watchSetting(
             "MessageComposerInput.surroundWith",
             null,
             this.surroundWithSettingChanged,

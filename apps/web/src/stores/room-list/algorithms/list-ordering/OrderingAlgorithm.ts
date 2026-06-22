@@ -12,6 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type RoomUpdateCause } from "../../models";
 import { type TagID } from "../../../room-list-v3/skip-list/tag";
 import { SortAlgorithm } from "../models";
+import { type SdkContextClass } from "../../../../contexts/SDKContextClass.ts";
 
 /**
  * Represents a list ordering algorithm. Subclasses should populate the
@@ -26,6 +27,7 @@ export abstract class OrderingAlgorithm {
     protected constructor(
         protected tagId: TagID,
         initialSortingAlgorithm: SortAlgorithm,
+        protected readonly sdkContext: SdkContextClass,
     ) {
         // noinspection JSIgnoredPromiseFromCall
         this.setSortAlgorithm(initialSortingAlgorithm); // we use the setter for validation

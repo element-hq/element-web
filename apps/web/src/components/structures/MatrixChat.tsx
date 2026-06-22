@@ -36,7 +36,6 @@ import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg"
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
-import Notifier from "../../Notifier";
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from "../../RoomInvite";
 import * as Rooms from "../../Rooms";
@@ -62,10 +61,7 @@ import { hideToast as hideAnalyticsToast, showToast as showAnalyticsToast } from
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
-import {
-    RoomNotificationStateStore,
-    UPDATE_STATUS_INDICATOR,
-} from "../../stores/notifications/RoomNotificationStateStore";
+import { UPDATE_STATUS_INDICATOR } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import ThreepidInviteStore, {
     type IThreepidInvite,
@@ -75,9 +71,7 @@ import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import RoomListStore from "../../stores/room-list/RoomListStore";
 import { RoomUpdateCause } from "../../stores/room-list/models";
-import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog from "../views/dialogs/UserSettingsDialog";
@@ -97,7 +91,6 @@ import SoftLogout from "./auth/SoftLogout";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
-import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { type ActionPayload } from "../../dispatcher/payloads";
@@ -110,15 +103,14 @@ import { type AfterForgetRoomPayload } from "../../dispatcher/payloads/AfterForg
 import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
-import { CallStore } from "../../stores/CallStore";
 import { type IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
 import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext";
+import { SdkContextClass } from "../../contexts/SDKContextClass";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
@@ -144,6 +136,8 @@ import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
 import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
 import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
+
+Lifecycle.registerHandlers(SdkContextClass.instance);
 
 const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
@@ -337,12 +331,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // When the session loads it'll be detected as soft logged out and a dispatch
             // will be sent out to say that, triggering this MatrixChat to show the soft
             // logout page.
-            Lifecycle.loadSession({ abortSignal: this.loadSessionAbortController.signal });
+            Lifecycle.loadSession(this.stores, { abortSignal: this.loadSessionAbortController.signal });
             return;
         }
 
         // Otherwise, the first thing to do is to try the token params in the query-string
         const delegatedAuthSucceeded = await Lifecycle.attemptDelegatedAuthLogin(
+            this.stores,
             this.props.urlParams,
             this.props.defaultDeviceDisplayName,
             this.getFragmentAfterLogin(),
@@ -364,7 +359,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // Create and start the client
             // accesses the new credentials just set in storage during attemptDelegatedAuthLogin
             // and sets logged in state
-            await Lifecycle.restoreSessionFromStorage({ ignoreGuest: true });
+            await Lifecycle.restoreSessionFromStorage(this.stores, { ignoreGuest: true });
             await this.postLoginSetup();
             return;
         }
@@ -392,7 +387,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         // now we can tell the Lifecycle routines to abort any active startup, and to stop the active client.
-        await Lifecycle.onSessionLockStolen();
+        await Lifecycle.onSessionLockStolen(this.stores);
     }
 
     /**
@@ -449,7 +444,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if the user has previously set up cross-signing, verify this device so we can fetch the
             // private keys.
 
-            const cryptoExtension = ModuleRunner.instance.extensions.cryptoSetup;
+            const cryptoExtension = this.stores.moduleRunner.extensions.cryptoSetup;
             if (cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
                 this.onShowPostLoginScreen();
             } else {
@@ -489,7 +484,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // For PersistentElement
         this.stores.resizeNotifier.on("middlePanelResized", this.dispatchTimelineResize);
 
-        RoomNotificationStateStore.instance.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatusIndicator);
+        this.stores.roomNotificationStateStore.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatusIndicator);
 
         this.dispatcherRef = dis.register(this.onAction);
 
@@ -533,7 +528,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        Lifecycle.stopMatrixClient();
+        Lifecycle.stopMatrixClient(this.stores);
         dis.unregister(this.dispatcherRef);
         this.themeWatcher?.off(ThemeWatcherEvent.Change, setTheme);
         this.themeWatcher?.stop();
@@ -581,7 +576,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // asynchronous ones.
         return Promise.resolve()
             .then(() => {
-                return Lifecycle.loadSession({
+                return Lifecycle.loadSession(this.stores, {
                     urlParams: this.props.urlParams,
                     enableGuest: this.props.enableGuest,
                     guestHsUrl: this.getServerProperties().serverConfig.hsUrl,
@@ -703,9 +698,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             case "logout":
-                LegacyCallHandler.instance.hangupAllCalls();
-                Promise.all([...[...CallStore.instance.connectedCalls].map((call) => call.disconnect())]).finally(() =>
-                    Lifecycle.logout(this.stores.oidcClientStore),
+                this.stores.legacyCallHandler.hangupAllCalls();
+                Promise.all([...[...this.stores.callStore.connectedCalls].map((call) => call.disconnect())]).finally(
+                    () => Lifecycle.logout(this.stores),
                 );
                 break;
             case "require_registration":
@@ -955,9 +950,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     },
                 };
                 if (push ?? false) {
-                    RightPanelStore.instance.pushCard(threadViewCard);
+                    this.stores.rightPanelStore.pushCard(threadViewCard);
                 } else {
-                    RightPanelStore.instance.setCards([{ phase: RightPanelPhases.ThreadPanel }, threadViewCard]);
+                    this.stores.rightPanelStore.setCards([{ phase: RightPanelPhases.ThreadPanel }, threadViewCard]);
                 }
 
                 // Focus the composer
@@ -1346,7 +1341,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         finished.then(async ([shouldLeave]) => {
             if (shouldLeave) {
-                await leaveRoomBehaviour(cli, roomId);
+                await leaveRoomBehaviour(this.stores, roomId);
 
                 dis.dispatch<AfterLeaveRoomPayload>({
                     action: Action.AfterLeaveRoom,
@@ -1368,7 +1363,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
                 if (room) {
                     // Legacy room list store needs to be told to manually remove this room
-                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    this.stores.roomListStore.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
                     // New room list store will remove the room on the following dispatch
                     dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
                 }
@@ -1666,7 +1661,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
+            if (this.stores.notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
                 showNotificationsToast(false);
             }
 
@@ -1684,7 +1679,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             if (errObj.httpStatus === 401 && errObj.data?.["soft_logout"]) {
                 logger.warn("Soft logout issued by server - avoiding data deletion");
-                Lifecycle.softLogout();
+                Lifecycle.softLogout(this.stores);
                 return;
             }
 
@@ -2085,9 +2080,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     // returns a promise which resolves to the new MatrixClient
-    private onRegistered(this: void, credentials: IMatrixClientCreds): Promise<MatrixClient> {
-        return Lifecycle.setLoggedIn(credentials);
-    }
+    private onRegistered = (credentials: IMatrixClientCreds): Promise<MatrixClient> =>
+        Lifecycle.setLoggedIn(this.stores, credentials);
 
     private onSendEvent(roomId: string, event: MatrixEvent): void {
         const cli = MatrixClientPeg.get();
@@ -2150,7 +2144,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds): Promise<void> => {
         // Create and start the client
-        await Lifecycle.setLoggedIn(credentials);
+        await Lifecycle.setLoggedIn(this.stores, credentials);
         await this.postLoginSetup();
 
         PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
@@ -2167,8 +2161,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }: QrLoginCredentials): Promise<void> => {
         // Persist credentials + OIDC settings, then hydrate the client from storage.
         // setLoggedIn would clear storage and drop the OIDC settings; see its docstring.
-        await configureFromCompletedOAuthLogin(tokenResponse);
-        await Lifecycle.restoreSessionFromStorage();
+        await configureFromCompletedOAuthLogin(this.stores, tokenResponse);
+        await Lifecycle.restoreSessionFromStorage(this.stores);
 
         if (secrets) {
             const crypto = MatrixClientPeg.safeGet().getCrypto();

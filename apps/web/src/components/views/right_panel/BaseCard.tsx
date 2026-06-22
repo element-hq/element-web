@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, type KeyboardEvent, type Ref, type MouseEvent } from "react";
+import React, { type ReactNode, type KeyboardEvent, type Ref, type MouseEvent, useContext, useCallback } from "react";
 import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -14,9 +14,9 @@ import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { backLabelForPhase } from "../../../stores/right-panel/RightPanelStorePhases";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { CardContext } from "./context";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     header?: ReactNode | null;
@@ -38,10 +38,20 @@ interface IProps {
     children: ReactNode;
 }
 
-function closeRightPanel(ev: MouseEvent<HTMLButtonElement>): void {
-    ev.preventDefault();
-    ev.stopPropagation();
-    RightPanelStore.instance.popCard();
+function backLabelForPhase(phase: RightPanelPhases | null): string | null {
+    switch (phase) {
+        case RightPanelPhases.ThreadPanel:
+            return _t("common|threads");
+        case RightPanelPhases.Timeline:
+            return _t("chat_card_back_action_label");
+        case RightPanelPhases.RoomSummary:
+            return _t("room_summary_card_back_action_label");
+        case RightPanelPhases.MemberList:
+            return _t("member_list_back_action_label");
+        case RightPanelPhases.ThreadView:
+            return _t("thread_view_back_action_label");
+    }
+    return null;
 }
 
 const BaseCard: React.FC<IProps> = ({
@@ -61,13 +71,24 @@ const BaseCard: React.FC<IProps> = ({
     closeButtonRef,
     ref,
 }: IProps) => {
+    const sdkContext = useContext(SDKContext);
+
+    const closeRightPanel = useCallback(
+        (ev: MouseEvent<HTMLButtonElement>): void => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            sdkContext.rightPanelStore.popCard();
+        },
+        [sdkContext.rightPanelStore],
+    );
+
     let backButton;
-    const cardHistory = RightPanelStore.instance.roomPhaseHistory;
+    const cardHistory = sdkContext.rightPanelStore.roomPhaseHistory;
     if (cardHistory.length > 1 && !hideHeaderButtons) {
         const prevCard = cardHistory[cardHistory.length - 2];
         const onBackClick = (ev: MouseEvent<HTMLButtonElement>): void => {
             onBack?.(ev);
-            RightPanelStore.instance.popCard();
+            sdkContext.rightPanelStore.popCard();
         };
         const label = backLabelForPhase(prevCard.phase) ?? _t("action|back");
         backButton = (

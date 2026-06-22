@@ -24,6 +24,7 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import * as widgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 import { type WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher.ts";
 
 describe("WidgetContextMenuViewModel", () => {
     const widgetId = "w1";
@@ -41,6 +42,7 @@ describe("WidgetContextMenuViewModel", () => {
         creatorUserId: userId,
         avatar_url: undefined,
     };
+    const widgetLayoutStore = new WidgetLayoutStore(defaultDispatcher);
 
     let client: MatrixClient;
     const defaultProps: WidgetContextMenuViewModelProps = {
@@ -55,6 +57,7 @@ describe("WidgetContextMenuViewModel", () => {
         onEditClick: jest.fn(),
         onDeleteClick: jest.fn(),
         onFinished: jest.fn(),
+        widgetLayoutStore,
     };
 
     beforeEach(() => {
@@ -130,7 +133,7 @@ describe("WidgetContextMenuViewModel", () => {
     });
 
     it("should move widget position when onmovebutton is called", () => {
-        jest.spyOn(WidgetLayoutStore.instance, "moveWithinContainer").mockReturnValue();
+        jest.spyOn(widgetLayoutStore, "moveWithinContainer").mockReturnValue();
         const props = {
             ...defaultProps,
             room: new Room(roomId, client, userId),
@@ -138,7 +141,7 @@ describe("WidgetContextMenuViewModel", () => {
         const vm = new WidgetContextMenuViewModel(props);
         vm.onMoveButton(1);
 
-        expect(WidgetLayoutStore.instance.moveWithinContainer).toHaveBeenCalledWith(props.room, "top", props.app, 1);
+        expect(widgetLayoutStore.moveWithinContainer).toHaveBeenCalledWith(props.room, "top", props.app, 1);
         expect(props.onFinished).toHaveBeenCalled();
     });
 

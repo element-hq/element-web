@@ -23,7 +23,7 @@ import { _t } from "../languageHandler";
 import { ModuleUiDialog } from "../components/views/dialogs/ModuleUiDialog";
 import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
-import dispatcher from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { navigateToPermalink } from "../utils/permalinks/navigator";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -31,8 +31,9 @@ import { Action } from "../dispatcher/actions";
 import { type OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import WidgetStore, { type IApp } from "../stores/WidgetStore";
-import { type Container, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { type Container } from "../stores/widgets/WidgetLayoutStore";
 import type { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload.ts";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 /**
  * Glue between the `ModuleApi` interface and the react-sdk. Anticipates one instance
@@ -43,7 +44,10 @@ export class ProxiedModuleApi implements ModuleApi {
 
     private overrideLoginResolve?: () => void;
 
-    public constructor() {
+    public constructor(
+        private readonly dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
         dispatcher.register(this.onAction);
     }
 
@@ -159,7 +163,7 @@ export class ProxiedModuleApi implements ModuleApi {
             this.overrideLoginResolve = resolve;
         });
 
-        dispatcher.dispatch<OverwriteLoginPayload>(
+        this.dispatcher.dispatch<OverwriteLoginPayload>(
             {
                 action: Action.OverwriteLogin,
                 credentials: {
@@ -183,7 +187,7 @@ export class ProxiedModuleApi implements ModuleApi {
         const parts = parsePermalink(uri);
         if (parts?.roomIdOrAlias) {
             if (parts.roomIdOrAlias.startsWith("#")) {
-                dispatcher.dispatch<ViewRoomPayload>({
+                this.dispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_alias: parts.roomIdOrAlias,
                     via_servers: parts.viaServers ?? undefined,
@@ -191,7 +195,7 @@ export class ProxiedModuleApi implements ModuleApi {
                     metricsTrigger: undefined,
                 });
             } else {
-                dispatcher.dispatch<ViewRoomPayload>({
+                this.dispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: parts.roomIdOrAlias,
                     via_servers: parts.viaServers ?? undefined,
@@ -234,7 +238,7 @@ export class ProxiedModuleApi implements ModuleApi {
     public isAppInContainer(app: IApp, container: Container, roomId: string): boolean {
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) return false;
-        return WidgetLayoutStore.instance.isInContainer(room, app, container);
+        return this.sdkContext.widgetLayoutStore.isInContainer(room, app, container);
     }
 
     /**
@@ -243,6 +247,6 @@ export class ProxiedModuleApi implements ModuleApi {
     public moveAppToContainer(app: IApp, container: Container, roomId: string): void {
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) return;
-        WidgetLayoutStore.instance.moveToContainer(room, app, container);
+        this.sdkContext.widgetLayoutStore.moveToContainer(room, app, container);
     }
 }

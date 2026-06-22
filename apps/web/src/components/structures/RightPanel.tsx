@@ -13,8 +13,6 @@ import { throttle } from "lodash";
 
 import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCardView from "../views/right_panel/RoomSummaryCardView";
 import WidgetCard from "../views/right_panel/WidgetCard";
 import UserInfo from "../views/right_panel/UserInfo";
@@ -34,6 +32,8 @@ import { Action } from "../../dispatcher/actions";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
+import { SDKContext } from "../../contexts/SDKContext.ts";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -62,8 +62,8 @@ interface IState {
 }
 
 export default class RightPanel extends React.Component<Props, IState> {
-    public static contextType = MatrixClientContext;
-    declare public context: React.ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: Props) {
         super(props);
@@ -80,19 +80,19 @@ export default class RightPanel extends React.Component<Props, IState> {
     );
 
     public componentDidMount(): void {
-        this.context.on(RoomStateEvent.Members, this.onRoomStateMember);
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.context.client?.on(RoomStateEvent.Members, this.onRoomStateMember);
+        this.context.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
     public componentWillUnmount(): void {
-        this.context?.removeListener(RoomStateEvent.Members, this.onRoomStateMember);
-        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.context.client?.removeListener(RoomStateEvent.Members, this.onRoomStateMember);
+        this.context.rightPanelStore.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
     public static getDerivedStateFromProps(props: Props): Partial<IState> {
         let currentCard: IRightPanelCard | undefined;
         if (props.room) {
-            currentCard = RightPanelStore.instance.currentCardForRoom(props.room.roomId);
+            currentCard = SdkContextClass.instance.rightPanelStore.currentCardForRoom(props.room.roomId);
         }
 
         return {
@@ -141,7 +141,7 @@ export default class RightPanel extends React.Component<Props, IState> {
             // When the user clicks close on the encryption panel cancel the pending request first if any
             this.state.cardState.verificationRequest.cancel();
         } else {
-            RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
+            this.context.rightPanelStore.togglePanel(this.props.room?.roomId ?? null);
         }
     };
 
@@ -164,7 +164,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                     card = (
                         <UserInfo
                             user={cardState.member}
-                            room={this.context.getRoom(roomMember?.roomId) ?? this.props.room}
+                            room={this.context.client?.getRoom(roomMember?.roomId) ?? this.props.room}
                             key={roomId ?? cardState.member.userId}
                             onClose={this.onClose}
                             phase={phase}

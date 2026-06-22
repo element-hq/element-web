@@ -12,18 +12,18 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useCreateAutoDisposedViewModel, WidgetPipView } from "@element-hq/web-shared-components";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PictureInPictureDragger, { type CreatePipChildren } from "./PictureInPictureDragger";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../stores/ActiveWidgetStore";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext";
 import RoomAvatar from "../views/avatars/RoomAvatar";
 import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../../viewmodels/room/WidgetPipViewModel";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -58,10 +58,13 @@ interface IState {
 // (which should be a single element) of other calls.
 // The primary will be the one not on hold, or an arbitrary one
 // if they're all on hold)
-function getPrimarySecondaryCallsForPip(roomId: string | null): [MatrixCall | null, MatrixCall[]] {
+function getPrimarySecondaryCallsForPip(
+    roomId: string | null,
+    sdkContext: SdkContextClass,
+): [MatrixCall | null, MatrixCall[]] {
     if (!roomId) return [null, []];
 
-    const calls = LegacyCallHandler.instance.getAllActiveCallsForPip(roomId);
+    const calls = sdkContext.legacyCallHandler.getAllActiveCallsForPip(roomId);
 
     let primary: MatrixCall | null = null;
     let secondaries: MatrixCall[] = [];
@@ -96,12 +99,15 @@ function getPrimarySecondaryCallsForPip(roomId: string | null): [MatrixCall | nu
  */
 
 class PipContainerInner extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props);
 
-        const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        const roomId = context.roomViewStore.getRoomId();
 
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(roomId);
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(roomId, context);
 
         this.state = {
             viewedRoomId: roomId || undefined,
@@ -114,13 +120,13 @@ class PipContainerInner extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
-        SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
+        this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
+        this.context.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         MatrixClientPeg.safeGet().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         const room = MatrixClientPeg.safeGet().getRoom(this.state.viewedRoomId);
         if (room) {
-            WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
+            this.context.widgetLayoutStore.on(this.context.widgetLayoutStore.emissionForRoom(room), this.updateCalls);
         }
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
@@ -128,14 +134,14 @@ class PipContainerInner extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
-        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
+        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
+        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         const cli = MatrixClientPeg.get();
         cli?.removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
-        SdkContextClass.instance.roomViewStore.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.roomViewStore.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         const room = cli?.getRoom(this.state.viewedRoomId);
         if (room) {
-            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
+            this.context.widgetLayoutStore.off(this.context.widgetLayoutStore.emissionForRoom(room), this.updateCalls);
         }
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Persistence, this.onWidgetPersistence);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onWidgetDockChanges);
@@ -145,22 +151,28 @@ class PipContainerInner extends React.Component<IProps, IState> {
     private onMove = (): void => this.props.movePersistedElement.current?.();
 
     private onRoomViewStoreUpdate = (): void => {
-        const newRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        const newRoomId = this.context.roomViewStore.getRoomId();
         const oldRoomId = this.state.viewedRoomId;
         if (newRoomId === oldRoomId) return;
         // The WidgetLayoutStore observer always tracks the currently viewed Room,
         // so we don't end up with multiple observers and know what observer to remove on unmount
         const oldRoom = MatrixClientPeg.get()?.getRoom(oldRoomId);
         if (oldRoom) {
-            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(oldRoom), this.updateCalls);
+            this.context.widgetLayoutStore.off(
+                this.context.widgetLayoutStore.emissionForRoom(oldRoom),
+                this.updateCalls,
+            );
         }
         const newRoom = MatrixClientPeg.get()?.getRoom(newRoomId || undefined);
         if (newRoom) {
-            WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(newRoom), this.updateCalls);
+            this.context.widgetLayoutStore.on(
+                this.context.widgetLayoutStore.emissionForRoom(newRoom),
+                this.updateCalls,
+            );
         }
         if (!newRoomId) return;
 
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(newRoomId);
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(newRoomId, this.context);
         this.setState({
             viewedRoomId: newRoomId,
             primaryCall: primaryCall,
@@ -179,7 +191,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
     private updateCalls = (): void => {
         if (!this.state.viewedRoomId) return;
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.state.viewedRoomId, this.context);
 
         this.setState({
             primaryCall: primaryCall,
@@ -190,7 +202,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
     private onCallRemoteHold = (): void => {
         if (!this.state.viewedRoomId) return;
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
+        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.state.viewedRoomId, this.context);
 
         this.setState({
             primaryCall: primaryCall,
@@ -254,6 +266,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         if (this.state.showWidgetInPip && this.state.persistentWidgetId) {
             pipContent.push(({ onStartMoving }) => (
                 <WidgetPipWrappedView
+                    widgetLayoutStore={this.context.widgetLayoutStore}
                     key="widget-pip"
                     widgetId={this.state.persistentWidgetId!}
                     room={MatrixClientPeg.safeGet().getRoom(this.state.persistentRoomId ?? undefined)!}

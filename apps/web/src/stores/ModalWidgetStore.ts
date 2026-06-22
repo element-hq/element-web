@@ -10,7 +10,7 @@ import { type IModalWidgetOpenRequestData, type IModalWidgetReturnData, type Wid
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
-import defaultDispatcher from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
 import Modal, { type IHandle, type IModal } from "../Modal";
 import ModalWidgetDialog from "../components/views/dialogs/ModalWidgetDialog";
@@ -22,21 +22,12 @@ interface IState {
 }
 
 export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
-    private static readonly internalInstance = (() => {
-        const instance = new ModalWidgetStore();
-        instance.start();
-        return instance;
-    })();
     private modalInstance: IHandle<typeof ModalWidgetDialog> | null = null;
     private openSourceWidgetId: string | null = null;
     private openSourceWidgetRoomId: string | null = null;
 
-    private constructor() {
-        super(defaultDispatcher, {});
-    }
-
-    public static get instance(): ModalWidgetStore {
-        return ModalWidgetStore.internalInstance;
+    public constructor(dispatcher: MatrixDispatcher) {
+        super(dispatcher, {});
     }
 
     protected async onAction(payload: ActionPayload): Promise<any> {
@@ -96,5 +87,3 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         }
     };
 }
-
-window.mxModalWidgetStore = ModalWidgetStore.instance;

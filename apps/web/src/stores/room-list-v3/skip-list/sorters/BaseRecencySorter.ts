@@ -8,9 +8,13 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Sorter, SortingAlgorithm } from ".";
 import { getLastTimestamp } from "./utils/getLastTimestamp";
+import { type SdkContextClass } from "../../../../contexts/SDKContextClass.ts";
 
 export abstract class BaseRecencySorter implements Sorter {
-    public constructor(protected myUserId: string) {}
+    public constructor(
+        protected myUserId: string,
+        protected readonly sdkContext: SdkContextClass,
+    ) {}
 
     public sort(rooms: Room[]): Room[] {
         const tsCache: { [roomId: string]: number } = {};

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { VerificationPhase, type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -21,9 +21,8 @@ import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
@@ -38,7 +37,8 @@ interface IProps {
 }
 
 const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
-    const cli = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
     const { verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted } = props;
     const [request, setRequest] = useState(verificationRequest);
     // state to show a spinner immediately after clicking "start verification",
@@ -130,14 +130,14 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         setRequest(verificationRequest_);
         setPhase(verificationRequest_.phase);
         // Notify the RightPanelStore about this
-        if (RightPanelStore.instance.currentCard.phase != RightPanelPhases.EncryptionPanel) {
-            RightPanelStore.instance.pushCard({
+        if (sdkContext.rightPanelStore.currentCard.phase != RightPanelPhases.EncryptionPanel) {
+            sdkContext.rightPanelStore.pushCard({
                 phase: RightPanelPhases.EncryptionPanel,
                 state: { member, verificationRequest: verificationRequest_ },
             });
         }
-        if (!RightPanelStore.instance.isOpen) RightPanelStore.instance.togglePanel(null);
-    }, [cli, member]);
+        if (!sdkContext.rightPanelStore.isOpen) sdkContext.rightPanelStore.togglePanel(null);
+    }, [cli, member, sdkContext.rightPanelStore]);
 
     const requested: boolean =
         (!request && isRequesting) ||

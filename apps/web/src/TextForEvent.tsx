@@ -27,20 +27,20 @@ import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
 import { _t } from "./languageHandler";
 import * as Roles from "./Roles";
-import { isValid3pidInvite } from "./RoomInvite";
+import { isValid3pidInvite } from "./utils/3pidInvites";
 import SettingsStore from "./settings/SettingsStore";
 import { ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES } from "./mjolnir/BanList";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
-import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog-tabs";
 import AccessibleButton from "./components/views/elements/AccessibleButton";
-import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
 import { ElementCallEventType } from "./call-types.ts";
 import Spoiler from "./components/views/elements/Spoiler.tsx";
+import { SdkContextClass } from "./contexts/SDKContextClass.ts";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -575,7 +575,7 @@ function textForPowerEvent(event: MatrixEvent, client: MatrixClient): (() => str
 
 const onPinnedMessagesClick = (): void => {
     PosthogTrackers.trackInteraction("PinnedMessageStateEventClick");
-    RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
+    SdkContextClass.instance.rightPanelStore.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
 };
 
 function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: boolean): (() => Renderable) | null {

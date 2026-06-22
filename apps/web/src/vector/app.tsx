@@ -25,7 +25,6 @@ import { type IConfigOptions } from "../IConfigOptions";
 import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
 import { type ValidatedServerConfig } from "../utils/ValidatedServerConfig";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 import { type URLParams } from "./url_utils.ts";
 import { UserFriendlyError } from "../languageHandler";
@@ -35,6 +34,7 @@ import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
 import Login from "../Login.ts";
 import { startOidcLogin } from "../utils/oidc/authorize.ts";
+import { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
@@ -145,7 +145,7 @@ export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<Mat
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
     const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
-    ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
+    SdkContextClass.instance.moduleRunner.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
 
     return (
         <wrapperOpts.Wrapper>

@@ -38,7 +38,7 @@ import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import { type IApp } from "../../../../src/utils/WidgetUtils-types";
 import { ModalWidgetStore } from "../../../../src/stores/ModalWidgetStore";

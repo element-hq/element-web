@@ -8,10 +8,10 @@ import { type MatrixClient, type RoomMember, type User } from "matrix-js-sdk/src
 import { useContext } from "react";
 import { type UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
-import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { type IDevice } from "../../../views/right_panel/UserInfo";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { verifyUser } from "../../../../verification";
+import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
 export interface UserInfoVerificationSectionState {
     /**
@@ -44,7 +44,8 @@ export const useUserInfoVerificationViewModel = (
     member: User | RoomMember,
     devices: IDevice[],
 ): UserInfoVerificationSectionState => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
 
     const userTrust = useAsyncMemo<UserVerificationStatus | undefined>(
         async () => cli.getCrypto()?.getUserVerificationStatus(member.userId),
@@ -58,7 +59,7 @@ export const useUserInfoVerificationViewModel = (
     const canVerify = hasUserVerificationStatus && !isUserVerified && !isMe && devices && devices.length > 0;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
-    const verifySelectedUser = (): Promise<void> => verifyUser(cli, member as User);
+    const verifySelectedUser = (): Promise<void> => verifyUser(sdkContext, member as User);
 
     return {
         canVerify,

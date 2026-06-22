@@ -12,21 +12,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
-import defaultDispatcher from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
-import WidgetUtils from "../utils/WidgetUtils";
+import WidgetUtils, { isVirtualWidget } from "../utils/WidgetUtils";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { type IApp } from "../utils/WidgetUtils-types";
 
 export type { IApp };
-
-export function isAppWidget(widget: IWidget | IApp): widget is IApp {
-    return "roomId" in widget && typeof widget.roomId === "string";
-}
-export function isVirtualWidget(widget: IApp): boolean {
-    return widget.eventId === undefined;
-}
 
 interface IRoomWidgets {
     widgets: IApp[];
@@ -35,23 +28,13 @@ interface IRoomWidgets {
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
 export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
-    private static readonly internalInstance = (() => {
-        const instance = new WidgetStore();
-        instance.start();
-        return instance;
-    })();
-
     private widgetMap = new Map<string, IApp>(); // Key is widget Unique ID (UID)
     private roomMap = new Map<string, IRoomWidgets>(); // Key is room ID
 
-    private constructor() {
-        super(defaultDispatcher, {});
+    public constructor(dispatcher: MatrixDispatcher) {
+        super(dispatcher, {});
 
         WidgetEchoStore.on("update", this.onWidgetEchoStoreUpdate);
-    }
-
-    public static get instance(): WidgetStore {
-        return WidgetStore.internalInstance;
     }
 
     private initRoom(roomId: string): void {
@@ -202,5 +185,3 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(UPDATE_EVENT, roomId);
     }
 }
-
-window.mxWidgetStore = WidgetStore.instance;

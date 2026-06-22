@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect } from "react";
+import React, { type JSX, useContext, useEffect } from "react";
 import {
     type MatrixEvent,
     EventType,
@@ -58,6 +58,7 @@ import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body
 import { ViewSourceEventViewModel } from "../viewmodels/room/timeline/event-tile/body/ViewSourceEventViewModel";
 import { ElementCallEventType } from "../call-types";
 import { CallTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallTileViewModel";
+import { SDKContext } from "../contexts/SDKContext.ts";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps extends Pick<
@@ -148,8 +149,16 @@ function ViewSourceEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 }
 
 function MJitsiWidgetEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
-    const cli = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(() => new MJitsiWidgetEventViewModel({ mxEvent, cli }));
+    const sdkContext = useContext(SDKContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new MJitsiWidgetEventViewModel({
+                mxEvent,
+                cli: sdkContext.client!,
+                widgetLayoutStore: sdkContext.widgetLayoutStore,
+                widgetStore: sdkContext.widgetStore,
+            }),
+    );
 
     useEffect(() => {
         vm.setEvent(mxEvent);

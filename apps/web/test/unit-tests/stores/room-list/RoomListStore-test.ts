@@ -23,10 +23,11 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import SettingsStore, { type CallbackFn } from "../../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../../src/stores/room-list/algorithms/models";
 import { OrderedDefaultTagIDs, RoomUpdateCause } from "../../../../src/stores/room-list/models";
-import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
+import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { flushPromises, stubClient, upsertRoomStateEvents } from "../../../test-utils";
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../../test-utils/pushRules";
+import { TestSdkContext } from "../../TestSdkContext.ts";
 
 describe("RoomListStore", () => {
     const client = stubClient();
@@ -86,21 +87,25 @@ describe("RoomListStore", () => {
         }
     });
 
+    const context = new TestSdkContext();
+    let store: RoomListStore;
+
     beforeAll(async () => {
-        await (RoomListStore.instance as RoomListStoreClass).makeReady(client);
+        store = new RoomListStore(defaultDispatcher, context);
+        await store.makeReady(client);
     });
 
     it.each(OrderedDefaultTagIDs)("defaults to importance ordering for %s=", (tagId) => {
-        expect(RoomListStore.instance.getTagSorting(tagId)).toBe(SortAlgorithm.Recent);
+        expect(store.getTagSorting(tagId)).toBe(SortAlgorithm.Recent);
     });
 
     it.each(OrderedDefaultTagIDs)("defaults to activity ordering for %s=", (tagId) => {
-        expect(RoomListStore.instance.getListOrder(tagId)).toBe(ListAlgorithm.Natural);
+        expect(store.getListOrder(tagId)).toBe(ListAlgorithm.Natural);
     });
 
-    function createStore(): { store: RoomListStoreClass; handleRoomUpdate: jest.Mock<any, any> } {
+    function createStore(): { store: RoomListStore; handleRoomUpdate: jest.Mock<any, any> } {
         const fakeDispatcher = { register: jest.fn() } as unknown as MatrixDispatcher;
-        const store = new RoomListStoreClass(fakeDispatcher);
+        const store = new RoomListStore(fakeDispatcher, context);
         // @ts-ignore accessing private member to set client
         store.readyStore.matrixClient = client;
         const handleRoomUpdate = jest.fn();
@@ -285,7 +290,7 @@ describe("RoomListStore", () => {
 
     describe("room updates", () => {
         const makeStore = async () => {
-            const store = new RoomListStoreClass(defaultDispatcher);
+            const store = new RoomListStore(defaultDispatcher, context);
             await store.start();
             return store;
         };

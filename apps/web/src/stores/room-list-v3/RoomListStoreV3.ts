@@ -13,13 +13,10 @@ import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
 import type { Filter, FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import SettingsStore from "../../settings/SettingsStore";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
-import SpaceStore from "../spaces/SpaceStore";
 import { type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
@@ -41,19 +38,7 @@ import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
 import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedCustomSections } from "./section";
-
-/**
- * These are the filters passed to the room skip list.
- */
-const FILTERS = [
-    new FavouriteFilter(),
-    new UnreadFilter(),
-    new PeopleFilter(),
-    new RoomsFilter(),
-    new InvitesFilter(),
-    new MentionsFilter(),
-    new LowPriorityFilter(),
-];
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export enum RoomListStoreV3Event {
     // The event/channel which is called when the room lists have been changed.
@@ -96,7 +81,7 @@ export const ROOM_TAGGED_EVENT = RoomListStoreV3Event.RoomTagged;
  * This is the third such implementation hence the "V3".
  * This store is being actively developed so expect the methods to change in future.
  */
-export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
+export default class RoomListStoreV3 extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Contains all the rooms in the active space
      */
@@ -120,14 +105,34 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private pendingEmit = false;
 
-    public constructor(dispatcher: MatrixDispatcher) {
+    private baseFilters;
+
+    public constructor(
+        dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
         super(dispatcher);
-        this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, () => {
+
+        this.baseFilters = [
+            new FavouriteFilter(),
+            new UnreadFilter(sdkContext),
+            new PeopleFilter(),
+            new RoomsFilter(),
+            new InvitesFilter(),
+            new MentionsFilter(sdkContext),
+            new LowPriorityFilter(),
+        ];
+
+        this.msc3946ProcessDynamicPredecessor = this.sdkContext.settingsStore.getValue(
+            "feature_dynamic_room_predecessors",
+        );
+        this.sdkContext.spaceStore.on(UPDATE_SELECTED_SPACE, () => {
             this.onActiveSpaceChanged();
         });
-        SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
-        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
+        this.sdkContext.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
+        this.sdkContext.settingsStore.watchSetting("RoomList.OrderedCustomSections", null, () =>
+            this.onOrderedCustomSectionsChange(),
+        );
         this.loadCustomSections();
     }
 
@@ -163,9 +168,9 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @param filterKeys Optional array of filters that the rooms must match against.
      */
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
-        const spaceId = SpaceStore.instance.activeSpace;
+        const spaceId = this.sdkContext.spaceStore.activeSpace;
 
-        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
+        const areSectionsEnabled = this.sdkContext.settingsStore.getValue("feature_room_list_sections");
         const sections = areSectionsEnabled
             ? this.getSections(filterKeys)
             : [{ tag: CHATS_TAG, rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filterKeys) ?? []) }];
@@ -188,7 +193,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         const sorter = this.getSorterFromSortingAlgorithm(algorithm, this.matrixClient.getSafeUserId());
         this.roomSkipList.useNewSorter(sorter, this.getRooms());
         this.emit(LISTS_UPDATE_EVENT);
-        SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
+        this.sdkContext.settingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
     }
 
     /**
@@ -202,9 +207,9 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
-        this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
+        this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters(), this.sdkContext);
 
-        await SpaceStore.instance.storeReadyPromise;
+        await this.sdkContext.spaceStore.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_LOADED_EVENT);
@@ -373,7 +378,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @returns Sorter object that can be passed to the skip list.
      */
     private getPreferredSorter(myUserId: string): Sorter {
-        const preferred = SettingsStore.getValue("RoomList.preferredSorting");
+        const preferred = this.sdkContext.settingsStore.getValue("RoomList.preferredSorting");
         return this.getSorterFromSortingAlgorithm(preferred, myUserId);
     }
 
@@ -388,14 +393,14 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case SortingAlgorithm.Alphabetic:
                 return new AlphabeticSorter();
             case SortingAlgorithm.Recency:
-                return new RecencySorter(myUserId);
+                return new RecencySorter(myUserId, this.sdkContext);
             case SortingAlgorithm.Unread:
-                return new UnreadSorter(myUserId);
+                return new UnreadSorter(myUserId, this.sdkContext);
             default:
                 logger.info(
                     `RoomListStoreV3: There is no sorting implementation for algorithm ${algorithm}, defaulting to recency sorter`,
                 );
-                return new RecencySorter(myUserId);
+                return new RecencySorter(myUserId, this.sdkContext);
         }
     }
 
@@ -450,7 +455,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         );
         this.sortedTags.forEach((tag, index) => this.filterByTag.set(tag, tagFilters[index]));
 
-        return [...FILTERS, ...tagFilters];
+        return [...this.baseFilters, ...tagFilters];
     }
 
     /**
@@ -488,7 +493,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
      */
     public async createSection(): Promise<string | undefined> {
-        const tag = await createSection(SpaceStore.instance.activeSpace);
+        const tag = await createSection(this.sdkContext.spaceStore.activeSpace);
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
         return tag;
@@ -528,19 +533,3 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
     }
 }
-
-export default class RoomListStoreV3 {
-    private static internalInstance: RoomListStoreV3Class;
-
-    public static get instance(): RoomListStoreV3Class {
-        if (!RoomListStoreV3.internalInstance) {
-            const instance = new RoomListStoreV3Class(defaultDispatcher);
-            instance.start();
-            RoomListStoreV3.internalInstance = instance;
-        }
-
-        return this.internalInstance;
-    }
-}
-
-window.getRoomListStoreV3 = () => RoomListStoreV3.instance;

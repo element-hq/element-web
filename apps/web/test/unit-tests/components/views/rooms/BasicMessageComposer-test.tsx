@@ -18,7 +18,7 @@ import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { CommandPartCreator } from "../../../../../src/editor/parts";
 import DocumentOffset from "../../../../../src/editor/offset";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("BasicMessageComposer", () => {

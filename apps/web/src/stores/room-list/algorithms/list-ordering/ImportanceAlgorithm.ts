@@ -10,13 +10,10 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { type TagID } from "../../../room-list-v3/skip-list/tag";
 import { RoomUpdateCause } from "../../models";
-import { type SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { NotificationLevel } from "../../../notifications/NotificationLevel";
-import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 type CategorizedRoomMap = {
     [category in NotificationLevel]: Room[];
@@ -63,10 +60,6 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
     private indices: CategoryIndex = {};
 
-    public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
-        super(tagId, initialSortingAlgorithm);
-    }
-
     // noinspection JSMethodCanBeStatic
     private categorizeRooms(rooms: Room[]): CategorizedRoomMap {
         const map: CategorizedRoomMap = {
@@ -88,7 +81,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     private getRoomCategory(room: Room): NotificationLevel {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
-        const state = RoomNotificationStateStore.instance.getRoomState(room);
+        const state = this.sdkContext.roomNotificationStateStore.getRoomState(room);
         return this.isMutedToBottom && state.muted ? NotificationLevel.Muted : state.level;
     }
 

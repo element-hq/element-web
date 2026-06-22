@@ -14,7 +14,7 @@ import { MainSplitContentType } from "../../src/components/structures/RoomView";
 import { type RoomContextType, TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
-import { SdkContextClass } from "../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../src/contexts/SDKContextClass";
 
 export const makeMembershipEvent = (roomId: string, userId: string, membership = KnownMembership.Join) =>
     mkEvent({

@@ -34,6 +34,7 @@ describe("WidgetPipViewModel", () => {
     let vm: WidgetPipViewModel;
     let room: MockedObject<Room>;
     let widget: IApp;
+    let widgetLayoutStore: WidgetLayoutStore;
 
     beforeEach(() => {
         client = stubClient() as MockedObject<MatrixClient>;
@@ -46,6 +47,7 @@ describe("WidgetPipViewModel", () => {
             name: "Test Widget",
             data: {},
         } as unknown as IApp;
+        widgetLayoutStore = new WidgetLayoutStore(defaultDispatcher);
         jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
 
         vm = new WidgetPipViewModel({
@@ -53,6 +55,7 @@ describe("WidgetPipViewModel", () => {
             widgetId,
             onStartMoving: () => {},
             movePersistedElement: createRef(),
+            widgetLayoutStore,
         });
     });
 
@@ -92,7 +95,7 @@ describe("WidgetPipViewModel", () => {
 
     it("updates onBackClick if viewingRoom changes", () => {
         const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        const moveSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer").mockImplementation(() => {});
+        const moveSpy = jest.spyOn(widgetLayoutStore, "moveToContainer").mockImplementation(() => {});
 
         vm.setViewingRoom(true);
         vm.onBackClick(createBackClickEvent());

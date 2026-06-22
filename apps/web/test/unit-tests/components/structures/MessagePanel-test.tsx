@@ -31,7 +31,7 @@ import {
 import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),

@@ -30,17 +30,16 @@ import {
     showSpaceSettings,
 } from "../../../utils/space";
 import { leaveSpace } from "../../../utils/leave-behaviour";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { BetaPill } from "../beta/BetaCard";
-import SettingsStore from "../../../settings/SettingsStore";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { Action } from "../../../dispatcher/actions";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps extends IContextMenuProps {
     space?: Room;
@@ -48,7 +47,8 @@ interface IProps extends IContextMenuProps {
 }
 
 const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...props }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
     const userId = cli.getSafeUserId();
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
@@ -100,7 +100,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             ev.preventDefault();
             ev.stopPropagation();
 
-            leaveSpace(space);
+            leaveSpace(sdkContext, space);
             onFinished();
         };
 
@@ -116,7 +116,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
     }
 
     let devtoolsOption: JSX.Element | null = null;
-    if (SettingsStore.getValue("developerMode")) {
+    if (sdkContext.settingsStore.getValue("developerMode")) {
         const onViewTimelineClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();

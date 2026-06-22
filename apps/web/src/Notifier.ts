@@ -34,16 +34,15 @@ import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import * as TextForEvent from "./TextForEvent";
 import * as Avatar from "./Avatar";
-import dis from "./dispatcher/dispatcher";
+import { type MatrixDispatcher } from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";
 import Modal from "./Modal";
-import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import { SettingLevel } from "./settings/SettingLevel";
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import { SdkContextClass } from "./contexts/SDKContext";
+import { type SdkContextClass } from "./contexts/SDKContext";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, getNotificationEventSendTs, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
@@ -134,21 +133,6 @@ function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
     }
 }
 
-// .m.rule.master being enabled means all events match that push rule
-// default action on this rule is dont_notify, but it could be something else
-export function isPushNotifyDisabled(): boolean {
-    // Return the value of the master push rule as a default
-    const masterRule = MatrixClientPeg.get()?.pushProcessor.getPushRuleById(".m.rule.master");
-
-    if (!masterRule) {
-        logger.warn("No master push rule! Notifications are disabled for this user.");
-        return true;
-    }
-
-    // If the rule is enabled then check it does not notify on everything
-    return masterRule.enabled && !masterRule.actions.includes(PushRuleActionName.Notify);
-}
-
 export const enum NotifierEvent {
     NotificationHiddenChange = "notification_hidden_change",
 }
@@ -167,7 +151,7 @@ export type NotificationSound = {
     size?: number;
 };
 
-class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
+export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
 
     // A list of event IDs that we've received but need to wait until
@@ -180,19 +164,26 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     private backgroundAudio = new BackgroundAudio();
 
+    public constructor(
+        private readonly dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
+        super();
+    }
+
     public notificationMessageForEvent(ev: MatrixEvent): string | null {
         const msgType = ev.getContent().msgtype;
         if (msgType && msgTypeHandlers.hasOwnProperty(msgType)) {
             return msgTypeHandlers[msgType](ev);
         }
-        return TextForEvent.textForEvent(ev, MatrixClientPeg.safeGet());
+        return TextForEvent.textForEvent(ev, this.sdkContext.client!);
     }
 
     // XXX: exported for tests
     public displayPopupNotification(ev: MatrixEvent, room: Room): void {
         const plaf = PlatformPeg.get();
-        const cli = MatrixClientPeg.safeGet();
-        if (!plaf) {
+        const cli = this.sdkContext.client;
+        if (!plaf || !cli) {
             return;
         }
         if (!plaf.supportsNotifications() || !plaf.maySendNotifications()) {
@@ -234,7 +225,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
 
         let avatarUrl: string | null = null;
-        if (ev.sender && !SettingsStore.getValue("lowBandwidth")) {
+        if (ev.sender && !this.sdkContext.settingsStore.getValue("lowBandwidth")) {
             avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, "crop");
         }
 
@@ -251,7 +242,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     public getSoundForRoom(roomId: string): NotificationSound | null {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
-        const content = SettingsStore.getValue("notificationSound", roomId);
+        const content = this.sdkContext.settingsStore.getValue("notificationSound", roomId);
         if (!content) {
             return null;
         }
@@ -284,8 +275,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: Exported for tests
     public async playAudioNotification(ev: MatrixEvent, room: Room): Promise<void> {
-        const cli = MatrixClientPeg.safeGet();
-        if (localNotificationsAreSilenced(cli)) {
+        const cli = this.sdkContext.client;
+        if (!cli || localNotificationsAreSilenced(cli)) {
             return;
         }
 
@@ -301,21 +292,21 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     }
 
     public start(): void {
-        const cli = MatrixClientPeg.safeGet();
-        cli.on(RoomEvent.Timeline, this.onEvent);
-        cli.on(RoomEvent.Receipt, this.onRoomReceipt);
-        cli.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-        cli.on(ClientEvent.Sync, this.onSyncStateChange);
+        const cli = this.sdkContext.client;
+        cli?.on(RoomEvent.Timeline, this.onEvent);
+        cli?.on(RoomEvent.Receipt, this.onRoomReceipt);
+        cli?.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        cli?.on(ClientEvent.Sync, this.onSyncStateChange);
         this.toolbarHidden = false;
         this.isSyncing = false;
     }
 
     public stop(): void {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get()!.removeListener(RoomEvent.Timeline, this.onEvent);
-            MatrixClientPeg.get()!.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
-            MatrixClientPeg.get()!.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-            MatrixClientPeg.get()!.removeListener(ClientEvent.Sync, this.onSyncStateChange);
+        if (this.sdkContext.client) {
+            this.sdkContext.client.removeListener(RoomEvent.Timeline, this.onEvent);
+            this.sdkContext.client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
+            this.sdkContext.client.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+            this.sdkContext.client.removeListener(ClientEvent.Sync, this.onSyncStateChange);
         }
         this.isSyncing = false;
     }
@@ -334,8 +325,13 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
-        if (SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
-            SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, this.isEnabled());
+        if (this.sdkContext.settingsStore.isLevelSupported(SettingLevel.DEVICE)) {
+            this.sdkContext.settingsStore.setValue(
+                "audioNotificationsEnabled",
+                null,
+                SettingLevel.DEVICE,
+                this.isEnabled(),
+            );
         }
 
         if (enable) {
@@ -365,7 +361,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
                     permission: "Notification",
                     granted: true,
                 });
-                dis.dispatch({
+                this.dispatcher.dispatch({
                     action: "notifier_enabled",
                     value: true,
                 });
@@ -376,7 +372,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
                 permission: "Notification",
                 granted: false,
             });
-            dis.dispatch({
+            this.dispatcher.dispatch({
                 action: "notifier_enabled",
                 value: false,
             });
@@ -387,7 +383,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     }
 
     public isEnabled(): boolean {
-        return this.isPossible() && SettingsStore.getValue("notificationsEnabled");
+        return this.isPossible() && this.sdkContext.settingsStore.getValue("notificationsEnabled");
     }
 
     public isPossible(): boolean {
@@ -399,12 +395,12 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     }
 
     public isBodyEnabled(): boolean {
-        return this.isEnabled() && SettingsStore.getValue("notificationBodyEnabled");
+        return this.isEnabled() && this.sdkContext.settingsStore.getValue("notificationBodyEnabled");
     }
 
     public isAudioEnabled(): boolean {
         // We don't route Audio via the HTML Notifications API so it is possible regardless of other things
-        return SettingsStore.getValue("audioNotificationsEnabled");
+        return this.sdkContext.settingsStore.getValue("audioNotificationsEnabled");
     }
 
     public setPromptHidden(hidden: boolean, persistent = true): void {
@@ -420,7 +416,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     }
 
     public shouldShowPrompt(): boolean {
-        const client = MatrixClientPeg.get();
+        const client = this.sdkContext.client;
         if (!client) {
             return false;
         }
@@ -428,10 +424,25 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         return (
             !isGuest &&
             this.supportsDesktopNotifications() &&
-            !isPushNotifyDisabled() &&
+            !this.isPushNotifyDisabled() &&
             !this.isEnabled() &&
             !this.isPromptHidden()
         );
+    }
+
+    // .m.rule.master being enabled means all events match that push rule
+    // default action on this rule is dont_notify, but it could be something else
+    public isPushNotifyDisabled(): boolean {
+        // Return the value of the master push rule as a default
+        const masterRule = this.sdkContext.client?.pushProcessor.getPushRuleById(".m.rule.master");
+
+        if (!masterRule) {
+            logger.warn("No master push rule! Notifications are disabled for this user.");
+            return true;
+        }
+
+        // If the rule is enabled then check it does not notify on everything
+        return masterRule.enabled && !masterRule.actions.includes(PushRuleActionName.Notify);
     }
 
     private isPromptHidden(): boolean {
@@ -452,8 +463,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
 
         // wait for first non-cached sync to complete
-        if (![SyncState.Stopped, SyncState.Error].includes(state) && !data?.fromCache) {
-            createLocalNotificationSettingsIfNeeded(MatrixClientPeg.safeGet());
+        if (this.sdkContext.client && ![SyncState.Stopped, SyncState.Error].includes(state) && !data?.fromCache) {
+            createLocalNotificationSettingsIfNeeded(this.sdkContext.client);
         }
     };
 
@@ -467,10 +478,10 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         if (removed) return; // only notify for new events, not removed ones
         if (!data.liveEvent || !!toStartOfTimeline) return; // only notify for new things, not old.
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.getSender() === MatrixClientPeg.safeGet().getUserId()) return;
+        if (ev.getSender() === this.sdkContext.client?.getUserId()) return;
         if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
 
-        MatrixClientPeg.safeGet().decryptEventIfNeeded(ev);
+        this.sdkContext.client?.decryptEventIfNeeded(ev);
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
@@ -517,19 +528,19 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     // XXX: exported for tests
     public evaluateEvent(ev: MatrixEvent): void {
         const roomId = ev.getRoomId()!;
-        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        const room = this.sdkContext.client?.getRoom(roomId);
         if (!room) {
             // e.g we are in the process of joining a room.
             // Seen in the Playwright lazy-loading test.
             return;
         }
 
-        const actions = MatrixClientPeg.safeGet().getPushActionsForEvent(ev);
+        const actions = this.sdkContext.client?.getPushActionsForEvent(ev);
 
         if (actions?.notify) {
             this.performCustomEventHandling(ev);
 
-            const store = SdkContextClass.instance.roomViewStore;
+            const store = this.sdkContext.roomViewStore;
             const isViewingRoom = store.getRoomId() === room.roomId;
             const threadId: string | undefined = ev.getId() !== ev.threadRootId ? ev.threadRootId : undefined;
             const isViewingThread = store.getThreadId() === threadId;
@@ -640,8 +651,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
      */
     private performCustomEventHandling(ev: MatrixEvent): void {
         const toaster = ToastStore.sharedInstance();
-        const cli = MatrixClientPeg.safeGet();
-        const room = cli.getRoom(ev.getRoomId());
+        const cli = this.sdkContext.client;
+        const room = cli?.getRoom(ev.getRoomId());
 
         if (room && EventType.RTCNotification === ev.getType()) {
             // We don't need to await this.
@@ -649,10 +660,3 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
     }
 }
-
-if (!window.mxNotifier) {
-    window.mxNotifier = new NotifierClass();
-}
-
-export default window.mxNotifier;
-export const Notifier: NotifierClass = window.mxNotifier;

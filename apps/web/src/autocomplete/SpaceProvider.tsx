@@ -10,14 +10,12 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import { _t } from "../languageHandler";
-import { MatrixClientPeg } from "../MatrixClientPeg";
-import SettingsStore from "../settings/SettingsStore";
 import RoomProvider from "./RoomProvider";
 
 export default class SpaceProvider extends RoomProvider {
     protected getRooms(): Room[] {
-        return MatrixClientPeg.safeGet()
-            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+        return this.sdkContext
+            .client!.getVisibleRooms(this.sdkContext.settingsStore.getValue("feature_dynamic_room_predecessors"))
             .filter((r) => r.isSpaceRoom());
     }
 

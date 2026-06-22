@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { _t } from "../languageHandler";
-import Notifier from "../Notifier";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getLocalNotificationAccountDataEventType } from "../utils/notifications";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
+import { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const onAccept = async (): Promise<void> => {
     await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);
@@ -25,7 +25,7 @@ const onAccept = async (): Promise<void> => {
 };
 
 const onReject = (): void => {
-    Notifier.setPromptHidden(true);
+    SdkContextClass.instance.notifier.setPromptHidden(true);
 };
 
 const TOAST_KEY = "desktopnotifications";

@@ -28,12 +28,10 @@ import {
 
 import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";
-import SettingsStore from "../settings/SettingsStore";
 import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetType } from "../widgets/WidgetType";
 import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
-import WidgetStore from "../stores/WidgetStore";
 import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { getCurrentLanguage } from "../languageHandler";
@@ -45,6 +43,7 @@ import SdkConfig from "../SdkConfig.ts";
 import DMRoomMap from "../utils/DMRoomMap.ts";
 import { type WidgetMessaging, WidgetMessagingEvent } from "../stores/widgets/WidgetMessaging.ts";
 import { BugReportEndpointURLLocal } from "../IConfigOptions.ts";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const TIMEOUT_MS = 16000;
 const logger = rootLogger.getChild("models/Call");
@@ -197,8 +196,8 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * @param {Room} room The room.
      * @returns {Call | null} The call.
      */
-    public static get(room: Room): Call | null {
-        return ElementCall.get(room) ?? JitsiCall.get(room);
+    public static get(sdkContext: SdkContextClass, room: Room): Call | null {
+        return ElementCall.get(sdkContext, room) ?? JitsiCall.get(sdkContext, room);
     }
 
     /**
@@ -355,10 +354,10 @@ export class JitsiCall extends Call {
         this.updateParticipants();
     }
 
-    public static get(room: Room): JitsiCall | null {
+    public static get(sdkContext: SdkContextClass, room: Room): JitsiCall | null {
         // Only supported in video rooms
         if (room.isElementVideoRoom()) {
-            const apps = WidgetStore.instance.getApps(room.roomId);
+            const apps = sdkContext.widgetStore.getApps(room.roomId);
             // The isVideoChannel field differentiates rich Jitsi calls from bare Jitsi widgets
             const jitsiWidget = apps.find((app) => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
             if (jitsiWidget) return new JitsiCall(jitsiWidget, room.client);
@@ -740,8 +739,12 @@ export class ElementCall extends Call {
      * @param opts
      * @returns
      */
-    private static generateWidgetUrl(client: MatrixClient, roomId: string, opts: WidgetGenerationParameters = {}): URL {
-        const elementCallUrlOverride = SettingsStore.getValue("Developer.elementCallUrl");
+    private static generateWidgetUrl(
+        sdkContext: SdkContextClass,
+        roomId: string,
+        opts: WidgetGenerationParameters = {},
+    ): URL {
+        const elementCallUrlOverride = sdkContext.settingsStore.getValue("Developer.elementCallUrl");
         const url = elementCallUrlOverride
             ? new URL(elementCallUrlOverride)
             : // this strips hash fragment from baseUrl
@@ -752,10 +755,10 @@ export class ElementCall extends Call {
         const params = new URLSearchParams({
             // Template variables are used, so that this can be configured using the widget data.
             perParticipantE2EE: "$perParticipantE2EE",
-            userId: client.getUserId()!,
-            deviceId: client.getDeviceId()!,
+            userId: sdkContext.client!.getUserId()!,
+            deviceId: sdkContext.client!.getDeviceId()!,
             roomId: roomId,
-            baseUrl: client.baseUrl,
+            baseUrl: sdkContext.client!.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
@@ -770,24 +773,25 @@ export class ElementCall extends Call {
             params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
-        if (SettingsStore.getValue("fallbackICEServerAllowed")) {
+        if (sdkContext.settingsStore.getValue("fallbackICEServerAllowed")) {
             params.append("allowIceFallback", "true");
         }
 
-        const echoCancellation = SettingsStore.getValue("webrtc_audio_echoCancellation");
+        const echoCancellation = sdkContext.settingsStore.getValue("webrtc_audio_echoCancellation");
         if (!echoCancellation) {
             // the default is true, so only set if false
             params.append("echoCancellation", "false");
         }
-        const noiseSuppression = SettingsStore.getValue("webrtc_audio_noiseSuppression");
+        const noiseSuppression = sdkContext.settingsStore.getValue("webrtc_audio_noiseSuppression");
         if (!noiseSuppression) {
             // the default is true, so only set if false
             params.append("noiseSuppression", "false");
         }
 
         // Set custom fonts
-        if (SettingsStore.getValue("useSystemFont")) {
-            SettingsStore.getValue("systemFont")
+        if (sdkContext.settingsStore.getValue("useSystemFont")) {
+            sdkContext.settingsStore
+                .getValue("systemFont")
                 .split(",")
                 .map((font) => {
                     // Strip whitespace and quotes
@@ -797,8 +801,8 @@ export class ElementCall extends Call {
                 })
                 .forEach((font) => params.append("font", font));
         }
-        this.appendAnalyticsParams(params, client);
-        this.appendRoomParams(params, client, roomId, opts);
+        this.appendAnalyticsParams(params, sdkContext.client!);
+        this.appendRoomParams(params, sdkContext.client!, roomId, opts);
 
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
@@ -806,34 +810,34 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    private static createOrGetCallWidget(roomId: string, client: MatrixClient): IApp {
-        const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
+    private static createOrGetCallWidget(sdkContext: SdkContextClass, roomId: string): IApp {
+        const ecWidget = sdkContext.widgetStore.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
         if (ecWidget) {
             // Always update the widget data because even if the widget is already created,
             // we might have settings changes that update the widget.
-            ecWidget.data = ElementCall.getWidgetData(client, roomId, ecWidget?.data ?? {}, {});
+            ecWidget.data = ElementCall.getWidgetData(sdkContext, roomId, ecWidget?.data ?? {}, {});
             return ecWidget;
         }
 
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
-        const url = ElementCall.generateWidgetUrl(client, roomId);
-        return WidgetStore.instance.addVirtualWidget(
+        const url = ElementCall.generateWidgetUrl(sdkContext, roomId);
+        return sdkContext.widgetStore.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
-                creatorUserId: client.getUserId()!,
+                creatorUserId: sdkContext.client!.getUserId()!,
                 name: "Element Call",
                 type: WidgetType.CALL.preferred,
                 url: url.toString(),
                 waitForIframeLoad: false,
-                data: ElementCall.getWidgetData(client, roomId, {}, {}),
+                data: ElementCall.getWidgetData(sdkContext.client!, roomId, {}, {}),
             },
             roomId,
         );
     }
 
     private static getWidgetData(
-        client: MatrixClient,
+        sdkContext: SdkContextClass,
         roomId: string,
         currentData: IWidgetData,
         overwriteData: IWidgetData,
@@ -842,25 +846,29 @@ export class ElementCall extends Call {
             ...currentData,
             ...overwriteData,
             perParticipantE2EE:
-                client.getRoom(roomId)?.hasEncryptionStateEvent() &&
-                !SettingsStore.getValue("feature_disable_call_per_sender_encryption"),
+                sdkContext.client?.getRoom(roomId)?.hasEncryptionStateEvent() &&
+                !sdkContext.settingsStore.getValue("feature_disable_call_per_sender_encryption"),
         };
     }
 
     private onCallEncryptionSettingsChange(): void {
-        this.widget.data = ElementCall.getWidgetData(this.client, this.roomId, this.widget.data ?? {}, {});
+        this.widget.data = ElementCall.getWidgetData(this.sdkContext, this.roomId, this.widget.data ?? {}, {});
     }
 
     private constructor(
         public session: MatrixRTCSession,
         widget: IApp,
-        client: MatrixClient,
+        private readonly sdkContext: SdkContextClass,
     ) {
-        super(widget, client, session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video);
+        super(
+            widget,
+            sdkContext.client!,
+            session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video,
+        );
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);
-        SettingsStore.watchSetting(
+        this.sdkContext.settingsStore.watchSetting(
             "feature_disable_call_per_sender_encryption",
             null,
             this.onCallEncryptionSettingsChange.bind(this),
@@ -868,8 +876,8 @@ export class ElementCall extends Call {
         this.updateParticipants();
     }
 
-    public static get(room: Room, voiceOnly?: boolean): ElementCall | null {
-        const apps = WidgetStore.instance.getApps(room.roomId);
+    public static get(sdkContext: SdkContextClass, room: Room, voiceOnly?: boolean): ElementCall | null {
+        const apps = sdkContext.widgetStore.getApps(room.roomId);
         const hasEcWidget = apps.some((app) => WidgetType.CALL.matches(app.type));
         const session = room.client.matrixRTC.getRoomSession(room);
 
@@ -879,15 +887,15 @@ export class ElementCall extends Call {
         // - or this is a call room. Then we also always want to show a call.
         if (hasEcWidget || session.memberships.length !== 0 || room.isCallRoom()) {
             // create a widget for the case we are joining a running call and don't have on yet.
-            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(room.roomId, room.client);
-            return new ElementCall(session, availableOrCreatedWidget, room.client);
+            const availableOrCreatedWidget = ElementCall.createOrGetCallWidget(sdkContext, room.roomId);
+            return new ElementCall(session, availableOrCreatedWidget, sdkContext);
         }
 
         return null;
     }
 
-    public static create(room: Room): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client);
+    public static create(sdkContext: SdkContextClass, room: Room): void {
+        ElementCall.createOrGetCallWidget(sdkContext, room.roomId);
     }
 
     public async start(widgetGenerationParameters: WidgetGenerationParameters): Promise<ClientWidgetApi> {
@@ -895,7 +903,7 @@ export class ElementCall extends Call {
         // at this point in case any of the parameters have changed.
         this.widgetGenerationParameters = { ...this.widgetGenerationParameters, ...widgetGenerationParameters };
         this.widget.url = ElementCall.generateWidgetUrl(
-            this.client,
+            this.sdkContext,
             this.roomId,
             this.widgetGenerationParameters,
         ).toString();
@@ -935,11 +943,11 @@ export class ElementCall extends Call {
 
     public destroy(): void {
         ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.widget.roomId);
-        WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
+        this.sdkContext.widgetStore.removeVirtualWidget(this.widget.id, this.widget.roomId);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);
 
-        SettingsStore.unwatchSetting(this.settingsStoreCallEncryptionWatcher);
+        this.sdkContext.settingsStore.unwatchSetting(this.settingsStoreCallEncryptionWatcher);
         clearTimeout(this.terminationTimer);
         this.terminationTimer = undefined;
 

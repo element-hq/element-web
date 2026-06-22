@@ -46,7 +46,7 @@ import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
 import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import WidgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import { type WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
 
 jest.mock("../../../../src/stores/OwnProfileStore", () => ({

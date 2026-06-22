@@ -19,7 +19,7 @@ import {
     SortAlgorithm,
 } from "./algorithms/models";
 import { type ActionPayload } from "../../dispatcher/payloads";
-import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { FILTER_CHANGED, type IFilterCondition } from "./filters/IFilterCondition";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
@@ -27,20 +27,19 @@ import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag 
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { SpaceWatcher } from "./SpaceWatcher";
 import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { type SdkContextClass } from "../../contexts/SDKContextClass";
 import { getChangedOverrideRoomMutePushRules } from "../room-list-v3/utils";
 import { type TagID } from "../room-list-v3/skip-list/tag";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 export const LISTS_LOADING_EVENT = RoomListStoreEvent.ListsLoading; // unused; used by SlidingRoomListStore
 
-export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implements Interface {
+export default class RoomListStore extends AsyncStoreWithClient<EmptyObject> implements Interface {
     /**
      * Set to true if you're running tests on the store. Should not be touched in
      * any other environment.
@@ -54,12 +53,15 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
     private prefilterConditions: IFilterCondition[] = [];
     private updateFn = new MarkedExecution(() => {
         for (const tagId of Object.keys(this.orderedLists)) {
-            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.orderedLists[tagId]);
+            this.sdkContext.roomNotificationStateStore.getListState(tagId).setRooms(this.orderedLists[tagId]);
         }
         this.emit(LISTS_UPDATE_EVENT);
     });
 
-    public constructor(dis: MatrixDispatcher) {
+    public constructor(
+        dis: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
         super(dis);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
         this.algorithm.start();
@@ -81,7 +83,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
 
     private setupWatchers(): void {
         // TODO: Maybe destroy this if this class supports destruction
-        new SpaceWatcher(this);
+        new SpaceWatcher(this, this.sdkContext);
     }
 
     public get orderedLists(): ITagMap {
@@ -113,7 +115,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
             this.readyStore.useUnitTestClient(forcedClient);
         }
 
-        SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
+        this.sdkContext.roomViewStore.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
         this.setupWatchers();
@@ -136,7 +138,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
     private handleRVSUpdate({ trigger = true }): void {
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
-        const activeRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        const activeRoomId = this.sdkContext.roomViewStore.getRoomId();
         if (!activeRoomId && this.algorithm.stickyRoom) {
             this.algorithm.setStickyRoom(null);
         } else if (activeRoomId) {
@@ -169,7 +171,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
 
         // When we're running tests we can't reliably use setImmediate out of timing concerns.
         // As such, we use a more synchronous model.
-        if (RoomListStoreClass.TEST_MODE) {
+        if (RoomListStore.TEST_MODE) {
             await this.onDispatchAsync(payload);
             return;
         }
@@ -614,19 +616,3 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
         this.updateFn.trigger();
     }
 }
-
-export default class RoomListStore {
-    private static internalInstance: Interface;
-
-    public static get instance(): Interface {
-        if (!RoomListStore.internalInstance) {
-            const instance = new RoomListStoreClass(defaultDispatcher);
-            instance.start();
-            RoomListStore.internalInstance = instance;
-        }
-
-        return this.internalInstance;
-    }
-}
-
-window.mxRoomListStore = RoomListStore.instance;

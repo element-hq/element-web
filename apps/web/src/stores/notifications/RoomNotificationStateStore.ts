@@ -10,7 +10,7 @@ import { type Room, ClientEvent, SyncState, type EmptyObject } from "matrix-js-s
 
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../../dispatcher/dispatcher";
 import { DefaultTagID, type TagID } from "../room-list-v3/skip-list/tag";
 import { type FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
@@ -18,21 +18,20 @@ import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { isRoomVisible } from "../room-list-v3/isRoomVisible";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 
 export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject> {
-    private static readonly internalInstance = (() => {
-        const instance = new RoomNotificationStateStore();
-        instance.start();
-        return instance;
-    })();
     private roomMap = new Map<Room, RoomNotificationState>();
 
     private listMap = new Map<TagID, ListNotificationState>();
-    private _globalState = new SummarizedNotificationState();
+    private _globalState: SummarizedNotificationState;
 
-    private constructor(dispatcher = defaultDispatcher) {
+    public constructor(
+        dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
         super(dispatcher, {});
         SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, () => {
             // We pass SyncState.Syncing here to "simulate" a sync happening.
@@ -41,13 +40,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
             // pass SyncState.Error.
             this.emitUpdateIfStateChanged(SyncState.Syncing, false);
         });
-    }
-
-    /**
-     * @internal Public for test only
-     */
-    public static testInstance(dispatcher: MatrixDispatcher): RoomNotificationStateStore {
-        return new RoomNotificationStateStore();
+        this._globalState = new SummarizedNotificationState(this.sdkContext);
     }
 
     /**
@@ -73,7 +66,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         const getRoomFn: FetchRoomFn = (room: Room) => {
             return this.getRoomState(room);
         };
-        const state = new ListNotificationState(useTileCount, getRoomFn);
+        const state = new ListNotificationState(this.sdkContext, useTileCount, getRoomFn);
         this.listMap.set(tagId, state);
         return state;
     }
@@ -87,13 +80,9 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
      */
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
-            this.roomMap.set(room, new RoomNotificationState(room, false));
+            this.roomMap.set(room, new RoomNotificationState(this.sdkContext, room, false));
         }
         return this.roomMap.get(room)!;
-    }
-
-    public static get instance(): RoomNotificationStateStore {
-        return RoomNotificationStateStore.internalInstance;
     }
 
     private onSync = (state: SyncState, prevState: SyncState | null): void => {
@@ -111,7 +100,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
         const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        const globalState = new SummarizedNotificationState();
+        const globalState = new SummarizedNotificationState(this.sdkContext);
         const visibleRooms = this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
 
         let numFavourites = 0;

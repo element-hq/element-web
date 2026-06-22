@@ -24,17 +24,14 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import WidgetUtils from "./utils/WidgetUtils";
-import SettingsStore from "./settings/SettingsStore";
 import { WidgetType } from "./widgets/WidgetType";
 import { SettingLevel } from "./settings/SettingLevel";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { UIFeature } from "./settings/UIFeature";
@@ -42,7 +39,6 @@ import { Action } from "./dispatcher/actions";
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./widgets/ManagedHybrid";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
-import { WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore";
 import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts/IncomingLegacyCallToast";
 import ToastStore from "./stores/ToastStore";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
@@ -54,6 +50,7 @@ import { localNotificationsAreSilenced } from "./utils/notifications";
 import { isNotNull } from "./Typeguards";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 import { Jitsi } from "./widgets/Jitsi.ts";
+import { type SdkContextClass } from "./contexts/SDKContextClass.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
@@ -95,13 +92,6 @@ export enum AudioID {
     CallEnd = "callendAudio",
     Busy = "busyAudio",
 }
-
-/* istanbul ignore next */
-const debuglog = (...args: any[]): void => {
-    if (SettingsStore.getValue("debug_legacy_call_handler")) {
-        logger.log.call(console, "LegacyCallHandler debuglog:", ...args);
-    }
-};
 
 interface ThirdpartyLookupResponse {
     userid: string;
@@ -151,12 +141,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private backgroundAudio = new BackgroundAudio();
     private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
 
-    public static get instance(): LegacyCallHandler {
-        if (!window.mxLegacyCallHandler) {
-            window.mxLegacyCallHandler = new LegacyCallHandler();
-        }
-
-        return window.mxLegacyCallHandler;
+    public constructor(private readonly sdkContext: SdkContextClass) {
+        super();
     }
 
     /*
@@ -170,7 +156,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         if (this.shouldObeyAssertedfIdentity()) {
             const nativeUser = this.assertedIdentityNativeUsers.get(call.callId);
             if (nativeUser) {
-                const room = findDMForUser(MatrixClientPeg.safeGet(), nativeUser);
+                const room = findDMForUser(this.sdkContext.client!, nativeUser);
                 if (room) return room.roomId;
             }
         }
@@ -179,15 +165,15 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     public start(): void {
-        if (SettingsStore.getValue(UIFeature.Voip)) {
-            MatrixClientPeg.safeGet().on(CallEventHandlerEvent.Incoming, this.onCallIncoming);
+        if (this.sdkContext.settingsStore.getValue(UIFeature.Voip)) {
+            this.sdkContext.client?.on(CallEventHandlerEvent.Incoming, this.onCallIncoming);
         }
 
         this.checkProtocols(CHECK_PROTOCOLS_ATTEMPTS);
     }
 
     public stop(): void {
-        const cli = MatrixClientPeg.get();
+        const cli = this.sdkContext.client;
         if (cli) {
             cli.removeListener(CallEventHandlerEvent.Incoming, this.onCallIncoming);
         }
@@ -206,8 +192,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     public isForcedSilent(): boolean {
-        const cli = MatrixClientPeg.safeGet();
-        return localNotificationsAreSilenced(cli);
+        const cli = this.sdkContext.client;
+        return !!cli && localNotificationsAreSilenced(cli);
     }
 
     public silenceCall(callId?: string): void {
@@ -255,7 +241,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     private async checkProtocols(maxTries: number): Promise<void> {
         try {
-            const protocols = await MatrixClientPeg.safeGet().getThirdpartyProtocols();
+            const protocols = await this.sdkContext.client!.getThirdpartyProtocols();
 
             if (protocols[PROTOCOL_PSTN] !== undefined) {
                 this.supportsPstnProtocol = Boolean(protocols[PROTOCOL_PSTN]);
@@ -290,7 +276,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     public async pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
         try {
-            return await MatrixClientPeg.safeGet().getThirdpartyUser(
+            return await this.sdkContext.client!.getThirdpartyUser(
                 this.pstnSupportPrefixed ? PROTOCOL_PSTN_PREFIXED : PROTOCOL_PSTN,
                 {
                     "m.id.phone": phoneNumber,
@@ -304,11 +290,11 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     private onCallIncoming = (call: MatrixCall): void => {
         // if the runtime env doesn't do VoIP, stop here.
-        if (!MatrixClientPeg.get()?.supportsVoip()) {
+        if (!this.sdkContext.client?.supportsVoip()) {
             return;
         }
 
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
         if (!mappedRoomId) return;
         if (this.getCallForRoom(mappedRoomId)) {
             logger.log(
@@ -325,9 +311,9 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         // get ready to send encrypted events in the room, so if the user does answer
         // the call, we'll be ready to send. NB. This is the protocol-level room ID not
         // the mapped one: that's where we'll send the events.
-        const cli = MatrixClientPeg.safeGet();
-        const room = cli.getRoom(call.roomId);
-        if (room) cli.getCrypto()?.prepareToEncrypt(room);
+        const cli = this.sdkContext.client;
+        const room = cli?.getRoom(call.roomId);
+        if (room) cli!.getCrypto()?.prepareToEncrypt(room);
     };
 
     public getCallById(callId: string): MatrixCall | null {
@@ -364,8 +350,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     public getAllActiveCallsForPip(roomId: string): MatrixCall[] {
-        const room = MatrixClientPeg.safeGet().getRoom(roomId);
-        if (room && WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
+        const room = this.sdkContext.client?.getRoom(roomId);
+        if (room && this.sdkContext.widgetLayoutStore.hasMaximisedWidget(room)) {
             // This checks if there is space for the call view in the aux panel
             // If there is no space any call should be displayed in PiP
             return this.getAllActiveCalls();
@@ -446,8 +432,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             }
 
             if (
-                MatrixClientPeg.safeGet().getTurnServers().length === 0 &&
-                SettingsStore.getValue("fallbackICEServerAllowed") === null
+                this.sdkContext.client?.getTurnServers().length === 0 &&
+                this.sdkContext.settingsStore.getValue("fallbackICEServerAllowed") === null
             ) {
                 this.showICEFallbackPrompt();
                 return;
@@ -506,7 +492,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                 // this if we want the actual, native room to exist (which we do). This is why it's
                 // important to only obey asserted identity in trusted environments, since anyone you're
                 // on a call with can cause you to send a room invite to someone.
-                await ensureDMExists(MatrixClientPeg.safeGet(), newAssertedIdentity);
+                await ensureDMExists(this.sdkContext.client!, newAssertedIdentity);
 
                 const newMappedRoomId = this.roomIdForCall(call);
                 logger.log(`Old room ID: ${mappedRoomId}, new room ID: ${newMappedRoomId}`);
@@ -547,9 +533,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         switch (newState) {
             case CallState.Ringing: {
-                const incomingCallPushRule = MatrixClientPeg.safeGet().pushProcessor.getPushRuleById(
-                    RuleId.IncomingCall,
-                );
+                const incomingCallPushRule = this.sdkContext.client?.pushProcessor.getPushRuleById(RuleId.IncomingCall);
                 const pushRuleEnabled = incomingCallPushRule?.enabled;
                 // actions can be either Tweaks | PushRuleActionName, ie an object or a string type enum
                 // and we want to only run this check on the Tweaks
@@ -667,7 +651,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private setCallState(call: MatrixCall, status: CallState): void {
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
 
         logger.log(`Call state in ${mappedRoomId} changed to ${status}`);
 
@@ -694,7 +678,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private showICEFallbackPrompt(): void {
-        const cli = MatrixClientPeg.safeGet();
+        const cli = this.sdkContext.client;
         const { finished } = Modal.createDialog(
             QuestionDialog,
             {
@@ -704,7 +688,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
                         <p>
                             {_t(
                                 "voip|misconfigured_server_description",
-                                { homeserverDomain: cli.getDomain() },
+                                { homeserverDomain: cli!.getDomain() },
                                 { code: (sub: string) => <code>{sub}</code> },
                             )}
                         </p>
@@ -725,7 +709,12 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         );
 
         finished.then(([allow]) => {
-            SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow ?? null);
+            this.sdkContext.settingsStore.setValue(
+                "fallbackICEServerAllowed",
+                null,
+                SettingLevel.DEVICE,
+                allow ?? null,
+            );
         });
     }
 
@@ -762,7 +751,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private async placeMatrixCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
-        const cli = MatrixClientPeg.safeGet();
+        const cli = this.sdkContext.client!;
 
         const timeUntilTurnCresExpire = cli.getTurnServersExpiry() - Date.now();
         logger.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
@@ -795,8 +784,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     public async placeCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
-        const cli = MatrixClientPeg.safeGet();
-        const room = cli.getRoom(roomId);
+        const cli = this.sdkContext.client;
+        const room = cli?.getRoom(roomId);
         if (!room) {
             logger.error(`Room ${roomId} does not exist.`);
             return;
@@ -804,12 +793,12 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         // We might be using managed hybrid widgets
         if (isManagedHybridWidgetEnabled(room)) {
-            await addManagedHybridWidget(room);
+            await addManagedHybridWidget(room, this.sdkContext);
             return;
         }
 
         // if the runtime env doesn't do VoIP, whine.
-        if (!cli.supportsVoip()) {
+        if (!cli?.supportsVoip()) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("voip|unsupported"),
                 description: _t("voip|unsupported_browser"),
@@ -817,7 +806,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             return;
         }
 
-        if (cli.getSyncState() === SyncState.Error) {
+        if (cli?.getSyncState() === SyncState.Error) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("voip|connection_lost"),
                 description: _t("voip|connection_lost_description"),
@@ -917,7 +906,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         }
         const userId = results[0].userid;
 
-        const roomId = await ensureDMExists(MatrixClientPeg.safeGet(), userId);
+        const roomId = await ensureDMExists(this.sdkContext.client!, userId);
         if (!roomId) {
             throw new Error("Failed to ensure DM exists for dialing number");
         }
@@ -957,7 +946,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     public async startTransferToMatrixID(call: MatrixCall, destination: string, consultFirst: boolean): Promise<void> {
         if (consultFirst) {
-            const dmRoomId = await ensureDMExists(MatrixClientPeg.safeGet(), destination);
+            const dmRoomId = await ensureDMExists(this.sdkContext.client!, destination);
             if (!dmRoomId) {
                 logger.log("Failed to transfer call, could not ensure dm exists");
                 Modal.createDialog(ErrorDialog, {
@@ -1016,24 +1005,24 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private async placeJitsiCall(roomId: string, type: CallType): Promise<void> {
-        const client = MatrixClientPeg.safeGet();
+        const client = this.sdkContext.client;
         logger.info(`Place conference call in ${roomId}`);
 
         dis.dispatch({ action: "appsDrawer", show: true });
 
         // Prevent double clicking the call button
-        const widget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
+        const widget = this.sdkContext.widgetStore.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
         if (widget) {
             // If there already is a Jitsi widget, pin it
-            const room = client.getRoom(roomId);
-            if (isNotNull(room)) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+            const room = client?.getRoom(roomId);
+            if (room) {
+                this.sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             }
             return;
         }
 
         try {
-            await WidgetUtils.addJitsiWidget(client, roomId, type, "Jitsi", false);
+            await WidgetUtils.addJitsiWidget(client!, roomId, type, "Jitsi", false);
             logger.log("Jitsi widget added");
         } catch (e) {
             if (e instanceof MatrixError && e.errcode === "M_FORBIDDEN") {
@@ -1049,7 +1038,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     public hangupCallApp(roomId: string): void {
         logger.info("Leaving conference call in " + roomId);
 
-        const roomInfo = WidgetStore.instance.getRoom(roomId);
+        const roomInfo = this.sdkContext.widgetStore.getRoom(roomId);
         if (!roomInfo) return; // "should never happen" clauses go here
 
         const jitsiWidgets = roomInfo.widgets.filter((w) => WidgetType.JITSI.matches(w.type));

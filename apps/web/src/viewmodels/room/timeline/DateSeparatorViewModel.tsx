@@ -27,7 +27,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
 import BugReportDialog from "../../../components/views/dialogs/BugReportDialog";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SdkContextClass } from "../../../contexts/SDKContextClass";
 
 export interface DateSeparatorViewModelProps {
     /**

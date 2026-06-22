@@ -27,7 +27,6 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import WidgetStore, { type IApp } from "../../../../../src/stores/WidgetStore";
 import ActiveWidgetStore from "../../../../../src/stores/ActiveWidgetStore";
 import AppTile from "../../../../../src/components/views/elements/AppTile";
@@ -39,7 +38,7 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { ModuleApi } from "../../../../../src/modules/Api";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -127,9 +126,9 @@ describe("AppTile", () => {
         // @ts-ignore
         await WidgetLayoutStore.instance.onReady();
 
-        RightPanelStore.instance.useUnitTestClient(cli);
+        sdkContext.rightPanelStore.useUnitTestClient(cli);
         // @ts-ignore
-        await RightPanelStore.instance.onReady();
+        await sdkContext.rightPanelStore.onReady();
     });
 
     afterEach(async () => {
@@ -137,7 +136,7 @@ describe("AppTile", () => {
         // @ts-ignore
         await WidgetLayoutStore.instance.onNotReady();
         // @ts-ignore
-        await RightPanelStore.instance.onNotReady();
+        await sdkContext.rightPanelStore.onNotReady();
     });
 
     it("destroys non-persisted right panel widget on room change", async () => {

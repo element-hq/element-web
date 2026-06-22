@@ -15,7 +15,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { type ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
-import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { pendingVerificationRequestForUser } from "../../../../src/verification.ts";
@@ -26,7 +26,7 @@ describe("RightPanelStore", () => {
     // Mock out the settings store so the right panel store can't persist values between tests
     jest.spyOn(SettingsStore, "setValue").mockImplementation(async () => {});
 
-    const store = RightPanelStore.instance;
+    const store = SdkContextClass.instance.rightPanelStore;
     let cli: MockedObject<MatrixClient>;
     beforeEach(() => {
         stubClient();

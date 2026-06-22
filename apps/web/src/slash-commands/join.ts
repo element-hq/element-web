@@ -137,8 +137,8 @@ export const join = new Command({
     aliases: ["j"],
     args: "<room-address>",
     description: _td("slash_command|join"),
-    runFn: function (cli, roomId, threadId, args) {
-        return openRoom(cli, args, true) ?? reject(this.getUsage());
+    runFn: function (context, roomId, threadId, args) {
+        return openRoom(context.client!, args, true) ?? reject(this.getUsage());
     },
     category: CommandCategories.actions,
     renderingTypes: [TimelineRenderingType.Room],
@@ -150,8 +150,8 @@ export const goto = new Command({
     aliases: ["view"],
     args: "<room-address>",
     description: _td("slash_command|view"),
-    runFn: function (cli, roomId, threadId, args) {
-        return openRoom(cli, args, false) ?? reject(this.getUsage());
+    runFn: function (context, roomId, threadId, args) {
+        return openRoom(context.client!, args, false) ?? reject(this.getUsage());
     },
     category: CommandCategories.actions,
     renderingTypes: [TimelineRenderingType.Room],

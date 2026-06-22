@@ -36,7 +36,6 @@ import ContentMessages from "../../ContentMessages";
 import UploadBar from "./UploadBar";
 import { _t } from "../../languageHandler";
 import ThreadListContextMenu from "../views/context_menus/ThreadListContextMenu";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import FileDropTarget from "./FileDropTarget";
@@ -52,6 +51,7 @@ import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 interface IProps {
     room: Room;
@@ -150,7 +150,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
 
         if (prevProps.room !== this.props.room) {
-            RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary });
+            SdkContextClass.instance.rightPanelStore.setCard({ phase: RightPanelPhases.RoomSummary });
         }
     }
 

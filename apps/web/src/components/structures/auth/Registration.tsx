@@ -46,6 +46,7 @@ import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_registration")) {
@@ -127,6 +128,9 @@ interface IState {
 }
 
 export default class Registration extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private readonly loginLogic: Login;
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
     private latestServerConfig?: ValidatedServerConfig;
@@ -513,7 +517,7 @@ export default class Registration extends React.Component<IProps, IState> {
     private onLoginClickWithCheck = async (ev: ButtonEvent): Promise<boolean> => {
         ev.preventDefault();
 
-        const sessionLoaded = await Lifecycle.loadSession({ ignoreGuest: true });
+        const sessionLoaded = await Lifecycle.loadSession(this.context, { ignoreGuest: true });
         if (!sessionLoaded) {
             // ok fine, there's still no session: really go to the login page
             this.props.onLoginClick();

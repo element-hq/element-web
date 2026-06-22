@@ -10,13 +10,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixRTCSession, MatrixRTCSessionManagerEvents, type Transport } from "matrix-js-sdk/src/matrixrtc";
 import { MatrixError, type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
 
-import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
-import WidgetStore from "./WidgetStore";
-import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher.ts";
 
 export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
@@ -27,20 +26,14 @@ export enum CallStoreEvent {
     TransportsUpdated = "transports_updated",
 }
 
-export class CallStore extends AsyncStoreWithClient<EmptyObject> {
-    private static _instance: CallStore;
-    public static get instance(): CallStore {
-        if (!this._instance) {
-            this._instance = new CallStore();
-            this._instance.start();
-        }
-        return this._instance;
-    }
-
+export default class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private readonly configuredMatrixRTCTransports = new Set<Transport>();
 
-    private constructor() {
-        super(defaultDispatcher);
+    public constructor(
+        dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SdkContextClass,
+    ) {
+        super(dispatcher);
         this.setMaxListeners(100); // One for each RoomTile
     }
 
@@ -90,19 +83,19 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
             this.updateRoom(room);
         }
         this.matrixClient.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
-        WidgetStore.instance.on(UPDATE_EVENT, this.onWidgets);
+        this.sdkContext.widgetStore.on(UPDATE_EVENT, this.onWidgets);
 
         // If the room ID of a previously connected call is still in settings at
         // this time, that's a sign that we failed to disconnect from it
         // properly, and need to clean up after ourselves
-        const uncleanlyDisconnectedRoomIds = SettingsStore.getValue("activeCallRoomIds");
+        const uncleanlyDisconnectedRoomIds = this.sdkContext.settingsStore.getValue("activeCallRoomIds");
         if (uncleanlyDisconnectedRoomIds.length) {
             await Promise.all([
                 ...uncleanlyDisconnectedRoomIds.map(async (uncleanlyDisconnectedRoomId): Promise<void> => {
                     logger.log(`Cleaning up call state for room ${uncleanlyDisconnectedRoomId}`);
                     await this.getCall(uncleanlyDisconnectedRoomId)?.clean();
                 }),
-                SettingsStore.setValue("activeCallRoomIds", null, SettingLevel.DEVICE, []),
+                this.sdkContext.settingsStore.setValue("activeCallRoomIds", null, SettingLevel.DEVICE, []),
             ]);
         }
     }
@@ -121,7 +114,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.configuredMatrixRTCTransports.clear();
 
         this.matrixClient?.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionStarted, this.onRTCSessionStart);
-        WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
+        this.sdkContext.widgetStore.off(UPDATE_EVENT, this.onWidgets);
     }
 
     private _connectedCalls: Set<Call> = new Set();
@@ -136,7 +129,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(CallStoreEvent.ConnectedCalls, value);
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
-        SettingsStore.setValue(
+        this.sdkContext.settingsStore.setValue(
             "activeCallRoomIds",
             null,
             SettingLevel.DEVICE,
@@ -157,7 +150,7 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         // fighting for control over the same widget.
         if (!this.inUpdateRoom && !this.calls.has(room.roomId)) {
             this.inUpdateRoom = true;
-            const call = Call.get(room);
+            const call = Call.get(this.sdkContext, room);
 
             if (call) {
                 const onConnectionState = (state: ConnectionState): void => {

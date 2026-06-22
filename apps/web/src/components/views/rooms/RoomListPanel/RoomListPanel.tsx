@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { Flex, RoomListHeaderView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
@@ -18,8 +18,7 @@ import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
 import { type IState as IRovingTabIndexState } from "../../../../accessibility/RovingTabIndex";
 import { RoomListHeaderViewModel } from "../../../../viewmodels/room-list/RoomListHeaderViewModel";
-import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import SpaceStore from "../../../../stores/spaces/SpaceStore";
+import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
 type RoomListPanelProps = {
     /**
@@ -33,6 +32,7 @@ type RoomListPanelProps = {
  * The panel of the room list
  */
 export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => {
+    const sdkContext = useContext(SDKContext);
     const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
     const [focusedElement, setFocusedElement] = useState<Element | null>(null);
 
@@ -60,9 +60,14 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
         [focusedElement],
     );
 
-    const matrixClient = useMatrixClientContext();
+    const matrixClient = sdkContext.client!;
     const vm = useCreateAutoDisposedViewModel(
-        () => new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance }),
+        () =>
+            new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStoreV3,
+            }),
     );
 
     return (

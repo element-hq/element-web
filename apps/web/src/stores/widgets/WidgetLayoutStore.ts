@@ -12,15 +12,15 @@ import { type IWidget } from "matrix-widget-api";
 import { clamp, defaultNumber, sum } from "@element-hq/web-shared-components";
 import { type Container } from "@element-hq/element-web-module-api";
 
-import SettingsStore from "../../settings/SettingsStore";
-import WidgetStore, { type IApp } from "../WidgetStore";
+import { type IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { type IStoredLayout, type ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, type IWidgetLayouts } from "./types";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
+import { type MatrixDispatcher } from "../../dispatcher/dispatcher.ts";
 
 export type { IStoredLayout, ILayoutStateEvent };
 export { type Container, WIDGET_LAYOUT_EVENT_TYPE };
@@ -45,60 +45,55 @@ interface ContainerValue {
 }
 
 export class WidgetLayoutStore extends ReadyWatchingStore {
-    private static internalInstance: WidgetLayoutStore;
-
     // Map: room Id → container → ContainerValue
     private byRoom: MapWithDefault<string, Map<Container, ContainerValue>> = new MapWithDefault(() => new Map());
     private pinnedRef: string | undefined;
     private layoutRef: string | undefined;
     private dynamicRef: string | undefined;
 
-    private constructor() {
-        super(defaultDispatcher);
+    public constructor(
+        dispatcher: MatrixDispatcher,
+        private readonly sdkConfig: SdkContextClass,
+    ) {
+        super(dispatcher);
     }
 
-    public static get instance(): WidgetLayoutStore {
-        if (!this.internalInstance) {
-            this.internalInstance = new WidgetLayoutStore();
-            this.internalInstance.start();
-        }
-        return this.internalInstance;
-    }
-
-    public static emissionForRoom(room: Room): string {
+    public emissionForRoom(room: Room): string {
         return `update_${room.roomId}`;
     }
 
     private emitFor(room: Room): void {
-        this.emit(WidgetLayoutStore.emissionForRoom(room));
+        this.emit(this.emissionForRoom(room));
     }
 
     protected async onReady(): Promise<void> {
         this.updateAllRooms();
 
         this.matrixClient?.on(RoomStateEvent.Events, this.updateRoomFromState);
-        this.pinnedRef = SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
-        this.layoutRef = SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
-        this.dynamicRef = SettingsStore.watchSetting(
+        this.pinnedRef = this.sdkConfig.settingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
+        this.layoutRef = this.sdkConfig.settingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
+        this.dynamicRef = this.sdkConfig.settingsStore.watchSetting(
             "feature_dynamic_room_predecessors",
             null,
             this.updateFromSettings,
         );
-        WidgetStore.instance.on(UPDATE_EVENT, this.updateFromWidgetStore);
+        this.sdkConfig.widgetStore.on(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
     protected async onNotReady(): Promise<void> {
         this.byRoom = new MapWithDefault(() => new Map());
 
         this.matrixClient?.off(RoomStateEvent.Events, this.updateRoomFromState);
-        SettingsStore.unwatchSetting(this.pinnedRef);
-        SettingsStore.unwatchSetting(this.layoutRef);
-        SettingsStore.unwatchSetting(this.dynamicRef);
-        WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
+        this.sdkConfig.settingsStore.unwatchSetting(this.pinnedRef);
+        this.sdkConfig.settingsStore.unwatchSetting(this.layoutRef);
+        this.sdkConfig.settingsStore.unwatchSetting(this.dynamicRef);
+        this.sdkConfig.widgetStore.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
     private updateAllRooms = (): void => {
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        const msc3946ProcessDynamicPredecessor = this.sdkConfig.settingsStore.getValue(
+            "feature_dynamic_room_predecessors",
+        );
         if (!this.matrixClient) return;
         this.byRoom = new MapWithDefault(() => new Map());
         for (const room of this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor)) {
@@ -137,7 +132,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     };
 
     public recalculateRoom(room: Room): void {
-        const widgets = WidgetStore.instance.getApps(room.roomId);
+        const widgets = this.sdkConfig.widgetStore.getApps(room.roomId);
         if (!widgets?.length) {
             this.byRoom.set(room.roomId, new Map());
             this.emitFor(room);
@@ -148,8 +143,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const beforeChanges = JSON.stringify(recursiveMapToObject(roomContainers));
 
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
-        const legacyPinned = SettingsStore.getValue("Widgets.pinned", room.roomId);
-        let userLayout = SettingsStore.getValue("Widgets.layout", room.roomId);
+        const legacyPinned = this.sdkConfig.settingsStore.getValue("Widgets.pinned", room.roomId);
+        let userLayout = this.sdkConfig.settingsStore.getValue("Widgets.layout", room.roomId);
 
         if (layoutEv && userLayout && userLayout.overrides !== layoutEv.getId()) {
             // For some other layout that we don't really care about. The user can reset this
@@ -507,12 +502,12 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
 
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
-        SettingsStore.setValue("Widgets.layout", room.roomId, SettingLevel.ROOM_ACCOUNT, {
-            overrides: layoutEv?.getId(),
-            widgets: newLayout,
-        }).catch(() => this.recalculateRoom(room));
+        this.sdkConfig.settingsStore
+            .setValue("Widgets.layout", room.roomId, SettingLevel.ROOM_ACCOUNT, {
+                overrides: layoutEv?.getId(),
+                widgets: newLayout,
+            })
+            .catch(() => this.recalculateRoom(room));
         this.recalculateRoom(room); // call to try local echo on changes (the catch above undoes any errors)
     }
 }
-
-window.mxWidgetLayoutStore = WidgetLayoutStore.instance;

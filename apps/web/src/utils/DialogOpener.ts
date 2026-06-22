@@ -24,7 +24,7 @@ import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToS
 import { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import PosthogTrackers from "../PosthogTrackers";
 import { showAddExistingSubspace, showCreateNewRoom } from "./space";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SdkContextClass } from "../contexts/SDKContextClass";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and

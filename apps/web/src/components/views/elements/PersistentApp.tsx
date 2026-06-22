@@ -12,8 +12,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "./AppTile";
-import WidgetStore from "../../../stores/WidgetStore";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     persistentWidgetId: string;
@@ -24,17 +23,17 @@ interface IProps {
 }
 
 export default class PersistentApp extends React.Component<IProps> {
-    public static contextType = MatrixClientContext;
-    declare public context: ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: ContextType<typeof SDKContext>;
     private room: Room;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: ContextType<typeof SDKContext>) {
         super(props, context);
-        this.room = context.getRoom(this.props.persistentRoomId)!;
+        this.room = context.client!.getRoom(this.props.persistentRoomId)!;
     }
 
     public render(): JSX.Element | null {
-        const app = WidgetStore.instance.get(this.props.persistentWidgetId, this.props.persistentRoomId);
+        const app = this.context.widgetStore.get(this.props.persistentWidgetId, this.props.persistentRoomId);
         if (!app) return null;
 
         return (
@@ -43,7 +42,7 @@ export default class PersistentApp extends React.Component<IProps> {
                 app={app}
                 fullWidth={true}
                 room={this.room}
-                userId={this.context.getSafeUserId()}
+                userId={this.context.client!.getSafeUserId()}
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}

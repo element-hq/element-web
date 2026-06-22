@@ -10,7 +10,7 @@ import { type Widget, WidgetKind } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import { type SdkContextClass } from "../../contexts/SDKContext";
+import { type SdkContextClass } from "../../contexts/SDKContextClass";
 
 export enum OIDCState {
     Allowed, // user has set the remembered value as allowed

@@ -22,7 +22,6 @@ import {
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import RoomListActions from "../../../actions/RoomListActions";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import dis from "../../../dispatcher/dispatcher";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
@@ -30,7 +29,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
@@ -45,6 +44,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { DeveloperToolsOption } from "./DeveloperToolsOption";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { getTagsForRoom } from "../../../utils/room/getTagsForRoom";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface RoomGeneralContextMenuProps extends IContextMenuProps {
     room: Room;
@@ -121,8 +121,9 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     onPostMarkAsUnreadClick,
     ...props
 }) => {
-    const cli = useContext(MatrixClientContext);
-    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () => getTagsForRoom(room));
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
+    const roomTags = useEventEmitterState(sdkContext.roomListStore, LISTS_UPDATE_EVENT, () => getTagsForRoom(room));
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     const wrapHandler = (
         handler: (ev: ButtonEvent) => void,

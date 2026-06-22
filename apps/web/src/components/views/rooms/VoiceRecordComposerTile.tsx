@@ -17,12 +17,11 @@ import { RecordingState } from "../../../audio/VoiceRecording";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
 import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
-import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import RecordingPlayback, { PlaybackLayout } from "../audio_messages/RecordingPlayback";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
+import { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 import NotificationBadge from "./NotificationBadge";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
@@ -36,6 +35,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
 import AccessibleButton from "../elements/AccessibleButton";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     room: Room;
@@ -62,11 +62,14 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         this.state = {};
 
-        this.voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
+        this.voiceRecordingId = SdkContextClass.instance.voiceRecordingStore.getVoiceRecordingId(
+            this.props.room,
+            this.props.relation,
+        );
     }
 
     public componentDidMount(): void {
-        const recorder = VoiceRecordingStore.instance.getActiveRecording(this.voiceRecordingId);
+        const recorder = SdkContextClass.instance.voiceRecordingStore.getActiveRecording(this.voiceRecordingId);
         if (recorder) {
             if (recorder.isRecording || !recorder.hasRecording) {
                 logger.warn("Cached recording hasn't ended yet and might cause issues");
@@ -79,7 +82,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     public async componentWillUnmount(): Promise<void> {
         // Stop recording, but keep the recording memory (don't dispose it). This is to let the user
         // come back and finish working with it.
-        const recording = VoiceRecordingStore.instance.getActiveRecording(this.voiceRecordingId);
+        const recording = SdkContextClass.instance.voiceRecordingStore.getActiveRecording(this.voiceRecordingId);
         await recording?.stop();
 
         // Clean up our listeners by binding a falsy recorder
@@ -149,7 +152,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     }
 
     private async disposeRecording(): Promise<void> {
-        await VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
+        await SdkContextClass.instance.voiceRecordingStore.disposeRecording(this.voiceRecordingId);
 
         // Reset back to no recording, which means no phase (ie: restart component entirely)
         this.setState({ recorder: undefined, recordingPhase: undefined, didUploadFail: false });
@@ -180,7 +183,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         // Do a sanity test to ensure we're about to grab a valid microphone reference. Things might
         // change between this and recording, but at least we will have tried.
         try {
-            const devices = await MediaDeviceHandler.getDevices();
+            const devices = await SdkContextClass.instance.mediaDeviceHandler.getDevices();
             if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("voip|no_audio_input_title"),
@@ -202,7 +205,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         try {
             // stop any noises which might be happening
             PlaybackManager.instance.pauseAllExcept();
-            const recorder = VoiceRecordingStore.instance.startRecording(this.voiceRecordingId);
+            const recorder = SdkContextClass.instance.voiceRecordingStore.startRecording(this.voiceRecordingId);
             await recorder.start();
 
             this.bindNewRecorder(recorder);
@@ -213,7 +216,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             accessError();
 
             // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack
-            VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
+            SdkContextClass.instance.voiceRecordingStore.disposeRecording(this.voiceRecordingId);
         }
     };
 

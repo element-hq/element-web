@@ -11,7 +11,7 @@ import type { MockedObject } from "jest-mock-vitest-adapter";
 import { UserMenuViewModel } from "../../../src/viewmodels/menus/UserMenuViewModel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import SdkConfig from "../../../src/SdkConfig";
 import { Action } from "../../../src/dispatcher/actions";
 import { UserTab } from "../../../src/components/views/dialogs/UserTab";

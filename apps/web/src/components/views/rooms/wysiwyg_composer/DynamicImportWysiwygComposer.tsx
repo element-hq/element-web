@@ -12,6 +12,7 @@ import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
 // we need to import the types for TS, but do not import the sendMessage
 // function to avoid importing from "@vector-im/matrix-wysiwyg"
 import { type SendMessageParams } from "./utils/message";
+import { SdkContextClass } from "../../../../contexts/SDKContextClass.ts";
 
 const SendComposer = lazy(() => import("./SendWysiwygComposer"));
 const EditComposer = lazy(() => import("./EditWysiwygComposer"));
@@ -23,7 +24,7 @@ export const dynamicImportSendMessage = async (
 ): Promise<ISendEventResponse | undefined> => {
     const { sendMessage } = await import("./utils/message");
 
-    return sendMessage(message, isHTML, params);
+    return sendMessage(SdkContextClass.instance, message, isHTML, params);
 };
 
 export const dynamicImportConversionFunctions = async (): Promise<{

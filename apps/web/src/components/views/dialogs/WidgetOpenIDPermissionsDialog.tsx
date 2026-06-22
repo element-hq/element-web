@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import { OIDCState } from "../../../stores/widgets/WidgetPermissionStore";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SdkContextClass } from "../../../contexts/SDKContextClass";
 
 interface IProps {
     widget: Widget;

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { _td } from "@element-hq/web-shared-components";
 
 import { Command, CommandCategories, splitAtFirstSpace } from "./SlashCommands";
-import SettingsStore from "../settings/SettingsStore";
 import { reject, success } from "./utils";
 import { UserFriendlyError } from "../languageHandler";
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -18,8 +17,8 @@ export const statusCommand = new Command({
     command: "status",
     args: "<emoji> <text>",
     description: _td("slash_command|status|description"),
-    isEnabled: () => SettingsStore.getValue("feature_user_status"),
-    runFn: function (cli, _roomId, _threadId, args) {
+    isEnabled: (context) => context.settingsStore.getValue("feature_user_status"),
+    runFn: function (context, _roomId, _threadId, args) {
         if (!args) {
             return reject(new UserFriendlyError("slash_command|status|no_args"));
         }
@@ -40,7 +39,7 @@ export const statusCommand = new Command({
             return reject(new UserFriendlyError("slash_command|status|too_long_text"));
         }
         return success(
-            setUserStatus(cli, {
+            setUserStatus(context.client!, {
                 emoji: emoji.segment,
                 text,
             }),

@@ -11,21 +11,22 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import type { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import type { IDestroyable } from "../../utils/IDestroyable";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import * as RoomNotifs from "../../RoomNotifs";
 import { NotificationState } from "./NotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { NotificationLevel } from "./NotificationLevel";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export class RoomNotificationState extends NotificationState implements IDestroyable {
     public constructor(
+        sdkContext: SdkContextClass,
         public readonly room: Room,
         private includeThreads: boolean,
     ) {
-        super();
-        const cli = this.room.client;
+        super(sdkContext);
+        const cli = sdkContext.client ?? this.room.client;
         this.room.on(RoomEvent.Receipt, this.handleReadReceipt);
         this.room.on(RoomEvent.MyMembership, this.handleMembershipUpdate);
         this.room.on(RoomEvent.LocalEchoUpdated, this.handleLocalEchoUpdated);
@@ -103,7 +104,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     };
 
     private handleReadReceipt = (event: MatrixEvent, room: Room): void => {
-        if (!readReceiptChangeIsFor(event, MatrixClientPeg.safeGet())) return; // not our own - ignore
+        if (!this.sdkContext.client || !readReceiptChangeIsFor(event, this.sdkContext.client)) return; // not our own - ignore
         if (room.roomId !== this.room.roomId) return; // not for us - ignore
         this.updateNotificationState();
     };

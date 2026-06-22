@@ -9,21 +9,23 @@ Please see LICENSE files in the repository root for full details.
 import { type CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import LegacyCallHandler from "../../LegacyCallHandler";
 import { getPlatformCallTypeProps, PlatformCallType } from "../../hooks/room/useRoomCall";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import PosthogTrackers from "../../PosthogTrackers";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * Helper to place a call in a room that works with all the legacy modes
+ * @param sdkContext - the SDK context to use
  * @param room the room to place the call in
  * @param callType the type of call
  * @param platformCallType the platform to pass the call on
  * @param skipLobby Has the user indicated they would like to skip the lobby. Otherwise, defer to platform defaults.
  */
 export const placeCall = async (
+    context: SdkContextClass,
     room: Room,
     callType: CallType,
     platformCallType: PlatformCallType,
@@ -34,7 +36,7 @@ export const placeCall = async (
     PosthogTrackers.trackInteraction(analyticsName);
 
     if (platformCallType == PlatformCallType.LegacyCall || platformCallType == PlatformCallType.JitsiCall) {
-        await LegacyCallHandler.instance.placeCall(room.roomId, callType);
+        await context.legacyCallHandler.placeCall(room.roomId, callType);
     } else if (platformCallType == PlatformCallType.ElementCall) {
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,

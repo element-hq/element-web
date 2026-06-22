@@ -20,6 +20,7 @@ import type AutocompleteProvider from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { filterBoolean } from "../utils/arrays";
+import type { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
@@ -55,10 +56,14 @@ export default class Autocompleter {
     public room: Room;
     public providers: AutocompleteProvider[];
 
-    public constructor(room: Room, renderingType: TimelineRenderingType = TimelineRenderingType.Room) {
+    public constructor(
+        sdkContext: SdkContextClass,
+        room: Room,
+        renderingType: TimelineRenderingType = TimelineRenderingType.Room,
+    ) {
         this.room = room;
         this.providers = PROVIDERS.map((Prov) => {
-            return new Prov(room, renderingType);
+            return new Prov(sdkContext, room, renderingType);
         });
     }
 

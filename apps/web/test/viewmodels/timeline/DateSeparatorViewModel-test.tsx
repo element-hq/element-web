@@ -16,7 +16,7 @@ import Modal from "../../../src/Modal";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../src/settings/UIFeature";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
 import { flushPromisesWithFakeTimers } from "../../test-utils";
 

@@ -14,7 +14,7 @@ import { OIDCState, WidgetPermissionStore } from "../../../../src/stores/widgets
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { TestSdkContext } from "../../TestSdkContext";
 import { type SettingLevel } from "../../../../src/settings/SettingLevel";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import { stubClient } from "../../../test-utils";
 import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
 import { WidgetType } from "../../../../src/widgets/WidgetType.ts";

@@ -34,6 +34,7 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation } from "../../../../../utils/messages";
+import { type SdkContextClass } from "../../../../../contexts/SDKContextClass.ts";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
@@ -43,6 +44,7 @@ export interface SendMessageParams {
 }
 
 export async function sendMessage(
+    sdkContext: SdkContextClass,
     message: string,
     isHTML: boolean,
     { roomContext, mxClient, ...params }: SendMessageParams,
@@ -76,11 +78,11 @@ export async function sendMessage(
     // Slash command handling here approximates what can be found in SendMessageComposer.sendMessage()
     // but note that the /me and // special cases are handled by the call to createMessageContent
     if (message.startsWith("/") && !message.startsWith("//") && !message.startsWith(EMOTE_PREFIX)) {
-        const { cmd, args } = getCommand(roomId, message);
+        const { cmd, args } = getCommand(sdkContext, roomId, message);
         if (cmd) {
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation?.event_id : null;
             let commandSuccessful: boolean;
-            [content, commandSuccessful] = await runSlashCommand(mxClient, cmd, args, roomId, threadId ?? null);
+            [content, commandSuccessful] = await runSlashCommand(sdkContext, cmd, args, roomId, threadId ?? null);
 
             if (!commandSuccessful) {
                 return; // errored

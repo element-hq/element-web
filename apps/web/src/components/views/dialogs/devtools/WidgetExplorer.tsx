@@ -13,18 +13,19 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { _t } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
-import WidgetStore, { type IApp } from "../../../../stores/WidgetStore";
+import { type IApp } from "../../../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../../../stores/AsyncStore";
 import FilteredList from "./FilteredList";
 import { StateEventEditor } from "./RoomState";
+import { SdkContextClass } from "../../../../contexts/SDKContextClass.ts";
 
 const WidgetExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [widget, setWidget] = useState<IApp | null>(null);
 
-    const widgets = useEventEmitterState(WidgetStore.instance, UPDATE_EVENT, () => {
-        return WidgetStore.instance.getApps(context.room.roomId);
+    const widgets = useEventEmitterState(SdkContextClass.instance.widgetStore, UPDATE_EVENT, () => {
+        return SdkContextClass.instance.widgetStore.getApps(context.room.roomId);
     });
 
     if (widget && widgets.includes(widget)) {

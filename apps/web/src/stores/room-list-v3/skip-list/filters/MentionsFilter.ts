@@ -6,11 +6,13 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Filter, FilterEnum } from ".";
-import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
+import { type SdkContextClass } from "../../../../contexts/SDKContextClass.ts";
 
 export class MentionsFilter implements Filter {
+    public constructor(private readonly sdkContext: SdkContextClass) {}
+
     public matches(room: Room): boolean {
-        return RoomNotificationStateStore.instance.getRoomState(room).isMention;
+        return this.sdkContext.roomNotificationStateStore.getRoomState(room).isMention;
     }
 
     public get key(): FilterEnum.MentionsFilter {

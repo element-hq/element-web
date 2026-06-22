@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
     EventType,
     type HistoryVisibility,
@@ -14,7 +14,6 @@ import {
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { type E2EStatus } from "../../../utils/ShieldUtils";
@@ -27,7 +26,6 @@ import { Action } from "../../../dispatcher/actions";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { PollHistoryDialog } from "../../views/dialogs/PollHistoryDialog";
@@ -41,6 +39,7 @@ import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { getTagsForRoom } from "../../../utils/room/getTagsForRoom";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface RoomSummaryCardState {
     isDirectMessage: boolean;
@@ -162,7 +161,8 @@ export function useRoomSummaryCardViewModel(
     permalinkCreator: RoomPermalinkCreator,
     onSearchCancel?: () => void,
 ): RoomSummaryCardState {
-    const cli = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
 
     const isRoomEncrypted = useIsEncrypted(cli, room) ?? false;
     const roomContext = useScopedRoomContext("e2eStatus", "timelineRenderingType");
@@ -184,24 +184,24 @@ export function useRoomSummaryCardViewModel(
     const isDirectMessage = useIsDirectMessage(room);
 
     const onRoomMembersClick = (): void => {
-        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.MemberList }, true);
+        sdkContext.rightPanelStore.pushCard({ phase: RightPanelPhases.MemberList }, true);
     };
 
     const onRoomThreadsClick = (): void => {
-        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.ThreadPanel }, true);
+        sdkContext.rightPanelStore.pushCard({ phase: RightPanelPhases.ThreadPanel }, true);
     };
 
     const onRoomFilesClick = (): void => {
-        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
+        sdkContext.rightPanelStore.pushCard({ phase: RightPanelPhases.FilePanel }, true);
     };
 
     const onRoomExtensionsClick = (): void => {
-        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.Extensions }, true);
+        sdkContext.rightPanelStore.pushCard({ phase: RightPanelPhases.Extensions }, true);
     };
 
     const onRoomPinsClick = (): void => {
         PosthogTrackers.trackInteraction("PinnedMessageRoomInfoButton");
-        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, true);
+        sdkContext.rightPanelStore.pushCard({ phase: RightPanelPhases.PinnedMessages }, true);
     };
 
     const onRoomSettingsClick = (ev: Event): void => {

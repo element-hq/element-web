@@ -14,9 +14,10 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../../languageHandler";
-import WidgetStore, { type IApp } from "../../../../stores/WidgetStore";
+import type WidgetStore from "../../../../stores/WidgetStore";
+import { type IApp } from "../../../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../../../stores/AsyncStore";
-import { WidgetLayoutStore } from "../../../../stores/widgets/WidgetLayoutStore";
+import { type WidgetLayoutStore } from "../../../../stores/widgets/WidgetLayoutStore";
 
 export interface MJitsiWidgetEventViewModelProps {
     /**
@@ -34,11 +35,11 @@ export interface MJitsiWidgetEventViewModelProps {
     /**
      * Widget store used to resolve the widget referenced by the state event.
      */
-    widgetStore?: WidgetStore;
+    widgetStore: WidgetStore;
     /**
      * Widget layout store used to resolve the current join prompt.
      */
-    widgetLayoutStore?: WidgetLayoutStore;
+    widgetLayoutStore: WidgetLayoutStore;
 }
 
 type InternalProps = Required<Pick<MJitsiWidgetEventViewModelProps, "widgetStore" | "widgetLayoutStore">> &
@@ -54,8 +55,8 @@ export class MJitsiWidgetEventViewModel
     public constructor(props: MJitsiWidgetEventViewModelProps) {
         const internalProps = {
             ...props,
-            widgetStore: props.widgetStore ?? WidgetStore.instance,
-            widgetLayoutStore: props.widgetLayoutStore ?? WidgetLayoutStore.instance,
+            widgetStore: props.widgetStore,
+            widgetLayoutStore: props.widgetLayoutStore,
         };
 
         super(internalProps, MJitsiWidgetEventViewModel.computeSnapshot(internalProps));
@@ -81,8 +82,10 @@ export class MJitsiWidgetEventViewModel
         }
 
         if (room) {
-            this.disposables.trackListener(this.props.widgetLayoutStore, WidgetLayoutStore.emissionForRoom(room), () =>
-                this.updateSnapshotFromProps(),
+            this.disposables.trackListener(
+                this.props.widgetLayoutStore,
+                this.props.widgetLayoutStore.emissionForRoom(room),
+                () => this.updateSnapshotFromProps(),
             );
         }
     }

@@ -30,12 +30,11 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
 import { type ListNotificationState } from "../../../stores/notifications/ListNotificationState";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { type ListLayout } from "../../../stores/room-list/ListLayout";
 import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
-import RoomListStore, { LISTS_UPDATE_EVENT, LISTS_LOADING_EVENT } from "../../../stores/room-list/RoomListStore";
+import { LISTS_UPDATE_EVENT, LISTS_LOADING_EVENT } from "../../../stores/room-list/RoomListStore";
 import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
@@ -49,6 +48,7 @@ import AccessibleButton, { type ButtonEvent } from "../../views/elements/Accessi
 import type ExtraTile from "./ExtraTile";
 import NotificationBadge from "./NotificationBadge";
 import RoomTile from "./RoomTile";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -101,6 +101,9 @@ interface IState {
 }
 
 export default class RoomSublist extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
     private tilesRef = createRef<HTMLDivElement>();
@@ -109,17 +112,17 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private heightAtStart: number;
     private notificationState: ListNotificationState;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
         this.heightAtStart = 0;
-        this.notificationState = RoomNotificationStateStore.instance.getListState(this.props.tagId);
+        this.notificationState = context.roomNotificationStateStore.getListState(this.props.tagId);
         this.state = {
             isResizing: false,
             isExpanded: !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
-            rooms: arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []),
+            rooms: arrayFastClone(context.roomListStore.orderedLists[this.props.tagId] || []),
             roomsLoading: false,
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
@@ -235,8 +238,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
-        RoomListStore.instance.on(LISTS_LOADING_EVENT, this.onListsLoading);
+        this.context.roomListStore.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
+        this.context.roomListStore.on(LISTS_LOADING_EVENT, this.onListsLoading);
 
         // Using the passive option to not block the main thread
         // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#improving_scrolling_performance_with_passive_listeners
@@ -245,8 +248,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         defaultDispatcher.unregister(this.dispatcherRef);
-        RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
-        RoomListStore.instance.off(LISTS_LOADING_EVENT, this.onListsLoading);
+        this.context.roomListStore.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
+        this.context.roomListStore.off(LISTS_LOADING_EVENT, this.onListsLoading);
         this.tilesRef.current?.removeEventListener("scroll", this.onScrollPrevent);
     }
 
@@ -263,7 +266,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const stateUpdates = {} as IState;
 
         const currentRooms = this.state.rooms;
-        const newRooms = arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []);
+        const newRooms = arrayFastClone(this.context.roomListStore.orderedLists[this.props.tagId] || []);
         if (arrayHasOrderChange(currentRooms, newRooms)) {
             stateUpdates.rooms = newRooms;
         }
@@ -374,14 +377,14 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onUnreadFirstChanged = (): void => {
-        const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
+        const isUnreadFirst = this.context.roomListStore.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
-        RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
+        this.context.roomListStore.setListOrder(this.props.tagId, newAlgorithm);
         this.forceUpdate(); // because if the sublist doesn't have any changes then we will miss the list order change
     };
 
     private onTagSortChanged = async (sort: SortAlgorithm): Promise<void> => {
-        RoomListStore.instance.setTagSorting(this.props.tagId, sort);
+        this.context.roomListStore.setTagSorting(this.props.tagId, sort);
         this.forceUpdate();
     };
 
@@ -400,7 +403,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             room = this.state.rooms && this.state.rooms[0];
         } else {
             // find the first room with a count of the same colour as the badge count
-            room = RoomListStore.instance.orderedLists[this.props.tagId].find((r: Room) => {
+            room = this.context.roomListStore.orderedLists[this.props.tagId].find((r: Room) => {
                 const notifState = this.notificationState.getForRoom(r);
                 return notifState.count > 0 && notifState.level === this.notificationState.level;
             });
@@ -544,8 +547,10 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
-            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
-            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
+            const isAlphabetical =
+                this.context.roomListStore.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
+            const isUnreadFirst =
+                this.context.roomListStore.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
 
             // Invites don't get some nonsense options, so only add them if we have to.
             let otherSections: JSX.Element | undefined;

@@ -10,7 +10,7 @@ import React, { type ComponentProps } from "react";
 import { type IWidget } from "matrix-widget-api";
 import classNames from "classnames";
 
-import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
+import { type IApp } from "../../../stores/WidgetStore";
 import BaseAvatar, { type BaseAvatarType } from "./BaseAvatar";
 import { mediaFromMxc } from "../../../customisations/Media";
 import DefaultAppSvg from "../../../../res/img/element-icons/room/default_app.svg";
@@ -18,6 +18,7 @@ import DefaultVideoSvg from "../../../../res/img/element-icons/room/default_vide
 import DefaultCalSvg from "../../../../res/img/element-icons/room/default_cal.svg";
 import DefaultDocSvg from "../../../../res/img/element-icons/room/default_doc.svg";
 import DefaultClockSvg from "../../../../res/img/element-icons/room/default_clock.svg";
+import { isAppWidget } from "../../../utils/WidgetUtils.ts";
 
 interface IProps extends Omit<ComponentProps<BaseAvatarType>, "name" | "url" | "urls"> {
     app: IApp | IWidget;

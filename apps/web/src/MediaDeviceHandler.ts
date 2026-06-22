@@ -10,10 +10,9 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
+import { type SdkContextClass } from "./contexts/SDKContextClass.ts";
 
 // XXX: MediaDeviceKind is a union type, so we make our own enum
 export enum MediaDeviceKindEnum {
@@ -29,16 +28,11 @@ export enum MediaDeviceHandlerEvent {
 }
 
 export default class MediaDeviceHandler extends EventEmitter {
-    private static internalInstance?: MediaDeviceHandler;
-
-    public static get instance(): MediaDeviceHandler {
-        if (!MediaDeviceHandler.internalInstance) {
-            MediaDeviceHandler.internalInstance = new MediaDeviceHandler();
-        }
-        return MediaDeviceHandler.internalInstance;
+    public constructor(private readonly sdkContext: SdkContextClass) {
+        super();
     }
 
-    public static async hasAnyLabeledDevices(): Promise<boolean> {
+    public async hasAnyLabeledDevices(): Promise<boolean> {
         const devices = await navigator.mediaDevices.enumerateDevices();
         return devices.some((d) => Boolean(d.label));
     }
@@ -56,7 +50,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      *
      * @return Promise<IMediaDevices> The available media devices
      */
-    public static async getDevices(): Promise<IMediaDevices | undefined> {
+    public async getDevices(): Promise<IMediaDevices | undefined> {
         try {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const output: Record<MediaDeviceKindEnum, MediaDeviceInfo[]> = {
@@ -72,7 +66,7 @@ export default class MediaDeviceHandler extends EventEmitter {
         }
     }
 
-    public static getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>): string => {
+    public getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>): string => {
         // Note we're looking for a device with deviceId 'default' but adding a device
         // with deviceId == the empty string: this is because Chrome gives us a device
         // with deviceId 'default', so we're looking for this, not the one we are adding.
@@ -87,26 +81,26 @@ export default class MediaDeviceHandler extends EventEmitter {
     /**
      * Retrieves devices from the SettingsStore and tells the js-sdk to use them
      */
-    public static async loadDevices(): Promise<void> {
-        const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
-        const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
+    public async loadDevices(): Promise<void> {
+        const audioDeviceId = this.sdkContext.settingsStore.getValue("webrtc_audioinput");
+        const videoDeviceId = this.sdkContext.settingsStore.getValue("webrtc_videoinput");
 
-        await MatrixClientPeg.safeGet().getMediaHandler().setAudioInput(audioDeviceId);
-        await MatrixClientPeg.safeGet().getMediaHandler().setVideoInput(videoDeviceId);
+        await this.sdkContext.client!.getMediaHandler().setAudioInput(audioDeviceId);
+        await this.sdkContext.client!.getMediaHandler().setVideoInput(videoDeviceId);
 
-        await MediaDeviceHandler.updateAudioSettings();
+        await this.updateAudioSettings();
     }
 
-    private static async updateAudioSettings(): Promise<void> {
-        await MatrixClientPeg.safeGet().getMediaHandler().setAudioSettings({
-            autoGainControl: MediaDeviceHandler.getAudioAutoGainControl(),
-            echoCancellation: MediaDeviceHandler.getAudioEchoCancellation(),
-            noiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression(),
+    private async updateAudioSettings(): Promise<void> {
+        await this.sdkContext.client!.getMediaHandler().setAudioSettings({
+            autoGainControl: this.getAudioAutoGainControl(),
+            echoCancellation: this.getAudioEchoCancellation(),
+            noiseSuppression: this.getAudioNoiseSuppression(),
         });
     }
 
     public setAudioOutput(deviceId: string): void {
-        SettingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
+        this.sdkContext.settingsStore.setValue("webrtc_audiooutput", null, SettingLevel.DEVICE, deviceId);
         this.emit(MediaDeviceHandlerEvent.AudioOutputChanged, deviceId);
     }
 
@@ -116,8 +110,8 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {string} deviceId
      */
     public async setAudioInput(deviceId: string): Promise<void> {
-        SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
-        return MatrixClientPeg.safeGet().getMediaHandler().setAudioInput(deviceId);
+        this.sdkContext.settingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
+        return this.sdkContext.client!.getMediaHandler().setAudioInput(deviceId);
     }
 
     /**
@@ -126,8 +120,8 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {string} deviceId
      */
     public async setVideoInput(deviceId: string): Promise<void> {
-        SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
-        return MatrixClientPeg.safeGet().getMediaHandler().setVideoInput(deviceId);
+        this.sdkContext.settingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
+        return this.sdkContext.client!.getMediaHandler().setVideoInput(deviceId);
     }
 
     public async setDevice(deviceId: string, kind: MediaDeviceKindEnum): Promise<void> {
@@ -144,43 +138,43 @@ export default class MediaDeviceHandler extends EventEmitter {
         }
     }
 
-    public static async setAudioAutoGainControl(value: boolean): Promise<void> {
-        await SettingsStore.setValue("webrtc_audio_autoGainControl", null, SettingLevel.DEVICE, value);
-        await MediaDeviceHandler.updateAudioSettings();
+    public async setAudioAutoGainControl(value: boolean): Promise<void> {
+        await this.sdkContext.settingsStore.setValue("webrtc_audio_autoGainControl", null, SettingLevel.DEVICE, value);
+        await this.updateAudioSettings();
     }
 
-    public static async setAudioEchoCancellation(value: boolean): Promise<void> {
-        await SettingsStore.setValue("webrtc_audio_echoCancellation", null, SettingLevel.DEVICE, value);
-        await MediaDeviceHandler.updateAudioSettings();
+    public async setAudioEchoCancellation(value: boolean): Promise<void> {
+        await this.sdkContext.settingsStore.setValue("webrtc_audio_echoCancellation", null, SettingLevel.DEVICE, value);
+        await this.updateAudioSettings();
     }
 
-    public static async setAudioNoiseSuppression(value: boolean): Promise<void> {
-        await SettingsStore.setValue("webrtc_audio_noiseSuppression", null, SettingLevel.DEVICE, value);
-        await MediaDeviceHandler.updateAudioSettings();
+    public async setAudioNoiseSuppression(value: boolean): Promise<void> {
+        await this.sdkContext.settingsStore.setValue("webrtc_audio_noiseSuppression", null, SettingLevel.DEVICE, value);
+        await this.updateAudioSettings();
     }
 
-    public static getAudioOutput(): string {
-        return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audiooutput");
+    public getAudioOutput(): string {
+        return this.sdkContext.settingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audiooutput");
     }
 
-    public static getAudioInput(): string {
-        return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audioinput");
+    public getAudioInput(): string {
+        return this.sdkContext.settingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audioinput");
     }
 
-    public static getVideoInput(): string {
-        return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_videoinput");
+    public getVideoInput(): string {
+        return this.sdkContext.settingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_videoinput");
     }
 
-    public static getAudioAutoGainControl(): boolean {
-        return SettingsStore.getValue("webrtc_audio_autoGainControl");
+    public getAudioAutoGainControl(): boolean {
+        return this.sdkContext.settingsStore.getValue("webrtc_audio_autoGainControl");
     }
 
-    public static getAudioEchoCancellation(): boolean {
-        return SettingsStore.getValue("webrtc_audio_echoCancellation");
+    public getAudioEchoCancellation(): boolean {
+        return this.sdkContext.settingsStore.getValue("webrtc_audio_echoCancellation");
     }
 
-    public static getAudioNoiseSuppression(): boolean {
-        return SettingsStore.getValue("webrtc_audio_noiseSuppression");
+    public getAudioNoiseSuppression(): boolean {
+        return this.sdkContext.settingsStore.getValue("webrtc_audio_noiseSuppression");
     }
 
     /**
@@ -188,7 +182,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      * @param {MediaDeviceKindEnum} kind of the device that will be returned
      * @returns {string} the deviceId
      */
-    public static getDevice(kind: MediaDeviceKindEnum): string {
+    public getDevice(kind: MediaDeviceKindEnum): string {
         switch (kind) {
             case MediaDeviceKindEnum.AudioOutput:
                 return this.getAudioOutput();
@@ -199,17 +193,17 @@ export default class MediaDeviceHandler extends EventEmitter {
         }
     }
 
-    public static get startWithAudioMuted(): boolean {
-        return SettingsStore.getValue("audioInputMuted");
+    public get startWithAudioMuted(): boolean {
+        return this.sdkContext.settingsStore.getValue("audioInputMuted");
     }
-    public static set startWithAudioMuted(value: boolean) {
-        SettingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
+    public set startWithAudioMuted(value: boolean) {
+        this.sdkContext.settingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
     }
 
-    public static get startWithVideoMuted(): boolean {
-        return SettingsStore.getValue("videoInputMuted");
+    public get startWithVideoMuted(): boolean {
+        return this.sdkContext.settingsStore.getValue("videoInputMuted");
     }
-    public static set startWithVideoMuted(value: boolean) {
-        SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
+    public set startWithVideoMuted(value: boolean) {
+        this.sdkContext.settingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
     }
 }

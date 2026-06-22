@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Sorter, SortingAlgorithm } from ".";
-import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 import { BaseRecencySorter } from "./BaseRecencySorter";
 import { DefaultTagID } from "../tag";
 
@@ -29,7 +28,7 @@ export class RecencySorter extends BaseRecencySorter implements Sorter {
      */
     protected getScore(room: Room): number {
         const isLowPriority = !!room.tags[DefaultTagID.LowPriority];
-        const isMuted = RoomNotificationStateStore.instance.getRoomState(room).muted;
+        const isMuted = this.sdkContext.roomNotificationStateStore.getRoomState(room).muted;
         // These constants are chosen so that the following order is maintained:
         // Low priority rooms -> Low priority and muted rooms -> Muted rooms
         if (isMuted && isLowPriority) return 5;

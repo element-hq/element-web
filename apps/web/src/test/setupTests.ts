@@ -32,3 +32,5 @@ if (globalThis.window === undefined) {
 
 // uninitialised SdkConfig causes lots of warnings in console, init with defaults
 SdkConfig.put(DEFAULTS);
+
+Error.stackTraceLimit = 200;

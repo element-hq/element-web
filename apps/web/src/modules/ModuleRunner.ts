@@ -22,6 +22,7 @@ import { AppModule } from "./AppModule";
 import { type ModuleFactory } from "./ModuleFactory";
 
 import "./ModuleComponents";
+import { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 /**
  * Handles and manages extensions provided by modules.
@@ -107,13 +108,11 @@ class ExtensionsManager {
  * Handles and coordinates the operation of modules.
  */
 export class ModuleRunner {
-    public static readonly instance = new ModuleRunner();
-
     private extensionsManager = new ExtensionsManager();
 
     private modules: AppModule[] = [];
 
-    private constructor() {
+    public constructor(private readonly sdkContext: SdkContextClass) {
         // we only want one instance
     }
 
@@ -164,7 +163,7 @@ export class ModuleRunner {
      * @param factory The module factory.
      */
     public registerModule(factory: ModuleFactory): void {
-        const appModule = new AppModule(factory);
+        const appModule = new AppModule(factory, this.sdkContext);
 
         this.modules.push(appModule);
 

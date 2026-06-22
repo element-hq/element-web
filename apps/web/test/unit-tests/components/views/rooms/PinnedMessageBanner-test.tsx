@@ -16,11 +16,10 @@ import { PinnedMessageBanner } from "../../../../../src/components/views/rooms/P
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { makePollStartEvent, stubClient, clientAndSDKContextRenderOptions } from "../../../../test-utils";
 import dis from "../../../../../src/dispatcher/dispatcher";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("<PinnedMessageBanner />", () => {
     const userId = "@alice:server.org";
@@ -268,7 +267,7 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should display View all button if the right panel is closed", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(false);
+            jest.spyOn(sdkContext.rightPanelStore, "isOpenForRoom").mockReturnValue(false);
 
             renderBanner();
             await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
@@ -278,8 +277,8 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should display View all button if the right panel is not opened on the pinned message list", async () => {
             // The Right panel is opened on another card
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            jest.spyOn(sdkContext.rightPanelStore, "isOpenForRoom").mockReturnValue(true);
+            jest.spyOn(sdkContext.rightPanelStore, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.MemberList,
             });
 
@@ -291,8 +290,8 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should display Close list button if the message pinning list is displayed", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            jest.spyOn(sdkContext.rightPanelStore, "isOpenForRoom").mockReturnValue(true);
+            jest.spyOn(sdkContext.rightPanelStore, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.PinnedMessages,
             });
 
@@ -304,21 +303,21 @@ describe("<PinnedMessageBanner />", () => {
 
         it("should open or close the message pinning list", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            jest.spyOn(sdkContext.rightPanelStore, "isOpenForRoom").mockReturnValue(true);
+            jest.spyOn(sdkContext.rightPanelStore, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.PinnedMessages,
             });
-            jest.spyOn(RightPanelStore.instance, "showOrHidePhase").mockReturnValue();
+            jest.spyOn(sdkContext.rightPanelStore, "showOrHidePhase").mockReturnValue();
 
             renderBanner();
             await userEvent.click(screen.getByRole("button", { name: "Close list" }));
-            expect(RightPanelStore.instance.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.PinnedMessages);
+            expect(sdkContext.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.PinnedMessages);
         });
 
         it("should listen to the right panel", async () => {
             // The Right panel is closed
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
-            jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
+            jest.spyOn(sdkContext.rightPanelStore, "isOpenForRoom").mockReturnValue(true);
+            jest.spyOn(sdkContext.rightPanelStore, "currentCard", "get").mockReturnValue({
                 phase: RightPanelPhases.PinnedMessages,
             });
 
@@ -326,9 +325,9 @@ describe("<PinnedMessageBanner />", () => {
             await expect(screen.findByText("Second pinned message")).resolves.toBeVisible();
             expect(screen.getByRole("button", { name: "Close list" })).toBeVisible();
 
-            jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(false);
+            jest.spyOn(sdkContext.rightPanelStore, "isOpenForRoom").mockReturnValue(false);
             act(() => {
-                RightPanelStore.instance.emit(UPDATE_EVENT);
+                sdkContext.rightPanelStore.emit(UPDATE_EVENT);
             });
             expect(screen.getByRole("button", { name: "View all" })).toBeVisible();
         });

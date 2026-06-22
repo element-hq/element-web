@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { sleep } from "matrix-js-sdk/src/utils";
 import React, { type ReactNode } from "react";
-import { EventStatus, MatrixEventEvent, type Room, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { EventStatus, MatrixEventEvent, type Room, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal, { type IHandle } from "../Modal";
@@ -16,7 +16,6 @@ import Spinner from "../components/views/elements/Spinner";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { isMetaSpace } from "../stores/spaces";
-import SpaceStore from "../stores/spaces/SpaceStore";
 import dis from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
@@ -24,13 +23,10 @@ import { type ViewHomePagePayload } from "../dispatcher/payloads/ViewHomePagePay
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import { type AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { bulkSpaceBehaviour } from "./space";
-import { SdkContextClass } from "../contexts/SDKContext";
-import SettingsStore from "../settings/SettingsStore";
-import { CallStore } from "../stores/CallStore";
-import LegacyCallHandler from "../LegacyCallHandler";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 export async function leaveRoomBehaviour(
-    matrixClient: MatrixClient,
+    context: SdkContextClass,
     roomId: string,
     retry = true,
     spinner = true,
@@ -41,10 +37,10 @@ export async function leaveRoomBehaviour(
     }
 
     let leavingAllVersions = true;
-    const history = matrixClient.getRoomUpgradeHistory(
+    const history = context.client?.getRoomUpgradeHistory(
         roomId,
         true,
-        SettingsStore.getValue("feature_dynamic_room_predecessors"),
+        context.settingsStore.getValue("feature_dynamic_room_predecessors"),
     );
     if (history && history.length > 0) {
         const currentRoom = history[history.length - 1];
@@ -55,7 +51,7 @@ export async function leaveRoomBehaviour(
         }
     }
 
-    const room = matrixClient.getRoom(roomId);
+    const room = context.client?.getRoom(roomId);
 
     // should not encounter this
     if (!room) {
@@ -64,13 +60,13 @@ export async function leaveRoomBehaviour(
 
     // attempt to hang up legacy based calls
     try {
-        LegacyCallHandler.instance.hangupOrReject(roomId);
+        context.legacyCallHandler.hangupOrReject(roomId);
     } catch (e) {
         logger.warn("Failed to hangup call before leaving room: ", e);
     }
 
     // hang up widget based calls
-    const activeCall = CallStore.instance.getActiveCall(roomId);
+    const activeCall = context.callStore.getActiveCall(roomId);
     if (activeCall) {
         try {
             await activeCall.disconnect();
@@ -109,7 +105,7 @@ export async function leaveRoomBehaviour(
     let results: { [roomId: string]: Error | MatrixError | null } = {};
     if (!leavingAllVersions) {
         try {
-            await matrixClient.leave(roomId);
+            await context.client!.leave(roomId);
         } catch (e) {
             if (e instanceof MatrixError) {
                 const message = e.data.error || _t("room|leave_unexpected_error");
@@ -121,7 +117,7 @@ export async function leaveRoomBehaviour(
             }
         }
     } else {
-        results = await matrixClient.leaveRoomChain(roomId, retry);
+        results = await context.client!.leaveRoomChain(roomId, retry);
     }
 
     if (retry) {
@@ -130,7 +126,7 @@ export async function leaveRoomBehaviour(
         ) as MatrixError;
         if (limitExceededError) {
             await sleep(limitExceededError.data.retry_after_ms ?? 100);
-            return leaveRoomBehaviour(matrixClient, roomId, false, false);
+            return leaveRoomBehaviour(context, roomId, false, false);
         }
     }
 
@@ -161,16 +157,16 @@ export async function leaveRoomBehaviour(
         return;
     }
 
-    if (SdkContextClass.instance.roomViewStore.getRoomId() === roomId) {
+    if (context.roomViewStore.getRoomId() === roomId) {
         // We were viewing the room that was just left. In order to avoid
         // accidentally viewing the next room in the list and clearing its
         // notifications, switch to a neutral ground such as the home page or
         // space landing page.
-        if (isMetaSpace(SpaceStore.instance.activeSpace)) {
+        if (isMetaSpace(context.spaceStore.activeSpace)) {
             dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
-        } else if (SpaceStore.instance.activeSpace === roomId) {
+        } else if (context.spaceStore.activeSpace === roomId) {
             // View the parent space, if there is one
-            const parent = SpaceStore.instance.getCanonicalParent(roomId);
+            const parent = context.spaceStore.getCanonicalParent(roomId);
             if (parent !== null) {
                 dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
@@ -183,14 +179,14 @@ export async function leaveRoomBehaviour(
         } else {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: SpaceStore.instance.activeSpace,
+                room_id: context.spaceStore.activeSpace,
                 metricsTrigger: undefined, // other
             });
         }
     }
 }
 
-export const leaveSpace = (space: Room): void => {
+export const leaveSpace = (context: SdkContextClass, space: Room): void => {
     const { finished } = Modal.createDialog(
         LeaveSpaceDialog,
         {
@@ -200,7 +196,7 @@ export const leaveSpace = (space: Room): void => {
     );
     finished.then(async ([leave, rooms]) => {
         if (!leave) return;
-        await bulkSpaceBehaviour(space, rooms!, (room) => leaveRoomBehaviour(space.client, room.roomId));
+        await bulkSpaceBehaviour(space, rooms!, (room) => leaveRoomBehaviour(context, room.roomId));
 
         dis.dispatch<AfterLeaveRoomPayload>({
             action: Action.AfterLeaveRoom,

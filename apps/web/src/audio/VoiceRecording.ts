@@ -13,7 +13,6 @@ import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 import { clamp } from "@element-hq/web-shared-components";
 
-import MediaDeviceHandler from "../MediaDeviceHandler";
 import { type IDestroyable } from "../utils/IDestroyable";
 import { Singleflight } from "../utils/Singleflight";
 import { PayloadEvent, WORKLET_NAME } from "./consts";
@@ -21,6 +20,7 @@ import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { createAudioContext } from "./compat";
 import { FixedRollingArray } from "../utils/FixedRollingArray";
 import recorderWorkletFactory from "./recorderWorkletFactory";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const CHANNELS = 1; // stereo isn't important
 export const SAMPLE_RATE = 48000; // 48khz is what WebRTC uses. 12khz is where we lose quality.
@@ -71,6 +71,10 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private liveWaveform = new FixedRollingArray(RECORDING_PLAYBACK_SAMPLES, 0);
     public onDataAvailable?: (data: ArrayBuffer) => void;
 
+    public constructor(private readonly sdkContext: SdkContextClass) {
+        super();
+    }
+
     public get contentType(): string {
         return "audio/ogg";
     }
@@ -98,12 +102,12 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         // Non-voice use case is suspected when noise suppression is disabled by the user.
         // When recording complex audio, higher quality is required to avoid audio artifacts.
         // This is a really arbitrary decision, but it can be refined/replaced at any time.
-        return !MediaDeviceHandler.getAudioNoiseSuppression();
+        return !this.sdkContext.mediaDeviceHandler.getAudioNoiseSuppression();
     }
 
     private async makeRecorder(): Promise<void> {
         try {
-            const requestedDeviceId = MediaDeviceHandler.getAudioInput();
+            const requestedDeviceId = this.sdkContext.mediaDeviceHandler.getAudioInput();
             const deviceIdConstraint =
                 requestedDeviceId && requestedDeviceId !== "default" ? { deviceId: { exact: requestedDeviceId } } : {};
 
@@ -111,9 +115,9 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 audio: {
                     channelCount: CHANNELS,
                     ...deviceIdConstraint,
-                    autoGainControl: { ideal: MediaDeviceHandler.getAudioAutoGainControl() },
-                    echoCancellation: { ideal: MediaDeviceHandler.getAudioEchoCancellation() },
-                    noiseSuppression: { ideal: MediaDeviceHandler.getAudioNoiseSuppression() },
+                    autoGainControl: { ideal: this.sdkContext.mediaDeviceHandler.getAudioAutoGainControl() },
+                    echoCancellation: { ideal: this.sdkContext.mediaDeviceHandler.getAudioEchoCancellation() },
+                    noiseSuppression: { ideal: this.sdkContext.mediaDeviceHandler.getAudioNoiseSuppression() },
                 },
             });
             this.recorderContext = createAudioContext({

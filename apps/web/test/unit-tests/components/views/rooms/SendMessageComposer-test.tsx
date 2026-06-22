@@ -30,7 +30,7 @@ import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext.ts";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 jest.mock("../../../../../src/utils/local-room", () => ({

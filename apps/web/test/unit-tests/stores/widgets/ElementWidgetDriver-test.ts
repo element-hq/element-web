@@ -34,7 +34,7 @@ import {
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
 import { mkEvent, stubClient } from "../../../test-utils";

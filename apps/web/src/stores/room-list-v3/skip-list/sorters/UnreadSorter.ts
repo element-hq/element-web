@@ -8,8 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { KnownMembership, RoomType, type Room } from "matrix-js-sdk/src/matrix";
 
 import { type Sorter, SortingAlgorithm } from ".";
-import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
-import { CallStore } from "../../../CallStore";
 import { getMarkedUnreadState } from "../../../../utils/notifications";
 import { BaseRecencySorter } from "./BaseRecencySorter";
 import { DefaultTagID } from "../tag";
@@ -30,9 +28,9 @@ export class UnreadSorter extends BaseRecencySorter implements Sorter {
         // Then rooms that have calls (but not video rooms)
         const roomType = room.getType();
         const isVideoRoom = roomType === RoomType.UnstableCall || roomType === RoomType.ElementVideo;
-        if (!isVideoRoom && !!CallStore.instance.getCall(room.roomId)) return 101;
+        if (!isVideoRoom && !!this.sdkContext.callStore.getCall(room.roomId)) return 101;
 
-        const roomNotificationState = RoomNotificationStateStore.instance.getRoomState(room);
+        const roomNotificationState = this.sdkContext.roomNotificationStateStore.getRoomState(room);
         // Then mentions
         if (roomNotificationState.isMention) return 102;
 

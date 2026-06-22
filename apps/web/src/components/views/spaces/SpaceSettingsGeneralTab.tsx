@@ -20,6 +20,7 @@ import { getTopic } from "../../../hooks/room/useTopic";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
 import { SettingsSubsection } from "../settings/shared/SettingsSubsection";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -122,7 +123,7 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
                     <AccessibleButton
                         kind="danger"
                         onClick={() => {
-                            leaveSpace(space);
+                            leaveSpace(SdkContextClass.instance, space);
                         }}
                     >
                         {_t("room_settings|general|leave_space")}

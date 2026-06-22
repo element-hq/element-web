@@ -27,7 +27,6 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
@@ -39,7 +38,6 @@ import Dialpad from "../voip/DialPad";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import LegacyCallHandler from "../../../LegacyCallHandler";
 import CopyableText from "../elements/CopyableText";
 import { type ScreenName } from "../../../PosthogTrackers";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -56,7 +54,7 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { type NonEmptyArray } from "../../../@types/common";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SdkContextClass } from "../../../contexts/SDKContextClass";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
@@ -281,7 +279,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
         // room list doesn't tag the room for the DMRoomMap, but does for the room list.
-        const dmTaggedRooms = RoomListStore.instance.orderedLists[DefaultTagID.DM] || [];
+        const dmTaggedRooms = SdkContextClass.instance.roomListStore.orderedLists[DefaultTagID.DM] || [];
         const myUserId = MatrixClientPeg.safeGet().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter((u) => u.userId !== myUserId);
@@ -484,9 +482,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 return;
             }
 
-            LegacyCallHandler.instance.startTransferToMatrixID(this.props.call, targetIds[0], this.state.consultFirst);
+            SdkContextClass.instance.legacyCallHandler.startTransferToMatrixID(
+                this.props.call,
+                targetIds[0],
+                this.state.consultFirst,
+            );
         } else {
-            LegacyCallHandler.instance.startTransferToPhoneNumber(
+            SdkContextClass.instance.legacyCallHandler.startTransferToPhoneNumber(
                 this.props.call,
                 this.state.dialPadValue,
                 this.state.consultFirst,

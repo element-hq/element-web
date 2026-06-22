@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { useMemo } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { useCall } from "../../hooks/useCall";
 import { NotificationDecoration } from "../../components/views/rooms/NotificationDecoration";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export interface ModuleNotificationDecorationProps {
     /**
@@ -23,7 +23,10 @@ export interface ModuleNotificationDecorationProps {
  * Used by the module API to render notification decoration without having to expose a bunch of stores.
  */
 export const ModuleNotificationDecoration: React.FC<ModuleNotificationDecorationProps> = ({ room }) => {
-    const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
+    const notificationState = useMemo(
+        () => SdkContextClass.instance.roomNotificationStateStore.getRoomState(room),
+        [room],
+    );
     const call = useCall(room.roomId);
     return <NotificationDecoration notificationState={notificationState} callType={call?.callType} />;
 };

@@ -34,7 +34,7 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { canInviteTo } from "../../../utils/room/canInviteTo";
-import { isValid3pidInvite } from "../../../RoomInvite";
+import { isValid3pidInvite } from "../../../utils/3pidInvites";
 import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";

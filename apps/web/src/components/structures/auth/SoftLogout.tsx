@@ -14,7 +14,7 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import * as Lifecycle from "../../../Lifecycle";
 import Modal from "../../../Modal";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../MatrixClientPeg";
 import { sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
@@ -91,7 +91,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             if (!wipeData) return;
 
             logger.log("Clearing data from soft-logged-out session");
-            Lifecycle.logout(this.context.oidcClientStore);
+            Lifecycle.logout(this.context);
         });
     };
 
@@ -106,7 +106,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         // Note: we don't use the existing Login class because it is heavily flow-based. We don't
         // care about login flows here, unless it is the single flow we support.
-        const client = MatrixClientPeg.safeGet();
+        const client = this.context.client!;
         const flows = (await client.loginFlows()).flows;
         const loginViews = flows.map((f) => STATIC_FLOWS_TO_VIEWS[f.type]);
 
@@ -130,7 +130,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         this.setState({ busy: true });
 
-        const cli = MatrixClientPeg.safeGet();
+        const cli = this.context.client!;
         const hsUrl = cli.getHomeserverUrl();
         const isUrl = cli.getIdentityServerUrl();
         const loginType = "m.login.password";
@@ -163,7 +163,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return;
         }
 
-        Lifecycle.hydrateSession(credentials).catch((e) => {
+        Lifecycle.hydrateSession(this.context, credentials).catch((e) => {
             logger.error(e);
             this.setState({ busy: false, errorText: _t("auth|failed_soft_logout_auth") });
         });
@@ -183,11 +183,11 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return false;
         }
 
-        const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || MatrixClientPeg.safeGet().getIdentityServerUrl();
+        const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || this.context.client?.getIdentityServerUrl();
         const loginType = "m.login.token";
         const loginParams = {
             token: this.props.urlParams?.legacy_sso?.loginToken,
-            device_id: MatrixClientPeg.safeGet().getDeviceId() ?? undefined,
+            device_id: this.context.client?.getDeviceId() ?? undefined,
         };
 
         let credentials: IMatrixClientCreds;
@@ -199,7 +199,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return false;
         }
 
-        return Lifecycle.hydrateSession(credentials)
+        return Lifecycle.hydrateSession(this.context, credentials)
             .then(() => {
                 this.props.onTokenLoginCompleted(this.props.urlParams, this.props.fragmentAfterLogin);
                 return true;
@@ -246,7 +246,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             <div>
                 {introText ? <p>{introText}</p> : null}
                 <SSOButtons
-                    matrixClient={MatrixClientPeg.safeGet()}
+                    matrixClient={this.context.client!}
                     flow={flow}
                     loginType={loginType}
                     fragmentAfterLogin={this.props.fragmentAfterLogin}

@@ -16,7 +16,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
-import { isValid3pidInvite } from "../../../RoomInvite";
+import { isValid3pidInvite } from "../../../utils/3pidInvites";
 import { Action } from "../../../dispatcher/actions";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import BaseCard from "../right_panel/BaseCard";

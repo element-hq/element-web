@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import { type SettingLevel } from "../SettingLevel";
-import Notifier, { isPushNotifyDisabled } from "../../Notifier";
 
 export class NotificationsEnabledController extends SettingController {
     public getValueOverride(
@@ -18,28 +17,28 @@ export class NotificationsEnabledController extends SettingController {
         calculatedValue: any,
         calculatedAtLevel: SettingLevel | null,
     ): any {
-        if (!Notifier.isPossible()) return false;
+        if (!this.sdkContext.notifier.isPossible()) return false;
 
         if (calculatedValue === null || calculatedAtLevel === "default") {
-            return !isPushNotifyDisabled();
+            return !this.sdkContext.notifier.isPushNotifyDisabled();
         }
 
         return calculatedValue;
     }
 
     public onChange(level: SettingLevel, roomId: string, newValue: any): void {
-        if (Notifier.supportsDesktopNotifications()) {
-            Notifier.setEnabled(newValue);
+        if (this.sdkContext.notifier.supportsDesktopNotifications()) {
+            this.sdkContext.notifier.setEnabled(newValue);
         }
     }
 }
 
 export class NotificationBodyEnabledController extends SettingController {
     public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any): any {
-        if (!Notifier.isPossible()) return false;
+        if (!this.sdkContext.notifier.isPossible()) return false;
 
         if (calculatedValue === null) {
-            return !isPushNotifyDisabled();
+            return !this.sdkContext.notifier.isPushNotifyDisabled();
         }
 
         return calculatedValue;

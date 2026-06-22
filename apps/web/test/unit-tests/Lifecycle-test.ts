@@ -29,6 +29,7 @@ import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../..
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
 import * as StorageManager from "../../src/utils/StorageManager.ts";
 import type BasePlatform from "../../src/BasePlatform.ts";
+import { TestSdkContext } from "./TestSdkContext.ts";
 
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
@@ -152,6 +153,7 @@ describe("Lifecycle", () => {
         iv: expect.any(String),
         mac: expect.any(String),
     };
+    const context = new TestSdkContext();
 
     describe("loadSession", () => {
         beforeEach(() => {
@@ -166,7 +168,7 @@ describe("Lifecycle", () => {
             jest.spyOn(StorageManager, "checkConsistency").mockRejectedValue(new Error("test error"));
 
             const abortController = new AbortController();
-            const prom = Lifecycle.loadSession({
+            const prom = Lifecycle.loadSession(context, {
                 enableGuest: true,
                 guestHsUrl: "https://guest.server",
                 urlParams: { guest: { guest_user_id: "a", guest_access_token: "b" } },
@@ -201,18 +203,18 @@ describe("Lifecycle", () => {
             // @ts-ignore dirty mocking
             global.localStorage = undefined;
 
-            expect(await restoreSessionFromStorage()).toEqual(false);
+            expect(await restoreSessionFromStorage(context)).toEqual(false);
         });
 
         it("should return false when no session data is found in local storage", async () => {
-            expect(await restoreSessionFromStorage()).toEqual(false);
+            expect(await restoreSessionFromStorage(context)).toEqual(false);
             expect(logger.log).toHaveBeenCalledWith("No previous session found.");
         });
 
         it("should abort login when we expect to find an access token but don't", async () => {
             localStorage.setItem("mx_has_access_token", "true");
 
-            await expect(() => restoreSessionFromStorage()).rejects.toThrow();
+            await expect(() => restoreSessionFromStorage(context)).rejects.toThrow();
             expect(Modal.createDialog).toHaveBeenCalledWith(StorageEvictedDialog);
             expect(mockClient.clearStores).toHaveBeenCalled();
         });
@@ -228,12 +230,12 @@ describe("Lifecycle", () => {
                 });
 
                 it("should ignore guest accounts when ignoreGuest is true", async () => {
-                    expect(await restoreSessionFromStorage({ ignoreGuest: true })).toEqual(false);
+                    expect(await restoreSessionFromStorage(context, { ignoreGuest: true })).toEqual(false);
                     expect(logger.log).toHaveBeenCalledWith(`Ignoring stored guest account: ${userId}`);
                 });
 
                 it("should restore guest accounts when ignoreGuest is false", async () => {
-                    expect(await restoreSessionFromStorage({ ignoreGuest: false })).toEqual(true);
+                    expect(await restoreSessionFromStorage(context, { ignoreGuest: false })).toEqual(true);
 
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                         expect.objectContaining({
@@ -255,7 +257,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should persist credentials", async () => {
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(localStorage.getItem("mx_user_id")).toEqual(userId);
                     expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
@@ -269,7 +271,7 @@ describe("Lifecycle", () => {
 
                 it("should persist access token when idb is not available", async () => {
                     jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
                     // put accessToken in localstorage as fallback
@@ -277,7 +279,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                         {
@@ -297,13 +299,13 @@ describe("Lifecycle", () => {
                 });
 
                 it("should remove fresh login flag from session storage", async () => {
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(sessionStorage.getItem("mx_fresh_login")).toBeFalsy();
                 });
 
                 it("should start matrix client", async () => {
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(MatrixClientPeg.start).toHaveBeenCalled();
                 });
@@ -318,7 +320,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should persist credentials", async () => {
-                        expect(await restoreSessionFromStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                         // refresh token from storage is re-persisted
                         expect(localStorage.getItem("mx_has_refresh_token")).toEqual("true");
@@ -326,7 +328,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should create new matrix client with credentials", async () => {
-                        expect(await restoreSessionFromStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                         expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                             {
@@ -366,7 +368,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should persist credentials", async () => {
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
 
@@ -388,7 +390,7 @@ describe("Lifecycle", () => {
                         },
                     );
 
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith(
                         "account",
@@ -407,7 +409,7 @@ describe("Lifecycle", () => {
                     });
 
                     // Perform the restore
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     // Ensure that the expected calls were made
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
@@ -434,7 +436,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should persist credentials", async () => {
-                        expect(await restoreSessionFromStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                         // refresh token from storage is re-persisted
                         expect(localStorage.getItem("mx_has_refresh_token")).toEqual("true");
@@ -446,7 +448,7 @@ describe("Lifecycle", () => {
                     });
 
                     it("should create new matrix client with credentials", async () => {
-                        expect(await restoreSessionFromStorage()).toEqual(true);
+                        expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                         expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                             {
@@ -498,7 +500,7 @@ describe("Lifecycle", () => {
 
                 it("should create and start new matrix client with credentials", async () => {
                     // Perform the restore
-                    expect(await restoreSessionFromStorage()).toEqual(true);
+                    expect(await restoreSessionFromStorage(context)).toEqual(true);
 
                     // Ensure that the expected calls were made
                     expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
@@ -527,7 +529,7 @@ describe("Lifecycle", () => {
                 initIdbMock(idbStorageSession);
                 mockClient.isVersionSupported.mockRejectedValue(new Error("Oh, noes, the server is down!"));
 
-                expect(await restoreSessionFromStorage()).toEqual(true);
+                expect(await restoreSessionFromStorage(context)).toEqual(true);
             });
 
             it("should throw if the token was persisted with a pickle key but there is no pickle key available now", async () => {
@@ -544,7 +546,7 @@ describe("Lifecycle", () => {
                 // Now destroy the pickle key
                 await PlatformPeg.get()!.destroyPickleKey(credentials.userId, credentials.deviceId);
 
-                await expect(restoreSessionFromStorage()).rejects.toThrow(
+                await expect(restoreSessionFromStorage(context)).rejects.toThrow(
                     "Error decrypting secret access_token: no pickle key found.",
                 );
             });
@@ -568,25 +570,25 @@ describe("Lifecycle", () => {
         const refreshToken = "test-refresh-token";
 
         it("should remove fresh login flag from session storage", async () => {
-            await setLoggedIn(credentials);
+            await setLoggedIn(context, credentials);
 
             expect(sessionStorage.getItem("mx_fresh_login")).toBeFalsy();
         });
 
         it("should start matrix client", async () => {
-            await setLoggedIn(credentials);
+            await setLoggedIn(context, credentials);
 
             expect(MatrixClientPeg.start).toHaveBeenCalled();
         });
 
         describe("after a soft-logout", () => {
             beforeEach(async () => {
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
                 localStorage.setItem("mx_soft_logout", "true");
             });
 
             it("should not clear the storage if device is the same", async () => {
-                await Lifecycle.hydrateSession(credentials);
+                await Lifecycle.hydrateSession(context, credentials);
 
                 expect(localStorage.getItem("mx_soft_logout")).toBeFalsy();
                 expect(mockClient.getUserId).toHaveReturnedWith(userId);
@@ -602,7 +604,7 @@ describe("Lifecycle", () => {
                     deviceId,
                     accessToken,
                 };
-                await Lifecycle.hydrateSession(fakeCredentials);
+                await Lifecycle.hydrateSession(context, fakeCredentials);
 
                 expect(localStorage.getItem("mx_soft_logout")).toBeFalsy();
                 expect(mockClient.getUserId).toHaveReturnedWith(userId);
@@ -617,7 +619,7 @@ describe("Lifecycle", () => {
             });
 
             it("should persist credentials", async () => {
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 expect(localStorage.getItem("mx_user_id")).toEqual(userId);
                 expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
@@ -633,7 +635,7 @@ describe("Lifecycle", () => {
                 localStorage.setItem("mx_oidc_token_issuer", "test-issuer.dummy");
                 localStorage.setItem("mx_oidc_client_id", "test-client-id");
 
-                await setLoggedIn({
+                await setLoggedIn(context, {
                     ...credentials,
                     refreshToken,
                 });
@@ -646,7 +648,7 @@ describe("Lifecycle", () => {
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
                 jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
-                await setLoggedIn({
+                await setLoggedIn(context, {
                     ...credentials,
                     // @ts-ignore
                     accessToken: undefined,
@@ -657,7 +659,7 @@ describe("Lifecycle", () => {
             });
 
             it("should clear stores", async () => {
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 expect(StorageAccess.idbClear).toHaveBeenCalledWith("account");
                 expect(sessionStorage.length).toBe(0);
@@ -665,7 +667,7 @@ describe("Lifecycle", () => {
             });
 
             it("should create new matrix client with credentials", async () => {
-                expect(await setLoggedIn(credentials)).toEqual(mockClient);
+                expect(await setLoggedIn(context, credentials)).toEqual(mockClient);
 
                 expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                     {
@@ -685,7 +687,7 @@ describe("Lifecycle", () => {
 
         describe("with a pickle key", () => {
             it("should not create a pickle key when credentials do not include deviceId", async () => {
-                await setLoggedIn({
+                await setLoggedIn(context, {
                     ...credentials,
                     deviceId: undefined,
                 });
@@ -696,13 +698,13 @@ describe("Lifecycle", () => {
             });
 
             it("creates a pickle key with userId and deviceId", async () => {
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 expect(mockPlatform.createPickleKey).toHaveBeenCalledWith(userId, deviceId);
             });
 
             it("should persist credentials", async () => {
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 expect(localStorage.getItem("mx_user_id")).toEqual(userId);
                 expect(localStorage.getItem("mx_has_access_token")).toEqual("true");
@@ -722,7 +724,7 @@ describe("Lifecycle", () => {
 
             it("should persist token when encrypting the token fails", async () => {
                 jest.spyOn(encryptAESSecretStorageItemModule, "default").mockRejectedValue("MOCK REJECT ENCRYPTAES");
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 // persist the unencrypted token
                 expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
@@ -737,7 +739,7 @@ describe("Lifecycle", () => {
                         }
                     },
                 );
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 // put plain accessToken in localstorage when we dont have idb
                 expect(localStorage.getItem("mx_access_token")).toEqual(accessToken);
@@ -752,7 +754,7 @@ describe("Lifecycle", () => {
                         }
                     },
                 );
-                await setLoggedIn({
+                await setLoggedIn(context, {
                     ...credentials,
                     // @ts-ignore
                     accessToken: undefined,
@@ -763,7 +765,7 @@ describe("Lifecycle", () => {
             });
 
             it("should create new matrix client with credentials", async () => {
-                expect(await setLoggedIn(credentials)).toEqual(mockClient);
+                expect(await setLoggedIn(context, credentials)).toEqual(mockClient);
 
                 expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
                     {
@@ -807,7 +809,7 @@ describe("Lifecycle", () => {
             });
 
             it("should not try to create a token refresher without a refresh token", async () => {
-                await setLoggedIn(credentials);
+                await setLoggedIn(context, credentials);
 
                 // didn't try to initialise token refresher
                 expect(fetchMock).toHaveFetchedTimes(
@@ -818,7 +820,7 @@ describe("Lifecycle", () => {
 
             it("should not try to create a token refresher without a deviceId", async () => {
                 await expect(
-                    setLoggedIn({
+                    setLoggedIn(context, {
                         ...credentials,
                         refreshToken,
                         deviceId: undefined,
@@ -835,7 +837,7 @@ describe("Lifecycle", () => {
             it("should not try to create a token refresher without an issuer in session storage", async () => {
                 localStorage.removeItem("mx_oidc_token_issuer");
                 await expect(
-                    setLoggedIn({
+                    setLoggedIn(context, {
                         ...credentials,
                         refreshToken,
                     }),
@@ -850,7 +852,7 @@ describe("Lifecycle", () => {
 
             it("should create a client with a tokenRefreshFunction", async () => {
                 expect(
-                    await setLoggedIn({
+                    await setLoggedIn(context, {
                         ...credentials,
                         refreshToken,
                     }),
@@ -871,7 +873,7 @@ describe("Lifecycle", () => {
 
                 // succeeded
                 expect(
-                    await setLoggedIn({
+                    await setLoggedIn(context, {
                         ...credentials,
                         refreshToken,
                     }),
@@ -890,12 +892,12 @@ describe("Lifecycle", () => {
     });
 
     describe("logout()", () => {
-        let oidcClientStore!: OidcClientStore;
         const accessToken = "test-access-token";
         const refreshToken = "test-refresh-token";
 
         beforeEach(() => {
-            oidcClientStore = new OidcClientStore(mockClient);
+            const oidcClientStore = new OidcClientStore(mockClient);
+            jest.spyOn(context, "oidcClientStore", "get").mockReturnValue(oidcClientStore);
             // stub
             jest.spyOn(oidcClientStore, "revokeTokens").mockResolvedValue(undefined);
 
@@ -904,7 +906,7 @@ describe("Lifecycle", () => {
         });
 
         it("should call logout on the client when oidcClientStore is falsy", async () => {
-            logout();
+            logout(context);
 
             await flushPromises();
 
@@ -912,23 +914,23 @@ describe("Lifecycle", () => {
         });
 
         it("should call logout on the client when oidcClientStore.isUserAuthenticatedWithOidc is falsy", async () => {
-            jest.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(false);
-            logout(oidcClientStore);
+            jest.spyOn(context.oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(false);
+            logout(context);
 
             await flushPromises();
 
             expect(mockClient.logout).toHaveBeenCalledWith(true);
-            expect(oidcClientStore.revokeTokens).not.toHaveBeenCalled();
+            expect(context.oidcClientStore.revokeTokens).not.toHaveBeenCalled();
         });
 
         it("should revoke tokens when user is authenticated with oidc", async () => {
-            jest.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(true);
-            logout(oidcClientStore);
+            jest.spyOn(context.oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(true);
+            logout(context);
 
             await flushPromises();
 
             expect(mockClient.logout).not.toHaveBeenCalled();
-            expect(oidcClientStore.revokeTokens).toHaveBeenCalledWith(accessToken, refreshToken);
+            expect(context.oidcClientStore.revokeTokens).toHaveBeenCalledWith(accessToken, refreshToken);
         });
     });
 
@@ -949,7 +951,7 @@ describe("Lifecycle", () => {
                 });
             });
             // set a logged in state
-            await setLoggedIn(credentials);
+            await setLoggedIn(context, credentials);
 
             await firstLoginEvent;
 

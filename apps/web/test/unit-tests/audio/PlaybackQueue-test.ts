@@ -12,7 +12,7 @@ import { PlaybackQueue } from "../../../src/audio/PlaybackQueue";
 import { type Playback, PlaybackState } from "../../../src/audio/Playback";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { MockedPlayback } from "./MockedPlayback";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 
 describe("PlaybackQueue", () => {
     let playbackQueue: PlaybackQueue;

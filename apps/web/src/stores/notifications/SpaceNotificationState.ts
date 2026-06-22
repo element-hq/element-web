@@ -14,16 +14,11 @@ import { arrayDiff } from "../../utils/arrays";
 import { type RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
 import { DefaultTagID } from "../room-list-v3/skip-list/tag";
-import { RoomNotificationStateStore } from "./RoomNotificationStateStore";
 import { getTagsForRoom } from "../../utils/room/getTagsForRoom";
 
 export class SpaceNotificationState extends NotificationState {
     public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
-
-    public constructor() {
-        super();
-    }
 
     public get symbol(): string | null {
         return this._level === NotificationLevel.Unsent ? "!" : null;
@@ -40,7 +35,7 @@ export class SpaceNotificationState extends NotificationState {
             state.off(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
         }
         for (const newRoom of diff.added) {
-            const state = RoomNotificationStateStore.instance.getRoomState(newRoom);
+            const state = this.sdkContext.roomNotificationStateStore.getRoomState(newRoom);
             state.on(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
             this.states[newRoom.roomId] = state;
         }

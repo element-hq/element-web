@@ -30,7 +30,7 @@ import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SdkContextClass } from "../../../contexts/SDKContextClass";
 
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;

@@ -886,6 +886,3 @@ export default class SettingsStore {
         return handlers;
     }
 }
-
-// For debugging purposes
-window.mxSettingsStore = SettingsStore;

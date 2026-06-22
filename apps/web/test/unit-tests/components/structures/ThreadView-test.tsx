@@ -23,7 +23,7 @@ import React, { useState } from "react";
 
 import ThreadView from "../../../../src/components/structures/ThreadView";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import { Action } from "../../../../src/dispatcher/actions";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

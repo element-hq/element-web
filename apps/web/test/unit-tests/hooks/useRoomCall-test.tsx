@@ -22,7 +22,7 @@ import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomConte
 import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
 import type LegacyCallHandler from "../../../src/LegacyCallHandler";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
 

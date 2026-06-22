@@ -20,10 +20,9 @@ import dis from "../../../../src/dispatcher/dispatcher";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 const RightPanelBase = wrapInMatrixClientContext(_RightPanel);
@@ -67,13 +66,13 @@ describe("RightPanel", () => {
         await WidgetLayoutStore.instance.onReady();
 
         // Make sure we start with a clean store
-        RightPanelStore.instance.reset();
-        RightPanelStore.instance.useUnitTestClient(cli);
+        context.rightPanelStore.reset();
+        context.rightPanelStore.useUnitTestClient(cli);
         // @ts-ignore
-        await RightPanelStore.instance.onReady();
+        await context.rightPanelStore.onReady();
     };
 
-    const waitForRpsUpdate = () => new Promise<void>((resolve) => RightPanelStore.instance.once(UPDATE_EVENT, resolve));
+    const waitForRpsUpdate = () => new Promise<void>((resolve) => context.rightPanelStore.once(UPDATE_EVENT, resolve));
 
     it("renders info from only one room during room changes", async () => {
         const r1 = mkRoom(cli, "r1");

@@ -30,7 +30,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
 import { type IConfigOptions } from "../../../../../src/IConfigOptions";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { type IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
 

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import { OidcClientStore } from "../../../src/stores/oidc/OidcClientStore";
 import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
 import { createTestClient } from "../../test-utils";

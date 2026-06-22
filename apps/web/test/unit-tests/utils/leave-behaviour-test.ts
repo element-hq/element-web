@@ -16,7 +16,7 @@ import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../src/dispatcher/actions";
 import { leaveRoomBehaviour } from "../../../src/utils/leave-behaviour";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../src/stores/spaces";

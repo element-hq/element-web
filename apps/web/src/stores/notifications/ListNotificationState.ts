@@ -12,6 +12,7 @@ import { NotificationLevel } from "./NotificationLevel";
 import { arrayDiff } from "../../utils/arrays";
 import { type RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export type FetchRoomFn = (room: Room) => RoomNotificationState;
 
@@ -20,10 +21,11 @@ export class ListNotificationState extends NotificationState {
     private states: { [roomId: string]: RoomNotificationState } = {};
 
     public constructor(
+        sdkContext: SdkContextClass,
         private byTileCount = false,
         private getRoomFn: FetchRoomFn,
     ) {
-        super();
+        super(sdkContext);
     }
 
     public get symbol(): string | null {

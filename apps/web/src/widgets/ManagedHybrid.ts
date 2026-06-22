@@ -12,11 +12,12 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { getCallBehaviourWellKnown } from "../utils/WellKnownUtils";
 import WidgetUtils from "../utils/WidgetUtils";
-import { type IStoredLayout, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { type IStoredLayout } from "../stores/widgets/WidgetLayoutStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
-import WidgetStore, { type IApp } from "../stores/WidgetStore";
+import { type IApp } from "../stores/WidgetStore";
 import SdkConfig from "../SdkConfig";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 /* eslint-disable camelcase */
 interface IManagedHybridWidgetData {
@@ -48,7 +49,7 @@ export function isManagedHybridWidgetEnabled(room: Room): boolean {
     return !!getWidgetBuildUrl(room);
 }
 
-export async function addManagedHybridWidget(room: Room): Promise<void> {
+export async function addManagedHybridWidget(room: Room, sdkContext: SdkContextClass): Promise<void> {
     // Check for permission
     if (!WidgetUtils.canUserModifyWidgets(room.client, room.roomId)) {
         logger.error(`User not allowed to modify widgets in ${room.roomId}`);
@@ -75,7 +76,7 @@ export async function addManagedHybridWidget(room: Room): Promise<void> {
     const { widget_id: widgetId, widget: widgetContent, layout } = widgetData;
 
     // Ensure the widget is not already present in the room
-    let widgets = WidgetStore.instance.getApps(room.roomId);
+    let widgets = sdkContext.widgetStore.getApps(room.roomId);
     const existing = widgets.some((w) => w.id === widgetId) || WidgetEchoStore.roomHasPendingWidgets(room.roomId, []);
     if (existing) {
         logger.error(`Managed hybrid widget already present in room ${room.roomId}`);
@@ -94,17 +95,17 @@ export async function addManagedHybridWidget(room: Room): Promise<void> {
     }
 
     // Move the widget into position
-    if (!WidgetLayoutStore.instance.canCopyLayoutToRoom(room)) {
+    if (!sdkContext.widgetLayoutStore.canCopyLayoutToRoom(room)) {
         return;
     }
-    widgets = WidgetStore.instance.getApps(room.roomId);
+    widgets = sdkContext.widgetStore.getApps(room.roomId);
     const installedWidget = widgets.find((w) => w.id === widgetId);
     if (!installedWidget) {
         return;
     }
-    WidgetLayoutStore.instance.moveToContainer(room, installedWidget, layout.container);
-    WidgetLayoutStore.instance.setContainerHeight(room, layout.container, layout.height);
-    WidgetLayoutStore.instance.copyLayoutToRoom(room);
+    sdkContext.widgetLayoutStore.moveToContainer(room, installedWidget, layout.container);
+    sdkContext.widgetLayoutStore.setContainerHeight(room, layout.container, layout.height);
+    sdkContext.widgetLayoutStore.copyLayoutToRoom(room);
 }
 
 export function isManagedHybridWidget(widget: IApp): boolean {

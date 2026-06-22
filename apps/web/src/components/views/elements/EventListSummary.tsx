@@ -15,20 +15,20 @@ import { throttle } from "lodash";
 
 import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
-import { isValid3pidInvite } from "../../../RoomInvite";
+import { isValid3pidInvite } from "../../../utils/3pidInvites";
 import GenericEventListSummary from "./GenericEventListSummary";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { jsxJoin } from "../../../utils/ReactUtils";
 import { Layout } from "../../../settings/enums/Layout";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import AccessibleButton from "./AccessibleButton";
 import RoomContext from "../../../contexts/RoomContext";
 import { arrayHasDiff } from "../../../utils/arrays.ts";
 import { objectHasDiff } from "../../../utils/objects.ts";
 import Spoiler from "./Spoiler.tsx";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const onPinnedMessagesClick = (): void => {
-    RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
+    SdkContextClass.instance.rightPanelStore.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
 };
 
 const TARGET_AS_DISPLAY_NAME_EVENTS = [EventType.RoomMember];

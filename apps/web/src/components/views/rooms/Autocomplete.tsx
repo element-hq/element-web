@@ -18,6 +18,7 @@ import Autocompleter, {
 } from "../../../autocomplete/Autocompleter";
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomContext from "../../../contexts/RoomContext";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const MAX_PROVIDER_MATCHES = 20;
 
@@ -77,14 +78,18 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.autocompleter = new Autocompleter(this.props.room, this.context.timelineRenderingType);
+        this.autocompleter = new Autocompleter(
+            SdkContextClass.instance,
+            this.props.room,
+            this.context.timelineRenderingType,
+        );
         this.applyNewProps();
     }
 
     private applyNewProps(oldQuery?: string, oldRoom?: Room): void {
         if (oldRoom && this.props.room.roomId !== oldRoom.roomId) {
             this.autocompleter?.destroy();
-            this.autocompleter = new Autocompleter(this.props.room);
+            this.autocompleter = new Autocompleter(SdkContextClass.instance, this.props.room);
         }
 
         // Query hasn't changed so don't try to complete it

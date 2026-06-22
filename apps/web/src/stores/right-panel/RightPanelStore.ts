@@ -26,8 +26,7 @@ import {
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
-import { SdkContextClass } from "../../contexts/SDKContext";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { type SdkContextClass } from "../../contexts/SDKContextClass";
 
 /**
  * @see RightPanelStore#generateHistoryForPhase
@@ -53,13 +52,11 @@ function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] 
  * the member) associated with it.
  */
 export default class RightPanelStore extends ReadyWatchingStore {
-    private static internalInstance: RightPanelStore;
-
     private global?: IRightPanelForRoom;
     private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
     private viewedRoomId: string | null = null;
 
-    private constructor() {
+    public constructor(private readonly context: SdkContextClass) {
         super(defaultDispatcher);
         this.reset();
     }
@@ -74,7 +71,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected async onReady(): Promise<any> {
-        this.viewedRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        this.viewedRoomId = this.context.roomViewStore.getRoomId();
         this.matrixClient?.on(CryptoEvent.VerificationRequestReceived, this.onVerificationRequestUpdate);
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
@@ -97,6 +94,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     this.setCard({ phase: RightPanelPhases.RoomSummary, state: { focusRoomSearch: true } });
                 }
                 this.show(null);
+                break;
             }
         }
     }
@@ -376,9 +374,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (card.phase === RightPanelPhases.MemberInfo && card.state) {
             // RightPanelPhases.RoomMemberInfo -> needs to be changed to RightPanelPhases.EncryptionPanel if there is a pending verification request
             const { member } = card.state;
-            const pendingRequest = member
-                ? pendingVerificationRequestForUser(MatrixClientPeg.safeGet(), member)
-                : undefined;
+            const pendingRequest = member ? pendingVerificationRequestForUser(this.context.client!, member) : undefined;
             if (pendingRequest) {
                 return {
                     phase: RightPanelPhases.EncryptionPanel,
@@ -411,7 +407,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.currentCard?.state) return;
         const { member } = this.currentCard.state;
         if (!member) return;
-        const pendingRequest = pendingVerificationRequestForUser(MatrixClientPeg.safeGet(), member);
+        const pendingRequest = pendingVerificationRequestForUser(this.context.client!, member);
         if (pendingRequest) {
             this.currentCard.state.verificationRequest = pendingRequest;
             this.emitAndUpdateSettings();
@@ -445,14 +441,4 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
         this.emitAndUpdateSettings();
     }
-
-    public static get instance(): RightPanelStore {
-        if (!this.internalInstance) {
-            this.internalInstance = new RightPanelStore();
-            this.internalInstance.start();
-        }
-        return this.internalInstance;
-    }
 }
-
-window.mxRightPanelStore = RightPanelStore.instance;

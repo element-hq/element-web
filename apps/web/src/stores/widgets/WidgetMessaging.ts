@@ -10,7 +10,6 @@ import {
     type Room,
     type MatrixEvent,
     MatrixEventEvent,
-    type MatrixClient,
     ClientEvent,
     RoomStateEvent,
     type ReceivedToDeviceMessage,
@@ -40,17 +39,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t, getUserLanguage } from "../../languageHandler";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
-import WidgetUtils from "../../utils/WidgetUtils";
+import WidgetUtils, { isAppWidget } from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
 import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { ElementWidgetActions, type IHangupCallApiRequest, type IViewRoomApiRequest } from "./ElementWidgetActions";
-import { ModalWidgetStore } from "../ModalWidgetStore";
-import { isAppWidget } from "../WidgetStore";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
@@ -60,7 +56,7 @@ import { arrayFastClone } from "../../utils/arrays";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { type SdkContextClass } from "../../contexts/SDKContextClass";
 import { UPDATE_EVENT } from "../AsyncStore";
 
 // TODO: Purge this code of its overgrown hacks and compatibility shims.
@@ -181,7 +177,6 @@ interface WidgetMessagingOptions {
  * @see {@link WidgetMessagingStore} for the store that holds these instances.
  */
 export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, WidgetMessagingEventMap> {
-    private client: MatrixClient;
     private iframe: HTMLIFrameElement | null = null;
     private scalarToken?: string;
     private roomId?: string;
@@ -200,9 +195,9 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     public constructor(
         private readonly widget: ElementWidget,
         options: WidgetMessagingOptions,
+        private readonly sdkContext: SdkContextClass,
     ) {
         super();
-        this.client = MatrixClientPeg.safeGet();
         this.roomId = options.room?.roomId;
         this.kind = options.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
         this.virtual = isAppWidget(options.app) && options.app.eventId === undefined;
@@ -239,14 +234,14 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
         const defaults: ITemplateParams = {
             widgetRoomId: this.roomId,
-            currentUserId: this.client.getUserId()!,
+            currentUserId: this.sdkContext.client!.getUserId()!,
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
             clientTheme: this.themeWatcher.getEffectiveTheme(),
             clientLanguage: getUserLanguage(),
-            deviceId: this.client.getDeviceId() ?? undefined,
-            baseUrl: this.client.baseUrl,
+            deviceId: this.sdkContext.client!.getDeviceId() ?? undefined,
+            baseUrl: this.sdkContext.client!.baseUrl,
         };
         const templated = this.widget.getCompleteUrl(Object.assign(defaults, fromCustomisation), opts?.asPopout);
 
@@ -277,8 +272,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
-        if (ModalWidgetStore.instance.canOpenModalWidget()) {
-            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.widget, this.roomId);
+        if (this.sdkContext.modalWidgetStore.canOpenModalWidget()) {
+            this.sdkContext.modalWidgetStore.openModalWidget(ev.detail.data, this.widget, this.roomId);
             this.widgetApi?.transport.reply(ev.detail, {}); // ack
         } else {
             this.widgetApi?.transport.reply(ev.detail, {
@@ -292,7 +287,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     // This listener is only active for account widgets, which may follow the
     // user to different rooms
     private onRoomViewStoreUpdate = (): void => {
-        const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
+        const roomId = this.sdkContext.roomViewStore.getRoomId() ?? null;
         if (roomId !== this.viewedRoomId) {
             this.widgetApi!.setViewedRoomId(roomId);
             this.viewedRoomId = roomId;
@@ -322,8 +317,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         // receiving events for the right room
         if (this.roomId === undefined) {
             // Account widgets listen to the currently active room
-            this.widgetApi.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
-            SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+            this.widgetApi.setViewedRoomId(this.sdkContext.roomViewStore.getRoomId() ?? null);
+            this.sdkContext.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         } else {
             // Room widgets get locked to the room they were added in
             this.widgetApi.setViewedRoomId(this.roomId);
@@ -362,7 +357,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         // Populate the map of "read up to" events for this widget with the current event in every room.
         // This is a bit inefficient, but should be okay. We do this for all rooms in case the widget
         // requests timeline capabilities in other rooms down the road. It's just easier to manage here.
-        for (const room of this.client.getRooms()) {
+        for (const room of this.sdkContext.client!.getRooms()) {
             // Timelines are most recent last
             const events = room.getLiveTimeline()?.getEvents() || [];
             const roomEvent = events[events.length - 1];
@@ -371,10 +366,10 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         }
 
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us
-        this.client.on(ClientEvent.Event, this.onEvent);
-        this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-        this.client.on(RoomStateEvent.Events, this.onStateUpdate);
-        this.client.on(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
+        this.sdkContext.client!.on(ClientEvent.Event, this.onEvent);
+        this.sdkContext.client!.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.sdkContext.client!.on(RoomStateEvent.Events, this.onStateUpdate);
+        this.sdkContext.client!.on(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
 
         this.widgetApi.on(
             `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
@@ -434,8 +429,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                     const integType = data?.integType as string;
                     const integId = <string>data?.integId;
 
-                    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
-                    const room = roomId ? this.client.getRoom(roomId) : undefined;
+                    const roomId = this.sdkContext.roomViewStore.getRoomId();
+                    const room = roomId ? this.sdkContext.client!.getRoom(roomId) : undefined;
                     if (!room) return;
 
                     // noinspection JSIgnoredPromiseFromCall
@@ -515,16 +510,16 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         this.iframe = null;
         WidgetMessagingStore.instance.stopMessaging(this.widget, this.roomId);
 
-        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.sdkContext.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
-        this.client.off(ClientEvent.Event, this.onEvent);
-        this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-        this.client.off(RoomStateEvent.Events, this.onStateUpdate);
-        this.client.off(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
+        this.sdkContext.client!.off(ClientEvent.Event, this.onEvent);
+        this.sdkContext.client!.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.sdkContext.client!.off(RoomStateEvent.Events, this.onStateUpdate);
+        this.sdkContext.client!.off(ClientEvent.ReceivedToDeviceMessage, this.onToDeviceMessage);
     }
 
     private onEvent = (ev: MatrixEvent): void => {
-        this.client.decryptEventIfNeeded(ev);
+        this.sdkContext.client!.decryptEventIfNeeded(ev);
         this.feedEvent(ev);
     };
 
@@ -550,7 +545,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     private relatesToUnknown(ev: MatrixEvent): boolean {
         // Replies to unknown events don't count
         if (!ev.relationEventId || ev.replyEventId) return false;
-        const room = this.client.getRoom(ev.getRoomId());
+        const room = this.sdkContext.client!.getRoom(ev.getRoomId());
         return room === null || !room.findEventById(ev.relationEventId);
     }
 
@@ -559,7 +554,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
      * (in which case we likely don't have the full timeline).
      */
     private isFromInvite(ev: MatrixEvent): boolean {
-        const room = this.client.getRoom(ev.getRoomId());
+        const room = this.sdkContext.client!.getRoom(ev.getRoomId());
         return room?.getMyMembership() === KnownMembership.Invite;
     }
 
@@ -573,7 +568,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         if (evId === undefined) return false;
         const roomId = ev.getRoomId();
         if (roomId === undefined) return false;
-        const room = this.client.getRoom(roomId);
+        const room = this.sdkContext.client!.getRoom(roomId);
         if (room === null) return false;
 
         const upToEventId = this.readUpToMap[ev.getRoomId()!];

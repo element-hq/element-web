@@ -66,6 +66,7 @@ import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -363,14 +364,18 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         let content: RoomMessageEventContent | null = null;
 
         if (!containsEmote(model) && isSlashCommand(this.model)) {
-            const [cmd, args, commandText] = getSlashCommand(this.props.room.roomId, this.model);
+            const [cmd, args, commandText] = getSlashCommand(
+                SdkContextClass.instance,
+                this.props.room.roomId,
+                this.model,
+            );
             if (cmd) {
                 const threadId =
                     this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation?.event_id : null;
 
                 let commandSuccessful: boolean;
                 [content, commandSuccessful] = await runSlashCommand(
-                    MatrixClientPeg.safeGet(),
+                    SdkContextClass.instance,
                     cmd,
                     args,
                     this.props.room.roomId,

@@ -14,14 +14,13 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
 import AutocompleteProvider from "./AutocompleteProvider";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
 import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
-import SettingsStore from "../settings/SettingsStore";
+import type { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -50,6 +49,7 @@ export default class RoomProvider extends AutocompleteProvider {
     protected matcher: QueryMatcher<ReturnType<typeof matcherObject>>;
 
     public constructor(
+        protected readonly sdkContext: SdkContextClass,
         private readonly room: Room,
         renderingType?: TimelineRenderingType,
     ) {
@@ -60,11 +60,11 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     protected getRooms(): Room[] {
-        const cli = MatrixClientPeg.safeGet();
+        const cli = this.sdkContext.client!;
 
         // filter out spaces here as they get their own autocomplete provider
         return cli
-            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .getVisibleRooms(this.sdkContext.settingsStore.getValue("feature_dynamic_room_predecessors"))
             .filter((r) => !r.isSpaceRoom());
     }
 

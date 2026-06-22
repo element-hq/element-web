@@ -14,7 +14,6 @@ import classNames from "classnames";
 import { type MatrixClient, type RoomMember, type Room, type User, type Device } from "matrix-js-sdk/src/matrix";
 import { type UserVerificationStatus, type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
-import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -22,12 +21,11 @@ import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePha
 import EncryptionPanel from "./EncryptionPanel";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
-import QuestionDialog from "../dialogs/QuestionDialog";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
 import { UserInfoBasicView } from "./user_info/UserInfoBasicView";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -48,23 +46,6 @@ export const disambiguateDevices = (devices: IDevice[]): void => {
             });
         }
     }
-};
-
-export const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
-    const { finished } = Modal.createDialog(QuestionDialog, {
-        title: _t("user_info|demote_self_confirm_title"),
-        description: (
-            <div>
-                {isSpace
-                    ? _t("user_info|demote_self_confirm_description_space")
-                    : _t("user_info|demote_self_confirm_room")}
-            </div>
-        ),
-        button: _t("user_info|demote_button"),
-    });
-
-    const [confirmed] = await finished;
-    return !!confirmed;
 };
 
 export const Container: React.FC<{
@@ -182,7 +163,8 @@ interface IProps {
 }
 
 const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPhases.MemberInfo, ...props }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
 
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
     const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
@@ -199,7 +181,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     }
 
     const onEncryptionPanelClose = (): void => {
-        RightPanelStore.instance.popCard();
+        sdkContext.rightPanelStore.popCard();
     };
 
     let content: JSX.Element | undefined;
@@ -247,7 +229,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             closeLabel={closeLabel}
             cardState={cardState}
             onBack={(ev: ButtonEvent) => {
-                if (RightPanelStore.instance.previousCard.phase === RightPanelPhases.MemberList) {
+                if (sdkContext.rightPanelStore.previousCard.phase === RightPanelPhases.MemberList) {
                     PosthogTrackers.trackInteraction("WebRightPanelRoomUserInfoBackButton", ev);
                 }
             }}

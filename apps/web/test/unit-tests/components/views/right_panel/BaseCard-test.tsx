@@ -9,7 +9,7 @@ import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
 
 import BaseCard from "../../../../../src/components/views/right_panel/BaseCard.tsx";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore.ts";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../src/stores/right-panel/RightPanelStore", () => ({
     instance: {
@@ -30,6 +30,6 @@ describe("<BaseCard />", () => {
         expect(asFragment()).toMatchSnapshot();
 
         fireEvent.click(screen.getByTestId("base-card-close-button"));
-        expect(RightPanelStore.instance.popCard).toHaveBeenCalled();
+        expect(SdkContextClass.instance.rightPanelStore.popCard).toHaveBeenCalled();
     });
 });

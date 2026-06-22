@@ -16,7 +16,7 @@ import type { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper
 import MVoiceMessageBody from "../../../../../src/components/views/messages/MVoiceMessageBody";
 import { PlaybackQueue } from "../../../../../src/audio/PlaybackQueue";
 import { createTestClient } from "../../../../test-utils";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 describe("<MVvoiceMessageBody />", () => {
     let event: MatrixEvent;

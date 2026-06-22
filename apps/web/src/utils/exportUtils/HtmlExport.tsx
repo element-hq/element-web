@@ -30,7 +30,8 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
+import { SDKContext } from "../../contexts/SDKContext.ts";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import exportJS from "./exportJS.js?raw";
 

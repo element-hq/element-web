@@ -15,7 +15,7 @@ import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListViewModel";
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";

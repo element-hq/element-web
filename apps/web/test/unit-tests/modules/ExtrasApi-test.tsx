@@ -12,7 +12,8 @@ import { EventEmitter } from "events";
 
 import { stubClient } from "../../test-utils";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { SDKContext, SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomContext";
 import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";

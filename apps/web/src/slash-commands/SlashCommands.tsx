@@ -44,7 +44,6 @@ import SdkConfig from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import { UIComponent, UIFeature } from "../settings/UIFeature";
 import { CHAT_EFFECTS } from "../effects";
-import LegacyCallHandler from "../LegacyCallHandler";
 import { guessAndSetDMRoom } from "../Rooms";
 import DevtoolsDialog from "../components/views/dialogs/DevtoolsDialog";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
@@ -54,7 +53,6 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { htmlSerializeFromMdIfNeeded } from "../editor/serialize";
 import { leaveRoomBehaviour } from "../utils/leave-behaviour";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./utils";
 import { deop, op } from "./op";
 import { CommandCategories } from "./interface";
@@ -64,6 +62,7 @@ import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKe
 import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
 import { statusCommand } from "./status";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 export { CommandCategories, Command };
 
@@ -72,7 +71,7 @@ export const Commands = [
         command: "spoiler",
         args: "<message>",
         description: _td("slash_command|spoiler"),
-        runFn: function (cli, roomId, threadId, message = "") {
+        runFn: function (context, roomId, threadId, message = "") {
             return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
         },
         category: CommandCategories.messages,
@@ -85,7 +84,7 @@ export const Commands = [
         command: "plain",
         args: "<message>",
         description: _td("slash_command|plain"),
-        runFn: function (cli, roomId, threadId, messages = "") {
+        runFn: function (context, roomId, threadId, messages = "") {
             return successSync(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
@@ -94,7 +93,7 @@ export const Commands = [
         command: "html",
         args: "<message>",
         description: _td("slash_command|html"),
-        runFn: function (cli, roomId, threadId, messages = "") {
+        runFn: function (context, roomId, threadId, messages = "") {
             return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
@@ -105,7 +104,7 @@ export const Commands = [
         args: "<YYYY-MM-DD>",
         description: _td("slash_command|jumptodate"),
         isEnabled: () => SettingsStore.getValue("feature_jump_to_date"),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 return success(
                     (async (): Promise<void> => {
@@ -117,11 +116,8 @@ export const Commands = [
                             });
                         }
 
-                        const { event_id: eventId, origin_server_ts: originServerTs } = await cli.timestampToEvent(
-                            roomId,
-                            unixTimestamp,
-                            Direction.Forward,
-                        );
+                        const { event_id: eventId, origin_server_ts: originServerTs } =
+                            await context.client!.timestampToEvent(roomId, unixTimestamp, Direction.Forward);
                         logger.log(
                             `/timestamp_to_event: found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp}`,
                         );
@@ -145,9 +141,9 @@ export const Commands = [
         command: "nick",
         args: "<display_name>",
         description: _td("slash_command|nick"),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
-                return success(cli.setDisplayName(args));
+                return success(context.client!.setDisplayName(args));
             }
             return reject(this.getUsage());
         },
@@ -159,15 +155,24 @@ export const Commands = [
         aliases: ["roomnick"],
         args: "<display_name>",
         description: _td("slash_command|myroomnick"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
-                const ev = cli.getRoom(roomId)?.currentState.getStateEvents(EventType.RoomMember, cli.getSafeUserId());
+                const ev = context
+                    .client!.getRoom(roomId)
+                    ?.currentState.getStateEvents(EventType.RoomMember, context.client!.getSafeUserId());
                 const content: RoomMemberEventContent = {
                     ...(ev ? ev.getContent() : { membership: KnownMembership.Join }),
                     displayname: args,
                 };
-                return success(cli.sendStateEvent(roomId, EventType.RoomMember, content, cli.getSafeUserId()));
+                return success(
+                    context.client!.sendStateEvent(
+                        roomId,
+                        EventType.RoomMember,
+                        content,
+                        context.client!.getSafeUserId(),
+                    ),
+                );
             }
             return reject(this.getUsage());
         },
@@ -178,17 +183,17 @@ export const Commands = [
         command: "roomavatar",
         args: "[<mxc_url>]",
         description: _td("slash_command|roomavatar"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             let promise = Promise.resolve(args ?? null);
             if (!args) {
-                promise = singleMxcUpload(cli);
+                promise = singleMxcUpload(context.client!);
             }
 
             return success(
                 promise.then((url) => {
                     if (!url) return;
-                    return cli.sendStateEvent(roomId, EventType.RoomAvatar, { url }, "");
+                    return context.client!.sendStateEvent(roomId, EventType.RoomAvatar, { url }, "");
                 }),
             );
         },
@@ -199,14 +204,14 @@ export const Commands = [
         command: "myroomavatar",
         args: "[<mxc_url>]",
         description: _td("slash_command|myroomavatar"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            const room = cli.getRoom(roomId);
-            const userId = cli.getSafeUserId();
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
+            const room = context.client!.getRoom(roomId);
+            const userId = context.client!.getSafeUserId();
 
             let promise = Promise.resolve(args ?? null);
             if (!args) {
-                promise = singleMxcUpload(cli);
+                promise = singleMxcUpload(context.client!);
             }
 
             return success(
@@ -217,7 +222,7 @@ export const Commands = [
                         ...(ev ? ev.getContent() : { membership: KnownMembership.Join }),
                         avatar_url: url,
                     };
-                    return cli.sendStateEvent(roomId, EventType.RoomMember, content, userId);
+                    return context.client!.sendStateEvent(roomId, EventType.RoomMember, content, userId);
                 }),
             );
         },
@@ -228,16 +233,16 @@ export const Commands = [
         command: "myavatar",
         args: "[<mxc_url>]",
         description: _td("slash_command|myavatar"),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             let promise = Promise.resolve(args ?? null);
             if (!args) {
-                promise = singleMxcUpload(cli);
+                promise = singleMxcUpload(context.client!);
             }
 
             return success(
                 promise.then((url) => {
                     if (!url) return;
-                    return cli.setAvatarUrl(url);
+                    return context.client!.setAvatarUrl(url);
                 }),
             );
         },
@@ -248,13 +253,13 @@ export const Commands = [
         command: "topic",
         args: "[<topic>]",
         description: _td("slash_command|topic"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const html = htmlSerializeFromMdIfNeeded(args, { forceHTML: false });
-                return success(cli.setRoomTopic(roomId, args, html));
+                return success(context.client!.setRoomTopic(roomId, args, html));
             }
-            const room = cli.getRoom(roomId);
+            const room = context.client!.getRoom(roomId);
             if (!room) {
                 return reject(
                     new UserFriendlyError("slash_command|topic_room_error", {
@@ -286,10 +291,10 @@ export const Commands = [
         command: "roomname",
         args: "<name>",
         description: _td("slash_command|roomname"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
-                return success(cli.setRoomName(roomId, args));
+                return success(context.client!.setRoomName(roomId, args));
             }
             return reject(this.getUsage());
         },
@@ -302,7 +307,7 @@ export const Commands = [
         description: _td("slash_command|invite"),
         analyticsName: "Invite",
         isEnabled: (cli) => !isCurrentLocalRoom(cli) && shouldShowComponent(UIComponent.InviteUsers),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const [address, reason] = splitAtFirstSpace(args);
                 if (address) {
@@ -312,7 +317,7 @@ export const Commands = [
                     // get a bit more complex here, but we try to show something
                     // meaningful.
                     let prom = Promise.resolve();
-                    if (getAddressType(address) === AddressType.Email && !cli.getIdentityServerUrl()) {
+                    if (getAddressType(address) === AddressType.Email && !context.client!.getIdentityServerUrl()) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
                             const { finished } = Modal.createDialog(QuestionDialog, {
@@ -329,7 +334,7 @@ export const Commands = [
 
                             prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
-                                    setToDefaultIdentityServer(cli);
+                                    setToDefaultIdentityServer(context.client!);
                                     return;
                                 }
                                 throw new UserFriendlyError("slash_command|invite_3pid_needs_is_error");
@@ -338,7 +343,7 @@ export const Commands = [
                             return reject(new UserFriendlyError("slash_command|invite_3pid_needs_is_error"));
                         }
                     }
-                    const inviter = new MultiInviter(cli, roomId);
+                    const inviter = new MultiInviter(context.client!, roomId);
                     return success(
                         prom
                             .then(() => {
@@ -373,8 +378,8 @@ export const Commands = [
         args: "[<room-address>]",
         description: _td("action|leave_room"),
         analyticsName: "Part",
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             let targetRoomId: string | undefined;
             if (args) {
                 const matches = args.match(/^(\S+)$/);
@@ -383,11 +388,11 @@ export const Commands = [
                     if (!roomAlias.startsWith("#")) return reject(this.getUsage());
 
                     if (!roomAlias.includes(":")) {
-                        roomAlias += ":" + cli.getDomain();
+                        roomAlias += ":" + context.client!.getDomain();
                     }
 
                     // Try to find a room with this alias
-                    const rooms = cli.getRooms();
+                    const rooms = context.client!.getRooms();
                     targetRoomId = rooms.find((room) => {
                         return room.getCanonicalAlias() === roomAlias || room.getAltAliases().includes(roomAlias);
                     })?.roomId;
@@ -403,7 +408,7 @@ export const Commands = [
             }
 
             if (!targetRoomId) targetRoomId = roomId;
-            return success(leaveRoomBehaviour(cli, targetRoomId));
+            return success(leaveRoomBehaviour(context, targetRoomId));
         },
         category: CommandCategories.actions,
         renderingTypes: [TimelineRenderingType.Room],
@@ -413,12 +418,12 @@ export const Commands = [
         aliases: ["kick"],
         args: "<user-id> [reason]",
         description: _td("slash_command|remove"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const [userId, reason] = splitAtFirstSpace(args);
                 if (userId) {
-                    return success(cli.kick(roomId, userId, reason));
+                    return success(context.client!.kick(roomId, userId, reason));
                 }
             }
             return reject(this.getUsage());
@@ -430,12 +435,12 @@ export const Commands = [
         command: "ban",
         args: "<user-id> [reason]",
         description: _td("slash_command|ban"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const [userId, reason] = splitAtFirstSpace(args);
                 if (userId) {
-                    return success(cli.ban(roomId, userId, reason));
+                    return success(context.client!.ban(roomId, userId, reason));
                 }
             }
             return reject(this.getUsage());
@@ -447,13 +452,13 @@ export const Commands = [
         command: "unban",
         args: "<user-id>",
         description: _td("slash_command|unban"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const matches = args.match(/^(\S+)$/);
                 if (matches) {
                     // Reset the user membership to "leave" to unban him
-                    return success(cli.unban(roomId, matches[1]));
+                    return success(context.client!.unban(roomId, matches[1]));
                 }
             }
             return reject(this.getUsage());
@@ -465,15 +470,15 @@ export const Commands = [
         command: "ignore",
         args: "<user-id>",
         description: _td("slash_command|ignore"),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const matches = args.match(/^(@[^:]+:\S+)$/);
                 if (matches) {
                     const userId = matches[1];
-                    const ignoredUsers = cli.getIgnoredUsers();
+                    const ignoredUsers = context.client!.getIgnoredUsers();
                     ignoredUsers.push(userId); // de-duped internally in the js-sdk
                     return success(
-                        cli.setIgnoredUsers(ignoredUsers).then(() => {
+                        context.client!.setIgnoredUsers(ignoredUsers).then(() => {
                             Modal.createDialog(InfoDialog, {
                                 title: _t("slash_command|ignore_dialog_title"),
                                 description: (
@@ -494,16 +499,16 @@ export const Commands = [
         command: "unignore",
         args: "<user-id>",
         description: _td("slash_command|unignore"),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 const matches = args.match(/(^@[^:]+:\S+$)/);
                 if (matches) {
                     const userId = matches[1];
-                    const ignoredUsers = cli.getIgnoredUsers();
+                    const ignoredUsers = context.client!.getIgnoredUsers();
                     const index = ignoredUsers.indexOf(userId);
                     if (index !== -1) ignoredUsers.splice(index, 1);
                     return success(
-                        cli.setIgnoredUsers(ignoredUsers).then(() => {
+                        context.client!.setIgnoredUsers(ignoredUsers).then(() => {
                             Modal.createDialog(InfoDialog, {
                                 title: _t("slash_command|unignore_dialog_title"),
                                 description: (
@@ -525,7 +530,7 @@ export const Commands = [
     new Command({
         command: "devtools",
         description: _td("slash_command|devtools"),
-        runFn: function (cli, roomId, threadRootId) {
+        runFn: function (context, roomId, threadRootId) {
             Modal.createDialog(DevtoolsDialog, { roomId, threadRootId }, "mx_DevtoolsDialog_wrapper");
             return success();
         },
@@ -539,7 +544,7 @@ export const Commands = [
             SettingsStore.getValue(UIFeature.Widgets) &&
             shouldShowComponent(UIComponent.AddIntegrations) &&
             !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, widgetUrl) {
+        runFn: function (context, roomId, threadId, widgetUrl) {
             if (!widgetUrl) {
                 return reject(new UserFriendlyError("slash_command|addwidget_missing_url"));
             }
@@ -562,8 +567,8 @@ export const Commands = [
             if (!widgetUrl.startsWith("https://") && !widgetUrl.startsWith("http://")) {
                 return reject(new UserFriendlyError("slash_command|addwidget_invalid_protocol"));
             }
-            if (WidgetUtils.canUserModifyWidgets(cli, roomId)) {
-                const userId = cli.getUserId();
+            if (WidgetUtils.canUserModifyWidgets(context.client!, roomId)) {
+                const userId = context.client!.getUserId();
                 const nowMs = new Date().getTime();
                 const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
                 let type = WidgetType.CUSTOM;
@@ -580,7 +585,9 @@ export const Commands = [
                     widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
                 }
 
-                return success(WidgetUtils.setRoomWidget(cli, roomId, widgetId, type, widgetUrl, name, data));
+                return success(
+                    WidgetUtils.setRoomWidget(context.client!, roomId, widgetId, type, widgetUrl, name, data),
+                );
             } else {
                 return reject(new UserFriendlyError("slash_command|addwidget_no_permissions"));
             }
@@ -592,7 +599,7 @@ export const Commands = [
         command: "verify",
         args: "<device-id> <device-fingerprint>",
         description: _td("slash_command|verify"),
-        runFn: function (cli, _roomId, _threadId, args) {
+        runFn: function (context, _roomId, _threadId, args) {
             if (args) {
                 const matches = args.match(/^(\S+) +(\S+)$/);
                 if (matches) {
@@ -608,7 +615,7 @@ export const Commands = [
 
                     return success(
                         finished.then(([confirmed]) => {
-                            if (confirmed) manuallyVerifyDevice(cli, deviceId, fingerprint);
+                            if (confirmed) manuallyVerifyDevice(context.client!, deviceId, fingerprint);
                         }),
                     );
                 }
@@ -621,10 +628,10 @@ export const Commands = [
     new Command({
         command: "discardsession",
         description: _td("slash_command|discardsession"),
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId) {
             try {
-                cli.getCrypto()?.forceDiscardSession(roomId);
+                context.client!.getCrypto()?.forceDiscardSession(roomId);
             } catch (e) {
                 return reject(e instanceof Error ? e.message : e);
             }
@@ -637,7 +644,7 @@ export const Commands = [
         command: "rainbow",
         description: _td("slash_command|rainbow"),
         args: "<message>",
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (!args) return reject(this.getUsage());
             return successSync(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
@@ -647,7 +654,7 @@ export const Commands = [
         command: "rainbowme",
         description: _td("slash_command|rainbowme"),
         args: "<message>",
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (!args) return reject(this.getUsage());
             return successSync(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
@@ -656,7 +663,7 @@ export const Commands = [
     new Command({
         command: "help",
         description: _td("slash_command|help"),
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             Modal.createDialog(SlashCommandHelpDialog, { roomId });
             return success();
         },
@@ -666,13 +673,13 @@ export const Commands = [
         command: "whois",
         description: _td("slash_command|whois"),
         args: "<user-id>",
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, userId) {
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, userId) {
             if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
                 return reject(this.getUsage());
             }
 
-            const member = cli.getRoom(roomId)?.getMember(userId);
+            const member = context.client!.getRoom(roomId)?.getMember(userId);
             dis.dispatch<ViewUserPayload>({
                 action: Action.ViewUser,
                 // XXX: We should be using a real member object and not assuming what the receiver wants.
@@ -688,7 +695,7 @@ export const Commands = [
         description: _td("slash_command|rageshake"),
         isEnabled: () => !!SdkConfig.get().bug_report_endpoint_url,
         args: "<description>",
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             return success(
                 Modal.createDialog(BugReportDialog, {
                     initialText: args,
@@ -701,7 +708,7 @@ export const Commands = [
         command: "query",
         description: _td("slash_command|query"),
         args: "<user-id>",
-        runFn: function (cli, roomId, threadId, userId) {
+        runFn: function (context, roomId, threadId, userId) {
             // easter-egg for now: look up phone numbers through the thirdparty API
             // (very dumb phone number detection...)
             const isPhoneNumber = userId && /^\+?[0123456789]+$/.test(userId);
@@ -712,14 +719,14 @@ export const Commands = [
             return success(
                 (async (): Promise<void> => {
                     if (isPhoneNumber) {
-                        const results = await LegacyCallHandler.instance.pstnLookup(userId);
+                        const results = await context.legacyCallHandler.pstnLookup(userId);
                         if (!results || results.length === 0 || !results[0].userid) {
                             throw new UserFriendlyError("slash_command|query_not_found_phone_number");
                         }
                         userId = results[0].userid;
                     }
 
-                    const roomId = await ensureDMExists(cli, userId);
+                    const roomId = await ensureDMExists(context.client!, userId);
                     if (!roomId) throw new Error("Failed to ensure DM exists");
 
                     dis.dispatch<ViewRoomPayload>({
@@ -737,7 +744,7 @@ export const Commands = [
         command: "msg",
         description: _td("slash_command|msg"),
         args: "<user-id> [<message>]",
-        runFn: function (cli, roomId, threadId, args) {
+        runFn: function (context, roomId, threadId, args) {
             if (args) {
                 // matches the first whitespace delimited group and then the rest of the string
                 const [userId, msg] = splitAtFirstSpace(args);
@@ -745,7 +752,7 @@ export const Commands = [
                     if (userId && userId.startsWith("@") && userId.includes(":")) {
                         return success(
                             (async (): Promise<void> => {
-                                const roomId = await ensureDMExists(cli, userId);
+                                const roomId = await ensureDMExists(context.client!, userId);
                                 if (!roomId) throw new Error("Failed to ensure DM exists");
 
                                 dis.dispatch<ViewRoomPayload>({
@@ -755,7 +762,7 @@ export const Commands = [
                                     metricsViaKeyboard: true,
                                 });
                                 if (msg) {
-                                    cli.sendTextMessage(roomId, msg);
+                                    context.client!.sendTextMessage(roomId, msg);
                                 }
                             })(),
                         );
@@ -771,9 +778,9 @@ export const Commands = [
         command: "holdcall",
         description: _td("slash_command|holdcall"),
         category: CommandCategories.other,
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            const call = LegacyCallHandler.instance.getCallForRoom(roomId);
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
+            const call = context.legacyCallHandler.getCallForRoom(roomId);
             if (!call) {
                 return reject(new UserFriendlyError("slash_command|no_active_call"));
             }
@@ -786,9 +793,9 @@ export const Commands = [
         command: "unholdcall",
         description: _td("slash_command|unholdcall"),
         category: CommandCategories.other,
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            const call = LegacyCallHandler.instance.getCallForRoom(roomId);
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
+            const call = context.legacyCallHandler.getCallForRoom(roomId);
             if (!call) {
                 return reject(new UserFriendlyError("slash_command|no_active_call"));
             }
@@ -801,9 +808,9 @@ export const Commands = [
         command: "converttodm",
         description: _td("slash_command|converttodm"),
         category: CommandCategories.other,
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            const room = cli.getRoom(roomId);
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
+            const room = context.client!.getRoom(roomId);
             if (!room) return reject(new UserFriendlyError("slash_command|could_not_find_room"));
             return success(guessAndSetDMRoom(room, true));
         },
@@ -813,9 +820,9 @@ export const Commands = [
         command: "converttoroom",
         description: _td("slash_command|converttoroom"),
         category: CommandCategories.other,
-        isEnabled: (cli) => !isCurrentLocalRoom(cli),
-        runFn: function (cli, roomId, threadId, args) {
-            const room = cli.getRoom(roomId);
+        isEnabled: (context) => !isCurrentLocalRoom(context),
+        runFn: function (context, roomId, threadId, args) {
+            const room = context.client!.getRoom(roomId);
             if (!room) return reject(new UserFriendlyError("slash_command|could_not_find_room"));
             return success(guessAndSetDMRoom(room, false));
         },
@@ -838,7 +845,7 @@ export const Commands = [
             command: effect.command,
             description: effect.description(),
             args: "<message>",
-            runFn: function (cli, roomId, threadId, args) {
+            runFn: function (context, roomId, threadId, args) {
                 let content: IContent;
                 if (!args) {
                     content = ContentHelpers.makeEmoteMessage(effect.fallbackMessage());
@@ -914,15 +921,16 @@ export function splitAtFirstSpace(args: string): [string, string?] {
 
 /**
  * Process the given text for /commands and returns a parsed command that can be used for running the operation.
+ * @param context - the SDK context to use
  * @param {string} roomId The room ID where the command was issued.
  * @param {string} input The raw text input by the user.
  * @return {ICmd} The parsed command object.
  * Returns an empty object if the input didn't match a command.
  */
-export function getCommand(roomId: string, input: string): ICmd {
+export function getCommand(context: SdkContextClass, roomId: string, input: string): ICmd {
     const { cmd, args } = parseCommandString(input);
 
-    if (cmd && CommandMap.has(cmd) && CommandMap.get(cmd)!.isEnabled(MatrixClientPeg.get(), roomId)) {
+    if (cmd && CommandMap.has(cmd) && CommandMap.get(cmd)!.isEnabled(context, roomId)) {
         return {
             cmd: CommandMap.get(cmd),
             args,

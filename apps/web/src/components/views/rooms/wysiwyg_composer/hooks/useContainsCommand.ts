@@ -6,9 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 
 import CommandProvider from "../../../../../autocomplete/CommandProvider";
+import { SDKContext } from "../../../../../contexts/SDKContext.ts";
 
 /**
  * A hook which determines if the given content contains a slash command.
@@ -17,6 +18,7 @@ import CommandProvider from "../../../../../autocomplete/CommandProvider";
  * @param room The current room.
  */
 export function useContainsCommand(content: string | null, room: Room | undefined): boolean {
+    const sdkContext = useContext(SDKContext);
     const [contentContainsCommands, setContentContainsCommands] = useState(false);
     const providerRef = useRef<CommandProvider | null>(null);
     const currentRoomIdRef = useRef<string | null>(null);
@@ -29,7 +31,7 @@ export function useContainsCommand(content: string | null, room: Room | undefine
 
         // Create or reuse CommandProvider for the current room
         if (!providerRef.current || currentRoomIdRef.current !== room.roomId) {
-            providerRef.current = new CommandProvider(room);
+            providerRef.current = new CommandProvider(sdkContext, room);
             currentRoomIdRef.current = room.roomId;
         }
 
@@ -47,7 +49,7 @@ export function useContainsCommand(content: string | null, room: Room | undefine
                 // If there's an error getting completions, assume no commands
                 setContentContainsCommands(false);
             });
-    }, [content, room]);
+    }, [content, room, sdkContext]);
 
     return contentContainsCommands;
 }

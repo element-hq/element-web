@@ -23,7 +23,6 @@ import { PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import RoomAvatar from "./RoomAvatar";
 import NotificationBadge from "../rooms/NotificationBadge";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { isPresenceEnabled } from "../../../utils/presence";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -31,6 +30,7 @@ import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     room: Room;
@@ -85,6 +85,9 @@ function tooltipText(variant: Icon): string | undefined {
  * @deprecated Use {@link RoomAvatarView} instead.
  */
 export default class DecoratedRoomAvatar extends React.PureComponent<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private _dmUser: User | null = null;
     private isUnmounted = false;
     private isWatchingTimeline = false;
@@ -93,7 +96,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         super(props);
 
         this.state = {
-            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
+            notificationState: this.context.roomNotificationStateStore.getRoomState(this.props.room),
             icon: this.calculateIcon(),
         };
     }

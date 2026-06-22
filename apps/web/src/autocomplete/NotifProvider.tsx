@@ -10,16 +10,17 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import AutocompleteProvider from "./AutocompleteProvider";
 import { _t } from "../languageHandler";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { PillCompletion } from "./Components";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
+import type { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const AT_ROOM_REGEX = /@\S*/g;
 
 export default class NotifProvider extends AutocompleteProvider {
     public constructor(
+        private readonly sdkContext: SdkContextClass,
         public room: Room,
         renderingType?: TimelineRenderingType,
     ) {
@@ -32,7 +33,7 @@ export default class NotifProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const client = MatrixClientPeg.safeGet();
+        const client = this.sdkContext.client!;
 
         if (!this.room.currentState.mayTriggerNotifOfType("room", client.getSafeUserId())) return [];
 

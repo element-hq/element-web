@@ -294,7 +294,7 @@ import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { WidgetType } from "./widgets/WidgetType";
 import { objectClone } from "./utils/objects";
 import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
-import { SdkContextClass } from "./contexts/SDKContext";
+import { SdkContextClass } from "./contexts/SDKContextClass";
 
 enum Action {
     CloseScalar = "close_scalar",

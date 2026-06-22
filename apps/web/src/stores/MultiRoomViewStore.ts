@@ -9,7 +9,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { RoomViewStore } from "./RoomViewStore";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
-import { type SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContextClass";
 import { Action } from "../dispatcher/actions";
 
 /**

@@ -68,9 +68,8 @@ import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
-import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
 import { type QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
 
@@ -855,7 +854,9 @@ describe("<MatrixChat />", () => {
                         await getComponentAndWaitForReady();
 
                         // Mock out the old room list store
-                        jest.spyOn(RoomListStore.instance, "manualRoomUpdate").mockImplementation(async () => {});
+                        jest.spyOn(SdkContextClass.instance.roomListStore, "manualRoomUpdate").mockImplementation(
+                            async () => {},
+                        );
 
                         // Register a mock function to the dispatcher
                         const fn = jest.fn();

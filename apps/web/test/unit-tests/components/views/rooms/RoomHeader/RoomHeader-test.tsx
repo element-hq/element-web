@@ -44,7 +44,6 @@ import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext";
 import RoomContext, { type RoomContextType } from "../../../../../../src/contexts/RoomContext";
-import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
 import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
@@ -60,6 +59,7 @@ import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
+import { SdkContextClass } from "../../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -109,7 +109,7 @@ describe("RoomHeader", () => {
             getUserIdForRoomId: jest.fn(),
         } as unknown as DMRoomMap);
 
-        setCardSpy = jest.spyOn(RightPanelStore.instance, "setCard");
+        setCardSpy = jest.spyOn(SdkContextClass.instance.rightPanelStore, "setCard");
         jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Normal);
 
         // Mock CallStore.instance.getCall to return null by default

@@ -11,7 +11,7 @@ import { render, fireEvent } from "jest-matrix-react";
 
 import MainSplit from "../../../../src/components/structures/MainSplit";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics.ts";
-import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 describe("<MainSplit/>", () => {
     const children = (

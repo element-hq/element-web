@@ -54,6 +54,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -227,7 +228,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
+        SdkContextClass.instance.voiceRecordingStore.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
 
         window.addEventListener("beforeunload", this.saveWysiwygEditorState);
         if (this.state.isWysiwygLabEnabled) {
@@ -321,7 +322,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        VoiceRecordingStore.instance.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
+        SdkContextClass.instance.voiceRecordingStore.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);
         UIStore.instance.stopTrackingElementDimensions(`MessageComposer${this.instanceId}`);
         UIStore.instance.removeListener(`MessageComposer${this.instanceId}`, this.onResize);
@@ -450,8 +451,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private updateRecordingState(): void {
-        const voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
-        this.voiceRecording = VoiceRecordingStore.instance.getActiveRecording(voiceRecordingId);
+        const voiceRecordingId = SdkContextClass.instance.voiceRecordingStore.getVoiceRecordingId(
+            this.props.room,
+            this.props.relation,
+        );
+        this.voiceRecording = SdkContextClass.instance.voiceRecordingStore.getActiveRecording(voiceRecordingId);
         if (this.voiceRecording) {
             // If the recording has already started, it's probably a cached one.
             if (this.voiceRecording.hasRecording && !this.voiceRecording.isRecording) {
@@ -466,8 +470,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     private onRecordingStarted = (): void => {
         // update the recording instance, just in case
-        const voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
-        this.voiceRecording = VoiceRecordingStore.instance.getActiveRecording(voiceRecordingId);
+        const voiceRecordingId = SdkContextClass.instance.voiceRecordingStore.getVoiceRecordingId(
+            this.props.room,
+            this.props.relation,
+        );
+        this.voiceRecording = SdkContextClass.instance.voiceRecordingStore.getActiveRecording(voiceRecordingId);
         this.setState({
             haveRecording: !!this.voiceRecording,
         });

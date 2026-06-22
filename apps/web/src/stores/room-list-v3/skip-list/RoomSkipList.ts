@@ -12,6 +12,7 @@ import { RoomNode } from "./RoomNode";
 import { shouldPromote } from "./utils";
 import { Level } from "./Level";
 import { SortedRoomIterator, SortedSpaceFilteredIterator } from "./iterators";
+import type { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 /**
  * Implements a skip list that stores rooms using a given sorting algorithm.
@@ -25,6 +26,7 @@ export class RoomSkipList implements Iterable<Room> {
     public constructor(
         private sorter: Sorter,
         private filters: Filter[] = [],
+        private readonly sdkContext: SdkContextClass,
     ) {}
 
     private reset(): void {
@@ -37,7 +39,7 @@ export class RoomSkipList implements Iterable<Room> {
      */
     public seed(rooms: Room[]): void {
         // 1. First sort the rooms and create a base sorted linked list
-        const sortedRoomNodes = this.sorter.sort(rooms).map((room) => new RoomNode(room));
+        const sortedRoomNodes = this.sorter.sort(rooms).map((room) => new RoomNode(room, this.sdkContext));
         let currentLevel = this.levels[0];
         for (const node of sortedRoomNodes) {
             node.applyFilters(this.filters);
@@ -129,7 +131,7 @@ export class RoomSkipList implements Iterable<Room> {
      * Adds a given room to the correct sorted position in the list.
      */
     private insertRoom(room: Room): void {
-        const newNode = new RoomNode(room);
+        const newNode = new RoomNode(room, this.sdkContext);
         newNode.checkIfRoomBelongsToActiveSpace();
         newNode.applyFilters(this.filters);
         this.roomNodeMap.set(room.roomId, newNode);

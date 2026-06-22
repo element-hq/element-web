@@ -6,26 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { type SummarizedNotificationState } from "../stores/notifications/SummarizedNotificationState";
-import {
-    RoomNotificationStateStore,
-    UPDATE_STATUS_INDICATOR,
-} from "../stores/notifications/RoomNotificationStateStore";
+import { UPDATE_STATUS_INDICATOR } from "../stores/notifications/RoomNotificationStateStore";
 import { useEventEmitter } from "./useEventEmitter";
+import { SDKContext } from "../contexts/SDKContext.ts";
 
 /**
  * Tracks the global notification state of the user's account
  * @returns A global notification state object
  */
 export const useGlobalNotificationState = (): SummarizedNotificationState => {
+    const sdkContext = useContext(SDKContext);
     const [summarizedNotificationState, setSummarizedNotificationState] = useState(
-        RoomNotificationStateStore.instance.globalState,
+        sdkContext.roomNotificationStateStore.globalState,
     );
 
     useEventEmitter(
-        RoomNotificationStateStore.instance,
+        sdkContext.roomNotificationStateStore,
         UPDATE_STATUS_INDICATOR,
         (notificationState: SummarizedNotificationState) => {
             setSummarizedNotificationState(notificationState);

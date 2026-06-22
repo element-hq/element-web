@@ -13,7 +13,7 @@ import { mocked } from "jest-mock";
 
 import QuickSettingsButton from "../../../../../src/components/views/spaces/QuickSettingsButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 describe("QuickSettingsButton", () => {
     const roomId = "!room:example.com";

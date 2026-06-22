@@ -62,7 +62,7 @@ import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SdkContextClass } from "../../contexts/SDKContextClass";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import { ModuleApi } from "../../modules/Api";
 import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";

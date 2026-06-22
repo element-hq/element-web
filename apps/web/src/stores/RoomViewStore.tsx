@@ -22,7 +22,6 @@ import {
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import Modal from "../Modal";
 import { _t, UserFriendlyError } from "../languageHandler";
 import { getCachedRoomIdForAlias, storeRoomAliasInCache } from "../RoomAliasCache";
@@ -38,11 +37,9 @@ import { type JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorP
 import { type ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { type ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
-import SettingsStore from "../settings/SettingsStore";
 import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { UPDATE_EVENT } from "./AsyncStore";
-import { type SdkContextClass } from "../contexts/SDKContext";
-import { CallStore } from "./CallStore";
+import { type SdkContextClass } from "../contexts/SDKContextClass";
 import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
@@ -259,7 +256,7 @@ export class RoomViewStore extends EventEmitter {
                     this.setState({ shouldPeek: false });
                 }
 
-                awaitRoomDownSync(MatrixClientPeg.safeGet(), payload.roomId).then((room) => {
+                awaitRoomDownSync(this.stores.client!, payload.roomId).then((room) => {
                     const numMembers = room.getJoinedMemberCount();
                     const roomSize =
                         numMembers > 1000
@@ -335,7 +332,7 @@ export class RoomViewStore extends EventEmitter {
 
     public async viewRoom(payload: ViewRoomPayload): Promise<void> {
         if (payload.room_id) {
-            const room = MatrixClientPeg.safeGet().getRoom(payload.room_id);
+            const room = this.stores.client!.getRoom(payload.room_id);
 
             if (payload.metricsTrigger !== null && payload.room_id !== this.state.roomId) {
                 let activeSpace: ViewRoomEvent["activeSpace"];
@@ -367,15 +364,15 @@ export class RoomViewStore extends EventEmitter {
                 // Always view the call in video rooms
                 else if (room && isVideoRoom(room)) viewingCall = true;
                 // Otherwise, only view if actively connected
-                else viewingCall = CallStore.instance.getActiveCall(payload.room_id) !== null;
+                else viewingCall = this.stores.callStore.getActiveCall(payload.room_id) !== null;
             }
 
             if (room && viewingCall) {
-                let call = CallStore.instance.getCall(payload.room_id);
+                let call = this.stores.callStore.getCall(payload.room_id);
                 // Start a call if not already there
                 if (call === null) {
-                    ElementCall.create(room);
-                    call = CallStore.instance.getCall(payload.room_id)!;
+                    ElementCall.create(this.stores, room);
+                    call = this.stores.callStore.getCall(payload.room_id)!;
                 }
                 call.presented = true;
                 // Immediately start the call. This will connect to all required widget events
@@ -385,11 +382,14 @@ export class RoomViewStore extends EventEmitter {
                 }
             }
             // If we switch to a different room from the call, we are no longer presenting it
-            const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
+            const prevRoomCall = this.state.roomId ? this.stores.callStore.getCall(this.state.roomId) : null;
             if (prevRoomCall !== null && (!payload.view_call || payload.room_id !== this.state.roomId))
                 prevRoomCall.presented = false;
 
-            if (SettingsStore.getValue("feature_simplified_sliding_sync") && this.state.roomId !== payload.room_id) {
+            if (
+                this.stores.settingsStore.getValue("feature_simplified_sliding_sync") &&
+                this.state.roomId !== payload.room_id
+            ) {
                 this.setState({
                     subscribingRoomId: payload.room_id,
                     roomId: payload.room_id,
@@ -450,7 +450,7 @@ export class RoomViewStore extends EventEmitter {
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
-                    canAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
+                    canAskToJoin: this.stores.settingsStore.getValue("feature_ask_to_join"),
                 };
                 // Explicitly pass viaServers in case state doesn't contain the same due to
                 // some race issues.
@@ -463,7 +463,7 @@ export class RoomViewStore extends EventEmitter {
             }
 
             if (room) {
-                await setMarkedUnreadState(room, MatrixClientPeg.safeGet(), false);
+                await setMarkedUnreadState(room, this.stores.client!, false);
             }
         } else if (payload.room_alias) {
             let roomId: string;
@@ -492,7 +492,7 @@ export class RoomViewStore extends EventEmitter {
                     viewingCall: payload.view_call ?? false,
                 });
                 try {
-                    const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(payload.room_alias);
+                    const result = await this.stores.client!.getRoomIdForAlias(payload.room_alias);
                     storeRoomAliasInCache(payload.room_alias, result.room_id, result.servers);
                     roomId = result.room_id;
                     viaServers = result.servers;
@@ -548,7 +548,7 @@ export class RoomViewStore extends EventEmitter {
             ...(payload.opts ?? {}),
         };
         try {
-            const cli = MatrixClientPeg.safeGet();
+            const cli = this.stores.client!;
             await retry<Room, MatrixError>(
                 () => cli.joinRoom(address, joinOpts),
                 NUM_JOIN_RETRY,
@@ -582,7 +582,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     private getInvitingUserId(roomId: string): string | undefined {
-        const cli = MatrixClientPeg.safeGet();
+        const cli = this.stores.client!;
         const room = cli.getRoom(roomId);
         if (room?.getMyMembership() === KnownMembership.Invite) {
             const myMember = room.getMember(cli.getSafeUserId());
@@ -610,7 +610,7 @@ export class RoomViewStore extends EventEmitter {
             // provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
-                if (invitingUserId.endsWith(`:${MatrixClientPeg.safeGet().getDomain()}`)) {
+                if (invitingUserId.endsWith(`:${this.stores.client!.getDomain()}`)) {
                     description = _t("room|error_join_404_invite_same_hs");
                 } else {
                     description = _t("room|error_join_404_invite");
@@ -773,8 +773,8 @@ export class RoomViewStore extends EventEmitter {
      * @returns {void}
      */
     private submitAskToJoin(payload: SubmitAskToJoinPayload): void {
-        MatrixClientPeg.safeGet()
-            .knockRoom(payload.roomId, { viaServers: this.state.viaServers, ...payload.opts })
+        this.stores
+            .client!.knockRoom(payload.roomId, { viaServers: this.state.viaServers, ...payload.opts })
             .catch((err: MatrixError) =>
                 Modal.createDialog(ErrorDialog, {
                     title: _t("room|error_join_title"),
@@ -791,14 +791,12 @@ export class RoomViewStore extends EventEmitter {
      * @returns {void}
      */
     private cancelAskToJoin(payload: CancelAskToJoinPayload): void {
-        MatrixClientPeg.safeGet()
-            .leave(payload.roomId)
-            .catch((err: MatrixError) =>
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("room|error_cancel_knock_title"),
-                    description: err.message,
-                }),
-            );
+        this.stores.client!.leave(payload.roomId).catch((err: MatrixError) =>
+            Modal.createDialog(ErrorDialog, {
+                title: _t("room|error_cancel_knock_title"),
+                description: err.message,
+            }),
+        );
     }
 
     /**

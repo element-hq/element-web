@@ -6,16 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SdkContextClass } from "../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../src/contexts/SDKContextClass";
 import { type PosthogAnalytics } from "../../src/PosthogAnalytics";
 import { type SlidingSyncManager } from "../../src/SlidingSyncManager";
 import { type RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
 import type RightPanelStore from "../../src/stores/right-panel/RightPanelStore";
 import { type RoomViewStore } from "../../src/stores/RoomViewStore";
-import { type SpaceStoreClass } from "../../src/stores/spaces/SpaceStore";
+import type SpaceStore from "../../src/stores/spaces/SpaceStore";
 import { type WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
 import { type WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
 import type WidgetStore from "../../src/stores/WidgetStore";
+import { type OidcClientStore } from "../../src/stores/oidc/OidcClientStore.ts";
 
 /**
  * A class which provides the same API as SdkContextClass but adds additional unsafe setters which can
@@ -30,7 +31,8 @@ export class TestSdkContext extends SdkContextClass {
     declare public _WidgetStore?: WidgetStore;
     declare public _PosthogAnalytics?: PosthogAnalytics;
     declare public _SlidingSyncManager?: SlidingSyncManager;
-    declare public _SpaceStore?: SpaceStoreClass;
+    declare public _SpaceStore?: SpaceStore;
+    declare public _OidcClientStore?: OidcClientStore;
 
     constructor() {
         super();

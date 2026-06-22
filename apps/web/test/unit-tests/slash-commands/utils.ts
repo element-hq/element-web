@@ -11,7 +11,7 @@ import { mocked } from "jest-mock";
 import { type Command } from "../../../src/slash-commands/command";
 import { getCommand } from "../../../src/slash-commands/SlashCommands";
 import { stubClient } from "../../test-utils";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContextClass";
 import { LocalRoom } from "../../../src/models/LocalRoom";
 
 export function setUpCommandTest(

@@ -7,23 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
-import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
 import { type UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
 import { Action } from "../../dispatcher/actions";
 
 export default class SystemFontController extends SettingController {
-    public constructor() {
-        super();
-    }
-
     public onChange(): void {
         // Dispatch font size change so that everything open responds to the change.
         dis.dispatch<UpdateSystemFontPayload>({
             action: Action.UpdateSystemFont,
-            useBundledEmojiFont: SettingsStore.getValue("useBundledEmojiFont"),
-            useSystemFont: SettingsStore.getValue("useSystemFont"),
-            font: SettingsStore.getValue("systemFont"),
+            useBundledEmojiFont: this.sdkContext.settingsStore.getValue("useBundledEmojiFont"),
+            useSystemFont: this.sdkContext.settingsStore.getValue("useSystemFont"),
+            font: this.sdkContext.settingsStore.getValue("systemFont"),
         });
     }
 }

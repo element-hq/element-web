@@ -15,12 +15,14 @@ import React from "react";
 
 import type { RefObject, FC } from "react";
 import { Action } from "../../dispatcher/actions";
-import WidgetStore, { type IApp } from "../../stores/WidgetStore";
-import { CallStore, CallStoreEvent } from "../../stores/CallStore";
+import type WidgetStore from "../../stores/WidgetStore";
+import { type IApp } from "../../stores/WidgetStore";
+import type CallStore from "../../stores/CallStore";
+import { CallStoreEvent } from "../../stores/CallStore";
 import { type Call } from "../../models/Call";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { type WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import PersistentApp from "../../components/views/elements/PersistentApp";
 
 export interface Props {
@@ -43,6 +45,10 @@ export interface Props {
      * This callback allows any `PersistentApp` view/component to know when to update the iframe position of the widget.
      */
     movePersistedElement: RefObject<(() => void) | null>;
+
+    widgetLayoutStore: WidgetLayoutStore;
+    widgetStore: WidgetStore;
+    callStore: CallStore;
 }
 
 export class WidgetPipViewModel
@@ -61,12 +67,12 @@ export class WidgetPipViewModel
 
     public constructor(props: Props) {
         super(props, { widgetId: props.widgetId, roomName: props.room.name, roomId: props.room.roomId });
-        this.widget = WidgetStore.instance.getApps(props.room.roomId).find((app) => app.id === this.props.widgetId)!;
-        this.call = CallStore.instance.getCall(props.room.roomId) ?? null;
+        this.widget = props.widgetStore.getApps(props.room.roomId).find((app) => app.id === this.props.widgetId)!;
+        this.call = props.callStore.getCall(props.room.roomId) ?? null;
         this.onStartMoving = props.onStartMoving;
 
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomName);
-        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChange);
+        this.disposables.trackListener(props.callStore, CallStoreEvent.Call, this.onCallChange);
     }
 
     public onStartMoving: (ev: React.MouseEvent<Element, MouseEvent>) => void;
@@ -91,7 +97,7 @@ export class WidgetPipViewModel
                 metricsTrigger: "WebFloatingCallWindow",
             });
         } else if (this.viewingRoom) {
-            WidgetLayoutStore.instance.moveToContainer(this.props.room, this.widget, "center");
+            this.props.widgetLayoutStore.moveToContainer(this.props.room, this.widget, "center");
         } else {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,

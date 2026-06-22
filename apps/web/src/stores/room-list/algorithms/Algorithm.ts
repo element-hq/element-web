@@ -28,8 +28,9 @@ import { EffectiveMembership, splitRoomsByMembership } from "../../../utils/memb
 import { type OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import { isRoomVisible } from "../../room-list-v3/isRoomVisible";
-import { CallStore, CallStoreEvent } from "../../CallStore";
+import { CallStoreEvent } from "../../CallStore";
 import { getTagsForRoom, getTagsOfJoinedRoom } from "../../../utils/room/getTagsForRoom";
+import { type SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -68,17 +69,21 @@ export class Algorithm extends EventEmitter {
         [roomId: string]: TagID[];
     } = {};
 
+    public constructor(private readonly sdkContext: SdkContextClass) {
+        super();
+    }
+
     /**
      * Set to true to suspend emissions of algorithm updates.
      */
     public updatesInhibited = false;
 
     public start(): void {
-        CallStore.instance.on(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
+        this.sdkContext.callStore.on(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
     }
 
     public stop(): void {
-        CallStore.instance.off(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
+        this.sdkContext.callStore.off(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
     }
 
     public get stickyRoom(): Room | null {
@@ -385,12 +390,12 @@ export class Algorithm extends EventEmitter {
             return;
         }
 
-        if (CallStore.instance.connectedCalls.size) {
+        if (this.sdkContext.callStore.connectedCalls.size) {
             // We operate on the sticky rooms map
             if (!this._cachedStickyRooms) this.initCachedStickyRooms();
             const rooms = this._cachedStickyRooms![updatedTag];
 
-            const activeRoomIds = new Set([...CallStore.instance.connectedCalls].map((call) => call.roomId));
+            const activeRoomIds = new Set([...this.sdkContext.callStore.connectedCalls].map((call) => call.roomId));
             const activeRooms: Room[] = [];
             const inactiveRooms: Room[] = [];
 

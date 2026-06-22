@@ -9,9 +9,9 @@ import { type Container, type WidgetApi as WidgetApiInterface } from "@element-h
 import { getHttpUriForMxc } from "matrix-js-sdk/src/matrix";
 
 import type { IWidget } from "matrix-widget-api";
-import WidgetStore, { isAppWidget } from "../stores/WidgetStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { SdkContextClass } from "../contexts/SDKContextClass.ts";
+import { isAppWidget } from "../utils/WidgetUtils.ts";
 
 /**
  * Host-side implementation of the widget API.
@@ -19,7 +19,7 @@ import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
  */
 export class WidgetApi implements WidgetApiInterface {
     public getWidgetsInRoom(roomId: string): IWidget[] {
-        return WidgetStore.instance.getApps(roomId);
+        return SdkContextClass.instance.widgetStore.getApps(roomId);
     }
 
     public getAppAvatarUrl(app: IWidget, width?: number, height?: number, resizeMethod?: string): string | null {
@@ -34,14 +34,14 @@ export class WidgetApi implements WidgetApiInterface {
     }
 
     public isAppInContainer(app: IWidget, container: Container, roomId: string): boolean {
-        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        const room = SdkContextClass.instance.client?.getRoom(roomId);
         if (!room) return false;
-        return WidgetLayoutStore.instance.isInContainer(room, app, container);
+        return SdkContextClass.instance.widgetLayoutStore.isInContainer(room, app, container);
     }
 
     public moveAppToContainer(app: IWidget, container: Container, roomId: string): void {
-        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        const room = SdkContextClass.instance.client?.getRoom(roomId);
         if (!room) return;
-        WidgetLayoutStore.instance.moveToContainer(room, app, container);
+        SdkContextClass.instance.widgetLayoutStore.moveToContainer(room, app, container);
     }
 }

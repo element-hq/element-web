@@ -26,7 +26,7 @@ import {
 } from "../../../../test-utils";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 import { mockOpenIdConfiguration } from "../../../../test-utils/oidc.ts";
 

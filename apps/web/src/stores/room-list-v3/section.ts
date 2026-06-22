@@ -14,7 +14,7 @@ import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectio
 import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { isMetaSpace, MetaSpace, type SpaceKey } from "../spaces";
-import SpaceStore from "../spaces/SpaceStore";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * A synthetic tag used to represent the "Chats" section, which contains
@@ -91,8 +91,8 @@ export type OrderedCustomSections = CustomTag[];
  * Returns true if the given space key corresponds to an enabled meta-space or a known top-level space room.
  */
 function doesSpaceExist(spaceId: SpaceKey): boolean {
-    if (isMetaSpace(spaceId)) return SpaceStore.instance.enabledMetaSpaces.includes(spaceId);
-    return SpaceStore.instance.spacePanelSpaces.some((room) => room.roomId === spaceId);
+    if (isMetaSpace(spaceId)) return SdkContextClass.instance.spaceStore.enabledMetaSpaces.includes(spaceId);
+    return SdkContextClass.instance.spaceStore.spacePanelSpaces.some((room) => room.roomId === spaceId);
 }
 
 /**

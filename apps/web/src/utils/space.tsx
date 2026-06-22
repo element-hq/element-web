@@ -31,7 +31,7 @@ import {
 } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { type OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
 import { type OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SdkContextClass } from "../contexts/SDKContextClass";
 
 export const shouldShowSpaceSettings = (space: Room): boolean => {
     const userId = space.client.getUserId()!;

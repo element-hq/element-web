@@ -24,9 +24,9 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import type ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import StickerpackPlaceholder from "../../../../res/img/stickerpack-placeholder.png";
+import { SdkContextClass } from "../../../contexts/SDKContextClass.ts";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -132,7 +132,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         // Track updates to widget state in account data
         MatrixClientPeg.safeGet().on(ClientEvent.AccountData, this.updateWidget);
 
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        SdkContextClass.instance.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         // Initialise widget state from current account data
         this.updateWidget();
     }
@@ -140,7 +140,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) client.removeListener(ClientEvent.AccountData, this.updateWidget);
-        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        SdkContextClass.instance.rightPanelStore.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         window.removeEventListener("resize", this.onResize);
         dis.unregister(this.dispatcherRef);
     }

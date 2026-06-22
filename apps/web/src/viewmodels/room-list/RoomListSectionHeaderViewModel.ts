@@ -14,14 +14,15 @@ import {
     type RoomListSectionHeaderViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
+import { type RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import PosthogTrackers from "../../PosthogTrackers";
-import { CallStore, CallStoreEvent } from "../../stores/CallStore";
+import type CallStore from "../../stores/CallStore";
+import { CallStoreEvent } from "../../stores/CallStore";
 import { type Call, CallEvent } from "../../models/Call";
 
 interface RoomListSectionHeaderViewModelProps {
@@ -32,6 +33,10 @@ interface RoomListSectionHeaderViewModelProps {
      */
     spaceId: string;
     onToggleExpanded: (isExpanded: boolean) => void;
+
+    roomNotificationStateStore: RoomNotificationStateStore;
+    roomListStore: RoomListStoreV3;
+    callStore: CallStore;
 }
 
 export class RoomListSectionHeaderViewModel
@@ -69,7 +74,7 @@ export class RoomListSectionHeaderViewModel
         this.disposables.track(() => SettingsStore.unwatchSetting(sectionWatherRef));
 
         // Recompute the decoration when a call starts or ends in any room
-        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallChanged);
+        this.disposables.trackListener(this.props.callStore, CallStoreEvent.Call, this.onCallChanged);
     }
 
     public onClick = (): void => {
@@ -114,7 +119,7 @@ export class RoomListSectionHeaderViewModel
      * @param rooms - The rooms currently in this section
      */
     public setRooms(rooms: Room[]): void {
-        const newStates = new Set(rooms.map((room) => RoomNotificationStateStore.instance.getRoomState(room)));
+        const newStates = new Set(rooms.map((room) => this.props.roomNotificationStateStore.getRoomState(room)));
 
         // Unsubscribe from rooms no longer in the section
         for (const state of this.roomNotificationStates) {
@@ -143,7 +148,7 @@ export class RoomListSectionHeaderViewModel
     private updateCallListeners(): void {
         const newCalls = new Set<Call>();
         for (const state of this.roomNotificationStates) {
-            const call = state.room && CallStore.instance.getCall(state.room.roomId);
+            const call = state.room && this.props.callStore.getCall(state.room.roomId);
             if (call) newCalls.add(call);
         }
 
@@ -197,7 +202,7 @@ export class RoomListSectionHeaderViewModel
             if (state.isMention || state.isNotification) count += state.count || 1;
 
             // Aggregate active calls, preferring a video call over a voice call
-            const call = state.room && CallStore.instance.getCall(state.room.roomId);
+            const call = state.room && this.props.callStore.getCall(state.room.roomId);
             if (call && call.participants.size > 0) {
                 if (call.callType === CallType.Video) callType = "video";
                 else if (call.callType === CallType.Voice && callType !== "video") callType = "voice";
@@ -247,13 +252,13 @@ export class RoomListSectionHeaderViewModel
     }
 
     public editSection = async (): Promise<void> => {
-        await RoomListStoreV3.instance.editSection(this.props.tag);
+        await this.props.roomListStore.editSection(this.props.tag);
     };
 
     public removeSection = async (): Promise<void> => {
         // There is one notification state per room in the section
         const isEmpty = this.roomNotificationStates.size === 0;
-        await RoomListStoreV3.instance.removeSection(this.props.tag, isEmpty);
+        await this.props.roomListStore.removeSection(this.props.tag, isEmpty);
 
         PosthogTrackers.trackInteraction("WebDeleteSection");
     };

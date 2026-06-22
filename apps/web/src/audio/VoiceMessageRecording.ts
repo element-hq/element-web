@@ -16,6 +16,7 @@ import { type IDestroyable } from "../utils/IDestroyable";
 import { Singleflight } from "../utils/Singleflight";
 import { Playback } from "./Playback";
 import { type IRecordingUpdate, RecordingState, VoiceRecording } from "./VoiceRecording";
+import { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 export interface IUpload {
     mxc?: string; // for unencrypted uploads
@@ -149,6 +150,6 @@ export class VoiceMessageRecording implements IDestroyable {
     }
 }
 
-export const createVoiceMessageRecording = (matrixClient: MatrixClient): VoiceMessageRecording => {
-    return new VoiceMessageRecording(matrixClient, new VoiceRecording());
+export const createVoiceMessageRecording = (sdkContext: SdkContextClass): VoiceMessageRecording => {
+    return new VoiceMessageRecording(sdkContext.client!, new VoiceRecording(sdkContext));
 };

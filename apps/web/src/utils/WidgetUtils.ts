@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
 import { capitalize } from "lodash";
 import { type IWidget, type IWidgetData } from "matrix-widget-api";
@@ -26,11 +26,11 @@ import { WidgetType } from "../widgets/WidgetType";
 import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
-import WidgetStore, { type IApp, isAppWidget } from "../stores/WidgetStore";
+import { type IApp } from "../stores/WidgetStore";
 import { parseUrl } from "./UrlUtils";
 import { useEventEmitter } from "../hooks/useEventEmitter";
-import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { type IWidgetEvent, type UserWidget } from "./WidgetUtils-types";
+import { SDKContext } from "../contexts/SDKContext.ts";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -557,16 +557,24 @@ export default class WidgetUtils {
  * @param room the room to get widgets for
  */
 export const useWidgets = (room: Room): IApp[] => {
-    const [apps, setApps] = useState<IApp[]>(() => WidgetStore.instance.getApps(room.roomId));
+    const sdkContext = useContext(SDKContext);
+    const [apps, setApps] = useState<IApp[]>(() => sdkContext.widgetStore.getApps(room.roomId));
 
     const updateApps = useCallback(() => {
         // Copy the array so that we always trigger a re-render, as some updates mutate the array of apps/settings
-        setApps([...WidgetStore.instance.getApps(room.roomId)]);
-    }, [room]);
+        setApps([...sdkContext.widgetStore.getApps(room.roomId)]);
+    }, [room, sdkContext.widgetStore]);
 
     useEffect(updateApps, [room, updateApps]);
-    useEventEmitter(WidgetStore.instance, room.roomId, updateApps);
-    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateApps);
+    useEventEmitter(sdkContext.widgetStore, room.roomId, updateApps);
+    useEventEmitter(sdkContext.widgetLayoutStore, sdkContext.widgetLayoutStore.emissionForRoom(room), updateApps);
 
     return apps;
 };
+
+export function isAppWidget(widget: IWidget | IApp): widget is IApp {
+    return "roomId" in widget && typeof widget.roomId === "string";
+}
+export function isVirtualWidget(widget: IApp): boolean {
+    return widget.eventId === undefined;
+}

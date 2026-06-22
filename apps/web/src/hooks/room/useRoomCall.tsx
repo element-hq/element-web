@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type React from "react";
@@ -22,7 +22,6 @@ import { useCall, useConnectionState, useParticipantCount } from "../useCall";
 import { useRoomMemberCount } from "../useRoomMembers";
 import { ConnectionState } from "../../models/Call";
 import { placeCall } from "../../utils/room/placeCall";
-import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../widgets/ManagedHybrid";
@@ -31,14 +30,13 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
-import { CallStore, CallStoreEvent } from "../../stores/CallStore";
+import { CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { UIFeature } from "../../settings/UIFeature";
 import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
-import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext.ts";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -107,7 +105,7 @@ export const useRoomCall = (
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
 } => {
-    const roomViewStore = useScopedRoomContext("roomViewStore").roomViewStore;
+    const sdkContext = useContext(SDKContext);
     // settings
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
@@ -117,10 +115,12 @@ export const useRoomCall = (
     }, []);
 
     const serverIsConfiguredForElementCall = useEventEmitterState(
-        CallStore.instance,
+        sdkContext.callStore,
         CallStoreEvent.TransportsUpdated,
         () =>
-            CallStore.instance.getConfiguredRTCTransports().some((s) => s.type === "livekit" && s.livekit_service_url),
+            sdkContext.callStore
+                .getConfiguredRTCTransports()
+                .some((s) => s.type === "livekit" && s.livekit_service_url),
     );
 
     useEffect(() => {
@@ -132,9 +132,9 @@ export const useRoomCall = (
     }, [useElementCallExclusively, serverIsConfiguredForElementCall]);
 
     const hasLegacyCall = useEventEmitterState(
-        SdkContextClass.instance.legacyCallHandler,
+        sdkContext.legacyCallHandler,
         LegacyCallHandlerEvent.CallsChanged,
-        () => SdkContextClass.instance.legacyCallHandler.getCallForRoom(room.roomId) !== null,
+        () => sdkContext.legacyCallHandler.getCallForRoom(room.roomId) !== null,
     );
     // settings
     const widgets = useWidgets(room);
@@ -148,9 +148,9 @@ export const useRoomCall = (
     const isConnectedToCall = useConnectionState(groupCall) === ConnectionState.Connected;
     const hasGroupCall = groupCall !== null;
     const isViewingCall = useEventEmitterState(
-        roomViewStore,
+        sdkContext.roomViewStore,
         UPDATE_EVENT,
-        () => roomViewStore.isViewingCall() || isVideoRoom(room),
+        () => sdkContext.roomViewStore.isViewingCall() || isVideoRoom(room),
     );
 
     const participantCount = useParticipantCount(groupCall);
@@ -214,10 +214,14 @@ export const useRoomCall = (
         widget = groupCall?.widget ?? jitsiWidget;
     }
     const updateWidgetState = useCallback((): void => {
-        setCanPinWidget(WidgetLayoutStore.instance.canAddToContainer(room, "top"));
-        setWidgetPinned(!!widget && WidgetLayoutStore.instance.isInContainer(room, widget, "top"));
-    }, [room, widget]);
-    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateWidgetState);
+        setCanPinWidget(sdkContext.widgetLayoutStore.canAddToContainer(room, "top"));
+        setWidgetPinned(!!widget && sdkContext.widgetLayoutStore.isInContainer(room, widget, "top"));
+    }, [room, widget, sdkContext.widgetLayoutStore]);
+    useEventEmitter(
+        sdkContext.widgetLayoutStore,
+        sdkContext.widgetLayoutStore.emissionForRoom(room),
+        updateWidgetState,
+    );
     useEffect(() => {
         updateWidgetState();
     }, [room, jitsiWidget, groupCall, updateWidgetState]);
@@ -226,8 +230,8 @@ export const useRoomCall = (
     // We only want to prompt to pin the widget if it's not element call based.
     const isECWidget = WidgetType.CALL.matches(widget?.type ?? "");
     const promptPinWidget = !isECWidget && canPinWidget && !widgetPinned;
-    const connectedCalls = useEventEmitterState(CallStore.instance, CallStoreEvent.ConnectedCalls, () =>
-        Array.from(CallStore.instance.connectedCalls),
+    const connectedCalls = useEventEmitterState(sdkContext.callStore, CallStoreEvent.ConnectedCalls, () =>
+        Array.from(sdkContext.callStore.connectedCalls),
     );
 
     const state = useMemo((): State => {
@@ -266,25 +270,25 @@ export const useRoomCall = (
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+                sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             } else {
-                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined, true);
+                placeCall(sdkContext, room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined, true);
             }
         },
-        [promptPinWidget, room, widget],
+        [promptPinWidget, room, widget, sdkContext],
     );
     const videoCallClick = useCallback(
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+                sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined, false);
+                placeCall(sdkContext, room, CallType.Video, callPlatformType, evt?.shiftKey || undefined, false);
             }
         },
-        [widget, promptPinWidget, room],
+        [widget, promptPinWidget, room, sdkContext],
     );
 
     let voiceCallDisabledReason: string | null;

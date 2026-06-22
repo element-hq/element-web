@@ -24,7 +24,7 @@ import { clientAndSDKContextRenderOptions, stubClient } from "../../../test-util
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { searchPagination, SearchScope } from "../../../../src/Searching";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../../src/settings/SettingsStore.ts";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 

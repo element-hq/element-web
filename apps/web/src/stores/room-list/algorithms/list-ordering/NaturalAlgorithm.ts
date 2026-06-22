@@ -9,12 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { type SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
-import { type TagID } from "../../../room-list-v3/skip-list/tag";
 import { RoomUpdateCause } from "../../models";
-import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 type NaturalCategorizedRoomMap = {
     defaultRooms: Room[];
@@ -30,9 +27,6 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
         defaultRooms: [],
         mutedRooms: [],
     };
-    public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
-        super(tagId, initialSortingAlgorithm);
-    }
 
     public setRooms(rooms: Room[]): void {
         const { defaultRooms, mutedRooms } = this.categorizeRooms(rooms);
@@ -138,7 +132,7 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
     private getRoomIsMuted(room: Room): boolean {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
-        const state = RoomNotificationStateStore.instance.getRoomState(room);
+        const state = this.sdkContext.roomNotificationStateStore.getRoomState(room);
         return state.muted;
     }
 

@@ -9,7 +9,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/types/typescript/SlashCommand";
 
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -17,10 +16,11 @@ import { reject } from "./utils";
 import { _t, UserFriendlyError } from "../languageHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { CommandCategories, type RunResult } from "./interface";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 /**
  * The function signature for the run function of a {@link Command}
- * @param matrixClient - The Matrix client
+ * @param context - The SDK context including the Matrix client
  * @param roomId - The room ID where the command is run
  * @param threadId - The thread ID where the command is run, or null for room timeline
  * @param args - The arguments passed to the command
@@ -28,7 +28,7 @@ import { CommandCategories, type RunResult } from "./interface";
  */
 type RunFn = (
     this: Command,
-    matrixClient: MatrixClient,
+    context: SdkContextClass,
     roomId: string,
     threadId: string | null,
     args?: string,
@@ -56,7 +56,7 @@ interface ICommandOpts {
     runFn?: RunFn;
     category: string;
     hideCompletionAfterSpace?: boolean;
-    isEnabled?(this: void, matrixClient: MatrixClient | null, roomId: string | null): boolean;
+    isEnabled?(this: void, context: SdkContextClass, roomId: string | null): boolean;
     renderingTypes?: TimelineRenderingType[];
 }
 
@@ -70,7 +70,7 @@ export class Command {
     public readonly hideCompletionAfterSpace: boolean;
     public readonly renderingTypes?: TimelineRenderingType[];
     public readonly analyticsName?: SlashCommandEvent["command"];
-    private readonly _isEnabled?: (matrixClient: MatrixClient | null, roomId: string | null) => boolean;
+    private readonly _isEnabled?: (context: SdkContextClass, roomId: string | null) => boolean;
 
     public constructor(opts: ICommandOpts) {
         this.command = opts.command;
@@ -93,7 +93,7 @@ export class Command {
         return this.getCommand() + " " + this.args;
     }
 
-    public run(matrixClient: MatrixClient, roomId: string, threadId: string | null, args?: string): RunResult {
+    public run(sdkContext: SdkContextClass, roomId: string, threadId: string | null, args?: string): RunResult {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
         if (!this.runFn) {
             return reject(new UserFriendlyError("slash_command|error_invalid_runfn"));
@@ -116,14 +116,14 @@ export class Command {
             });
         }
 
-        return this.runFn(matrixClient, roomId, threadId, args);
+        return this.runFn(sdkContext, roomId, threadId, args);
     }
 
     public getUsage(): string {
         return _t("slash_command|usage") + ": " + this.getCommandWithArgs();
     }
 
-    public isEnabled(cli: MatrixClient | null, roomId: string | null): boolean {
-        return this._isEnabled?.(cli, roomId) ?? true;
+    public isEnabled(context: SdkContextClass, roomId: string | null): boolean {
+        return this._isEnabled?.(context, roomId) ?? true;
     }
 }

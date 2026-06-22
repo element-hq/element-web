@@ -21,10 +21,8 @@ import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
-import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import createMatrixClient from "./utils/createMatrixClient";
-import Notifier from "./Notifier";
 import UserActivity from "./UserActivity";
 import Presence from "./Presence";
 import dis from "./dispatcher/dispatcher";
@@ -35,7 +33,6 @@ import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from "./utils/StorageManager";
 import * as StorageAccess from "./utils/StorageAccess";
-import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import ToastStore from "./stores/ToastStore";
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
@@ -45,7 +42,6 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import { PosthogAnalytics } from "./PosthogAnalytics";
-import LegacyCallHandler from "./LegacyCallHandler";
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { _t } from "./languageHandler";
@@ -56,7 +52,7 @@ import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
-import { SdkContextClass } from "./contexts/SDKContext";
+import { type SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oidc/authorize";
 import { getOidcErrorMessage } from "./utils/oidc/error";
@@ -85,28 +81,30 @@ import { type URLParams } from "./vector/url_utils.ts";
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
 
-dis.register((payload) => {
-    if (payload.action === Action.TriggerLogout) {
-        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
-        onLoggedOut();
-    } else if (payload.action === Action.OverwriteLogin) {
-        const typed = <OverwriteLoginPayload>payload;
-        // Stop the current client before overwriting the login.
-        // If not done it might be impossible to clear the storage, as the
-        // rust crypto backend might be holding an open connection to the indexeddb store.
-        // We also use the `unsetClient` flag to false, because at this point we are
-        // already in the logged in flows of the `MatrixChat` component, and it will
-        // always expect to have a client (calls to `MatrixClientPeg.safeGet()`).
-        // If we unset the client and the component is updated,  the render will fail and unmount everything.
-        // (The module dialog closes and fires a `aria_unhide_main_app` that will trigger a re-render)
-        stopMatrixClient(false);
-        doSetLoggedIn(typed.credentials, true, true).catch((e) => {
-            // XXX we might want to fire a new event here to let the app know that the login failed ?
-            // The module api could use it to display a message to the user.
-            logger.warn("Failed to overwrite login", e);
-        });
-    }
-});
+export function registerHandlers(sdkContext: SdkContextClass): void {
+    dis.register((payload) => {
+        if (payload.action === Action.TriggerLogout) {
+            // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
+            onLoggedOut(sdkContext);
+        } else if (payload.action === Action.OverwriteLogin) {
+            const typed = <OverwriteLoginPayload>payload;
+            // Stop the current client before overwriting the login.
+            // If not done it might be impossible to clear the storage, as the
+            // rust crypto backend might be holding an open connection to the indexeddb store.
+            // We also use the `unsetClient` flag to false, because at this point we are
+            // already in the logged in flows of the `MatrixChat` component, and it will
+            // always expect to have a client (calls to `MatrixClientPeg.safeGet()`).
+            // If we unset the client and the component is updated,  the render will fail and unmount everything.
+            // (The module dialog closes and fires a `aria_unhide_main_app` that will trigger a re-render)
+            stopMatrixClient(sdkContext, false);
+            doSetLoggedIn(sdkContext, typed.credentials, true, true).catch((e) => {
+                // XXX we might want to fire a new event here to let the app know that the login failed ?
+                // The module api could use it to display a message to the user.
+                logger.warn("Failed to overwrite login", e);
+            });
+        }
+    });
+}
 
 /**
  * This is set to true by {@link #onSessionLockStolen}.
@@ -125,10 +123,11 @@ export function setSessionLockNotStolen(): void {
 
 /**
  * Handle the session lock being stolen. Stops any active Matrix Client, and aborts any ongoing client initialisation.
+ * @param sdkContext - the SDK context to use
  */
-export async function onSessionLockStolen(): Promise<void> {
+export async function onSessionLockStolen(sdkContext: SdkContextClass): Promise<void> {
     sessionLockStolen = true;
-    stopMatrixClient();
+    stopMatrixClient(sdkContext);
 }
 
 /**
@@ -168,6 +167,7 @@ interface ILoadSessionOpts {
  * If any of steps 1-4 are successful, it will call {_doSetLoggedIn}, which in
  * turn will raise on_logged_in and will_start_client events.
  *
+ * @param sdkContext - the SDK context to use
  * @param {object} [opts]
  * @param {object} [opts.fragmentQueryParams]: string->string map of the
  *     query-parameters extracted from the #-fragment of the starting URI.
@@ -185,7 +185,7 @@ interface ILoadSessionOpts {
  *     Resolves to `true` if we ended up starting a session, or `false` if we
  *     failed.
  */
-export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean> {
+export async function loadSession(sdkContext: SdkContextClass, opts: ILoadSessionOpts = {}): Promise<boolean> {
     try {
         let enableGuest = opts.enableGuest || false;
         const guestHsUrl = opts.guestHsUrl;
@@ -201,6 +201,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
             logger.log("Using guest access credentials");
             await doSetLoggedIn(
+                sdkContext,
                 {
                     userId: urlParams.guest.guest_user_id,
                     accessToken: urlParams.guest.guest_access_token,
@@ -213,7 +214,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             );
             return true;
         }
-        const success = await restoreSessionFromStorage({
+        const success = await restoreSessionFromStorage(sdkContext, {
             ignoreGuest: Boolean(opts.ignoreGuest),
         });
         if (success) {
@@ -224,7 +225,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         }
 
         if (enableGuest && guestHsUrl) {
-            return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
+            return registerAsGuest(sdkContext, guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
         }
 
         // fall back to welcome screen
@@ -246,7 +247,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             return false;
         }
 
-        return handleLoadSessionFailure(e, opts);
+        return handleLoadSessionFailure(sdkContext, e, opts);
     }
 }
 
@@ -267,6 +268,7 @@ export async function getStoredSessionOwner(): Promise<[string, boolean] | [null
  * If query string includes OIDC authorization code flow parameters attempt to login using oidc flow
  * Else, we may be returning from SSO - attempt token login
  *
+ * @param sdkContext - the SDK context to use
  * @param urlParams the parameters read in at app load time from the url
  *
  * @param defaultDeviceDisplayName
@@ -276,26 +278,29 @@ export async function getStoredSessionOwner(): Promise<[string, boolean] | [null
  *      else false
  */
 export async function attemptDelegatedAuthLogin(
+    sdkContext: SdkContextClass,
     urlParams: URLParams,
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
     if (urlParams.oidc_fragment) {
-        return attemptOidcNativeLogin(urlParams.oidc_fragment, "fragment");
+        return attemptOidcNativeLogin(sdkContext, urlParams.oidc_fragment, "fragment");
     } else if (urlParams.oidc_query) {
-        return attemptOidcNativeLogin(urlParams.oidc_query, "query");
+        return attemptOidcNativeLogin(sdkContext, urlParams.oidc_query, "query");
     }
 
-    return attemptTokenLogin(urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
+    return attemptTokenLogin(sdkContext, urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
 }
 
 /**
  * Attempt to login by completing OIDC authorization code flow
+ * @param sdkContext - the SDK context to use
  * @param urlParams subset of app-load url parameters relating to oidc auth
  * @param responseMode - the response_mode used in the auth request
  * @returns Promise that resolves to true when login succeeded, else false
  */
 async function attemptOidcNativeLogin(
+    sdkContext: SdkContextClass,
     urlParams: NonNullable<URLParams["oidc_fragment"]>,
     responseMode: "fragment" | "query",
 ): Promise<boolean> {
@@ -305,7 +310,7 @@ async function attemptOidcNativeLogin(
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
             await completeOidcLogin(urlParams, responseMode);
 
-        await configureFromCompletedOAuthLogin({
+        await configureFromCompletedOAuthLogin(sdkContext, {
             accessToken,
             refreshToken,
             homeserverUrl,
@@ -326,17 +331,21 @@ async function attemptOidcNativeLogin(
 
 /**
  * Exchange the given OIDC credentials for {@link IMatrixClientCreds}, additionally persisting them to storage.
+ * @param sdkContext - the SDK context to use
  * @param creds the credentials from the OIDC flow
  */
-export async function configureFromCompletedOAuthLogin({
-    accessToken,
-    refreshToken,
-    homeserverUrl,
-    identityServerUrl,
-    clientId,
-    issuer,
-    idToken,
-}: Omit<CompleteOidcLoginResponse, "idTokenClaims">): Promise<IMatrixClientCreds> {
+export async function configureFromCompletedOAuthLogin(
+    sdkContext: SdkContextClass,
+    {
+        accessToken,
+        refreshToken,
+        homeserverUrl,
+        identityServerUrl,
+        clientId,
+        issuer,
+        idToken,
+    }: Omit<CompleteOidcLoginResponse, "idTokenClaims">,
+): Promise<IMatrixClientCreds> {
     const {
         user_id: userId,
         device_id: deviceId,
@@ -354,7 +363,7 @@ export async function configureFromCompletedOAuthLogin({
     };
 
     logger.debug("Logged in via OIDC native flow");
-    await onSuccessfulDelegatedAuthLogin(credentials);
+    await onSuccessfulDelegatedAuthLogin(sdkContext, credentials);
     // this needs to happen after success handler which clears storages
     persistOidcAuthenticatedSettings(clientId, issuer, idToken);
     return credentials;
@@ -388,7 +397,8 @@ async function getUserIdFromAccessToken(
 }
 
 /**
- @param urlParams subset of app-load url parameters relating to legacy sso auth
+ * @param sdkContext - the SDK context to use
+ * @param urlParams subset of app-load url parameters relating to legacy sso auth
  *
  * @param defaultDeviceDisplayName
  * @param fragmentAfterLogin path to go to after a successful login, only used for "Try again"
@@ -397,6 +407,7 @@ async function getUserIdFromAccessToken(
  *    login, else false
  */
 export function attemptTokenLogin(
+    sdkContext: SdkContextClass,
     urlParams: URLParams["legacy_sso"],
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
@@ -421,7 +432,7 @@ export function attemptTokenLogin(
     })
         .then(async function (creds) {
             logger.log("Logged in with token");
-            await onSuccessfulDelegatedAuthLogin(creds);
+            await onSuccessfulDelegatedAuthLogin(sdkContext, creds);
             return true;
         })
         .catch((error) => {
@@ -481,13 +492,17 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
 /**
  * Called after a successful token login or OIDC authorization.
  * Clear storage then save new credentials in storage
+ * @param sdkContext - the SDK context to use
  * @param credentials as returned from login
  */
-async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): Promise<void> {
-    await clearStorage();
+async function onSuccessfulDelegatedAuthLogin(
+    sdkContext: SdkContextClass,
+    credentials: IMatrixClientCreds,
+): Promise<void> {
+    await clearStorage(sdkContext);
     // SSO does not go through setLoggedIn so we need to load/create the pickle key here too
     credentials.pickleKey = await loadOrCreatePickleKey(credentials);
-    await persistCredentials(credentials);
+    await persistCredentials(sdkContext, credentials);
 
     // remember that we just logged in
     sessionStorage.setItem("mx_fresh_login", String(true));
@@ -513,7 +528,12 @@ function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: 
     });
 }
 
-function registerAsGuest(hsUrl: string, isUrl?: string, defaultDeviceDisplayName?: string): Promise<boolean> {
+function registerAsGuest(
+    sdkContext: SdkContextClass,
+    hsUrl: string,
+    isUrl?: string,
+    defaultDeviceDisplayName?: string,
+): Promise<boolean> {
     logger.log(`Doing guest login on ${hsUrl}`);
 
     // create a temporary MatrixClient to do the login
@@ -531,6 +551,7 @@ function registerAsGuest(hsUrl: string, isUrl?: string, defaultDeviceDisplayName
             (creds) => {
                 logger.log(`Registered as guest: ${creds.user_id}`);
                 return doSetLoggedIn(
+                    sdkContext,
                     {
                         userId: creds.user_id,
                         deviceId: creds.device_id,
@@ -620,10 +641,10 @@ export async function getStoredSessionVars(): Promise<Partial<IStoredSession>> {
     return { hsUrl, isUrl, hasAccessToken, accessToken, refreshToken, hasRefreshToken, userId, deviceId, isGuest };
 }
 
-async function abortLogin(): Promise<void> {
+async function abortLogin(sdkContext: SdkContextClass): Promise<void> {
     const signOut = await showStorageEvictedDialog();
     if (signOut) {
-        await clearStorage();
+        await clearStorage(sdkContext);
         // This error feels a bit clunky, but we want to make sure we don't go any
         // further and instead head back to sign in.
         throw new AbortLoginAndRebuildStorage("Aborting login in progress because of storage inconsistency");
@@ -635,6 +656,7 @@ async function abortLogin(): Promise<void> {
  * If the credentials are found, and the session is successfully restored,
  * emits {@link Action.OnLoggedIn}, {@link Action.WillStartClient} and {@link Action.StartedClient}.
  *
+ * @param sdkContext - the SDK context to use
  * @returns true if a session was found; false if no existing session was found.
  *
  * N.B. Lifecycle.js should not maintain any further localStorage state, we
@@ -645,7 +667,10 @@ async function abortLogin(): Promise<void> {
  *      SessionStore to avoid bugs where the view becomes out-of-sync with
  *      localStorage (e.g. isGuest etc.)
  */
-export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }): Promise<boolean> {
+export async function restoreSessionFromStorage(
+    sdkContext: SdkContextClass,
+    opts?: { ignoreGuest?: boolean },
+): Promise<boolean> {
     const ignoreGuest = opts?.ignoreGuest;
 
     if (!localStorage) {
@@ -659,7 +684,7 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
         logger.warn(
             "restoreSessionFromStorage: storage indicates we should have an access token, but we do not. Displaying StorageEvictedDialog",
         );
-        await abortLogin();
+        await abortLogin(sdkContext);
     }
 
     if (accessToken && userId && hsUrl) {
@@ -683,6 +708,7 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
 
         logger.log(`Restoring session for ${userId}`);
         await doSetLoggedIn(
+            sdkContext,
             {
                 userId: userId,
                 deviceId: deviceId,
@@ -704,7 +730,11 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
     }
 }
 
-async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessionOpts): Promise<boolean> {
+async function handleLoadSessionFailure(
+    sdkContext: SdkContextClass,
+    e: unknown,
+    loadSessionOpts?: ILoadSessionOpts,
+): Promise<boolean> {
     logger.error("Unable to load session", e);
 
     const modal = Modal.createDialog(SessionRestoreErrorDialog, {
@@ -714,12 +744,12 @@ async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessi
     const [success] = await modal.finished;
     if (success) {
         // user clicked continue.
-        await clearStorage();
+        await clearStorage(sdkContext);
         return false;
     }
 
     // try, try again
-    return loadSession(loadSessionOpts);
+    return loadSession(sdkContext, loadSessionOpts);
 }
 
 /**
@@ -735,15 +765,16 @@ async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessi
  * Storage is cleared early in the process so the required data is lost.
  * You must use {@link attemptDelegatedAuthLogin} followed by {@link restoreSessionFromStorage} for OIDC login.
  *
+ * @param sdkContext - the SDK context to use
  * @param {IMatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+export async function setLoggedIn(sdkContext: SdkContextClass, credentials: IMatrixClientCreds): Promise<MatrixClient> {
     credentials.freshLogin = true;
-    stopMatrixClient();
+    stopMatrixClient(sdkContext);
     credentials.pickleKey = await loadOrCreatePickleKey(credentials);
-    return doSetLoggedIn(credentials, true, true);
+    return doSetLoggedIn(sdkContext, credentials, true, true);
 }
 
 /**
@@ -757,15 +788,19 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
  * If the credentials belong to a different user from the session already stored,
  * the old session will be cleared automatically.
  *
+ * @param sdkContext - the SDK context to use
  * @param {IMatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export async function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+export async function hydrateSession(
+    sdkContext: SdkContextClass,
+    credentials: IMatrixClientCreds,
+): Promise<MatrixClient> {
     const oldUserId = MatrixClientPeg.safeGet().getUserId();
     const oldDeviceId = MatrixClientPeg.safeGet().getDeviceId();
 
-    stopMatrixClient(); // unsets MatrixClientPeg.get()
+    stopMatrixClient(sdkContext); // unsets MatrixClientPeg.get()
     localStorage.removeItem("mx_soft_logout");
     _isLoggingOut = false;
 
@@ -780,7 +815,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
             (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
     }
 
-    return doSetLoggedIn(credentials, overwrite, false);
+    return doSetLoggedIn(sdkContext, credentials, overwrite, false);
 }
 
 /**
@@ -827,6 +862,7 @@ async function createOidcTokenRefresher(
  *
  * Emits {@link Action.OnLoggedIn}, {@link Action.WillStartClient} and {@link Action.StartedClient}.
  *
+ * @param sdkContext - the SDK context to use
  * @param {IMatrixClientCreds} credentials The credentials to use
  * @param {Boolean} clearStorageEnabled True to clear storage before starting the new client
  * @param {Boolean} isFreshLogin True if this is a fresh login, false if it is previous session being restored
@@ -834,6 +870,7 @@ async function createOidcTokenRefresher(
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 async function doSetLoggedIn(
+    sdkContext: SdkContextClass,
     credentials: IMatrixClientCreds,
     clearStorageEnabled: boolean,
     isFreshLogin: boolean,
@@ -858,7 +895,7 @@ async function doSetLoggedIn(
     );
 
     if (clearStorageEnabled) {
-        await clearStorage();
+        await clearStorage(sdkContext);
     }
 
     const results = await StorageManager.checkConsistency();
@@ -867,7 +904,7 @@ async function doSetLoggedIn(
     // Show a modal recommending a full reset of storage.
     if (results.dataInLocalStorage && results.cryptoInited && !results.dataInCryptoStore) {
         logger.warn("doSetLoggedIn: StorageManager consistency check failed; displaying StorageEvictedDialog.");
-        await abortLogin();
+        await abortLogin(sdkContext);
     }
 
     let storedClientid;
@@ -895,7 +932,7 @@ async function doSetLoggedIn(
 
     if (localStorage) {
         try {
-            await persistCredentials(credentials);
+            await persistCredentials(sdkContext, credentials);
             // make sure we don't think that it's a fresh login any more
             sessionStorage.removeItem("mx_fresh_login");
         } catch (e) {
@@ -922,13 +959,13 @@ async function doSetLoggedIn(
     }
 
     try {
-        await startMatrixClient(client, /*startSyncing=*/ !softLogout, clientPegOpts);
+        await startMatrixClient(sdkContext, client, /*startSyncing=*/ !softLogout, clientPegOpts);
     } finally {
         clientPegOpts.rustCryptoStoreKey?.fill(0);
     }
 
     // Run the migrations after the MatrixClientPeg has been assigned
-    SettingsStore.runMigrations(isFreshLogin);
+    sdkContext.settingsStore.runMigrations(isFreshLogin);
 
     if (isFreshLogin && !credentials.guest) {
         // For newly registered users, set a flag so that we force them to verify,
@@ -949,7 +986,7 @@ async function showStorageEvictedDialog(): Promise<boolean> {
 // `instanceof`. Babel 7 supports this natively in their class handling.
 class AbortLoginAndRebuildStorage extends Error {}
 
-async function persistCredentials(credentials: IMatrixClientCreds): Promise<void> {
+async function persistCredentials(sdkContext: SdkContextClass, credentials: IMatrixClientCreds): Promise<void> {
     localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
         localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
@@ -977,7 +1014,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
         localStorage.setItem("mx_device_id", credentials.deviceId);
     }
 
-    ModuleRunner.instance.extensions.cryptoSetup?.persistCredentials(credentials);
+    sdkContext.moduleRunner.extensions.cryptoSetup?.persistCredentials(credentials);
 
     logger.log(`Session persisted for ${credentials.userId}`);
 }
@@ -1004,9 +1041,9 @@ async function doLogout(client: MatrixClient, oidcClientStore?: OidcClientStore)
 
 /**
  * Logs the current session out and transitions to the logged-out state
- * @param oidcClientStore store instance from SDKContext
+ * @param sdkContext - the SDK context to use
  */
-export function logout(oidcClientStore?: OidcClientStore): void {
+export function logout(sdkContext: SdkContextClass): void {
     const client = MatrixClientPeg.get();
     if (!client) return;
 
@@ -1023,20 +1060,23 @@ export function logout(oidcClientStore?: OidcClientStore): void {
     _isLoggingOut = true;
     PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
 
-    doLogout(client, oidcClientStore).then(onLoggedOut, (err) => {
-        // Just throwing an error here is going to be very unhelpful
-        // if you're trying to log out because your server's down and
-        // you want to log into a different server, so just forget the
-        // access token. It's annoying that this will leave the access
-        // token still valid, but we should fix this by having access
-        // tokens expire (and if you really think you've been compromised,
-        // change your password).
-        logger.warn("Failed to call logout API: token will not be invalidated", err);
-        onLoggedOut();
-    });
+    doLogout(client, sdkContext.oidcClientStore).then(
+        () => onLoggedOut(sdkContext),
+        (err) => {
+            // Just throwing an error here is going to be very unhelpful
+            // if you're trying to log out because your server's down and
+            // you want to log into a different server, so just forget the
+            // access token. It's annoying that this will leave the access
+            // token still valid, but we should fix this by having access
+            // tokens expire (and if you really think you've been compromised,
+            // change your password).
+            logger.warn("Failed to call logout API: token will not be invalidated", err);
+            onLoggedOut(sdkContext);
+        },
+    );
 }
 
-export function softLogout(): void {
+export function softLogout(sdkContext: SdkContextClass): void {
     if (!MatrixClientPeg.get()) return;
 
     // Track that we've detected and trapped a soft logout. This helps prevent other
@@ -1052,7 +1092,7 @@ export function softLogout(): void {
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.dispatch({ action: Action.ClientNotViable }); // generic version of on_logged_out
-    stopMatrixClient(/*unsetClient=*/ false);
+    stopMatrixClient(sdkContext, /*unsetClient=*/ false);
 
     // DO NOT CALL LOGOUT. A soft logout preserves data, logout does not.
 }
@@ -1075,11 +1115,13 @@ export function isLoggingOut(): boolean {
  * Emits {@link Action.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
  * been started.
  *
+ * @param sdkContext - the SDK context to use
  * @param client the matrix client to start
  * @param startSyncing - `true` to actually start syncing the client.
  * @param clientPegOpts - Options to pass through to {@link MatrixClientPeg.start}.
  */
 async function startMatrixClient(
+    sdkContext: SdkContextClass,
     client: MatrixClient,
     startSyncing: boolean,
     clientPegOpts: MatrixClientPegAssignOpts,
@@ -1093,16 +1135,16 @@ async function startMatrixClient(
     dis.dispatch({ action: Action.WillStartClient }, true);
 
     // reset things first just in case
-    SdkContextClass.instance.typingStore.reset();
+    sdkContext.typingStore.reset();
     ToastStore.sharedInstance().reset();
 
     DialogOpener.instance.prepare(client);
-    Notifier.start();
+    sdkContext.notifier.start();
     UserActivity.sharedInstance().start();
     DMRoomMap.makeShared(client).start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
-    LegacyCallHandler.instance.start();
+    sdkContext.legacyCallHandler.start();
     checkBrowserSupport();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
@@ -1127,7 +1169,7 @@ async function startMatrixClient(
     DeviceListener.sharedInstance().start(client);
     // Similarly, don't start sending presence updates until we've started
     // the client
-    if (!SettingsStore.getValue("lowBandwidth")) {
+    if (!sdkContext.settingsStore.getValue("lowBandwidth")) {
         Presence.start();
     }
 
@@ -1139,24 +1181,25 @@ async function startMatrixClient(
     dis.dispatch({ action: Action.ClientStarted });
 
     if (isSoftLogout()) {
-        softLogout();
+        softLogout(sdkContext);
     }
 }
 
-/*
+/**
  * Stops a running client and all related services, and clears persistent
  * storage. Used after a session has been logged out.
+ * @param sdkContext - the SDK context to use
  */
-export async function onLoggedOut(): Promise<void> {
+export async function onLoggedOut(sdkContext: SdkContextClass): Promise<void> {
     // Ensure that we dispatch a view change **before** stopping the client,
     // that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.fire(Action.OnLoggedOut, true);
-    stopMatrixClient();
-    await clearStorage({ deleteEverything: true });
+    stopMatrixClient(sdkContext);
+    await clearStorage(sdkContext, { deleteEverything: true });
     LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
     await PlatformPeg.get()?.clearStorage();
-    SettingsStore.reset();
+    sdkContext.settingsStore.reset();
 
     // Do this last, so we can make sure all storage has been cleared and all
     // customisations got the memo.
@@ -1172,15 +1215,16 @@ export async function onLoggedOut(): Promise<void> {
 }
 
 /**
+ * @param sdkContext - the SDK context to use
  * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-export async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
+export async function clearStorage(sdkContext: SdkContextClass, opts?: { deleteEverything?: boolean }): Promise<void> {
     logger.info(`Clearing storage, deleteEverything=${opts?.deleteEverything}`);
 
     if (window.localStorage) {
         // get the currently defined device language, if set, so we can restore it later
-        const language = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
+        const language = sdkContext.settingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
 
         // try to save any 3pid invites from being obliterated and registration time
         const pendingInvites = ThreepidInviteStore.instance.getWireInvites();
@@ -1197,7 +1241,7 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
         // now restore those invites, registration time and previously set device language
         if (!opts?.deleteEverything) {
             if (language) {
-                await SettingsStore.setValue("language", null, SettingLevel.DEVICE, language);
+                await sdkContext.settingsStore.setValue("language", null, SettingLevel.DEVICE, language);
             }
 
             pendingInvites.forEach(({ roomId, ...invite }) => {
@@ -1224,14 +1268,15 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
 
 /**
  * Stop all the background processes related to the current client.
+ * @param sdkContext - the SDK context to use
  * @param {boolean} unsetClient True (default) to abandon the client
  * on MatrixClientPeg after stopping.
  */
-export function stopMatrixClient(unsetClient = true): void {
-    Notifier.stop();
-    LegacyCallHandler.instance.stop();
+export function stopMatrixClient(sdkContext: SdkContextClass, unsetClient = true): void {
+    sdkContext.notifier.stop();
+    sdkContext.legacyCallHandler.stop();
     UserActivity.sharedInstance().stop();
-    SdkContextClass.instance.typingStore.reset();
+    sdkContext.typingStore.reset();
     Presence.stop();
     ActiveWidgetStore.instance.stop();
     IntegrationManagers.sharedInstance().stopWatching();
@@ -1260,6 +1305,7 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
     });
     const { user_id: userId, device_id: deviceId } = await tempClient.whoami();
     await doSetLoggedIn(
+        window.mxSdkContext,
         {
             homeserverUrl: hsUrl,
             accessToken,

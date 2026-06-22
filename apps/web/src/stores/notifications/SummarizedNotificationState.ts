@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { NotificationLevel } from "./NotificationLevel";
 import { NotificationState } from "./NotificationState";
 
 /**
@@ -17,13 +16,6 @@ import { NotificationState } from "./NotificationState";
  */
 export class SummarizedNotificationState extends NotificationState {
     private totalStatesWithUnread = 0;
-
-    public constructor() {
-        super();
-        this._symbol = null;
-        this._count = 0;
-        this._level = NotificationLevel.None;
-    }
 
     public get numUnreadStates(): number {
         return this.totalStatesWithUnread;

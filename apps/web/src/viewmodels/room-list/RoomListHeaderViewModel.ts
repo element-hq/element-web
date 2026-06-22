@@ -17,7 +17,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import PosthogTrackers from "../../PosthogTrackers";
 import { Action } from "../../dispatcher/actions";
 import { getMetaSpaceName, type MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import {
     shouldShowSpaceSettings,
     showCreateNewRoom,
@@ -28,7 +28,7 @@ import {
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import type { RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
@@ -42,7 +42,11 @@ export interface Props {
     /**
      * The space store instance.
      */
-    spaceStore: SpaceStoreClass;
+    spaceStore: SpaceStore;
+    /**
+     * The room list store instance.
+     */
+    roomListStore: RoomListStoreV3;
 }
 
 /**
@@ -182,7 +186,7 @@ export class RoomListHeaderViewModel
     };
 
     public sort = (option: SortOption): void => {
-        const oldSortingAlgorithm = RoomListStoreV3.instance.activeSortAlgorithm;
+        const oldSortingAlgorithm = this.props.roomListStore.activeSortAlgorithm;
         let newSortingAlgorithm: SortingAlgorithm;
         switch (option) {
             case "alphabetical":
@@ -195,7 +199,7 @@ export class RoomListHeaderViewModel
                 newSortingAlgorithm = SortingAlgorithm.Unread;
                 break;
         }
-        RoomListStoreV3.instance.resort(newSortingAlgorithm);
+        this.props.roomListStore.resort(newSortingAlgorithm);
         this.snapshot.merge({ activeSortOption: option });
 
         // Record analytics for this action
@@ -213,7 +217,7 @@ export class RoomListHeaderViewModel
     };
 
     public createSection = (): void => {
-        RoomListStoreV3.instance.createSection();
+        this.props.roomListStore.createSection();
         PosthogTrackers.trackSectionCreation("RoomListHeader");
     };
 
@@ -257,7 +261,7 @@ export class RoomListHeaderViewModel
  * @param matrixClient - The Matrix client instance.
  * @returns
  */
-function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
+function getInitialSnapshot(spaceStore: SpaceStore, matrixClient: MatrixClient): RoomListHeaderViewSnapshot {
     const sortingAlgorithm = SettingsStore.getValue("RoomList.preferredSorting");
 
     let activeSortOption: SortOption;
@@ -286,7 +290,7 @@ function getInitialSnapshot(spaceStore: SpaceStoreClass, matrixClient: MatrixCli
  * Get the header title based on the active space.
  * @param spaceStore - The space store instance.
  */
-function getHeaderTitle(spaceStore: SpaceStoreClass): string {
+function getHeaderTitle(spaceStore: SpaceStore): string {
     const activeSpace = spaceStore.activeSpaceRoom;
     const spaceName = activeSpace?.name;
     return spaceName ?? getMetaSpaceName(spaceStore.activeSpace as MetaSpace, spaceStore.allRoomsInHome);
@@ -307,7 +311,7 @@ function getCanCreateVideoRoom(canCreateRoom: boolean): boolean {
  * @returns The header space state containing title, permissions, and display flags.
  */
 function computeHeaderSpaceState(
-    spaceStore: SpaceStoreClass,
+    spaceStore: SpaceStore,
     matrixClient: MatrixClient,
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
     const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");

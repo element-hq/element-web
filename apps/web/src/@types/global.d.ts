@@ -21,14 +21,14 @@ import type RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import { type IntegrationManagers } from "../integrations/IntegrationManagers";
 import { type ModalManager } from "../Modal";
 import type SettingsStore from "../settings/SettingsStore";
-import { type Notifier } from "../Notifier";
+import type Notifier from "../Notifier";
 import type RightPanelStore from "../stores/right-panel/RightPanelStore";
 import type WidgetStore from "../stores/WidgetStore";
 import type LegacyCallHandler from "../LegacyCallHandler";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import type SpaceStore from "../stores/spaces/SpaceStore";
 import type TypingStore from "../stores/TypingStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
 import { type VoiceRecordingStore } from "../stores/VoiceRecordingStore";
@@ -44,7 +44,8 @@ import { type DeepReadonly } from "./common";
 import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
-import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
+import type RoomListStoreV3 from "../stores/room-list-v3/RoomListStoreV3.ts";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -95,20 +96,20 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
-        getRoomListStoreV3: () => RoomListStoreV3Class;
+        mxRoomListStoreV3: RoomListStoreV3;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
-        mxNotifier: typeof Notifier;
+        mxNotifier: Notifier;
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxWidgetLayoutStore: WidgetLayoutStore;
         mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxSpaceStore: SpaceStoreClass;
+        mxSpaceStore: SpaceStore;
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
@@ -122,6 +123,7 @@ declare global {
         mxOnRecaptchaLoaded?: () => void;
         mxModuleLoader: ModuleLoader;
         mxModuleApi: ModuleApiType;
+        mxSdkContext: SdkContextClass;
 
         // electron-only
         electron?: Electron;

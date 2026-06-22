@@ -24,7 +24,7 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";

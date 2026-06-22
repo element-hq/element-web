@@ -28,7 +28,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { RoomNotificationContextMenu } from "../context_menus/RoomNotificationContextMenu";
 import NotificationBadge from "./NotificationBadge";
 import { type ActionPayload } from "../../../dispatcher/payloads";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { type NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
 import { CachedRoomKey, type RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
@@ -38,8 +37,8 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
-import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { CallStoreEvent } from "../../../stores/CallStore";
+import { SDKContext } from "../../../contexts/SDKContext";
 import { RoomTileSubtitle } from "./RoomTileSubtitle";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -75,24 +74,27 @@ export const contextMenuBelow = (elementRect: PartialDOMRect): MenuProps => {
 };
 
 class RoomTile extends React.PureComponent<Props, State> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private dispatcherRef?: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
     private roomProps: RoomEchoChamber;
 
-    public constructor(props: Props) {
-        super(props);
+    public constructor(props: Props, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.state = {
-            selected: SdkContextClass.instance.roomViewStore.getRoomId() === this.props.room.roomId,
+            selected: context.roomViewStore.getRoomId() === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
-            call: CallStore.instance.getCall(this.props.room.roomId),
+            call: context.callStore.getCall(this.props.room.roomId),
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: null,
         };
 
-        this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
+        this.notificationState = context.roomNotificationStateStore.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
     }
 
@@ -150,7 +152,7 @@ class RoomTile extends React.PureComponent<Props, State> {
             this.scrollIntoView();
         }
 
-        SdkContextClass.instance.roomViewStore.addRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        this.context.roomViewStore.addRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         MessagePreviewStore.instance.on(
             MessagePreviewStore.getPreviewChangedEventName(this.props.room),
@@ -159,15 +161,15 @@ class RoomTile extends React.PureComponent<Props, State> {
         this.notificationState.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         this.props.room.on(RoomEvent.Name, this.onRoomNameUpdate);
-        CallStore.instance.on(CallStoreEvent.Call, this.onCallChanged);
+        this.context.callStore.on(CallStoreEvent.Call, this.onCallChanged);
 
         // Recalculate the call for this room, since it could've changed between
         // construction and mounting
-        this.setState({ call: CallStore.instance.getCall(this.props.room.roomId) });
+        this.setState({ call: this.context.callStore.getCall(this.props.room.roomId) });
     }
 
     public componentWillUnmount(): void {
-        SdkContextClass.instance.roomViewStore.removeRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        this.context.roomViewStore.removeRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
         MessagePreviewStore.instance.off(
             MessagePreviewStore.getPreviewChangedEventName(this.props.room),
             this.onRoomPreviewChanged,
@@ -176,7 +178,7 @@ class RoomTile extends React.PureComponent<Props, State> {
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);
+        this.context.callStore.off(CallStoreEvent.Call, this.onCallChanged);
     }
 
     private onAction = (payload: ActionPayload): void => {

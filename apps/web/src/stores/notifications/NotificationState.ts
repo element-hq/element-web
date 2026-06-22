@@ -10,7 +10,7 @@ import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { NotificationLevel } from "./NotificationLevel";
 import { type IDestroyable } from "../../utils/IDestroyable";
-import SettingsStore from "../../settings/SettingsStore";
+import { type SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export interface INotificationStateSnapshotParams {
     symbol: string | null;
@@ -43,10 +43,10 @@ export abstract class NotificationState
 
     private watcherReferences: string[] = [];
 
-    public constructor() {
+    public constructor(protected readonly sdkContext: SdkContextClass) {
         super();
         this.watcherReferences.push(
-            SettingsStore.watchSetting("feature_hidebold", null, () => {
+            this.sdkContext.settingsStore.watchSetting("feature_hidebold", null, () => {
                 this.emit(NotificationStateEvents.Update);
             }),
         );
@@ -92,7 +92,7 @@ export abstract class NotificationState
         if (this.level > NotificationLevel.Activity) {
             return true;
         } else {
-            const hideBold = SettingsStore.getValue("feature_hidebold");
+            const hideBold = this.sdkContext.settingsStore.getValue("feature_hidebold");
             return this.level === NotificationLevel.Activity && !hideBold;
         }
     }
@@ -127,7 +127,7 @@ export abstract class NotificationState
     public destroy(): void {
         this.removeAllListeners(NotificationStateEvents.Update);
         for (const watcherReference of this.watcherReferences) {
-            SettingsStore.unwatchSetting(watcherReference);
+            this.sdkContext.settingsStore.unwatchSetting(watcherReference);
         }
         this.watcherReferences = [];
     }

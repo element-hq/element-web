@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import type EditorModel from "./model";
@@ -18,6 +17,7 @@ import { UserFriendlyError, _t, _td } from "../languageHandler";
 import Modal from "../Modal";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
+import { type SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 export function isSlashCommand(model: EditorModel): boolean {
     const parts = model.parts;
@@ -40,11 +40,16 @@ export function isSlashCommand(model: EditorModel): boolean {
 
 /**
  * Get the slash command and its arguments from the editor model
+ * @param sdkContext - the SDK context to use
  * @param roomId - The room ID to check whether the command is enabled
  * @param model - The editor model
  * @returns A tuple of the command (or undefined if not found), the arguments (or undefined), and the full command text
  */
-export function getSlashCommand(roomId: string, model: EditorModel): [Command | undefined, string | undefined, string] {
+export function getSlashCommand(
+    sdkContext: SdkContextClass,
+    roomId: string,
+    model: EditorModel,
+): [Command | undefined, string | undefined, string] {
     const commandText = model.parts.reduce((text, part) => {
         // use mxid to textify user pills in a command and room alias/id for room pills
         if (part.type === Type.UserPill || part.type === Type.RoomPill) {
@@ -52,18 +57,18 @@ export function getSlashCommand(roomId: string, model: EditorModel): [Command | 
         }
         return text + part.text;
     }, "");
-    const { cmd, args } = getCommand(roomId, commandText);
+    const { cmd, args } = getCommand(sdkContext, roomId, commandText);
     return [cmd, args, commandText];
 }
 
 export async function runSlashCommand(
-    matrixClient: MatrixClient,
+    sdkContext: SdkContextClass,
     cmd: Command,
     args: string | undefined,
     roomId: string,
     threadId: string | null,
 ): Promise<[content: RoomMessageEventContent | null, success: boolean]> {
-    const result = cmd.run(matrixClient, roomId, threadId, args);
+    const result = cmd.run(sdkContext, roomId, threadId, args);
     let messageContent: RoomMessageEventContent | null = null;
     let error: any = result.error;
     if (result.promise) {

@@ -19,29 +19,29 @@ import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module
 
 import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
 import QuestionDialog from "../../../components/views/dialogs/QuestionDialog";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { _t } from "../../../languageHandler";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
-import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { type WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { isAppWidget } from "../../../stores/WidgetStore";
-import WidgetUtils from "../../../utils/WidgetUtils";
+import WidgetUtils, { isAppWidget } from "../../../utils/WidgetUtils";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { type ModuleRunner } from "../../../modules/ModuleRunner";
 import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
 import dis from "../../../dispatcher/dispatcher";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const checkRevokeButtonState = (
     cli: MatrixClient,
+    moduleRunner: ModuleRunner,
     roomId: string | undefined,
     app: IWidget,
     userWidget: boolean | undefined,
 ): boolean => {
     const opts: ApprovalOpts = { approved: undefined };
-    ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(app));
+    moduleRunner.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(app));
     if (!opts.approved) {
         const isAllowedWidget =
             (isAppWidget(app) &&
@@ -70,8 +70,10 @@ export class WidgetContextMenuViewModel
         super(
             props,
             WidgetContextMenuViewModel.computeSnapshot(
+                props.widgetLayoutStore,
                 app,
                 cli,
+                props.moduleRunner,
                 room,
                 userWidget,
                 showUnpin,
@@ -88,8 +90,10 @@ export class WidgetContextMenuViewModel
     }
 
     private static readonly computeSnapshot = (
+        widgetLayoutStore: WidgetLayoutStore,
         app: IWidget,
         cli: MatrixClient,
+        moduleRunner: ModuleRunner,
         room: Room | undefined,
         userWidget: boolean | undefined,
         showUnpin: boolean | undefined,
@@ -108,14 +112,14 @@ export class WidgetContextMenuViewModel
 
         let showMoveButtons: [boolean, boolean] = [false, false];
         if (showUnpin) {
-            const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, "top") : [];
+            const pinnedWidgets = room ? widgetLayoutStore.getContainerWidgets(room, "top") : [];
             const widgetIndex = pinnedWidgets.findIndex((widget) => widget.id === app.id);
             showMoveButtons = [widgetIndex > 0, widgetIndex < pinnedWidgets.length - 1];
         }
 
         const showEditButton = canModify && WidgetUtils.isManagedByManager(app);
 
-        const showRevokeButton = checkRevokeButtonState(cli, room?.roomId, app, userWidget);
+        const showRevokeButton = checkRevokeButtonState(cli, moduleRunner, room?.roomId, app, userWidget);
 
         return {
             showStreamAudioStreamButton,
@@ -224,7 +228,7 @@ export class WidgetContextMenuViewModel
     public get onMoveButton(): (direction: number) => void {
         return (direction: number) => {
             if (!this._room) throw new Error("room must be defined");
-            WidgetLayoutStore.instance.moveWithinContainer(this._room, "top", this._app, direction);
+            this.props.widgetLayoutStore.moveWithinContainer(this._room, "top", this._app, direction);
             this.props.onFinished!();
         };
     }
@@ -247,11 +251,13 @@ export type WidgetContextMenuViewModelProps = WidgetContextMenuProps & {
     cli: MatrixClient;
     room: Room | undefined;
     roomId: string | undefined;
+    widgetLayoutStore: WidgetLayoutStore;
+    moduleRunner: ModuleRunner;
 };
 
 export function WidgetContextMenu(props: WidgetContextMenuProps): ReactElement {
     const { app, userWidget, showUnpin, menuDisplayed, trigger, onEditClick, onDeleteClick, onFinished } = props;
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
     const { room, roomId } = useScopedRoomContext("room", "roomId");
 
     const vm = useMemo(
@@ -260,7 +266,8 @@ export function WidgetContextMenu(props: WidgetContextMenuProps): ReactElement {
                 menuDisplayed,
                 room,
                 roomId,
-                cli,
+                cli: sdkContext.client!,
+                moduleRunner: sdkContext.moduleRunner,
                 app,
                 showUnpin,
                 userWidget,
@@ -268,8 +275,22 @@ export function WidgetContextMenu(props: WidgetContextMenuProps): ReactElement {
                 onEditClick,
                 onDeleteClick,
                 onFinished,
+                widgetLayoutStore: sdkContext.widgetLayoutStore,
             }),
-        [app, room, roomId, userWidget, showUnpin, menuDisplayed, cli, trigger, onEditClick, onDeleteClick, onFinished],
+        [
+            app,
+            room,
+            roomId,
+            userWidget,
+            showUnpin,
+            menuDisplayed,
+            sdkContext.client,
+            sdkContext.widgetLayoutStore,
+            trigger,
+            onEditClick,
+            onDeleteClick,
+            onFinished,
+        ],
     );
 
     useEffect(() => {

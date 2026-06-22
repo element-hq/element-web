@@ -17,7 +17,7 @@ import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";

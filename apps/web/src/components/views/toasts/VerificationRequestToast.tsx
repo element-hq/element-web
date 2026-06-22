@@ -25,9 +25,9 @@ import Modal from "../../../Modal";
 import GenericToast from "./GenericToast";
 import { Action } from "../../../dispatcher/actions";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     toastKey: string;
@@ -42,6 +42,9 @@ interface IState {
 }
 
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private intervalHandle?: number;
 
     public constructor(props: IProps) {
@@ -114,7 +117,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     metricsTrigger: "VerificationRequest",
                 });
                 const member = cli.getUser(request.otherUserId) ?? undefined;
-                RightPanelStore.instance.setCards(
+                this.context.rightPanelStore.setCards(
                     [
                         { phase: RightPanelPhases.RoomSummary },
                         { phase: RightPanelPhases.MemberInfo, state: { member } },

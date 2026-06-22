@@ -58,6 +58,7 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 // These pagination sizes are higher than they may possibly need be
 // once https://github.com/matrix-org/matrix-spec-proposals/pull/3874 lands
@@ -1798,7 +1799,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.props.timelineSet.relations?.getChildEventsForEvent(eventId, relationType, eventType);
 
     private buildLegacyCallEventGroupers(events?: MatrixEvent[]): void {
-        this.callEventGroupers = buildLegacyCallEventGroupers(this.callEventGroupers, events);
+        this.callEventGroupers = buildLegacyCallEventGroupers(SdkContextClass.instance, this.callEventGroupers, events);
     }
 
     public render(): React.ReactNode {

@@ -12,7 +12,6 @@ import { useRoomSummaryCardViewModel } from "../../../../../src/components/viewm
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import Modal from "../../../../../src/Modal";
 import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
@@ -23,6 +22,7 @@ import { inviteToRoom } from "../../../../../src/utils/room/inviteToRoom";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import * as hooks from "../../../../../src/hooks/useAccountData";
 import * as getTagsForRoomUtils from "../../../../../src/utils/room/getTagsForRoom";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../src/utils/room/inviteToRoom", () => ({
     inviteToRoom: jest.fn(),
@@ -69,7 +69,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room members click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = jest.spyOn(SdkContextClass.instance.rightPanelStore, "pushCard");
         const { result } = render();
 
         result.current.onRoomMembersClick();
@@ -96,7 +96,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room threads click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = jest.spyOn(SdkContextClass.instance.rightPanelStore, "pushCard");
         const { result } = render();
 
         result.current.onRoomThreadsClick();
@@ -104,7 +104,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room files click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = jest.spyOn(SdkContextClass.instance.rightPanelStore, "pushCard");
         const { result } = render();
 
         result.current.onRoomFilesClick();
@@ -112,7 +112,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room extensions click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = jest.spyOn(SdkContextClass.instance.rightPanelStore, "pushCard");
         const { result } = render();
 
         result.current.onRoomExtensionsClick();
@@ -120,7 +120,7 @@ describe("useRoomSummaryCardViewModel", () => {
     });
 
     it("should handle room pins click", () => {
-        const spy = jest.spyOn(RightPanelStore.instance, "pushCard");
+        const spy = jest.spyOn(SdkContextClass.instance.rightPanelStore, "pushCard");
         const { result } = render();
 
         result.current.onRoomPinsClick();

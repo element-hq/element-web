@@ -21,10 +21,10 @@ import AutocompleteProvider from "./AutocompleteProvider";
 import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
-import SettingsStore from "../settings/SettingsStore";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
 import * as recent from "../emojipicker/recent";
 import { filterBoolean } from "../utils/arrays";
+import type { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 const LIMIT = 20;
 
@@ -73,7 +73,11 @@ export default class EmojiProvider extends AutocompleteProvider {
     public nameMatcher: QueryMatcher<ISortedEmoji>;
     private readonly recentlyUsed: Emoji[];
 
-    public constructor(room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(
+        private readonly sdkContext: SdkContextClass,
+        room: Room,
+        renderingType?: TimelineRenderingType,
+    ) {
         super({ commandRegex: EMOJI_REGEX, renderingType });
         this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
             keys: [],
@@ -96,7 +100,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         force?: boolean,
         limit = -1,
     ): Promise<ICompletion[]> {
-        if (!SettingsStore.getValue("MessageComposerInput.suggestEmoji")) {
+        if (!this.sdkContext.settingsStore.getValue("MessageComposerInput.suggestEmoji")) {
             return []; // don't give any suggestions if the user doesn't want them
         }
 

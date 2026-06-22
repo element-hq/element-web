@@ -26,7 +26,7 @@ import PlatformPeg from "./PlatformPeg";
 import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 import SdkConfig from "./SdkConfig";
-import { ModuleRunner } from "./modules/ModuleRunner";
+import { type ModuleRunner } from "./modules/ModuleRunner.ts";
 
 export {
     _t,
@@ -106,7 +106,7 @@ export function setMissingEntryGenerator(f: (value: string) => void): void {
     setMissingEntryGeneratorSharedComponents(f);
 }
 
-export async function setLanguage(...preferredLangs: string[]): Promise<void> {
+export async function setLanguage(moduleRunner: ModuleRunner, ...preferredLangs: string[]): Promise<void> {
     PlatformPeg.get()?.setLanguage(preferredLangs);
 
     const availableLanguages = await getLangsJson();
@@ -134,7 +134,7 @@ export async function setLanguage(...preferredLangs: string[]): Promise<void> {
         registerTranslations("en", fallbackLanguageData);
     }
 
-    await registerCustomTranslations();
+    await registerCustomTranslations(moduleRunner);
 }
 
 type Language = {
@@ -273,12 +273,15 @@ function doRegisterTranslations(customTranslations: TranslationStringsObject): v
  * This function should be called *after* registering other translations data to
  * ensure it overrides strings properly.
  */
-export async function registerCustomTranslations({
-    testOnlyIgnoreCustomTranslationsCache = false,
-}: {
-    testOnlyIgnoreCustomTranslationsCache?: boolean;
-} = {}): Promise<void> {
-    const moduleTranslations = ModuleRunner.instance.allTranslations;
+export async function registerCustomTranslations(
+    moduleRunner: ModuleRunner,
+    {
+        testOnlyIgnoreCustomTranslationsCache = false,
+    }: {
+        testOnlyIgnoreCustomTranslationsCache?: boolean;
+    } = {},
+): Promise<void> {
+    const moduleTranslations = moduleRunner.allTranslations;
     doRegisterTranslations(moduleTranslations);
 
     const lookupUrl = SdkConfig.get().custom_translations_url;

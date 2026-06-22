@@ -18,7 +18,6 @@ import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
@@ -26,6 +25,7 @@ import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
 import { type URLParams } from "./url_utils.ts";
+import { SdkContextClass } from "../contexts/SDKContextClass.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -75,7 +75,7 @@ export async function loadLanguage(): Promise<void> {
         langs = [prefLang];
     }
     try {
-        await languageHandler.setLanguage(...langs);
+        await languageHandler.setLanguage(SdkContextClass.instance.moduleRunner, ...langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
         logger.error("Unable to set language", e);
@@ -133,7 +133,7 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
 export async function loadModules(): Promise<void> {
     const { INSTALLED_MODULES } = await import("../modules.js");
     for (const InstalledModule of INSTALLED_MODULES) {
-        ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
+        SdkContextClass.instance.moduleRunner.registerModule((api) => new InstalledModule(api));
     }
 }
 

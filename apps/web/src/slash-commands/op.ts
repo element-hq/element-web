@@ -13,11 +13,11 @@ import { type MatrixClient, type Room, type RoomMember } from "matrix-js-sdk/src
 
 import { _td, UserFriendlyError } from "../languageHandler";
 import { EffectiveMembership, getEffectiveMembership } from "../utils/membership";
-import { warnSelfDemote } from "../components/views/right_panel/UserInfo";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { canAffectPowerlevels, success, reject } from "./utils";
 import { CommandCategories, type RunResult } from "./interface";
 import { Command } from "./command";
+import { warnSelfDemote } from "../utils/powerLevels.tsx";
 
 const updatePowerLevel = async (room: Room, member: RoomMember, powerLevel: number | undefined): Promise<unknown> => {
     // Only warn if the target is ourselves and the power level is decreasing or being unset
@@ -56,7 +56,7 @@ export const op = new Command({
     args: "<user-id> [<power-level>]",
     description: _td("slash_command|op"),
     isEnabled: canAffectPowerlevels,
-    runFn: function (cli, roomId, threadId, args) {
+    runFn: function (context, roomId, threadId, args) {
         if (args) {
             const matches = args.match(/^(\S+?)( +(-?\d+))?$/);
             let powerLevel = 50; // default power level for op
@@ -65,7 +65,7 @@ export const op = new Command({
                 if (matches.length === 4 && undefined !== matches[3]) {
                     powerLevel = parseInt(matches[3], 10);
                 }
-                return updatePowerLevelHelper(cli, roomId, userId, powerLevel);
+                return updatePowerLevelHelper(context.client!, roomId, userId, powerLevel);
             }
         }
         return reject(this.getUsage());
@@ -79,11 +79,11 @@ export const deop = new Command({
     args: "<user-id>",
     description: _td("slash_command|deop"),
     isEnabled: canAffectPowerlevels,
-    runFn: function (cli, roomId, threadId, args) {
+    runFn: function (context, roomId, threadId, args) {
         if (args) {
             const matches = args.match(/^(\S+)$/);
             if (matches) {
-                return updatePowerLevelHelper(cli, roomId, args, undefined);
+                return updatePowerLevelHelper(context.client!, roomId, args, undefined);
             }
         }
         return reject(this.getUsage());

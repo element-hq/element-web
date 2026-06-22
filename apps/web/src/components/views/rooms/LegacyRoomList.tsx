@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, type Room, RoomType } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
+import React, {
+    type JSX,
+    type ComponentType,
+    createRef,
+    type ReactComponentElement,
+    type SyntheticEvent,
+    useContext,
+} from "react";
 import {
     PlusIcon,
     UserAddSolidIcon,
@@ -18,7 +25,6 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex.tsx";
-import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { Action } from "../../../dispatcher/actions.ts";
 import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
@@ -32,11 +38,10 @@ import PosthogTrackers from "../../../PosthogTrackers.ts";
 import SettingsStore from "../../../settings/SettingsStore.ts";
 import { useFeatureEnabled } from "../../../hooks/useSettings.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore.ts";
 import { type ITagMap } from "../../../stores/room-list/algorithms/models.ts";
 import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list/tag";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore.ts";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore.ts";
+import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore.ts";
 import {
     isMetaSpace,
     type ISuggestedRoom,
@@ -45,7 +50,6 @@ import {
     UPDATE_SELECTED_SPACE,
     UPDATE_SUGGESTED_ROOMS,
 } from "../../../stores/spaces/index.ts";
-import SpaceStore from "../../../stores/spaces/SpaceStore.ts";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays.ts";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects.ts";
 import type ResizeNotifier from "../../../utils/ResizeNotifier.ts";
@@ -69,12 +73,12 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu.tsx";
 import ExtraTile from "./ExtraTile.tsx";
 import RoomSublist, { type IAuxButtonProps } from "./RoomSublist.tsx";
-import { SdkContextClass } from "../../../contexts/SDKContext.ts";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts.ts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager.ts";
 import AccessibleButton from "../elements/AccessibleButton.tsx";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation.ts";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
+import { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -131,9 +135,10 @@ const auxButtonContextMenuPosition = (handle: HTMLDivElement): MenuProps => {
 };
 
 const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = defaultDispatcher }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    const activeSpace = useEventEmitterState(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
-        return SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = useEventEmitterState(sdkContext.spaceStore, UPDATE_SELECTED_SPACE, () => {
+        return sdkContext.spaceStore.activeSpaceRoom;
     });
 
     const showCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
@@ -220,9 +225,10 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
 };
 
 const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    const activeSpace = useEventEmitterState<Room | null>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
-        return SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = useEventEmitterState<Room | null>(sdkContext.spaceStore, UPDATE_SELECTED_SPACE, () => {
+        return sdkContext.spaceStore.activeSpaceRoom;
     });
 
     const showCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
@@ -448,33 +454,33 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
     private dispatcherRef?: string;
     private treeRef = createRef<HTMLDivElement>();
 
-    public static contextType = MatrixClientContext;
-    declare public context: React.ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps) {
         super(props);
 
         this.state = {
             sublists: {},
-            suggestedRooms: SpaceStore.instance.suggestedRooms,
+            suggestedRooms: this.context.spaceStore.suggestedRooms,
         };
     }
 
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-        SpaceStore.instance.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
-        LegacyCallHandler.instance.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+        this.context.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.spaceStore.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
+        this.context.roomListStore.on(LISTS_UPDATE_EVENT, this.updateLists);
+        this.context.legacyCallHandler.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
         this.updateLists(); // trigger the first update
     }
 
     public componentWillUnmount(): void {
-        SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
-        RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
+        this.context.spaceStore.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
+        this.context.roomListStore.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
-        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-        LegacyCallHandler.instance.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+        this.context.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.legacyCallHandler.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
     }
 
     private updateProtocolSupport = (): void => {
@@ -483,14 +489,14 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
 
     private onRoomViewStoreUpdate = (): void => {
         this.setState({
-            currentRoomId: SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined,
+            currentRoomId: this.context.roomViewStore.getRoomId() ?? undefined,
         });
     };
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.context.roomViewStore.getRoomId();
             if (!currentRoomId) return;
             const room = this.getRoomDelta(currentRoomId, viewRoomDeltaPayload.delta, viewRoomDeltaPayload.unread);
             if (room) {
@@ -506,7 +512,7 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
     };
 
     private getRoomDelta = (roomId: string, delta: number, unread = false): Room => {
-        const lists = RoomListStore.instance.orderedLists;
+        const lists = this.context.roomListStore.orderedLists;
         const rooms: Room[] = [];
         TAG_ORDER.forEach((t) => {
             let listRooms = lists[t];
@@ -514,7 +520,7 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
             if (unread) {
                 // filter to only notification rooms (and our current active room so we can index properly)
                 listRooms = listRooms.filter((r) => {
-                    const state = RoomNotificationStateStore.instance.getRoomState(r);
+                    const state = this.context.roomNotificationStateStore.getRoomState(r);
                     return state.room.roomId === roomId || state.isUnread;
                 });
             }
@@ -533,7 +539,7 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
     };
 
     private updateLists = (): void => {
-        const newLists = RoomListStore.instance.orderedLists;
+        const newLists = this.context.roomListStore.orderedLists;
         const previousListIds = Object.keys(this.state.sublists);
         const newListIds = Object.keys(newLists);
 
@@ -608,7 +614,7 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
         // show a skeleton UI if the user is in no rooms and they are not filtering and have no suggested rooms
         const showSkeleton =
             !this.state.suggestedRooms?.length &&
-            Object.values(RoomListStore.instance.orderedLists).every((list) => !list?.length);
+            Object.values(this.context.roomListStore.orderedLists).every((list) => !list?.length);
 
         return TAG_ORDER.map((orderedTagId) => {
             let extraTiles: ReactComponentElement<typeof ExtraTile>[] | undefined;

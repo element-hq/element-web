@@ -32,7 +32,7 @@ import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SdkContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("jszip");
 jest.mock("../../../../src/settings/SettingsStore");

@@ -8,12 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { NotificationLevel } from "./NotificationLevel";
 import { NotificationState } from "./NotificationState";
+import { SdkContextClass } from "../../contexts/SDKContextClass.ts";
 
 export class StaticNotificationState extends NotificationState {
     public static readonly RED_EXCLAMATION = StaticNotificationState.forSymbol("!", NotificationLevel.Highlight);
 
     public constructor(symbol: string | null, count: number, level: NotificationLevel) {
-        super();
+        super(SdkContextClass.instance);
         this._symbol = symbol;
         this._count = count;
         this._level = level;

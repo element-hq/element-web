@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContextClass";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Modal from "../Modal";
 import UploadConfirmDialog from "../components/views/dialogs/UploadConfirmDialog";
@@ -31,14 +31,17 @@ export function successSync(value: any): RunResult {
 
 /**
  * Check whether the user can affect power levels in the given room
- * @param cli - The Matrix client
+ * @param context - the SDK context to use
  * @param roomId - The room ID
  * @returns True if the user can affect power levels, false otherwise
  */
-export const canAffectPowerlevels = (cli: MatrixClient | null, roomId: string | null): boolean => {
-    if (!cli || !roomId) return false;
-    const room = cli?.getRoom(roomId);
-    return !!room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getSafeUserId()) && !isLocalRoom(room);
+export const canAffectPowerlevels = (context: SdkContextClass, roomId: string | null): boolean => {
+    if (!context.client || !roomId) return false;
+    const room = context.client.getRoom(roomId);
+    return (
+        !!room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, context.client.getSafeUserId()) &&
+        !isLocalRoom(room)
+    );
 };
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
@@ -69,10 +72,10 @@ export const singleMxcUpload = async (cli: MatrixClient): Promise<string | null>
     });
 };
 
-export const isCurrentLocalRoom = (cli: MatrixClient | null): boolean => {
-    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+export const isCurrentLocalRoom = (context: SdkContextClass): boolean => {
+    const roomId = context.roomViewStore.getRoomId();
     if (!roomId) return false;
-    const room = cli?.getRoom(roomId);
+    const room = context.client?.getRoom(roomId);
     if (!room) return false;
     return isLocalRoom(room);
 };
