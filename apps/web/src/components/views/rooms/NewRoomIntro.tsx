@@ -17,7 +17,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t, _td } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
-import RoomAvatar from "../avatars/RoomAvatar";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { type ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../../dispatcher/actions";

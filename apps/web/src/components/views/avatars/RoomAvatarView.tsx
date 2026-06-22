@@ -17,7 +17,7 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 import { Flex } from "@element-hq/web-shared-components";
 
-import RoomAvatar from "./RoomAvatar";
+import RoomAvatar from "./RoomAvatarAdapter";
 import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
 import { _t } from "../../../languageHandler";
 import { Presence } from "./WithPresenceIndicator";

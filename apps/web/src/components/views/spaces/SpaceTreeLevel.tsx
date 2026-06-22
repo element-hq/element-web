@@ -26,7 +26,7 @@ import {
     OverflowHorizontalIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import RoomAvatar from "../avatars/RoomAvatar";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { type SpaceKey } from "../../../stores/spaces";
 import SpaceTreeLevelLayoutStore from "../../../stores/spaces/SpaceTreeLevelLayoutStore";

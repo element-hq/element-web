@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import RoomAvatar from "../avatars/RoomAvatar";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import AccessibleButton from "../elements/AccessibleButton";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

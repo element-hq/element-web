@@ -37,7 +37,7 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import RoomAvatar from "../avatars/RoomAvatar";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";

@@ -11,7 +11,7 @@ import { render } from "jest-matrix-react";
 import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
-import RoomAvatar from "../../../../../src/components/views/avatars/RoomAvatar";
+import RoomAvatar from "../../../../../src/components/views/avatars/RoomAvatarAdapter";
 import { filterConsole, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";

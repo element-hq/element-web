@@ -20,7 +20,7 @@ import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import RoomAvatar from "../avatars/RoomAvatar";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import { getDisplayAliasForRoom } from "../../../Rooms";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import DMRoomMap from "../../../utils/DMRoomMap";

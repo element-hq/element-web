@@ -24,7 +24,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import InlineSpinner from "../elements/InlineSpinner";
 import RoomTopic from "../elements/RoomTopic";
 import RoomFacePile from "../elements/RoomFacePile";
-import RoomAvatar from "../avatars/RoomAvatar";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { BetaPill } from "../beta/BetaCard";
 import RoomInfoLine from "./RoomInfoLine";

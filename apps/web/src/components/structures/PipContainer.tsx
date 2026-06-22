@@ -22,7 +22,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../stores/ActiveWi
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import RoomAvatar from "../views/avatars/RoomAvatar";
+import RoomAvatar from "../views/avatars/RoomAvatarAdapter";
 import { WidgetPipViewModel, type Props as WidgetPipViewModelProps } from "../../viewmodels/room/WidgetPipViewModel";
 
 const SHOW_CALL_IN_STATES = [

@@ -61,7 +61,7 @@ import {
     type MenuProps,
     useContextMenu,
 } from "../../structures/ContextMenu.tsx";
-import RoomAvatar from "../avatars/RoomAvatar.tsx";
+import RoomAvatar from "../avatars/RoomAvatarAdapter";
 import { BetaPill } from "../beta/BetaCard.tsx";
 import IconizedContextMenu, {
     IconizedContextMenuOption,

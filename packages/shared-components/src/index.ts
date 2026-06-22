@@ -89,5 +89,7 @@ export * from "./core/utils/FormattingUtils";
 export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";
+export * from "./room/avatar/RoomAvatar";
+
 // MVVM
 export * from "./core/viewmodel";

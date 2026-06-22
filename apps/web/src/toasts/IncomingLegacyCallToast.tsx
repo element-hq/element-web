@@ -22,7 +22,7 @@ import {
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
-import RoomAvatar from "../components/views/avatars/RoomAvatar";
+import RoomAvatar from "../components/views/avatars/RoomAvatarAdapter";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { getCallStateIcon } from "../components/views/messages/LegacyCallEvent.tsx";
 

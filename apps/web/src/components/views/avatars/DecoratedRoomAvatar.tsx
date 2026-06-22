@@ -21,7 +21,7 @@ import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 import { Tooltip } from "@vector-im/compound-web";
 import { PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import RoomAvatar from "./RoomAvatar";
+import RoomAvatar from "./RoomAvatarAdapter";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { type NotificationState } from "../../../stores/notifications/NotificationState";
