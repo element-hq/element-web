@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ToastRack } from "../../../src/contexts/ToastContext";
+import { describe, it, expect, vitest } from "vitest";
+
+import { ToastRack } from "./ToastContext";
 
 describe("ToastRack", () => {
     it("should return a toast once one is displayed", () => {
@@ -18,7 +20,7 @@ describe("ToastRack", () => {
 
     it("calls update callback when a toast is added", () => {
         const toastRack = new ToastRack();
-        const updateCallbackFn = jest.fn();
+        const updateCallbackFn = vitest.fn();
         toastRack.setCallback(updateCallbackFn);
         toastRack.displayToast("Hello, world!");
 
