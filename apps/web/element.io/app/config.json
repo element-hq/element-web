@@ -50,6 +50,7 @@
         "feature_element_call_video_rooms": true
     },
     "element_call": {
-        "url": "https://call.element.io"
+        "url": "https://call.element.io",
+        "enabled": true
     }
 }
