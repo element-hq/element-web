@@ -72,7 +72,7 @@ const renderProfileSettings = (toastRack: Partial<ToastRack>, client: MatrixClie
     return render(
         <TooltipProvider>
             <MatrixClientContext.Provider value={client}>
-                <ToastContext.Provider value={toastRack}>
+                <ToastContext.Provider value={toastRack as ToastRack}>
                     <UserProfileSettings canSetAvatar={true} canSetDisplayName={true} />
                 </ToastContext.Provider>
             </MatrixClientContext.Provider>

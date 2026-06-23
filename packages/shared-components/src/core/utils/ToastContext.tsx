@@ -18,7 +18,7 @@ import { type ReactNode, createContext, useCallback, useContext, useEffect, useS
  * corner of the app, however the name 'toast' as used in this class refers to the component
  * of the same name in compound that it is written to manage.
  */
-export const ToastContext = createContext<ToastRack|null>(null);
+export const ToastContext = createContext<ToastRack | null>(null);
 ToastContext.displayName = "ToastContext";
 
 /**
