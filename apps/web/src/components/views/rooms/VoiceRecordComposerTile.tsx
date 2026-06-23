@@ -288,7 +288,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (this.state.recordingPhase === RecordingState.Uploading) {
             uploadIndicator = (
                 <span className="mx_VoiceRecordComposerTile_uploadingState">
-                    <InlineSpinner w={16} h={16} />
+                    <InlineSpinner size={16} />
                 </span>
             );
         } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {
