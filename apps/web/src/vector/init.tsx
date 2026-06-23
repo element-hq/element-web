@@ -12,8 +12,11 @@ import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
+import { getNormalizedLanguageKeys } from "@element-hq/web-shared-components";
 
-import * as languageHandler from "../languageHandler";
+import { getLanguagesFromBrowser } from "../i18n/browser";
+import { setLanguage } from "../i18n/settings";
+import { getCurrentLanguage } from "../i18n";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
@@ -68,15 +71,15 @@ export async function loadLanguage(): Promise<void> {
     let langs: string[] = [];
 
     if (!prefLang) {
-        languageHandler.getLanguagesFromBrowser().forEach((l) => {
-            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
+        getLanguagesFromBrowser().forEach((l) => {
+            langs.push(...getNormalizedLanguageKeys(l));
         });
     } else {
         langs = [prefLang];
     }
     try {
-        await languageHandler.setLanguage(...langs);
-        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
+        await setLanguage(...langs);
+        document.documentElement.setAttribute("lang", getCurrentLanguage());
     } catch (e) {
         logger.error("Unable to set language", e);
     }

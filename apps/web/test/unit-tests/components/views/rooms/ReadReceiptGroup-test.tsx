@@ -46,7 +46,7 @@ describe("ReadReceiptGroup", () => {
             expect(readReceiptTooltip([], 1)).toBe("");
         });
         it("returns a pretty list without hasMore", () => {
-            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+            jest.spyOn(languageHandler, "getCurrentLanguage").mockReturnValue("en-GB");
             expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], 5)).toEqual(
                 "Alice, Bob, Charlie, Dan and Eve",
             );

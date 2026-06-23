@@ -10,7 +10,7 @@ import React, { type ReactElement } from "react";
 
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t, getCurrentLanguage } from "../../../languageHandler";
 import Spinner from "./Spinner";
 import { type NonEmptyArray } from "../../../@types/common";
 
@@ -51,7 +51,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
     public componentDidMount(): void {
         const plaf = PlatformPeg.get();
         if (plaf) {
-            const languageNames = new Intl.DisplayNames([getUserLanguage()], { type: "language", style: "short" });
+            const languageNames = new Intl.DisplayNames([getCurrentLanguage()], { type: "language", style: "short" });
             plaf.getAvailableSpellCheckLanguages()
                 ?.then((languages) => {
                     languages.sort(function (a, b) {

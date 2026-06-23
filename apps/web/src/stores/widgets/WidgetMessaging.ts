@@ -37,7 +37,7 @@ import {
 } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, getUserLanguage } from "../../languageHandler";
+import { _t, getCurrentLanguage } from "../../languageHandler";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -244,7 +244,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
             clientTheme: this.themeWatcher.getEffectiveTheme(),
-            clientLanguage: getUserLanguage(),
+            clientLanguage: getCurrentLanguage(),
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
         };

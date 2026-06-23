@@ -25,7 +25,7 @@ import {
 import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseDialog from "./BaseDialog";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t, getCurrentLanguage } from "../../../languageHandler";
 import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import { ElementWidgetDriver } from "../../../stores/widgets/ElementWidgetDriver";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -139,7 +139,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
             clientTheme: this.themeWatcher.getEffectiveTheme(),
-            clientLanguage: getUserLanguage(),
+            clientLanguage: getCurrentLanguage(),
             baseUrl: MatrixClientPeg.safeGet().baseUrl,
         });
 

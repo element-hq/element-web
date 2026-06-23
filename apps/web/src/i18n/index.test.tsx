@@ -6,215 +6,23 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import fetchMock from "@fetch-mock/jest";
-import { type Translation } from "matrix-web-i18n";
-import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
+// @vitest-environment happy-dom
 
-import SdkConfig from "../../src/SdkConfig";
+import React from "react";
+import { describe, it, expect, beforeEach } from "vitest";
 import {
-    _t,
-    _tDom,
-    getAllLanguagesWithLabels,
-    registerCustomTranslations,
-    setLanguage,
     setMissingEntryGenerator,
     substitute,
     type TranslatedString,
-    UserFriendlyError,
     type IVariables,
     type Tags,
-    getLanguagesFromBrowser,
-} from "../../src/languageHandler";
-import { stubClient } from "../test-utils";
+} from "@element-hq/web-shared-components";
 
-async function setupTranslationOverridesForTests(overrides: TranslationStringsObject) {
-    const lookupUrl = "/translations.json";
+import { _t, _tDom } from ".";
+import { setLanguage } from "./settings";
+import { stubClient } from "../../test/test-utils";
 
-    SdkConfig.add({
-        custom_translations_url: lookupUrl,
-    });
-    fetchMock.get(lookupUrl, overrides, { name: "i18n-override" });
-    await registerCustomTranslations({
-        testOnlyIgnoreCustomTranslationsCache: true,
-    });
-}
-
-describe("languageHandler", () => {
-    beforeEach(async () => {
-        await setLanguage("en");
-    });
-
-    afterEach(() => {
-        SdkConfig.reset();
-        fetchMock.removeRoute("i18n-override");
-    });
-
-    it("should support overriding translations", async () => {
-        const str: TranslationKey = "power_level|default";
-        const enOverride: Translation = "Visitor";
-        const deOverride: Translation = "Besucher";
-
-        // First test that overrides aren't being used
-        await setLanguage("en");
-        expect(_t(str)).toMatchInlineSnapshot(`"Default"`);
-        await setLanguage("de");
-        expect(_t(str)).toMatchInlineSnapshot(`"Standard"`);
-
-        await setupTranslationOverridesForTests({
-            [str]: {
-                en: enOverride,
-                de: deOverride,
-            },
-        });
-
-        // Now test that they *are* being used
-        await setLanguage("en");
-        expect(_t(str)).toEqual(enOverride);
-
-        await setLanguage("de");
-        expect(_t(str)).toEqual(deOverride);
-    });
-
-    it("should support overriding plural translations", async () => {
-        const str: TranslationKey = "voip|n_people_joined";
-        const enOverride: Translation = {
-            other: "%(count)s people in the call",
-            one: "%(count)s person in the call",
-        };
-        const deOverride: Translation = {
-            other: "%(count)s Personen im Anruf",
-            one: "%(count)s Person im Anruf",
-        };
-
-        // First test that overrides aren't being used
-        await setLanguage("en");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 person joined"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 people joined"`);
-        await setLanguage("de");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 Person beigetreten"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 Personen beigetreten"`);
-
-        await setupTranslationOverridesForTests({
-            [str]: {
-                en: enOverride,
-                de: deOverride,
-            },
-        });
-
-        // Now test that they *are* being used
-        await setLanguage("en");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 person in the call"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 people in the call"`);
-
-        await setLanguage("de");
-        expect(_t(str, { count: 1 })).toMatchInlineSnapshot(`"1 Person im Anruf"`);
-        expect(_t(str, { count: 5 })).toMatchInlineSnapshot(`"5 Personen im Anruf"`);
-    });
-
-    describe("UserFriendlyError", () => {
-        const testErrorMessage = "This email address is already in use (%(email)s)" as TranslationKey;
-        beforeEach(async () => {
-            // Setup some  strings with variable substituations that we can use in the tests.
-            const deOverride = "Diese E-Mail-Adresse wird bereits verwendet (%(email)s)";
-            await setupTranslationOverridesForTests({
-                [testErrorMessage]: {
-                    en: testErrorMessage,
-                    de: deOverride,
-                },
-            });
-        });
-
-        it("includes English message and localized translated message", async () => {
-            await setLanguage("de");
-
-            const friendlyError = new UserFriendlyError(testErrorMessage, {
-                email: "test@example.com",
-                cause: undefined,
-            });
-
-            // Ensure message is in English so it's readable in the logs
-            expect(friendlyError.message).toStrictEqual("This email address is already in use (test@example.com)");
-            // Ensure the translated message is localized appropriately
-            expect(friendlyError.translatedMessage).toStrictEqual(
-                "Diese E-Mail-Adresse wird bereits verwendet (test@example.com)",
-            );
-        });
-
-        it("includes underlying cause error", async () => {
-            await setLanguage("de");
-
-            const underlyingError = new Error("Fake underlying error");
-            const friendlyError = new UserFriendlyError(testErrorMessage, {
-                email: "test@example.com",
-                cause: underlyingError,
-            });
-
-            expect(friendlyError.cause).toStrictEqual(underlyingError);
-        });
-
-        it("ok to omit the substitution variables and cause object, there just won't be any cause", async () => {
-            const friendlyError = new UserFriendlyError("foo error" as TranslationKey);
-            expect(friendlyError.cause).toBeUndefined();
-        });
-    });
-
-    describe("getAllLanguagesWithLabels", () => {
-        it("should handle unknown language sanely", async () => {
-            fetchMock.modifyRoute("languages", {
-                response: {
-                    en: "en_EN.json",
-                    de: "de_DE.json",
-                    qq: "qq.json",
-                },
-            });
-            await expect(getAllLanguagesWithLabels()).resolves.toMatchInlineSnapshot(`
-                [
-                  {
-                    "label": "English",
-                    "labelInTargetLanguage": "English",
-                    "value": "en",
-                  },
-                  {
-                    "label": "German",
-                    "labelInTargetLanguage": "Deutsch",
-                    "value": "de",
-                  },
-                  {
-                    "label": "qq",
-                    "labelInTargetLanguage": "qq",
-                    "value": "qq",
-                  },
-                ]
-            `);
-        });
-    });
-
-    describe("getLanguagesFromBrowser", () => {
-        beforeEach(() => {
-            jest.restoreAllMocks();
-        });
-
-        it("should return navigator.languages if available", () => {
-            jest.spyOn(window.navigator, "languages", "get").mockReturnValue(["en", "de"]);
-            expect(getLanguagesFromBrowser()).toEqual(["en", "de"]);
-        });
-
-        it("should return navigator.language if available", () => {
-            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
-            jest.spyOn(window.navigator, "language", "get").mockReturnValue("de");
-            expect(getLanguagesFromBrowser()).toEqual(["de"]);
-        });
-
-        it("should return 'en' otherwise", () => {
-            jest.spyOn(window.navigator, "languages", "get").mockReturnValue([]);
-            jest.spyOn(window.navigator, "language", "get").mockReturnValue(undefined as any);
-            expect(getLanguagesFromBrowser()).toEqual(["en"]);
-        });
-    });
-});
-
-describe("languageHandler JSX", function () {
+describe("languageHandler", function () {
     // See setupLanguage.ts for how we are stubbing out translations to provide fixture data for these tests
     const basicString = "common|rooms";
     const selfClosingTagSub = "Accept <policyLink /> to continue:" as TranslationKey;
@@ -269,16 +77,6 @@ describe("languageHandler JSX", function () {
             </span>,
         ],
     ];
-
-    let oldNodeEnv: string | undefined;
-    beforeAll(() => {
-        oldNodeEnv = process.env.NODE_ENV;
-        process.env.NODE_ENV = "test";
-    });
-
-    afterAll(() => {
-        process.env.NODE_ENV = oldNodeEnv;
-    });
 
     describe("when translations exist in language", () => {
         beforeEach(async () => {

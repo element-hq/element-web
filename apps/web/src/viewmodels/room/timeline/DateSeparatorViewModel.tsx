@@ -20,7 +20,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t, getCurrentLanguage } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
@@ -110,7 +110,7 @@ export class DateSeparatorViewModel
     }
 
     private static get relativeTimeFormat(): Intl.RelativeTimeFormat {
-        return new Intl.RelativeTimeFormat(getUserLanguage(), { style: "long", numeric: "auto" });
+        return new Intl.RelativeTimeFormat(getCurrentLanguage(), { style: "long", numeric: "auto" });
     }
 
     private static computeLabel(props: DateSeparatorViewModelProps, relativeDatesEnabled: boolean): string {

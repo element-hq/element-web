@@ -132,7 +132,7 @@ describe("RoomKnocksBar", () => {
             jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
             jest.spyOn(Modal, "createDialog");
             jest.spyOn(dis, "dispatch");
-            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+            jest.spyOn(languageHandler, "getCurrentLanguage").mockReturnValue("en-GB");
         });
 
         it("does not render if user can neither approve nor deny", () => {

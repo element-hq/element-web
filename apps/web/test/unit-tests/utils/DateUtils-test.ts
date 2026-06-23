@@ -369,7 +369,7 @@ describe("formatLocalDateShort()", () => {
     });
     const timestamp = new Date("Fri Dec 17 2021 09:09:00 GMT+0100 (Central European Standard Time)").getTime();
     it("formats date correctly by locale", () => {
-        const locale = jest.spyOn(languageHandler, "getUserLanguage");
+        const locale = jest.spyOn(languageHandler, "getCurrentLanguage");
         mockIntlDateTimeFormat();
 
         // format is DD/MM/YY
