@@ -119,17 +119,8 @@ export type UserMenuViewProps = {
 };
 
 export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps): JSX.Element {
-    const {
-        userId,
-        displayName,
-        avatarUrl,
-        expanded,
-        open,
-        manageAccountHref,
-        actions,
-        showAvatar,
-        userStatus,
-    } = useViewModel(vm);
+    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar, userStatus } =
+        useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
@@ -159,22 +150,8 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                 className={styles.container}
             >
                 <section className={styles.profile}>
-                    {showAvatar && (
-                        <Avatar
-                            id={userId}
-                            name={displayName}
-                            type="round"
-                            size="64px"
-                            src={avatarUrl}
-                        />
-                    )}
-                    <Text
-                        className={styles.displayname}
-                        type="body"
-                        size="lg"
-                        weight="semibold"
-                        as="span"
-                    >
+                    {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
+                    <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
                     <SetStatusView vm={setStatusVm} />
@@ -182,13 +159,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                         {userId}
                     </Text>
                     {manageAccountHref && (
-                        <Button
-                            as="a"
-                            size="md"
-                            kind="tertiary"
-                            href={manageAccountHref}
-                            Icon={PopOutIcon}
-                        >
+                        <Button as="a" size="md" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
                             {_t("menus|user_menu|manage_account")}
                         </Button>
                     )}
@@ -215,11 +186,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                 <Separator />
                 <section className={styles.actions}>
                     {actions.openHomePage && (
-                        <MenuItem
-                            Icon={HomeIcon}
-                            label={_t("user_menu|open_home")}
-                            onSelect={vm.openHomePage}
-                        />
+                        <MenuItem Icon={HomeIcon} label={_t("user_menu|open_home")} onSelect={vm.openHomePage} />
                     )}
                     {actions.linkNewDevice && (
                         <MenuItem
@@ -229,11 +196,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                         />
                     )}
                     {actions.openSecurity && (
-                        <MenuItem
-                            Icon={LockIcon}
-                            label={_t("user_menu|open_security")}
-                            onSelect={vm.openSecurity}
-                        />
+                        <MenuItem Icon={LockIcon} label={_t("user_menu|open_security")} onSelect={vm.openSecurity} />
                     )}
                     {actions.openFeedback && (
                         <MenuItem
@@ -252,13 +215,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                 </section>
             </Menu>
             {expanded && (
-                <Text
-                    type="heading"
-                    size="sm"
-                    as="span"
-                    weight="semibold"
-                    className={styles.displayName}
-                >
+                <Text type="heading" size="sm" as="span" weight="semibold" className={styles.displayName}>
                     {displayName}
                 </Text>
             )}

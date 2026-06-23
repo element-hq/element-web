@@ -5,11 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    BaseViewModel,
-    type UserMenuSnapshot,
-    type UserMenuViewActions,
-} from "@element-hq/web-shared-components";
+import { BaseViewModel, type UserMenuSnapshot, type UserMenuViewActions } from "@element-hq/web-shared-components";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
@@ -29,10 +25,7 @@ import { SetStatusViewModel, UserMenuSetStatusViewModel } from "../status/SetSta
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
 
-export class UserMenuViewModel
-    extends BaseViewModel<UserMenuSnapshot, undefined>
-    implements UserMenuViewActions
-{
+export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
     public readonly setStatusVm: SetStatusViewModel;
     private static computeSnapshot(
         client: MatrixClient,
@@ -72,10 +65,7 @@ export class UserMenuViewModel
         isPanelCollapsed: boolean,
         accountManagementEndpoint?: string,
     ) {
-        super(
-            undefined,
-            UserMenuViewModel.computeSnapshot(client, isPanelCollapsed, accountManagementEndpoint),
-        );
+        super(undefined, UserMenuViewModel.computeSnapshot(client, isPanelCollapsed, accountManagementEndpoint));
         this.setStatusVm = new UserMenuSetStatusViewModel({ client });
         OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
     }
