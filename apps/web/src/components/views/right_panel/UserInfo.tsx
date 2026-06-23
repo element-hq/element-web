@@ -222,14 +222,12 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     }
 
     const header = (
-        <>
-            <UserInfoHeaderView
-                hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
-                member={member}
-                devices={devices}
-                roomId={room?.roomId}
-            />
-        </>
+        <UserInfoHeaderView
+            hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
+            member={member}
+            devices={devices}
+            roomId={room?.roomId}
+        />
     );
 
     return (
