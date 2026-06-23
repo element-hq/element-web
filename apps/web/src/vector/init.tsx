@@ -71,9 +71,7 @@ export async function loadLanguage(): Promise<void> {
     let langs: string[] = [];
 
     if (!prefLang) {
-        getLanguagesFromBrowser().forEach((l) => {
-            langs.push(...getNormalizedLanguageKeys(l));
-        });
+        langs = getLanguagesFromBrowser().flatMap(getNormalizedLanguageKeys);
     } else {
         langs = [prefLang];
     }
