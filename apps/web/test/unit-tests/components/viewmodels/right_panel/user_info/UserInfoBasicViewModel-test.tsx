@@ -14,12 +14,6 @@ import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import Modal from "../../../../../../src/Modal";
 import QuestionDialog from "../../../../../../src/components/views/dialogs/QuestionDialog";
 
-jest.mock("../../../../../../src/customisations/UserIdentifier", () => {
-    return {
-        getDisplayUserIdentifier: jest.fn().mockReturnValue("customUserIdentifier"),
-    };
-});
-
 describe("useUserInfoHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
     const defaultUserId = "@user:example.com";

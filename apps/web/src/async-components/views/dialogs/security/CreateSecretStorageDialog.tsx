@@ -25,7 +25,6 @@ import StyledRadioButton from "../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import { ModuleRunner } from "../../../../modules/ModuleRunner";
 import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
@@ -92,8 +91,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     public constructor(props: IProps) {
         super(props);
 
-        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
-        const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
+        const phase = Phase.ChooseKeyPassphrase;
 
         this.state = {
             phase,
@@ -105,19 +103,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             setPassphrase: false,
             passPhraseKeySelected: SecureBackupSetupMethod.Key,
         };
-    }
-
-    public componentDidMount(): void {
-        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
-        if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
-    }
-
-    private initExtension(keyFromCustomisations: Uint8Array<ArrayBuffer>): void {
-        logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
-        this.recoveryKey = {
-            privateKey: keyFromCustomisations,
-        };
-        this.bootstrapSecretStorage();
     }
 
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {

@@ -20,12 +20,6 @@ import ImageView from "../../../../../../src/components/views/elements/ImageView
 import * as Media from "../../../../../../src/customisations/Media";
 import { type IConfigOptions } from "../../../../../../src/IConfigOptions";
 
-jest.mock("../../../../../../src/customisations/UserIdentifier", () => {
-    return {
-        getDisplayUserIdentifier: jest.fn().mockReturnValue("customUserIdentifier"),
-    };
-});
-
 describe("useUserInfoHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
     const defaultUserId = "@user:example.com";

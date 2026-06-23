@@ -11,11 +11,6 @@ import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { act, render, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import {
-    type ApprovalOpts,
-    type WidgetInfo,
-    WidgetLifecycle,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import RightPanel from "../../../../../src/components/structures/RightPanel";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -36,7 +31,6 @@ import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import { ElementWidgetCapabilities } from "../../../../../src/stores/widgets/ElementWidgetCapabilities";
 import { ElementWidget, type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
-import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { ModuleApi } from "../../../../../src/modules/Api";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
@@ -392,12 +386,6 @@ describe("AppTile", () => {
         });
 
         it("should render permission request", async () => {
-            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
-                    (opts as ApprovalOpts).approved = false;
-                }
-            });
-
             // userId and creatorUserId are different
             const { container, asFragment, queryByRole } = render(
                 <MatrixClientContext.Provider value={cli}>
@@ -409,32 +397,7 @@ describe("AppTile", () => {
             expect(asFragment()).toMatchSnapshot();
         });
 
-        it("should not display 'Continue' button on permission load", async () => {
-            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
-                    (opts as ApprovalOpts).approved = true;
-                }
-            });
-
-            // userId and creatorUserId are different
-            const renderResult = render(
-                <MatrixClientContext.Provider value={cli}>
-                    <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />
-                </MatrixClientContext.Provider>,
-            );
-            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
-
-            expect(renderResult.queryByRole("button", { name: "Continue" })).not.toBeInTheDocument();
-        });
-
         it("should auto-approve preload via new widget lifecycle API", async () => {
-            // Legacy module API denies preload
-            jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
-                if (lifecycleEvent === WidgetLifecycle.PreLoadRequest && (widgetInfo as WidgetInfo).id === app1.id) {
-                    (opts as ApprovalOpts).approved = false;
-                }
-            });
-
             // New API approves preload
             jest.spyOn(ModuleApi.instance.widgetLifecycle, "preapprovePreload").mockResolvedValue(true);
 

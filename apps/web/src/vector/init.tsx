@@ -18,7 +18,6 @@ import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
-import { ModuleRunner } from "../modules/ModuleRunner";
 import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
@@ -125,16 +124,6 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
     );
-}
-
-/**
- * @deprecated in favour of the plugin system
- */
-export async function loadModules(): Promise<void> {
-    const { INSTALLED_MODULES } = await import("../modules.js");
-    for (const InstalledModule of INSTALLED_MODULES) {
-        ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
-    }
 }
 
 export async function loadPlugins(): Promise<void> {

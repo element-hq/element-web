@@ -9,11 +9,10 @@ import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { VideoBodyViewState } from "@element-hq/web-shared-components";
 import { decode } from "blurhash";
-import { type Media } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { ImageSize } from "../../../src/settings/enums/ImageSize";
-import { mediaFromContent } from "../../../src/customisations/Media";
+import { type Media, mediaFromContent } from "../../../src/customisations/Media";
 import { BLURHASH_FIELD } from "../../../src/utils/image-media";
 import { type MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import { VideoBodyViewModel } from "../../../src/viewmodels/message-body/VideoBodyViewModel";

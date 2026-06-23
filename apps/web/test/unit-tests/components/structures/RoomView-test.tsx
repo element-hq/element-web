@@ -366,6 +366,7 @@ describe("RoomView", () => {
             instance.messagePanel = {
                 sendReadReceipts: sendReadReceiptsSpy,
                 updateReadMarker: updateReadMarkerSpy,
+                getScrollState: jest.fn(),
             };
 
             // Find the main RoomView div and trigger focus
@@ -1045,12 +1046,6 @@ describe("RoomView", () => {
 
             await expect(findByPlaceholderText("Search messages…")).resolves.toHaveValue("search term");
         });
-    });
-
-    it("fires Action.RoomLoaded", async () => {
-        jest.spyOn(defaultDispatcher, "dispatch");
-        await mountRoomView();
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
     });
 
     // Regression test for https://github.com/element-hq/element-web/issues/29072

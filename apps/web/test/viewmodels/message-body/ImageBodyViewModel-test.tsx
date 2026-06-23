@@ -7,12 +7,11 @@
 
 import { createRef, type RefObject } from "react";
 import { ClientEvent, EventType, MatrixEvent, SyncState } from "matrix-js-sdk/src/matrix";
-import { type Media } from "@element-hq/element-web-module-api";
 import { ImageBodyViewPlaceholder, ImageBodyViewState } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { ImageSize } from "../../../src/settings/enums/ImageSize";
-import { mediaFromContent } from "../../../src/customisations/Media";
+import { type Media, mediaFromContent } from "../../../src/customisations/Media";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { DecryptError, DownloadError } from "../../../src/utils/DecryptFile";
 import { type MediaEventHelper } from "../../../src/utils/MediaEventHelper";

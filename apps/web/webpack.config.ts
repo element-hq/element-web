@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import dotenv from "dotenv";
 import path from "node:path";
-import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import webpack from "webpack";
 import "webpack-dev-server"; // for types
@@ -28,7 +27,6 @@ import postcssNested from "postcss-nested";
 import postcssEasings from "postcss-easings";
 
 import pkgJson from "./package.json" with { type: "json" };
-import componentsJson from "./components.json" with { type: "json" };
 import { I18nWebpackPlugin } from "./I18nWebpackPlugin.ts";
 import type { sentryWebpackPlugin as sentryWebpackPluginType } from "@sentry/webpack-plugin/webpack5";
 
@@ -65,61 +63,11 @@ const cssThemes = {
     "theme-dark-custom": "./res/themes/dark-custom/css/dark-custom.pcss",
 };
 
-// See docs/customisations.md
-let fileOverrides = {
-    /* {[file: string]: string} */
-};
-try {
-    const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
-    fileOverrides = JSON.parse(customisationsFile);
-
-    // stringify the output so it appears in logs correctly, as large files can sometimes get
-    // represented as `<Object>` which is less than helpful.
-    console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
-
-    process.on("exit", () => {
-        console.log(""); // blank line
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
-        console.warn("!! See https://github.com/element-hq/element-web/blob/develop/docs/customisations.md !!");
-        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        console.log(""); // blank line
-    });
-} catch {
-    // ignore - not important
-}
-
 // Get the root of a node_modules dependency the name of its import
 function getPackageRoot(dep: string, target = "package.json"): string {
     const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
     return path.dirname(fileURLToPath(targetPath));
 }
-
-function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
-    return Object.entries(overrides).map(([oldPath, newPath]) => {
-        return new webpack.NormalModuleReplacementPlugin(
-            // because the input is effectively defined by the person running the build, we don't
-            // need to do anything special to protect against regex overrunning, etc.
-            new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
-            function (resource) {
-                resource.request = path.resolve(__dirname, newPath);
-                resource.createData.resource = path.resolve(__dirname, newPath);
-                // Starting with Webpack 5 we also need to set the context as otherwise replacing
-                // files in e.g. matrix-js-sdk with files from element-web will try to resolve
-                // them within matrix-js-sdk (https://github.com/webpack/webpack/issues/17716)
-                resource.context = path.dirname(resource.request);
-                resource.createData.context = path.dirname(resource.createData.resource);
-            },
-        );
-    });
-}
-
-const moduleReplacementPlugins = [
-    ...parseOverridesToReplacements(componentsJson),
-
-    // Allow customisations to override the default components too
-    ...parseOverridesToReplacements(fileOverrides),
-];
 
 export default (env: string, argv: Record<string, any>): webpack.Configuration => {
     // Establish settings based on the environment and args.
@@ -249,7 +197,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
 
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
-                "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
                 "oidc-client-ts": getPackageRoot("oidc-client-ts"),
@@ -627,8 +574,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         },
 
         plugins: [
-            ...moduleReplacementPlugins,
-
             new I18nWebpackPlugin({
                 stringsPath: "src/i18n/strings/",
                 additionalStringsPaths: ["../../packages/shared-components/src/i18n/strings/"],
