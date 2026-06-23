@@ -10,8 +10,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactElement } from "react";
 import classNames from "classnames";
 
-import { _t, getCurrentLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { getAllLanguagesWithLabels } from "../../../i18n/utils";
+import { getUserLanguage } from "../../../i18n/settings";
 import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
 import { type NonEmptyArray } from "../../../@types/common";
@@ -72,7 +73,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         if (!this.props.value) {
             // If no value is given, we start with the first country selected,
             // but our parent component doesn't know this, therefore we do this.
-            const language = getCurrentLanguage();
+            const language = getUserLanguage();
             this.props.onOptionChange(language);
         }
     }

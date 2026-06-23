@@ -10,7 +10,8 @@ import React, { type ReactElement } from "react";
 
 import { COUNTRIES, getEmojiFlag, type PhoneNumberCountryDefinition } from "../../../phonenumber";
 import SdkConfig from "../../../SdkConfig";
-import { _t, getCurrentLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 import Dropdown from "../elements/Dropdown";
 import { type NonEmptyArray } from "../../../@types/common";
 
@@ -51,7 +52,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
-        const displayNames = new Intl.DisplayNames([getCurrentLanguage()], { type: "region" });
+        const displayNames = new Intl.DisplayNames([getUserLanguage()], { type: "region" });
 
         this.countries = COUNTRIES.map((c) => ({
             name: displayNames.of(c.iso2) ?? c.iso2,

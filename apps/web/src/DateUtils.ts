@@ -8,7 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _t, getCurrentLanguage } from "./languageHandler";
+import { _t } from "./languageHandler";
+import { getUserLanguage } from "./i18n/settings";
 import { getUserTimezone } from "./TimezoneHandler";
 
 export { formatSeconds } from "@element-hq/web-shared-components";
@@ -23,7 +24,7 @@ export const DAY_MS = HOUR_MS * 24;
  */
 export function getDaysArray(weekday: Intl.DateTimeFormatOptions["weekday"] = "short"): string[] {
     const sunday = 1672574400000; // 2023-01-01 12:00 UTC
-    const dateTimeFormat = new Intl.DateTimeFormat(getCurrentLanguage(), { weekday, timeZone: "UTC" });
+    const dateTimeFormat = new Intl.DateTimeFormat(getUserLanguage(), { weekday, timeZone: "UTC" });
     return [...Array(7).keys()].map((day) => dateTimeFormat.format(sunday + day * DAY_MS));
 }
 
@@ -32,7 +33,7 @@ export function getDaysArray(weekday: Intl.DateTimeFormatOptions["weekday"] = "s
  * @param month - format desired "numeric" | "2-digit" | "long" | "short" | "narrow"
  */
 export function getMonthsArray(month: Intl.DateTimeFormatOptions["month"] = "short"): string[] {
-    const dateTimeFormat = new Intl.DateTimeFormat(getCurrentLanguage(), { month, timeZone: "UTC" });
+    const dateTimeFormat = new Intl.DateTimeFormat(getUserLanguage(), { month, timeZone: "UTC" });
     return [...Array(12).keys()].map((m) => dateTimeFormat.format(Date.UTC(2021, m)));
 }
 
@@ -59,7 +60,7 @@ export function getTwelveHourOptions(showTwelveHour: boolean): Intl.DateTimeForm
  * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
  */
 export function formatDate(date: Date, showTwelveHour = false, locale?: string): string {
-    const _locale = locale ?? getCurrentLanguage();
+    const _locale = locale ?? getUserLanguage();
     const now = new Date();
     if (date.toDateString() === now.toDateString()) {
         return formatTime(date, showTwelveHour, _locale);
@@ -94,7 +95,7 @@ export function formatDate(date: Date, showTwelveHour = false, locale?: string):
  * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
  */
 export function formatFullDateNoTime(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale ?? getCurrentLanguage(), {
+    return new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
         weekday: "short",
         month: "short",
         day: "numeric",
@@ -114,7 +115,7 @@ export function formatFullDateNoTime(date: Date, locale?: string): string {
  * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
  */
 export function formatFullDate(date: Date, showTwelveHour = false, showSeconds = true, locale?: string): string {
-    return new Intl.DateTimeFormat(locale ?? getCurrentLanguage(), {
+    return new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
         ...getTwelveHourOptions(showTwelveHour),
         weekday: "short",
         month: "short",
@@ -138,7 +139,7 @@ export function formatFullDate(date: Date, showTwelveHour = false, showSeconds =
  * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
  */
 export function formatFullTime(date: Date, showTwelveHour = false, locale?: string): string {
-    return new Intl.DateTimeFormat(locale ?? getCurrentLanguage(), {
+    return new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
         ...getTwelveHourOptions(showTwelveHour),
         hour: "numeric",
         minute: "2-digit",
@@ -158,7 +159,7 @@ export function formatFullTime(date: Date, showTwelveHour = false, locale?: stri
  * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
  */
 export function formatTime(date: Date, showTwelveHour = false, locale?: string): string {
-    return new Intl.DateTimeFormat(locale ?? getCurrentLanguage(), {
+    return new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
         ...getTwelveHourOptions(showTwelveHour),
         hour: "numeric",
         minute: "2-digit",
@@ -217,7 +218,7 @@ export function wantsDateSeparator(prevEventDate: Date | undefined, nextEventDat
 }
 
 export function formatFullDateNoDay(date: Date): string {
-    const locale = getCurrentLanguage();
+    const locale = getUserLanguage();
     return _t("time|date_at_time", {
         date: date.toLocaleDateString(locale).replace(/\//g, "-"),
         time: date.toLocaleTimeString(locale).replace(/:/g, "-"),
@@ -241,7 +242,7 @@ export function formatFullDateNoDayISO(date: Date): string {
  * @param locale - the locale string to use, in BCP 47 format, defaulting to user's selected application locale
  */
 export function formatFullDateNoDayNoTime(date: Date, locale?: string): string {
-    return new Intl.DateTimeFormat(locale ?? getCurrentLanguage(), {
+    return new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
         year: "numeric",
         month: "numeric",
         day: "numeric",
@@ -315,7 +316,7 @@ export function formatPreciseDuration(durationMs: number): string {
  * @returns {string} formattedDate
  */
 export const formatLocalDateShort = (timestamp: number, locale?: string): string =>
-    new Intl.DateTimeFormat(locale ?? getCurrentLanguage(), {
+    new Intl.DateTimeFormat(locale ?? getUserLanguage(), {
         day: "2-digit",
         month: "2-digit",
         year: "2-digit",

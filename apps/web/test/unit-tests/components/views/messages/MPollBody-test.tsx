@@ -55,7 +55,7 @@ describe("MPollBody", () => {
 
         mockClient.getRoom.mockReturnValue(null);
         mockClient.relations.mockResolvedValue({ events: [] });
-        jest.spyOn(languageHandler, "getCurrentLanguage").mockReturnValue("en-GB");
+        jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
     });
 
     it("finds no votes if there are none", () => {

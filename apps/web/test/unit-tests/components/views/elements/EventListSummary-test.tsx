@@ -130,7 +130,7 @@ describe("EventListSummary", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        jest.spyOn(languageHandler, "getCurrentLanguage").mockReturnValue("en-GB");
+        jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
     });
 
     afterAll(() => {

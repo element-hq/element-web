@@ -11,6 +11,7 @@ import { type ReactElement, type ReactNode } from "react";
 import { useIdColorHash } from "@vector-im/compound-web";
 
 import { _t, getCurrentLanguage } from "../languageHandler";
+import { getUserLanguage } from "../i18n/settings";
 import { jsxJoin } from "./ReactUtils";
 
 export { formatBytes } from "@element-hq/web-shared-components";
@@ -69,7 +70,7 @@ export function formatList(items: ReactNode[], itemLimit = items.length, include
         return items[0] ?? "";
     }
 
-    const formatter = new Intl.ListFormat(getCurrentLanguage(), { style: "long", type: "conjunction" });
+    const formatter = new Intl.ListFormat(getUserLanguage(), { style: "long", type: "conjunction" });
     if (remaining > 0) {
         if (includeCount) {
             itemLimit--;

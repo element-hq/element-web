@@ -10,7 +10,8 @@ import React from "react";
 
 import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
 import AccessibleButton, { type ButtonEvent } from "../../../components/views/elements/AccessibleButton";
-import { _t, getCurrentLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 
 interface ExistingSpellCheckLanguageIProps {
     language: string;
@@ -85,7 +86,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
     };
 
     public render(): React.ReactNode {
-        const intl = new Intl.DisplayNames([getCurrentLanguage()], { type: "language", style: "short" });
+        const intl = new Intl.DisplayNames([getUserLanguage()], { type: "language", style: "short" });
         const existingSpellCheckLanguages = this.props.languages.map((e) => {
             return <ExistingSpellCheckLanguage language={e} label={intl.of(e)} onRemoved={this.onRemoved} key={e} />;
         });
