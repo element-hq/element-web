@@ -88,6 +88,11 @@ export default {
             ignoreDependencies: [
                 // Brought in via hak scripts
                 "matrix-seshat",
+                "element-translation",
+            ],
+            ignoreUnresolved: [
+                // Native addon built by hak at package time, not present in the source tree
+                /translation\.node$/,
             ],
             ignoreBinaries: [
                 // Used to build seshat (optional)
