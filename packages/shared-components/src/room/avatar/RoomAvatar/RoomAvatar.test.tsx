@@ -76,7 +76,7 @@ describe("RoomAvatarView", () => {
             urls: ["https://example.com/first.png", "https://example.com/fallback.png"],
             type: "round",
             isClickable: false,
-        }) as RoomAvatarViewModel;
+        }) as unknown as RoomAvatarViewModel;
 
         const { rerender } = render(<RoomAvatarView vm={vm} size="36px" />);
 
