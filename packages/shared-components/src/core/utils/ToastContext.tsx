@@ -18,14 +18,18 @@ import { type ReactNode, createContext, useCallback, useContext, useEffect, useS
  * corner of the app, however the name 'toast' as used in this class refers to the component
  * of the same name in compound that it is written to manage.
  */
-export const ToastContext = createContext(null as any);
+export const ToastContext = createContext<ToastRack|null>(null);
 ToastContext.displayName = "ToastContext";
 
 /**
  * Returns the ToastRack in context in order to display toasts
  */
 export function useToastContext(): ToastRack {
-    return useContext(ToastContext);
+    const rack = useContext(ToastContext);
+    if (!rack) {
+        throw new Error("Component must be wrapped in <ToastContext.Provider /> to use useToastContext");
+    }
+    return rack;
 }
 
 /**
