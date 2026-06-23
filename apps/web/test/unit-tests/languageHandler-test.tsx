@@ -25,7 +25,7 @@ import {
     type IVariables,
     type Tags,
     getLanguagesFromBrowser,
-    TranslationStringsObject,
+    type TranslationStringsObject,
 } from "../../src/languageHandler";
 import { stubClient } from "../test-utils";
 
