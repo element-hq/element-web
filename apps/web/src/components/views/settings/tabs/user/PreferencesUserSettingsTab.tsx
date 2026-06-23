@@ -40,7 +40,6 @@ import SettingsDropdown from "../../../elements/SettingsDropdown.tsx";
 interface IState {
     timezone: string | undefined;
     timezones: string[];
-    timezoneSearch: string | undefined;
     autocompleteDelay: string;
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
@@ -174,7 +173,6 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
         this.state = {
             timezone: TimezoneHandler.getUserTimezone(),
             timezones: TimezoneHandler.getAllTimezones(),
-            timezoneSearch: undefined,
             autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay").toString(10),
             readMarkerInViewThresholdMs: SettingsStore.getValueAt(
                 SettingLevel.DEVICE,
@@ -203,7 +201,7 @@ export default class PreferencesUserSettingsTab extends React.Component<EmptyObj
               })
             : TimezoneHandler.getAllTimezones();
 
-        this.setState({ timezones, timezoneSearch });
+        this.setState({ timezones });
     };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
