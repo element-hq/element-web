@@ -41,9 +41,11 @@ import {
     ShareIcon,
     CopyIcon,
     TreeIcon,
+    TranslateIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import PlatformPeg from "../../../PlatformPeg";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -333,6 +335,16 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 text: "\n" + quotedText + "\n\n ",
                 timelineRenderingType: this.context.timelineRenderingType,
             });
+        }
+        this.closeMenu();
+    };
+
+    private onTranslateClick = (): void => {
+        const platform = PlatformPeg.get();
+        const selection = window.getSelection();
+        const text = getSelectedText();
+        if (platform && text.trim().length > 0 && selection && selection.rangeCount > 0) {
+            platform.translate(text, selection.getRangeAt(0).getBoundingClientRect());
         }
         this.closeMenu();
     };
@@ -632,6 +644,18 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
+        let translateButton: JSX.Element | undefined;
+        if (rightClick && PlatformPeg.get()?.supportsNativeTranslation() && selectedText) {
+            translateButton = (
+                <IconizedContextMenuOption
+                    icon={<TranslateIcon />}
+                    label={_t("action|translate")}
+                    triggerOnMouseDown={true} // use onMouseDown so the selection isn't cleared when we click
+                    onClick={this.onTranslateClick}
+                />
+            );
+        }
+
         let editButton: JSX.Element | undefined;
         if (rightClick && canEditContent(cli, mxEvent)) {
             editButton = (
@@ -697,11 +721,12 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let nativeItemsList: JSX.Element | undefined;
-        if (copyButton || quoteButton || copyLinkButton) {
+        if (copyButton || quoteButton || translateButton || copyLinkButton) {
             nativeItemsList = (
                 <IconizedContextMenuOptionList>
                     {copyButton}
                     {quoteButton}
+                    {translateButton}
                     {copyLinkButton}
                 </IconizedContextMenuOptionList>
             );

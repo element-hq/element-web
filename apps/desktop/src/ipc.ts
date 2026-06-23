@@ -12,6 +12,7 @@ import { randomArray } from "./utils.js";
 import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
+import { isTranslationAvailable, showTranslation } from "./translation.js";
 
 let focusHandlerAttached = false;
 ipcMain.on("loudNotification", function (): void {
@@ -106,6 +107,14 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             break;
         case "getAvailableSpellCheckLanguages":
             ret = global.mainWindow.webContents.session.availableSpellCheckerLanguages;
+            break;
+
+        case "getTranslationAvailable":
+            ret = isTranslationAvailable();
+            break;
+
+        case "showTranslation":
+            showTranslation(global.mainWindow, args[0]?.text, args[0]?.rect);
             break;
 
         case "getPickleKey":
