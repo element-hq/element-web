@@ -31,6 +31,13 @@ export interface SetStatusViewSnapshot {
 
 export interface SetStatusViewActions {
     /**
+     * Called when the user clicks to start setting a status.
+     *
+     * If falsy, the default dropdown will open for the user to choose a status.
+     */
+    onSetStatusClick?: () => void;
+
+    /**
      * Called when the user selects a preset status from the dropdown.
      */
     setStatus: (status: UserStatus) => void;
@@ -67,12 +74,28 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
         return trigger;
     };
 
-    return (
+    const onValueChange = (value: string): void => {
+        const status = PRESET_STATUSES.find((s) => s.textKey === value);
+
+        if (!status) {
+            return;
+        }
+
+        vm.setStatus({
+            emoji: status.emoji,
+            text: _t(status.textKey),
+        });
+    };
+
+    return vm.onSetStatusClick ? (
+        renderTrigger({ onClick: vm.onSetStatusClick })
+    ) : (
         <Dropdown
             values={PRESET_STATUSES.map((s) => [s.textKey, `${s.emoji} ${_t(s.textKey)}`])}
             label={null}
             placeholder={null}
             trigger={renderTrigger}
+            onValueChange={onValueChange}
         />
     );
 }
