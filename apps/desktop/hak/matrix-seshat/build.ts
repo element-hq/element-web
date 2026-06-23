@@ -16,6 +16,16 @@ export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Prom
         env.CARGO_BUILD_TARGET = hakEnv.getTargetId();
     }
 
+    // Seshat encrypts its index with AES-256 from the RustCrypto `aes` crate.
+    // On aarch64 that crate only uses the ARMv8 hardware AES backend when built
+    // with `--cfg aes_armv8`; without it, it falls back to a constant-time
+    // software implementation that uses ~10-20x more CPU. (On x86_64, AES-NI is
+    // auto-detected at runtime, so no flag is needed there.) Append rather than
+    // overwrite so any caller-provided RUSTFLAGS are preserved.
+    if (hakEnv.getTargetArch() === "arm64") {
+        env.RUSTFLAGS = [env.RUSTFLAGS, "--cfg aes_armv8"].filter(Boolean).join(" ");
+    }
+
     console.log("Running yarn install");
     await hakEnv.spawn("yarn", ["install"], {
         cwd: moduleInfo.moduleBuildDir,
