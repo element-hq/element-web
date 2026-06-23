@@ -1,11 +1,11 @@
 /*
-Copyright 2026 Element Creations Ltd.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-import { RoomEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, RoomEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { act } from "react";
 
 import { RoomAvatarViewModel } from "../../../src/viewmodels/avatars/RoomAvatarViewModel";
@@ -14,12 +14,25 @@ import { createTestClient, mkStubRoom } from "../../test-utils";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { DirectoryMember } from "../../../src/utils/direct-messages";
 
-describe("RoomAvatarViewModel", () => {
-    const client = createTestClient();
+jest.mock("../../../src/customisations/Media", () => ({
+    mediaFromMxc: jest.fn(() => ({
+        srcHttp: "https://example.org/avatar.png",
+        getThumbnailOfSourceHttp: jest.fn(() => "https://example.org/avatar-thumbnail.png"),
+    })),
+}));
 
-    beforeAll(() => {
-        DMRoomMap.makeShared(client);
-        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(undefined);
+describe("RoomAvatarViewModel", () => {
+    let client: MatrixClient;
+
+    beforeEach(() => {
+        client = createTestClient();
+        DMRoomMap.setShared({
+            getUserIdForRoomId: jest.fn().mockReturnValue(undefined),
+        } as unknown as DMRoomMap);
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     it("uses the room data in the initial snapshot", () => {
