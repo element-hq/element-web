@@ -471,7 +471,7 @@ export default function RoomHeader({
                             oobData={oobData}
                             onClick={room instanceof LocalRoom ? undefined : onAvatarClick}
                             tabIndex={-1}
-                            aria-label={_t("room|header_avatar_open_settings_label")}
+                            altText={_t("room|header_avatar_open_settings_label")}
                         />
                     </WithPresenceIndicator>
                     {/* Disable on-click actions until the room is created */}
