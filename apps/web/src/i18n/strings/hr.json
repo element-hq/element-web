@@ -988,14 +988,6 @@
         "set_up_toast_title": "Postavljanje zaštićene sigurnosne kopije",
         "turn_on_key_storage": "Uključi pohranu ključeva",
         "turn_on_key_storage_description": "Sigurno pohranite svoj identitet šifriranja i ključeve poruka na poslužitelju. To će vam omogućiti pregled povijesti poruka na svim novim uređajima.",
-        "udd": {
-            "interactive_verification_button": "Interaktivna provjera pomoću emotikona",
-            "other_ask_verify_text": "Zamolite tog korisnika da potvrdi svoju sesiju ili je ručno potvrdite u nastavku.",
-            "other_new_session_text": "%(name)s(%(userId)s ) prijavio/la se u novu sesiju, a da je nije potvrdio/la:",
-            "own_ask_verify_text": "Potvrdite svoju drugu sesiju služeći se jednom od ispod navedenih mogućnosti.",
-            "own_new_session_text": "Prijavili ste se u novu sesiju, a da je niste potvrdili:",
-            "title": "Nije pouzdano"
-        },
         "unable_to_setup_keys_error": "Nije moguće postaviti ključeve",
         "verification": {
             "accepting": "U tijeku je prihvaćanje…",
@@ -4067,13 +4059,7 @@
         "close_to_view_right_panel": "Zatvorite ovaj widget kako biste ga vidjeli na ovoj ploči",
         "context_menu": {
             "delete": "Izbriši widget",
-            "delete_warning": "Brisanjem widgeta uklanjate ga za sve korisnike u ovoj sobi. Jeste li sigurni da želite izbrisati ovaj widget?",
-            "move_left": "Premjesti ulijevo",
-            "move_right": "Premjesti udesno",
-            "remove": "Ukloni za sve",
-            "revoke": "Poništi dopuštenja",
-            "screenshot": "Fotografiraj",
-            "start_audio_stream": "Pokreni strujanje zvučnog sadržaja"
+            "delete_warning": "Brisanjem widgeta uklanjate ga za sve korisnike u ovoj sobi. Jeste li sigurni da želite izbrisati ovaj widget?"
         },
         "cookie_warning": "Ovaj widget može upotrebljavati kolačiće.",
         "error_hangup_description": "Više niste u pozivu. (Pogreška: %(message)s)",

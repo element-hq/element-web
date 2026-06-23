@@ -947,14 +947,6 @@
         "set_up_toast_title": "Ställ in säker säkerhetskopiering",
         "turn_on_key_storage": "Slå på nyckellagring",
         "turn_on_key_storage_description": "Lagra din kryptografiska identitet och dina meddelandenycklar säkert på servern. Detta gör att du kan se din meddelandehistorik på alla nya enheter.",
-        "udd": {
-            "interactive_verification_button": "Verifiera interaktivt med emoji",
-            "other_ask_verify_text": "Be den här användaren att verifiera sin session, eller verifiera den manuellt nedan.",
-            "other_new_session_text": "%(name)s (%(userId)s) loggade in i en ny session utan att verifiera den:",
-            "own_ask_verify_text": "Verifiera din andra session med ett av alternativen nedan.",
-            "own_new_session_text": "Du loggade in i en ny session utan att verifiera den:",
-            "title": "Inte betrodd"
-        },
         "unable_to_setup_keys_error": "Kunde inte ställa in nycklar",
         "verification": {
             "accepting": "Accepterar…",
@@ -3879,13 +3871,7 @@
         "close_to_view_right_panel": "Stäng den här widgeten för att se den i den här panelen",
         "context_menu": {
             "delete": "Radera widget",
-            "delete_warning": "Att radera en widget tar bort den för alla användare i rummet. Är du säker på att du vill radera den?",
-            "move_left": "Flytta till vänster",
-            "move_right": "Flytta till höger",
-            "remove": "Ta bort för alla",
-            "revoke": "Återkalla behörigheter",
-            "screenshot": "Ta en bild",
-            "start_audio_stream": "Starta ljudström"
+            "delete_warning": "Att radera en widget tar bort den för alla användare i rummet. Är du säker på att du vill radera den?"
         },
         "cookie_warning": "Denna widget kan använda kakor.",
         "error_hangup_description": "Du kopplades bort från samtalet. (Fel: %(message)s)",

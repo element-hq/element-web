@@ -828,14 +828,6 @@
         "set_up_recovery_toast_description": "產生一把復原金鑰，以便在您無法存取裝置時恢復您的加密訊息歷史記錄。",
         "set_up_toast_title": "設定安全備份",
         "turn_on_key_storage_description": "在伺服器安全地儲存您的加密身分及訊息金鑰。如此一來，您便能在任何新裝置上檢視訊息歷史紀錄。",
-        "udd": {
-            "interactive_verification_button": "透過表情符號互動來驗證",
-            "other_ask_verify_text": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
-            "other_new_session_text": "%(name)s （%(userId)s）登入到未驗證的新工作階段：",
-            "own_ask_verify_text": "使用下方的其中一個選項來驗證您其他工作階段。",
-            "own_new_session_text": "您已登入新的工作階段但未驗證：",
-            "title": "未受信任"
-        },
         "unable_to_setup_keys_error": "無法設定金鑰",
         "verification": {
             "accepting": "正在接受…",
@@ -3447,13 +3439,7 @@
         "close_to_view_right_panel": "關閉此小工具以在此面板中檢視",
         "context_menu": {
             "delete": "刪除小工具",
-            "delete_warning": "刪除小工具會將它從此聊天室中所有使用者的收藏中移除。您確定您要刪除這個小工具嗎？",
-            "move_left": "向左移動",
-            "move_right": "向右移動",
-            "remove": "為所有人移除",
-            "revoke": "撤銷權限",
-            "screenshot": "拍照",
-            "start_audio_stream": "開始音訊串流"
+            "delete_warning": "刪除小工具會將它從此聊天室中所有使用者的收藏中移除。您確定您要刪除這個小工具嗎？"
         },
         "cookie_warning": "這個小工具可能會使用 cookies。",
         "error_hangup_description": "您已斷開通話。（錯誤：%(message)s）",

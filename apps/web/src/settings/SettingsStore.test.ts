@@ -6,16 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, type MatrixClient, type Room, SyncState } from "matrix-js-sdk/src/matrix";
-import { waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import type BasePlatform from "../../../src/BasePlatform";
-import SdkConfig from "../../../src/SdkConfig";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
-import { SETTINGS, type SettingKey } from "../../../src/settings/Settings.tsx";
-import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController.ts";
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
+import { ClientEvent, type MatrixClient, type Room, SyncState } from "matrix-js-sdk/src/matrix";
+import { waitFor } from "test-utils-rtl";
+
+import type BasePlatform from "../BasePlatform";
+import SdkConfig from "../SdkConfig";
+import { SettingLevel } from "./SettingLevel";
+import SettingsStore from "./SettingsStore";
+import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test/test-utils";
+import { SETTINGS, type SettingKey } from "./Settings.tsx";
+import MatrixClientBackedController from "./controllers/MatrixClientBackedController.ts";
 
 const TEST_DATA = [
     {
@@ -34,18 +37,18 @@ describe("SettingsStore", () => {
     let platformSettings: Record<string, any>;
 
     beforeAll(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         platformSettings = {};
         mockPlatformPeg({
-            isLevelSupported: jest.fn().mockReturnValue(true),
-            supportsSetting: jest.fn().mockReturnValue(true),
-            setSettingValue: jest.fn().mockImplementation((settingName: string, value: any) => {
+            isLevelSupported: vi.fn().mockReturnValue(true),
+            supportsSetting: vi.fn().mockReturnValue(true),
+            setSettingValue: vi.fn().mockImplementation((settingName: string, value: any) => {
                 platformSettings[settingName] = value;
             }),
-            getSettingValue: jest.fn().mockImplementation((settingName: string) => {
+            getSettingValue: vi.fn().mockImplementation((settingName: string) => {
                 return platformSettings[settingName];
             }),
-            reload: jest.fn(),
+            reload: vi.fn(),
         } as unknown as BasePlatform);
 
         TEST_DATA.forEach((d) => {
@@ -100,21 +103,21 @@ describe("SettingsStore", () => {
         beforeEach(() => {
             client = stubClient();
             room = mkStubRoom("!room:example.org", "Room", client);
-            client.getRooms = jest.fn().mockReturnValue([room]);
-            client.getRoom = jest.fn().mockReturnValue(room);
+            client.getRooms = vi.fn().mockReturnValue([room]);
+            client.getRoom = vi.fn().mockReturnValue(room);
         });
 
         afterEach(() => {
-            jest.restoreAllMocks();
+            vi.restoreAllMocks();
         });
 
         describe("Migrate media preview configuration", () => {
             beforeEach(() => {
                 MatrixClientBackedController.matrixClient = client;
-                client.getAccountData = jest.fn().mockImplementation((type) => {
+                client.getAccountData = vi.fn().mockImplementation((type) => {
                     if (type === "im.vector.web.settings") {
                         return {
-                            getContent: jest.fn().mockReturnValue({
+                            getContent: vi.fn().mockReturnValue({
                                 showImages: false,
                                 showAvatarsOnInvites: false,
                             }),
@@ -126,7 +129,7 @@ describe("SettingsStore", () => {
             });
 
             it("migrates media preview configuration immediately", async () => {
-                client.setAccountData = jest.fn();
+                client.setAccountData = vi.fn();
                 SettingsStore.runMigrations(false);
                 expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
                     invite_avatars: "off",
@@ -134,13 +137,13 @@ describe("SettingsStore", () => {
                 });
             });
             it("migrates media preview configuration once client is ready", async () => {
-                client.setAccountData = jest.fn();
-                const mockInitialSync = (client.isInitialSyncComplete = jest.fn().mockReturnValue(false));
+                client.setAccountData = vi.fn();
+                const mockInitialSync = (client.isInitialSyncComplete = vi.fn().mockReturnValue(false));
                 SettingsStore.runMigrations(false);
                 mockInitialSync.mockReturnValue(true);
                 client.emit(ClientEvent.Sync, SyncState.Prepared, null);
                 // Update is asynchronous
-                waitFor(() => {
+                await waitFor(() => {
                     expect(client.setAccountData).toHaveBeenCalledWith("io.element.msc4278.media_preview_config", {
                         invite_avatars: "off",
                         media_previews: "off",
@@ -149,15 +152,15 @@ describe("SettingsStore", () => {
             });
 
             it("does not migrate media preview configuration if the session is fresh", async () => {
-                client.setAccountData = jest.fn();
+                client.setAccountData = vi.fn();
                 SettingsStore.runMigrations(true);
                 client.emit(ClientEvent.Sync, SyncState.Prepared, null);
                 expect(client.setAccountData).not.toHaveBeenCalled();
             });
 
             it("does not migrate media preview configuration if the account data is already set", async () => {
-                client.setAccountData = jest.fn();
-                client.getAccountData = jest.fn().mockReturnValue({});
+                client.setAccountData = vi.fn();
+                client.getAccountData = vi.fn().mockReturnValue({});
                 SettingsStore.runMigrations(false);
                 client.emit(ClientEvent.Sync, SyncState.Prepared, null);
                 expect(client.setAccountData).not.toHaveBeenCalled();

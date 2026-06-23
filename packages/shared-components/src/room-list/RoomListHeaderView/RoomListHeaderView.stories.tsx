@@ -32,6 +32,7 @@ const RoomListHeaderViewWrapperImpl = ({
     toggleMessagePreview,
     createSection,
     collapseOrExpandSections,
+    closeSectionReleaseAnnouncement,
     ...rest
 }: RoomListHeaderProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -46,6 +47,7 @@ const RoomListHeaderViewWrapperImpl = ({
         toggleMessagePreview,
         createSection,
         collapseOrExpandSections,
+        closeSectionReleaseAnnouncement,
     });
     return <RoomListHeaderView vm={vm} />;
 };
@@ -68,6 +70,7 @@ const meta = {
         toggleMessagePreview: fn(),
         createSection: fn(),
         collapseOrExpandSections: fn(),
+        closeSectionReleaseAnnouncement: fn(),
     },
     parameters: {
         design: {
@@ -122,5 +125,32 @@ export const CollapseSections: Story = {
 export const ExpandSections: Story = {
     args: {
         collapseSections: "expand",
+    },
+};
+
+export const DisplaySectionReleaseAnnouncement: Story = {
+    decorators: [
+        (Story) => (
+            <div style={{ width: "300px" }}>
+                <Story />
+            </div>
+        ),
+    ],
+    args: {
+        displaySectionReleaseAnnouncement: true,
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: [
+                    {
+                        // compound-web's ReleaseAnnouncement renders its header as <h3>,
+                        // which jumps from RoomListHeaderView's <h1> ("Rooms").
+                        id: "heading-order",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
     },
 };

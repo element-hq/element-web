@@ -920,14 +920,6 @@
         "set_up_recovery": "Configurar a recuperação",
         "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
-        "udd": {
-            "interactive_verification_button": "Verifica interactivamente por emoji",
-            "other_ask_verify_text": "Pede a este utilizador para verificar a sua sessão ou verifica-a manualmente abaixo.",
-            "other_new_session_text": "%(name)s(%(userId)s ) entrou numa nova sessão sem verificá-la:",
-            "own_ask_verify_text": "Verifica a tua outra sessão utilizando uma das opções abaixo.",
-            "own_new_session_text": "Entraste numa nova sessão sem a verificar:",
-            "title": "Não é confiável"
-        },
         "unable_to_setup_keys_error": "Não é possível configurar as chaves",
         "verification": {
             "accepting": "Aceitando...",
@@ -3793,13 +3785,7 @@
         "close_to_view_right_panel": "Fecha este widget para o veres neste painel",
         "context_menu": {
             "delete": "Apagar widget",
-            "delete_warning": "A eliminação de um widget remove-o para todos os utilizadores desta sala. Tens a certeza de que queres apagar este widget?",
-            "move_left": "Mover para a esquerda",
-            "move_right": "Mover para a direita",
-            "remove": "Remover para todos",
-            "revoke": "Revogar permissões",
-            "screenshot": "Tira uma fotografia",
-            "start_audio_stream": "Iniciar transmissão de áudio"
+            "delete_warning": "A eliminação de um widget remove-o para todos os utilizadores desta sala. Tens a certeza de que queres apagar este widget?"
         },
         "cookie_warning": "Este widget pode utilizar cookies.",
         "error_hangup_description": "Foste desligado da chamada. (Erro: %(message)s)",

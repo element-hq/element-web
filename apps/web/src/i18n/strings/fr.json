@@ -1013,14 +1013,6 @@
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "turn_on_key_storage": "Activer le stockage des clés",
         "turn_on_key_storage_description": "Cela vous permettra de consulter votre historique de conversations sur tous vos nouveaux appareils et est nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.",
-        "udd": {
-            "interactive_verification_button": "Vérifier de façon interactive avec des émojis",
-            "other_ask_verify_text": "Demandez à cet utilisateur de vérifier sa session, ou vérifiez-la manuellement ci-dessous.",
-            "other_new_session_text": "%(name)s (%(userId)s) s’est connecté à une nouvelle session sans la vérifier :",
-            "own_ask_verify_text": "Vérifiez votre autre session en utilisant une des options ci-dessous.",
-            "own_new_session_text": "Vous vous êtes connecté à une nouvelle session sans la vérifier :",
-            "title": "Non fiable"
-        },
         "unable_to_setup_keys_error": "Impossible de configurer les clés",
         "verification": {
             "accepting": "Acceptation…",
@@ -4076,13 +4068,7 @@
         "close_to_view_right_panel": "Fermer ce widget pour l’afficher dans ce panneau",
         "context_menu": {
             "delete": "Supprimer le widget",
-            "delete_warning": "Supprimer un widget le supprime pour tous les utilisateurs du salon. Voulez-vous vraiment supprimer ce widget ?",
-            "move_left": "Aller à gauche",
-            "move_right": "Aller à droite",
-            "remove": "Supprimer pour tout le monde",
-            "revoke": "Révoquer les permissions",
-            "screenshot": "Prendre une photo",
-            "start_audio_stream": "Démarrer une diffusion audio"
+            "delete_warning": "Supprimer un widget le supprime pour tous les utilisateurs du salon. Voulez-vous vraiment supprimer ce widget ?"
         },
         "cookie_warning": "Ce widget pourrait utiliser des cookies.",
         "error_hangup_description": "Vous avez déconnecté de l’appel. (Erreur : %(message)s)",

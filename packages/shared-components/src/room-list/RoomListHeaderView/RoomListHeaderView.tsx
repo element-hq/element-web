@@ -80,6 +80,10 @@ export interface RoomListHeaderViewSnapshot {
      * If undefined, no  icon are shown.
      */
     collapseSections?: CollapseSectionsOption;
+    /**
+     *  Whether to display the section release announcement
+     */
+    displaySectionReleaseAnnouncement: boolean;
 }
 
 export interface RoomListHeaderViewActions {
@@ -127,6 +131,10 @@ export interface RoomListHeaderViewActions {
      * Collapse or expand all sections in the room list depending on the current state.
      */
     collapseOrExpandSections: () => void;
+    /**
+     * Close the section release announcement
+     */
+    closeSectionReleaseAnnouncement: () => void;
 }
 
 /**

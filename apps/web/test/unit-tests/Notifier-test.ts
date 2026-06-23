@@ -5,7 +5,7 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import {
     ClientEvent,
     type MatrixClient,
@@ -602,7 +602,7 @@ describe("Notifier", () => {
                 slotDescription: { application: "m.call", id: "" },
             } as unknown as MatrixRTCSession;
 
-            mockClient.matrixRTC.getRoomSession.mockReturnValue(mockRtcSession);
+            mocked(mockClient.matrixRTC.getRoomSession).mockReturnValue(mockRtcSession);
 
             emitCallNotificationEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
