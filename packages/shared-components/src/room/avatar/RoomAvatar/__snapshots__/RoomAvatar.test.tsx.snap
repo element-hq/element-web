@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RoomAvatarView > renders a clickable avatar 1`] = `
+<div>
+  <button
+    aria-label="Avatar"
+    aria-live="off"
+    class="_avatar_va14e_8"
+    data-color="6"
+    data-testid="avatar-img"
+    data-type="round"
+    role="button"
+    style="--cpd-avatar-size: 36px;"
+  >
+    <img
+      alt=""
+      class="_image_va14e_43"
+      data-type="round"
+      height="36px"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+      src="https://example.com/avatar.png"
+      width="36px"
+    />
+  </button>
+</div>
+`;
+
+exports[`RoomAvatarView > renders a round avatar with initial letter 1`] = `
+<div>
+  <span
+    class="_avatar_va14e_8 _avatar-imageless_va14e_55"
+    data-color="6"
+    data-testid="avatar-img"
+    data-type="round"
+    role="presentation"
+    style="--cpd-avatar-size: 36px;"
+  >
+    T
+  </span>
+</div>
+`;
+
+exports[`RoomAvatarView > renders a square avatar for a space 1`] = `
+<div>
+  <span
+    class="_avatar_va14e_8 _avatar-imageless_va14e_55"
+    data-color="1"
+    data-testid="avatar-img"
+    data-type="square"
+    role="presentation"
+    style="--cpd-avatar-size: 36px;"
+  >
+    M
+  </span>
+</div>
+`;

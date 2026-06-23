@@ -6,7 +6,7 @@
  */
 
 import { composeStories } from "@storybook/react-vite";
-import { render, screen } from "@test-utils";
+import { fireEvent, render, screen } from "@test-utils";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -69,7 +69,7 @@ describe("RoomAvatarView", () => {
         expect(onClick).toHaveBeenCalledTimes(1);
     });
 
-    it("cycles to the next URL on image load error", async () => {
+    it("cycles to the next URL on image load error", () => {
         const vm = new MockViewModel<RoomAvatarViewSnapshot>({
             name: "Test Room",
             idName: "!room:example.com",
@@ -78,18 +78,17 @@ describe("RoomAvatarView", () => {
             isClickable: false,
         }) as unknown as RoomAvatarViewModel;
 
-        const { rerender } = render(<RoomAvatarView vm={vm} size="36px" />);
+        render(<RoomAvatarView vm={vm} size="36px" />);
 
-        const avatarImg = screen.getByTestId("avatar-img");
+        // The image lives inside the avatar root rendered with data-testid="avatar-img".
+        const getImg = (): HTMLImageElement => screen.getByTestId("avatar-img").querySelector("img")!;
 
         // Verify initial URL is the first one.
-        expect(avatarImg).toHaveAttribute("src", "https://example.com/first.png");
+        expect(getImg()).toHaveAttribute("src", "https://example.com/first.png");
 
-        // Trigger image error to cycle to the fallback URL.
-        // Re-render is needed after the event handler updates state.
-        avatarImg.dispatchEvent(new Event("error", { bubbles: true }));
-        rerender(<RoomAvatarView vm={vm} size="36px" />);
+        // Trigger image error on the <img> itself to cycle to the fallback URL.
+        fireEvent.error(getImg());
 
-        expect(screen.getByTestId("avatar-img")).toHaveAttribute("src", "https://example.com/fallback.png");
+        expect(getImg()).toHaveAttribute("src", "https://example.com/fallback.png");
     });
 });

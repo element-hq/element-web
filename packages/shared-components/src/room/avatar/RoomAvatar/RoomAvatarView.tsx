@@ -125,6 +125,18 @@ export function RoomAvatarView({
 
     const src = urls[urlIndex];
 
+    // Avatar's default role="img" is invalid ARIA once it renders as a <button> (onClick set).
+    const extraProps: { "role"?: AriaRole; "aria-live"?: "off"; "aria-label"?: string } = {};
+    if (role) {
+        extraProps.role = role;
+    } else if (isClickable) {
+        extraProps.role = "button";
+        extraProps["aria-live"] = "off";
+    } else if (!src) {
+        extraProps.role = "presentation";
+        extraProps["aria-label"] = undefined;
+    }
+
     return (
         <Avatar
             ref={ref}
@@ -139,9 +151,9 @@ export function RoomAvatarView({
             title={title}
             onClick={isClickable ? vm.onClick : undefined}
             tabIndex={tabIndex}
-            role={role}
             aria-hidden={ariaHidden}
             data-testid="avatar-img"
+            {...extraProps}
         />
     );
 }
