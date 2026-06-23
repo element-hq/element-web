@@ -184,7 +184,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         let requestButton: ReactNode | undefined;
         let speakerDropdown: ReactNode | undefined;
         let microphoneDropdown: ReactNode | undefined;
-        let microphoneRecordingDropdown: ReactNode | undefined;
+
         let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
             requestButton = (
@@ -200,28 +200,23 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                 MediaDeviceKindEnum.AudioOutput,
                 _t("settings|voip|audio_output"),
             ) || <p>{_t("settings|voip|audio_output_empty")}</p>;
-            microphoneRecordingDropdown = this.renderDropdown(
-                MediaDeviceKindEnum.AudioInput,
-                _t("common|microphone_audio_recording"),
-            ) || <p>{_t("settings|voip|audio_input_empty")}</p>;
-            microphoneDropdown = this.renderDropdown(
-                MediaDeviceKindEnum.AudioInput,
-                _t("common|microphone_legacy_call"),
-            ) || <p>{_t("settings|voip|audio_input_empty")}</p>;
+            microphoneDropdown = this.renderDropdown(MediaDeviceKindEnum.AudioInput, _t("common|microphone")) || (
+                <p>{_t("settings|voip|audio_input_empty")}</p>
+            );
             webcamDropdown = this.renderDropdown(MediaDeviceKindEnum.VideoInput, _t("common|camera")) || (
                 <p>{_t("settings|voip|video_input_empty")}</p>
             );
         }
 
-        const elementCallEnabled = !SdkConfig.get("element_call").disable;
-        const allowLegacyCalls = !SdkConfig.get("element_call").use_exclusively;
+        const elementCallEnabled = SdkConfig.get("element_call").enabled;
+        // We also allow/use legacy if element call is not enabled.
+        const allowLegacyCalls = !SdkConfig.get("element_call").use_exclusively || !elementCallEnabled;
         const showLegacySettings = this.state.enableLegacyCallsVoip;
 
         const legacySettingsComponent = (
             <>
                 <SettingsSubsection heading={_t("settings|voip|voice_section")} stretchContent>
                     {speakerDropdown}
-                    {microphoneDropdown}
                     <SettingsToggleInput
                         name="voice-auto-gain"
                         label={_t("settings|voip|voice_agc")}
@@ -261,9 +256,10 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         evt.stopPropagation();
                     }}
                 >
-                    <SettingsSection heading={_t("settings|voip|voice_recording_section")}>
+                    <SettingsSection heading={_t("settings|voip|voice_input_section")}>
+                        {_t("settings|voip|voice_input_description")}
                         {requestButton}
-                        {microphoneRecordingDropdown}
+                        {microphoneDropdown}
                     </SettingsSection>
                     {elementCallEnabled && (
                         <SettingsSection heading={_t("common|element_call_settings")}>
@@ -279,11 +275,6 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                             {(!elementCallEnabled || showLegacySettings) && legacySettingsComponent}
                         </SettingsSection>
                     )}
-                    {!allowLegacyCalls &&
-                        !elementCallEnabled && (
-                            // This is a broken configuration. We still try to handle this by prompting the user.
-                            <p>{_t("settings|voip|no_calling_option_available_misconfigured")}</p>
-                        )}
                     {(allowLegacyCalls || elementCallEnabled) && (
                         <SettingsSection heading={_t("settings|voip|voice_processing")}>
                             <SettingsToggleInput
