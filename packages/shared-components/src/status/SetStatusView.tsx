@@ -50,10 +50,12 @@ export type SetStatusViewProps = {
 export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
     const { userStatus } = useViewModel(vm);
 
+    if (userStatus) {
+        return <StatusButtonView status={userStatus} clearStatus={vm.clearStatus} />;
+    }
+
     const renderTrigger = (props: DropdownTriggerProps): JSX.Element => {
-        const trigger = userStatus ? (
-            <StatusButtonView status={userStatus} clearStatus={vm.clearStatus} {...props} />
-        ) : (
+        const trigger = (
             <button className={styles.setStatusTrigger} {...props}>
                 <ReactionIcon />
                 <Text as="span" type="body" size="md" weight="medium">
@@ -67,7 +69,6 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
 
     return (
         <Dropdown
-            className={styles.setStatusDropdown}
             values={PRESET_STATUSES.map((s) => [s.textKey, `${s.emoji} ${_t(s.textKey)}`])}
             label={null}
             placeholder={null}

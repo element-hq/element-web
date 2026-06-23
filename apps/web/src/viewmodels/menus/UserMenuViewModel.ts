@@ -20,11 +20,13 @@ import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { clearUserStatus } from "../../utils/userStatus";
+import { SetStatusViewModel } from "../status/SetStatusViewModel";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
 
 export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
+    public readonly setStatusVm: SetStatusViewModel;
     private static computeSnapshot(
         client: MatrixClient,
         isPanelCollapsed: boolean,
@@ -64,11 +66,13 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         accountManagementEndpoint?: string,
     ) {
         super(undefined, UserMenuViewModel.computeSnapshot(client, isPanelCollapsed, accountManagementEndpoint));
+        this.setStatusVm = new SetStatusViewModel({ client });
         OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
     }
 
     public dispose(): void {
         OwnProfileStore.instance.off(UPDATE_EVENT, this.recalculateProfile);
+        this.setStatusVm.dispose();
         super.dispose();
     }
 
