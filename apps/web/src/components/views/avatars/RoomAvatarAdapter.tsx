@@ -18,51 +18,51 @@ interface Props {
      * The room whose avatar should be displayed.
      * When omitted, `oobData.avatarUrl` must be provided.
      */
-    room?: Room;
+    "room"?: Room;
     /**
      * Out-of-band data used when the room object is not yet available,
      * e.g. during a three-pid invite flow.
      */
-    oobData?: IOOBData & {
+    "oobData"?: IOOBData & {
         roomId?: string;
     };
     /**
      * When `true`, clicking the avatar opens a full-size lightbox.
      */
-    viewAvatarOnClick?: boolean;
+    "viewAvatarOnClick"?: boolean;
     /**
      * Custom click handler. Takes precedence over the lightbox when both are set.
      */
-    onClick?(): void;
+    "onClick"?(): void;
     /**
      * Rendered size of the avatar in CSS units. Defaults to `"36px"`.
      */
-    size?: string;
+    "size"?: string;
     /**
      * Avatar shape override. When omitted the adapter derives the shape from
      * the room type (square for spaces, round otherwise).
      */
-    type?: "round" | "square";
+    "type"?: "round" | "square";
     /**
      * Optional additional CSS class names.
      */
-    className?: string;
+    "className"?: string;
     /**
      * Accessible label. Defaults to `"Avatar"`.
      */
-    altText?: string;
+    "altText"?: string;
     /**
      * Browser tooltip shown on hover.
      */
-    title?: string;
+    "title"?: string;
     /**
      * Tab index forwarded to the avatar element.
      */
-    tabIndex?: number;
+    "tabIndex"?: number;
     /**
      * ARIA role override.
      */
-    role?: AriaRole;
+    "role"?: AriaRole;
     /**
      * When `true`, hides the avatar from the accessibility tree.
      */
@@ -70,7 +70,7 @@ interface Props {
     /**
      * Ref forwarded to the underlying avatar element.
      */
-    ref?: Ref<HTMLButtonElement | HTMLSpanElement>;
+    "ref"?: Ref<HTMLButtonElement | HTMLSpanElement>;
 }
 
 /**
@@ -119,14 +119,7 @@ export function RoomAvatarAdapter({
         vm.setType(type);
     }, [type, vm]);
 
-    return (
-        <RoomAvatarView
-            vm={vm}
-            size={size}
-            className={classNames("mx_BaseAvatar", className)}
-            {...viewProps}
-        />
-    );
+    return <RoomAvatarView vm={vm} size={size} className={classNames("mx_BaseAvatar", className)} {...viewProps} />;
 }
 
 export default RoomAvatarAdapter;

@@ -182,9 +182,8 @@ export class RoomAvatarViewModel
                 sizeInt,
                 sizeInt,
                 "crop",
-                props.room?.currentState
-                    .getStateEvents(EventType.RoomAvatar, "")
-                    ?.getContent<RoomAvatarEventContent>().url,
+                props.room?.currentState.getStateEvents(EventType.RoomAvatar, "")?.getContent<RoomAvatarEventContent>()
+                    .url,
             ),
         ]);
     }
@@ -203,7 +202,8 @@ export class RoomAvatarViewModel
 
         if (current.name !== nextSnapshot.name) updates.name = nextSnapshot.name;
         if (current.idName !== nextSnapshot.idName) updates.idName = nextSnapshot.idName;
-        if (!RoomAvatarViewModel.areStringArraysEqual(current.urls, nextSnapshot.urls)) updates.urls = nextSnapshot.urls;
+        if (!RoomAvatarViewModel.areStringArraysEqual(current.urls, nextSnapshot.urls))
+            updates.urls = nextSnapshot.urls;
         if (current.type !== nextSnapshot.type) updates.type = nextSnapshot.type;
         if (current.isClickable !== nextSnapshot.isClickable) updates.isClickable = nextSnapshot.isClickable;
 

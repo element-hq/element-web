@@ -56,32 +56,32 @@ interface RoomAvatarViewProps {
     /**
      * ViewModel providing room avatar state and the click action.
      */
-    vm: RoomAvatarViewModel;
+    "vm": RoomAvatarViewModel;
     /**
      * Rendered size of the avatar in CSS units, e.g. `"36px"`.
      */
-    size: string;
+    "size": string;
     /**
      * Optional additional CSS class names applied to the avatar element.
      */
-    className?: string;
+    "className"?: string;
     /**
      * Accessible label announced by assistive technologies.
      * Defaults to `"Avatar"`.
      */
-    altText?: string;
+    "altText"?: string;
     /**
      * Browser tooltip shown on hover.
      */
-    title?: string;
+    "title"?: string;
     /**
      * Tab index forwarded to the avatar element.
      */
-    tabIndex?: number;
+    "tabIndex"?: number;
     /**
      * ARIA role override for the avatar element.
      */
-    role?: AriaRole;
+    "role"?: AriaRole;
     /**
      * When `true`, hides the avatar from the accessibility tree.
      */
@@ -89,7 +89,7 @@ interface RoomAvatarViewProps {
     /**
      * Ref forwarded to the underlying avatar element.
      */
-    ref?: Ref<HTMLButtonElement | HTMLSpanElement>;
+    "ref"?: Ref<HTMLButtonElement | HTMLSpanElement>;
 }
 
 /**
