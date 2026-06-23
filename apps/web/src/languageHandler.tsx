@@ -239,16 +239,6 @@ async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
 let cachedCustomTranslations: TranslationStringsObject | undefined;
 let cachedCustomTranslationsExpire = 0; // zero to trigger expiration right away
 
-// This awkward class exists so the test runner can get at the function. It is
-// not intended for practical or realistic usage.
-export class CustomTranslationOptions {
-    public static lookupFn?: (url: string) => TranslationStringsObject;
-
-    private constructor() {
-        // static access for tests only
-    }
-}
-
 function doRegisterTranslations(customTranslations: TranslationStringsObject): void {
     // We convert the operator-friendly version into something counterpart can consume.
     // Map: lang → Record: string → translation
@@ -287,9 +277,7 @@ export async function registerCustomTranslations({
     try {
         let json: TranslationStringsObject | undefined;
         if (testOnlyIgnoreCustomTranslationsCache || Date.now() >= cachedCustomTranslationsExpire) {
-            json = CustomTranslationOptions.lookupFn
-                ? CustomTranslationOptions.lookupFn(lookupUrl)
-                : ((await (await fetch(lookupUrl)).json()) as TranslationStringsObject);
+            json = (await (await fetch(lookupUrl)).json()) as TranslationStringsObject;
             cachedCustomTranslations = json;
 
             // Set expiration to the future, but not too far. Just trying to avoid
