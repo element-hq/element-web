@@ -16,7 +16,6 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { type RoomAvatarEventContent } from "matrix-js-sdk/src/types";
-
 import {
     BaseViewModel,
     type RoomAvatarViewModel as RoomAvatarViewModelInterface,
