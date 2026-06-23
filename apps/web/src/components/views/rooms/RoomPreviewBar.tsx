@@ -99,11 +99,6 @@ interface IProps {
     canAskToJoinAndMembershipIsLeave?: boolean;
     promptAskToJoin?: boolean;
 
-    /**
-     * If true, this will prompt for additional safety options
-     * like reporting an invite or ignoring the user.
-     */
-    promptRejectionOptions?: boolean;
     knocked?: boolean;
     onSubmitAskToJoin?(reason?: string): void;
     onCancelAskToJoin?(): void;

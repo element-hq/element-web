@@ -19,7 +19,6 @@ import { _t, _td } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import { SAFE_LOCALPART_REGEX } from "../../../Registration";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
-import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
 import Field from "../elements/Field";
@@ -56,7 +55,6 @@ interface IProps {
     flows: {
         stages: string[];
     }[];
-    serverConfig: ValidatedServerConfig;
     canSubmit?: boolean;
     matrixClient: MatrixClient;
     mobileRegister?: boolean;
@@ -68,7 +66,6 @@ interface IProps {
         phoneCountry?: string;
         phoneNumber?: string;
     }): Promise<void>;
-    onEditServerDetailsClick?(): void;
 }
 
 interface IState {

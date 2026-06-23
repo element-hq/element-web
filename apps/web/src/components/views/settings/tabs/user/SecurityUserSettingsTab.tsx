@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent, type IServerVersions, type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -80,10 +80,6 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     }
 }
 
-interface IProps {
-    closeSettingsFn: () => void;
-}
-
 interface IState {
     ignoredUserIds: string[];
     waitingUnignored: string[];
@@ -92,10 +88,10 @@ interface IState {
     versions?: IServerVersions;
 }
 
-export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
+export default class SecurityUserSettingsTab extends React.Component<EmptyObject, IState> {
     private dispatcherRef?: string;
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         // Get rooms we're invited to

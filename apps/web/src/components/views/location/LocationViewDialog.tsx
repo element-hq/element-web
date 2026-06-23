@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import BaseDialog from "../dialogs/BaseDialog";
 import { locationEventGeoUri, isSelfLocation } from "../../../utils/location";
@@ -16,7 +16,6 @@ import SmartMarker from "./SmartMarker";
 import ZoomButtons from "./ZoomButtons";
 
 interface IProps {
-    matrixClient: MatrixClient;
     mxEvent: MatrixEvent;
     onFinished(): void;
 }

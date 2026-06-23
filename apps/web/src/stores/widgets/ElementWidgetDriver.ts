@@ -281,7 +281,6 @@ export class ElementWidgetDriver extends WidgetDriver {
             try {
                 const [result] = await Modal.createDialog(WidgetCapabilitiesPromptDialog, {
                     requestedCapabilities: missing,
-                    widget: this.forWidget,
                     widgetKind: this.forWidgetKind,
                 }).finished;
                 result?.approved?.forEach((cap) => allowedSoFar.add(cap));

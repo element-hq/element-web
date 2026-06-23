@@ -428,7 +428,6 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                 onPhoneNumberChanged={this.onPhoneNumberChanged}
                 onForgotPasswordClick={this.props.onForgotPasswordClick}
                 loginIncorrect={this.state.loginIncorrect}
-                serverConfig={this.props.serverConfig}
                 disableSubmit={this.isBusy()}
                 busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
