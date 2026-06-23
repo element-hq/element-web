@@ -981,14 +981,6 @@
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "turn_on_key_storage": "Schlüsselspeicher einschalten",
         "turn_on_key_storage_description": "Die kryptografische Identität und die Schlüssel deiner Nachrichten sicher auf dem Server speichern. So kann der Nachrichtenverlauf auf allen neuen Geräten angezeigt werden.",
-        "udd": {
-            "interactive_verification_button": "Interaktiv per Emoji verifizieren",
-            "other_ask_verify_text": "Bitte diesen Nutzer, seine Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
-            "other_new_session_text": "%(name)s (%(userId)s) hat sich zu einer neuen Sitzung angemeldet, ohne sie zu verifizieren:",
-            "own_ask_verify_text": "Verifiziere deine andere Sitzung mit einer der folgenden Optionen.",
-            "own_new_session_text": "Du hast dich in einer neuen Sitzung angemeldet ohne sie zu verifizieren:",
-            "title": "Nicht vertraut"
-        },
         "unable_to_setup_keys_error": "Schlüssel können nicht eingerichtet werden",
         "verification": {
             "accepting": "Annehmen…",
@@ -3979,13 +3971,7 @@
         "close_to_view_right_panel": "Widget schließen und in diesem Panel anzeigen",
         "context_menu": {
             "delete": "Widget entfernen",
-            "delete_warning": "Das Löschen des Widgets entfernt es für alle in diesem Chat. Wirklich löschen?",
-            "move_left": "Nach links schieben",
-            "move_right": "Nach rechts schieben",
-            "remove": "Für alle entfernen",
-            "revoke": "Berechtigungen widerrufen",
-            "screenshot": "Bildschirmfoto",
-            "start_audio_stream": "Audiostream starten"
+            "delete_warning": "Das Löschen des Widgets entfernt es für alle in diesem Chat. Wirklich löschen?"
         },
         "cookie_warning": "Dieses Widget kann Cookies verwenden.",
         "error_hangup_description": "Du wurdest vom Anruf getrennt. (Error: %(message)s)",

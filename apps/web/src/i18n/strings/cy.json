@@ -986,14 +986,6 @@
         "set_up_toast_title": "Gosod Copi Wrth Gefn Diogel",
         "turn_on_key_storage": "Troi storfa allweddi ymlaen",
         "turn_on_key_storage_description": "Cadwch eich hunaniaeth cryptograffig a'ch allweddi neges yn ddiogel ar y gweinydd. Bydd hyn yn caniatáu ichi weld hanes eich neges ar unrhyw ddyfeisiau newydd. %1$s.",
-        "udd": {
-            "interactive_verification_button": "Dilyswch yn rhyngweithiol trwy emoji",
-            "other_ask_verify_text": "Gofynnwch i'r defnyddiwr hwn wirio ei sesiwn, neu ei wirio â llaw isod.",
-            "other_new_session_text": "Mae %(matere)s (%(userId)s) wedi mewngofnodi i sesiwn newydd heb ei wirio:",
-            "own_ask_verify_text": "Dilyswch eich sesiwn arall gan ddefnyddio un o'r dewisiadau isod.",
-            "own_new_session_text": "Fe wnaethoch chi fewngofnodi i sesiwn newydd heb ei wirio:",
-            "title": "Heb Ymddiried"
-        },
         "unable_to_setup_keys_error": "Methu gosod allweddi",
         "verification": {
             "accepting": "Yn derbyn…",
@@ -3986,13 +3978,7 @@
         "close_to_view_right_panel": "Caewch y teclyn hwn i'w weld yn y panel hwn",
         "context_menu": {
             "delete": "Dileu teclyn",
-            "delete_warning": "Mae dileu teclyn yn ei ddileu ar gyfer pob defnyddiwr yn yr ystafell hon. Ydych chi'n siŵr eich bod am ddileu'r teclyn hwn?",
-            "move_left": "Symud i'r chwith",
-            "move_right": "Symud i'r dde",
-            "remove": "Tynnwch i bawb",
-            "revoke": "Diddymu caniatâd",
-            "screenshot": "Cymryd llun",
-            "start_audio_stream": "Dechrau ffrwd sain"
+            "delete_warning": "Mae dileu teclyn yn ei ddileu ar gyfer pob defnyddiwr yn yr ystafell hon. Ydych chi'n siŵr eich bod am ddileu'r teclyn hwn?"
         },
         "cookie_warning": "Gall y teclyn hwn ddefnyddio cwcis.",
         "error_hangup_description": "Rydych wedi'ch datgysylltu o'r alwad. (Gwall: %(message)s)",

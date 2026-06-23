@@ -1,6 +1,6 @@
 {
     "name": "@element-hq/web-shared-components",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Shared components for Element",
     "author": "New Vector Ltd.",
     "repository": {
@@ -83,7 +83,7 @@
         "react-merge-refs": "^3.0.2",
         "react-resizable-panels": "4.9.0",
         "react-virtuoso": "^4.14.0",
-        "temporal-polyfill": "^0.3.0"
+        "temporal-polyfill": "^1.0.0"
     },
     "devDependencies": {
         "@element-hq/element-web-playwright-common": "workspace:*",
