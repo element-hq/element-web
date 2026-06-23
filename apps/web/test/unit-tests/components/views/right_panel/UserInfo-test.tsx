@@ -46,12 +46,6 @@ jest.mock("../../../../../src/utils/direct-messages", () => ({
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
-jest.mock("../../../../../src/customisations/UserIdentifier", () => {
-    return {
-        getDisplayUserIdentifier: jest.fn().mockReturnValue("customUserIdentifier"),
-    };
-});
-
 jest.mock("../../../../../src/utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: jest.fn(),
