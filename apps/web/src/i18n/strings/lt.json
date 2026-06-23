@@ -556,13 +556,6 @@
             "warning": "Jei jūs nepašalinote paskyros atgavimo metodo, gali būti, kad užpuolikas bando patekti į jūsų paskyrą. Nedelsiant nustatymuose pakeiskite savo paskyros slaptažodį ir nustatykite naują atgavimo metodą."
         },
         "set_up_toast_title": "Nustatyti Saugią Atsarginę Kopiją",
-        "udd": {
-            "other_ask_verify_text": "Paprašykite šio vartotojo patvirtinti savo seansą, arba patvirtinkite jį rankiniu būdu žemiau.",
-            "other_new_session_text": "%(name)s (%(userId)s) prisijungė prie naujo seanso jo nepatvirtinę:",
-            "own_ask_verify_text": "Patvirtinkite savo kitą seansą naudodami vieną iš žemiau esančių parinkčių.",
-            "own_new_session_text": "Jūs prisijungėte prie naujo seanso, jo nepatvirtinę:",
-            "title": "Nepatikimas"
-        },
         "unable_to_setup_keys_error": "Nepavyksta nustatyti raktų",
         "verification": {
             "accepting": "Priimama…",
@@ -2352,11 +2345,7 @@
         "close_to_view_right_panel": "Uždarykite šį valdiklį, kad galėtumėte jį peržiūrėti šiame skydelyje",
         "context_menu": {
             "delete": "Ištrinti valdiklį",
-            "delete_warning": "Valdiklio ištrinimas pašalina jį visiems kambaryje esantiems vartotojams. Ar tikrai norite ištrinti šį valdiklį?",
-            "remove": "Pašalinti visiems",
-            "revoke": "Atšaukti leidimus",
-            "screenshot": "Padarykite nuotrauką",
-            "start_audio_stream": "Pradėti garso transliaciją"
+            "delete_warning": "Valdiklio ištrinimas pašalina jį visiems kambaryje esantiems vartotojams. Ar tikrai norite ištrinti šį valdiklį?"
         },
         "cookie_warning": "Šiame valdiklyje gali būti naudojami slapukai.",
         "error_hangup_description": "Jūsų skambutis buvo nutrauktas. (Klaida: %(message)s)",

@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { type Mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach, type Mocked } from "vitest";
 import {
     Direction,
     type MatrixClient,
@@ -25,22 +27,27 @@ import {
     SyncState,
 } from "matrix-js-sdk/src/matrix";
 
-import EventIndex from "../../../src/indexing/EventIndex.ts";
-import { emitPromise, getMockClientWithEventEmitter, mockClientMethodsRooms, mockPlatformPeg } from "../../test-utils";
-import type BaseEventIndexManager from "../../../src/indexing/BaseEventIndexManager.ts";
-import { type ICrawlerCheckpoint } from "../../../src/indexing/BaseEventIndexManager.ts";
-import SettingsStore from "../../../src/settings/SettingsStore.ts";
+import EventIndex from "./EventIndex.ts";
+import {
+    emitPromise,
+    getMockClientWithEventEmitter,
+    mockClientMethodsRooms,
+    mockPlatformPeg,
+} from "../../test/test-utils";
+import type BaseEventIndexManager from "./BaseEventIndexManager.ts";
+import { type ICrawlerCheckpoint } from "./BaseEventIndexManager.ts";
+import SettingsStore from "../settings/SettingsStore.ts";
 
 afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
 });
 
 describe("EventIndex", () => {
     it("crawls through the loaded checkpoints", async () => {
         const mockIndexingManager = {
-            loadCheckpoints: jest.fn(),
-            removeCrawlerCheckpoint: jest.fn(),
-            isEventIndexEmpty: jest.fn().mockResolvedValue(false),
+            loadCheckpoints: vi.fn(),
+            removeCrawlerCheckpoint: vi.fn(),
+            isEventIndexEmpty: vi.fn().mockResolvedValue(false),
         } as any as Mocked<BaseEventIndexManager>;
         mockPlatformPeg({ getEventIndexingManager: () => mockIndexingManager });
 
@@ -48,11 +55,11 @@ describe("EventIndex", () => {
         const room2 = { roomId: "!room2:id" } as any as Room;
         const mockClient = getMockClientWithEventEmitter({
             getEventMapper: () => (obj: Partial<IEvent>) => new MatrixEvent(obj),
-            createMessagesRequest: jest.fn(),
+            createMessagesRequest: vi.fn(),
             ...mockClientMethodsRooms([room1, room2]),
         });
 
-        jest.spyOn(SettingsStore, "getValueAt").mockImplementation((_level, settingName): any => {
+        vi.spyOn(SettingsStore, "getValueAt").mockImplementation((_level, settingName): any => {
             if (settingName === "crawlerSleepTime") return 0;
             return undefined;
         });
@@ -90,11 +97,11 @@ describe("EventIndex", () => {
 
     it("adds checkpoints for the encrypted rooms after the first sync", async () => {
         const mockIndexingManager = {
-            loadCheckpoints: jest.fn().mockResolvedValue([]),
-            isEventIndexEmpty: jest.fn().mockResolvedValue(true),
-            addCrawlerCheckpoint: jest.fn(),
-            removeCrawlerCheckpoint: jest.fn(),
-            commitLiveEvents: jest.fn(),
+            loadCheckpoints: vi.fn().mockResolvedValue([]),
+            isEventIndexEmpty: vi.fn().mockResolvedValue(true),
+            addCrawlerCheckpoint: vi.fn(),
+            removeCrawlerCheckpoint: vi.fn(),
+            commitLiveEvents: vi.fn(),
         } as any as Mocked<BaseEventIndexManager>;
         mockPlatformPeg({ getEventIndexingManager: () => mockIndexingManager });
 
@@ -111,11 +118,11 @@ describe("EventIndex", () => {
             }),
         } as any as Room;
         const mockCrypto = {
-            isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(true),
         };
         const mockClient = getMockClientWithEventEmitter({
             getEventMapper: () => (obj: Partial<IEvent>) => new MatrixEvent(obj),
-            createMessagesRequest: jest.fn(),
+            createMessagesRequest: vi.fn(),
             getCrypto: () => mockCrypto as any,
             ...mockClientMethodsRooms([room1, room2]),
         });

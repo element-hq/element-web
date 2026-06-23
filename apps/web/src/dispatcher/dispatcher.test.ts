@@ -6,9 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
-import { AsyncActionPayload } from "../../../src/dispatcher/payloads";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect } from "vitest";
+
+import defaultDispatcher from "./dispatcher";
+import { Action } from "./actions";
+import { AsyncActionPayload } from "./payloads";
 
 describe("MatrixDispatcher", () => {
     it("should throw error if unregistering unknown token", () => {
@@ -21,8 +25,8 @@ describe("MatrixDispatcher", () => {
         const deferred1 = Promise.withResolvers<number>();
         const deferred2 = Promise.withResolvers<number>();
 
-        const fn1 = jest.fn(() => deferred1.resolve(1));
-        const fn2 = jest.fn(() => deferred2.resolve(2));
+        const fn1 = vi.fn(() => deferred1.resolve(1));
+        const fn2 = vi.fn(() => deferred2.resolve(2));
 
         defaultDispatcher.register(fn1);
         defaultDispatcher.register(fn2);
@@ -37,8 +41,8 @@ describe("MatrixDispatcher", () => {
         const deferred1 = Promise.withResolvers<number>();
         const deferred2 = Promise.withResolvers<number>();
 
-        const fn1 = jest.fn(() => deferred1.resolve(1));
-        const fn2 = jest.fn(() => deferred2.resolve(2));
+        const fn1 = vi.fn(() => deferred1.resolve(1));
+        const fn2 = vi.fn(() => deferred2.resolve(2));
 
         defaultDispatcher.register(() => {
             defaultDispatcher.waitFor([id2]);
@@ -53,7 +57,7 @@ describe("MatrixDispatcher", () => {
     });
 
     it("should not fire callback which was added during a dispatch", () => {
-        const fn2 = jest.fn();
+        const fn2 = vi.fn();
 
         defaultDispatcher.register(() => {
             defaultDispatcher.register(fn2);
@@ -65,10 +69,10 @@ describe("MatrixDispatcher", () => {
     });
 
     it("should handle AsyncActionPayload", () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
         defaultDispatcher.register(fn);
 
-        const readyFn = jest.fn((dispatch) => {
+        const readyFn = vi.fn((dispatch) => {
             dispatch({ action: "test" });
         });
         defaultDispatcher.dispatch(new AsyncActionPayload(readyFn), true);

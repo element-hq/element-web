@@ -1013,14 +1013,6 @@
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "turn_on_key_storage": "Zapnout úložiště klíčů",
         "turn_on_key_storage_description": "Díky tomu budete moci zobrazit historii chatu na jakémkoli novém zařízení a je to nutné pro zálohování chatů a digitální identity.",
-        "udd": {
-            "interactive_verification_button": "Interaktivní ověření pomocí emoji",
-            "other_ask_verify_text": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
-            "other_new_session_text": "%(name)s (%(userId)s) se přihlásil(a) do nové relace bez ověření:",
-            "own_ask_verify_text": "Ověřte další relaci jedním z následujících způsobů.",
-            "own_new_session_text": "Přihlásili jste se do nové relace, aniž byste ji ověřili:",
-            "title": "Nedůvěryhodné"
-        },
         "unable_to_setup_keys_error": "Nepovedlo se nastavit klíče",
         "verification": {
             "accepting": "Přijímání…",
@@ -4087,13 +4079,7 @@
         "close_to_view_right_panel": "Zavřít tento widget a zobrazit ho na tomto panelu",
         "context_menu": {
             "delete": "Vymazat widget",
-            "delete_warning": "Smazáním widgetu ho odstraníte všem uživatelům v této místnosti. Opravdu chcete tento widget smazat?",
-            "move_left": "Posunout doleva",
-            "move_right": "Posunout doprava",
-            "remove": "Odstranit pro všechny",
-            "revoke": "Odvolat oprávnění",
-            "screenshot": "Vyfotit",
-            "start_audio_stream": "Zahájit audio přenos"
+            "delete_warning": "Smazáním widgetu ho odstraníte všem uživatelům v této místnosti. Opravdu chcete tento widget smazat?"
         },
         "cookie_warning": "Widget může používat cookies.",
         "error_hangup_description": "Hovor byl přerušen. (Chyba: %(message)s)",

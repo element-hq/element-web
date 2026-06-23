@@ -25,7 +25,174 @@ import { type StartedMatrixAuthenticationServiceContainer } from "./mas.js";
 import { Api, ClientServerApi, type Verb, type Credentials } from "../utils/api.js";
 import { type StartedMailpitContainer } from "./mailpit.js";
 
-const DEFAULT_CONFIG = {
+/**
+ * Incomplete type describing the configuration for a Synapse homeserver
+ */
+export interface SynapseConfig {
+    server_name: string;
+    public_baseurl: string;
+    pid_file: string;
+    web_client: boolean;
+    soft_file_limit: number;
+    log_config: string;
+    listeners: Array<{
+        port: number;
+        tls: boolean;
+        bind_addresses: string[];
+        type: string;
+        x_forwarded: boolean;
+        resources: Array<{
+            names: string[];
+            compress: boolean;
+        }>;
+    }>;
+    database: {
+        name: string;
+        args: {
+            database: string;
+        };
+    };
+    rc_messages_per_second: number;
+    rc_message_burst_count: number;
+    rc_registration: {
+        per_second: number;
+        burst_count: number;
+    };
+    rc_joins: {
+        local: {
+            per_second: number;
+            burst_count: number;
+        };
+        remote: {
+            per_second: number;
+            burst_count: number;
+        };
+    };
+    rc_joins_per_room: {
+        per_second: number;
+        burst_count: number;
+    };
+    rc_3pid_validation: {
+        per_second: number;
+        burst_count: number;
+    };
+    rc_invites: {
+        per_room: {
+            per_second: number;
+            burst_count: number;
+        };
+        per_user: {
+            per_second: number;
+            burst_count: number;
+        };
+    };
+    rc_login: {
+        address: {
+            per_second: number;
+            burst_count: number;
+        };
+        account: {
+            per_second: number;
+            burst_count: number;
+        };
+        failed_attempts: {
+            per_second: number;
+            burst_count: number;
+        };
+    };
+    rc_room_creation: {
+        per_second: number;
+        burst_count: number;
+    };
+    media_store_path: string;
+    max_upload_size: string;
+    max_image_pixels: string;
+    dynamic_thumbnails: boolean;
+    enable_registration: boolean;
+    enable_registration_without_verification: boolean;
+    disable_msisdn_registration: boolean;
+    registrations_require_3pid: string[];
+    enable_metrics: boolean;
+    report_stats: boolean;
+    registration_shared_secret: string;
+    macaroon_secret_key: string;
+    form_secret: string;
+    signing_key_path: string;
+    trusted_key_servers: never[];
+    password_config: {
+        enabled: boolean;
+    };
+    ui_auth?: {
+        session_timeout: `${number}s`;
+    };
+    background_updates: {
+        min_batch_size: number;
+        sleep_duration_ms: number;
+    };
+    enable_authenticated_media: boolean;
+    email?: {
+        enable_notifs: boolean;
+        smtp_host: string;
+        smtp_port: number;
+        smtp_user: string;
+        smtp_pass: string;
+        require_transport_security: false;
+        notif_from: string;
+        app_name: string;
+        notif_template_html: string;
+        notif_template_text: string;
+        notif_for_new_users: boolean;
+        client_base_url: string;
+    };
+    user_consent?: {
+        template_dir: string;
+        version: string;
+        server_notice_content: Record<string, unknown>;
+        send_server_notice_to_guests: boolean;
+        block_events_error: string;
+        require_at_registration: boolean;
+    };
+    server_notices?: {
+        system_mxid_localpart: string;
+        system_mxid_display_name: string;
+        system_mxid_avatar_url: string;
+        room_name: string;
+    };
+    allow_guest_access: boolean;
+    experimental_features: Record<string, boolean>;
+    matrix_rtc?: {
+        transports: Array<{ type: string; [field: string]: string }>;
+    };
+    oidc_providers: unknown[];
+    serve_server_wellknown: boolean;
+    presence: {
+        enabled: boolean;
+        include_offline_users_on_sync: boolean;
+    };
+    room_list_publication_rules: Array<{ action: string }>;
+    modules: Array<{ module: string; config?: Record<string, unknown> }>;
+    matrix_authentication_service?: {
+        enabled?: boolean;
+        endpoint?: string;
+        secret?: string | null;
+        secret_path?: string | null;
+    };
+    /**
+     * Server-wide retention rules.
+     * @see https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html?highlight=retent#retention
+     */
+    retention?: {
+        enabled: boolean;
+        default_policy?: {
+            min_lifetime?: string;
+            max_lifetime?: string;
+        };
+        allowed_lifetime_min?: string;
+        allowed_lifetime_max?: string;
+    };
+}
+
+const DEFAULT_CONFIG: SynapseConfig = {
     server_name: "localhost",
     public_baseurl: "", // set by start method
     pid_file: "/homeserver.pid",
@@ -128,54 +295,15 @@ const DEFAULT_CONFIG = {
     password_config: {
         enabled: true,
     },
-    ui_auth: {},
     background_updates: {
         // Inhibit background updates as this Synapse isn't long-lived
         min_batch_size: 100000,
         sleep_duration_ms: 100000,
     },
     enable_authenticated_media: true,
-    email: undefined as
-        | undefined
-        | {
-              enable_notifs: boolean;
-              smtp_host: string;
-              smtp_port: number;
-              smtp_user: string;
-              smtp_pass: string;
-              require_transport_security: false;
-              notif_from: string;
-              app_name: string;
-              notif_template_html: string;
-              notif_template_text: string;
-              notif_for_new_users: boolean;
-              client_base_url: string;
-          },
-    user_consent: undefined as
-        | undefined
-        | {
-              template_dir: string;
-              version: string;
-              server_notice_content: Record<string, unknown>;
-              send_server_notice_to_guests: boolean;
-              block_events_error: string;
-              require_at_registration: boolean;
-          },
-    server_notices: undefined as
-        | undefined
-        | {
-              system_mxid_localpart: string;
-              system_mxid_display_name: string;
-              system_mxid_avatar_url: string;
-              room_name: string;
-          },
     allow_guest_access: false,
-    experimental_features: {} as Record<string, boolean>,
-    matrix_rtc: undefined as
-        | undefined
-        | {
-              transports: Array<{ type: string; [field: string]: string }>;
-          },
+    experimental_features: {},
+    matrix_rtc: undefined,
     oidc_providers: [],
     serve_server_wellknown: true,
     presence: {
@@ -183,21 +311,8 @@ const DEFAULT_CONFIG = {
         include_offline_users_on_sync: true,
     },
     room_list_publication_rules: [{ action: "allow" }],
-    modules: [] as Array<{ module: string; config?: Record<string, unknown> }>,
-    matrix_authentication_service: undefined as
-        | undefined
-        | {
-              enabled?: boolean;
-              endpoint?: string;
-              secret?: string | null;
-              secret_path?: string | null;
-          },
+    modules: [],
 };
-
-/**
- * Incomplete type describing the configuration for a Synapse homeserver
- */
-export type SynapseConfig = typeof DEFAULT_CONFIG;
 
 /**
  * A Synapse testcontainer
