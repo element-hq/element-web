@@ -996,6 +996,30 @@ export default class EventIndex extends EventEmitter {
     }
 
     /**
+     * Flush any events that background indexing has buffered but not yet committed
+     * to Tantivy, so a subsequent search sees up-to-date results.
+     *
+     * Seshat batches commits coarsely (COMMIT_TIME) to save power while nobody is
+     * searching, so without an on-demand flush a freshly-received message could be
+     * up to a commit-interval stale in results. The underlying force_commit is a
+     * no-op when nothing is pending, so this is cheap to call speculatively.
+     *
+     * Call this when the user *focuses* the search box (not just on submit) so the
+     * commit overlaps with them typing their query, hiding its latency.
+     */
+    public async prepareForSearch(): Promise<void> {
+        const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
+        try {
+            await indexManager.commitLiveEvents();
+        } catch (e) {
+            // A failed flush just means results may be slightly stale; search can
+            // still proceed against the last committed segments.
+            this.logger.warn("Failed to flush pending events for search", e);
+        }
+    }
+
+    /**
      * Search the event index using the given term for matching events.
      *
      * @param {ISearchArgs} searchArgs The search configuration for the search,
@@ -1006,7 +1030,14 @@ export default class EventIndex extends EventEmitter {
      */
     public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents | undefined> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
-        return indexManager?.searchEventIndex(searchArgs);
+        if (!indexManager) return undefined;
+
+        // Safety net: usually the flush already happened on search-box focus
+        // (prepareForSearch), so this is a no-op; it only does work if events
+        // arrived between focus and submit. Cheap either way.
+        await this.prepareForSearch();
+
+        return indexManager.searchEventIndex(searchArgs);
     }
 
     /**
