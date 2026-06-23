@@ -81,7 +81,7 @@ interface Props {
  * Consumers interact with this adapter exactly as they would with the
  * old `RoomAvatar` component – the MVVM split is an implementation detail.
  */
-export function RoomAvatarAdapter({
+function RoomAvatarAdapter({
     room,
     viewAvatarOnClick,
     onClick,
