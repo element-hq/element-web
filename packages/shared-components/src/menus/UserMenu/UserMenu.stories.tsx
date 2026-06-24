@@ -13,6 +13,7 @@ import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } fro
 import avatarUrl from "../../../static/element.png";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
+import { type SetStatusViewActions, type SetStatusViewSnapshot } from "../..";
 
 const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
     const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(snapshot, {
@@ -26,7 +27,16 @@ const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
         openSettings: fn(),
         clearStatus: fn(),
     });
-    return <UserMenuView vm={vm} />;
+
+    const setStatusVm = useMockedViewModel<SetStatusViewSnapshot, SetStatusViewActions>(
+        {},
+        {
+            setStatus: fn(),
+            clearStatus: fn(),
+        },
+    );
+
+    return <UserMenuView vm={vm} setStatusVm={setStatusVm} />;
 };
 
 const UserMenuWrapper = withViewDocs(UserMenuWrapperImpl, UserMenuView);
