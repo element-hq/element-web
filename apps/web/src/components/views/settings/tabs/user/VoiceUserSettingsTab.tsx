@@ -261,11 +261,6 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         {requestButton}
                         {microphoneDropdown}
                     </SettingsSection>
-                    {elementCallEnabled && (
-                        <SettingsSection heading={_t("common|element_call_settings")}>
-                            {_t("settings|voip|element_call_settings_desc")}
-                        </SettingsSection>
-                    )}
                     {allowLegacyCalls && (
                         <SettingsSection heading={_t("common|legacy_voice_and_video_settings")}>
                             {elementCallEnabled && (
