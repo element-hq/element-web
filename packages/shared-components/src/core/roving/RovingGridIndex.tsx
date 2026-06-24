@@ -230,9 +230,33 @@ export const RovingGridIndexProvider: React.FC<RovingGridIndexProviderProps> = (
             if (event.defaultPrevented) return;
 
             const action = getAction?.(event) ?? getDefaultGridAction(event);
-            if (!isGridNavigationAction(action) || !state.activeNode) return;
+            if (action !== RovingAction.Tab && !isGridNavigationAction(action)) return;
+            if (!state.activeNode) return;
 
-            if (!handleInputFields && event.target instanceof HTMLElement && checkInputableElement(event.target)) {
+            const isInputTarget = event.target instanceof HTMLElement && checkInputableElement(event.target);
+            if (!handleInputFields && isInputTarget) {
+                return;
+            }
+
+            if (isInputTarget && action === RovingAction.Tab) {
+                if (event.shiftKey) {
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                state.activeNode.focus();
+                dispatch({
+                    type: RovingStateActionType.SetFocus,
+                    payload: { node: state.activeNode },
+                });
+
+                if (scrollIntoView) {
+                    state.activeNode.scrollIntoView(scrollIntoView);
+                }
+
+                onGridNavigation?.(event, state.activeNode, state, dispatch);
                 return;
             }
 

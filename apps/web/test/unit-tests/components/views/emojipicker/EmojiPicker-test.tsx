@@ -270,6 +270,39 @@ describe("EmojiPicker", function () {
         expect(input).not.toHaveFocus();
     });
 
+    it("should move actual focus to the active emoji when tabbing from search after hovering", async () => {
+        // mock offsetParent
+        Object.defineProperty(HTMLElement.prototype, "offsetParent", {
+            get() {
+                return this.parentNode;
+            },
+        });
+
+        const { container } = render(<EmojiPicker onChoose={jest.fn()} onFinished={jest.fn()} />);
+
+        const input = container.querySelector("input")!;
+        expect(input).toHaveFocus();
+
+        await waitFor(() => {
+            expect(container.querySelectorAll('.mx_EmojiPicker_item_wrapper [role="button"]').length).toBeGreaterThan(
+                1,
+            );
+        });
+
+        const emojiButtons = container.querySelectorAll('.mx_EmojiPicker_item_wrapper [role="button"]');
+        await userEvent.hover(emojiButtons[1]);
+        await waitFor(() => {
+            expect(getActiveEmojiText(container)).toEqual(emojiButtons[1].textContent || "");
+        });
+
+        await userEvent.click(input);
+        await userEvent.keyboard("[Tab]");
+
+        expect(input).not.toHaveFocus();
+        expect(document.activeElement?.getAttribute("role")).not.toBe("tab");
+        expect(document.activeElement?.textContent).toEqual(emojiButtons[1].textContent);
+    });
+
     it("should not select emoji on Enter press before highlight is shown", async () => {
         // mock offsetParent
         Object.defineProperty(HTMLElement.prototype, "offsetParent", {

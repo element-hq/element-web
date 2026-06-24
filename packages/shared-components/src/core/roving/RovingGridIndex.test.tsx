@@ -208,6 +208,24 @@ describe("RovingGridIndexProvider", () => {
         expectTabIndexes(["A1", "A2"], "A2");
     });
 
+    it("moves from an input field with Tab when handleInputFields=true", async () => {
+        const user = userEvent.setup();
+        render(
+            <DefaultGrid
+                rows={[["A1", "A2"]]}
+                props={{ handleInputFields: true }}
+                beforeGrid={<input aria-label="Search" />}
+            />,
+        );
+
+        await user.click(getButton("A2"));
+        await user.click(screen.getByRole("textbox", { name: "Search" }));
+        await user.keyboard("{Tab}");
+
+        expect(getButton("A2")).toHaveFocus();
+        expectTabIndexes(["A1", "A2"], "A2");
+    });
+
     it("allows moveFocus to be decided per navigation target", async () => {
         const user = userEvent.setup();
         const moveFocus = vi.fn((target: HTMLElement) => target.textContent !== "A2");
