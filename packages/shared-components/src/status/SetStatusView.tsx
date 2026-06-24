@@ -11,7 +11,7 @@ import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons
 
 import { _t, _td, type UserStatus } from "..";
 import { useViewModel, type ViewModel } from "../core/viewmodel";
-import { StatusButtonView } from "./StatusButtonView";
+import { StatusPillView } from "./StatusPillView";
 import styles from "./SetStatusView.module.css";
 
 const PRESET_STATUSES = [
@@ -58,7 +58,7 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
     const { userStatus } = useViewModel(vm);
 
     if (userStatus) {
-        return <StatusButtonView status={userStatus} clearStatus={vm.clearStatus} />;
+        return <StatusPillView status={userStatus} clearStatus={vm.clearStatus} />;
     }
 
     const renderTrigger = (props: DropdownTriggerProps): JSX.Element => {

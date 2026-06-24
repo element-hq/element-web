@@ -10,17 +10,17 @@ import { IconButton, Text } from "@vector-im/compound-web";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, type UserStatus } from "..";
-import styles from "./StatusButtonView.module.css";
+import styles from "./StatusPillView.module.css";
 
-export const StatusButtonView = React.forwardRef<
-    HTMLButtonElement,
+export const StatusPillView = React.forwardRef<
+    HTMLDivElement,
     {
         status: UserStatus;
         clearStatus: () => void;
-    } & React.HTMLAttributes<HTMLButtonElement>
->(function StatusButtonView({ status, clearStatus, ...props }, ref): JSX.Element {
+    } & React.HTMLAttributes<HTMLDivElement>
+>(function StatusPillView({ status, clearStatus, ...props }, ref): JSX.Element {
     return (
-        <button ref={ref} {...props} className={styles.statusButton}>
+        <div ref={ref} {...props} className={styles.statusPill}>
             <Text as="span" className={styles.menuStatusEmoji}>
                 {status.emoji}
             </Text>
@@ -35,6 +35,6 @@ export const StatusButtonView = React.forwardRef<
             >
                 <CloseIcon />
             </IconButton>
-        </button>
+        </div>
     );
 });

@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.statusButton {
+.statusPill {
     border-radius: 30px;
-    border: 0px;
     background: var(--cpd-color-bg-subtle-secondary);
     display: inline-flex;
     /* Disables filling to available width if we're in a flex container */
