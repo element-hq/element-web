@@ -67,6 +67,11 @@
         "mentions_keywords": "Mentions et mots-clés",
         "mute_room": "Rendre le salon muet"
     },
+    "release_announcement": {
+        "room_list_section_close": "OK",
+        "room_list_section_description": " Regroupez vos discussions en sections afin que les conversations restent organisées et faciles à parcourir.",
+        "room_list_section_title": "Introduction des sections"
+    },
     "room": {
         "context_menu": {
             "title": "Options du salon"

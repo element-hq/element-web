@@ -67,6 +67,11 @@
         "mentions_keywords": "Mainimised ja märksõnad",
         "mute_room": "Summuta jututuba"
     },
+    "release_announcement": {
+        "room_list_section_close": "Sobib",
+        "room_list_section_description": "Võid omi vestlusi grupeerida jaotiste kaupa ning saad hoida vestlused korrastatuna ja hõlpsasti leitavatena.",
+        "room_list_section_title": "Võtame kasutusele jaotised"
+    },
     "room": {
         "context_menu": {
             "title": "Jututoa eelistused"

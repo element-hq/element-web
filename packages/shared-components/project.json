@@ -17,7 +17,7 @@
             "continuous": true
         },
         "typedoc": {
-            "cache": "true",
+            "cache": true,
             "command": "typedoc",
             "inputs": ["src", "{projectRoot}/typedoc.json"],
             "outputs": ["{projectRoot}/typedoc"],
@@ -25,7 +25,7 @@
             "dependsOn": ["^build"]
         },
         "storybook": {
-            "cache": "true",
+            "cache": true,
             "inputs": ["src", "{projectRoot}/.storybook", "{projectRoot}/typedoc"],
             "outputs": ["{projectRoot}/storybook-static"],
             "executor": "nx:run-commands",

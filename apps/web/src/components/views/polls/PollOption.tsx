@@ -44,7 +44,7 @@ interface PollOptionProps extends PollOptionContentProps {
     children?: ReactNode;
 }
 
-const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { children: ReactNode }> = ({
+const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
     pollId,
     isChecked,
     isEnded,
