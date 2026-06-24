@@ -21,6 +21,7 @@ import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { clearUserStatus } from "../../utils/userStatus";
 import { type SetStatusViewModel, UserMenuSetStatusViewModel } from "../status/SetStatusViewModel";
+import SettingsStore from "../../settings/SettingsStore";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
@@ -47,6 +48,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             manageAccountHref: accountManagementEndpoint,
             showAvatar: isAuthenticated,
             userStatus: OwnProfileStore.instance.userStatus,
+            showUserStatus: SettingsStore.getValue("feature_user_status"),
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,

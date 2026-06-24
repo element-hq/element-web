@@ -57,6 +57,12 @@ export interface UserMenuViewSnapshot {
      */
     userStatus?: UserStatus;
     /**
+     * Whether to show UI for user status.
+     * Temporary while user status is in labs.
+     * Default: true
+     */
+    showUserStatus?: boolean;
+    /**
      * A set of actions that the user can perform from the menu.
      */
     actions: Partial<{
@@ -119,8 +125,18 @@ export type UserMenuViewProps = {
 };
 
 export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar, userStatus } =
-        useViewModel(vm);
+    const {
+        userId,
+        displayName,
+        avatarUrl,
+        expanded,
+        open,
+        manageAccountHref,
+        actions,
+        showAvatar,
+        userStatus,
+        showUserStatus = true,
+    } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
@@ -154,7 +170,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                     <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
-                    <SetStatusView vm={setStatusVm} />
+                    {showUserStatus && <SetStatusView vm={setStatusVm} />}
                     <Text data-testid="userId" size="md" as="span" type="body">
                         {userId}
                     </Text>
