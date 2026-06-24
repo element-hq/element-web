@@ -15,6 +15,7 @@ import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedR
 import { type Room, type RoomListItemViewModel } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
 import { type ToastType, RoomListToast } from "./RoomListToast";
+import { UnreadActivityToast } from "./UnreadActivityToast";
 import styles from "./RoomListView.module.css";
 import { Flex } from "../../core/utils/Flex";
 import { AutoHideScrollbar } from "../../core/utils/Scrollbar";
@@ -52,6 +53,11 @@ export type RoomListViewSnapshot = {
     isFlatList: boolean;
     /** Optional toast to display */
     toast?: ToastType;
+    /**
+     * Whether to show the "unread activity" toast, i.e. whether there are unread
+     * rooms scrolled below the visible area of the list.
+     */
+    hasUnreadActivityBelow?: boolean;
 };
 
 /**
@@ -71,10 +77,24 @@ export interface RoomListViewActions {
     getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
+    /**
+     * Called when the last genuinely-visible item index changes (excluding the rendered
+     * overscan buffer), used to decide whether unread activity is below the fold.
+     */
+    updateVisibleFold: (visibleEndIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */
     getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
     /** Called to close the toast message */
     closeToast: () => void;
+    /** Called to scroll the next unread room below the visible area of the list into view */
+    scrollToUnreadActivity: () => void;
+    /**
+     * Registers (or, with `undefined`, clears) the imperative scroll handler the view model
+     * uses to scroll a virtualized item index into view. The view owns the scroll handle, so
+     * it provides this on mount; the view model calls it in response to user actions such as
+     * clicking the "unread activity" toast.
+     */
+    setScrollToIndex: (scrollToIndex: ((index: number) => void) | undefined) => void;
     /** Called to change the section of a room */
     changeRoomSection: (roomId: string, tag: string) => void;
     /** Called to change the order of sections */
@@ -129,7 +149,11 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
             <Flex direction="column" className={styles.list}>
                 <AutoHideScrollbar className={styles.scrollbar}>
                     {listBody}
-                    {snapshot.toast && <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />}
+                    {snapshot.toast ? (
+                        <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />
+                    ) : (
+                        snapshot.hasUnreadActivityBelow && <UnreadActivityToast onClick={vm.scrollToUnreadActivity} />
+                    )}
                 </AutoHideScrollbar>
             </Flex>
         </>

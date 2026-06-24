@@ -195,7 +195,8 @@
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
-        }
+        },
+        "unread_activity": "You have unread activity"
     },
     "terms": {
         "tac_button": "Review terms and conditions"
