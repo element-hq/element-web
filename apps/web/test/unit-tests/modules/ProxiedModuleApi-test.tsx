@@ -17,7 +17,7 @@ import { type Mocked } from "jest-mock-vitest-adapter";
 
 import { ProxiedModuleApi } from "../../../src/modules/ProxiedModuleApi";
 import { getMockClientWithEventEmitter, mkRoom, stubClient } from "../../test-utils";
-import { setLanguage } from "../../../src/languageHandler";
+import { setLanguage } from "../../../src/i18n/settings";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import { registerMockModule } from "./MockModule";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";

@@ -232,7 +232,13 @@ module.exports = {
             },
         },
         {
-            files: ["src/**/*.test.{ts,tsx}", "test/**/*.{ts,tsx}", "playwright/**/*.ts"],
+            files: [
+                "src/**/*.test.{ts,tsx}",
+                "src/**/__mocks__/*.{ts,tsx}",
+                "src/test/*.ts",
+                "test/**/*.{ts,tsx}",
+                "playwright/**/*.ts",
+            ],
             extends: ["plugin:matrix-org/jest"],
             rules: {
                 // We don't need super strict typing in test utilities
@@ -258,6 +264,7 @@ module.exports = {
                 // These are fine in tests
                 "no-restricted-globals": "off",
                 "react-compiler/react-compiler": "off",
+                "jest/no-mocks-import": "off",
             },
         },
         {
