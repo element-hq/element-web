@@ -63,7 +63,11 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
 
     const renderTrigger = (props: DropdownTriggerProps): JSX.Element => {
         const trigger = (
-            <button className={styles.setStatusTrigger} {...props}>
+            <button
+                className={styles.setStatusTrigger}
+                aria-label={_t("status|set_status|set_status_prompt")}
+                {...props}
+            >
                 <ReactionIcon />
                 <Text as="span" type="body" size="md" weight="medium">
                     {_t("status|set_status|set_status_prompt")}
