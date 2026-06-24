@@ -221,9 +221,14 @@ export function useRoomListAccessibilityPlugin(
                 return _t("room_list|a11y|drag_start", { source: sourceName });
             },
             dragover: ({ operation: { source, target } }: A11yData) => {
-                if (!source || !target) return;
+                if (!source) return;
                 const sourceName = getDragSourceName(source);
                 if (sourceName === undefined) return;
+                // A section dragged over a non-droppable area (favourites/low-priority or its own original slot) has no target and snaps back to where it started.
+                if (isSectionDragData(source.data) && !target) {
+                    return _t("room_list|a11y|drag_over_original", { source: sourceName });
+                }
+                if (!target) return;
                 const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
                 if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
                     const droppedBefore = source.data.index > target.data.index;
@@ -235,10 +240,16 @@ export function useRoomListAccessibilityPlugin(
                 return _t("room_list|a11y|drag_over", { source: sourceName, target: targetTitle });
             },
             dragend: ({ operation: { source, target }, canceled }: A11yData) => {
-                if (!source || !target) return;
+                if (!source) return;
                 if (canceled) return _t("room_list|a11y|drag_cancelled");
                 const sourceName = getDragSourceName(source);
                 if (sourceName === undefined) return;
+                // A section dragged over a non-droppable area (favourites/low-priority or its own original slot) has no target and snaps back to where it started.
+                if (isSectionDragData(source.data) && !target) {
+                    return _t("room_list|a11y|drag_end_original", { source: sourceName });
+                }
+
+                if (!target) return;
                 const targetTitle = vm.getSectionHeaderViewModel(target.id as string).getSnapshot().title;
                 if (isSectionDragData(source.data) && isSectionDragData(target.data)) {
                     const droppedBefore = source.data.index > target.data.index;

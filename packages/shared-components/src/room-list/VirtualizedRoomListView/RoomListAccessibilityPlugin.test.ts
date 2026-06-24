@@ -5,9 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { renderHook } from "@test-utils";
 
-import { RoomListAccessibilityPlugin, type RoomListAccessibilityOptions } from "./RoomListAccessibilityPlugin";
+import {
+    type A11yData,
+    type DragAnnouncementGetter,
+    RoomListAccessibilityPlugin,
+    type RoomListAccessibilityOptions,
+    useRoomListAccessibilityPlugin,
+} from "./RoomListAccessibilityPlugin";
+import { I18nContext } from "../../core/i18n/i18nContext";
+import { I18nApi } from "../../core/i18n/I18nApi";
+import type { RoomListViewModel } from "../RoomListView";
 
 // ---------------------------------------------------------------------------
 // Minimal mock manager compatible with the @dnd-kit/abstract Plugin base class
@@ -338,6 +349,89 @@ describe("RoomListAccessibilityPlugin", () => {
             plugin.destroy();
 
             expect(unsubscribeSpy).toHaveBeenCalled();
+        });
+    });
+
+    describe("useRoomListAccessibilityPlugin announcements", () => {
+        const SECTION_TITLES: Record<string, string> = {
+            work: "Work",
+            fun: "Fun",
+        };
+        const ROOM_NAMES: Record<string, string> = {
+            "!room:server": "My Room",
+        };
+
+        function createMockVm(): RoomListViewModel {
+            return {
+                getSectionHeaderViewModel: (id: string) => ({
+                    getSnapshot: () => ({ title: SECTION_TITLES[id] ?? id }),
+                }),
+                getRoomItemViewModel: (id: string) => ({
+                    getSnapshot: () => ({ name: ROOM_NAMES[id] }),
+                }),
+            } as unknown as RoomListViewModel;
+        }
+
+        /** Render the hook and return the announcement getters it configures on the plugin. */
+        function getAnnouncements(
+            vm: RoomListViewModel,
+        ): Partial<Record<"dragstart" | "dragover" | "dragend", DragAnnouncementGetter>> {
+            const wrapper = ({ children }: { children: React.ReactNode }): React.ReactNode =>
+                React.createElement(I18nContext.Provider, { value: new I18nApi() }, children);
+            const { result } = renderHook(() => useRoomListAccessibilityPlugin(vm), { wrapper });
+
+            const descriptor = result.current([]).find(
+                (
+                    plugin,
+                ): plugin is {
+                    plugin: typeof RoomListAccessibilityPlugin;
+                    options: RoomListAccessibilityOptions;
+                } => typeof plugin === "object" && plugin.plugin === RoomListAccessibilityPlugin,
+            );
+            return descriptor!.options.announcements!;
+        }
+
+        const sectionSource = (id: string, index: number): A11yData["operation"]["source"] =>
+            ({ id, data: { type: "section", index } }) as A11yData["operation"]["source"];
+        const sectionTarget = (id: string, index: number): A11yData["operation"]["target"] =>
+            ({ id, data: { type: "section", index } }) as A11yData["operation"]["target"];
+
+        it("announces a section will return to its original position when dragged over a non-droppable area", () => {
+            const { dragover } = getAnnouncements(createMockVm());
+            const message = dragover!({
+                operation: { source: sectionSource("work", 1), target: null },
+                canceled: false,
+            });
+            expect(message).toBe("Work will return to its original position");
+        });
+
+        it("announces a section returned to its original position when dropped on a non-droppable area", () => {
+            const { dragend } = getAnnouncements(createMockVm());
+            const message = dragend!({
+                operation: { source: sectionSource("work", 1), target: null },
+                canceled: false,
+            });
+            expect(message).toBe("Work returned to its original position");
+        });
+
+        it("still announces the before/after target when a section is dragged over another section", () => {
+            const { dragover, dragend } = getAnnouncements(createMockVm());
+            // Source index 2 dropped onto target index 1 → dropped before the target.
+            const event: A11yData = {
+                operation: { source: sectionSource("fun", 2), target: sectionTarget("work", 1) },
+                canceled: false,
+            };
+            expect(dragover!(event)).toBe("Fun will be dropped before Work");
+            expect(dragend!(event)).toBe("Fun was dropped before Work");
+        });
+
+        it("announces cancellation even when there is no target", () => {
+            const { dragend } = getAnnouncements(createMockVm());
+            const message = dragend!({
+                operation: { source: sectionSource("work", 1), target: null },
+                canceled: true,
+            });
+            expect(message).toBe("Dragging cancelled");
         });
     });
 });

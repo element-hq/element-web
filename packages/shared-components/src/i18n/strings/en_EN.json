@@ -107,10 +107,12 @@
             "drag_end": "%(source)s was dropped on %(target)s",
             "drag_end_after": "%(source)s was dropped after %(target)s",
             "drag_end_before": "%(source)s was dropped before %(target)s",
+            "drag_end_original": "%(source)s returned to its original position",
             "drag_instructions": "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
             "drag_over": "%(source)s is over %(target)s",
             "drag_over_after": "%(source)s will be dropped after %(target)s",
             "drag_over_before": "%(source)s will be dropped before %(target)s",
+            "drag_over_original": "%(source)s will return to its original position",
             "drag_start": "Dragging %(source)s",
             "invitation": "Open room %(roomName)s invitation.",
             "mention": {
