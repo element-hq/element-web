@@ -301,6 +301,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
             aria-controls="react-use-id-3"
             aria-expanded="false"
             aria-haspopup="listbox"
+            aria-label="What's your status?"
             class="SetStatusView-module_setStatusTrigger"
             role="combobox"
           >
@@ -715,6 +716,7 @@ exports[`UserMenu > renders an open menu 1`] = `
             aria-controls="react-use-id-3"
             aria-expanded="false"
             aria-haspopup="listbox"
+            aria-label="What's your status?"
             class="SetStatusView-module_setStatusTrigger"
             role="combobox"
           >
