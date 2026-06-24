@@ -20,7 +20,7 @@ import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { clearUserStatus } from "../../utils/userStatus";
-import { SetStatusViewModel, UserMenuSetStatusViewModel } from "../status/SetStatusViewModel";
+import { type SetStatusViewModel, UserMenuSetStatusViewModel } from "../status/SetStatusViewModel";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
