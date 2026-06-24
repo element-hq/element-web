@@ -61,6 +61,11 @@
         "mentions_keywords": "提及与关键词",
         "mute_room": "静默房间"
     },
+    "release_announcement": {
+        "room_list_section_close": "确定",
+        "room_list_section_description": "分组聊天以便保持对话井然有序并方便浏览。",
+        "room_list_section_title": "“区域”功能已推出"
+    },
     "room": {
         "context_menu": {
             "title": "房间选项"
