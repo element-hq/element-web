@@ -821,14 +821,6 @@
             "warning": "Raha tsy nesorinao ny fomba fanarenana, dia mety hanandrana hiditra aminy kaontinao ny mpanafika. Hanova ny tenimiafiny kaontinao ary mametraha fomba fanarenana vaovao avy hatrany ao amin'ny fanitsiana."
         },
         "set_up_toast_title": "Hanitsy angona voaharo",
-        "udd": {
-            "interactive_verification_button": "Hamarino amin'ny alalany emoji",
-            "other_ask_verify_text": "Angataho ity mpampiasa ity mba hanamarina ny fotoam-pivorian'izy ireo, na hanamarina izany amin'ny tanana eto ambany.",
-            "other_new_session_text": "%(name)s(%(userId)s ) niditra tamina fivoriana vaovao nefa tsy nanamarina izany:",
-            "own_ask_verify_text": "Hamarino ny fotoam-pivorianao hafa aminy fampiasana ny iray amin'ireo safidy etsy ambany.",
-            "own_new_session_text": "Niditra tamina fivoriana vaovao ianao nefa tsy nanamarina izany:",
-            "title": "Tsy atokisana"
-        },
         "unable_to_setup_keys_error": "Tsy afaka nanangana fanalahidy",
         "verification": {
             "accepting": "Manaiky…",
@@ -3439,13 +3431,7 @@
         "close_to_view_right_panel": "Akatono ity widget ity raha hijery azy amin'ity tontonana ity",
         "context_menu": {
             "delete": "Fafao ny widget",
-            "delete_warning": "Ny famafana widget dia manala azy hoany mpampiasa rehetra ao amin'ity efitrano ity. Tena te-hamafa ity widget ity ve ianao?",
-            "move_left": "Mifindra eo ankavia",
-            "move_right": "Mandrosoa miankavanana",
-            "remove": "Esory avokoa hoany rehetra",
-            "revoke": "Manafoana ny fahazoan-dàlana",
-            "screenshot": "Maka sary",
-            "start_audio_stream": "Atombohy ny onjam-peo"
+            "delete_warning": "Ny famafana widget dia manala azy hoany mpampiasa rehetra ao amin'ity efitrano ity. Tena te-hamafa ity widget ity ve ianao?"
         },
         "cookie_warning": "Ity widget ity dia mety mampiasa cookies.",
         "error_hangup_description": "Tapaka tamin'ny antso ianao. (Hadisoana:%(message)s )",

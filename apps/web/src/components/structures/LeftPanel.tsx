@@ -35,14 +35,12 @@ import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
-import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 import SettingsStore from "../../settings/SettingsStore";
 import { RoomListPanel } from "../views/rooms/RoomListPanel";
 
 interface IProps {
     isMinimized: boolean;
-    pageType: PageType;
     resizeNotifier: ResizeNotifier;
 }
 

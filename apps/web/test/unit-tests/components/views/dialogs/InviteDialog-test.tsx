@@ -12,7 +12,7 @@ import userEvent from "@testing-library/user-event";
 import { type MatrixClient, MatrixError, Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { mocked, type Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock-vitest-adapter";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";

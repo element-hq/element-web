@@ -12,7 +12,6 @@ import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import Field from "../elements/Field";
@@ -28,7 +27,6 @@ interface IProps {
     phoneCountry: string;
     phoneNumber: string;
 
-    serverConfig: ValidatedServerConfig;
     loginIncorrect: boolean;
     disableSubmit?: boolean;
     busy?: boolean;

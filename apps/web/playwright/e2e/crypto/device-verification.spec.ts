@@ -121,7 +121,6 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await infoDialog.getByRole("button", { name: "Got it" }).click();
 
         // There should be no toast (other than the notifications one)
-        await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
         await assertNoToasts(page);
 

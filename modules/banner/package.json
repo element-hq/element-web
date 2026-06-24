@@ -12,7 +12,7 @@
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
         "@element-hq/element-web-module-api": "workspace:*",
-        "@types/node": "^22.10.7",
+        "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "@vitejs/plugin-react": "catalog:",

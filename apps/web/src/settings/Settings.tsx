@@ -427,13 +427,11 @@ export const SETTINGS: Settings = {
         betaInfo: {
             title: _td("labs|notification_settings_beta_title"),
             caption: () => (
-                <>
-                    <p>
-                        {_t("labs|notification_settings_beta_caption", {
-                            brand: SdkConfig.get().brand,
-                        })}
-                    </p>
-                </>
+                <p>
+                    {_t("labs|notification_settings_beta_caption", {
+                        brand: SdkConfig.get().brand,
+                    })}
+                </p>
             ),
         },
     },

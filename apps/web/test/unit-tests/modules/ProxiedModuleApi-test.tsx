@@ -13,7 +13,7 @@ import { DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-ap
 import { screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock-vitest-adapter";
 
 import { ProxiedModuleApi } from "../../../src/modules/ProxiedModuleApi";
 import { getMockClientWithEventEmitter, mkRoom, stubClient } from "../../test-utils";

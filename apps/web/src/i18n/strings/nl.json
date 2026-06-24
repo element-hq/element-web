@@ -720,14 +720,6 @@
             "warning": "Als je de herstelmethode niet hebt verwijderd, is het mogelijk dat er een aanvaller toegang tot jouw account probeert te verkrijgen. Wijzig onmiddellijk je wachtwoord en stel bij instellingen een nieuwe herstelmethode in."
         },
         "set_up_toast_title": "Beveiligde back-up instellen",
-        "udd": {
-            "interactive_verification_button": "Interactief verifiëren door emoji",
-            "other_ask_verify_text": "Vraag deze persoon de sessie te verifiëren, of verifieer het handmatig hieronder.",
-            "other_new_session_text": "%(name)s%(userId)s heeft zich aangemeld bij een nieuwe sessie zonder deze te verifiëren:",
-            "own_ask_verify_text": "Verifieer je andere sessie op een van onderstaande wijzen.",
-            "own_new_session_text": "Je hebt je bij een nog niet geverifieerde sessie aangemeld:",
-            "title": "Niet vertrouwd"
-        },
         "unable_to_setup_keys_error": "Kan geen sleutels instellen",
         "verification": {
             "accepting": "Toestaan…",
@@ -3011,13 +3003,7 @@
         "close_to_view_right_panel": "Sluit deze widget om het in dit paneel weer te geven",
         "context_menu": {
             "delete": "Widget verwijderen",
-            "delete_warning": "Widgets verwijderen geldt voor alle deelnemers aan deze kamer. Weet je zeker dat je deze widget wilt verwijderen?",
-            "move_left": "Ga naar links",
-            "move_right": "Ga naar rechts",
-            "remove": "Verwijderen voor iedereen",
-            "revoke": "Machtigingen intrekken",
-            "screenshot": "Neem een foto",
-            "start_audio_stream": "Audiostream starten"
+            "delete_warning": "Widgets verwijderen geldt voor alle deelnemers aan deze kamer. Weet je zeker dat je deze widget wilt verwijderen?"
         },
         "cookie_warning": "Deze widget kan cookies gebruiken.",
         "error_hangup_description": "De verbinding is verbroken van uw oproep. (Error: %(message)s)",

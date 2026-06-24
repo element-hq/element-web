@@ -26,10 +26,6 @@ interface IState {
  * A waveform which shows the waveform of a live recording
  */
 export default class LiveRecordingWaveform extends React.PureComponent<IProps, IState> {
-    public static defaultProps = {
-        progress: 1,
-    };
-
     private waveform: number[] = [];
     private scheduledUpdate: MarkedExecution = new MarkedExecution(
         () => this.updateWaveform(),

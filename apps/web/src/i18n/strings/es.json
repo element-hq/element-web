@@ -852,14 +852,6 @@
         },
         "set_up_recovery_toast_description": "Genera una clave de recuperación que puede usarse para restaurar el histórico de mensajes encriptados en caso de que pierdas el acceso a tus dispositivos.",
         "set_up_toast_title": "Configurar copia de seguridad segura",
-        "udd": {
-            "interactive_verification_button": "Verificar interactivamente usando emojis",
-            "other_ask_verify_text": "Pídele al usuario que verifique su sesión, o verifícala manualmente a continuación.",
-            "other_new_session_text": "%(name)s (%(userId)s) inició una nueva sesión sin verificarla:",
-            "own_ask_verify_text": "Verifica la otra sesión utilizando una de las siguientes opciones.",
-            "own_new_session_text": "Iniciaste una nueva sesión sin verificarla:",
-            "title": "No es de confianza"
-        },
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
         "verification": {
             "accepting": "Aceptando…",
@@ -3297,13 +3289,7 @@
         "close_to_view_right_panel": "Cierra este accesorio para verlo en este panel",
         "context_menu": {
             "delete": "Eliminar accesorio",
-            "delete_warning": "Al borrar un accesorio, este se elimina para todos usuarios de la sala. ¿Estás seguro?",
-            "move_left": "Mover a la izquierda",
-            "move_right": "Mover a la derecha",
-            "remove": "Eliminar para todos",
-            "revoke": "Quitar permisos",
-            "screenshot": "Toma una foto",
-            "start_audio_stream": "Empezar retransmisión de audio"
+            "delete_warning": "Al borrar un accesorio, este se elimina para todos usuarios de la sala. ¿Estás seguro?"
         },
         "cookie_warning": "Puede que el accesorio use cookies.",
         "error_hangup_description": "Te has desconectado de la llamada. (Error: %(message)s)",

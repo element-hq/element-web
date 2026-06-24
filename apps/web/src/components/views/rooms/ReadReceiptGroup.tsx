@@ -124,8 +124,6 @@ export function ReadReceiptGroup({
                     readReceiptPosition={readReceiptPosition}
                     checkUnmounting={checkUnmounting}
                     suppressAnimation={suppressAnimation}
-                    timestamp={receipt.ts}
-                    showTwelveHour={isTwelveHour}
                 />
             );
         })

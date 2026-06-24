@@ -446,36 +446,34 @@ class RoomTile extends React.PureComponent<Props, State> {
         }
 
         return (
-            <React.Fragment>
-                <RovingTabIndexWrapper inputRef={this.roomTileRef}>
-                    {({ onFocus, isActive, ref }) => (
-                        <AccessibleButton
-                            onFocus={onFocus}
-                            tabIndex={isActive ? 0 : -1}
-                            ref={ref}
-                            className={classes}
-                            onClick={this.onTileClick}
-                            onContextMenu={this.onContextMenu}
-                            role="treeitem"
-                            aria-label={ariaLabel}
-                            aria-selected={this.state.selected}
-                            aria-describedby={ariaDescribedBy}
-                            title={this.props.isMinimized && !this.state.generalMenuPosition ? name : undefined}
-                        >
-                            <DecoratedRoomAvatar
-                                room={this.props.room}
-                                size="32px"
-                                displayBadge={this.props.isMinimized}
-                                tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
-                            />
-                            {titleContainer}
-                            {badge}
-                            {this.renderGeneralMenu()}
-                            {this.renderNotificationsMenu(isActive)}
-                        </AccessibleButton>
-                    )}
-                </RovingTabIndexWrapper>
-            </React.Fragment>
+            <RovingTabIndexWrapper inputRef={this.roomTileRef}>
+                {({ onFocus, isActive, ref }) => (
+                    <AccessibleButton
+                        onFocus={onFocus}
+                        tabIndex={isActive ? 0 : -1}
+                        ref={ref}
+                        className={classes}
+                        onClick={this.onTileClick}
+                        onContextMenu={this.onContextMenu}
+                        role="treeitem"
+                        aria-label={ariaLabel}
+                        aria-selected={this.state.selected}
+                        aria-describedby={ariaDescribedBy}
+                        title={this.props.isMinimized && !this.state.generalMenuPosition ? name : undefined}
+                    >
+                        <DecoratedRoomAvatar
+                            room={this.props.room}
+                            size="32px"
+                            displayBadge={this.props.isMinimized}
+                            tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
+                        />
+                        {titleContainer}
+                        {badge}
+                        {this.renderGeneralMenu()}
+                        {this.renderNotificationsMenu(isActive)}
+                    </AccessibleButton>
+                )}
+            </RovingTabIndexWrapper>
         );
     }
 }

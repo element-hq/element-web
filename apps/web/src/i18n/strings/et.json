@@ -1013,14 +1013,6 @@
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
         "turn_on_key_storage": "Võta krüptovõtmete hoidla kasutusele",
         "turn_on_key_storage_description": "See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes ning on nõutav vestluste ja digitaalse identiteedi varundamiseks.",
-        "udd": {
-            "interactive_verification_button": "Verifitseeri interaktiivselt emoji abil",
-            "other_ask_verify_text": "Palu nimetatud kasutajal verifitseerida see sessioon või tee seda alljärgnevaga käsitsi.",
-            "other_new_session_text": "%(name)s (%(userId)s) logis sisse uude sessiooni ilma seda verifitseerimata:",
-            "own_ask_verify_text": "Verifitseeri oma teine sessioon kasutades üht alljärgnevatest võimalustest.",
-            "own_new_session_text": "Sa logisid sisse uude sessiooni ilma seda verifitseerimata:",
-            "title": "Ei ole usaldusväärne"
-        },
         "unable_to_setup_keys_error": "Krüptovõtmete kasutuselevõtmine ei õnnestu",
         "verification": {
             "accepting": "Nõustun …",
@@ -4076,13 +4068,7 @@
         "close_to_view_right_panel": "Sellel paneelil kuvamiseks sulge see vidin",
         "context_menu": {
             "delete": "Kustuta vidin",
-            "delete_warning": "Vidina kustutamisel eemaldatakse ta kõikide selle jututoa kasutajate jaoks. Kas sa kindlasti soovid seda vidinat eemaldada?",
-            "move_left": "Liigu vasakule",
-            "move_right": "Liigu paremale",
-            "remove": "Eemalda kõigilt",
-            "revoke": "Tühista õigused",
-            "screenshot": "Pildista",
-            "start_audio_stream": "Käivita audiovoog"
+            "delete_warning": "Vidina kustutamisel eemaldatakse ta kõikide selle jututoa kasutajate jaoks. Kas sa kindlasti soovid seda vidinat eemaldada?"
         },
         "cookie_warning": "See vidin võib kasutada küpsiseid.",
         "error_hangup_description": "Kõne on katkenud. (Veateade: %(message)s)",

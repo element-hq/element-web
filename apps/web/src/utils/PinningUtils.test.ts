@@ -6,19 +6,21 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, test, expect, beforeEach } from "vitest";
 import { EventTimeline, EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
 
-import { createTestClient } from "../../test-utils";
-import PinningUtils from "../../../src/utils/PinningUtils";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { isContentActionable } from "../../../src/utils/EventUtils";
-import { ReadPinsEventId } from "../../../src/components/views/right_panel/types";
+import { createTestClient } from "../../test/test-utils";
+import PinningUtils from "./PinningUtils";
+import SettingsStore from "../settings/SettingsStore";
+import { isContentActionable } from "./EventUtils";
+import { ReadPinsEventId } from "../components/views/right_panel/types";
 
-jest.mock("../../../src/utils/EventUtils", () => {
+vi.mock("./EventUtils", () => {
     return {
-        isContentActionable: jest.fn(),
-        canPinEvent: jest.fn(),
+        isContentActionable: vi.fn(),
+        canPinEvent: vi.fn(),
     };
 });
 
@@ -26,7 +28,7 @@ describe("PinningUtils", () => {
     const roomId = "!room:example.org";
     const userId = "@alice:example.org";
 
-    const mockedIsContentActionable = mocked(isContentActionable);
+    const mockedIsContentActionable = vi.mocked(isContentActionable);
 
     let matrixClient: MatrixClient;
     let room: Room;
@@ -52,14 +54,14 @@ describe("PinningUtils", () => {
 
     beforeEach(() => {
         // Enable feature pinning
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
         mockedIsContentActionable.mockImplementation(() => true);
 
         matrixClient = createTestClient();
         room = new Room(roomId, matrixClient, userId);
-        matrixClient.getRoom = jest.fn().mockReturnValue(room);
+        matrixClient.getRoom = vi.fn().mockReturnValue(room);
 
-        jest.spyOn(
+        vi.spyOn(
             matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
             "mayClientSendStateEvent",
         ).mockReturnValue(true);
@@ -96,14 +98,14 @@ describe("PinningUtils", () => {
 
     describe("isPinned", () => {
         test("should return false if no room", () => {
-            matrixClient.getRoom = jest.fn().mockReturnValue(undefined);
+            matrixClient.getRoom = vi.fn().mockReturnValue(undefined);
             const event = makePinEvent();
 
             expect(PinningUtils.isPinned(matrixClient, event)).toBe(false);
         });
 
         test("should return false if no pinned event", () => {
-            jest.spyOn(
+            vi.spyOn(
                 matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "getStateEvents",
             ).mockReturnValue(null);
@@ -113,7 +115,7 @@ describe("PinningUtils", () => {
         });
 
         test("should return false if pinned events do not contain the event id", () => {
-            jest.spyOn(
+            vi.spyOn(
                 matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "getStateEvents",
             ).mockReturnValue({
@@ -127,7 +129,7 @@ describe("PinningUtils", () => {
 
         test("should return true if pinned events contains the event id", () => {
             const event = makePinEvent();
-            jest.spyOn(
+            vi.spyOn(
                 matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "getStateEvents",
             ).mockReturnValue({
@@ -149,14 +151,14 @@ describe("PinningUtils", () => {
             });
 
             test("should return false if no room", () => {
-                matrixClient.getRoom = jest.fn().mockReturnValue(undefined);
+                matrixClient.getRoom = vi.fn().mockReturnValue(undefined);
                 const event = makePinEvent();
 
                 expect(PinningUtils.canPin(matrixClient, event)).toBe(false);
             });
 
             test("should return false if client cannot send state event", () => {
-                jest.spyOn(
+                vi.spyOn(
                     matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                     "mayClientSendStateEvent",
                 ).mockReturnValue(false);
@@ -201,7 +203,7 @@ describe("PinningUtils", () => {
 
     describe("pinOrUnpinEvent", () => {
         test("should do nothing if no room", async () => {
-            matrixClient.getRoom = jest.fn().mockReturnValue(undefined);
+            matrixClient.getRoom = vi.fn().mockReturnValue(undefined);
             const event = makePinEvent();
 
             await PinningUtils.pinOrUnpinEvent(matrixClient, event);
@@ -216,7 +218,7 @@ describe("PinningUtils", () => {
         });
 
         test("should pin the event if not pinned", async () => {
-            jest.spyOn(
+            vi.spyOn(
                 matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "getStateEvents",
             ).mockReturnValue({
@@ -224,8 +226,8 @@ describe("PinningUtils", () => {
                 getContent: () => ({ pinned: ["$otherEventId"] }),
             });
 
-            jest.spyOn(room, "getAccountData").mockReturnValue({
-                getContent: jest.fn().mockReturnValue({
+            vi.spyOn(room, "getAccountData").mockReturnValue({
+                getContent: vi.fn().mockReturnValue({
                     event_ids: ["$otherEventId"],
                 }),
             } as unknown as MatrixEvent);
@@ -247,7 +249,7 @@ describe("PinningUtils", () => {
         test("should unpin the event if already pinned", async () => {
             const event = makePinEvent();
 
-            jest.spyOn(
+            vi.spyOn(
                 matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "getStateEvents",
             ).mockReturnValue({
@@ -271,7 +273,7 @@ describe("PinningUtils", () => {
         });
 
         test("should return false if client cannot send state event", () => {
-            jest.spyOn(
+            vi.spyOn(
                 matrixClient.getRoom(roomId)!.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                 "mayClientSendStateEvent",
             ).mockReturnValue(false);

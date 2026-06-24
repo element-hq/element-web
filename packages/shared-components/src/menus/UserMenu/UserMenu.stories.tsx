@@ -108,6 +108,26 @@ export const Open: Story = {
     tags: ["!dev", "!autodocs"],
 };
 
+export const OpenVeryLongName: Story = {
+    args: {
+        open: true,
+        displayName: "Sally Sanderandersonanonanonabibblybobblywooblywobblynobblynom with a name with a very long word",
+        userId: "@person-whose-username-some-might-consider-to-be-a-little-overly-long-although-thats-their-choice-and-we-must-respect-it:homeserver.com",
+        expanded: true,
+        showAvatar: true,
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: MENU_OPEN_A11Y_RULES,
+            },
+        },
+    },
+    // Only used for playwright tests for the menu.
+    // Steals focus if actually opened on the storybook page
+    tags: ["!dev", "!autodocs"],
+};
+
 export const Condensed: Story = {
     args: {
         displayName: "Sally Sanderson with a longer name",

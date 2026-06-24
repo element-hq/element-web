@@ -15,7 +15,6 @@ import SdkConfig from "../../src/SdkConfig";
 import {
     _t,
     _tDom,
-    CustomTranslationOptions,
     getAllLanguagesWithLabels,
     registerCustomTranslations,
     setLanguage,
@@ -31,15 +30,11 @@ import { stubClient } from "../test-utils";
 
 async function setupTranslationOverridesForTests(overrides: TranslationStringsObject) {
     const lookupUrl = "/translations.json";
-    const fn = (url: string): TranslationStringsObject => {
-        expect(url).toEqual(lookupUrl);
-        return overrides;
-    };
 
     SdkConfig.add({
         custom_translations_url: lookupUrl,
     });
-    CustomTranslationOptions.lookupFn = fn;
+    fetchMock.get(lookupUrl, overrides, { name: "i18n-override" });
     await registerCustomTranslations({
         testOnlyIgnoreCustomTranslationsCache: true,
     });
@@ -52,7 +47,7 @@ describe("languageHandler", () => {
 
     afterEach(() => {
         SdkConfig.reset();
-        CustomTranslationOptions.lookupFn = undefined;
+        fetchMock.removeRoute("i18n-override");
     });
 
     it("should support overriding translations", async () => {

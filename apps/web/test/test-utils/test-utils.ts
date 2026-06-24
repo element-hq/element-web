@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { mocked, type MockedObject } from "jest-mock";
+import { type MockedObject } from "vitest";
 import {
     MatrixEvent,
     type Room,
@@ -48,6 +48,7 @@ import { type ValidatedServerConfig } from "../../src/utils/ValidatedServerConfi
 import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
+import { vi } from "../setup/adapter.ts";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -66,10 +67,10 @@ export function stubClient(): MatrixClient {
     //
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
-    jest.spyOn(peg, "get");
-    jest.spyOn(peg, "safeGet");
-    jest.spyOn(peg, "unset");
-    jest.spyOn(peg, "replaceUsingCreds");
+    vi.spyOn(peg, "get");
+    vi.spyOn(peg, "safeGet");
+    vi.spyOn(peg, "unset");
+    vi.spyOn(peg, "replaceUsingCreds");
     // MatrixClientPeg.safeGet() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
     peg.get = () => client;
@@ -90,64 +91,64 @@ export function createTestClient(): MatrixClient {
     let createdRoom: Room | undefined;
 
     const client = {
-        getHomeserverUrl: jest.fn(),
-        getIdentityServerUrl: jest.fn(),
-        getDomain: jest.fn().mockReturnValue("matrix.org"),
-        getUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
-        getSafeUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
-        getUserIdLocalpart: jest.fn().mockResolvedValue("userId"),
-        getUser: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn() }),
-        getDevice: jest.fn(),
-        getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
+        getHomeserverUrl: vi.fn(),
+        getIdentityServerUrl: vi.fn(),
+        getDomain: vi.fn().mockReturnValue("matrix.org"),
+        getUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
+        getSafeUserId: vi.fn().mockReturnValue("@userId:matrix.org"),
+        getUserIdLocalpart: vi.fn().mockResolvedValue("userId"),
+        getUser: vi.fn().mockReturnValue({ on: vi.fn(), off: vi.fn() }),
+        getDevice: vi.fn(),
+        getDeviceId: vi.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",
-        getDevices: jest.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
-        getSessionId: jest.fn().mockReturnValue("iaszphgvfku"),
+        getDevices: vi.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
+        getSessionId: vi.fn().mockReturnValue("iaszphgvfku"),
         credentials: { userId: "@userId:matrix.org" },
-        getAccessToken: jest.fn(),
+        getAccessToken: vi.fn(),
 
         secretStorage: {
-            get: jest.fn(),
-            isStored: jest.fn().mockReturnValue(false),
-            checkKey: jest.fn().mockResolvedValue(false),
-            hasKey: jest.fn().mockReturnValue(false),
-            getDefaultKeyId: jest.fn().mockResolvedValue(null),
+            get: vi.fn(),
+            isStored: vi.fn().mockReturnValue(false),
+            checkKey: vi.fn().mockResolvedValue(false),
+            hasKey: vi.fn().mockReturnValue(false),
+            getDefaultKeyId: vi.fn().mockResolvedValue(null),
         },
 
         store: {
-            getPendingEvents: jest.fn().mockResolvedValue([]),
-            setPendingEvents: jest.fn().mockResolvedValue(undefined),
-            storeRoom: jest.fn(),
-            removeRoom: jest.fn(),
+            getPendingEvents: vi.fn().mockResolvedValue([]),
+            setPendingEvents: vi.fn().mockResolvedValue(undefined),
+            storeRoom: vi.fn(),
+            removeRoom: vi.fn(),
         },
 
-        getCrypto: jest.fn().mockReturnValue({
-            getOwnDeviceKeys: jest.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
-            getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
-            getUserVerificationStatus: jest.fn(),
-            getDeviceVerificationStatus: jest.fn(),
-            resetKeyBackup: jest.fn(),
-            isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
-            isStateEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
-            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-            setDeviceIsolationMode: jest.fn(),
-            prepareToEncrypt: jest.fn(),
-            bootstrapCrossSigning: jest.fn(),
-            getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
-            isKeyBackupTrusted: jest.fn().mockResolvedValue({}),
-            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({
+        getCrypto: vi.fn().mockReturnValue({
+            getOwnDeviceKeys: vi.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
+            getUserDeviceInfo: vi.fn().mockResolvedValue(new Map()),
+            getUserVerificationStatus: vi.fn(),
+            getDeviceVerificationStatus: vi.fn(),
+            resetKeyBackup: vi.fn(),
+            isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
+            isStateEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
+            getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+            setDeviceIsolationMode: vi.fn(),
+            prepareToEncrypt: vi.fn(),
+            bootstrapCrossSigning: vi.fn(),
+            getActiveSessionBackupVersion: vi.fn().mockResolvedValue(null),
+            isKeyBackupTrusted: vi.fn().mockResolvedValue({}),
+            createRecoveryKeyFromPassphrase: vi.fn().mockResolvedValue({
                 privateKey: new Uint8Array(32),
                 encodedPrivateKey: "encoded private key",
             }),
-            bootstrapSecretStorage: jest.fn(),
-            isDehydrationSupported: jest.fn().mockResolvedValue(false),
-            restoreKeyBackup: jest.fn(),
-            restoreKeyBackupWithPassphrase: jest.fn(),
-            loadSessionBackupPrivateKeyFromSecretStorage: jest.fn(),
-            storeSessionBackupPrivateKey: jest.fn(),
-            checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
-            getEncryptionInfoForEvent: jest.fn().mockResolvedValue(null),
-            getCrossSigningStatus: jest.fn().mockResolvedValue({
+            bootstrapSecretStorage: vi.fn(),
+            isDehydrationSupported: vi.fn().mockResolvedValue(false),
+            restoreKeyBackup: vi.fn(),
+            restoreKeyBackupWithPassphrase: vi.fn(),
+            loadSessionBackupPrivateKeyFromSecretStorage: vi.fn(),
+            storeSessionBackupPrivateKey: vi.fn(),
+            checkKeyBackupAndEnable: vi.fn().mockResolvedValue(null),
+            getKeyBackupInfo: vi.fn().mockResolvedValue(null),
+            getEncryptionInfoForEvent: vi.fn().mockResolvedValue(null),
+            getCrossSigningStatus: vi.fn().mockResolvedValue({
                 publicKeysOnDevice: false,
                 privateKeysInSecretStorage: false,
                 privateKeysCachedLocally: {
@@ -156,17 +157,17 @@ export function createTestClient(): MatrixClient {
                     userSigningKey: false,
                 },
             }),
-            isCrossSigningReady: jest.fn().mockResolvedValue(false),
-            disableKeyStorage: jest.fn(),
-            resetEncryption: jest.fn(),
-            getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
-            isSecretStorageReady: jest.fn().mockResolvedValue(false),
-            deleteKeyBackupVersion: jest.fn(),
-            crossSignDevice: jest.fn(),
+            isCrossSigningReady: vi.fn().mockResolvedValue(false),
+            disableKeyStorage: vi.fn(),
+            resetEncryption: vi.fn(),
+            getSessionBackupPrivateKey: vi.fn().mockResolvedValue(null),
+            isSecretStorageReady: vi.fn().mockResolvedValue(false),
+            deleteKeyBackupVersion: vi.fn(),
+            crossSignDevice: vi.fn(),
         }),
 
-        getPushActionsForEvent: jest.fn(),
-        getRoom: jest.fn().mockImplementation((roomId) => {
+        getPushActionsForEvent: vi.fn(),
+        getRoom: vi.fn().mockImplementation((roomId) => {
             // If the test called `createRoom`, return the mocked room it created.
             if (createdRoom) {
                 return createdRoom;
@@ -174,32 +175,32 @@ export function createTestClient(): MatrixClient {
                 return mkStubRoom(roomId, "My room", client);
             }
         }),
-        getRooms: jest.fn().mockReturnValue([]),
-        getVisibleRooms: jest.fn().mockReturnValue([]),
-        loginFlows: jest.fn(),
+        getRooms: vi.fn().mockReturnValue([]),
+        getVisibleRooms: vi.fn().mockReturnValue([]),
+        loginFlows: vi.fn(),
         on: eventEmitter.on.bind(eventEmitter),
         once: eventEmitter.once.bind(eventEmitter),
         off: eventEmitter.off.bind(eventEmitter),
         removeListener: eventEmitter.removeListener.bind(eventEmitter),
         emit: eventEmitter.emit.bind(eventEmitter),
-        isRoomEncrypted: jest.fn().mockReturnValue(false),
-        peekInRoom: jest.fn().mockResolvedValue(mkStubRoom(undefined, undefined, undefined)),
-        stopPeeking: jest.fn(),
+        isRoomEncrypted: vi.fn().mockReturnValue(false),
+        peekInRoom: vi.fn().mockResolvedValue(mkStubRoom(undefined, undefined, undefined)),
+        stopPeeking: vi.fn(),
 
-        getEventTimeline: jest.fn().mockResolvedValue([]),
-        paginateEventTimeline: jest.fn().mockResolvedValue(undefined),
-        sendReadReceipt: jest.fn().mockResolvedValue(undefined),
-        getRoomIdForAlias: jest.fn().mockResolvedValue(undefined),
-        getRoomDirectoryVisibility: jest.fn().mockResolvedValue(undefined),
-        getProfileInfo: jest.fn().mockResolvedValue({}),
-        getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
-        getClientWellKnown: jest.fn().mockReturnValue(null),
-        waitForClientWellKnown: jest.fn().mockResolvedValue({}),
-        supportsVoip: jest.fn().mockReturnValue(true),
-        getTurnServers: jest.fn().mockReturnValue([]),
-        getTurnServersExpiry: jest.fn().mockReturnValue(2 ^ 32),
-        getThirdpartyUser: jest.fn().mockResolvedValue([]),
-        getAccountData: jest.fn().mockImplementation((type) => {
+        getEventTimeline: vi.fn().mockResolvedValue([]),
+        paginateEventTimeline: vi.fn().mockResolvedValue(undefined),
+        sendReadReceipt: vi.fn().mockResolvedValue(undefined),
+        getRoomIdForAlias: vi.fn().mockResolvedValue(undefined),
+        getRoomDirectoryVisibility: vi.fn().mockResolvedValue(undefined),
+        getProfileInfo: vi.fn().mockResolvedValue({}),
+        getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
+        getClientWellKnown: vi.fn().mockReturnValue(null),
+        waitForClientWellKnown: vi.fn().mockResolvedValue({}),
+        supportsVoip: vi.fn().mockReturnValue(true),
+        getTurnServers: vi.fn().mockReturnValue([]),
+        getTurnServersExpiry: vi.fn().mockReturnValue(2 ^ 32),
+        getThirdpartyUser: vi.fn().mockResolvedValue([]),
+        getAccountData: vi.fn().mockImplementation((type) => {
             return mkEvent({
                 user: "@user:example.com",
                 room: undefined,
@@ -208,26 +209,26 @@ export function createTestClient(): MatrixClient {
                 content: {},
             });
         }),
-        getAccountDataFromServer: jest.fn(),
+        getAccountDataFromServer: vi.fn(),
 
-        mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
-        setAccountData: jest.fn(),
-        deleteAccountData: jest.fn(),
-        setRoomAccountData: jest.fn(),
-        setRoomName: jest.fn(),
-        setRoomTopic: jest.fn(),
-        setRoomReadMarkers: jest.fn().mockResolvedValue({}),
-        sendTyping: jest.fn().mockResolvedValue({}),
-        sendMessage: jest.fn().mockResolvedValue({}),
-        sendStateEvent: jest.fn().mockResolvedValue(undefined),
-        sendRtcDecline: jest.fn().mockResolvedValue(undefined),
-        getSyncState: jest.fn().mockReturnValue("SYNCING"),
+        mxcUrlToHttp: vi.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
+        setAccountData: vi.fn(),
+        deleteAccountData: vi.fn(),
+        setRoomAccountData: vi.fn(),
+        setRoomName: vi.fn(),
+        setRoomTopic: vi.fn(),
+        setRoomReadMarkers: vi.fn().mockResolvedValue({}),
+        sendTyping: vi.fn().mockResolvedValue({}),
+        sendMessage: vi.fn().mockResolvedValue({}),
+        sendStateEvent: vi.fn().mockResolvedValue(undefined),
+        sendRtcDecline: vi.fn().mockResolvedValue(undefined),
+        getSyncState: vi.fn().mockReturnValue("SYNCING"),
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
-        isGuest: jest.fn().mockReturnValue(false),
-        getRoomHierarchy: jest.fn().mockReturnValue({
+        isGuest: vi.fn().mockReturnValue(false),
+        getRoomHierarchy: vi.fn().mockReturnValue({
             rooms: [],
         }),
-        createRoom: jest.fn(async (createOpts?: ICreateRoomOpts) => {
+        createRoom: vi.fn(async (createOpts?: ICreateRoomOpts) => {
             const initialState = createOpts?.initial_state?.map((event, i) =>
                 mkEvent({
                     ...event,
@@ -244,60 +245,60 @@ export function createTestClient(): MatrixClient {
             );
             return { room_id: "!1:example.org" };
         }),
-        setPowerLevel: jest.fn().mockResolvedValue(undefined),
+        setPowerLevel: vi.fn().mockResolvedValue(undefined),
         pushRules: {},
         decryptEventIfNeeded: () => Promise.resolve(),
-        isUserIgnored: jest.fn().mockReturnValue(false),
-        getCapabilities: jest.fn().mockResolvedValue({}),
-        getCachedCapabilities: jest.fn().mockReturnValue({}),
-        supportsThreads: jest.fn().mockReturnValue(false),
-        supportsIntentionalMentions: jest.fn().mockReturnValue(false),
-        getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
-        getOpenIdToken: jest.fn().mockResolvedValue(undefined),
-        registerWithIdentityServer: jest.fn().mockResolvedValue({}),
-        getIdentityAccount: jest.fn().mockResolvedValue({}),
-        getTerms: jest.fn().mockResolvedValue({ policies: [] }),
-        agreeToTerms: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(undefined),
-        isVersionSupported: jest.fn().mockResolvedValue(undefined),
-        getPushRules: jest.fn().mockResolvedValue(undefined),
-        getPushers: jest.fn().mockResolvedValue({ pushers: [] }),
-        getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
-        bulkLookupThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
-        setAvatarUrl: jest.fn().mockResolvedValue(undefined),
-        setDisplayName: jest.fn().mockResolvedValue(undefined),
-        setPusher: jest.fn().mockResolvedValue(undefined),
-        setPushRuleEnabled: jest.fn().mockResolvedValue(undefined),
-        setPushRuleActions: jest.fn().mockResolvedValue(undefined),
-        relations: jest.fn().mockResolvedValue({
+        isUserIgnored: vi.fn().mockReturnValue(false),
+        getCapabilities: vi.fn().mockResolvedValue({}),
+        getCachedCapabilities: vi.fn().mockReturnValue({}),
+        supportsThreads: vi.fn().mockReturnValue(false),
+        supportsIntentionalMentions: vi.fn().mockReturnValue(false),
+        getRoomUpgradeHistory: vi.fn().mockReturnValue([]),
+        getOpenIdToken: vi.fn().mockResolvedValue(undefined),
+        registerWithIdentityServer: vi.fn().mockResolvedValue({}),
+        getIdentityAccount: vi.fn().mockResolvedValue({}),
+        getTerms: vi.fn().mockResolvedValue({ policies: [] }),
+        agreeToTerms: vi.fn(),
+        doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(undefined),
+        isVersionSupported: vi.fn().mockResolvedValue(undefined),
+        getPushRules: vi.fn().mockResolvedValue(undefined),
+        getPushers: vi.fn().mockResolvedValue({ pushers: [] }),
+        getThreePids: vi.fn().mockResolvedValue({ threepids: [] }),
+        bulkLookupThreePids: vi.fn().mockResolvedValue({ threepids: [] }),
+        setAvatarUrl: vi.fn().mockResolvedValue(undefined),
+        setDisplayName: vi.fn().mockResolvedValue(undefined),
+        setPusher: vi.fn().mockResolvedValue(undefined),
+        setPushRuleEnabled: vi.fn().mockResolvedValue(undefined),
+        setPushRuleActions: vi.fn().mockResolvedValue(undefined),
+        relations: vi.fn().mockResolvedValue({
             events: [],
         }),
-        hasLazyLoadMembersEnabled: jest.fn().mockReturnValue(false),
-        isInitialSyncComplete: jest.fn().mockReturnValue(true),
-        fetchRoomEvent: jest.fn().mockRejectedValue({}),
-        makeTxnId: jest.fn().mockImplementation(() => `t${txnId++}`),
-        sendToDevice: jest.fn().mockResolvedValue(undefined),
-        queueToDevice: jest.fn().mockResolvedValue(undefined),
-        cancelPendingEvent: jest.fn(),
+        hasLazyLoadMembersEnabled: vi.fn().mockReturnValue(false),
+        isInitialSyncComplete: vi.fn().mockReturnValue(true),
+        fetchRoomEvent: vi.fn().mockRejectedValue({}),
+        makeTxnId: vi.fn().mockImplementation(() => `t${txnId++}`),
+        sendToDevice: vi.fn().mockResolvedValue(undefined),
+        queueToDevice: vi.fn().mockResolvedValue(undefined),
+        cancelPendingEvent: vi.fn(),
 
-        getMediaHandler: jest.fn().mockReturnValue({
-            setVideoInput: jest.fn(),
-            setAudioInput: jest.fn(),
-            setAudioSettings: jest.fn(),
-            stopAllStreams: jest.fn(),
+        getMediaHandler: vi.fn().mockReturnValue({
+            setVideoInput: vi.fn(),
+            setAudioInput: vi.fn(),
+            setAudioSettings: vi.fn(),
+            stopAllStreams: vi.fn(),
         } as unknown as MediaHandler),
-        uploadContent: jest.fn(),
+        uploadContent: vi.fn(),
         getEventMapper: (_options?: MapperOpts) => (event: Partial<IEvent>) => new MatrixEvent(event),
-        leaveRoomChain: jest.fn((roomId) => ({ [roomId]: null })),
-        requestPasswordEmailToken: jest.fn().mockRejectedValue({}),
-        setPassword: jest.fn().mockRejectedValue({}),
+        leaveRoomChain: vi.fn((roomId) => ({ [roomId]: null })),
+        requestPasswordEmailToken: vi.fn().mockRejectedValue({}),
+        setPassword: vi.fn().mockRejectedValue({}),
         groupCallEventHandler: { groupCalls: new Map<string, GroupCall>() },
-        redactEvent: jest.fn(),
+        redactEvent: vi.fn(),
 
-        createMessagesRequest: jest.fn().mockResolvedValue({
+        createMessagesRequest: vi.fn().mockResolvedValue({
             chunk: [],
         }),
-        sendEvent: jest.fn().mockImplementation((roomId, type, content) => {
+        sendEvent: vi.fn().mockImplementation((roomId, type, content) => {
             return new MatrixEvent({
                 type,
                 sender: "@me:localhost",
@@ -306,61 +307,61 @@ export function createTestClient(): MatrixClient {
                 room_id: roomId,
             });
         }),
-        resendEvent: jest.fn().mockResolvedValue({}),
+        resendEvent: vi.fn().mockResolvedValue({}),
 
-        _unstable_sendDelayedEvent: jest.fn(),
-        _unstable_sendDelayedStateEvent: jest.fn(),
-        _unstable_cancelScheduledDelayedEvent: jest.fn(),
-        _unstable_restartScheduledDelayedEvent: jest.fn(),
-        _unstable_sendScheduledDelayedEvent: jest.fn(),
-        _unstable_sendStickyEvent: jest.fn(),
-        _unstable_sendStickyDelayedEvent: jest.fn(),
-        _unstable_getRTCTransports: jest.fn(),
-        searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
-        setDeviceVerified: jest.fn(),
-        joinRoom: jest.fn(),
-        getSyncStateData: jest.fn(),
-        getDehydratedDevice: jest.fn(),
-        exportRoomKeys: jest.fn(),
-        knockRoom: jest.fn(),
-        leave: jest.fn(),
-        getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
-        requestAdd3pidEmailToken: jest.fn(),
-        requestAdd3pidMsisdnToken: jest.fn(),
-        submitMsisdnTokenOtherUrl: jest.fn(),
-        deleteThreePid: jest.fn().mockResolvedValue({}),
-        bindThreePid: jest.fn().mockResolvedValue({}),
-        unbindThreePid: jest.fn().mockResolvedValue({}),
-        requestEmailToken: jest.fn(),
-        addThreePidOnly: jest.fn(),
-        requestMsisdnToken: jest.fn(),
-        submitMsisdnToken: jest.fn(),
-        getMediaConfig: jest.fn(),
+        _unstable_sendDelayedEvent: vi.fn(),
+        _unstable_sendDelayedStateEvent: vi.fn(),
+        _unstable_cancelScheduledDelayedEvent: vi.fn(),
+        _unstable_restartScheduledDelayedEvent: vi.fn(),
+        _unstable_sendScheduledDelayedEvent: vi.fn(),
+        _unstable_sendStickyEvent: vi.fn(),
+        _unstable_sendStickyDelayedEvent: vi.fn(),
+        _unstable_getRTCTransports: vi.fn(),
+        searchUserDirectory: vi.fn().mockResolvedValue({ limited: false, results: [] }),
+        setDeviceVerified: vi.fn(),
+        joinRoom: vi.fn(),
+        getSyncStateData: vi.fn(),
+        getDehydratedDevice: vi.fn(),
+        exportRoomKeys: vi.fn(),
+        knockRoom: vi.fn(),
+        leave: vi.fn(),
+        getVersions: vi.fn().mockResolvedValue({ versions: ["v1.1"] }),
+        requestAdd3pidEmailToken: vi.fn(),
+        requestAdd3pidMsisdnToken: vi.fn(),
+        submitMsisdnTokenOtherUrl: vi.fn(),
+        deleteThreePid: vi.fn().mockResolvedValue({}),
+        bindThreePid: vi.fn().mockResolvedValue({}),
+        unbindThreePid: vi.fn().mockResolvedValue({}),
+        requestEmailToken: vi.fn(),
+        addThreePidOnly: vi.fn(),
+        requestMsisdnToken: vi.fn(),
+        submitMsisdnToken: vi.fn(),
+        getMediaConfig: vi.fn(),
         baseUrl: "https://matrix-client.matrix.org",
         matrixRTC: createStubMatrixRTC(),
-        isFallbackICEServerAllowed: jest.fn().mockReturnValue(false),
-        getAuthIssuer: jest.fn(),
-        getOrCreateFilter: jest.fn(),
-        sendStickerMessage: jest.fn(),
-        getLocalAliases: jest.fn().mockReturnValue([]),
-        uploadDeviceSigningKeys: jest.fn(),
-        isKeyBackupKeyStored: jest.fn().mockResolvedValue(null),
-        getIgnoredUsers: jest.fn().mockReturnValue([]),
-        setIgnoredUsers: jest.fn(),
-        reportRoom: jest.fn(),
+        isFallbackICEServerAllowed: vi.fn().mockReturnValue(false),
+        getAuthIssuer: vi.fn(),
+        getOrCreateFilter: vi.fn(),
+        sendStickerMessage: vi.fn(),
+        getLocalAliases: vi.fn().mockReturnValue([]),
+        uploadDeviceSigningKeys: vi.fn(),
+        isKeyBackupKeyStored: vi.fn().mockResolvedValue(null),
+        getIgnoredUsers: vi.fn().mockReturnValue([]),
+        setIgnoredUsers: vi.fn(),
+        reportRoom: vi.fn(),
         pushProcessor: {
-            getPushRuleById: jest.fn(),
+            getPushRuleById: vi.fn(),
         },
-        search: jest.fn().mockResolvedValue({}),
-        processRoomEventsSearch: jest.fn().mockResolvedValue({ highlights: [], results: [] }),
-        invite: jest.fn(),
-        kick: jest.fn(),
-        ban: jest.fn(),
-        sendTextMessage: jest.fn(),
-        deleteRoomTag: jest.fn().mockResolvedValue({}),
-        setRoomTag: jest.fn().mockResolvedValue({}),
-        getExtendedProfileProperty: jest.fn(),
-        setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
+        search: vi.fn().mockResolvedValue({}),
+        processRoomEventsSearch: vi.fn().mockResolvedValue({ highlights: [], results: [] }),
+        invite: vi.fn(),
+        kick: vi.fn(),
+        ban: vi.fn(),
+        sendTextMessage: vi.fn(),
+        deleteRoomTag: vi.fn().mockResolvedValue({}),
+        setRoomTag: vi.fn().mockResolvedValue({}),
+        getExtendedProfileProperty: vi.fn(),
+        setExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -379,7 +380,7 @@ export function createTestClient(): MatrixClient {
 
 export function createStubMatrixRTC(): MatrixRTCSessionManager {
     const eventEmitterMatrixRTCSessionManager = new EventEmitter();
-    const mockGetRoomSession = jest.fn();
+    const mockGetRoomSession = vi.fn();
     mockGetRoomSession.mockImplementation((roomId) => {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
@@ -388,9 +389,9 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
         return session;
     });
     return {
-        start: jest.fn(),
-        stop: jest.fn(),
-        getActiveRoomSession: jest.fn(),
+        start: vi.fn(),
+        stop: vi.fn(),
+        getActiveRoomSession: vi.fn(),
         getRoomSession: mockGetRoomSession,
         on: eventEmitterMatrixRTCSessionManager.on.bind(eventEmitterMatrixRTCSessionManager),
         off: eventEmitterMatrixRTCSessionManager.off.bind(eventEmitterMatrixRTCSessionManager),
@@ -673,42 +674,42 @@ export function mkStubRoom(
     const eventEmitter = new EventEmitter();
 
     return {
-        canInvite: jest.fn().mockReturnValue(false),
+        canInvite: vi.fn().mockReturnValue(false),
         client,
-        findThreadForEvent: jest.fn(),
-        createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
+        findThreadForEvent: vi.fn(),
+        createThreadsTimelineSets: vi.fn().mockReturnValue(new Promise(() => {})),
         currentState: {
-            getStateEvents: jest.fn((_type, key) => (key === undefined ? [] : null)),
-            getMember: jest.fn(),
-            mayClientSendStateEvent: jest.fn().mockReturnValue(true),
-            maySendStateEvent: jest.fn().mockReturnValue(true),
-            maySendRedactionForEvent: jest.fn().mockReturnValue(true),
-            maySendEvent: jest.fn().mockReturnValue(true),
-            maySendMessage: jest.fn().mockReturnValue(true),
+            getStateEvents: vi.fn((_type, key) => (key === undefined ? [] : null)),
+            getMember: vi.fn(),
+            mayClientSendStateEvent: vi.fn().mockReturnValue(true),
+            maySendStateEvent: vi.fn().mockReturnValue(true),
+            maySendRedactionForEvent: vi.fn().mockReturnValue(true),
+            maySendEvent: vi.fn().mockReturnValue(true),
+            maySendMessage: vi.fn().mockReturnValue(true),
             members: {},
-            getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Shared),
-            getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
-            on: jest.fn(),
-            off: jest.fn(),
-            removeListener: jest.fn(),
+            getHistoryVisibility: vi.fn().mockReturnValue(HistoryVisibility.Shared),
+            getJoinRule: vi.fn().mockReturnValue(JoinRule.Invite),
+            on: vi.fn(),
+            off: vi.fn(),
+            removeListener: vi.fn(),
         } as unknown as RoomState,
-        eventShouldLiveIn: jest.fn().mockReturnValue({ shouldLiveInRoom: true, shouldLiveInThread: false }),
-        fetchRoomThreads: jest.fn().mockReturnValue(Promise.resolve()),
-        findEventById: jest.fn().mockReturnValue(undefined),
-        findPredecessor: jest.fn().mockReturnValue({ roomId: "", eventId: null }),
-        getAltAliases: jest.fn().mockReturnValue([]),
+        eventShouldLiveIn: vi.fn().mockReturnValue({ shouldLiveInRoom: true, shouldLiveInThread: false }),
+        fetchRoomThreads: vi.fn().mockReturnValue(Promise.resolve()),
+        findEventById: vi.fn().mockReturnValue(undefined),
+        findPredecessor: vi.fn().mockReturnValue({ roomId: "", eventId: null }),
+        getAltAliases: vi.fn().mockReturnValue([]),
         getAvatarUrl: () => "mxc://avatar.url/room.png",
-        getCanonicalAlias: jest.fn(),
-        getDMInviter: jest.fn(),
-        getEventReadUpTo: jest.fn(() => null),
-        getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(1),
-        getJoinRule: jest.fn().mockReturnValue("invite"),
-        getJoinedMemberCount: jest.fn().mockReturnValue(1),
-        getJoinedMembers: jest.fn().mockReturnValue([]),
-        getLiveTimeline: jest.fn().mockReturnValue(stubTimeline),
-        getLastLiveEvent: jest.fn().mockReturnValue(undefined),
-        getLastActiveTimestamp: jest.fn().mockReturnValue(1183140000),
-        getMember: jest.fn().mockReturnValue({
+        getCanonicalAlias: vi.fn(),
+        getDMInviter: vi.fn(),
+        getEventReadUpTo: vi.fn(() => null),
+        getInvitedAndJoinedMemberCount: vi.fn().mockReturnValue(1),
+        getJoinRule: vi.fn().mockReturnValue("invite"),
+        getJoinedMemberCount: vi.fn().mockReturnValue(1),
+        getJoinedMembers: vi.fn().mockReturnValue([]),
+        getLiveTimeline: vi.fn().mockReturnValue(stubTimeline),
+        getLastLiveEvent: vi.fn().mockReturnValue(undefined),
+        getLastActiveTimestamp: vi.fn().mockReturnValue(1183140000),
+        getMember: vi.fn().mockReturnValue({
             userId: "@member:domain.bla",
             name: "Member",
             rawDisplayName: "Member",
@@ -718,29 +719,29 @@ export function mkStubRoom(
             events: {},
             isKicked: () => false,
         }),
-        getMembers: jest.fn().mockReturnValue([]),
-        getEncryptionTargetMembers: jest.fn().mockReturnValue([]),
-        getMembersWithMembership: jest.fn().mockReturnValue([]),
+        getMembers: vi.fn().mockReturnValue([]),
+        getEncryptionTargetMembers: vi.fn().mockReturnValue([]),
+        getMembersWithMembership: vi.fn().mockReturnValue([]),
         getMxcAvatarUrl: () => "mxc://avatar.url/room.png",
-        getMyMembership: jest.fn().mockReturnValue(KnownMembership.Join),
-        getPendingEvents: jest.fn().mockReturnValue([]),
-        getReceiptsForEvent: jest.fn().mockReturnValue([]),
-        getRecommendedVersion: jest.fn().mockReturnValue(Promise.resolve("")),
-        getThreads: jest.fn().mockReturnValue([]),
-        getType: jest.fn().mockReturnValue(undefined),
-        getUnfilteredTimelineSet: jest.fn(),
-        getUnreadNotificationCount: jest.fn(() => 0),
-        getRoomUnreadNotificationCount: jest.fn().mockReturnValue(0),
-        getVersion: jest.fn().mockReturnValue("1"),
-        getBumpStamp: jest.fn().mockReturnValue(0),
-        getAccountData: jest.fn(),
+        getMyMembership: vi.fn().mockReturnValue(KnownMembership.Join),
+        getPendingEvents: vi.fn().mockReturnValue([]),
+        getReceiptsForEvent: vi.fn().mockReturnValue([]),
+        getRecommendedVersion: vi.fn().mockReturnValue(Promise.resolve("")),
+        getThreads: vi.fn().mockReturnValue([]),
+        getType: vi.fn().mockReturnValue(undefined),
+        getUnfilteredTimelineSet: vi.fn(),
+        getUnreadNotificationCount: vi.fn(() => 0),
+        getRoomUnreadNotificationCount: vi.fn().mockReturnValue(0),
+        getVersion: vi.fn().mockReturnValue("1"),
+        getBumpStamp: vi.fn().mockReturnValue(0),
+        getAccountData: vi.fn(),
         hasMembershipState: () => false,
-        isElementVideoRoom: jest.fn().mockReturnValue(false),
-        isSpaceRoom: jest.fn().mockReturnValue(false),
-        isCallRoom: jest.fn().mockReturnValue(false),
-        hasEncryptionStateEvent: jest.fn().mockReturnValue(false),
-        loadMembersIfNeeded: jest.fn(),
-        maySendMessage: jest.fn().mockReturnValue(true),
+        isElementVideoRoom: vi.fn().mockReturnValue(false),
+        isSpaceRoom: vi.fn().mockReturnValue(false),
+        isCallRoom: vi.fn().mockReturnValue(false),
+        hasEncryptionStateEvent: vi.fn().mockReturnValue(false),
+        loadMembersIfNeeded: vi.fn(),
+        maySendMessage: vi.fn().mockReturnValue(true),
         myUserId: client?.getUserId(),
         name,
         normalizedName: normalize(name || ""),
@@ -750,8 +751,8 @@ export function mkStubRoom(
         removeListener: eventEmitter.removeListener.bind(eventEmitter),
         emit: eventEmitter.emit.bind(eventEmitter),
         roomId,
-        setBlacklistUnverifiedDevices: jest.fn(),
-        setUnreadNotificationCount: jest.fn(),
+        setBlacklistUnverifiedDevices: vi.fn(),
+        setUnreadNotificationCount: vi.fn(),
         tags: {},
         timeline: [],
     } as unknown as Room;
@@ -828,8 +829,8 @@ export const mkRoom = (
     roomId: string,
     rooms?: ReturnType<typeof mkStubRoom>[],
 ): MockedObject<Room> => {
-    const room = mocked(mkStubRoom(roomId, roomId, client));
-    mocked(room.currentState).getStateEvents.mockImplementation(mockStateEventImplementation([]));
+    const room = vi.mocked(mkStubRoom(roomId, roomId, client));
+    vi.mocked(room.currentState).getStateEvents.mockImplementation(mockStateEventImplementation([]));
     rooms?.push(room);
     return room;
 };
@@ -858,10 +859,10 @@ export const mkSpace = (
     rooms?: ReturnType<typeof mkStubRoom>[],
     children: string[] = [],
 ): MockedObject<Room> => {
-    const space = mocked(mkRoom(client, spaceId, rooms));
+    const space = vi.mocked(mkRoom(client, spaceId, rooms));
     space.isSpaceRoom.mockReturnValue(true);
     space.getType.mockReturnValue(RoomType.Space);
-    mocked(space.currentState).getStateEvents.mockImplementation(
+    vi.mocked(space.currentState).getStateEvents.mockImplementation(
         mockStateEventImplementation(
             children.map((roomId) =>
                 mkEvent({
