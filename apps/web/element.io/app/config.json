@@ -51,6 +51,6 @@
     },
     "element_call": {
         "url": "https://call.element.io",
-        "enabled": true
+        "disable": false
     }
 }

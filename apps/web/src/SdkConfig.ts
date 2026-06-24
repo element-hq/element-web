@@ -36,7 +36,6 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     },
     element_call: {
         use_exclusively: false,
-        enabled: true,
         brand: "Element Call",
     },
 

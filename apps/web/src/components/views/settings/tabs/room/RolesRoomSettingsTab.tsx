@@ -273,7 +273,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
         };
         // MSC3401: Native Group VoIP signaling
-        if (SdkConfig.get("element_call").enabled) {
+        if (!SdkConfig.get("element_call").disable) {
             plEventsToLabels[ElementCallEventType.name] = _td("room_settings|permissions|m.call");
             plEventsToLabels[ElementCallMemberEventType.name] = _td("room_settings|permissions|m.call.member");
         }

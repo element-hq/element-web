@@ -186,7 +186,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 },
             };
         }
-    } else if (SdkConfig.get("element_call").enabled) {
+    } else if (!SdkConfig.get("element_call").disable) {
         createOpts.power_level_content_override = {
             events: {
                 // It should always (including non video rooms) be possible to join a group call.

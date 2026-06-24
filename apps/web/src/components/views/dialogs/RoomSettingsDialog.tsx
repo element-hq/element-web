@@ -158,7 +158,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 ),
             );
         }
-        if (SdkConfig.get("element_call").enabled) {
+        if (!SdkConfig.get("element_call").disable) {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.Voip,

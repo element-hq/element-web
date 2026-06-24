@@ -208,7 +208,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
             );
         }
 
-        const elementCallEnabled = SdkConfig.get("element_call").enabled;
+        const elementCallEnabled = !SdkConfig.get("element_call").disable;
         // We also allow/use legacy if element call is not enabled.
         const allowLegacyCalls = !SdkConfig.get("element_call").use_exclusively || !elementCallEnabled;
         const showLegacySettings = this.state.enableLegacyCallsVoip;

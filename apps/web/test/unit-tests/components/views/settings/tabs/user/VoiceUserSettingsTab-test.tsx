@@ -62,9 +62,7 @@ describe("<VoiceUserSettingsTab />", () => {
         it("renders dropdowns for input devices", async () => {
             render(getComponent());
 
-            await expect(screen.findByLabelText("Microphone for voice messages.")).resolves.toHaveDisplayValue(
-                audioIn1.label,
-            );
+            await expect(screen.findByLabelText("Microphone")).resolves.toHaveDisplayValue(audioIn1.label);
             await expect(screen.findByLabelText("Camera")).resolves.toHaveDisplayValue(videoIn1.label);
         });
 
