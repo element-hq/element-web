@@ -12,7 +12,7 @@ import type { Call } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
 import { useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { ConnectionState } from "../../../models/Call";
-import { LiveContentSummary, LiveContentType } from "./LiveContentSummary";
+import { LiveContentSummary } from "./LiveContentSummary";
 
 interface Props {
     call: Call;
@@ -34,12 +34,5 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
             break;
     }
 
-    return (
-        <LiveContentSummary
-            type={LiveContentType.Video}
-            text={text}
-            active={active}
-            participantCount={useParticipantCount(call)}
-        />
-    );
+    return <LiveContentSummary text={text} active={active} participantCount={useParticipantCount(call)} />;
 };

@@ -66,7 +66,6 @@ import LeftPanelLiveShareWarning from "../views/beacon/LeftPanelLiveShareWarning
 import HomePage from "./HomePage";
 import { PipContainer } from "./PipContainer";
 import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushRules";
-import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 import { ModuleApi } from "../../modules/Api.ts";
@@ -93,12 +92,10 @@ interface IProps {
     hideToSRUsers: boolean;
     // eslint-disable-next-line camelcase
     page_type?: string;
-    autoJoin?: boolean;
     threepidInvite?: IThreepidInvite;
     roomOobData?: IOOBData;
     currentRoomId: string | null;
     collapseLhs: boolean;
-    config: ConfigOptions;
     currentUserId: string | null;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;
@@ -796,7 +793,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                             data-collapsed={shouldUseMinimizedUI ? true : undefined}
                         >
                             <LeftPanel
-                                pageType={this.props.page_type as PageTypes}
                                 isMinimized={shouldUseMinimizedUI || false}
                                 resizeNotifier={this.context.resizeNotifier}
                             />

@@ -225,7 +225,7 @@
             "skip_key_backup": "Usuń urządzenie mimo to"
         },
         "misconfigured_body": "Poproś swojego administratora %(brand)s by sprawdzić <a>Twoją konfigurację</a> względem niewłaściwych lub zduplikowanych elementów.",
-        "misconfigured_title": "Twój %(brand)s jest źle skonfigurowany",
+        "misconfigured_title": "%(brand)s jest źle skonfigurowany",
         "mobile_create_account_title": "Zamierzasz utworzyć konto na%(hsName)s",
         "msisdn_field_description": "Inni użytkownicy mogą Cię zaprosić do pokoi za pomocą Twoich danych kontaktowych",
         "msisdn_field_label": "Telefon",
@@ -2517,7 +2517,7 @@
     },
     "setting": {
         "help_about": {
-            "access_token_detail": "Twój token dostępu daje pełny dostęp do Twojego konta. Nie dziel się nim z nikim.",
+            "access_token_detail": "Token dostępu daje pełny dostęp do Twojego konta. Nie dziel się nim z nikim.",
             "brand_version": "Wersja %(brand)s:",
             "clear_cache_reload": "Wyczyść pamięć podręczną i przeładuj",
             "crypto_version": "Wersja krypto:",

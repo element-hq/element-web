@@ -459,93 +459,91 @@ export default function RoomHeader({
     };
 
     return (
-        <>
-            <CurrentRightPanelPhaseContextProvider roomId={room.roomId}>
-                <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
-                    <WithPresenceIndicator room={room}>
-                        {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
-                        {/* Disable on-click actions until the room is created */}
-                        <RoomAvatar
-                            room={room}
-                            size="40px"
-                            oobData={oobData}
-                            onClick={room instanceof LocalRoom ? undefined : onAvatarClick}
-                            tabIndex={-1}
-                            aria-label={_t("room|header_avatar_open_settings_label")}
-                        />
-                    </WithPresenceIndicator>
+        <CurrentRightPanelPhaseContextProvider roomId={room.roomId}>
+            <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
+                <WithPresenceIndicator room={room}>
+                    {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
                     {/* Disable on-click actions until the room is created */}
-                    <button
-                        aria-label={_t("right_panel|room_summary_card|title")}
-                        tabIndex={0}
-                        onClick={
-                            room instanceof LocalRoom
-                                ? undefined
-                                : () => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)
-                        }
-                        className="mx_RoomHeader_infoWrapper"
-                    >
-                        <Box flex="1" className="mx_RoomHeader_info">
-                            <Text
-                                as="div"
-                                size="lg"
-                                weight="semibold"
-                                dir="auto"
-                                role="heading"
-                                aria-level={1}
-                                className="mx_RoomHeader_heading"
-                            >
-                                <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
+                    <RoomAvatar
+                        room={room}
+                        size="40px"
+                        oobData={oobData}
+                        onClick={room instanceof LocalRoom ? undefined : onAvatarClick}
+                        tabIndex={-1}
+                        aria-label={_t("room|header_avatar_open_settings_label")}
+                    />
+                </WithPresenceIndicator>
+                {/* Disable on-click actions until the room is created */}
+                <button
+                    aria-label={_t("right_panel|room_summary_card|title")}
+                    tabIndex={0}
+                    onClick={
+                        room instanceof LocalRoom
+                            ? undefined
+                            : () => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)
+                    }
+                    className="mx_RoomHeader_infoWrapper"
+                >
+                    <Box flex="1" className="mx_RoomHeader_info">
+                        <Text
+                            as="div"
+                            size="lg"
+                            weight="semibold"
+                            dir="auto"
+                            role="heading"
+                            aria-level={1}
+                            className="mx_RoomHeader_heading"
+                        >
+                            <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
 
-                                {!isDirectMessage && joinRule === JoinRule.Public && (
-                                    <Tooltip label={_t("common|public_room")} placement="right">
-                                        <PublicIcon
-                                            width="16px"
-                                            height="16px"
-                                            className="mx_RoomHeader_icon"
-                                            color="var(--cpd-color-icon-info-primary)"
-                                            aria-label={_t("common|public_room")}
-                                        />
-                                    </Tooltip>
-                                )}
+                            {!isDirectMessage && joinRule === JoinRule.Public && (
+                                <Tooltip label={_t("common|public_room")} placement="right">
+                                    <PublicIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon"
+                                        color="var(--cpd-color-icon-info-primary)"
+                                        aria-label={_t("common|public_room")}
+                                    />
+                                </Tooltip>
+                            )}
 
-                                {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                                    <Tooltip label={_t("common|verified")} placement="right">
-                                        <VerifiedIcon
-                                            width="16px"
-                                            height="16px"
-                                            className="mx_RoomHeader_icon mx_Verified"
-                                            aria-label={_t("common|verified")}
-                                        />
-                                    </Tooltip>
-                                )}
+                            {isDirectMessage && e2eStatus === E2EStatus.Verified && (
+                                <Tooltip label={_t("common|verified")} placement="right">
+                                    <VerifiedIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon mx_Verified"
+                                        aria-label={_t("common|verified")}
+                                    />
+                                </Tooltip>
+                            )}
 
-                                {isDirectMessage && e2eStatus === E2EStatus.Warning && (
-                                    <Tooltip label={_t("room|header_untrusted_label")} placement="right">
-                                        <ErrorIcon
-                                            width="16px"
-                                            height="16px"
-                                            className="mx_RoomHeader_icon mx_Untrusted"
-                                            aria-label={_t("room|header_untrusted_label")}
-                                        />
-                                    </Tooltip>
-                                )}
+                            {isDirectMessage && e2eStatus === E2EStatus.Warning && (
+                                <Tooltip label={_t("room|header_untrusted_label")} placement="right">
+                                    <ErrorIcon
+                                        width="16px"
+                                        height="16px"
+                                        className="mx_RoomHeader_icon mx_Untrusted"
+                                        aria-label={_t("room|header_untrusted_label")}
+                                    />
+                                </Tooltip>
+                            )}
 
-                                {isRoomEncrypted && historyVisibilityIcon(historyVisibility)}
-                            </Text>
-                        </Box>
-                    </button>
-                    {/* If the room is local-only then we don't want to show any additional buttons, as it won't work */}
-                    {room instanceof LocalRoom === false && (
-                        <RoomHeaderButtons
-                            room={room}
-                            legacyAdditionalButtons={legacyAdditionalButtons}
-                            extraButtons={extraButtons}
-                        />
-                    )}
-                </Flex>
-                {askToJoinEnabled && <RoomKnocksBar room={room} />}
-            </CurrentRightPanelPhaseContextProvider>
-        </>
+                            {isRoomEncrypted && historyVisibilityIcon(historyVisibility)}
+                        </Text>
+                    </Box>
+                </button>
+                {/* If the room is local-only then we don't want to show any additional buttons, as it won't work */}
+                {room instanceof LocalRoom === false && (
+                    <RoomHeaderButtons
+                        room={room}
+                        legacyAdditionalButtons={legacyAdditionalButtons}
+                        extraButtons={extraButtons}
+                    />
+                )}
+            </Flex>
+            {askToJoinEnabled && <RoomKnocksBar room={room} />}
+        </CurrentRightPanelPhaseContextProvider>
     );
 }

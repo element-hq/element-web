@@ -20,7 +20,6 @@ import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 interface IProps {
     roomId: string;
-    label?: string;
     canSetCanonicalAlias?: boolean;
 }
 

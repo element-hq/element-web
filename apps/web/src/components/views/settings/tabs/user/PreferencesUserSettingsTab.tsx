@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 import { SettingsToggleInput } from "@vector-im/compound-web";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -36,14 +37,9 @@ import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
 import SettingsDropdown from "../../../elements/SettingsDropdown.tsx";
 
-interface IProps {
-    closeSettingsFn(success: boolean): void;
-}
-
 interface IState {
     timezone: string | undefined;
     timezones: string[];
-    timezoneSearch: string | undefined;
     autocompleteDelay: string;
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
@@ -120,7 +116,7 @@ const SpellCheckSection: React.FC = () => {
     );
 };
 
-export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
+export default class PreferencesUserSettingsTab extends React.Component<EmptyObject, IState> {
     private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs"];
 
     private static SPACES_SETTINGS: BooleanSettingKey[] = ["Spaces.allRoomsInHome"];
@@ -171,13 +167,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         // Autocomplete delay (niche text box)
     ];
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
             timezone: TimezoneHandler.getUserTimezone(),
             timezones: TimezoneHandler.getAllTimezones(),
-            timezoneSearch: undefined,
             autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay").toString(10),
             readMarkerInViewThresholdMs: SettingsStore.getValueAt(
                 SettingLevel.DEVICE,
@@ -206,7 +201,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
               })
             : TimezoneHandler.getAllTimezones();
 
-        this.setState({ timezones, timezoneSearch });
+        this.setState({ timezones });
     };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>): void => {

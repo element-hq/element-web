@@ -25,7 +25,8 @@ import {
 import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseDialog from "./BaseDialog";
-import { _t, getUserLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
+import { getUserLanguage } from "../../../i18n/settings";
 import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import { ElementWidgetDriver } from "../../../stores/widgets/ElementWidgetDriver";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Wyczyść",
             "create_an_account": "Utwórz konto",
             "got_an_account": "Masz już konto?",
             "manage_account": "Zarządzaj kontem",
@@ -65,6 +66,11 @@
         "default_settings": "Dopasuj do ustawień domyślnych",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
         "mute_room": "Wycisz pokój"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Ok",
+        "room_list_section_description": "Grupuj swoje czaty w sekcje, aby zachować porządek i ułatwić nawigację.",
+        "room_list_section_title": "Przedstawiamy sekcje"
     },
     "room": {
         "context_menu": {

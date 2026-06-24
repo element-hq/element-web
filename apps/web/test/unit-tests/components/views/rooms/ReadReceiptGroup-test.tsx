@@ -17,7 +17,7 @@ import {
     ReadReceiptPerson,
     readReceiptTooltip,
 } from "../../../../../src/components/views/rooms/ReadReceiptGroup";
-import * as languageHandler from "../../../../../src/languageHandler";
+import * as languageSettings from "../../../../../src/i18n/settings";
 import { stubClient } from "../../../../test-utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
@@ -46,7 +46,7 @@ describe("ReadReceiptGroup", () => {
             expect(readReceiptTooltip([], 1)).toBe("");
         });
         it("returns a pretty list without hasMore", () => {
-            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+            jest.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
             expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], 5)).toEqual(
                 "Alice, Bob, Charlie, Dan and Eve",
             );
