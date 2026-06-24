@@ -772,14 +772,6 @@
             "warning": "Nếu bạn không xóa phương pháp khôi phục, kẻ tấn công có thể đang cố truy cập vào tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt."
         },
         "set_up_toast_title": "Thiết lập Sao lưu Bảo mật",
-        "udd": {
-            "interactive_verification_button": "Xác thực có tương tác bằng biểu tượng cảm xúc",
-            "other_ask_verify_text": "Yêu cầu người dùng này xác thực phiên của họ hoặc xác minh theo cách thủ công bên dưới.",
-            "other_new_session_text": "%(name)s (%(userId)s) đã đăng nhập vào một phiên mới mà không xác thực:",
-            "own_ask_verify_text": "Xác minh phiên khác của bạn bằng một trong các tùy chọn bên dưới.",
-            "own_new_session_text": "Bạn đã đăng nhập vào một phiên mới mà không xác thực nó:",
-            "title": "Không tin cậy"
-        },
         "unable_to_setup_keys_error": "Không thể thiết lập khóa",
         "verification": {
             "accepting": "Đang chấp nhận…",
@@ -3186,13 +3178,7 @@
         "close_to_view_right_panel": "Đóng widget này để xem nó trong bảng điều khiển này",
         "context_menu": {
             "delete": "Xóa Widget",
-            "delete_warning": "Xóa tiện ích widget sẽ xóa tiện ích widget đó cho tất cả người dùng khác trong phòng này. Bạn có chắc chắn muốn xóa tiện ích widget này không?",
-            "move_left": "Di chuyển sang trái",
-            "move_right": "Đi sang phải",
-            "remove": "Xóa cho mọi người",
-            "revoke": "Thu hồi quyền",
-            "screenshot": "Chụp ảnh",
-            "start_audio_stream": "Bắt đầu luồng âm thanh"
+            "delete_warning": "Xóa tiện ích widget sẽ xóa tiện ích widget đó cho tất cả người dùng khác trong phòng này. Bạn có chắc chắn muốn xóa tiện ích widget này không?"
         },
         "cookie_warning": "Tiện ích này có thể sử dụng cookie.",
         "error_hangup_description": "Bạn bị mất kết nối đến cuộc gọi. (Lỗi: %(message)s)",

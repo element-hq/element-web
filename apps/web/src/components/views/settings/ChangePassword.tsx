@@ -38,7 +38,6 @@ interface IProps {
     buttonClassName?: string;
     buttonKind?: AccessibleButtonKind;
     buttonLabel?: string;
-    confirm?: boolean;
     // Whether to autoFocus the new password input
     autoFocusNewPasswordInput?: boolean;
     className?: string;
@@ -61,8 +60,6 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         onFinished() {},
         onError() {},
-
-        confirm: true,
     };
 
     public constructor(props: IProps) {

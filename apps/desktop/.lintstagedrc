@@ -1,4 +1,4 @@
 {
-    "*": "prettier --write --ignore-unknown",
+    "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.(ts|tsx)": ["eslint --fix"]
 }

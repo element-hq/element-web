@@ -37,10 +37,6 @@ interface IMenuOptionProps {
 }
 
 class MenuOption extends React.Component<IMenuOptionProps> {
-    public static defaultProps = {
-        disabled: false,
-    };
-
     private onMouseEnter = (): void => {
         this.props.onMouseEnter(this.props.dropdownKey);
     };

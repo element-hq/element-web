@@ -46,12 +46,6 @@ interface IProps {
     // unmounted, to avoid unnecessary work. Should return true if we
     // are being unmounted.
     checkUnmounting?: () => boolean;
-
-    // Timestamp when the receipt was read
-    timestamp?: number;
-
-    // True to show twelve hour format, false otherwise
-    showTwelveHour?: boolean;
 }
 
 interface IState {

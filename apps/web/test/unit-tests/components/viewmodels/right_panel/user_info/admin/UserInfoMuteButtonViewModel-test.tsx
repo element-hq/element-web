@@ -19,7 +19,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";
 import { useMuteButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoMuteButtonViewModel";
-import { isMuted } from "../../../../../../../src/components/views/right_panel/UserInfo";
 import { withClientContextRenderOptions } from "../../../../../../test-utils";
 
 describe("useMuteButtonViewModel", () => {
@@ -190,41 +189,5 @@ describe("useMuteButtonViewModel", () => {
         await result.current.onMuteButtonClick();
 
         expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, -1);
-    });
-
-    it("returns false if either argument is falsy", () => {
-        // @ts-ignore to let us purposely pass incorrect args
-        expect(isMuted(defaultMember, null)).toBe(false);
-        // @ts-ignore to let us purposely pass incorrect args
-        expect(isMuted(null, {})).toBe(false);
-    });
-
-    it("when powerLevelContent.events and .events_default are undefined, returns false", () => {
-        const powerLevelContents = {};
-        expect(isMuted(defaultMember, powerLevelContents)).toBe(false);
-    });
-
-    it("when powerLevelContent.events is undefined, uses .events_default", () => {
-        const higherPowerLevelContents = { events_default: 10 };
-        expect(isMuted(defaultMember, higherPowerLevelContents)).toBe(true);
-
-        const lowerPowerLevelContents = { events_default: -10 };
-        expect(isMuted(defaultMember, lowerPowerLevelContents)).toBe(false);
-    });
-
-    it("when powerLevelContent.events is defined but '.m.room.message' isn't, uses .events_default", () => {
-        const higherPowerLevelContents = { events: {}, events_default: 10 };
-        expect(isMuted(defaultMember, higherPowerLevelContents)).toBe(true);
-
-        const lowerPowerLevelContents = { events: {}, events_default: -10 };
-        expect(isMuted(defaultMember, lowerPowerLevelContents)).toBe(false);
-    });
-
-    it("when powerLevelContent.events and '.m.room.message' are defined, uses the value", () => {
-        const higherPowerLevelContents = { events: { "m.room.message": -10 }, events_default: 10 };
-        expect(isMuted(defaultMember, higherPowerLevelContents)).toBe(false);
-
-        const lowerPowerLevelContents = { events: { "m.room.message": 10 }, events_default: -10 };
-        expect(isMuted(defaultMember, lowerPowerLevelContents)).toBe(true);
     });
 });

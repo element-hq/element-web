@@ -6,11 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MethodLikeKeys, mocked, type MockedObject } from "jest-mock";
+import { type MethodLikeKeys } from "jest-mock";
+import { type MockedObject } from "vitest";
 
 import BasePlatform from "../../src/BasePlatform";
 import PlatformPeg from "../../src/PlatformPeg";
 import * as SessionLock from "../../src/utils/SessionLock";
+import { vi } from "../setup/adapter.ts";
 
 // doesn't implement abstract
 // @ts-ignore
@@ -38,10 +40,10 @@ export const mockPlatformPeg = (
     platformMocks: Partial<Record<MethodLikeKeys<BasePlatform>, unknown>> = {},
 ): MockedObject<BasePlatform> => {
     const mockPlatform = new MockPlatform(platformMocks);
-    jest.spyOn(PlatformPeg, "get").mockReturnValue(mockPlatform);
-    return mocked(mockPlatform);
+    vi.spyOn(PlatformPeg, "get").mockReturnValue(mockPlatform);
+    return vi.mocked(mockPlatform);
 };
 
 export const unmockPlatformPeg = () => {
-    jest.spyOn(PlatformPeg, "get").mockRestore();
+    vi.spyOn(PlatformPeg, "get").mockRestore();
 };

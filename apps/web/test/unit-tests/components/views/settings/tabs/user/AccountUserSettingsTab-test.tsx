@@ -11,7 +11,7 @@ import React from "react";
 import { type MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 
 import AccountUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
 import { SdkContextClass, SDKContext } from "../../../../../../../src/contexts/SDKContext";

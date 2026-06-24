@@ -15,7 +15,6 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { makeUserPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import { type Layout } from "../../../settings/enums/Layout";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
@@ -37,8 +36,6 @@ interface IProps {
     // the latest event in this chain of replies
     parentEv: MatrixEvent;
     permalinkCreator?: RoomPermalinkCreator;
-    // Specifies which layout to use.
-    layout?: Layout;
     // Whether to always show a timestamp
     alwaysShowTimestamps?: boolean;
     forExport?: boolean;

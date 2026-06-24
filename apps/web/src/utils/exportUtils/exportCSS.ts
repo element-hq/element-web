@@ -7,8 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { CssNode, Rule, StyleSheet } from "css-tree";
-
-import customCSS from "!!raw-loader!./exportCustomCSS.css";
+import customCSS from "./exportCustomCSS.css?raw";
 
 const cssSelectorTextClassesRegex = /\.[\w-]+/g;
 const appLayerName = "app-web";

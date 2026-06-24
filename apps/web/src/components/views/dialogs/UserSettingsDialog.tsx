@@ -166,7 +166,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Preferences,
                 _td("common|preferences"),
                 <PreferencesIcon />,
-                <PreferencesUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <PreferencesUserSettingsTab />,
                 "UserSettingsPreferences",
             ),
         );
@@ -206,7 +206,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Security,
                 _td("room_settings|security|title"),
                 <LockIcon />,
-                <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <SecurityUserSettingsTab />,
                 "UserSettingsSecurityPrivacy",
             ),
         );

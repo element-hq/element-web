@@ -863,14 +863,6 @@
             "warning": "Hvis du ikke har fjernet gendannelsesmetoden, kan det være en hacker forsøger at få adgang til din konto. Skift din kontos adgangskode og indstil straks en ny gendannelsesmetode under Indstillinger."
         },
         "set_up_toast_title": "Opsæt sikkerhedskopiering",
-        "udd": {
-            "interactive_verification_button": "Bekræft interaktivt med emoji",
-            "other_ask_verify_text": "Bed denne bruger om at bekræfte sin session, eller bekræft den manuelt nedenfor.",
-            "other_new_session_text": "%(name)s (%(userId)s) loggede ind på en ny session uden at verificere den:",
-            "own_ask_verify_text": "Bekræft din anden session ved hjælp af en af ​​mulighederne herunder.",
-            "own_new_session_text": "Du loggede på en ny session uden at bekræfte den:",
-            "title": "Ikke betroet"
-        },
         "unable_to_setup_keys_error": "Nøgler kunne ikke konfigureres",
         "verification": {
             "accepting": "Accepterer…",
@@ -3525,13 +3517,7 @@
         "close_to_view_right_panel": "Luk denne widget for at se den i dette panel",
         "context_menu": {
             "delete": "Slet widget",
-            "delete_warning": "Hvis du sletter en widget, fjernes den for alle brugere i dette rum. Er du sikker på, at du vil slette denne widget?",
-            "move_left": "Flyt til venstre",
-            "move_right": "Flyt til højre",
-            "remove": "Fjern for alle",
-            "revoke": "Tilbagekald tilladelser",
-            "screenshot": "Tag et billede",
-            "start_audio_stream": "Start lydstream"
+            "delete_warning": "Hvis du sletter en widget, fjernes den for alle brugere i dette rum. Er du sikker på, at du vil slette denne widget?"
         },
         "cookie_warning": "Denne widget kan bruge cookies.",
         "error_hangup_description": "Du blev afbrudt fra opkaldet. (Fejl:%(message)s )",

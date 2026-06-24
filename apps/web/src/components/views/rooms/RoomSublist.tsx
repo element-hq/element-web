@@ -818,25 +818,23 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             });
 
             content = (
-                <React.Fragment>
-                    <Resizable
-                        size={{ height: this.state.height } as any}
-                        minHeight={minTilesPx}
-                        maxHeight={maxTilesPx}
-                        onResizeStart={this.onResizeStart}
-                        onResizeStop={this.onResizeStop}
-                        onResize={this.onResize}
-                        handleWrapperClass={handleWrapperClasses}
-                        handleClasses={{ bottom: "mx_RoomSublist_resizerHandle" }}
-                        className="mx_RoomSublist_resizeBox"
-                        enable={handles}
-                    >
-                        <div className="mx_RoomSublist_tiles" ref={this.tilesRef}>
-                            {visibleTiles}
-                        </div>
-                        {showNButton}
-                    </Resizable>
-                </React.Fragment>
+                <Resizable
+                    size={{ height: this.state.height } as any}
+                    minHeight={minTilesPx}
+                    maxHeight={maxTilesPx}
+                    onResizeStart={this.onResizeStart}
+                    onResizeStop={this.onResizeStop}
+                    onResize={this.onResize}
+                    handleWrapperClass={handleWrapperClasses}
+                    handleClasses={{ bottom: "mx_RoomSublist_resizerHandle" }}
+                    className="mx_RoomSublist_resizeBox"
+                    enable={handles}
+                >
+                    <div className="mx_RoomSublist_tiles" ref={this.tilesRef}>
+                        {visibleTiles}
+                    </div>
+                    {showNButton}
+                </Resizable>
             );
         } else if (this.props.showSkeleton && this.state.isExpanded) {
             content = <div className="mx_RoomSublist_skeletonUI" />;

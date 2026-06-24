@@ -7,7 +7,7 @@
 import { MatrixError, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 
-import type { MockedObject } from "jest-mock";
+import type { MockedObject } from "jest-mock-vitest-adapter";
 import { UserMenuViewModel } from "../../../src/viewmodels/menus/UserMenuViewModel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
@@ -27,6 +27,7 @@ describe("UserMenuViewModel", () => {
             ...mockClientMethodsUser(),
             ...mockClientMethodsServer(),
             getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
+            setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         });
         SdkContextClass.instance.client = client;
     });
@@ -150,6 +151,15 @@ describe("UserMenuViewModel", () => {
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
             }),
+        );
+    });
+
+    it("can clear a user status", async () => {
+        const vm = new UserMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
+        vm.clearStatus();
+        await waitFor(() =>
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null),
         );
     });
 

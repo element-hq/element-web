@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Effacer",
             "create_an_account": "Créer un compte",
             "got_an_account": "Tu as un compte ?",
             "manage_account": "Gérer le compte",
@@ -65,6 +66,11 @@
         "default_settings": "Correspondre aux paramètres par défaut",
         "mentions_keywords": "Mentions et mots-clés",
         "mute_room": "Rendre le salon muet"
+    },
+    "release_announcement": {
+        "room_list_section_close": "OK",
+        "room_list_section_description": " Regroupez vos discussions en sections afin que les conversations restent organisées et faciles à parcourir.",
+        "room_list_section_title": "Introduction des sections"
     },
     "room": {
         "context_menu": {
@@ -150,7 +156,8 @@
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
             "mark_unread": "Marquer comme non lu",
-            "move_to_section": "Déplacer vers"
+            "move_to_section": "Déplacer vers",
+            "remove_from_section": "Supprimer de la section"
         },
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",

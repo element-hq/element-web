@@ -762,7 +762,7 @@
         "category_other": "Muud",
         "category_room": "Jututuba",
         "caution_colon": "Hoiatus:",
-        "checking_sticky_events_support": "Määratud kestusega sõnumite tugi on tuvastamisel...",
+        "checking_sticky_events_support": "Määratud kestusega sündmuste tugi on tuvastamisel...",
         "client_versions": "Klientrakenduste versioonid",
         "crypto": {
             "4s_public_key_in_account_data": "kasutajakonto andmete juures",
@@ -832,7 +832,7 @@
         "explore_account_data": "Uuri konto andmeid",
         "explore_room_account_data": "Uuri kasutajakonto olekut",
         "explore_room_state": "Uuri jututoa olekut",
-        "explore_sticky_state": "Tuvasta määratud kestusega sõnumite olek",
+        "explore_sticky_state": "Tuvasta määratud kestusega sündmuste olek",
         "failed_to_find_widget": "Selle vidina leidmisel tekkis viga.",
         "failed_to_load": "Laadimine ei õnnestunud.",
         "failed_to_save": "Seadistuste salvestamine ei õnnestunud.",
@@ -846,7 +846,7 @@
         "main_timeline": "Peamine ajajoon",
         "manual_device_verification": "Seadme käsitsi verifitseerimine",
         "no_receipt_found": "Lugemisteatist ei leidu",
-        "no_sticky_events": "Selles jututoas pole määratud kestusega sõnumeid",
+        "no_sticky_events": "Selles jututoas pole määratud kestusega sõnumeid või muid sündmusi",
         "notification_state": "Teavituste olek: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Teavituste silumine",
         "number_of_users": "Kasutajate arv",
@@ -893,9 +893,9 @@
             "one": "<kogukond>"
         },
         "state_key": "Oleku võti",
-        "sticky_duration": "Määratud kestusega sõnumi eluiga (ms)",
-        "sticky_events_not_supported": "Sinu koduserver veel ei toeta määratud kestusega sõnumeid",
-        "sticky_key": "Määratud kestusega sõnumi võti",
+        "sticky_duration": "Määratud kestusega sõnumi/sündmuse eluiga (ms)",
+        "sticky_events_not_supported": "Sinu koduserver veel ei toeta määratud kestusega sõnumeid/sündmusi",
+        "sticky_key": "Määratud kestusega sündmuse võti",
         "thread_root_id": "Jutulõnga esimese kirje tunnus: %(threadRootId)s",
         "threads_timeline": "Jutulõngade ajajoon",
         "title": "Arendusvahendid",
@@ -1013,14 +1013,6 @@
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
         "turn_on_key_storage": "Võta krüptovõtmete hoidla kasutusele",
         "turn_on_key_storage_description": "See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes ning on nõutav vestluste ja digitaalse identiteedi varundamiseks.",
-        "udd": {
-            "interactive_verification_button": "Verifitseeri interaktiivselt emoji abil",
-            "other_ask_verify_text": "Palu nimetatud kasutajal verifitseerida see sessioon või tee seda alljärgnevaga käsitsi.",
-            "other_new_session_text": "%(name)s (%(userId)s) logis sisse uude sessiooni ilma seda verifitseerimata:",
-            "own_ask_verify_text": "Verifitseeri oma teine sessioon kasutades üht alljärgnevatest võimalustest.",
-            "own_new_session_text": "Sa logisid sisse uude sessiooni ilma seda verifitseerimata:",
-            "title": "Ei ole usaldusväärne"
-        },
         "unable_to_setup_keys_error": "Krüptovõtmete kasutuselevõtmine ei õnnestu",
         "verification": {
             "accepting": "Nõustun …",
@@ -1542,6 +1534,11 @@
         "experimental_section": "Varased arendusjärgud",
         "extended_profiles_msc_support": "See eeldab, et koduserver toetab MSC4133 spetsifikatsiooni",
         "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
+        "feature_retention": {
+            "description": "Selle seadistusega saad jututoast sõnumeid automaatselt eemaldada etteantud ajavahemiku möödumisel. Hetkel on toetatud vaid lugemise seadistused.",
+            "disabled_sliding_sync": "Kui järkjärgulise sünkroonimine on kasutusel, siis sõnumise säilitamise reegleid ei saa sisse lülitada.",
+            "display_name": "Sõnumite säilitamine"
+        },
         "feature_user_status": {
             "description": "Võimaldab näha praegust olekut ja muuta seda",
             "display_name": "Kasutaja olek",
@@ -1584,7 +1581,7 @@
         "render_reaction_images": "Kujuta reaktsioonides ka kohandatud pilte",
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
         "room_list_sections": "Jututubade loendi jaotised",
-        "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
+        "sliding_sync": "Järkjärgulise sünkroonimise režiim",
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
@@ -3167,7 +3164,7 @@
         "view": "Vaata sellise aadressiga jututuba",
         "whois": "Näitab teavet kasutaja kohta"
     },
-    "sliding_sync_legacy_no_longer_supported": "Järkjärgulise sünkroniseerimise (Sliding sync) varasem lahendus pole enam toetatud: uue lahenduse kasutamiseks palun logi rakendusesse uuesti sisse",
+    "sliding_sync_legacy_no_longer_supported": "Järkjärgulise sünkroonimise (Sliding sync) varasem lahendus pole enam toetatud: uue lahenduse kasutamiseks palun logi rakendusesse uuesti sisse",
     "space": {
         "add_existing_room_space": {
             "create": "Kas sa selle asemel soovid lisada jututuba?",
@@ -4071,13 +4068,7 @@
         "close_to_view_right_panel": "Sellel paneelil kuvamiseks sulge see vidin",
         "context_menu": {
             "delete": "Kustuta vidin",
-            "delete_warning": "Vidina kustutamisel eemaldatakse ta kõikide selle jututoa kasutajate jaoks. Kas sa kindlasti soovid seda vidinat eemaldada?",
-            "move_left": "Liigu vasakule",
-            "move_right": "Liigu paremale",
-            "remove": "Eemalda kõigilt",
-            "revoke": "Tühista õigused",
-            "screenshot": "Pildista",
-            "start_audio_stream": "Käivita audiovoog"
+            "delete_warning": "Vidina kustutamisel eemaldatakse ta kõikide selle jututoa kasutajate jaoks. Kas sa kindlasti soovid seda vidinat eemaldada?"
         },
         "cookie_warning": "See vidin võib kasutada küpsiseid.",
         "error_hangup_description": "Kõne on katkenud. (Veateade: %(message)s)",
