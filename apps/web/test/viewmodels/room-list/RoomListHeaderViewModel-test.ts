@@ -26,6 +26,7 @@ import {
 import { createTestClient, mkSpace } from "../../test-utils";
 import { createRoom, hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
 import PosthogTrackers from "../../../src/PosthogTrackers";
+import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 
 jest.mock("../../../src/PosthogTrackers", () => ({
     trackInteraction: jest.fn(),
@@ -58,6 +59,9 @@ describe("RoomListHeaderViewModel", () => {
 
         mocked(hasCreateRoomRights).mockReturnValue(true);
         mocked(shouldShowSpaceSettings).mockReturnValue(true);
+
+        jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
+        jest.spyOn(ReleaseAnnouncementStore.instance, "nextReleaseAnnouncement").mockResolvedValue(undefined);
 
         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
             if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Recency;
@@ -191,6 +195,28 @@ describe("RoomListHeaderViewModel", () => {
                 expect(vm.getSnapshot().useComposeIcon).toBe(expectedUseComposeIcon);
             },
         );
+
+        it("should set displaySectionReleaseAnnouncement to true when sections feature is enabled and announcement is active", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "feature_room_list_sections") return true;
+                return false;
+            });
+            jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(
+                "room_list_section",
+            );
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(true);
+        });
+
+        it("should set displaySectionReleaseAnnouncement to false when sections feature is disabled", () => {
+            jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(
+                "room_list_section",
+            );
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(false);
+        });
     });
 
     describe("event listeners", () => {
@@ -434,6 +460,15 @@ describe("RoomListHeaderViewModel", () => {
 
             expect(setValueSpy).toHaveBeenCalledWith("RoomList.showMessagePreview", null, expect.anything(), false);
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(false);
+        });
+
+        it("should call nextReleaseAnnouncement and set displaySectionReleaseAnnouncement to false when closeSectionReleaseAnnouncement is called", () => {
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+            vm.closeSectionReleaseAnnouncement();
+
+            expect(ReleaseAnnouncementStore.instance.nextReleaseAnnouncement).toHaveBeenCalled();
+            expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(false);
         });
     });
 });

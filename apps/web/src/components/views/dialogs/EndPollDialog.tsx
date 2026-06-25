@@ -15,13 +15,11 @@ import QuestionDialog from "./QuestionDialog";
 import { findTopAnswer } from "../messages/MPollBody";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
-import { type GetRelationsForEvent } from "../rooms/EventTile";
 
 interface IProps {
     matrixClient: MatrixClient;
     event: MatrixEvent;
     onFinished: (success?: boolean) => void;
-    getRelationsForEvent?: GetRelationsForEvent;
 }
 
 export default class EndPollDialog extends React.Component<IProps> {

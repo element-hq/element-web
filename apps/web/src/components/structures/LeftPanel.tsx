@@ -35,14 +35,12 @@ import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
-import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 import SettingsStore from "../../settings/SettingsStore";
 import { RoomListPanel } from "../views/rooms/RoomListPanel";
 
 interface IProps {
     isMinimized: boolean;
-    pageType: PageType;
     resizeNotifier: ResizeNotifier;
 }
 
@@ -329,7 +327,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <IndicatorScrollbar
                     role="navigation"
                     aria-label={_t("a11y|recent_rooms")}
-                    className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
+                    className="mx_LeftPanel_breadcrumbsContainer"
                     verticalScrollsHorizontally={true}
                 >
                     <RoomBreadcrumbs />

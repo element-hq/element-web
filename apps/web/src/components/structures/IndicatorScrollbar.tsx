@@ -5,9 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX } from "react";
+import React, { type JSX } from "react";
+import { AutoHideScrollbar, type AutoHideScrollbarProps } from "@element-hq/web-shared-components";
+import classNames from "classnames";
 
-import AutoHideScrollbar, { type IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {
@@ -32,7 +33,6 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     IProps<T>,
     IState
 > {
-    private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement?: HTMLDivElement;
     private likelyTrackpadUser: boolean | null = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
@@ -170,7 +170,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
 
     public render(): React.ReactNode {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
+        const { children, trackHorizontalOverflow, verticalScrollsHorizontally, className, ...otherProps } = this.props;
 
         const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };
         const rightIndicatorStyle = { right: this.state.rightIndicatorOffset };
@@ -184,7 +184,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         return (
             <AutoHideScrollbar
                 {...otherProps}
-                ref={this.autoHideScrollbar}
+                className={classNames("mx_AutoHideScrollbar", className)}
                 wrappedRef={this.collectScroller}
                 onWheel={this.onMouseWheel}
             >

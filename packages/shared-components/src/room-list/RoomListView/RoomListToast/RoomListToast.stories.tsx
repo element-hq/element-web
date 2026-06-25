@@ -32,6 +32,12 @@ const meta = {
             </div>
         ),
     ],
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/qurBlLqjf3mRNpyZ1ffamm/ER-213---Sections?node-id=1233-22137&t=ftTEpAma7PgRaaqB-4",
+        },
+    },
 } satisfies Meta<typeof RoomListToast>;
 
 export default meta;

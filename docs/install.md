@@ -66,7 +66,7 @@ on other runtimes may require root privileges. To resolve this, either run the
 image as root (`docker run --user 0`) or, better, change the port that nginx
 listens on via the `ELEMENT_WEB_PORT` environment variable.
 
-[Element Web Modules](https://github.com/element-hq/element-modules/tree/main/packages/element-web-module-api) can be dynamically loaded
+[Element Web Modules](https://github.com/element-hq/element-web/tree/develop/packages/module-api) can be dynamically loaded
 by being made available (e.g. via bind mount) in a directory within `/modules/`.
 The default entrypoint will be index.js in that directory but can be overridden if a package.json file is found with a `main` directive.
 These modules will be presented in a `/modules` subdirectory within the webroot, and automatically added to the config.json `modules` field.

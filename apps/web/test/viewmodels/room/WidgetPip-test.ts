@@ -6,7 +6,7 @@
  */
 
 import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 import { createRef } from "react";
 
 import { mkRoom, stubClient } from "../../test-utils";

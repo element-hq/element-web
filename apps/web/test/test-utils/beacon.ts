@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 import {
     type MatrixClient,
     MatrixEvent,
@@ -165,7 +165,7 @@ export const mockGeolocation = (): MockedObject<Geolocation> => {
  * See for error codes: https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
  */
 export const watchPositionMockImplementation = (delays: number[], errorCodes: number[] = []) => {
-    return (callback: PositionCallback, error: PositionErrorCallback): number => {
+    return (callback: PositionCallback, error?: PositionErrorCallback | null): number => {
         const position = makeGeolocationPosition({});
 
         let totalDelay = 0;
@@ -173,7 +173,7 @@ export const watchPositionMockImplementation = (delays: number[], errorCodes: nu
             totalDelay += delayMs;
             const timeout = window.setTimeout(() => {
                 if (errorCodes[index]) {
-                    error(getMockGeolocationPositionError(errorCodes[index], "error message"));
+                    error?.(getMockGeolocationPositionError(errorCodes[index], "error message"));
                 } else {
                     callback({ ...position, timestamp: position.timestamp + totalDelay });
                 }

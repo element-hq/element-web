@@ -26,10 +26,6 @@ interface ICaptchaFormState {
  * A pure UI component which displays a captcha form.
  */
 export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICaptchaFormState> {
-    public static defaultProps = {
-        onCaptchaResponse: () => {},
-    };
-
     private captchaWidgetId?: string;
     private recaptchaContainer = createRef<HTMLDivElement>();
 

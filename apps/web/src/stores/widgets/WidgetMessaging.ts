@@ -37,7 +37,8 @@ import {
 } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, getUserLanguage } from "../../languageHandler";
+import { _t } from "../../languageHandler";
+import { getUserLanguage } from "../../i18n/settings";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";

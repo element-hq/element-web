@@ -18,7 +18,6 @@ import ExternalLink from "../elements/ExternalLink.tsx";
 interface IProps {
     policiesAndServicePairs: ServicePolicyPair[];
     onFinished: (accepted: string[]) => void;
-    agreedUrls: string[]; // array of URLs the user has accepted
     introElement: React.ReactNode;
 }
 

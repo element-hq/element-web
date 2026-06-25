@@ -115,7 +115,10 @@ dis.register((payload) => {
  */
 let sessionLockStolen = false;
 
-// this is exposed solely for unit tests.
+/**
+ * this is exposed solely for unit tests.
+ * @knipignore
+ */
 export function setSessionLockNotStolen(): void {
     sessionLockStolen = false;
 }

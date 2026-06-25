@@ -217,29 +217,92 @@ test.describe("Room list sections", () => {
         });
     });
 
-    test("should show unread indicator on section header", async ({ page, app, bot }) => {
-        // Create a favourite room
-        const favouriteId = await app.client.createRoom({ name: "favourite room" });
-        await app.client.evaluate(async (client, roomId) => {
-            await client.setRoomTag(roomId, "m.favourite");
-        }, favouriteId);
+    test.describe("Section header notification", () => {
+        test("should show unread indicator on section header", async ({ page, app, bot }) => {
+            // Create a favourite room
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
 
-        const roomList = getRoomList(page);
+            const roomList = getRoomList(page);
 
-        // Invite the bot and have it send a message to generate an unread
-        await app.client.inviteUser(favouriteId, bot.credentials.userId);
-        await bot.joinRoom(favouriteId);
-        await bot.sendMessage(favouriteId, "Hello from bot!");
+            // Invite the bot and have it send a message to generate an unread
+            await app.client.inviteUser(favouriteId, bot.credentials.userId);
+            await bot.joinRoom(favouriteId);
+            await bot.sendMessage(favouriteId, "Hello from bot!");
 
-        let sectionHeader = getSectionHeader(page, "Favourites", true);
-        await expect(sectionHeader).toBeVisible();
+            let sectionHeader = getSectionHeader(page, "Favourites", true);
+            await expect(sectionHeader).toBeVisible();
 
-        // Open the room to mark it as read
-        await roomList.getByRole("row", { name: "Open room favourite room" }).click();
+            // Open the room to mark it as read
+            await roomList.getByRole("row", { name: "Open room favourite room" }).click();
 
-        // The section should no longer be unread
-        sectionHeader = getSectionHeader(page, "Favourites", false);
-        await expect(sectionHeader).toBeVisible();
+            // The section should no longer be unread
+            sectionHeader = getSectionHeader(page, "Favourites", false);
+            await expect(sectionHeader).toBeVisible();
+        });
+
+        test(
+            "should aggregate notification decorations on the collapsed section header",
+            { tag: "@screenshot" },
+            async ({ page, app, user, bot }) => {
+                // A favourite room to keep the room list in section mode (otherwise it renders as a flat list)
+                const favouriteId = await app.client.createRoom({ name: "favourite room" });
+                await app.client.evaluate(async (client, roomId) => {
+                    await client.setRoomTag(roomId, "m.favourite");
+                }, favouriteId);
+
+                // A room with a mention, landing in the Chats section
+                const mentionId = await app.client.createRoom({ name: "mention room" });
+                await app.client.inviteUser(mentionId, bot.credentials.userId);
+                await bot.joinRoom(mentionId);
+                const clientBot = await bot.prepareClient();
+                await clientBot.evaluate(
+                    async (client, { roomId, userId }) => {
+                        await client.sendMessage(roomId, {
+                            // @ts-ignore ignore usage of MsgType.text
+                            "msgtype": "m.text",
+                            "body": "User",
+                            "format": "org.matrix.custom.html",
+                            "formatted_body": `<a href="https://matrix.to/#/${userId}">User</a>`,
+                            "m.mentions": {
+                                user_ids: [userId],
+                            },
+                        });
+                    },
+                    { roomId: mentionId, userId: user.userId },
+                );
+
+                // A room we are invited to, landing in the Chats section
+                await bot.createRoom({
+                    name: "invited room",
+                    invite: [user.userId],
+                    is_direct: true,
+                });
+
+                const roomList = getRoomList(page);
+
+                // Wait for the mention decoration to sync onto the mention room before collapsing, so the
+                // section header aggregation has the room states available.
+                await expect(
+                    roomList.getByRole("row", { name: /mention room/ }).getByTestId("notification-decoration"),
+                ).toBeVisible();
+
+                // Collapse the Chats section so the aggregated decoration is displayed on its header
+                const chatsHeader = getSectionHeader(page, "Chats", true);
+                await expect(chatsHeader).toBeVisible();
+                await chatsHeader.click();
+
+                // The header hides its decoration while hovered/focused, so move the pointer away
+                await page.mouse.move(0, 0);
+
+                // The collapsed header aggregates the mention and the invitation
+                await expect(chatsHeader.getByTestId("notification-decoration")).toBeVisible();
+
+                await expect(chatsHeader).toMatchScreenshot("room-list-section-header-notification.png");
+            },
+        );
     });
 
     test.describe("Sections and filters interaction", () => {
@@ -288,6 +351,133 @@ test.describe("Room list sections", () => {
             await expect(roomList.getByRole("row", { name: "fav with unread" })).toBeVisible();
             await expect(roomList.getByRole("row", { name: "regular with unread" })).toBeVisible();
             await expect(roomList.getByRole("row", { name: "no unread room" })).not.toBeVisible();
+        });
+    });
+
+    test.describe("Section keyboard navigation", () => {
+        test.beforeEach(async ({ app }) => {
+            // A favourite room forces section mode and gives us a non-trivial first section.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            // A chats-section room so we have a second section to navigate to.
+            await app.client.createRoom({ name: "chat room" });
+        });
+
+        test("Arrow Down/Up move focus through sections and rooms", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            // In treegrid mode, a room renders as <div role="row"><div role="gridcell"><button …></button></div></div>.
+            // Only the inner <button> is focusable, so target it by role for focus assertions.
+            const favRoomButton = roomList.getByRole("button", { name: "Open room favourite room" });
+            const chatsHeader = getSectionHeader(page, "Chats");
+
+            await expect(favouritesHeader).toBeVisible();
+            await expect(favRoomButton).toBeVisible();
+            await expect(chatsHeader).toBeVisible();
+
+            await favouritesHeader.focus();
+            await expect(favouritesHeader).toBeFocused();
+
+            // Down moves into the favourite section's room.
+            await page.keyboard.press("ArrowDown");
+            await expect(favRoomButton).toBeFocused();
+
+            // Down again jumps to the next section header.
+            await page.keyboard.press("ArrowDown");
+            await expect(chatsHeader).toBeFocused();
+
+            // Up reverses the traversal.
+            await page.keyboard.press("ArrowUp");
+            await expect(favRoomButton).toBeFocused();
+
+            await page.keyboard.press("ArrowUp");
+            await expect(favouritesHeader).toBeFocused();
+        });
+
+        test("Arrow Right expands a collapsed section", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoom = getRoomList(page).getByRole("row", { name: "Open room favourite room" });
+
+            // Collapse the section via click so we know we start expanded=false.
+            await favouritesHeader.click();
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(favRoom).not.toBeVisible();
+
+            await favouritesHeader.focus();
+            await page.keyboard.press("ArrowRight");
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+            await expect(favRoom).toBeVisible();
+        });
+
+        test("Arrow Right is a no-op on an already-expanded section", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+
+            await favouritesHeader.focus();
+            await page.keyboard.press("ArrowRight");
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+        });
+
+        test("Arrow Left collapses an expanded section", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoom = getRoomList(page).getByRole("row", { name: "Open room favourite room" });
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+            await expect(favRoom).toBeVisible();
+
+            await favouritesHeader.focus();
+            await page.keyboard.press("ArrowLeft");
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(favRoom).not.toBeVisible();
+        });
+
+        test("Arrow Left is a no-op on an already-collapsed section", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+
+            await favouritesHeader.click();
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+
+            await favouritesHeader.focus();
+            await page.keyboard.press("ArrowLeft");
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+        });
+
+        test("Arrow Right on an expanded section with rooms moves focus to its first room", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoomButton = getRoomList(page).getByRole("button", { name: "Open room favourite room" });
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+
+            await favouritesHeader.focus();
+            await expect(favouritesHeader).toBeFocused();
+
+            await page.keyboard.press("ArrowRight");
+
+            // Focus must move to the first room in the section, not the next section header.
+            await expect(favRoomButton).toBeFocused();
+            // The section should remain expanded.
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+        });
+
+        test("Arrow Left on the first room of a section moves focus back to the section header", async ({ page }) => {
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoomButton = getRoomList(page).getByRole("button", { name: "Open room favourite room" });
+
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+
+            await favRoomButton.focus();
+            await expect(favRoomButton).toBeFocused();
+
+            await page.keyboard.press("ArrowLeft");
+
+            await expect(favouritesHeader).toBeFocused();
         });
     });
 });

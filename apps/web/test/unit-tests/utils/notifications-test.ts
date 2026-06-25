@@ -14,7 +14,7 @@ import {
     ReceiptType,
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
-import { type Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 
 import {
     localNotificationsAreSilenced,

@@ -13,6 +13,7 @@ import { routeConfigJson } from "./utils/config_json.js";
 
 export * from "./utils/config_json.js";
 export * from "./utils/context.js";
+export * from "./utils/release_accouncement.js";
 export * from "./utils/toasts.js";
 
 export { populateLocalStorageWithCredentials } from "./fixtures/user.js";
