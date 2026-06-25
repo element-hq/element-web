@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { NetworkProxyViewModelImpl, NetworkProxyView } from "@element-hq/web-shared-components";
+import { NetworkProxyViewModelImpl } from "@element-hq/web-shared-components";
 
 import { NetworkProxyModal } from "../../../../../src/components/views/settings/NetworkProxyModal";
 import SettingsStore from "../../../../../src/settings/SettingsStore";

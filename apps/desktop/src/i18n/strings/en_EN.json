@@ -53,12 +53,6 @@
         "services": "Services",
         "unhide": "Unhide"
     },
-    "settings": {
-        "network_proxy": {
-            "title": "Network Proxy",
-            "title_ellipsis": "Network Proxy…"
-        }
-    },
     "right_click_menu": {
         "add_to_dictionary": "Add to dictionary",
         "copy_email": "Copy email address",
@@ -68,6 +62,11 @@
         "save_image_as": "Save image as...",
         "save_image_as_error_description": "The image failed to save",
         "save_image_as_error_title": "Failed to save image"
+    },
+    "settings": {
+        "network_proxy": {
+            "title_ellipsis": "Network Proxy…"
+        }
     },
     "store": {
         "error": {

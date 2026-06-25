@@ -32,7 +32,7 @@ const AuthFooter = (): ReactElement => {
         );
     }
 
-    if (PlatformPeg.get().supportsProxyConfiguration()) {
+    if (PlatformPeg.get()?.supportsProxyConfiguration()) {
         authFooterLinks.push(
             <a
                 href="#"

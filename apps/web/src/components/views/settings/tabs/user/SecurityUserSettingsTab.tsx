@@ -290,13 +290,13 @@ export default class SecurityUserSettingsTab extends React.Component<EmptyObject
     }
 
     private renderProxySection(): ReactNode {
-        if (!PlatformPeg.get().supportsProxyConfiguration()) return null;
+        if (!PlatformPeg.get()?.supportsProxyConfiguration()) return null;
 
         const config = SettingsStore.getValue("desktopProxyConfig");
         let description = _t("settings|network_proxy|mode_system_selected");
-        if (config.mode === "direct") {
+        if (config?.mode === "direct") {
             description = _t("settings|network_proxy|mode_direct_selected");
-        } else if (config.mode === "custom") {
+        } else if (config?.mode === "custom") {
             description = _t("settings|network_proxy|mode_custom_selected");
         }
 

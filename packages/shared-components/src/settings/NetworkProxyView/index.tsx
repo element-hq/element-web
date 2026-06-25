@@ -14,4 +14,5 @@ export {
 export {
     NetworkProxyViewModel as NetworkProxyViewModelImpl,
     type NetworkProxyViewModelProps,
+    type ProxyConfig,
 } from "./NetworkProxyViewModel";

@@ -8,8 +8,8 @@
 import React, { type JSX } from "react";
 import { Button, RadioInput, TextInput, PasswordInput, Separator, Text } from "@vector-im/compound-web";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
-import { _t } from "../../utils/i18n";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
+import { _t } from "../../core/i18n/i18n";
 import styles from "./NetworkProxyView.module.css";
 
 /**
