@@ -95,4 +95,11 @@ describe("TextInputDialog", () => {
 
         expect(screen.queryByTestId("dialog-cancel-button")).not.toBeInTheDocument();
     });
+
+    it("applies cancelButtonClass to the cancel button", () => {
+        render(<TextInputDialog {...defaultProps} cancelButtonClass="secondary" />);
+
+        const cancelButton = screen.getByTestId("dialog-cancel-button");
+        expect(cancelButton).toHaveClass("secondary");
+    });
 });

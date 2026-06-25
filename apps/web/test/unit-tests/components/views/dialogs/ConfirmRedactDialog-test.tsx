@@ -61,7 +61,7 @@ describe("ConfirmRedactDialog", () => {
     });
 
     describe("rendering", () => {
-        it("renders the confirm dialog with danger button class", () => {
+        it("renders the confirm dialog with danger button class and delete icon", () => {
             const event = mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -70,7 +70,7 @@ describe("ConfirmRedactDialog", () => {
                 user: client.getSafeUserId(),
             });
 
-            render(<ConfirmRedactDialog event={event} onFinished={jest.fn()} />);
+            const { container } = render(<ConfirmRedactDialog event={event} onFinished={jest.fn()} />);
 
             expect(screen.getByText("Confirm Removal")).toBeInTheDocument();
             expect(screen.getByText("Are you sure you wish to remove (delete) this event?")).toBeInTheDocument();
@@ -79,6 +79,9 @@ describe("ConfirmRedactDialog", () => {
             const primaryButton = screen.getByTestId("dialog-primary-button");
             expect(primaryButton).toHaveClass("mx_Dialog_primary");
             expect(primaryButton).toHaveClass("danger");
+
+            // Verify DeleteIcon is present inside the primary button
+            expect(primaryButton.querySelector("svg")).toBeInTheDocument();
         });
 
         it("renders extended description for state events", () => {
@@ -133,6 +136,21 @@ describe("ConfirmRedactDialog", () => {
             await userEvent.click(primaryButton);
 
             expect(onFinished).toHaveBeenCalledWith(true, "spam");
+        });
+
+        it("applies secondary class to the cancel button", () => {
+            const event = mkEvent({
+                event: true,
+                type: "m.room.message",
+                room: roomId,
+                content: {},
+                user: client.getSafeUserId(),
+            });
+
+            render(<ConfirmRedactDialog event={event} onFinished={jest.fn()} />);
+
+            const cancelButton = screen.getByTestId("dialog-cancel-button");
+            expect(cancelButton).toHaveClass("secondary");
         });
     });
 });
