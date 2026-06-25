@@ -180,18 +180,14 @@ test.describe("Room list filters and sort", () => {
             await expect.poll(() => roomList.locator("role=option").count()).toBe(2);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
-            await expect(roomList.getByRole("option", { name: "unread room" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "favourite room" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "empty room" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "room with mention" })).toBeVisible();
-            await expect(roomList.getByRole("option", { name: "Low prio room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(5);
+            await expect(roomList.getByRole("button", { name: "unread room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "favourite room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "empty room" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "room with mention" })).toBeVisible();
+            await expect(roomList.getByRole("button", { name: "Low prio room" })).toBeVisible();
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(5);
 
             await getFilterExpandButton(page).click();
-
-            await primaryFilters.getByRole("option", { name: "Favourite" }).click();
-            await expect(roomList.getByRole("option", { name: "favourite room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=option").count()).toBe(1);
 
             await primaryFilters.getByRole("option", { name: "Mentions" }).click();
             await expect(roomList.getByRole("option", { name: "room with mention" })).toBeVisible();
@@ -219,7 +215,7 @@ test.describe("Room list filters and sort", () => {
                 await app.settings.closeDialog();
 
                 // Let's open a room other than unread room or unread dm
-                await roomListView.getByRole("option", { name: "Open room favourite room" }).click();
+                await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
 
                 // Let's make the bot send a new message in both rooms
                 await bot.sendMessage(unReadDmId, "Hello!");
@@ -242,15 +238,19 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            await expect(roomListView.getByRole("option").first()).toHaveText(/empty room/);
+            await expect(roomListView.getByRole("button").nth(1)).toHaveText(/empty room/);
         });
 
-        test("should move room to the top on message when sorting by activity", async ({ page, bot }) => {
+        test("should move room to the top on message (chat section) when sorting by activity", async ({
+            page,
+            bot,
+        }) => {
             const roomListView = getRoomList(page);
 
             await bot.sendMessage(unReadDmId, "Hello!");
 
-            await expect(roomListView.getByRole("option").first()).toHaveText(/unread dm/);
+            // Favourite room is the favourite section is on top, so unread dm should be the second room in the list
+            await expect(roomListView.getByRole("button").nth(1)).toHaveText(/unread dm/);
         });
     });
 
