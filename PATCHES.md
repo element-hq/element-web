@@ -5,15 +5,22 @@ Maintenu à jour à chaque PR ou rebase upstream. Source de vérité pour la cha
 **Base upstream** : tag `v1.12.21`
 **Branche Renaissance** : `renaissance/main`
 
-## B — Onboarding pré-câblé Renaissance
+## B — Onboarding pré-câblé Renaissance (v2 — brand Attal Président + login hardening)
 
 - **Fichiers** :
-  - `apps/web/config.sample.json` (override values default_server_config + brand + disable_custom_urls + permalink_prefix + room_directory)
-  - `apps/web/src/components/views/elements/ServerPicker.tsx` (hide si `disable_custom_urls === true`)
-  - `apps/web/src/components/structures/auth/Login.tsx` (normalize username + invite link Renaissance)
-  - `apps/web/src/components/structures/auth/Registration.tsx` (redirect vers `https://chat.attalpresident.fr/onboard/`)
-- **Marker code** : `PATCH-RENAISSANCE-B`
-- **Conflit attendu au rebase** : moyen (composants React touchés régulièrement par upstream)
+  - `apps/web/config.sample.json` :
+    - v1 : default_server_config + disable_custom_urls + permalink_prefix + room_directory
+    - **v2** : `brand: "Attal Président"` (vs "Renaissance Chat")
+  - `apps/web/webapp/manifest.json` (v2) :
+    - `name: "Attal Président"` + `short_name: "Attal"` (vs "Element" upstream)
+    - Suppression `related_applications` (les suggestions Element Android/iOS ne concernent pas Attal Président)
+  - `apps/web/src/components/views/elements/ServerPicker.tsx` (v1, hide si `disable_custom_urls === true` — filet upstream)
+  - `apps/web/src/components/structures/auth/Login.tsx` :
+    - v1 : normalize username + invite link Renaissance
+    - **v2** : ServerPicker plus rendu du tout + footer "Créer un compte" supprimé (inscription token-only via /onboard/) + imports `UIFeature` et `ServerPicker` retirés
+  - `apps/web/src/components/structures/auth/Registration.tsx` (v1, redirect vers `https://chat.attalpresident.fr/onboard/`)
+- **Marker code** : `PATCH-RENAISSANCE-B` (v1) + `PATCH-RENAISSANCE-B v2` (v2 deltas)
+- **Conflit attendu au rebase** : moyen (composants React touchés régulièrement par upstream — Login.tsx en particulier)
 - **Alternative si rebase casse** : ré-appliquer la logique en lisant ce ledger + script `scripts/check-patches-applied.sh`
 
 ## CI — Build pipeline Renaissance

@@ -22,6 +22,11 @@ check "_patch_renaissance_b_marker" "apps/web/config.sample.json" "Patch B confi
 check "chat.attalpresident.fr" "apps/web/config.sample.json" "Homeserver pre-cabled in config"
 check "attalpresident.fr" "apps/web/config.sample.json" "server_name pre-cabled in config"
 
+# v2 (2026-06-25) — brand Attal Président + login hardening
+check "Attal Président" "apps/web/config.sample.json" "v2 brand Attal Président in config.sample.json"
+check "Attal Président" "apps/web/res/manifest.json" "v2 brand Attal Président in manifest.json (PWA install name)"
+check "PATCH-RENAISSANCE-B v2" "apps/web/src/components/structures/auth/Login.tsx" "v2 Login.tsx markers (ServerPicker + register footer removed)"
+
 if [ "$errors" -gt 0 ]; then
   echo ""
   echo "$errors Renaissance patches missing — rebase likely broke them"
