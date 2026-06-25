@@ -354,7 +354,8 @@ export class RoomListViewModel
     };
 
     /**
-     * Find the first unread room positioned below the visible area of the list.
+     * Find the first room with an unread-message notification (a count badge — the green or
+     * red decoration, not just the unread-activity dot) positioned below the visible area.
      *
      * "Below the fold" is determined from the last visible index reported by the
      * virtualized list (see {@link updateVisibleRooms}). For a grouped list the
@@ -363,24 +364,27 @@ export class RoomListViewModel
      * compare against that index space.
      *
      * Collapsed sections render only their header (their rooms are removed from the
-     * displayed sections), so their unread rooms are not directly reachable. When a
-     * collapsed section's header is itself below the fold and the section contains
-     * unread rooms, we surface the header as the target so clicking the toast scrolls
-     * it into view (revealing the header's aggregated unread badge).
+     * displayed sections), so their notifying rooms are not directly reachable. When a
+     * collapsed section's header is itself below the fold and the section contains a
+     * notifying room, we surface the header as the target so clicking the toast scrolls
+     * it into view (revealing the header's aggregated notification badge).
      *
-     * @returns The next unread room below the fold, or undefined if there is none
+     * @returns The next notifying room below the fold, or undefined if there is none
      *          (or the view has not yet reported a visible range).
      */
     private firstUnreadRoomBelowFold(): { room: Room; index: number } | undefined {
         if (this.foldIndex < 0) return undefined;
 
-        const isUnread = (room: Room): boolean => RoomNotificationStateStore.instance.getRoomState(room).isUnread;
+        // Only surface rooms showing a notification badge (a count/symbol — the green or red
+        // decoration), not rooms with just the unread-activity dot.
+        const hasNotification = (room: Room): boolean =>
+            RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount;
 
         if (this.snapshot.current.isFlatList) {
             // Flat list: virtualized indices map 1:1 to rooms.
             const rooms = this.sections.flatMap((section) => section.rooms);
             for (let i = this.foldIndex + 1; i < rooms.length; i++) {
-                if (isUnread(rooms[i])) return { room: rooms[i], index: i };
+                if (hasNotification(rooms[i])) return { room: rooms[i], index: i };
             }
             return undefined;
         }
@@ -400,15 +404,15 @@ export class RoomListViewModel
                 // Collapsed: rooms aren't rendered, so the header is the only entry. If it is
                 // below the fold and hides an unread room, target the header itself.
                 if (entryIndex > this.foldIndex) {
-                    const unreadRoom = (fullRoomsByTag.get(section.tag) ?? []).find(isUnread);
-                    if (unreadRoom) return { room: unreadRoom, index: entryIndex };
+                    const notifyingRoom = (fullRoomsByTag.get(section.tag) ?? []).find(hasNotification);
+                    if (notifyingRoom) return { room: notifyingRoom, index: entryIndex };
                 }
                 continue;
             }
 
             for (const room of section.rooms) {
                 entryIndex++; // this room's entry
-                if (entryIndex > this.foldIndex && isUnread(room)) return { room, index: entryIndex };
+                if (entryIndex > this.foldIndex && hasNotification(room)) return { room, index: entryIndex };
             }
         }
         return undefined;

@@ -35,7 +35,7 @@ export function UnreadActivityToast({ onClick }: Readonly<UnreadActivityToastPro
 
     return (
         <Toast className={styles.toast} Icon={ArrowDownIcon} onClick={onClick}>
-            {_t("room_list|unread_activity")}
+            {_t("room_list|unread_messages")}
         </Toast>
     );
 }

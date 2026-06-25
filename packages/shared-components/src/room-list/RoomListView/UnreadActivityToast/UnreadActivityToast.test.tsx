@@ -24,7 +24,7 @@ describe("<UnreadActivityToast />", () => {
     it("calls onClick when the toast is clicked", async () => {
         const user = userEvent.setup();
         render(<Default />);
-        await user.click(screen.getByRole("button", { name: "You have unread activity" }));
+        await user.click(screen.getByRole("button", { name: "Unread messages" }));
         expect(Default.args.onClick).toHaveBeenCalled();
     });
 });
