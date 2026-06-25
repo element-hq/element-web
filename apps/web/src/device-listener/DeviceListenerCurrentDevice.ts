@@ -197,6 +197,11 @@ export class DeviceListenerCurrentDevice {
             return;
         }
 
+        failed = await this.failIfDehydrationKeyMissing(crypto, logSpan);
+        if (failed) {
+            return;
+        }
+
         // Everything is OK - no need to show a toast
         logSpan.info("No toast needed");
         this.setDeviceState("ok", logSpan);
@@ -337,6 +342,27 @@ export class DeviceListenerCurrentDevice {
             await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
             return true;
         }
+    }
+
+    /**
+     * If a dehydrated device exists on the server (set up on another of the user's devices) but we don't
+     * hold its dehydration key, show a toast prompting the user to recover the key and return true.
+     * Otherwise, return false.
+     *
+     * Checked last, so it only fires once the device is otherwise healthy. See
+     * https://github.com/element-hq/element-web/issues/29579.
+     */
+    private async failIfDehydrationKeyMissing(crypto: CryptoApi, logSpan: LogSpan): Promise<boolean> {
+        if (await crypto.isDehydratedDeviceKeyMissing()) {
+            await this.failedCheck(
+                "dehydration_key_out_of_sync",
+                logSpan,
+                "info",
+                "A dehydrated device exists but its key is missing locally",
+            );
+            return true;
+        }
+        return false;
     }
 
     /**

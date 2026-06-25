@@ -972,6 +972,8 @@
         "cross_signing_user_normal": "You have not verified this user.",
         "cross_signing_user_verified": "You have verified this user. This user has verified all of their sessions.",
         "cross_signing_user_warning": "This user has not verified all of their sessions.",
+        "dehydration_key_out_of_sync": "Recover your offline device.",
+        "dehydration_key_out_of_sync_description": "One of your other devices set up an offline device that catches messages while you're away, but this device can't access it. Confirm your recovery key to restore access.",
         "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
         "event_shield_reason_mismatched_sender": "The sender of the event does not match the owner of the device that sent it.",
