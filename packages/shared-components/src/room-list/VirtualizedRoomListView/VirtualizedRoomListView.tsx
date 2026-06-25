@@ -493,7 +493,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         getItemKey,
         isItemFocusable,
         rangeChanged,
-        scrollerRef: setScroller,
+        "scrollerRef": setScroller,
         onKeyDown,
         increaseViewportBy,
         "className": styles.roomList,
