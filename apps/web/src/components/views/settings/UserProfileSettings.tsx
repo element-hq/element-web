@@ -29,6 +29,7 @@ import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { SettingsSection } from "./shared/SettingsSection.tsx";
 import { SetStatusViewModel } from "../../../viewmodels/status/SetStatusViewModel.ts";
+import SettingsStore from "../../../settings/SettingsStore.ts";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -133,6 +134,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
         })();
     }, [client]);
 
+    const userStatusEnabled = SettingsStore.getValue("feature_user_status");
     const setStatusVM = useCreateAutoDisposedViewModel(() => new SetStatusViewModel({ client }));
 
     const onAvatarRemove = useCallback(async () => {
@@ -235,7 +237,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                                 <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>
                             )}
                         </EditInPlace>
-                        <SetStatusView vm={setStatusVM} />
+                        {userStatusEnabled && <SetStatusView vm={setStatusVM} />}
                     </Flex>
                 </div>
                 {avatarError && (
