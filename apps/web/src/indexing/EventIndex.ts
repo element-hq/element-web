@@ -60,6 +60,18 @@ interface ICrawler {
 }
 
 /**
+ * Returns the id of the event redacted by the given redaction event, or undefined if it has none.
+ *
+ * We deliberately don't use {@link MatrixEvent#getAssociatedId}, which prefers a reply or relation
+ * target over the redaction target and so returns the wrong id for a redaction that also carries a
+ * relation. The redaction target lives in the `redacts` field, which is top-level before room
+ * version 11 and moved into `content` for room version 11+ (MSC2174), so we check both.
+ */
+function getRedactionTargetId(ev: MatrixEvent): string | undefined {
+    return ev.event.redacts ?? ev.getContent().redacts;
+}
+
+/**
  * Event indexing class that wraps the platform specific event indexing.
  */
 export default class EventIndex extends EventEmitter {
@@ -80,6 +92,16 @@ export default class EventIndex extends EventEmitter {
      * This is set if the database is empty when the indexer is first initialized.
      */
     private needsInitialCheckpoints = false;
+
+    /**
+     * Ids of events that have been redacted, gathered from redaction events seen while crawling.
+     *
+     * The crawler walks history backwards, so it encounters a (newer) redaction before the (older)
+     * message it redacts. We remember the redaction's target here so that, once the crawl later
+     * reaches that message, we know to drop it rather than (re-)index a redacted event. See the
+     * crawler loop in {@link crawlerFunc} for the full rationale.
+     */
+    private readonly redactedEventIds = new Set<string>();
 
     private readonly logger;
 
@@ -273,7 +295,7 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
 
-        const associatedId = ev.getAssociatedId();
+        const associatedId = getRedactionTargetId(ev);
         if (!associatedId) return;
 
         try {
@@ -582,22 +604,40 @@ export default class EventIndex extends EventEmitter {
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
 
-            // Collect the redaction events, so we can delete the redacted events from the index.
-            const redactionEvents = matrixEvents.filter((ev) => ev.isRedaction());
+            // Note which events the redactions in this batch redact. We index from raw /messages
+            // chunks mapped with getEventMapper, which - unlike adding events to a live timeline -
+            // does NOT apply redactions, so a message and the redaction that removes it both look
+            // like ordinary events here (isRedacted() stays false). We must therefore never index a
+            // redacted message and must delete any copy already in the index. A backward crawl sees
+            // the (newer) redaction before the (older) message it redacts, so we remember redaction
+            // targets in `this.redactedEventIds` for the lifetime of the crawl, across batches.
+            const redactedInThisBatch: string[] = [];
+            for (const ev of matrixEvents) {
+                if (!ev.isRedaction()) continue;
+                const redactedId = getRedactionTargetId(ev);
+                if (redactedId) {
+                    redactedInThisBatch.push(redactedId);
+                    this.redactedEventIds.add(redactedId);
+                } else {
+                    this.logger.warn("Redaction event doesn't contain a valid associated event id", ev);
+                }
+            }
 
             // Let us convert the events back into a format that EventIndex can
-            // consume.
-            const events = filteredEvents.map((ev) => {
-                const e = this.eventToJson(ev);
+            // consume, dropping any that we know to be redacted so we never index them.
+            const events = filteredEvents
+                .filter((ev) => !this.redactedEventIds.has(ev.getId()!))
+                .map((ev) => {
+                    const e = this.eventToJson(ev);
 
-                let profile: IMatrixProfile = {};
-                if (e.sender in profiles) profile = profiles[e.sender];
-                const object = {
-                    event: e,
-                    profile: profile,
-                };
-                return object;
-            });
+                    let profile: IMatrixProfile = {};
+                    if (e.sender in profiles) profile = profiles[e.sender];
+                    const object = {
+                        event: e,
+                        profile: profile,
+                    };
+                    return object;
+                });
 
             let newCheckpoint: ICrawlerCheckpoint | null = null;
 
@@ -615,18 +655,16 @@ export default class EventIndex extends EventEmitter {
             }
 
             try {
-                for (let i = 0; i < redactionEvents.length; i++) {
-                    const ev = redactionEvents[i];
-                    const eventId = ev.getAssociatedId();
-
-                    if (eventId) {
-                        await indexManager.deleteEvent(eventId);
-                    } else {
-                        this.logger.warn("Redaction event doesn't contain a valid associated event id", ev);
-                    }
-                }
-
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint);
+
+                // Delete any events redacted by this batch's redactions that are already in the
+                // index - added live, by a previous run, or by an earlier crawl batch. We filtered
+                // these out of `events` above, so this only removes pre-existing copies; deleteEvent
+                // is a no-op when the event is absent, so it's safe even if the redaction arrived
+                // (as it usually does, crawling backwards) before its target was ever indexed.
+                for (const redactedId of redactedInThisBatch) {
+                    await indexManager.deleteEvent(redactedId);
+                }
 
                 // We didn't get a valid new checkpoint from the server, nothing
                 // to do here anymore.

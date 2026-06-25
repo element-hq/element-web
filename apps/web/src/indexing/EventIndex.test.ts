@@ -95,6 +95,90 @@ describe("EventIndex", () => {
         expect(mockClient.createMessagesRequest).toHaveBeenCalledWith("!room2:id", "token2", 100, "f");
     });
 
+    it("does not index a message that has been redacted, even when the redaction is crawled first", async () => {
+        // The crawler walks history backwards, so it fetches the (newer) redaction before the
+        // (older) message it redacts. Raw /messages chunks are not run through timeline redaction,
+        // so the message still looks live when it arrives - we must drop it rather than index it.
+        const addedEvents: Array<{ event: Partial<IEvent> }> = [];
+        const secondBatchAdded = Promise.withResolvers<void>();
+        let addCount = 0;
+
+        const mockIndexingManager = {
+            loadCheckpoints: vi.fn(),
+            removeCrawlerCheckpoint: vi.fn(),
+            isEventIndexEmpty: vi.fn().mockResolvedValue(false),
+            deleteEvent: vi.fn().mockResolvedValue(true),
+            addHistoricEvents: vi
+                .fn()
+                .mockImplementation(async (events: Array<{ event: Partial<IEvent> }>): Promise<boolean> => {
+                    addedEvents.push(...events);
+                    if (++addCount === 2) secondBatchAdded.resolve();
+                    return false;
+                }),
+        } as any as Mocked<BaseEventIndexManager>;
+        mockPlatformPeg({ getEventIndexingManager: () => mockIndexingManager });
+
+        const room1 = { roomId: "!room1:id" } as any as Room;
+        const mockClient = getMockClientWithEventEmitter({
+            getEventMapper: () => (obj: Partial<IEvent>) => new MatrixEvent(obj),
+            createMessagesRequest: vi.fn(),
+            ...mockClientMethodsRooms([room1]),
+        });
+
+        vi.spyOn(SettingsStore, "getValueAt").mockImplementation((_level, settingName): any => {
+            if (settingName === "crawlerSleepTime") return 0;
+            return undefined;
+        });
+
+        mockIndexingManager.loadCheckpoints.mockResolvedValue([
+            {
+                roomId: "!room1:id",
+                token: "token1",
+                direction: Direction.Backward,
+                fullCrawl: true,
+            } as ICrawlerCheckpoint,
+        ]);
+
+        const message: Partial<IEvent> = {
+            event_id: "$message",
+            type: "m.room.message",
+            sender: "@alice:example.com",
+            room_id: "!room1:id",
+            origin_server_ts: 1000,
+            content: { msgtype: "m.text", body: "a secret that was later redacted" },
+        };
+        const redaction: Partial<IEvent> = {
+            event_id: "$redaction",
+            type: "m.room.redaction",
+            sender: "@alice:example.com",
+            room_id: "!room1:id",
+            origin_server_ts: 2000,
+            redacts: "$message",
+            content: { reason: "oops" },
+        };
+
+        const indexer = new EventIndex();
+        await indexer.init();
+        indexer.startCrawler();
+
+        // First batch (newest history): just the redaction. Its target hasn't been indexed yet.
+        const batch1 = mockCreateMessagesRequest(mockClient);
+        await batch1.called;
+        const batch2 = mockCreateMessagesRequest(mockClient);
+        batch1.resolve({ chunk: [redaction], end: "token2" });
+
+        // Second batch (older history): the message that the first batch's redaction redacted.
+        await batch2.called;
+        batch2.resolve({ chunk: [message] });
+
+        await secondBatchAdded.promise;
+
+        // The redacted message must never be handed to the index...
+        expect(addedEvents.some((e) => e.event.event_id === "$message")).toBe(false);
+        // ...and the redaction must still delete any copy that had already been indexed.
+        expect(mockIndexingManager.deleteEvent).toHaveBeenCalledWith("$message");
+    });
+
     it("adds checkpoints for the encrypted rooms after the first sync", async () => {
         const mockIndexingManager = {
             loadCheckpoints: vi.fn().mockResolvedValue([]),
