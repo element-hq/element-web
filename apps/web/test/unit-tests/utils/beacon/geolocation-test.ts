@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock-vitest-adapter";
 
 import {
     type GenericPosition,

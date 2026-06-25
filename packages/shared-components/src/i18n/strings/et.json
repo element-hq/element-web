@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Tühjenda",
             "create_an_account": "Loo kasutajakonto",
             "got_an_account": "Kas sul on kasutajakonto juba olemas?",
             "manage_account": "Halda kasutajakontot",
@@ -65,6 +66,11 @@
         "default_settings": "Sobita vaikimisi seadistustega",
         "mentions_keywords": "Mainimised ja märksõnad",
         "mute_room": "Summuta jututuba"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Sobib",
+        "room_list_section_description": "Võid omi vestlusi grupeerida jaotiste kaupa ning saad hoida vestlused korrastatuna ja hõlpsasti leitavatena.",
+        "room_list_section_title": "Võtame kasutusele jaotised"
     },
     "room": {
         "context_menu": {
@@ -150,7 +156,8 @@
             "low_priority": "Vähetähtis",
             "mark_read": "Märgi loetuks",
             "mark_unread": "Märgi mitteloetuks",
-            "move_to_section": "Tõsta teise jaotisse"
+            "move_to_section": "Tõsta teise jaotisse",
+            "remove_from_section": "Eemalda jaotisest"
         },
         "notification_options": "Teavituste eelistused",
         "open_space_menu": "Ava kogukonna menüü",

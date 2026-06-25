@@ -625,13 +625,6 @@
             "warning": "Se vi ne forigis la rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj."
         },
         "set_up_toast_title": "Agordi Sekuran savkopiadon",
-        "udd": {
-            "other_ask_verify_text": "Petu, ke ĉi tiu la uzanto kontrolu sian salutaĵon, aŭ kontrolu ĝin permane sube.",
-            "other_new_session_text": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
-            "own_ask_verify_text": "Kontrolu vian alian salutaĵon per unu el la ĉi-subaj elektebloj.",
-            "own_new_session_text": "Vi salutis novan salutaĵon sen kontrolo:",
-            "title": "Nefidata"
-        },
         "unable_to_setup_keys_error": "Ne povas agordi ŝlosilojn",
         "verification": {
             "accepting": "Akceptante…",
@@ -2536,13 +2529,7 @@
         },
         "context_menu": {
             "delete": "Forigi fenestraĵon",
-            "delete_warning": "Forigo de fenestraĵo efektiviĝos por ĉiuj uzantoj en ĉi tiu ĉambro. Ĉu vi certe volas ĝin forigi?",
-            "move_left": "Movi maldekstren",
-            "move_right": "Movi dekstren",
-            "remove": "Forigi por ĉiuj",
-            "revoke": "Nuligi permesojn",
-            "screenshot": "Foti",
-            "start_audio_stream": "Komenci sonelsendon"
+            "delete_warning": "Forigo de fenestraĵo efektiviĝos por ĉiuj uzantoj en ĉi tiu ĉambro. Ĉu vi certe volas ĝin forigi?"
         },
         "cookie_warning": "Ĉi tiu fenestraĵo povas uzi kuketojn.",
         "error_loading": "Eraris enlegado de fenestraĵo",

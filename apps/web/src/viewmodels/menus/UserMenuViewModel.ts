@@ -6,6 +6,7 @@
  */
 
 import { BaseViewModel, type UserMenuSnapshot, type UserMenuViewActions } from "@element-hq/web-shared-components";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -18,6 +19,7 @@ import { shouldShowFeedback } from "../../utils/Feedback";
 import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { clearUserStatus } from "../../utils/userStatus";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
@@ -42,7 +44,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             expanded: !isPanelCollapsed,
             manageAccountHref: accountManagementEndpoint,
             showAvatar: isAuthenticated,
-            statusEmoji: OwnProfileStore.instance.userStatus?.emoji,
+            userStatus: OwnProfileStore.instance.userStatus,
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,
@@ -57,7 +59,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
 
     public constructor(
         private readonly dispatcher: MatrixDispatcher,
-        client: MatrixClient,
+        private readonly client: MatrixClient,
         isPanelCollapsed: boolean,
         accountManagementEndpoint?: string,
     ) {
@@ -73,8 +75,8 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     public readonly recalculateProfile = (): void => {
         const displayName = OwnProfileStore.instance.displayName || this.snapshot.current.userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
-        const statusEmoji = OwnProfileStore.instance.userStatus?.emoji;
-        this.snapshot.merge({ displayName, avatarUrl, statusEmoji });
+        const userStatus = OwnProfileStore.instance.userStatus;
+        this.snapshot.merge({ displayName, avatarUrl, userStatus });
     };
 
     public readonly setOpen = (isOpen: boolean): void => {
@@ -126,6 +128,13 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         this.setOpen(false);
         this.dispatcher.dispatch({
             action: Action.ViewUserSettings,
+        });
+    };
+
+    public readonly clearStatus = (): void => {
+        this.setOpen(false);
+        clearUserStatus(this.client).catch((err) => {
+            logger.warn("Failed to clear user status", err);
         });
     };
 }

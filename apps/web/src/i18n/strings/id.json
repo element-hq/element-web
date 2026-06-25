@@ -980,14 +980,6 @@
         "set_up_toast_title": "Siapkan Cadangan Aman",
         "turn_on_key_storage": "Aktifkan penyimpanan kunci",
         "turn_on_key_storage_description": "Simpan identitas kriptografi dan kunci pesan Anda secara aman di server. Ini akan memungkinkan Anda untuk melihat riwayat pesan Anda di perangkat baru mana pun.",
-        "udd": {
-            "interactive_verification_button": "Verifikasi secara interaktif sengan emoji",
-            "other_ask_verify_text": "Tanyakan pengguna ini untuk memverifikasi sesinya, atau verifikasi secara manual di bawah.",
-            "other_new_session_text": "%(name)s (%(userId)s) masuk ke sesi yang baru tanpa memverifikasinya:",
-            "own_ask_verify_text": "Verifikasi sesi Anda lainnya dengan menggunakan salah satu pilihan di bawah.",
-            "own_new_session_text": "Anda masuk ke sesi baru tanpa memverifikasinya:",
-            "title": "Tidak Dipercayai"
-        },
         "unable_to_setup_keys_error": "Tidak dapat mengatur kunci-kunci",
         "verification": {
             "accepting": "Menerima…",
@@ -3966,13 +3958,7 @@
         "close_to_view_right_panel": "Tutup widget ini untuk menampilkannya di panel ini",
         "context_menu": {
             "delete": "Hapus widget",
-            "delete_warning": "Menghapus sebuah widget menghapusnya untuk semua pengguna di ruangan ini. Apakah Anda yakin untuk menghapus widget ini?",
-            "move_left": "Pindah ke kiri",
-            "move_right": "Pindah ke kanan",
-            "remove": "Hapus untuk semuanya",
-            "revoke": "Cabut izin",
-            "screenshot": "Ambil foto",
-            "start_audio_stream": "Mulai penyiaran audio"
+            "delete_warning": "Menghapus sebuah widget menghapusnya untuk semua pengguna di ruangan ini. Apakah Anda yakin untuk menghapus widget ini?"
         },
         "cookie_warning": "Widget ini mungkin menggunakan kuki.",
         "error_hangup_description": "Anda terputus dari panggilan. (Terjadi kesalahan: %(message)s)",

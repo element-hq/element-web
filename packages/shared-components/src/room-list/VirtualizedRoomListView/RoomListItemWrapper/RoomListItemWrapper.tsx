@@ -41,10 +41,27 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
         return <RoomListItemView {...rest} {...getItemAccessibleProps("listbox", roomIndex, roomCount)} />;
     }
 
+    const isFirstInSection = roomIndexInSection === 0;
     return (
         <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>
             <div role="gridcell" aria-selected={rest.isSelected}>
-                <DraggableWrapper {...rest} />
+                <DraggableWrapper
+                    {...rest}
+                    onKeyDown={(e) => {
+                        if (e.code === "ArrowLeft" && isFirstInSection) {
+                            // Move focus to the section header
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.dispatchEvent(
+                                new KeyboardEvent("keydown", {
+                                    code: "ArrowUp",
+                                    key: "ArrowUp",
+                                    bubbles: true,
+                                }),
+                            );
+                        }
+                    }}
+                />
             </div>
         </div>
     );
@@ -55,12 +72,16 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
  */
 function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
     const item = useViewModel(props.vm);
-    const { ref: draggableRef, handleRef } = useDraggable({
+    const {
+        ref: draggableRef,
+        handleRef,
+        isDragSource,
+    } = useDraggable({
         id: item.id,
         // We clone the item in the dnd overlay to avoid putting a hole in the list
         plugins: [Feedback.configure({ feedback: "clone" })],
         modifiers: [RestrictToVerticalAxis],
     });
     const dndRef = useMergeRefs([draggableRef, handleRef]);
-    return <RoomListItemView {...props} ref={dndRef} />;
+    return <RoomListItemView {...props} ref={dndRef} isDragSource={isDragSource} />;
 }

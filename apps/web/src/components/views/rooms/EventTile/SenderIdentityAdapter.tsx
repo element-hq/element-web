@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import MemberAvatar from "../../avatars/MemberAvatar";
 import SenderProfile from "../../messages/SenderProfile";
@@ -16,8 +16,8 @@ import { type EventTileSenderSnapshot } from "../../../../viewmodels/room/timeli
  * Props for the {@link EventTileAvatarAdapter} component.
  */
 interface EventTileAvatarAdapterProps {
-    /** Matrix event whose sender avatar is being rendered. */
-    mxEvent: MatrixEvent;
+    /** Room member whose avatar is being rendered. */
+    avatarMember: RoomMember | null;
     /** Snapshot of the sender identity state for this tile. */
     senderSnapshot: EventTileSenderSnapshot;
 }
@@ -26,22 +26,22 @@ interface EventTileAvatarAdapterProps {
  * Renders the sender avatar for an event tile.
  */
 export function EventTileAvatarAdapter({
-    mxEvent,
+    avatarMember,
     senderSnapshot,
 }: Readonly<EventTileAvatarAdapterProps>): JSX.Element | null {
     const { avatarSize } = senderSnapshot.profileState;
 
-    if (!mxEvent.sender || avatarSize === null) {
+    if (!avatarMember || avatarSize === null) {
         return null;
     }
 
     return (
         <div className="mx_EventTile_avatar">
             <MemberAvatar
-                member={senderSnapshot.avatarMember}
+                member={avatarMember}
                 size={avatarSize}
                 viewUserOnClick={senderSnapshot.viewUserOnClick}
-                forceHistorical={mxEvent.getType() === EventType.RoomMember}
+                forceHistorical={senderSnapshot.forceHistoricalAvatar}
             />
         </div>
     );

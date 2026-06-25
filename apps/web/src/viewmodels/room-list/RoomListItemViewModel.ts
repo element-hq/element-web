@@ -415,6 +415,14 @@ export class RoomListItemViewModel
         tagRoom(this.props.room, tag);
     };
 
+    public onRemoveFromSection = (): void => {
+        const roomTags = this.props.room.tags;
+        const sectionTag = RoomListStoreV3.instance.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
+        if (sectionTag) {
+            tagRoom(this.props.room, sectionTag);
+        }
+    };
+
     private onOrderedCustomSectionsChange = (): void => {
         // Rebuild sections list to reflect new order
         const sections = RoomListItemViewModel.buildSections(this.props.room.tags);

@@ -132,7 +132,6 @@ export const DiscoverySettings: React.FC = () => {
             <>
                 <InlineTermsAgreement
                     policiesAndServicePairs={requiredPolicyInfo.policiesAndServices}
-                    agreedUrls={requiredPolicyInfo.agreedUrls}
                     onFinished={requiredPolicyInfo.resolve}
                     introElement={intro}
                 />

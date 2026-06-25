@@ -144,7 +144,6 @@ const QuickSettingsButton: React.FC<{
             aria-label={_t("quick_settings|title")}
             className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
             onClick={openMenu}
-            title={isPanelCollapsed ? _t("quick_settings|title") : undefined}
             ref={handle}
             aria-expanded={!isPanelCollapsed}
         >

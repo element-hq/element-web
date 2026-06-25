@@ -33,7 +33,7 @@ import {
     MatrixError,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import fetchMock from "@fetch-mock/jest";
 
 import {

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useState, type JSX } from "react";
+import React, { useMemo, useState, type JSX } from "react";
 import { IconButton, Menu, MenuItem, Separator, SubMenu, ToggleMenuItem } from "@vector-im/compound-web";
 import {
     MarkAsReadIcon,
@@ -18,11 +18,13 @@ import {
     OverflowHorizontalIcon,
     ArrowRightIcon,
     CheckIcon,
+    MinusIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../core/i18n/i18n";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
+import styles from "./RoomListItemMoreOptionsMenu.module.css";
 
 /**
  * View model type for room list item
@@ -73,6 +75,8 @@ interface MoreOptionContentProps {
 
 export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
     const snapshot = useViewModel(vm);
+    const hasSections = snapshot.sections.length > 0;
+    const isInSection = useMemo(() => snapshot.sections.some((section) => section.isSelected), [snapshot.sections]);
     return (
         // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div onKeyDown={(e) => e.stopPropagation()}>
@@ -141,6 +145,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                         <MenuItem
                             key={section.tag}
                             label={section.name}
+                            labelProps={{ className: styles.sectionLabel }}
                             onSelect={() => vm.onToggleSection(section.tag)}
                             onClick={(evt) => evt.stopPropagation()}
                             hideChevron={true}
@@ -151,9 +156,18 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                             )}
                         </MenuItem>
                     ))}
-                    <Separator />
+                    {hasSections && <Separator />}
                     <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
                 </SubMenu>
+            )}
+            {isInSection && (
+                <MenuItem
+                    Icon={MinusIcon}
+                    label={_t("room_list|more_options|remove_from_section")}
+                    onSelect={vm.onRemoveFromSection}
+                    onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
+                />
             )}
             <Separator />
             <MenuItem

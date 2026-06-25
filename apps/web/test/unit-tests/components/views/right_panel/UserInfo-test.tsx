@@ -202,16 +202,14 @@ describe("<UserInfo />", () => {
         describe.each([[ProfileKeyTimezone], [ProfileKeyMSC4175Timezone]])("timezone rendering (%s)", (profileKey) => {
             it("renders user timezone if set", async () => {
                 // For timezone, force a consistent locale.
-                jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(function (
-                    this: Date,
-                    _locale,
-                    opts,
-                ) {
-                    return origDate.call(this, "en-US", {
-                        ...opts,
-                        hourCycle: "h12",
-                    });
-                });
+                jest.spyOn(global.Date.prototype, "toLocaleString").mockImplementation(
+                    function (this: Date, _locale, opts) {
+                        return origDate.call(this, "en-US", {
+                            ...opts,
+                            hourCycle: "h12",
+                        });
+                    },
+                );
                 mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
                 mockClient.getExtendedProfile.mockResolvedValue({ [profileKey]: "Europe/London" });
                 renderComponent();

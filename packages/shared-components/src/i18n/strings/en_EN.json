@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Clear",
             "create_an_account": "Create an account",
             "got_an_account": "Got an account?",
             "manage_account": "Manage account",
@@ -65,6 +66,11 @@
         "default_settings": "Match default settings",
         "mentions_keywords": "Mentions and keywords",
         "mute_room": "Mute room"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Ok",
+        "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
+        "room_list_section_title": "Introducing Sections"
     },
     "room": {
         "context_menu": {
@@ -150,7 +156,8 @@
             "low_priority": "Low priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
-            "move_to_section": "Move to"
+            "move_to_section": "Move to",
+            "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
