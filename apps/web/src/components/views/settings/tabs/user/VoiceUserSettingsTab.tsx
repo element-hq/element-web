@@ -78,7 +78,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         this.legacyCallsEnabledWatcherRef = SettingsStore.watchSetting(
             "enableLegacyCallsVoip",
             null,
-            (...[, , , value]) => this.setState({ enableLegacyCallsVoip: value as boolean }),
+            (...[, , , , value]) => this.setState({ enableLegacyCallsVoip: value as boolean }),
         );
 
         const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
