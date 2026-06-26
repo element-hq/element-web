@@ -242,8 +242,8 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            // Faouvrite section her is a button + favourite room
-            await expect(roomListView.getByRole("button").nth(2)).toHaveText(/empty room/);
+            // Favourite + chat section headers are buttons + favourite room
+            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/empty room/);
         });
 
         test("should move room to the top on message (chat section) when sorting by activity", async ({
@@ -254,8 +254,8 @@ test.describe("Room list filters and sort", () => {
 
             await bot.sendMessage(unReadDmId, "Hello!");
 
-            // Favourite room is in the favourite section is on top, so unread dm should be the third room in the list
-            await expect(roomListView.getByRole("button").nth(2)).toHaveText(/unread dm/);
+            // Favourite + chat section headers are buttons + favourite room
+            await expect(roomListView.getByRole("button").nth(3)).toHaveText(/unread dm/);
         });
     });
 
