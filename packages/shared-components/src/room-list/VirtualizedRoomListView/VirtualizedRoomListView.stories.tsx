@@ -37,6 +37,9 @@ const RoomListWrapperImpl = ({
     closeToast,
     renderAvatar: renderAvatarProp,
     changeRoomSection,
+    changeSectionOrder,
+    onSectionDragStart,
+    onSectionDragEnd,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -48,6 +51,9 @@ const RoomListWrapperImpl = ({
         updateVisibleRooms,
         closeToast,
         changeRoomSection,
+        changeSectionOrder,
+        onSectionDragStart,
+        onSectionDragEnd,
     });
 
     return (
@@ -88,6 +94,9 @@ const meta = {
         isFlatList: true,
         closeToast: fn(),
         changeRoomSection: fn(),
+        changeSectionOrder: fn(),
+        onSectionDragStart: fn(),
+        onSectionDragEnd: fn(),
     },
     parameters: {
         design: {

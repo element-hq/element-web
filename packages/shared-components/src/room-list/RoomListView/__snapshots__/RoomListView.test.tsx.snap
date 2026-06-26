@@ -8241,42 +8241,47 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                   aria-setsize="23"
                   role="row"
                 >
-                  <button
+                  <div
                     aria-expanded="true"
-                    aria-label="Toggle Favourites section"
-                    class="RoomListSectionHeaderView-module_header RoomListSectionHeaderView-module_firstHeader"
                     role="gridcell"
-                    tabindex="-1"
-                    type="button"
                   >
-                    <div
-                      class="Flex-module_flex RoomListSectionHeaderView-module_container"
-                      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+                    <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
+                      aria-expanded="true"
+                      aria-label="Toggle Favourites section"
+                      class="RoomListSectionHeaderView-module_header RoomListSectionHeaderView-module_firstHeader"
+                      tabindex="-1"
+                      type="button"
                     >
                       <div
-                        class="Flex-module_flex"
-                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+                        class="Flex-module_flex RoomListSectionHeaderView-module_container"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                       >
-                        <svg
-                          class="RoomListSectionHeaderView-module_chevron"
-                          fill="var(--cpd-color-icon-secondary)"
-                          height="24px"
-                          viewBox="0 0 24 24"
-                          width="24px"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <div
+                          class="Flex-module_flex"
+                          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                         >
-                          <path
-                            d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-                          />
-                        </svg>
-                        <span
-                          class="RoomListSectionHeaderView-module_title"
-                        >
-                          Favourites
-                        </span>
+                          <svg
+                            class="RoomListSectionHeaderView-module_chevron"
+                            fill="var(--cpd-color-icon-secondary)"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            width="24px"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+                            />
+                          </svg>
+                          <span
+                            class="RoomListSectionHeaderView-module_title"
+                          >
+                            Favourites
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div
@@ -8296,6 +8301,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room General"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -8453,6 +8459,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Random"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -8583,6 +8590,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Engineering"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -8719,6 +8727,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Design"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -8849,6 +8858,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Product"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -8985,6 +8995,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Marketing with 5 unread mentions."
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -9138,6 +9149,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Sales"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -9274,6 +9286,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Support"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -9404,6 +9417,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Announcements"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -9540,6 +9554,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Off-topic"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -9670,6 +9685,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Team Alpha with 10 unread mentions."
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -9829,6 +9845,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Team Beta"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -9959,6 +9976,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Project X"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -10095,6 +10113,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Project Y"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -10225,6 +10244,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Water Cooler"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -10361,6 +10381,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Feedback with 15 unread mentions."
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -10514,6 +10535,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Ideas"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -10650,6 +10672,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Bugs"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -10780,6 +10803,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Features"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -10916,6 +10940,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Releases"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -11046,6 +11071,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room General with 20 unread mentions."
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -11205,6 +11231,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Random"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -11335,6 +11362,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Engineering"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -11468,42 +11496,47 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                   aria-setsize="29"
                   role="row"
                 >
-                  <button
+                  <div
                     aria-expanded="true"
-                    aria-label="Toggle Chats section"
-                    class="RoomListSectionHeaderView-module_header"
                     role="gridcell"
-                    tabindex="-1"
-                    type="button"
                   >
-                    <div
-                      class="Flex-module_flex RoomListSectionHeaderView-module_container"
-                      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+                    <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
+                      aria-expanded="true"
+                      aria-label="Toggle Chats section"
+                      class="RoomListSectionHeaderView-module_header"
+                      tabindex="-1"
+                      type="button"
                     >
                       <div
-                        class="Flex-module_flex"
-                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+                        class="Flex-module_flex RoomListSectionHeaderView-module_container"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                       >
-                        <svg
-                          class="RoomListSectionHeaderView-module_chevron"
-                          fill="var(--cpd-color-icon-secondary)"
-                          height="24px"
-                          viewBox="0 0 24 24"
-                          width="24px"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <div
+                          class="Flex-module_flex"
+                          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                         >
-                          <path
-                            d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-                          />
-                        </svg>
-                        <span
-                          class="RoomListSectionHeaderView-module_title"
-                        >
-                          Chats
-                        </span>
+                          <svg
+                            class="RoomListSectionHeaderView-module_chevron"
+                            fill="var(--cpd-color-icon-secondary)"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            width="24px"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+                            />
+                          </svg>
+                          <span
+                            class="RoomListSectionHeaderView-module_title"
+                          >
+                            Chats
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div
@@ -11523,6 +11556,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Design"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -11653,6 +11687,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Product"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -11789,6 +11824,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Marketing with 25 unread mentions."
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -11942,6 +11978,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Sales"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -12078,6 +12115,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Support"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -12208,6 +12246,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Announcements"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -12344,6 +12383,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Off-topic"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -12474,6 +12514,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Team Alpha with 30 unread mentions."
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -12633,6 +12674,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Team Beta"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -12763,6 +12805,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Project X"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -12899,6 +12942,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Project Y"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -13029,6 +13073,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000006"
                       aria-haspopup="menu"
                       aria-label="Open room Water Cooler"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -13666,42 +13711,47 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                   aria-setsize="2"
                   role="row"
                 >
-                  <button
+                  <div
                     aria-expanded="true"
-                    aria-label="Toggle Favourites section"
-                    class="RoomListSectionHeaderView-module_header RoomListSectionHeaderView-module_firstHeader"
                     role="gridcell"
-                    tabindex="-1"
-                    type="button"
                   >
-                    <div
-                      class="Flex-module_flex RoomListSectionHeaderView-module_container"
-                      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+                    <button
+                      aria-describedby="00000000-0000-0000-0000-000000000003"
+                      aria-expanded="true"
+                      aria-label="Toggle Favourites section"
+                      class="RoomListSectionHeaderView-module_header RoomListSectionHeaderView-module_firstHeader"
+                      tabindex="-1"
+                      type="button"
                     >
                       <div
-                        class="Flex-module_flex"
-                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+                        class="Flex-module_flex RoomListSectionHeaderView-module_container"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                       >
-                        <svg
-                          class="RoomListSectionHeaderView-module_chevron"
-                          fill="var(--cpd-color-icon-secondary)"
-                          height="24px"
-                          viewBox="0 0 24 24"
-                          width="24px"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <div
+                          class="Flex-module_flex"
+                          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                         >
-                          <path
-                            d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-                          />
-                        </svg>
-                        <span
-                          class="RoomListSectionHeaderView-module_title"
-                        >
-                          Favourites
-                        </span>
+                          <svg
+                            class="RoomListSectionHeaderView-module_chevron"
+                            fill="var(--cpd-color-icon-secondary)"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            width="24px"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+                            />
+                          </svg>
+                          <span
+                            class="RoomListSectionHeaderView-module_title"
+                          >
+                            Favourites
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div
@@ -13721,6 +13771,7 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000003"
                       aria-haspopup="menu"
                       aria-label="Open room General"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
@@ -13878,6 +13929,7 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                     role="gridcell"
                   >
                     <button
+                      aria-describedby="00000000-0000-0000-0000-000000000003"
                       aria-haspopup="menu"
                       aria-label="Open room Random"
                       class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
@@ -14005,42 +14057,47 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                   aria-setsize="0"
                   role="row"
                 >
-                  <button
+                  <div
                     aria-expanded="true"
-                    aria-label="Toggle Chats section"
-                    class="RoomListSectionHeaderView-module_header"
                     role="gridcell"
-                    tabindex="-1"
-                    type="button"
                   >
-                    <div
-                      class="Flex-module_flex RoomListSectionHeaderView-module_container"
-                      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+                    <button
+                      aria-describedby="00000000-0000-0000-0000-000000000003"
+                      aria-expanded="true"
+                      aria-label="Toggle Chats section"
+                      class="RoomListSectionHeaderView-module_header"
+                      tabindex="-1"
+                      type="button"
                     >
                       <div
-                        class="Flex-module_flex"
-                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+                        class="Flex-module_flex RoomListSectionHeaderView-module_container"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                       >
-                        <svg
-                          class="RoomListSectionHeaderView-module_chevron"
-                          fill="var(--cpd-color-icon-secondary)"
-                          height="24px"
-                          viewBox="0 0 24 24"
-                          width="24px"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <div
+                          class="Flex-module_flex"
+                          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                         >
-                          <path
-                            d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-                          />
-                        </svg>
-                        <span
-                          class="RoomListSectionHeaderView-module_title"
-                        >
-                          Chats
-                        </span>
+                          <svg
+                            class="RoomListSectionHeaderView-module_chevron"
+                            fill="var(--cpd-color-icon-secondary)"
+                            height="24px"
+                            viewBox="0 0 24 24"
+                            width="24px"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+                            />
+                          </svg>
+                          <span
+                            class="RoomListSectionHeaderView-module_title"
+                          >
+                            Chats
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
