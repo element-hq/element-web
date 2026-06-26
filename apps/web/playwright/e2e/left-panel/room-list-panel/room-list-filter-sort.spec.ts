@@ -180,12 +180,16 @@ test.describe("Room list filters and sort", () => {
             await expect.poll(() => roomList.locator("role=option").count()).toBe(2);
 
             await primaryFilters.getByRole("option", { name: "Rooms" }).click();
-            await expect(roomList.getByRole("button", { name: "unread room" })).toBeVisible();
+            // "Open room" prefix disambiguates the room tile from the "Toggle Chats section with
+            // unread rooms" section header button, which also matches the "unread room" substring.
+            await expect(roomList.getByRole("button", { name: "Open room unread room" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "favourite room" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "empty room" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "room with mention" })).toBeVisible();
             await expect(roomList.getByRole("button", { name: "Low prio room" })).toBeVisible();
-            await expect.poll(() => roomList.locator("role=button").count()).toBe(5);
+            // 5 room tiles spread across 3 sections (Favourites, Rooms, Low priority); each section
+            // header is also a button, so 5 rooms + 3 section headers = 8 buttons.
+            await expect.poll(() => roomList.locator("role=button").count()).toBe(8);
 
             await getFilterExpandButton(page).click();
 
@@ -238,7 +242,8 @@ test.describe("Room list filters and sort", () => {
             await getRoomOptionsMenu(page).click();
             await page.getByRole("menuitemradio", { name: "A-Z" }).click();
 
-            await expect(roomListView.getByRole("button").nth(1)).toHaveText(/empty room/);
+            // Faouvrite section her is a button + favourite room
+            await expect(roomListView.getByRole("button").nth(2)).toHaveText(/empty room/);
         });
 
         test("should move room to the top on message (chat section) when sorting by activity", async ({
@@ -249,8 +254,8 @@ test.describe("Room list filters and sort", () => {
 
             await bot.sendMessage(unReadDmId, "Hello!");
 
-            // Favourite room is the favourite section is on top, so unread dm should be the second room in the list
-            await expect(roomListView.getByRole("button").nth(1)).toHaveText(/unread dm/);
+            // Favourite room is in the favourite section is on top, so unread dm should be the third room in the list
+            await expect(roomListView.getByRole("button").nth(2)).toHaveText(/unread dm/);
         });
     });
 
