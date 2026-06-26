@@ -104,9 +104,25 @@ export class RoomListViewModel
     private readonly savedExpansionStates = new Map<string, boolean>();
 
     /**
-     * Reference to the currently displayed toast, used to automatically close the toast after a timeout.
+     * Reference to the currently displayed event toast's auto-close timer, used to dismiss it
+     * after a timeout (see {@link showToast}).
      */
     private toastRef?: number;
+
+    /**
+     * The currently active transient event toast ("section_created" / "chat_moved"), if any.
+     * Distinct from the derived "unread_activity" toast: this is set imperatively by an event
+     * and auto-dismisses, whereas unread activity is recomputed from list/notification state.
+     * {@link recomputeToast} reconciles the two into the single {@link RoomListViewSnapshot.toast}.
+     */
+    private eventToast?: ToastType;
+
+    /**
+     * Whether there is currently unread activity (a notification count) in a room scrolled below
+     * the visible area of the list. Recomputed by {@link updateUnreadActivityBelow}; surfaced as
+     * the "unread_activity" toast by {@link recomputeToast} when no event toast takes precedence.
+     */
+    private hasUnreadActivityBelow = false;
 
     /**
      * The last genuinely-visible index reported by the virtualized list (excluding the
@@ -154,7 +170,6 @@ export class RoomListViewModel
             isFlatList,
             sections: toRoomListSection(sections),
             canCreateRoom,
-            hasUnreadActivityBelow: false,
         });
 
         this.roomsResult = roomsResult;
@@ -422,14 +437,14 @@ export class RoomListViewModel
     }
 
     /**
-     * Recompute whether there is unread activity below the visible area, updating
-     * the snapshot only when the value changes to avoid unnecessary re-renders.
+     * Recompute whether there is unread activity below the visible area, reconciling the
+     * displayed toast if it changed.
      */
     private updateUnreadActivityBelow = (): void => {
         const hasUnreadActivityBelow = this.firstUnreadRoomBelowFold() !== undefined;
-        if (this.snapshot.current.hasUnreadActivityBelow !== hasUnreadActivityBelow) {
-            this.snapshot.merge({ hasUnreadActivityBelow });
-        }
+        if (this.hasUnreadActivityBelow === hasUnreadActivityBelow) return;
+        this.hasUnreadActivityBelow = hasUnreadActivityBelow;
+        this.recomputeToast();
     };
 
     /**
@@ -793,18 +808,31 @@ export class RoomListViewModel
 
     public closeToast: () => void = () => {
         clearTimeout(this.toastRef);
-        this.snapshot.merge({
-            toast: undefined,
-        });
+        this.eventToast = undefined;
+        this.recomputeToast();
     };
 
     private showToast(toast: ToastType): void {
         clearTimeout(this.toastRef);
-        this.snapshot.merge({ toast });
+        this.eventToast = toast;
+        this.recomputeToast();
         // Automatically close the toast after 15 seconds
         this.toastRef = setTimeout(() => {
             this.closeToast();
         }, 15 * 1000);
+    }
+
+    /**
+     * Reconcile the single toast shown by the view from the two independent sources: the
+     * transient event toast (which takes precedence and auto-dismisses) and the derived
+     * unread-activity state. The snapshot is only updated when the effective toast changes,
+     * to avoid unnecessary re-renders.
+     */
+    private recomputeToast(): void {
+        const toast = this.eventToast ?? (this.hasUnreadActivityBelow ? "unread_activity" : undefined);
+        if (this.snapshot.current.toast !== toast) {
+            this.snapshot.merge({ toast });
+        }
     }
 
     public changeSectionOrder = async (sourceTag: string, targetTag: string): Promise<void> => {

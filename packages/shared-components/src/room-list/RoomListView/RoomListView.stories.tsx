@@ -279,6 +279,6 @@ export const Toast: Story = {
 
 export const UnreadActivityBelow: Story = {
     args: {
-        hasUnreadActivityBelow: true,
+        toast: "unread_activity",
     },
 };

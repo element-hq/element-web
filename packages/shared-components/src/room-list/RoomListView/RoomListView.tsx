@@ -15,7 +15,6 @@ import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedR
 import { type Room, type RoomListItemViewModel } from "../VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
 import { type ToastType, RoomListToast } from "./RoomListToast";
-import { UnreadActivityToast } from "./UnreadActivityToast";
 import styles from "./RoomListView.module.css";
 import { Flex } from "../../core/utils/Flex";
 import { AutoHideScrollbar } from "../../core/utils/Scrollbar";
@@ -51,13 +50,12 @@ export type RoomListViewSnapshot = {
     canCreateRoom?: boolean;
     /** Whether the room list is displayed as a flat list */
     isFlatList: boolean;
-    /** Optional toast to display */
-    toast?: ToastType;
     /**
-     * Whether to show the "unread activity" toast, i.e. whether there are unread
-     * rooms scrolled below the visible area of the list.
+     * The single toast to display (if any). The view model owns which toast wins when more
+     * than one applies (e.g. a transient "chat_moved" event toast takes precedence over the
+     * persistent "unread_activity" toast), so the view just renders whatever it is given.
      */
-    hasUnreadActivityBelow?: boolean;
+    toast?: ToastType;
 };
 
 /**
@@ -149,10 +147,12 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
             <Flex direction="column" className={styles.list}>
                 <AutoHideScrollbar className={styles.scrollbar}>
                     {listBody}
-                    {snapshot.toast ? (
-                        <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />
-                    ) : (
-                        snapshot.hasUnreadActivityBelow && <UnreadActivityToast onClick={vm.scrollToUnreadActivity} />
+                    {snapshot.toast && (
+                        <RoomListToast
+                            type={snapshot.toast}
+                            onClose={vm.closeToast}
+                            onClick={vm.scrollToUnreadActivity}
+                        />
                     )}
                 </AutoHideScrollbar>
             </Flex>
