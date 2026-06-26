@@ -14,6 +14,8 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     align-items: center;
     width: fit-content;
+    /* Make the button a little taller so it matches the height of the status pill */
+    min-height: 2.1em;
 
     svg {
         width: 20px;
