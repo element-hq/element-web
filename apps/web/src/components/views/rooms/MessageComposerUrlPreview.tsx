@@ -14,11 +14,12 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import PlatformPeg from "../../../PlatformPeg";
+import { ModuleApi } from "../../../modules/Api";
 
 const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
 export function MessageComposerUrlPreviewWrapper({ content }: { content: string }): ReactNode | null {
-    const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
+    const { showUrlPreview, roomId } = useScopedRoomContext("showUrlPreview", "roomId");
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
@@ -41,5 +42,9 @@ export function MessageComposerUrlPreviewWrapper({ content }: { content: string 
         void vm.updateUrlPreviewVisible(showUrlPreview);
     }, [vm, showUrlPreview]);
 
-    return <MessageComposerUrlPreviewView vm={vm} />;
+    // For performance reasons, we keep the VM running even if a component overrides it. We don't
+    // want to have to keep recreating the composer preview view if a module preview falls in and out of focus.
+    return ModuleApi.instance.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
+        <MessageComposerUrlPreviewView vm={vm} />
+    ));
 }
