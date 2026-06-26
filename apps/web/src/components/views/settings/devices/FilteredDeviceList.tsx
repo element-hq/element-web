@@ -331,7 +331,7 @@ export const FilteredDeviceList = ({
                             className="mx_FilteredDeviceList_headerButton"
                         >
                             {isSigningOut && <Spinner size={16} />}
-                            {_t("action|sign_out")}
+                            {_t("settings|sessions|sign_out_n_sessions", { count: selectedDeviceIds.length })}
                         </AccessibleButton>
                         <AccessibleButton
                             data-testid="cancel-selection-cta"
