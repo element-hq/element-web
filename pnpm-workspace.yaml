@@ -23,7 +23,7 @@ catalog:
     "playwright-core": 1.60.0
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.6.0
+    "@vector-im/compound-web": 9.7.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
