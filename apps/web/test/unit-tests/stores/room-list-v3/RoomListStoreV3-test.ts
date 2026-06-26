@@ -826,6 +826,104 @@ describe("RoomListStoreV3", () => {
                 ).toContain(room);
             });
         });
+
+        describe("getServerNoticeRooms", () => {
+            it("returns only rooms tagged as server notice", async () => {
+                const { rooms } = getClientAndRooms();
+
+                // Tag rooms 8 and 27 as server notice rooms
+                [8, 27].forEach((i) => (rooms[i].tags[DefaultTagID.ServerNotice] = {}));
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const result = store.getServerNoticeRooms();
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("returns an empty array when there are no server notice rooms", async () => {
+                getClientAndRooms();
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+                expect(store.getServerNoticeRooms()).toEqual([]);
+            });
+
+            it("only returns rooms that belong to the active space", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Put rooms 6, 8, 13, 27, 75 into a space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Room 8 (in the space) and room 50 (in Home only) are both server notices
+                rooms[8].tags[DefaultTagID.ServerNotice] = {};
+                rooms[50].tags[DefaultTagID.ServerNotice] = {};
+
+                // Activate the space
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Only the server notice room within the active space is returned
+                const result = store.getServerNoticeRooms();
+                expect(result).toEqual([rooms[8]]);
+            });
+        });
+
+        describe("getDmRooms", () => {
+            it("returns only rooms tagged as DM", async () => {
+                const { rooms } = getClientAndRooms();
+
+                // Rooms 8 and 27 are DMs (no explicit tags + present in the DM map)
+                const ids = [8, 27].map((i) => rooms[i].roomId);
+                jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+                    return {
+                        getUserIdForRoomId: (id: string) => (ids.includes(id) ? "@myuser:matrix.org" : ""),
+                    };
+                }) as () => DMRoomMap);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const result = store.getDmRooms();
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("returns an empty array when there are no DM rooms", async () => {
+                // The top-level beforeEach mocks the DM map to match no rooms.
+                getClientAndRooms();
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+                expect(store.getDmRooms()).toEqual([]);
+            });
+
+            it("only returns rooms that belong to the active space", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Put rooms 6, 8, 13, 27, 75 into a space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Room 8 (in the space) and room 50 (in Home only) are both DMs
+                const ids = [rooms[8].roomId, rooms[50].roomId];
+                jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+                    return {
+                        getUserIdForRoomId: (id: string) => (ids.includes(id) ? "@myuser:matrix.org" : ""),
+                    };
+                }) as () => DMRoomMap);
+
+                // Activate the space
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Only the DM room within the active space is returned
+                const result = store.getDmRooms();
+                expect(result).toEqual([rooms[8]]);
+            });
+        });
     });
 
     describe("Sections", () => {

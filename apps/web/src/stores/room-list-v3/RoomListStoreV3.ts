@@ -36,6 +36,7 @@ import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
 import { getChangedOverrideRoomMutePushRules } from "./utils";
 import { isRoomVisible } from "./isRoomVisible";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
+import { getTagsForRoom } from "../../utils/room/getTagsForRoom";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
@@ -47,7 +48,7 @@ import {
     getOrderedReorderableSections,
     reorderSection,
 } from "./section";
-import { DefaultTagID } from "./skip-list/tag";
+import { DefaultTagID, type TagID } from "./skip-list/tag";
 
 /**
  * These are the filters passed to the room skip list.
@@ -182,6 +183,30 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             filterKeys,
             sections,
         };
+    }
+
+    /**
+     * Get the rooms in the currently active space that are tagged with the given tag.
+     * @param tag The tag to filter the rooms by.
+     */
+    private getRoomsWithTagInActiveSpace(tag: TagID): Room[] {
+        return this.getSortedRoomsInActiveSpace()
+            .sections.flatMap((s) => s.rooms)
+            .filter((room) => getTagsForRoom(room).includes(tag));
+    }
+
+    /**
+     * Get the server notice rooms in the currently active space.
+     */
+    public getServerNoticeRooms(): Room[] {
+        return this.getRoomsWithTagInActiveSpace(DefaultTagID.ServerNotice);
+    }
+
+    /**
+     * Get the direct message (DM) rooms in the currently active space.
+     */
+    public getDmRooms(): Room[] {
+        return this.getRoomsWithTagInActiveSpace(DefaultTagID.DM);
     }
 
     /**
