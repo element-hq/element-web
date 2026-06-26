@@ -235,6 +235,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
         class="_breadcrumb_t96w3_8"
       >
         <button
+          aria-disabled="false"
           aria-label="Back"
           class="_icon-button_1215g_8"
           data-kind="secondary"

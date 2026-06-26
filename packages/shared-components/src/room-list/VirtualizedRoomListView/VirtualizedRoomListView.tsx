@@ -13,7 +13,6 @@ import { KeyboardSensor, PointerActivationConstraints, PointerSensor } from "@dn
 
 import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
-import { _t } from "../../core/i18n/i18n";
 import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
@@ -22,9 +21,13 @@ import {
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
+import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
+import { useRoomListAccessibilityPlugin } from "./RoomListAccessibilityPlugin";
 import styles from "./VirtualizedRoomListView.module.css";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -70,6 +73,11 @@ export interface VirtualizedRoomListViewProps {
 const ROOM_LIST_ITEM_HEIGHT = 52;
 
 /**
+ * Number of pixels the keyboard sensor moves the dragged element per arrow keypress.
+ */
+export const KEYBOARD_DRAG_OFFSET = 17;
+
+/**
  * Type for context used in ListView
  */
 type Context = {
@@ -112,6 +120,7 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  * ```
  */
 export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: VirtualizedRoomListViewProps): JSX.Element {
+    const { translate: _t } = useI18n();
     const snapshot = useViewModel(vm);
     const { roomListState, sections, isFlatList } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;
@@ -146,6 +155,10 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         },
         [vm],
     );
+
+    // Builds the accessibility plugin (live-region announcements) for keyboard/pointer drags,
+    // replacing dnd-kit's built-in Accessibility plugin.
+    const a11yPlugins = useRoomListAccessibilityPlugin(vm);
 
     /**
      * Get the item component for a specific index
@@ -388,13 +401,25 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     }
 
     return (
-        <DragDropProvider
+        <DragDropProvider<RoomListDragData>
+            onDragStart={(event) => {
+                const { source } = event.operation;
+                // Changing the state of sections (collapsed/expanded) while dragging a section header causes a double readback for the a11y announcement.
+                if (isSectionDragData(source?.data)) {
+                    vm.onSectionDragStart();
+                }
+            }}
             onDragEnd={(event) => {
-                if (event.canceled) return;
-                const { target, source } = event.operation;
-                if (!source || !target) return;
-
-                vm.changeRoomSection(source.id as string, target.id as string);
+                const { source, target } = event.operation;
+                if (isSectionDragData(source?.data)) {
+                    vm.onSectionDragEnd();
+                }
+                if (event.canceled || !source || !target) return;
+                if (isSectionDragData(source.data)) {
+                    vm.changeSectionOrder(String(source.id), String(target.id));
+                } else {
+                    vm.changeRoomSection(String(source.id), String(target.id));
+                }
             }}
             sensors={[
                 // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
@@ -404,6 +429,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 }),
                 // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
                 KeyboardSensor.configure({
+                    // The default 10px-per-keypress offset makes keyboard dragging feel sluggish.
+                    offset: KEYBOARD_DRAG_OFFSET,
                     keyboardCodes: {
                         start: ["Space"],
                         cancel: ["Escape"],
@@ -415,6 +442,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     },
                 }),
             ]}
+            plugins={a11yPlugins}
         >
             <DragOverlay dropAnimation={null}>
                 <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />
@@ -439,7 +467,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
  * navigation shortcuts while a drag is in progress, preventing unwanted list scrolling.
  */
 function GroupedRoomList(props: GroupedVirtualizedListProps<string, string, Context>): JSX.Element {
-    const { source } = useDragOperation();
+    const { source } = useDragOperation<RoomListDragData>();
 
     return <GroupedVirtualizedList<string, string, Context> {...props} disableKeyboardNavigation={source !== null} />;
 }
@@ -455,10 +483,15 @@ interface DragOverlayContentProps {
  * Component rendered in the drag overlay when dragging a room item. Renders a copy of the dragged item to avoid dragging the actual element out of virtualization.
  */
 function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
-    const { source } = useDragOperation();
+    const { source } = useDragOperation<RoomListDragData>();
     if (!source) return null;
 
-    const itemVm = vm.getRoomItemViewModel(source.id as string);
+    if (isSectionDragData(source.data)) {
+        const sectionHeaderVM = vm.getSectionHeaderViewModel(String(source.id));
+        return <RoomListSectionHeaderDragOverlayView vm={sectionHeaderVM} />;
+    }
+
+    const itemVm = vm.getRoomItemViewModel(String(source.id));
     if (!itemVm) return null;
 
     return <RoomListItemDragOverlayView vm={itemVm} renderAvatar={renderAvatar} />;

@@ -35,7 +35,11 @@ export const RoomListItemDragOverlayView = memo(function RoomListItemDragOverlay
     renderAvatar,
 }: RoomListItemDragOverlayViewProps): JSX.Element {
     return (
+        // Purely a visual clone that follows the drag. Hide it from the accessibility tree so the
+        // dragged room isn't duplicated (the real, still-focused item already exposes it, and drag
+        // feedback is narrated via the dnd live-region announcements).
         <Flex
+            aria-hidden={true}
             className={classNames(roomListItemStyles.roomListItem, styles.dragOverlay)}
             gap="var(--cpd-space-3x)"
             align="stretch"

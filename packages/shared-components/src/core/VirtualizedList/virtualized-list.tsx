@@ -413,8 +413,16 @@ export function useVirtualizedList<Item, Context>(
         [handleRef],
     );
 
+    // Key items by id, not position, so react-virtuoso preserves (moves) the existing DOM
+    // node when an item's absolute index shifts — e.g. sections collapsing on drag start removes
+    // the rooms above a header, shifting its index. Without this, Virtuoso's default key is the
+    // index, so the wrapper (and the focused header inside it) remounts, the roving-tabindex effect
+    // refocuses the fresh node, and screen readers re-announce the header mid-drag.
+    const computeItemKey = useCallback((_index: number, item: Item): string => getItemKey(item), [getItemKey]);
+
     return {
         ...virtuosoProps,
+        computeItemKey,
         ref: setRef,
         scrollerRef,
         onKeyDown: keyDownCallback,
