@@ -42,6 +42,20 @@ interface IProps {
     isQuoteExpanded?: boolean;
     setQuoteExpanded: (isExpanded: boolean) => void;
     getRelationsForEvent?: GetRelationsForEvent;
+    /**
+     * Height-stable preview mode for the virtualised (new) timeline.
+     *
+     * In this mode the preview must not change height after mount, because the
+     * row sits inside a virtualised list where late growth shifts neighbouring
+     * rows and jumps the scroll position. To achieve that we:
+     *  - resolve the replied-to event synchronously from the local store when
+     *    possible, so the first paint is already the final content;
+     *  - never render the nested "In reply to <user>" header chain (it resolves
+     *    asynchronously and adds a line of height when it arrives);
+     *  - render a fixed-height skeleton instead of a spinner while fetching an
+     *    event we don't have locally.
+     */
+    compactPreview?: boolean;
 }
 
 interface IState {
@@ -69,14 +83,29 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
+        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
+
+        // In compact mode, resolve the replied-to event synchronously when the
+        // room already has it (the common case — it's usually within the loaded
+        // timeline). The first render is then the final content and the preview
+        // never changes height after mount.
+        let initialEvents: MatrixEvent[] = [];
+        let loading = true;
+        if (props.compactPreview) {
+            const parentEventId = getParentEventId(props.parentEv);
+            const ev = parentEventId ? this.room?.findEventById(parentEventId) : undefined;
+            if (ev) {
+                initialEvents = [ev];
+                loading = false;
+            }
+        }
+
         this.state = {
-            events: [],
+            events: initialEvents,
             loadedEv: null,
-            loading: true,
+            loading,
             err: false,
         };
-
-        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
     }
 
     private get matrixClient(): MatrixClient {
@@ -85,7 +114,9 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
-        this.initialize();
+        // Skip the async fetch when the constructor already resolved the event
+        // synchronously (compact mode with a locally-available event).
+        if (this.state.loading) this.initialize();
         this.trySetExpandableQuotes();
     }
 
@@ -125,7 +156,10 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         if (ev) {
-            const loadedEv = await this.getNextEvent(ev);
+            // The compact preview never renders the nested "In reply to" header,
+            // so don't fetch the next event up the chain (it could hit the network
+            // and would add a header line when it resolved).
+            const loadedEv = this.props.compactPreview ? null : await this.getNextEvent(ev);
             this.setState({
                 events: [ev],
                 loadedEv,
@@ -249,7 +283,17 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 </p>
             );
         } else if (this.state.loading) {
-            header = <Spinner size={16} />;
+            header = this.props.compactPreview ? (
+                // Two-row skeleton mirroring the resolved preview's structure
+                // (sender row + one body line) at the same fixed row heights, so
+                // the fetch completing doesn't change the preview's height.
+                <blockquote className="mx_ReplyChain mx_ReplyChain_placeholder">
+                    <div className="mx_ReplyChain_placeholderRow" />
+                    <div className="mx_ReplyChain_placeholderRow" />
+                </blockquote>
+            ) : (
+                <Spinner size={16} />
+            );
         }
 
         const { isQuoteExpanded } = this.props;

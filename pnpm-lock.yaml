@@ -290,6 +290,8 @@ packageExtensionsChecksum: sha256-EMEi1vcyzQthk7O/0AcntvnHgJaKCoFBlzp6iX/qNYk=
 patchedDependencies:
   '@arcmantle/vite-plugin-import-css-sheet': 8019aa9feca17db6bab3483612b4150c911d70b58fddc52bf2d7258a1484a747
   '@matrix-org/react-sdk-module-api': 016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96
+  '@tanstack/react-virtual@3.14.3': a0928451f79c6dbd3af7c9b0c590387173714da1a9feb8c3f6710241a51ee428
+  '@tanstack/virtual-core@3.17.1': 0037026a53550642e686de3072aa9cced429eda8c9e3338afc527dbe6bda09cd
   '@types/auto-launch': b60dc9846a11a1684ce52c55493f29ea398d3dc44b88f66ab44e9843d6c01538
   '@vector-im/matrix-wysiwyg': 7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e
   await-lock: b767a571946a4f8710ac54b1a7bec8a7c1570f9b85d75922392fae20d0578964
@@ -1423,6 +1425,9 @@ importers:
       '@matrix-org/spec':
         specifier: ^1.7.0
         version: 1.16.0
+      '@tanstack/react-virtual':
+        specifier: ^3.14.3
+        version: 3.14.3(patch_hash=a0928451f79c6dbd3af7c9b0c590387173714da1a9feb8c3f6710241a51ee428)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@vector-im/compound-design-tokens':
         specifier: 'catalog:'
         version: 10.2.1(@types/react@19.2.14)(react@19.2.7)
@@ -5815,6 +5820,15 @@ packages:
   '@szmarczak/http-timer@4.0.6':
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
+
+  '@tanstack/react-virtual@3.14.3':
+    resolution: {integrity: sha512-k/cnHPVaOfn46hSbiY6n4Dzf4QjCGWSF40zR5QIIYUqPAjpA6TN7InfYmcMiDVQGP2iUn9xsRbAl8u1v3UmeVQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  '@tanstack/virtual-core@3.17.1':
+    resolution: {integrity: sha512-VZyW2Uiml5tmBZwPGrSD3Sz73OxzljQMCmzYHsUTPEuTsERf5xwa+uWb01xEzkz3ZSYTjj8NEb/mKHvgKxyZdA==}
 
   '@testcontainers/postgresql@12.0.3':
     resolution: {integrity: sha512-y0l/ItWxNfdMU783EOZ66lMq90uuuXPqE+fo1jNSRfMbtfUq/9Ez/wluDxxaS+D/i3I0juep+jmz/WVuip8i9Q==}
@@ -18726,6 +18740,14 @@ snapshots:
   '@szmarczak/http-timer@4.0.6':
     dependencies:
       defer-to-connect: 2.0.1
+
+  '@tanstack/react-virtual@3.14.3(patch_hash=a0928451f79c6dbd3af7c9b0c590387173714da1a9feb8c3f6710241a51ee428)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+    dependencies:
+      '@tanstack/virtual-core': 3.17.1(patch_hash=0037026a53550642e686de3072aa9cced429eda8c9e3338afc527dbe6bda09cd)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+
+  '@tanstack/virtual-core@3.17.1(patch_hash=0037026a53550642e686de3072aa9cced429eda8c9e3338afc527dbe6bda09cd)': {}
 
   '@testcontainers/postgresql@12.0.3':
     dependencies:

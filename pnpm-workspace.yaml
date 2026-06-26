@@ -99,6 +99,10 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
+    # New timeline: custom anchor-item validation for scroll anchoring (see patch)
+    "@tanstack/virtual-core@3.17.1": patches/@tanstack__virtual-core@3.17.1.patch
+    # New timeline: grow the scroll container before the re-pin write to avoid a scrollTop clamp
+    "@tanstack/react-virtual@3.14.3": patches/@tanstack__react-virtual@3.14.3.patch
 
 peerDependencyRules:
     allowedVersions:

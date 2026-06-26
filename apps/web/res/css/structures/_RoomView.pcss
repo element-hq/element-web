@@ -91,6 +91,14 @@ Please see LICENSE files in the repository root for full details.
         order: 2;
     }
 
+    /* Fill the column like the message panel does, so the loading spinner sits
+       in the vertical middle rather than collapsing to content height at the
+       top. Without this the legacy spinner appears high, then the timeline's
+       own centred load spinner appears in the middle — a visible jump. */
+    .mx_RoomView_messagePanelSpinner {
+        flex: 1 1 0;
+    }
+
     .mx_RoomView_timeline {
         /* offset parent for mx_RoomView_topUnreadMessagesBar  */
         position: relative;

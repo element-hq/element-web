@@ -50,3 +50,81 @@ Please see LICENSE files in the repository root for full details.
         --username-color: $username-variant6-color;
     }
 }
+
+/*
+ * New-timeline-only reply height stabilisation.
+ *
+ * Inside the virtualised timeline a reply preview must not change height after
+ * mount: late growth shifts the rows around it and jumps the scroll position.
+ * ReplyChain's compact mode (see `compactPreview` in ReplyChain.tsx) resolves
+ * the referenced event synchronously when it's in the local store and never
+ * renders the nested "In reply to" header, so the preview is structurally
+ * fixed: one blockquote with a sender row and a single clamped body line.
+ *
+ * The rules here pin the two rows to the shared `--mx-reply-row-height` so the
+ * fetch-fallback skeleton (`mx_ReplyChain_placeholder`, also two rows at the
+ * same height) is pixel-identical to the resolved preview — no clipping, no
+ * reflow when the event arrives.
+ */
+.mx_NewTimelinePanel {
+    /* One preview row: fits the 16px avatar and a body-md (15px/20px) text line. */
+    --mx-reply-row-height: 20px;
+
+    /* Pin the resolved preview's two rows (sender, single clamped body line) to
+       the same row height the skeleton uses, so loading → resolved is exactly
+       height-neutral. Lives here rather than _ReplyTile.pcss to stay next to
+       the --mx-reply-row-height definition it depends on. */
+    .mx_ReplyTile .mx_ReplyTile_sender {
+        height: var(--mx-reply-row-height);
+    }
+
+    .mx_ReplyTile .mx_EventTile_content {
+        -webkit-line-clamp: 1;
+        line-height: var(--mx-reply-row-height);
+
+        .mx_EventTile_pre_container > pre {
+            -webkit-line-clamp: 1;
+        }
+    }
+
+    /* Skeleton shown while fetching an event we don't have locally. Mirrors the
+       resolved preview: same blockquote box (border/padding from .mx_ReplyChain),
+       same vertical padding as .mx_ReplyTile (2px 0), same 2px row gap. */
+    .mx_ReplyChain_placeholder {
+        --username-color: $quinary-content;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .mx_ReplyChain_placeholderRow {
+        height: var(--mx-reply-row-height);
+        display: flex;
+        align-items: center;
+
+        &::before {
+            content: "";
+            height: 12px;
+            width: 35%;
+            border-radius: 6px;
+            background: $quinary-content;
+        }
+
+        /* Body line placeholder reads wider than the sender line. */
+        &:last-child::before {
+            width: 70%;
+        }
+    }
+
+    /* A failed fetch renders a single-line error blockquote; hold the same
+       overall height as the skeleton it replaces so even the failure path
+       doesn't reflow the row. */
+    .mx_ReplyChain_error {
+        box-sizing: border-box;
+        min-height: calc(2 * var(--mx-reply-row-height) + 2px + 4px);
+        display: flex;
+        align-items: center;
+    }
+}

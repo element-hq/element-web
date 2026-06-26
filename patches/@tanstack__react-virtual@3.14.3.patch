@@ -1,0 +1,43 @@
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index d3410767dea9ab4db64881cdb4df84607223bd70..8fdf57418fe10c41479bced170e47cf62a2b52ea 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -23,7 +23,14 @@ function useVirtualizerBase({
+   });
+   directRef.current.enabled = directDomUpdates;
+   directRef.current.mode = directDomUpdatesMode;
+-  const applyDirectStyles = (instance2) => {
++  // element-web patch: grow the scroll container to the new total size. Split out
++  // of applyDirectStyles so it can run BEFORE _willUpdate applies anchorTo's scroll
++  // re-pin (see the _willUpdate layout effect below). Otherwise a large backward
++  // prepend writes a scroll offset the still-short container can't reach and the
++  // browser clamps it, collapsing the viewport to the top — only bites right after
++  // jump-to-top / cold load, when little is loaded so the container is short and
++  // the prepend exceeds the content below the viewport.
++  const applyContainerSize = (instance2) => {
+     const state = directRef.current;
+     if (!state.enabled || !state.container) return;
+     const totalSize = instance2.getTotalSize();
+@@ -32,6 +39,11 @@ function useVirtualizerBase({
+       const sizeAxis = instance2.options.horizontal ? "width" : "height";
+       state.container.style[sizeAxis] = `${totalSize}px`;
+     }
++  };
++  const applyDirectStyles = (instance2) => {
++    const state = directRef.current;
++    if (!state.enabled || !state.container) return;
++    applyContainerSize(instance2);
+     const horizontal = !!instance2.options.horizontal;
+     const useTransform = state.mode === "transform";
+     const posAxis = horizontal ? "left" : "top";
+@@ -100,6 +112,10 @@ function useVirtualizerBase({
+     return instance._didMount();
+   }, []);
+   useIsomorphicLayoutEffect(() => {
++    // element-web patch: size the container to the new total BEFORE _willUpdate
++    // applies anchorTo's scroll re-pin, so the re-pin write can't be clamped by a
++    // still-short container (the "jump to top" collapse on backward prepend).
++    applyContainerSize(instance);
+     return instance._willUpdate();
+   });
+   useIsomorphicLayoutEffect(() => {

@@ -285,14 +285,24 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
     public render(): ReactNode {
         const { poll, pollInitialised } = this.state;
-        if (!poll?.pollEvent) {
+
+        // The Poll *model* (vote relations, ended state) is fetched async in
+        // componentDidMount, but a poll's question and answers live in the start
+        // event we already hold. Render the full question + option list from that
+        // immediately — before the model resolves — so the tile reserves its final
+        // height from first paint. Only vote counts/results wait for the model, and
+        // filling those into the already-present option rows does not change their
+        // height, so the resolve is height-neutral. Without this a cold-loaded poll
+        // renders empty then grows ~180px when its model arrives, shoving the
+        // timeline (a backward-pagination scroll jump).
+        const pollEvent = (poll?.pollEvent ?? this.props.mxEvent.unstableExtensibleEvent) as PollStartEvent | null;
+        if (!pollEvent?.isEquivalentTo(M_POLL_START)) {
             return null;
         }
 
-        const pollEvent = poll.pollEvent;
-
+        const isEnded = !!poll?.isEnded;
         const pollId = this.props.mxEvent.getId()!;
-        const isFetchingResponses = !pollInitialised || poll.isFetchingResponses;
+        const isFetchingResponses = !poll || !pollInitialised || poll.isFetchingResponses;
         const userVotes = this.collectUserVotes();
         const votes = countVotes(userVotes, pollEvent);
         const totalVotes = this.totalVotes(votes);
@@ -303,12 +313,12 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         // Disclosed: votes are hidden until I vote or the poll ends
         // Undisclosed: votes are hidden until poll ends
-        const showResults = poll.isEnded || (disclosed && myVote !== undefined);
+        const showResults = isEnded || (disclosed && myVote !== undefined);
 
         let totalText: string;
-        if (showResults && poll.undecryptableRelationsCount) {
+        if (showResults && poll?.undecryptableRelationsCount) {
             totalText = _t("poll|total_decryption_errors");
-        } else if (poll.isEnded) {
+        } else if (isEnded) {
             totalText = _t("right_panel|poll|final_result", { count: totalVotes });
         } else if (!disclosed) {
             totalText = _t("poll|total_not_ended");
@@ -326,8 +336,8 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             <span className="mx_MPollBody_edited"> ({_t("common|edited")})</span>
         ) : null;
 
-        const PollIcon = poll.isEnded ? PollsEndIcon : PollsIcon;
-        const pollLabel = poll.isEnded ? _t("poll|ended_poll_label") : _t("poll|poll_label");
+        const PollIcon = isEnded ? PollsEndIcon : PollsIcon;
+        const pollLabel = isEnded ? _t("poll|ended_poll_label") : _t("poll|poll_label");
 
         return (
             <fieldset className="mx_MPollBody">
@@ -345,7 +355,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         }
 
                         const checked =
-                            (!poll.isEnded && myVote === answer.id) || (poll.isEnded && answerVotes === winCount);
+                            (!isEnded && myVote === answer.id) || (isEnded && answerVotes === winCount);
 
                         return (
                             <PollOption
@@ -354,7 +364,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                 answer={answer}
                                 optionNumber={index + 1}
                                 isChecked={checked}
-                                isEnded={poll.isEnded}
+                                isEnded={isEnded}
                                 voteCount={answerVotes}
                                 totalVoteCount={totalVotes}
                                 displayVoteCount={showResults}
