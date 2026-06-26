@@ -36,7 +36,7 @@ const meta = {
         alt: "Reply preview",
         maxWidth: 57,
         maxHeight: 44,
-        aspectRatio: "57 / 43.95",
+        aspectRatio: "57 / 44",
         placeholder: ImageReplyBodyViewPlaceholder.NONE,
         blurhash: demoBlurhash,
     },
