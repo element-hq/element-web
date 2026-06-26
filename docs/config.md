@@ -393,9 +393,9 @@ The VoIP and Jitsi options are:
       the app, removing the ability to enable legacy 1:1 calls or Jitsi calls.
       It is a misconfiguration if its set to true while `element_call.disable` is also true!
       Defaults to `false`.
-    - `enabled`: A boolean specifying whether Element Call should be available.
-      If it is not enabled `element_call.use_exclusively` has no effect!
-      Defaults to `true`.
+    - `disabled`: A boolean flag specifying whether Element Call should be disabled.
+      If it is disabled `element_call.use_exclusively` has no effect!
+      Defaults to `false`.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
     - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),

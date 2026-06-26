@@ -188,7 +188,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
             requestButton = (
-                <SettingsSubsection heading="Permissions">
+                <SettingsSubsection heading={_t("settings|voip|permissions")}>
                     <p>{_t("settings|voip|missing_permissions_prompt")}</p>
                     <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
                         {_t("settings|voip|request_permissions")}

@@ -86,17 +86,6 @@ export interface IOpts {
     joinRule?: JoinRule;
 }
 
-const DEFAULT_VIDEO_ROOM_EVENT_POWER_LEVELS = {
-    [EventType.RoomName]: 50,
-    [EventType.RoomAvatar]: 50,
-    [EventType.RoomPowerLevels]: 100,
-    [EventType.RoomHistoryVisibility]: 100,
-    [EventType.RoomCanonicalAlias]: 50,
-    [EventType.RoomTombstone]: 100,
-    [EventType.RoomServerAcl]: 100,
-    [EventType.RoomEncryption]: 100,
-};
-
 /**
  * Create a new room, and switch to it.
  *
@@ -173,7 +162,6 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
-                    ...DEFAULT_VIDEO_ROOM_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
                     [opts.roomType === RoomType.ElementVideo
                         ? JitsiCall.MEMBER_EVENT_TYPE

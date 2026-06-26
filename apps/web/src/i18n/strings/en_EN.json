@@ -3050,6 +3050,7 @@
             "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
             "noise_suppression": "Noise suppression",
             "noise_suppression_description": "Reduces background noise in your microphone input during calls. This setting also applies to Element Call.",
+            "permissions": "Permissions",
             "request_permissions": "Request media permissions",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
