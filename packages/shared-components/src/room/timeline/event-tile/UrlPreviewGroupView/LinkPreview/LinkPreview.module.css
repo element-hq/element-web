@@ -85,22 +85,6 @@ button.preview {
         overflow: hidden; /* cause it to wrap rather than clip */
     }
 
-    .title,
-    .description {
-        display: inline-block;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        white-space: normal;
-    }
-
-    .title {
-        display: inline-block;
-        line-clamp: 2;
-        -webkit-line-clamp: 2;
-        color: var(--cpd-color-text-primary);
-        text-decoration-line: none;
-    }
-
     .description {
         margin: 0;
         display: -webkit-box;
@@ -109,15 +93,31 @@ button.preview {
         line-clamp: 2;
         overflow: hidden;
     }
+}
 
-    .siteName {
-        margin-top: var(--cpd-space-1x);
-        vertical-align: middle;
-        display: flex;
-        gap: var(--cpd-space-1-5x);
-        > * {
-            /* Center everything */
-            margin: auto 0;
-        }
+.siteName {
+    margin-top: var(--cpd-space-1x);
+    vertical-align: middle;
+    display: flex;
+    gap: var(--cpd-space-1-5x);
+    > * {
+        /* Center everything */
+        margin: auto 0;
     }
+}
+
+.title,
+.description {
+    display: inline-block;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+}
+
+.title {
+    display: inline-block;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    color: var(--cpd-color-text-primary);
+    text-decoration-line: none;
 }
