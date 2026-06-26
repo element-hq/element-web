@@ -904,6 +904,8 @@
         "user_avatar": "Avatar: %(avatar)s",
         "user_displayname": "Displayname: %(displayname)s",
         "user_id": "User ID: %(userId)s",
+        "user_identity": "Cryptographic identity",
+        "user_identity_unknown": "Unknown",
         "user_no_avatar": "Avatar: <i>None</i>",
         "user_no_displayname": "Displayname: <i>None</i>",
         "user_read_up_to": "User read up to: ",
