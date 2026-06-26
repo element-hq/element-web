@@ -15,7 +15,7 @@ import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import PlatformPeg from "../../../PlatformPeg";
 
-const DEBOUNCE_REQUEST_TIMEOUT = 400;
+const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
 export function MessageComposerUrlPreviewWrapper({ content }: { content: string }): ReactNode | null {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
@@ -34,7 +34,7 @@ export function MessageComposerUrlPreviewWrapper({ content }: { content: string 
             void vm.updateWithText(content);
         },
         [vm, content],
-        DEBOUNCE_REQUEST_TIMEOUT,
+        DEBOUNCE_REQUEST_TIMEOUT_MS,
     );
 
     useEffect(() => {
