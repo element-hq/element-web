@@ -152,8 +152,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             showPollsButton: SettingsStore.getValue("MessageComposerInput.showPollsButton"),
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
-            initialComposerContent: initialComposerContent,
-            hidePreviewsInSentEvent: false,
+            initialComposerContent: initialComposerContent
         };
 
         this.instanceId = instanceCount++;
