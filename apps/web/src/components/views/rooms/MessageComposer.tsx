@@ -54,6 +54,8 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { Type } from "../../../editor/parts";
+import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -151,6 +153,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
             initialComposerContent: initialComposerContent,
+            hidePreviewsInSentEvent: false,
         };
 
         this.instanceId = instanceCount++;
@@ -417,7 +420,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onChange = (model: EditorModel): void => {
+        model.serializeParts();
         this.setState({
+            composerContent: model
+                .serializeParts()
+                .filter((p) => p.type === Type.Plain)
+                .map((p) => p.text)
+                .join(" "),
             isComposerEmpty: model.isEmpty,
         });
     };
@@ -673,6 +682,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
+                <MessageComposerUrlPreviewWrapper content={this.state.composerContent} />
                 <div className="mx_MessageComposer_wrapper">
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
