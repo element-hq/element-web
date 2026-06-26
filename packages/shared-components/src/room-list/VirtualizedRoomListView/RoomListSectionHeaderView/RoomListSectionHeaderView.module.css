@@ -12,6 +12,11 @@
     text-align: unset;
 
     width: 100%;
+    /* Fixed, uniform height across every header (regular, unread/bold, first, last) and the pinned
+       overlay. This keeps the sticky-header "push" maths exact — the first/last variants below only
+       shift the content within this box, they no longer change its height. */
+    box-sizing: border-box;
+    height: 44px;
     cursor: pointer;
     font: var(--cpd-font-body-sm-regular);
     letter-spacing: var(--cpd-font-letter-spacing-body-sm);
@@ -58,6 +63,12 @@
         }
     }
 
+    /* A focused header can be scrolled flush to the scroller's top edge (where it pins), so the
+       default outline would be clipped by overflow:auto. Inset it so the focus ring stays visible. */
+    &:focus-visible {
+        outline-offset: -2px;
+    }
+
     &.unread {
         font: var(--cpd-font-body-sm-semibold);
         color: var(--cpd-color-text-primary);
@@ -88,12 +99,6 @@
 
 .firstHeader {
     padding-top: 0;
-
-    /* The first item sits flush with the scroller's top edge, so the default outline
-       would be clipped by overflow:auto. Inset it so it stays inside the button. */
-    &:focus-visible {
-        outline-offset: -2px;
-    }
 }
 
 .lastHeader {
@@ -134,4 +139,30 @@
 
 .dragSource .container {
     opacity: 0.6;
+}
+
+/*
+Opaque backing for the pinned "current section" overlay header. The list rows scroll underneath it,
+so it must obscure them. The header button stays full width (so its pill aligns with the real header
+rows), while the opaque fill is painted by the pseudo-element below.
+*/
+.stickyBackground {
+    position: relative;
+    width: 100%;
+}
+
+/*
+The opaque fill. It stops short of the inline-end edge by the same gutter the room/header pills
+already leave clear (--cpd-space-3x), so the scroller's scrollbar — which floats in that gutter —
+stays visible instead of being covered by the pinned overlay. The negative z-index keeps the fill
+behind the header's text/chevron while still sitting above the scrolling rows (the overlay wrapper
+owns the stacking context).
+*/
+.stickyBackground::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline: 0 var(--cpd-space-3x);
+    z-index: -1;
+    background: var(--cpd-color-bg-canvas-default);
 }
