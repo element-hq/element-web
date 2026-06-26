@@ -3055,7 +3055,7 @@
             "video_input_empty": "No Webcams detected",
             "video_section": "Video settings",
             "voice_agc": "Automatically adjust the microphone volume",
-            "voice_input_description": "The audio input configured here is used for voice messges and calls (Legacy/1:1).",
+            "voice_input_description": "The audio input configured here is used for voice messages and calls (Legacy/1:1).",
             "voice_input_section": "Audio Input",
             "voice_processing": "Voice processing",
             "voice_section": "Voice settings"
