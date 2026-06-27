@@ -2114,6 +2114,7 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "back_to_results": "Back to results",
+            "jump_to_date_button": "Jump to date",
             "order_recent": "Most recent",
             "order_relevant": "Most relevant",
             "order_toggle_button": "Sort results",

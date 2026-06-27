@@ -23,6 +23,7 @@ import {
     useRoomSummaryCardViewModel,
 } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
@@ -177,6 +178,28 @@ describe("<RoomSummaryCard />", () => {
 
             expect(onSearchChange).toHaveBeenCalledWith("test query");
             expect(searchInput).toHaveValue("test query");
+        });
+
+        it("shows the jump-to-date calendar in the search header when feature_jump_to_date is enabled", () => {
+            const realGetValue = SettingsStore.getValue.bind(SettingsStore);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...rest): any =>
+                key === "feature_jump_to_date" ? true : (realGetValue as any)(key, ...rest),
+            );
+
+            const { getByTestId } = getComponent({ onSearchChange: jest.fn() });
+
+            expect(getByTestId("search-jump-to-date-button")).toBeInTheDocument();
+        });
+
+        it("hides the jump-to-date calendar when feature_jump_to_date is disabled", () => {
+            const realGetValue = SettingsStore.getValue.bind(SettingsStore);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...rest): any =>
+                key === "feature_jump_to_date" ? false : (realGetValue as any)(key, ...rest),
+            );
+
+            const { queryByTestId } = getComponent({ onSearchChange: jest.fn() });
+
+            expect(queryByTestId("search-jump-to-date-button")).not.toBeInTheDocument();
         });
     });
 

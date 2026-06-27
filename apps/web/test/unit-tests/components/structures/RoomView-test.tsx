@@ -485,6 +485,66 @@ describe("RoomView", () => {
                 expect.objectContaining({ action: Action.ViewRoom, room_id: otherRoom.roomId, event_id: "$there" }),
             );
         });
+
+        it("ends the active search when a jump (e.g. jump-to-date) navigates the timeline mid-stepping", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+            const makeResult = (eventId: string, ts: number) =>
+                SearchResult.fromJson(
+                    {
+                        rank: 1,
+                        result: {
+                            room_id: room.roomId,
+                            event_id: eventId,
+                            sender: cli.getSafeUserId(),
+                            origin_server_ts: ts,
+                            content: { body: "a match", msgtype: "m.text" },
+                            type: EventType.RoomMessage,
+                        },
+                        context: { profile_info: {}, events_before: [], events_after: [] },
+                    },
+                    eventMapper,
+                );
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            startSearch(roomViewRef, {
+                searchId: 1,
+                roomId: room.roomId,
+                term: "match",
+                scope: SearchScope.Room,
+                promise: Promise.resolve({
+                    results: [makeResult("$m1", 2), makeResult("$m2", 1)],
+                    highlights: [],
+                    count: 2,
+                }),
+            });
+
+            // Step to a match: the timeline now renders as Room (stepping), but the search session stays alive.
+            await screen.findByText("0 of 2", { exact: false });
+            await userEvent.click(screen.getByRole("button", { name: "Next match" }));
+            await screen.findByText("1 of 2", { exact: false });
+            expect(SearchSessionStore.instance.hasActiveSession()).toBe(true);
+
+            // The jump-to-date calendar dispatches a plain ViewRoom (no beginSteppingJump) to a different event. Even
+            // though the timeline is mid-stepping (Room mode, not Search), this genuine navigation must end the search
+            // rather than leaving a dangling session pinned to the old match.
+            act(() => {
+                defaultDispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    event_id: "$jumped-to-date",
+                    highlighted: true,
+                    metricsTrigger: undefined,
+                });
+            });
+
+            await waitFor(() => expect(roomViewRef.current!.state.search).toBeUndefined());
+            expect(SearchSessionStore.instance.hasActiveSession()).toBe(false);
+        });
     });
 
     it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {

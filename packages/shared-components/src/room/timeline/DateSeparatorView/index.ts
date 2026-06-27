@@ -6,3 +6,4 @@
  */
 
 export { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
+export { DateSeparatorContextMenuView } from "./DateSeparatorContextMenuView";

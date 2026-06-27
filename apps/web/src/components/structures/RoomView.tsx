@@ -815,11 +815,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
         }
 
-        // Clear the search results when clicking a search result (which changes the currently scrolled-to event),
-        // but leave the session alive for our own stepping/back-to-results ViewRoom dispatches.
+        // End the search when a genuine navigation changes the currently scrolled-to event — a result click from the
+        // results list, OR a jump (e.g. the search-header jump-to-date calendar) taken while stepping through matches.
+        // We gate on an active session rather than the Search rendering type so this also fires mid-stepping (where
+        // the timeline renders as Room); our own stepping/back-to-results dispatches are still excluded by the
+        // one-shot flag and the durable steppingTarget anchor below.
         const focusedEventId = this.roomViewStore.getInitialEventId();
         if (
-            this.state.timelineRenderingType === TimelineRenderingType.Search &&
+            this.state.search !== undefined &&
             !wasSteppingJump &&
             focusedEventId &&
             focusedEventId !== SearchSessionStore.instance.steppingTarget

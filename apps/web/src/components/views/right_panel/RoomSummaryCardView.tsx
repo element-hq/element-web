@@ -51,6 +51,7 @@ import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSu
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 import { useRoomName } from "../../../hooks/useRoomName.ts";
 import { RoomSearchSenderFilter } from "./RoomSearchSenderFilter.tsx";
+import { RoomSearchJumpToDate } from "./RoomSearchJumpToDate.tsx";
 import { RoomSearchOrderToggle } from "./RoomSearchOrderToggle.tsx";
 
 interface IProps {
@@ -242,6 +243,8 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                         onSearchSendersChange={onSearchSendersChange}
                     />
                 )}
+                {/* "jump to date" calendar; renders only when jump-to-date is enabled (MSC3030). */}
+                <RoomSearchJumpToDate key={room.roomId} roomId={room.roomId} />
                 {/* Recent/Relevant result-order toggle. */}
                 {onSearchOrderChange && (
                     <RoomSearchOrderToggle
