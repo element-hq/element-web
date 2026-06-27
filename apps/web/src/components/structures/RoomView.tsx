@@ -122,7 +122,15 @@ import { LargeLoader } from "./LargeLoader";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch, { type SearchInfo, SearchScope } from "../../Searching";
+import eventSearch, {
+    extractSearchHighlights,
+    extractSearchMatches,
+    extractSearchResultPreviews,
+    type SearchInfo,
+    type SearchMatch,
+    SearchScope,
+} from "../../Searching";
+import { RoomSearchNavigationViewModel } from "../../viewmodels/search/RoomSearchNavigationViewModel";
 import { WidgetType } from "../../widgets/WidgetType";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
@@ -137,6 +145,7 @@ import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
 import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusMessageSearchPayload.ts";
+import { type SearchMatchStepPayload } from "../../dispatcher/payloads/SearchMatchStepPayload.ts";
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
@@ -144,6 +153,8 @@ import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-t
 import { ModuleApi } from "../../modules/Api.ts";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
+import { SearchSessionStore } from "../../stores/SearchSessionStore";
+import { Key } from "../../Keyboard";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -209,6 +220,17 @@ interface IRoomProps extends RoomViewProps {
 
 export { MainSplitContentType };
 
+interface RoomSearchInfo extends SearchInfo {
+    /**
+     * Index of the currently-focused in-room match, mirrored from SearchSessionStore for render-only state.
+     */
+    currentMatchIndex?: number;
+    /**
+     * Terms to highlight in the live tile while stepping through in-room matches.
+     */
+    highlights?: string[];
+}
+
 export interface IRoomState {
     room?: Room;
     roomId?: string;
@@ -232,7 +254,7 @@ export interface IRoomState {
     /**
      * The state of an ongoing search if there is one.
      */
-    search?: SearchInfo;
+    search?: RoomSearchInfo;
     callState?: CallState;
     canPeek: boolean;
     canSelfRedact: boolean;
@@ -441,6 +463,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
     private messagePanel: TimelinePanel | null = null;
+    // Drives the in-timeline "k of N" search match stepper. Always present; renders nothing until it has matches.
+    public readonly searchNavVm = new RoomSearchNavigationViewModel({
+        onActivateMatch: (match: SearchMatch, index: number): void => this.onActivateSearchMatch(match, index),
+    });
     private roomViewBody = createRef<HTMLDivElement>();
 
     private roomViewStore: RoomViewStore;
@@ -677,8 +703,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             newState.showRightPanel = false;
         }
 
+        // Consume the stepping-jump flag exactly once per store update. A stepping jump (set by the match stepper
+        // just before its ViewRoom dispatch) must not be treated as a user navigation by the clear gate below.
+        const wasSteppingJump = SearchSessionStore.instance.consumeSteppingJump();
+        // While the results list is shown (a search is active but no match is focused), keep the live timeline
+        // anchored to the last-viewed match. The durable anchor is the event our last internal navigation pinned.
+        const searchResultsListShown =
+            this.state.search !== undefined && SearchSessionStore.instance.focusedMatch === null;
+        const searchAnchorEventId = SearchSessionStore.instance.steppingTarget ?? undefined;
         const initialEventId = this.roomViewStore.getInitialEventId() ?? this.state.initialEventId;
-        if (initialEventId) {
+        if (searchResultsListShown) {
+            newState.initialEventId = searchAnchorEventId;
+            newState.isInitialEventHighlighted = false;
+        } else if (initialEventId) {
             let initialEvent = room?.findEventById(initialEventId);
             // The event does not exist in the current sync data
             // We need to fetch it to know whether to route this request
@@ -777,14 +814,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
         }
 
-        // Clear the search results when clicking a search result (which changes the
-        // currently scrolled to event, this.state.initialEventId).
+        // Clear the search results when clicking a search result (which changes the currently scrolled-to event),
+        // but leave the session alive for our own stepping/back-to-results ViewRoom dispatches.
+        const focusedEventId = this.roomViewStore.getInitialEventId();
         if (
             this.state.timelineRenderingType === TimelineRenderingType.Search &&
-            this.state.initialEventId !== newState.initialEventId
+            !wasSteppingJump &&
+            focusedEventId &&
+            focusedEventId !== SearchSessionStore.instance.steppingTarget
         ) {
             newState.timelineRenderingType = TimelineRenderingType.Room;
-            this.state.search?.abortController?.abort();
+            SearchSessionStore.instance.clear({ abort: true });
             newState.search = undefined;
         }
 
@@ -1065,6 +1105,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
+        this.searchNavVm.dispose();
+
         this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallState, this.onCallState);
 
         // update the scroll map before we get unmounted
@@ -1145,6 +1187,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onReactKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = false;
+
+        if (
+            this.state.search &&
+            ev.target instanceof HTMLInputElement &&
+            ev.key === Key.ENTER &&
+            !ev.nativeEvent?.isComposing
+        ) {
+            defaultDispatcher.dispatch<SearchMatchStepPayload>({
+                action: Action.SearchMatchStep,
+                direction: ev.shiftKey ? "previous" : "next",
+            });
+            handled = true;
+        }
 
         const action = getKeyBindingsManager().getRoomAction(ev);
         switch (action) {
@@ -1276,13 +1331,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 }
 
                 const editState = payload.event ? new EditorStateTransfer(payload.event) : undefined;
+                // If a search is active (implying that the "edit" button has been pressed on one of the events in
+                // the search result), we need to close that search, because RoomSearchView doesn't handle editing
+                // and won't render the composer. Skip this while a stepping jump is in flight so a racing edit
+                // dispatch cannot tear down the surviving session; a genuine edit (no jump) still clears it.
+                const closeSearchForEdit =
+                    this.state.search !== undefined && !SearchSessionStore.instance.isSteppingJump();
+                if (closeSearchForEdit) {
+                    SearchSessionStore.instance.clear({ abort: true });
+                }
                 this.setState(
                     {
                         editState,
-                        // If a search is active (implying that the "edit" button has been pressed on one of the
-                        // events in the search result), we need to close that search, because RoomSearchView
-                        // doesn't handle editing and won't render the composer.
-                        search: undefined,
+                        ...(closeSearchForEdit ? { search: undefined } : {}),
                     },
                     () => {
                         if (payload.event) {
@@ -1356,6 +1417,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.FocusMessageSearch:
                 if ((payload as FocusMessageSearchPayload).initialText) {
                     this.onSearch(payload.initialText);
+                }
+                break;
+            case Action.SearchMatchStep:
+                // Step the in-room search match cursor in response to Enter / Shift+Enter in the search box.
+                // The view model no-ops when there is nothing to step (e.g. no matches loaded).
+                if ((payload as SearchMatchStepPayload).direction === "previous") {
+                    this.searchNavVm.previous();
+                } else {
+                    this.searchNavVm.next();
                 }
                 break;
         }
@@ -1797,13 +1867,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         debuglog("sending search request");
         const abortController = new AbortController();
         const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+        // make sure that we don't end up showing results from an aborted search by keeping a unique id.
+        const searchId = new Date().getTime();
+
+        // The search session lives in the SearchSessionStore so the shared stepper and clear gates read one source.
+        SearchSessionStore.instance.start({ searchId, roomId, term, scope, promise, abortController });
 
         this.setState({
             timelineRenderingType: TimelineRenderingType.Search,
             search: {
-                // make sure that we don't end up showing results from
-                // an aborted search by keeping a unique id.
-                searchId: new Date().getTime(),
+                searchId,
                 roomId,
                 term,
                 scope,
@@ -1818,13 +1891,66 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
+        // In-timeline match stepping is enabled only for completed, single-room searches in this PR. All-rooms and
+        // cross-room stepping are deliberately left to PR-24.
+        const canStep = !inProgress && searchResults !== null && this.state.search?.scope === SearchScope.Room;
+        const currentRoomId = this.getRoomId();
+        const freshMatches =
+            canStep && searchResults
+                ? extractSearchMatches(searchResults).filter((match) => match.roomId === currentRoomId)
+                : undefined;
+        const freshPreviews =
+            canStep && searchResults
+                ? extractSearchResultPreviews(searchResults).filter((preview) => preview.roomId === currentRoomId)
+                : undefined;
+        const freshHighlights =
+            canStep && searchResults ? extractSearchHighlights(searchResults, this.state.search!.term) : undefined;
+        const count = searchResults?.count ?? this.state.search?.count;
+
+        SearchSessionStore.instance.updateResults({
+            inProgress,
+            matches: freshMatches ?? [],
+            previews: freshPreviews ?? [],
+            highlights: freshHighlights,
+            count,
+            error: error ?? undefined,
+        });
+
         this.setState({
             search: {
                 ...this.state.search!,
-                count: searchResults?.count,
+                // NB: `count` (the backend's full estimate) and `matches.length` (this loaded page, filtered to the
+                // current room, capped at SEARCH_LIMIT) are intentionally different denominators.
+                count,
+                highlights: freshHighlights,
+                currentMatchIndex:
+                    SearchSessionStore.instance.focusedMatch !== null
+                        ? SearchSessionStore.instance.currentMatchIndex
+                        : undefined,
                 error: error ?? undefined,
                 inProgress,
             },
+        });
+    };
+
+    /**
+     * Step the live timeline to a search match. Switches back to the room timeline so the match is shown in context
+     * and reuses the existing ViewRoom jump-and-highlight path, while keeping the search session alive.
+     */
+    private onActivateSearchMatch = (match: SearchMatch, index: number): void => {
+        SearchSessionStore.instance.beginSteppingJump(match.eventId);
+        SearchSessionStore.instance.setCurrentMatchIndex(index);
+        this.setState((state) => ({
+            timelineRenderingType: TimelineRenderingType.Room,
+            search: state.search ? { ...state.search, currentMatchIndex: index } : undefined,
+        }));
+        defaultDispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: match.roomId,
+            event_id: match.eventId,
+            highlighted: true,
+            scroll_into_view: true,
+            metricsTrigger: undefined,
         });
     };
 
@@ -1953,6 +2079,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }, 300);
 
     private onCancelSearchClick = (): Promise<void> => {
+        SearchSessionStore.instance.clear({ abort: true });
         return new Promise<void>((resolve) => {
             this.setState(
                 {
@@ -1963,6 +2090,36 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         });
     };
+
+    private onBackToSearchResults = (): void => {
+        // Return from live-timeline match stepping to the results list while keeping the search session alive.
+        SearchSessionStore.instance.setCurrentMatchIndex(-1);
+        this.setState((state) => ({
+            timelineRenderingType: TimelineRenderingType.Search,
+            search: state.search ? { ...state.search, currentMatchIndex: undefined } : undefined,
+            // Anchor the hidden live timeline to the last-viewed match while the results list is showing.
+            initialEventId: SearchSessionStore.instance.steppingTarget ?? undefined,
+            isInitialEventHighlighted: false,
+        }));
+        this.resetFocusedEvent();
+    };
+
+    /**
+     * While a search is active, clear any event the live timeline is pinned to by dispatching a stepping-guarded
+     * ViewRoom with no event_id. No-op if nothing is focused.
+     */
+    private resetFocusedEvent(): void {
+        const roomId = this.getRoomId();
+        const focusedEventId = this.roomViewStore.getInitialEventId();
+        if (roomId && focusedEventId) {
+            SearchSessionStore.instance.beginSteppingJump(focusedEventId);
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: roomId,
+                metricsTrigger: undefined,
+            });
+        }
+    }
 
     // jump down to the bottom of this room, where new events are arriving
     private jumpToLiveTimeline = (): void => {
@@ -2424,14 +2581,24 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const hiddenHighlightCount = this.getHiddenHighlightCount();
 
+        // While stepping a match in the live timeline, show the live MessagePanel instead of the results list.
+        // The durable store signal survives result updates that may reset the local index mirror.
+        const isSteppingSearchMatch =
+            this.state.search !== undefined && SearchSessionStore.instance.focusedMatch !== null;
+
         let aux: JSX.Element | undefined;
         let previewBar;
-        if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
+        if (
+            this.state.search &&
+            (this.state.timelineRenderingType === TimelineRenderingType.Search || isSteppingSearchMatch)
+        ) {
             if (!isRoomEncryptionLoading) {
                 aux = (
                     <RoomSearchAuxPanel
                         searchInfo={this.state.search}
+                        navigationVm={this.searchNavVm}
                         onCancelClick={this.onCancelSearchClick}
+                        onBackToResults={this.onBackToSearchResults}
                         onSearchScopeChange={this.onSearchScopeChange}
                         isRoomEncrypted={isRoomEncrypted}
                     />
@@ -2533,7 +2700,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let searchResultsPanel;
         let hideMessagePanel = false;
 
-        if (this.state.search) {
+        if (this.state.search && !isSteppingSearchMatch) {
             searchResultsPanel = (
                 <RoomSearchView
                     key={this.state.search.searchId}
@@ -2554,6 +2721,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             highlightedEventId = this.state.initialEventId;
         }
 
+        // While stepping through search matches, highlight the matched terms in the focused match's live tile.
+        let searchHighlightEventId: string | undefined;
+        let searchHighlights: string[] | undefined;
+        if (isSteppingSearchMatch && this.state.search) {
+            searchHighlightEventId = SearchSessionStore.instance.focusedMatch ?? undefined;
+            searchHighlights = this.state.search.highlights;
+        }
+
         let messagePanel: JSX.Element | undefined;
         if (!isRoomEncryptionLoading) {
             messagePanel = (
@@ -2569,6 +2744,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         manageReadMarkers={!this.state.isPeeking}
                         hidden={hideMessagePanel}
                         highlightedEventId={highlightedEventId}
+                        searchHighlights={searchHighlights}
+                        searchHighlightEventId={searchHighlightEventId}
                         eventId={this.state.initialEventId}
                         eventScrollIntoView={this.state.initialEventScrollIntoView}
                         eventPixelOffset={this.state.initialEventPixelOffset}

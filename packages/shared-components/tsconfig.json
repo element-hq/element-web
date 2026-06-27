@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
         "allowImportingTsExtensions": true,
+        // Type-checking only: this package is bundled by Vite and `lint:types` always runs `tsc --noEmit`, so tsc
+        // never emits here. Setting noEmit in-file keeps editors (which read tsconfig.json directly, without the CLI
+        // flag) from flagging TS5096 for allowImportingTsExtensions without noEmit/emitDeclarationOnly.
+        "noEmit": true,
         "experimentalDecorators": false,
         "emitDecoratorMetadata": false,
         "resolveJsonModule": true,

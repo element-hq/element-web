@@ -2113,6 +2113,7 @@
         "room_is_low_priority": "This is a low priority room",
         "search": {
             "all_rooms_button": "Search all rooms",
+            "back_to_results": "Back to results",
             "placeholder": "Search messages…",
             "summary": {
                 "one": "1 result found for “<query/>”",

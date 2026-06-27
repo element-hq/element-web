@@ -417,6 +417,8 @@ export interface EventTileClassState {
     isHighlighted: boolean;
     /** Whether the tile is selected or has an open context menu. */
     isSelected: boolean;
+    /** Whether the tile is the search match currently focused while stepping in the live timeline. */
+    isSearchHighlightMatch?: boolean;
     /** Whether the tile is a continuation of the previous event. */
     isContinuation?: boolean;
     /** The Matrix event type for event-type class derivation. */
@@ -456,6 +458,7 @@ export function getEventTileClassState({
     isSending,
     isHighlighted,
     isSelected,
+    isSearchHighlightMatch,
     isContinuation,
     eventType,
     isCallInvite,
@@ -482,6 +485,7 @@ export function getEventTileClassState({
         mx_EventTile_sending: !isEditing && isSending,
         mx_EventTile_highlight: isHighlighted,
         mx_EventTile_selected: isSelected,
+        mx_EventTile_searchHighlightActive: isSearchHighlightMatch,
         mx_EventTile_continuation: isContinuation || isCallInvite || ElementCallEventType.matches(eventType),
         mx_EventTile_last: isLast,
         mx_EventTile_lastInSection: isLastInSection,

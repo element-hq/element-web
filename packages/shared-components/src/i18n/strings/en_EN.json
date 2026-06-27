@@ -85,6 +85,11 @@
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
         "pinned_message_badge": "Pinned message",
+        "search": {
+            "match_position": "%(current)s of %(total)s loaded",
+            "next_match": "Next match",
+            "previous_match": "Previous match"
+        },
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
