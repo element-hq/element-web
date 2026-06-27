@@ -20,6 +20,7 @@ import {
     RoomEvent,
     RoomMember,
     RoomStateEvent,
+    SearchOrderBy,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -359,6 +360,72 @@ describe("RoomView", () => {
                 expect.objectContaining({ term: "match", scope: SearchScope.Room, senders: ["@bob:example.org"] }),
             );
             expect(roomViewRef.current!.state.search!.senders).toEqual(["@bob:example.org"]);
+        });
+
+        it("re-runs the active search with the chosen order, preserving term, scope and senders", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            startSearch(roomViewRef, {
+                searchId: 1,
+                roomId: room.roomId,
+                term: "match",
+                scope: SearchScope.Room,
+                senders: ["@bob:example.org"],
+                promise: Promise.resolve({ results: [], highlights: [], count: 0 } as any),
+            });
+
+            // The order toggle calls onSearchOrderChange; it must re-run the search keeping the current term, scope
+            // and sender filter, and record the order on both the session store and the render-state mirror.
+            const startSpy = jest.spyOn(SearchSessionStore.instance, "start");
+            act(() => {
+                (
+                    roomViewRef.current as unknown as { onSearchOrderChange: (order: SearchOrderBy) => void }
+                ).onSearchOrderChange(SearchOrderBy.Rank);
+            });
+
+            expect(startSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    term: "match",
+                    scope: SearchScope.Room,
+                    senders: ["@bob:example.org"],
+                    order: SearchOrderBy.Rank,
+                }),
+            );
+            expect(roomViewRef.current!.state.search!.order).toBe(SearchOrderBy.Rank);
+        });
+
+        it("preserves an already-active relevance order across a sender-filter change", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            // Relevance order is already active on the render state.
+            startSearch(roomViewRef, {
+                searchId: 1,
+                roomId: room.roomId,
+                term: "match",
+                scope: SearchScope.Room,
+                order: SearchOrderBy.Rank,
+                promise: Promise.resolve({ results: [], highlights: [], count: 0 } as any),
+            });
+
+            // Changing the sender filter must NOT reset the order: onSearch defaults `order` from the current
+            // session, so the chosen relevance order is carried through (the point of making order session identity).
+            const startSpy = jest.spyOn(SearchSessionStore.instance, "start");
+            act(() => {
+                (
+                    roomViewRef.current as unknown as { onSearchSendersChange: (senders: string[]) => void }
+                ).onSearchSendersChange(["@bob:example.org"]);
+            });
+
+            expect(startSpy).toHaveBeenCalledWith(expect.objectContaining({ order: SearchOrderBy.Rank }));
+            expect(roomViewRef.current!.state.search!.order).toBe(SearchOrderBy.Rank);
         });
 
         it("enables the match stepper for all-rooms searches and steps across rooms", async () => {

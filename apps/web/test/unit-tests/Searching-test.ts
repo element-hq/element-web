@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IResultRoomEvents } from "matrix-js-sdk/src/matrix";
+import { type IResultRoomEvents, SearchOrderBy } from "matrix-js-sdk/src/matrix";
 
 import eventSearch, { searchPagination } from "../../src/Searching";
 import EventIndexPeg from "../../src/indexing/EventIndexPeg";
@@ -458,6 +458,108 @@ describe("Searching", () => {
             expect(mockEventIndex.search.mock.calls[0][0].limit).toBe(10);
             const senders = processed.get().search_categories.room_events.results.map((r: any) => r.result.sender);
             expect(senders).toEqual(["@alice:example.org", "@bob:example.org"]);
+        });
+    });
+
+    describe("relevance-vs-recency order", () => {
+        // Pretend the searched room is encrypted so eventSearch takes the local (Seshat) path.
+        const mockEncryptedRoom = (): void => {
+            jest.spyOn(mockClient, "getCrypto").mockReturnValue({
+                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            } as any);
+        };
+
+        it("sets order_by: Rank on the homeserver body when relevance order is requested", async () => {
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(null); // no local index -> server-side path
+            const searchSpy = jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+
+            await eventSearch(mockClient, "hello", "!room:example.org", undefined, undefined, SearchOrderBy.Rank);
+
+            const body = (searchSpy.mock.calls[0][0] as any).body;
+            expect(body.search_categories.room_events.order_by).toBe(SearchOrderBy.Rank);
+        });
+
+        it("defaults the homeserver body to Recent order", async () => {
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(null);
+            const searchSpy = jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+
+            await eventSearch(mockClient, "hello", "!room:example.org");
+
+            const body = (searchSpy.mock.calls[0][0] as any).body;
+            expect(body.search_categories.room_events.order_by).toBe(SearchOrderBy.Recent);
+        });
+
+        it("carries order_by into the stored _query so server-side pagination keeps the order", async () => {
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(null);
+            jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+            jest.spyOn(mockClient, "processRoomEventsSearch").mockImplementation(((sr: any) => sr) as any);
+
+            const result: any = await eventSearch(
+                mockClient,
+                "hello",
+                "!room:example.org",
+                undefined,
+                undefined,
+                SearchOrderBy.Rank,
+            );
+
+            expect(result._query.search_categories.room_events.order_by).toBe(SearchOrderBy.Rank);
+        });
+
+        it("orders a single encrypted room by Seshat relevance (order_by_recency false) under relevance order", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({ count: 0, results: [], highlights: [] } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+
+            await eventSearch(mockClient, "hello", "!room:example.org", undefined, undefined, SearchOrderBy.Rank);
+
+            expect(mockEventIndex.search.mock.calls[0][0].order_by_recency).toBe(false);
+        });
+
+        it("keeps a single encrypted room ordered by recency (order_by_recency true) by default", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({ count: 0, results: [], highlights: [] } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+
+            await eventSearch(mockClient, "hello", "!room:example.org");
+
+            expect(mockEventIndex.search.mock.calls[0][0].order_by_recency).toBe(true);
+        });
+
+        it("keeps recency order on both legs of an all-rooms search even when relevance is requested", async () => {
+            // The combined (All-rooms) path merges the two legs with a sliding-window cache that only preserves
+            // global order when both legs are recency-sorted, so a relevance order must NOT propagate to either leg
+            // (deferred until the merge is redesigned). The single-source paths above honour it; the merged path
+            // stays recency by construction.
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({ count: 0, results: [], highlights: [] } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            const searchSpy = jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+            jest.spyOn(mockClient, "processRoomEventsSearch").mockImplementation(((sr: any) => ({
+                ...sr,
+                results: [],
+                highlights: [],
+            })) as any);
+
+            // roomId undefined => All Rooms => combinedSearch.
+            await eventSearch(mockClient, "hello", undefined, undefined, undefined, SearchOrderBy.Rank);
+
+            const body = (searchSpy.mock.calls[0][0] as any).body;
+            expect(body.search_categories.room_events.order_by).toBe(SearchOrderBy.Recent);
+            expect(mockEventIndex.search.mock.calls[0][0].order_by_recency).toBe(true);
         });
     });
 });

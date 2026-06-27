@@ -57,6 +57,7 @@ async function serverSideSearch(
     roomId?: string,
     abortSignal?: AbortSignal,
     senders?: string[],
+    order: SearchOrderBy = SearchOrderBy.Recent,
 ): Promise<{ response: ISearchResponse; query: ISearchRequestBody }> {
     const filter: IRoomEventFilter = {
         limit: SEARCH_LIMIT,
@@ -75,7 +76,9 @@ async function serverSideSearch(
             room_events: {
                 search_term: term,
                 filter: filter,
-                order_by: SearchOrderBy.Recent,
+                // Recency by default; the search header's order toggle can request relevance. The order rides
+                // inside `body` (stored as `_query`) so server-side pagination replays it.
+                order_by: order,
                 event_context: {
                     before_limit: 1,
                     after_limit: 1,
@@ -96,8 +99,9 @@ async function serverSideSearchProcess(
     roomId?: string,
     abortSignal?: AbortSignal,
     senders?: string[],
+    order: SearchOrderBy = SearchOrderBy.Recent,
 ): Promise<ISearchResults> {
-    const result = await serverSideSearch(client, term, roomId, abortSignal, senders);
+    const result = await serverSideSearch(client, term, roomId, abortSignal, senders, order);
 
     // The js-sdk method backPaginateRoomEventsSearch() uses _query internally
     // so we're reusing the concept here since we want to delegate the
@@ -128,8 +132,14 @@ async function combinedSearch(
     abortSignal?: AbortSignal,
     senders?: string[],
 ): Promise<ISearchResults> {
-    // Create two promises, one for the local search, one for the
-    // server-side search.
+    // Create two promises, one for the local search, one for the server-side search.
+    //
+    // Both legs are intentionally left on the recency default (no order param): the sliding-window merge below
+    // (combineEvents/compareOldestEvents, which pages the next leg by oldest timestamp) only preserves global order
+    // when both sources are recency-sorted, so the search header's relevance order is NOT honoured on this combined
+    // (local index + homeserver) all-rooms path — it would corrupt cross-page order. (A homeserver-only all-rooms
+    // search has a single source and does honour relevance — see eventSearch's no-index branch.) Honouring relevance
+    // in the merge needs a merge-by-rank redesign (deferred).
     const serverSidePromise = serverSideSearch(client, searchTerm, undefined, abortSignal, senders);
     const localPromise = localSearch(searchTerm, undefined, senders);
 
@@ -192,6 +202,7 @@ async function localSearch(
     searchTerm: string,
     roomId?: string,
     senders?: string[],
+    order: SearchOrderBy = SearchOrderBy.Recent,
 ): Promise<{ response: IResultRoomEvents; query: ISearchArgs }> {
     const eventIndex = EventIndexPeg.get();
 
@@ -203,7 +214,9 @@ async function localSearch(
         // Over-fetch when a sender filter is active so the client-side post-filter still has enough candidates to
         // fill a page; Seshat has no native sender filter.
         limit: hasSenderFilter ? SESHAT_SENDER_OVERFETCH_LIMIT : SEARCH_LIMIT,
-        order_by_recency: true,
+        // Recency unless the order toggle requested relevance: with order_by_recency false, Seshat/tantivy orders
+        // results by its full-text relevance (BM25) score instead of timestamp.
+        order_by_recency: order !== SearchOrderBy.Rank,
         room_id: undefined,
     };
 
@@ -265,6 +278,7 @@ async function localSearchProcess(
     searchTerm: string,
     roomId?: string,
     senders?: string[],
+    order: SearchOrderBy = SearchOrderBy.Recent,
 ): Promise<ISeshatSearchResults> {
     const emptyResult = {
         results: [],
@@ -274,7 +288,7 @@ async function localSearchProcess(
 
     if (searchTerm === "") return emptyResult;
 
-    const result = await localSearch(searchTerm, roomId, senders);
+    const result = await localSearch(searchTerm, roomId, senders, order);
 
     emptyResult.seshatQuery = result.query;
 
@@ -679,22 +693,23 @@ async function eventIndexSearch(
     roomId?: string,
     abortSignal?: AbortSignal,
     senders?: string[],
+    order: SearchOrderBy = SearchOrderBy.Recent,
 ): Promise<ISearchResults> {
     let searchPromise: Promise<ISearchResults>;
 
     if (roomId !== undefined) {
         if (await client.getCrypto()?.isEncryptionEnabledInRoom(roomId)) {
-            // The search is for a single encrypted room, use our local
-            // search method.
-            searchPromise = localSearchProcess(client, term, roomId, senders);
+            // The search is for a single encrypted room, use our local search method. Single Seshat source, so the
+            // requested order is honoured (recency vs Seshat relevance).
+            searchPromise = localSearchProcess(client, term, roomId, senders, order);
         } else {
-            // The search is for a single non-encrypted room, use the
-            // server-side search.
-            searchPromise = serverSideSearchProcess(client, term, roomId, abortSignal, senders);
+            // The search is for a single non-encrypted room, use the server-side search. Single source, so the
+            // backend order is honoured verbatim — thread the requested order through.
+            searchPromise = serverSideSearchProcess(client, term, roomId, abortSignal, senders, order);
         }
     } else {
-        // Search across all rooms, combine a server side search and a
-        // local search.
+        // Search across all rooms, combine a server side search and a local search. The combined merge re-sorts by
+        // recency, so `order` is intentionally NOT threaded here (forced recency, see combinedSearch).
         searchPromise = combinedSearch(client, term, abortSignal, senders);
     }
 
@@ -743,13 +758,14 @@ export default function eventSearch(
     roomId?: string,
     abortSignal?: AbortSignal,
     senders?: string[],
+    order: SearchOrderBy = SearchOrderBy.Recent,
 ): Promise<ISearchResults> {
     const eventIndex = EventIndexPeg.get();
 
     if (eventIndex === null) {
-        return serverSideSearchProcess(client, term, roomId, abortSignal, senders);
+        return serverSideSearchProcess(client, term, roomId, abortSignal, senders, order);
     } else {
-        return eventIndexSearch(client, term, roomId, abortSignal, senders);
+        return eventIndexSearch(client, term, roomId, abortSignal, senders, order);
     }
 }
 
@@ -884,6 +900,12 @@ export interface SearchInfo {
      * {@link SearchSessionParams.senders} into the per-room-view render state.
      */
     senders?: string[];
+    /**
+     * The requested result ordering — {@link SearchOrderBy.Recent} (default) or {@link SearchOrderBy.Rank}
+     * (relevance). Mirrors {@link SearchSessionParams.order} into the per-room-view render state. Honoured by
+     * single-backend searches; an all-rooms search that merges a local index (combinedSearch) stays recency.
+     */
+    order?: SearchOrderBy;
     /**
      * The promise for the search results.
      */

@@ -36,6 +36,7 @@ import {
     ClientEvent,
     type MatrixError,
     type ISearchResults,
+    SearchOrderBy,
     THREAD_RELATION_TYPE,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
@@ -1862,18 +1863,24 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             });
     }
 
-    // `senders` defaults to the current session's filter so a term change (onSearchChange) or scope change
-    // (onSearchScopeChange) preserves the active `from:` filter; the sender-filter control passes it explicitly.
-    private onSearch = (term: string, scope = SearchScope.Room, senders = this.state.search?.senders): void => {
+    // `senders` and `order` default to the current session's values so a term change (onSearchChange) or scope
+    // change (onSearchScopeChange) preserves the active `from:` filter and chosen order; the dedicated controls pass
+    // their axis explicitly.
+    private onSearch = (
+        term: string,
+        scope = SearchScope.Room,
+        senders = this.state.search?.senders,
+        order = this.state.search?.order ?? SearchOrderBy.Recent,
+    ): void => {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
-        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal, senders);
+        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal, senders, order);
         // make sure that we don't end up showing results from an aborted search by keeping a unique id.
         const searchId = new Date().getTime();
 
         // The search session lives in the SearchSessionStore so the shared stepper and clear gates read one source.
-        SearchSessionStore.instance.start({ searchId, roomId, term, scope, senders, promise, abortController });
+        SearchSessionStore.instance.start({ searchId, roomId, term, scope, senders, order, promise, abortController });
 
         this.setState({
             timelineRenderingType: TimelineRenderingType.Search,
@@ -1883,6 +1890,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 term,
                 scope,
                 senders,
+                order,
                 promise,
                 abortController,
             },
@@ -1897,6 +1905,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     // clears the filter.
     private onSearchSendersChange = (senders: string[]): void => {
         this.onSearch(this.state.search?.term ?? "", this.state.search?.scope ?? SearchScope.Room, senders);
+    };
+
+    // Re-run the active search with a new result order (recent/relevant), keeping the current term, scope and
+    // sender filter.
+    private onSearchOrderChange = (order: SearchOrderBy): void => {
+        this.onSearch(
+            this.state.search?.term ?? "",
+            this.state.search?.scope ?? SearchScope.Room,
+            this.state.search?.senders,
+            order,
+        );
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
@@ -2801,8 +2820,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 onSearchChange={this.onSearchChange}
                 onSearchCancel={this.onCancelSearchClick}
                 onSearchSendersChange={this.onSearchSendersChange}
+                onSearchOrderChange={this.onSearchOrderChange}
                 searchTerm={this.state.search?.term ?? ""}
                 searchSenders={this.state.search?.senders ?? []}
+                searchOrder={this.state.search?.order ?? SearchOrderBy.Recent}
             />
         ) : undefined;
 

@@ -2114,6 +2114,11 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "back_to_results": "Back to results",
+            "order_recent": "Most recent",
+            "order_relevant": "Most relevant",
+            "order_toggle_button": "Sort results",
+            "order_toggle_button_active": "Sort results (by relevance)",
+            "order_toggle_label": "Sort search results",
             "placeholder": "Search messages…",
             "sender_filter_button": "Filter by sender",
             "sender_filter_button_active": "Filter by sender (%(count)s selected)",

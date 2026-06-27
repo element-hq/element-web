@@ -8,7 +8,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type Room, type RoomState, RoomStateEvent, RoomMember, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type RoomState,
+    RoomStateEvent,
+    RoomMember,
+    type MatrixEvent,
+    type SearchOrderBy,
+} from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import dis from "../../dispatcher/dispatcher";
@@ -52,8 +59,10 @@ interface RoomProps extends BaseProps {
     onSearchChange?: (term: string) => void;
     onSearchCancel?: () => void;
     onSearchSendersChange?: (senders: string[]) => void;
+    onSearchOrderChange?: (order: SearchOrderBy) => void;
     searchTerm?: string;
     searchSenders?: string[];
+    searchOrder?: SearchOrderBy;
 }
 
 type Props = XOR<RoomlessProps, RoomProps>;
@@ -262,8 +271,10 @@ export default class RightPanel extends React.Component<Props, IState> {
                             onSearchChange={this.props.onSearchChange}
                             onSearchCancel={this.props.onSearchCancel}
                             onSearchSendersChange={this.props.onSearchSendersChange}
+                            onSearchOrderChange={this.props.onSearchOrderChange}
                             searchTerm={this.props.searchTerm}
                             searchSenders={this.props.searchSenders}
+                            searchOrder={this.props.searchOrder}
                             focusRoomSearch={cardState?.focusRoomSearch}
                         />
                     );
