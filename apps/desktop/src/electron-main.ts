@@ -21,11 +21,11 @@ import {
     session,
     protocol,
     desktopCapturer,
+    screen,
 } from "electron";
 // eslint-disable-next-line n/file-extension-in-import
 import * as Sentry from "@sentry/electron/main";
 import path, { dirname } from "node:path";
-import windowStateKeeper from "electron-window-state";
 import { URL, fileURLToPath } from "node:url";
 
 import "./ipc.js";
@@ -40,6 +40,7 @@ import * as updater from "./updater.js";
 import ProtocolHandler from "./protocol.js";
 import { _t, AppLocalization } from "./language-helper.js";
 import { setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { WindowStateManager } from "./window-state.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
 import { getBuildConfig } from "./build-config.js";
@@ -237,11 +238,10 @@ app.on("ready", async () => {
         store,
     });
 
-    // Load the previous window state with fallback to defaults
-    const mainWindowState = windowStateKeeper({
-        defaultWidth: 1024,
-        defaultHeight: 768,
-    });
+    // Load the previous window state (size/position/maximized) with fallback to defaults, clamped to
+    // the displays currently connected. See window-state.ts (#32228 / #32360).
+    const windowState = new WindowStateManager();
+    const restoreState = windowState.getRestoreState(screen.getAllDisplays());
 
     console.debug("Opening main window");
     const preloadScript = path.normalize(`${__dirname}/preload.cjs`);
@@ -256,10 +256,10 @@ app.on("ready", async () => {
         show: false,
         autoHideMenuBar: store.get("autoHideMenuBar"),
 
-        x: mainWindowState.x,
-        y: mainWindowState.y,
-        width: mainWindowState.width,
-        height: mainWindowState.height,
+        x: restoreState.bounds.x,
+        y: restoreState.bounds.y,
+        width: restoreState.bounds.width,
+        height: restoreState.bounds.height,
         webPreferences: {
             preload: preloadScript,
             nodeIntegration: false,
@@ -298,12 +298,16 @@ app.on("ready", async () => {
 
     global.mainWindow.once("ready-to-show", () => {
         if (!global.mainWindow) return;
-        mainWindowState.manage(global.mainWindow);
+
+        // Now the window exists, restore the maximized state and start tracking changes. Fullscreen
+        // is deliberately not restored so the app never auto-starts fullscreen (#32360).
+        if (restoreState.isMaximized) global.mainWindow.maximize();
+        windowState.monitor(global.mainWindow);
 
         if (!args.hidden) {
             global.mainWindow.show();
         } else {
-            // hide here explicitly because window manage above sometimes shows it
+            // hide here explicitly because maximize() above can show the window
             global.mainWindow.hide();
         }
     });
@@ -337,6 +341,10 @@ app.on("ready", async () => {
             if (shouldCancelCloseRequest) return;
         }
 
+        // Persist the window geometry before exiting: app.exit() terminates immediately and fires no
+        // `close` event, so the close-handler flush below would otherwise be skipped on this path.
+        windowState.persist(global.mainWindow);
+
         // Exit the app
         app.exit();
     });
@@ -345,6 +353,11 @@ app.on("ready", async () => {
         global.mainWindow = null;
     });
     global.mainWindow.on("close", async (e) => {
+        // Capture the final geometry synchronously while the window is still alive — this is the only
+        // reliable flush on the macOS hide-on-close path (where `closed` never fires) and also picks up
+        // any geometry change still sitting in the debounce when the user quits. See window-state.ts.
+        windowState.persist(global.mainWindow!);
+
         // If we are not quitting and have a tray icon then minimize to tray
         if (!global.appQuitting && (tray.hasTray() || process.platform === "darwin")) {
             // On Mac, closing the window just hides it
