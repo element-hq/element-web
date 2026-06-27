@@ -17,13 +17,123 @@ import {
     EventType,
     type MatrixClient,
     type SearchResult,
+    RelationType,
 } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { type ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import { isNotUndefined } from "./Typeguards";
 
 const SEARCH_LIMIT = 10;
+
+/**
+ * Seshat's full-text engine (tantivy) interprets an unescaped colon as a
+ * `field:value` operator, so a query such as `https://github.com` is parsed as a
+ * search of the non-existent field `https` and Seshat rejects the whole query
+ * with `Query is invalid. FieldDoesNotExist("https")` (#32341). Wrapping the
+ * term in double quotes forces tantivy into phrase mode and disables the field
+ * operator — the maintainer-endorsed workaround. This is applied ONLY to the
+ * Seshat (local) search term, never to the homeserver search body, which does a
+ * plain substring match and must keep the raw term.
+ */
+export function hardenSeshatSearchTerm(term: string): string {
+    // A genuinely closed phrase (balanced surrounding quotes with no stray inner quote) is
+    // already safe for tantivy, and a term with no field-operator character cannot trip it —
+    // leave both alone. Note: a leading-but-unbalanced quote (e.g. `"https://github.com`) is
+    // NOT treated as a phrase here; it falls through to be escaped and re-wrapped so tantivy
+    // does not reject it as an odd-quote syntax error.
+    const isClosedPhrase =
+        term.length >= 2 && term.startsWith('"') && term.endsWith('"') && !term.slice(1, -1).includes('"');
+    if (isClosedPhrase || !term.includes(":")) return term;
+    // Escape any embedded double quotes so the phrase stays well-formed, then phrase-wrap.
+    return `"${term.replace(/"/g, '\\"')}"`;
+}
+
+interface IReplaceRelation {
+    rel_type?: string;
+    event_id?: string;
+}
+
+/**
+ * Seshat indexes message edits (`m.replace`) as standalone events, so a search
+ * for the edited text matches the edit event rather than the original message.
+ * The search render path has no tile for a replace relation
+ * (`haveRendererForEvent` -> `isRelation(RelationType.Replace)` returns false),
+ * so the result silently fails to render even though the reported count includes
+ * it (#32356). The live timeline never hits this because the SDK aggregates the
+ * edit onto its target; that aggregation does not run in the search path.
+ *
+ * We cannot simply rewrite the edit's content, because the SDK event mapper
+ * (`eventMapperFor`) resolves a result via `room.findEventById(event_id)` and,
+ * when the event is loaded, REUSES that live model verbatim — discarding any
+ * content we mutated and re-dropping the live `m.replace`. So instead we re-key
+ * the result to the edit's TARGET (the original message id): the mapper then
+ * resolves the renderable original — which already carries the aggregated edit
+ * in a loaded room — and, when the original is not loaded, builds a fresh event
+ * from the promoted `m.new_content` we leave behind. Either way the edited text
+ * renders and the permalink targets the original message.
+ *
+ * We touch `content` and `event_id` only; the encryption sidecar fields
+ * (curve25519Key/ed25519Key/algorithm/forwardingCurve25519KeyChain) that
+ * `restoreEncryptionInfo` re-reads live at the event top level are preserved.
+ */
+function promoteReplacementContent(event: Record<string, unknown> | undefined): void {
+    const content = event?.content as Record<string, unknown> | undefined;
+    if (!content) return;
+    const relatesTo = content["m.relates_to"] as IReplaceRelation | undefined;
+    const newContent = content["m.new_content"] as Record<string, unknown> | undefined;
+    // Only act on a well-formed edit: a Replace relation with a target event id and a
+    // non-empty replacement body (an empty m.new_content would otherwise blank the tile).
+    if (
+        relatesTo?.rel_type !== RelationType.Replace ||
+        typeof relatesTo.event_id !== "string" ||
+        typeof newContent?.body !== "string"
+    ) {
+        return;
+    }
+    event!.content = { ...newContent };
+    event!.event_id = relatesTo.event_id;
+}
+
+/**
+ * Post-process a raw Seshat search response in place: strip the spurious
+ * `state_key: null` Seshat attaches to non-state events (which makes the SDK
+ * treat them as state events) from every event, promote a matched edit so it
+ * renders (#32356), and de-duplicate results that now resolve to the same
+ * message (a promoted edit re-keyed to its original id alongside the original
+ * itself) to avoid duplicate tiles / React-key collisions in RoomSearchView.
+ */
+function sanitizeSeshatResults(localResult: IResultRoomEvents): void {
+    if (!localResult.results) return;
+    const stripStateKey = (event: Record<string, unknown> | undefined): void => {
+        if (event?.state_key === null) delete event.state_key;
+    };
+    for (const searchResult of localResult.results) {
+        const matched = searchResult.result as unknown as Record<string, unknown>;
+        stripStateKey(matched);
+        // Promote only the MATCHED event: re-keying a context event would risk colliding
+        // its id with another result/context event, and an edit appearing only as context
+        // is harmlessly skipped by the renderer as before.
+        promoteReplacementContent(matched);
+        if (searchResult.context) {
+            for (const ctxEvent of searchResult.context.events_before || []) {
+                stripStateKey(ctxEvent as unknown as Record<string, unknown>);
+            }
+            for (const ctxEvent of searchResult.context.events_after || []) {
+                stripStateKey(ctxEvent as unknown as Record<string, unknown>);
+            }
+        }
+    }
+    const seenIds = new Set<string>();
+    localResult.results = localResult.results.filter((r) => {
+        const id = (r.result as unknown as Record<string, unknown>)?.event_id;
+        if (typeof id !== "string") return true;
+        if (seenIds.has(id)) return false;
+        seenIds.add(id);
+        return true;
+    });
+}
 
 async function serverSideSearch(
     client: MatrixClient,
@@ -93,23 +203,45 @@ async function combinedSearch(
     searchTerm: string,
     abortSignal?: AbortSignal,
 ): Promise<ISearchResults> {
-    // Create two promises, one for the local search, one for the
-    // server-side search.
-    const serverSidePromise = serverSideSearch(client, searchTerm, undefined, abortSignal);
-    const localPromise = localSearch(searchTerm);
+    // Run the server-side and the local (Seshat) search concurrently, but tolerate one leg
+    // failing: Seshat rejects some queries the homeserver accepts and vice-versa (e.g. a URL
+    // trips tantivy's `field:` operator and Seshat throws FieldDoesNotExist, #32341). Using
+    // Promise.all here used to reject the entire "All Rooms" search whenever either leg threw;
+    // degrade to the surviving leg's results instead, and only fail if BOTH legs fail.
+    const [serverSettled, localSettled] = await Promise.allSettled([
+        serverSideSearch(client, searchTerm, undefined, abortSignal),
+        localSearch(searchTerm),
+    ]);
 
-    // Wait for both promises to resolve.
-    await Promise.all([serverSidePromise, localPromise]);
+    if (serverSettled.status === "rejected" && localSettled.status === "rejected") {
+        logger.error("Both server-side and local search failed", serverSettled.reason, localSettled.reason);
+        throw serverSettled.reason;
+    }
 
-    // Get both search results.
-    const localResult = await localPromise;
-    const serverSideResult = await serverSidePromise;
+    // Degradation is intentionally sticky for the session: a leg that fails here leaves its
+    // query undefined, so eventIndexSearchPagination routes later pages to the surviving leg
+    // only (it never retries the failed one). This is sound because each leg returns at most
+    // SEARCH_LIMIT results, so the degraded first page never overflows into cachedEvents (which
+    // the single-leg paginators do not drain).
+    let serverSideResult: { response: ISearchResponse; query: ISearchRequestBody } | undefined;
+    if (serverSettled.status === "fulfilled") {
+        serverSideResult = serverSettled.value;
+    } else {
+        logger.warn("Server-side search failed; returning local search results only", serverSettled.reason);
+    }
 
-    const serverQuery = serverSideResult.query;
-    const serverResponse = serverSideResult.response;
+    let localResult: { response: IResultRoomEvents; query: ISearchArgs } | undefined;
+    if (localSettled.status === "fulfilled") {
+        localResult = localSettled.value;
+    } else {
+        logger.warn("Local (Seshat) search failed; returning server-side search results only", localSettled.reason);
+    }
 
-    const localQuery = localResult.query;
-    const localResponse = localResult.response;
+    const serverQuery = serverSideResult?.query;
+    const serverResponse = serverSideResult?.response;
+
+    const localQuery = localResult?.query;
+    const localResponse = localResult?.response;
 
     // Store our queries for later on so we can support pagination.
     //
@@ -125,15 +257,16 @@ async function combinedSearch(
     const emptyResult: ISeshatSearchResults = {
         seshatQuery: localQuery,
         _query: serverQuery,
-        serverSideNextBatch: serverResponse.search_categories.room_events.next_batch,
+        serverSideNextBatch: serverResponse?.search_categories.room_events.next_batch,
         cachedEvents: [],
         oldestEventFrom: "server",
         results: [],
         highlights: [],
     };
 
-    // Combine our results.
-    const combinedResult = combineResponses(emptyResult, localResponse, serverResponse.search_categories.room_events);
+    // Combine our results (combineResponses tolerates either source being undefined, so a
+    // degraded single-leg search still produces a valid, paginatable result).
+    const combinedResult = combineResponses(emptyResult, localResponse, serverResponse?.search_categories.room_events);
 
     // Let the client process the combined result.
     const response: ISearchResponse = {
@@ -158,7 +291,9 @@ async function localSearch(
     const eventIndex = EventIndexPeg.get();
 
     const searchArgs: ISearchArgs = {
-        search_term: searchTerm,
+        // Harden the term against tantivy's `field:` operator so a URL/colon query does not make
+        // Seshat reject the search (#32341). The homeserver leg keeps the raw term (substring match).
+        search_term: hardenSeshatSearchTerm(searchTerm),
         before_limit: 1,
         after_limit: 1,
         limit: SEARCH_LIMIT,
@@ -175,25 +310,9 @@ async function localSearch(
         throw new Error("Local search failed");
     }
 
-    // Fix state_key: null issue - Seshat includes "state_key": null for non-state events,
-    // which causes matrix-js-sdk to incorrectly treat them as state events
-    if (localResult.results) {
-        for (const searchResult of localResult.results) {
-            const event = searchResult.result as unknown as Record<string, unknown>;
-            if (event?.state_key === null) delete event.state_key;
-            // Also fix context events
-            if (searchResult.context) {
-                for (const ctxEvent of searchResult.context.events_before || []) {
-                    const ev = ctxEvent as unknown as Record<string, unknown>;
-                    if (ev?.state_key === null) delete ev.state_key;
-                }
-                for (const ctxEvent of searchResult.context.events_after || []) {
-                    const ev = ctxEvent as unknown as Record<string, unknown>;
-                    if (ev?.state_key === null) delete ev.state_key;
-                }
-            }
-        }
-    }
+    // Strip Seshat's spurious `state_key: null` (which makes the SDK treat non-state events as
+    // state events) and promote edited messages so they render in results (#32356).
+    sanitizeSeshatResults(localResult);
 
     searchArgs.next_batch = localResult.next_batch;
 
