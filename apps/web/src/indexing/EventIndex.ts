@@ -81,6 +81,14 @@ export default class EventIndex extends EventEmitter {
      */
     private needsInitialCheckpoints = false;
 
+    /**
+     * Circuit-breaker flag: set to true once the indexer has thrown an unexpected error in the sync
+     * handler and we have told the user about it. Once set, we stop indexing and suppress further
+     * error dialogs so that a persistent failure doesn't pop up a dialog after every `/sync`, which
+     * previously made the app unusable. See https://github.com/element-hq/element-web/issues/33501.
+     */
+    private indexingErrored = false;
+
     private readonly logger;
 
     public constructor() {
@@ -199,6 +207,10 @@ export default class EventIndex extends EventEmitter {
     private onSync = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
         if (state != SyncState.Syncing) return;
 
+        // Circuit-breaker: once indexing has hit an unexpected error we stop trying, to avoid
+        // repeatedly hitting the same failure and flooding the user with error dialogs (#33501).
+        if (this.indexingErrored) return;
+
         const onSyncInner = async (): Promise<void> => {
             const indexManager = PlatformPeg.get()?.getEventIndexingManager();
             if (!indexManager) return;
@@ -216,6 +228,14 @@ export default class EventIndex extends EventEmitter {
         };
 
         onSyncInner().catch((e) => {
+            // Guard against multiple in-flight syncs racing past the check above before the flag is set.
+            if (this.indexingErrored) {
+                this.logger.error("Event indexer threw an error (already reported to the user)", e);
+                return;
+            }
+            this.indexingErrored = true;
+            // Stop the background crawler so we don't keep churning against a broken index.
+            this.stopCrawler();
             logErrorAndShowErrorDialog("Event indexer threw an unexpected error", e);
         });
     };

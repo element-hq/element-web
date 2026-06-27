@@ -30,6 +30,7 @@ import {
 import EventIndex from "./EventIndex.ts";
 import {
     emitPromise,
+    flushPromises,
     getMockClientWithEventEmitter,
     mockClientMethodsRooms,
     mockPlatformPeg,
@@ -37,6 +38,11 @@ import {
 import type BaseEventIndexManager from "./BaseEventIndexManager.ts";
 import { type ICrawlerCheckpoint } from "./BaseEventIndexManager.ts";
 import SettingsStore from "../settings/SettingsStore.ts";
+import { logErrorAndShowErrorDialog } from "../utils/ErrorUtils.tsx";
+
+vi.mock("../utils/ErrorUtils.tsx", () => ({
+    logErrorAndShowErrorDialog: vi.fn(),
+}));
 
 afterEach(() => {
     vi.restoreAllMocks();
@@ -165,6 +171,69 @@ describe("EventIndex", () => {
             roomId: "!room2:id",
             token: "token2",
             direction: Direction.Forward,
+        });
+    });
+
+    describe("sync error circuit breaker (#33501)", () => {
+        async function setUpFailingSync(): Promise<{
+            indexer: EventIndex;
+            mockClient: Mocked<MatrixClient>;
+            mockIndexingManager: Mocked<BaseEventIndexManager>;
+            getEventIndexingManager: ReturnType<typeof vi.fn>;
+            cancelCrawler: ReturnType<typeof vi.fn>;
+        }> {
+            const mockIndexingManager = {
+                loadCheckpoints: vi.fn().mockResolvedValue([]),
+                isEventIndexEmpty: vi.fn().mockResolvedValue(false),
+                commitLiveEvents: vi.fn().mockRejectedValue(new Error("indexer boom")),
+            } as any as Mocked<BaseEventIndexManager>;
+            const getEventIndexingManager = vi.fn(() => mockIndexingManager);
+            mockPlatformPeg({ getEventIndexingManager });
+
+            const mockClient = getMockClientWithEventEmitter({
+                getEventMapper: () => (obj: Partial<IEvent>) => new MatrixEvent(obj),
+                createMessagesRequest: vi.fn(),
+                ...mockClientMethodsRooms([]),
+            });
+
+            const indexer = new EventIndex();
+            await indexer.init();
+
+            const cancelCrawler = vi.fn();
+            const indexerWithCrawler = indexer as unknown as { crawler: { cancel: () => void } | null };
+            vi.spyOn(indexer, "startCrawler").mockImplementation(() => {
+                indexerWithCrawler.crawler = { cancel: cancelCrawler };
+            });
+            vi.spyOn(indexer, "stopCrawler");
+            vi.mocked(logErrorAndShowErrorDialog).mockClear();
+
+            return { indexer, mockClient, mockIndexingManager, getEventIndexingManager, cancelCrawler };
+        }
+
+        it("reports the first unexpected sync failure and stops the crawler", async () => {
+            const { indexer, mockClient, mockIndexingManager, cancelCrawler } = await setUpFailingSync();
+
+            mockClient.emit(ClientEvent.Sync, SyncState.Syncing, null, {});
+            await flushPromises();
+
+            expect(mockIndexingManager.commitLiveEvents).toHaveBeenCalledTimes(1);
+            expect(logErrorAndShowErrorDialog).toHaveBeenCalledTimes(1);
+            expect(indexer.stopCrawler).toHaveBeenCalledTimes(1);
+            expect(cancelCrawler).toHaveBeenCalledTimes(1);
+        });
+
+        it("does not re-enter the indexer or show another dialog after the breaker trips", async () => {
+            const { indexer, mockClient, mockIndexingManager, getEventIndexingManager } = await setUpFailingSync();
+
+            mockClient.emit(ClientEvent.Sync, SyncState.Syncing, null, {});
+            await flushPromises();
+            mockClient.emit(ClientEvent.Sync, SyncState.Syncing, null, {});
+            await flushPromises();
+
+            expect(indexer.startCrawler).toHaveBeenCalledTimes(1);
+            expect(getEventIndexingManager).toHaveBeenCalledTimes(2);
+            expect(mockIndexingManager.commitLiveEvents).toHaveBeenCalledTimes(1);
+            expect(logErrorAndShowErrorDialog).toHaveBeenCalledTimes(1);
         });
     });
 });
