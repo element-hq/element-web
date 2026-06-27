@@ -125,6 +125,20 @@ describe("RightPanelStore", () => {
         });
     });
 
+    describe("FocusMessageSearch", () => {
+        it("no longer opens the room summary card (search moved to the top-of-chat bar)", async () => {
+            await viewRoom("!1:example.org");
+            expect(store.isOpen).toBe(false);
+
+            defaultDispatcher.fire(Action.FocusMessageSearch);
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            // The right panel must not pop open the RoomSummary card on Cmd+F any more; search lives at the top.
+            expect(store.currentCard.phase).not.toEqual(RightPanelPhases.RoomSummary);
+            expect(store.isOpen).toBe(false);
+        });
+    });
+
     describe("setCards", () => {
         it("overwrites history", async () => {
             await viewRoom("!1:example.org");

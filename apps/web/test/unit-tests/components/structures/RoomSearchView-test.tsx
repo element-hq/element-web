@@ -258,6 +258,56 @@ describe("<RoomSearchView/>", () => {
         expect(screen.queryByRole("progressbar")).toBeFalsy();
     });
 
+    it("registers a pagination trigger (onLoadMoreReady) that calls searchPagination", async () => {
+        const searchResults: ISearchResults = {
+            results: [
+                SearchResult.fromJson(
+                    {
+                        rank: 1,
+                        result: {
+                            room_id: room.roomId,
+                            event_id: "$1",
+                            sender: client.getSafeUserId(),
+                            origin_server_ts: 1,
+                            content: { body: "PaginationProbe", msgtype: "m.text" },
+                            type: EventType.RoomMessage,
+                        },
+                        context: { profile_info: {}, events_before: [], events_after: [] },
+                    },
+                    eventMapper,
+                ),
+            ],
+            highlights: [],
+            next_batch: "next_batch",
+            count: 5,
+        };
+        mocked(searchPagination).mockResolvedValue({ ...searchResults, next_batch: undefined });
+
+        let loadMore: (() => Promise<boolean>) | null = null;
+
+        render(
+            <RoomSearchView
+                inProgress={false}
+                term="search term"
+                scope={SearchScope.All}
+                promise={Promise.resolve(searchResults)}
+                className="someClass"
+                onUpdate={jest.fn()}
+                onLoadMoreReady={(fn) => {
+                    loadMore = fn;
+                }}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        // Once the first page has rendered, the dropdown's load-more trigger is registered and drives searchPagination.
+        await screen.findByText("PaginationProbe");
+        expect(typeof loadMore).toBe("function");
+
+        await loadMore!();
+        expect(searchPagination).toHaveBeenCalled();
+    });
+
     it("should handle resolutions after unmounting sanely", async () => {
         const deferred = Promise.withResolvers<ISearchResults>();
 

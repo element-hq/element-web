@@ -43,11 +43,26 @@ interface Props {
     className: string;
     onUpdate(this: void, inProgress: boolean, results: ISearchResults | null, error: Error | null): void;
     ref?: Ref<ScrollPanel>;
+    /**
+     * Registers this view's pagination trigger with the parent so an external surface (the Telegram-style dropdown)
+     * can load the next page on demand. Called with a function that loads the next result page
+     * (resolving false when there are none left), and with `null` on unmount.
+     */
+    onLoadMoreReady?: (loadMore: (() => Promise<boolean>) | null) => void;
 }
 
 // XXX: todo: merge overlapping results somehow?
 // XXX: why doesn't searching on name work?
-export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inProgress, ref }: Props): JSX.Element => {
+export const RoomSearchView = ({
+    term,
+    scope,
+    promise,
+    className,
+    onUpdate,
+    inProgress,
+    ref,
+    onLoadMoreReady,
+}: Props): JSX.Element => {
     const client = useContext(MatrixClientContext);
     const roomContext = useScopedRoomContext("showHiddenEvents");
     const [highlights, setHighlights] = useState<string[] | null>(null);
@@ -137,6 +152,24 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // Load the next page of results, or resolve false when there are none left. Re-created when `results` changes so
+    // it always paginates from the latest accumulation.
+    const loadMore = useCallback((): Promise<boolean> => {
+        if (!results?.next_batch) {
+            debuglog("no more search results");
+            return Promise.resolve(false);
+        }
+        debuglog("requesting more search results");
+        return handleSearchResult(searchPagination(client, results));
+    }, [client, results, handleSearchResult]);
+
+    // Register the pagination trigger with the parent so the external Telegram-style results dropdown can load the
+    // next page when it is scrolled to the bottom; deregistered on unmount.
+    useEffect(() => {
+        onLoadMoreReady?.(loadMore);
+        return () => onLoadMoreReady?.(null);
+    }, [loadMore, onLoadMoreReady]);
+
     // show searching spinner
     if (results === null) {
         return (
@@ -149,20 +182,9 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
         );
     }
 
-    const onSearchResultsFillRequest = async (backwards: boolean): Promise<boolean> => {
-        if (!backwards) {
-            return false;
-        }
-
-        if (!results.next_batch) {
-            debuglog("no more search results");
-            return false;
-        }
-
-        debuglog("requesting more search results");
-        const searchPromise = searchPagination(client, results);
-        return handleSearchResult(searchPromise);
-    };
+    // The ScrollPanel back-fills (scroll to top) through the same paginator.
+    const onSearchResultsFillRequest = (backwards: boolean): Promise<boolean> =>
+        backwards ? loadMore() : Promise.resolve(false);
 
     const ret: JSX.Element[] = [];
 

@@ -1,0 +1,117 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * The Telegram-style results dropdown. The dropdown is a bounded panel anchored under the search
+ * bar at the top of the timeline; the live conversation stays visible behind/below it. RoomSearchView is kept mounted
+ * (visually hidden) as the data engine — it awaits the search promise, enriches results and drives pagination — so the
+ * wrapper overlays the whole timeline area but is click-through (pointer-events:none) except over the dropdown itself.
+ */
+.mx_RoomView_searchResultsWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* The kept-mounted results list driving the search/pagination — invisible but laid out full-size so its ScrollPanel
+   measures a real height (visibility:hidden, not display:none, avoids a 0-height auto-fill loop). */
+.mx_RoomView_searchDataEngine {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+}
+
+.mx_RoomSearchResults {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: min(60vh, 480px);
+    overflow-y: auto;
+    background-color: var(--cpd-color-bg-canvas-default);
+    border-bottom: 1px solid var(--cpd-color-bg-subtle-primary);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+
+    .mx_RoomSearchResults_status {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--cpd-space-8x);
+        color: var(--cpd-color-text-secondary);
+        font: var(--cpd-font-body-md-regular);
+        text-align: center;
+    }
+
+    .mx_RoomSearchResults_list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Spinner row shown under the loaded rows while the next page paginates in. */
+    .mx_RoomSearchResults_loadingMore {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--cpd-space-3x);
+    }
+
+    .mx_RoomSearchResults_row {
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-3x);
+        padding: var(--cpd-space-2x) var(--cpd-space-4x);
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        text-align: start;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:hover,
+        &:focus-visible {
+            background-color: var(--cpd-color-bg-action-secondary-hovered);
+        }
+
+        .mx_RoomSearchResults_row_text {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+            gap: var(--cpd-space-0-5x);
+        }
+
+        .mx_RoomSearchResults_row_sender {
+            font: var(--cpd-font-body-md-semibold);
+            color: var(--cpd-color-text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mx_RoomSearchResults_row_body {
+            font: var(--cpd-font-body-sm-regular);
+            color: var(--cpd-color-text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mx_RoomSearchResults_row_date {
+            flex-shrink: 0;
+            align-self: flex-start;
+            font: var(--cpd-font-body-sm-regular);
+            color: var(--cpd-color-text-secondary);
+        }
+    }
+}

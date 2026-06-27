@@ -43,7 +43,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { debounce, throttle } from "lodash";
+import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
@@ -83,6 +83,8 @@ import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader/RoomHeader";
+import RoomSearchHeader from "../views/rooms/RoomSearchHeader";
+import RoomSearchResults from "../views/rooms/RoomSearchResults";
 import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from "../../effects/utils";
@@ -129,6 +131,7 @@ import eventSearch, {
     extractSearchResultPreviews,
     type SearchInfo,
     type SearchMatch,
+    type SearchResultPreview,
     SearchScope,
 } from "../../Searching";
 import { RoomSearchNavigationViewModel } from "../../viewmodels/search/RoomSearchNavigationViewModel";
@@ -141,7 +144,6 @@ import { type CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAsk
 import { type SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
-import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
@@ -149,13 +151,12 @@ import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusM
 import { type SearchMatchStepPayload } from "../../dispatcher/payloads/SearchMatchStepPayload.ts";
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
+import { type SearchSession, SearchSessionStore } from "../../stores/SearchSessionStore";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
-import { SearchSessionStore } from "../../stores/SearchSessionStore";
-import { Key } from "../../Keyboard";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -221,17 +222,6 @@ interface IRoomProps extends RoomViewProps {
 
 export { MainSplitContentType };
 
-interface RoomSearchInfo extends SearchInfo {
-    /**
-     * Index of the currently-focused in-room match, mirrored from SearchSessionStore for render-only state.
-     */
-    currentMatchIndex?: number;
-    /**
-     * Terms to highlight in the live tile while stepping through in-room matches.
-     */
-    highlights?: string[];
-}
-
 export interface IRoomState {
     room?: Room;
     roomId?: string;
@@ -255,7 +245,13 @@ export interface IRoomState {
     /**
      * The state of an ongoing search if there is one.
      */
-    search?: RoomSearchInfo;
+    search?: SearchInfo;
+    /**
+     * Whether the Telegram-style top-of-chat search bar is showing in place of the room header.
+     * Set on Cmd+F (FocusMessageSearch) so the bar opens with an empty input before any term is typed, and cleared
+     * on cancel. Distinct from {@link search}, which only exists once a term has actually been searched.
+     */
+    searchHeaderActive: boolean;
     callState?: CallState;
     canPeek: boolean;
     canSelfRedact: boolean;
@@ -445,6 +441,38 @@ function EncryptionEventWrappedView({ mxEvent }: { mxEvent: MatrixEvent }): Reac
     return <EncryptionEventView vm={vm} className="mx_EventTileBubble mx_cryptoEvent" />;
 }
 
+/**
+ * Build a {@link SearchInfo} render-mirror from a {@link SearchSession} held in the SearchSessionStore. Used to
+ * re-hydrate RoomView's search render state when the component is re-mounted for a new room during a cross-room
+ * stepping jump, so the surviving session keeps driving the header, "k of N" arrows and live highlight.
+ */
+function searchInfoFromSession(session: SearchSession): SearchInfo {
+    return {
+        searchId: session.searchId,
+        roomId: session.roomId,
+        term: session.term,
+        scope: session.scope,
+        // Carry the from:/sender filter across the remount so the chip keeps its selection and a subsequent
+        // re-search (term/scope/sender change) keeps the active filter rather than silently clearing it.
+        senders: session.senders,
+        // Likewise carry the chosen result order (recent/relevant) so the toggle keeps its selection and a
+        // re-search does not silently revert to recency.
+        order: session.order,
+        promise: session.promise,
+        abortController: session.abortController,
+        inProgress: session.inProgress,
+        count: session.count,
+        matches: session.matches,
+        // Carry the dropdown result rows across the remount so the results list survives a cross-room jump.
+        previews: session.previews,
+        currentMatchIndex: session.currentMatchIndex,
+        highlights: session.highlights,
+        // Carry whether more result pages remain so the dropdown's infinite scroll keeps working after a remount.
+        hasMore: session.hasMore,
+        error: session.error,
+    };
+}
+
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
     // We cache the latest computed e2eStatus per room to show as soon as we switch rooms otherwise defaulting to
     // unencrypted causes a flicker which can yield confusion/concern in a larger room.
@@ -463,8 +491,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private roomView = createRef<HTMLDivElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
+    // The kept-mounted RoomSearchView (data engine) registers its pagination trigger here, so the visible
+    // Telegram-style results dropdown can load the next page on scroll-to-bottom.
+    private searchLoadMore: (() => Promise<boolean>) | null = null;
     private messagePanel: TimelinePanel | null = null;
-    // Drives the in-timeline "k of N" search match stepper. Always present; renders nothing until it has matches.
+    // Drives the in-timeline "k of N" search match stepper (header arrows). Always present; renders nothing
+    // until it has matches.
     public readonly searchNavVm = new RoomSearchNavigationViewModel({
         onActivateMatch: (match: SearchMatch, index: number): void => this.onActivateSearchMatch(match, index),
     });
@@ -508,6 +540,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showApps: false,
             isPeeking: false,
             showRightPanel: false,
+            searchHeaderActive: false,
             joining: false,
             showTopUnreadMessagesBar: false,
             statusBarVisible: false,
@@ -540,6 +573,21 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             viewRoomOpts: { buttons: [] },
             isRoomEncrypted: null,
         };
+
+        // Re-hydrate a live cross-room search session that survived this RoomView being re-mounted for a new room
+        // (the component is keyed by room id — see LoggedInView — so a stepping jump into another room unmounts and
+        // re-mounts it). If the store still holds a session whose focused match is in THIS room, seed the search
+        // render state from it so the first paint already shows the live timeline, header and "k of N" arrows
+        // (no results-list flash), and stepping continues seamlessly. The searchNavVm field already reads the store.
+        // The target room comes from props.roomId (embedded views) or, for the main view, the RoomViewStore the
+        // stepping jump already pointed at this room — `this.state.roomId` is not populated until after mount.
+        const thisRoomId = props.roomId ?? this.roomViewStore.getRoomId() ?? undefined;
+        const session = SearchSessionStore.instance.getSnapshot();
+        const focusedMatch = session?.matches[session.currentMatchIndex];
+        if (session && focusedMatch && thisRoomId && focusedMatch.roomId === thisRoomId) {
+            // The surviving session also means the top-of-chat search bar should be showing.
+            this.state = { ...this.state, search: searchInfoFromSession(session), searchHeaderActive: true };
+        }
     }
 
     private onIsResizing = (resizing: boolean): void => {
@@ -707,8 +755,26 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // Consume the stepping-jump flag exactly once per store update. A stepping jump (set by the match stepper
         // just before its ViewRoom dispatch) must not be treated as a user navigation by the clear gate below.
         const wasSteppingJump = SearchSessionStore.instance.consumeSteppingJump();
-        // While the results list is shown (a search is active but no match is focused), keep the live timeline
-        // anchored to the last-viewed match. The durable anchor is the event our last internal navigation pinned.
+        // While the Telegram-style results list is shown (a search is active but no match is focused) the live
+        // timeline behind it must stay anchored to the LAST-VIEWED match, so reopening the list leaves the
+        // conversation exactly on the message the user was just reading. Deriving the pin from `getInitialEventId() ??
+        // this.state.initialEventId` is unreliable here: the store value lags our async no-event un-pin ViewRoom and
+        // the `??` fallback can resurrect a stale earlier match from local state — a background RoomViewStore emission
+        // (constant on the packaged build) then re-scrolled the conversation to the FIRST-clicked result. Forcing it
+        // to `undefined` instead un-pinned the timeline so it fell to the live bottom and jumped to the LATEST message
+        // (the regression the earlier attempt traded in). The durable, deterministic anchor for both is
+        // SearchSessionStore.steppingTarget: the event our last internal navigation pinned — the clicked/stepped
+        // match, kept across the return to the list and reset only by start()/clear(). Pinning to it is stable across
+        // background emissions (same value every frame → eventId prop unchanged → TimelinePanel never re-scrolls) and
+        // immune to the lagged store/state. A fresh search with nothing viewed yet has no target → undefined → the
+        // overlay covers the live bottom, which is correct. Stepping (a match focused, Room mode) and the non-search
+        // timeline are unaffected.
+        //
+        // "Results list shown" must be derived from the DURABLE SearchSessionStore.focusedMatch, NOT the volatile
+        // `state.search.currentMatchIndex`: a settled search update (or a "load more" page) landing while a match is
+        // focused nulls that cursor, and a background emission then read it here as "no match focused", took this
+        // branch mid-jump and clobbered the live flash + in-bubble highlight + centered scroll.
+        // focusedMatch is null only when genuinely viewing the list, and survives result updates.
         const searchResultsListShown =
             this.state.search !== undefined && SearchSessionStore.instance.focusedMatch === null;
         const searchAnchorEventId = SearchSessionStore.instance.steppingTarget ?? undefined;
@@ -815,14 +881,26 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
         }
 
-        // End the search when a genuine navigation changes the currently scrolled-to event — a result click from the
-        // results list, OR a jump (e.g. the search-header jump-to-date calendar) taken while stepping through matches.
-        // We gate on an active session rather than the Search rendering type so this also fires mid-stepping (where
-        // the timeline renders as Room); our own stepping/back-to-results dispatches are still excluded by the
-        // one-shot flag and the durable steppingTarget anchor below.
+        // End the search only when the user navigates AWAY to an event we did not pin ourselves — a non-stepping
+        // ViewRoom that points the live timeline at some other event (a permalink, a notification jump). While
+        // searching, the live timeline is kept un-pinned (onSearch and onBackToSearchResults call resetFocusedEvent so
+        // getInitialEventId() is null when idle in the results list), so a non-null focused event here means a real
+        // navigation happened.
+        //
+        // Our OWN navigations (clicking/stepping to a match, or the async no-event_id ViewRoom resetFocusedEvent fires
+        // on the way back to the list) must be excluded. The `!wasSteppingJump` one-shot flag does that in the common
+        // case, but it is racy: on the packaged build, unrelated RoomViewStore emissions (sync, read receipts,
+        // setViewRoomOpts on RoomLoaded) fire constantly while a search is active and can consume the flag before our
+        // own ViewRoom update lands. The durable guard is SearchSessionStore.steppingTarget: the event our in-flight
+        // navigation pinned, reset ONLY by start()/clear(). A focused event equal to it is ours — the match we clicked
+        // or stepped to, including while its async jump is still queued and the live timeline is transiently un-pinned
+        // — so the gate fires only for an event we did NOT pin. Keeping the guard durable (never dropping it on a
+        // transient un-pinned frame) is what fixes the earlier race where such a frame nulled it mid-jump and the
+        // queued jump then tripped the gate ("the search resets itself"). A welcome corollary:
+        // re-clicking the same/last result keeps the session alive instead of ending it.
         const focusedEventId = this.roomViewStore.getInitialEventId();
         if (
-            this.state.search !== undefined &&
+            this.state.timelineRenderingType === TimelineRenderingType.Search &&
             !wasSteppingJump &&
             focusedEventId &&
             focusedEventId !== SearchSessionStore.instance.steppingTarget
@@ -830,6 +908,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             newState.timelineRenderingType = TimelineRenderingType.Room;
             SearchSessionStore.instance.clear({ abort: true });
             newState.search = undefined;
+            // Fully close the search UI on a genuine navigate-away. Without this, searchHeaderActive stays true and the
+            // header lingers as an empty search bar over the timeline — another flavour of "it resets itself".
+            newState.searchHeaderActive = false;
         }
 
         if (
@@ -1192,19 +1273,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onReactKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = false;
 
-        if (
-            this.state.search &&
-            ev.target instanceof HTMLInputElement &&
-            ev.key === Key.ENTER &&
-            !ev.nativeEvent?.isComposing
-        ) {
-            defaultDispatcher.dispatch<SearchMatchStepPayload>({
-                action: Action.SearchMatchStep,
-                direction: ev.shiftKey ? "previous" : "next",
-            });
-            handled = true;
-        }
-
         const action = getKeyBindingsManager().getRoomAction(ev);
         switch (action) {
             case KeyBindingAction.DismissReadMarker:
@@ -1337,8 +1405,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 const editState = payload.event ? new EditorStateTransfer(payload.event) : undefined;
                 // If a search is active (implying that the "edit" button has been pressed on one of the events in
                 // the search result), we need to close that search, because RoomSearchView doesn't handle editing
-                // and won't render the composer. Skip this while a stepping jump is in flight so a racing edit
-                // dispatch cannot tear down the surviving session; a genuine edit (no jump) still clears it.
+                // and won't render the composer. Skip this while a cross-room stepping jump is in flight so a racing
+                // edit dispatch cannot tear down the surviving session; a genuine edit (no jump) still clears it.
                 const closeSearchForEdit =
                     this.state.search !== undefined && !SearchSessionStore.instance.isSteppingJump();
                 if (closeSearchForEdit) {
@@ -1419,6 +1487,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 onView3pidInvite(payload, RightPanelStore.instance);
                 break;
             case Action.FocusMessageSearch:
+                // Open the Telegram-style top-of-chat search bar. The bar shows with an empty input
+                // before any term is typed; an `initialText` (e.g. from Spotlight) kicks off a search immediately.
+                this.setState({ searchHeaderActive: true });
                 if ((payload as FocusMessageSearchPayload).initialText) {
                     this.onSearch(payload.initialText);
                 }
@@ -1867,8 +1938,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     // `senders` and `order` default to the current session's values so a term change (onSearchChange) or scope
-    // change (onSearchScopeChange) preserves the active `from:` filter and chosen order; the dedicated controls pass
-    // their axis explicitly.
+    // change (onSearchScopeChange) preserves the active `from:` filter and chosen order; the dedicated controls
+    // pass their axis explicitly.
     private onSearch = (
         term: string,
         scope = SearchScope.Room,
@@ -1882,11 +1953,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // make sure that we don't end up showing results from an aborted search by keeping a unique id.
         const searchId = new Date().getTime();
 
-        // The search session lives in the SearchSessionStore so the shared stepper and clear gates read one source.
+        // The session lives in the SearchSessionStore (not just this component) so it survives RoomView being
+        // re-mounted when a cross-room stepping jump switches rooms. Starting a new term aborts any previous one.
         SearchSessionStore.instance.start({ searchId, roomId, term, scope, senders, order, promise, abortController });
 
         this.setState({
             timelineRenderingType: TimelineRenderingType.Search,
+            // Keep the top-of-chat search bar open whenever a search is running, even if the search was
+            // kicked off by something other than Cmd+F (e.g. Spotlight's "search messages").
+            searchHeaderActive: true,
             search: {
                 searchId,
                 roomId,
@@ -1898,20 +1973,26 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 abortController,
             },
         });
+
+        // If we opened search while the timeline was pinned to an event (e.g. a permalink/notification jump), drop
+        // that focus so the results list is shown rather than the pinned timeline. resetFocusedEvent records the
+        // event as the durable stepping target while its async clearing ViewRoom is in flight, so the clear gate
+        // treats that transient frame as ours (see resetFocusedEvent + the clear gate).
+        this.resetFocusedEvent();
     };
 
     private onSearchScopeChange = (scope: SearchScope): void => {
         this.onSearch(this.state.search?.term ?? "", scope);
     };
 
-    // Re-run the active search with a new `from:`/sender filter, keeping the current term and scope. An empty array
-    // clears the filter.
+    // Re-run the active search with a new `from:`/sender filter, keeping the current
+    // term and scope. An empty array clears the filter.
     private onSearchSendersChange = (senders: string[]): void => {
         this.onSearch(this.state.search?.term ?? "", this.state.search?.scope ?? SearchScope.Room, senders);
     };
 
-    // Re-run the active search with a new result order (recent/relevant), keeping the current term, scope and
-    // sender filter.
+    // Re-run the active search with a new result order (recent/relevant), keeping the
+    // current term, scope and sender filter.
     private onSearchOrderChange = (order: SearchOrderBy): void => {
         this.onSearch(
             this.state.search?.term ?? "",
@@ -1922,34 +2003,59 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
-        // In-timeline match stepping is enabled for any completed search. Matches can span rooms — an all-rooms search
-        // spans rooms, and a room-scoped search of an upgraded room also covers its predecessor chain (#32258) — and
-        // stepping into a different room re-mounts this room-id-keyed RoomView, which re-hydrates the live stepper from
-        // the SearchSessionStore. So there is no current-room filter and no scope restriction; the store holds the
-        // full, ordered cross-room match list. (Stepping through pages beyond the loaded results is still deferred.)
+        // In-timeline match stepping is enabled for any completed search. Matches span rooms — an all-rooms search
+        // spans rooms, and a room-scoped search also covers upgraded predecessor rooms (#32258) — and stepping into
+        // a different room re-mounts this room-id-keyed RoomView (see LoggedInView), which re-hydrates the live
+        // stepper from the SearchSessionStore. So there is no current-room filter and no scope restriction; the
+        // store holds the full, ordered cross-room match list. Stepping through pages beyond the loaded results is
+        // still deferred (the stepper covers the loaded result page).
         const canStep = !inProgress && searchResults !== null;
+        // Fresh derivations are computed only on a settled result set; `undefined` during the in-progress interim so
+        // the values below fall back to the prior ones (no list flash while a "load more" page is loading).
         const freshMatches = canStep && searchResults ? extractSearchMatches(searchResults) : undefined;
+        // Result preview rows for the Telegram-style dropdown, ordered in lockstep with `matches`.
         const freshPreviews = canStep && searchResults ? extractSearchResultPreviews(searchResults) : undefined;
         const freshHighlights =
             canStep && searchResults ? extractSearchHighlights(searchResults, this.state.search!.term) : undefined;
+        // More pages exist while the backend hands back a next_batch token; drives the dropdown's infinite scroll
+        //. Preserve the prior value during the interim so it never momentarily reads "no more".
+        const hasMore = searchResults ? !!searchResults.next_batch : this.state.search?.hasMore;
+        // Preserve the prior backend count (e.g. "54 results found") during the interim so it does not blank out.
         const count = searchResults?.count ?? this.state.search?.count;
 
         SearchSessionStore.instance.updateResults({
             inProgress,
-            matches: freshMatches ?? [],
-            previews: freshPreviews ?? [],
+            matches: freshMatches,
+            previews: freshPreviews,
             highlights: freshHighlights,
             count,
+            hasMore,
             error: error ?? undefined,
         });
 
         this.setState({
             search: {
                 ...this.state.search!,
-                // NB: `count` (the backend's full estimate across all matching rooms) and `matches.length` (this
-                // loaded page, capped at SEARCH_LIMIT) are intentionally different denominators.
+                // NB: `count` (the backend's full estimate across the whole predecessor chain) and
+                // `matches.length` (this loaded page, capped at SEARCH_LIMIT) are intentionally DIFFERENT
+                // denominators — do not "fix" one to match the other. The results-list summary shows `count`; the
+                // "k of N" live stepper shows `matches.length` (labelled "loaded"). They can legitimately diverge
+                // (>SEARCH_LIMIT hits; rooms hidden because we lack their state).
                 count,
-                highlights: freshHighlights,
+                // Keep the prior matches/previews/highlights during the in-progress interim (e.g. a "load more"
+                // round-trip), so the dropdown keeps showing the already-loaded rows instead of flashing empty.
+                matches: freshMatches ?? this.state.search?.matches,
+                // Result preview rows for the Telegram-style dropdown, parallel to `matches`.
+                previews: freshPreviews ?? this.state.search?.previews,
+                // Terms to highlight in the focused match's live tile while stepping. Mirrors the
+                // enrichment the results list applies so the live highlight matches the result-tile highlight.
+                highlights: freshHighlights ?? this.state.search?.highlights,
+                // Whether more result pages remain to be paginated into the dropdown.
+                hasMore,
+                // Keep the local cursor mirror in lockstep with the store, which `updateResults` above re-derived. If
+                // a match is still focused (a settled update / "load more" landing mid-step) keep the mirror on it so
+                // RoomSearchHeader's stepping affordances stay correct through the race; otherwise undefined (viewing
+                // the list). The durable stepping signal is SearchSessionStore.focusedMatch.
                 currentMatchIndex:
                     SearchSessionStore.instance.focusedMatch !== null
                         ? SearchSessionStore.instance.currentMatchIndex
@@ -1961,12 +2067,24 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     /**
-     * Step the live timeline to a search match. Switches back to the room timeline so the match is shown in context
-     * and reuses the existing ViewRoom jump-and-highlight path, while keeping the search session alive.
+     * Step the live timeline to a search match. Switches back to the room (live) timeline so the match is
+     * shown in context and reuses the existing ViewRoom → jump-and-highlight path, while keeping the search
+     * session alive so the user can keep stepping with the header arrows.
      */
     private onActivateSearchMatch = (match: SearchMatch, index: number): void => {
+        // Mirror the focused-match cursor into the shared SearchSessionStore, exactly like the arrow/Enter stepping
+        // path does in RoomSearchNavigationViewModel.activate. Without this, a dropdown row click moved only the
+        // local view-state cursor, leaving the store at -1 — so the store-backed "k of N" counter stayed "0 of N"
+        // (no indication which result was opened) and a subsequent Enter-step restarted from the newest match
+        // instead of the clicked one. beginSteppingJump also records this match as the
+        // in-flight navigation target so the result-click clear gate never tears the session down for this jump, even
+        // if its one-shot flag is consumed early by an unrelated emission. Both calls are idempotent
+        // no-ops when reached via the arrow/Enter path (which already set them with the same index/event).
         SearchSessionStore.instance.beginSteppingJump(match.eventId);
         SearchSessionStore.instance.setCurrentMatchIndex(index);
+        // Flip to the live timeline before the (async) ViewRoom dispatch lands, so onRoomViewStoreUpdate does
+        // not treat this as a "clicked a search result" and tear the search down. `currentMatchIndex` drives
+        // the body to show the live timeline instead of the results list.
         this.setState((state) => ({
             timelineRenderingType: TimelineRenderingType.Room,
             search: state.search ? { ...state.search, currentMatchIndex: index } : undefined,
@@ -1977,8 +2095,36 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             event_id: match.eventId,
             highlighted: true,
             scroll_into_view: true,
-            metricsTrigger: undefined,
+            metricsTrigger: undefined, // we stay within the same search session
         });
+    };
+
+    // Load the next page of results when the Telegram-style dropdown is scrolled to the bottom. The
+    // kept-mounted RoomSearchView owns the real searchPagination call (registered via onLoadMoreReady); the larger
+    // set flows back through onSearchUpdate, which recomputes previews/matches over the full accumulation. No-op once
+    // there are no more pages (the data engine guards on next_batch).
+    private onSearchLoadMore = (): void => {
+        void this.searchLoadMore?.();
+    };
+
+    // Stable callback so RoomSearchView's registration effect does not re-run every render.
+    private setSearchLoadMore = (loadMore: (() => Promise<boolean>) | null): void => {
+        this.searchLoadMore = loadMore;
+    };
+
+    // Click a row in the Telegram-style results dropdown: jump the live timeline to it. Previews are
+    // ordered in lockstep with `matches`, so the row index addresses the matching SearchMatch directly.
+    private onSearchResultClick = (index: number): void => {
+        const match = this.state.search?.matches?.[index];
+        if (match) {
+            this.onActivateSearchMatch(match, index);
+        }
+    };
+
+    // Resolve a sender's display name for a results-dropdown row, against the matched message's (possibly other) room.
+    private getSearchResultSenderName = (preview: SearchResultPreview): string => {
+        const room = this.context.client?.getRoom(preview.roomId);
+        return room?.getMember(preview.sender)?.name ?? preview.sender;
     };
 
     private onForgetClick = (): void => {
@@ -2101,17 +2247,22 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         defaultDispatcher.fire(Action.ViewRoomDirectory);
     };
 
-    private onSearchChange = debounce((term: string): void => {
+    // Search runs on Enter (RoomSearchHeader commits the typed term), so there is no keystroke stream to debounce —
+    // run the search immediately.
+    private onSearchChange = (term: string): void => {
         this.onSearch(term);
-    }, 300);
+    };
 
     private onCancelSearchClick = (): Promise<void> => {
+        // Cancelling is the only path that ends (and aborts) the search session. It also closes the top-of-chat
+        // search bar, restoring the normal room header.
         SearchSessionStore.instance.clear({ abort: true });
         return new Promise<void>((resolve) => {
             this.setState(
                 {
                     timelineRenderingType: TimelineRenderingType.Room,
                     search: undefined,
+                    searchHeaderActive: false,
                 },
                 resolve,
             );
@@ -2119,26 +2270,44 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onBackToSearchResults = (): void => {
-        // Return from live-timeline match stepping to the results list while keeping the search session alive.
+        // Return from live-timeline match stepping to the results list while keeping the search session alive
+        // (term, promise, matches) — unlike onCancelSearchClick, the session is preserved. Moving the focused index
+        // back to "none" (-1) makes the body re-render RoomSearchView instead of the live timeline (counter ->
+        // "0 of N loaded").
         SearchSessionStore.instance.setCurrentMatchIndex(-1);
         this.setState((state) => ({
             timelineRenderingType: TimelineRenderingType.Search,
             search: state.search ? { ...state.search, currentMatchIndex: undefined } : undefined,
-            // Anchor the hidden live timeline to the last-viewed match while the results list is showing.
+            // Anchor the live timeline to the last-viewed match (steppingTarget, set to the match we are returning
+            // from) so reopening the results list leaves the conversation on the message the user was just reading —
+            // not jumped to the first result (a stale-pin resurrection) nor to the live bottom/latest message (what
+            // un-pinning did). onRoomViewStoreUpdate keeps it pinned there while the list shows.
             initialEventId: SearchSessionStore.instance.steppingTarget ?? undefined,
             isInitialEventHighlighted: false,
         }));
+        // Clear the focused event in the STORE (not our local anchor) so a later click on the same result still
+        // registers in the result-click clear gate. resetFocusedEvent records it as the durable steppingTarget first,
+        // so the gate stays guarded while its async no-event ViewRoom is in flight.
         this.resetFocusedEvent();
     };
 
     /**
-     * While a search is active, clear any event the live timeline is pinned to by dispatching a stepping-guarded
-     * ViewRoom with no event_id. No-op if nothing is focused.
+     * While a search is active, clear any event the live timeline is pinned to (e.g. a prior permalink jump or the
+     * last-stepped match) by dispatching a stepping-jump-flagged ViewRoom with no event_id. The flag stops the
+     * result-click clear gate from tearing the session down for this internal navigation, while nulling the focused
+     * event means a subsequent user click on ANY result — including the event we were just viewing — registers in
+     * the gate and ends the search. Without this, the result-click gate (which only fires when the live focused
+     * event is set) would treat clicking the already-focused event as a no-op. No-op if nothing is focused.
      */
     private resetFocusedEvent(): void {
         const roomId = this.getRoomId();
         const focusedEventId = this.roomViewStore.getInitialEventId();
         if (roomId && focusedEventId) {
+            // Record the event we are clearing FROM as the in-flight navigation target. The clearing ViewRoom is
+            // async, so for the whole window before it lands the live timeline is still pinned to focusedEventId while
+            // we are already back in Search mode — the clear gate must treat that focused event as ours, or a racing
+            // RoomViewStore emission that consumed the one-shot flag tears the surviving session down. Passing null
+            // here would leave that window unguarded once the flag is gone.
             SearchSessionStore.instance.beginSteppingJump(focusedEventId);
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
@@ -2246,14 +2415,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
      * We pass it down to the scroll panel.
      */
     public handleScrollKey = (ev: React.KeyboardEvent | KeyboardEvent): void => {
-        let panel: ScrollPanel | TimelinePanel | undefined;
-        if (this.searchResultsPanel.current) {
-            panel = this.searchResultsPanel.current;
-        } else if (this.messagePanel) {
-            panel = this.messagePanel;
-        }
-
-        panel?.handleScrollKey(ev);
+        // The live timeline owns keyboard scrolling. The search results are now a bounded dropdown overlay and the
+        // old full-list RoomSearchView is kept mounted only as a hidden data engine, so PageUp/Down should drive the
+        // visible conversation, not the hidden panel.
+        this.messagePanel?.handleScrollKey(ev);
     };
 
     /**
@@ -2608,8 +2773,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const hiddenHighlightCount = this.getHiddenHighlightCount();
 
-        // While stepping a match in the live timeline, show the live MessagePanel instead of the results list.
-        // The durable store signal survives result updates that may reset the local index mirror.
+        // While stepping a match in the live timeline (a match is focused) we show the live MessagePanel jumped to
+        // the match instead of the results list, but keep the search header. Derived from the DURABLE
+        // SearchSessionStore.focusedMatch, not the volatile `state.search.currentMatchIndex`: a settled search update
+        // landing mid-step nulls that cursor, which used to drop the live timeline + in-bubble highlight back to the
+        // results dropdown until the next step.
         const isSteppingSearchMatch =
             this.state.search !== undefined && SearchSessionStore.instance.focusedMatch !== null;
 
@@ -2619,18 +2787,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             this.state.search &&
             (this.state.timelineRenderingType === TimelineRenderingType.Search || isSteppingSearchMatch)
         ) {
-            if (!isRoomEncryptionLoading) {
-                aux = (
-                    <RoomSearchAuxPanel
-                        searchInfo={this.state.search}
-                        navigationVm={this.searchNavVm}
-                        onCancelClick={this.onCancelSearchClick}
-                        onBackToResults={this.onBackToSearchResults}
-                        onSearchScopeChange={this.onSearchScopeChange}
-                        isRoomEncrypted={isRoomEncrypted}
-                    />
-                );
-            }
+            // The search summary, "k of N" stepper, scope toggle and cancel now live in the top-of-chat search bar
+            // (RoomSearchHeader), so the aux panel renders nothing during a search.
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} />;
         } else if (myMembership !== KnownMembership.Join) {
@@ -2725,22 +2883,42 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // if we have search results, we keep the messagepanel (so that it preserves its
         // scroll state), but hide it.
         let searchResultsPanel;
-        let hideMessagePanel = false;
 
         if (this.state.search && !isSteppingSearchMatch) {
+            // RoomSearchView is kept mounted as the data engine — it awaits the search promise, processes results
+            // (threads, highlights, pagination) and drives onSearchUpdate, which populates `search.previews`. The
+            // Telegram-style RoomSearchResults dropdown renders those previews as an opaque overlay on
+            // top of it; a row click jumps the live timeline to that match.
             searchResultsPanel = (
-                <RoomSearchView
-                    key={this.state.search.searchId}
-                    ref={this.searchResultsPanel}
-                    term={this.state.search.term}
-                    scope={this.state.search.scope}
-                    promise={this.state.search.promise}
-                    inProgress={!!this.state.search.inProgress}
-                    className={this.messagePanelClassNames}
-                    onUpdate={this.onSearchUpdate}
-                />
+                <div className="mx_RoomView_searchResultsWrapper">
+                    {/* The old results list stays mounted, but visually hidden, purely as the data engine: it awaits
+                        the search promise, enriches results (threads/highlights) and drives onSearchUpdate. It also
+                        owns the real pagination (searchPagination), which we trigger on demand (onLoadMoreReady) when the
+                        visible dropdown is scrolled to the bottom. */}
+                    <div className="mx_RoomView_searchDataEngine">
+                        <RoomSearchView
+                            key={this.state.search.searchId}
+                            ref={this.searchResultsPanel}
+                            term={this.state.search.term}
+                            scope={this.state.search.scope}
+                            promise={this.state.search.promise}
+                            inProgress={!!this.state.search.inProgress}
+                            className={this.messagePanelClassNames}
+                            onUpdate={this.onSearchUpdate}
+                            onLoadMoreReady={this.setSearchLoadMore}
+                        />
+                    </div>
+                    <RoomSearchResults
+                        previews={this.state.search.previews ?? []}
+                        inProgress={!!this.state.search.inProgress}
+                        error={this.state.search.error}
+                        hasMore={!!this.state.search.hasMore}
+                        onResultClick={this.onSearchResultClick}
+                        onLoadMore={this.onSearchLoadMore}
+                        getSenderName={this.getSearchResultSenderName}
+                    />
+                </div>
             );
-            hideMessagePanel = true;
         }
 
         let highlightedEventId: string | undefined;
@@ -2748,10 +2926,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             highlightedEventId = this.state.initialEventId;
         }
 
-        // While stepping through search matches, highlight the matched terms in the focused match's live tile.
+        // While stepping through search matches, highlight the matched terms in the body of the
+        // focused match's live tile. Decoupled from `highlightedEventId` (the transient jump flash) so the body
+        // highlight persists for as long as the match stays focused.
         let searchHighlightEventId: string | undefined;
         let searchHighlights: string[] | undefined;
         if (isSteppingSearchMatch && this.state.search) {
+            // The focused match's event id straight from the durable store signal — robust against the volatile
+            // `currentMatchIndex` being nulled by a settled search update mid-step.
             searchHighlightEventId = SearchSessionStore.instance.focusedMatch ?? undefined;
             searchHighlights = this.state.search.highlights;
         }
@@ -2769,7 +2951,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
                         }
                         manageReadMarkers={!this.state.isPeeking}
-                        hidden={hideMessagePanel}
+                        // Keep the live conversation visible behind the Telegram-style search dropdown;
+                        // the dropdown is a bounded overlay, not a full-screen takeover.
+                        hidden={false}
                         highlightedEventId={highlightedEventId}
                         searchHighlights={searchHighlights}
                         searchHighlightEventId={searchHighlightEventId}
@@ -2815,18 +2999,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             !this.props.hideRightPanel && !isRoomEncryptionLoading && this.state.room && this.state.showRightPanel;
 
         const rightPanel = showRightPanel ? (
+            // Search moved out of the right-panel "About" card into the top-of-chat search bar,
+            // so the right panel no longer receives any search props.
             <RightPanel
                 room={this.state.room}
                 resizeNotifier={this.context.resizeNotifier}
                 permalinkCreator={this.permalinkCreator}
                 e2eStatus={this.state.e2eStatus}
-                onSearchChange={this.onSearchChange}
-                onSearchCancel={this.onCancelSearchClick}
-                onSearchSendersChange={this.onSearchSendersChange}
-                onSearchOrderChange={this.onSearchOrderChange}
-                searchTerm={this.state.search?.term ?? ""}
-                searchSenders={this.state.search?.senders ?? []}
-                searchOrder={this.state.search?.order ?? SearchOrderBy.Recent}
             />
         ) : undefined;
 
@@ -2943,13 +3122,33 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 ref={this.roomViewBody}
                                 data-layout={this.state.layout}
                             >
-                                {!this.props.hideHeader && (
-                                    <RoomHeader
-                                        room={this.state.room}
-                                        legacyAdditionalButtons={this.state.viewRoomOpts.buttons}
-                                        extraButtons={<>{extraButtons}</>}
-                                    />
-                                )}
+                                {!this.props.hideHeader &&
+                                    (this.state.searchHeaderActive || this.state.search ? (
+                                        // Telegram-style search bar replaces the room header while searching.
+                                        <RoomSearchHeader
+                                            room={this.state.room}
+                                            term={this.state.search?.term ?? ""}
+                                            onSearchChange={this.onSearchChange}
+                                            onCancel={this.onCancelSearchClick}
+                                            isRoomEncrypted={!!isRoomEncrypted}
+                                            searchInfo={this.state.search}
+                                            navigationVm={this.searchNavVm}
+                                            scope={this.state.search?.scope ?? SearchScope.Room}
+                                            onSearchScopeChange={this.onSearchScopeChange}
+                                            senders={this.state.search?.senders ?? []}
+                                            onSearchSendersChange={this.onSearchSendersChange}
+                                            order={this.state.search?.order ?? SearchOrderBy.Recent}
+                                            onSearchOrderChange={this.onSearchOrderChange}
+                                            onBackToResults={this.onBackToSearchResults}
+                                            autoFocus={true}
+                                        />
+                                    ) : (
+                                        <RoomHeader
+                                            room={this.state.room}
+                                            legacyAdditionalButtons={this.state.viewRoomOpts.buttons}
+                                            extraButtons={<>{extraButtons}</>}
+                                        />
+                                    ))}
                                 {mainSplitBody}
                             </div>
                         </MainSplit>

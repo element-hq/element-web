@@ -923,6 +923,29 @@ export interface SearchInfo {
      */
     count?: number;
     /**
+     * Whether more result pages remain to be paginated in (the backend returned a `next_batch` token). Drives the
+     * Telegram-style results dropdown's infinite scroll.
+     */
+    hasMore?: boolean;
+    /**
+     * Ordered list of match locations (display order) used to step through matches in the live timeline.
+     */
+    matches?: SearchMatch[];
+    /**
+     * Ordered list of result previews (parallel to {@link matches}) rendered as rows in the Telegram-style results
+     * dropdown. See {@link extractSearchResultPreviews}.
+     */
+    previews?: SearchResultPreview[];
+    /**
+     * Index into {@link matches} of the currently-focused match, or -1/undefined when no match is active.
+     */
+    currentMatchIndex?: number;
+    /**
+     * Terms to highlight in matched message bodies (longest-first), used to highlight the focused match in the
+     * live timeline while stepping. See {@link extractSearchHighlights}.
+     */
+    highlights?: string[];
+    /**
      * Describe the error if any occured.
      */
     error?: Error;

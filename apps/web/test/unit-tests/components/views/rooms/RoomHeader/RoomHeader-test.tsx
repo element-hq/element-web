@@ -50,6 +50,7 @@ import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import dispatcher from "../../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../../src/dispatcher/actions";
 import { CallStore } from "../../../../../../src/stores/CallStore";
 import { type Call } from "../../../../../../src/models/Call";
 import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
@@ -214,6 +215,15 @@ describe("RoomHeader", () => {
 
         await user.click(getByLabelText(document.body, "Threads"));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel });
+    });
+
+    it("opens & focuses in-room search when the header search button is clicked", async () => {
+        const user = userEvent.setup();
+        const fireSpy = jest.spyOn(dispatcher, "fire");
+        render(<RoomHeader room={room} />, getWrapper());
+
+        await user.click(getByLabelText(document.body, "Search"));
+        expect(fireSpy).toHaveBeenCalledWith(Action.FocusMessageSearch);
     });
 
     it("opens the notifications panel", async () => {
