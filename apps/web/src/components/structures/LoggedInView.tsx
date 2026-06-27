@@ -36,6 +36,7 @@ import { CollapseDistributor, Resizer } from "../../resizer";
 import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { hideToast as hideServerLimitToast, showToast as showServerLimitToast } from "../../toasts/ServerLimitToast";
+import { showInRoomSearchNudgeIfNeeded } from "../../toasts/InRoomSearchNudgeToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
@@ -518,6 +519,10 @@ class LoggedInView extends React.Component<IProps, IState> {
         // react keydown handler that respects the react bubbling order.
         if (ev.target === document.body) {
             this.onKeyDown(ev);
+            // On the web build the in-room search shortcut is opt-in (to preserve the browser's
+            // find-on-page). Surface a one-time nudge towards it here, on the nothing-focused path,
+            // without preventing the browser find bar (see ctrlFForSearch / element-web #33360).
+            showInRoomSearchNudgeIfNeeded(ev);
         }
     };
 

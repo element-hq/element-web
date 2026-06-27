@@ -275,6 +275,7 @@ export interface Settings {
     "sendTypingNotifications": IBaseSetting<boolean>;
     "showTypingNotifications": IBaseSetting<boolean>;
     "ctrlFForSearch": IBaseSetting<boolean>;
+    "ctrlFForSearchNudgeShown": IBaseSetting<boolean>;
     "MessageComposerInput.ctrlEnterToSend": IBaseSetting<boolean>;
     "MessageComposerInput.surroundWith": IBaseSetting<boolean>;
     "MessageComposerInput.autoReplaceEmoji": IBaseSetting<boolean>;
@@ -957,6 +958,12 @@ export const SETTINGS: Settings = {
         // encrypted-room search work and there is no browser "find on page" to override. Web
         // stays opt-in so the browser's native find bar is preserved (see element-web #24359/#33360).
         default: !!IS_ELECTRON,
+    },
+    // Device-local flag tracking whether the one-time web nudge towards the opt-in in-room search
+    // shortcut has been shown, so it never nags the user more than once per browser.
+    "ctrlFForSearchNudgeShown": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

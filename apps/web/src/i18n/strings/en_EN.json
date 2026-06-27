@@ -2113,6 +2113,8 @@
         "room_is_low_priority": "This is a low priority room",
         "search": {
             "all_rooms_button": "Search all rooms",
+            "nudge_description": "Enable the in-room search shortcut to search this conversation instead of your browser's find-on-page.",
+            "nudge_title": "Search this room",
             "placeholder": "Search messages…",
             "summary": {
                 "one": "1 result found for “<query/>”",
