@@ -2829,6 +2829,7 @@
             "composer_heading": "Composer",
             "default_timezone": "Browser default (%(timezone)s)",
             "dialog_title": "<strong>Settings:</strong> Preferences",
+            "disable_smooth_scrolling": "Disable smooth scrolling (reduces motion)",
             "enable_content_protection": "Enable content protection",
             "enable_hardware_acceleration": "Enable hardware acceleration",
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
