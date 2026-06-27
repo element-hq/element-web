@@ -47,6 +47,17 @@ const safeStorageBackendMap: Omit<Record<SaneSafeStorageBackend, string>, "syste
     kwallet6: "kwallet6",
 };
 
+/**
+ * Error thrown when a secret is present in storage but cannot be decrypted with the current
+ * safeStorage backend (e.g. the OS keychain is temporarily unavailable or locked, or the app's
+ * keychain ACL was invalidated by a re-sign/update).
+ *
+ * This is deliberately distinct from a secret being absent so that callers can avoid destroying a
+ * still-valid-but-temporarily-unreadable secret (which would turn a transient failure into permanent
+ * session/encryption-key loss). See element-web#32521 and element-web#32715.
+ */
+export class SafeStorageDecryptionError extends Error {}
+
 function relaunchApp(): void {
     console.info("Relaunching app...");
     app.relaunch();
@@ -100,6 +111,10 @@ class StorageWriter {
         return this.store.get(this.getKey(key));
     }
 
+    public has(key: string): boolean {
+        return this.store.has(this.getKey(key));
+    }
+
     public delete(key: string): void {
         this.store.delete(this.getKey(key));
     }
@@ -115,15 +130,21 @@ class SafeStorageWriter extends StorageWriter {
 
     public get(key: string): string | undefined {
         const ciphertext = this.store.get<string, string | undefined>(this.getKey(key));
-        if (ciphertext) {
-            try {
-                return safeStorage.decryptString(Buffer.from(ciphertext, "base64"));
-            } catch (e) {
-                console.error("Failed to decrypt secret", e);
-                console.error("...ciphertext:", JSON.stringify(ciphertext));
-            }
+        if (!ciphertext) {
+            // No secret stored.
+            return undefined;
         }
-        return undefined;
+        try {
+            return safeStorage.decryptString(Buffer.from(ciphertext, "base64"));
+        } catch (e) {
+            // The secret exists but cannot be decrypted in this session. Returning undefined here (as
+            // we used to) is indistinguishable from "no secret stored", which makes callers create or
+            // overwrite a fresh secret and permanently destroy the still-valid ciphertext. Throw a
+            // typed error instead so callers can preserve the data and recover on a later launch once
+            // the keychain is readable again. See element-web#32521 / #32715.
+            console.error("Failed to decrypt secret", e);
+            throw new SafeStorageDecryptionError("Failed to decrypt safeStorage secret", { cause: e });
+        }
     }
 }
 
@@ -427,7 +448,12 @@ class Store extends ElectronStore<StoreData> {
         const data = this.get("safeStorage");
         if (data) {
             for (const key in data) {
-                this.set(secrets.getKey(key), secrets.get(key));
+                try {
+                    this.set(secrets.getKey(key), secrets.get(key));
+                } catch (e) {
+                    // Skip secrets that cannot be decrypted rather than overwriting them with undefined.
+                    console.error(`Skipping migration of undecryptable secret '${key}'`, e);
+                }
             }
             this.recordSafeStorageBackend("plaintext");
         }
@@ -457,6 +483,25 @@ class Store extends ElectronStore<StoreData> {
     public async getSecret(key: string): Promise<string | undefined> {
         await this.safeStorageReady();
         return this.secrets!.get(key);
+    }
+
+    /**
+     * Returns true if a secret is stored for the key but cannot currently be decrypted.
+     *
+     * Used to avoid destroying a recoverable secret by overwriting it with a freshly-generated one
+     * when the keychain is only temporarily unavailable. See element-web#32521 / #32715.
+     *
+     * @param key The string key name.
+     */
+    public async isSecretUndecryptable(key: string): Promise<boolean> {
+        await this.safeStorageReady();
+        if (!this.secrets!.has(key)) return false;
+        try {
+            this.secrets!.get(key);
+            return false;
+        } catch (e) {
+            return e instanceof SafeStorageDecryptionError;
+        }
     }
 
     /**
