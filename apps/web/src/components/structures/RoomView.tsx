@@ -1891,18 +1891,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
-        // In-timeline match stepping is enabled only for completed, single-room searches in this PR. All-rooms and
-        // cross-room stepping are deliberately left to PR-24.
-        const canStep = !inProgress && searchResults !== null && this.state.search?.scope === SearchScope.Room;
-        const currentRoomId = this.getRoomId();
-        const freshMatches =
-            canStep && searchResults
-                ? extractSearchMatches(searchResults).filter((match) => match.roomId === currentRoomId)
-                : undefined;
-        const freshPreviews =
-            canStep && searchResults
-                ? extractSearchResultPreviews(searchResults).filter((preview) => preview.roomId === currentRoomId)
-                : undefined;
+        // In-timeline match stepping is enabled for any completed search. Matches can span rooms — an all-rooms search
+        // spans rooms, and a room-scoped search of an upgraded room also covers its predecessor chain (#32258) — and
+        // stepping into a different room re-mounts this room-id-keyed RoomView, which re-hydrates the live stepper from
+        // the SearchSessionStore. So there is no current-room filter and no scope restriction; the store holds the
+        // full, ordered cross-room match list. (Stepping through pages beyond the loaded results is still deferred.)
+        const canStep = !inProgress && searchResults !== null;
+        const freshMatches = canStep && searchResults ? extractSearchMatches(searchResults) : undefined;
+        const freshPreviews = canStep && searchResults ? extractSearchResultPreviews(searchResults) : undefined;
         const freshHighlights =
             canStep && searchResults ? extractSearchHighlights(searchResults, this.state.search!.term) : undefined;
         const count = searchResults?.count ?? this.state.search?.count;
@@ -1919,8 +1915,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState({
             search: {
                 ...this.state.search!,
-                // NB: `count` (the backend's full estimate) and `matches.length` (this loaded page, filtered to the
-                // current room, capped at SEARCH_LIMIT) are intentionally different denominators.
+                // NB: `count` (the backend's full estimate across all matching rooms) and `matches.length` (this
+                // loaded page, capped at SEARCH_LIMIT) are intentionally different denominators.
                 count,
                 highlights: freshHighlights,
                 currentMatchIndex:

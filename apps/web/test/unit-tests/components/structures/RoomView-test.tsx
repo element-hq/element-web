@@ -60,7 +60,8 @@ import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import WidgetStore from "../../../../src/stores/WidgetStore";
 import { type ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRoomErrorPayload";
-import { SearchScope } from "../../../../src/Searching";
+import { type SearchInfo, SearchScope } from "../../../../src/Searching";
+import { SearchSessionStore } from "../../../../src/stores/SearchSessionStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
@@ -116,6 +117,10 @@ describe("RoomView", () => {
 
         crypto = cli.getCrypto()!;
         jest.spyOn(cli, "getCrypto").mockReturnValue(undefined);
+
+        // The SearchSessionStore is a singleton that outlives each test; reset it so a search session never leaks
+        // into the next test (abort:false so we don't reject a still-pending mock promise).
+        SearchSessionStore.instance.clear({ abort: false });
     });
 
     afterEach(() => {
@@ -218,6 +223,170 @@ describe("RoomView", () => {
         await mountRoomView(ref);
         return ref.current!;
     };
+
+    // Seed a completed search the way RoomView.onSearch would: the session lives in the SearchSessionStore, so a
+    // directly-setState'd `search` no longer populates the store-backed match stepper on its own. RoomSearchView then
+    // resolves the promise and onSearchUpdate fills in the matches. This mirrors onSearch INCLUDING its
+    // resetFocusedEvent step — a flag-guarded no-event ViewRoom that drops any event the timeline was pinned to — so
+    // the result-click clear gate behaves the same as in production.
+    const startSearch = (ref: RefObject<RoomView | null>, search: SearchInfo): void => {
+        act(() => {
+            SearchSessionStore.instance.start({
+                searchId: search.searchId,
+                roomId: search.roomId,
+                term: search.term,
+                scope: search.scope,
+                promise: search.promise,
+                abortController: search.abortController ?? new AbortController(),
+            });
+            ref.current!.setState({ timelineRenderingType: TimelineRenderingType.Search, search });
+            const focusedEventId = stores.roomViewStore.getInitialEventId();
+            if (focusedEventId) {
+                SearchSessionStore.instance.beginSteppingJump(focusedEventId);
+                defaultDispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    metricsTrigger: undefined,
+                });
+            }
+        });
+    };
+
+    describe("all-rooms / cross-room search match stepping", () => {
+        // These heavier mount-based stepping tests live in an early describe rather than alongside the later
+        // "message search" tests: a pre-existing cross-test isolation leak in this large suite leaves a client-less
+        // RoomView re-rendering (and crashing) for whichever mount-heavy test runs last among the later describes.
+        // Running early keeps state clean.
+        it("steps into a predecessor-room match (cross-room) via the SearchSessionStore", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            // A room-scoped search of an upgraded room also searches its predecessor chain (#32258), so the completed
+            // result set can contain matches that live in a *different* room. The session lives in the
+            // SearchSessionStore, which survives RoomView being re-mounted for the predecessor room — so these
+            // cross-room matches ARE steppable (there is no current-room filter): stepping into one dispatches
+            // ViewRoom for the predecessor room.
+            const predRoom = new Room("!predecessor:example.org", cli, "@alice:example.org");
+            rooms.set(predRoom.roomId, predRoom);
+
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+            const makeResult = (roomId: string, eventId: string, body: string, ts: number) =>
+                SearchResult.fromJson(
+                    {
+                        rank: 1,
+                        result: {
+                            room_id: roomId,
+                            event_id: eventId,
+                            sender: cli.getSafeUserId(),
+                            origin_server_ts: ts,
+                            content: { body, msgtype: "m.text" },
+                            type: EventType.RoomMessage,
+                        },
+                        context: { profile_info: {}, events_before: [], events_after: [] },
+                    },
+                    eventMapper,
+                );
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            startSearch(roomViewRef, {
+                searchId: 1,
+                roomId: room.roomId,
+                term: "match",
+                scope: SearchScope.Room,
+                promise: Promise.resolve({
+                    results: [
+                        makeResult(room.roomId, "$current", "current match", 2),
+                        makeResult(predRoom.roomId, "$predecessor", "predecessor match", 1),
+                    ],
+                    highlights: [],
+                    count: 2,
+                }),
+            });
+
+            // Both matches are now steppable; the store holds the full, unfiltered cross-room match list.
+            await screen.findByText("0 of 2", { exact: false });
+            expect(SearchSessionStore.instance.matches).toHaveLength(2);
+
+            const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+            // Step to the newest ($current, this room) then the older ($predecessor, the predecessor room).
+            await userEvent.click(screen.getByRole("button", { name: "Next match" }));
+            await screen.findByText("1 of 2", { exact: false });
+            await userEvent.click(screen.getByRole("button", { name: "Next match" }));
+            await screen.findByText("2 of 2", { exact: false });
+
+            // Stepping into the predecessor match dispatches ViewRoom for the *predecessor* room — in the real app
+            // this re-mounts the room-id-keyed RoomView, which re-hydrates the stepper from the store.
+            expect(dispatchSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewRoom,
+                    room_id: predRoom.roomId,
+                    event_id: "$predecessor",
+                    highlighted: true,
+                    scroll_into_view: true,
+                }),
+            );
+        });
+
+        it("enables the match stepper for all-rooms searches and steps across rooms", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            // All-rooms matches span rooms; the SearchSessionStore survives the cross-room re-mount, so the stepper is
+            // enabled for scope=All too (there is no scope===Room gate).
+            const otherRoom = new Room("!other:example.org", cli, "@alice:example.org");
+            rooms.set(otherRoom.roomId, otherRoom);
+
+            const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+            const makeResult = (roomId: string, eventId: string, ts: number) =>
+                SearchResult.fromJson(
+                    {
+                        rank: 1,
+                        result: {
+                            room_id: roomId,
+                            event_id: eventId,
+                            sender: cli.getSafeUserId(),
+                            origin_server_ts: ts,
+                            content: { body: "a match", msgtype: "m.text" },
+                            type: EventType.RoomMessage,
+                        },
+                        context: { profile_info: {}, events_before: [], events_after: [] },
+                    },
+                    eventMapper,
+                );
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            startSearch(roomViewRef, {
+                searchId: 1,
+                roomId: undefined, // all-rooms search
+                term: "match",
+                scope: SearchScope.All,
+                promise: Promise.resolve({
+                    results: [makeResult(room.roomId, "$here", 2), makeResult(otherRoom.roomId, "$there", 1)],
+                    highlights: [],
+                    count: 2,
+                }),
+            });
+
+            // The stepper IS enabled for all-rooms searches now, with the full cross-room match list.
+            await screen.findByText("0 of 2", { exact: false });
+            expect(screen.getByRole("button", { name: "Next match" })).toBeInTheDocument();
+
+            const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+            await userEvent.click(screen.getByRole("button", { name: "Next match" })); // $here (this room)
+            await screen.findByText("1 of 2", { exact: false });
+            await userEvent.click(screen.getByRole("button", { name: "Next match" })); // $there (the other room)
+            await screen.findByText("2 of 2", { exact: false });
+
+            // Stepping reaches a match in a different room, dispatching ViewRoom for that room.
+            expect(dispatchSpy).toHaveBeenCalledWith(
+                expect.objectContaining({ action: Action.ViewRoom, room_id: otherRoom.roomId, event_id: "$there" }),
+            );
+        });
+    });
 
     it("gets a room view store from MultiRoomViewStore when given a room ID", async () => {
         stores.multiRoomViewStore.getRoomViewStoreForRoom = jest.fn().mockReturnValue(stores.roomViewStore);
