@@ -27,14 +27,12 @@ import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from "../../languageHandler";
 import SearchWarning, { WarningKind } from "../views/elements/SearchWarning";
 import BaseCard from "../views/right_panel/BaseCard";
-import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
-import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
-import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
+import { RoomFilesView } from "../views/right_panel/RoomFilesView";
 
 interface IProps {
     roomId: string;
@@ -287,17 +285,11 @@ class FilePanel extends React.Component<IProps, IState> {
                     >
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                        <EventPresentationContextProvider layout={Layout.Group}>
-                            <TimelinePanel
-                                manageReadReceipts={false}
-                                manageReadMarkers={false}
-                                timelineSet={this.state.timelineSet}
-                                showUrlPreview={false}
-                                onPaginationRequest={this.onPaginationRequest}
-                                empty={emptyState}
-                                layout={Layout.Group}
-                            />
-                        </EventPresentationContextProvider>
+                        <RoomFilesView
+                            timelineSet={this.state.timelineSet}
+                            onPaginationRequest={this.onPaginationRequest}
+                            empty={emptyState}
+                        />
                     </BaseCard>
                 </ScopedRoomContextProvider>
             );

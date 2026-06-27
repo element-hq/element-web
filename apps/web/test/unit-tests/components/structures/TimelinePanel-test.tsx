@@ -518,6 +518,51 @@ describe("TimelinePanel", () => {
         expect(forceUpdateSpy).toHaveBeenCalledTimes(1);
     });
 
+    describe("eventFilter", () => {
+        it("renders only events matching the eventFilter predicate", async () => {
+            const [, room, events] = setupTestData(); // two events
+
+            const { container } = render(
+                <TimelinePanel
+                    {...getProps(room, events)}
+                    eventFilter={(ev: MatrixEvent) => ev.getId() === events[1].getId()}
+                />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            await waitFor(() => expectEvents(container, [events[1]]));
+        });
+
+        it("renders all events when no eventFilter is supplied", async () => {
+            const [, room, events] = setupTestData();
+
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            await waitFor(() => expectEvents(container, [events[0], events[1]]));
+        });
+
+        it("shows the empty state when the eventFilter removes every loaded event", async () => {
+            // Regression: the empty-state guard must consider the *filtered* list, not the full window — otherwise a
+            // tab/search that matches nothing (e.g. the Voice tab in a room with no voice messages) renders blank.
+            const [, room, events] = setupTestData(); // non-empty window
+
+            const { container } = render(
+                <TimelinePanel
+                    {...getProps(room, events)}
+                    eventFilter={() => false}
+                    empty={<div data-testid="file-panel-empty">No files</div>}
+                />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            await waitFor(() => expect(screen.getByTestId("file-panel-empty")).toBeInTheDocument());
+            expectEvents(container, []);
+        });
+    });
+
     describe("onRoomTimeline", () => {
         it("ignores events for other timelines", () => {
             const [client, room, events] = setupTestData();

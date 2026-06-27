@@ -46,6 +46,86 @@ exports[`FilePanel renders empty state 1`] = `
       </button>
     </div>
     <div
+      class="mx_RoomFilesView_header"
+    >
+      <div
+        aria-label="Filter files by type"
+        class="_flex_4dswl_9 mx_RoomFilesView_tabs"
+        role="listbox"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <button
+          aria-selected="true"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          All
+        </button>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Media
+        </button>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Files
+        </button>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Music
+        </button>
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="option"
+          tabindex="0"
+        >
+          Voice
+        </button>
+      </div>
+      <form
+        class="_root_1o4d9_17 mx_RoomFilesView_search"
+      >
+        <label
+          class="_label_1o4d9_60 _field_1o4d9_27 _search_1lktl_8"
+          for="react-use-id-2"
+        >
+          <svg
+            class="_icon_1lktl_37"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414zM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0"
+            />
+          </svg>
+          <input
+            class="_input_1lktl_52"
+            id="react-use-id-2"
+            name="file_search"
+            placeholder="Search by file name"
+            type="search"
+            value=""
+          />
+        </label>
+      </form>
+    </div>
+    <div
       class="mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
     >
       <div

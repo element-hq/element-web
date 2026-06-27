@@ -142,6 +142,13 @@ interface IProps {
     disableGrouping?: boolean;
 
     /**
+     * Optional predicate restricting which loaded events are *displayed* (e.g. the FilePanel's media-type tabs +
+     * in-tab search, Phase 4). Only the rendered list is filtered; pagination, scroll and read-marker logic still
+     * operate over the full timeline window. When omitted, every event is shown (existing behaviour).
+     */
+    eventFilter?: (event: MatrixEvent) => boolean;
+
+    /**
      * Enable updating the read receipts and markers on user activity.
      * @default true
      */
@@ -1821,7 +1828,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
             );
         }
 
-        if (this.state.events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
+        // Only the *displayed* list is filtered; this.state.events stays the full window so pagination/scroll/
+        // read-marker bookkeeping is unaffected (Phase 4 media tabs + in-tab search).
+        const events = this.props.eventFilter ? this.state.events.filter(this.props.eventFilter) : this.state.events;
+
+        // The empty-state check uses the *filtered* list so a tab/search that matches nothing shows the empty
+        // state instead of a blank panel.
+        if (events.length == 0 && !this.state.canBackPaginate && this.props.empty) {
             return (
                 <div className={this.props.className + " mx_RoomView_messageListWrapper"}>
                     <div className="mx_RoomView_empty">{this.props.empty}</div>
@@ -1842,7 +1855,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // If the state is PREPARED or CATCHUP, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating = this.state.forwardPaginating || this.syncImpliesForwardPaginating;
-        const events = this.state.events;
         return (
             <MessagePanel
                 ref={this.messagePanel}
