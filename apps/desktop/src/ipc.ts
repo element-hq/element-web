@@ -9,7 +9,7 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { consumeDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
@@ -137,15 +137,26 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }
             break;
         case "getDesktopCapturerSources":
-            ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
-                id: source.id,
-                name: source.name,
-                thumbnailURL: source.thumbnail.toDataURL(),
-            }));
+            try {
+                ret = (await desktopCapturer.getSources(args[0])).map((source) => ({
+                    id: source.id,
+                    name: source.name,
+                    thumbnailURL: source.thumbnail.toDataURL(),
+                }));
+            } catch (e) {
+                // A native getSources() failure must not reject this handler: doing so would skip the
+                // terminal ipcReply below and leave the renderer's screen-share picker awaiting forever.
+                // Reply with an empty list so the picker shows no sources and can be cancelled cleanly.
+                // See element-web#32398.
+                console.error("Failed to get desktop capturer sources", e);
+                ret = [];
+            }
             break;
         case "callDisplayMediaCallback":
-            await getDisplayMediaCallback()?.({ video: args[0] });
-            setDisplayMediaCallback(null);
+            // Consume-once: a duplicate or stale IPC (e.g. left over from the macOS 15+ native picker
+            // path, which never consumes the callback via the renderer) becomes a safe no-op rather
+            // than invoking a stale callback twice.
+            consumeDisplayMediaCallback()?.({ video: args[0] });
             ret = null;
             break;
 
