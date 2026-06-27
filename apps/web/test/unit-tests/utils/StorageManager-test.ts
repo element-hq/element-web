@@ -10,6 +10,7 @@ import "fake-indexeddb/auto";
 
 import { IDBFactory } from "fake-indexeddb";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import * as StorageManager from "../../../src/utils/StorageManager";
 
@@ -117,6 +118,151 @@ describe("StorageManager", () => {
                 // eslint-disable-next-line no-global-assign
                 indexedDB = new IDBFactory();
             });
+        });
+    });
+
+    describe("tryPersistStorage", () => {
+        let originalStorage: PropertyDescriptor | undefined;
+        let originalRequestStorageAccess: PropertyDescriptor | undefined;
+
+        // jsdom does not implement navigator.storage / document.requestStorageAccess, so we
+        // shadow them per-test (configurable so they can be reset cleanly).
+        function setStorage(value: unknown): void {
+            Object.defineProperty(navigator, "storage", { value, configurable: true });
+        }
+
+        function setRequestStorageAccess(value: unknown): void {
+            Object.defineProperty(document, "requestStorageAccess", { value, configurable: true });
+        }
+
+        beforeAll(() => {
+            originalStorage = Object.getOwnPropertyDescriptor(navigator, "storage");
+            originalRequestStorageAccess = Object.getOwnPropertyDescriptor(document, "requestStorageAccess");
+        });
+
+        beforeEach(() => {
+            jest.spyOn(logger, "log").mockImplementation(() => {});
+            jest.spyOn(logger, "warn").mockImplementation(() => {});
+            jest.spyOn(logger, "error").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            delete (window as unknown as { electron?: unknown }).electron;
+            jest.restoreAllMocks();
+        });
+
+        afterAll(() => {
+            if (originalStorage) {
+                Object.defineProperty(navigator, "storage", originalStorage);
+            } else {
+                setStorage(undefined);
+            }
+            if (originalRequestStorageAccess) {
+                Object.defineProperty(document, "requestStorageAccess", originalRequestStorageAccess);
+            } else {
+                setRequestStorageAccess(undefined);
+            }
+        });
+
+        it("returns true and does not re-request when storage is already persisted", async () => {
+            const persist = jest.fn().mockResolvedValue(true);
+            const persisted = jest.fn().mockResolvedValue(true);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persisted).toHaveBeenCalled();
+            expect(persist).not.toHaveBeenCalled();
+            expect(logger.warn).not.toHaveBeenCalled();
+        });
+
+        it("requests persistence and returns true when granted", async () => {
+            const persist = jest.fn().mockResolvedValue(true);
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persist).toHaveBeenCalled();
+            expect(logger.warn).not.toHaveBeenCalled();
+        });
+
+        it("requests persistence directly when persisted() is unavailable", async () => {
+            const persist = jest.fn().mockResolvedValue(true);
+            setStorage({ persist });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persist).toHaveBeenCalledTimes(1);
+        });
+
+        it("still requests persistence when querying the persisted state fails", async () => {
+            const persisted = jest.fn().mockRejectedValue(new Error("query failed"));
+            const persist = jest.fn().mockResolvedValue(true);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persist).toHaveBeenCalled();
+        });
+
+        it("returns false and warns (without a desktop note) when persistence is denied on web", async () => {
+            const persist = jest.fn().mockResolvedValue(false);
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining("Persistent storage"));
+            expect(logger.warn).not.toHaveBeenCalledWith(expect.stringContaining("desktop"));
+        });
+
+        it("includes a desktop-specific warning when persistence is denied on desktop", async () => {
+            (window as unknown as { electron?: unknown }).electron = {};
+            const persist = jest.fn().mockResolvedValue(false);
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining("desktop"));
+        });
+
+        it("falls back to document.requestStorageAccess (Safari) and returns true on success", async () => {
+            setStorage(undefined);
+            const requestStorageAccess = jest.fn().mockResolvedValue(undefined);
+            setRequestStorageAccess(requestStorageAccess);
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(requestStorageAccess).toHaveBeenCalled();
+        });
+
+        it("falls back to requestStorageAccess when navigator.storage lacks persist()", async () => {
+            const requestStorageAccess = jest.fn().mockResolvedValue(undefined);
+            setStorage({ persisted: jest.fn().mockResolvedValue(false) });
+            setRequestStorageAccess(requestStorageAccess);
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(requestStorageAccess).toHaveBeenCalled();
+        });
+
+        it("returns false and warns when document.requestStorageAccess rejects", async () => {
+            setStorage(undefined);
+            const requestStorageAccess = jest.fn().mockRejectedValue(new Error("denied"));
+            setRequestStorageAccess(requestStorageAccess);
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.warn).toHaveBeenCalled();
+        });
+
+        it("returns false without throwing when persistence is unsupported", async () => {
+            setStorage(undefined);
+            setRequestStorageAccess(undefined);
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+        });
+
+        it("does not reject but logs an error if requesting persistence throws", async () => {
+            const persist = jest.fn().mockRejectedValue(new Error("boom"));
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.error).toHaveBeenCalled();
         });
     });
 });

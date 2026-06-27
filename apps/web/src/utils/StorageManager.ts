@@ -22,23 +22,87 @@ function log(msg: string): void {
     logger.log(`StorageManager: ${msg}`);
 }
 
+function warn(msg: string): void {
+    logger.warn(`StorageManager: ${msg}`);
+}
+
 function error(msg: string, ...args: any[]): void {
     logger.error(`StorageManager: ${msg}`, ...args);
 }
 
-export function tryPersistStorage(): void {
-    if (navigator.storage && navigator.storage.persist) {
-        navigator.storage.persist().then((persistent) => {
-            logger.log("StorageManager: Persistent?", persistent);
-        });
-    } else if (document.requestStorageAccess) {
-        // Safari
-        document.requestStorageAccess().then(
-            () => logger.log("StorageManager: Persistent?", true),
-            () => logger.log("StorageManager: Persistent?", false),
-        );
-    } else {
-        logger.log("StorageManager: Persistence unsupported");
+/**
+ * Warn (in the logs, captured by rageshakes) that the browser refused to make our storage
+ * persistent. Without durable storage the browser may evict IndexedDB — which holds the
+ * end-to-end encryption crypto store — under storage pressure, forcing a re-login and
+ * recovery-key re-entry. See https://github.com/element-hq/element-web/issues/32198.
+ *
+ * We deliberately do NOT surface a user-facing dialog/toast here: on a packaged desktop
+ * (custom-scheme) build Chromium's durable-storage heuristic commonly returns `false` even
+ * in the healthy case, so a per-login warning would be a false-alarm flood. The actual
+ * post-eviction user prompt is handled separately by {@link checkConsistency} →
+ * StorageEvictedDialog.
+ */
+function warnPersistenceDenied(): void {
+    let msg =
+        "Persistent storage was not granted. The browser may evict locally stored data " +
+        "(including the end-to-end encryption keys in the crypto store) under storage pressure, " +
+        "which can force a re-login. See https://github.com/element-hq/element-web/issues/32198.";
+    if (window.electron) {
+        // On desktop, eviction means silent session/crypto-store loss; flag it more strongly.
+        msg += " Running on desktop: ensure key backup is enabled so encrypted messages can be recovered.";
+    }
+    warn(msg);
+}
+
+/**
+ * Ask the browser to make our storage persistent (durable), so it is not evicted under
+ * storage pressure. Acts on the result: warns when persistence is denied.
+ *
+ * Invoked on every login *and* session restore, so we first check whether storage is
+ * already persistent and short-circuit to avoid re-requesting (some browsers re-prompt).
+ *
+ * Never rejects — the sole caller treats it as fire-and-forget.
+ *
+ * @returns whether storage is persistent after the attempt.
+ */
+export async function tryPersistStorage(): Promise<boolean> {
+    try {
+        if (navigator.storage && navigator.storage.persist) {
+            // Avoid re-requesting (and possibly re-prompting) when we already have it. A failure
+            // to *query* the state must not stop us from *requesting* persistence below.
+            try {
+                if (navigator.storage.persisted && (await navigator.storage.persisted())) {
+                    log("Persistent storage already granted");
+                    return true;
+                }
+            } catch {
+                warn("Could not query persisted-storage state; requesting persistence anyway");
+            }
+            const persistent = await navigator.storage.persist();
+            log(`Persistent? ${persistent}`);
+            if (!persistent) {
+                warnPersistenceDenied();
+            }
+            return persistent;
+        } else if (document.requestStorageAccess) {
+            // Safari
+            try {
+                await document.requestStorageAccess();
+                log("Persistent? true");
+                return true;
+            } catch {
+                log("Persistent? false");
+                warnPersistenceDenied();
+                return false;
+            }
+        } else {
+            log("Persistence unsupported");
+            return false;
+        }
+    } catch (e) {
+        // A storage-API hiccup must never reject into the fire-and-forget caller.
+        error("Failed to request persistent storage", e);
+        return false;
     }
 }
 
