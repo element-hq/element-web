@@ -2115,6 +2115,10 @@
             "all_rooms_button": "Search all rooms",
             "back_to_results": "Back to results",
             "placeholder": "Search messages…",
+            "sender_filter_button": "Filter by sender",
+            "sender_filter_button_active": "Filter by sender (%(count)s selected)",
+            "sender_filter_clear": "Clear sender filter",
+            "sender_filter_label": "Messages from",
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"

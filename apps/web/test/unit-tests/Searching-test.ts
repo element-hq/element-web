@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type IResultRoomEvents } from "matrix-js-sdk/src/matrix";
 
-import eventSearch from "../../src/Searching";
+import eventSearch, { searchPagination } from "../../src/Searching";
 import EventIndexPeg from "../../src/indexing/EventIndexPeg";
 import { createTestClient } from "../test-utils";
 
@@ -257,6 +257,207 @@ describe("Searching", () => {
 
             const thirdMainEvent = mockSearchResults.results![2].result as unknown as Record<string, unknown>;
             expect(thirdMainEvent.state_key).toBeUndefined();
+        });
+    });
+
+    describe("from:/sender filter", () => {
+        const rawResult = (sender: string, eventId: string, ts: number): any => ({
+            rank: 1,
+            result: {
+                event_id: eventId,
+                room_id: "!room:example.org",
+                sender,
+                type: "m.room.message",
+                origin_server_ts: ts,
+                content: { body: "hello", msgtype: "m.text" },
+            },
+            context: { events_before: [], events_after: [], profile_info: {} },
+        });
+
+        // Pretend the searched room is encrypted so eventSearch takes the local (Seshat) path.
+        const mockEncryptedRoom = (): void => {
+            jest.spyOn(mockClient, "getCrypto").mockReturnValue({
+                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            } as any);
+        };
+
+        const captureProcessed = (): { get: () => any } => {
+            let captured: any;
+            jest.spyOn(mockClient, "processRoomEventsSearch").mockImplementation(((sr: any, response: any) => {
+                captured = response;
+                return { ...sr, results: [], highlights: [] };
+            }) as any);
+            return { get: () => captured };
+        };
+
+        it("sets filter.senders on the homeserver search body when senders are given", async () => {
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(null); // no local index -> server-side path
+            const searchSpy = jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+
+            await eventSearch(mockClient, "hello", "!room:example.org", undefined, ["@alice:example.org"]);
+
+            const body = (searchSpy.mock.calls[0][0] as any).body;
+            expect(body.search_categories.room_events.filter.senders).toEqual(["@alice:example.org"]);
+            // The room scope is preserved alongside the new sender scope.
+            expect(body.search_categories.room_events.filter.rooms).toEqual(["!room:example.org"]);
+        });
+
+        it("carries filter.senders into the stored _query so server-side pagination keeps it", async () => {
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(null);
+            jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+            jest.spyOn(mockClient, "processRoomEventsSearch").mockImplementation(((sr: any) => sr) as any);
+
+            const result: any = await eventSearch(mockClient, "hello", "!room:example.org", undefined, [
+                "@alice:example.org",
+            ]);
+
+            expect(result._query.search_categories.room_events.filter.senders).toEqual(["@alice:example.org"]);
+        });
+
+        it("over-fetches the Seshat limit when a sender filter is active", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({ count: 0, results: [], highlights: [] } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+
+            await eventSearch(mockClient, "hello", "!room:example.org", undefined, ["@bob:example.org"]);
+
+            expect(mockEventIndex.search.mock.calls[0][0].limit).toBeGreaterThan(10);
+        });
+
+        it("keeps the default Seshat limit when no sender filter is given", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({ count: 0, results: [], highlights: [] } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+
+            await eventSearch(mockClient, "hello", "!room:example.org");
+
+            expect(mockEventIndex.search.mock.calls[0][0].limit).toBe(10);
+        });
+
+        it("post-filters Seshat results to the selected sender", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({
+                    count: 2,
+                    results: [rawResult("@alice:example.org", "$a", 200), rawResult("@bob:example.org", "$b", 100)],
+                    highlights: [],
+                } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+            const processed = captureProcessed();
+
+            await eventSearch(mockClient, "hello", "!room:example.org", undefined, ["@bob:example.org"]);
+
+            const senders = processed.get().search_categories.room_events.results.map((r: any) => r.result.sender);
+            expect(senders).toEqual(["@bob:example.org"]);
+        });
+
+        it("returns an empty result without throwing when the sender has no matches", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({
+                    count: 1,
+                    results: [rawResult("@alice:example.org", "$a", 200)],
+                    highlights: [],
+                } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+            const processed = captureProcessed();
+
+            await expect(
+                eventSearch(mockClient, "hello", "!room:example.org", undefined, ["@nobody:example.org"]),
+            ).resolves.toBeDefined();
+
+            expect(processed.get().search_categories.room_events.results).toEqual([]);
+        });
+
+        it("re-applies the sender post-filter on Seshat pagination", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({
+                    count: 2,
+                    results: [rawResult("@alice:example.org", "$a2", 80), rawResult("@bob:example.org", "$b2", 70)],
+                    highlights: [],
+                } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            const processed = captureProcessed();
+
+            const searchResult: any = {
+                results: [],
+                highlights: [],
+                seshatQuery: { search_term: "hello", room_id: "!room:example.org", limit: 50, next_batch: "n1" },
+                senderFilter: ["@bob:example.org"],
+            };
+
+            await searchPagination(mockClient, searchResult);
+
+            const senders = processed.get().search_categories.room_events.results.map((r: any) => r.result.sender);
+            expect(senders).toEqual(["@bob:example.org"]);
+        });
+
+        it("filters both the homeserver and Seshat legs for an all-rooms search", async () => {
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({
+                    count: 2,
+                    results: [rawResult("@alice:example.org", "$e", 90), rawResult("@bob:example.org", "$f", 80)],
+                    highlights: [],
+                } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            const searchSpy = jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+            const processed = captureProcessed();
+
+            // roomId undefined => All Rooms => combinedSearch
+            await eventSearch(mockClient, "hello", undefined, undefined, ["@bob:example.org"]);
+
+            const body = (searchSpy.mock.calls[0][0] as any).body;
+            expect(body.search_categories.room_events.filter.senders).toEqual(["@bob:example.org"]);
+            const senders = processed.get().search_categories.room_events.results.map((r: any) => r.result.sender);
+            expect(senders).toEqual(["@bob:example.org"]);
+        });
+
+        it("does not set filter.senders on the homeserver body when no sender filter is given", async () => {
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(null);
+            const searchSpy = jest.spyOn(mockClient, "search").mockResolvedValue({
+                search_categories: { room_events: { results: [], count: 0, highlights: [] } },
+            } as any);
+
+            await eventSearch(mockClient, "hello", "!room:example.org");
+
+            const body = (searchSpy.mock.calls[0][0] as any).body;
+            expect(body.search_categories.room_events.filter.senders).toBeUndefined();
+        });
+
+        it("treats an empty senders array as no filter (the cleared-filter case)", async () => {
+            // The Clear action passes []; it must behave exactly like undefined — no homeserver filter, no Seshat
+            // over-fetch, no post-filter dropping results.
+            const mockEventIndex = {
+                search: jest.fn().mockResolvedValue({
+                    count: 2,
+                    results: [rawResult("@alice:example.org", "$a", 200), rawResult("@bob:example.org", "$b", 100)],
+                    highlights: [],
+                } as IResultRoomEvents),
+            };
+            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            mockEncryptedRoom();
+            const processed = captureProcessed();
+
+            await eventSearch(mockClient, "hello", "!room:example.org", undefined, []);
+
+            // Default Seshat limit (no over-fetch) and every sender preserved (no post-filter).
+            expect(mockEventIndex.search.mock.calls[0][0].limit).toBe(10);
+            const senders = processed.get().search_categories.room_events.results.map((r: any) => r.result.sender);
+            expect(senders).toEqual(["@alice:example.org", "@bob:example.org"]);
         });
     });
 });

@@ -329,6 +329,38 @@ describe("RoomView", () => {
             );
         });
 
+        it("re-runs the active search with the from:/sender filter, preserving term and scope", async () => {
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+            const roomViewRef = createRef<RoomView>();
+            await mountRoomView(roomViewRef);
+            await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+
+            startSearch(roomViewRef, {
+                searchId: 1,
+                roomId: room.roomId,
+                term: "match",
+                scope: SearchScope.Room,
+                promise: Promise.resolve({ results: [], highlights: [], count: 0 } as any),
+            });
+
+            // The sender-filter control calls onSearchSendersChange; it must re-run the search keeping the current
+            // term + scope, and record the senders on both the session store and the render-state mirror. We invoke
+            // the (private) handler directly via the ref — driving it through the full RightPanel UI would add a heavy
+            // member-list render for no extra coverage; the store spy + state assertion below prove the wiring.
+            const startSpy = jest.spyOn(SearchSessionStore.instance, "start");
+            act(() => {
+                (
+                    roomViewRef.current as unknown as { onSearchSendersChange: (senders: string[]) => void }
+                ).onSearchSendersChange(["@bob:example.org"]);
+            });
+
+            expect(startSpy).toHaveBeenCalledWith(
+                expect.objectContaining({ term: "match", scope: SearchScope.Room, senders: ["@bob:example.org"] }),
+            );
+            expect(roomViewRef.current!.state.search!.senders).toEqual(["@bob:example.org"]);
+        });
+
         it("enables the match stepper for all-rooms searches and steps across rooms", async () => {
             room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
 

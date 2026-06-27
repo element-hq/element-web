@@ -1862,16 +1862,18 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             });
     }
 
-    private onSearch = (term: string, scope = SearchScope.Room): void => {
+    // `senders` defaults to the current session's filter so a term change (onSearchChange) or scope change
+    // (onSearchScopeChange) preserves the active `from:` filter; the sender-filter control passes it explicitly.
+    private onSearch = (term: string, scope = SearchScope.Room, senders = this.state.search?.senders): void => {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
-        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
+        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal, senders);
         // make sure that we don't end up showing results from an aborted search by keeping a unique id.
         const searchId = new Date().getTime();
 
         // The search session lives in the SearchSessionStore so the shared stepper and clear gates read one source.
-        SearchSessionStore.instance.start({ searchId, roomId, term, scope, promise, abortController });
+        SearchSessionStore.instance.start({ searchId, roomId, term, scope, senders, promise, abortController });
 
         this.setState({
             timelineRenderingType: TimelineRenderingType.Search,
@@ -1880,6 +1882,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 roomId,
                 term,
                 scope,
+                senders,
                 promise,
                 abortController,
             },
@@ -1888,6 +1891,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onSearchScopeChange = (scope: SearchScope): void => {
         this.onSearch(this.state.search?.term ?? "", scope);
+    };
+
+    // Re-run the active search with a new `from:`/sender filter, keeping the current term and scope. An empty array
+    // clears the filter.
+    private onSearchSendersChange = (senders: string[]): void => {
+        this.onSearch(this.state.search?.term ?? "", this.state.search?.scope ?? SearchScope.Room, senders);
     };
 
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null, error: Error | null): void => {
@@ -2791,7 +2800,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 e2eStatus={this.state.e2eStatus}
                 onSearchChange={this.onSearchChange}
                 onSearchCancel={this.onCancelSearchClick}
+                onSearchSendersChange={this.onSearchSendersChange}
                 searchTerm={this.state.search?.term ?? ""}
+                searchSenders={this.state.search?.senders ?? []}
             />
         ) : undefined;
 
