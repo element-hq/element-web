@@ -168,6 +168,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         gatekeeperAssess: true,
         strictVerify: true,
         entitlements: "./build/entitlements.mac.plist",
+        // Under the hardened runtime macOS requires these Info.plist usage-description strings to
+        // raise the TCC consent prompt for camera/microphone; without them getUserMedia is denied
+        // before the user is ever asked (element-web#32373). The matching device entitlements live
+        // in build/entitlements.mac.plist, and the main process triggers the prompt via
+        // systemPreferences.askForMediaAccess in src/media-permissions.ts.
+        extendInfo: {
+            NSCameraUsageDescription: "The camera is used for video calls.",
+            NSMicrophoneUsageDescription: "The microphone is used for voice and video calls.",
+        },
         icon: "build/icon.icon",
         mergeASARs: true,
         x64ArchFiles: "**/matrix-seshat/*.node", // hak already runs lipo
