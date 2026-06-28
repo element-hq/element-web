@@ -218,6 +218,7 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                 className="mx_no_textinput"
                 ref={vm.searchInputRef}
                 autoFocus={focusRoomSearch}
+                onFocus={vm.onSearchFocus}
                 onKeyDown={vm.onUpdateSearchInput}
             />
         </Form.Root>
