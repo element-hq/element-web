@@ -644,6 +644,20 @@ export default class EventIndex extends EventEmitter {
             direction: Direction.Backward,
         };
 
+        // Don't queue an *exact* duplicate of a checkpoint we already have. A
+        // single gappy sync calls room.resetLiveTimeline once, but that resets
+        // every timeline set and thread of the room, each emitting a TimelineReset.
+        // onTimelineReset reads the main live timeline's backward token regardless
+        // of which one fired, so one gap can call this several times with the same
+        // token, stacking exact duplicates in the in-memory queue (the DB dedupes
+        // via a UNIQUE constraint) and wasting crawler cycles re-walking the same
+        // range. Distinct gaps carry different tokens and still queue, so real gaps
+        // stay covered.
+        if (this.hasQueuedCheckpoint(checkpoint)) {
+            this.logger.debug("Skipping duplicate checkpoint", JSON.stringify(checkpoint));
+            return;
+        }
+
         this.logger.debug("Adding checkpoint", JSON.stringify(checkpoint));
 
         try {
@@ -653,6 +667,23 @@ export default class EventIndex extends EventEmitter {
         }
 
         this.crawlerCheckpoints.push(checkpoint);
+    }
+
+    /**
+     * Whether the crawl queue (or the checkpoint currently being processed)
+     * already contains an exact duplicate of the given checkpoint - same room,
+     * token, direction and fullCrawl flag.
+     */
+    private hasQueuedCheckpoint(cp: ICrawlerCheckpoint): boolean {
+        const matches = (c: ICrawlerCheckpoint): boolean =>
+            c.roomId === cp.roomId &&
+            c.token === cp.token &&
+            c.direction === cp.direction &&
+            Boolean(c.fullCrawl) === Boolean(cp.fullCrawl);
+        const queue = this.currentCheckpoint
+            ? [this.currentCheckpoint, ...this.crawlerCheckpoints]
+            : this.crawlerCheckpoints;
+        return queue.some(matches);
     }
 
     /**
