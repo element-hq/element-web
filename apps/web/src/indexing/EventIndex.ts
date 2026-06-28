@@ -1281,39 +1281,6 @@ export default class EventIndex extends EventEmitter {
         }
     }
 
-    public crawlingRooms(): {
-        /** The rooms that we are currently crawling. */
-        crawlingRooms: Set<string>;
-
-        /** All the encrypted rooms known by the MatrixClient. */
-        totalRooms: Set<string>;
-    } {
-        const totalRooms = new Set<string>();
-        const crawlingRooms = new Set<string>();
-
-        this.crawlerCheckpoints.forEach((checkpoint, index) => {
-            crawlingRooms.add(checkpoint.roomId);
-        });
-
-        if (this.currentCheckpoint !== null) {
-            crawlingRooms.add(this.currentCheckpoint.roomId);
-        }
-
-        const client = MatrixClientPeg.safeGet();
-        const rooms = client.getRooms();
-
-        const isRoomEncrypted = (room: Room): boolean => {
-            return client.isRoomEncrypted(room.roomId);
-        };
-
-        const encryptedRooms = rooms.filter(isRoomEncrypted);
-        encryptedRooms.forEach((room, index) => {
-            totalRooms.add(room.roomId);
-        });
-
-        return { crawlingRooms, totalRooms };
-    }
-
     /**
      * Cheap, synchronous indexed / indexing / errored breakdown of the joined
      * encrypted rooms (see {@link IIndexingStatus}). Rooms we deliberately don't
