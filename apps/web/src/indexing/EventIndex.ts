@@ -74,6 +74,16 @@ interface ICrawler {
     cancel(): void;
 }
 
+/** A breakdown of the encrypted rooms we're indexing, for the UI to consume. */
+export interface IIndexingStatus {
+    /** Joined encrypted rooms still being back-filled (have a crawler checkpoint). */
+    indexing: number;
+    /** Joined encrypted rooms fully crawled (no checkpoint left). */
+    indexed: number;
+    /** Joined encrypted rooms the crawler permanently errored on and gave up. */
+    errored: number;
+}
+
 /**
  * Event indexing class that wraps the platform specific event indexing.
  */
@@ -1302,5 +1312,44 @@ export default class EventIndex extends EventEmitter {
         });
 
         return { crawlingRooms, totalRooms };
+    }
+
+    /**
+     * Cheap, synchronous indexed / indexing / errored breakdown of the joined
+     * encrypted rooms (see {@link IIndexingStatus}). Rooms we deliberately don't
+     * index are not counted: invites / left rooms, and ones whose encryption the
+     * crypto module can't speak ({@link unindexableRooms}).
+     *
+     * "No checkpoint" reliably means "fully indexed" rather than "never started"
+     * only because the reconciliation pass seeds a checkpoint for every missed
+     * joined+encrypted room. In-memory only (no Seshat IPC), so it's cheap enough
+     * to call on every refresh.
+     */
+    public getIndexingStatus(): IIndexingStatus {
+        const client = MatrixClientPeg.safeGet();
+
+        const checkpointed = new Set<string>(this.crawlerCheckpoints.map((c) => c.roomId));
+        if (this.currentCheckpoint) checkpointed.add(this.currentCheckpoint.roomId);
+
+        let indexing = 0;
+        let indexed = 0;
+        let errored = 0;
+
+        for (const room of client.getRooms()) {
+            if (!client.isRoomEncrypted(room.roomId)) continue;
+            if (room.getMyMembership() !== KnownMembership.Join) continue;
+            if (this.unindexableRooms.has(room.roomId)) continue;
+
+            if (checkpointed.has(room.roomId)) {
+                // Being crawled (also covers errored rooms that have been re-seeded).
+                indexing += 1;
+            } else if (this.erroredRooms.has(room.roomId)) {
+                errored += 1;
+            } else {
+                indexed += 1;
+            }
+        }
+
+        return { indexing, indexed, errored };
     }
 }
