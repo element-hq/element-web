@@ -97,6 +97,15 @@ export default class EventIndex extends EventEmitter {
      */
     private readonly unindexableRooms = new Set<string>();
 
+    /**
+     * Joined rooms the crawler has actually given up on: it hit a permanent
+     * failure (e.g. a 403/404/400 from /messages) so the checkpoint was dropped
+     * and won't be retried. Cleared once the room successfully crawls again (e.g.
+     * after rejoining). Unlike {@link unindexableRooms} these are a real problem
+     * to surface, not a room we deliberately skip.
+     */
+    private readonly erroredRooms = new Set<string>();
+
     private readonly logger;
 
     public constructor() {
@@ -527,6 +536,19 @@ export default class EventIndex extends EventEmitter {
         };
 
         await indexManager.addEventToIndex(e, profile);
+
+        // If we'd given up on this room (errored) but it's now delivering
+        // indexable live events, it's clearly accessible again. Clear the flag
+        // and re-seed a backfill to retry what we'd previously failed to fetch.
+        // Clearing *before* re-seeding bounds retries to the crawl rate, not the
+        // event rate: if the backfill fails again the crawler re-flags it, and
+        // the next live event retries.
+        const roomId = ev.getRoomId();
+        if (roomId && this.erroredRooms.has(roomId)) {
+            this.erroredRooms.delete(roomId);
+            this.logger.debug("Re-attempting a previously given-up room after a live event", roomId);
+            await this.addRoomCheckpoint(roomId, true);
+        }
     }
 
     /**
@@ -658,12 +680,21 @@ export default class EventIndex extends EventEmitter {
                     checkpoint.direction,
                 );
             } catch (e) {
-                if (e instanceof HTTPError && e.httpStatus === 403) {
+                // A permanent client error (403 no-access, 404 room gone, 400 bad
+                // request) won't be fixed by retrying, so give up on the room and
+                // mark it errored. Rate-limit (429), auth (401), 5xx and network
+                // errors are transient and keep retrying, so a temporary outage
+                // never permanently abandons rooms.
+                const status = e instanceof HTTPError ? e.httpStatus : undefined;
+                const permanent =
+                    status !== undefined && status >= 400 && status < 500 && status !== 429 && status !== 401;
+
+                if (permanent) {
                     this.logger.debug(
-                        "Removing checkpoint as we don't have ",
-                        "permissions to fetch messages from this room.",
+                        `Giving up on room ${checkpoint.roomId}: permanent error ${status} fetching messages`,
                         JSON.stringify(checkpoint),
                     );
+                    this.erroredRooms.add(checkpoint.roomId);
                     try {
                         await indexManager.removeCrawlerCheckpoint(checkpoint);
                     } catch (e) {
@@ -676,6 +707,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
+                // Transient error - retry.
                 this.logger.warn(`Error crawling using checkpoint ${JSON.stringify(checkpoint)}:`, e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
@@ -776,6 +808,10 @@ export default class EventIndex extends EventEmitter {
                 }
 
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint);
+
+                // A batch crawled successfully, so this room is no longer errored
+                // (e.g. it was re-seeded after a rejoin).
+                this.erroredRooms.delete(checkpoint.roomId);
 
                 // We didn't get a valid new checkpoint from the server, nothing
                 // to do here anymore.
