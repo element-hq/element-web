@@ -55,6 +55,21 @@ const CRAWLER_IDLE_TIME = 5000;
 // The maximum number of events our crawler should fetch in a single crawl.
 const EVENTS_PER_CRAWL = 100;
 
+/**
+ * Sentinel pagination token marking a room as fully crawled. When a backward
+ * fullCrawl reaches the start of history we swap its checkpoint for one bearing
+ * this token, persisting the "fully crawled" mark in Seshat's sqlite (alongside
+ * real checkpoints) so it lives and dies with the index it describes.
+ *
+ * We only ever compare loaded tokens against this constant and never paginate
+ * from it (such checkpoints are filtered out of the crawl queue). A real server
+ * pagination token colliding with this exact string is vanishingly unlikely, and
+ * even then the worst case is one room wrongly treated as fully crawled - a
+ * recoverable, single-room miss. A dedicated boolean column would be cleaner but
+ * needs a Seshat schema change; this keeps the fix client-side.
+ */
+const FULLY_CRAWLED_TOKEN = "fully_crawled";
+
 interface ICrawler {
     cancel(): void;
 }
@@ -106,6 +121,15 @@ export default class EventIndex extends EventEmitter {
      */
     private readonly erroredRooms = new Set<string>();
 
+    /**
+     * Rooms whose backward fullCrawl has reached the start of their history - we
+     * have indexed everything there is to. Matters most for rooms with no
+     * indexable content, which otherwise look unindexed (isRoomIndexed === false)
+     * forever and get re-crawled on every restart. Persisted as a sentinel
+     * checkpoint (see {@link FULLY_CRAWLED_TOKEN}) and hydrated at init.
+     */
+    private readonly fullyCrawledRooms = new Set<string>();
+
     private readonly logger;
 
     public constructor() {
@@ -125,10 +149,32 @@ export default class EventIndex extends EventEmitter {
             this.needsInitialCheckpoints = true;
         }
 
-        this.crawlerCheckpoints = await indexManager.loadCheckpoints();
+        // loadCheckpoints stores our fully-crawled markers as ordinary
+        // checkpoints (same table) bearing FULLY_CRAWLED_TOKEN. Partition them on
+        // load: markers hydrate fullyCrawledRooms; real checkpoints drive the
+        // crawler. They live and die with the index, so a reset index just has none.
+        const loadedCheckpoints = await indexManager.loadCheckpoints();
+        this.crawlerCheckpoints = [];
+        for (const checkpoint of loadedCheckpoints) {
+            if (checkpoint.token === FULLY_CRAWLED_TOKEN) {
+                this.fullyCrawledRooms.add(checkpoint.roomId);
+            } else {
+                this.crawlerCheckpoints.push(checkpoint);
+            }
+        }
         this.logger.debug("Loaded checkpoints", JSON.stringify(this.crawlerCheckpoints));
 
         this.registerListeners();
+    }
+
+    /** The sentinel checkpoint that marks a room as fully crawled in Seshat's DB. */
+    private fullyCrawledMarker(roomId: string): ICrawlerCheckpoint {
+        return {
+            roomId,
+            token: FULLY_CRAWLED_TOKEN,
+            fullCrawl: true,
+            direction: Direction.Backward,
+        };
     }
 
     /**
@@ -270,6 +316,11 @@ export default class EventIndex extends EventEmitter {
             }
             // We can speak its encryption again, if we couldn't on a prior pass.
             this.unindexableRooms.delete(room.roomId);
+
+            // Already fully crawled in a previous session - don't re-seed, even
+            // if it has no indexable content (which would otherwise keep it
+            // unindexed and re-seeded forever).
+            if (this.fullyCrawledRooms.has(room.roomId)) continue;
 
             // Already queued for crawling, or already has events indexed - nothing to do.
             if (queued.has(room.roomId)) continue;
@@ -720,10 +771,23 @@ export default class EventIndex extends EventEmitter {
 
             if (res.chunk.length === 0) {
                 this.logger.debug("Done with the checkpoint", JSON.stringify(checkpoint));
-                // We got to the start/end of our timeline, lets just
-                // delete our checkpoint and go back to sleep.
+                // We reached the start/end of the timeline. A backward fullCrawl
+                // hitting an empty chunk means we've reached the start of the
+                // room's history: it's fully crawled. Atomically swap its
+                // checkpoint for a sentinel marker so reconciliation won't re-seed
+                // it next launch (this matters mainly for rooms with no indexable
+                // content, which stay unindexed otherwise). Otherwise just delete it.
                 try {
-                    await indexManager.removeCrawlerCheckpoint(checkpoint);
+                    if (checkpoint.fullCrawl && checkpoint.direction === Direction.Backward) {
+                        await indexManager.addHistoricEvents(
+                            [],
+                            this.fullyCrawledMarker(checkpoint.roomId),
+                            checkpoint,
+                        );
+                        this.fullyCrawledRooms.add(checkpoint.roomId);
+                    } else {
+                        await indexManager.removeCrawlerCheckpoint(checkpoint);
+                    }
                 } catch (e) {
                     this.logger.warn("Error removing checkpoint", JSON.stringify(checkpoint), e);
                 }
