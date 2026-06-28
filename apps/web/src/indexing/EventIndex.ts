@@ -81,6 +81,22 @@ export default class EventIndex extends EventEmitter {
      */
     private needsInitialCheckpoints = false;
 
+    /**
+     * Guards the one-shot reconciliation pass. Set true only once it has actually
+     * run (i.e. once crypto was ready), so that if crypto isn't ready on the first
+     * sync we retry on a later one rather than skipping reconciliation entirely.
+     */
+    private reconciliationDone = false;
+
+    /**
+     * Joined rooms carrying an `m.room.encryption` state event whose encryption
+     * the crypto module doesn't actually support, so they can never be indexed
+     * ("can't speak" their encryption). Populated by the reconciliation pass and
+     * deliberately ignored - neither crawled nor surfaced as a problem in the UI,
+     * just like rooms we've only been invited to / have left.
+     */
+    private readonly unindexableRooms = new Set<string>();
+
     private readonly logger;
 
     public constructor() {
@@ -194,6 +210,99 @@ export default class EventIndex extends EventEmitter {
     }
 
     /**
+     * Reconciliation pass (runs once per launch, once crypto is ready).
+     *
+     * `addInitialCheckpoints` only seeds rooms that exist and have a
+     * back-pagination token at the single moment it runs (when the index is
+     * first created). An encrypted room joined later, or missed then (crypto not
+     * yet ready, no token yet, a transient failure), never gets a checkpoint: the
+     * crawler only re-seeds on a *new* m.room.encryption event or a gappy sync,
+     * neither of which fires for a quiet already-encrypted room, so it would stay
+     * unindexed forever. This pass finds joined, encryption-enabled rooms with no
+     * events indexed and no checkpoint queued, and seeds a fullCrawl checkpoint.
+     *
+     * Gated on crypto being ready by the caller; if it isn't, the caller retries
+     * on a later sync (the guard flag is only set once this actually runs).
+     */
+    public async reconcileMissedRooms(): Promise<void> {
+        const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
+        const client = MatrixClientPeg.safeGet();
+
+        const queued = new Set<string>(this.crawlerCheckpoints.map((c) => c.roomId));
+        if (this.currentCheckpoint) queued.add(this.currentCheckpoint.roomId);
+
+        let recovered = 0;
+        let scanned = 0;
+
+        for (const room of client.getRooms()) {
+            // Yield occasionally so the many isRoomIndexed reads don't monopolise
+            // Seshat's small connection pool and starve the live writer.
+            if (++scanned % 20 === 0) await sleep(10);
+
+            // Only joined rooms - invites/leaves can't be crawled (403) and
+            // shouldn't count as indexable.
+            if (room.getMyMembership() !== KnownMembership.Join) continue;
+
+            // Only rooms whose encryption the crypto module supports. Done inline
+            // (not via isRoomIndexable) so we can record the "can't speak" case.
+            let encEnabled = false;
+            try {
+                encEnabled = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId));
+            } catch {
+                continue;
+            }
+            if (!encEnabled) {
+                // Joined room with a legacy m.room.encryption marker but no
+                // crypto-enabled encryption: nothing we can index, so record it
+                // to be ignored rather than treated as a problem.
+                if (client.isRoomEncrypted(room.roomId)) this.unindexableRooms.add(room.roomId);
+                continue;
+            }
+            // We can speak its encryption again, if we couldn't on a prior pass.
+            this.unindexableRooms.delete(room.roomId);
+
+            // Already queued for crawling, or already has events indexed - nothing to do.
+            if (queued.has(room.roomId)) continue;
+            let indexed = false;
+            try {
+                indexed = await indexManager.isRoomIndexed(room.roomId);
+            } catch (e) {
+                this.logger.warn(`reconcileMissedRooms: isRoomIndexed failed for ${room.roomId}`, e);
+                continue;
+            }
+            if (indexed) continue;
+
+            // This room should have been indexed but wasn't. Recover it.
+            const timeline = room.getLiveTimeline();
+            const token = timeline.getPaginationToken(Direction.Backward);
+
+            try {
+                if (!token) {
+                    // No token: index whatever is in the live timeline directly,
+                    // mirroring addRoomCheckpoint's fallback.
+                    await this.addEventsFromLiveTimeline(timeline);
+                    recovered += 1;
+                    continue;
+                }
+                const checkpoint: ICrawlerCheckpoint = {
+                    roomId: room.roomId,
+                    token,
+                    fullCrawl: true,
+                    direction: Direction.Backward,
+                };
+                await indexManager.addCrawlerCheckpoint(checkpoint);
+                this.crawlerCheckpoints.push(checkpoint);
+                recovered += 1;
+            } catch (e) {
+                this.logger.warn(`reconcileMissedRooms: failed to seed checkpoint for ${room.roomId}`, e);
+            }
+        }
+
+        this.logger.debug(`reconcileMissedRooms: recovered ${recovered} missed rooms`);
+    }
+
+    /**
      * The sync event listener.
      */
     private onSync = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
@@ -210,6 +319,13 @@ export default class EventIndex extends EventEmitter {
 
             // Start the crawler if it's not already running.
             this.startCrawler();
+
+            // Once per launch, as soon as crypto is ready, reconcile any encrypted
+            // rooms the one-time initial checkpointing missed (see reconcileMissedRooms).
+            if (!this.reconciliationDone && MatrixClientPeg.safeGet().getCrypto()) {
+                this.reconciliationDone = true;
+                await this.reconcileMissedRooms();
+            }
 
             // Commit any queued up live events
             await indexManager.commitLiveEvents();
@@ -263,6 +379,13 @@ export default class EventIndex extends EventEmitter {
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
         if (ev.getType() !== EventType.RoomEncryption) return;
+
+        // Until reconciliation has run it owns seeding the startup set of
+        // encrypted rooms; acting here too would fire a concurrent isRoomIndexed
+        // for every room as initial sync replays each m.room.encryption event,
+        // flooding Seshat's small connection pool. Afterwards this only handles
+        // rooms newly encrypted mid-session.
+        if (!this.reconciliationDone) return;
 
         // Only seed a checkpoint if the room's encryption is one we can speak.
         if (!(await this.isRoomIndexable(state.roomId))) return;
