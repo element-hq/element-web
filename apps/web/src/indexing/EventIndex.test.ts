@@ -24,6 +24,7 @@ import {
     MatrixEvent,
     type Room,
     ClientEvent,
+    RoomEvent,
     SyncState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -168,6 +169,62 @@ describe("EventIndex", () => {
             roomId: "!room2:id",
             token: "token2",
             direction: Direction.Forward,
+        });
+    });
+
+    it("only seeds a gap-fill on the room's own live timeline reset, not thread/filtered resets", async () => {
+        const mockIndexingManager = {
+            loadCheckpoints: vi.fn().mockResolvedValue([]),
+            isEventIndexEmpty: vi.fn().mockResolvedValue(false),
+            addCrawlerCheckpoint: vi.fn().mockResolvedValue(undefined),
+            removeCrawlerCheckpoint: vi.fn(),
+        } as any as Mocked<BaseEventIndexManager>;
+        mockPlatformPeg({ getEventIndexingManager: () => mockIndexingManager });
+
+        // The room's main (unfiltered) timeline set vs. a thread's timeline set. The
+        // SDK re-emits RoomEvent.TimelineReset from both, but only the former is a
+        // genuine history gap; thread resets (e.g. Thread.updateThreadMetadata on
+        // startup) must be ignored.
+        const liveTimelineSet = { id: "live" };
+        const threadTimelineSet = { id: "thread" };
+        const room = {
+            roomId: "!room1:id",
+            getMyMembership: () => KnownMembership.Join,
+            getUnfilteredTimelineSet: () => liveTimelineSet,
+            getLiveTimeline: () => ({ getPaginationToken: () => "token1" }),
+        } as any as Room;
+
+        const mockCrypto = { isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(true) };
+        const mockClient = getMockClientWithEventEmitter({
+            getEventMapper: () => (obj: Partial<IEvent>) => new MatrixEvent(obj),
+            createMessagesRequest: vi.fn(),
+            getCrypto: () => mockCrypto as any,
+            ...mockClientMethodsRooms([room]),
+            isRoomEncrypted: () => true,
+        });
+
+        const indexer = new EventIndex();
+        await indexer.init();
+
+        // A thread (non-unfiltered) timeline reset must be ignored - no checkpoint.
+        mockClient.emit(RoomEvent.TimelineReset, room, threadTimelineSet as any);
+        // Let the async handler run to completion (it bails synchronously, but flush
+        // microtasks to be sure nothing is seeded on a later tick).
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(mockIndexingManager.addCrawlerCheckpoint).not.toHaveBeenCalled();
+
+        // A reset of the room's own live timeline is a real gap - seed a gap-fill.
+        const added = Promise.withResolvers<void>();
+        mockIndexingManager.addCrawlerCheckpoint.mockImplementation(async () => {
+            added.resolve();
+        });
+        mockClient.emit(RoomEvent.TimelineReset, room, liveTimelineSet as any);
+        await added.promise;
+        expect(mockIndexingManager.addCrawlerCheckpoint).toHaveBeenCalledWith({
+            roomId: "!room1:id",
+            token: "token1",
+            direction: Direction.Backward,
+            fullCrawl: false,
         });
     });
 });
