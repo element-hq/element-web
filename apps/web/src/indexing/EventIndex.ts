@@ -239,7 +239,8 @@ export default class EventIndex extends EventEmitter {
 
         const client = MatrixClientPeg.safeGet();
 
-        // We only index encrypted rooms locally.
+        // Cheap synchronous gate first: we only index encrypted rooms locally,
+        // and this rejects the (many) unencrypted-room events without async work.
         if (!client.isRoomEncrypted(ev.getRoomId()!)) return;
 
         if (ev.isRedaction()) {
@@ -251,17 +252,30 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
+        // Only now, for an event we'd actually index, pay for the async crypto
+        // check so we skip rooms whose encryption the crypto module can't speak.
+        if (!(await this.isRoomIndexable(ev.getRoomId()!))) return;
+
         await client.decryptEventIfNeeded(ev);
 
         await this.addLiveEventToIndex(ev);
     };
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
-        if (!MatrixClientPeg.safeGet().isRoomEncrypted(state.roomId)) return;
+        if (ev.getType() !== EventType.RoomEncryption) return;
 
-        if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
-            this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
-            this.addRoomCheckpoint(state.roomId, true);
+        // Only seed a checkpoint if the room's encryption is one we can speak.
+        if (!(await this.isRoomIndexable(state.roomId))) return;
+
+        try {
+            // Distinct from the check above: skip if the room already has events
+            // in the index (`isRoomIndexable` is "can we speak its encryption").
+            if (!(await this.isRoomIndexed(state.roomId))) {
+                this.logger.debug("Adding a checkpoint for a newly encrypted room", state.roomId);
+                this.addRoomCheckpoint(state.roomId, true);
+            }
+        } catch (e) {
+            this.logger.warn("Error checking/seeding newly encrypted room", state.roomId, e);
         }
     };
 
@@ -291,12 +305,24 @@ export default class EventIndex extends EventEmitter {
      */
     private onTimelineReset = async (room: Room | undefined): Promise<void> => {
         if (!room) return;
+        // Cheap sync gate first, then the async crypto-aware check.
         if (!MatrixClientPeg.safeGet().isRoomEncrypted(room.roomId)) return;
+        if (!(await this.isRoomIndexable(room.roomId))) return;
 
         this.logger.debug("Adding a checkpoint because of a limited timeline", room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
     };
+
+    /**
+     * Whether a room is one we can index: it must have E2EE that the crypto
+     * module actually supports. Uses the crypto-aware `isEncryptionEnabledInRoom`
+     * rather than the legacy state-only `isRoomEncrypted`, so rooms with an
+     * unsupported ("can't speak") encryption algorithm are excluded.
+     */
+    private async isRoomIndexable(roomId: string): Promise<boolean> {
+        return Boolean(await MatrixClientPeg.safeGet().getCrypto()?.isEncryptionEnabledInRoom(roomId));
+    }
 
     /**
      * Check if an event should be added to the event index.
