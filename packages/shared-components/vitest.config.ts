@@ -117,6 +117,7 @@ export default defineConfig({
             "vite-plugin-node-polyfills/shims/process",
             "@vector-im/compound-design-tokens/assets/web/icons",
             "storybook/preview-api",
+            "@dnd-kit/abstract",
         ],
     },
     resolve: {

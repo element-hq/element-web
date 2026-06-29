@@ -5,24 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX, type FocusEvent, useEffect, useRef, useState } from "react";
-import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-right";
+import React, { memo, type JSX, type FocusEvent, useEffect, useRef } from "react";
 import classNames from "classnames";
-import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
-import { OverflowHorizontalIcon, EditIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useDroppable } from "@dnd-kit/react";
+import { useDraggable, useDragOperation, useDroppable } from "@dnd-kit/react";
 import { useMergeRefs } from "react-merge-refs";
+import { Feedback } from "@dnd-kit/dom";
+import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
 
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
-import { Flex } from "../../../core/utils/Flex";
 import { useI18n } from "../../../core/i18n/i18nContext";
 import { getGroupHeaderAccessibleProps } from "../../../core/VirtualizedList";
-import { _t } from "../../../core/i18n/i18n";
-import {
-    NotificationDecoration,
-    type NotificationDecorationData,
-} from "../RoomListItemWrapper/RoomListItemView/NotificationDecoration";
+import { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
+import { isSectionDragData, type RoomListDragData, type SectionDragData } from "../dragAndDrop";
+import { type NotificationDecorationData } from "../RoomListItemWrapper/RoomListItemView/NotificationDecoration";
 
 /**
  * The observable state snapshot for a room list section header.
@@ -40,6 +36,8 @@ export interface RoomListSectionHeaderViewSnapshot {
     notification?: NotificationDecorationData;
     /** Wether to display the section menu  */
     displaySectionMenu: boolean;
+    /** Whether the section can be reordered via drag-and-drop  */
+    canBeReordered: boolean;
 }
 
 /**
@@ -108,14 +106,61 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     roomCountInSection,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { id, title, isExpanded, isUnread, notification, displaySectionMenu } = useViewModel(vm);
+    const { id, title, isExpanded, isUnread, canBeReordered } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
-    const { ref: droppableRef, isDropTarget } = useDroppable({
+    const {
+        ref: draggableRef,
+        handleRef,
+        isDragSource,
+    } = useDraggable<SectionDragData>({
         id,
+        data: { type: "section", index: sectionIndex },
+        plugins: [Feedback.configure({ feedback: "clone" })],
+        modifiers: [RestrictToVerticalAxis],
+        disabled: !canBeReordered,
     });
+
+    const { source } = useDragOperation<RoomListDragData>();
+    const draggedData = source?.data;
+    const isDraggingSectionSource = isSectionDragData(draggedData);
+
+    // Keep the droppable enabled so rooms can still be dropped on default sections
+    // (Favourite / Low Priority). Only disable it for section drags on non-reorderable
+    // headers so they can't be used as reorder targets.
+    const { ref: droppableRef, isDropTarget } = useDroppable<SectionDragData>({
+        id,
+        data: { type: "section", index: sectionIndex },
+        disabled: isDragSource || (isDraggingSectionSource && !canBeReordered),
+    });
+
+    const isDraggingRoom = isDropTarget && draggedData?.type === "room";
+    const isDraggingSection = isDropTarget && isDraggingSectionSource;
+
+    const sourceSectionIndex = isSectionDragData(draggedData) ? draggedData.index : -1;
+    const isSourceAbove = isDraggingSection && sourceSectionIndex > sectionIndex;
+    const hasBottomBorder = isDraggingSection && !isSourceAbove;
+    const hasTopBorder = isDraggingSection && isSourceAbove;
+
+    // Keep the last expanded state we rendered while NOT dragging.
+    const lastExpandedRef = useRef(isExpanded);
+    if (!isDragSource) {
+        lastExpandedRef.current = isExpanded;
+    }
+    // While this header is the drag source, freeze aria-expanded at its pre-drag value. Section
+    // drag start collapses every section, flipping this focused header's aria-expanded true→false;
+    // announcing that state change is a second, redundant screen-reader announcement on top of the
+    // dnd "Dragging X" live-region announcement. The collapse is still reflected visually.
+    const ariaExpanded = isDragSource ? lastExpandedRef.current : isExpanded;
+
     const internalRef = useRef<HTMLButtonElement>(null);
-    const mergedRef = useMergeRefs<HTMLButtonElement>([droppableRef, internalRef]);
+    // Only wire up draggable refs when the section can be dragged. Otherwise dndkit will put incorrect and misleading a11y attributes
+    // on the default section (aka aria-disabled=true and aria-draggable=false)
+    const buttonRef = useMergeRefs([
+        ...(canBeReordered ? [draggableRef, handleRef] : []),
+        droppableRef,
+        internalRef,
+    ]) as React.Ref<HTMLButtonElement>;
 
     useEffect(() => {
         if (isFocused) {
@@ -125,128 +170,54 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
 
     return (
         <div
-            aria-expanded={isExpanded}
+            aria-expanded={ariaExpanded}
             {...getGroupHeaderAccessibleProps(indexInList, sectionIndex, roomCountInSection)}
         >
-            <button
-                ref={mergedRef}
-                type="button"
-                role="gridcell"
-                className={classNames(styles.header, {
-                    [styles.firstHeader]: sectionIndex === 0,
-                    // If the section is collapsed and it's the last one
-                    [styles.lastHeader]: !isExpanded && isLastSection,
-                    [styles.unread]: isUnread,
-                })}
-                onClick={vm.onClick}
-                onKeyDown={(e) => {
-                    if ((e.code === "ArrowRight" && !isExpanded) || (e.code === "ArrowLeft" && isExpanded)) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        vm.onClick();
-                    } else if (e.code === "ArrowRight" && isExpanded && roomCountInSection > 0) {
-                        // Move focus to the first room in the section
-                        e.preventDefault();
-                        e.stopPropagation();
-                        e.currentTarget.dispatchEvent(
-                            new KeyboardEvent("keydown", {
-                                code: "ArrowDown",
-                                key: "ArrowDown",
-                                bubbles: true,
-                            }),
-                        );
-                    }
-                }}
-                aria-expanded={isExpanded}
-                onFocus={(e) => onFocus(id, e)}
-                tabIndex={isFocused ? 0 : -1}
-                aria-label={
-                    isUnread
-                        ? _t("room_list|section_header|toggle_unread", { section: title })
-                        : _t("room_list|section_header|toggle", { section: title })
-                }
-            >
-                <Flex
-                    className={classNames(styles.container, {
-                        [styles.dropTarget]: isDropTarget,
+            <div role="gridcell" aria-expanded={ariaExpanded}>
+                <button
+                    ref={buttonRef}
+                    type="button"
+                    className={classNames(styles.header, {
+                        [styles.firstHeader]: sectionIndex === 0,
+                        // If the section is collapsed and it's the last one
+                        [styles.lastHeader]: !isExpanded && isLastSection,
+                        [styles.unread]: isUnread,
+                        [styles.dragSource]: isDragSource,
+                        [styles.dropTarget]: isDraggingRoom,
+                        [styles.dropTargetBottom]: hasBottomBorder,
+                        [styles.dropTargetTop]: hasTopBorder,
                     })}
-                    align="center"
-                    justify="space-between"
-                    gap="var(--cpd-space-2x)"
+                    onClick={() => !isDragSource && vm.onClick()}
+                    onKeyDown={(e) => {
+                        if ((e.code === "ArrowRight" && !isExpanded) || (e.code === "ArrowLeft" && isExpanded)) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            vm.onClick();
+                        } else if (e.code === "ArrowRight" && isExpanded && roomCountInSection > 0) {
+                            // Move focus to the first room in the section
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.dispatchEvent(
+                                new KeyboardEvent("keydown", {
+                                    code: "ArrowDown",
+                                    key: "ArrowDown",
+                                    bubbles: true,
+                                }),
+                            );
+                        }
+                    }}
+                    aria-expanded={ariaExpanded}
+                    onFocus={(e) => onFocus(id, e)}
+                    tabIndex={isFocused ? 0 : -1}
+                    aria-label={
+                        isUnread
+                            ? _t("room_list|section_header|toggle_unread", { section: title })
+                            : _t("room_list|section_header|toggle", { section: title })
+                    }
                 >
-                    <Flex align="center" gap="var(--cpd-space-0-5x)">
-                        <ChevronRightIcon
-                            className={styles.chevron}
-                            width="24px"
-                            height="24px"
-                            fill="var(--cpd-color-icon-secondary)"
-                        />
-                        <span className={styles.title}>{title}</span>
-                    </Flex>
-                    {!isExpanded && notification && (
-                        <div className={styles.notificationDecoration} aria-hidden={true}>
-                            <NotificationDecoration {...notification} />
-                        </div>
-                    )}
-                    {displaySectionMenu && <MenuComponent vm={vm} />}
-                </Flex>
-            </button>
+                    <RoomListSectionHeaderContent vm={vm} />
+                </button>
+            </div>
         </div>
     );
 });
-
-interface MenuComponentProps {
-    vm: RoomListSectionHeaderViewModel;
-}
-
-/**
- *
- * Menu component for the section header.
- */
-
-function MenuComponent({ vm }: MenuComponentProps): JSX.Element {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <Menu
-            open={open}
-            onOpenChange={setOpen}
-            title={_t("room_list|section_header|more_options")}
-            showTitle={false}
-            align="start"
-            trigger={
-                <IconButton
-                    className={styles.menu}
-                    tooltip={_t("room_list|section_header|more_options")}
-                    aria-label={_t("room_list|section_header|more_options")}
-                    size="24px"
-                    style={{ padding: "2px" }}
-                    color="var(--cpd-color-icon-primary)"
-                >
-                    <OverflowHorizontalIcon fill="var(--cpd-color-icon-primary)" />
-                </IconButton>
-            }
-        >
-            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-            <div
-                // We don't want keyboard navigation events to bubble up to the ListView changing the focused item
-                onKeyDown={(e) => e.stopPropagation()}
-            >
-                <MenuItem
-                    hideChevron={true}
-                    Icon={EditIcon}
-                    label={_t("room_list|section_header|edit_section")}
-                    onSelect={() => vm.editSection()}
-                    onClick={(evt) => evt.stopPropagation()}
-                />
-                <MenuItem
-                    hideChevron={true}
-                    Icon={DeleteIcon}
-                    label={_t("room_list|section_header|remove_section")}
-                    onSelect={() => vm.removeSection()}
-                    onClick={(evt) => evt.stopPropagation()}
-                />
-            </div>
-        </Menu>
-    );
-}
