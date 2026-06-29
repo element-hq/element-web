@@ -12,11 +12,6 @@
     text-align: unset;
 
     width: 100%;
-    /* Fixed, uniform height across every header (regular, unread/bold, first, last) and the pinned
-       overlay. This keeps the sticky-header "push" maths exact — the first/last variants below only
-       shift the content within this box, they no longer change its height. */
-    box-sizing: border-box;
-    height: 44px;
     cursor: pointer;
     font: var(--cpd-font-body-sm-regular);
     letter-spacing: var(--cpd-font-letter-spacing-body-sm);
