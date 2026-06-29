@@ -92,6 +92,13 @@ interface IProps {
     // typically this will be either 'eventId' or undefined.
     highlightedEventId?: string;
 
+    // Terms to highlight in the body of the focused search match (`searchHighlightEventId`) while stepping
+    // through search results in the live timeline. Undefined when not stepping.
+    searchHighlights?: string[];
+
+    // Id of the event whose body should have `searchHighlights` applied while stepping through search matches.
+    searchHighlightEventId?: string;
+
     // id of an event to jump to. If not given, will go to the end of the live timeline.
     eventId?: string;
 
@@ -1853,6 +1860,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 forwardPaginating={forwardPaginating}
                 events={events}
                 highlightedEventId={this.props.highlightedEventId}
+                searchHighlights={this.props.searchHighlights}
+                searchHighlightEventId={this.props.searchHighlightEventId}
                 readMarkerEventId={this.state.readMarkerEventId}
                 readMarkerVisible={this.state.readMarkerVisible}
                 canBackPaginate={this.state.canBackPaginate}

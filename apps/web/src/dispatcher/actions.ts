@@ -399,6 +399,13 @@ export enum Action {
     FocusMessageSearch = "focus_search",
 
     /**
+     * Step the in-room search match cursor to the next or previous match in the live timeline. Dispatched from
+     * the focused search input (Enter / Shift+Enter) and handled by the room being searched. Use with a
+     * SearchMatchStepPayload.
+     */
+    SearchMatchStep = "search_match_step",
+
+    /**
      * Open the direct message dialog
      */
     CreateChat = "view_create_chat",

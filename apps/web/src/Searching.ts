@@ -703,6 +703,104 @@ export enum SearchScope {
 }
 
 /**
+ * The location of a single search match, used for stepping through matches in the live timeline.
+ */
+export interface SearchMatch {
+    /**
+     * The room the matched event belongs to.
+     */
+    roomId: string;
+    /**
+     * The id of the matched event.
+     */
+    eventId: string;
+}
+
+/**
+ * Build a chronologically ordered list of match locations from a set of search results, for in-timeline
+ * stepping.
+ *
+ * Matches are ordered newest-first by event timestamp so that the up/down arrows mean a consistent
+ * "newer/older" independent of how the backend happened to order the raw results. This explicit client-side
+ * sort guarantees a single chronological order on the merged stepping list regardless of the backend's
+ * ordering, so stepping stays "newer/older" in every case.
+ * `Array.prototype.sort` is stable, so matches sharing a timestamp keep their backend order; a match whose
+ * event has no timestamp sinks to the end (treated as oldest). Results whose matched event is missing an event
+ * id or room id are skipped — they cannot be jumped to in the timeline.
+ */
+export function extractSearchMatches(results: ISearchResults): SearchMatch[] {
+    const matches: Array<SearchMatch & { ts: number }> = [];
+    for (const result of results.results ?? []) {
+        const event = result.context.getEvent();
+        const eventId = event.getId();
+        const roomId = event.getRoomId();
+        if (eventId && roomId) {
+            // getTs() is typed as number but masks a possibly-absent origin_server_ts with a non-null
+            // assertion; default to 0 so an undated match can never produce a NaN comparison and corrupt order.
+            matches.push({ roomId, eventId, ts: event.getTs() ?? 0 });
+        }
+    }
+    matches.sort((a, b) => b.ts - a.ts);
+    return matches.map(({ roomId, eventId }) => ({ roomId, eventId }));
+}
+
+/**
+ * A single search result enriched for the Telegram-style results dropdown: the jumpable location
+ * ({@link SearchMatch}) plus the data a compact row needs — sender MXID, the matched message body and timestamp.
+ */
+export interface SearchResultPreview extends SearchMatch {
+    /** The MXID of the matched event's sender. */
+    sender: string;
+    /** The matched message body (plain text) shown as the row preview. */
+    body: string;
+    /** The matched event's origin-server timestamp (ms), used to render the row date. */
+    ts: number;
+}
+
+/**
+ * Build the ordered list of result previews for the search results dropdown.
+ *
+ * Ordered identically to {@link extractSearchMatches} (newest-first by timestamp, stable, undated last, results
+ * missing an event/room id skipped) so that preview row index `i` maps to match `i` — letting a row click reuse the
+ * existing {@link SearchMatch}-based live-timeline stepping. Pure: the backend results are not mutated.
+ */
+export function extractSearchResultPreviews(results: ISearchResults): SearchResultPreview[] {
+    const previews: SearchResultPreview[] = [];
+    for (const result of results.results ?? []) {
+        const event = result.context.getEvent();
+        const eventId = event.getId();
+        const roomId = event.getRoomId();
+        if (eventId && roomId) {
+            previews.push({
+                roomId,
+                eventId,
+                sender: event.getSender() ?? "",
+                body: event.getContent().body ?? "",
+                // Default an absent timestamp to 0 so it sorts last and never produces a NaN comparison.
+                ts: event.getTs() ?? 0,
+            });
+        }
+    }
+    previews.sort((a, b) => b.ts - a.ts);
+    return previews;
+}
+
+/**
+ * Build the ordered list of terms to highlight in matched message bodies for a set of search results.
+ *
+ * Mirrors the enrichment the results list applies (see RoomSearchView): the literal search term is always
+ * highlighted even if the backend (Synapse/Seshat) did not echo it back, and terms are ordered longest-first so
+ * that overlapping highlights favour the more specific term. Pure — the backend `highlights` array is not mutated.
+ */
+export function extractSearchHighlights(results: ISearchResults, term: string): string[] {
+    const highlights = [...(results.highlights ?? [])];
+    if (!highlights.includes(term)) {
+        highlights.push(term);
+    }
+    return highlights.sort((a, b) => b.length - a.length);
+}
+
+/**
  * Information about a message search in progress.
  */
 export interface SearchInfo {
