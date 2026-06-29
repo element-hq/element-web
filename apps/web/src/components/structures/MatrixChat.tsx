@@ -75,8 +75,6 @@ import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import RoomListStore from "../../stores/room-list/RoomListStore";
-import { RoomUpdateCause } from "../../stores/room-list/models";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
@@ -1363,9 +1361,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
 
                 if (room) {
-                    // Legacy room list store needs to be told to manually remove this room
-                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
-                    // New room list store will remove the room on the following dispatch
+                    // The room list store will remove the room on the following dispatch
                     dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
                 }
             })
