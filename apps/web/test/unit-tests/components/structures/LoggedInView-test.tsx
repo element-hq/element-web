@@ -573,11 +573,8 @@ describe("<LoggedInView />", () => {
             expect(mockResize).toHaveBeenCalledWith(400);
         });
 
-        it("should enforce minimum width for new room list when stored size is zero", async () => {
-            // Enable new room list feature
-            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
-
-            // 0 represents the collapsed state for the old room list, which could have been set before the new room list was enabled
+        it("should enforce minimum width when stored size is below the minimum", () => {
+            // 0 is a stale collapsed value that could have been persisted by the old room list
             window.localStorage.setItem("mx_lhs_size", "0");
 
             getComponent();
@@ -586,10 +583,7 @@ describe("<LoggedInView />", () => {
             expect(mockResize).toHaveBeenCalledWith(350);
         });
 
-        it("should not set localStorage to 0 when resizing lp-resizer to minimum width for new room list", async () => {
-            // Enable new room list feature and mock SettingsStore
-            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
-
+        it("should not set localStorage to 0 when resizing lp-resizer to the minimum width", () => {
             const minimumWidth = 224; // NEW_ROOM_LIST_MIN_WIDTH
 
             // Render the component
@@ -598,16 +592,7 @@ describe("<LoggedInView />", () => {
             // Get the callbacks that were captured during resizer creation
             const callbacks = (global as any).__resizeCallbacks;
 
-            // Create a mock DOM node for isItemCollapsed to check
-            const domNode = {
-                classList: {
-                    contains: jest.fn().mockReturnValue(true), // Simulate the error where mx_LeftPanel_minimized is present
-                },
-            } as any;
-
             callbacks.onResized(minimumWidth);
-            const isCollapsed = callbacks.isItemCollapsed(domNode);
-            callbacks.onCollapsed(isCollapsed); // Not collapsed for new room list
             callbacks.onResizeStop();
 
             // Verify localStorage was set to the minimum width (224), not 0
@@ -619,16 +604,14 @@ describe("<LoggedInView />", () => {
         // A page_type for which a module registers a custom full-screen renderer.
         const modulePageType = "io.element.test_fullscreen";
 
-        beforeEach(async () => {
-            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
+        beforeEach(() => {
             ModuleApi.instance.navigation.registerLocationRenderer(modulePageType, () => (
                 <div data-testid="module-content" />
             ));
         });
 
-        afterEach(async () => {
+        afterEach(() => {
             ModuleApi.instance.navigation.locationRenderers.delete(modulePageType);
-            await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, false);
         });
 
         it("renders the resizable separator for a normal room view with the new room list", () => {

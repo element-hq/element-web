@@ -65,13 +65,7 @@ import { ModuleApi } from "../../modules/Api.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
-const metaSpaceOrder: MetaSpace[] = [
-    MetaSpace.Home,
-    MetaSpace.Favourites,
-    MetaSpace.People,
-    MetaSpace.Orphans,
-    MetaSpace.VideoRooms,
-];
+const metaSpaceOrder: MetaSpace[] = [MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms];
 
 const MAX_SUGGESTED_ROOMS = 20;
 
@@ -164,20 +158,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
      */
     public get storeReadyPromise(): Promise<void> {
         return this._storeReadyDeferred.promise;
-    }
-
-    /**
-     * Get the order of meta spaces to display in the space panel.
-     *
-     * This accessor should be removed when the "feature_new_room_list" labs flag is removed.
-     * "People" and "Favourites" will be removed from the "metaSpaceOrder" array and this filter will no longer be needed.
-     * @private
-     */
-    private get metaSpaceOrder(): MetaSpace[] {
-        if (!SettingsStore.getValue("feature_new_room_list")) return metaSpaceOrder;
-
-        // People and Favourites are not shown when the new room list is enabled
-        return metaSpaceOrder.filter((space) => space !== MetaSpace.People && space !== MetaSpace.Favourites);
     }
 
     public get invitedSpaces(): Room[] {
@@ -1193,7 +1173,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
         const oldMetaSpaces = this._enabledMetaSpaces;
         const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        this._enabledMetaSpaces = this.metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
+        this._enabledMetaSpaces = metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
 
         this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
         this.sendUserProperties();
@@ -1310,7 +1290,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
                     case "Spaces.enabledMetaSpaces": {
                         const newValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-                        const enabledMetaSpaces = this.metaSpaceOrder.filter((k) => newValue[k]);
+                        const enabledMetaSpaces = metaSpaceOrder.filter((k) => newValue[k]);
                         if (arrayHasDiff(this._enabledMetaSpaces, enabledMetaSpaces)) {
                             const hadPeopleOrHomeEnabled = this.enabledMetaSpaces.some((s) => {
                                 return s === MetaSpace.Home || s === MetaSpace.People;

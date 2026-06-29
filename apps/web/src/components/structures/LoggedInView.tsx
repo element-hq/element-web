@@ -53,7 +53,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { RoomView } from "./RoomView";
 import ToastContainer from "./ToastContainer";
 import UserView from "./UserView";
-import { BackdropPanel } from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
 import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
@@ -299,25 +298,12 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private createResizer(): Resizer<ICollapseConfig, CollapseItem> {
         let panelSize: number | null;
-        let panelCollapsed: boolean;
-        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
-        // TODO decrease this once Spaces launches as it'll no longer need to include the 56px Community Panel
-        const toggleSize = useNewRoomList ? NEW_ROOM_LIST_MIN_WIDTH : 206 - 50;
+        const toggleSize = NEW_ROOM_LIST_MIN_WIDTH;
 
         const collapseConfig: ICollapseConfig = {
             toggleSize,
-            onCollapsed: (collapsed) => {
-                if (useNewRoomList) {
-                    // The new room list does not support collapsing.
-                    return;
-                }
-                panelCollapsed = collapsed;
-                if (collapsed) {
-                    dis.dispatch({ action: "hide_left_panel" });
-                    window.localStorage.setItem("mx_lhs_size", "0");
-                } else {
-                    dis.dispatch({ action: "show_left_panel" });
-                }
+            onCollapsed: () => {
+                // The room list does not support collapsing.
             },
             onResized: (size) => {
                 panelSize = size;
@@ -327,13 +313,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                 this.context.resizeNotifier.startResizing();
             },
             onResizeStop: () => {
-                // Always save the lhs size for the new room list.
-                if (useNewRoomList || !panelCollapsed) window.localStorage.setItem("mx_lhs_size", "" + panelSize);
+                window.localStorage.setItem("mx_lhs_size", "" + panelSize);
                 this.context.resizeNotifier.stopResizing();
             },
-            isItemCollapsed: (domNode) => {
-                // New rooms list does not support collapsing.
-                return !useNewRoomList && domNode.classList.contains("mx_LeftPanel_minimized");
+            isItemCollapsed: () => {
+                // The room list does not support collapsing.
+                return false;
             },
             handler: this.resizeHandler.current ?? undefined,
         };
@@ -347,11 +332,9 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private loadResizerPreferences(): void {
-        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
         let lhsSize = parseInt(window.localStorage.getItem("mx_lhs_size")!, 10);
-        // If the user has not set a size, or for the new room list if the size is less than the minimum width,
-        // set a default size.
-        if (isNaN(lhsSize) || (useNewRoomList && lhsSize < NEW_ROOM_LIST_MIN_WIDTH)) {
+        // If the user has not set a size, or if the size is less than the minimum width, set a default size.
+        if (isNaN(lhsSize) || lhsSize < NEW_ROOM_LIST_MIN_WIDTH) {
             lhsSize = 350;
         }
         this.resizer?.forHandleWithId("lp-resizer")?.resize(lhsSize);
@@ -763,38 +746,19 @@ class LoggedInView extends React.Component<IProps, IState> {
             "mx_MatrixChat--with-avatar": this.state.backgroundImage,
         });
 
-        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
-
-        const leftPanelWrapperClasses = classNames({
-            mx_LeftPanel_wrapper: true,
-            mx_LeftPanel_newRoomList: useNewRoomList,
-        });
+        const leftPanelWrapperClasses = classNames("mx_LeftPanel_wrapper", "mx_LeftPanel_newRoomList");
 
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
-        const shouldUseMinimizedUI = !useNewRoomList && this.props.collapseLhs;
-
         const leftPanel = (
             <div className="mx_LeftPanel_outerWrapper">
-                <LeftPanelLiveShareWarning isMinimized={shouldUseMinimizedUI || false} />
+                <LeftPanelLiveShareWarning isMinimized={false} />
                 <div className={leftPanelWrapperClasses}>
-                    {!useNewRoomList && (
-                        <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
-                    )}
-                    {!useNewRoomList && <SpacePanel />}
-                    {!useNewRoomList && <BackdropPanel backgroundImage={this.state.backgroundImage} />}
                     {!moduleRenderer && (
-                        <div
-                            className="mx_LeftPanel_wrapper--user"
-                            ref={this._resizeContainer}
-                            data-collapsed={shouldUseMinimizedUI ? true : undefined}
-                        >
-                            <LeftPanel
-                                isMinimized={shouldUseMinimizedUI || false}
-                                resizeNotifier={this.context.resizeNotifier}
-                            />
+                        <div className="mx_LeftPanel_wrapper--user" ref={this._resizeContainer}>
+                            <LeftPanel isMinimized={false} resizeNotifier={this.context.resizeNotifier} />
                         </div>
                     )}
                 </div>
@@ -805,9 +769,9 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         let content: React.ReactNode;
         const resizerViewModel = !moduleRenderer ? this.getResizerViewModel() : undefined;
-        if (useNewRoomList && resizerViewModel && !moduleRenderer) {
-            // New room list owned by element-web: resizable layout with a draggable separator.
-            // The SpacePanel lives inside GroupView (leftPanel omits it when the new room list is enabled).
+        if (resizerViewModel && !moduleRenderer) {
+            // Resizable layout with a draggable separator. The SpacePanel lives inside GroupView
+            // (leftPanel omits it).
             content = (
                 <GroupView vm={resizerViewModel}>
                     <SpacePanel />
@@ -825,13 +789,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                 </GroupView>
             );
         } else {
-            // Fallback layout: the old room list, or a module's full-screen view (e.g. multiroom) which
-            // must not use the resizable layout above. SpacePanel is guarded on useNewRoomList to avoid a
-            // duplicate (the old room list already renders one inside leftPanel); the legacy ResizeHandle is
-            // dropped for module views, which manage their own layout.
+            // Fallback layout for a module's full-screen view (e.g. multiroom) which must not use the
+            // resizable layout above. The ResizeHandle is dropped for module views, which manage their
+            // own layout.
             content = (
                 <>
-                    {useNewRoomList && <SpacePanel />}
+                    <SpacePanel />
                     {leftPanel}
                     {!moduleRenderer && <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />}
                     {roomView}
