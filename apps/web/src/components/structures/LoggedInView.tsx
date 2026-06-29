@@ -34,12 +34,11 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import ResizeHandle from "../views/elements/ResizeHandle";
 import { CollapseDistributor, Resizer } from "../../resizer";
 import PlatformPeg from "../../PlatformPeg";
-import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { hideToast as hideServerLimitToast, showToast as showServerLimitToast } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
-import RoomListStore from "../../stores/room-list/RoomListStore";
+import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
@@ -389,8 +388,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     private onRoomStateEvents = (ev: MatrixEvent): void => {
-        const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
-        if (serverNoticeList?.some((r) => r.roomId === ev.getRoomId())) {
+        const serverNoticeList = RoomListStoreV3.instance.getServerNoticeRooms();
+        if (serverNoticeList.some((r) => r.roomId === ev.getRoomId())) {
             this.updateServerNoticeEvents();
         }
     };
@@ -422,8 +421,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private updateServerNoticeEvents = async (): Promise<void> => {
-        const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
-        if (!serverNoticeList) return;
+        const serverNoticeList = RoomListStoreV3.instance.getServerNoticeRooms();
+        if (!serverNoticeList.length) return;
 
         const events: MatrixEvent[] = [];
         let pinnedEventTs = 0;
