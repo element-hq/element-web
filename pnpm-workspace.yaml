@@ -19,8 +19,8 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.61.0
-    "playwright-core": 1.61.0
+    "@playwright/test": 1.61.1
+    "playwright-core": 1.61.1
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
     "@vector-im/compound-web": 9.7.0
