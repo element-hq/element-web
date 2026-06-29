@@ -55,21 +55,82 @@
     width: 120px;
 }
 
-.select {
+.input {
     width: 100%;
-    height: 40px;
-    padding: 0 var(--cpd-space-2x);
-    border: 1px solid var(--cpd-color-border-subtle);
-    border-radius: 8px;
-    background: var(--cpd-color-bg-canvas-default);
-    color: var(--cpd-color-text-primary);
-    font-family: inherit;
-    font-size: var(--cpd-font-size-body-md);
 }
 
-.select:focus {
-    outline: 2px solid var(--cpd-color-border-focused);
-    outline-offset: 1px;
+.segmentedControl {
+    display: flex;
+    border-radius: 8px;
+    background: var(--cpd-color-bg-subtle-secondary);
+    padding: var(--cpd-space-0-5x);
+    gap: var(--cpd-space-0-5x);
+}
+
+.segment {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition:
+        background-color 0.15s ease,
+        opacity 0.15s ease;
+    color: var(--cpd-color-text-primary) !important;
+    opacity: 0.6;
+}
+
+.segment * {
+    color: inherit !important;
+}
+
+.segment:hover {
+    background: var(--cpd-color-bg-action-hover);
+    opacity: 0.85;
+}
+
+.selectedSegment {
+    background: var(--cpd-color-bg-canvas-default);
+    opacity: 1 !important;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.hiddenRadio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.authToggle {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    cursor: pointer;
+    user-select: none;
+    margin: var(--cpd-space-1x) 0;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.authContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-3x);
+    padding: var(--cpd-space-3x);
+    background: var(--cpd-color-bg-subtle-secondary);
+    border-radius: 8px;
 }
 
 .helperText {
@@ -87,4 +148,59 @@
     margin-top: var(--cpd-space-2x);
 }
 
+/* Reset .mx_Dialog button styles on the password visibility toggle button */
+.networkProxyView button:not([data-kind]) {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    width: auto !important;
+    border-radius: initial !important;
+    box-shadow: none !important;
+}
 
+.passwordInput {
+    display: inline-flex !important;
+    position: relative !important;
+    width: 100% !important;
+    border: 1px solid var(--cpd-color-border-interactive-primary) !important;
+    border-radius: 8px !important;
+    background: var(--cpd-color-bg-canvas-default) !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+}
+
+.passwordInput input {
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    padding: var(--cpd-space-3x) var(--cpd-space-12x) var(--cpd-space-3x) var(--cpd-space-4x) !important;
+    width: 100% !important;
+    color: var(--cpd-color-text-primary) !important;
+    box-sizing: border-box !important;
+    font: inherit !important;
+}
+
+.passwordInput button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: absolute !important;
+    right: var(--cpd-space-2x) !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;
+    width: var(--cpd-space-8x) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+}
+
+.passwordInput:focus-within {
+    outline: 2px solid var(--cpd-color-border-focused) !important;
+    border-color: transparent !important;
+}

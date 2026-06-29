@@ -206,6 +206,7 @@
             "proxy_config_encrypted_system_storage": "Proxy password is stored in the system credential store when available.",
             "proxy_host": "Proxy host",
             "proxy_settings_updates_warning": "Changes apply to new network requests after saving.",
+            "requires_auth": "Proxy requires authentication",
             "use_system_proxy": "Use system proxy"
         }
     },
