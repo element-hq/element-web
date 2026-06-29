@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect, vitest } from "vitest";
 import { render, waitFor } from "@testing-library/react";
 import { Toast } from "@vector-im/compound-web";
-import userEvent from "@testing-library/user-event";
 import React, { type JSX } from "react";
 
 import { ToastContext, ToastRack, useToastContext } from "./ToastContext";
