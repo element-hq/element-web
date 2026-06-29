@@ -102,45 +102,6 @@ describe("RoomListStoreV3", () => {
         expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Recency);
     });
 
-    describe("Recency sorting helpers", () => {
-        // Each mocked room i has a single message with ts = i + 1, so a higher
-        // index means more recent activity.
-        it("sortRoomsByRecency sorts an arbitrary list by recency without mutating the input", async () => {
-            const { store, rooms } = await getRoomListStore();
-            const input = [rooms[0], rooms[5], rooms[2]];
-            const inputCopy = [...input];
-
-            const sorted = store.sortRoomsByRecency(input);
-
-            // ts: room5 (6) > room2 (3) > room0 (1)
-            expect(sorted).toEqual([rooms[5], rooms[2], rooms[0]]);
-            // The input array is not mutated.
-            expect(input).toEqual(inputCopy);
-        });
-
-        it("sortRoomsByRecency does not move muted or low-priority rooms (pure recency)", async () => {
-            const { store, rooms } = await getRoomListStore();
-            const recent = rooms[99]; // highest ts
-            recent.tags = { [DefaultTagID.LowPriority]: { order: 0 } };
-            mocked(RoomNotificationStateStore.instance.getRoomState).mockImplementation((room) => {
-                return { isUnread: false, muted: room === recent } as unknown as RoomNotificationState;
-            });
-
-            const sorted = store.sortRoomsByRecency([rooms[0], rooms[50], recent]);
-
-            // A pure recency sort keeps the most recent room first even though it
-            // is muted and low priority (the full RecencySorter would sink it).
-            expect(sorted[0]).toBe(recent);
-        });
-
-        it("compareRoomsByRecency orders the more recent room first", async () => {
-            const { store, rooms } = await getRoomListStore();
-            // rooms[10] (ts 11) is more recent than rooms[3] (ts 4)
-            expect(store.compareRoomsByRecency(rooms[10], rooms[3])).toBeLessThan(0);
-            expect(store.compareRoomsByRecency(rooms[3], rooms[10])).toBeGreaterThan(0);
-        });
-    });
-
     it("Uses preferred sorter on startup", async () => {
         jest.spyOn(SettingsStore, "getValue").mockImplementation(() => {
             return SortingAlgorithm.Alphabetic;

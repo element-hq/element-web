@@ -35,7 +35,6 @@ import { Action } from "../../dispatcher/actions";
 import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
 import { getChangedOverrideRoomMutePushRules } from "./utils";
 import { isRoomVisible } from "./isRoomVisible";
-import { getLastTimestamp } from "./skip-list/sorters/utils/getLastTimestamp";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
@@ -154,47 +153,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     public getSortedRooms(): Room[] {
         if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList);
         else return [];
-    }
-
-    /**
-     * Get the most-recent-activity timestamp for a room, using the current user id.
-     */
-    private getRecencyTimestamp(room: Room): number {
-        return getLastTimestamp(room, this.matrixClient?.getSafeUserId() ?? "");
-    }
-
-    /**
-     * Sort an arbitrary list of rooms by recency (most recent activity first).
-     *
-     * Unlike the main room list sorting, this is a pure recency sort: muted and
-     * low-priority rooms are NOT moved to the bottom. The provided array is not
-     * mutated; a sorted copy is returned. The given list is sorted as-is and is
-     * not filtered by the active space.
-     * @param rooms The rooms to sort.
-     */
-    public sortRoomsByRecency(rooms: Room[]): Room[] {
-        const cache = new Map<string, number>();
-        const ts = (room: Room): number => {
-            let value = cache.get(room.roomId);
-            if (value === undefined) {
-                value = this.getRecencyTimestamp(room);
-                cache.set(room.roomId, value);
-            }
-            return value;
-        };
-        return [...rooms].sort((a, b) => ts(b) - ts(a));
-    }
-
-    /**
-     * Compare two rooms by recency, most recent activity first.
-     *
-     * Intended for sorting mixed result sets where rooms need to be ordered
-     * relative to each other (e.g. spotlight search results).
-     * @param roomA The first room.
-     * @param roomB The second room.
-     */
-    public compareRoomsByRecency(roomA: Room, roomB: Room): number {
-        return this.getRecencyTimestamp(roomB) - this.getRecencyTimestamp(roomA);
     }
 
     /**
