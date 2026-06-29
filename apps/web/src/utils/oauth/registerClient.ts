@@ -14,33 +14,33 @@ import PlatformPeg from "../../PlatformPeg";
 
 /**
  * Get the statically configured clientId for the issuer
- * @param issuer delegated auth OIDC issuer
- * @param staticOidcClients static client config from config.json
+ * @param issuer delegated auth OAuth2 issuer
+ * @param staticOAuthClients static client config from config.json
  * @returns clientId if found, otherwise undefined
  */
-const getStaticOidcClientId = (
+const getStaticOAuthClientId = (
     issuer: string,
-    staticOidcClients?: IConfigOptions["oidc_static_clients"],
+    staticOAuthClients?: IConfigOptions["oidc_static_clients"],
 ): string | undefined => {
     // static_oidc_clients are configured with a trailing slash
     const issuerWithTrailingSlash = issuer.endsWith("/") ? issuer : issuer + "/";
-    return staticOidcClients?.[issuerWithTrailingSlash]?.client_id;
+    return staticOAuthClients?.[issuerWithTrailingSlash]?.client_id;
 };
 
 /**
- * Get the clientId for an OIDC OP
+ * Get the clientId for an OAuth2 OP
  * Checks statically configured clientIds first
  * Then attempts dynamic registration with the OP
  * @param delegatedAuthConfig Auth config from ValidatedServerConfig
- * @param staticOidcClients static client config from config.json
+ * @param staticOAuthClients static client config from config.json
  * @returns Promise<string> resolves with clientId
  * @throws if no clientId is found
  */
-export const getOidcClientId = async (
+export const getOAuthClientId = async (
     delegatedAuthConfig: ValidatedAuthMetadata,
-    staticOidcClients?: IConfigOptions["oidc_static_clients"],
+    staticOAuthClients?: IConfigOptions["oidc_static_clients"],
 ): Promise<string> => {
-    const staticClientId = getStaticOidcClientId(delegatedAuthConfig.issuer, staticOidcClients);
+    const staticClientId = getStaticOAuthClientId(delegatedAuthConfig.issuer, staticOAuthClients);
     if (staticClientId) {
         logger.debug(`Using static clientId for issuer ${delegatedAuthConfig.issuer}`);
         return staticClientId;

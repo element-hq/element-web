@@ -45,7 +45,7 @@ import { AuthHeaderDisplay } from "./header/AuthHeaderDisplay";
 import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import { startOidcLogin } from "../../../utils/oauth/authorize";
+import { startOAuthLogin } from "../../../utils/oauth/authorize";
 
 const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_registration")) {
@@ -552,7 +552,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     kind="primary"
                     size="md"
                     onClick={async () => {
-                        await startOidcLogin(
+                        await startOAuthLogin(
                             this.props.serverConfig.delegatedAuthentication!,
                             this.state.oauthNativeFlow!.clientId,
                             this.props.serverConfig.hsUrl,

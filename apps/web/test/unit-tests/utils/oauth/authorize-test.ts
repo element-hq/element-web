@@ -11,9 +11,9 @@ import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
 import { Crypto } from "@peculiar/webcrypto";
 import { getRandomValues } from "node:crypto";
 
-import { completeOidcLogin, startOidcLogin } from "../../../../src/utils/oauth/authorize";
+import { completeOAuthLogin, startOAuthLogin } from "../../../../src/utils/oauth/authorize";
 import { makeDelegatedAuthMetadata } from "../../../test-utils/auth";
-import { OidcClientError } from "../../../../src/utils/oauth/error";
+import { OAuthClientError } from "../../../../src/utils/oauth/error";
 import { mockPlatformPeg } from "../../../test-utils";
 import { storeAuthContext } from "../../../../src/utils/oauth/persistOAuthSettings.ts";
 
@@ -21,7 +21,7 @@ jest.unmock("matrix-js-sdk/src/randomstring");
 
 const webCrypto = new Crypto();
 
-describe("OIDC authorization", () => {
+describe("OAuth2 authorization", () => {
     const issuer = "https://auth.com/";
     const homeserverUrl = "https://matrix.org";
     const identityServerUrl = "https://is.org";
@@ -58,9 +58,9 @@ describe("OIDC authorization", () => {
         window.location = realWindowLocation;
     });
 
-    describe("startOidcLogin()", () => {
+    describe("startOAuthLogin()", () => {
         it("navigates to authorization endpoint with correct parameters", async () => {
-            await startOidcLogin(delegatedAuthConfig, clientId, homeserverUrl);
+            await startOAuthLogin(delegatedAuthConfig, clientId, homeserverUrl);
 
             const expectedScopeWithoutDeviceId = `urn:matrix:client:api:* urn:matrix:client:device:`;
 
@@ -82,7 +82,7 @@ describe("OIDC authorization", () => {
         });
 
         it("should prefer response_mode fragment if supported", async () => {
-            await startOidcLogin(
+            await startOAuthLogin(
                 { ...delegatedAuthConfig, response_modes_supported: ["query", "fragment"] },
                 clientId,
                 homeserverUrl,
@@ -94,7 +94,7 @@ describe("OIDC authorization", () => {
         });
     });
 
-    describe("completeOidcLogin()", () => {
+    describe("completeOAuth2Login()", () => {
         const state = "test-state-444";
         const code = "test-code-777";
         const params = {
@@ -123,19 +123,19 @@ describe("OIDC authorization", () => {
         });
 
         it("should throw when fragment params do not include state and code", async () => {
-            await expect(async () => await completeOidcLogin({})).rejects.toThrow(
-                OidcClientError.InvalidFragmentParameters,
+            await expect(async () => await completeOAuthLogin({})).rejects.toThrow(
+                OAuthClientError.InvalidFragmentParameters,
             );
         });
 
         it("should make request complete authorization code grant", async () => {
-            await completeOidcLogin(params);
+            await completeOAuthLogin(params);
 
             expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(code);
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
-            const result = await completeOidcLogin(params);
+            const result = await completeOAuthLogin(params);
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,

@@ -52,13 +52,9 @@ import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
-import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oauth/authorize";
-import { getOidcErrorMessage } from "./utils/oauth/error";
-import {
-    getOAuthParams,
-    getStoredOidcClientId,
-    persistOidcAuthenticatedSettings,
-} from "./utils/oauth/persistOAuthSettings";
+import { completeOAuthLogin, type CompleteOAuthLoginResponse } from "./utils/oauth/authorize";
+import { getOAuthErrorMessage } from "./utils/oauth/error";
+import { getOAuthParams, getStoredOAuthClientId, persistOAuthClientId } from "./utils/oauth/persistOAuthSettings";
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
@@ -272,7 +268,7 @@ export async function attemptDelegatedAuthLogin(
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
     if (urlParams.oauth2) {
-        return attemptOidcNativeLogin(urlParams.oauth2);
+        return attemptOAuthLogin(urlParams.oauth2);
     }
 
     return attemptTokenLogin(urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
@@ -283,12 +279,12 @@ export async function attemptDelegatedAuthLogin(
  * @param urlParams subset of app-load url parameters relating to oauth auth
  * @returns Promise that resolves to true when login succeeded, else false
  */
-async function attemptOidcNativeLogin(urlParams: NonNullable<URLParams["oauth2"]>): Promise<boolean> {
+async function attemptOAuthLogin(urlParams: NonNullable<URLParams["oauth2"]>): Promise<boolean> {
     console.log("We have OAuth2 params - attempting login");
 
     try {
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, clientId } =
-            await completeOidcLogin(urlParams);
+            await completeOAuthLogin(urlParams);
 
         await configureFromCompletedOAuthLogin({
             accessToken,
@@ -302,7 +298,7 @@ async function attemptOidcNativeLogin(urlParams: NonNullable<URLParams["oauth2"]
     } catch (error) {
         logger.error("Failed to login via OAuth", error);
 
-        onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
+        onFailedDelegatedAuthLogin(getOAuthErrorMessage(error as Error));
         return false;
     }
 }
@@ -317,7 +313,7 @@ export async function configureFromCompletedOAuthLogin({
     homeserverUrl,
     identityServerUrl,
     clientId,
-}: CompleteOidcLoginResponse): Promise<IMatrixClientCreds> {
+}: CompleteOAuthLoginResponse): Promise<IMatrixClientCreds> {
     const {
         user_id: userId,
         device_id: deviceId,
@@ -337,7 +333,7 @@ export async function configureFromCompletedOAuthLogin({
     logger.debug("Logged in via OAuth2 native flow");
     await onSuccessfulDelegatedAuthLogin(credentials);
     // this needs to happen after success handler which clears storages
-    persistOidcAuthenticatedSettings(clientId);
+    persistOAuthClientId(clientId);
     return credentials;
 }
 
@@ -1219,7 +1215,7 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
  * Returned promise will reject if the session or the server are not OAuth2-native.
  */
 async function hydrateAuth(): Promise<OAuth2> {
-    const storedClientId = getStoredOidcClientId();
+    const storedClientId = getStoredOAuthClientId();
     const homeserverUrl = localStorage.getItem(HOMESERVER_URL_KEY)!;
 
     const tempClient = new MatrixClient({ baseUrl: homeserverUrl });

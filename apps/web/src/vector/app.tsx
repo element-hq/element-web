@@ -34,7 +34,7 @@ import { RoomView } from "../components/structures/RoomView";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
 import Login from "../Login.ts";
-import { startOidcLogin } from "../utils/oauth/authorize.ts";
+import { startOAuthLogin } from "../utils/oauth/authorize.ts";
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
@@ -68,9 +68,9 @@ async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
         });
         const flows = await login.getFlows();
 
-        const nativeOidcFlow = flows.find((flow) => "clientId" in flow);
-        if (nativeOidcFlow && config.delegatedAuthentication) {
-            await startOidcLogin(config.delegatedAuthentication, nativeOidcFlow.clientId, config.hsUrl, config.isUrl);
+        const nativeOAuthFlow = flows.find((flow) => "clientId" in flow);
+        if (nativeOAuthFlow && config.delegatedAuthentication) {
+            await startOAuthLogin(config.delegatedAuthentication, nativeOAuthFlow.clientId, config.hsUrl, config.isUrl);
             return true;
         }
 

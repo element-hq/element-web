@@ -31,7 +31,7 @@ import AuthHeader from "../../views/auth/AuthHeader";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
-import { startOidcLogin } from "../../../utils/oauth/authorize";
+import { startOAuthLogin } from "../../../utils/oauth/authorize";
 import { ModuleApi } from "../../../modules/Api.ts";
 
 interface IProps {
@@ -122,7 +122,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             "m.login.cas": () => this.renderSsoStep("cas"),
             // eslint-disable-next-line @typescript-eslint/naming-convention
             "m.login.sso": () => this.renderSsoStep("sso"),
-            "oauthNativeFlow": () => this.renderOidcNativeStep(),
+            "oauthNativeFlow": () => this.renderOAuth2Step(),
         };
     }
 
@@ -435,7 +435,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
         );
     };
 
-    private renderOidcNativeStep = (): React.ReactNode => {
+    private renderOAuth2Step = (): React.ReactNode => {
         const flow = this.state.flows!.find((flow) => flow.type === "oauthNativeFlow")! as OAuthNativeFlow;
         return (
             <Button
@@ -443,7 +443,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                 kind="primary"
                 size="md"
                 onClick={async () => {
-                    await startOidcLogin(
+                    await startOAuthLogin(
                         this.props.serverConfig.delegatedAuthentication!,
                         flow.clientId,
                         this.props.serverConfig.hsUrl,

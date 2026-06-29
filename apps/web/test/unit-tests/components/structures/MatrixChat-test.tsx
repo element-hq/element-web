@@ -52,7 +52,7 @@ import {
     unmockClientPeg,
 } from "../../../test-utils";
 import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
-import { OidcClientError } from "../../../../src/utils/oauth/error";
+import { OAuthClientError } from "../../../../src/utils/oauth/error";
 import LegacyCallHandler from "../../../../src/LegacyCallHandler";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { type Call } from "../../../../src/models/Call";
@@ -537,7 +537,7 @@ describe("<MatrixChat />", () => {
 
             expect(logger.error).toHaveBeenCalledWith(
                 "Failed to login via OAuth",
-                new Error(OidcClientError.InvalidFragmentParameters),
+                new Error(OAuthClientError.InvalidFragmentParameters),
             );
 
             await expectOAuthError();

@@ -30,12 +30,12 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
-import { type CompleteOidcLoginResponse } from "../../../utils/oauth/authorize";
-import { getOidcClientId } from "../../../utils/oauth/registerClient.ts";
+import { type CompleteOAuthLoginResponse } from "../../../utils/oauth/authorize";
+import { getOAuthClientId } from "../../../utils/oauth/registerClient.ts";
 import SdkConfig from "../../../SdkConfig.ts";
 import { type Context } from "../../../utils/oauth/persistOAuthSettings.ts";
 
-export type QrLoginCredentials = CompleteOidcLoginResponse &
+export type QrLoginCredentials = CompleteOAuthLoginResponse &
     Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>> & {
         deviceId: string;
     };
@@ -260,7 +260,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     if (!metadata.grant_types_supported.includes(OAuthGrantType.DeviceAuthorization)) {
                         throw new Error("Server does not support Device Authorization Grant");
                     }
-                    clientId = await getOidcClientId(metadata, SdkConfig.get().oidc_static_clients);
+                    clientId = await getOAuthClientId(metadata, SdkConfig.get().oidc_static_clients);
                 } catch (e) {
                     this.setState({
                         phase: Phase.Error,

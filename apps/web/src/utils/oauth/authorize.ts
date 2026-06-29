@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { OAuth2, OAuth2Error, type ValidatedAuthMetadata } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
-import { OidcClientError } from "./error";
+import { OAuthClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
 import { type URLParams } from "../../vector/url_utils.ts";
 import { getOAuthParams, loadAuthContext, storeAuthContext } from "./persistOAuthSettings.ts";
@@ -17,7 +17,7 @@ import { getOAuthParams, loadAuthContext, storeAuthContext } from "./persistOAut
 const RESPONSE_MODE = "fragment";
 
 /**
- * Start OIDC authorization code flow
+ * Start OAuth2 authorization code flow
  * Generates auth params, stores them in session storage and
  * Navigates to configured authorization endpoint
  * @param authMetadata from {@link MatrixClient.getAuthMetdata}
@@ -27,7 +27,7 @@ const RESPONSE_MODE = "fragment";
  * @param isRegistration if true will set the prompt to "create"
  * @returns Promise that resolves after we have navigated to auth endpoint
  */
-export const startOidcLogin = async (
+export const startOAuthLogin = async (
     authMetadata: ValidatedAuthMetadata,
     clientId: string,
     homeserverUrl: string,
@@ -68,16 +68,16 @@ const getCodeAndStateFromParams = ({
     state,
 }: NonNullable<URLParams["oauth2"]>): { code: string; state: string } => {
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
-        throw new Error(OidcClientError.InvalidFragmentParameters);
+        throw new Error(OAuthClientError.InvalidFragmentParameters);
     }
     return { code, state };
 };
 
 /**
- * Return type for {@link completeOidcLogin}
+ * Return type for {@link completeOAuthLogin}
  * Contains all the credentials gathered from a successful OIDC login
  */
-export type CompleteOidcLoginResponse = {
+export type CompleteOAuthLoginResponse = {
     /**
      * URL of the homeserver selected during login
      */
@@ -103,12 +103,12 @@ export type CompleteOidcLoginResponse = {
 /**
  * Attempt to complete authorization code flow to get an access token
  * @param urlParams the parameters extracted from the app-load URI.
- * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
+ * @returns Promise that resolves with a CompleteOAuthLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
-export const completeOidcLogin = async (
+export const completeOAuthLogin = async (
     urlParams: NonNullable<URLParams["oauth2"]>,
-): Promise<CompleteOidcLoginResponse> => {
+): Promise<CompleteOAuthLoginResponse> => {
     const { code, state } = getCodeAndStateFromParams(urlParams);
     const context = loadAuthContext();
 

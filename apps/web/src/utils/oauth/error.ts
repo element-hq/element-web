@@ -15,7 +15,7 @@ import { _t } from "../../languageHandler";
  * Errors thrown by EW during OIDC native flow authentication.
  * Intended to be logged, not read by users.
  */
-export enum OidcClientError {
+export enum OAuthClientError {
     InvalidFragmentParameters = "Invalid fragment parameters for OIDC native login. `code` and `state` are required.",
 }
 
@@ -25,11 +25,11 @@ export enum OidcClientError {
  * @param error
  * @returns a friendly translated error message for user consumption
  */
-export const getOidcErrorMessage = (error: Error): string | ReactNode => {
+export const getOAuthErrorMessage = (error: Error): string | ReactNode => {
     switch (error.message) {
         case OAuth2Error.MissingOrInvalidStoredState:
             return _t("auth|oidc|missing_or_invalid_stored_state");
-        case OidcClientError.InvalidFragmentParameters:
+        case OAuthClientError.InvalidFragmentParameters:
         case OAuth2Error.CodeExchangeFailed:
         case OAuth2Error.InvalidBearerTokenResponse:
         default:

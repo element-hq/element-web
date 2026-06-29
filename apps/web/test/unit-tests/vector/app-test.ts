@@ -82,10 +82,10 @@ describe("sso_redirect_options", () => {
             };
             fetchMock.get("https://synapse/_matrix/client/v1/auth_metadata", authConfig);
 
-            const startOidcLoginSpy = jest.spyOn(window.location, "href", "set");
+            const startOAuthLoginSpy = jest.spyOn(window.location, "href", "set");
 
             await loadApp({}, jest.fn());
-            expect(startOidcLoginSpy).toHaveBeenCalledWith(
+            expect(startOAuthLoginSpy).toHaveBeenCalledWith(
                 "https://auth.org/auth?response_type=code&response_mode=fragment&client_id=12345&redirect_uri=https%3A%2F%2Fapp.element.io%2F%3Fno_universal_links%3Dtrue&scope=urn%3Amatrix%3Aclient%3Aapi%3A*+urn%3Amatrix%3Aclient%3Adevice%3AefiPqpMRMw&state=38QgU2PomxwKpa6hpi3YEetmBG4yVCeE&code_challenge_method=S256&code_challenge=K7YiVESe7aP10nby6-SgZB3z4qblEkAKhrONGnqQN7k",
             );
         });

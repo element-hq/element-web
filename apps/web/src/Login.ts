@@ -21,7 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { type IMatrixClientCreds } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
-import { getOidcClientId } from "./utils/oauth/registerClient";
+import { getOAuthClientId } from "./utils/oauth/registerClient";
 import { type IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
 import { isUserRegistrationSupported } from "./utils/oauth/isUserRegistrationSupported";
@@ -29,7 +29,7 @@ import { isUserRegistrationSupported } from "./utils/oauth/isUserRegistrationSup
 /**
  * Login flows supported by this client
  * LoginFlow type use the client API /login endpoint
- * OidcNativeFlow is specific to this client
+ * OAuthNativeFlow is specific to this client
  */
 export type ClientLoginFlow = LoginFlow | OAuthNativeFlow;
 
@@ -111,12 +111,12 @@ export default class Login {
         // try to use oauth2 native flow if we have delegated auth config
         if (this.delegatedAuthentication) {
             try {
-                const oidcFlow = await tryInitOidcNativeFlow(
+                const oauthFlow = await tryInitOAuthNativeFlow(
                     this.delegatedAuthentication,
                     SdkConfig.get().oidc_static_clients,
                     isRegistration,
                 );
-                return [oidcFlow];
+                return [oauthFlow];
             } catch (error) {
                 logger.error("Failed to get OAuth2 native flow", error);
             }
@@ -209,27 +209,27 @@ export interface OAuthNativeFlow extends ILoginFlow {
     clientId: string;
 }
 /**
- * Prepares an OidcNativeFlow for logging into the server.
+ * Prepares an OAuthNativeFlow for logging into the server.
  *
  * Finds a static clientId for configured issuer, or attempts dynamic registration with the OP, and wraps the
  * results.
  *
  * @param delegatedAuthConfig  Auth config from ValidatedServerConfig
- * @param staticOidcClientIds static client config from config.json, used during client registration with OP
+ * @param staticOAuthClientIds static client config from config.json, used during client registration with OP
  * @param isRegistration true when we are attempting registration
- * @returns Promise<OidcNativeFlow> when oauth native authentication flow is supported and correctly configured
+ * @returns Promise<OAuthNativeFlow> when oauth native authentication flow is supported and correctly configured
  * @throws when client can't register with OP, or any unexpected error
  */
-const tryInitOidcNativeFlow = async (
+const tryInitOAuthNativeFlow = async (
     delegatedAuthConfig: ValidatedAuthMetadata,
-    staticOidcClientIds?: IConfigOptions["oidc_static_clients"],
+    staticOAuthClientIds?: IConfigOptions["oidc_static_clients"],
     isRegistration?: boolean,
 ): Promise<OAuthNativeFlow> => {
     // if registration is not supported, bail before attempting to get the clientId
     if (isRegistration && !isUserRegistrationSupported(delegatedAuthConfig)) {
         throw new Error("Registration is not supported by OP");
     }
-    const clientId = await getOidcClientId(delegatedAuthConfig, staticOidcClientIds);
+    const clientId = await getOAuthClientId(delegatedAuthConfig, staticOAuthClientIds);
 
     const flow = {
         type: "oauthNativeFlow",

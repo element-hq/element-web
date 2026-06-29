@@ -18,7 +18,7 @@ const stateSessionStorageKey = "mx_oauth_state";
  * Only set after successful authentication
  * @param clientId
  */
-export const persistOidcAuthenticatedSettings = (clientId: string): void => {
+export const persistOAuthClientId = (clientId: string): void => {
     localStorage.setItem(clientIdLocalStorageKey, clientId);
 };
 
@@ -28,7 +28,7 @@ export const persistOidcAuthenticatedSettings = (clientId: string): void => {
  * @returns clientId
  * @throws when clientId is not found in local storage
  */
-export const getStoredOidcClientId = (): string => {
+export const getStoredOAuthClientId = (): string => {
     const clientId = localStorage.getItem(clientIdLocalStorageKey);
     if (!clientId) {
         throw new Error("OAuth client ID not found in storage");

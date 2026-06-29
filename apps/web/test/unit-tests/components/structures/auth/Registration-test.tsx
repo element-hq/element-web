@@ -22,10 +22,10 @@ import {
 } from "../../../../test-utils";
 import Registration from "../../../../../src/components/structures/auth/Registration";
 import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth";
-import { startOidcLogin } from "../../../../../src/utils/oauth/authorize";
+import { startOAuthLogin } from "../../../../../src/utils/oauth/authorize";
 
 jest.mock("../../../../../src/utils/oauth/authorize", () => ({
-    startOidcLogin: jest.fn(),
+    startOAuthLogin: jest.fn(),
 }));
 
 jest.mock("matrix-js-sdk/src/matrix", () => ({
@@ -190,7 +190,7 @@ describe("Registration", function () {
 
             fireEvent.click(await screen.findByText("Continue"));
 
-            expect(startOidcLogin).toHaveBeenCalledWith(
+            expect(startOAuthLogin).toHaveBeenCalledWith(
                 authConfig,
                 clientId,
                 defaultHsUrl,

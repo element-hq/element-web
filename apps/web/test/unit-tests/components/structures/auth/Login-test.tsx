@@ -28,7 +28,7 @@ import { ModuleApi } from "../../../../../src/modules/Api.ts";
 
 jest.useRealTimers();
 
-const oidcStaticClientsConfig = {
+const oauthStaticClientsConfig = {
     "https://staticallyregisteredissuer.org/": {
         client_id: "static-clientId-123",
     },
@@ -46,7 +46,7 @@ describe("Login", function () {
         SdkConfig.put({
             brand: "test-brand",
             disable_custom_urls: true,
-            oidc_static_clients: oidcStaticClientsConfig,
+            oidc_static_clients: oauthStaticClientsConfig,
         });
         mockClient.login.mockClear().mockResolvedValue({
             access_token: "TOKEN",
@@ -406,9 +406,9 @@ describe("Login", function () {
             jest.spyOn(logger, "error").mockRestore();
         });
 
-        it("should attempt to register oidc client", async () => {
+        it("should attempt to register oauth client", async () => {
             // dont mock, spy so we can check config values were correctly passed
-            jest.spyOn(registerClientUtils, "getOidcClientId");
+            jest.spyOn(registerClientUtils, "getOAuthClientId");
             fetchMock.post(delegatedAuth.registration_endpoint!, { status: 500 });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
@@ -417,7 +417,7 @@ describe("Login", function () {
             // tried to register
             expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             // called with values from config
-            expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(delegatedAuth, oidcStaticClientsConfig);
+            expect(registerClientUtils.getOAuthClientId).toHaveBeenCalledWith(delegatedAuth, oauthStaticClientsConfig);
         });
 
         it("should fallback to normal login when client registration fails", async () => {
@@ -429,7 +429,7 @@ describe("Login", function () {
             // tried to register
             expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             expect(logger.error).toHaveBeenCalledWith(
-                "Failed to get oidc native flow",
+                "Failed to get OAuth2 native flow",
                 new Error(OAuth2Error.DynamicRegistrationFailed),
             );
 
@@ -440,7 +440,7 @@ describe("Login", function () {
         });
 
         // short term during active development, UI will be added in next PRs
-        it("should show continue button when oidc native flow is correctly configured", async () => {
+        it("should show continue button when oauth native flow is correctly configured", async () => {
             fetchMock.post(delegatedAuth.registration_endpoint!, { client_id: "abc123" });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
