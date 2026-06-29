@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useEffect, useRef, type ReactNode, type Ref } from "react";
+import React, { type JSX, memo, useEffect, useRef, useState, type ReactNode, type Ref } from "react";
 import classNames from "classnames";
 import { useMergeRefs } from "react-merge-refs";
 
@@ -177,11 +177,34 @@ export const RoomListItemView = memo(function RoomListItemView({
     const mergedRef = useMergeRefs([ref, internalRef]);
     const item = useViewModel(vm);
 
+    // Reveal the hover menu when the row is focused via the keyboard (not the mouse), and keep it
+    // revealed while focus moves onto the menu buttons so they stay reachable by Tab. A pure CSS
+    // :focus-visible rule can't do the latter: it drops the instant focus leaves the row for a child,
+    // hiding the menu mid-Tab and dropping focus to <body>. A :focus-within rule reveals it for mouse
+    // focus too, which clutters selected/clicked rows. So we mark keyboard focus in JS (using the
+    // browser's own :focus-visible determination) and keep it set until focus leaves the row entirely.
+    const [keyboardActive, setKeyboardActive] = useState(false);
+
     useEffect(() => {
         if (isFocused) {
             internalRef.current?.focus({ preventScroll: true } as FocusOptions);
         }
     }, [isFocused]);
+
+    const onItemFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
+        onFocus(item.id, e);
+        // Only when focus enters the row from outside via the keyboard.
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null) && e.currentTarget.matches(":focus-visible")) {
+            setKeyboardActive(true);
+        }
+    };
+
+    const onItemBlur = (e: React.FocusEvent<HTMLButtonElement>): void => {
+        // Keep it revealed while focus is on a child menu button; clear once focus leaves the row.
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+            setKeyboardActive(false);
+        }
+    };
 
     // Generate a11y label from notification state and room name
     const a11yLabel = getA11yLabel(item.name, item.notification);
@@ -192,6 +215,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                 as="button"
                 ref={mergedRef}
                 className={classNames(styles.roomListItem, "mx_RoomListItemView", {
+                    [styles.keyboardActive]: keyboardActive,
                     [styles.selected]: isSelected,
                     [styles.bold]: item.isBold,
                     [styles.firstItem]: isFirstItem,
@@ -204,7 +228,8 @@ export const RoomListItemView = memo(function RoomListItemView({
                 type="button"
                 aria-label={a11yLabel}
                 onClick={vm.onOpenRoom}
-                onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(item.id, e)}
+                onFocus={onItemFocus}
+                onBlur={onItemBlur}
                 tabIndex={isFocused ? 0 : -1}
                 aria-selected={props.role === "option" ? isSelected : undefined}
                 {...props}
