@@ -28,7 +28,7 @@ import {
 type RoomListViewProps = RoomListViewSnapshot &
     RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
-const mockFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite"];
+const mockFilterIds: FilterId[] = ["unread", "people", "rooms"];
 
 // Wrapper component that creates a mocked ViewModel
 const RoomListViewWrapperImpl = ({
@@ -164,12 +164,12 @@ export const EmptyWithoutCreatePermission: Story = {
 
 export const WithActiveFilter: Story = {
     args: {
-        filterIds: ["unread", "people", "rooms", "favourite"],
-        activeFilterId: "favourite",
+        filterIds: ["unread", "people", "rooms"],
+        activeFilterId: "people",
         roomListState: {
             activeRoomIndex: undefined,
             spaceId: "!space:server",
-            filterKeys: ["favourites"],
+            filterKeys: ["people"],
         },
     },
 };
@@ -181,14 +181,6 @@ export const WithSelection: Story = {
             spaceId: "!space:server",
             filterKeys: undefined,
         },
-    },
-};
-
-export const EmptyFavouriteFilter: Story = {
-    args: {
-        isRoomListEmpty: true,
-        filterIds: ["favourite", "people"],
-        activeFilterId: "favourite",
     },
 };
 
@@ -230,14 +222,6 @@ export const EmptyMentionsFilter: Story = {
 
         filterIds: ["mentions", "people"],
         activeFilterId: "mentions",
-    },
-};
-
-export const EmptyLowPriorityFilter: Story = {
-    args: {
-        isRoomListEmpty: true,
-        filterIds: ["low_priority", "people"],
-        activeFilterId: "low_priority",
     },
 };
 

@@ -105,7 +105,6 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
-    canMoveToSection: true,
     sections: [],
 });
 

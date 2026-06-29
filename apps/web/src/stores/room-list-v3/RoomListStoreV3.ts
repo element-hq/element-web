@@ -173,10 +173,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
         const spaceId = SpaceStore.instance.activeSpace;
 
-        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
-        const sections = areSectionsEnabled
-            ? this.getSections(filterKeys)
-            : [{ tag: CHATS_TAG, rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filterKeys) ?? []) }];
+        const sections = this.getSections(filterKeys);
 
         return {
             spaceId: spaceId,

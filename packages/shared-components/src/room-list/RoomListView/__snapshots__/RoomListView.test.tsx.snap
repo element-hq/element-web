@@ -45,15 +45,6 @@ exports[`<RoomListView /> > renders Default story 1`] = `
           >
             Rooms
           </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
-          </button>
         </div>
       </div>
     </div>
@@ -2726,15 +2717,6 @@ exports[`<RoomListView /> > renders Empty story 1`] = `
           >
             Rooms
           </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
-          </button>
         </div>
       </div>
     </div>
@@ -2815,75 +2797,6 @@ exports[`<RoomListView /> > renders Empty story 1`] = `
 </div>
 `;
 
-exports[`<RoomListView /> > renders EmptyFavouriteFilter story 1`] = `
-<div>
-  <div
-    style="width: 320px; height: 600px; border: 1px solid var(--cpd-color-border-interactive-primary); display: flex; flex-direction: column; resize: horizontal; overflow: auto; min-width: 250px; max-width: 800px;"
-  >
-    <div>
-      <div
-        class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
-        data-testid="primary-filters"
-        style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
-      >
-        <div
-          aria-label="Room list filters"
-          class="Flex-module_flex RoomListPrimaryFilters-module_list"
-          id="react-use-id-1"
-          role="listbox"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
-        >
-          <button
-            aria-hidden="false"
-            aria-selected="true"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            People
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class="Flex-module_flex RoomListView-module_list"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
-    >
-      <div
-        class="AutoHideScrollbar-module_scrollbar RoomListView-module_scrollbar"
-        tabindex="-1"
-      >
-        <div
-          class="Flex-module_flex RoomListEmptyStateView-module_genericPlaceholder"
-          data-testid="empty-room-list"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-        >
-          <span
-            class="RoomListEmptyStateView-module_title"
-          >
-            You don't have favourite chats yet
-          </span>
-          <span
-            class="RoomListEmptyStateView-module_description"
-          >
-            You can add a chat to your favourites in the chat settings
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`<RoomListView /> > renders EmptyInvitesFilter story 1`] = `
 <div>
   <div
@@ -2940,79 +2853,6 @@ exports[`<RoomListView /> > renders EmptyInvitesFilter story 1`] = `
             class="RoomListEmptyStateView-module_title"
           >
             You don't have any unread invites
-          </span>
-          <button
-            class="_button_1nw83_8"
-            data-kind="tertiary"
-            data-size="lg"
-            role="button"
-            tabindex="0"
-          >
-            See all activity
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`<RoomListView /> > renders EmptyLowPriorityFilter story 1`] = `
-<div>
-  <div
-    style="width: 320px; height: 600px; border: 1px solid var(--cpd-color-border-interactive-primary); display: flex; flex-direction: column; resize: horizontal; overflow: auto; min-width: 250px; max-width: 800px;"
-  >
-    <div>
-      <div
-        class="Flex-module_flex RoomListPrimaryFilters-module_roomListPrimaryFilters"
-        data-testid="primary-filters"
-        style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
-      >
-        <div
-          aria-label="Room list filters"
-          class="Flex-module_flex RoomListPrimaryFilters-module_list"
-          id="react-use-id-1"
-          role="listbox"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
-        >
-          <button
-            aria-hidden="false"
-            aria-selected="true"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Low priority
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            People
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class="Flex-module_flex RoomListView-module_list"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
-    >
-      <div
-        class="AutoHideScrollbar-module_scrollbar RoomListView-module_scrollbar"
-        tabindex="-1"
-      >
-        <div
-          class="Flex-module_flex RoomListEmptyStateView-module_genericPlaceholder"
-          data-testid="empty-room-list"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
-        >
-          <span
-            class="RoomListEmptyStateView-module_title"
-          >
-            You don't have any low priority rooms
           </span>
           <button
             class="_button_1nw83_8"
@@ -3359,15 +3199,6 @@ exports[`<RoomListView /> > renders EmptyWithoutCreatePermission story 1`] = `
           >
             Rooms
           </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
-          </button>
         </div>
       </div>
     </div>
@@ -3471,15 +3302,6 @@ exports[`<RoomListView /> > renders LargeFlatList story 1`] = `
             tabindex="0"
           >
             Rooms
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
           </button>
         </div>
       </div>
@@ -8372,15 +8194,6 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
             tabindex="0"
           >
             Rooms
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
           </button>
         </div>
       </div>
@@ -13434,15 +13247,6 @@ exports[`<RoomListView /> > renders Loading story 1`] = `
           >
             Rooms
           </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
-          </button>
         </div>
       </div>
     </div>
@@ -13507,15 +13311,6 @@ exports[`<RoomListView /> > renders SmallFlatList story 1`] = `
             tabindex="0"
           >
             Rooms
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
           </button>
         </div>
       </div>
@@ -13869,15 +13664,6 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
             tabindex="0"
           >
             Rooms
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
           </button>
         </div>
       </div>
@@ -14367,15 +14153,6 @@ exports[`<RoomListView /> > renders Toast story 1`] = `
             tabindex="0"
           >
             Rooms
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="false"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
           </button>
         </div>
       </div>
@@ -17067,7 +16844,7 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
           </button>
           <button
             aria-hidden="false"
-            aria-selected="false"
+            aria-selected="true"
             class="_chat-filter_5qdp0_8"
             role="option"
             tabindex="0"
@@ -17082,15 +16859,6 @@ exports[`<RoomListView /> > renders WithActiveFilter story 1`] = `
             tabindex="0"
           >
             Rooms
-          </button>
-          <button
-            aria-hidden="false"
-            aria-selected="true"
-            class="_chat-filter_5qdp0_8"
-            role="option"
-            tabindex="0"
-          >
-            Favourites
           </button>
         </div>
       </div>

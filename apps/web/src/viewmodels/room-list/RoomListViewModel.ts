@@ -40,7 +40,6 @@ import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
 import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
-import SettingsStore from "../../settings/SettingsStore";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 
@@ -64,10 +63,8 @@ const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
     [FilterEnum.UnreadFilter, "unread"],
     [FilterEnum.PeopleFilter, "people"],
     [FilterEnum.RoomsFilter, "rooms"],
-    [FilterEnum.FavouriteFilter, "favourite"],
     [FilterEnum.MentionsFilter, "mentions"],
     [FilterEnum.InvitesFilter, "invites"],
-    [FilterEnum.LowPriorityFilter, "low_priority"],
 ]);
 
 const TAG_TO_TITLE_MAP: Record<string, string> = {
@@ -146,11 +143,7 @@ export class RoomListViewModel
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
-        // Remove favourite and low priority filters if sections are enabled, as they are redundant with the sections
-        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
-        const filterIds = [...filterKeyToIdMap.values()].filter(
-            (id) => !areSectionsEnabled || (id !== "favourite" && id !== "low_priority"),
-        );
+        const filterIds = [...filterKeyToIdMap.values()];
 
         // By default, all sections are expanded
         const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
@@ -756,8 +749,8 @@ export class RoomListViewModel
      * @param isFlatList - Whether the room list is currently displayed as a flat list
      */
     private notifyCollapseState(isFlatList: boolean): void {
-        // Hide collapse/expand all button if sections are disabled or if it's a flat list
-        if (!SettingsStore.getValue("feature_room_list_sections") || isFlatList) {
+        // Hide collapse/expand all button if it's a flat list
+        if (isFlatList) {
             dispatcher.dispatch<RoomListSectionsCollapseStateChangedPayload>({
                 action: Action.RoomListSectionsCollapseStateChanged,
                 collapseSections: undefined,

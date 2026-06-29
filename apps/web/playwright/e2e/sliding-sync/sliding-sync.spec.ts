@@ -291,7 +291,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Room to Join", "Test Room"], page);
     });
 
-    test("should show a favourite DM only in the favourite sublist", async ({ page, app }) => {
+    test("should show a favourite DM only in the favourite section", async ({ page, app }) => {
         const roomId = await app.client.createRoom({
             name: "Favourite DM",
             is_direct: true,
@@ -300,12 +300,9 @@ test.describe("Sliding Sync", () => {
             await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
         }, roomId);
 
-        await getFilterExpandButton(page).click();
+        await expect(page.getByRole("button", { name: "Favourite DM" })).toBeVisible();
+
         const primaryFilters = getPrimaryFilters(page);
-        await primaryFilters.getByRole("option", { name: "Favourites" }).click();
-
-        await expect(page.getByRole("option", { name: "Favourite DM" })).toBeVisible();
-
         await primaryFilters.getByRole("option", { name: "People" }).click();
 
         await expect(page.getByRole("option", { name: "Favourite DM" })).not.toBeAttached();
