@@ -149,9 +149,12 @@ rows), while the opaque fill is painted by the pseudo-element below.
 /*
 The opaque fill. It stops short of the inline-end edge by the same gutter the room/header pills
 already leave clear (--cpd-space-3x), so the scroller's scrollbar — which floats in that gutter —
-stays visible instead of being covered by the pinned overlay. The negative z-index keeps the fill
-behind the header's text/chevron while still sitting above the scrolling rows (the overlay wrapper
-owns the stacking context).
+stays visible instead of being covered by the pinned overlay. It's a separate inset layer (rather
+than a plain `background` on .stickyBackground) precisely so it can stop short of that gutter.
+
+An absolutely-positioned element paints ABOVE its statically-positioned siblings by default, so
+`z-index: -1` is needed to drop this fill behind the header's text/chevron/menu. It still covers the
+scrolling rows beneath because the overlay wrapper (.stickyHeader) owns the stacking context.
 */
 .stickyBackground::before {
     content: "";
