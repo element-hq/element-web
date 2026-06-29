@@ -52,7 +52,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         for (const link of this.links) {
             try {
                 const preview = await this.fetcher.fetchPreview(link, true);
-                if (preview.title && preview.description) {
+                if (preview?.title && preview.description) {
                     this.snapshot.set({ preview });
                     return;
                 }
