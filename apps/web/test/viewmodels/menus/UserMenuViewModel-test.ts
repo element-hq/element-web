@@ -7,7 +7,7 @@
 import { MatrixError, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 
-import type { MockedObject } from "jest-mock";
+import type { MockedObject } from "jest-mock-vitest-adapter";
 import { UserMenuViewModel } from "../../../src/viewmodels/menus/UserMenuViewModel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";

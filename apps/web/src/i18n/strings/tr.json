@@ -919,14 +919,6 @@
         "set_up_recovery": "Kurtarmayı ayarlayın",
         "set_up_recovery_toast_description": "Cihazlarınıza erişiminizi kaybetmeniz durumunda şifrelenmiş mesaj geçmişinizi geri yüklemek için kullanılabilecek bir kurtarma anahtarı oluşturun.",
         "set_up_toast_title": "Güvenli Yedekleme kur",
-        "udd": {
-            "interactive_verification_button": "Emoji ile etkileşimli olarak doğrula",
-            "other_ask_verify_text": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
-            "other_new_session_text": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
-            "own_ask_verify_text": "Diğer oturumunuzu aşağıdaki seçeneklerden birini kullanarak doğrulayın.",
-            "own_new_session_text": "Yeni bir oturuma, doğrulamadan oturum açtınız:",
-            "title": "Güvenilmiyor"
-        },
         "unable_to_setup_keys_error": "Anahtarlar ayarlanamıyor",
         "verification": {
             "accepting": "Kabul ediyorum…",
@@ -3779,13 +3771,7 @@
         "close_to_view_right_panel": "Bu panelde görüntülemek için bu widget'ı kapatın",
         "context_menu": {
             "delete": "Görsel bileşen sil",
-            "delete_warning": "Bir widget silindiğinde, widget bu odadaki tüm kullanıcılar için kaldırılır. Bu widget'ı silmek istediğinizden emin misiniz?",
-            "move_left": "Sola taşı",
-            "move_right": "Sağa taşı",
-            "remove": "Herkes için sil",
-            "revoke": "İzinleri iptal et",
-            "screenshot": "Resim çek",
-            "start_audio_stream": "Ses akışını başlat"
+            "delete_warning": "Bir widget silindiğinde, widget bu odadaki tüm kullanıcılar için kaldırılır. Bu widget'ı silmek istediğinizden emin misiniz?"
         },
         "cookie_warning": "Bu widget çerezleri kullanabilir.",
         "error_hangup_description": "Aramayla bağlantınız kesildi. (Hata: %(message)s)",

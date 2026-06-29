@@ -988,14 +988,6 @@
         "set_up_toast_title": "Nastaviť bezpečné zálohovanie",
         "turn_on_key_storage": "Zapnúť úložisko kľúčov",
         "turn_on_key_storage_description": "Uložte svoju kryptografickú totožnosť a kľúče správ bezpečne na serveri. To vám umožní zobraziť históriu správ na všetkých nových zariadeniach.",
-        "udd": {
-            "interactive_verification_button": "Interaktívne overte pomocou emotikonov",
-            "other_ask_verify_text": "Poproste tohto používateľa, aby si overil svoju reláciu alebo ju nižšie manuálne overte.",
-            "other_new_session_text": "%(name)s (%(userId)s) sa prihlásil do novej relácie bez jej overenia:",
-            "own_ask_verify_text": "Overte svoje ostatné relácie pomocou jednej z nižšie uvedených možností.",
-            "own_new_session_text": "Prihlásili ste sa do novej relácie bez jej overenia:",
-            "title": "Nedôveryhodné"
-        },
         "unable_to_setup_keys_error": "Nie je možné nastaviť kľúče",
         "verification": {
             "accepting": "Akceptovanie…",
@@ -4053,13 +4045,7 @@
         "close_to_view_right_panel": "Zatvorte tento widget a zobrazíte ho na tomto paneli",
         "context_menu": {
             "delete": "Vymazať widget",
-            "delete_warning": "Týmto vymažete widget pre všetkých používateľov v tejto miestnosti. Ste si istí, že chcete vymazať tento widget?",
-            "move_left": "Presun doľava",
-            "move_right": "Presun doprava",
-            "remove": "Odstrániť pre všetkých",
-            "revoke": "Odvolať oprávnenia",
-            "screenshot": "Urobiť fotografiu",
-            "start_audio_stream": "Spustiť zvukový prenos"
+            "delete_warning": "Týmto vymažete widget pre všetkých používateľov v tejto miestnosti. Ste si istí, že chcete vymazať tento widget?"
         },
         "cookie_warning": "Tento widget môže používať súbory cookie.",
         "error_hangup_description": "Boli ste odpojení od hovoru. (Chyba: %(message)s)",

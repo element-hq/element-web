@@ -19,4 +19,5 @@ export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     isMessagePreviewEnabled: true,
     useComposeIcon: true,
     canCreateSection: true,
+    displaySectionReleaseAnnouncement: false,
 };

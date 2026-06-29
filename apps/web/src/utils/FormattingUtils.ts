@@ -10,7 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import { type ReactElement, type ReactNode } from "react";
 import { useIdColorHash } from "@vector-im/compound-web";
 
-import { _t, getCurrentLanguage, getUserLanguage } from "../languageHandler";
+import { _t, getCurrentLanguage } from "../languageHandler";
+import { getUserLanguage } from "../i18n/settings";
 import { jsxJoin } from "./ReactUtils";
 
 export { formatBytes } from "@element-hq/web-shared-components";

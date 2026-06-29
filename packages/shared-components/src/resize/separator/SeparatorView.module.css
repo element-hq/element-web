@@ -73,7 +73,7 @@
     Without this, we'd only capture the events within a narrow 2px/1px border.
     */
     position: absolute;
-    width: 20px;
+    width: 10px;
     z-index: 100;
     height: 100%;
 

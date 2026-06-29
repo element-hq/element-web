@@ -10,6 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ReactNode } from "react";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
+// Imports directly from shared-components to avoid an import cycle
+import { _t } from "@element-hq/web-shared-components";
 
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
 import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
@@ -18,7 +20,6 @@ import RoomAccountSettingsHandler from "./handlers/RoomAccountSettingsHandler";
 import AccountSettingsHandler from "./handlers/AccountSettingsHandler";
 import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
-import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import {
     type IFeature,

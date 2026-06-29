@@ -18,7 +18,9 @@
         "strict": true,
         "types": ["node", "modernizr"],
         "paths": {
-            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"]
+            "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
+            "test-utils-rtl": ["./test/test-utils/jest-matrix-react"],
+            "jest-mock-vitest-adapter": ["./test/setup/adapter.ts"]
         }
     },
     "include": [

@@ -6,6 +6,8 @@
  */
 
 export { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+export { RoomListSectionHeaderContent } from "./RoomListSectionHeaderContent";
+export type { RoomListSectionHeaderContentProps } from "./RoomListSectionHeaderContent";
 export type {
     RoomListSectionHeaderViewModel,
     RoomListSectionHeaderViewSnapshot,

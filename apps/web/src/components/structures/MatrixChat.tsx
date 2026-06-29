@@ -220,10 +220,6 @@ interface IState {
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public static displayName = "MatrixChat";
 
-    public static defaultProps: Partial<IProps> = {
-        config: {},
-    };
-
     private firstSyncComplete = false;
     private firstSyncPromise: PromiseWithResolvers<void>;
 

@@ -53,7 +53,6 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         Modal.createDialog(
             LocationViewDialog,
             {
-                matrixClient: this.context,
                 mxEvent: this.props.mxEvent,
             },
             "mx_LocationViewDialog_wrapper",

@@ -12,7 +12,6 @@ import { render, type RenderResult, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import LeftPanel from "../../../../src/components/structures/LeftPanel";
-import PageType from "../../../../src/PageTypes";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../src/settings/UIFeature";
@@ -23,9 +22,7 @@ jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
 
 describe("LeftPanel", () => {
     function renderComponent(): RenderResult {
-        return render(
-            <LeftPanel isMinimized={false} pageType={PageType.RoomView} resizeNotifier={new ResizeNotifier()} />,
-        );
+        return render(<LeftPanel isMinimized={false} resizeNotifier={new ResizeNotifier()} />);
     }
 
     it("does not show filter container when disabled by UIComponent customisations", () => {

@@ -697,14 +697,6 @@
             "warning": "Se non eliminaches o método de recuperación, un atacante podería estar a intentar acceder á túa conta. Cambia inmediatamente o contrasinal da conta e establece un novo método de recuperación nos Axustes."
         },
         "set_up_toast_title": "Configurar Copia de apoio Segura",
-        "udd": {
-            "interactive_verification_button": "Verificar interactivamente usando emoji",
-            "other_ask_verify_text": "Pídelle a usuaria que verifique a súa sesión, ou verificaa manualmente aquí.",
-            "other_new_session_text": "%(name)s (%(userId)s) conectouse a unha nova sesión sen verificala:",
-            "own_ask_verify_text": "Verifica a túa outra sesión usando unha das opcións inferiores.",
-            "own_new_session_text": "Conectácheste nunha nova sesión sen verificala:",
-            "title": "Non confiable"
-        },
         "unable_to_setup_keys_error": "Non se puideron configurar as chaves",
         "verification": {
             "accepting": "Aceptando…",
@@ -2954,13 +2946,7 @@
         "close_to_view_right_panel": "Pecha este widget para velo neste panel",
         "context_menu": {
             "delete": "Eliminar widget",
-            "delete_warning": "Quitando un trebello elimínalo para todas as usuarias desta sala. ¿tes certeza de querer eliminar este widget?",
-            "move_left": "Mover á esquerda",
-            "move_right": "Mover á dereita",
-            "remove": "Eliminar para todas",
-            "revoke": "Revogar permisos",
-            "screenshot": "Tomar unha foto",
-            "start_audio_stream": "Iniciar fluxo de audio"
+            "delete_warning": "Quitando un trebello elimínalo para todas as usuarias desta sala. ¿tes certeza de querer eliminar este widget?"
         },
         "cookie_warning": "Este widget podería usar cookies.",
         "error_hangup_description": "Desconectouse a chamada. (Erro: %(message)s)",

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { zxcvbn, zxcvbnOptions, type ZxcvbnResult, type TranslationKeys } from "@zxcvbn-ts/core";
+import { ZxcvbnFactory, type ZxcvbnResult, type TranslationKeys } from "@zxcvbn-ts/core";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
@@ -13,7 +13,11 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 
-zxcvbnOptions.setOptions({
+/**
+ * Base zxcvbn options
+ * @knipignore - exported for tests
+ */
+export const baseOptions = {
     dictionary: {
         ...zxcvbnCommonPackage.dictionary,
         ...zxcvbnEnPackage.dictionary,
@@ -21,7 +25,7 @@ zxcvbnOptions.setOptions({
     },
     graphs: zxcvbnCommonPackage.adjacencyGraphs,
     useLevenshteinDistance: true,
-});
+};
 
 function getTranslations(): TranslationKeys {
     return {
@@ -95,12 +99,15 @@ export function scorePassword(
         }
     }
 
-    zxcvbnOptions.setTranslations(getTranslations());
+    const zxcvbn = new ZxcvbnFactory({
+        ...baseOptions,
+        translations: getTranslations(),
+    });
 
-    let zxcvbnResult = zxcvbn(password, inputs);
+    let zxcvbnResult = zxcvbn.check(password, inputs);
     // Work around https://github.com/dropbox/zxcvbn/issues/216
     if (password.includes(" ")) {
-        const resultNoSpaces = zxcvbn(password.replace(/ /g, ""), inputs);
+        const resultNoSpaces = zxcvbn.check(password.replace(/ /g, ""), inputs);
         if (resultNoSpaces.score < zxcvbnResult.score) zxcvbnResult = resultNoSpaces;
     }
 

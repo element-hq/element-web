@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type BaseSyntheticEvent, type ComponentProps, type ReactNode } from "react";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
 import { Button } from "@vector-im/compound-web";
 
 import * as Email from "../../../email";
@@ -19,7 +18,6 @@ import { _t, _td } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import { SAFE_LOCALPART_REGEX } from "../../../Registration";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
-import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
 import Field from "../elements/Field";
@@ -56,7 +54,6 @@ interface IProps {
     flows: {
         stages: string[];
     }[];
-    serverConfig: ValidatedServerConfig;
     canSubmit?: boolean;
     matrixClient: MatrixClient;
     mobileRegister?: boolean;
@@ -68,7 +65,6 @@ interface IProps {
         phoneCountry?: string;
         phoneNumber?: string;
     }): Promise<void>;
-    onEditServerDetailsClick?(): void;
 }
 
 interface IState {
@@ -95,7 +91,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     private [RegistrationField.PhoneNumber]: Field | null = null;
 
     public static defaultProps = {
-        onValidationChange: logger.error,
         canSubmit: true,
     };
 

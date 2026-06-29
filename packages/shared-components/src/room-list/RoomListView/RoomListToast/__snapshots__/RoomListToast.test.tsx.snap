@@ -6,16 +6,16 @@ exports[`<RoomListToast /> > renders ChatMoved story 1`] = `
     style="position: relative; width: 320px; height: 100px; background-color: grey;"
   >
     <div
-      class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _toast-container_1ysb3_8 RoomListToast-module_toast _has-close_1ysb3_30"
+      class="_toast-container_1jkz7_8 RoomListToast-module_toast _has-close_1jkz7_59"
     >
       <div
-        class="_content_1ysb3_34"
+        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _content_1jkz7_68"
       >
         Chat moved
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8 _close_1ysb3_41 _no-background_1215g_42"
+        class="_icon-button_1215g_8 _close_1jkz7_75 _no-background_1215g_42"
         data-kind="secondary"
         role="button"
         style="--cpd-icon-button-size: 24px;"
@@ -49,16 +49,16 @@ exports[`<RoomListToast /> > renders SectionCreated story 1`] = `
     style="position: relative; width: 320px; height: 100px; background-color: grey;"
   >
     <div
-      class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _toast-container_1ysb3_8 RoomListToast-module_toast _has-close_1ysb3_30"
+      class="_toast-container_1jkz7_8 RoomListToast-module_toast _has-close_1jkz7_59"
     >
       <div
-        class="_content_1ysb3_34"
+        class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _content_1jkz7_68"
       >
         Section created
       </div>
       <button
         aria-labelledby="react-use-id-1"
-        class="_icon-button_1215g_8 _close_1ysb3_41 _no-background_1215g_42"
+        class="_icon-button_1215g_8 _close_1jkz7_75 _no-background_1215g_42"
         data-kind="secondary"
         role="button"
         style="--cpd-icon-button-size: 24px;"
