@@ -24,7 +24,15 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     MessageComposerUrlPreviewViewModelProps
 > {
     private readonly fetcher: UrlPreviewFetcher;
+
+    /**
+     * Calculated set of links from the message text.
+     */
     private links: Set<string> = new Set();
+
+    /**
+     * Should the URL preview render according to the application.
+     */
     private urlPreviewVisible: boolean;
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
@@ -35,23 +43,30 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
     private async computeSnapshot(): Promise<void> {
         if (!this.urlPreviewVisible) {
-            this.snapshot.merge({ preview: null });
+            this.snapshot.set({ preview: null });
             return;
         }
+        // We always select the FIRST viable link out of the message.
+        // Viability is determined by whether the link has a title AND
+        // description
         for (const link of this.links) {
             try {
                 const preview = await this.fetcher.fetchPreview(link, true);
-                if (preview) {
-                    this.snapshot.merge({ preview });
+                if (preview.title && preview.description) {
+                    this.snapshot.set({ preview });
                     return;
                 }
             } catch (ex) {
                 logger.warn("Fetching preview failed", ex);
             }
         }
-        this.snapshot.merge({ preview: null });
+        this.snapshot.set({ preview: null });
     }
 
+    /**
+     * Trigger a recalculation of the links in the provided text.
+     * @param content Plaintext from the message composer.
+     */
     public async updateWithText(content: string): Promise<void> {
         const newLinks = new Set(content.split(" ").filter((word) => URL.canParse(word.trim())));
         if (this.links.symmetricDifference(newLinks).size === 0) {
@@ -62,6 +77,12 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         return this.computeSnapshot();
     }
 
+    /**
+     * Update the view model about visible state of previews.
+     * @param urlPreviewVisible Whether URL previews are hidden for this room.
+     *
+     * @returns A promise that completes when the snapshot has been recomputed.
+     */
     public readonly updateUrlPreviewVisible = (urlPreviewVisible: boolean): Promise<void> => {
         this.urlPreviewVisible = urlPreviewVisible;
         this.fetcher.clearCache();

@@ -21,7 +21,7 @@ export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
 
 /**
- * Handles fetching and parsing URL previews from the Matrix homeserver.
+ * Handles fetching and parsing URL previews.
  * Maintains a cache of previously fetched previews; call `clearCache` when
  * media visibility changes so images are re-fetched with the correct visibility.
  */
@@ -38,6 +38,13 @@ export class UrlPreviewFetcher {
         this.cache.clear();
     }
 
+    /**
+     * Parse a numeric value from OpenGraph. The OpenGraph spec defines all values as strings
+     * although Synapse may return these values as numbers. To be compatible, test strings
+     * and numbers.
+     * @param value The numeric value
+     * @returns A number if the value parsed correctly, or undefined otherwise.
+     */
     private static getNumberFromOpenGraph(value: number | string | undefined): number | undefined {
         if (typeof value === "number") {
             return value;
@@ -48,6 +55,12 @@ export class UrlPreviewFetcher {
         return undefined;
     }
 
+    /**
+     * Calculate the best possible title from an opengraph response.
+     * @param response The opengraph response
+     * @param link The link being used to preview.
+     * @returns The title value.
+     */
     private static getBaseMetadataFromResponse(
         response: IPreviewUrlResponse,
         link: string,
@@ -81,6 +94,11 @@ export class UrlPreviewFetcher {
         return { title, description: description && decode(description), siteName };
     }
 
+    /**
+     * Calculate the best possible author from an opengraph response.
+     * @param response The opengraph response
+     * @returns The author value, or undefined if no valid author could be found.
+     */
     private static getAuthorFromResponse(response: IPreviewUrlResponse): UrlPreview["author"] {
         let calculatedAuthor: string | undefined;
         if (response["og:type"] === "article") {
@@ -97,6 +115,11 @@ export class UrlPreviewFetcher {
         return calculatedAuthor;
     }
 
+    /**
+     * Calculate whether the provided image from the preview response is an full size preview or
+     * a site icon.
+     * @returns `true` if the image should be used as a preview, otherwise `false`
+     */
     private static isImagePreview(width?: number, height?: number, bytes?: number): boolean {
         if (width && width < MIN_PREVIEW_PX) return false;
         if (height && height < MIN_PREVIEW_PX) return false;
