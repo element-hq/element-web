@@ -7,6 +7,8 @@
 
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
+import { DragDropProvider } from "@dnd-kit/react";
+import { PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -71,6 +73,7 @@ const meta = {
             muted: false,
         },
         displaySectionMenu: true,
+        canBeReordered: true,
         onClick: fn(),
         onFocus: fn(),
         editSection: fn(),
@@ -82,9 +85,17 @@ const meta = {
     },
     decorators: [
         (Story) => (
-            <div role="treegrid" style={{ width: "320px" }}>
-                <Story />
-            </div>
+            <DragDropProvider
+                sensors={[
+                    PointerSensor.configure({
+                        activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
+                    }),
+                ]}
+            >
+                <div role="treegrid" style={{ width: "320px" }}>
+                    <Story />
+                </div>
+            </DragDropProvider>
         ),
     ],
     parameters: {

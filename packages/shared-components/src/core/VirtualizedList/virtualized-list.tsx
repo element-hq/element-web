@@ -176,6 +176,7 @@ export function useVirtualizedList<Item, Context>(
         rangeChanged,
         mapScrollIndex,
         mapRangeIndex,
+        scrollerRef: externalScrollerRef,
         ...virtuosoProps
     } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -329,11 +330,17 @@ export function useVirtualizedList<Item, Context>(
 
     /**
      * Callback ref for the Virtuoso scroller element.
-     * Stores the reference for use in focus management.
+     * Stores the reference for use in focus management, and forwards it to an
+     * optional external scrollerRef provided by the consumer (e.g. to observe
+     * scroll position) since the hook owns the scrollerRef passed to Virtuoso.
      */
-    const scrollerRef = useCallback((element: HTMLElement | Window | null) => {
-        virtuosoDomRef.current = element;
-    }, []);
+    const scrollerRef = useCallback(
+        (element: HTMLElement | Window | null) => {
+            virtuosoDomRef.current = element;
+            externalScrollerRef?.(element);
+        },
+        [externalScrollerRef],
+    );
 
     /**
      * Focus handler passed to each item component.
@@ -413,8 +420,16 @@ export function useVirtualizedList<Item, Context>(
         [handleRef],
     );
 
+    // Key items by id, not position, so react-virtuoso preserves (moves) the existing DOM
+    // node when an item's absolute index shifts — e.g. sections collapsing on drag start removes
+    // the rooms above a header, shifting its index. Without this, Virtuoso's default key is the
+    // index, so the wrapper (and the focused header inside it) remounts, the roving-tabindex effect
+    // refocuses the fresh node, and screen readers re-announce the header mid-drag.
+    const computeItemKey = useCallback((_index: number, item: Item): string => getItemKey(item), [getItemKey]);
+
     return {
         ...virtuosoProps,
+        computeItemKey,
         ref: setRef,
         scrollerRef,
         onKeyDown: keyDownCallback,
