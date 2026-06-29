@@ -49,8 +49,8 @@ export class UrlPreviewFetcher {
         if (typeof value === "number") {
             return value;
         } else if (typeof value === "string" && value) {
-            const i = parseInt(value, 10);
-            if (!isNaN(i)) return i;
+            const i = Number.parseInt(value, 10);
+            if (!Number.isNaN(i)) return i;
         }
         return undefined;
     }
