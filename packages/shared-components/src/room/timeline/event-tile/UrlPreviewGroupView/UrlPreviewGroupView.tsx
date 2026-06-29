@@ -56,15 +56,18 @@ export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, Ur
 
 function HideButton({ onHideClick }: { onHideClick: UrlPreviewGroupViewActions["onHideClick"] }): JSX.Element {
     const { translate: _t } = useI18n();
-    return <div className={styles.hideButton}>
-        <IconButton
-            kind="secondary"
-            size="28px"
-            onClick={onHideClick}
-            aria-label={_t("timeline|url_preview|close")}
-        >
-            <CloseIcon />
-        </IconButton></div>;
+    return (
+        <div className={styles.hideButton}>
+            <IconButton
+                kind="secondary"
+                size="28px"
+                onClick={onHideClick}
+                aria-label={_t("timeline|url_preview|close")}
+            >
+                <CloseIcon />
+            </IconButton>
+        </div>
+    );
 }
 
 /**
