@@ -29,7 +29,10 @@ import RoomListStoreV3, {
     type Section,
 } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
-import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
+import {
+    RoomNotificationStateStore,
+    UPDATE_STATUS_INDICATOR,
+} from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
@@ -101,9 +104,40 @@ export class RoomListViewModel
     private readonly savedExpansionStates = new Map<string, boolean>();
 
     /**
-     * Reference to the currently displayed toast, used to automatically close the toast after a timeout.
+     * Reference to the currently displayed event toast's auto-close timer, used to dismiss it
+     * after a timeout (see {@link showToast}).
      */
     private toastRef?: number;
+
+    /**
+     * The currently active transient event toast ("section_created" / "chat_moved"), if any.
+     * Distinct from the derived "unread_activity" toast: this is set imperatively by an event
+     * and auto-dismisses, whereas unread activity is recomputed from list/notification state.
+     * {@link recomputeToast} reconciles the two into the single {@link RoomListViewSnapshot.toast}.
+     */
+    private eventToast?: ToastType;
+
+    /**
+     * Whether there is currently unread activity (a notification count) in a room scrolled below
+     * the visible area of the list. Recomputed by {@link updateUnreadActivityBelow}; surfaced as
+     * the "unread_activity" toast by {@link recomputeToast} when no event toast takes precedence.
+     */
+    private hasUnreadActivityBelow = false;
+
+    /**
+     * The last genuinely-visible index reported by the virtualized list (excluding the
+     * rendered overscan buffer), in the list's own entry space (room indices for a flat
+     * list; including a slot per section header for a grouped list). Initialised to -1 so
+     * that nothing is considered "below the fold" until the view reports the fold.
+     */
+    private foldIndex = -1;
+
+    /**
+     * Imperative scroll handle registered by the view (see {@link setScrollToIndex}). The view
+     * owns the virtualized list's scroll handle, so it provides this; we call it to scroll a
+     * given item index into view in response to user actions.
+     */
+    private scrollToIndex?: (index: number) => void;
 
     public constructor(props: RoomListViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;
@@ -170,6 +204,14 @@ export class RoomListViewModel
             RoomListStoreV3.instance,
             RoomListStoreV3Event.RoomTagged as any,
             this.onRoomTagged,
+        );
+
+        // Recompute the "unread activity below" toast when room notification state
+        // changes (e.g. a room below the fold becomes unread, or is marked read).
+        this.disposables.trackListener(
+            RoomNotificationStateStore.instance,
+            UPDATE_STATUS_INDICATOR as any,
+            this.updateUnreadActivityBelow,
         );
 
         // Subscribe to active room changes to update selected room
@@ -311,7 +353,116 @@ export class RoomListViewModel
                 this.roomItemViewModels.delete(roomId);
             }
         }
+
+        // The rendered range changed, so re-evaluate whether unread activity is below the fold.
+        this.updateUnreadActivityBelow();
     }
+
+    /**
+     * Update the last genuinely-visible item index (excluding the rendered overscan
+     * buffer), reported by the view from the scroller geometry. This is what the
+     * "unread activity" toast uses to decide what is below the fold, so that the toast
+     * appears as soon as an unread room scrolls just out of view rather than only once
+     * it leaves the overscan buffer.
+     */
+    public updateVisibleFold = (visibleEndIndex: number): void => {
+        if (this.foldIndex === visibleEndIndex) return;
+        this.foldIndex = visibleEndIndex;
+        this.updateUnreadActivityBelow();
+    };
+
+    /**
+     * Find the first room with an unread-message notification (a count badge — the green or
+     * red decoration, not just the unread-activity dot) positioned below the visible area.
+     *
+     * "Below the fold" is determined from the last visible index reported by the
+     * virtualized list (see {@link updateVisibleRooms}). For a grouped list the
+     * virtualized list interleaves a section-header entry before each section's
+     * rooms, so we walk the rooms in the same entry order the view renders and
+     * compare against that index space.
+     *
+     * Collapsed sections render only their header (their rooms are removed from the
+     * displayed sections), so their notifying rooms are not directly reachable. When a
+     * collapsed section's header is itself below the fold and the section contains a
+     * notifying room, we surface the header as the target so clicking the toast scrolls
+     * it into view (revealing the header's aggregated notification badge).
+     *
+     * @returns The next notifying room below the fold, or undefined if there is none
+     *          (or the view has not yet reported a visible range).
+     */
+    private firstUnreadRoomBelowFold(): { room: Room; index: number } | undefined {
+        if (this.foldIndex < 0) return undefined;
+
+        // Only surface rooms showing a notification badge (a count/symbol — the green or red
+        // decoration), not rooms with just the unread-activity dot.
+        const hasNotification = (room: Room): boolean =>
+            RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount;
+
+        if (this.snapshot.current.isFlatList) {
+            // Flat list: virtualized indices map 1:1 to rooms.
+            const rooms = this.sections.flatMap((section) => section.rooms);
+            for (let i = this.foldIndex + 1; i < rooms.length; i++) {
+                if (hasNotification(rooms[i])) return { room: rooms[i], index: i };
+            }
+            return undefined;
+        }
+
+        // Full (pre-collapse) rooms per section tag, so we can detect unreads hidden inside
+        // collapsed sections whose displayed rooms have been emptied.
+        const fullRoomsByTag = new Map(this.roomsResult.sections.map((section) => [section.tag, section.rooms]));
+
+        // Grouped list: each section contributes a header entry followed by its rooms, so the
+        // index we return is in the virtualized list's entry space (matching scrollIntoView).
+        let entryIndex = -1;
+        for (const section of this.sections) {
+            entryIndex++; // section header entry
+
+            const isExpanded = this.roomSectionHeaderViewModels.get(section.tag)?.isExpanded ?? true;
+            if (!isExpanded) {
+                // Collapsed: rooms aren't rendered, so the header is the only entry. If it is
+                // below the fold and hides an unread room, target the header itself.
+                if (entryIndex > this.foldIndex) {
+                    const notifyingRoom = (fullRoomsByTag.get(section.tag) ?? []).find(hasNotification);
+                    if (notifyingRoom) return { room: notifyingRoom, index: entryIndex };
+                }
+                continue;
+            }
+
+            for (const room of section.rooms) {
+                entryIndex++; // this room's entry
+                if (entryIndex > this.foldIndex && hasNotification(room)) return { room, index: entryIndex };
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Recompute whether there is unread activity below the visible area, reconciling the
+     * displayed toast if it changed.
+     */
+    private updateUnreadActivityBelow = (): void => {
+        const hasUnreadActivityBelow = this.firstUnreadRoomBelowFold() !== undefined;
+        if (this.hasUnreadActivityBelow === hasUnreadActivityBelow) return;
+        this.hasUnreadActivityBelow = hasUnreadActivityBelow;
+        this.recomputeToast();
+    };
+
+    /**
+     * Register (or clear) the view's imperative scroll handler. Called by the view on mount
+     * since it owns the virtualized list's scroll handle.
+     */
+    public setScrollToIndex = (scrollToIndex: ((index: number) => void) | undefined): void => {
+        this.scrollToIndex = scrollToIndex;
+    };
+
+    /**
+     * Scroll the next unread room below the visible area of the list into view (without opening
+     * it). Invoked when the user clicks the "unread activity" toast.
+     */
+    public scrollToUnreadActivity = (): void => {
+        const target = this.firstUnreadRoomBelowFold();
+        if (target) this.scrollToIndex?.(target.index);
+    };
 
     private onDispatch = (payload: any): void => {
         if (payload.action === Action.ActiveRoomChanged) {
@@ -595,6 +746,9 @@ export class RoomListViewModel
         });
 
         this.notifyCollapseState(isFlatList);
+
+        // Room list / sections changed: re-evaluate the unread-activity toast.
+        this.updateUnreadActivityBelow();
     }
 
     /**
@@ -654,18 +808,31 @@ export class RoomListViewModel
 
     public closeToast: () => void = () => {
         clearTimeout(this.toastRef);
-        this.snapshot.merge({
-            toast: undefined,
-        });
+        this.eventToast = undefined;
+        this.recomputeToast();
     };
 
     private showToast(toast: ToastType): void {
         clearTimeout(this.toastRef);
-        this.snapshot.merge({ toast });
+        this.eventToast = toast;
+        this.recomputeToast();
         // Automatically close the toast after 15 seconds
         this.toastRef = setTimeout(() => {
             this.closeToast();
         }, 15 * 1000);
+    }
+
+    /**
+     * Reconcile the single toast shown by the view from the two independent sources: the
+     * transient event toast (which takes precedence and auto-dismisses) and the derived
+     * unread-activity state. The snapshot is only updated when the effective toast changes,
+     * to avoid unnecessary re-renders.
+     */
+    private recomputeToast(): void {
+        const toast = this.eventToast ?? (this.hasUnreadActivityBelow ? "unread_activity" : undefined);
+        if (this.snapshot.current.toast !== toast) {
+            this.snapshot.merge({ toast });
+        }
     }
 
     public changeSectionOrder = async (sourceTag: string, targetTag: string): Promise<void> => {

@@ -25,6 +25,8 @@ import { tagRoom } from "../../../src/utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
 import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX } from "../../../src/stores/room-list-v3/section";
 import { MetaSpace } from "../../../src/stores/spaces";
+import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
+import { type RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
 
 jest.mock("../../../src/utils/room/tagRoom", () => ({
     tagRoom: jest.fn(),
@@ -687,6 +689,38 @@ describe("RoomListViewModel", () => {
 
                 jest.advanceTimersByTime(5 * 1000);
                 expect(viewModel.getSnapshot().toast).toBeUndefined();
+            });
+
+            /** Make only `room3` report an unread count, so it is the unread room below the fold. */
+            const mockRoom3Unread = (): void => {
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation(
+                    (room) => ({ hasUnreadCount: room === room3 }) as unknown as RoomNotificationState,
+                );
+            };
+
+            it("should show the unread-activity toast when an unread room is below the fold", () => {
+                mockRoom3Unread();
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // room1/room2 visible, room3 (unread) scrolled below the fold.
+                viewModel.updateVisibleFold(1);
+
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
+            });
+
+            it("should prefer the event toast over the unread-activity toast, restoring it on auto-close", () => {
+                mockRoom3Unread();
+                viewModel = new RoomListViewModel({ client: matrixClient });
+                viewModel.updateVisibleFold(1);
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
+
+                // A transient event toast takes precedence over the persistent unread-activity toast…
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.RoomTagged);
+                expect(viewModel.getSnapshot().toast).toBe("chat_moved");
+
+                // …and once it auto-dismisses, the unread-activity toast returns.
+                jest.advanceTimersByTime(15 * 1000);
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
             });
         });
 

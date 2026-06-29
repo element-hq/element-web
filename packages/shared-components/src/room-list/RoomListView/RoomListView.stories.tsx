@@ -38,8 +38,11 @@ const RoomListViewWrapperImpl = ({
     getRoomItemViewModel,
     getSectionHeaderViewModel,
     updateVisibleRooms,
+    updateVisibleFold,
     renderAvatar: renderAvatarProp,
     closeToast,
+    scrollToUnreadActivity,
+    setScrollToIndex,
     changeRoomSection,
     changeSectionOrder,
     onSectionDragStart,
@@ -53,7 +56,10 @@ const RoomListViewWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        updateVisibleFold,
         closeToast,
+        scrollToUnreadActivity,
+        setScrollToIndex,
         changeRoomSection,
         changeSectionOrder,
         onSectionDragStart,
@@ -106,10 +112,13 @@ const meta = {
         getRoomItemViewModel: createGetRoomItemViewModel(mockRoomIds),
         getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
+        updateVisibleFold: fn(),
         renderAvatar,
         isFlatList: true,
         toast: undefined,
         closeToast: fn(),
+        scrollToUnreadActivity: fn(),
+        setScrollToIndex: fn(),
         changeRoomSection: fn(),
         changeSectionOrder: fn(),
         onSectionDragStart: fn(),
@@ -265,5 +274,11 @@ export const LargeSectionList: Story = {
 export const Toast: Story = {
     args: {
         toast: "section_created",
+    },
+};
+
+export const UnreadActivityBelow: Story = {
+    args: {
+        toast: "unread_activity",
     },
 };

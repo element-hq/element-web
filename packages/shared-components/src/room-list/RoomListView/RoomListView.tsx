@@ -50,7 +50,11 @@ export type RoomListViewSnapshot = {
     canCreateRoom?: boolean;
     /** Whether the room list is displayed as a flat list */
     isFlatList: boolean;
-    /** Optional toast to display */
+    /**
+     * The single toast to display (if any). The view model owns which toast wins when more
+     * than one applies (e.g. a transient "chat_moved" event toast takes precedence over the
+     * persistent "unread_activity" toast), so the view just renders whatever it is given.
+     */
     toast?: ToastType;
 };
 
@@ -71,10 +75,24 @@ export interface RoomListViewActions {
     getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
+    /**
+     * Called when the last genuinely-visible item index changes (excluding the rendered
+     * overscan buffer), used to decide whether unread activity is below the fold.
+     */
+    updateVisibleFold: (visibleEndIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */
     getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
     /** Called to close the toast message */
     closeToast: () => void;
+    /** Called to scroll the next unread room below the visible area of the list into view */
+    scrollToUnreadActivity: () => void;
+    /**
+     * Registers (or, with `undefined`, clears) the imperative scroll handler the view model
+     * uses to scroll a virtualized item index into view. The view owns the scroll handle, so
+     * it provides this on mount; the view model calls it in response to user actions such as
+     * clicking the "unread activity" toast.
+     */
+    setScrollToIndex: (scrollToIndex: ((index: number) => void) | undefined) => void;
     /** Called to change the section of a room */
     changeRoomSection: (roomId: string, tag: string) => void;
     /** Called to change the order of sections */
@@ -129,7 +147,13 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
             <Flex direction="column" className={styles.list}>
                 <AutoHideScrollbar className={styles.scrollbar}>
                     {listBody}
-                    {snapshot.toast && <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />}
+                    {snapshot.toast && (
+                        <RoomListToast
+                            type={snapshot.toast}
+                            onClose={vm.closeToast}
+                            onClick={vm.scrollToUnreadActivity}
+                        />
+                    )}
                 </AutoHideScrollbar>
             </Flex>
         </>
