@@ -6,13 +6,14 @@
  */
 
 button.preview {
-    background: #fff;
+    background-color: #fff;
 }
 
 .preview {
     display: flex;
     position: relative;
-    width: 100%;
+    max-width: 100%;
+    width: 478px;
     height: 200px;
     background-size: cover;
     background-position: center;
@@ -38,7 +39,8 @@ button.preview {
 }
 
 .container {
-    max-width: 478px;
+    max-width: 100%;
+    width: 478px;
     display: flex;
     border: 1px solid var(--cpd-color-border-interactive-primary);
     border-radius: 12px; /* Get radius from cpd */
