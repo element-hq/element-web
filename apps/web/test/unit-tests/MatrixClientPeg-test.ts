@@ -16,11 +16,6 @@ jest.useFakeTimers();
 
 const PegClass = Object.getPrototypeOf(peg).constructor;
 
-jest.mock("../../../../src/utils/tokens/tokens", () => ({
-    persistAccessTokenInStorage: jest.fn(),
-    persistRefreshTokenInStorage: jest.fn(),
-}));
-
 describe("MatrixClientPeg", () => {
     beforeEach(() => {
         // stub out Logger.log which gets called a lot and clutters up the test output
