@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type IMatrixProfile, type MatrixEvent, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { useContext, useEffect, useState } from "react";
 
-import { PillType } from "../components/views/elements/Pill";
+import { PillType } from "../components/views/elements/PillType";
 import { SDKContext, type SdkContextClass } from "../contexts/SDKContext";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 
