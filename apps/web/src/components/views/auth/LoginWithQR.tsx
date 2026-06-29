@@ -110,7 +110,8 @@ interface IState {
     /**
      * Details of the server we are logging into, set after initial protocol negotiation.
      */
-    loginServerDetails?: Pick<Context, "homeserverUrl" | "identityServerUrl" | "clientId" | "metadata">;
+    loginServerDetails?: Pick<Context, "homeserverUrl" | "identityServerUrl" | "metadata"> &
+        Pick<Context["authContext"], "clientId">;
 }
 
 export enum LoginWithQRFailureReason {

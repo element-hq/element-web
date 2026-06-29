@@ -36,11 +36,13 @@ export const getStoredOAuthClientId = (): string => {
     return clientId;
 };
 
+type OAuth2Context = ConstructorParameters<typeof OAuth2>[1];
+
 /**
  * Utility function to get the OAuth parameters needed to construct an OAuth2 instance
  * @param clientId - the registered OAuth client ID
  */
-export function getOAuthParams(clientId: string): ConstructorParameters<typeof OAuth2>[1] {
+export function getOAuthParams(clientId: string): OAuth2Context {
     const platform = PlatformPeg.get()!;
     const redirectUri = platform.getOAuthCallbackUrl().href;
     return { clientId, redirectUri };
@@ -53,21 +55,18 @@ export function getOAuthParams(clientId: string): ConstructorParameters<typeof O
 export interface Context {
     /** The state string we included in the auth url */
     state: string;
-    /** The seed we used to generate the challenge code */
-    codeVerifier: string;
     /** The URL of the homeserver the user is logging into */
     homeserverUrl: string;
     /** The URL of the identity server the user is using */
     identityServerUrl: string | undefined;
     /** The metadata received from {@link MatrixClient.getAuthMetadata} at time of initiating the auth dance */
     metadata: ValidatedAuthMetadata;
-    /** The OAuth client ID in use for this authentication flow */
-    clientId: string;
+    /** The context needed for the SDK's OAuth2 to resume the auth flow */
+    authContext: Required<OAuth2Context>;
 }
 
 /**
  * Retrieve the context of the ongoing authorization code flow from sessionStorage
- * @throws if the value is missing or invalid
  */
 export function loadAuthContext(): Context | null {
     const value = sessionStorage.getItem(stateSessionStorageKey);

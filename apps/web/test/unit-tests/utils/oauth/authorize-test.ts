@@ -114,11 +114,15 @@ describe("OAuth2 authorization", () => {
             jest.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockResolvedValue(tokenResponse);
             storeAuthContext({
                 state,
-                codeVerifier: "123456",
                 homeserverUrl,
                 metadata: delegatedAuthConfig,
                 identityServerUrl,
-                clientId,
+                authContext: {
+                    codeVerifier: "123456",
+                    clientId,
+                    deviceId: "DEADB33F",
+                    redirectUri: "https://test.com/callback",
+                },
             });
         });
 

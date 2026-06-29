@@ -38,20 +38,19 @@ export const startOAuthLogin = async (
     const state = secureRandomString(32) + platform.getOAuthClientState();
 
     const auth = new OAuth2(authMetadata, getOAuthParams(clientId));
-    const authorizationUrl = await auth.generateAuthorizationCodeGrantUrl(
-        state,
-        RESPONSE_MODE,
-        isRegistration ? "create" : undefined,
-    );
-
     storeAuthContext({
-        codeVerifier: auth.context.codeVerifier,
-        clientId: auth.context.clientId,
+        authContext: auth.context,
         metadata: authMetadata,
         homeserverUrl,
         identityServerUrl,
         state,
     });
+
+    const authorizationUrl = await auth.generateAuthorizationCodeGrantUrl(
+        state,
+        RESPONSE_MODE,
+        isRegistration ? "create" : undefined,
+    );
 
     window.location.href = authorizationUrl;
 };
@@ -110,20 +109,19 @@ export const completeOAuthLogin = async (
     urlParams: NonNullable<URLParams["oauth2"]>,
 ): Promise<CompleteOAuthLoginResponse> => {
     const { code, state } = getCodeAndStateFromParams(urlParams);
-    const context = loadAuthContext();
 
+    const context = loadAuthContext();
     if (context?.state !== state) {
         throw new Error(OAuth2Error.MissingOrInvalidStoredState);
     }
 
-    const auth = new OAuth2(context.metadata, getOAuthParams(context.clientId));
-    const bearerToken = await auth.completeAuthorizationCodeGrant(code);
+    const bearerToken = await new OAuth2(context.metadata, context.authContext).completeAuthorizationCodeGrant(code);
 
     return {
         homeserverUrl: context.homeserverUrl,
         identityServerUrl: context.identityServerUrl,
         accessToken: bearerToken.access_token,
         refreshToken: bearerToken.refresh_token,
-        clientId: context.clientId,
+        clientId: context.authContext.clientId,
     };
 };

@@ -811,7 +811,7 @@ async function doSetLoggedIn(
 
     let auth: OAuth2 | undefined;
     try {
-        auth = await hydrateAuth();
+        auth = await hydrateAuth(credentials);
     } catch {}
 
     // check the session lock just before creating the new client
@@ -1214,12 +1214,11 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
  * Instantiate an OAuth2 instance from storage
  * Returned promise will reject if the session or the server are not OAuth2-native.
  */
-async function hydrateAuth(): Promise<OAuth2> {
+async function hydrateAuth(credentials: IMatrixClientCreds): Promise<OAuth2> {
     const storedClientId = getStoredOAuthClientId();
-    const homeserverUrl = localStorage.getItem(HOMESERVER_URL_KEY)!;
 
-    const tempClient = new MatrixClient({ baseUrl: homeserverUrl });
+    const tempClient = new MatrixClient({ baseUrl: credentials.homeserverUrl });
     const authMetadata = await tempClient.getAuthMetadata();
 
-    return new OAuth2(authMetadata, getOAuthParams(storedClientId));
+    return new OAuth2(authMetadata, { ...getOAuthParams(storedClientId), deviceId: credentials.deviceId });
 }

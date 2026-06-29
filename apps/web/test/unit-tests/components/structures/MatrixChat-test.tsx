@@ -512,15 +512,16 @@ describe("<MatrixChat />", () => {
                 is_guest: false,
             });
             storeAuthContext({
-                clientId,
                 homeserverUrl,
                 identityServerUrl,
                 metadata: makeDelegatedAuthMetadata(),
                 state,
-                codeVerifier: "123456",
-            });
-            mockPlatformPeg({
-                getOAuthCallbackUrl: jest.fn().mockReturnValue("https://cb"),
+                authContext: {
+                    clientId,
+                    codeVerifier: "123456",
+                    deviceId,
+                    redirectUri: "https://cb",
+                },
             });
         });
 
