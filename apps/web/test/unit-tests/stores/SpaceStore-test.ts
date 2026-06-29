@@ -37,7 +37,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Action } from "../../../src/dispatcher/actions";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import RoomListStore from "../../../src/stores/room-list/RoomListStore";
+import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
@@ -1515,8 +1515,9 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.Notification;
-            jest.spyOn(RoomListStore.instance, "orderedLists", "get").mockReturnValue({
-                [DefaultTagID.Untagged]: [room],
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: MetaSpace.Home,
+                sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });
 
             // init the store

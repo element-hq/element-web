@@ -24,7 +24,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import RoomListStore from "../room-list/RoomListStore";
+import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
@@ -35,7 +35,6 @@ import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
 import { arrayHasDiff, arrayHasOrderChange, filterBoolean } from "../../utils/arrays";
 import { reorderLexicographically } from "../../utils/stringOrderField";
-import { TAG_ORDER } from "../../components/views/rooms/LegacyRoomList";
 import { type SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import {
     isMetaSpace,
@@ -217,16 +216,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         let roomId: string | undefined;
         if (space === MetaSpace.Home && this.allRoomsInHome) {
             const hasMentions = RoomNotificationStateStore.instance.globalState.hasMentions;
-            const lists = RoomListStore.instance.orderedLists;
-            tagLoop: for (let i = 0; i < TAG_ORDER.length; i++) {
-                const t = TAG_ORDER[i];
-                if (!lists[t]) continue;
-                for (const room of lists[t]) {
-                    const state = RoomNotificationStateStore.instance.getRoomState(room);
-                    if (hasMentions ? state.hasMentions : state.isUnread) {
-                        roomId = room.roomId;
-                        break tagLoop;
-                    }
+            const rooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace().sections.flatMap((s) => s.rooms);
+            for (const room of rooms) {
+                const state = RoomNotificationStateStore.instance.getRoomState(room);
+                if (hasMentions ? state.hasMentions : state.isUnread) {
+                    roomId = room.roomId;
+                    break;
                 }
             }
         } else {
