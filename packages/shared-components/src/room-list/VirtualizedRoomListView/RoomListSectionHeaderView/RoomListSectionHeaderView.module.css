@@ -19,7 +19,9 @@
     padding: var(--cpd-space-1x) 0;
 
     &:hover,
-    &:focus-visible,
+    /* :focus-within (not :focus-visible) so the menu stays revealed while focus moves
+       onto the menu button, keeping it reachable by keyboard */
+    &:focus-within,
     &:has(button[data-state="open"]) {
         color: var(--cpd-color-text-primary);
 

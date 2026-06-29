@@ -253,6 +253,39 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
             });
 
+            test("should reveal the options menu when a room is focused without hovering", async ({
+                page,
+                app,
+                user,
+            }) => {
+                // Regression test: focusing a room with the keyboard must reveal its hover menu so the
+                // "More options" button is reachable via Tab (the room item reveals the menu on
+                // :focus-within). The pointer MUST be moved away first — if it stays over the room (as
+                // it does right after .click()) then :hover reveals the menu and masks the keyboard
+                // behaviour, which is why the other keyboard tests here don't catch this.
+                const roomListView = getRoomList(page);
+                const room29 = roomListView.getByRole("option", { name: "Open room room29" });
+                const moreButton = room29.getByRole("button", { name: "More options" });
+
+                // Open the room, then put focus back on the room list item.
+                await room29.click();
+                await room29.click();
+                await expect(room29).toBeFocused();
+
+                // Move the pointer away so the menu is no longer revealed by :hover.
+                await page.mouse.move(0, 0);
+                await expect(room29).toBeFocused();
+
+                // With focus on the room (and no hover) the "More options" button must be revealed and
+                // reachable by Tab, rather than focus escaping the room list.
+                await page.keyboard.press("Tab");
+                await expect(moreButton).toBeFocused();
+
+                // TODO: once menu-close focus restoration is fixed, extend this to open the menu
+                // (Enter) and assert that Escape returns focus to a room list item rather than <body>.
+                // Today, with no hover, that focus restoration is broken, so it isn't asserted here.
+            });
+
             test("should navigate to the top and then bottom of the room list", async ({ page, app, user }) => {
                 const roomListView = getRoomList(page);
 
