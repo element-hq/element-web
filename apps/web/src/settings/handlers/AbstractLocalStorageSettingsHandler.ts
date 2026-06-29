@@ -38,7 +38,8 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
         if (!AbstractLocalStorageSettingsHandler.storageListenerBound) {
             AbstractLocalStorageSettingsHandler.storageListenerBound = true;
             // Listen for storage changes from other tabs to bust the cache
-            window.addEventListener("storage", AbstractLocalStorageSettingsHandler.onStorageEvent);
+            // Ignore if the function doesn't exist so it doesn't error when run in tests
+            globalThis.addEventListener?.("storage", AbstractLocalStorageSettingsHandler.onStorageEvent);
         }
     }
 
