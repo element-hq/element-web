@@ -92,8 +92,6 @@ export interface RoomListItemViewSnapshot {
     canMarkAsUnread: boolean;
     /** The room's notification state */
     roomNotifState: RoomNotifState;
-    /** Whether the room can be moved to a section */
-    canMoveToSection: boolean;
     /** Available sections the room can be assigned to */
     sections: Section[];
 }

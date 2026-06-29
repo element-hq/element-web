@@ -207,8 +207,6 @@ interface IRoomProps extends RoomViewProps {
     enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
 
-export { MainSplitContentType };
-
 export interface IRoomState {
     room?: Room;
     roomId?: string;

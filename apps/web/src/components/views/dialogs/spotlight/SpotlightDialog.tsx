@@ -70,7 +70,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
-import { RecentAlgorithm } from "../../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { compareRoomsByRecency } from "../../../../utils/room/sortRoomsByRecency";
 import { SdkContextClass } from "../../../../contexts/SDKContext";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";
@@ -251,8 +251,6 @@ const toMemberResult = (member: Member | RoomMember, alreadyFiltered: boolean): 
     filter: [Filter.People],
     query: [member.userId.toLowerCase(), member.name.toLowerCase()].filter(Boolean),
 });
-
-const recentAlgorithm = new RecentAlgorithm();
 
 export const useWebSearchMetrics = (numResults: number, queryLength: number, viaSpotlight: boolean): void => {
     useEffect(() => {
@@ -498,7 +496,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         // Sort results by most recent activity
-
         const myUserId = cli.getSafeUserId();
         for (const resultArray of Object.values(results)) {
             resultArray.sort((a: Result, b: Result) => {
@@ -507,7 +504,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     if (!isRoomResult(b)) return -1;
                     if (!isRoomResult(a)) return -1;
 
-                    return recentAlgorithm.getLastTs(b.room, myUserId) - recentAlgorithm.getLastTs(a.room, myUserId);
+                    return compareRoomsByRecency(a.room, b.room, myUserId);
                 } else if (isMemberResult(a) || isMemberResult(b)) {
                     // Member results should appear just after room results
                     if (!isMemberResult(b)) return -1;
@@ -520,7 +517,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return results;
-    }, [trimmedQuery, filter, cli, possibleResults, userDirectorySearchResults, memberComparator]);
+    }, [cli, trimmedQuery, filter, possibleResults, userDirectorySearchResults, memberComparator]);
 
     const numResults = sum(Object.values(results).map((it) => it.length));
     useWebSearchMetrics(numResults, query.length, true);

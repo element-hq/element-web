@@ -243,9 +243,7 @@ export class RoomListHeaderViewModel
     };
 
     public onReleaseAnnouncementChanged = (): void => {
-        const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
         const displaySectionReleaseAnnouncement =
-            isSectionFeatureEnabled &&
             ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
         this.snapshot.merge({ displaySectionReleaseAnnouncement });
     };
@@ -310,35 +308,27 @@ function computeHeaderSpaceState(
     spaceStore: SpaceStoreClass,
     matrixClient: MatrixClient,
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
-    const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
     const displaySectionReleaseAnnouncement =
-        isSectionFeatureEnabled && ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
+        ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
 
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
 
     const canCreateRoom = hasCreateRoomRights(matrixClient, activeSpace);
     const canCreateVideoRoom = getCanCreateVideoRoom(canCreateRoom);
-    const displayComposeMenu = isSectionFeatureEnabled || canCreateRoom;
     const displaySpaceMenu = Boolean(activeSpace);
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
     );
     const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
 
-    const useComposeIcon = !isSectionFeatureEnabled;
-    const canCreateSection = isSectionFeatureEnabled;
-
     return {
         title,
         canCreateRoom,
         canCreateVideoRoom,
-        displayComposeMenu,
         displaySpaceMenu,
         canInviteInSpace,
         canAccessSpaceSettings,
-        canCreateSection,
-        useComposeIcon,
         displaySectionReleaseAnnouncement,
     };
 }
