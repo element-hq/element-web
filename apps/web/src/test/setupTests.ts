@@ -14,10 +14,6 @@ import { setupLanguageMock } from "./setupLanguage.ts";
 
 manageFetchMockGlobally();
 
-// Mock this as some code assumes it exists (needs to be done at the top level as
-// things try to access it before the beforeEach blocks run)
-window.addEventListener = vi.fn();
-
 beforeEach(() => {
     // set up fetch API mock
     fetchMock.hardReset();
