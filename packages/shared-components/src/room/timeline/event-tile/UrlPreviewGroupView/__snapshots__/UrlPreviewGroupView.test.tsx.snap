@@ -45,13 +45,8 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -129,13 +124,8 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -169,13 +159,8 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="A dog"
-            src="/static/tallImage.png"
-            title="A dog"
-          />
-        </button>
+          style="background-image: url("/static/tallImage.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -209,13 +194,8 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -302,13 +282,8 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -395,13 +370,8 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -435,13 +405,8 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="A dog"
-            src="/static/tallImage.png"
-            title="A dog"
-          />
-        </button>
+          style="background-image: url("/static/tallImage.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -475,13 +440,8 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
