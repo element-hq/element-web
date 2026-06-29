@@ -18,7 +18,7 @@ if (globalThis.window === undefined) {
     // We are in a node environment, stub a basic window so singletons work.
     // Also stub `location` as a bare global: some libraries (e.g. posthog toolbar) access
     // `location` directly rather than via `window.location`.
-    const locationStub = new URL("http://test/test");
+    const locationStub = new URL("test://test/test");
     vi.stubGlobal("location", locationStub);
     vi.stubGlobal("window", {
         // Mock this as some code assumes it exists (needs to be done at the top level as
