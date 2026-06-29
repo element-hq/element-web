@@ -38,7 +38,7 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
+import { sortRoomsByRecency } from "../../../utils/room/sortRoomsByRecency";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import { Action } from "../../../dispatcher/actions";
@@ -284,10 +284,11 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
 
     let rooms = useMemo(
         () =>
-            RoomListStoreV3.instance.sortRoomsByRecency(
+            sortRoomsByRecency(
                 cli
                     .getVisibleRooms(msc3946DynamicRoomPredecessors)
                     .filter((room) => room.getMyMembership() === KnownMembership.Join && !room.isSpaceRoom()),
+                cli.getSafeUserId(),
             ),
         [cli, msc3946DynamicRoomPredecessors],
     );

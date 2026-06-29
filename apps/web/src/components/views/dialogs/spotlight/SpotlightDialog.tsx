@@ -70,7 +70,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
-import RoomListStoreV3 from "../../../../stores/room-list-v3/RoomListStoreV3";
+import { compareRoomsByRecency } from "../../../../utils/room/sortRoomsByRecency";
 import { SdkContextClass } from "../../../../contexts/SDKContext";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";
@@ -496,7 +496,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         // Sort results by most recent activity
-
+        const myUserId = cli.getSafeUserId();
         for (const resultArray of Object.values(results)) {
             resultArray.sort((a: Result, b: Result) => {
                 if (isRoomResult(a) || isRoomResult(b)) {
@@ -504,7 +504,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     if (!isRoomResult(b)) return -1;
                     if (!isRoomResult(a)) return -1;
 
-                    return RoomListStoreV3.instance.compareRoomsByRecency(a.room, b.room);
+                    return compareRoomsByRecency(a.room, b.room, myUserId);
                 } else if (isMemberResult(a) || isMemberResult(b)) {
                     // Member results should appear just after room results
                     if (!isMemberResult(b)) return -1;
@@ -517,7 +517,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return results;
-    }, [trimmedQuery, filter, possibleResults, userDirectorySearchResults, memberComparator]);
+    }, [cli, trimmedQuery, filter, possibleResults, userDirectorySearchResults, memberComparator]);
 
     const numResults = sum(Object.values(results).map((it) => it.length));
     useWebSearchMetrics(numResults, query.length, true);
