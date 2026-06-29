@@ -203,7 +203,7 @@ jobs:
             - name: Diff Coverage
               id: coverage
               if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
-              uses: Affanmir/diff-cover-action@0d8c98f613bbd2428df50b3109b1e3b1d5ab59d3 # v2.1.0
+              uses: Affanmir/diff-cover-action@a35ea05c1c458490473f6fc2233737e809678273 # v2.1.1
               with:
                   compare-branch: origin/${{ github.base_ref || 'develop' }}
                   mode: coverage
