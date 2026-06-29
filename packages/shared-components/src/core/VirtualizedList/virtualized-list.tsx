@@ -176,6 +176,7 @@ export function useVirtualizedList<Item, Context>(
         rangeChanged,
         mapScrollIndex,
         mapRangeIndex,
+        scrollerRef: externalScrollerRef,
         ...virtuosoProps
     } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -329,11 +330,17 @@ export function useVirtualizedList<Item, Context>(
 
     /**
      * Callback ref for the Virtuoso scroller element.
-     * Stores the reference for use in focus management.
+     * Stores the reference for use in focus management, and forwards it to an
+     * optional external scrollerRef provided by the consumer (e.g. to observe
+     * scroll position) since the hook owns the scrollerRef passed to Virtuoso.
      */
-    const scrollerRef = useCallback((element: HTMLElement | Window | null) => {
-        virtuosoDomRef.current = element;
-    }, []);
+    const scrollerRef = useCallback(
+        (element: HTMLElement | Window | null) => {
+            virtuosoDomRef.current = element;
+            externalScrollerRef?.(element);
+        },
+        [externalScrollerRef],
+    );
 
     /**
      * Focus handler passed to each item component.

@@ -103,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "Otwórz pokój %(roomName)s",
+            "drag_cancelled": "Przeciąganie anulowane",
+            "drag_end": "%(source)s został upuszczony na %(target)s",
+            "drag_end_after": "%(source)s został upuszczony po %(target)s",
+            "drag_end_before": "%(source)s został upuszczony przed %(target)s",
+            "drag_end_original": "%(source)s wrócił do pierwotnego położenia",
+            "drag_instructions": "Kliknij spację, aby rozpocząć przeciąganie, klawisze strzałek do poruszania się i klawisz Esc, by anulować.",
+            "drag_over": "%(source)s jest na %(target)s",
+            "drag_over_after": "%(source)s zostanie upuszczony po %(target)s",
+            "drag_over_before": "%(source)s zostanie upuszczony przed %(target)s",
+            "drag_over_original": "%(source)s wróci do pierwotnej pozycji",
+            "drag_start": "Przeciąganie %(source)s",
             "invitation": "Otwórz zaproszenie pokoju %(roomName)s.",
             "mention": {
                 "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wzmianką.",
@@ -174,7 +185,7 @@
             "more_options": "Więcej opcji",
             "remove_section": "Usuń sekcję",
             "toggle": "Przełącz sekcję %(section)s",
-            "toggle_unread": "Wyświetl sekcję %(section)s z nieprzeczytanymi pokojami"
+            "toggle_unread": "Przełącz sekcję %(section)s z nieprzeczytanymi pokojami"
         },
         "show_message_previews": "Pokaż podglądy wiadomości",
         "sort": "Sortuj",
