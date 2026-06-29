@@ -27,6 +27,7 @@ import { UIFeature } from "../../../../../../../src/settings/UIFeature";
 import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../../src/Modal";
+import { ToastContext, ToastRack } from "@element-hq/web-shared-components";
 
 let changePasswordOnError: (e: Error) => void;
 let changePasswordOnFinished: () => void;
@@ -54,7 +55,9 @@ describe("<AccountUserSettingsTab />", () => {
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>
             <SDKContext.Provider value={stores}>
-                <AccountUserSettingsTab {...defaultProps} />
+                <ToastContext.Provider value={new ToastRack()}>
+                    <AccountUserSettingsTab {...defaultProps} />\
+                </ToastContext.Provider>
             </SDKContext.Provider>
         </MatrixClientContext.Provider>
     );
