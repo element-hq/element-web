@@ -16,10 +16,11 @@ import {
     type IStartClientOpts,
     type MatrixClient,
     MemoryStore,
+    type OAuth2,
     PendingEventOrdering,
     type RoomNameState,
     RoomNameType,
-    type TokenRefreshFunction,
+    TokenRefresher,
 } from "matrix-js-sdk/src/matrix";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 import * as utils from "matrix-js-sdk/src/utils";
@@ -42,6 +43,7 @@ import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
+import { persistTokens } from "./utils/tokens/tokens.ts";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -99,6 +101,12 @@ export interface IMatrixClientPeg {
     safeGet(): MatrixClient;
 
     /**
+     * The Matrix JS SDK OAuth2 instance response for this session.
+     * Only present when a client is set and the session is OAuth2-native.
+     */
+    get oauth(): OAuth2 | null;
+
+    /**
      * Unset the current MatrixClient
      */
     unset(): void;
@@ -147,11 +155,11 @@ export interface IMatrixClientPeg {
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      *
-     * @param {IMatrixClientCreds} creds The new credentials to use.
-     * @param {TokenRefreshFunction} tokenRefreshFunction OPTIONAL function used by MatrixClient to attempt token refresh
-     *          see {@link ICreateClientOpts.tokenRefreshFunction}
+     * @param creds The new credentials to use.
+     * @param oauth The OAuth2 object to use for token refreshes, or null if not applicable.
+     *     Only specified for OAuth-native sessions.
      */
-    replaceUsingCreds(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void;
+    replaceUsingCreds(creds: IMatrixClientCreds, oauth: OAuth2 | null): void;
 }
 
 /**
@@ -169,8 +177,13 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         initialSyncLimit: 20,
     };
 
+    private oauth2: OAuth2 | null = null;
     private matrixClient: MatrixClient | null = null;
     private justRegisteredUserId: string | null = null;
+
+    public get oauth(): OAuth2 | null {
+        return this.oauth2;
+    }
 
     public get(): MatrixClient | null {
         return this.matrixClient;
@@ -185,6 +198,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
     public unset(): void {
         this.matrixClient = null;
+        this.oauth2 = null;
 
         MatrixActionCreators.stop();
     }
@@ -224,8 +238,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
     }
 
-    public replaceUsingCreds(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void {
-        this.createClient(creds, tokenRefreshFunction);
+    public replaceUsingCreds(creds: IMatrixClientCreds, oauth: OAuth2 | null): void {
+        this.createClient(creds, oauth);
     }
 
     private onUnexpectedStoreClose = async (): Promise<void> => {
@@ -414,7 +428,15 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         });
     }
 
-    private createClient(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void {
+    private createClient(creds: IMatrixClientCreds, oauth: OAuth2 | null): void {
+        let tokenRefreshFunction: ICreateClientOpts["tokenRefreshFunction"];
+        if (creds.refreshToken && oauth) {
+            const tokenRefresher = new TokenRefresher(oauth, persistTokens.bind(null, creds.pickleKey));
+            tokenRefreshFunction = tokenRefresher?.tokenRefreshFunction;
+        } else {
+            logger.debug("No refresh token was supplied: access token will not be refreshed");
+        }
+
         const opts: ICreateClientOpts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -467,6 +489,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         this.matrixClient = createMatrixClient(opts);
         this.matrixClient.setGuest(Boolean(creds.guest));
+        this.oauth2 = oauth;
 
         const notifTimelineSet = new EventTimelineSet(undefined, {
             timelineSupport: true,

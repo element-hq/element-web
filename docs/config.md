@@ -298,7 +298,6 @@ The following subproperties are available:
 2. `logo_uri`: Optional URI for the client logo.
 3. `tos_uri`: Optional URI for the client's terms of service.
 4. `policy_uri`: Optional URI for the client's privacy policy.
-5. `contacts`: Optional list of contact emails for the client.
 
 As an example:
 
@@ -308,8 +307,7 @@ As an example:
         "client_uri": "https://example.com",
         "logo_uri": "https://example.com/logo.png",
         "tos_uri": "https://example.com/tos",
-        "policy_uri": "https://example.com/policy",
-        "contacts": ["support@example.com"]
+        "policy_uri": "https://example.com/policy"
     }
 }
 ```

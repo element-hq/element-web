@@ -24,7 +24,6 @@ import {
     flushPromises,
 } from "../../../../../../test-utils";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
-import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../../src/Modal";
 
@@ -85,9 +84,6 @@ describe("<AccountUserSettingsTab />", () => {
 
         stores = new SdkContextClass();
         stores.client = mockClient;
-        // stub out this store completely to avoid mocking initialisation
-        const mockOidcClientStore = {} as unknown as OidcClientStore;
-        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
     });
 
     afterEach(() => {
@@ -103,10 +99,7 @@ describe("<AccountUserSettingsTab />", () => {
 
     it("show account management link in expected format", async () => {
         const accountManagementLink = "https://id.server.org/my-account";
-        const mockOidcClientStore = {
-            accountManagementEndpoint: accountManagementLink,
-        } as unknown as OidcClientStore;
-        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+        stores.oauth = { metadata: { account_management_uri: accountManagementLink } } as any;
 
         render(getComponent());
 
@@ -130,10 +123,7 @@ describe("<AccountUserSettingsTab />", () => {
             );
             // account is managed externally when we have delegated auth configured
             const accountManagementLink = "https://id.server.org/my-account";
-            const mockOidcClientStore = {
-                accountManagementEndpoint: accountManagementLink,
-            } as unknown as OidcClientStore;
-            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+            stores.oauth = { metadata: { account_management_uri: accountManagementLink } } as any;
             render(getComponent());
 
             await flushPromises();
@@ -203,11 +193,6 @@ describe("<AccountUserSettingsTab />", () => {
 
     describe("3pids", () => {
         beforeEach(() => {
-            const mockOidcClientStore = {
-                accountManagementEndpoint: undefined,
-            } as unknown as OidcClientStore;
-            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
-
             mockClient.getCapabilities.mockResolvedValue({
                 "m.3pid_changes": {
                     enabled: true,

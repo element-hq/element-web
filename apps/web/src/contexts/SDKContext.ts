@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type OAuth2 } from "matrix-js-sdk/src/matrix";
 import { createContext } from "react";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -23,7 +23,6 @@ import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
-import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
 import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
@@ -51,6 +50,7 @@ export class SdkContextClass {
     // It is only safe to set this once, as updating this value will NOT notify components using
     // this Context.
     public client?: MatrixClient;
+    public oauth?: OAuth2;
 
     // All protected fields to make it easier to derive test stores
     protected _WidgetPermissionStore?: WidgetPermissionStore;
@@ -66,7 +66,6 @@ export class SdkContextClass {
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
     protected _UserProfilesStore?: UserProfilesStore;
-    protected _OidcClientStore?: OidcClientStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
 
@@ -164,18 +163,6 @@ export class SdkContextClass {
         return this._UserProfilesStore;
     }
 
-    public get oidcClientStore(): OidcClientStore {
-        if (!this.client) {
-            throw new Error("Unable to create OidcClientStore without a client");
-        }
-
-        if (!this._OidcClientStore) {
-            this._OidcClientStore = new OidcClientStore(this.client);
-        }
-
-        return this._OidcClientStore;
-    }
-
     // This is getting increasingly tenuous to have here but we still have class components so it's
     // awkward to consume multiple contexts in them. This should be replaced with ResizeObservers
     // anyway really.
@@ -195,6 +182,5 @@ export class SdkContextClass {
 
     public onLoggedOut(): void {
         this._UserProfilesStore = undefined;
-        this._OidcClientStore = undefined;
     }
 }

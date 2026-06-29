@@ -6,25 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
-import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
+import { OAuth2, type BearerTokenResponse } from "matrix-js-sdk/src/matrix";
 import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
-import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
-import { mocked } from "jest-mock";
 import { Crypto } from "@peculiar/webcrypto";
 import { getRandomValues } from "node:crypto";
 
-import { completeOidcLogin, startOidcLogin } from "../../../../src/utils/oidc/authorize";
-import { makeDelegatedAuthConfig } from "../../../test-utils/oidc";
-import { OidcClientError } from "../../../../src/utils/oidc/error";
+import { completeOidcLogin, startOidcLogin } from "../../../../src/utils/oauth/authorize";
+import { makeDelegatedAuthMetadata } from "../../../test-utils/auth";
+import { OidcClientError } from "../../../../src/utils/oauth/error";
 import { mockPlatformPeg } from "../../../test-utils";
+import { storeAuthContext } from "../../../../src/utils/oauth/persistOAuthSettings.ts";
 
 jest.unmock("matrix-js-sdk/src/randomstring");
-
-jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/oidc/authorize"),
-    completeAuthorizationCodeGrant: jest.fn(),
-}));
 
 const webCrypto = new Crypto();
 
@@ -35,7 +28,7 @@ describe("OIDC authorization", () => {
     const clientId = "xyz789";
     const baseUrl = "https://test.com";
 
-    const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
+    const delegatedAuthConfig = makeDelegatedAuthMetadata(issuer);
 
     // to restore later
     const realWindowLocation = window.location;
@@ -58,8 +51,6 @@ describe("OIDC authorization", () => {
                 subtle: webCrypto.subtle,
             },
         });
-
-        fetchMock.get(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`, delegatedAuthConfig);
     });
 
     afterAll(() => {
@@ -71,11 +62,11 @@ describe("OIDC authorization", () => {
         it("navigates to authorization endpoint with correct parameters", async () => {
             await startOidcLogin(delegatedAuthConfig, clientId, homeserverUrl);
 
-            const expectedScopeWithoutDeviceId = `openid urn:matrix:org.matrix.msc2967.client:api:* urn:matrix:org.matrix.msc2967.client:device:`;
+            const expectedScopeWithoutDeviceId = `urn:matrix:client:api:* urn:matrix:client:device:`;
 
             const authUrl = new URL(window.location.href);
 
-            expect(authUrl.searchParams.get("response_mode")).toEqual("query");
+            expect(authUrl.searchParams.get("response_mode")).toEqual("fragment");
             expect(authUrl.searchParams.get("response_type")).toEqual("code");
             expect(authUrl.searchParams.get("client_id")).toEqual(clientId);
             expect(authUrl.searchParams.get("code_challenge_method")).toEqual("S256");
@@ -87,7 +78,6 @@ describe("OIDC authorization", () => {
 
             // random string, just check they are set
             expect(authUrl.searchParams.has("state")).toBeTruthy();
-            expect(authUrl.searchParams.has("nonce")).toBeTruthy();
             expect(authUrl.searchParams.has("code_challenge")).toBeTruthy();
         });
 
@@ -109,63 +99,50 @@ describe("OIDC authorization", () => {
         const code = "test-code-777";
         const params = {
             code,
-            state: state,
+            state,
         };
 
         const tokenResponse: BearerTokenResponse = {
             access_token: "abc123",
             refresh_token: "def456",
-            id_token: "ghi789",
             scope: "test",
             token_type: "Bearer",
-            expires_at: 12345,
+            expires_in: 12345,
         };
 
         beforeEach(() => {
-            mocked(completeAuthorizationCodeGrant)
-                .mockClear()
-                .mockResolvedValue({
-                    oidcClientSettings: {
-                        clientId,
-                        issuer,
-                    },
-                    tokenResponse,
-                    homeserverUrl,
-                    identityServerUrl,
-                    idTokenClaims: {
-                        aud: "123",
-                        iss: issuer,
-                        sub: "123",
-                        exp: 123,
-                        iat: 456,
-                    },
-                });
+            jest.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockResolvedValue(tokenResponse);
+            storeAuthContext({
+                state,
+                codeVerifier: "123456",
+                homeserverUrl,
+                metadata: delegatedAuthConfig,
+                identityServerUrl,
+                clientId,
+            });
         });
 
-        it("should throw when query params do not include state and code", async () => {
-            await expect(async () => await completeOidcLogin({}, "query")).rejects.toThrow(
-                OidcClientError.InvalidQueryParameters,
+        it("should throw when fragment params do not include state and code", async () => {
+            await expect(async () => await completeOidcLogin({})).rejects.toThrow(
+                OidcClientError.InvalidFragmentParameters,
             );
         });
 
         it("should make request complete authorization code grant", async () => {
-            await completeOidcLogin(params, "fragment");
+            await completeOidcLogin(params);
 
-            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state, "fragment");
+            expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(code);
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
-            const result = await completeOidcLogin(params, "query");
+            const result = await completeOidcLogin(params);
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,
                 refreshToken: tokenResponse.refresh_token,
                 homeserverUrl,
                 identityServerUrl,
-                issuer,
                 clientId,
-                idToken: "ghi789",
-                idTokenClaims: result.idTokenClaims,
             });
         });
     });

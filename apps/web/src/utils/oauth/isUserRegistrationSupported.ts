@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { type ValidatedAuthMetadata } from "matrix-js-sdk/src/matrix";
 
 /**
  * Check the create prompt is supported by the OP, if so, we can do a registration flow
@@ -14,7 +14,7 @@ import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
  * @param delegatedAuthConfig config as returned from discovery
  * @returns whether user registration is supported
  */
-export const isUserRegistrationSupported = (delegatedAuthConfig: OidcClientConfig): boolean => {
+export const isUserRegistrationSupported = (delegatedAuthConfig: ValidatedAuthMetadata): boolean => {
     const supportedPrompts = delegatedAuthConfig.prompt_values_supported;
     return Array.isArray(supportedPrompts) && supportedPrompts?.includes("create");
 };

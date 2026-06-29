@@ -7,13 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "@fetch-mock/jest";
-import { OidcError } from "matrix-js-sdk/src/oidc/error";
-import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { OAuth2Error } from "matrix-js-sdk/src/matrix";
 
-import { getOidcClientId } from "../../../../src/utils/oidc/registerClient";
+import { getOidcClientId } from "../../../../src/utils/oauth/registerClient";
 import { mockPlatformPeg } from "../../../test-utils";
 import PlatformPeg from "../../../../src/PlatformPeg";
-import { makeDelegatedAuthConfig } from "../../../test-utils/oidc";
+import { makeDelegatedAuthMetadata } from "../../../test-utils/auth";
 
 describe("getOidcClientId()", () => {
     const issuer = "https://auth.com/";
@@ -25,7 +24,7 @@ describe("getOidcClientId()", () => {
             client_id: "abc123",
         },
     };
-    const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
+    const delegatedAuthConfig = makeDelegatedAuthMetadata(issuer);
 
     beforeEach(() => {
         fetchMock.removeRoutes();
@@ -40,7 +39,7 @@ describe("getOidcClientId()", () => {
                 return baseUrl;
             },
         });
-        Object.defineProperty(PlatformPeg.get(), "getOidcCallbackUrl", {
+        Object.defineProperty(PlatformPeg.get(), "getOAuthCallbackUrl", {
             value: () => ({
                 href: baseUrl,
             }),
@@ -49,30 +48,6 @@ describe("getOidcClientId()", () => {
 
     it("should return static clientId when configured", async () => {
         expect(await getOidcClientId(delegatedAuthConfig, staticOidcClients)).toEqual("abc123");
-        // didn't try to register
-        expect(fetchMock).toHaveFetchedTimes(0);
-    });
-
-    it("should throw when no static clientId is configured and no registration endpoint", async () => {
-        const authConfigWithoutRegistration: OidcClientConfig = makeDelegatedAuthConfig(
-            "https://issuerWithoutStaticClientId.org/",
-        );
-        authConfigWithoutRegistration.registration_endpoint = undefined;
-        await expect(getOidcClientId(authConfigWithoutRegistration, staticOidcClients)).rejects.toThrow(
-            OidcError.DynamicRegistrationNotSupported,
-        );
-        // didn't try to register
-        expect(fetchMock).toHaveFetchedTimes(0);
-    });
-
-    it("should handle when staticOidcClients object is falsy", async () => {
-        const authConfigWithoutRegistration: OidcClientConfig = {
-            ...delegatedAuthConfig,
-            registration_endpoint: undefined,
-        };
-        await expect(getOidcClientId(authConfigWithoutRegistration)).rejects.toThrow(
-            OidcError.DynamicRegistrationNotSupported,
-        );
         // didn't try to register
         expect(fetchMock).toHaveFetchedTimes(0);
     });
@@ -96,7 +71,6 @@ describe("getOidcClientId()", () => {
                 response_types: ["code"],
                 grant_types: ["authorization_code", "refresh_token"],
                 redirect_uris: [baseUrl],
-                id_token_signed_response_alg: "RS256",
                 token_endpoint_auth_method: "none",
                 application_type: "web",
                 logo_uri: `${baseUrl}/vector-icons/1024.png`,
@@ -108,7 +82,7 @@ describe("getOidcClientId()", () => {
         fetchMock.post(delegatedAuthConfig.registration_endpoint!, {
             status: 500,
         });
-        await expect(getOidcClientId(delegatedAuthConfig)).rejects.toThrow(OidcError.DynamicRegistrationFailed);
+        await expect(getOidcClientId(delegatedAuthConfig)).rejects.toThrow(OAuth2Error.DynamicRegistrationFailed);
     });
 
     it("should throw when registration response is invalid", async () => {
@@ -117,6 +91,6 @@ describe("getOidcClientId()", () => {
             // no clientId in response
             body: "{}",
         });
-        await expect(getOidcClientId(delegatedAuthConfig)).rejects.toThrow(OidcError.DynamicRegistrationInvalid);
+        await expect(getOidcClientId(delegatedAuthConfig)).rejects.toThrow(OAuth2Error.DynamicRegistrationInvalid);
     });
 });

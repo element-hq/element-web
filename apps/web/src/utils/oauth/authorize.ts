@@ -6,20 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
-import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { OAuth2, OAuth2Error, type ValidatedAuthMetadata } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
-import { type IdTokenClaims } from "oidc-client-ts";
 
 import { OidcClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
 import { type URLParams } from "../../vector/url_utils.ts";
+import { getOAuthParams, loadAuthContext, storeAuthContext } from "./persistOAuthSettings.ts";
+
+const RESPONSE_MODE = "fragment";
 
 /**
  * Start OIDC authorization code flow
  * Generates auth params, stores them in session storage and
  * Navigates to configured authorization endpoint
- * @param delegatedAuthConfig from discovery
+ * @param authMetadata from {@link MatrixClient.getAuthMetdata}
  * @param clientId this client's id as registered with configured issuer
  * @param homeserverUrl target homeserver
  * @param identityServerUrl OPTIONAL target identity server
@@ -27,28 +28,29 @@ import { type URLParams } from "../../vector/url_utils.ts";
  * @returns Promise that resolves after we have navigated to auth endpoint
  */
 export const startOidcLogin = async (
-    delegatedAuthConfig: OidcClientConfig,
+    authMetadata: ValidatedAuthMetadata,
     clientId: string,
     homeserverUrl: string,
     identityServerUrl?: string,
     isRegistration?: boolean,
 ): Promise<void> => {
-    const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
+    const platform = PlatformPeg.get()!;
+    const state = secureRandomString(32) + platform.getOAuthClientState();
 
-    const nonce = secureRandomString(10);
+    const auth = new OAuth2(authMetadata, getOAuthParams(clientId));
+    const authorizationUrl = await auth.generateAuthorizationCodeGrantUrl(
+        state,
+        RESPONSE_MODE,
+        isRegistration ? "create" : undefined,
+    );
 
-    const prompt = isRegistration ? "create" : undefined;
-
-    const authorizationUrl = await generateOidcAuthorizationUrl({
-        metadata: delegatedAuthConfig,
-        redirectUri,
-        clientId,
+    storeAuthContext({
+        codeVerifier: auth.context.codeVerifier,
+        clientId: auth.context.clientId,
+        metadata: authMetadata,
         homeserverUrl,
         identityServerUrl,
-        nonce,
-        prompt,
-        urlState: PlatformPeg.get()?.getOidcClientState(),
-        responseMode: delegatedAuthConfig.response_modes_supported?.includes("fragment") ? "fragment" : "query",
+        state,
     });
 
     window.location.href = authorizationUrl;
@@ -58,20 +60,15 @@ export const startOidcLogin = async (
  * Gets `code` and `state` response params
  *
  * @param urlParams - the parameters to read
- * @param responseMode - the response_mode used in the auth request
  * @returns code and state
  * @throws when code and state are not valid strings
  */
-const getCodeAndStateFromParams = (
-    { code, state }: NonNullable<URLParams["oidc_fragment"]>,
-    responseMode: "fragment" | "query",
-): { code: string; state: string } => {
+const getCodeAndStateFromParams = ({
+    code,
+    state,
+}: NonNullable<URLParams["oauth2"]>): { code: string; state: string } => {
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
-        if (responseMode === "fragment") {
-            throw new Error(OidcClientError.InvalidFragmentParameters);
-        } else {
-            throw new Error(OidcClientError.InvalidQueryParameters);
-        }
+        throw new Error(OidcClientError.InvalidFragmentParameters);
     }
     return { code, state };
 };
@@ -98,46 +95,35 @@ export type CompleteOidcLoginResponse = {
      */
     refreshToken?: string;
     /**
-     * ID Token gained from OIDC token issuer
-     */
-    idToken?: string;
-    /**
      * This client's ID as registered with the OIDC issuer
      */
     clientId: string;
-    /**
-     * Issuer used during authentication
-     */
-    issuer: string;
-    /**
-     * Claims of the given access token; used during token refresh to validate new tokens
-     */
-    idTokenClaims: IdTokenClaims;
 };
 
 /**
  * Attempt to complete authorization code flow to get an access token
  * @param urlParams the parameters extracted from the app-load URI.
- * @param responseMode - the response_mode used in the auth request
  * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
 export const completeOidcLogin = async (
-    urlParams: NonNullable<URLParams["oidc_fragment"]>,
-    responseMode: "fragment" | "query",
+    urlParams: NonNullable<URLParams["oauth2"]>,
 ): Promise<CompleteOidcLoginResponse> => {
-    const { code, state } = getCodeAndStateFromParams(urlParams, responseMode);
-    const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
-        await completeAuthorizationCodeGrant(code, state, responseMode);
+    const { code, state } = getCodeAndStateFromParams(urlParams);
+    const context = loadAuthContext();
+
+    if (context?.state !== state) {
+        throw new Error(OAuth2Error.MissingOrInvalidStoredState);
+    }
+
+    const auth = new OAuth2(context.metadata, getOAuthParams(context.clientId));
+    const bearerToken = await auth.completeAuthorizationCodeGrant(code);
 
     return {
-        homeserverUrl,
-        identityServerUrl,
-        accessToken: tokenResponse.access_token,
-        refreshToken: tokenResponse.refresh_token,
-        idToken: tokenResponse.id_token,
-        clientId: oidcClientSettings.clientId,
-        issuer: oidcClientSettings.issuer,
-        idTokenClaims,
+        homeserverUrl: context.homeserverUrl,
+        identityServerUrl: context.identityServerUrl,
+        accessToken: bearerToken.access_token,
+        refreshToken: bearerToken.refresh_token,
+        clientId: context.clientId,
     };
 };

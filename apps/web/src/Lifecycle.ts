@@ -10,13 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ReactNode } from "react";
-import {
-    createClient,
-    type MatrixClient,
-    SSOAction,
-    type OidcTokenRefresher,
-    decodeBase64,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixClient, OAuth2, createClient, SSOAction, decodeBase64 } from "matrix-js-sdk/src/matrix";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -58,29 +52,26 @@ import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
-import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oidc/authorize";
-import { getOidcErrorMessage } from "./utils/oidc/error";
-import { type OidcClientStore } from "./stores/oidc/OidcClientStore";
+import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oauth/authorize";
+import { getOidcErrorMessage } from "./utils/oauth/error";
 import {
+    getOAuthParams,
     getStoredOidcClientId,
-    getStoredOidcIdTokenClaims,
-    getStoredOidcTokenIssuer,
     persistOidcAuthenticatedSettings,
-} from "./utils/oidc/persistOidcSettings";
+} from "./utils/oauth/persistOAuthSettings";
 import {
     ACCESS_TOKEN_IV,
     ACCESS_TOKEN_STORAGE_KEY,
     HAS_ACCESS_TOKEN_STORAGE_KEY,
     HAS_REFRESH_TOKEN_STORAGE_KEY,
-    persistAccessTokenInStorage,
-    persistRefreshTokenInStorage,
+    persistTokens,
     REFRESH_TOKEN_IV,
     REFRESH_TOKEN_STORAGE_KEY,
     tryDecryptToken,
 } from "./utils/tokens/tokens";
-import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
+import { filterBoolean } from "./utils/arrays.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -264,7 +255,7 @@ export async function getStoredSessionOwner(): Promise<[string, boolean] | [null
 }
 
 /**
- * If query string includes OIDC authorization code flow parameters attempt to login using oidc flow
+ * If query string includes OAuth2 authorization code flow parameters attempt to login using oauth flow
  * Else, we may be returning from SSO - attempt token login
  *
  * @param urlParams the parameters read in at app load time from the url
@@ -280,30 +271,24 @@ export async function attemptDelegatedAuthLogin(
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
-    if (urlParams.oidc_fragment) {
-        return attemptOidcNativeLogin(urlParams.oidc_fragment, "fragment");
-    } else if (urlParams.oidc_query) {
-        return attemptOidcNativeLogin(urlParams.oidc_query, "query");
+    if (urlParams.oauth2) {
+        return attemptOidcNativeLogin(urlParams.oauth2);
     }
 
     return attemptTokenLogin(urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
 }
 
 /**
- * Attempt to login by completing OIDC authorization code flow
- * @param urlParams subset of app-load url parameters relating to oidc auth
- * @param responseMode - the response_mode used in the auth request
+ * Attempt to login by completing OAuth2 authorization code flow
+ * @param urlParams subset of app-load url parameters relating to oauth auth
  * @returns Promise that resolves to true when login succeeded, else false
  */
-async function attemptOidcNativeLogin(
-    urlParams: NonNullable<URLParams["oidc_fragment"]>,
-    responseMode: "fragment" | "query",
-): Promise<boolean> {
-    console.log("We have OIDC params - attempting OIDC login");
+async function attemptOidcNativeLogin(urlParams: NonNullable<URLParams["oauth2"]>): Promise<boolean> {
+    console.log("We have OAuth2 params - attempting login");
 
     try {
-        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
-            await completeOidcLogin(urlParams, responseMode);
+        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, clientId } =
+            await completeOidcLogin(urlParams);
 
         await configureFromCompletedOAuthLogin({
             accessToken,
@@ -311,13 +296,11 @@ async function attemptOidcNativeLogin(
             homeserverUrl,
             identityServerUrl,
             clientId,
-            issuer,
-            idToken,
         });
 
         return true;
     } catch (error) {
-        logger.error("Failed to login via OIDC", error);
+        logger.error("Failed to login via OAuth", error);
 
         onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
@@ -325,8 +308,8 @@ async function attemptOidcNativeLogin(
 }
 
 /**
- * Exchange the given OIDC credentials for {@link IMatrixClientCreds}, additionally persisting them to storage.
- * @param creds the credentials from the OIDC flow
+ * Exchange the given OAuth2 credentials for {@link IMatrixClientCreds}, additionally persisting them to storage.
+ * @param creds the credentials from the OAuth2 flow
  */
 export async function configureFromCompletedOAuthLogin({
     accessToken,
@@ -334,9 +317,7 @@ export async function configureFromCompletedOAuthLogin({
     homeserverUrl,
     identityServerUrl,
     clientId,
-    issuer,
-    idToken,
-}: Omit<CompleteOidcLoginResponse, "idTokenClaims">): Promise<IMatrixClientCreds> {
+}: CompleteOidcLoginResponse): Promise<IMatrixClientCreds> {
     const {
         user_id: userId,
         device_id: deviceId,
@@ -353,10 +334,10 @@ export async function configureFromCompletedOAuthLogin({
         isGuest,
     };
 
-    logger.debug("Logged in via OIDC native flow");
+    logger.debug("Logged in via OAuth2 native flow");
     await onSuccessfulDelegatedAuthLogin(credentials);
     // this needs to happen after success handler which clears storages
-    persistOidcAuthenticatedSettings(clientId, issuer, idToken);
+    persistOidcAuthenticatedSettings(clientId);
     return credentials;
 }
 
@@ -479,7 +460,7 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
 }
 
 /**
- * Called after a successful token login or OIDC authorization.
+ * Called after a successful token login or OAuth2 authorization.
  * Clear storage then save new credentials in storage
  * @param credentials as returned from login
  */
@@ -496,7 +477,7 @@ async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): 
 type TryAgainFunction = () => void;
 
 /**
- * Display a friendly error to the user when token login or OIDC authorization fails
+ * Display a friendly error to the user when token login or OAuth2 authorization fails
  * @param description error description
  * @param tryAgain OPTIONAL function to call on try again button from error dialog
  */
@@ -731,9 +712,9 @@ async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessi
  * Also stops the old MatrixClient and clears old credentials/etc out of
  * storage before starting the new client.
  *
- * This function does not work for OIDC login.
+ * This function does not work for OAuth2 login.
  * Storage is cleared early in the process so the required data is lost.
- * You must use {@link attemptDelegatedAuthLogin} followed by {@link restoreSessionFromStorage} for OIDC login.
+ * You must use {@link attemptDelegatedAuthLogin} followed by {@link restoreSessionFromStorage} for OAuth2 login.
  *
  * @param {IMatrixClientCreds} credentials The credentials to use
  *
@@ -781,44 +762,6 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
     }
 
     return doSetLoggedIn(credentials, overwrite, false);
-}
-
-/**
- * When we have a authenticated via OIDC-native flow and have a refresh token
- * try to create a token refresher.
- * @param credentials from current session
- * @param clientId OIDC client ID
- * @throws If credentials.refreshToken or credentials.deviceId is falsy, or if no token issuer is stored
- * @returns Promise that resolves to a TokenRefresher
- */
-async function createOidcTokenRefresher(
-    credentials: IMatrixClientCreds,
-    clientId: string,
-): Promise<OidcTokenRefresher> {
-    if (!credentials.refreshToken) {
-        throw new Error("A refresh token must be supplied in order to create an OIDC token refresher.");
-    }
-    // stored token issuer indicates we authenticated via OIDC-native flow
-    const tokenIssuer = getStoredOidcTokenIssuer();
-    if (!tokenIssuer) {
-        throw new Error("Cannot create an OIDC token refresher as no stored OIDC token issuer was found.");
-    }
-
-    const idTokenClaims = getStoredOidcIdTokenClaims();
-    const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
-    const deviceId = credentials.deviceId;
-    if (!deviceId) {
-        throw new Error("Expected deviceId in user credentials.");
-    }
-    const tokenRefresher = new TokenRefresher(
-        tokenIssuer,
-        clientId,
-        redirectUri,
-        deviceId,
-        idTokenClaims!,
-        credentials.userId,
-    );
-    return tokenRefresher;
 }
 
 /**
@@ -870,21 +813,14 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    let storedClientid;
+    let auth: OAuth2 | undefined;
     try {
-        storedClientid = getStoredOidcClientId();
+        auth = await hydrateAuth();
     } catch {}
-
-    let tokenRefresher;
-    if (credentials.refreshToken && storedClientid) {
-        tokenRefresher = await createOidcTokenRefresher(credentials, storedClientid);
-    } else {
-        logger.debug("No refresh token was supplied: access token will not be refreshed");
-    }
 
     // check the session lock just before creating the new client
     checkSessionLock();
-    MatrixClientPeg.replaceUsingCreds(credentials, tokenRefresher?.doRefreshAccessToken.bind(tokenRefresher));
+    MatrixClientPeg.replaceUsingCreds(credentials, auth ?? null);
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);
@@ -957,8 +893,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
 
-    await persistAccessTokenInStorage(credentials.accessToken, credentials.pickleKey);
-    await persistRefreshTokenInStorage(credentials.refreshToken, credentials.pickleKey);
+    await persistTokens(credentials.pickleKey, credentials);
 
     if (credentials.pickleKey) {
         localStorage.setItem("mx_has_pickle_key", String(true));
@@ -986,17 +921,25 @@ let _isLoggingOut = false;
 
 /**
  * Logs out the current session.
- * When user has authenticated using OIDC native flow revoke tokens with OIDC provider.
+ * When user has authenticated using OAuth2 native flow revoke tokens with OAuth2 provider.
  * Otherwise, call /logout on the homeserver.
  * @param client
- * @param oidcClientStore
+ * @param oauth
  */
-async function doLogout(client: MatrixClient, oidcClientStore?: OidcClientStore): Promise<void> {
-    if (oidcClientStore?.isUserAuthenticatedWithOidc) {
-        const accessToken = client.getAccessToken() ?? undefined;
-        const refreshToken = client.getRefreshToken() ?? undefined;
+async function doLogout(client: MatrixClient, oauth: OAuth2 | null): Promise<void> {
+    if (oauth) {
+        const accessToken = client.getAccessToken();
+        const refreshToken = client.getRefreshToken();
 
-        await oidcClientStore.revokeTokens(accessToken, refreshToken);
+        await Promise.all(
+            filterBoolean([
+                accessToken ? oauth.revokeToken(accessToken, "access_token") : null,
+                refreshToken ? oauth.revokeToken(refreshToken, "refresh_token") : null,
+            ]),
+        );
+
+        client.stopClient();
+        client.http.abort();
     } else {
         await client.logout(true);
     }
@@ -1004,10 +947,10 @@ async function doLogout(client: MatrixClient, oidcClientStore?: OidcClientStore)
 
 /**
  * Logs the current session out and transitions to the logged-out state
- * @param oidcClientStore store instance from SDKContext
  */
-export function logout(oidcClientStore?: OidcClientStore): void {
+export function logout(): void {
     const client = MatrixClientPeg.get();
+    const oauth = MatrixClientPeg.oauth;
     if (!client) return;
 
     PosthogAnalytics.instance.logout();
@@ -1023,7 +966,7 @@ export function logout(oidcClientStore?: OidcClientStore): void {
     _isLoggingOut = true;
     PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
 
-    doLogout(client, oidcClientStore).then(onLoggedOut, (err) => {
+    doLogout(client, oauth).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
         // if you're trying to log out because your server's down and
         // you want to log into a different server, so just forget the
@@ -1270,3 +1213,17 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
         false,
     );
 };
+
+/**
+ * Instantiate an OAuth2 instance from storage
+ * Returned promise will reject if the session or the server are not OAuth2-native.
+ */
+async function hydrateAuth(): Promise<OAuth2> {
+    const storedClientId = getStoredOidcClientId();
+    const homeserverUrl = localStorage.getItem(HOMESERVER_URL_KEY)!;
+
+    const tempClient = new MatrixClient({ baseUrl: homeserverUrl });
+    const authMetadata = await tempClient.getAuthMetadata();
+
+    return new OAuth2(authMetadata, getOAuthParams(storedClientId));
+}

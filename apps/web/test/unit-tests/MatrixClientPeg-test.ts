@@ -16,6 +16,11 @@ jest.useFakeTimers();
 
 const PegClass = Object.getPrototypeOf(peg).constructor;
 
+jest.mock("../../../../src/utils/tokens/tokens", () => ({
+    persistAccessTokenInStorage: jest.fn(),
+    persistRefreshTokenInStorage: jest.fn(),
+}));
+
 describe("MatrixClientPeg", () => {
     beforeEach(() => {
         // stub out Logger.log which gets called a lot and clutters up the test output
@@ -70,12 +75,15 @@ describe("MatrixClientPeg", () => {
             // instantiate a MatrixClientPegClass instance, with a new MatrixClient
             testPeg = new PegClass();
             fetchMock.get("http://example.com/_matrix/client/versions", {});
-            testPeg.replaceUsingCreds({
-                accessToken: "SEKRET",
-                homeserverUrl: "http://example.com",
-                userId: "@user:example.com",
-                deviceId: "TEST_DEVICE_ID",
-            });
+            testPeg.replaceUsingCreds(
+                {
+                    accessToken: "SEKRET",
+                    homeserverUrl: "http://example.com",
+                    userId: "@user:example.com",
+                    deviceId: "TEST_DEVICE_ID",
+                },
+                null,
+            );
         });
 
         it("should initialise the rust crypto library by default", async () => {

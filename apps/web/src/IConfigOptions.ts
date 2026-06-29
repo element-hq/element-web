@@ -194,24 +194,25 @@ export interface IConfigOptions {
     };
 
     /**
-     * Configuration for OIDC issuers where a static client_id has been issued for the app.
+     * Configuration for OAuth2 issuers where a static client_id has been issued for the app.
      * Otherwise dynamic client registration is attempted.
      * The issuer URL must have a trailing `/`.
      * OPTIONAL
+     * Refers to `oidc` only for legacy compatibility
      */
     oidc_static_clients?: {
         [issuer: string]: { client_id: string };
     };
 
     /**
-     * Configuration for OIDC dynamic registration where a static OIDC client is not configured.
+     * Configuration for OAuth2 dynamic registration where a static OAuth2 client is not configured.
+     * Refers to `oidc` only for legacy compatibility
      */
     oidc_metadata?: {
         client_uri?: string;
         logo_uri?: string;
         tos_uri?: string;
         policy_uri?: string;
-        contacts?: string[];
     };
 
     modules?: string[];
