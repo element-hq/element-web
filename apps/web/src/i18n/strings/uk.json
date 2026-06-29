@@ -113,7 +113,7 @@
         "show_advanced": "Показати розширені",
         "show_all": "Показати все",
         "sign_in": "Увійти",
-        "sign_out": "Вийти",
+        "sign_out": "Вилучити цей пристрій",
         "skip": "Пропустити",
         "start": "Почати",
         "start_chat": "Почати бесіду",
@@ -217,9 +217,10 @@
         "incorrect_password": "Неправильний пароль",
         "log_in_new_account": "<a>Увійти</a> до нового облікового запису.",
         "logout_dialog": {
-            "description": "Ви впевнені, що хочете вийти?",
-            "setup_key_backup_title": "Ви втратите доступ до ваших зашифрованих повідомлень",
-            "skip_key_backup": "Мені не потрібні мої зашифровані повідомлення"
+            "description": "Ви впевнені, що хочете вилучити цей пристрій?",
+            "setup_key_backup_title": "Ви втратите доступ до своїх зашифрованих бесід",
+            "setup_secure_backup_description": "Це ваш єдиний пристрій. Якщо ви його вилучите, вам знадобиться ключ відновлення, щоб підтвердити свою цифрову ідентичність та відновити зашифровані бесіди під час наступного входу.",
+            "skip_key_backup": "Усе одно вилучити цей пристрій"
         },
         "misconfigured_body": "Попросіть адміністратора %(brand)s перевірити <a>конфігураційний файл</a> на наявність неправильних або повторюваних записів.",
         "misconfigured_title": "Ваш %(brand)s налаштовано неправильно",
@@ -272,6 +273,7 @@
             "scan_qr_code": "Увійдіть за допомогою QR-коду",
             "security_code_prompt": "Якщо з'явиться запит, введіть наведений нижче код на іншому пристрої.",
             "select_qr_code": "Виберіть «%(scanQRCode)s»",
+            "tap_avatar_link_new_device": "Натисніть на свій аватар і виберіть «%(linkNewDevice)s»",
             "unsupported_explainer": "Ваш постачальник облікового запису не підтримує вхід на новий пристрій за допомогою QR-коду.",
             "unsupported_heading": "QR-код не підтримується",
             "waiting_for_device": "Очікування входу з пристрою"
@@ -299,7 +301,7 @@
             "rate_limit_error_with_time": "Забагато спроб за короткий час. Повторіть спробу за %(timeout)s.",
             "reset_successful": "Ваш пароль скинуто.",
             "return_to_login": "Повернутися на сторінку входу",
-            "sign_out_other_devices": "Вийти на всіх пристроях"
+            "sign_out_other_devices": "Вилучити інші пристрої"
         },
         "reset_password_action": "Скинути пароль",
         "reset_password_button": "Забули пароль?",
@@ -322,8 +324,8 @@
         "server_picker_title": "Увійдіть на ваш домашній сервер",
         "server_picker_title_default": "Опції сервера",
         "server_picker_title_registration": "Розмістити обліковий запис на",
-        "session_logged_out_description": "З метою безпеки ваш сеанс було завершено. Увійдіть знову.",
-        "session_logged_out_title": "Виконано вихід",
+        "session_logged_out_description": "З міркувань безпеки цей сеанс вилучено. Увійдіть знову.",
+        "session_logged_out_title": "Сеанс вилучено",
         "set_email": {
             "description": "Це дозволить вам скинути пароль і отримувати сповіщення.",
             "verification_pending_description": "Перейдіть до своєї е-пошти й натисніть на отримане посилання. Після цього натисніть «Продовжити».",
@@ -333,8 +335,10 @@
         "sign_in_description": "Скористайтесь обліковим записом, щоб продовжити.",
         "sign_in_instead": "Натомість увійти",
         "sign_in_instead_prompt": "Натомість увійти",
+        "sign_in_manually": "Увійти вручну",
         "sign_in_or_register": "Увійти або створити обліковий запис",
         "sign_in_or_register_description": "Скористайтесь вашим обліковим записом або створіть новий, щоб продовжити.",
+        "sign_in_with_qr": "Увійти за допомогою QR-коду",
         "sign_in_with_sso": "Увійти за допомогою єдиного входу",
         "signing_in": "Вхід…",
         "soft_logout": {
@@ -363,7 +367,7 @@
             "fallback_button": "Почати автентифікацію",
             "mas_cross_signing_reset_cta": "Перейти до свого облікового запису",
             "mas_cross_signing_reset_description": "Скиньте свою особистість через постачальника облікового запису, а потім поверніться та натисніть «Повторити».",
-            "mas_cross_signing_reset_title": "Перейдіть до свого облікового запису, щоб скинути свою ідентичність",
+            "mas_cross_signing_reset_title": "Перейдіть до свого облікового запису, щоб скинути свою цифрову ідентичність",
             "msisdn": "Текстове повідомлення надіслано на %(msisdn)s",
             "msisdn_token_incorrect": "Хибний токен",
             "msisdn_token_prompt": "Введіть отриманий код:",
@@ -469,9 +473,10 @@
         "description": "Опис",
         "deselect_all": "Скасувати вибір",
         "device": "Пристрій",
+        "disabled_by_homeserver": "Вимкнено на домашньому сервері",
         "edited": "змінено",
         "email_address": "Адреса е-пошти",
-        "emoji": "Емодзі",
+        "emoji": "Емоджі",
         "encrypted": "Зашифроване",
         "error": "Помилка",
         "faq": "ЧаПи",
@@ -589,7 +594,7 @@
             "@room_description": "Сповістити всю кімнату",
             "command_a11y": "Команда автозаповнення",
             "command_description": "Команди",
-            "emoji_a11y": "Самодоповнення емодзі",
+            "emoji_a11y": "Самозаповнення емодзі",
             "notification_a11y": "Автозаповнення сповіщення",
             "notification_description": "Сповіщення кімнати",
             "room_a11y": "Автозаповнення кімнати",
@@ -660,7 +665,7 @@
         "join_rule_public_label": "Будь-хто зможе знайти цю кімнату й приєднатись.",
         "join_rule_public_parent_space_label": "Будь-хто зможе знайти цю кімнату й приєднатись, не лише учасники <SpaceName/>.",
         "join_rule_restricted": "Видима для учасників простору",
-        "join_rule_restricted_label": "Усі в <SpaceName/> зможуть знайти та приєднатися до цієї кімнати.",
+        "join_rule_restricted_label": "Будь-хто з <SpaceName/> може приєднатися.",
         "name_validation_required": "Введіть назву кімнати",
         "room_visibility_label": "Видимість кімнати",
         "state_encryption_label": "Шифрування подій стану",
@@ -673,6 +678,14 @@
         "unfederated_label_default_on": "Ви можете вимкнути це, якщо кімната буде використовуватися для співпраці із зовнішніми командами, які мають власний домашній сервер. Це неможливо змінити пізніше.",
         "unsupported_version": "Сервер не підтримує вказану версію кімнати."
     },
+    "create_section_dialog": {
+        "create_section": "Створити розділ",
+        "description": "Розділи призначені лише для вас",
+        "edit_section": "Змінити розділ",
+        "label": "Назва розділу",
+        "title": "Створити розділ",
+        "title_edition": "Змінити розділ"
+    },
     "create_space": {
         "add_details_prompt": "Додайте якісь подробиці, щоб допомогти людям дізнатися про нього.",
         "add_details_prompt_2": "Ви можете змінити це будь-коли.",
@@ -684,7 +697,7 @@
         "creating_rooms": "Створення кімнат…",
         "done_action": "Перейти до мого простору",
         "done_action_first_room": "Перейти до моєї першої кімнати",
-        "explainer": "Простори — це новий спосіб групових кімнат та людей. Який вид простору ви хочете створити? Ви можете змінити це пізніше.",
+        "explainer": "Простори — це новий спосіб групувати кімнати та людей. Який вид простору ви хочете створити?",
         "failed_create_initial_rooms": "Не вдалося створити початкові кімнати простору",
         "failed_invite_users": "Не вдалося запросити до вашого простору таких користувачів: %(csvUsers)s",
         "invite_teammates_by_username": "Запросити за користувацьким іменем",
@@ -702,13 +715,13 @@
         "private_personal_heading": "З ким ви працюєте?",
         "private_space": "Я й учасники моєї команди",
         "private_space_description": "Приватний простір для вас та учасників вашої команди",
-        "public_description": "Відкритий простір для будь-кого, найкраще для спільнот",
+        "public_description": "Приєднатися може будь-хто, ідеально підходить для спільнот",
         "public_heading": "Ваш загальнодоступний простір",
         "search_public_button": "Пошук загальнодоступних просторів",
-        "setup_rooms_community_description": "Створімо по кімнаті для кожної.",
+        "setup_rooms_community_description": "Створімо кімнати, щоб розпочати.",
         "setup_rooms_community_heading": "Які речі ви бажаєте обговорювати в %(spaceName)s?",
-        "setup_rooms_description": "Згодом ви зможете додати більше, зокрема вже наявні.",
-        "setup_rooms_private_description": "Ми створимо кімнати для кожного з них.",
+        "setup_rooms_description": "Згодом ви зможете додати більше кімнат до простору, зокрема вже наявні.",
+        "setup_rooms_private_description": "Створімо кімнати, щоб розпочати.",
         "setup_rooms_private_heading": "Над якими проєктами працює ваша команда?",
         "share_description": "Зараз це лише для вас, якщо додати ще когось буде цікавіше.",
         "share_heading": "Поділитися %(name)s",
@@ -721,7 +734,7 @@
         "subspace_join_rule_invite_only": "Приватний простір (лише за запрошенням)",
         "subspace_join_rule_label": "Видимість простору",
         "subspace_join_rule_public_description": "Будь-хто зможе знайти цей простір і приєднатись, не лише учасники <SpaceName/>.",
-        "subspace_join_rule_restricted_description": "Будь-хто в <SpaceName/> зможе знайти й приєднатись."
+        "subspace_join_rule_restricted_description": "Будь-хто з <SpaceName/> може приєднатися."
     },
     "credits": {
         "default_cover_photo": "<photo>Типова світлина обкладинки</photo> від © <author>Jesús Roncero</author> використовується на умовах <terms>CC-BY-SA 4.0</terms>.",
@@ -763,7 +776,7 @@
             "cross_signing_public_keys_on_device_status": "Відкриті ключі перехресного підписування:",
             "cross_signing_ready": "Перехресне підписування готове до користування.",
             "cross_signing_status": "Стан перехресного підписування:",
-            "cross_signing_untrusted": "Ваш обліковий запис має ідентичність із перехресним підписом у таємному сховищі, але цей сеанс ще не довіряє їй.",
+            "cross_signing_untrusted": "Ваш обліковий запис має цифрову ідентичність у сховищі таємниць, але цей сеанс ще не має до неї довіри.",
             "crypto_not_available": "Криптографічний модуль недоступний",
             "device_id": "ID пристрою",
             "key_backup_active_version": "Активна версія резервної копії:",
@@ -947,6 +960,7 @@
         "event_shield_reason_unverified_identity": "Зашифровано неперевіреним користувачем.",
         "export_unsupported": "Ваш браузер не підтримує необхідних криптографічних функцій",
         "forgot_recovery_key": "Забули ключ відновлення?",
+        "identity_needs_reset_description": "Вам потрібно скинути налаштування цифрової ідентичності, щоб забезпечити доступ до історії бесіди",
         "import_invalid_keyfile": "Файл ключа %(brand)s некоректний",
         "import_invalid_passphrase": "Помилка автентифікації: неправильний пароль?",
         "key_storage_out_of_sync": "Ваше сховище ключів не синхронізується.",
@@ -965,8 +979,8 @@
             "title": "Новий метод відновлення",
             "warning": "Якщо ви не встановлювали нового способу відновлення, ймовірно хтось намагається зламати ваш обліковий запис. Негайно змініть пароль до свого облікового запису й встановіть новий спосіб відновлення в налаштуваннях."
         },
-        "pinned_identity_changed": "Ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
-        "pinned_identity_changed_no_displayname": "Ідентичність <b>%(userId)s</b> скинуто. <a>Докладніше</a>",
+        "pinned_identity_changed": "Цифрову ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
+        "pinned_identity_changed_no_displayname": "Цифрову ідентичність <b>%(userId)s</b> скинуто. <a>Докладніше</a>",
         "recovery_method_removed": {
             "description_1": "Цей сеанс виявив, що ваша фраза безпеки й ключ до захищених повідомлень були видалені.",
             "description_2": "Якщо це ненароком зробили ви, налаштуйте захищені повідомлення для цього сеансу, щоб повторно зашифрувати історію листування цього сеансу з новим способом відновлення.",
@@ -993,7 +1007,7 @@
             "complete_description": "Ви успішно звірили цього користувача.",
             "complete_title": "Звірено!",
             "confirm_identity_description": "Верифікуйте цей пристрій, щоб налаштувати безпечний обмін повідомленнями.",
-            "confirm_identity_title": "Підтвердьте свою особистість",
+            "confirm_identity_title": "Звірте свою цифрову ідентичність",
             "confirm_the_emojis": "Підтвердьте, що емодзі нижче збігаються з тими, які показані на вашому іншому пристрої.",
             "error_starting_description": "Ми не змогли розпочати бесіду з іншим користувачем.",
             "error_starting_title": "Помилка запуску перевірки",
@@ -1039,7 +1053,7 @@
             "sas_caption_self": "Звірте цей пристрій, підтвердивши, що на екрані з'явилося це число.",
             "sas_caption_user": "Звірте справжність цього користувача, підтвердивши, що на екрані з'явилося таке число.",
             "sas_description": "Порівняйте унікальний набір емодзі якщо жоден ваш пристрій не має камери",
-            "sas_emoji_caption_user": "Звірте цього користувача підтвердженням того, що наступні емодзі з'являються на його екрані.",
+            "sas_emoji_caption_user": "Звірте цього користувача, отримавши підтвердження, що на його екрані показано ці емоджі.",
             "sas_match": "Вони збігаються",
             "sas_no_match": "Вони не збігаються",
             "sas_prompt": "Порівняйте унікальні емодзі",
@@ -1077,7 +1091,7 @@
             "waiting_other_user": "Очікування звірки %(displayName)s…"
         },
         "verification_requested_toast_title": "Запит перевірки",
-        "verified_identity_changed": "Ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
+        "verified_identity_changed": "Цифрову ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
         "verified_identity_changed_no_displayname": "Ідентичність <b>%(userId)s</b> скинуто. <a>Докладніше</a> ",
         "verify_toast_description": "Інші користувачі можуть не довіряти цьому",
         "verify_toast_title": "Звірити цей сеанс",
@@ -1095,7 +1109,7 @@
         "failed_copy": "Не вдалося скопіювати",
         "hs_blocked": "Цей домашній сервер заблокований адміністратором.",
         "invalid_configuration_mixed_server": "Неправильна конфігурація: не можна вказати default_hs_url разом з default_server_name або default_server_config",
-        "invalid_configuration_no_server": "Невірна конфігурація: не вказано сервер за замовчуванням.",
+        "invalid_configuration_no_server": "Неправильна конфігурація: не вказано усталений сервер.",
         "invalid_json": "Ваша конфігурація Element містить хибний JSON. Виправте проблему та оновіть сторінку.",
         "invalid_json_detail": "Повідомлення від аналізатора : %(message)s",
         "invalid_json_generic": "Хибний JSON",
@@ -1204,7 +1218,7 @@
         "fetching_events": "Отримання подій…",
         "file_attached": "Файл прикріплено",
         "format": "Формат",
-        "from_the_beginning": "З самого початку",
+        "from_the_beginning": "З початку",
         "generating_zip": "Генерування ZIP-файлу",
         "html": "HTML",
         "html_title": "Експортовані дані",
@@ -1797,6 +1811,11 @@
         "ongoing": "Вилучення…",
         "reason_label": "Причина (не обов'язково)"
     },
+    "remove_section_dialog": {
+        "confirmation": "Ви впевнені, що хочете вилучити цей розділ?",
+        "remove_section": "Вилучити розділ",
+        "title": "Вилучити розділ?"
+    },
     "report_content": {
         "description": "Зі скаргою на це повідомлення буде надіслано його унікальний «ID події» адміністраторові вашого домашнього сервера. Якщо повідомлення у цій кімнаті зашифровані, то адміністратор не зможе побачити ані тексту повідомлень, ані жодних файлів чи зображень.",
         "hide_messages_from_user": "Виберіть, чи хочете ви сховати всі поточні та майбутні повідомлення від цього користувача.",
@@ -1934,6 +1953,7 @@
         "error_join_incompatible_version_1": "На жаль, ваш домашній сервер застарий для участі тут.",
         "error_join_incompatible_version_2": "Будь ласка, зв'яжіться з адміністратором вашого домашнього сервера.",
         "error_join_title": "Не вдалося приєднатися",
+        "error_join_unknown": "Сталася невідома помилка.",
         "error_jump_to_date": "Сервер повернув %(statusCode)s з кодом помилки %(errorCode)s",
         "error_jump_to_date_connection": "Виникла помилка мережі під час спроби знайти та перейти до вказаної дати. Можливо, ваш домашній сервер не працює або виникли тимчасові проблеми з інтернет-з'єднанням. Повторіть спробу ще раз. Якщо це не допоможе, зверніться до адміністратора вашого домашнього сервера.",
         "error_jump_to_date_details": "Подробиці помилки",
@@ -2100,6 +2120,10 @@
         "redacting_messages_status": {
             "one": "Триває видалення повідомлень в %(count)s кімнаті",
             "other": "Триває видалення повідомлень у %(count)s кімнатах"
+        },
+        "section": {
+            "chats": "Бесіди",
+            "low_priority": "Неважливі"
         },
         "show_less": "Згорнути",
         "show_n_more": {
@@ -2291,18 +2315,19 @@
             "history_visibility_invited": "Учасники з моменту запрошення",
             "history_visibility_legend": "Хто може читати історію?",
             "history_visibility_shared": "Учасники (повна історія)",
-            "history_visibility_warning": "Видимість наявної історії не зміниться.",
+            "history_visibility_warning": "Зміни не вплинуть на попередні повідомлення, лише на нові. <a>Докладніше</a>",
             "history_visibility_world_readable": "Будь-хто (історія загальнодоступна)",
             "join_rule_description": "Вкажіть, хто може приєднуватися до %(roomName)s.",
-            "join_rule_invite": "Приватно (лише за запрошенням)",
+            "join_rule_invite": "Лише запрошені",
             "join_rule_invite_description": "Приєднатися можуть лише запрошені люди.",
             "join_rule_knock": "Запит на приєднання",
             "join_rule_knock_description": "Люди не можуть приєднатися, якщо їм не надано доступ.",
-            "join_rule_public_description": "Будь-хто може знайти та приєднатися.",
+            "join_rule_public": "Будь-хто",
+            "join_rule_public_description": "Будь-хто може приєднатися.",
             "join_rule_restricted": "Учасники простору",
             "join_rule_restricted_description": "Будь-хто у просторі може знайти та приєднатися. <a>Укажіть, які простори можуть отримати доступ сюди.</a>",
-            "join_rule_restricted_description_active_space": "Будь-хто у <spaceName/> може знайти та приєднатися. Ви можете вибрати інші простори.",
-            "join_rule_restricted_description_prompt": "Будь-хто у просторі може знайти та приєднатися. Можна вибрати кілька просторів.",
+            "join_rule_restricted_description_active_space": "Будь-хто з <spaceName/> може приєднатися.",
+            "join_rule_restricted_description_prompt": "Приєднуватися можуть усі учасники простору.",
             "join_rule_restricted_description_spaces": "Простори з доступом",
             "join_rule_restricted_dialog_description": "Оберіть, які простори матимуть доступ до цієї кімнати. Якщо обрати простір, його учасники зможуть знаходити <RoomName/> і приєднуватися.",
             "join_rule_restricted_dialog_empty_warning": "Ви вилучаєте всі простори. Усталеним стане доступ за запрошенням",
@@ -2312,7 +2337,7 @@
             "join_rule_restricted_dialog_heading_room": "Відомі вам простори, до яких входить кімната",
             "join_rule_restricted_dialog_heading_space": "Відомі вам простори, до яких входить цей",
             "join_rule_restricted_dialog_heading_unknown": "Ймовірно, інші адміністратори кімнати є їхніми учасниками.",
-            "join_rule_restricted_dialog_title": "Вибрати простори",
+            "join_rule_restricted_dialog_title": "Керувати просторами",
             "join_rule_restricted_n_more": {
                 "one": "і ще %(count)s",
                 "other": "і ще %(count)s"
@@ -2339,7 +2364,7 @@
             "publish_room": "Зробити цю кімнату видимою в каталозі загальнодоступних кімнат.",
             "publish_space": "Зробити цей простір видимим у каталозі загальнодоступних кімнат.",
             "strict_encryption": "Надсилати повідомлення лише верифікованим користувачам.",
-            "title": "Безпека й приватність"
+            "title": "Безпека та приватність"
         },
         "title": "Налаштування кімнати - %(roomName)s",
         "upload_avatar_label": "Вивантажити аватар",
@@ -2355,7 +2380,7 @@
             "history_visibility_anyone_space_description": "Дозвольте людям переглядати ваш простір, перш ніж вони приєднаються.",
             "history_visibility_anyone_space_disabled": "Ви не маєте дозволу змінювати видимість історії.",
             "history_visibility_anyone_space_recommendation": "Рекомендовано для загальнодоступних просторів.",
-            "title": "Видимість"
+            "title": "Безпека та приватність"
         },
         "voip": {
             "call_type_section": "Тип викликів",
@@ -2473,8 +2498,8 @@
                 "breadcrumb_page": "Скинути шифрування",
                 "breadcrumb_second_description": "Ви втратите історію повідомлень, яка зберігається лише на сервері",
                 "breadcrumb_third_description": "Вам потрібно буде верифікувати всі наявні пристрої та контакти ще раз",
-                "breadcrumb_title": "Ви впевнені, що хочете скинути свою особистість?",
-                "breadcrumb_title_cant_confirm": "Вам потрібно скинути свою ідентичність",
+                "breadcrumb_title": "Ви впевнені, що хочете скинути свою цифрову ідентичність?",
+                "breadcrumb_title_cant_confirm": "Вам потрібно скинути налаштування вашої цифрової ідентичності",
                 "breadcrumb_title_forgot": "Забули ключ відновлення? Вам потрібно скинути свою особистість.",
                 "breadcrumb_title_sync_failed": "Не вдалося синхронізувати сховище ключів. Вам потрібно скинути свою ідентичність.",
                 "breadcrumb_warning": "Робіть це, лише якщо ви впевнені, що ваш обліковий запис скомпрометований.",
@@ -2625,7 +2650,7 @@
             "unable_to_load_msisdns": "Не вдалося завантажити номери телефонів",
             "username": "Ім'я користувача"
         },
-        "inline_url_previews_default": "Увімкнути вбудований перегляд гіперпосилань за умовчанням",
+        "inline_url_previews_default": "Увімкнути попередній перегляд",
         "insert_trailing_colon_mentions": "Додавати двокрапку після згадки користувача на початку повідомлення",
         "invite_controls": {
             "default_label": "Дозволити користувачам запрошувати вас до кімнат"
@@ -2704,7 +2729,7 @@
             "enable_desktop_notifications_session": "Увімкнути стільничні сповіщення для цього сеансу",
             "enable_email_notifications": "Увімкнути сповіщення е-поштою для %(email)s",
             "enable_notifications_account": "Увімкнути сповіщення для цього облікового запису",
-            "enable_notifications_account_detail": "Вимкніть, щоб вимкнути сповіщення для всіх ваших пристроїв і сесій",
+            "enable_notifications_account_detail": "Вимкніть, щоб вимкнути сповіщення для всіх ваших пристроїв і сеансів",
             "enable_notifications_device": "Увімкнути сповіщення для цього пристрою",
             "error_loading": "Сталася помилка під час завантаження налаштувань сповіщень.",
             "error_permissions_denied": "%(brand)s не має дозволу надсилати вам сповіщення — перевірте налаштування браузера",
@@ -2778,7 +2803,7 @@
             "user_timezone": "Установити часовий пояс"
         },
         "prompt_invite": "Запитувати перед надсиланням запрошень на потенційно недійсні matrix ID",
-        "replace_plain_emoji": "Автоматично замінювати простотекстові емодзі",
+        "replace_plain_emoji": "Автоматично замінювати текстові емоджі",
         "security": {
             "analytics_description": "Поділіться анонімними даними, щоб допомагати нам виявляти проблеми. Нічого особистого. Ніяких третіх осіб.",
             "bulk_options_accept_all_invites": "Прийняти всі %(invitedRooms)s запрошення",
@@ -2786,7 +2811,7 @@
             "bulk_options_section": "Масові дії",
             "dehydrated_device_description": "Функція офлайн-пристрою дозволяє отримувати зашифровані повідомлення, навіть якщо ви не ввійшли в обліковий запис на жодному пристрої",
             "dehydrated_device_enabled": "Офлайн-пристрій увімкнено",
-            "dialog_title": "<strong>Налаштування:</strong> Безпека й приватність",
+            "dialog_title": "<strong>Налаштування:</strong> Безпека та приватність",
             "e2ee_default_disabled_warning": "Адміністратором вашого сервера було вимкнено автоматичне наскрізне шифрування у приватних кімнатах і особистих повідомленнях.",
             "enable_message_search": "Увімкнути шукання повідомлень у зашифрованих кімнатах",
             "encryption_section": "Шифрування",
@@ -2820,7 +2845,7 @@
         "send_read_receipts_unsupported": "Ваш сервер не підтримує вимкнення надсилання сповіщень про прочитання.",
         "send_typing_notifications": "Надсилати сповіщення про набирання тексту",
         "sessions": {
-            "best_security_note": "Для кращої безпеки перевірте свої сеанси та вийдіть із усіх сеансів, які ви більше не впізнаєте або не використовуєте.",
+            "best_security_note": "Для кращої безпеки звірте свої сеанси та вийдіть з усіх сеансів, які ви більше не розпізнаєте або не використовуєте.",
             "browser": "Браузер",
             "confirm_sign_out": {
                 "one": "Підтвердьте вихід із цього пристрою",
@@ -2831,8 +2856,9 @@
                 "one": "Натисніть кнопку внизу, щоб підтвердити вихід із цього пристрою."
             },
             "confirm_sign_out_continue": {
-                "one": "Вийти з пристрою",
-                "other": "Вийти з пристроїв"
+                "one": "Вилучити пристрій",
+                "few": "Вилучити пристрої",
+                "many": "Вилучити пристрої"
             },
             "confirm_sign_out_sso": {
                 "other": "Підтвердьте вихід із цих пристроїв за допомогою єдиного входу, щоб довести вашу справжність.",
@@ -2841,7 +2867,7 @@
             "current_session": "Поточний сеанс",
             "desktop_session": "Сеанс на комп'ютері",
             "details_heading": "Подробиці сеансу",
-            "device_unverified_description": "Звірте цей сеанс або вийдіть із нього для поліпшення безпеки та надійності.",
+            "device_unverified_description": "Звірте цей сеанс або вийдіть із нього для найкращої безпеки та надійності.",
             "device_unverified_description_current": "Звірте свій поточний сеанс для посилення безпеки обміну повідомленнями.",
             "device_verified_description": "Цей сеанс готовий для безпечного обміну повідомленнями.",
             "device_verified_description_current": "Ваш поточний сеанс готовий до захищеного обміну повідомленнями.",
@@ -2859,7 +2885,7 @@
             "inactive_sessions": "Неактивні сеанси",
             "inactive_sessions_explainer_1": "Неактивні сеанси — це сеанси, які ви не використовували протягом певного часу, але вони продовжують отримувати ключі шифрування.",
             "inactive_sessions_explainer_2": "Вилучення неактивних сеансів посилює безпеку і швидкодію, а також полегшує виявлення підозрілих нових сеансів.",
-            "inactive_sessions_list_description": "Обміркуйте можливість виходу зі старих сеансів (%(inactiveAgeDays)s днів або більше), якими ви більше не користуєтесь.",
+            "inactive_sessions_list_description": "Розгляньте можливість виходу зі старих сеансів (%(inactiveAgeDays)s днів або більше), якими ви більше не користуєтесь.",
             "ip": "IP-адреса",
             "last_activity": "Остання активність",
             "manage": "Керувати цим сеансом",
@@ -2886,19 +2912,21 @@
             "security_recommendations_description": "Удоскональте безпеку свого облікового запису, дотримуючись цих порад.",
             "session_id": "ID сеансу",
             "show_details": "Показати подробиці",
-            "sign_in_with_qr": "Підключити новий пристрій",
+            "sign_in_with_qr": "Зв’язати новий пристрій",
             "sign_in_with_qr_button": "Показати QR-код",
             "sign_in_with_qr_description": "Використовуйте QR-код, щоб увійти на інший пристрій і налаштувати безпечний обмін повідомленнями.",
             "sign_in_with_qr_unsupported": "Не підтримується постачальником облікового запису",
             "sign_out": "Вийти з цього сеансу",
             "sign_out_all_other_sessions": "Вийти з усіх інших сеансів (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Ви впевнені, що хочете вийти з %(count)s сеансів?",
-                "other": "Ви впевнені, що хочете вийти з %(count)s сеансів?"
+                "one": "Ви впевнені, що хочете вилучити %(count)s сеанс?",
+                "few": "Ви впевнені, що хочете вилучити %(count)s сеанси?",
+                "many": "Ви впевнені, що хочете вилучити %(count)s сеансів?"
             },
             "sign_out_n_sessions": {
-                "one": "Вийти з %(count)s сеансу",
-                "other": "Вийти з %(count)s сеансів"
+                "one": "Вилучити %(count)s сеанс",
+                "few": "Вилучити %(count)s сеанси",
+                "many": "Вилучити %(count)s сеансів"
             },
             "title": "Сеанси",
             "unknown_session": "Невідомий тип сеансу",
@@ -3050,7 +3078,7 @@
         "plain": "Надсилає повідомлення у вигляді звичайного тексту, не інтерпретуючи його як розмітку",
         "query": "Відкриває бесіду з вказаним користувачем",
         "query_not_found_phone_number": "Не вдалося знайти Matrix ID для номера телефону",
-        "rageshake": "Надіслати звіт про ваду разом з журналами",
+        "rageshake": "Надіслати звіт про проблему разом з журналами",
         "rainbow": "Надсилає вказане повідомлення, розфарбоване веселкою",
         "rainbowme": "Надсилає вказаний смайлик, розфарбований веселкою",
         "remove": "Вилучає користувача з указаним ID з цієї кімнати",
@@ -3234,7 +3262,7 @@
             "other": "%(count)s відповідей"
         },
         "empty_description": "Використовувати “%(replyInThread)s” під час наведення курсора на повідомлення.",
-        "empty_title": "Гілки допомагають підтримувати тему розмов і їх легко відстежувати.",
+        "empty_title": "Гілки допомагають дотримуватися теми розмов та полегшують відстеження повідомлень.",
         "mark_all_read": "Позначити все прочитаним",
         "my_threads": "Мої гілки",
         "my_threads_description": "Показує всі гілки, де ви брали участь",
@@ -3274,7 +3302,7 @@
         "creation_summary_dm": "%(creator)s створює цю приватну розмову.",
         "creation_summary_room": "%(creator)s створює й налаштовує кімнату.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "Верифіковану ідентичність відправника скинуто",
+            "sender_identity_previously_verified": "Звірена цифрова ідентичність відправника була скинута",
             "unable_to_decrypt": "Не вдалося розшифрувати повідомлення"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",
@@ -3408,8 +3436,10 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s приймає запрошення до %(displayName)s",
             "accepted_invite": "%(targetName)s приймає запрошення",
-            "ban": "%(senderName)s блокує %(targetName)s",
-            "ban_reason": "%(senderName)s блокує %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s блокує користувача",
+            "ban_reason": "%(senderName)s блокує користувача: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s блокує <user/>: %(reason)s",
+            "ban_spoiler": "%(senderName)s блокує <user/>",
             "change_avatar": "%(senderName)s змінює зображення профілю",
             "change_name": "%(oldDisplayName)s змінює псевдонім на %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s змінює своє ім'я та зображення профілю",
@@ -3836,10 +3866,12 @@
         "enable_microphone": "Увімкнути мікрофон",
         "expand": "Повернутися до виклику",
         "get_call_link": "Поділитися посиланням на виклик",
+        "group_call_started": "Груповий виклик розпочато",
         "hangup": "Покласти слухавку",
         "hide_sidebar_button": "Сховати бічну панель",
         "input_devices": "Пристрої вводу",
         "jitsi_call": "Конференція Jitsi",
+        "join_with_video": "Приєднатися з відео",
         "legacy_call": "Застарілий спосіб виклику",
         "maximise": "Заповнити екран",
         "maximise_call": "Розгорнути виклик",
@@ -3895,13 +3927,18 @@
         "user_is_presenting": "%(sharerName)s показує",
         "video_call": "Відеовиклик",
         "video_call_incoming": "Вхідний відеовиклик",
-        "video_call_using": "Відеодзвінок за допомогою:",
+        "video_call_using": "Відеовиклик за допомогою:",
         "voice_call": "Голосовий виклик",
         "voice_call_incoming": "Вхідний голосовий виклик",
         "voice_call_using": "Голосовий виклик за допомогою:",
         "you_are_presenting": "Ви показуєте"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
+    "welcome": {
+        "tagline_element": "Створено для швидкості та простоти.",
+        "title_element": "Спілкуйтесь елементарно",
+        "title_generic": "Вітаємо в %(brand)s"
+    },
     "widget": {
         "added_by": "Вджет додано",
         "capabilities_dialog": {
@@ -3923,6 +3960,7 @@
             "change_name_this_room": "Змінювати назву цієї кімнати",
             "change_topic_active_room": "Змінювати тему вашої активної кімнати",
             "change_topic_this_room": "Змінювати тему цієї кімнати",
+            "download_file": "Завантажити файли з медіарепозиторію",
             "receive_membership_active_room": "Бачити, коли хтось додається, виходить чи запрошується до вашої активної кімнати",
             "receive_membership_this_room": "Бачити, коли хтось додається, виходить чи запрошується до цієї кімнати",
             "remove_ban_invite_leave_active_room": "Вилучати, блокувати чи запрошувати людей у вашій активній кімнаті, зокрема вас",
@@ -3992,7 +4030,7 @@
         "error_unable_start_audio_stream_title": "Не вдалося почати живу трансляцію",
         "modal_data_warning": "Наведені далі дані надсилаються на %(widgetDomain)s",
         "modal_title_default": "Модальний віджет",
-        "no_name": "Невідомий додаток",
+        "no_name": "Невідомий застосунок",
         "open_id_permissions_dialog": {
             "remember_selection": "Запам'ятати це",
             "starting_text": "Віджет звірить ваш ID користувача, але не зможе виконувати такі дії від вашого імені:",
