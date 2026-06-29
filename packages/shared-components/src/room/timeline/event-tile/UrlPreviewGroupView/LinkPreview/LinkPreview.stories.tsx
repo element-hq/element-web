@@ -13,7 +13,6 @@ import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../../../core/utils/LinkedText";
 import imageFile from "../../../../../../static/element.png";
 import imageFileWide from "../../../../../../static/wideImage.png";
-import imageFileTall from "../../../../../../static/tallImage.png";
 
 export default {
     title: "EventTiles/LinkPreview",
@@ -21,16 +20,6 @@ export default {
     tags: ["autodocs"],
     args: {
         onImageClick: fn(),
-        title: "A simple title",
-        description: "A simple description",
-        link: "https://matrix.org",
-        siteName: "Site name",
-        image: {
-            imageThumb: imageFile,
-            imageFull: imageFile,
-            alt: "Element logo",
-            playable: false,
-        },
     },
     argTypes: {
         siteName: {
@@ -57,6 +46,18 @@ const Template: StoryFn<typeof LinkPreview> = (args) => (
 );
 
 export const Default = Template.bind({});
+Default.args = {
+    title: "A simple title",
+    description: "A simple description",
+    link: "https://matrix.org",
+    siteName: "Site name",
+    image: {
+        imageThumb: imageFile,
+        imageFull: imageFile,
+        alt: "Element logo",
+        playable: false,
+    },
+};
 
 export const Title = Template.bind({});
 Title.args = {
@@ -154,18 +155,14 @@ SocialWithImage.args = {
 
 export const WithVeryLongText = Template.bind({});
 WithVeryLongText.args = {
-    title: "GitHub - element-hq/not-a-real-repo: A very very very very very very very very very very very very very long PR title that should be rendered nicely",
+    title: "GitHub - element-hq/not-a-real-repo: A very very long PR title that should be rendered nicely",
     description:
         "This PR doesn't actually exist and neither does the repository. It might exist one day if we go into the business of making paradoxical repository names.",
     link: "https://matrix.org",
     siteName: "GitHub",
-};
-
-export const WithTallImage = Template.bind({});
-WithTallImage.args = {
     image: {
-        imageThumb: imageFileTall,
-        imageFull: imageFileTall,
+        imageThumb: imageFile,
+        imageFull: imageFile,
         alt: "Element logo",
         playable: false,
     },
