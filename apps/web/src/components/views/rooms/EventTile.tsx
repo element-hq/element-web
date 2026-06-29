@@ -191,6 +191,12 @@ export interface EventTileProps {
     /** Whether this is the currently selected event. */
     isSelectedEvent?: boolean;
 
+    /**
+     * Whether this tile is the search match currently focused while stepping through results in the live
+     * timeline. Drives the `mx_EventTile_searchHighlightActive` class. See Searching.ts / RoomView search stepping.
+     */
+    isSearchHighlightMatch?: boolean;
+
     /** Resize observer used by the parent timeline, if any. */
     resizeObserver?: ResizeObserver;
 
@@ -903,6 +909,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     isRedacted: this.props.isRedacted,
                 }),
                 isSelected: this.props.isSelectedEvent || !!this.state.interaction.contextMenu,
+                isSearchHighlightMatch: this.props.isSearchHighlightMatch,
                 isLast: this.props.last,
                 isLastInSection: this.props.lastInSection,
                 isContextual: this.props.contextual,

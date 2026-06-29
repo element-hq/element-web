@@ -95,7 +95,10 @@ Please see LICENSE files in the repository root for full details.
     }
 
     &:hover,
-    &.mx_EventTile_selected {
+    &.mx_EventTile_selected,
+    /* Focused search-stepping match: give the bubble the same subtle band as the
+       selected/hover state so the active match is distinguishable in bubble layout too. */
+    &.mx_EventTile_searchHighlightActive {
         &::before {
             background: $eventbubble-bg-hover;
         }

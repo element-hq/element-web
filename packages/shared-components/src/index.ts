@@ -14,6 +14,7 @@ export * from "./core/AvatarWithDetails";
 export * from "./core/roving";
 export * from "./room/composer/Banner";
 export * from "./room/composer/UploadButton";
+export * from "./room/search/SearchMatchNavigation";
 export * from "./crypto/SasEmoji";
 export * from "./menus/UserMenu";
 export * from "./notifications/NotificationBadgeView";
