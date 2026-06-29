@@ -12,6 +12,7 @@ import { type MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";
 import { type MockedObject } from "jest-mock-vitest-adapter";
+import { ToastContext, ToastRack } from "@element-hq/web-shared-components";
 
 import AccountUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
 import { SdkContextClass, SDKContext } from "../../../../../../../src/contexts/SDKContext";
@@ -27,7 +28,6 @@ import { UIFeature } from "../../../../../../../src/settings/UIFeature";
 import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../../src/Modal";
-import { ToastContext, ToastRack } from "@element-hq/web-shared-components";
 
 let changePasswordOnError: (e: Error) => void;
 let changePasswordOnFinished: () => void;
@@ -56,7 +56,7 @@ describe("<AccountUserSettingsTab />", () => {
         <MatrixClientContext.Provider value={mockClient}>
             <SDKContext.Provider value={stores}>
                 <ToastContext.Provider value={new ToastRack()}>
-                    <AccountUserSettingsTab {...defaultProps} />\
+                    <AccountUserSettingsTab {...defaultProps} />
                 </ToastContext.Provider>
             </SDKContext.Provider>
         </MatrixClientContext.Provider>
