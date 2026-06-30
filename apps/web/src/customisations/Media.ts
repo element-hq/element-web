@@ -97,8 +97,8 @@ class MediaImplementation implements Media {
     public getThumbnailHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null {
         if (!this.hasThumbnail) return null;
         // scale using the device pixel ratio to keep images clear
-        width = Math.floor(width * (window?.devicePixelRatio ?? 1));
-        height = Math.floor(height * (window?.devicePixelRatio ?? 1));
+        width = Math.floor(width * window.devicePixelRatio);
+        height = Math.floor(height * window.devicePixelRatio);
         // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.thumbnailMxc!, width, height, mode, false, true);
     }
@@ -112,8 +112,8 @@ class MediaImplementation implements Media {
      */
     public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null {
         // scale using the device pixel ratio to keep images clear
-        width = Math.floor(width * (window?.devicePixelRatio ?? 1));
-        height = Math.floor(height * (window?.devicePixelRatio ?? 1));
+        width = Math.floor(width * window.devicePixelRatio);
+        height = Math.floor(height * window.devicePixelRatio);
         // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.srcMxc, width, height, mode, false, true);
     }
@@ -125,7 +125,7 @@ class MediaImplementation implements Media {
      * @returns {string} An HTTP URL for the thumbnail.
      */
     public getSquareThumbnailHttp(dim: number): string | null {
-        dim = Math.floor(dim * (window?.devicePixelRatio ?? 1)); // scale using the device pixel ratio to keep images clear
+        dim = Math.floor(dim * window.devicePixelRatio); // scale using the device pixel ratio to keep images clear
         if (this.hasThumbnail) {
             return this.getThumbnailHttp(dim, dim, "crop");
         }

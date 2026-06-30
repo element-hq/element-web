@@ -35,9 +35,7 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
     protected constructor() {
         super();
 
-        // We test for this function because some tests instantiate this class as a
-        // side effect of an import.
-        if (window?.addEventListener && !AbstractLocalStorageSettingsHandler.storageListenerBound) {
+        if (!AbstractLocalStorageSettingsHandler.storageListenerBound) {
             AbstractLocalStorageSettingsHandler.storageListenerBound = true;
             // Listen for storage changes from other tabs to bust the cache
             window.addEventListener("storage", AbstractLocalStorageSettingsHandler.onStorageEvent);
