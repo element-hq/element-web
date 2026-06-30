@@ -46,13 +46,12 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             this.snapshot.set({ preview: null });
             return;
         }
-        // We always select the FIRST viable link out of the message.
-        // Viability is determined by whether the link has a title AND
-        // description
+        // We always select the *first* viable preview out of the message.
+        // Subsequent links are ignored.
         for (const link of this.links) {
             try {
                 const preview = await this.fetcher.fetchPreview(link, true);
-                if (preview?.title && preview.description) {
+                if (preview) {
                     this.snapshot.set({ preview });
                     return;
                 }
