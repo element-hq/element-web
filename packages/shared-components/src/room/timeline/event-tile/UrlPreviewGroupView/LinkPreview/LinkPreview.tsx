@@ -135,12 +135,13 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             // Otherwise, the preview can be clicked on.
             img = (
                 <button
+                    style={{
+                        backgroundImage: `url('${preview.image.imageThumb}')`,
+                    }}
                     className={styles.preview}
                     onClick={onImageClickHandler}
                     aria-label={_t("timeline|url_preview|view_image")}
-                >
-                    <img src={preview.image.imageThumb} alt={preview.image.alt} title={preview.image.alt} />
-                </button>
+                />
             );
         }
     }
