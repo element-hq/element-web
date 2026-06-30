@@ -188,7 +188,6 @@ interface IState {
     currentRoomId: string | null;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId: string | null;
-    collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
     // eslint-disable-next-line camelcase
     register_client_secret?: string;
@@ -249,7 +248,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         this.state = {
             view: Views.LOADING,
-            collapseLhs: false,
             currentRoomId: null,
             currentUserId: null,
 
@@ -869,24 +867,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case "hide_left_panel":
-                this.setState(
-                    {
-                        collapseLhs: true,
-                    },
-                    () => {
-                        this.stores.resizeNotifier.notifyLeftHandleResized();
-                    },
-                );
-                break;
             case "show_left_panel":
-                this.setState(
-                    {
-                        collapseLhs: false,
-                    },
-                    () => {
-                        this.stores.resizeNotifier.notifyLeftHandleResized();
-                    },
-                );
+                this.stores.resizeNotifier.notifyLeftHandleResized();
                 break;
             case Action.OpenDialPad:
                 Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
@@ -1570,7 +1552,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private onLoggedOut(): void {
         this.viewWelcome({
             ready: false,
-            collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = "";
@@ -1586,7 +1567,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView({
             view: Views.SOFT_LOGOUT,
             ready: false,
-            collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = "";

@@ -65,7 +65,6 @@ describe("<LoggedInView />", () => {
         matrixClient: mockClient,
         onRegistered: jest.fn(),
         resizeNotifier: new ResizeNotifier(),
-        collapseLhs: false,
         hideToSRUsers: false,
         config: {
             brand: "Test",
@@ -547,5 +546,4 @@ describe("<LoggedInView />", () => {
             expect(container.querySelector(".mx_SpacePanel")).toBeInTheDocument();
         });
     });
-
 });

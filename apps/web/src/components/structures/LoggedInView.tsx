@@ -90,7 +90,6 @@ interface IProps {
     threepidInvite?: IThreepidInvite;
     roomOobData?: IOOBData;
     currentRoomId: string | null;
-    collapseLhs: boolean;
     currentUserId: string | null;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;
