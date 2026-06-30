@@ -1743,7 +1743,6 @@
         "mentions_and_keywords": "@mentions & keywords",
         "mentions_and_keywords_description": "Get notified only with mentions and keywords as set up in your <a>settings</a>",
         "mentions_keywords": "Mentions and keywords",
-        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_description": "You won't get any notifications"
     },
     "notifier": {
