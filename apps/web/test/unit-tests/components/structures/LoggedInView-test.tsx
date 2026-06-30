@@ -90,7 +90,6 @@ describe("<LoggedInView />", () => {
         hideToSRUsers: false,
         config: {
             brand: "Test",
-            element_call: {},
         },
         currentRoomId: "",
         currentUserId: "@bob:server",

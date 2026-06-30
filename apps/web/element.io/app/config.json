@@ -48,8 +48,5 @@
     "features": {
         "feature_video_rooms": true,
         "feature_element_call_video_rooms": true
-    },
-    "element_call": {
-        "disable": false
     }
 }

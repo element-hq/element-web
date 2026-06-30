@@ -101,11 +101,6 @@ test.use({
 
 test.describe("Element Call", () => {
     test.use({
-        config: {
-            element_call: {
-                use_exclusively: false,
-            },
-        },
         displayName: "Alice",
         botCreateOpts: {
             autoAcceptInvites: true,
