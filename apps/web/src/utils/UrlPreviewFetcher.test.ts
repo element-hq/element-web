@@ -34,7 +34,7 @@ function getFetcher(): {
 }
 
 describe("UrlPreviewFetcher", () => {
-    let originalDevicePixelRatio;
+    let originalDevicePixelRatio: Window["devicePixelRatio"];
     beforeAll(() => {
         originalDevicePixelRatio = window.devicePixelRatio;
         window.devicePixelRatio = 1;
