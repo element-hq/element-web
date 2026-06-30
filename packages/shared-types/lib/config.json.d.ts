@@ -5,11 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IClientWellKnown } from "matrix-js-sdk";
+import { DeepPartial } from "./utils";
+import { ClientWellKnown } from "./matrix";
 
 // Convention decision: All config options are lower_snake_case
-
 // see docs/config.md for non-developer docs
+
+/**
+ * Type describing the `config.json` format for Element Web
+ * All fields are optional here, consumers should validate that fields are present before assuming otherwise
+ */
 export interface WebConfigJson {
     // dev note: while true that this is arbitrary JSON, it's valuable to enforce that all
     // config options are documented for "find all usages" sort of searching.
@@ -19,7 +24,7 @@ export interface WebConfigJson {
     // a logical separation of properties, but keep similar ones near each other.
 
     // Exactly one of the following must be supplied
-    default_server_config?: IClientWellKnown; // copy/paste of client well-known
+    default_server_config?: DeepPartial<Pick<ClientWellKnown, "m.homeserver" | "m.identity_server">>;
     default_server_name?: string; // domain to do well-known lookup on
     default_hs_url?: string; // http url
 
@@ -202,6 +207,10 @@ export interface WebConfigJson {
     modules?: string[];
 }
 
+/**
+ * Type describing the `config.json` format for Element Desktop, a superset of Element Web's config.
+ * All fields are optional here, consumers should validate that fields are present before assuming otherwise
+ */
 export interface DesktopConfigJson extends WebConfigJson {
     web_base_url?: string;
     update_base_url?: string;

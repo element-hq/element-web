@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { app, dialog } from "electron";
 import path from "node:path";
-import { type ResolveDefaults, type DesktopConfigJson } from "shared-types";
+import { type ResolveDefaults, type DesktopConfigJson, type JsonDocument } from "shared-types";
 
 import { getAsarPath } from "./asar.js";
-import { type Json, loadJsonFile } from "./utils.js";
+import { loadJsonFile } from "./utils.js";
 
 export type ConfigOptions = ResolveDefaults<DesktopConfigJson, typeof DEFAULTS>;
 
@@ -20,7 +20,7 @@ let config: ConfigOptions;
 
 const homeserverProps = ["default_is_url", "default_hs_url", "default_server_name", "default_server_config"] as const;
 
-function loadLocalConfigFile(location: string | undefined): Json {
+function loadLocalConfigFile(location: string | undefined): JsonDocument {
     if (location) {
         console.log("Loading local config: " + location);
         return loadJsonFile(location);

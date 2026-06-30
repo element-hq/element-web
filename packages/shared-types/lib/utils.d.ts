@@ -60,7 +60,7 @@ type DeepReadonlyObject<T> = {
 };
 
 /**
- * Like `Partial` but requires at least one properties to be present.
+ * Like `Partial` but requires at least one property to be present.
  */
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
 
