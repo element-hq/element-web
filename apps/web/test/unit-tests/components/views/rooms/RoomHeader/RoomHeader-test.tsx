@@ -789,7 +789,6 @@ describe("RoomHeader", () => {
                 features: {
                     feature_notifications: false,
                 },
-                element_call: { disable: true },
             });
             const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
 

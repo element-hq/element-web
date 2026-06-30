@@ -330,9 +330,6 @@ describe("createRoom", () => {
     });
 
     it("correctly sets up MSC3401 power levels", async () => {
-        SdkConfig.add({
-            element_call: { disable: false },
-        });
         await createRoom(client, {});
 
         const callMemberPower =
