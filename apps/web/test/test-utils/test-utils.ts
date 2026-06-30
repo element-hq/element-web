@@ -125,6 +125,7 @@ export function createTestClient(): MatrixClient {
             getOwnDeviceKeys: vi.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
             getUserDeviceInfo: vi.fn().mockResolvedValue(new Map()),
             getUserVerificationStatus: vi.fn(),
+            getUserCrossSigningKeys: vi.fn().mockResolvedValue(null),
             getDeviceVerificationStatus: vi.fn(),
             resetKeyBackup: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),

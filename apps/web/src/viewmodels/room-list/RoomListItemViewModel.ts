@@ -288,10 +288,8 @@ export class RoomListItemViewModel
         const callType =
             call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
 
-        const canMoveToSection = SettingsStore.getValue("feature_room_list_sections");
-
         // Build sections list for the "Move to section" submenu
-        const sections: Section[] = canMoveToSection ? RoomListItemViewModel.buildSections(roomTags) : [];
+        const sections: Section[] = RoomListItemViewModel.buildSections(roomTags);
 
         return {
             id: room.roomId,
@@ -320,7 +318,6 @@ export class RoomListItemViewModel
             canMarkAsRead,
             canMarkAsUnread,
             roomNotifState,
-            canMoveToSection,
             sections,
         };
     }

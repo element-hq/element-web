@@ -97,6 +97,17 @@
     "room_list": {
         "a11y": {
             "default": "打开房间 %(roomName)s",
+            "drag_cancelled": "拖动已取消",
+            "drag_end": "%(source)s 已被拖动到 %(target)s 之上",
+            "drag_end_after": "%(source)s 已被拖动到 %(target)s 之后",
+            "drag_end_before": "%(source)s 已被拖动到 %(target)s 之前",
+            "drag_end_original": "%(source)s 已恢复到其原始位置",
+            "drag_instructions": "按空格键开始或停止拖动，按方向键移动，按 Esc 键取消。",
+            "drag_over": "%(source)s 位于 %(target)s 之上",
+            "drag_over_after": "%(source)s 将被拖动到 %(target)s 之后",
+            "drag_over_before": "%(source)s 将被拖动到 %(target)s 之前",
+            "drag_over_original": "%(source)s 将恢复到其原始位置",
+            "drag_start": "正在拖动 %(source)s",
             "invitation": "打开房间 %(roomName)s 的邀请。",
             "video_call": "以视频通话方式打开房间 %(roomName)s。",
             "voice_call": "以语音通话方式打开房间 %(roomName)s。"
@@ -163,6 +174,7 @@
         "sort": "排序",
         "sort_type": {
             "activity": "活动",
+            "atoz": "",
             "unread_first": "未读优先"
         },
         "space_menu": {
