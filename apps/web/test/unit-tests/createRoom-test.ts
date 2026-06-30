@@ -46,9 +46,6 @@ describe("createRoom", () => {
 
     let client: Mocked<MatrixClient>;
     beforeEach(() => {
-        SdkConfig.add({
-            element_call: { disable: true },
-        });
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(client);
@@ -69,6 +66,7 @@ describe("createRoom", () => {
                 { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
     });
 
@@ -89,6 +87,7 @@ describe("createRoom", () => {
                 },
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
     });
 
@@ -118,6 +117,7 @@ describe("createRoom", () => {
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
 
         // And the room name, topic and avatar are set later
@@ -161,6 +161,7 @@ describe("createRoom", () => {
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
 
         // And the avatar is set later
@@ -194,6 +195,7 @@ describe("createRoom", () => {
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
 
         // And the room name, topic and avatar were not set since we didn't
@@ -234,6 +236,7 @@ describe("createRoom", () => {
                 { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
     });
 
@@ -244,6 +247,7 @@ describe("createRoom", () => {
             preset: "public_chat",
             visibility: "private",
             initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
     });
 
@@ -255,6 +259,7 @@ describe("createRoom", () => {
             visibility: "private",
             topic: "My topic",
             initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
     });
 
@@ -272,6 +277,7 @@ describe("createRoom", () => {
                 { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
                 { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
             ],
+            power_level_content_override: { events: { "org.matrix.msc3401.call.member": 0 } },
         });
     });
 
