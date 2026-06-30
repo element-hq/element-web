@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { vi, describe, it, expect, type Mock, beforeAll, afterAll, vitest } from "vitest";
+import { vi, describe, it, expect, type Mock, beforeAll, afterAll } from "vitest";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreviewViewModel";
@@ -38,7 +38,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     });
     afterAll(() => {
         window.devicePixelRatio = originalDevicePixelRatio;
-    })
+    });
 
     it("should return no preview by default", () => {
         expect(getViewModel().vm.getSnapshot()).toMatchInlineSnapshot(`
