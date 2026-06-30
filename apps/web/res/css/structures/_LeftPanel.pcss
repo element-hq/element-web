@@ -43,7 +43,6 @@ Please see LICENSE files in the repository root for full details.
     height: 100%; /* ensure space panel is still scrollable with an outer wrapper */
 
     .mx_LeftPanel_wrapper--user {
-        background-color: $roomlist-bg-color;
         display: flex;
         overflow: hidden;
         position: relative;
@@ -57,7 +56,10 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_LeftPanel {
-    background-color: $roomlist-bg-color;
+    background-color: var(--cpd-color-bg-canvas-default);
+    /* The room list is not designed to be collapsed to just icons. */
+    /* 224 + 68(spaces bar) was deemed by design to be a good minimum for the left panel. */
+    --collapsedWidth: 224px;
 
     /* Create a row-based flexbox for the space panel and the room list */
     display: flex;
@@ -67,7 +69,6 @@ Please see LICENSE files in the repository root for full details.
     overflow: hidden;
 
     .mx_LeftPanel_roomListContainer {
-        background-color: $roomlist-bg-color;
         flex: 1 0 0;
         min-width: 0;
         /* Create another flexbox (this time a column) for the room list components */
@@ -85,14 +86,6 @@ Please see LICENSE files in the repository root for full details.
             width: var(--collapsedWidth);
         }
     }
-}
-
-.mx_LeftPanel_newRoomList {
-    /* Thew new rooms list is not designed to be collapsed to just icons. */
-    /* 224 + 68(spaces bar) was deemed by design to be a good minimum for the left panel. */
-    --collapsedWidth: 224px;
-    /* Important to force the color on ED titlebar until we remove the old room list */
-    background-color: var(--cpd-color-bg-canvas-default) !important;
 }
 
 #left-panel .mx_LeftPanel_wrapper--user {

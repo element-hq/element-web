@@ -671,7 +671,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             "mx_MatrixChat--with-avatar": this.state.backgroundImage,
         });
 
-        const leftPanelWrapperClasses = classNames("mx_LeftPanel_wrapper", "mx_LeftPanel_newRoomList");
+        const leftPanelWrapperClasses = classNames("mx_LeftPanel_wrapper");
 
         const audioFeedArraysForCalls = this.state.activeCalls.map((call) => {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;

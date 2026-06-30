@@ -47,7 +47,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const containerClasses = classNames({
             mx_LeftPanel: true,
-            mx_LeftPanel_newRoomList: true,
             mx_LeftPanel_minimized: this.props.isMinimized,
         });
 
