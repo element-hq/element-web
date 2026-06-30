@@ -14,7 +14,7 @@ import { _t } from "../../../languageHandler";
 const InviteProgressBody: React.FC = () => {
     return (
         <div className="mx_InviteProgressBody">
-            <InlineSpinner w={32} h={32} />
+            <InlineSpinner size={32} />
             <h1>{_t("invite|progress|preparing")}</h1>
             {_t("invite|progress|dont_close")}
         </div>

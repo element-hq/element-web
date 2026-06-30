@@ -86,7 +86,6 @@ describe("RoomListHeaderViewModel", () => {
 
             const snapshot = vm.getSnapshot();
             expect(snapshot.title).toBe("Home");
-            expect(snapshot.displayComposeMenu).toBe(true);
             expect(snapshot.displaySpaceMenu).toBe(false);
             expect(snapshot.canCreateRoom).toBe(true);
             expect(snapshot.canCreateVideoRoom).toBe(true);
@@ -123,28 +122,6 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().activeSortOption).toBe("alphabetical");
         });
 
-        it("should hide compose menu when user cannot create rooms", () => {
-            mocked(hasCreateRoomRights).mockReturnValue(false);
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-
-            const snapshot = vm.getSnapshot();
-            expect(snapshot.displayComposeMenu).toBe(false);
-            expect(snapshot.canCreateRoom).toBe(false);
-        });
-
-        it("should display compose menu when section feature is enabled@", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                if (settingName === "feature_room_list_sections") return true;
-                return false;
-            });
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-
-            const snapshot = vm.getSnapshot();
-            expect(snapshot.displayComposeMenu).toBe(true);
-        });
-
         it("should show invite option when space is public", () => {
             jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
             jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
@@ -179,43 +156,13 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
         });
 
-        it.each([
-            [true, true, false],
-            [false, false, true],
-        ])(
-            "when feature_room_list_sections is %s: canCreateSection=%s, useComposeIcon=%s",
-            (featureEnabled, expectedCanCreateSection, expectedUseComposeIcon) => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                    if (settingName === "feature_room_list_sections") return featureEnabled;
-                    return false;
-                });
-
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-                expect(vm.getSnapshot().canCreateSection).toBe(expectedCanCreateSection);
-                expect(vm.getSnapshot().useComposeIcon).toBe(expectedUseComposeIcon);
-            },
-        );
-
         it("should set displaySectionReleaseAnnouncement to true when sections feature is enabled and announcement is active", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                if (settingName === "feature_room_list_sections") return true;
-                return false;
-            });
             jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(
                 "room_list_section",
             );
 
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(true);
-        });
-
-        it("should set displaySectionReleaseAnnouncement to false when sections feature is disabled", () => {
-            jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(
-                "room_list_section",
-            );
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-            expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(false);
         });
     });
 

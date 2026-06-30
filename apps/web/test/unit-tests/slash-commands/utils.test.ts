@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { splitAtFirstSpace } from "../../../src/slash-commands/SlashCommands";
+import { splitAtFirstSpace } from "../../../src/slash-commands/utils";
 
 describe("splitAtFirstSpace", () => {
     it("should be able to split arguments at the first whitespace", () => {

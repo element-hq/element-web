@@ -28,7 +28,7 @@ import {
 type RoomListViewProps = RoomListViewSnapshot &
     RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
-const mockFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite"];
+const mockFilterIds: FilterId[] = ["unread", "people", "rooms"];
 
 // Wrapper component that creates a mocked ViewModel
 const RoomListViewWrapperImpl = ({
@@ -38,9 +38,15 @@ const RoomListViewWrapperImpl = ({
     getRoomItemViewModel,
     getSectionHeaderViewModel,
     updateVisibleRooms,
+    updateVisibleFold,
     renderAvatar: renderAvatarProp,
     closeToast,
+    scrollToUnreadActivity,
+    setScrollToIndex,
     changeRoomSection,
+    changeSectionOrder,
+    onSectionDragStart,
+    onSectionDragEnd,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -50,8 +56,14 @@ const RoomListViewWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        updateVisibleFold,
         closeToast,
+        scrollToUnreadActivity,
+        setScrollToIndex,
         changeRoomSection,
+        changeSectionOrder,
+        onSectionDragStart,
+        onSectionDragEnd,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -100,11 +112,17 @@ const meta = {
         getRoomItemViewModel: createGetRoomItemViewModel(mockRoomIds),
         getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
+        updateVisibleFold: fn(),
         renderAvatar,
         isFlatList: true,
         toast: undefined,
         closeToast: fn(),
+        scrollToUnreadActivity: fn(),
+        setScrollToIndex: fn(),
         changeRoomSection: fn(),
+        changeSectionOrder: fn(),
+        onSectionDragStart: fn(),
+        onSectionDragEnd: fn(),
     },
     parameters: {
         design: {
@@ -146,12 +164,12 @@ export const EmptyWithoutCreatePermission: Story = {
 
 export const WithActiveFilter: Story = {
     args: {
-        filterIds: ["unread", "people", "rooms", "favourite"],
-        activeFilterId: "favourite",
+        filterIds: ["unread", "people", "rooms"],
+        activeFilterId: "people",
         roomListState: {
             activeRoomIndex: undefined,
             spaceId: "!space:server",
-            filterKeys: ["favourites"],
+            filterKeys: ["people"],
         },
     },
 };
@@ -163,14 +181,6 @@ export const WithSelection: Story = {
             spaceId: "!space:server",
             filterKeys: undefined,
         },
-    },
-};
-
-export const EmptyFavouriteFilter: Story = {
-    args: {
-        isRoomListEmpty: true,
-        filterIds: ["favourite", "people"],
-        activeFilterId: "favourite",
     },
 };
 
@@ -215,14 +225,6 @@ export const EmptyMentionsFilter: Story = {
     },
 };
 
-export const EmptyLowPriorityFilter: Story = {
-    args: {
-        isRoomListEmpty: true,
-        filterIds: ["low_priority", "people"],
-        activeFilterId: "low_priority",
-    },
-};
-
 export const SmallFlatList: Story = {
     args: {
         sections: mockSmallListSections,
@@ -256,5 +258,11 @@ export const LargeSectionList: Story = {
 export const Toast: Story = {
     args: {
         toast: "section_created",
+    },
+};
+
+export const UnreadActivityBelow: Story = {
+    args: {
+        toast: "unread_activity",
     },
 };

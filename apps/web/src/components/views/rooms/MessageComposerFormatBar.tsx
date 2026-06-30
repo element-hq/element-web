@@ -64,41 +64,35 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
                     onClick={() => this.props.onAction(Formatting.Bold)}
                     icon={<BoldIcon />}
                     shortcut={this.props.shortcuts.bold}
-                    visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_italics")}
                     onClick={() => this.props.onAction(Formatting.Italics)}
                     icon={<ItalicIcon />}
                     shortcut={this.props.shortcuts.italics}
-                    visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_strikethrough")}
                     onClick={() => this.props.onAction(Formatting.Strikethrough)}
                     icon={<StrikethroughIcon />}
-                    visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_code_block")}
                     onClick={() => this.props.onAction(Formatting.Code)}
                     icon={<InlineCodeIcon />}
                     shortcut={this.props.shortcuts.code}
-                    visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("action|quote")}
                     onClick={() => this.props.onAction(Formatting.Quote)}
                     icon={<QuoteIcon />}
                     shortcut={this.props.shortcuts.quote}
-                    visible={this.state.visible}
                 />
                 <FormatButton
                     label={_t("composer|format_insert_link")}
                     onClick={() => this.props.onAction(Formatting.InsertLink)}
                     icon={<LinkIcon />}
                     shortcut={this.props.shortcuts.insert_link}
-                    visible={this.state.visible}
                 />
             </Toolbar>
         );
@@ -126,7 +120,6 @@ interface IFormatButtonProps {
     label: string;
     icon: JSX.Element;
     shortcut?: string;
-    visible?: boolean;
     onClick(): void;
 }
 

@@ -53,7 +53,7 @@ import InviteRulesConfigController from "./controllers/InviteRulesConfigControll
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
-import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
+import { type ReorderableSection, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
 import { type NotificationSound } from "../Notifier.ts";
 import VideoRoomsBetaImage from "../../res/img/betas/video_rooms.png";
 
@@ -226,7 +226,6 @@ export interface Settings {
     "feature_render_reaction_images": IFeature;
     "feature_new_room_list": IFeature;
     "feature_retention": IFeature;
-    "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
@@ -371,7 +370,7 @@ export interface Settings {
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
-    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
+    "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
 }
 
 export type SettingKey = keyof Settings;
@@ -427,13 +426,11 @@ export const SETTINGS: Settings = {
         betaInfo: {
             title: _td("labs|notification_settings_beta_title"),
             caption: () => (
-                <>
-                    <p>
-                        {_t("labs|notification_settings_beta_caption", {
-                            brand: SdkConfig.get().brand,
-                        })}
-                    </p>
-                </>
+                <p>
+                    {_t("labs|notification_settings_beta_caption", {
+                        brand: SdkConfig.get().brand,
+                    })}
+                </p>
             ),
         },
     },
@@ -460,7 +457,7 @@ export const SETTINGS: Settings = {
         shouldExportToRageshake: false,
     },
     "blockInvites": {
-        controller: new BlockInvitesConfigController("blockInvites"),
+        controller: new BlockInvitesConfigController("blockInvites", defaultWatchManager),
         supportedLevels: [SettingLevel.ACCOUNT],
         default: false,
     },
@@ -656,15 +653,6 @@ export const SETTINGS: Settings = {
         description: _td("labs|under_active_development"),
         isFeature: true,
         default: true,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_room_list_sections": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        labsGroup: LabGroup.Ui,
-        displayName: _td("labs|room_list_sections"),
-        description: _td("labs|under_active_development"),
-        isFeature: true,
-        default: false,
         controller: new ReloadOnChangeController(),
     },
     "feature_login_with_qr": {

@@ -863,25 +863,23 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                     let results: JSX.Element | undefined;
                     if (filteredRoomSet.size && root) {
                         results = (
-                            <>
-                                <HierarchyLevel
-                                    root={root}
-                                    roomSet={filteredRoomSet}
-                                    hierarchy={hierarchy}
-                                    parents={new Set()}
-                                    selectedMap={selected}
-                                    onToggleClick={hasPermissions ? onToggleClick : undefined}
-                                    onViewRoomClick={(roomId, roomType) => showRoom(cli, hierarchy, roomId, roomType)}
-                                    onJoinRoomClick={async (roomId, parents) => {
-                                        for (const parent of parents) {
-                                            if (cli.getRoom(parent)?.getMyMembership() !== KnownMembership.Join) {
-                                                await joinRoom(cli, roomContext.roomViewStore, hierarchy, parent);
-                                            }
+                            <HierarchyLevel
+                                root={root}
+                                roomSet={filteredRoomSet}
+                                hierarchy={hierarchy}
+                                parents={new Set()}
+                                selectedMap={selected}
+                                onToggleClick={hasPermissions ? onToggleClick : undefined}
+                                onViewRoomClick={(roomId, roomType) => showRoom(cli, hierarchy, roomId, roomType)}
+                                onJoinRoomClick={async (roomId, parents) => {
+                                    for (const parent of parents) {
+                                        if (cli.getRoom(parent)?.getMyMembership() !== KnownMembership.Join) {
+                                            await joinRoom(cli, roomContext.roomViewStore, hierarchy, parent);
                                         }
-                                        await joinRoom(cli, roomContext.roomViewStore, hierarchy, roomId);
-                                    }}
-                                />
-                            </>
+                                    }
+                                    await joinRoom(cli, roomContext.roomViewStore, hierarchy, roomId);
+                                }}
+                            />
                         );
                     } else if (!hierarchy.canLoadMore) {
                         results = (

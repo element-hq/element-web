@@ -123,7 +123,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     public static defaultProps = {
         compact: false,
-        isRichTextEnabled: true,
     };
 
     public constructor(props: IProps) {

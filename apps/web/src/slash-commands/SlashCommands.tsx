@@ -55,7 +55,7 @@ import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { htmlSerializeFromMdIfNeeded } from "../editor/serialize";
 import { leaveRoomBehaviour } from "../utils/leave-behaviour";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./utils";
+import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync, splitAtFirstSpace } from "./utils";
 import { deop, op } from "./op";
 import { CommandCategories } from "./interface";
 import { Command } from "./command";
@@ -890,26 +890,6 @@ export function parseCommandString(input: string): { cmd?: string; args?: string
 interface ICmd {
     cmd?: Command;
     args?: string;
-}
-
-/**
- * Split the supplied string into one or two strings separated by the first
- * region of white space we can find.
- */
-export function splitAtFirstSpace(args: string): [string, string?] {
-    const trimmedArgs = args.trim();
-    const i = trimmedArgs.search(/\s+/);
-    if (i === -1) {
-        return [trimmedArgs];
-    } else {
-        const first = trimmedArgs.slice(0, i);
-        const second = trimmedArgs.slice(i + 1).trimStart();
-        if (second === "") {
-            return [first];
-        } else {
-            return [first, second];
-        }
-    }
 }
 
 /**

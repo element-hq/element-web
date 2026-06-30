@@ -13,7 +13,8 @@ import { mocked, type Mocked } from "jest-mock";
 import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../../src/dispatcher/dispatcher";
-import { Pill, type PillProps, PillType } from "../../../../../src/components/views/elements/Pill";
+import { Pill, type PillProps } from "../../../../../src/components/views/elements/Pill";
+import { PillType } from "../../../../../src/components/views/elements/PillType";
 import {
     filterConsole,
     flushPromises,

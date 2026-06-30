@@ -23,6 +23,7 @@ import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 import LabsIcon from "@vector-im/compound-design-tokens/assets/web/icons/labs";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import HelpIcon from "@vector-im/compound-design-tokens/assets/web/icons/help";
+import { ToastContext, useActiveToast } from "@element-hq/web-shared-components";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -46,7 +47,6 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { NoChange, useEventEmitterAsyncState, type AsyncStateCallbackResult } from "../../../hooks/useEventEmitter";
-import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
 import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
@@ -166,7 +166,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Preferences,
                 _td("common|preferences"),
                 <PreferencesIcon />,
-                <PreferencesUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <PreferencesUserSettingsTab />,
                 "UserSettingsPreferences",
             ),
         );
@@ -206,7 +206,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.Security,
                 _td("room_settings|security|title"),
                 <LockIcon />,
-                <SecurityUserSettingsTab closeSettingsFn={props.onFinished} />,
+                <SecurityUserSettingsTab />,
                 "UserSettingsSecurityPrivacy",
             ),
         );

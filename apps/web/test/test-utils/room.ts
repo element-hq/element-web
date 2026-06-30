@@ -10,7 +10,7 @@ import { type MockedObject } from "jest-mock-vitest-adapter";
 import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { MainSplitContentType } from "../../src/components/structures/RoomView";
+import { MainSplitContentType } from "../../src/contexts/RoomContext";
 import { type RoomContextType, TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";

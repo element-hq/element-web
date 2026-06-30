@@ -54,6 +54,22 @@ export interface UrlPreviewGroupViewActions {
 /** View model contract for the URL preview group view. */
 export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewActions>;
 
+function HideButton({ onHideClick }: { onHideClick: UrlPreviewGroupViewActions["onHideClick"] }): JSX.Element {
+    const { translate: _t } = useI18n();
+    return (
+        <div className={styles.hideButton}>
+            <IconButton
+                kind="secondary"
+                size="28px"
+                onClick={onHideClick}
+                aria-label={_t("timeline|url_preview|close")}
+            >
+                <CloseIcon />
+            </IconButton>
+        </div>
+    );
+}
+
 /**
  * Renders the URL preview group attached to a single event.
  *
@@ -81,20 +97,13 @@ export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps)
 
     return (
         <div className={classNames(className, styles.wrapper)} {...eventPresentationAttributes}>
+            <HideButton onHideClick={vm.onHideClick} />
             <div className={styles.previewGroup}>
                 {previews.map((preview) => (
                     <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
                 ))}
                 {toggleButton}
             </div>
-            <IconButton
-                kind="secondary"
-                size="28px"
-                onClick={vm.onHideClick}
-                aria-label={_t("timeline|url_preview|close")}
-            >
-                <CloseIcon />
-            </IconButton>
         </div>
     );
 }

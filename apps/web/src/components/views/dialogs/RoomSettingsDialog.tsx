@@ -43,19 +43,8 @@ import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
+import { RoomSettingsTab } from "./RoomSettingsDialog-tab.ts";
 import SdkConfig from "../../../SdkConfig";
-
-export const enum RoomSettingsTab {
-    General = "ROOM_GENERAL_TAB",
-    People = "ROOM_PEOPLE_TAB",
-    Voip = "ROOM_VOIP_TAB",
-    Security = "ROOM_SECURITY_TAB",
-    Roles = "ROOM_ROLES_TAB",
-    Notifications = "ROOM_NOTIFICATIONS_TAB",
-    Bridges = "ROOM_BRIDGES_TAB",
-    Advanced = "ROOM_ADVANCED_TAB",
-    PollHistory = "ROOM_POLL_HISTORY_TAB",
-}
 
 interface IProps {
     roomId: string;

@@ -11,7 +11,8 @@ import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import { Pill, PillType } from "../elements/Pill";
+import { Pill } from "../elements/Pill";
+import { PillType } from "../elements/PillType";
 import { makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SettingsStore from "../../../settings/SettingsStore";

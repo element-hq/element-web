@@ -21,7 +21,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
 
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
-import { RoomSettingsTab } from "../../../../../src/components/views/dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "../../../../../src/components/views/dialogs/RoomSettingsDialog-tab";
 import { RoomKnocksBar } from "../../../../../src/components/views/rooms/RoomKnocksBar";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import dis from "../../../../../src/dispatcher/dispatcher";
@@ -32,7 +32,7 @@ import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
 } from "../../../../test-utils";
-import * as languageHandler from "../../../../../src/languageHandler";
+import * as languageSettings from "../../../../../src/i18n/settings";
 
 describe("RoomKnocksBar", () => {
     const userId = "@alice:example.org";
@@ -132,7 +132,7 @@ describe("RoomKnocksBar", () => {
             jest.spyOn(state, "hasSufficientPowerLevelFor").mockReturnValue(true);
             jest.spyOn(Modal, "createDialog");
             jest.spyOn(dis, "dispatch");
-            jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+            jest.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
         });
 
         it("does not render if user can neither approve nor deny", () => {

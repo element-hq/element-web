@@ -86,9 +86,7 @@ const MAX_RING_TIME_MS = 90 * 1000;
 
 interface JoinCallButtonWithCallProps {
     onClick: (e: ButtonEvent) => void;
-    call: Call | null;
     disabledTooltip: string | undefined;
-    isRinging: boolean;
 }
 
 function JoinCallButtonWithCall({ onClick, disabledTooltip }: JoinCallButtonWithCallProps): JSX.Element {
@@ -379,8 +377,6 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
                 />
                 <JoinCallButtonWithCall
                     onClick={onJoinClick}
-                    call={call}
-                    isRinging={notificationContent.notification_type === "ring"}
                     disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                 />
             </div>
