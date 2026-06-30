@@ -188,7 +188,6 @@ interface IState {
     currentRoomId: string | null;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId: string | null;
-    // this is persisted as mx_lhs_size, loaded in LoggedInView
     collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
     // eslint-disable-next-line camelcase
