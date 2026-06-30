@@ -15,6 +15,7 @@ import {
     TypedEventEmitter,
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKey } from "matrix-js-sdk/src/crypto-api";
 import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
@@ -193,7 +194,7 @@ describe("Rageshakes", () => {
                 const crossSigningPubKey = "crossSigningPubKey";
                 mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockImplementation(
                     async (type): Promise<string | null> => {
-                        if (!type || type === "master") {
+                        if (!type || type === CrossSigningKey.Master) {
                             return crossSigningPubKey;
                         }
                         return null;

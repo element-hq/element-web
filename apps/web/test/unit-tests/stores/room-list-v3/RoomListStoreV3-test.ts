@@ -826,12 +826,109 @@ describe("RoomListStoreV3", () => {
                 ).toContain(room);
             });
         });
+
+        describe("getServerNoticeRooms", () => {
+            it("returns only rooms tagged as server notice", async () => {
+                const { rooms } = getClientAndRooms();
+
+                // Tag rooms 8 and 27 as server notice rooms
+                [8, 27].forEach((i) => (rooms[i].tags[DefaultTagID.ServerNotice] = {}));
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const result = store.getServerNoticeRooms();
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("returns an empty array when there are no server notice rooms", async () => {
+                getClientAndRooms();
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+                expect(store.getServerNoticeRooms()).toEqual([]);
+            });
+
+            it("only returns rooms that belong to the active space", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Put rooms 6, 8, 13, 27, 75 into a space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Room 8 (in the space) and room 50 (in Home only) are both server notices
+                rooms[8].tags[DefaultTagID.ServerNotice] = {};
+                rooms[50].tags[DefaultTagID.ServerNotice] = {};
+
+                // Activate the space
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Only the server notice room within the active space is returned
+                const result = store.getServerNoticeRooms();
+                expect(result).toEqual([rooms[8]]);
+            });
+        });
+
+        describe("getDmRooms", () => {
+            it("returns only rooms tagged as DM", async () => {
+                const { rooms } = getClientAndRooms();
+
+                // Rooms 8 and 27 are DMs (no explicit tags + present in the DM map)
+                const ids = [8, 27].map((i) => rooms[i].roomId);
+                jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+                    return {
+                        getUserIdForRoomId: (id: string) => (ids.includes(id) ? "@myuser:matrix.org" : ""),
+                    };
+                }) as () => DMRoomMap);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const result = store.getDmRooms();
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("returns an empty array when there are no DM rooms", async () => {
+                // The top-level beforeEach mocks the DM map to match no rooms.
+                getClientAndRooms();
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+                expect(store.getDmRooms()).toEqual([]);
+            });
+
+            it("only returns rooms that belong to the active space", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Put rooms 6, 8, 13, 27, 75 into a space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Room 8 (in the space) and room 50 (in Home only) are both DMs
+                const ids = [rooms[8].roomId, rooms[50].roomId];
+                jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+                    return {
+                        getUserIdForRoomId: (id: string) => (ids.includes(id) ? "@myuser:matrix.org" : ""),
+                    };
+                }) as () => DMRoomMap);
+
+                // Activate the space
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Only the DM room within the active space is returned
+                const result = store.getDmRooms();
+                expect(result).toEqual([rooms[8]]);
+            });
+        });
     });
 
     describe("Sections", () => {
         function enableSections(): void {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
                 if (setting === "RoomList.CustomSectionData") return {};
                 return false;
@@ -850,26 +947,7 @@ describe("RoomListStoreV3", () => {
             return { client, rooms };
         }
 
-        it("returns a single chats section when sections feature is disabled", async () => {
-            const { rooms } = getClientAndRooms();
-            // Mark some rooms as favourite so we can verify they are NOT split out
-            [0, 1, 2].forEach((i) => {
-                rooms[i].tags[DefaultTagID.Favourite] = {};
-            });
-
-            const store = new RoomListStoreV3Class(dispatcher);
-            await store.start();
-
-            const result = store.getSortedRoomsInActiveSpace();
-            expect(result.sections).toHaveLength(1);
-            expect(result.sections[0].tag).toBe(CHATS_TAG);
-            // All rooms, including favourites, are in the single section
-            for (const i of [0, 1, 2]) {
-                expect(result.sections[0].rooms).toContain(rooms[i]);
-            }
-        });
-
-        it("returns three sections in the correct order when enabled", async () => {
+        it("returns three sections in the correct order", async () => {
             enableSections();
             getClientAndRooms();
 
@@ -1131,7 +1209,6 @@ describe("RoomListStoreV3", () => {
             const customTag = "element.io.section.custom";
 
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
                 if (setting === "RoomList.CustomSectionData") return {};
                 return false;
@@ -1146,7 +1223,6 @@ describe("RoomListStoreV3", () => {
             // Mark a room with the custom tag and update the settings
             rooms[0].tags = { [customTag]: { order: 0 } };
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [customTag];
                 if (setting === "RoomList.CustomSectionData")
                     return { [customTag]: { tag: customTag, name: "Custom" } };

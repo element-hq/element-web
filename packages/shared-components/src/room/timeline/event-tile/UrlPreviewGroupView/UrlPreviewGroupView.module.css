@@ -5,13 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+.hideButton {
+    position: absolute;
+    top: var(--cpd-space-2x);
+    right: var(--cpd-space-2x);
+    z-index: 1;
+}
+
 .wrapper {
     margin-top: var(--cpd-space-4x);
-    display: flex;
-    flex-direction: row;
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
 
     .previewGroup {
-        flex: 1;
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-4x);
