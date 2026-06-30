@@ -35,46 +35,67 @@ import shouldHideEvent from "../../shouldHideEvent";
 // the change happened.
 const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 
+// The previewers are created lazily (via factories) rather than eagerly instantiated here.
+// Some previewers (e.g. ReactionEventPreview) import MessagePreviewStore to preview the related
+// event, creating a circular dependency; instantiating them at module-eval time can run before
+// their own module has finished evaluating. Deferring construction until first use avoids that.
 const PREVIEWS: Record<
     string,
     {
         isState: boolean;
-        previewer: Preview;
+        previewer: () => Preview;
     }
 > = {
     "m.room.message": {
         isState: false,
-        previewer: new MessageEventPreview(),
+        previewer: () => new MessageEventPreview(),
     },
     "m.call.invite": {
         isState: false,
-        previewer: new LegacyCallInviteEventPreview(),
+        previewer: () => new LegacyCallInviteEventPreview(),
     },
     "m.call.answer": {
         isState: false,
-        previewer: new LegacyCallAnswerEventPreview(),
+        previewer: () => new LegacyCallAnswerEventPreview(),
     },
     "m.call.hangup": {
         isState: false,
-        previewer: new LegacyCallHangupEvent(),
+        previewer: () => new LegacyCallHangupEvent(),
     },
     "m.sticker": {
         isState: false,
-        previewer: new StickerEventPreview(),
+        previewer: () => new StickerEventPreview(),
     },
     "m.reaction": {
         isState: false,
-        previewer: new ReactionEventPreview(),
+        previewer: () => new ReactionEventPreview(),
     },
     [M_POLL_START.name]: {
         isState: false,
-        previewer: new PollStartEventPreview(),
+        previewer: () => new PollStartEventPreview(),
     },
     [M_POLL_START.altName]: {
         isState: false,
-        previewer: new PollStartEventPreview(),
+        previewer: () => new PollStartEventPreview(),
     },
 };
+
+// Cache of instantiated previewers, keyed by event type.
+const previewers = new Map<string, Preview>();
+
+/**
+ * Get the (lazily instantiated) preview definition for an event type, or undefined if none exists.
+ */
+function getPreviewDefinition(eventType: string): { isState: boolean; previewer: Preview } | undefined {
+    const definition = PREVIEWS[eventType];
+    if (!definition) return undefined;
+    let previewer = previewers.get(eventType);
+    if (!previewer) {
+        previewer = definition.previewer();
+        previewers.set(eventType, previewer);
+    }
+    return { isState: definition.isState, previewer };
+}
 
 // The maximum number of events we're willing to look back on to get a preview.
 const MAX_EVENTS_BACKWARDS = 50;
@@ -170,7 +191,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     }
 
     public generatePreviewForEvent(event: MatrixEvent): string {
-        const previewDef = PREVIEWS[event.getType()];
+        const previewDef = getPreviewDefinition(event.getType());
         return previewDef?.previewer.getTextFor(event, undefined, true) ?? "";
     }
 
@@ -206,7 +227,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
             await this.matrixClient?.decryptEventIfNeeded(event);
             const shouldHide = shouldHideEvent(event);
             if (shouldHide) continue;
-            const previewDef = PREVIEWS[event.getType()];
+            const previewDef = getPreviewDefinition(event.getType());
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
 
