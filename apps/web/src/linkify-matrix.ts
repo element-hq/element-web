@@ -16,7 +16,7 @@ const escapeRegExp = function (s: string): string {
 // Anyone else really should be using matrix.to. vector:// allowed to support Element Desktop relative links.
 export const ELEMENT_URL_PATTERN = new RegExp(
     "^(?:vector://|https?://)?(?:" +
-        escapeRegExp((window?.location?.host ?? "") + (window?.location?.pathname ?? "")) +
+        escapeRegExp(window.location.host + window.location.pathname) +
         "|" +
         "(?:www\\.)?(?:riot|vector)\\.im/(?:app|beta|staging|develop)/|" +
         "(?:app|beta|staging|develop)\\.element\\.io/" +
