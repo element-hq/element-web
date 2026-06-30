@@ -229,7 +229,6 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                     <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
                 </SettingsSubsection>
                 <SettingsSection heading={_t("common|advanced")}>
-                    <SettingsSubsection heading={_t("settings|voip|connection_section")}>
                         <SettingsFlag
                             name="webRtcAllowPeerToPeer"
                             level={SettingLevel.DEVICE}
@@ -243,7 +242,6 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                             level={SettingLevel.DEVICE}
                             hideIfCannotSet
                         />
-                    </SettingsSubsection>
                 </SettingsSection>
             </>
         );
