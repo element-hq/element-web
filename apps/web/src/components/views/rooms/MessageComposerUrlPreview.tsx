@@ -53,10 +53,11 @@ export function MessageComposerUrlPreviewWrapper({
                 () => <MessageComposerUrlPreviewView vm={vm} />,
             );
 
-            // Explictly only update the VM if we're not rendering text.
             if (customComponent) {
                 setCustomComponent(customComponent);
             }
+            // We still update the VM even if the custom component is used since
+            // the component may choose to render the original component.
             void vm.updateWithText(content);
         },
         [content],
