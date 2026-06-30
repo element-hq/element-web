@@ -3045,6 +3045,7 @@
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
             "enable_legacy_calls": "Enable Legacy voice/video calls (Jitsi and webrtc 1:1 calls)",
+            "enable_legacy_calls_description": "Applies to Jitsi and 1:1 WebRTC calls",
             "mirror_local_feed": "Mirror local video feed",
             "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
             "noise_suppression": "Noise suppression",
