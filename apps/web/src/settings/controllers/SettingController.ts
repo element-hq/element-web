@@ -71,7 +71,8 @@ export default abstract class SettingController {
     }
 
     /**
-     * TODO
+     * Accessor to the SettingsStore injected at runtime.
+     * Preferred to direct imports in order to avoid import cycles.
      */
     protected get settingsStore(): typeof SettingsStore {
         return SettingController.settingsStore;
