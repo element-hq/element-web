@@ -67,7 +67,7 @@
      *
      *   "bundledPackages": [ "@my-company/*" ],
      */
-    "bundledPackages": ["shared-types", "matrix-js-sdk"],
+    "bundledPackages": ["shared-types"],
 
     /**
      * Specifies what type of newlines API Extractor should use when writing output files.  By default, the output files
