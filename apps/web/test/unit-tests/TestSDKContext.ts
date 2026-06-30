@@ -21,7 +21,7 @@ import type WidgetStore from "../../src/stores/WidgetStore";
  * A class which provides the same API as SDKContextClass but adds additional unsafe setters which can
  * replace individual stores. This is useful for tests which need to mock out stores.
  */
-export class TestSdkContext extends SDKContextClass {
+export class TestSDKContext extends SDKContextClass {
     declare public _RightPanelStore?: RightPanelStore;
     declare public _RoomNotificationStateStore?: RoomNotificationStateStore;
     declare public _RoomViewStore?: RoomViewStore;

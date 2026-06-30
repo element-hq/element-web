@@ -38,7 +38,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import PlatformPeg from "../../../../../src/PlatformPeg";
 import type BasePlatform from "../../../../../src/BasePlatform";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
-import { TestSdkContext } from "../../../TestSdkContext";
+import { TestSDKContext } from "../../../TestSDKContext";
 import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
@@ -73,7 +73,7 @@ describe("RoomTile", () => {
 
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let sdkContext: TestSdkContext;
+    let sdkContext: TestSDKContext;
     let showMessagePreview = false;
 
     filterConsole(
@@ -114,7 +114,7 @@ describe("RoomTile", () => {
 
     beforeEach(() => {
         useMockMediaDevices();
-        sdkContext = new TestSdkContext();
+        sdkContext = new TestSDKContext();
 
         client = mocked(stubClient());
         sdkContext.client = client;

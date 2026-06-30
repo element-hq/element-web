@@ -30,7 +30,7 @@ import { type ButtonEvent } from "../../../../../src/components/views/elements/A
 import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg.ts";
-import { TestSdkContext } from "../../../TestSdkContext.ts";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -51,7 +51,7 @@ describe("<Pill>", () => {
 
     const renderPill = (props: PillProps): void => {
         const cli = MatrixClientPeg.safeGet();
-        const mockSdkContext = new TestSdkContext();
+        const mockSdkContext = new TestSDKContext();
         mockSdkContext.client = cli;
 
         const withDefault = {

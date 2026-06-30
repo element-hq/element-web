@@ -31,7 +31,7 @@ import { SDKContext } from "../../../../src/contexts/SDKContext";
 import { StandardActions } from "../../../../src/notifications/StandardActions";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
-import { TestSdkContext } from "../../TestSdkContext";
+import { TestSDKContext } from "../../TestSDKContext";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -80,7 +80,7 @@ describe("<LoggedInView />", () => {
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(true),
     });
     const mediaHandler = new MediaHandler(mockClient);
-    const mockSdkContext = new TestSdkContext();
+    const mockSdkContext = new TestSDKContext();
 
     const defaultProps = {
         matrixClient: mockClient,

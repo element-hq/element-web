@@ -12,7 +12,7 @@ import { Widget, WidgetKind } from "matrix-widget-api";
 
 import { OIDCState, WidgetPermissionStore } from "../../../../src/stores/widgets/WidgetPermissionStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { TestSdkContext } from "../../TestSdkContext";
+import { TestSDKContext } from "../../TestSDKContext";
 import { type SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { stubClient } from "../../../test-utils";
@@ -53,7 +53,7 @@ describe("WidgetPermissionStore", () => {
             },
         );
         mockClient = stubClient();
-        const context = new TestSdkContext();
+        const context = new TestSDKContext();
         context.client = mockClient;
         widgetPermissionStore = new WidgetPermissionStore(context);
     });
