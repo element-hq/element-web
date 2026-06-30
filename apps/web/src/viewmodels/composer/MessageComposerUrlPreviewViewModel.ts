@@ -67,7 +67,12 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * @param content Plaintext from the message composer.
      */
     public async updateWithText(content: string): Promise<void> {
-        const newLinks = new Set(content.split(" ").map(w => w.trim()).filter((word) => URL.canParse(word)));
+        const newLinks = new Set(
+            content
+                .split(" ")
+                .map((w) => w.trim())
+                .filter((word) => URL.canParse(word)),
+        );
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
