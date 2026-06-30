@@ -27,7 +27,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
+import { sortRoomsByRecency } from "../../../utils/room/sortRoomsByRecency";
 import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
@@ -172,7 +172,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         }
 
         const joinRule = space.getJoinRule();
-        return sortRooms(rooms).reduce<[spaces: Room[], rooms: Room[], dms: Room[]]>(
+        return sortRoomsByRecency(rooms, cli.getSafeUserId()).reduce<[spaces: Room[], rooms: Room[], dms: Room[]]>(
             (arr, room) => {
                 if (room.isSpaceRoom()) {
                     if (room !== space && !existingSubspacesSet.has(room)) {
@@ -190,7 +190,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             },
             [[], [], []],
         );
-    }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet]);
+    }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet, cli]);
 
     const addRooms = async (): Promise<void> => {
         setError(false);

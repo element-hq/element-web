@@ -6,6 +6,7 @@
  */
 
 import { type Locator } from "@playwright/test";
+import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../../element-web-test";
 
@@ -18,7 +19,12 @@ test.describe("Roles & Permissions room settings tab", () => {
 
     let settings: Locator;
 
-    test.beforeEach(async ({ user, app }) => {
+    test.beforeEach(async ({ user, app, page }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
+
         await app.client.createRoom({
             name: roomName,
             power_level_content_override: {
