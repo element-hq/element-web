@@ -12,7 +12,7 @@ import React from "react";
 import { StatelessNotificationBadge } from "../../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
-import { NotificationBadgeAdapter } from "../../../../../../src/components/views/rooms/NotificationBadge/NotificationBadgeAdapter";
+import { NotificationBadge } from "../../../../../../src/components/views/rooms/NotificationBadge/NotificationBadge";
 import { NotificationState } from "../../../../../../src/stores/notifications/NotificationState";
 
 class DummyNotificationState extends NotificationState {
@@ -22,11 +22,11 @@ class DummyNotificationState extends NotificationState {
     }
 }
 
-describe("NotificationBadgeAdapter", () => {
+describe("NotificationBadge", () => {
     it("shows a dot if the level is activity", () => {
         const notif = new DummyNotificationState(NotificationLevel.Activity);
 
-        const { container } = render(<NotificationBadgeAdapter notification={notif} />);
+        const { container } = render(<NotificationBadge notification={notif} />);
         expect(container.querySelector('[data-badge-type="dot"]')).toBeInTheDocument();
         expect(container.querySelector('[data-testid="notification-badge"]')).toBeInTheDocument();
     });
@@ -34,7 +34,7 @@ describe("NotificationBadgeAdapter", () => {
     it("does not show a dot if the level is activity and hideIfDot is true", () => {
         const notif = new DummyNotificationState(NotificationLevel.Activity);
 
-        const { container } = render(<NotificationBadgeAdapter notification={notif} hideIfDot={true} />);
+        const { container } = render(<NotificationBadge notification={notif} hideIfDot={true} />);
         expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
         expect(container.querySelector('[data-testid="notification-badge"]')).not.toBeInTheDocument();
     });
@@ -42,7 +42,7 @@ describe("NotificationBadgeAdapter", () => {
     it("still shows an empty badge if hideIfDot us true", () => {
         const notif = new DummyNotificationState(NotificationLevel.Notification);
 
-        const { container } = render(<NotificationBadgeAdapter notification={notif} hideIfDot={true} />);
+        const { container } = render(<NotificationBadge notification={notif} hideIfDot={true} />);
         expect(container.querySelector('[data-badge-type="dot"]')).not.toBeInTheDocument();
         expect(container.querySelector('[data-testid="notification-badge"]')).toBeInTheDocument();
     });

@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 import classNames from "classnames";
 
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
-import { NotificationBadgeAdapter } from "./NotificationBadge/NotificationBadgeAdapter";
+import { NotificationBadge } from "./NotificationBadge/NotificationBadge";
 import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import useHover from "../../../hooks/useHover";
@@ -44,7 +44,7 @@ export default function ExtraTile({
 
     let badge: JSX.Element | null = null;
     if (notificationState) {
-        badge = <NotificationBadgeAdapter notification={notificationState} />;
+        badge = <NotificationBadge notification={notificationState} />;
     }
 
     let name = displayName;

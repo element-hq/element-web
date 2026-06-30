@@ -12,7 +12,7 @@ import { CheckCircleIcon, CircleIcon } from "@vector-im/compound-design-tokens/a
 
 import { _t } from "../../../../languageHandler";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
-import { NotificationBadgeAdapter } from "../NotificationBadge/NotificationBadgeAdapter";
+import { NotificationBadge } from "../NotificationBadge/NotificationBadge";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import { type EventTileReceiptState } from "../../../../viewmodels/room/timeline/event-tile/EventTileReceiptState";
@@ -100,7 +100,7 @@ function SentReceipt({ messageState }: Readonly<SentReceiptProps>): JSX.Element 
         icon = <CheckCircleIcon />;
         label = _t("timeline|send_state_sent");
     } else if (isFailed) {
-        icon = <NotificationBadgeAdapter notification={StaticNotificationState.RED_EXCLAMATION} />;
+        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
         label = _t("timeline|send_state_failed");
     } else {
         icon = <CircleIcon />;

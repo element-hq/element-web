@@ -32,7 +32,7 @@ interface Props {
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function NotificationBadgeAdapter({
+export function NotificationBadge({
     notification,
     hideIfDot,
     showUnsentTooltip,
