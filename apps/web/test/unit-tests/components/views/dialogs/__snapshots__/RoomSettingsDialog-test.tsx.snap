@@ -34,6 +34,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_VOIP_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_VOIP_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_VOIP_TAB"
