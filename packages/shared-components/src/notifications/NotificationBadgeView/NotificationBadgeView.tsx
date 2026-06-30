@@ -51,7 +51,7 @@ export interface NotificationBadgeViewSnapshot {
     /**
      * Whether to render the badge as an interactive control.
      */
-    isClickable?: boolean;
+    isClickable: boolean;
     /**
      * Accessible label for clickable badges.
      */
