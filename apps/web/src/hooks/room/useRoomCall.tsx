@@ -38,7 +38,7 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -132,9 +132,9 @@ export const useRoomCall = (
     }, [useElementCallExclusively, serverIsConfiguredForElementCall]);
 
     const hasLegacyCall = useEventEmitterState(
-        SdkContextClass.instance.legacyCallHandler,
+        SDKContextClass.instance.legacyCallHandler,
         LegacyCallHandlerEvent.CallsChanged,
-        () => SdkContextClass.instance.legacyCallHandler.getCallForRoom(room.roomId) !== null,
+        () => SDKContextClass.instance.legacyCallHandler.getCallForRoom(room.roomId) !== null,
     );
     // settings
     const widgets = useWidgets(room);

@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Modal from "../Modal";
 import UploadConfirmDialog from "../components/views/dialogs/UploadConfirmDialog";
@@ -70,7 +70,7 @@ export const singleMxcUpload = async (cli: MatrixClient): Promise<string | null>
 };
 
 export const isCurrentLocalRoom = (cli: MatrixClient | null): boolean => {
-    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+    const roomId = SDKContextClass.instance.roomViewStore.getRoomId();
     if (!roomId) return false;
     const room = cli?.getRoom(roomId);
     if (!room) return false;

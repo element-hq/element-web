@@ -39,7 +39,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
 import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { RoomTileSubtitle } from "./RoomTileSubtitle";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -84,7 +84,7 @@ class RoomTile extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            selected: SdkContextClass.instance.roomViewStore.getRoomId() === this.props.room.roomId,
+            selected: SDKContextClass.instance.roomViewStore.getRoomId() === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
             call: CallStore.instance.getCall(this.props.room.roomId),
@@ -150,7 +150,7 @@ class RoomTile extends React.PureComponent<Props, State> {
             this.scrollIntoView();
         }
 
-        SdkContextClass.instance.roomViewStore.addRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        SDKContextClass.instance.roomViewStore.addRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         MessagePreviewStore.instance.on(
             MessagePreviewStore.getPreviewChangedEventName(this.props.room),
@@ -167,7 +167,7 @@ class RoomTile extends React.PureComponent<Props, State> {
     }
 
     public componentWillUnmount(): void {
-        SdkContextClass.instance.roomViewStore.removeRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        SDKContextClass.instance.roomViewStore.removeRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
         MessagePreviewStore.instance.off(
             MessagePreviewStore.getPreviewChangedEventName(this.props.room),
             this.onRoomPreviewChanged,

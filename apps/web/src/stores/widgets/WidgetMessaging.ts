@@ -61,7 +61,7 @@ import { arrayFastClone } from "../../utils/arrays";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { UPDATE_EVENT } from "../AsyncStore";
 
 // TODO: Purge this code of its overgrown hacks and compatibility shims.
@@ -293,7 +293,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
     // This listener is only active for account widgets, which may follow the
     // user to different rooms
     private onRoomViewStoreUpdate = (): void => {
-        const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
+        const roomId = SDKContextClass.instance.roomViewStore.getRoomId() ?? null;
         if (roomId !== this.viewedRoomId) {
             this.widgetApi!.setViewedRoomId(roomId);
             this.viewedRoomId = roomId;
@@ -323,8 +323,8 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         // receiving events for the right room
         if (this.roomId === undefined) {
             // Account widgets listen to the currently active room
-            this.widgetApi.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
-            SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+            this.widgetApi.setViewedRoomId(SDKContextClass.instance.roomViewStore.getRoomId() ?? null);
+            SDKContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         } else {
             // Room widgets get locked to the room they were added in
             this.widgetApi.setViewedRoomId(this.roomId);
@@ -435,7 +435,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
                     const integType = data?.integType as string;
                     const integId = <string>data?.integId;
 
-                    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+                    const roomId = SDKContextClass.instance.roomViewStore.getRoomId();
                     const room = roomId ? this.client.getRoom(roomId) : undefined;
                     if (!room) return;
 
@@ -516,7 +516,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
         this.iframe = null;
         WidgetMessagingStore.instance.stopMessaging(this.widget, this.roomId);
 
-        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        SDKContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         this.client.off(ClientEvent.Event, this.onEvent);
         this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);

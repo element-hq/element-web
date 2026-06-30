@@ -33,7 +33,7 @@ import { SpaceWatcher } from "./SpaceWatcher";
 import { type IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { getChangedOverrideRoomMutePushRules } from "../room-list-v3/utils";
 import { type TagID } from "../room-list-v3/skip-list/tag";
 
@@ -113,7 +113,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
             this.readyStore.useUnitTestClient(forcedClient);
         }
 
-        SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
+        SDKContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
         this.setupWatchers();
@@ -136,7 +136,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
     private handleRVSUpdate({ trigger = true }): void {
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
-        const activeRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        const activeRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
         if (!activeRoomId && this.algorithm.stickyRoom) {
             this.algorithm.setStickyRoom(null);
         } else if (activeRoomId) {

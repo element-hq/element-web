@@ -31,7 +31,7 @@ import {
 import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -54,7 +54,7 @@ describe("MessagePanel", function () {
         getClientWellKnown: jest.fn().mockReturnValue({}),
         supportsThreads: jest.fn().mockReturnValue(true),
     });
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
 
     const room = new Room(roomId, client, userId);
@@ -106,7 +106,7 @@ describe("MessagePanel", function () {
             return arg === "showDisplaynameChanges";
         });
 
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
 
         DMRoomMap.makeShared(client);
     });
