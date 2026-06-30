@@ -13,7 +13,6 @@ import {
     type NotificationBadgeViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-import { _t } from "../../../languageHandler";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { formatCount } from "../../../utils/FormattingUtils";
@@ -103,14 +102,10 @@ export class NotificationBadgeViewModel
             isKnocked: knocked,
             badgeType: getBadgeType(props.level, displaySymbol, props.forceDot, knocked),
             symbol: displaySymbol,
-            knockLabel: _t("room|knock_sent"),
             isClickable: !!props.onClick,
             ariaLabel: props.ariaLabel,
             tabIndex: props.tabIndex,
-            tooltipLabel:
-                props.showUnsentTooltip && props.level === NotificationLevel.Unsent
-                    ? _t("notifications|message_didnt_send")
-                    : undefined,
+            showUnsentTooltip: !!props.showUnsentTooltip && props.level === NotificationLevel.Unsent,
         };
     };
 

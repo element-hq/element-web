@@ -11,6 +11,7 @@ import { AskToJoinIcon } from "@vector-im/compound-design-tokens/assets/web/icon
 import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
+import { useI18n } from "../../core/i18n/i18nContext";
 import styles from "./NotificationBadgeView.module.css";
 
 export type NotificationBadgeType = "dot" | "badge_2char" | "badge_3char";
@@ -45,10 +46,6 @@ export interface NotificationBadgeViewSnapshot {
      */
     symbol: string | null;
     /**
-     * Accessible label for the knock icon.
-     */
-    knockLabel?: string;
-    /**
      * Whether to render the badge as an interactive control.
      */
     isClickable: boolean;
@@ -61,9 +58,9 @@ export interface NotificationBadgeViewSnapshot {
      */
     tabIndex?: number;
     /**
-     * Optional tooltip label.
+     * Whether to show the unsent-message tooltip.
      */
-    tooltipLabel?: string;
+    showUnsentTooltip: boolean;
 }
 
 export interface NotificationBadgeViewActions {
@@ -80,6 +77,7 @@ interface NotificationBadgeViewProps {
 }
 
 export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProps>): JSX.Element {
+    const { translate: _t } = useI18n();
     const {
         shouldRender,
         isVisible,
@@ -88,11 +86,10 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         isKnocked,
         badgeType,
         symbol,
-        knockLabel,
         isClickable,
         ariaLabel,
         tabIndex,
-        tooltipLabel,
+        showUnsentTooltip,
     } = useViewModel(vm);
 
     if (!shouldRender) {
@@ -111,12 +108,11 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
     });
     const notificationLevel = isHighlight ? "highlight" : isNotification ? "notification" : undefined;
 
-    const content =
-        isKnocked && knockLabel ? (
-            <AskToJoinIcon aria-label={knockLabel} />
-        ) : (
-            <span className={styles.count}>{symbol}</span>
-        );
+    const content = isKnocked ? (
+        <AskToJoinIcon aria-label={_t("room|knock_sent")} />
+    ) : (
+        <span className={styles.count}>{symbol}</span>
+    );
 
     const badge = isClickable ? (
         <button
@@ -144,9 +140,9 @@ export function NotificationBadgeView({ vm }: Readonly<NotificationBadgeViewProp
         </div>
     );
 
-    if (tooltipLabel) {
+    if (showUnsentTooltip) {
         return (
-            <Tooltip label={tooltipLabel} placement="right">
+            <Tooltip label={_t("notifications|message_didnt_send")} placement="right">
                 {badge}
             </Tooltip>
         );

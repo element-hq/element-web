@@ -41,11 +41,10 @@ const meta = {
         isKnocked: false,
         badgeType: "badge_2char",
         symbol: "3",
-        knockLabel: "Request to join sent",
         isClickable: false,
         ariaLabel: undefined,
         tabIndex: undefined,
-        tooltipLabel: undefined,
+        showUnsentTooltip: false,
     },
 } satisfies Meta<typeof NotificationBadgeViewWrapper>;
 
@@ -88,7 +87,7 @@ export const WithTooltip: Story = {
     args: {
         isHighlight: true,
         symbol: "!",
-        tooltipLabel: "Message did not send",
+        showUnsentTooltip: true,
     },
 };
 

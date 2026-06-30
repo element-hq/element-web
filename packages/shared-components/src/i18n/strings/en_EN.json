@@ -65,6 +65,7 @@
         "all_messages": "All messages",
         "default_settings": "Match default settings",
         "mentions_keywords": "Mentions and keywords",
+        "message_didnt_send": "Message didn't send. Click for info.",
         "mute_room": "Mute room"
     },
     "release_announcement": {
@@ -84,6 +85,7 @@
         "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
+        "knock_sent": "Request to join sent",
         "pinned_message_badge": "Pinned message",
         "status_bar": {
             "delete_all": "Delete all",
