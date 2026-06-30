@@ -6,45 +6,62 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, type ReactNode } from "react";
+import React, { useEffect, useState, type ReactNode } from "react";
 import { MessageComposerUrlPreviewView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import PlatformPeg from "../../../PlatformPeg";
 import { ModuleApi } from "../../../modules/Api";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
-const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
+export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
-export function MessageComposerUrlPreviewWrapper({ content }: { content: string }): ReactNode | null {
+export function MessageComposerUrlPreviewWrapper({
+    content,
+    moduleApi = ModuleApi.instance,
+}: {
+    content: string;
+    moduleApi?: ModuleApi;
+}): ReactNode | null {
     const { showUrlPreview, roomId } = useScopedRoomContext("showUrlPreview", "roomId");
+    const [customComponent, setCustomComponent] = useState<React.JSX.Element | null>(null);
+
+    const client = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
-                client: MatrixClientPeg.safeGet(),
+                client,
                 visible: showUrlPreview,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             }),
-    );
-
-    useDebouncedCallback<[MessageComposerUrlPreviewViewModel, string]>(
-        true,
-        (vm, content) => {
-            void vm.updateWithText(content);
-        },
-        [vm, content],
-        DEBOUNCE_REQUEST_TIMEOUT_MS,
     );
 
     useEffect(() => {
         void vm.updateUrlPreviewVisible(showUrlPreview);
     }, [vm, showUrlPreview]);
 
-    // For performance reasons, we keep the VM running even if a component overrides it. We don't
-    // want to have to keep recreating the composer preview view if a module preview falls in and out of focus.
-    return ModuleApi.instance.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
-        <MessageComposerUrlPreviewView vm={vm} />
-    ));
+    // Rather than checking each time the text changes, we only do a URL check every 500ms to avoid
+    // hitting the server too frequently. We also only check the module API for a custom component
+    // at this frequency to avoid expensive calculations downstream.
+    useDebouncedCallback<[string]>(
+        true,
+        (content) => {
+            const customComponent = moduleApi.customComponents.renderComposerPreview(
+                { text: content, roomId: roomId! },
+                () => <MessageComposerUrlPreviewView vm={vm} />,
+            );
+
+            // Explictly only update the VM if we're not rendering text.
+            if (customComponent) {
+                setCustomComponent(customComponent);
+            }
+            void vm.updateWithText(content);
+        },
+        [content],
+        DEBOUNCE_REQUEST_TIMEOUT_MS,
+    );
+
+    return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;
 }

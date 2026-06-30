@@ -188,10 +188,10 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         this.registeredComposerPreviewRenderers.push({ filter, renderer });
     }
     /**
-     * Render the component for a message event.
+     * Render the component for a composer preview.
      * @param props Props to be passed to the custom renderer.
      * @param originalComponent Function that will be rendered if no custom renderers are present, or as a child of a custom component.
-     * @returns A component if a custom renderer exists, or originalComponent returns a value. Otherwise null.
+     * @returns A component if a custom renderer was found. Otherwise null.
      */
     public renderComposerPreview(
         props: CustomComposerPreviewComponentProps,
@@ -202,10 +202,9 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             try {
                 return renderer.renderer({ ...props }, originalComponent);
             } catch (ex) {
-                logger.warn("Message renderer failed to render", ex);
-                // Fall through to original component. If the module encounters an error we still want to display messages to the user!
+                logger.warn("Composer preview failed to render", ex);
             }
         }
-        return originalComponent();
+        return null;
     }
 }
