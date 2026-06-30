@@ -87,6 +87,28 @@ export interface IOpts {
 }
 
 /**
+ * The power levels set by synapse as of 30.06.2026.
+ * If power_level_content_override is used, these values should be used
+ * as a starting point to ensure the expected room power levels.
+ *
+ * NOTE: power_level_content_override does do a merge but NOT a deep merge.
+ * e.g. "ban": 50, will still be set by the server when `power_level_content_override = {events: {"custom": 0}}`
+ * BUT `events` will lose all the other default props listed below.
+ * So we have to do: `power_level_content_override = {events: {...POWER_LEVEL_EVENTS_DEFAULT, "custom": 0}}`
+ * This is very unfortunate if defaults change in synapse we have to keep the sdk in sync... (todo)
+ */
+export const DEFAULT_EVENTS_POWER_LEVEL = {
+    [EventType.RoomAvatar]: 50,
+    [EventType.RoomCanonicalAlias]: 50,
+    [EventType.RoomEncryption]: 100,
+    [EventType.RoomHistoryVisibility]: 100,
+    [EventType.RoomName]: 50,
+    [EventType.RoomPowerLevels]: 100,
+    [EventType.RoomServerAcl]: 100,
+    [EventType.RoomTombstone]: 100,
+}
+
+/**
  * Create a new room, and switch to it.
  *
  * @param client The Matrix Client instance to create the room with
@@ -162,6 +184,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
+                    ...DEFAULT_EVENTS_POWER_LEVEL,
                     // Allow all users to send call membership updates
                     [opts.roomType === RoomType.ElementVideo
                         ? JitsiCall.MEMBER_EVENT_TYPE
@@ -177,6 +200,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
     } else if (!SdkConfig.get("element_call").disable) {
         createOpts.power_level_content_override = {
             events: {
+                ...DEFAULT_EVENTS_POWER_LEVEL,
                 // It should always (including non video rooms) be possible to join a group call.
                 [ElementCallMemberEventType.name]: 0,
             },
