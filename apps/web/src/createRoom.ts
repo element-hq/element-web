@@ -106,7 +106,7 @@ export const DEFAULT_EVENTS_POWER_LEVEL = {
     [EventType.RoomPowerLevels]: 100,
     [EventType.RoomServerAcl]: 100,
     [EventType.RoomTombstone]: 100,
-}
+};
 
 /**
  * Create a new room, and switch to it.
