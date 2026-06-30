@@ -258,6 +258,40 @@ test.describe("Room list", () => {
                 await expect(notificationButton).toBeFocused();
             });
 
+            test("should reveal the options menu when a room is focused with the keyboard", async ({
+                page,
+                app,
+                user,
+            }) => {
+                // Regression test: navigating the room list with the keyboard must reveal a room's hover
+                // menu so the "More options" button is reachable by Tab, rather than focus escaping to
+                // <body>. The reveal must depend on keyboard focus alone, so we move focus with the
+                // keyboard to an adjacent room the pointer is NOT over — otherwise :hover would reveal
+                // the menu and mask the behaviour (which is why the other keyboard tests don't catch it).
+                const roomListView = getRoomList(page);
+                const room29 = roomListView.getByRole("option", { name: "Open room room29" });
+                const room28 = roomListView.getByRole("option", { name: "Open room room28" });
+                const moreButton = room28.getByRole("button", { name: "More options" });
+
+                // Open the room, then put focus back on the room list item.
+                await room29.click();
+                await room29.click();
+                await expect(room29).toBeFocused();
+
+                // Keyboard-focus the adjacent room (the pointer is still over room29, not room28), so the
+                // menu's visibility depends purely on keyboard focus and not on :hover.
+                await page.keyboard.press("ArrowDown");
+                await expect(room28).toBeFocused();
+
+                // The "More options" button must be revealed and reachable by Tab.
+                await page.keyboard.press("Tab");
+                await expect(moreButton).toBeFocused();
+
+                // TODO: once menu-close focus restoration is fixed, extend this to open the menu
+                // (Enter) and assert that Escape returns focus to a room list item rather than <body>.
+                // Today that focus restoration is broken, so it isn't asserted here.
+            });
+
             test("should navigate to the top and then bottom of the room list", async ({ page, app, user }) => {
                 const roomListView = getRoomList(page);
 

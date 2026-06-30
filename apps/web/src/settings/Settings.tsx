@@ -457,7 +457,7 @@ export const SETTINGS: Settings = {
         shouldExportToRageshake: false,
     },
     "blockInvites": {
-        controller: new BlockInvitesConfigController("blockInvites"),
+        controller: new BlockInvitesConfigController("blockInvites", defaultWatchManager),
         supportedLevels: [SettingLevel.ACCOUNT],
         default: false,
     },

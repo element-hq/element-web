@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type SettingLevel } from "../SettingLevel";
+import type SettingsStore from "../SettingsStore";
 
 /**
  * Represents a controller for individual settings to alter the reading behaviour
@@ -18,6 +19,8 @@ import { type SettingLevel } from "../SettingLevel";
  * intended to handle environmental factors for specific settings.
  */
 export default abstract class SettingController {
+    public static settingsStore: typeof SettingsStore;
+
     /**
      * Gets the overridden value for the setting, if any. This must return null if the
      * value is not to be overridden, otherwise it must return the new value.
@@ -65,5 +68,13 @@ export default abstract class SettingController {
      */
     public get settingDisabled(): boolean | string {
         return false;
+    }
+
+    /**
+     * Accessor to the SettingsStore injected at runtime.
+     * Preferred to direct imports in order to avoid import cycles.
+     */
+    protected get settingsStore(): typeof SettingsStore {
+        return SettingController.settingsStore;
     }
 }
