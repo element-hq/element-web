@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { vi, describe, it, expect, type Mock } from "vitest";
+import { vi, describe, it, expect, beforeAll, afterAll, type Mock } from "vitest";
 
 import type { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { UrlPreviewFetcher } from "./UrlPreviewFetcher";
@@ -34,6 +34,14 @@ function getFetcher(): {
 }
 
 describe("UrlPreviewFetcher", () => {
+    let originalDevicePixelRatio;
+    beforeAll(() => {
+        originalDevicePixelRatio = window.devicePixelRatio;
+        window.devicePixelRatio = 1;
+    });
+    afterAll(() => {
+        window.devicePixelRatio = originalDevicePixelRatio;
+    });
     it("should return null when the fetch fails", async () => {
         const { fetcher, client } = getFetcher();
         client.getUrlPreview.mockRejectedValue(new Error("Forced test failure"));
