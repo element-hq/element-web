@@ -21,7 +21,7 @@ import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/Da
 import { flushPromisesWithFakeTimers } from "../../test-utils";
 
 jest.mock("../../../src/settings/SettingsStore");
-jest.mock("../../../src/contexts/SDKContext", () => ({
+jest.mock("../../../src/contexts/SDKContextClass", () => ({
     SDKContextClass: {
         instance: {
             roomViewStore: {
