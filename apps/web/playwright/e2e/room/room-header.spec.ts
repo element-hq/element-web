@@ -16,11 +16,6 @@ import { type ElementAppPage } from "../../pages/ElementAppPage";
 test.describe("Room Header", () => {
     test.use({
         displayName: "Sakura",
-        config: {
-            features: {
-                feature_new_room_list: true,
-            },
-        },
     });
 
     test.beforeEach(async ({ page, app, user }) => {
