@@ -3039,7 +3039,6 @@
             "audio_output": "Audio Output",
             "audio_output_empty": "No Audio Outputs detected",
             "auto_gain_control": "Automatic gain control",
-            "connection_section": "Connection",
             "dialog_title": "<strong>Settings:</strong> Voice & Video",
             "echo_cancellation": "Echo cancellation",
             "echo_cancellation_description": "Removes echo from your microphone input during calls. This setting also applies to Element Call.",
