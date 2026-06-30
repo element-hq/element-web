@@ -198,8 +198,14 @@ export const RoomListItemView = memo(function RoomListItemView({
     };
 
     const onItemBlur = (e: React.FocusEvent<HTMLButtonElement>): void => {
-        // Keep it revealed while focus is on a child menu button; clear once focus leaves the row.
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+        // Keep it revealed while focus is on a child menu button, and while one of the menus is open
+        // (focus is then in the portaled popover, outside the row). The latter means that when the
+        // menu closes with Escape, the trigger is still revealed, so the popover's own focus
+        // restoration lands on it instead of dropping to <body>. Clear once focus leaves for good.
+        if (
+            !e.currentTarget.contains(e.relatedTarget as Node | null) &&
+            !e.currentTarget.querySelector('[data-state="open"]')
+        ) {
             setKeyboardActive(false);
         }
     };

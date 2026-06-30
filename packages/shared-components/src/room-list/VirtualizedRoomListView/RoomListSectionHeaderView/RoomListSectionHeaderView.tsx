@@ -180,7 +180,13 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     };
 
     const onHeaderBlur = (e: React.FocusEvent<HTMLButtonElement>): void => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+        // Keep it revealed while focus is on the menu button, and while the menu is open (focus is
+        // then in the portaled popover, outside the header). That way closing with Escape restores
+        // focus to the still-revealed trigger instead of dropping to <body>. Clear once focus leaves.
+        if (
+            !e.currentTarget.contains(e.relatedTarget as Node | null) &&
+            !e.currentTarget.querySelector('[data-state="open"]')
+        ) {
             setKeyboardActive(false);
         }
     };
