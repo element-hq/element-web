@@ -229,19 +229,19 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                     <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
                 </SettingsSubsection>
                 <SettingsSection heading={_t("common|advanced")}>
-                        <SettingsFlag
-                            name="webRtcAllowPeerToPeer"
-                            level={SettingLevel.DEVICE}
-                            onChange={this.changeWebRtcMethod}
-                        />
-                        <SettingsFlag
-                            name="fallbackICEServerAllowed"
-                            label={_t("settings|voip|enable_fallback_ice_server", {
-                                server: new URL(FALLBACK_ICE_SERVER).pathname,
-                            })}
-                            level={SettingLevel.DEVICE}
-                            hideIfCannotSet
-                        />
+                    <SettingsFlag
+                        name="webRtcAllowPeerToPeer"
+                        level={SettingLevel.DEVICE}
+                        onChange={this.changeWebRtcMethod}
+                    />
+                    <SettingsFlag
+                        name="fallbackICEServerAllowed"
+                        label={_t("settings|voip|enable_fallback_ice_server", {
+                            server: new URL(FALLBACK_ICE_SERVER).pathname,
+                        })}
+                        level={SettingLevel.DEVICE}
+                        hideIfCannotSet
+                    />
                 </SettingsSection>
             </>
         );
