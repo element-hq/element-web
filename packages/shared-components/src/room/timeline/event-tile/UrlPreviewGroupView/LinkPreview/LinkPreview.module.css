@@ -19,11 +19,7 @@ button.preview {
     background-position: center;
     border: none;
     padding: 0;
-    > img {
-        height: 200px;
-        width: 478px;
-        object-fit: cover;
-    }
+
     .playButton[data-kind="primary"] {
         padding: 0;
         width: 50px;
