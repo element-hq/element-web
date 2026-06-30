@@ -32,7 +32,8 @@ import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
  * as singletons scoped to this object.
  *
  * Since this does the actual construction of all stores, it is *very* heavy on imports and lives right near
- * the top of the import tree.
+ * the top of the import tree. If anything other than code to set up the app (or tests) are importing this file,
+ * it's doing it wrong and should be accessing whatever it needs via the react context.
  */
 export class SDKContextClass {
     /**
