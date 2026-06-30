@@ -61,8 +61,6 @@ describe("useToastContext", () => {
                 <HappyComponent />
             </ToastContext>,
         );
-        await waitFor(() => {
-            expect(getByText("Toast!")).toBeInViewport();
-        });
+        expect(getByText("Toast!")).toBeVisible();
     });
 });
