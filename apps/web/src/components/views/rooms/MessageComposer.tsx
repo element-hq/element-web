@@ -91,7 +91,7 @@ interface IProps extends MatrixClientProps {
 }
 
 interface IState {
-    composerContent: string;
+    urlPreviewContent: string;
     isComposerEmpty: boolean;
     haveRecording: boolean;
     recordingTimeLeftSeconds?: number;
@@ -143,7 +143,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         this.state = {
             isComposerEmpty: initialComposerContent?.length === 0,
-            composerContent: initialComposerContent,
+            urlPreviewContent: initialComposerContent,
             haveRecording: false,
             recordingTimeLeftSeconds: undefined, // when set to a number, shows a toast
             isMenuOpen: false,
@@ -181,7 +181,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     private saveWysiwygEditorState = (): void => {
         if (this.shouldSaveWysiwygEditorState()) {
-            const { isRichTextEnabled, composerContent } = this.state;
+            const { isRichTextEnabled, urlPreviewContent: composerContent } = this.state;
             const replyEventId = this.props.replyToEvent ? this.props.replyToEvent.getId() : undefined;
             const item: WysiwygComposerState = {
                 content: composerContent,
@@ -403,8 +403,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         if (this.state.isWysiwygLabEnabled) {
             const { relation, replyToEvent } = this.props;
-            const composerContent = this.state.composerContent;
-            this.setState({ composerContent: "", initialComposerContent: "" });
+            const composerContent = this.state.urlPreviewContent;
+            this.setState({ urlPreviewContent: "", initialComposerContent: "" });
             dis.dispatch({
                 action: Action.ClearAndFocusSendMessageComposer,
                 timelineRenderingType: this.context.timelineRenderingType,
@@ -419,9 +419,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onChange = (model: EditorModel): void => {
-        model.serializeParts();
         this.setState({
-            composerContent: model
+            urlPreviewContent: model
                 .serializeParts()
                 .filter((p) => p.type === Type.Plain)
                 .map((p) => p.text)
@@ -432,7 +431,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     private onWysiwygChange = (content: string): void => {
         this.setState({
-            composerContent: content,
+            urlPreviewContent: content,
             isComposerEmpty: content?.length === 0,
         });
     };
@@ -440,14 +439,14 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private onRichTextToggle = async (): Promise<void> => {
         const { richToPlain, plainToRich } = await getConversionFunctions();
 
-        const { isRichTextEnabled, composerContent } = this.state;
+        const { isRichTextEnabled, urlPreviewContent: composerContent } = this.state;
         const convertedContent = isRichTextEnabled
             ? await richToPlain(composerContent, false)
             : await plainToRich(composerContent, false);
 
         this.setState({
             isRichTextEnabled: !isRichTextEnabled,
-            composerContent: convertedContent,
+            urlPreviewContent: convertedContent,
             initialComposerContent: convertedContent,
         });
     };
@@ -681,7 +680,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
-                <MessageComposerUrlPreviewWrapper content={this.state.composerContent} />
+                <MessageComposerUrlPreviewWrapper content={this.state.urlPreviewContent} />
                 <div className="mx_MessageComposer_wrapper">
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
