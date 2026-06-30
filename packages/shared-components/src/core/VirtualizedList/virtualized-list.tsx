@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { type ListRange, type VirtuosoHandle, type VirtuosoProps } from "react-virtuoso";
+import { type CalculateViewLocation, type ListRange, type VirtuosoHandle, type VirtuosoProps } from "react-virtuoso";
 
 /**
  * Keyboard key codes
@@ -122,6 +122,17 @@ export interface VirtualizedListProps<Item, Context> extends Omit<
      * @returns The corresponding index in the items array
      */
     mapRangeIndex?: (virtuosoIndex: number) => number;
+
+    /**
+     * Optional space, in pixels, reserved at the top of the scroll viewport — e.g. for a pinned
+     * sticky header that overlays the top of the list. When set, keyboard navigation scrolls
+     * focused items to just below this offset rather than flush to the top, so the focused item
+     * (and its focus ring / hover affordances) is never hidden behind the pinned header.
+     *
+     * Pass a function to vary the reserved space per item index — e.g. return 0 for an item that is
+     * itself the pinned header (so it lands flush at the top) and the header height for the rest.
+     */
+    scrollPaddingTop?: number | ((index: number) => number);
 }
 
 /**
@@ -143,6 +154,28 @@ export interface UseVirtualizedListResult<Item, Context> extends Omit<
     rangeChanged: (range: ListRange) => void;
     onFocusForGetItemComponent: (item: Item, e: React.FocusEvent) => void;
     context: VirtualizedListContext<Context>;
+}
+
+/**
+ * Builds a Virtuoso `calculateViewLocation` that keeps `paddingTop` pixels clear at the top of the
+ * viewport (e.g. for a pinned sticky header). It honours the requested alignment and only insets
+ * the cases that would otherwise place the item against the top edge — so a focused item lands just
+ * below the pinned header instead of underneath it. `offset` is negative because Virtuoso adds it to
+ * the computed `scrollTop`, and a smaller scrollTop pushes the item further down the viewport.
+ */
+function reserveTopViewLocation(paddingTop: number): CalculateViewLocation {
+    return ({ itemTop, itemBottom, viewportTop, viewportBottom, locationParams: { align, behavior, ...rest } }) => {
+        if (align === "start" || (align === undefined && itemTop < viewportTop + paddingTop)) {
+            return { ...rest, behavior, align: "start", offset: -paddingTop };
+        }
+        if (align === "end" || (align === undefined && itemBottom > viewportBottom)) {
+            return { ...rest, behavior, align: "end" };
+        }
+        if (align === "center") {
+            return { ...rest, behavior, align: "center" };
+        }
+        return null;
+    };
 }
 
 /**
@@ -177,6 +210,7 @@ export function useVirtualizedList<Item, Context>(
         mapScrollIndex,
         mapRangeIndex,
         scrollerRef: externalScrollerRef,
+        scrollPaddingTop,
         ...virtuosoProps
     } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -217,14 +251,19 @@ export function useVirtualizedList<Item, Context>(
                 const key = getItemKey(items[clampedIndex]);
                 setTabIndexKey(key);
                 const scrollIndex = mapScrollIndex ? mapScrollIndex(clampedIndex) : clampedIndex;
+                // Reserve space for a pinned header so the focused item isn't hidden behind it.
+                // The reserved amount can vary per item (e.g. 0 for the header that itself pins).
+                const paddingTop =
+                    typeof scrollPaddingTop === "function" ? scrollPaddingTop(clampedIndex) : (scrollPaddingTop ?? 0);
                 virtuosoHandleRef.current?.scrollIntoView({
                     index: scrollIndex,
                     align: align,
                     behavior: "auto",
+                    ...(paddingTop > 0 ? { calculateViewLocation: reserveTopViewLocation(paddingTop) } : {}),
                 });
             }
         },
-        [items, getItemKey, mapScrollIndex],
+        [items, getItemKey, mapScrollIndex, scrollPaddingTop],
     );
 
     /**

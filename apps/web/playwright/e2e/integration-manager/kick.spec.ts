@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { closeReleaseAnnouncement } from "@element-hq/element-web-playwright-common";
+
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { openIntegrationManager } from "./utils";
@@ -137,6 +139,11 @@ test.describe("Integration Manager: Kick", () => {
         );
 
         await app.viewRoomByName(ROOM_NAME);
+    });
+
+    test.beforeEach(async ({ page, user, app, room }) => {
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
     });
 
     test("should kick the target", async ({ page, app, bot: targetUser, room }) => {

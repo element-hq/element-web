@@ -1,10 +1,10 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2024 The Matrix.org Foundation C.I.C.
-
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2024 New Vector Ltd.
+ * Copyright 2024 The Matrix.org Foundation C.I.C.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import { type ReactNode, createContext, useCallback, useContext, useEffect, useState, useMemo } from "react";
 
@@ -18,14 +18,18 @@ import { type ReactNode, createContext, useCallback, useContext, useEffect, useS
  * corner of the app, however the name 'toast' as used in this class refers to the component
  * of the same name in compound that it is written to manage.
  */
-export const ToastContext = createContext(null as any);
+export const ToastContext = createContext<ToastRack | null>(null);
 ToastContext.displayName = "ToastContext";
 
 /**
  * Returns the ToastRack in context in order to display toasts
  */
 export function useToastContext(): ToastRack {
-    return useContext(ToastContext);
+    const rack = useContext(ToastContext);
+    if (!rack) {
+        throw new Error("Component must be wrapped in <ToastContext.Provider /> to use useToastContext");
+    }
+    return rack;
 }
 
 /**

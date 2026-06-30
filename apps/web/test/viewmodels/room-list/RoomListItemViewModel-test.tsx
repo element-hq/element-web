@@ -509,20 +509,6 @@ describe("RoomListItemViewModel", () => {
         });
     });
 
-    describe("canMoveToSection", () => {
-        it.each([
-            [true, true],
-            [false, false],
-        ])("should be %s when feature_room_list_sections is %s", (featureEnabled, expected) => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "feature_room_list_sections") return featureEnabled;
-                return false;
-            });
-            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
-            expect(viewModel.getSnapshot().canMoveToSection).toBe(expected);
-        });
-    });
-
     describe("Actions", () => {
         it("should dispatch view room action on openRoom", () => {
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
@@ -631,10 +617,6 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should include sections from orderedSectionTags excluding CHATS_TAG, favourite, and low priority", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "feature_room_list_sections") return true;
-                return false;
-            });
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
             const sections = viewModel.getSnapshot().sections;
@@ -643,10 +625,7 @@ describe("RoomListItemViewModel", () => {
 
         it("should mark the room current section as selected", () => {
             room.tags = { [customTag]: { order: 0 } };
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "feature_room_list_sections") return true;
-                return false;
-            });
+
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
             const sections = viewModel.getSnapshot().sections;
@@ -655,7 +634,6 @@ describe("RoomListItemViewModel", () => {
 
         it("should use custom section name from CustomSectionData", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.CustomSectionData")
                     return { [customTag]: { name: "My Custom Section", tag: customTag } };
                 return false;
@@ -671,10 +649,6 @@ describe("RoomListItemViewModel", () => {
             jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
                 if (setting === "RoomList.OrderedCustomSections") watchCallback = callback;
                 return "watcher-id";
-            });
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "feature_room_list_sections") return true;
-                return false;
             });
 
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });

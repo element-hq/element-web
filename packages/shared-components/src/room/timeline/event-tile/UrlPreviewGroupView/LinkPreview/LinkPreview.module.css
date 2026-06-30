@@ -6,20 +6,22 @@
  */
 
 button.preview {
-    background: #fff;
+    background-color: #fff;
 }
 
 .preview {
     display: flex;
     position: relative;
-    width: 100%;
+    max-width: 100%;
+    width: 478px;
     height: 200px;
     background-size: cover;
     background-position: center;
     border: none;
     padding: 0;
     > img {
-        width: 100%;
+        height: 200px;
+        width: 478px;
         object-fit: cover;
     }
     .playButton[data-kind="primary"] {
@@ -37,9 +39,10 @@ button.preview {
 }
 
 .container {
-    max-width: 478px;
+    max-width: 100%;
+    width: 478px;
     display: flex;
-    border: 1px solid var(--cpd-color-bg-subtle-secondary);
+    border: 1px solid var(--cpd-color-border-interactive-primary);
     border-radius: 12px; /* Get radius from cpd */
     flex-direction: column;
     color: var(--cpd-color-gray-900);
@@ -87,27 +90,18 @@ button.preview {
 
     .title,
     .description {
-        display: inline-block;
+        display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
         white-space: normal;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        margin: 0;
     }
 
     .title {
-        display: inline-block;
-        line-clamp: 2;
-        -webkit-line-clamp: 2;
         color: var(--cpd-color-text-primary);
         text-decoration-line: none;
-    }
-
-    .description {
-        margin: 0;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        overflow: hidden;
     }
 
     .siteName {

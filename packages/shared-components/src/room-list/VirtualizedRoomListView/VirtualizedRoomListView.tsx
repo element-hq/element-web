@@ -20,7 +20,7 @@ import {
 } from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
-import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListSectionHeaderView, RoomListStickySectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
@@ -391,6 +391,19 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     );
 
     /**
+     * Render the pinned "current section" overlay header for the grouped list.
+     * Presentational only — the real header rows in the list stay the accessible, focusable
+     * controls. See {@link RoomListStickySectionHeaderView}.
+     */
+    const renderStickyHeader = useCallback(
+        (groupIndex: number, headerId: string, context: VirtualizedListContext<Context>): ReactNode => {
+            const sectionHeaderVM = context.context.vm.getSectionHeaderViewModel(headerId);
+            return <RoomListStickySectionHeaderView key={headerId} vm={sectionHeaderVM} isFirst={groupIndex === 0} />;
+        },
+        [],
+    );
+
+    /**
      * Get the key for a room item
      * Since we're using virtualization, items are always room ID strings
      */
@@ -431,7 +444,10 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
      */
     const scrollIntoViewOnChange = useCallback(
         (params: {
-            context: VirtualizedListContext<{ spaceId: string; filterKeys: FilterKey[] | undefined }>;
+            context: VirtualizedListContext<{
+                spaceId: string;
+                filterKeys: FilterKey[] | undefined;
+            }>;
         }): ScrollIntoViewLocation | null | undefined | false => {
             const { spaceId, filterKeys } = params.context.context;
             const shouldScrollIndexIntoView =
@@ -458,7 +474,11 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         const sectionIndex = sections.findIndex((s) => s.id === scrollToSectionTag);
         if (sectionIndex === -1) return;
         const flatIndex = sections.slice(0, sectionIndex).reduce((acc, s) => acc + s.roomIds.length + 1, 0);
-        virtuosoHandleRef.current?.scrollIntoView({ index: flatIndex, align: "start", behavior: "auto" });
+        virtuosoHandleRef.current?.scrollIntoView({
+            index: flatIndex,
+            align: "start",
+            behavior: "auto",
+        });
     }, [scrollToSectionTag, sections]);
 
     // Give the view model an imperative handle to scroll an item index into view (e.g. when the
@@ -567,6 +587,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 getGroupHeaderComponent={getGroupHeaderComponent}
                 getItemComponent={getItemComponentForGroupedList}
                 isGroupHeaderFocusable={isGroupHeaderFocusable}
+                renderStickyHeader={renderStickyHeader}
             />
         </DragDropProvider>
     );

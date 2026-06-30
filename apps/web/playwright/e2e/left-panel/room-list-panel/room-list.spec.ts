@@ -6,7 +6,7 @@
  */
 
 import { type Page } from "@playwright/test";
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
@@ -26,6 +26,9 @@ test.describe("Room list", () => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");
         await rejectToast(page, "Notifications");
+
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
 
         // focus the user menu to avoid to have hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
@@ -71,11 +74,11 @@ test.describe("Room list", () => {
 
         test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
-            const roomItem = roomListView.getByRole("option", { name: "Open room room29" });
+            let roomItem = roomListView.getByRole("option", { name: "Open room room29" });
             await roomItem.hover();
 
             await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
-            const roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
+            let roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page).toMatchScreenshot("room-list-item-open-more-options.png");
 
@@ -83,7 +86,9 @@ test.describe("Room list", () => {
             await page.getByRole("menuitemcheckbox", { name: "Favourited" }).click();
 
             // Check that the room is favourited
+            roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
             await roomItem.hover();
+            roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
             await roomItemMenu.click();
             await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).toBeChecked();
             // It should show the invite dialog
@@ -296,13 +301,14 @@ test.describe("Room list", () => {
             // @ts-ignore Visibility enum is not accessible
             await app.client.createRoom({ name: "low priority room", visibility: "public" });
             const roomListView = getRoomList(page);
-            const publicRoom = roomListView.getByRole("option", { name: "low priority room" });
+            let publicRoom = roomListView.getByRole("option", { name: "low priority room" });
 
             // Make room low priority
             await publicRoom.click({ button: "right" });
             await page.getByRole("menuitemcheckbox", { name: "Low priority" }).click();
 
             // Should have low priority decoration
+            publicRoom = roomListView.getByRole("gridcell", { name: "low priority room" });
             await expect(publicRoom.locator(".mx_RoomAvatarView_icon")).toHaveAccessibleName(
                 "This is a low priority room",
             );
