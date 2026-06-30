@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type OAuth2 } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { createContext } from "react";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -50,7 +50,6 @@ export class SdkContextClass {
     // It is only safe to set this once, as updating this value will NOT notify components using
     // this Context.
     public client?: MatrixClient;
-    public oauth?: OAuth2;
 
     // All protected fields to make it easier to derive test stores
     protected _WidgetPermissionStore?: WidgetPermissionStore;

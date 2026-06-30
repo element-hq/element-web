@@ -1177,10 +1177,10 @@ describe("<SessionManagerTab />", () => {
         describe("for an OIDC-aware server", () => {
             beforeEach(() => {
                 // just do an ugly mock here to avoid mocking initialisation
-                const mockAuth = {
-                    metadata: { account_management_uri: "https://issuer.org/account" },
-                };
-                sdkContext.oauth = mockAuth as any;
+                mockClient.getAuthMetadata.mockResolvedValue({
+                    ...makeDelegatedAuthMetadata(),
+                    account_management_uri: "https://issuer.org/account",
+                } as any);
             });
 
             // signing out the current device works as usual

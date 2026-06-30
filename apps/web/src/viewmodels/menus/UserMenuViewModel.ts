@@ -25,11 +25,7 @@ import { clearUserStatus } from "../../utils/userStatus";
 const AVATAR_PX = 88;
 
 export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
-    private static computeSnapshot(
-        client: MatrixClient,
-        isPanelCollapsed: boolean,
-        accountManagementEndpoint?: string,
-    ): UserMenuSnapshot {
+    private static computeSnapshot(client: MatrixClient, isPanelCollapsed: boolean): UserMenuSnapshot {
         const hasHomePage = !!getHomePageUrl(SdkConfig.get(), client);
         const isAuthenticated = !client.isGuest();
         const userId = client.getSafeUserId();
@@ -42,7 +38,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             displayName,
             avatarUrl,
             expanded: !isPanelCollapsed,
-            manageAccountHref: accountManagementEndpoint,
+            manageAccountHref: undefined, // loaded async
             showAvatar: isAuthenticated,
             userStatus: OwnProfileStore.instance.userStatus,
             actions: {
@@ -61,10 +57,10 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         private readonly dispatcher: MatrixDispatcher,
         private readonly client: MatrixClient,
         isPanelCollapsed: boolean,
-        accountManagementEndpoint?: string,
     ) {
-        super(undefined, UserMenuViewModel.computeSnapshot(client, isPanelCollapsed, accountManagementEndpoint));
+        super(undefined, UserMenuViewModel.computeSnapshot(client, isPanelCollapsed));
         OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
+        this.loadAuthMetadata();
     }
 
     public dispose(): void {
@@ -137,4 +133,9 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             logger.warn("Failed to clear user status", err);
         });
     };
+
+    private async loadAuthMetadata(): Promise<void> {
+        const authMetadata = await this.client.getAuthMetadata().catch(() => {});
+        this.snapshot.merge({ manageAccountHref: authMetadata?.account_management_uri });
+    }
 }

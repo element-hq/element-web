@@ -795,13 +795,10 @@ describe("Lifecycle", () => {
             });
 
             it("should not try to create a token refresher without a refresh token", async () => {
-                await setLoggedIn(credentials);
+                const cli = await setLoggedIn(credentials);
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).toHaveFetchedTimes(
-                    0,
-                    `${delegatedAuthConfig.issuer}.well-known/openid-configuration`,
-                );
+                expect(cli.http.opts.tokenRefreshFunction).toBeUndefined();
             });
 
             it("should not try to create a token refresher without a deviceId", async () => {

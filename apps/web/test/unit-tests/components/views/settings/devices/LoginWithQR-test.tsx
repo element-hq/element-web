@@ -330,12 +330,12 @@ describe("<LoginWithQR />", () => {
             test("should handle qr login", async () => {
                 fetchMock.get("https://hs/_matrix/client/versions", {
                     unstable_features: {},
-                    versions: ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"],
+                    versions: ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9", "v1.15"],
                 });
                 const authMetadata = makeDelegatedAuthMetadata("https://auth.org/", [
                     OAuthGrantType.DeviceAuthorization,
                 ]);
-                fetchMock.get("https://hs/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadata);
+                fetchMock.get("https://hs/_matrix/client/v1/auth_metadata", authMetadata);
                 fetchMock.post(authMetadata.registration_endpoint!, {
                     client_id: "!client_id!",
                 });

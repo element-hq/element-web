@@ -45,9 +45,12 @@ describe("UserMenuViewModel", () => {
     });
 
     it("should show a link for account management", async () => {
-        const vm = new UserMenuViewModel(dispatcher, client, true, "https://example.org/");
+        client.getAuthMetadata.mockResolvedValue({ account_management_uri: "https://example.org/" } as any);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
-        expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
+        await waitFor(() => {
+            expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
+        });
     });
 
     it("should generate a menu options for a guest", () => {

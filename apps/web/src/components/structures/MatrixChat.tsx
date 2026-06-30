@@ -1543,7 +1543,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private onLoggedIn(): void {
         this.stores.client = MatrixClientPeg.safeGet();
-        this.stores.oauth = MatrixClientPeg.oauth ?? undefined;
         StorageManager.tryPersistStorage();
 
         // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the

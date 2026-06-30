@@ -407,13 +407,7 @@ const SpacePanel: React.FC = () => {
     const newRoomListEnabled = useSettingValue("feature_new_room_list");
 
     const userMenuVm = useCreateAutoDisposedViewModel(
-        () =>
-            new UserMenuViewModel(
-                defaultDispatcher,
-                client,
-                isPanelCollapsed,
-                sdkContext.oauth?.metadata.account_management_uri,
-            ),
+        () => new UserMenuViewModel(defaultDispatcher, client, isPanelCollapsed),
     );
 
     useDispatcher(defaultDispatcher, (payload) => {

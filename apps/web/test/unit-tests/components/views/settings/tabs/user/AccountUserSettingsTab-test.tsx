@@ -72,6 +72,8 @@ describe("<AccountUserSettingsTab />", () => {
             getThreePids: jest.fn(),
             getIdentityServerUrl: jest.fn(),
             deleteThreePid: jest.fn(),
+            getMediaConfig: jest.fn(),
+            getAuthMetadata: jest.fn().mockRejectedValue(new Error("not implemented")),
         });
 
         mockClient.getCapabilities.mockResolvedValue({});
@@ -99,7 +101,9 @@ describe("<AccountUserSettingsTab />", () => {
 
     it("show account management link in expected format", async () => {
         const accountManagementLink = "https://id.server.org/my-account";
-        stores.oauth = { metadata: { account_management_uri: accountManagementLink } } as any;
+        mockClient.getAuthMetadata.mockResolvedValue({
+            account_management_uri: accountManagementLink,
+        } as any);
 
         render(getComponent());
 
@@ -123,7 +127,9 @@ describe("<AccountUserSettingsTab />", () => {
             );
             // account is managed externally when we have delegated auth configured
             const accountManagementLink = "https://id.server.org/my-account";
-            stores.oauth = { metadata: { account_management_uri: accountManagementLink } } as any;
+            mockClient.getAuthMetadata.mockResolvedValue({
+                account_management_uri: accountManagementLink,
+            } as any);
             render(getComponent());
 
             await flushPromises();

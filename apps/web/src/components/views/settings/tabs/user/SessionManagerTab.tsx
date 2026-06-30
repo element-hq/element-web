@@ -32,8 +32,8 @@ import { type FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { getManageDeviceUrl } from "../../../../../utils/oauth/urls.ts";
+import { SDKContext } from "../../../../../contexts/SDKContext";
 import Spinner from "../../../elements/Spinner";
-import { SDKContext } from "../../../../../contexts/SDKContext.ts";
 
 // We import `LoginWithQR` asynchronously to avoid importing the entire Rust Crypto WASM into the main bundle.
 const LoginWithQR = lazy(() => import("../../../auth/LoginWithQR"));
@@ -153,9 +153,14 @@ const SessionManagerTab: React.FC<{
      * delegated auth provider.
      * See https://github.com/matrix-org/matrix-spec-proposals/pull/3824
      */
-    const accountManagementEndpoint = sdkContext.oauth?.metadata.account_management_uri;
-    const accountManagementActionsSupported = sdkContext.oauth?.metadata.account_management_actions_supported;
-    const disableMultipleSignout = !!accountManagementEndpoint;
+    const accountManagement = useAsyncMemo(async () => {
+        const authMetadata = await matrixClient.getAuthMetadata().catch(() => {});
+        return {
+            endpoint: authMetadata?.account_management_uri,
+            actionsSupported: authMetadata?.account_management_actions_supported,
+        };
+    }, [matrixClient]);
+    const disableMultipleSignout = !!accountManagement?.endpoint;
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
     const isCrossSigningReady = useAsyncMemo(
@@ -223,8 +228,8 @@ const SessionManagerTab: React.FC<{
     const { onSignOutCurrentDevice, onSignOutOtherDevices, signingOutDeviceIds } = useSignOut(
         matrixClient,
         onSignoutResolvedCallback,
-        accountManagementEndpoint,
-        accountManagementActionsSupported,
+        accountManagement?.endpoint,
+        accountManagement?.actionsSupported,
     );
 
     useEffect(
@@ -289,8 +294,8 @@ const SessionManagerTab: React.FC<{
                     onSignOutCurrentDevice={onSignOutCurrentDevice}
                     signOutAllOtherSessions={signOutAllOtherSessions}
                     otherSessionsCount={otherSessionsCount}
-                    accountManagementEndpoint={accountManagementEndpoint}
-                    accountManagementActionsSupported={accountManagementActionsSupported}
+                    accountManagementEndpoint={accountManagement?.endpoint}
+                    accountManagementActionsSupported={accountManagement?.actionsSupported}
                 />
                 {shouldShowOtherSessions && (
                     <SettingsSubsection
@@ -324,8 +329,8 @@ const SessionManagerTab: React.FC<{
                             setPushNotifications={setPushNotifications}
                             ref={filteredDeviceListRef}
                             supportsMSC3881={supportsMSC3881}
-                            accountManagementEndpoint={accountManagementEndpoint}
-                            accountManagementActionsSupported={accountManagementActionsSupported}
+                            accountManagementEndpoint={accountManagement?.endpoint}
+                            accountManagementActionsSupported={accountManagement?.actionsSupported}
                         />
                     </SettingsSubsection>
                 )}

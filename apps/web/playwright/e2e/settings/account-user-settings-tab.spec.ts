@@ -101,7 +101,6 @@ test.describe("Account user settings tab", () => {
                 };
 
                 await page.route("**/_matrix/client/v1/auth_metadata", authMetadataHandler);
-                await page.route("**/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadataHandler);
                 await runFixture(page);
             },
         });
