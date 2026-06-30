@@ -324,6 +324,15 @@ export const FilteredDeviceList = ({
                 {selectedDeviceIds.length ? (
                     <>
                         <AccessibleButton
+                            data-testid="cancel-selection-cta"
+                            kind="content_inline"
+                            disabled={isSigningOut}
+                            onClick={() => setSelectedDeviceIds([])}
+                            className="mx_FilteredDeviceList_headerButton"
+                        >
+                            {_t("action|cancel")}
+                        </AccessibleButton>
+                        <AccessibleButton
                             data-testid="sign-out-selection-cta"
                             kind="danger_inline"
                             disabled={isSigningOut}
@@ -332,15 +341,6 @@ export const FilteredDeviceList = ({
                         >
                             {isSigningOut && <Spinner size={16} />}
                             {_t("settings|sessions|sign_out_n_sessions", { count: selectedDeviceIds.length })}
-                        </AccessibleButton>
-                        <AccessibleButton
-                            data-testid="cancel-selection-cta"
-                            kind="content_inline"
-                            disabled={isSigningOut}
-                            onClick={() => setSelectedDeviceIds([])}
-                            className="mx_FilteredDeviceList_headerButton"
-                        >
-                            {_t("action|cancel")}
                         </AccessibleButton>
                     </>
                 ) : (
