@@ -123,15 +123,6 @@ export class NotificationBadgeViewModel
     }
 
     public setNotificationData(data: NotificationBadgeData): void {
-        if (
-            this.props.symbol === data.symbol &&
-            this.props.count === data.count &&
-            this.props.level === data.level &&
-            this.props.knocked === data.knocked
-        ) {
-            return;
-        }
-
         this.props = {
             ...this.props,
             ...data,
@@ -140,8 +131,6 @@ export class NotificationBadgeViewModel
     }
 
     public setHideIfDot(hideIfDot: boolean): void {
-        if (!!this.props.hideIfDot === hideIfDot) return;
-
         this.props = {
             ...this.props,
             hideIfDot,
@@ -150,8 +139,6 @@ export class NotificationBadgeViewModel
     }
 
     public setForceDot(forceDot: boolean): void {
-        if (!!this.props.forceDot === forceDot) return;
-
         this.props = {
             ...this.props,
             forceDot,
@@ -160,8 +147,6 @@ export class NotificationBadgeViewModel
     }
 
     public setHideBold(hideBold: boolean): void {
-        if (!!this.props.hideBold === hideBold) return;
-
         this.props = {
             ...this.props,
             hideBold,
@@ -170,8 +155,6 @@ export class NotificationBadgeViewModel
     }
 
     public setShowUnsentTooltip(showUnsentTooltip: boolean): void {
-        if (!!this.props.showUnsentTooltip === showUnsentTooltip) return;
-
         this.props = {
             ...this.props,
             showUnsentTooltip,
@@ -184,21 +167,13 @@ export class NotificationBadgeViewModel
         ariaLabel,
         tabIndex,
     }: Pick<NotificationBadgeViewModelProps, "onClick" | "ariaLabel" | "tabIndex">): void {
-        if (this.props.onClick === onClick && this.props.ariaLabel === ariaLabel && this.props.tabIndex === tabIndex) {
-            return;
-        }
-
         this.props = {
             ...this.props,
             onClick,
             ariaLabel,
             tabIndex,
         };
-        this.snapshot.merge({
-            isClickable: !!onClick,
-            ariaLabel,
-            tabIndex,
-        });
+        this.updateSnapshotFromProps();
     }
 
     public onClick: MouseEventHandler<HTMLButtonElement> = (event) => {
