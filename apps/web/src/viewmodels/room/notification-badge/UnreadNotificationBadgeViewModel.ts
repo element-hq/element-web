@@ -73,6 +73,8 @@ export class UnreadNotificationBadgeViewModel
             isKnocked: false,
             badgeType: getBadgeType(level, displaySymbol, props.forceDot),
             symbol: displaySymbol,
+            isClickable: false,
+            showUnsentTooltip: false,
         };
     };
 
