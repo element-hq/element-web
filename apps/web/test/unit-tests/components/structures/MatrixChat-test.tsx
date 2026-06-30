@@ -199,6 +199,7 @@ describe("<MatrixChat />", () => {
         logout: jest.fn(),
         getDeviceId: jest.fn(),
         forget: () => Promise.resolve(),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
