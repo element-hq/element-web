@@ -10,7 +10,6 @@ import { type Route } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { getSampleFilePath } from "../../sample-files";
-import { OAuthGrantType } from "matrix-js-sdk/src";
 
 const USER_NAME = "Bob";
 const USER_NAME_NEW = "Alice";
