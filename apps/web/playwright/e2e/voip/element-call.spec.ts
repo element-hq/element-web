@@ -336,6 +336,22 @@ test.describe("Element Call", () => {
             expect(hash.get("skipLobby")).toEqual("true");
         });
 
+        test("should start a voice call in PiP", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+            await page.getByRole("button", { name: "Voice call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            await expect(frameUrlStr).toBeDefined();
+
+            // The call should be presented in the picture-in-picture container, right in the room we started it
+            // from, rather than taking over the room view.
+            const pipContainer = page.getByTestId("widget-pip-container");
+            await expect(pipContainer).toBeVisible();
+        });
+
         test("should be able to join a call in progress", async ({ page, user, bot, room, app }) => {
             await app.viewRoomById(room.roomId);
             await expect(page.getByText("Bob joined the room")).toBeVisible();
