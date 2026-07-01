@@ -19,7 +19,8 @@ import {
     mockClientMethodsDevice,
     mockPlatformPeg,
 } from "../../../../../../test-utils";
-import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
 import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
@@ -41,7 +42,7 @@ describe("<SecurityUserSettingsTab />", () => {
         setIgnoredUsers,
     });
 
-    const sdkContext = new SdkContextClass();
+    const sdkContext = new SDKContextClass();
     sdkContext.client = mockClient;
 
     const getComponent = () => (

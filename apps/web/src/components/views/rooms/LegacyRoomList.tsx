@@ -69,7 +69,7 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu.tsx";
 import ExtraTile from "./ExtraTile.tsx";
 import RoomSublist, { type IAuxButtonProps } from "./RoomSublist.tsx";
-import { SdkContextClass } from "../../../contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts.ts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager.ts";
 import AccessibleButton from "../elements/AccessibleButton.tsx";
@@ -462,7 +462,7 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
 
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        SDKContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         SpaceStore.instance.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
         LegacyCallHandler.instance.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
@@ -473,7 +473,7 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
         SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
-        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        SDKContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         LegacyCallHandler.instance.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
     }
 
@@ -483,14 +483,14 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
 
     private onRoomViewStoreUpdate = (): void => {
         this.setState({
-            currentRoomId: SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined,
+            currentRoomId: SDKContextClass.instance.roomViewStore.getRoomId() ?? undefined,
         });
     };
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
             if (!currentRoomId) return;
             const room = this.getRoomDelta(currentRoomId, viewRoomDeltaPayload.delta, viewRoomDeltaPayload.unread);
             if (room) {

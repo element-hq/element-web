@@ -23,6 +23,7 @@ import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomCon
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
 import type LegacyCallHandler from "../../../src/LegacyCallHandler";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
 
 describe("useRoomCall", () => {
@@ -58,7 +59,7 @@ describe("useRoomCall", () => {
             on: jest.fn(),
             off: jest.fn(),
         };
-        jest.spyOn(SdkContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
+        jest.spyOn(SDKContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
             callHandler as unknown as LegacyCallHandler,
         );
     });

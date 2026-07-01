@@ -56,7 +56,7 @@ import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
-import { SdkContextClass } from "./contexts/SDKContext";
+import { SDKContextClass } from "./contexts/SDKContextClass";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oidc/authorize";
 import { getOidcErrorMessage } from "./utils/oidc/error";
@@ -1093,7 +1093,7 @@ async function startMatrixClient(
     dis.dispatch({ action: Action.WillStartClient }, true);
 
     // reset things first just in case
-    SdkContextClass.instance.typingStore.reset();
+    SDKContextClass.instance.typingStore.reset();
     ToastStore.sharedInstance().reset();
 
     DialogOpener.instance.prepare(client);
@@ -1231,7 +1231,7 @@ export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
     LegacyCallHandler.instance.stop();
     UserActivity.sharedInstance().stop();
-    SdkContextClass.instance.typingStore.reset();
+    SDKContextClass.instance.typingStore.reset();
     Presence.stop();
     ActiveWidgetStore.instance.stop();
     IntegrationManagers.sharedInstance().stopWatching();

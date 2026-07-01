@@ -27,9 +27,10 @@ import {
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { type ButtonEvent } from "../../../../../src/components/views/elements/AccessibleButton";
-import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg.ts";
-import { TestSdkContext } from "../../../TestSdkContext.ts";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -50,7 +51,7 @@ describe("<Pill>", () => {
 
     const renderPill = (props: PillProps): void => {
         const cli = MatrixClientPeg.safeGet();
-        const mockSdkContext = new TestSdkContext();
+        const mockSdkContext = new TestSDKContext();
         mockSdkContext.client = cli;
 
         const withDefault = {
@@ -78,7 +79,7 @@ describe("<Pill>", () => {
 
     beforeEach(() => {
         client = mocked(stubClient());
-        SdkContextClass.instance.client = client;
+        SDKContextClass.instance.client = client;
         DMRoomMap.makeShared(client);
         room1 = new Room(room1Id, client, user1Id);
         room1.name = "Room 1";

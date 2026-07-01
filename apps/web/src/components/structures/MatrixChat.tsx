@@ -118,7 +118,8 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
 import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
@@ -240,14 +241,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private dispatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
-    private readonly stores: SdkContextClass;
+    private readonly stores: SDKContextClass;
     private loadSessionAbortController = new AbortController();
 
     private sessionLoadStarted = false;
 
     public constructor(props: IProps) {
         super(props);
-        this.stores = SdkContextClass.instance;
+        this.stores = SDKContextClass.instance;
         this.stores.constructEagerStores();
 
         this.state = {

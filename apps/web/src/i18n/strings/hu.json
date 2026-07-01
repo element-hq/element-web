@@ -1572,7 +1572,6 @@
         "notifications": "Engedélyezze az értesítési panelt a szoba fejlécében",
         "render_reaction_images": "Egyéni képek megjelenítése reakciókban",
         "render_reaction_images_description": "Néha „egyéni emodzsiknak” nevezik.",
-        "room_list_sections": "Szobalista szakaszok",
         "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
         "sliding_sync_disabled_notice": "Jelentkezzen be újra a letiltáshoz",

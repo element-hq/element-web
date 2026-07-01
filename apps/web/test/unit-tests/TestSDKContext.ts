@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SdkContextClass } from "../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass";
 import { type PosthogAnalytics } from "../../src/PosthogAnalytics";
 import { type SlidingSyncManager } from "../../src/SlidingSyncManager";
 import { type RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
@@ -18,10 +18,10 @@ import { type WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermi
 import type WidgetStore from "../../src/stores/WidgetStore";
 
 /**
- * A class which provides the same API as SdkContextClass but adds additional unsafe setters which can
+ * A class which provides the same API as SDKContextClass but adds additional unsafe setters which can
  * replace individual stores. This is useful for tests which need to mock out stores.
  */
-export class TestSdkContext extends SdkContextClass {
+export class TestSDKContext extends SDKContextClass {
     declare public _RightPanelStore?: RightPanelStore;
     declare public _RoomNotificationStateStore?: RoomNotificationStateStore;
     declare public _RoomViewStore?: RoomViewStore;
