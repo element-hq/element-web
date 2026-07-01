@@ -73,7 +73,7 @@ describe("MessageComposerUrlPreview", () => {
         const { getByText } = wrapComponent(<MessageComposerUrlPreviewWrapper content="https://example.org" />);
         await waitFor(
             () => {
-                expect(getByText("Example.org"));
+                expect(getByText("Example.org")).toBeVisible();
             },
             { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
         );
@@ -91,7 +91,7 @@ describe("MessageComposerUrlPreview", () => {
         );
         await waitFor(
             () => {
-                expect(getByText("Fake preview"));
+                expect(getByText("Fake preview")).toBeVisible();
             },
             { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
         );
