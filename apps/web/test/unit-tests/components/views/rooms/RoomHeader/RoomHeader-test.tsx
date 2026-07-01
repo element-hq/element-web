@@ -612,7 +612,7 @@ describe("RoomHeader", () => {
         it("clicking the join button of an ongoing video call joins as a video call", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
-            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Video,true));
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Video, true));
             // Avoid the "pin the widget" path so the join button places the call.
             jest.spyOn(WidgetLayoutStore.instance, "canAddToContainer").mockReturnValue(false);
             render(<RoomHeader room={room} />, getWrapper());
@@ -626,7 +626,7 @@ describe("RoomHeader", () => {
         it("clicking the join button of an ongoing voice call joins as a voice call", async () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
-            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice,true));
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice, true));
             // Avoid the "pin the widget" path so the join button places the call.
             jest.spyOn(WidgetLayoutStore.instance, "canAddToContainer").mockReturnValue(false);
             render(<RoomHeader room={room} />, getWrapper());
