@@ -21,6 +21,7 @@ import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
+import { Layout } from "../../settings/enums/Layout";
 
 /**
  * Minimal static VM for DateSeparatorView — no jump-to menu, label only.
@@ -44,14 +45,27 @@ class StaticDateSeparatorViewModel implements DateSeparatorViewSnapshot {
 interface NewTimelinePanelProps {
     room: Room;
     highlightedEventId?: string;
+    /**
+     * The message layout to render tiles with. Reactivity is handled upstream:
+     * RoomView watches the `layout` setting and re-renders down through
+     * TimelinePanel, so a settings change flows in as a new prop here.
+     */
+    layout?: Layout;
 }
 
 /**
  * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
  */
-export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelProps): JSX.Element {
+export function NewTimelinePanel({ room, highlightedEventId, layout }: NewTimelinePanelProps): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
+
+    // IRC layout isn't supported in the new timeline yet: it needs the
+    // IRCTimelineProfileResizer and the `mx_IRCLayout` container wiring that the
+    // legacy MessagePanel provides. Fall back to Modern (Group) until that lands.
+    // Modern and Message Bubbles are fully supported.
+    // TODO: support IRC layout (profile-name resizer + container class).
+    const effectiveLayout = layout === Layout.IRC ? Layout.Group : (layout ?? Layout.Group);
 
     // RoomTimelineViewModel's constructor is intentionally side-effect-free
     // (no listener registration, no load() call) so that React's StrictMode
@@ -121,6 +135,8 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                                 key={item.key}
                                 mxEvent={findEventById(room, item.key)!}
                                 continuation={item.continuation}
+                                lastInSection={item.lastInSection}
+                                layout={effectiveLayout}
                                 isSelectedEvent={highlightedId !== null && item.key === highlightedId}
                             />
                         );
@@ -128,7 +144,7 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                         return null;
                 }
             },
-        [room, highlightedId],
+        [room, highlightedId, effectiveLayout],
     );
 
     return (

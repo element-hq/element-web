@@ -1409,6 +1409,7 @@ export class RoomTimelineViewModel
                 key: eventId,
                 kind: "event",
                 continuation: this.getCachedContinuation(eventId, prevEvent, event),
+                lastInSection: false, // computed in the post-pass below, once the next event is known
             });
 
             // Insert the read-marker item directly after the event it belongs to.
@@ -1421,6 +1422,17 @@ export class RoomTimelineViewModel
             }
 
             prevEvent = event;
+        }
+
+        // lastInSection: an event closes its continuation group when the next
+        // event does not continue from it (or it is the last event). This mirrors
+        // the grouping MessagePanel derives for the legacy timeline; bubble layout
+        // rounds a group's closing corner off it. Mutating the filtered references
+        // mutates the originals in `items` (same objects). Recomputed each build —
+        // it only drives border-radius, so a flip has no height/scroll impact.
+        const eventItems = items.filter((it): it is Extract<TimelineItem, { kind: "event" }> => it.kind === "event");
+        for (let i = 0; i < eventItems.length; i++) {
+            eventItems[i].lastInSection = i === eventItems.length - 1 || !eventItems[i + 1].continuation;
         }
 
         // Stash for the caller to log alongside batch/rebuild context.

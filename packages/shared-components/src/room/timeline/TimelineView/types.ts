@@ -23,6 +23,14 @@ export interface EventTimelineItem {
     kind: "event";
     /** Whether this event continues unbroken from the previous sender (suppresses avatar/name). */
     continuation: boolean;
+    /**
+     * Whether this event closes its continuation group — i.e. the next event does
+     * not continue from it (different sender, a gap, or a separator follows), or it
+     * is the last event. Bubble layout uses this to round a message group's closing
+     * corner. Affects border-radius only (no height change), so — unlike
+     * `continuation` — it is recomputed on every build and never cached.
+     */
+    lastInSection: boolean;
 }
 
 export interface DateSeparatorTimelineItem {

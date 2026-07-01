@@ -29,6 +29,16 @@ Please see LICENSE files in the repository root for full details.
  * dedicated media / reply designs.
  */
 .mx_NewTimelinePanel {
+    /* EventTile renders each tile as an <li>. The legacy timeline wraps its tiles
+       in <ol class="mx_RoomView_MessageList"> (ScrollPanel), whose
+       `list-style-type: none` inherits down to suppress the default markers. The
+       virtualized timeline renders each <li> inside its own row <div> with no <ol>
+       ancestor, so the markers reappear (bullets down the left margin). Set the
+       inherited property here to mirror the legacy reset; markdown lists inside
+       message bodies still override it with their own disc/decimal (see
+       _EventTile.pcss). */
+    list-style-type: none;
+
     /* Matches SIZE_NORMAL_LANDSCAPE.w in src/settings/enums/ImageSize.ts so the
        fallback box lines up with normally-sized thumbnails. */
     --mx-image-fallback-width: 324px;

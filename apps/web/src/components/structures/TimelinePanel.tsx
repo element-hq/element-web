@@ -1857,6 +1857,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                         key={room.roomId}
                         room={room}
                         highlightedEventId={this.props.highlightedEventId}
+                        layout={this.props.layout}
                     />
                 );
             }
