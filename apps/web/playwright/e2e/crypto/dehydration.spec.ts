@@ -8,7 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { createBot, enableKeyBackup, logIntoElement } from "./utils.ts";
+import {
+    autoJoin,
+    createBot,
+    createSharedEncryptedRoomWithUser,
+    enableKeyBackup,
+    logIntoElement,
+    logIntoElementAndVerify,
+    logOutOfElement,
+} from "./utils.ts";
 import { type Client } from "../../pages/client.ts";
 import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
 
@@ -110,6 +118,43 @@ test.describe("Dehydration", () => {
         await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
 
         await expectDehydratedDeviceDisabled(app);
+    });
+
+    test("Can read messages sent while logged out", async ({ page, user: credentials, app, bot: bob }) => {
+        const recoveryKey =
+            await test.step("Alice sets up cross-signing and recovery => a dehydrated device is created", async () => {
+                // Create an identity, then set up recovery, to create a dehydrated device.
+                await app.client.bootstrapCrossSigning(credentials);
+                const recoveryKey = await enableKeyBackup(app);
+
+                await expectDehydratedDeviceEnabled(app);
+                return recoveryKey;
+            });
+
+        const testRoomId = await test.step("Bob and Alice make a shared room", async () => {
+            await autoJoin(bob);
+
+            // create an encrypted room, and wait for Bob to join it.
+            const testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials.userId);
+
+            // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+            await bob.awaitRoomMembership(testRoomId);
+            return testRoomId;
+        });
+
+        await test.step("Alice logs out", async () => {
+            await logOutOfElement(page);
+        });
+
+        await test.step("Bob sends a message", async () => {
+            await bob.sendMessage(testRoomId, "test encrypted 1");
+        });
+
+        await test.step("Alice logs back in, and should be able to view Bob's message", async () => {
+            await logIntoElementAndVerify(page, credentials, recoveryKey);
+            await app.viewRoomById(testRoomId);
+            await expect(page.getByText("test encrypted 1")).toBeVisible();
+        });
     });
 });
 
