@@ -6,9 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -41,7 +40,6 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         super(defaultDispatcher);
 
         SettingsStore.monitorSetting("breadcrumb_rooms", null);
-        SettingsStore.monitorSetting("breadcrumbs", null);
     }
 
     public static get instance(): BreadcrumbsStore {
@@ -69,12 +67,8 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
     protected async onAction(payload: SettingUpdatedPayload | ViewRoomPayload | JoinRoomPayload): Promise<void> {
         if (!this.matrixClient) return;
-        if (payload.action === Action.SettingUpdated) {
-            if (payload.settingName === "breadcrumb_rooms") {
-                await this.updateRooms();
-            } else if (payload.settingName === "breadcrumbs") {
-                await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
-            }
+        if (payload.action === Action.SettingUpdated && payload.settingName === "breadcrumb_rooms") {
+            await this.updateRooms();
         } else if (payload.action === Action.ViewRoom) {
             if (payload.auto_join && payload.room_id && !this.matrixClient.getRoom(payload.room_id)) {
                 // Queue the room instead of pushing it immediately. We're probably just
@@ -94,28 +88,17 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
     protected async onReady(): Promise<void> {
         await this.updateRooms();
-        await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
 
         if (this.matrixClient) {
-            this.matrixClient.on(RoomEvent.MyMembership, this.onMyMembership);
             this.matrixClient.on(ClientEvent.Room, this.onRoom);
         }
     }
 
     protected async onNotReady(): Promise<void> {
         if (this.matrixClient) {
-            this.matrixClient.removeListener(RoomEvent.MyMembership, this.onMyMembership);
             this.matrixClient.removeListener(ClientEvent.Room, this.onRoom);
         }
     }
-
-    private onMyMembership = async (room: Room): Promise<void> => {
-        // Only turn on breadcrumbs is the user hasn't explicitly turned it off again.
-        const settingValueRaw = SettingsStore.getValue("breadcrumbs", null, /*excludeDefault=*/ true);
-        if (this.meetsRoomRequirement && isNullOrUndefined(settingValueRaw)) {
-            await SettingsStore.setValue("breadcrumbs", null, SettingLevel.ACCOUNT, true);
-        }
-    };
 
     private onRoom = async (room: Room): Promise<void> => {
         const waitingRoom = this.waitingRooms.find((r) => r.roomId === room.roomId);
