@@ -761,8 +761,8 @@ importers:
         specifier: ^7.12.7
         version: 7.29.7(@babel/core@7.29.7)
       '@element-hq/element-call-embedded':
-        specifier: 0.20.1
-        version: 0.20.1
+        specifier: 0.20.2
+        version: 0.20.2
       '@element-hq/element-web-playwright-common':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -2915,8 +2915,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-embedded@0.20.1':
-    resolution: {integrity: sha512-ODg2r7UmR8UjRpapLKbn6v1PS8fu/r58zdbvXMYaAlUEAC2f6L/9Moc9S4noG1+ARgWxY+m2vLmNDK9G9uFZYQ==}
+  '@element-hq/element-call-embedded@0.20.2':
+    resolution: {integrity: sha512-sAJHML6aBGOl8gHbCLmJabFiLZ82rKmFmVulq3P9rxD6mkO/6ph9IGI/XHjnpd/nqhns+iF6M61004APjY942g==}
 
   '@emnapi/core@1.10.0':
     resolution: {integrity: sha512-yq6OkJ4p82CAfPl0u9mQebQHKPJkY7WrIuk205cTYnYe+k2Z8YBh11FrbRG/H6ihirqcacOgl2BIO8oyMQLeXw==}
@@ -10641,7 +10641,7 @@ packages:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
   matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca}
+    resolution: {gitHosted: true, integrity: sha512-ggKfGdQ3IbFjWCZsebjmO9QHar6KlplUp12ERVJfJso/sTFMuK/x2KO284R61D9m3LUz42+9Ro+N0sBj3ORVpg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca}
     version: 41.8.0
     engines: {node: '>=22.0.0'}
 
@@ -15833,7 +15833,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-embedded@0.20.1': {}
+  '@element-hq/element-call-embedded@0.20.2': {}
 
   '@emnapi/core@1.10.0':
     dependencies:
