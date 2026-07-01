@@ -199,7 +199,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // prepend and our commit of it). `pendingCommitRef` holds the snapshot to
     // commit once those heights are seeded.
     const [sidecarItems, setSidecarItems] = useState<TimelineItem[]>([]);
-    const sidecarRef = useRef<HTMLDivElement | null>(null);
+    const sidecarRef = useRef<HTMLLIElement | null>(null);
     const pendingCommitRef = useRef<{ items: TimelineItem[]; firstItemIndex: number } | null>(null);
 
     const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -487,9 +487,9 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     useIsomorphicLayoutEffect(() => {
         if (sidecarItems.length === 0) return;
         const container = sidecarRef.current;
-        let measured = 0,
-            zeroH = 0,
-            total = 0;
+        let measured = 0;
+        let zeroH = 0;
+        let total = 0;
         const samples: number[] = [];
         if (container) {
             for (const node of container.querySelectorAll<HTMLElement>("[data-sidecar-key]")) {
@@ -671,13 +671,28 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             >
                 {/* Sizer height is written imperatively by the virtualizer via
                     containerRef (directDomUpdates); do NOT set height here. */}
-                <div ref={virtualizer.containerRef} style={{ width: "100%", position: "relative" }}>
+                {/* Semantic list: an <ol> of <li> rows, mirroring the legacy
+                    <ol class="mx_RoomView_MessageList"> so screen readers announce
+                    the timeline as a list of messages. `role="list"` is set
+                    explicitly because Safari+VoiceOver drop list semantics once
+                    `list-style: none` is applied (same reason ScrollPanel does it).
+                    Rows are absolutely positioned by the virtualizer; that's
+                    orthogonal to the list role. Tiles render as <div> (EventTile
+                    `as="div"`), so there is no nested <li>. */}
+                {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- explicit role survives list-style:none (see comment) */}
+                <ol
+                    ref={virtualizer.containerRef}
+                    className="mx_TimelineView_list"
+                    role="list"
+                    style={{ width: "100%", position: "relative", listStyle: "none", margin: 0 }}
+                >
                     {virtualItems.map((vi) => {
                         const item: TimelineItem | undefined = items[vi.index];
                         if (!item) return null;
                         return (
-                            <div
+                            <li
                                 key={vi.key}
+                                className="mx_TimelineView_tile"
                                 data-index={vi.index}
                                 data-key={item.key}
                                 ref={virtualizer.measureElement}
@@ -692,6 +707,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                                     left: 0,
                                     width: "100%",
                                     overflowAnchor: "none",
+                                    listStyle: "none",
                                 }}
                             >
                                 {DEBUG_SIZES ? (
@@ -704,7 +720,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                                 ) : (
                                     renderItem(item)
                                 )}
-                            </div>
+                            </li>
                         );
                     })}
                     {/* Sidecar measure pass: a freshly-fetched history batch is
@@ -712,11 +728,14 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                         position:absolute so it never grows the scroll content) just
                         long enough to measure real heights into the cache — then
                         it's committed to the list above. Inside the same container
-                        as the real rows so its width (and thus text wrapping) match. */}
+                        as the real rows so its width (and thus text wrapping) match.
+                        A <li> (not a <div>) to stay a valid <ol> child; aria-hidden
+                        keeps it out of the accessibility tree. */}
                     {sidecarItems.length > 0 && (
-                        <div
+                        <li
                             ref={sidecarRef}
                             aria-hidden="true"
+                            className="mx_TimelineView_tile"
                             style={{
                                 position: "absolute",
                                 top: 0,
@@ -724,6 +743,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                                 width: "100%",
                                 visibility: "hidden",
                                 pointerEvents: "none",
+                                listStyle: "none",
                             }}
                         >
                             {sidecarItems.map((item) => (
@@ -731,9 +751,9 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                                     {renderItem(item)}
                                 </div>
                             ))}
-                        </div>
+                        </li>
                     )}
-                </div>
+                </ol>
             </div>
             {/* Loading spinners are real in-list items now (kind:"loading",
                 rendered by renderItem), so they occupy reserved space and are

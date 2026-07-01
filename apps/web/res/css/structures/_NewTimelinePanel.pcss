@@ -29,15 +29,21 @@ Please see LICENSE files in the repository root for full details.
  * dedicated media / reply designs.
  */
 .mx_NewTimelinePanel {
-    /* EventTile renders each tile as an <li>. The legacy timeline wraps its tiles
-       in <ol class="mx_RoomView_MessageList"> (ScrollPanel), whose
-       `list-style-type: none` inherits down to suppress the default markers. The
-       virtualized timeline renders each <li> inside its own row <div> with no <ol>
-       ancestor, so the markers reappear (bullets down the left margin). Set the
-       inherited property here to mirror the legacy reset; markdown lists inside
-       message bodies still override it with their own disc/decimal (see
-       _EventTile.pcss). */
-    list-style-type: none;
+    /* The virtualized timeline renders its rows as an <ol role="list"> of <li>
+       tiles (mx_TimelineView_list / mx_TimelineView_tile in TimelineView; the <ol>
+       and <li> reset their own list markers inline). Inset the tile content to
+       match the legacy mx_RoomView_MessageList padding so messages don't sit flush
+       against the panel edges.
+
+       The inset goes on the tiles rather than the <ol>: the rows are absolutely
+       positioned, so their containing block is the <ol>'s padding box and padding
+       there would not inset them. box-sizing + padding-inline on each row does,
+       and — being horizontal only — leaves the virtualizer's measured row heights
+       and vertical offsets untouched. */
+    .mx_TimelineView_tile {
+        box-sizing: border-box;
+        padding-inline: var(--RoomView_MessageList-padding);
+    }
 
     /* Matches SIZE_NORMAL_LANDSCAPE.w in src/settings/enums/ImageSize.ts so the
        fallback box lines up with normally-sized thumbnails. */

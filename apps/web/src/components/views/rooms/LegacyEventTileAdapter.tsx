@@ -61,6 +61,9 @@ export interface LegacyEventTileAdapterProps {
 export function LegacyEventTileAdapter(props: LegacyEventTileAdapterProps): JSX.Element {
     return (
         <EventTile
+            // The shared TimelineView wraps each row in its own semantic <li>, so
+            // the tile itself renders as a <div> to avoid a nested list item.
+            as="div"
             mxEvent={props.mxEvent}
             continuation={props.continuation}
             last={props.last}
