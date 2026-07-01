@@ -37,47 +37,6 @@ import SettingsStore from "../../settings/SettingsStore";
 // the change happened.
 const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 
-const PREVIEWS: Record<
-    string,
-    {
-        isState: boolean;
-        previewer: Preview;
-    }
-> = {
-    "m.room.message": {
-        isState: false,
-        previewer: new MessageEventPreview(),
-    },
-    "m.call.invite": {
-        isState: false,
-        previewer: new LegacyCallInviteEventPreview(),
-    },
-    "m.call.answer": {
-        isState: false,
-        previewer: new LegacyCallAnswerEventPreview(),
-    },
-    "m.call.hangup": {
-        isState: false,
-        previewer: new LegacyCallHangupEvent(),
-    },
-    "m.sticker": {
-        isState: false,
-        previewer: new StickerEventPreview(),
-    },
-    "m.reaction": {
-        isState: false,
-        previewer: new ReactionEventPreview(),
-    },
-    [M_POLL_START.name]: {
-        isState: false,
-        previewer: new PollStartEventPreview(),
-    },
-    [M_POLL_START.altName]: {
-        isState: false,
-        previewer: new PollStartEventPreview(),
-    },
-};
-
 // The maximum number of events we're willing to look back on to get a preview.
 const MAX_EVENTS_BACKWARDS = 50;
 
@@ -139,8 +98,23 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     // null indicates the preview is empty / irrelevant
     private previews = new Map<string, Map<TagID | TAG_ANY, MessagePreview | null>>();
 
+    // Previewers keyed by event type
+    private readonly previewers: Record<string, { isState: boolean; previewer: Preview }>;
+
     private constructor() {
         super(defaultDispatcher, {});
+        this.previewers = {
+            "m.room.message": { isState: false, previewer: new MessageEventPreview() },
+            "m.call.invite": { isState: false, previewer: new LegacyCallInviteEventPreview() },
+            "m.call.answer": { isState: false, previewer: new LegacyCallAnswerEventPreview() },
+            "m.call.hangup": { isState: false, previewer: new LegacyCallHangupEvent() },
+            "m.sticker": { isState: false, previewer: new StickerEventPreview() },
+            // ReactionEventPreview needs the message preview store, so the previewers are constructed here (passing `this`) rather than at
+            // module scope, where the store singleton would not exist yet (circular dependency).
+            "m.reaction": { isState: false, previewer: new ReactionEventPreview(this) },
+            [M_POLL_START.name]: { isState: false, previewer: new PollStartEventPreview() },
+            [M_POLL_START.altName]: { isState: false, previewer: new PollStartEventPreview() },
+        };
     }
 
     public static get instance(): MessagePreviewStore {
@@ -172,7 +146,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     }
 
     public generatePreviewForEvent(event: MatrixEvent): string {
-        const previewDef = PREVIEWS[event.getType()];
+        const previewDef = this.previewers[event.getType()];
         return previewDef?.previewer.getTextFor(event, undefined, true) ?? "";
     }
 
@@ -217,7 +191,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
             await this.matrixClient?.decryptEventIfNeeded(event);
             const shouldHide = shouldHideEvent(event);
             if (shouldHide) continue;
-            const previewDef = PREVIEWS[event.getType()];
+            const previewDef = this.previewers[event.getType()];
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
 

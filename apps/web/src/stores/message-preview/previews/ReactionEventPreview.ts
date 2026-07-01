@@ -13,9 +13,11 @@ import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { getSenderName, isSelf } from "./utils";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { MessagePreviewStore } from "../MessagePreviewStore";
+import type { MessagePreviewStore } from "../MessagePreviewStore";
 
 export class ReactionEventPreview implements Preview {
+    public constructor(private readonly messagePreviewStore: MessagePreviewStore) {}
+
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         const roomId = event.getRoomId();
         if (!roomId) return null; // not a room event
@@ -31,7 +33,7 @@ export class ReactionEventPreview implements Preview {
         const relatedEvent = relation.event_id ? room?.findEventById(relation.event_id) : null;
         if (!relatedEvent) return null;
 
-        const message = MessagePreviewStore.instance.generatePreviewForEvent(relatedEvent);
+        const message = this.messagePreviewStore.generatePreviewForEvent(relatedEvent);
         if (isSelf(event)) {
             return _t("event_preview|m.reaction|you", {
                 reaction,

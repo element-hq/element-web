@@ -31,7 +31,7 @@ import {
 } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { type OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
 import { type OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 
 export const shouldShowSpaceSettings = (space: Room): boolean => {
     const userId = space.client.getUserId()!;
@@ -115,7 +115,7 @@ export const showAddExistingSubspace = (space: Room): void => {
         "mx_AddExistingToSpaceDialog_wrapper",
     );
     finished.then(([added]) => {
-        if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+        if (added && SDKContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
             defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
         }
     });
@@ -131,7 +131,7 @@ export const showCreateNewSubspace = (space: Room): void => {
         "mx_CreateSubspaceDialog_wrapper",
     );
     finished.then(([added]) => {
-        if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+        if (added && SDKContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
             defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
         }
     });

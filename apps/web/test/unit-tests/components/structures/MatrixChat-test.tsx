@@ -70,7 +70,7 @@ import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts
 import { clearStorage } from "../../../../src/Lifecycle";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
 import { type QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
 
@@ -322,24 +322,24 @@ describe("<MatrixChat />", () => {
     it("should notify resizenotifier when left panel hidden", async () => {
         getComponent();
 
-        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+        jest.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
 
         defaultDispatcher.dispatch({ action: "hide_left_panel" });
 
         await waitFor(() =>
-            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+            expect(mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
     });
 
     it("should notify resizenotifier when left panel shown", async () => {
         getComponent();
 
-        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+        jest.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
 
         defaultDispatcher.dispatch({ action: "show_left_panel" });
 
         await waitFor(() =>
-            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+            expect(mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
     });
 
@@ -823,7 +823,7 @@ describe("<MatrixChat />", () => {
                     await waitFor(() =>
                         expect(createDialog).toHaveBeenCalledWith(
                             UserSettingsDialog,
-                            { initialTabId: UserTab.SessionManager, sdkContext: expect.any(SdkContextClass) },
+                            { initialTabId: UserTab.SessionManager, sdkContext: expect.any(SDKContextClass) },
                             /*className=*/ undefined,
                             /*isPriority=*/ false,
                             /*isStatic=*/ true,

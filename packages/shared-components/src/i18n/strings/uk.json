@@ -38,7 +38,11 @@
         "encryption_enabled": "Шифрування ввімкнено",
         "loading": "Завантаження…",
         "options": "Параметри",
-        "preferences": "Налаштування"
+        "preferences": "Налаштування",
+        "state_encryption_enabled": "Увімкнено експериментальне шифрування стану"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
         "open_dial_pad": "Відкрити номеронабирач"
@@ -54,7 +58,8 @@
         }
     },
     "notifications": {
-        "all_messages": "Усі повідомлення"
+        "all_messages": "Усі повідомлення",
+        "mentions_keywords": "Згадки та ключові слова"
     },
     "release_announcement": {
         "room_list_section_close": "ОК",
@@ -75,12 +80,15 @@
         "pinned_message_badge": "Закріплене повідомлення",
         "status_bar": {
             "delete_all": "Видалити все",
-            "server_connectivity_lost_title": "Втрачено зв'язок з сервером."
+            "server_connectivity_lost_description": "Надіслані повідомлення зберігатимуться, доки ваше з’єднання не відновиться.",
+            "server_connectivity_lost_title": "Втрачено зв'язок із сервером.",
+            "some_messages_not_sent": "Деякі з ваших повідомлень не надіслано"
         }
     },
     "room_list": {
         "a11y": {
-            "default": "Відкрити кімнату %(roomName)s"
+            "default": "Відкрити кімнату %(roomName)s",
+            "invitation": "Відкрити запрошення кімнати %(roomName)s."
         },
         "appearance": "Вигляд",
         "chat_moved": "Бесіду переміщено",
@@ -89,7 +97,6 @@
         "empty": {
             "no_chats": "Ще немає бесід",
             "no_chats_description_no_room_rights": "Розпочніть користування, написавши комусь повідомлення",
-            "no_lowpriority": "У вас немає неважливих кімнат",
             "no_unread": "Вітаємо! У вас немає непрочитаних повідомлень",
             "show_activity": "Переглянути всю діяльність",
             "show_chats": "Показати всі бесіди"
@@ -98,7 +105,6 @@
         "expand_filters": "Розгорнути список фільтрів",
         "filters": {
             "invites": "Запрошення",
-            "low_priority": "Неважливі",
             "mentions": "Згадки",
             "people": "Люди",
             "rooms": "Кімнати",

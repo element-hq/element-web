@@ -30,7 +30,7 @@ import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;
@@ -40,7 +40,7 @@ const QuickSettingsButton: React.FC<{
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
         useSettingValue("Spaces.enabledMetaSpaces");
 
-    const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+    const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
     const developerModeEnabled = useSettingValue("developerMode");
     // "Favourites" and "People" meta spaces are not available in the new room list
     const newRoomListEnabled = useSettingValue("feature_new_room_list");

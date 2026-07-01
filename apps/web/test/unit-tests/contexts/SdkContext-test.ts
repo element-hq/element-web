@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import { OidcClientStore } from "../../../src/stores/oidc/OidcClientStore";
 import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
 import { createTestClient } from "../../test-utils";
 
-describe("SdkContextClass", () => {
-    let sdkContext = SdkContextClass.instance;
+describe("SDKContextClass", () => {
+    let sdkContext = SDKContextClass.instance;
     let client: MatrixClient;
 
     beforeAll(() => {
@@ -22,12 +22,12 @@ describe("SdkContextClass", () => {
     });
 
     beforeEach(() => {
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
     });
 
     it("instance should always return the same instance", () => {
-        const globalInstance = SdkContextClass.instance;
-        expect(SdkContextClass.instance).toBe(globalInstance);
+        const globalInstance = SDKContextClass.instance;
+        expect(SDKContextClass.instance).toBe(globalInstance);
     });
 
     it("userProfilesStore should raise an error without a client", () => {

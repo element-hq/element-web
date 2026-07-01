@@ -87,31 +87,31 @@ button.preview {
         flex: 1;
         overflow: hidden; /* cause it to wrap rather than clip */
     }
+}
 
-    .title,
-    .description {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        white-space: normal;
-        line-clamp: 2;
-        -webkit-line-clamp: 2;
-        margin: 0;
+.siteName {
+    margin-top: var(--cpd-space-1x);
+    vertical-align: middle;
+    display: flex;
+    gap: var(--cpd-space-1-5x);
+    > * {
+        /* Center everything */
+        margin: auto 0;
     }
+}
 
-    .title {
-        color: var(--cpd-color-text-primary);
-        text-decoration-line: none;
-    }
+.title,
+.description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    margin: 0;
+}
 
-    .siteName {
-        margin-top: var(--cpd-space-1x);
-        vertical-align: middle;
-        display: flex;
-        gap: var(--cpd-space-1-5x);
-        > * {
-            /* Center everything */
-            margin: auto 0;
-        }
-    }
+.title {
+    color: var(--cpd-color-text-primary);
+    text-decoration-line: none;
 }

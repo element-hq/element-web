@@ -39,7 +39,7 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { ModuleApi } from "../../../../../src/modules/Api";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -56,7 +56,7 @@ const realGetValue = SettingsStore.getValue;
 
 describe("AppTile", () => {
     let cli: MatrixClient;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
     let r1: Room;
     let r2: Room;
     const resizeNotifier = new ResizeNotifier();
@@ -118,7 +118,7 @@ describe("AppTile", () => {
     beforeEach(async () => {
         // Do not carry across settings from previous tests
         SettingsStore.reset();
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
         // @ts-ignore
         await WidgetMessagingStore.instance.onReady();
 
