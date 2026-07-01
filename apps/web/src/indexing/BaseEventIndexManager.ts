@@ -13,6 +13,8 @@ import {
     type Direction,
 } from "matrix-js-sdk/src/matrix";
 
+import { type TokenizerMode } from "../settings/enums/TokenizerMode";
+
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
 
@@ -95,7 +97,7 @@ export default abstract class BaseEventIndexManager {
     public async initEventIndex(
         userId: string,
         deviceId: string,
-        tokenizerMode?: string,
+        tokenizerMode?: TokenizerMode,
     ): Promise<{ wasRecreated?: boolean } | void> {
         throw new Error("Unimplemented");
     }

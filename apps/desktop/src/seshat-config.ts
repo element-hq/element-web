@@ -5,6 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+export enum TokenizerMode {
+    Ngram = "ngram",
+    Language = "language",
+}
+
 /**
  * Create Seshat configuration based on tokenizer mode.
  *
@@ -12,11 +17,6 @@ Please see LICENSE files in the repository root for full details.
  *                        or "language" for standard language-based tokenization.
  * @returns Configuration object for Seshat initialization.
  */
-export enum TokenizerMode {
-    Ngram = "ngram",
-    Language = "language",
-}
-
 export function createSeshatConfig(tokenizerMode?: string): {
     tokenizerMode: TokenizerMode;
     ngramMinSize?: number;
@@ -29,6 +29,10 @@ export function createSeshatConfig(tokenizerMode?: string): {
             ngramMaxSize: 4,
         };
     }
-    // Default to language-based tokenizer
-    return { tokenizerMode: TokenizerMode.Language };
+
+    if (tokenizerMode === undefined || tokenizerMode === TokenizerMode.Language) {
+        return { tokenizerMode: TokenizerMode.Language };
+    }
+
+    throw new Error(`Unknown tokenizer mode: ${tokenizerMode}`);
 }

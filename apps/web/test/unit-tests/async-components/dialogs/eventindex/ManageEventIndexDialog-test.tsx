@@ -58,6 +58,27 @@ describe("<ManageEventIndexDialog />", () => {
         expect(onFinished).toHaveBeenCalled();
     });
 
+    it("shows tokenizer mode as radio options with descriptions", async () => {
+        setUpDefaults("language");
+
+        render(<ManageEventIndexDialog onFinished={jest.fn()} />);
+        await flushPromises();
+
+        expect(screen.getByRole("heading", { name: "Search tokenizer mode" })).toBeInTheDocument();
+        expect(screen.getByRole("radio", { name: "N-gram" })).toBeInTheDocument();
+        expect(screen.getByRole("radio", { name: "Language-based" })).toBeChecked();
+        expect(
+            screen.getByText(
+                "Supports all languages including those without word boundaries. Works with mixed languages.",
+            ),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Single language support based on your UI language. Only works with some languages (English, German, etc.).",
+            ),
+        ).toBeInTheDocument();
+    });
+
     it("opens confirm dialog and saves tokenizer mode when confirmed", async () => {
         setUpDefaults("language");
         const onFinished = jest.fn();
@@ -71,7 +92,7 @@ describe("<ManageEventIndexDialog />", () => {
         render(<ManageEventIndexDialog onFinished={onFinished} />);
         await flushPromises();
 
-        fireEvent.change(screen.getByRole("combobox"), { target: { value: "ngram" } });
+        fireEvent.click(screen.getByRole("radio", { name: "N-gram" }));
         fireEvent.click(screen.getByRole("button", { name: /done/i }));
         await flushPromises();
 
@@ -92,7 +113,7 @@ describe("<ManageEventIndexDialog />", () => {
         render(<ManageEventIndexDialog onFinished={onFinished} />);
         await flushPromises();
 
-        fireEvent.change(screen.getByRole("combobox"), { target: { value: "ngram" } });
+        fireEvent.click(screen.getByRole("radio", { name: "N-gram" }));
         fireEvent.click(screen.getByRole("button", { name: /done/i }));
         await flushPromises();
 

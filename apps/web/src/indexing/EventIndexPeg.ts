@@ -18,6 +18,7 @@ import EventIndex from "../indexing/EventIndex";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
+import { type TokenizerMode } from "../settings/enums/TokenizerMode";
 
 const INDEX_VERSION = 1;
 
@@ -79,7 +80,7 @@ export class EventIndexPeg {
 
         const userId = client.getUserId()!;
         const deviceId = client.getDeviceId()!;
-        const tokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode");
+        const tokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode") as TokenizerMode;
 
         try {
             const initResult = await indexManager.initEventIndex(userId, deviceId, tokenizerMode);

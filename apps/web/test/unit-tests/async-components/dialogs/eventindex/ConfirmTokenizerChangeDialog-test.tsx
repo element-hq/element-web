@@ -7,7 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "jest-matrix-react";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "jest-matrix-react";
 
 import ConfirmTokenizerChangeDialog from "../../../../../src/async-components/views/dialogs/eventindex/ConfirmTokenizerChangeDialog";
 import EventIndexPeg from "../../../../../src/indexing/EventIndexPeg";
@@ -24,7 +25,7 @@ describe("<ConfirmTokenizerChangeDialog />", () => {
 
         render(<ConfirmTokenizerChangeDialog onFinished={onFinished} />);
 
-        fireEvent.click(screen.getByRole("button", { name: /ok/i }));
+        await userEvent.click(screen.getByRole("button", { name: "OK" }));
         await flushPromises();
 
         expect(EventIndexPeg.deleteEventIndex).toHaveBeenCalled();

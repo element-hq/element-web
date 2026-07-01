@@ -29,6 +29,7 @@ import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";
+import { TokenizerMode } from "./enums/TokenizerMode";
 import ReducedMotionController from "./controllers/ReducedMotionController";
 import IncompatibleController from "./controllers/IncompatibleController";
 import { ImageSize } from "./enums/ImageSize";
@@ -336,7 +337,7 @@ export interface Settings {
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
-    "tokenizerMode": IBaseSetting<string>;
+    "tokenizerMode": IBaseSetting<TokenizerMode>;
     "showCallButtonsInComposer": IBaseSetting<boolean>;
     "ircDisplayNameWidth": IBaseSetting<number>;
     "layout": IBaseSetting<Layout>;
@@ -1263,7 +1264,7 @@ export const SETTINGS: Settings = {
     "tokenizerMode": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|security|tokenizer_mode"),
-        default: "language",
+        default: TokenizerMode.Language,
     },
     "showCallButtonsInComposer": {
         // Dev note: This is no longer "in composer" but is instead "in room header".

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { IPCManager } from "../../../../src/vector/platform/IPCManager";
 import { SeshatIndexManager } from "../../../../src/vector/platform/SeshatIndexManager";
+import { TokenizerMode } from "../../../../src/settings/enums/TokenizerMode";
 
 describe("SeshatIndexManager", () => {
     afterEach(() => {
@@ -16,7 +17,7 @@ describe("SeshatIndexManager", () => {
 
     it("passes tokenizerMode to initEventIndex IPC call", async () => {
         // IPCManager requires window.electron to exist.
-        window.electron = {
+        (globalThis as typeof globalThis & { electron: Electron }).electron = {
             on: jest.fn(),
             send: jest.fn(),
         } as unknown as Electron;
@@ -24,7 +25,7 @@ describe("SeshatIndexManager", () => {
         const ipcCallSpy = jest.spyOn(IPCManager.prototype, "call").mockResolvedValue(undefined);
         const mgr = new SeshatIndexManager();
 
-        await mgr.initEventIndex("@user:example.org", "DEVICE123", "ngram");
+        await mgr.initEventIndex("@user:example.org", "DEVICE123", TokenizerMode.Ngram);
 
         expect(ipcCallSpy).toHaveBeenCalledWith("initEventIndex", "@user:example.org", "DEVICE123", "ngram");
     });

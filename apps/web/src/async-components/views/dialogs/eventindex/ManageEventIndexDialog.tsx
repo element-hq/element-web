@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { HelpMessage, InlineField, Label, RadioControl, Root } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
 import SdkConfig from "../../../../SdkConfig";
@@ -20,6 +21,7 @@ import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import { type IIndexStats } from "../../../../indexing/BaseEventIndexManager";
+import { TokenizerMode } from "../../../../settings/enums/TokenizerMode";
 
 interface IProps {
     onFinished(): void;
@@ -48,10 +50,10 @@ interface IState {
     crawlerSleepTime: number;
 
     /** Tokenizer mode for search indexing. */
-    tokenizerMode: string;
+    tokenizerMode: TokenizerMode;
 
     /** Initial tokenizer mode when dialog was opened. */
-    initialTokenizerMode: string;
+    initialTokenizerMode: TokenizerMode;
 }
 
 /*
@@ -61,7 +63,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
     public constructor(props: IProps) {
         super(props);
 
-        const initialTokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode");
+        const initialTokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode") as TokenizerMode;
         this.state = {
             eventIndexSize: 0,
             eventCount: 0,
@@ -134,8 +136,8 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.valueAsNumber);
     };
 
-    private readonly onTokenizerModeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
-        this.setState({ tokenizerMode: e.target.value });
+    private readonly onTokenizerModeChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        this.setState({ tokenizerMode: e.target.value as TokenizerMode });
         // Don't save to settings yet - wait for Done button
     };
 
@@ -216,18 +218,37 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                         value={this.state.crawlerSleepTime.toString()}
                         onChange={this.onCrawlerSleepTimeChange}
                     />
-                    <Field
-                        element="select"
-                        label={_t("settings|security|tokenizer_mode")}
-                        value={this.state.tokenizerMode}
-                        onChange={this.onTokenizerModeChange}
-                    >
-                        <option value="ngram">{_t("settings|security|tokenizer_mode_ngram")}</option>
-                        <option value="language">{_t("settings|security|tokenizer_mode_language")}</option>
-                    </Field>
-                    <div className="mx_SettingsTab_subsectionText">
-                        {_t("settings|security|tokenizer_mode_description")}
-                    </div>
+                    <h3>{_t("settings|security|tokenizer_mode")}</h3>
+                    <Root>
+                        <InlineField
+                            name="tokenizerMode"
+                            control={
+                                <RadioControl
+                                    name="tokenizerMode"
+                                    value={TokenizerMode.Ngram}
+                                    checked={this.state.tokenizerMode === TokenizerMode.Ngram}
+                                    onChange={this.onTokenizerModeChange}
+                                />
+                            }
+                        >
+                            <Label>{_t("settings|security|tokenizer_mode_ngram")}</Label>
+                            <HelpMessage>{_t("settings|security|tokenizer_mode_ngram_description")}</HelpMessage>
+                        </InlineField>
+                        <InlineField
+                            name="tokenizerMode"
+                            control={
+                                <RadioControl
+                                    name="tokenizerMode"
+                                    value={TokenizerMode.Language}
+                                    checked={this.state.tokenizerMode === TokenizerMode.Language}
+                                    onChange={this.onTokenizerModeChange}
+                                />
+                            }
+                        >
+                            <Label>{_t("settings|security|tokenizer_mode_language")}</Label>
+                            <HelpMessage>{_t("settings|security|tokenizer_mode_language_description")}</HelpMessage>
+                        </InlineField>
+                    </Root>
                 </div>
             </div>
         );

@@ -19,6 +19,7 @@ import BaseEventIndexManager, {
     type ISearchArgs,
     type ILoadArgs,
 } from "../../indexing/BaseEventIndexManager";
+import { type TokenizerMode } from "../../settings/enums/TokenizerMode";
 import { IPCManager } from "./IPCManager";
 
 export class SeshatIndexManager extends BaseEventIndexManager {
@@ -31,7 +32,7 @@ export class SeshatIndexManager extends BaseEventIndexManager {
     public async initEventIndex(
         userId: string,
         deviceId: string,
-        tokenizerMode?: string,
+        tokenizerMode?: TokenizerMode,
     ): Promise<{ wasRecreated?: boolean } | void> {
         return this.ipc.call("initEventIndex", userId, deviceId, tokenizerMode);
     }

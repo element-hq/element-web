@@ -21,8 +21,11 @@ describe("createSeshatConfig", () => {
         ],
         [TokenizerMode.Language, { tokenizerMode: TokenizerMode.Language }],
         [undefined, { tokenizerMode: TokenizerMode.Language }],
-        ["unknown", { tokenizerMode: TokenizerMode.Language }],
     ])("returns the expected config for tokenizerMode %s", (tokenizerMode, expectedConfig) => {
         expect(createSeshatConfig(tokenizerMode)).toEqual(expectedConfig);
+    });
+
+    it("throws for unknown tokenizer modes", () => {
+        expect(() => createSeshatConfig("unknown")).toThrow("Unknown tokenizer mode: unknown");
     });
 });
