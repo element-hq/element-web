@@ -2,7 +2,7 @@ import * as os from "node:os";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { execFileSync } from "node:child_process";
-import { type Configuration as BaseConfiguration } from "electron-builder";
+import { Platform, type Configuration as BaseConfiguration } from "electron-builder";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -101,10 +101,11 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     asarUnpack: "**/*.node",
     // Build the macOS HEIC decoder helper (native/heic-decode/, an Image I/O tool) before packaging, so
     // the mac.extraResources reference to its gitignored artifact resolves without a separate CI step.
-    // Guarded to a macOS host — the helper links Apple frameworks and is only bundled into mac builds;
-    // build.sh is itself a no-op elsewhere.
-    beforeBuild: async (): Promise<void> => {
-        if (process.platform === "darwin") {
+    // Gate on the build *target* (not the host): only build it when targeting macOS, so a Windows/Linux
+    // build on a Mac doesn't produce an unused binary. The helper links Apple frameworks, so it can only
+    // be produced on a macOS host; build.sh is a no-op on any other host.
+    beforeBuild: async (context): Promise<void> => {
+        if (context.platform === Platform.MAC) {
             execFileSync("/bin/bash", ["native/heic-decode/build.sh"], { stdio: "inherit" });
         }
     },
