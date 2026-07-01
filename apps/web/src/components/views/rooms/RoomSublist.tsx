@@ -37,6 +37,7 @@ import { DefaultTagID, type TagID } from "../../../stores/room-list-v3/skip-list
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import RoomListStore, { LISTS_UPDATE_EVENT, LISTS_LOADING_EVENT } from "../../../stores/room-list/RoomListStore";
 import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
+import { getScrollBehavior } from "../../../utils/scrollBehavior";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import ContextMenu, {
@@ -432,7 +433,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         if ((isStickyBottom && !isAtBottom) || (isStickyTop && !isAtTop)) {
             // is sticky - jump to list
-            sublist.scrollIntoView({ behavior: "smooth" });
+            sublist.scrollIntoView({ behavior: getScrollBehavior() });
         } else {
             // on screen - toggle collapse
             const isExpanded = this.state.isExpanded;
@@ -440,7 +441,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             // if the bottom list is collapsed then scroll it in so it doesn't expand off screen
             if (!isExpanded && isStickyBottom) {
                 setTimeout(() => {
-                    sublist.scrollIntoView({ behavior: "smooth" });
+                    sublist.scrollIntoView({ behavior: getScrollBehavior() });
                 }, 0);
             }
         }

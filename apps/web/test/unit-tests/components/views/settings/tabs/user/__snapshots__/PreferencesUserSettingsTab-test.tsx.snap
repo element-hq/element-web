@@ -1297,7 +1297,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_container_udcm8_10"
                     >
                       <input
-                        checked=""
                         class="_input_udcm8_24"
                         disabled=""
                         id="mx_SettingsFlag_gs5uWEzYzZrS"
@@ -1316,7 +1315,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_1o4d9_60"
                       for="mx_SettingsFlag_gs5uWEzYzZrS"
                     >
-                      Show profile picture changes
+                      Disable smooth scrolling (reduces motion)
                     </label>
                   </div>
                 </div>
@@ -1349,7 +1348,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_1o4d9_60"
                       for="mx_SettingsFlag_qWg7OgID1yRR"
                     >
-                      Show avatars in user, room and event mentions
+                      Show profile picture changes
                     </label>
                   </div>
                 </div>
@@ -1382,7 +1381,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_1o4d9_60"
                       for="mx_SettingsFlag_pOPewl7rtMbV"
                     >
-                      Enable big emoji in chat
+                      Show avatars in user, room and event mentions
                     </label>
                   </div>
                 </div>
@@ -1415,7 +1414,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_1o4d9_60"
                       for="mx_SettingsFlag_cmt3PZSyNp3v"
                     >
-                      Jump to the bottom of the timeline when you send a message
+                      Enable big emoji in chat
                     </label>
                   </div>
                 </div>
@@ -1447,6 +1446,39 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     <label
                       class="_label_1o4d9_60"
                       for="mx_SettingsFlag_dJJz3lHUv9XX"
+                    >
+                      Jump to the bottom of the timeline when you send a message
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_1o4d9_33"
+                >
+                  <div
+                    class="_inline-field-control_1o4d9_45"
+                  >
+                    <div
+                      class="_container_udcm8_10"
+                    >
+                      <input
+                        checked=""
+                        class="_input_udcm8_24"
+                        disabled=""
+                        id="mx_SettingsFlag_SBSSOZDRlzlA"
+                        role="switch"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_udcm8_34"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_1o4d9_39"
+                  >
+                    <label
+                      class="_label_1o4d9_60"
+                      for="mx_SettingsFlag_SBSSOZDRlzlA"
                     >
                       Show current profile picture and name for users in message history
                     </label>
@@ -1696,7 +1728,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       <input
                         class="_input_udcm8_24"
                         disabled=""
-                        id="mx_SettingsFlag_SBSSOZDRlzlA"
+                        id="mx_SettingsFlag_FLEpLCb0jpp6"
                         role="switch"
                         type="checkbox"
                       />
@@ -1710,7 +1742,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_1o4d9_60"
-                      for="mx_SettingsFlag_SBSSOZDRlzlA"
+                      for="mx_SettingsFlag_FLEpLCb0jpp6"
                     >
                       Show NSFW content
                     </label>
@@ -1750,7 +1782,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="mx_SettingsFlag_FLEpLCb0jpp6"
+                        id="mx_SettingsFlag_NQFWldEwbV3q"
                         role="switch"
                         type="checkbox"
                       />
@@ -1764,7 +1796,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_1o4d9_60"
-                      for="mx_SettingsFlag_FLEpLCb0jpp6"
+                      for="mx_SettingsFlag_NQFWldEwbV3q"
                     >
                       Prompt before sending invites to potentially invalid matrix IDs
                     </label>

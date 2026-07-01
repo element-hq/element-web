@@ -343,6 +343,7 @@ export interface Settings {
     "layout": IBaseSetting<Layout>;
     "Images.size": IBaseSetting<ImageSize>;
     "showChatEffects": IBaseSetting<boolean>;
+    "Accessibility.disableSmoothScrolling": IBaseSetting<boolean>;
     "Performance.addSendMessageTimingMetadata": IBaseSetting<boolean>;
     "Widgets.pinned": IBaseSetting<{ [widgetId: string]: boolean }>;
     "Widgets.layout": IBaseSetting<ILayoutSettings | null>;
@@ -1300,6 +1301,11 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|show_chat_effects"),
         default: true,
         controller: new ReducedMotionController(),
+    },
+    "Accessibility.disableSmoothScrolling": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("settings|preferences|disable_smooth_scrolling"),
+        default: false,
     },
     "Performance.addSendMessageTimingMetadata": {
         supportedLevels: [SettingLevel.CONFIG],

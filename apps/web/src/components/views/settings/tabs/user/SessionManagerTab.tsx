@@ -32,6 +32,7 @@ import { type FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { getManageDeviceUrl } from "../../../../../utils/oidc/urls.ts";
+import { getScrollBehavior } from "../../../../../utils/scrollBehavior";
 import { SDKContext } from "../../../../../contexts/SDKContext";
 import Spinner from "../../../elements/Spinner";
 
@@ -185,7 +186,7 @@ const SessionManagerTab: React.FC<{
                 // align element to top of scrollbox
                 block: "start",
                 inline: "nearest",
-                behavior: "smooth",
+                behavior: getScrollBehavior(),
             }),
         );
     };
