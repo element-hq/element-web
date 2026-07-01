@@ -12,7 +12,7 @@ import { expect, test } from "../../element-web-test";
 import {
     autoJoin,
     createSecondBotDevice,
-    createSharedRoomWithUser,
+    createSharedEncryptedRoomWithUser,
     enableKeyBackup,
     logIntoElementAndVerify,
     logOutOfElement,
@@ -39,18 +39,7 @@ test.describe("Cryptography", function () {
             await autoJoin(bob);
 
             // create an encrypted room, and wait for Bob to join it.
-            testRoomId = await createSharedRoomWithUser(app, bob.credentials.userId, {
-                name: "TestRoom",
-                initial_state: [
-                    {
-                        type: "m.room.encryption",
-                        state_key: "",
-                        content: {
-                            algorithm: "m.megolm.v1.aes-sha2",
-                        },
-                    },
-                ],
-            });
+            testRoomId = await createSharedEncryptedRoomWithUser(app, bob.credentials.userId);
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
