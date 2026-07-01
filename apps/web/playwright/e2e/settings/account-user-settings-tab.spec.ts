@@ -95,6 +95,7 @@ test.describe("Account user settings tab", () => {
                             registration_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}register`,
                             response_types_supported: ["code"],
                             grant_types_supported: ["authorization_code"],
+                            response_modes_supported: ["query", "fragment"],
                             code_challenge_methods_supported: ["S256"],
                             account_management_uri: EXTERNAL_ACCOUNT_MANAGEMENT_URL,
                         },
