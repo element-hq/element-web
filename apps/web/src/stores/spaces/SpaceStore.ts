@@ -60,7 +60,7 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { ModuleApi } from "../../modules/Api.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
@@ -894,7 +894,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         this.updateNotificationStates(notificationStatesToUpdate);
     };
 
-    private switchSpaceIfNeeded = (roomId = SdkContextClass.instance.roomViewStore.getRoomId()): void => {
+    private switchSpaceIfNeeded = (roomId = SDKContextClass.instance.roomViewStore.getRoomId()): void => {
         if (!roomId) return;
         if (!this.isRoomInSpace(this.activeSpace, roomId) && !this.matrixClient?.getRoom(roomId)?.isSpaceRoom()) {
             this.switchToRelatedSpace(roomId);
@@ -950,7 +950,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
                 // if the room currently being viewed was just joined then switch to its related space
                 if (
                     newMembership === KnownMembership.Join &&
-                    room.roomId === SdkContextClass.instance.roomViewStore.getRoomId()
+                    room.roomId === SDKContextClass.instance.roomViewStore.getRoomId()
                 ) {
                     this.switchSpaceIfNeeded(room.roomId);
                 }
@@ -978,7 +978,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
             this.emit(room.roomId);
         }
 
-        if (membership === KnownMembership.Join && room.roomId === SdkContextClass.instance.roomViewStore.getRoomId()) {
+        if (membership === KnownMembership.Join && room.roomId === SDKContextClass.instance.roomViewStore.getRoomId()) {
             // if the user was looking at the space and then joined: select that space
             this.setActiveSpace(room.roomId, false);
         } else if (membership === KnownMembership.Leave && room.roomId === this.activeSpace) {
