@@ -31,6 +31,7 @@ import { URL, fileURLToPath } from "node:url";
 import "./ipc.js";
 import "./seshat.js";
 import "./settings.js";
+import "./heic.js";
 import "./badge.js";
 import * as tray from "./tray.js";
 import Store from "./store.js";

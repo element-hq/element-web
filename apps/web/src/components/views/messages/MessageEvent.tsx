@@ -24,6 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
+import { canDecodeHeic, isDecodableHeicContent, isHeicContent } from "../../../utils/heic";
 import { type IBodyProps } from "./IBodyProps";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MStickerBody from "./MStickerBody";
@@ -287,6 +288,24 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                     !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {
+                BodyType = this.bodyTypes.get(MsgType.File)!;
+            }
+
+            // HEIC often arrives as m.file; rescue those to the image renderer (which decodes it via the
+            // OS) only where we can actually decode it — otherwise leave it as a file attachment.
+            if (
+                BodyType === this.bodyTypes.get(MsgType.File) &&
+                (content.url || content.file) &&
+                isDecodableHeicContent(content)
+            ) {
+                BodyType = ImageBodyFactory;
+            }
+
+            // Conversely, HEIC we cannot decode must not reach the image renderer — it would be a broken
+            // <img> (image/heic is in the blob allow-list so it wouldn't otherwise fall back). Element
+            // bundles no decoder, so where the OS can't decode HEIC it stays a file attachment. Gated on the
+            // default image body so an overridden body (e.g. a reply body) is left alone.
+            if (BodyType === ImageBodyFactory && isHeicContent(content) && !canDecodeHeic()) {
                 BodyType = this.bodyTypes.get(MsgType.File)!;
             }
 

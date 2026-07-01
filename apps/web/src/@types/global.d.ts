@@ -147,6 +147,8 @@ declare global {
         // Settings
         setSettingValue(settingName: string, value: any): Promise<void>;
         getSettingValue(settingName: string): Promise<any>;
+        // Native HEIC/HEIF decode via the OS image pipeline (macOS only; undefined elsewhere).
+        decodeHeic?(bytes: Uint8Array): Promise<Uint8Array>;
     }
 
     interface DesktopCapturerSource {

@@ -27,6 +27,7 @@ import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyVi
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { isMimeTypeAllowed } from "../../../utils/blobs";
+import { isDecodableHeicContent } from "../../../utils/heic";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -158,6 +159,10 @@ export function ImageBodyFactory({
     const shouldFallbackToFileBody =
         mediaEventHelper?.media.isEncrypted === true &&
         !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
+        // HEIC we can decode is rendered as an image (decoded to JPEG via the OS at display time), so it's
+        // renderable even though it isn't in the blob allow-list; don't fall back to a file body for it
+        // (covers public.heic and .heic names). Where we can't decode it, it does fall back to a file body.
+        !isDecodableHeicContent(content) &&
         !content.info?.thumbnail_info;
 
     const vm = useCreateAutoDisposedViewModel(

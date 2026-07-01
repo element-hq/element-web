@@ -157,11 +157,16 @@ describe("ImageBodyViewModel", () => {
         mockedMediaFromContent.mockImplementation((content: Record<string, any>) => createMockMedia(content));
         mockedBlobIsAnimated.mockResolvedValue(true);
         mockedCreateThumbnail.mockResolvedValue({ thumbnail: new Blob(["thumbnail"], { type: "image/jpeg" }) } as any);
+
+        // HEIC is routed through the decode path only where the platform can decode it (main process
+        // exposes window.electron.decodeHeic); simulate that being available.
+        (window as any).electron = { decodeHeic: jest.fn() };
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
         imageSizeWatcher = undefined;
+        delete (window as any).electron;
     });
 
     it("starts hidden and skips emitting when setMediaVisible is unchanged", () => {
@@ -324,6 +329,37 @@ describe("ImageBodyViewModel", () => {
             src: "https://server/full.png",
             thumbnailSrc: "https://server/thumb.png",
             linkUrl: "https://server/full.png",
+        });
+    });
+
+    it("routes unencrypted HEIC through the decode (blob) path instead of srcHttp", async () => {
+        const vm = createVm({
+            mediaVisible: true,
+            mxEvent: createEvent({
+                content: {
+                    info: {
+                        mimetype: "image/heic",
+                        w: 320,
+                        h: 240,
+                        size: 48_000,
+                    },
+                },
+            }),
+            // Unencrypted, but HEIC must still resolve its URLs from the helper (which decodes to JPEG),
+            // not from the raw srcHttp ("https://server/full.png") that the browser can't paint.
+            mediaEventHelper: createMediaEventHelper({
+                encrypted: false,
+                sourceUrl: "blob:heic-image",
+                thumbnailUrl: "blob:heic-thumb",
+            }),
+        });
+
+        await downloadImageForTest(vm);
+
+        expect(vm.getSnapshot()).toMatchObject({
+            state: ImageBodyViewState.READY,
+            src: "blob:heic-image",
+            thumbnailSrc: "blob:heic-thumb",
         });
     });
 

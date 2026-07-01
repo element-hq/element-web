@@ -193,6 +193,15 @@ describe("MBodyFactory", () => {
             },
         };
 
+        // HEIC keeps the image body only where the platform can decode it (main process exposes
+        // window.electron.decodeHeic); simulate that being available for these tests.
+        beforeEach(() => {
+            (window as any).electron = { decodeHeic: jest.fn() };
+        });
+        afterEach(() => {
+            delete (window as any).electron;
+        });
+
         it("renders the shared image view in room timelines", () => {
             const mediaEvent = mkEvent("m.image", imageContent);
 
@@ -250,6 +259,94 @@ describe("MBodyFactory", () => {
             expect(container.querySelector(".mx_ImageBody")).toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
             expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        });
+
+        it("keeps the image body for encrypted HEIC images without thumbnails (decoded at display time)", () => {
+            const mediaEvent = mkEvent("m.image", {
+                body: "IMG_0001.HEIC",
+                file: { url: "mxc://server/encrypted-file" },
+                url: undefined,
+                info: {
+                    mimetype: "image/heic",
+                    w: 270,
+                    h: 360,
+                },
+            });
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).toBeNull();
+        });
+
+        it("falls back to the file body for encrypted HEIC when the platform has no OS decoder", () => {
+            // No window.electron.decodeHeic → Element bundles no decoder → HEIC must render as a file body.
+            // Uses the public.heic UTI shape (not in the blob allow-list) so this exercises the factory's own
+            // fallback rather than upstream routing.
+            delete (window as any).electron;
+            const mediaEvent = mkEvent("m.image", {
+                body: "ima_355e641",
+                file: { url: "mxc://server/encrypted-file" },
+                url: undefined,
+                info: {
+                    mimetype: "public.heic",
+                    w: 270,
+                    h: 360,
+                },
+            });
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
+        });
+
+        it("keeps the image body for an encrypted public.heic UTI image without a thumbnail", () => {
+            // The exact element-web#19531 shape: mimetype is the Apple UTI and the body has no extension.
+            const mediaEvent = mkEvent("m.image", {
+                body: "ima_355e641",
+                file: { url: "mxc://server/encrypted-file" },
+                url: undefined,
+                info: {
+                    mimetype: "public.heic",
+                },
+            });
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).toBeNull();
+        });
+
+        it("keeps the image body for an encrypted HEIC detected by extension when the mimetype is wrong", () => {
+            const mediaEvent = mkEvent("m.image", {
+                body: "photo.heic",
+                file: { url: "mxc://server/encrypted-file" },
+                url: undefined,
+                info: {
+                    mimetype: "application/octet-stream",
+                },
+            });
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).toBeNull();
         });
 
         it("keeps the image body for encrypted unsafe images when a thumbnail is available", () => {

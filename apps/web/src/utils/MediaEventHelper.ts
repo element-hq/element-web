@@ -15,6 +15,7 @@ import { type Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
 import { type IDestroyable } from "./IDestroyable";
 import { getBlobSafeMimeType } from "./blobs.ts";
+import { isDecodableHeicContent, decodeHeicToJpeg } from "./heic.ts";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 
@@ -47,34 +48,55 @@ export class MediaEventHelper implements IDestroyable {
     }
 
     public destroy(): void {
-        if (this.media.isEncrypted) {
-            if (this.sourceUrl.cachedValue) URL.revokeObjectURL(this.sourceUrl.cachedValue);
-            if (this.thumbnailUrl.cachedValue) URL.revokeObjectURL(this.thumbnailUrl.cachedValue);
-        }
+        // Revoke the object URLs we created for encrypted media and for HEIC; plain media uses HTTP URLs.
+        const revokeIfBlob = (url: string | null | undefined): void => {
+            if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
+        };
+        revokeIfBlob(this.sourceUrl.cachedValue);
+        revokeIfBlob(this.thumbnailUrl.cachedValue);
     }
 
     private prepareSourceUrl = async (): Promise<string | null> => {
-        if (this.media.isEncrypted) {
+        const content = this.event.getContent<MediaEventContent>();
+        // Decodable HEIC needs the blob path (even when unencrypted) so we can decode it to a JPEG display
+        // URL; sourceBlob keeps the original bytes for download.
+        if (this.media.isEncrypted || isDecodableHeicContent(content)) {
             const blob = await this.sourceBlob.value;
-            return URL.createObjectURL(blob);
+            return URL.createObjectURL(await this.decodeForDisplay(blob, isDecodableHeicContent(content)));
         } else {
             return this.media.srcHttp;
         }
     };
 
     private prepareThumbnailUrl = async (): Promise<string | null> => {
-        if (this.media.isEncrypted) {
+        const content = this.event.getContent<ImageContent>();
+        if (this.media.isEncrypted || isDecodableHeicContent(content)) {
             const blob = await this.thumbnailBlob.value;
             if (blob === null) return null;
-            return URL.createObjectURL(blob);
+            return URL.createObjectURL(await this.decodeForDisplay(blob, isDecodableHeicContent(content)));
         } else {
             return this.media.thumbnailHttp;
+        }
+    };
+
+    // Decode a HEIC blob to JPEG for display; a no-op for non-HEIC. If the OS decoder fails on this file
+    // (we only get here when a decoder is present — routing gates on isDecodableHeicContent) we let the
+    // error propagate rather than returning the raw HEIC bytes: an <img> can't render those, so it would
+    // show a broken image. Rejecting instead lets the image body render its load-error placeholder.
+    private decodeForDisplay = async (blob: Blob, isHeic: boolean): Promise<Blob> => {
+        if (!isHeic) return blob;
+        try {
+            return await decodeHeicToJpeg(blob);
+        } catch (e) {
+            logger.warn("HEIC decode failed; showing image load error", e);
+            throw e;
         }
     };
 
     private fetchSource = (): Promise<Blob> => {
         const content = this.event.getContent<MediaEventContent>();
         if (this.media.isEncrypted) {
+            // Hold the original (decrypted) bytes; HEIC is decoded to JPEG only when building the display URL.
             return decryptFile(content.file!, content.info);
         }
 

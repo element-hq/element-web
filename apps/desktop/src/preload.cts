@@ -77,4 +77,15 @@ contextBridge.exposeInMainWorld("electron", {
     async getSettingValue(settingName: string): Promise<any> {
         return ipcRenderer.invoke("getSettingValue", settingName);
     },
+
+    // Native HEIC/HEIF decode via the OS image pipeline (Apple's licensed HEVC decoder). Only exposed on
+    // macOS; on other platforms it stays undefined so the renderer leaves HEIC as a file attachment
+    // (no decoder is bundled — see apps/web/src/utils/heic.ts).
+    ...(process.platform === "darwin"
+        ? {
+              async decodeHeic(bytes: Uint8Array): Promise<Uint8Array> {
+                  return ipcRenderer.invoke("decodeHeic", bytes);
+              },
+          }
+        : {}),
 });

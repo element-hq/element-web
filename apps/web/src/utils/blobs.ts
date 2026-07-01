@@ -47,6 +47,12 @@ const ALLOWED_BLOB_MIMETYPES = [
     "image/apng",
     "image/webp",
     "image/avif",
+    // HEIC/HEIF: decoded to JPEG before it reaches an <img> (see utils/heic.ts + MediaEventHelper);
+    // allow-listing keeps it on the image path, not the file fallback. Non-scriptable container, so no XSS surface.
+    "image/heic",
+    "image/heif",
+    "image/heic-sequence",
+    "image/heif-sequence",
 
     "video/mp4",
     "video/webm",

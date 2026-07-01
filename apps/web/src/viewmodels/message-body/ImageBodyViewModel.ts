@@ -32,6 +32,7 @@ import { createReconnectedListener } from "../../utils/connection";
 import { DecryptError, DownloadError } from "../../utils/DecryptFile";
 import { BLURHASH_FIELD, createThumbnail } from "../../utils/image-media";
 import { isMimeTypeAllowed } from "../../utils/blobs";
+import { isDecodableHeicContent } from "../../utils/heic";
 import ImageView from "../../components/views/elements/ImageView";
 
 export interface ImageBodyViewModelProps {
@@ -347,7 +348,12 @@ export class ImageBodyViewModel
         let thumbUrl: string | null;
         let contentUrl: string | null;
 
-        if (this.props.mediaEventHelper?.media.isEncrypted) {
+        // Route decodable HEIC through MediaEventHelper (which decodes it to JPEG via the OS) rather than an
+        // <img>, same as encrypted media.
+        const content = this.props.mxEvent.getContent<ImageContent>();
+        const isHeic = isDecodableHeicContent(content);
+
+        if (this.props.mediaEventHelper && (this.props.mediaEventHelper.media.isEncrypted || isHeic)) {
             try {
                 [contentUrl, thumbUrl] = await Promise.all([
                     this.props.mediaEventHelper.sourceUrl.value,
@@ -374,11 +380,10 @@ export class ImageBodyViewModel
                 return;
             }
         } else {
-            contentUrl = mediaFromContent(this.props.mxEvent.getContent<ImageContent>()).srcHttp;
+            contentUrl = mediaFromContent(content).srcHttp;
             thumbUrl = this.getThumbUrl();
         }
 
-        const content = this.props.mxEvent.getContent<ImageContent>();
         let generatedThumbnailUrl: string | null = null;
         let isAnimated = (content.info as ImageInfoWithAnimationFlag | undefined)?.["org.matrix.msc4230.is_animated"];
         if (isAnimated === undefined) {

@@ -20,3 +20,5 @@ yarn-error.log
 .DS_Store
 /playwright-report
 .pnpm-store
+# native HEIC decoder helper (built artifact; source is tracked)
+native/heic-decode/heic-decode

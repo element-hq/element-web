@@ -1,6 +1,7 @@
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { execFileSync } from "node:child_process";
 import { type Configuration as BaseConfiguration } from "electron-builder";
 
 /**
@@ -98,6 +99,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
 } = {
     appId: variant.appId,
     asarUnpack: "**/*.node",
+    // Build the macOS HEIC decoder helper (native/heic-decode/, an Image I/O tool) before packaging, so
+    // the mac.extraResources reference to its gitignored artifact resolves without a separate CI step.
+    // Guarded to a macOS host — the helper links Apple frameworks and is only bundled into mac builds;
+    // build.sh is itself a no-op elsewhere.
+    beforeBuild: async (): Promise<void> => {
+        if (process.platform === "darwin") {
+            execFileSync("/bin/bash", ["native/heic-decode/build.sh"], { stdio: "inherit" });
+        }
+    },
     electronFuses: {
         enableCookieEncryption: true,
         onlyLoadAppFromAsar: true,
@@ -163,6 +173,13 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         icon: "build/icon.icon",
         mergeASARs: true,
         x64ArchFiles: "**/matrix-seshat/*.node", // hak already runs lipo
+        // `heic-decode` is the macOS-only native HEIC decoder helper (native/heic-decode/, Image I/O),
+        // built by `beforeBuild` below. Bundle it into Contents/Resources/heic-decode (mac-scoped so
+        // Windows/Linux packaging never references the macOS-only artifact) and sign it with the
+        // hardened runtime via `binaries` — required for notarization since it lives in Resources
+        // rather than a standard code location.
+        extraResources: [{ from: "native/heic-decode/heic-decode", to: "heic-decode" }],
+        binaries: ["Contents/Resources/heic-decode"],
     },
     dmg: {
         badgeIcon: "build/icon.icon",

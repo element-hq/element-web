@@ -39,6 +39,7 @@
         "lint:types:scripts": "tsc --noEmit -p scripts/tsconfig.json",
         "lint:types:hak": "tsc --noEmit -p hak/tsconfig.json",
         "build:native": "pnpm run hak",
+    "build:native:heic": "bash native/heic-decode/build.sh",
         "build:native:universal": "pnpm run hak --target x86_64-apple-darwin fetchandbuild && pnpm run hak --target aarch64-apple-darwin fetchandbuild && pnpm run hak --target x86_64-apple-darwin --target aarch64-apple-darwin copyandlink",
         "build:32": "nx build --ia32",
         "build:64": "nx build --x64",

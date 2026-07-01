@@ -166,6 +166,15 @@ describe("MessageEvent", () => {
     describe("when an image with a caption is sent", () => {
         let result: RenderResult;
 
+        // HEIC is only rendered as an image where the platform can decode it (desktop main process exposes
+        // window.electron.decodeHeic); simulate that being available for these tests.
+        beforeEach(() => {
+            (window as any).electron = { decodeHeic: jest.fn() };
+        });
+        afterEach(() => {
+            delete (window as any).electron;
+        });
+
         function createEvent(mimetype: string, filename: string, msgtype: string) {
             return mkEvent({
                 event: true,
@@ -208,6 +217,68 @@ describe("MessageEvent", () => {
             mockMedia();
             result.getByTestId("file-body");
             result.getByTestId("textual-body");
+        });
+
+        it("should render an ImageBody for HEIC even when the filename has no usable extension", () => {
+            // Regression: HEIC images are decoded to JPEG at display time and must reach the image
+            // renderer. The generic extension/mimetype validation used to downgrade them to a file
+            // attachment when `mime` couldn't classify the filename; the content mimetype short-circuit
+            // must keep them as images. Use an extension-less filename so this fails without the fix.
+            event = createEvent("image/heic", "IMG_0001", MsgType.Image);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("image-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render an ImageBody for HEIC sent as an m.file (other clients downgrade it)", () => {
+            // Regression: clients that can't thumbnail HEIC send it as an m.file. The viewer must still
+            // route it to the image renderer (which decodes to JPEG) rather than show a file-download chip.
+            event = createEvent("image/heic", "IMG_0001.heic", MsgType.File);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("image-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render an ImageBody for an m.file HEIC detected by extension alone (no mimetype)", () => {
+            // Some senders omit or mangle the mimetype; the .heic/.heif extension must be enough.
+            event = createEvent("", "IMG_0001.HEIC", MsgType.File);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("image-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a FileBody for HEIC when the platform has no OS decoder (graceful degradation)", () => {
+            // With no window.electron.decodeHeic (e.g. Element Web, or desktop without OS HEIC support),
+            // Element bundles no decoder, so HEIC must fall back to a file attachment rather than a broken
+            // image. The HEIC mimetype with an image filename would otherwise render as an image body, so
+            // this exercises the no-decoder downgrade gate.
+            delete (window as any).electron;
+            event = createEvent("image/heic", "photo.jpg", MsgType.Image);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("file-body");
+            expect(result.queryByTestId("image-body")).toBeNull();
+        });
+
+        it("should not clobber an overridden body for HEIC (e.g. a compact reply body)", () => {
+            // The HEIC rescue must only rescue events that would otherwise render as the file body.
+            // An overridden body (like ReplyTile's MImageReplyBody) must be left alone.
+            event = createEvent("image/heic", "IMG_0001.heic", MsgType.Image);
+            const result = render(
+                <MatrixClientContext.Provider value={client}>
+                    <MessageEvent
+                        mxEvent={event}
+                        permalinkCreator={new RoomPermalinkCreator(room)}
+                        overrideBodyTypes={{ [MsgType.Image]: () => <div data-testid="reply-body" /> }}
+                    />
+                </MatrixClientContext.Provider>,
+            );
+            mockMedia();
+            result.getByTestId("reply-body");
+            expect(result.queryByTestId("image-body")).toBeNull();
         });
 
         it("should render a TextualBody and a video element", () => {
