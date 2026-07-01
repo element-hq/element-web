@@ -35,13 +35,7 @@ function shouldCauseReorder(event: MatrixEvent): boolean {
 export const getLastTimestamp = (r: Room, userId: string): number => {
     const mainTimelineLastTs = ((): number => {
         const timeline = r.getLiveTimeline().getEvents();
-
-        // MSC4186: Simplified Sliding Sync sets this.
-        // If it's present, sort by it.
-        const bumpStamp = r.getBumpStamp();
-        if (bumpStamp) {
-            return bumpStamp;
-        }
+        const bumpStamp = r.getBumpStamp() ?? 0;
 
         // If the room hasn't been joined yet, it probably won't have a timeline to
         // parse. We'll still fall back to the timeline if this fails, but chances
@@ -53,7 +47,7 @@ export const getLastTimestamp = (r: Room, userId: string): number => {
                 .getState(EventTimeline.FORWARDS)
                 ?.getStateEvents(EventType.RoomMember, userId);
             if (membershipEvent && !Array.isArray(membershipEvent)) {
-                return membershipEvent.getTs();
+                return Math.max(bumpStamp, membershipEvent.getTs());
             }
         }
 
@@ -65,14 +59,14 @@ export const getLastTimestamp = (r: Room, userId: string): number => {
                 (ev.getSender() === userId && shouldCauseReorder(ev)) ||
                 Unread.eventTriggersUnreadCount(r.client, ev)
             ) {
-                return ev.getTs();
+                return Math.max(bumpStamp, ev.getTs());
             }
         }
 
         // we might only have events that don't trigger the unread indicator,
         // in which case use the oldest event even if normally it wouldn't count.
         // This is better than just assuming the last event was forever ago.
-        return timeline[0]?.getTs() ?? 0;
+        return Math.max(bumpStamp, timeline[0]?.getTs() ?? 0);
     })();
 
     const threadLastEventTimestamps = r.getThreads().map((thread) => {
