@@ -11,10 +11,10 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { FILTER_CHANGED, type IFilterCondition } from "./IFilterCondition";
 import { type IDestroyable } from "../../../utils/IDestroyable";
-import SpaceStore from "../../spaces/SpaceStore";
 import { isMetaSpace, MetaSpace, type SpaceKey } from "../../spaces";
 import { setHasDiff } from "../../../utils/sets";
 import SettingsStore from "../../../settings/SettingsStore";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 /**
  * A filter condition for the room list which reveals rooms which
@@ -29,17 +29,17 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
     private space: SpaceKey = MetaSpace.Home;
 
     public isVisible(room: Room): boolean {
-        return SpaceStore.instance.isRoomInSpace(this.space, room.roomId);
+        return SDKContextClass.instance.spaceStore.isRoomInSpace(this.space, room.roomId);
     }
 
     private onStoreUpdate = async (forceUpdate = false): Promise<void> => {
         const beforeRoomIds = this.roomIds;
         // clone the set as it may be mutated by the space store internally
-        this.roomIds = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(this.space));
+        this.roomIds = new Set(SDKContextClass.instance.spaceStore.getSpaceFilteredRoomIds(this.space));
 
         const beforeUserIds = this.userIds;
         // clone the set as it may be mutated by the space store internally
-        this.userIds = new Set(SpaceStore.instance.getSpaceFilteredUserIds(this.space));
+        this.userIds = new Set(SDKContextClass.instance.spaceStore.getSpaceFilteredUserIds(this.space));
 
         const beforeShowPeopleInSpace = this.showPeopleInSpace;
         this.showPeopleInSpace =
@@ -61,12 +61,12 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
     };
 
     public updateSpace(space: SpaceKey): void {
-        SpaceStore.instance.off(this.space, this.onStoreUpdate);
-        SpaceStore.instance.on((this.space = space), this.onStoreUpdate);
+        SDKContextClass.instance.spaceStore.off(this.space, this.onStoreUpdate);
+        SDKContextClass.instance.spaceStore.on((this.space = space), this.onStoreUpdate);
         this.onStoreUpdate(true); // initial update from the change to the space
     }
 
     public destroy(): void {
-        SpaceStore.instance.off(this.space, this.onStoreUpdate);
+        SDKContextClass.instance.spaceStore.off(this.space, this.onStoreUpdate);
     }
 }

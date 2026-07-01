@@ -11,7 +11,6 @@ import { type MatrixClient, type Room, EventType } from "matrix-js-sdk/src/matri
 import { mocked } from "jest-mock";
 import { act, render, screen, fireEvent, type RenderResult } from "jest-matrix-react";
 
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
 import _RoomListHeader from "../../../../../src/components/views/rooms/LegacyRoomListHeader";
 import * as testUtils from "../../../../test-utils";
@@ -22,6 +21,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const RoomListHeader = testUtils.wrapInMatrixClientContext(_RoomListHeader);
 
@@ -41,9 +41,9 @@ const setupSpace = (client: MatrixClient): Room => {
 };
 
 const setupMainMenu = async (client: MatrixClient, testSpace: Room): Promise<RenderResult> => {
-    await testUtils.setupAsyncStoreWithClient(SpaceStore.instance, client);
+    await testUtils.setupAsyncStoreWithClient(SDKContextClass.instance.spaceStore, client);
     act(() => {
-        SpaceStore.instance.setActiveSpace(testSpace.roomId);
+        SDKContextClass.instance.spaceStore.setActiveSpace(testSpace.roomId);
     });
 
     const wrapper = render(<RoomListHeader />);
@@ -55,9 +55,9 @@ const setupMainMenu = async (client: MatrixClient, testSpace: Room): Promise<Ren
 };
 
 const setupPlusMenu = async (client: MatrixClient, testSpace: Room): Promise<RenderResult> => {
-    await testUtils.setupAsyncStoreWithClient(SpaceStore.instance, client);
+    await testUtils.setupAsyncStoreWithClient(SDKContextClass.instance.spaceStore, client);
     act(() => {
-        SpaceStore.instance.setActiveSpace(testSpace.roomId);
+        SDKContextClass.instance.spaceStore.setActiveSpace(testSpace.roomId);
     });
 
     const wrapper = render(<RoomListHeader />);
@@ -109,7 +109,7 @@ describe("RoomListHeader", () => {
 
     it("renders a main menu for the home space", () => {
         act(() => {
-            SpaceStore.instance.setActiveSpace(MetaSpace.Home);
+            SDKContextClass.instance.spaceStore.setActiveSpace(MetaSpace.Home);
         });
 
         const { container } = render(<RoomListHeader />);
@@ -153,7 +153,7 @@ describe("RoomListHeader", () => {
         await setupMainMenu(client, testSpace);
 
         act(() => {
-            SpaceStore.instance.setActiveSpace(MetaSpace.Favourites);
+            SDKContextClass.instance.spaceStore.setActiveSpace(MetaSpace.Favourites);
         });
 
         screen.getByText("Favourites");

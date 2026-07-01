@@ -42,6 +42,8 @@ import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
 import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
+import { TestSDKContext } from "../TestSDKContext.ts";
 
 jest.useFakeTimers();
 
@@ -98,7 +100,7 @@ DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
 describe("SpaceStore", () => {
     stubClient();
-    const store = SpaceStore.instance;
+    const store = SDKContextClass.instance.spaceStore;
     const client = MatrixClientPeg.safeGet();
 
     const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
@@ -1290,43 +1292,43 @@ describe("SpaceStore", () => {
         rootSpace.getMyMembership.mockReturnValue(KnownMembership.Invite);
         client.emit(ClientEvent.Room, rootSpace);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.invitedSpaces).toStrictEqual([rootSpace]);
-        expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([]);
+        expect(SDKContextClass.instance.spaceStore.invitedSpaces).toStrictEqual([rootSpace]);
+        expect(SDKContextClass.instance.spaceStore.spacePanelSpaces).toStrictEqual([]);
 
         // accept invite to space
         rootSpace.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(RoomEvent.MyMembership, rootSpace, KnownMembership.Join, KnownMembership.Invite);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
-        expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
+        expect(SDKContextClass.instance.spaceStore.invitedSpaces).toStrictEqual([]);
+        expect(SDKContextClass.instance.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
 
         // join room in space
-        expect(SpaceStore.instance.isRoomInSpace(space1, room1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(space1, room1)).toBeFalsy();
         const rootSpaceRoom1 = mkRoom(room1);
         rootSpaceRoom1.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(ClientEvent.Room, rootSpaceRoom1);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
-        expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
-        expect(SpaceStore.instance.isRoomInSpace(space1, room1)).toBeTruthy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Home, room1)).toBeFalsy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Favourites, room1)).toBeFalsy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.People, room1)).toBeFalsy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Orphans, room1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.invitedSpaces).toStrictEqual([]);
+        expect(SDKContextClass.instance.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(space1, room1)).toBeTruthy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Home, room1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Favourites, room1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.People, room1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Orphans, room1)).toBeFalsy();
 
         // receive room invite
-        expect(SpaceStore.instance.isRoomInSpace(space1, room2)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(space1, room2)).toBeFalsy();
         const rootSpaceRoom2 = mkRoom(room2);
         rootSpaceRoom2.getMyMembership.mockReturnValue(KnownMembership.Invite);
         client.emit(ClientEvent.Room, rootSpaceRoom2);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
-        expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
-        expect(SpaceStore.instance.isRoomInSpace(space1, room2)).toBeTruthy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Home, room2)).toBeTruthy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Favourites, room2)).toBeFalsy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.People, room2)).toBeFalsy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Orphans, room2)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.invitedSpaces).toStrictEqual([]);
+        expect(SDKContextClass.instance.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(space1, room2)).toBeTruthy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Home, room2)).toBeTruthy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Favourites, room2)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.People, room2)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Orphans, room2)).toBeFalsy();
 
         // start DM in space
         const myRootSpaceMember = new RoomMember(space1, testUserId);
@@ -1343,7 +1345,7 @@ describe("SpaceStore", () => {
             }
             return null;
         });
-        expect(SpaceStore.instance.getSpaceFilteredUserIds(space1)!.has(dm1Partner.userId)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.getSpaceFilteredUserIds(space1)!.has(dm1Partner.userId)).toBeFalsy();
         const memberEvent = mkEvent({
             event: true,
             type: EventType.RoomMember,
@@ -1356,27 +1358,31 @@ describe("SpaceStore", () => {
         });
         client.emit(RoomStateEvent.Members, memberEvent, rootSpace.currentState, dm1Partner);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.getSpaceFilteredUserIds(space1)!.has(dm1Partner.userId)).toBeTruthy();
+        expect(
+            SDKContextClass.instance.spaceStore.getSpaceFilteredUserIds(space1)!.has(dm1Partner.userId),
+        ).toBeTruthy();
         const dm1Room = mkRoom(dm1);
         dm1Room.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(ClientEvent.Room, dm1Room);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
-        expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
-        expect(SpaceStore.instance.isRoomInSpace(space1, dm1)).toBeTruthy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Home, dm1)).toBeTruthy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Favourites, dm1)).toBeFalsy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.People, dm1)).toBeTruthy();
-        expect(SpaceStore.instance.isRoomInSpace(MetaSpace.Orphans, dm1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.invitedSpaces).toStrictEqual([]);
+        expect(SDKContextClass.instance.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(space1, dm1)).toBeTruthy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Home, dm1)).toBeTruthy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Favourites, dm1)).toBeFalsy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.People, dm1)).toBeTruthy();
+        expect(SDKContextClass.instance.spaceStore.isRoomInSpace(MetaSpace.Orphans, dm1)).toBeFalsy();
 
         // join subspace
         const subspace = mkSpace(space2);
         subspace.getMyMembership.mockReturnValue(KnownMembership.Join);
-        const prom = testUtils.emitPromise(SpaceStore.instance, space1);
+        const prom = testUtils.emitPromise(SDKContextClass.instance.spaceStore, space1);
         client.emit(ClientEvent.Room, subspace);
         jest.runOnlyPendingTimers();
-        expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
-        expect(SpaceStore.instance.spacePanelSpaces.map((r) => r.roomId)).toStrictEqual([rootSpace.roomId]);
+        expect(SDKContextClass.instance.spaceStore.invitedSpaces).toStrictEqual([]);
+        expect(SDKContextClass.instance.spaceStore.spacePanelSpaces.map((r) => r.roomId)).toStrictEqual([
+            rootSpace.roomId,
+        ]);
         await prom;
     });
 
@@ -1408,7 +1414,10 @@ describe("SpaceStore", () => {
 
         await run();
         // Favourites and People meta spaces should not be returned
-        expect(SpaceStore.instance.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);
+        expect(SDKContextClass.instance.spaceStore.enabledMetaSpaces).toStrictEqual([
+            MetaSpace.Home,
+            MetaSpace.Orphans,
+        ]);
     });
 
     describe("when feature_dynamic_room_predecessors is not enabled", () => {
@@ -1417,7 +1426,7 @@ describe("SpaceStore", () => {
                 (settingName) => settingName === "Spaces.allRoomsInHome",
             );
             // @ts-ignore calling a private function
-            SpaceStore.instance.onAction({
+            SDKContextClass.instance.spaceStore.onAction({
                 action: Action.SettingUpdated,
                 settingName: "feature_dynamic_room_predecessors",
                 roomId: null,
@@ -1448,7 +1457,7 @@ describe("SpaceStore", () => {
 
         it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
             // Given a store
-            const store = SpaceStore.testInstance();
+            const store = new SpaceStore(defaultDispatcher, new TestSDKContext());
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
@@ -1467,7 +1476,7 @@ describe("SpaceStore", () => {
                     settingName === "Spaces.allRoomsInHome" || settingName === "feature_dynamic_room_predecessors",
             );
             // @ts-ignore calling a private function
-            SpaceStore.instance.onAction({
+            SDKContextClass.instance.spaceStore.onAction({
                 action: Action.SettingUpdated,
                 settingName: "feature_dynamic_room_predecessors",
                 roomId: null,
@@ -1498,7 +1507,7 @@ describe("SpaceStore", () => {
 
         it("passes that value in calls to getVisibleRooms during getSpaceFilteredRoomIds", () => {
             // Given a store
-            const store = SpaceStore.testInstance();
+            const store = new SpaceStore(defaultDispatcher, new TestSDKContext());
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
 

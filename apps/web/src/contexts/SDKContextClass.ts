@@ -17,7 +17,7 @@ import { MemberListStore } from "../stores/MemberListStore";
 import { RoomNotificationStateStore } from "../stores/notifications/RoomNotificationStateStore";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
-import SpaceStore, { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import SpaceStore from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
@@ -59,7 +59,7 @@ export class SDKContextClass {
     protected _WidgetStore?: WidgetStore;
     protected _PosthogAnalytics?: PosthogAnalytics;
     protected _SlidingSyncManager?: SlidingSyncManager;
-    protected _SpaceStore?: SpaceStoreClass;
+    protected _SpaceStore?: SpaceStore;
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
     protected _UserProfilesStore?: UserProfilesStore;
@@ -135,9 +135,11 @@ export class SDKContextClass {
         }
         return this._SlidingSyncManager;
     }
-    public get spaceStore(): SpaceStoreClass {
+    public get spaceStore(): SpaceStore {
         if (!this._SpaceStore) {
-            this._SpaceStore = SpaceStore.instance;
+            this._SpaceStore = new SpaceStore(defaultDispatcher, this);
+            this._SpaceStore.start();
+            window.mxSpaceStore = this._SpaceStore;
         }
         return this._SpaceStore;
     }

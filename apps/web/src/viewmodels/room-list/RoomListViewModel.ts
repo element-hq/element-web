@@ -22,7 +22,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import SpaceStore from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
@@ -57,6 +57,7 @@ interface StickyRoomPosition {
 
 interface RoomListViewModelProps {
     client: MatrixClient;
+    spaceStore: SpaceStore;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
@@ -137,7 +138,7 @@ export class RoomListViewModel
     private scrollToIndex?: (index: number) => void;
 
     public constructor(props: RoomListViewModelProps) {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = props.spaceStore.activeSpaceRoom;
 
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
@@ -561,7 +562,7 @@ export class RoomListViewModel
             }
 
             // Space changed - get the last selected room for the new space to prevent flicker
-            const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
+            const lastSelectedRoom = this.props.spaceStore.getLastSelectedRoomIdForSpace(newSpaceId);
 
             this.updateRoomListData(true, lastSelectedRoom);
             return;
@@ -773,7 +774,7 @@ export class RoomListViewModel
     };
 
     public createRoom = (): void => {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = this.props.spaceStore.activeSpaceRoom;
         if (activeSpace) {
             dispatcher.dispatch({
                 action: Action.CreateRoom,

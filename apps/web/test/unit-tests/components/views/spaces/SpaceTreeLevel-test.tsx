@@ -17,9 +17,9 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { SpaceItem, SpaceButton } from "../../../../../src/components/views/spaces/SpaceTreeLevel";
 import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { StaticNotificationState } from "../../../../../src/stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -55,9 +55,9 @@ describe("SpaceButton", () => {
                 />,
             );
 
-            expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
             fireEvent.click(getByTestId(container, "create-space-button"));
-            expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith("!1:example.org");
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith("!1:example.org");
         });
 
         it("navigates to the space home on click if already active", () => {
@@ -89,9 +89,9 @@ describe("SpaceButton", () => {
                 />,
             );
 
-            expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
             fireEvent.click(getByTestId(container, "create-space-button"));
-            expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
         });
 
         it("does nothing on click if already active", () => {
@@ -108,7 +108,7 @@ describe("SpaceButton", () => {
             fireEvent.click(getByTestId(container, "create-space-button"));
             expect(dispatchSpy).not.toHaveBeenCalled();
             // Re-activating the metaspace is a no-op
-            expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
         });
 
         it("should render notificationState if one is provided", () => {
@@ -139,7 +139,7 @@ describe("SpaceItem", () => {
     subspace.name = "Subspace";
 
     it("should render a space with subspaces", () => {
-        mocked(SpaceStore.instance.getChildSpaces).mockImplementation((spaceId) =>
+        mocked(SDKContextClass.instance.spaceStore.getChildSpaces).mockImplementation((spaceId) =>
             spaceId === space.roomId ? [subspace] : [],
         );
 

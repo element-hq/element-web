@@ -27,7 +27,7 @@ import type WidgetStore from "../stores/WidgetStore";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import type SpaceStore from "../stores/spaces/SpaceStore";
 import type TypingStore from "../stores/TypingStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
 import { type VoiceRecordingStore } from "../stores/VoiceRecordingStore";
@@ -106,7 +106,7 @@ declare global {
         mxWidgetLayoutStore: WidgetLayoutStore;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxSpaceStore: SpaceStoreClass;
+        mxSpaceStore: SpaceStore;
         mxVoiceRecordingStore: VoiceRecordingStore;
         mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;

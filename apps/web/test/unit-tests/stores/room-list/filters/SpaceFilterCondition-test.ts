@@ -13,7 +13,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { FILTER_CHANGED } from "../../../../../src/stores/room-list/filters/IFilterCondition";
 import { SpaceFilterCondition } from "../../../../../src/stores/room-list/filters/SpaceFilterCondition";
 import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../src/settings/SettingsStore");
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
@@ -28,7 +28,7 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
 });
 
 const SettingsStoreMock = mocked(SettingsStore);
-const SpaceStoreInstanceMock = mocked(SpaceStore.instance);
+const SpaceStoreInstanceMock = mocked(SDKContextClass.instance.spaceStore);
 
 jest.useFakeTimers();
 

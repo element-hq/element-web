@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { type RoomListStore as Interface } from "./Interface";
 import { SpaceFilterCondition } from "./filters/SpaceFilterCondition";
-import SpaceStore from "../spaces/SpaceStore";
 import { MetaSpace, type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * Watches for changes in spaces to manage the filter on the provided RoomListStore
@@ -17,16 +17,16 @@ import { MetaSpace, type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE 
 export class SpaceWatcher {
     private readonly filter = new SpaceFilterCondition();
     // we track these separately to the SpaceStore as we need to observe transitions
-    private activeSpace: SpaceKey = SpaceStore.instance.activeSpace;
-    private allRoomsInHome: boolean = SpaceStore.instance.allRoomsInHome;
+    private activeSpace: SpaceKey = SDKContextClass.instance.spaceStore.activeSpace;
+    private allRoomsInHome: boolean = SDKContextClass.instance.spaceStore.allRoomsInHome;
 
     public constructor(private store: Interface) {
         if (SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome)) {
             this.updateFilter();
             store.addFilter(this.filter);
         }
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
-        SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, this.onHomeBehaviourUpdated);
+        SDKContextClass.instance.spaceStore.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
+        SDKContextClass.instance.spaceStore.on(UPDATE_HOME_BEHAVIOUR, this.onHomeBehaviourUpdated);
     }
 
     private static needsFilter(spaceKey: SpaceKey, allRoomsInHome: boolean): boolean {

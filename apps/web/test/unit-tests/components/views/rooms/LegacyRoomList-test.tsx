@@ -23,11 +23,11 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import * as testUtils from "../../../../test-utils";
 import { mkSpace, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
 import { type ITagMap } from "../../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -43,7 +43,7 @@ DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 describe("LegacyRoomList", () => {
     stubClient();
     const client = MatrixClientPeg.safeGet();
-    const store = SpaceStore.instance;
+    const store = SDKContextClass.instance.spaceStore;
 
     function getComponent(props: Partial<LegacyRoomList["props"]> = {}): JSX.Element {
         return (

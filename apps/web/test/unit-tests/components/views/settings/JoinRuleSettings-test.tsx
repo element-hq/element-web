@@ -33,8 +33,8 @@ import JoinRuleSettings, {
     type JoinRuleSettingsProps,
 } from "../../../../../src/components/views/settings/JoinRuleSettings";
 import { PreferredRoomVersions } from "../../../../../src/utils/PreferredRoomVersions";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("<JoinRuleSettings />", () => {
     const userId = "@alice:server.org";
@@ -165,7 +165,9 @@ describe("<JoinRuleSettings />", () => {
                 // room that doesn't support the join rule
                 const room = new Room(roomId, client, userId);
                 const parentSpace = new Room("!parentSpace:server.org", client, userId);
-                jest.spyOn(SpaceStore.instance, "getKnownParents").mockReturnValue(new Set([parentSpace.roomId]));
+                jest.spyOn(SDKContextClass.instance.spaceStore, "getKnownParents").mockReturnValue(
+                    new Set([parentSpace.roomId]),
+                );
                 setRoomStateEvents(room, unsupportedRoomVersion);
                 const memberAlice = new RoomMember(roomId, "@alice:server.org");
                 const memberBob = new RoomMember(roomId, "@bob:server.org");
