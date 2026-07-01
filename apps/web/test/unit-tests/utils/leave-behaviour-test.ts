@@ -24,7 +24,6 @@ import { type ActionPayload } from "../../../src/dispatcher/payloads";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
 import { type Call } from "../../../src/models/Call";
-import LegacyCallHandler from "../../../src/LegacyCallHandler";
 
 describe("leaveRoomBehaviour", () => {
     SDKContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
@@ -80,7 +79,9 @@ describe("leaveRoomBehaviour", () => {
     };
 
     it("hangs up legacy calls when leaving a room", async () => {
-        const hangupSpy = jest.spyOn(LegacyCallHandler.instance, "hangupOrReject").mockImplementation(() => {});
+        const hangupSpy = jest
+            .spyOn(SDKContextClass.instance.legacyCallHandler, "hangupOrReject")
+            .mockImplementation(() => {});
 
         viewRoom(room);
         await leaveRoomBehaviour(client, room.roomId);

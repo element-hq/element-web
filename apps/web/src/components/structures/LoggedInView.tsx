@@ -46,7 +46,7 @@ import { type CollapseItem, type ICollapseConfig } from "../../resizer/distribut
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { type IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import AudioFeedArrayForLegacyCall from "../views/voip/AudioFeedArrayForLegacyCall";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -147,7 +147,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue("useCompactLayout"),
             usageLimitDismissed: false,
-            activeCalls: LegacyCallHandler.instance.getAllActiveCalls(),
+            activeCalls: context.legacyCallHandler.getAllActiveCalls(),
         };
 
         // stash the MatrixClient in case we log out before we are unmounted
@@ -162,7 +162,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         document.addEventListener("keydown", this.onNativeKeyDown, false);
-        LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.onCallState);
+        this.context.legacyCallHandler.addListener(LegacyCallHandlerEvent.CallState, this.onCallState);
 
         this.updateServerNoticeEvents();
 
@@ -260,7 +260,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         document.removeEventListener("keydown", this.onNativeKeyDown, false);
-        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.onCallState);
+        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallState, this.onCallState);
         this._matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
         this._matrixClient.removeListener(ClientEvent.Sync, this.onSync);
         this._matrixClient.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
@@ -274,7 +274,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private onCallState = (): void => {
-        const activeCalls = LegacyCallHandler.instance.getAllActiveCalls();
+        const activeCalls = this.context.legacyCallHandler.getAllActiveCalls();
         if (activeCalls === this.state.activeCalls) return;
         this.setState({ activeCalls });
     };

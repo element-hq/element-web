@@ -24,7 +24,6 @@ import type SettingsStore from "../settings/SettingsStore";
 import { type Notifier } from "../Notifier";
 import type RightPanelStore from "../stores/right-panel/RightPanelStore";
 import type WidgetStore from "../stores/WidgetStore";
-import type LegacyCallHandler from "../LegacyCallHandler";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
@@ -105,7 +104,6 @@ declare global {
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxWidgetLayoutStore: WidgetLayoutStore;
-        mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
         mxSpaceStore: SpaceStoreClass;

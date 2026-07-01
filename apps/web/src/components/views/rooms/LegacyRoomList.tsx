@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, type Room, RoomType } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
+import React, {
+    type JSX,
+    type ComponentType,
+    createRef,
+    type ReactComponentElement,
+    type SyntheticEvent,
+    useContext,
+} from "react";
 import {
     PlusIcon,
     UserAddSolidIcon,
@@ -18,7 +25,6 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex.tsx";
-import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { Action } from "../../../dispatcher/actions.ts";
 import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
@@ -45,7 +51,6 @@ import {
     UPDATE_SELECTED_SPACE,
     UPDATE_SUGGESTED_ROOMS,
 } from "../../../stores/spaces/index.ts";
-import SpaceStore from "../../../stores/spaces/SpaceStore.ts";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays.ts";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects.ts";
 import type ResizeNotifier from "../../../utils/ResizeNotifier.ts";
@@ -69,12 +74,12 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu.tsx";
 import ExtraTile from "./ExtraTile.tsx";
 import RoomSublist, { type IAuxButtonProps } from "./RoomSublist.tsx";
-import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts.ts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager.ts";
 import AccessibleButton from "../elements/AccessibleButton.tsx";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation.ts";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
+import { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -131,9 +136,10 @@ const auxButtonContextMenuPosition = (handle: HTMLDivElement): MenuProps => {
 };
 
 const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = defaultDispatcher }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    const activeSpace = useEventEmitterState(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
-        return SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = useEventEmitterState(sdkContext.spaceStore, UPDATE_SELECTED_SPACE, () => {
+        return sdkContext.spaceStore.activeSpaceRoom;
     });
 
     const showCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
@@ -220,9 +226,10 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
 };
 
 const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    const activeSpace = useEventEmitterState<Room | null>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
-        return SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = useEventEmitterState<Room | null>(sdkContext.spaceStore, UPDATE_SELECTED_SPACE, () => {
+        return sdkContext.spaceStore.activeSpaceRoom;
     });
 
     const showCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
@@ -448,33 +455,33 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
     private dispatcherRef?: string;
     private treeRef = createRef<HTMLDivElement>();
 
-    public static contextType = MatrixClientContext;
-    declare public context: React.ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.state = {
             sublists: {},
-            suggestedRooms: SpaceStore.instance.suggestedRooms,
+            suggestedRooms: context.spaceStore.suggestedRooms,
         };
     }
 
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        SDKContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-        SpaceStore.instance.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
+        this.context.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.spaceStore.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
-        LegacyCallHandler.instance.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+        this.context.legacyCallHandler.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
         this.updateLists(); // trigger the first update
     }
 
     public componentWillUnmount(): void {
-        SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
+        this.context.spaceStore.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
-        SDKContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-        LegacyCallHandler.instance.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+        this.context.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.context.legacyCallHandler.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
     }
 
     private updateProtocolSupport = (): void => {
@@ -483,14 +490,14 @@ export default class LegacyRoomList extends React.PureComponent<IProps, IState> 
 
     private onRoomViewStoreUpdate = (): void => {
         this.setState({
-            currentRoomId: SDKContextClass.instance.roomViewStore.getRoomId() ?? undefined,
+            currentRoomId: this.context.roomViewStore.getRoomId() ?? undefined,
         });
     };
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
-            const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.context.roomViewStore.getRoomId();
             if (!currentRoomId) return;
             const room = this.getRoomDelta(currentRoomId, viewRoomDeltaPayload.delta, viewRoomDeltaPayload.unread);
             if (room) {

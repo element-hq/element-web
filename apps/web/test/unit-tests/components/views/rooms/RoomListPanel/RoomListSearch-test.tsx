@@ -12,7 +12,7 @@ import { mocked } from "jest-mock";
 import { RoomListSearch } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListSearch";
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
-import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
+import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -26,7 +26,7 @@ describe("<RoomListSearch />", () => {
     beforeEach(() => {
         // By default, we consider shouldShowComponent(UIComponent.ExploreRooms) should return true
         mocked(shouldShowComponent).mockReturnValue(true);
-        jest.spyOn(LegacyCallHandler.instance, "getSupportsPstnProtocol").mockReturnValue(false);
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getSupportsPstnProtocol").mockReturnValue(false);
     });
 
     it("renders", () => {

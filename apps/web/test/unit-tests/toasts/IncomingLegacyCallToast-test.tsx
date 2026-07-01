@@ -10,10 +10,10 @@ import { LOCAL_NOTIFICATION_SETTINGS_PREFIX, MatrixEvent, Room } from "matrix-js
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import React from "react";
 
-import LegacyCallHandler from "../../../src/LegacyCallHandler";
 import IncomingLegacyCallToast from "../../../src/toasts/IncomingLegacyCallToast";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
 
 describe("<IncomingLegacyCallToast />", () => {
     const userId = "@alice:server.org";
@@ -49,7 +49,7 @@ describe("<IncomingLegacyCallToast />", () => {
     });
 
     it("renders sound on button when call is silenced", () => {
-        LegacyCallHandler.instance.silenceCall(call.callId);
+        SDKContextClass.instance.legacyCallHandler.silenceCall(call.callId);
         const { getByLabelText } = render(getComponent());
         expect(getByLabelText("Sound on")).toMatchSnapshot();
     });

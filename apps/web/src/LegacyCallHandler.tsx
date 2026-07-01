@@ -34,7 +34,6 @@ import { WidgetType } from "./widgets/WidgetType";
 import { SettingLevel } from "./settings/SettingLevel";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { UIFeature } from "./settings/UIFeature";
@@ -42,7 +41,6 @@ import { Action } from "./dispatcher/actions";
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./widgets/ManagedHybrid";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
-import { WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore";
 import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts/IncomingLegacyCallToast";
 import ToastStore from "./stores/ToastStore";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
@@ -54,6 +52,7 @@ import { localNotificationsAreSilenced } from "./utils/notifications";
 import { isNotNull } from "./Typeguards";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 import { Jitsi } from "./widgets/Jitsi.ts";
+import { type SDKContextClass } from "./contexts/SDKContextClass.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
@@ -115,12 +114,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private backgroundAudio = new BackgroundAudio();
     private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
 
-    public static get instance(): LegacyCallHandler {
-        if (!window.mxLegacyCallHandler) {
-            window.mxLegacyCallHandler = new LegacyCallHandler();
-        }
-
-        return window.mxLegacyCallHandler;
+    public constructor(private readonly sdkContext: SDKContextClass) {
+        super();
     }
 
     /*
@@ -260,7 +255,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             return;
         }
 
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
         if (!mappedRoomId) return;
         if (this.getCallForRoom(mappedRoomId)) {
             logger.log(
@@ -317,7 +312,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     public getAllActiveCallsForPip(roomId: string): MatrixCall[] {
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
-        if (room && WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
+        if (room && this.sdkContext.widgetLayoutStore.hasMaximisedWidget(room)) {
             // This checks if there is space for the call view in the aux panel
             // If there is no space any call should be displayed in PiP
             return this.getAllActiveCalls();
@@ -619,7 +614,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private setCallState(call: MatrixCall, status: CallState): void {
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
 
         logger.log(`Call state in ${mappedRoomId} changed to ${status}`);
 
@@ -974,12 +969,12 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         dis.dispatch({ action: "appsDrawer", show: true });
 
         // Prevent double clicking the call button
-        const widget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
+        const widget = this.sdkContext.widgetStore.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
         if (widget) {
             // If there already is a Jitsi widget, pin it
             const room = client.getRoom(roomId);
             if (isNotNull(room)) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+                this.sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             }
             return;
         }
@@ -1001,7 +996,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     public hangupCallApp(roomId: string): void {
         logger.info("Leaving conference call in " + roomId);
 
-        const roomInfo = WidgetStore.instance.getRoom(roomId);
+        const roomInfo = this.sdkContext.widgetStore.getRoom(roomId);
         if (!roomInfo) return; // "should never happen" clauses go here
 
         const jitsiWidgets = roomInfo.widgets.filter((w) => WidgetType.JITSI.matches(w.type));
