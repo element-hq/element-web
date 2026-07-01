@@ -377,9 +377,6 @@ describe("MessagePreviewStore", () => {
         expect(store.previews.has(nonRenderedRoom.roomId)).toBeFalsy();
     });
 
-    // The previewers are instantiated lazily on first use (see getPreviewDefinition) to avoid a
-    // circular dependency between MessagePreviewStore and ReactionEventPreview. These tests exercise
-    // each previewer in the registry through the public generatePreviewForEvent entrypoint.
     describe("generatePreviewForEvent", () => {
         it("should generate a preview for a message event", () => {
             const message = mkMessage({
