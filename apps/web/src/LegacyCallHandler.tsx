@@ -60,48 +60,12 @@ export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
 
 const CHECK_PROTOCOLS_ATTEMPTS = 3;
 
-type MediaEventType = keyof HTMLMediaElementEventMap;
-const MEDIA_ERROR_EVENT_TYPES: MediaEventType[] = [
-    "error",
-    // The media has become empty; for example, this event is sent if the media has
-    // already been loaded (or partially loaded), and the HTMLMediaElement.load method
-    // is called to reload it.
-    "emptied",
-    // The user agent is trying to fetch media data, but data is unexpectedly not
-    // forthcoming.
-    "stalled",
-    // Media data loading has been suspended.
-    "suspend",
-    // Playback has stopped because of a temporary lack of data
-    "waiting",
-];
-const MEDIA_DEBUG_EVENT_TYPES: MediaEventType[] = [
-    "play",
-    "pause",
-    "playing",
-    "ended",
-    "loadeddata",
-    "loadedmetadata",
-    "canplay",
-    "canplaythrough",
-    "volumechange",
-];
-
-const MEDIA_EVENT_TYPES = [...MEDIA_ERROR_EVENT_TYPES, ...MEDIA_DEBUG_EVENT_TYPES];
-
 export enum AudioID {
     Ring = "ringAudio",
     Ringback = "ringbackAudio",
     CallEnd = "callendAudio",
     Busy = "busyAudio",
 }
-
-/* istanbul ignore next */
-const debuglog = (...args: any[]): void => {
-    if (SettingsStore.getValue("debug_legacy_call_handler")) {
-        logger.log.call(console, "LegacyCallHandler debuglog:", ...args);
-    }
-};
 
 interface ThirdpartyLookupResponse {
     userid: string;
@@ -190,18 +154,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener(CallEventHandlerEvent.Incoming, this.onCallIncoming);
-        }
-    }
-
-    /* istanbul ignore next (remove if we start using this function for things other than debug logging) */
-    public handleEvent(e: Event): void {
-        const target = e.target as HTMLElement;
-        const audioId = target?.id;
-
-        if (MEDIA_ERROR_EVENT_TYPES.includes(e.type as MediaEventType)) {
-            logger.error(`LegacyCallHandler: encountered "${e.type}" event with <audio id="${audioId}">`, e);
-        } else if (MEDIA_EVENT_TYPES.includes(e.type as MediaEventType)) {
-            debuglog(`encountered "${e.type}" event with <audio id="${audioId}">`, e);
         }
     }
 
