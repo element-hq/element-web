@@ -23,7 +23,6 @@ const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
 
 interface IState {
-    enabled?: boolean;
     rooms?: Room[];
 }
 
@@ -48,21 +47,6 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
     public get rooms(): Room[] {
         return this.state.rooms || [];
-    }
-
-    public get visible(): boolean {
-        return !!this.state.enabled && this.meetsRoomRequirement;
-    }
-
-    /**
-     * Do we have enough rooms to justify showing the breadcrumbs?
-     * (Or is the labs feature enabled?)
-     *
-     * @returns true if there are at least 20 visible rooms.
-     */
-    public get meetsRoomRequirement(): boolean {
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        return !!this.matrixClient && this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor).length >= 20;
     }
 
     protected async onAction(payload: SettingUpdatedPayload | ViewRoomPayload | JoinRoomPayload): Promise<void> {
