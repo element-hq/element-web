@@ -1548,7 +1548,6 @@
         "notifications": "방 헤더에서 알림 패널 활성화",
         "render_reaction_images": "반응에 사용자 정의 이미지 렌더링",
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
-        "room_list_sections": "대화방 목록 섹션",
         "sliding_sync": "슬라이딩 동기화 모드",
         "sliding_sync_description": "개발 진행 중인 기능이며 비활성화는 불가능합니다. 현재 Element Call 기능은 지원하지 않습니다.",
         "sliding_sync_disabled_notice": "기능을 해제하려면 다시 로그인하세요",

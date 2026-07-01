@@ -46,5 +46,12 @@
             "datasourceTemplate": "npm",
             "depTypeTemplate": "hak"
         }
-    ]
+    ],
+    "toolSettings": {
+        "nodeMaxMemory": 2048
+    },
+    "env": {
+        "PNPM_MAX_WORKERS": "2",
+        "PNPM_WORKERS": "2"
+    }
 }

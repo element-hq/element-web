@@ -12,7 +12,8 @@ import { type RenderOptions } from "jest-matrix-react";
 
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
-import { SDKContext, type SdkContextClass } from "../../src/contexts/SDKContext";
+import { SDKContext } from "../../src/contexts/SDKContext";
+import { type SDKContextClass } from "../../src/contexts/SDKContextClass";
 
 type WrapperProps<T> = { wrappedRef?: Ref<ComponentType<T>> } & T;
 
@@ -38,7 +39,7 @@ export function wrapInMatrixClientContext<T>(WrappedComponent: ComponentType<T>)
 
 export function wrapInSdkContext<T>(
     WrappedComponent: ComponentType<T>,
-    sdkContext: SdkContextClass,
+    sdkContext: SDKContextClass,
 ): ComponentType<WrapperProps<T>> {
     return class extends React.Component<WrapperProps<T>> {
         render() {
@@ -63,7 +64,7 @@ export function withClientContextRenderOptions(client: MatrixClient): RenderOpti
     };
 }
 
-export function clientAndSDKContextRenderOptions(client: MatrixClient, sdkContext: SdkContextClass): RenderOptions {
+export function clientAndSDKContextRenderOptions(client: MatrixClient, sdkContext: SDKContextClass): RenderOptions {
     return {
         wrapper: ({ children }) => (
             <SDKContext.Provider value={sdkContext}>

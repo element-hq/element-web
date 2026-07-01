@@ -100,7 +100,12 @@ export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps)
             <HideButton onHideClick={vm.onHideClick} />
             <div className={styles.previewGroup}>
                 {previews.map((preview) => (
-                    <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
+                    <LinkPreview
+                        key={preview.link}
+                        onImageClick={() => vm.onImageClick(preview)}
+                        {...preview}
+                        image={preview.image}
+                    />
                 ))}
                 {toggleButton}
             </div>

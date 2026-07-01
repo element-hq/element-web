@@ -19,7 +19,10 @@
     padding: var(--cpd-space-1x) 0;
 
     &:hover,
-    &:focus-visible,
+    /* keyboardActive is toggled in JS for keyboard focus only (see RoomListSectionHeaderView), and
+       kept while focus is on the menu button so it stays reachable by Tab — without revealing the
+       menu on a mouse-focused header the way :focus-within would */
+    &.keyboardActive,
     &:has(button[data-state="open"]) {
         color: var(--cpd-color-text-primary);
 

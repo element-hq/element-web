@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { render, screen } from "@test-utils";
+import { render, screen, waitFor } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { composeStories } from "@storybook/react-vite";
 import { describe, it, expect } from "vitest";
@@ -131,5 +131,20 @@ describe("<RoomListItemView />", () => {
     it("should hide hover menu when showMoreOptionsMenu is false", () => {
         const { container } = render(<WithoutHoverMenu />);
         expect(container.querySelector('[aria-label="More Options"]')).toBeNull();
+    });
+
+    it("reveals the hover menu on keyboard focus and clears it when focus leaves", async () => {
+        // isFocused focuses the row via the keyboard on mount, so the hover menu is revealed.
+        const { container } = render(<WithHoverMenu isFocused={true} />);
+        const option = screen.getByRole("option");
+        const moreButton = container.querySelector('[aria-label="More Options"]');
+
+        expect(option.className).toMatch(/keyboardActive/);
+        expect(moreButton).toBeVisible();
+
+        // Focus leaving the row hides the menu again.
+        option.blur();
+        await waitFor(() => expect(option.className).not.toMatch(/keyboardActive/));
+        expect(moreButton).not.toBeVisible();
     });
 });

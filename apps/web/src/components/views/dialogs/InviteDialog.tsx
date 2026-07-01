@@ -55,7 +55,7 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { type NonEmptyArray } from "../../../@types/common";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
@@ -204,7 +204,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             throw new Error("When using InviteKind.CallTransfer a call is required for an InviteDialog");
         }
 
-        this.profilesStore = SdkContextClass.instance.userProfilesStore;
+        this.profilesStore = SDKContextClass.instance.userProfilesStore;
         const cli = MatrixClientPeg.safeGet();
 
         const excludedIds = new Set([cli.getSafeUserId()]);

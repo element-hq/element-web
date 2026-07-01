@@ -21,9 +21,7 @@
         },
         "expand_filters": "Udvid filtreringslisten",
         "filters": {
-            "favourite": "Foretrukne",
             "invites": "Invitationer",
-            "low_priority": "Lav prioritet",
             "mentions": "Nævnt",
             "people": "Brugere",
             "rooms": "Rum",
