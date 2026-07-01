@@ -10,6 +10,7 @@ import { type Route } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { getSampleFilePath } from "../../sample-files";
+import { OAuthGrantType } from "matrix-js-sdk/src";
 
 const USER_NAME = "Bob";
 const USER_NAME_NEW = "Alice";
@@ -94,7 +95,7 @@ test.describe("Account user settings tab", () => {
                             revocation_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}revoke`,
                             registration_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}register`,
                             response_types_supported: ["code"],
-                            grant_types_supported: ["authorization_code"],
+                            grant_types_supported: ["authorization_code", "refresh_token"],
                             response_modes_supported: ["query", "fragment"],
                             code_challenge_methods_supported: ["S256"],
                             account_management_uri: EXTERNAL_ACCOUNT_MANAGEMENT_URL,
