@@ -40,7 +40,6 @@ import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { SdkContextClass } from "../../contexts/SDKContextClass";
 import SdkConfig from "../../SdkConfig";
 
-
 const logger = rootLogger.getChild("useRoomCall");
 
 export enum PlatformCallType {
