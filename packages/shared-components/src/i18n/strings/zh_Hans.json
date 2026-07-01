@@ -120,10 +120,7 @@
             "no_chats": "暂无聊天",
             "no_chats_description": "首先向人们发送消息或创建房间。",
             "no_chats_description_no_room_rights": "开始向某人发送消息",
-            "no_favourites": "你还没有收藏聊天",
-            "no_favourites_description": "你可以在聊天设置中将聊天添加到收藏夹",
             "no_invites": "你没有任何未读邀请",
-            "no_lowpriority": "你没有任何低优先级房间",
             "no_mentions": "你没有任何未读提及",
             "no_people": "你尚未与任何人私聊",
             "no_people_description": "你可以取消选择筛选条件，以便查看其它聊天记录",
@@ -136,9 +133,7 @@
         "expand_all_sections": "展开所有区域",
         "expand_filters": "展开过滤器列表",
         "filters": {
-            "favourite": "收藏",
             "invites": "邀请",
-            "low_priority": "低优先级",
             "mentions": "提及",
             "people": "人员",
             "rooms": "房间",
@@ -180,7 +175,8 @@
         "space_menu": {
             "home": "空间主页",
             "space_settings": "空间设置"
-        }
+        },
+        "unread_messages": "未读消息"
     },
     "terms": {
         "tac_button": "阅读条款与条件"

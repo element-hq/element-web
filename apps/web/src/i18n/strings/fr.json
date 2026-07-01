@@ -1580,7 +1580,6 @@
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
-        "room_list_sections": "Sections de la liste de salons",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Connectez-vous à nouveau pour désactiver",
