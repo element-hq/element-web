@@ -92,6 +92,7 @@ test.describe("Account user settings tab", () => {
                             authorization_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}authorize`,
                             token_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}token`,
                             revocation_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}revoke`,
+                            registration_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}register`,
                             response_types_supported: ["code"],
                             grant_types_supported: ["authorization_code"],
                             code_challenge_methods_supported: ["S256"],
