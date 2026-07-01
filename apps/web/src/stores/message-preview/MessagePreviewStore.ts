@@ -36,9 +36,9 @@ import shouldHideEvent from "../../shouldHideEvent";
 const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 
 // The previewers are created lazily (via factories) rather than eagerly instantiated here.
-// Some previewers (e.g. ReactionEventPreview) import MessagePreviewStore to preview the related
-// event, creating a circular dependency; instantiating them at module-eval time can run before
-// their own module has finished evaluating. Deferring construction until first use avoids that.
+// ReactionEventPreview is constructed with the store singleton so it can preview the reacted-to
+// event; that singleton doesn't exist yet at module-eval time, so construction must be deferred
+// until first use.
 const PREVIEWS: Record<
     string,
     {
@@ -68,7 +68,7 @@ const PREVIEWS: Record<
     },
     "m.reaction": {
         isState: false,
-        previewer: () => new ReactionEventPreview(),
+        previewer: () => new ReactionEventPreview(MessagePreviewStore.instance),
     },
     [M_POLL_START.name]: {
         isState: false,
