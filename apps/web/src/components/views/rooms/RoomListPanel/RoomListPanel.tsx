@@ -63,7 +63,12 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
 
     const matrixClient = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
-        () => new RoomListHeaderViewModel({ matrixClient, spaceStore: sdkContext.spaceStore }),
+        () =>
+            new RoomListHeaderViewModel({
+                matrixClient,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            }),
     );
 
     return (

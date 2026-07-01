@@ -28,7 +28,7 @@ import {
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import type { RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
@@ -43,6 +43,10 @@ export interface Props {
      * The space store instance.
      */
     spaceStore: SpaceStore;
+    /**
+     * The room list store instance.
+     */
+    roomListStore: RoomListStoreV3;
 }
 
 /**
@@ -182,7 +186,7 @@ export class RoomListHeaderViewModel
     };
 
     public sort = (option: SortOption): void => {
-        const oldSortingAlgorithm = RoomListStoreV3.instance.activeSortAlgorithm;
+        const oldSortingAlgorithm = this.props.roomListStore.activeSortAlgorithm;
         let newSortingAlgorithm: SortingAlgorithm;
         switch (option) {
             case "alphabetical":
@@ -195,7 +199,7 @@ export class RoomListHeaderViewModel
                 newSortingAlgorithm = SortingAlgorithm.Unread;
                 break;
         }
-        RoomListStoreV3.instance.resort(newSortingAlgorithm);
+        this.props.roomListStore.resort(newSortingAlgorithm);
         this.snapshot.merge({ activeSortOption: option });
 
         // Record analytics for this action
@@ -213,7 +217,7 @@ export class RoomListHeaderViewModel
     };
 
     public createSection = (): void => {
-        RoomListStoreV3.instance.createSection();
+        this.props.roomListStore.createSection();
         PosthogTrackers.trackSectionCreation("RoomListHeader");
     };
 

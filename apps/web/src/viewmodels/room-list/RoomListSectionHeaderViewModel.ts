@@ -18,7 +18,7 @@ import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotif
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import {
     CHATS_TAG,
     getCustomSectionData,
@@ -37,6 +37,7 @@ interface RoomListSectionHeaderViewModelProps {
      */
     spaceId: string;
     onToggleExpanded: (isExpanded: boolean) => void;
+    roomListStore: RoomListStoreV3;
 }
 
 export class RoomListSectionHeaderViewModel
@@ -253,13 +254,13 @@ export class RoomListSectionHeaderViewModel
     }
 
     public editSection = async (): Promise<void> => {
-        await RoomListStoreV3.instance.editSection(this.props.tag);
+        await this.props.roomListStore.editSection(this.props.tag);
     };
 
     public removeSection = async (): Promise<void> => {
         // There is one notification state per room in the section
         const isEmpty = this.roomNotificationStates.size === 0;
-        await RoomListStoreV3.instance.removeSection(this.props.tag, isEmpty);
+        await this.props.roomListStore.removeSection(this.props.tag, isEmpty);
 
         PosthogTrackers.trackInteraction("WebDeleteSection");
     };

@@ -26,6 +26,7 @@ import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
 import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
+import RoomListStoreV3 from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -66,6 +67,7 @@ export class SDKContextClass {
     protected _OidcClientStore?: OidcClientStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
+    protected _RoomListStore?: RoomListStoreV3;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -190,6 +192,15 @@ export class SDKContextClass {
             this._MultiRoomViewStore = new MultiRoomViewStore(defaultDispatcher, this);
         }
         return this._MultiRoomViewStore;
+    }
+
+    public get roomListStore(): RoomListStoreV3 {
+        if (!this._RoomListStore) {
+            this._RoomListStore = new RoomListStoreV3(defaultDispatcher, this);
+            this._RoomListStore.start();
+            window.roomListStoreV3 = this._RoomListStore;
+        }
+        return this._RoomListStore;
     }
 
     public onLoggedOut(): void {

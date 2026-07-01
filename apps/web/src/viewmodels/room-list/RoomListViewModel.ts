@@ -23,11 +23,8 @@ import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDel
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import type SpaceStore from "../../stores/spaces/SpaceStore";
-import RoomListStoreV3, {
-    RoomListStoreV3Event,
-    type RoomsResult,
-    type Section,
-} from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { RoomListStoreV3Event, type RoomsResult, type Section } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
 import {
     RoomNotificationStateStore,
@@ -58,6 +55,7 @@ interface StickyRoomPosition {
 interface RoomListViewModelProps {
     client: MatrixClient;
     spaceStore: SpaceStore;
+    roomListStore: RoomListStoreV3;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
@@ -141,7 +139,7 @@ export class RoomListViewModel
         const activeSpace = props.spaceStore.activeSpaceRoom;
 
         // Get initial rooms
-        const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
+        const roomsResult = props.roomListStore.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
         const filterIds = [...filterKeyToIdMap.values()];
@@ -152,7 +150,7 @@ export class RoomListViewModel
 
         super(props, {
             // Initial view state - start with empty, will populate in async init
-            isLoadingRooms: RoomListStoreV3.instance.isLoadingRooms,
+            isLoadingRooms: props.roomListStore.isLoadingRooms,
             isRoomListEmpty,
             filterIds,
             activeFilterId: undefined,
@@ -174,28 +172,28 @@ export class RoomListViewModel
 
         // Subscribe to room list updates
         this.disposables.trackListener(
-            RoomListStoreV3.instance,
+            this.props.roomListStore,
             RoomListStoreV3Event.ListsUpdate as any,
             this.onListsUpdate,
         );
 
         // Subscribe to room list loaded
         this.disposables.trackListener(
-            RoomListStoreV3.instance,
+            this.props.roomListStore,
             RoomListStoreV3Event.ListsLoaded as any,
             this.onListsLoaded,
         );
 
         // Subscribe to section creation
         this.disposables.trackListener(
-            RoomListStoreV3.instance,
+            this.props.roomListStore,
             RoomListStoreV3Event.SectionCreated as any,
             this.onSectionCreated as (...args: unknown[]) => void,
         );
 
         // Subscribe to room tagging
         this.disposables.trackListener(
-            RoomListStoreV3.instance,
+            this.props.roomListStore,
             RoomListStoreV3Event.RoomTagged as any,
             this.onRoomTagged,
         );
@@ -241,7 +239,7 @@ export class RoomListViewModel
 
         // Update rooms result with new filter
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
-        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.roomsResult = this.props.roomListStore.getSortedRoomsInActiveSpace(filterKeys);
 
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
@@ -306,6 +304,7 @@ export class RoomListViewModel
             viewModel = new RoomListItemViewModel({
                 room,
                 client: this.props.client,
+                roomListStore: this.props.roomListStore,
             });
 
             this.roomItemViewModels.set(roomId, viewModel);
@@ -324,6 +323,7 @@ export class RoomListViewModel
             title,
             spaceId: this.roomsResult.spaceId,
             onToggleExpanded: () => this.updateRoomListData(),
+            roomListStore: this.props.roomListStore,
         });
         this.roomSectionHeaderViewModels.set(tag, viewModel);
         return viewModel;
@@ -542,7 +542,7 @@ export class RoomListViewModel
         const oldSpaceId = this.roomsResult.spaceId;
 
         // Refresh room data from store
-        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.roomsResult = this.props.roomListStore.getSortedRoomsInActiveSpace(filterKeys);
         const newSpaceId = this.roomsResult.spaceId;
 
         // Detect space change
@@ -726,7 +726,7 @@ export class RoomListViewModel
 
         const activeFilterId = this.activeFilter !== undefined ? filterKeyToIdMap.get(this.activeFilter) : undefined;
         const isRoomListEmpty = this.roomsResult.sections.every((section) => section.rooms.length === 0);
-        const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
+        const isLoadingRooms = this.props.roomListStore.isLoadingRooms;
         const previousSections = this.snapshot.current.sections;
 
         // Single atomic snapshot update
@@ -790,7 +790,7 @@ export class RoomListViewModel
     public onSectionCreated = (tag: string): void => {
         // Refresh roomsResult so the new section lands in the same snapshot as the scroll-to.
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
-        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.roomsResult = this.props.roomListStore.getSortedRoomsInActiveSpace(filterKeys);
         this.updateRoomsMap(this.roomsResult);
         this.updateRoomListData(false, null, tag);
         this.showToast("section_created");
@@ -830,10 +830,10 @@ export class RoomListViewModel
     }
 
     public changeSectionOrder = async (sourceTag: string, targetTag: string): Promise<void> => {
-        await RoomListStoreV3.instance.reorderSection(sourceTag, targetTag);
+        await this.props.roomListStore.reorderSection(sourceTag, targetTag);
         // Scroll to the section after it moved
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
-        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.roomsResult = this.props.roomListStore.getSortedRoomsInActiveSpace(filterKeys);
         this.updateRoomsMap(this.roomsResult);
         this.updateRoomListData(false, null, sourceTag);
     };

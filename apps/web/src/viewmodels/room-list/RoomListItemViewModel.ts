@@ -38,13 +38,14 @@ import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import type RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
 
 interface RoomItemProps {
     room: Room;
     client: MatrixClient;
+    roomListStore: RoomListStoreV3;
 }
 
 /**
@@ -65,7 +66,12 @@ export class RoomListItemViewModel
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
         const notifState = RoomNotificationStateStore.instance.getRoomState(props.room);
-        const initialItem = RoomListItemViewModel.generateItemSync(props.room, props.client, notifState);
+        const initialItem = RoomListItemViewModel.generateItemSync(
+            props.roomListStore,
+            props.room,
+            props.client,
+            notifState,
+        );
         super(props, initialItem);
 
         this.notifState = notifState;
@@ -187,7 +193,12 @@ export class RoomListItemViewModel
      * Preserves the message preview which is managed separately.
      */
     private updateItem(): void {
-        const newItem = RoomListItemViewModel.generateItemSync(this.props.room, this.props.client, this.notifState);
+        const newItem = RoomListItemViewModel.generateItemSync(
+            this.props.roomListStore,
+            this.props.room,
+            this.props.client,
+            this.notifState,
+        );
         this.snapshot.merge({
             ...newItem,
             notification: keepIfSame(this.snapshot.current.notification, newItem.notification),
@@ -230,6 +241,7 @@ export class RoomListItemViewModel
      * Message preview is loaded separately to avoid blocking initial render.
      */
     private static generateItemSync(
+        roomListStore: RoomListStoreV3,
         room: Room,
         client: MatrixClient,
         notifState: RoomNotificationState,
@@ -289,7 +301,7 @@ export class RoomListItemViewModel
             call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
 
         // Build sections list for the "Move to section" submenu
-        const sections: Section[] = RoomListItemViewModel.buildSections(roomTags);
+        const sections: Section[] = RoomListItemViewModel.buildSections(roomListStore, roomTags);
 
         return {
             id: room.roomId,
@@ -399,7 +411,7 @@ export class RoomListItemViewModel
     };
 
     public onCreateSection = async (): Promise<void> => {
-        const newTag = await RoomListStoreV3.instance.createSection();
+        const newTag = await this.props.roomListStore.createSection();
         PosthogTrackers.trackSectionCreation("RoomListItemOverflowMenu");
 
         // Add the room to the section
@@ -414,7 +426,7 @@ export class RoomListItemViewModel
 
     public onRemoveFromSection = (): void => {
         const roomTags = this.props.room.tags;
-        const sectionTag = RoomListStoreV3.instance.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
+        const sectionTag = this.props.roomListStore.orderedSectionTags.find((tag) => Boolean(roomTags[tag]));
         if (sectionTag) {
             tagRoom(this.props.room, sectionTag);
         }
@@ -422,7 +434,7 @@ export class RoomListItemViewModel
 
     private onOrderedCustomSectionsChange = (): void => {
         // Rebuild sections list to reflect new order
-        const sections = RoomListItemViewModel.buildSections(this.props.room.tags);
+        const sections = RoomListItemViewModel.buildSections(this.props.roomListStore, this.props.room.tags);
         this.snapshot.merge({ sections: keepIfSame(this.snapshot.current.sections, sections) });
     };
 
@@ -430,11 +442,11 @@ export class RoomListItemViewModel
      * Build the list of available sections for the "Move to section" submenu.
      * Order follows the canonical section order from RoomListStoreV3.
      */
-    private static buildSections(roomTags: Room["tags"]): Section[] {
+    private static buildSections(roomListStore: RoomListStoreV3, roomTags: Room["tags"]): Section[] {
         const customSectionData = getCustomSectionData();
 
         return (
-            RoomListStoreV3.instance.orderedSectionTags
+            roomListStore.orderedSectionTags
                 // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
                 // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
                 .filter((tag) => !isDefaultSectionTag(tag))

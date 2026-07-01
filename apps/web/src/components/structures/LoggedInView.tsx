@@ -38,7 +38,6 @@ import { hideToast as hideServerLimitToast, showToast as showServerLimitToast } 
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
-import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
@@ -57,7 +56,6 @@ import { BackdropPanel } from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
 import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
@@ -388,7 +386,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     private onRoomStateEvents = (ev: MatrixEvent): void => {
-        const serverNoticeList = RoomListStoreV3.instance.getServerNoticeRooms();
+        const serverNoticeList = this.context.roomListStore.getServerNoticeRooms();
         if (serverNoticeList.some((r) => r.roomId === ev.getRoomId())) {
             this.updateServerNoticeEvents();
         }
@@ -421,7 +419,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     private updateServerNoticeEvents = async (): Promise<void> => {
-        const serverNoticeList = RoomListStoreV3.instance.getServerNoticeRooms();
+        const serverNoticeList = this.context.roomListStore.getServerNoticeRooms();
         if (!serverNoticeList.length) return;
 
         const events: MatrixEvent[] = [];
@@ -586,7 +584,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
             case KeyBindingAction.ToggleRoomSidePanel:
                 if (this.props.page_type === "room_view") {
-                    RightPanelStore.instance.togglePanel(null);
+                    this.context.rightPanelStore.togglePanel(null);
                     handled = true;
                 }
                 break;
