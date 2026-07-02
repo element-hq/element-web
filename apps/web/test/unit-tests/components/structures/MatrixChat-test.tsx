@@ -68,7 +68,6 @@ import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
-import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
@@ -853,9 +852,6 @@ describe("<MatrixChat />", () => {
                     it("should dispatch after_forget_room action on successful forget", async () => {
                         await clearAllModals();
                         await getComponentAndWaitForReady();
-
-                        // Mock out the old room list store
-                        jest.spyOn(RoomListStore.instance, "manualRoomUpdate").mockImplementation(async () => {});
 
                         // Register a mock function to the dispatcher
                         const fn = jest.fn();

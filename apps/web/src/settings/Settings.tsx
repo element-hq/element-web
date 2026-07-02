@@ -214,7 +214,6 @@ export interface Settings {
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
-    "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
     "feature_sliding_sync": IBaseSetting<boolean>;
@@ -225,7 +224,6 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_new_room_list": IFeature;
     "feature_retention": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
@@ -522,14 +520,6 @@ export const SETTINGS: Settings = {
         // Contains room ID
         shouldExportToRageshake: false,
     },
-    "feature_html_topic": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|html_topic"),
-        default: false,
-    },
     "feature_bridge_state": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
@@ -651,15 +641,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
-    },
-    "feature_new_room_list": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        labsGroup: LabGroup.Ui,
-        displayName: _td("labs|new_room_list"),
-        description: _td("labs|under_active_development"),
-        isFeature: true,
-        default: true,
-        controller: new ReloadOnChangeController(),
     },
     "feature_login_with_qr": {
         supportedLevels: [SettingLevel.CONFIG],
