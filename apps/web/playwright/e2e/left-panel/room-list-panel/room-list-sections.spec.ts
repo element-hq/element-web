@@ -13,7 +13,6 @@ import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList,
 test.describe("Room list sections", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list"],
         botCreateOpts: {
             displayName: "BotBob",
             autoAcceptInvites: true,
