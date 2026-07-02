@@ -25,6 +25,7 @@ import type LegacyCallHandler from "../../../src/LegacyCallHandler";
 import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
+import { SDKContext } from "../../../src/contexts/SDKContext";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -76,9 +77,11 @@ describe("useRoomCall", () => {
     function render() {
         return renderHook(() => useRoomCall(room), {
             wrapper: ({ children }) => (
-                <MatrixClientContextProvider client={client}>
-                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
-                </MatrixClientContextProvider>
+                <SDKContext.Provider value={SDKContextClass.instance}>
+                    <MatrixClientContextProvider client={client}>
+                        <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                    </MatrixClientContextProvider>
+                </SDKContext.Provider>
             ),
         });
     }
