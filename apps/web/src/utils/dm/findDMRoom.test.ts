@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { createTestClient } from "test-utils";
 
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { DirectoryMember, ThreepidMember } from "../../../../src/utils/direct-messages";
-import { findDMForUser } from "../../../../src/utils/dm/findDMForUser";
-import { findDMRoom } from "../../../../src/utils/dm/findDMRoom";
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { createTestClient } from "../../../test-utils";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { DirectoryMember, ThreepidMember } from "../direct-messages";
+import { findDMForUser } from "./findDMForUser";
+import { findDMRoom } from "./findDMRoom";
+import DMRoomMap from "../DMRoomMap";
 
-jest.mock("../../../../src/utils/dm/findDMForUser", () => ({
-    findDMForUser: jest.fn(),
+vi.mock("../dm/findDMForUser", () => ({
+    findDMForUser: vi.fn(),
 }));
 
 describe("findDMRoom", () => {
@@ -30,33 +32,33 @@ describe("findDMRoom", () => {
 
     beforeEach(() => {
         mockClient = createTestClient();
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         room1 = new Room("!room1:example.com", mockClient, userId1);
 
         dmRoomMap = {
-            getDMRoomForIdentifiers: jest.fn(),
-            getDMRoomsForUserId: jest.fn(),
+            getDMRoomForIdentifiers: vi.fn(),
+            getDMRoomsForUserId: vi.fn(),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
     });
 
     it("should return the room for a single target with a room", () => {
-        mocked(findDMForUser).mockReturnValue(room1);
+        vi.mocked(findDMForUser).mockReturnValue(room1);
         expect(findDMRoom(mockClient, [member1])).toBe(room1);
     });
 
     it("should return undefined for a single target without a room", () => {
-        mocked(findDMForUser).mockReturnValue(undefined);
+        vi.mocked(findDMForUser).mockReturnValue(undefined);
         expect(findDMRoom(mockClient, [member1])).toBeNull();
     });
 
     it("should return the room for 2 targets with a room", () => {
-        mocked(dmRoomMap.getDMRoomForIdentifiers).mockReturnValue(room1);
+        vi.mocked(dmRoomMap.getDMRoomForIdentifiers).mockReturnValue(room1);
         expect(findDMRoom(mockClient, [member1, member2])).toBe(room1);
     });
 
     it("should return null for 2 targets without a room", () => {
-        mocked(dmRoomMap.getDMRoomForIdentifiers).mockReturnValue(null);
+        vi.mocked(dmRoomMap.getDMRoomForIdentifiers).mockReturnValue(null);
         expect(findDMRoom(mockClient, [member1, member2])).toBeNull();
     });
 });
