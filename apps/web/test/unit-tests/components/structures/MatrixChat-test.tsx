@@ -474,7 +474,7 @@ describe("<MatrixChat />", () => {
 
         const tokenResponse: BearerTokenResponse = {
             access_token: accessToken,
-            refresh_token: "def456",
+            refresh_token: undefined,
             id_token: "ghi789",
             scope: "test",
             token_type: "Bearer",
@@ -644,12 +644,6 @@ describe("<MatrixChat />", () => {
         });
 
         describe("when login succeeds", () => {
-            beforeEach(() => {
-                jest.spyOn(StorageAccess, "idbLoad").mockImplementation(
-                    async (_table: string, key: string | string[]) => (key === "mx_access_token" ? accessToken : null),
-                );
-            });
-
             afterEach(() => {
                 SettingsStore.reset();
             });
