@@ -41,7 +41,7 @@ export async function populateLocalStorageWithCredentials(page: Page, credential
     );
 }
 
-export const test = base.extend<{
+export interface TestFixtures {
     /**
      * The displayname to use for the user registered in {@link #credentials}.
      *
@@ -71,7 +71,9 @@ export const test = base.extend<{
      * app.
      */
     user: Credentials;
-}>({
+}
+
+export const test = base.extend<TestFixtures>({
     displayName: undefined,
 
     // We don't directly depend upon the `context` fixture, but we do need to make sure that it has been run
