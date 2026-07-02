@@ -220,6 +220,20 @@ test.describe("Element Call", () => {
                 const expectedIntent = callType === "voice" ? "join_existing_voice" : "join_existing";
                 expect(hash.get("intent")).toEqual(expectedIntent);
                 expect(hash.get("skipLobby")).toEqual(null);
+
+                // pip layout check
+                switch (callType) {
+                    case "voice": {
+                        const pipContainer = page.getByTestId("widget-pip-container");
+                        await expect(pipContainer).toBeVisible();
+                        break;
+                    }
+                    case "video": {
+                        const pipContainer = page.getByTestId("widget-pip-container");
+                        await expect(pipContainer).not.toBeVisible();
+                        break;
+                    }
+                }
             });
         });
 
