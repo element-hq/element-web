@@ -6,8 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type Mocked } from "jest-mock-vitest-adapter";
+import { makeGeolocationPosition, mockGeolocation, getMockGeolocationPositionError } from "test-utils";
 
 import {
     type GenericPosition,
@@ -16,9 +19,8 @@ import {
     mapGeolocationError,
     mapGeolocationPositionToTimedGeo,
     watchPosition,
-} from "../../../../src/utils/beacon";
-import { getCurrentPosition } from "../../../../src/utils/beacon/geolocation";
-import { makeGeolocationPosition, mockGeolocation, getMockGeolocationPositionError } from "../../../test-utils";
+    getCurrentPosition,
+} from "./geolocation";
 
 describe("geolocation utilities", () => {
     let geolocation: Mocked<Geolocation>;
@@ -29,12 +31,12 @@ describe("geolocation utilities", () => {
 
     beforeEach(() => {
         geolocation = mockGeolocation();
-        jest.spyOn(Date, "now").mockReturnValue(now);
+        vi.spyOn(Date, "now").mockReturnValue(now);
     });
 
     afterEach(() => {
-        jest.spyOn(Date, "now").mockRestore();
-        jest.spyOn(logger, "error").mockRestore();
+        vi.spyOn(Date, "now").mockRestore();
+        vi.spyOn(logger, "error").mockRestore();
     });
 
     describe("getGeoUri", () => {
@@ -97,7 +99,7 @@ describe("geolocation utilities", () => {
     describe("mapGeolocationError", () => {
         beforeEach(() => {
             // suppress expected errors from test log
-            jest.spyOn(logger, "error").mockImplementation(() => {});
+            vi.spyOn(logger, "error").mockImplementation(() => {});
         });
 
         it("returns default for other error", () => {
@@ -138,21 +140,20 @@ describe("geolocation utilities", () => {
     describe("watchPosition()", () => {
         it("throws with unavailable error when geolocation is not available", () => {
             // suppress expected errors from test log
-            jest.spyOn(logger, "error").mockImplementation(() => {});
+            vi.spyOn(logger, "error").mockImplementation(() => {});
 
             // remove the mock we added
-            // @ts-ignore illegal assignment to readonly property
-            navigator.geolocation = undefined;
+            vi.spyOn(navigator, "geolocation", "get").mockRestore();
 
-            const positionHandler = jest.fn();
-            const errorHandler = jest.fn();
+            const positionHandler = vi.fn();
+            const errorHandler = vi.fn();
 
             expect(() => watchPosition(positionHandler, errorHandler)).toThrow(GeolocationError.Unavailable);
         });
 
         it("sets up position handler with correct options", () => {
-            const positionHandler = jest.fn();
-            const errorHandler = jest.fn();
+            const positionHandler = vi.fn();
+            const errorHandler = vi.fn();
             watchPosition(positionHandler, errorHandler);
 
             const [, , options] = geolocation.watchPosition.mock.calls[0];
@@ -165,8 +166,8 @@ describe("geolocation utilities", () => {
         it("returns clearWatch function", () => {
             const watchId = 1;
             geolocation.watchPosition.mockReturnValue(watchId);
-            const positionHandler = jest.fn();
-            const errorHandler = jest.fn();
+            const positionHandler = vi.fn();
+            const errorHandler = vi.fn();
             const clearWatch = watchPosition(positionHandler, errorHandler);
 
             clearWatch();
@@ -175,8 +176,8 @@ describe("geolocation utilities", () => {
         });
 
         it("calls position handler with position", () => {
-            const positionHandler = jest.fn();
-            const errorHandler = jest.fn();
+            const positionHandler = vi.fn();
+            const errorHandler = vi.fn();
             watchPosition(positionHandler, errorHandler);
 
             expect(positionHandler).toHaveBeenCalledWith(defaultPosition);
@@ -184,13 +185,13 @@ describe("geolocation utilities", () => {
 
         it("maps geolocation position error and calls error handler", () => {
             // suppress expected errors from test log
-            jest.spyOn(logger, "error").mockImplementation(() => {});
+            vi.spyOn(logger, "error").mockImplementation(() => {});
             geolocation.watchPosition.mockImplementation((_callback, error) => {
                 error!(getMockGeolocationPositionError(1, "message"));
                 return -1;
             });
-            const positionHandler = jest.fn();
-            const errorHandler = jest.fn();
+            const positionHandler = vi.fn();
+            const errorHandler = vi.fn();
             watchPosition(positionHandler, errorHandler);
 
             expect(errorHandler).toHaveBeenCalledWith(GeolocationError.PermissionDenied);
@@ -200,18 +201,17 @@ describe("geolocation utilities", () => {
     describe("getCurrentPosition()", () => {
         it("throws with unavailable error when geolocation is not available", async () => {
             // suppress expected errors from test log
-            jest.spyOn(logger, "error").mockImplementation(() => {});
+            vi.spyOn(logger, "error").mockImplementation(() => {});
 
             // remove the mock we added
-            // @ts-ignore illegal assignment to readonly property
-            navigator.geolocation = undefined;
+            vi.spyOn(navigator, "geolocation", "get").mockRestore();
 
             await expect(() => getCurrentPosition()).rejects.toThrow(GeolocationError.Unavailable);
         });
 
         it("throws with geolocation error when geolocation.getCurrentPosition fails", async () => {
             // suppress expected errors from test log
-            jest.spyOn(logger, "error").mockImplementation(() => {});
+            vi.spyOn(logger, "error").mockImplementation(() => {});
 
             const timeoutError = getMockGeolocationPositionError(3, "message");
             geolocation.getCurrentPosition.mockImplementation((callback, error) => error!(timeoutError));

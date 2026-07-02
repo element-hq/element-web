@@ -6,10 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { M_TIMESTAMP, Beacon } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { msUntilExpiry, sortBeaconsByLatestExpiry, sortBeaconsByLatestCreation } from "../../../../src/utils/beacon";
-import { makeBeaconInfoEvent } from "../../../test-utils";
+import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { M_TIMESTAMP, Beacon } from "matrix-js-sdk/src/matrix";
+import { makeBeaconInfoEvent } from "test-utils";
+
+import { msUntilExpiry, sortBeaconsByLatestExpiry, sortBeaconsByLatestCreation } from "./duration";
 
 describe("beacon utils", () => {
     // 14.03.2022 16:15
@@ -17,11 +20,11 @@ describe("beacon utils", () => {
     const HOUR_MS = 3600000;
 
     beforeEach(() => {
-        jest.spyOn(global.Date, "now").mockReturnValue(now);
+        vi.spyOn(global.Date, "now").mockReturnValue(now);
     });
 
     afterAll(() => {
-        jest.spyOn(global.Date, "now").mockRestore();
+        vi.spyOn(global.Date, "now").mockRestore();
     });
 
     describe("msUntilExpiry", () => {
