@@ -43,7 +43,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     it("should return no preview by default", () => {
         expect(getViewModel().vm.getSnapshot()).toMatchInlineSnapshot(`
 {
-  "preview": null,
+  "previews": [],
 }
 `);
     });
@@ -55,27 +55,29 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
 
-    it("should return null when preview is not visible", async () => {
+    it("should return empty list when preview is not visible", async () => {
         const { vm, client } = getViewModel({ visible: false });
         await vm.updateWithText("https://example.org");
-        expect(vm.getSnapshot().preview).toBeNull();
+        expect(vm.getSnapshot().previews).toHaveLength(0);
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
 
-    it("should return null when all URL fetches fail", async () => {
+    it("should return empty list when all URL fetches fail", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockRejectedValue(new Error("Forced test failure"));
         await vm.updateWithText("https://example.org");
-        expect(vm.getSnapshot().preview).toBeNull();
+        expect(vm.getSnapshot().previews).toHaveLength(0);
     });
 
-    it("should use the first URL with a valid preview when multiple are given", async () => {
+    it("should use all URLs with a valid preview when multiple are given", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview
             .mockRejectedValueOnce(new Error("First URL failed"))
             .mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText("https://example.org/one https://example.org/two");
-        expect(vm.getSnapshot().preview?.link).toEqual("https://example.org/two");
+        console.log(vm.getSnapshot().previews)
+        expect(vm.getSnapshot().previews[0]?.link).toEqual("https://example.org/two");
+        expect(vm.getSnapshot().previews).toHaveLength(1);
     });
 
     it("should not re-fetch when text changes but the URL set does not", async () => {
@@ -97,31 +99,33 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText("https://example.org");
-        expect(vm.getSnapshot().preview).not.toBeNull();
+        expect(vm.getSnapshot().previews).not.toHaveLength(0);
         await vm.updateUrlPreviewVisible(false);
-        expect(vm.getSnapshot().preview).toBeNull();
+        expect(vm.getSnapshot().previews).toHaveLength(0);
     });
 
     it("should restore preview when made visible again", async () => {
         const { vm, client } = getViewModel({ visible: false });
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText("https://example.org");
-        expect(vm.getSnapshot().preview).toBeNull();
+        expect(vm.getSnapshot().previews).toHaveLength(0);
         await vm.updateUrlPreviewVisible(true);
-        expect(vm.getSnapshot().preview).not.toBeNull();
+        expect(vm.getSnapshot().previews).not.toHaveLength(0);
     });
 
     it("should preview a URL with media", async () => {
         const { vm, client } = getViewModel();
-        client.getUrlPreview.mockResolvedValueOnce({
-            "og:title": "Media example",
-            "og:type": "document",
-            "og:url": "https://example.org",
-            "og:image": IMAGE_MXC,
-            "og:image:height": 128,
-            "og:image:width": 128,
-            "matrix:image:size": 10000,
-        });
+        client.getUrlPreview.mockResolvedValueOnce(
+            {
+                "og:title": "Media example",
+                "og:type": "document",
+                "og:url": "https://example.org",
+                "og:image": IMAGE_MXC,
+                "og:image:height": 128,
+                "og:image:width": 128,
+                "matrix:image:size": 10000,
+            }
+        );
         // eslint-disable-next-line no-restricted-properties
         client.mxcUrlToHttp.mockImplementation((url, width) => {
             expect(url).toEqual(IMAGE_MXC);

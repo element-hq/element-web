@@ -27,6 +27,9 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
     /**
      * Calculated set of links from the message text.
+     *
+     * Links are inserted in the order they appear in the message text,
+     * which guarantees Array.from(this.links) to be in the same order.
      */
     private links: Set<string> = new Set();
 
@@ -36,30 +39,33 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     private urlPreviewVisible: boolean;
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
-        super(props, { preview: null });
+        super(props, { previews: [] });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
     }
 
     private async computeSnapshot(): Promise<void> {
         if (!this.urlPreviewVisible) {
-            this.snapshot.set({ preview: null });
+            this.snapshot.set({ previews: [] });
             return;
         }
-        // We always select the *first* viable preview out of the message.
-        // Subsequent links are ignored.
-        for (const link of this.links) {
-            try {
-                const preview = await this.fetcher.fetchPreview(link, true);
-                if (preview) {
-                    this.snapshot.set({ preview });
-                    return;
+
+        // Fetch previews for all links in the message text,
+        // And remove the ones with erroneous responses
+        let previewRequests =
+            Array.from(this.links).map(async (link) => {
+                try {
+                    return await this.fetcher.fetchPreview(link, true);
+                } catch (ex) {
+                    logger.warn("Fetching preview failed", ex);
+                    return null;
                 }
-            } catch (ex) {
-                logger.warn("Fetching preview failed", ex);
-            }
-        }
-        this.snapshot.set({ preview: null });
+            });
+
+        let previewResponses = await Promise.all(previewRequests);
+        let previews = previewResponses.filter(res => res !== null);
+
+        this.snapshot.set({ previews });
     }
 
     /**
@@ -67,12 +73,11 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * @param content Plaintext from the message composer.
      */
     public async updateWithText(content: string): Promise<void> {
-        const newLinks = new Set(
-            content
-                .split(" ")
-                .map((w) => w.trim())
-                .filter((word) => URL.canParse(word)),
-        );
+        const newLinksOrdered = content
+            .split(" ")
+            .map((w) => w.trim())
+            .filter((word) => URL.canParse(word));
+        const newLinks = new Set(newLinksOrdered);
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
