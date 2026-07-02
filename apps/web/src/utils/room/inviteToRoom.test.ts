@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { inviteToRoom } from "../../../../src/utils/room/inviteToRoom";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { inviteToRoom } from "./inviteToRoom";
 
 describe("inviteToRoom()", () => {
     const userId = "@alice:server.org";
@@ -18,7 +21,7 @@ describe("inviteToRoom()", () => {
 
     const makeRoom = (): Room => {
         const client = getMockClientWithEventEmitter({
-            isGuest: jest.fn(),
+            isGuest: vi.fn(),
         });
         const room = new Room(roomId, client, userId);
         return room;
@@ -26,17 +29,17 @@ describe("inviteToRoom()", () => {
 
     beforeEach(() => {
         // stub
-        jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("requires registration when a guest tries to invite to a room", () => {
         const room = makeRoom();
 
-        jest.spyOn(room.client, "isGuest").mockReturnValue(true);
+        vi.spyOn(room.client, "isGuest").mockReturnValue(true);
 
         inviteToRoom(room);
 
@@ -47,7 +50,7 @@ describe("inviteToRoom()", () => {
     it("opens the room inviter", () => {
         const room = makeRoom();
 
-        jest.spyOn(room.client, "isGuest").mockReturnValue(false);
+        vi.spyOn(room.client, "isGuest").mockReturnValue(false);
 
         inviteToRoom(room);
 

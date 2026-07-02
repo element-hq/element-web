@@ -6,10 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, UNSTABLE_ELEMENT_FUNCTIONAL_USERS } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { getFunctionalMembers } from "../../../../src/utils/room/getFunctionalMembers";
-import { createTestClient, mkEvent } from "../../../test-utils";
+import { describe, it, expect } from "vitest";
+import { Room, UNSTABLE_ELEMENT_FUNCTIONAL_USERS } from "matrix-js-sdk/src/matrix";
+import { createTestClient, mkEvent } from "test-utils";
+
+import { getFunctionalMembers } from "./getFunctionalMembers";
 
 describe("getRoomFunctionalMembers", () => {
     const client = createTestClient();
