@@ -165,6 +165,14 @@ function isReferencedByOtherController(setting: DeclaredSetting, allSettings: De
     );
 }
 
+// See https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
+const SETTINGS_FILE_RELATIVE = path.relative(ROOT, SETTINGS_FILE);
+
+function printAnnotation(line: number, message: string): void {
+    const escape = (s: string): string => s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+    console.log(`::error file=${SETTINGS_FILE_RELATIVE},line=${line},title=Unused setting::${escape(message)}`);
+}
+
 function main(): void {
     const enumLookup = buildEnumLookup();
     const settings = extractSettingNames(enumLookup);
@@ -188,6 +196,9 @@ function main(): void {
         console.error(`⛔ Found ${unused.length} setting(s) declared with no usage:\n`);
         for (const { name, line } of unused) {
             console.error(`  Settings.tsx:${line}: "${name}"`);
+            if (process.env.GITHUB_ACTIONS === "true") {
+                printAnnotation(line, `Setting "${name}" is declared but never used outside ${SETTINGS_DIR_RELATIVE}/`);
+            }
         }
         process.exit(1);
     }
