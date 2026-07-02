@@ -214,7 +214,6 @@ export interface Settings {
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
-    "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
     "feature_sliding_sync": IBaseSetting<boolean>;
@@ -523,14 +522,6 @@ export const SETTINGS: Settings = {
         default: null,
         // Contains room ID
         shouldExportToRageshake: false,
-    },
-    "feature_html_topic": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|html_topic"),
-        default: false,
     },
     "feature_bridge_state": {
         isFeature: true,
