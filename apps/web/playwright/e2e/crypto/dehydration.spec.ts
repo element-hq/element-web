@@ -14,8 +14,8 @@ import {
     createSharedEncryptedRoomWithUser,
     enableKeyBackup,
     logIntoElement,
-    logIntoElementAndVerify,
     logOutOfElement,
+    verifyAfterLogin,
 } from "./utils.ts";
 import { type Client } from "../../pages/client.ts";
 import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
@@ -151,7 +151,8 @@ test.describe("Dehydration", () => {
         });
 
         await test.step("Alice logs back in, and should be able to view Bob's message", async () => {
-            await logIntoElementAndVerify(page, credentials, recoveryKey);
+            await logIntoElement(page, credentials);
+            await verifyAfterLogin(page, recoveryKey);
             await app.viewRoomById(testRoomId);
             await expect(page.getByText("test encrypted 1")).toBeVisible();
         });
