@@ -21,7 +21,6 @@ test.use({
     ...masHomeserver,
     synapseConfig: {
         experimental_features: {
-            msc2697_enabled: false,
             msc3814_enabled: true,
         },
     },
