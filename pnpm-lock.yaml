@@ -330,8 +330,8 @@ importers:
         specifier: ^9.0.0
         version: 9.1.7
       knip:
-        specifier: 6.21.0
-        version: 6.21.0(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28)
+        specifier: 6.23.0
+        version: 6.23.0(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28)
       lint-staged:
         specifier: ^17.0.0
         version: 17.0.8
@@ -494,7 +494,7 @@ importers:
         version: 6.1.3
       tar:
         specifier: ^7.5.8
-        version: 7.5.17
+        version: 7.5.19
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -598,8 +598,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5
       filesize:
-        specifier: 11.0.18
-        version: 11.0.18
+        specifier: 11.0.19
+        version: 11.0.19
       github-markdown-css:
         specifier: ^5.5.1
         version: 5.9.0
@@ -638,7 +638,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1710296787270cf4f4b9df6b3b4f8863a71de9f3
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -661,8 +661,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       posthog-js:
-        specifier: 1.394.0
-        version: 1.394.0
+        specifier: 1.396.0
+        version: 1.396.0
       qrcode:
         specifier: 1.5.4
         version: 1.5.4
@@ -1125,7 +1125,7 @@ importers:
         version: 10.2.1(@types/react@19.2.14)(react@19.2.7)
       '@vector-im/compound-web':
         specifier: ^9.0.0
-        version: 9.7.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 9.7.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       motion:
         specifier: ^12.4.10
         version: 12.42.0(@emotion/is-prop-valid@1.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -1183,7 +1183,7 @@ importers:
         version: 10.2.1(@types/react@19.2.14)(react@19.2.7)
       '@vector-im/compound-web':
         specifier: ^9.0.0
-        version: 9.7.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 9.7.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       styled-components:
         specifier: ^6.1.18
         version: 6.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -1251,7 +1251,7 @@ importers:
         version: 10.2.1(@types/react@19.2.14)(react@19.2.7)
       '@vector-im/compound-web':
         specifier: ^9.0.0
-        version: 9.7.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 9.7.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -4509,8 +4509,8 @@ packages:
   '@posthog/core@1.38.0':
     resolution: {integrity: sha512-QLrJh0hMVpEJXHNyiJR9YhvIO5tzLDedw4UHdvB+ub4fXHMtHCA8H44qgl11HWR3ajpjxtJ8hs3HyOGVF3Zc1w==}
 
-  '@posthog/types@1.391.1':
-    resolution: {integrity: sha512-ASwd7Nf4pViqdYRYaNRyPYRVKWa1CcHUAUWR0XeQJLGdNnsWACBwe0sSieb/cHnKsRXjRwO/23KIY83lm/Ccpw==}
+  '@posthog/types@1.392.0':
+    resolution: {integrity: sha512-nctNujXL3FC1v99FktaTMSugSD9ZOZekEpahUSafkU2TSvW+XGKNkQZbokuJtiWvPBK208dwMJva8UfBkChqpw==}
 
   '@preact/signals-core@1.14.2':
     resolution: {integrity: sha512-RZHdBj9ZF4n40Rp4jS052EHHjBWf96P9oNdXPfhQTovCuWY9iQn3Gq+gOTJSgBO9A/JBuPfMOWsSX/lIU9Pc/A==}
@@ -6403,18 +6403,6 @@ packages:
       '@types/react':
         optional: true
       react:
-        optional: true
-
-  '@vector-im/compound-web@9.7.0':
-    resolution: {integrity: sha512-X8LS9qtxBVynoQ9vmpqassjrxe8zier3EhFYbhYjb+ygZlls6uGj3m73OW6H/8LaaG2JQhNp99ISq5YvMuBRzg==}
-    peerDependencies:
-      '@fontsource/inconsolata': ^5
-      '@fontsource/inter': ^5
-      '@types/react': ^19.2.10
-      '@vector-im/compound-design-tokens': '>=1.6.1 <11.0.0'
-      react: ^18 || ^19.0.0
-    peerDependenciesMeta:
-      '@types/react':
         optional: true
 
   '@vector-im/compound-web@9.7.1':
@@ -8926,8 +8914,8 @@ packages:
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
 
-  filesize@11.0.18:
-    resolution: {integrity: sha512-d/SiIKVaIP7DqL14JfADiSi/TFoo3bmNJYQ6wR5d52/e9Nd/tEsooP/0RD4pgzrjNO6cFOQvSmsWSs84M9OFAw==}
+  filesize@11.0.19:
+    resolution: {integrity: sha512-9Q2itINBvCHwFw9v5X7czZm855yAiFIYlnugrh7+8tYO4ITHZMzV91m35q2FngL9hoZwwjSTQACFF/W52OzJZQ==}
     engines: {node: '>= 10.8.0'}
 
   fill-range@7.1.1:
@@ -10163,8 +10151,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  knip@6.21.0:
-    resolution: {integrity: sha512-q7K9VGSFfdVaCjhj9u+5aI2t5CZt3edZeLi+1wjnGAvYB2WfW6+T9UWAREsTR88aB8YeDqkKVZiVMV7va3oTmg==}
+  knip@6.23.0:
+    resolution: {integrity: sha512-2DvAOX2pZWiG4SLvRRxOAU0aWGEn1ZoVblI541xIoXFdHqq2THMZXy66/qcY5WGuW3TXhb9T1x1zd/Hd1u+yqg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
@@ -10480,8 +10468,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1710296787270cf4f4b9df6b3b4f8863a71de9f3:
+    resolution: {gitHosted: true, integrity: sha512-/9xtVHbqLOeCc/KzCMOmvLuacIu9FB6NgwY95iu8XPxsELjb4LgPNnroOyb1noq1wOaOcBEKiP/ZaEygU8Z82Q==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1710296787270cf4f4b9df6b3b4f8863a71de9f3}
     version: 41.8.0
     engines: {node: '>=22.0.0'}
 
@@ -11723,8 +11711,8 @@ packages:
     resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.394.0:
-    resolution: {integrity: sha512-KWyDYe4MHPrVRuga0uIcGxtBNe3VOVZt+/ueJ2fYRE1chiz5p8E9MzCmg7n6/zPwn9Ht6V9U59CadI3Q8nvIcA==}
+  posthog-js@1.396.0:
+    resolution: {integrity: sha512-OCfTy7NJqtMqwZd3GRiEA+v2d6wTCfSd8I6+rYopG5JHg20fQkpUBsWbUVRdm1X3aqw0JqEMeaKbGU+qEiVpsw==}
 
   postject@1.0.0-alpha.6:
     resolution: {integrity: sha512-b9Eb8h2eVqNE8edvKdwqkrY6O7kAwmI8kcnBv1NScolYJbo59XUF0noFq+lxbC1yN20bmC0WBEbDC5H/7ASb0A==}
@@ -12947,8 +12935,8 @@ packages:
   tar-stream@3.2.0:
     resolution: {integrity: sha512-ojzvCvVaNp6aOTFmG7jaRD0meowIAuPc3cMMhSgKiVWws1GyHbGd/xvnyuRKcKlMpt3qvxx6r0hreCNITP9hIg==}
 
-  tar@7.5.17:
-    resolution: {integrity: sha512-wPEBwzapC+2PaTYPH6e2L+cNOEE227S47wUYFqlegcs8zlLLmeb9Fcff1HVZY4Fwku/1Eyv38n7GYwB2aaS71g==}
+  tar@7.5.19:
+    resolution: {integrity: sha512-4LeEWl96twnS2Q7Bz4MGqgazLqO+hJN63GZxXoIqh1T3VweYD997gbU1ItNsQafqqXTXd5WFyFdReLtwvRBNiw==}
     engines: {node: '>=18'}
 
   teex@1.0.1:
@@ -17282,9 +17270,9 @@ snapshots:
 
   '@posthog/core@1.38.0':
     dependencies:
-      '@posthog/types': 1.391.1
+      '@posthog/types': 1.392.0
 
-  '@posthog/types@1.391.1': {}
+  '@posthog/types@1.392.0': {}
 
   '@preact/signals-core@1.14.2': {}
 
@@ -19180,27 +19168,6 @@ snapshots:
       '@types/react': 19.2.14
       react: 19.2.7
 
-  '@vector-im/compound-web@9.7.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
-    dependencies:
-      '@floating-ui/react': 0.27.17(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@fontsource/inconsolata': 5.2.8
-      '@fontsource/inter': 5.2.8
-      '@radix-ui/react-context-menu': 2.2.16(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@radix-ui/react-dropdown-menu': 2.1.16(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@radix-ui/react-form': 0.1.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@radix-ui/react-progress': 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@radix-ui/react-separator': 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@radix-ui/react-slot': 1.2.4(@types/react@19.2.14)(react@19.2.7)
-      '@vector-im/compound-design-tokens': 10.2.1(@types/react@19.2.14)(react@19.2.7)
-      classnames: 2.5.1
-      react: 19.2.7
-      vaul: 1.1.2(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-    optionalDependencies:
-      '@types/react': 19.2.14
-    transitivePeerDependencies:
-      - '@types/react-dom'
-      - react-dom
-
   '@vector-im/compound-web@9.7.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.2.1(@types/react@19.2.14)(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@floating-ui/react': 0.27.17(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -19750,7 +19717,7 @@ snapshots:
       proper-lockfile: 4.1.2
       resedit: 1.7.2
       semver: 7.7.4
-      tar: 7.5.17
+      tar: 7.5.19
       temp-file: 3.4.0
       tiny-async-pool: 1.3.0
       unzipper: 0.12.3
@@ -22286,7 +22253,7 @@ snapshots:
     dependencies:
       minimatch: 5.1.9
 
-  filesize@11.0.18: {}
+  filesize@11.0.19: {}
 
   fill-range@7.1.1:
     dependencies:
@@ -23748,7 +23715,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  knip@6.21.0(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28):
+  knip@6.23.0(patch_hash=9ee905cce2466e391db69dfcea905b0fe2502afd935d1dc6a6ac94ffe2855c28):
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
       formatly: 0.3.0
@@ -24081,7 +24048,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cad8371fa645f0d57fb9c2287d390dfbcf7409ca:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1710296787270cf4f4b9df6b3b4f8863a71de9f3:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
@@ -24452,7 +24419,7 @@ snapshots:
       nopt: 9.0.0
       proc-log: 6.1.0
       semver: 7.8.5
-      tar: 7.5.17
+      tar: 7.5.19
       tinyglobby: 0.2.17
       which: 6.0.1
     transitivePeerDependencies:
@@ -24466,7 +24433,7 @@ snapshots:
       nopt: 10.0.1
       proc-log: 7.0.0
       semver: 7.8.5
-      tar: 7.5.17
+      tar: 7.5.19
       tinyglobby: 0.2.17
       undici: 6.27.0
       which: 7.0.0
@@ -25047,7 +25014,7 @@ snapshots:
       proc-log: 7.0.0
       sigstore: 5.0.0
       ssri: 14.0.0
-      tar: 7.5.17
+      tar: 7.5.19
     transitivePeerDependencies:
       - kerberos
       - supports-color
@@ -25695,10 +25662,10 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  posthog-js@1.394.0:
+  posthog-js@1.396.0:
     dependencies:
       '@posthog/core': 1.38.0
-      '@posthog/types': 1.391.1
+      '@posthog/types': 1.392.0
       core-js: 3.48.0
       dompurify: 3.4.11
       fflate: 0.4.8
@@ -27232,7 +27199,7 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  tar@7.5.17:
+  tar@7.5.19:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
