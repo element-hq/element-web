@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
 
 // Finds settings declared in apps/web/src/settings/Settings.tsx which are never
 // referenced anywhere else in apps/ outside of settings/ directories. This is a
@@ -16,6 +22,23 @@ const ROOT = path.resolve(__dirname, "..");
 const SETTINGS_DIR = path.join(ROOT, "apps/web/src/settings");
 const SETTINGS_FILE = path.join(SETTINGS_DIR, "Settings.tsx");
 
+// Only the settings *definitions* directory should be excluded from the usage search -
+// there are plenty of other directories literally named "settings" (e.g.
+// apps/web/src/components/views/settings/) which hold real usages and must stay included.
+const SETTINGS_DIR_RELATIVE = path.relative(ROOT, SETTINGS_DIR);
+
+// See https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
+const SETTINGS_FILE_RELATIVE = path.relative(ROOT, SETTINGS_FILE);
+
+// Settings that are only ever referenced from inside another setting's `controller: ...`
+// expression in Settings.tsx (both live in the excluded settings/ directory) are treated as
+// used. This is detected automatically by scanning controller text for other settings'
+// search terms, but keep this list as a manual escape hatch for cases the heuristic can't
+// see (e.g. usage mediated through a helper function rather than a literal reference).
+const KNOWN_USED_OVERRIDES = new Set<string>([
+    // e.g. "someSettingName",
+]);
+
 interface DeclaredSetting {
     // The literal setting name (as passed to SettingsStore), used for reporting.
     name: string;
@@ -28,15 +51,6 @@ interface DeclaredSetting {
     // gating a different setting) - see KNOWN_USED_VIA_CONTROLLER below for how this is used.
     controllerText?: string;
 }
-
-// Settings that are only ever referenced from inside another setting's `controller: ...`
-// expression in Settings.tsx (both live in the excluded settings/ directory) are treated as
-// used. This is detected automatically by scanning controller text for other settings'
-// search terms, but keep this list as a manual escape hatch for cases the heuristic can't
-// see (e.g. usage mediated through a helper function rather than a literal reference).
-const KNOWN_USED_OVERRIDES = new Set<string>([
-    // e.g. "someSettingName",
-]);
 
 function parseFile(filePath: string): ts.SourceFile {
     const content = fs.readFileSync(filePath, "utf-8");
@@ -131,11 +145,10 @@ function findControllerText(settingValue: ts.Expression, sourceFile: ts.SourceFi
     return undefined;
 }
 
-// Only the settings *definitions* directory should be excluded from the usage search -
-// there are plenty of other directories literally named "settings" (e.g.
-// apps/web/src/components/views/settings/) which hold real usages and must stay included.
-const SETTINGS_DIR_RELATIVE = path.relative(ROOT, SETTINGS_DIR);
-
+/**
+ * Checks whether any of the given search terms appears anywhere under apps/ outside the
+ * settings definitions directory. Relies on the `git` binary being available on PATH.
+ */
 function isUsedOutsideSettings(searchTerms: string[]): boolean {
     const patternArgs = searchTerms.flatMap((term) => ["-e", term]);
     try {
@@ -151,11 +164,7 @@ function isUsedOutsideSettings(searchTerms: string[]): boolean {
     }
 }
 
-// A setting is "used via another controller" if some *other* setting's controller expression
-// mentions one of this setting's search terms, e.g. `blacklistUnverifiedDevices`'s
-// `controller: new UIFeatureController(UIFeature.AdvancedEncryption)` counts as usage of the
-// `UIFeature.AdvancedEncryption` setting. Excludes self-references (a setting's own controller
-// citing its own name, e.g. ServerSupportUnstableFeatureController("sendReadReceipts")).
+/** Checks whether another setting's `controller` expression references one of this setting's search terms. */
 function isReferencedByOtherController(setting: DeclaredSetting, allSettings: DeclaredSetting[]): boolean {
     return allSettings.some(
         (other) =>
@@ -165,41 +174,50 @@ function isReferencedByOtherController(setting: DeclaredSetting, allSettings: De
     );
 }
 
-// See https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message
-const SETTINGS_FILE_RELATIVE = path.relative(ROOT, SETTINGS_FILE);
-
 function printAnnotation(line: number, message: string): void {
-    const escape = (s: string): string => s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+    const escape = (s: string): string => s.replaceAll("%", "%25").replaceAll("\r", "%0D").replaceAll("\n", "%0A");
     console.log(`::error file=${SETTINGS_FILE_RELATIVE},line=${line},title=Unused setting::${escape(message)}`);
+}
+
+/** De-duplicates settings by name, keeping the first occurrence. */
+function dedupeSettingsByName(settings: DeclaredSetting[]): Map<string, DeclaredSetting> {
+    const firstByName = new Map<string, DeclaredSetting>();
+    for (const setting of settings) {
+        if (!firstByName.has(setting.name)) firstByName.set(setting.name, setting);
+    }
+    return firstByName;
+}
+
+function findUnusedSettings(candidates: Iterable<DeclaredSetting>, allSettings: DeclaredSetting[]): DeclaredSetting[] {
+    const unused: DeclaredSetting[] = [];
+    for (const setting of candidates) {
+        if (KNOWN_USED_OVERRIDES.has(setting.name)) continue;
+        if (isUsedOutsideSettings(setting.searchTerms)) continue;
+        if (isReferencedByOtherController(setting, allSettings)) continue;
+        unused.push(setting);
+    }
+    return unused;
+}
+
+function reportUnused(unused: DeclaredSetting[]): void {
+    unused.sort((a, b) => a.line - b.line);
+    console.error(`⛔ Found ${unused.length} setting(s) declared with no usage:\n`);
+    for (const { name, line } of unused) {
+        console.error(`  Settings.tsx:${line}: "${name}"`);
+        if (process.env.GITHUB_ACTIONS === "true") {
+            printAnnotation(line, `Setting "${name}" is declared but never used outside ${SETTINGS_DIR_RELATIVE}/`);
+        }
+    }
 }
 
 function main(): void {
     const enumLookup = buildEnumLookup();
     const settings = extractSettingNames(enumLookup);
-
-    // De-duplicate by name (some settings, e.g. inverted pairs, may share a base name).
-    const firstByName = new Map<string, DeclaredSetting>();
-    for (const setting of settings) {
-        if (!firstByName.has(setting.name)) firstByName.set(setting.name, setting);
-    }
-
-    const unused: DeclaredSetting[] = [];
-    for (const setting of firstByName.values()) {
-        if (KNOWN_USED_OVERRIDES.has(setting.name)) continue;
-        if (isUsedOutsideSettings(setting.searchTerms)) continue;
-        if (isReferencedByOtherController(setting, settings)) continue;
-        unused.push(setting);
-    }
+    const firstByName = dedupeSettingsByName(settings);
+    const unused = findUnusedSettings(firstByName.values(), settings);
 
     if (unused.length > 0) {
-        unused.sort((a, b) => a.line - b.line);
-        console.error(`⛔ Found ${unused.length} setting(s) declared with no usage:\n`);
-        for (const { name, line } of unused) {
-            console.error(`  Settings.tsx:${line}: "${name}"`);
-            if (process.env.GITHUB_ACTIONS === "true") {
-                printAnnotation(line, `Setting "${name}" is declared but never used outside ${SETTINGS_DIR_RELATIVE}/`);
-            }
-        }
+        reportUnused(unused);
         process.exit(1);
     }
 
