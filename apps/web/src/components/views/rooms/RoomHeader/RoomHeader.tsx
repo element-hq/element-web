@@ -51,7 +51,7 @@ import WithPresenceIndicator, { useDmMember } from "../../avatars/WithPresenceIn
 import { type IOOBData } from "../../../../stores/ThreepidInviteStore.ts";
 import { MainSplitContentType } from "../../../../contexts/RoomContext.ts";
 import defaultDispatcher from "../../../../dispatcher/dispatcher.ts";
-import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";
+import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog-tab";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";

@@ -1575,7 +1575,6 @@
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
-        "room_list_sections": "Sekce seznamu místností",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
         "sliding_sync_disabled_notice": "Pro deaktivaci se znovu přihlaste",

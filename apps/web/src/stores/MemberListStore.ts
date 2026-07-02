@@ -10,7 +10,7 @@ import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../settings/SettingsStore";
-import { type SdkContextClass } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import SdkConfig from "../SdkConfig";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
@@ -28,7 +28,7 @@ export class MemberListStore {
 
     private collator?: Intl.Collator;
 
-    public constructor(private readonly stores: SdkContextClass) {}
+    public constructor(private readonly stores: SDKContextClass) {}
 
     /**
      * Load the member list. Call this whenever the list may have changed.

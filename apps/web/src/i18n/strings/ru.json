@@ -1537,7 +1537,6 @@
         "notifications": "Включить панель уведомлений в заголовке комнаты",
         "render_reaction_images": "Обработка пользовательских изображений в реакциях",
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
-        "room_list_sections": "Разделы списка чатов",
         "sliding_sync": "Режим Sliding Sync",
         "sliding_sync_description": "В активной разработке, нельзя отключить.",
         "sliding_sync_disabled_notice": "Выйдите из системы и снова войдите, чтобы отключить",

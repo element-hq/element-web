@@ -11,6 +11,9 @@ import {
     EventStatus,
     EventTimeline,
     EventType,
+    M_POLL_KIND_DISCLOSED,
+    M_POLL_START,
+    M_TEXT,
     type MatrixClient,
     type MatrixEvent,
     PendingEventOrdering,
@@ -372,5 +375,83 @@ describe("MessagePreviewStore", () => {
 
         // @ts-ignore private access
         expect(store.previews.has(nonRenderedRoom.roomId)).toBeFalsy();
+    });
+
+    describe("generatePreviewForEvent", () => {
+        it("should generate a preview for a message event", () => {
+            const message = mkMessage({
+                user: "@sender:server",
+                event: true,
+                room: room.roomId,
+                msg: "Hello world",
+            });
+
+            expect(store.generatePreviewForEvent(message)).toBe("Hello world");
+        });
+
+        it("should generate a preview for a sticker event", () => {
+            const sticker = mkEvent({
+                event: true,
+                type: EventType.Sticker,
+                user: "@sender:server",
+                room: room.roomId,
+                content: { body: "A sticker" },
+            });
+
+            expect(store.generatePreviewForEvent(sticker)).toBe("A sticker");
+        });
+
+        // Poll start events have both a stable and an unstable event type, each with its own
+        // registry entry, so exercise both.
+        it.each([M_POLL_START.name, M_POLL_START.altName])(
+            "should generate a preview for a poll start event (%s)",
+            (type) => {
+                const poll = mkEvent({
+                    event: true,
+                    type: type!,
+                    user: "@sender:server",
+                    room: room.roomId,
+                    content: {
+                        [M_POLL_START.name]: {
+                            question: { [M_TEXT.name]: "Where shall we eat?" },
+                            kind: M_POLL_KIND_DISCLOSED.name,
+                            answers: [
+                                { id: "pizza", [M_TEXT.name]: "Pizza" },
+                                { id: "sushi", [M_TEXT.name]: "Sushi" },
+                            ],
+                        },
+                    },
+                });
+
+                expect(store.generatePreviewForEvent(poll)).toBe("Where shall we eat?");
+            },
+        );
+
+        it.each([EventType.CallInvite, EventType.CallAnswer, EventType.CallHangup])(
+            "should generate a preview for a %s event",
+            (type) => {
+                const callEvent = mkEvent({
+                    event: true,
+                    type,
+                    user: "@sender:server",
+                    room: room.roomId,
+                    content: { call_id: "1" },
+                });
+
+                expect(store.generatePreviewForEvent(callEvent)).toBeTruthy();
+            },
+        );
+
+        it("should return an empty string for an event type without a previewer", () => {
+            const topicEvent = mkEvent({
+                event: true,
+                type: EventType.RoomTopic,
+                user: "@sender:server",
+                room: room.roomId,
+                content: { topic: "A new topic" },
+            });
+
+            expect(store.generatePreviewForEvent(topicEvent)).toBe("");
+        });
     });
 });

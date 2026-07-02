@@ -104,10 +104,6 @@ Unreliable in encrypted rooms.
 
 Enables knock feature for rooms. This allows users to ask to join a room.
 
-## New room list (`feature_new_room_list`) [In Development]
-
-Enable the new room list that is currently in development.
-
 ## Exclude insecure devices when sending/receiving messages (`feature_exclude_insecure_devices`)
 
 Do not send or receive messages to/from devices that are not properly verified. Users with unverified devices will not

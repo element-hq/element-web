@@ -406,6 +406,7 @@ export async function copyAndContinue(page: Page) {
  * @param opts - other options for the createRoom call
  *
  * @returns a promise which resolves to the room ID
+ * @see createSharedEncryptedRoomWithUser
  */
 export async function createSharedRoomWithUser(
     app: ElementAppPage,
@@ -421,6 +422,32 @@ export async function createSharedRoomWithUser(
     await expect(app.page.getByText(" joined the room", { exact: false })).toBeVisible();
 
     return roomId;
+}
+
+/**
+ * Create a shared, encrypted room with the given user, and wait for them to join
+ *
+ * @param other - UserID of the other user
+ * @param opts - other options for the createRoom call
+ *
+ * @returns a promise which resolves to the room ID
+ * @see createSharedRoomWithUser
+ */
+export async function createSharedEncryptedRoomWithUser(
+    app: ElementAppPage,
+    other: string,
+    opts: Omit<ICreateRoomOpts, "invite"> = { name: "TestRoom" },
+): Promise<string> {
+    opts = structuredClone(opts);
+    opts.initial_state ??= [];
+    opts.initial_state.push({
+        type: "m.room.encryption",
+        state_key: "",
+        content: {
+            algorithm: "m.megolm.v1.aes-sha2",
+        },
+    });
+    return createSharedRoomWithUser(app, other, opts);
 }
 
 /**

@@ -1594,7 +1594,6 @@
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
-        "room_list_sections": "Sekcje listy pokoi",
         "sliding_sync": "Tryb Sliding sync",
         "sliding_sync_description": "W trakcie aktywnego rozwoju, nie można wyłączyć.",
         "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć",

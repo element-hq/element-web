@@ -35,7 +35,7 @@ import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
-import { TestSdkContext } from "../TestSdkContext";
+import { TestSDKContext } from "../TestSDKContext";
 import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
@@ -176,7 +176,7 @@ describe("RoomViewStore", function () {
     let roomViewStore: RoomViewStore;
     let slidingSyncManager: SlidingSyncManager;
     let dis: MatrixDispatcher;
-    let stores: TestSdkContext;
+    let stores: TestSDKContext;
 
     beforeEach(function () {
         jest.clearAllMocks();
@@ -193,7 +193,7 @@ describe("RoomViewStore", function () {
         // Make the RVS to test
         dis = new MatrixDispatcher();
         slidingSyncManager = new MockSlidingSyncManager();
-        stores = new TestSdkContext();
+        stores = new TestSDKContext();
         stores.client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
