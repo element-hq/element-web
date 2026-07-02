@@ -6,14 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { EventType, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { createTestClient, makeMembershipEvent, mkEvent } from "test-utils";
 
-import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
-import { DirectoryMember } from "../../../../src/utils/direct-messages";
-import { isRoomReady } from "../../../../src/utils/localRoom/isRoomReady";
-import { createTestClient, makeMembershipEvent, mkEvent } from "../../../test-utils";
+import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../models/LocalRoom";
+import { DirectoryMember } from "../direct-messages";
+import { isRoomReady } from "./isRoomReady";
 
 describe("isRoomReady", () => {
     const userId1 = "@user1:example.com";
@@ -41,7 +43,7 @@ describe("isRoomReady", () => {
     describe("for a room with an actual room id", () => {
         beforeEach(() => {
             localRoom.actualRoomId = room1.roomId;
-            mocked(client.getRoom).mockReturnValue(null);
+            vi.mocked(client.getRoom).mockReturnValue(null);
         });
 
         it("should return false", () => {
@@ -50,7 +52,7 @@ describe("isRoomReady", () => {
 
         describe("and the room is known to the client", () => {
             beforeEach(() => {
-                mocked(client.getRoom).mockImplementation((roomId: string) => {
+                vi.mocked(client.getRoom).mockImplementation((roomId: string) => {
                     if (roomId === room1.roomId) return room1;
                     return null;
                 });

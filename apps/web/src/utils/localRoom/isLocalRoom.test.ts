@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
-import { isLocalRoom } from "../../../../src/utils/localRoom/isLocalRoom";
-import { createTestClient } from "../../../test-utils";
+import { describe, it, expect, beforeEach } from "vitest";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { createTestClient } from "test-utils";
+
+import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../models/LocalRoom";
+import { isLocalRoom } from "./isLocalRoom";
 
 describe("isLocalRoom", () => {
     let room: Room;
