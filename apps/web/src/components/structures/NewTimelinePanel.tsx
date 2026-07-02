@@ -1,0 +1,165 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
+import {
+    TimelineView,
+    useCreateAutoDisposedViewModel,
+    useViewModel,
+    type TimelineItem,
+    DateSeparatorView,
+    type DateSeparatorViewSnapshot,
+    ReadMarker,
+} from "@element-hq/web-shared-components";
+import { InlineSpinner } from "@vector-im/compound-web";
+
+import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
+import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
+import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
+import { Layout } from "../../settings/enums/Layout";
+
+/**
+ * Minimal static VM for DateSeparatorView — no jump-to menu, label only.
+ *
+ * `DateSeparatorViewActions` is a weak type (all members optional), so we
+ * don't list it in `implements` (that trips TS2559); the instance still
+ * satisfies the `DateSeparatorViewModel` intersection when passed as `vm`.
+ */
+class StaticDateSeparatorViewModel implements DateSeparatorViewSnapshot {
+    public readonly label: string;
+    public readonly jumpToEnabled = false;
+
+    public constructor(label: string) {
+        this.label = label;
+    }
+
+    public subscribe = (): (() => void) => (): void => {};
+    public getSnapshot = (): DateSeparatorViewSnapshot => this;
+}
+
+interface NewTimelinePanelProps {
+    room: Room;
+    highlightedEventId?: string;
+    /**
+     * The message layout to render tiles with. Reactivity is handled upstream:
+     * RoomView watches the `layout` setting and re-renders down through
+     * TimelinePanel, so a settings change flows in as a new prop here.
+     */
+    layout?: Layout;
+}
+
+/**
+ * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
+ * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
+ */
+export function NewTimelinePanel({ room, highlightedEventId, layout }: NewTimelinePanelProps): JSX.Element {
+    const client: MatrixClient = useMatrixClientContext();
+
+    // IRC layout isn't supported in the new timeline yet: it needs the
+    // IRCTimelineProfileResizer and the `mx_IRCLayout` container wiring that the
+    // legacy MessagePanel provides. Fall back to Modern (Group) until that lands.
+    // Modern and Message Bubbles are fully supported.
+    // TODO: support IRC layout (profile-name resizer + container class).
+    const effectiveLayout = layout === Layout.IRC ? Layout.Group : (layout ?? Layout.Group);
+
+    // RoomTimelineViewModel's constructor is intentionally side-effect-free
+    // (no listener registration, no load() call) so that React's StrictMode
+    // double-invoke of the useState initializer doesn't leak subscriptions on
+    // the discarded instance. We wire it up via vm.start() in an effect below,
+    // which React only runs against the retained instance.
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RoomTimelineViewModel({
+                client,
+                room,
+                initialEventId: highlightedEventId,
+            }),
+    );
+
+    useEffect(() => {
+        vm.start();
+        // Disposal is handled by useCreateAutoDisposedViewModel; no cleanup needed here.
+    }, [vm]);
+
+    useEffect(() => {
+        // Warm the highlight.js chunk. CodeBlock applies syntax highlighting via a
+        // dynamic import inside a ref callback; with the module already in the
+        // import cache that `await` resolves in a microtask and the innerHTML swap
+        // lands before first paint. Without the warm-up the import resolves a
+        // frame or more later, the <pre> re-wraps after the row has been measured,
+        // and a code block above the viewport jumps the scroll position.
+        void import("highlight.js");
+    }, []);
+
+    const snapshot = useViewModel(vm);
+    const { highlightedEventId: highlightedId } = snapshot;
+
+    const renderItem = useMemo(
+        () =>
+            (item: TimelineItem): ReactNode => {
+                switch (item.kind) {
+                    case "date-separator": {
+                        const separatorVm = new StaticDateSeparatorViewModel(item.label ?? item.key);
+                        return <DateSeparatorView key={item.key} vm={separatorVm} />;
+                    }
+                    case "read-marker":
+                        return <ReadMarker key={item.key} eventId={item.key} kind="current" />;
+                    case "loading":
+                        return (
+                            <div
+                                key={item.key}
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: 32,
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <InlineSpinner size={32} />
+                            </div>
+                        );
+                    case "gap":
+                        return <div key={item.key}>Gap</div>;
+                    case "event":
+                        // For now, all events go through the legacy adapter.
+                        // As tiles are migrated to MVVM, this switch will
+                        // send migrated types to their shared views instead.
+                        return (
+                            <LegacyEventTileAdapter
+                                key={item.key}
+                                mxEvent={findEventById(room, item.key)!}
+                                continuation={item.continuation}
+                                lastInSection={item.lastInSection}
+                                layout={effectiveLayout}
+                                isSelectedEvent={highlightedId !== null && item.key === highlightedId}
+                            />
+                        );
+                    default:
+                        return null;
+                }
+            },
+        [room, highlightedId, effectiveLayout],
+    );
+
+    return (
+        <div
+            className="mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
+            style={{ height: "100%" }}
+        >
+            <TimelineView vm={vm} renderItem={renderItem} />
+        </div>
+    );
+}
+
+/**
+ * Look up a MatrixEvent by ID from the room's timelines.
+ */
+function findEventById(room: Room, eventId: string): MatrixEvent | undefined {
+    return room.findEventById(eventId) ?? undefined;
+}

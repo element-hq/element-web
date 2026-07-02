@@ -1,0 +1,30 @@
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index 00fd4a4b0a0049193f8862c2604cb76013d605d5..37c058b25d30f42f82617d9cc4c2831bc0b13704 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -295,7 +295,24 @@ class Virtualizer {
+         const didEdgeKeysChange = didCountChange || prevCount > 0 && nextCount > 0 && (merged.getItemKey(0) !== prevFirstKey || merged.getItemKey(nextCount - 1) !== prevLastKey);
+         if (didEdgeKeysChange) {
+           edgeKeysChanged = true;
+-          const item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
++          let item = prevCount > 0 ? this.getVirtualItemForOffset(this.getScrollOffset()) ?? measurements[0] : null;
++          // With anchorTo: "end" the scroll is re-pinned by the key of the item
++          // under the current offset. If the consumer rejects that item as an
++          // anchor via isValidAnchorItem — e.g. a transient placeholder/sentinel
++          // row (loading spinner, "load more", skeleton) whose key does not
++          // survive the update — re-pinning by its key would fail and the
++          // prepend would go uncompensated (the list jumps to the edge). Such
++          // rows only sit at the extreme edges, so step one index inward to the
++          // nearest accepted item, whose key persists across the update.
++          const isValidAnchorItem = merged.isValidAnchorItem;
++          if (item && isValidAnchorItem && !isValidAnchorItem(item)) {
++            const step = item.index === 0 ? 1 : -1;
++            let i = item.index;
++            while (i >= 0 && i < measurements.length && measurements[i] && !isValidAnchorItem(measurements[i])) {
++              i += step;
++            }
++            item = measurements[i] ?? item;
++          }
+           if (item) {
+             anchor = [item.key, this.getScrollOffset() - item.start];
+           }

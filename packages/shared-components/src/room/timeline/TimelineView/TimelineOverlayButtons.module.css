@@ -1,0 +1,202 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/**
+ * Overlay layer — absolutely fills the Virtuoso wrapper so buttons can be
+ * positioned at the top or bottom without affecting list layout.
+ * Children use their own absolute positioning to match the legacy components.
+ */
+.overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* ── Top unread bar — matches legacy TopUnreadMessagesBar ────────── */
+
+.topUnreadBar {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 38px;
+    pointer-events: all;
+}
+
+.topUnreadBar::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 11px;
+    width: 4px;
+    height: 4px;
+    border-radius: 16px;
+    background-color: var(--cpd-color-bg-canvas-default);
+    border: 6px solid var(--cpd-color-icon-accent-tertiary);
+    pointer-events: none;
+}
+
+.topUnreadBarScrollUp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    width: 38px;
+    border-radius: 19px;
+    box-sizing: border-box;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1.3px solid var(--cpd-color-icon-tertiary);
+    cursor: pointer;
+}
+
+.topUnreadBarScrollUp svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-tertiary);
+}
+
+.topUnreadBarMarkAsRead {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1.3px solid var(--cpd-color-icon-tertiary);
+    border-radius: 10px;
+    margin: 5px auto;
+    cursor: pointer;
+}
+
+.topUnreadBarMarkAsRead svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-tertiary);
+}
+
+/* ── Below unread bar — marker is below viewport; appears at top-right ── */
+
+.belowUnreadBar {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 38px;
+    pointer-events: all;
+}
+
+/* Green dot just below the chevron button (bottom edge at 38px), hinting the marker is downward */
+.belowUnreadBar::after {
+    content: "";
+    position: absolute;
+    top: 30px;
+    left: 11px;
+    width: 4px;
+    height: 4px;
+    border-radius: 16px;
+    background-color: var(--cpd-color-bg-canvas-default);
+    border: 6px solid var(--cpd-color-icon-accent-tertiary);
+    pointer-events: none;
+}
+
+.belowUnreadBarScrollDown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    width: 38px;
+    border-radius: 19px;
+    box-sizing: border-box;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1.3px solid var(--cpd-color-icon-tertiary);
+    cursor: pointer;
+}
+
+.belowUnreadBarScrollDown svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-tertiary);
+}
+
+.belowUnreadBarMarkAsRead {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1.3px solid var(--cpd-color-icon-tertiary);
+    border-radius: 10px;
+    /* dot centre is at top: 38px, radius 8px → extends to 46px; add 4px visual gap → 50px - 38px = 12px margin */
+    margin: 12px auto 0;
+    cursor: pointer;
+}
+
+.belowUnreadBarMarkAsRead svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-tertiary);
+}
+
+/* ── Jump-to-bottom button — matches legacy JumpToBottomButton ───── */
+
+.jumpToBottom {
+    position: absolute;
+    /* 12 because height is 50 but button is only 38 = 12+(50-38) = 24 */
+    bottom: 12px;
+    right: 24px;
+    width: 38px;
+    /* give it a fixed height so the badge doesn't make */
+    /* it taller and pop upwards when visible */
+    height: 50px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.jumpToBottomBadge {
+    position: relative;
+    top: -12px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    display: inline-block;
+    padding: 0 4px;
+    color: var(--cpd-color-text-on-solid-primary);
+    background-color: var(--cpd-color-icon-secondary);
+}
+
+.highlight .jumpToBottomBadge {
+    background-color: var(--cpd-color-icon-critical-primary);
+}
+
+.jumpToBottomScrollDown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1.3px solid var(--cpd-color-icon-tertiary);
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.jumpToBottomScrollDown svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--cpd-color-icon-tertiary);
+}
+

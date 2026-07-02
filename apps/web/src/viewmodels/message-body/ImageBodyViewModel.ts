@@ -151,9 +151,13 @@ export class ImageBodyViewModel
     private static getImageDimensions(
         props: ImageBodyViewModelProps,
         state: InternalState,
-    ): Pick<ImageBodyViewSnapshot, "maxWidth" | "maxHeight" | "aspectRatio" | "isSvg"> {
+    ): Pick<ImageBodyViewSnapshot, "maxWidth" | "maxHeight" | "aspectRatio" | "isSvg" | "hasIntrinsicSize"> {
         const content = props.mxEvent.getContent<ImageContent>();
         const info = content.info;
+        // Whether the event declared its dimensions up front. Without them the
+        // sizing below only becomes available once the image has loaded, so the
+        // view marks the frame for stylesheet-level fallback box reservation.
+        const hasIntrinsicSize = Boolean(info?.w && info?.h);
         const naturalWidth = info?.w ?? state.loadedImageDimensions?.naturalWidth;
         const naturalHeight = info?.h ?? state.loadedImageDimensions?.naturalHeight;
 
@@ -163,6 +167,7 @@ export class ImageBodyViewModel
                 maxHeight: undefined,
                 aspectRatio: undefined,
                 isSvg: info?.mimetype === "image/svg+xml",
+                hasIntrinsicSize,
             };
         }
 
@@ -177,6 +182,7 @@ export class ImageBodyViewModel
             maxHeight,
             aspectRatio: `${naturalWidth}/${naturalHeight}`,
             isSvg: info?.mimetype === "image/svg+xml",
+            hasIntrinsicSize,
         };
     }
 

@@ -98,6 +98,27 @@ function UnknownBody({ mxEvent, ref }: IBodyProps): JSX.Element {
     return <UnknownBodyView text={mxEvent.getContent().body} ref={ref} className="mx_UnknownBody" />;
 }
 
+/**
+ * NOTE: we deliberately do NOT cache {@link MediaEventHelper}s across
+ * `MessageEvent` mount cycles. The `LazyValue`s inside the helper cache the
+ * FIRST resolved/rejected promise (see {@link LazyValue.value}) — so if the
+ * very first download attempt fails (404 from the homeserver before the
+ * authenticated-media service worker has intercepted, transient network
+ * blip, etc.), every subsequent reuse of the same helper would replay the
+ * same cached error, even though a fresh fetch attempt would succeed.
+ *
+ * The legacy timeline works around this implicitly by creating a fresh
+ * helper per mount — each remount gets a fresh `LazyValue` and a fresh
+ * download attempt. We do the same here.
+ *
+ * Instead, to keep the blob URLs alive long enough for the browser to
+ * actually load the image after an unmount/remount race,
+ * `componentWillUnmount` does NOT destroy the helper. The helper is allowed
+ * to leak; its blob URLs eventually get GC'd along with the helper itself
+ * when the `MatrixEvent` they reference goes away. This trades a small
+ * per-event memory cost for image/video reliability.
+ */
+
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body = createRef<React.Component | IOperableEventTile>();
     private mediaHelper?: MediaEventHelper;
@@ -120,12 +141,21 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
 
     public componentWillUnmount(): void {
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
-        this.mediaHelper?.destroy();
+        // Deliberately NOT destroying the mediaHelper. `MediaEventHelper.destroy()`
+        // revokes every blob URL the helper has issued — and the browser may
+        // still be loading those URLs into the <img>/<video> at unmount time.
+        // Revoking mid-load surfaces as "Error downloading image" / "Error
+        // decrypting video" even though the data is fine. We accept a small
+        // per-event memory leak (helpers persist for the session) in exchange
+        // for media reliability across virtuoso virtualization-driven
+        // mount/unmount cycles.
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (this.props.mxEvent !== prevProps.mxEvent && MediaEventHelper.isEligible(this.props.mxEvent)) {
-            this.mediaHelper?.destroy();
+            // New event entirely (the same component instance is being
+            // reused for a different event). Switch to a fresh helper; the
+            // old event's helper is left to GC.
             this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
         }
 
@@ -153,11 +183,15 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     }
 
     private onDecrypted = (): void => {
-        // Recheck MediaEventHelper eligibility as it can change when the event gets decrypted
-        if (MediaEventHelper.isEligible(this.props.mxEvent)) {
-            this.mediaHelper?.destroy();
-            this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
-        }
+        // Fill in `mediaHelper` once decryption completes for the legacy
+        // timeline path: there the constructor saw a wire-encrypted-pending
+        // event so `isEligible` returned false. We DO NOT destroy and recreate
+        // an existing helper here — re-emits of `Decrypted` (re-decryption
+        // with a fresh key, internal SDK timeline re-emits) must not yank
+        // blob URLs out from under any in-flight media download.
+        if (this.mediaHelper) return;
+        if (!MediaEventHelper.isEligible(this.props.mxEvent)) return;
+        this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
     };
 
     private onTileUpdate = (): void => {
