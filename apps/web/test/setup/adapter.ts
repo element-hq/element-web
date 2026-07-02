@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi } from "vitest";
 import { mocked as jestMocked } from "jest-mock";
 
-const isJest = typeof jest !== "undefined";
+export const isJest = typeof jest !== "undefined";
 
 /**
  * Subset of the vitest API surface, with jest equivalents for the same functions when running under jest.

@@ -20,7 +20,7 @@ import {
 
 import { getMockGeolocationPositionError } from "./location";
 import { makeRoomWithStateEvents } from "./room";
-import { vi } from "../setup/adapter.ts";
+import { vi, isJest } from "../setup/adapter.ts";
 
 type InfoContentProps = {
     timeout: number;
@@ -139,7 +139,12 @@ export const mockGeolocation = (): MockedObject<Geolocation> => {
     } as unknown as MockedObject<Geolocation>;
 
     // jest jsdom does not provide geolocation
-    vi.spyOn(navigator, "geolocation", "get").mockReturnValue(mockGeolocation);
+    if (isJest) {
+        // @ts-ignore illegal assignment to readonly property
+        navigator.geolocation = mockGeolocation;
+    } else {
+        vi.spyOn(navigator, "geolocation", "get").mockReturnValue(mockGeolocation);
+    }
 
     return mockGeolocation;
 };
