@@ -37,8 +37,8 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { SdkContextClass } from "../../contexts/SDKContextClass";
 import SdkConfig from "../../SdkConfig";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 
 const logger = rootLogger.getChild("useRoomCall");
 

@@ -22,9 +22,8 @@ import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomConte
 import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
 import type LegacyCallHandler from "../../../src/LegacyCallHandler";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
-import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
