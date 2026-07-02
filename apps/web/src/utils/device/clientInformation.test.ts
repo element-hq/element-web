@@ -6,14 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import type BasePlatform from "../../../../src/BasePlatform";
-import { type IConfigOptions } from "../../../../src/IConfigOptions";
-import { getDeviceClientInformation, recordClientInformation } from "../../../../src/utils/device/clientInformation";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
-import { DEFAULTS } from "../../../../src/SdkConfig";
-import { type DeepReadonly } from "../../../../src/@types/common";
+import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import type BasePlatform from "../../BasePlatform";
+import { type IConfigOptions } from "../../IConfigOptions";
+import { getDeviceClientInformation, recordClientInformation } from "./clientInformation";
+import { DEFAULTS } from "../../SdkConfig";
+import { type DeepReadonly } from "../../@types/common";
 
 describe("recordClientInformation()", () => {
     const deviceId = "my-device-id";
@@ -21,8 +24,8 @@ describe("recordClientInformation()", () => {
     const isElectron = window.electron;
 
     const mockClient = getMockClientWithEventEmitter({
-        getDeviceId: jest.fn().mockReturnValue(deviceId),
-        setAccountData: jest.fn(),
+        getDeviceId: vi.fn().mockReturnValue(deviceId),
+        setAccountData: vi.fn(),
     });
 
     const sdkConfig: DeepReadonly<IConfigOptions> = {
@@ -32,11 +35,11 @@ describe("recordClientInformation()", () => {
     };
 
     const platform = {
-        getAppVersion: jest.fn().mockResolvedValue(version),
+        getAppVersion: vi.fn().mockResolvedValue(version),
     } as unknown as BasePlatform;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         window.electron = undefined;
     });
 
@@ -72,11 +75,11 @@ describe("getDeviceClientInformation()", () => {
     const deviceId = "my-device-id";
 
     const mockClient = getMockClientWithEventEmitter({
-        getAccountData: jest.fn(),
+        getAccountData: vi.fn(),
     });
 
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("returns an empty object when no event exists for the device", () => {
