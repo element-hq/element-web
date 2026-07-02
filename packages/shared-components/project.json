@@ -10,7 +10,7 @@
             "options": { "cwd": "packages/shared-components" },
             "dependsOn": ["^build"]
         },
-        "start": {
+        "startx": {
             "command": "vite build --watch",
             "options": { "cwd": "packages/shared-components" },
             "dependsOn": ["^start"],

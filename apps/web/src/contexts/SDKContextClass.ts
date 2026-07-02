@@ -26,6 +26,8 @@ import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
 import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
+import { CallStore } from "../stores/CallStore";
+import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -66,6 +68,8 @@ export class SDKContextClass {
     protected _OidcClientStore?: OidcClientStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
+    protected _CallStore?: CallStore;
+    protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -188,6 +192,19 @@ export class SDKContextClass {
             this._MultiRoomViewStore = new MultiRoomViewStore(defaultDispatcher, this);
         }
         return this._MultiRoomViewStore;
+    }
+
+    public get callStore(): CallStore {
+        this._CallStore ??= CallStore.instance;
+        return this._CallStore;
+    }
+
+    public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
+        if (!this._LatestRtcNotificationEventStore) {
+            this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
+            this._LatestRtcNotificationEventStore.start();
+        }
+        return this._LatestRtcNotificationEventStore;
     }
 
     public onLoggedOut(): void {
