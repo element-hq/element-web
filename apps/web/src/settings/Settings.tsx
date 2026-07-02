@@ -269,8 +269,6 @@ export interface Settings {
     "scrollToBottomOnMessageSent": IBaseSetting<boolean>;
     "Pill.shouldShowPillAvatar": IBaseSetting<boolean>;
     "TextualBody.enableBigEmoji": IBaseSetting<boolean>;
-    "MessageComposerInput.isRichTextEnabled": IBaseSetting<boolean>;
-    "MessageComposer.showFormatting": IBaseSetting<boolean>;
     "sendTypingNotifications": IBaseSetting<boolean>;
     "showTypingNotifications": IBaseSetting<boolean>;
     "ctrlFForSearch": IBaseSetting<boolean>;
@@ -338,7 +336,6 @@ export interface Settings {
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
     "crawlerSleepTime": IBaseSetting<number>;
-    "showCallButtonsInComposer": IBaseSetting<boolean>;
     "ircDisplayNameWidth": IBaseSetting<number>;
     "layout": IBaseSetting<Layout>;
     "Images.size": IBaseSetting<ImageSize>;
@@ -920,14 +917,6 @@ export const SETTINGS: Settings = {
         default: true,
         invertedSettingName: "TextualBody.disableBigEmoji",
     },
-    "MessageComposerInput.isRichTextEnabled": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-    },
-    "MessageComposer.showFormatting": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-    },
     "sendTypingNotifications": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|send_typing_notifications"),
@@ -1272,13 +1261,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("settings|security|message_search_sleep_time"),
         default: 3000,
-    },
-    "showCallButtonsInComposer": {
-        // Dev note: This is no longer "in composer" but is instead "in room header".
-        // TODO: Rename with settings v3
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true,
-        controller: new UIFeatureController(UIFeature.Voip),
     },
     "ircDisplayNameWidth": {
         // We specifically want to have room-device > device so that users may set a device default
