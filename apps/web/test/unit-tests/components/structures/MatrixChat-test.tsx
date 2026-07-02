@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import "fake-indexeddb/auto";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock-vitest-adapter";
