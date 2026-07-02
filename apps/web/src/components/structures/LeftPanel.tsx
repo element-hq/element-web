@@ -14,12 +14,11 @@ import { ExploreIcon, DialPadIcon } from "@vector-im/compound-design-tokens/asse
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import LegacyRoomList from "../views/rooms/LegacyRoomList";
-import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
+import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import RoomSearch from "./RoomSearch";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
-import SpaceStore from "../../stores/spaces/SpaceStore";
 import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
@@ -38,6 +37,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 import SettingsStore from "../../settings/SettingsStore";
 import { RoomListPanel } from "../views/rooms/RoomListPanel";
+import { SDKContext } from "../../contexts/SDKContext.ts";
 
 interface IProps {
     isMinimized: boolean;
@@ -56,18 +56,21 @@ interface IState {
 }
 
 export default class LeftPanel extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private listContainerRef = createRef<HTMLDivElement>();
     private roomListRef = createRef<LegacyRoomList>();
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         this.state = {
-            activeSpace: SpaceStore.instance.activeSpace,
+            activeSpace: this.context.spaceStore.activeSpace,
             showBreadcrumbs: LeftPanel.breadcrumbsMode,
-            supportsPstnProtocol: LegacyCallHandler.instance.getSupportsPstnProtocol(),
+            supportsPstnProtocol: this.context.legacyCallHandler.getSupportsPstnProtocol(),
         };
     }
 
@@ -78,8 +81,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        LegacyCallHandler.instance.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+        this.context.spaceStore.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        this.context.legacyCallHandler.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
 
         if (this.listContainerRef.current) {
             UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
@@ -93,8 +96,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     public componentWillUnmount(): void {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
-        SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
-        LegacyCallHandler.instance.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+        this.context.spaceStore.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        this.context.legacyCallHandler.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
         UIStore.instance.stopTrackingElementDimensions("ListContainer");
         UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
         this.listContainerRef.current?.removeEventListener("scroll", this.onScroll);
@@ -107,7 +110,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     private updateProtocolSupport = (): void => {
-        this.setState({ supportsPstnProtocol: LegacyCallHandler.instance.getSupportsPstnProtocol() });
+        this.setState({ supportsPstnProtocol: this.context.legacyCallHandler.getSupportsPstnProtocol() });
     };
 
     private updateActiveSpace = (activeSpace: SpaceKey): void => {

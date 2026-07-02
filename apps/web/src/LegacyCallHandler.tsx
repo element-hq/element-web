@@ -309,7 +309,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             return;
         }
 
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
         if (!mappedRoomId) return;
         if (this.getCallForRoom(mappedRoomId)) {
             logger.log(
@@ -668,7 +668,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private setCallState(call: MatrixCall, status: CallState): void {
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
 
         logger.log(`Call state in ${mappedRoomId} changed to ${status}`);
 
