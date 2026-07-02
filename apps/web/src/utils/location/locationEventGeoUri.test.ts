@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { locationEventGeoUri } from "../../../../src/utils/location";
-import { makeLegacyLocationEvent, makeLocationEvent } from "../../../test-utils/location";
+import { describe, it, expect } from "vitest";
+import { makeLegacyLocationEvent, makeLocationEvent } from "test-utils/location";
+
+import { locationEventGeoUri } from "./locationEventGeoUri";
 
 describe("locationEventGeoUri()", () => {
     it("returns m.location uri when available", () => {
