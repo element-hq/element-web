@@ -15,7 +15,7 @@ import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import * as AvatarModule from "../../../../../src/Avatar";
 import VideoFeed from "../../../../../src/components/views/voip/VideoFeed";
 import { stubClient, useMockedCalls } from "../../../../test-utils";
-import type LegacyCallHandler from "../../../../../src/LegacyCallHandler";
+import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 const FAKE_AVATAR_URL = "http://fakeurl.dummy/fake.png";
@@ -39,9 +39,7 @@ describe("VideoFeed", () => {
     });
 
     it("Displays the room avatar when no video is available", () => {
-        window.mxLegacyCallHandler = {
-            roomIdForCall: jest.fn().mockReturnValue("!this:room.here"),
-        } as unknown as LegacyCallHandler;
+        jest.spyOn(LegacyCallHandler.instance, "roomIdForCall").mockReturnValue("!this:room.here");
 
         const mockCall = {
             room: new Room("!room:example.com", client, client.getSafeUserId()),

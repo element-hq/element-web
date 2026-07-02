@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useContext } from "react";
 import classNames from "classnames";
 import {
     OverflowHorizontalIcon,
@@ -30,17 +30,18 @@ import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
-import { SDKContextClass } from "../../../contexts/SDKContextClass";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const QuickSettingsButton: React.FC<{
     isPanelCollapsed: boolean;
 }> = ({ isPanelCollapsed = false }) => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLButtonElement>();
 
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
         useSettingValue("Spaces.enabledMetaSpaces");
 
-    const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+    const currentRoomId = sdkContext.roomViewStore.getRoomId();
     const developerModeEnabled = useSettingValue("developerMode");
     // "Favourites" and "People" meta spaces are not available in the new room list
     const newRoomListEnabled = useSettingValue("feature_new_room_list");
