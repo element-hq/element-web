@@ -94,7 +94,7 @@ describe("findDMForUser", () => {
             mkThirdPartyInviteEvent(thirdPartyId, "third-party", room7.roomId),
         ]);
 
-        vi.mocked(mockClient.getRoom).mockImplementation((roomId: string) => {
+        vi.mocked(mockClient.getRoom).mockImplementation((roomId?: string) => {
             return (
                 {
                     [room1.roomId]: room1,
@@ -104,7 +104,7 @@ describe("findDMForUser", () => {
                     [room5.roomId]: room5,
                     [room6.roomId]: room6,
                     [room7.roomId]: room7,
-                }[roomId] || null
+                }[roomId!] || null
             );
         });
 
