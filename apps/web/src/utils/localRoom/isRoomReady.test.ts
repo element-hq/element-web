@@ -52,7 +52,7 @@ describe("isRoomReady", () => {
 
         describe("and the room is known to the client", () => {
             beforeEach(() => {
-                vi.mocked(client.getRoom).mockImplementation((roomId: string) => {
+                vi.mocked(client.getRoom).mockImplementation((roomId?: string) => {
                     if (roomId === room1.roomId) return room1;
                     return null;
                 });
