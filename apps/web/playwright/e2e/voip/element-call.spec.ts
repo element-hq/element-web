@@ -217,7 +217,8 @@ test.describe("Element Call", () => {
                 const hash = new URLSearchParams(url.hash.slice(1));
                 assertCommonCallParameters(url.searchParams, hash, user, room);
 
-                expect(hash.get("intent")).toEqual("join_existing");
+                const expectedIntent = callType === "voice" ? "join_existing_voice" : "join_existing";
+                expect(hash.get("intent")).toEqual(expectedIntent);
                 expect(hash.get("skipLobby")).toEqual(null);
             });
         });
