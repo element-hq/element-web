@@ -15,7 +15,11 @@ import { sample, uniqueId } from "lodash-es";
 import { test as base } from "./panel.js";
 import { type Credentials } from "../utils/api.js";
 
-/** Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials. */
+/**
+ * Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials.
+ *
+ * Warning: this is an incomplete implementation, particularly in MAS environments: for example, a logout operation will not work correctly.
+ */
 export async function populateLocalStorageWithCredentials(page: Page, credentials: Credentials) {
     await page.addInitScript(
         ({ credentials }) => {
@@ -61,6 +65,9 @@ export const test = base.extend<{
      * but adds an initScript which will populate localStorage with the user's details from
      * {@link #credentials} and {@link #homeserver}.
      *
+     * Warning: this is an incomplete implementation, particularly in MAS environments: for example, a logout operation
+     * will not work correctly.
+     *
      * Similar to {@link #user}, but doesn't load the app.
      */
     pageWithCredentials: Page;
@@ -69,6 +76,9 @@ export const test = base.extend<{
      * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
      * the credentials into localStorage per {@link #pageWithCredentials}, and then loads the front page of the
      * app.
+     *
+     * Warning: the user credentials are an incomplete implementation, particularly in MAS environments: for example, a logout operation
+     * will not work correctly.
      */
     user: Credentials;
 }>({
