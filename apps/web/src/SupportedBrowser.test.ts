@@ -6,17 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "../../src/SupportedBrowser";
-import ToastStore from "../../src/stores/ToastStore";
-import GenericToast from "../../src/components/views/toasts/GenericToast";
+import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "./SupportedBrowser";
+import ToastStore from "./stores/ToastStore";
+import GenericToast from "./components/views/toasts/GenericToast";
 
-jest.mock("matrix-js-sdk/src/logger");
+vi.mock("matrix-js-sdk/src/logger");
 
 describe("SupportedBrowser", () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
         localStorage.clear();
         getBrowserSupport.clear();
     });
@@ -24,8 +27,8 @@ describe("SupportedBrowser", () => {
     const testUserAgentFactory =
         (expectedWarning?: string) =>
         async (userAgent: string): Promise<void> => {
-            const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-            const warnLogSpy = jest.spyOn(logger, "warn");
+            const toastSpy = vi.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+            const warnLogSpy = vi.spyOn(logger, "warn");
             Object.defineProperty(window, "navigator", { value: { userAgent: userAgent }, writable: true });
             checkBrowserSupport();
             if (expectedWarning) {
@@ -91,8 +94,8 @@ describe("SupportedBrowser", () => {
     );
 
     it("should not warn for unsupported browser if user accepted already", async () => {
-        const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
-        const warnLogSpy = jest.spyOn(logger, "warn");
+        const toastSpy = vi.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+        const warnLogSpy = vi.spyOn(logger, "warn");
         const userAgent =
             "Mozilla/5.0 (X11; CrOS x86_64 15633.69.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.212 Safari/537.36";
         Object.defineProperty(window, "navigator", { value: { userAgent: userAgent }, writable: true });

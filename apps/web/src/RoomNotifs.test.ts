@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
 import {
     PushRuleActionName,
     TweakName,
@@ -19,19 +21,19 @@ import {
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient, upsertRoomStateEvents } from "test-utils";
+import { mkThread } from "test-utils/threads";
 
-import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient, upsertRoomStateEvents } from "../test-utils";
 import {
     getRoomNotifsState,
     RoomNotifState,
     getUnreadNotificationCount,
     determineUnreadState,
     getUnsentMessages,
-} from "../../src/RoomNotifs";
-import { NotificationLevel } from "../../src/stores/notifications/NotificationLevel";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { mkThread } from "../test-utils/threads";
+} from "./RoomNotifs";
+import { NotificationLevel } from "./stores/notifications/NotificationLevel";
+import SettingsStore from "./settings/SettingsStore";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 describe("getUnsentMessages", () => {
     const ROOM_ID = "!roomId";
@@ -95,14 +97,14 @@ describe("getUnsentMessages", () => {
 });
 
 describe("RoomNotifs test", () => {
-    let client: jest.Mocked<MatrixClient>;
+    let client: Mocked<MatrixClient>;
 
     beforeEach(() => {
-        client = stubClient() as jest.Mocked<MatrixClient>;
+        client = stubClient() as Mocked<MatrixClient>;
     });
 
     it("getRoomNotifsState handles rules with no conditions", () => {
-        mocked(client).pushRules = {
+        vi.mocked(client).pushRules = {
             global: {
                 override: [
                     {
@@ -118,7 +120,7 @@ describe("RoomNotifs test", () => {
     });
 
     it("getRoomNotifsState handles guest users", () => {
-        mocked(client).isGuest.mockReturnValue(true);
+        vi.mocked(client).isGuest.mockReturnValue(true);
         expect(getRoomNotifsState(client, "!roomId:server")).toBe(RoomNotifState.AllMessages);
     });
 
@@ -258,7 +260,7 @@ describe("RoomNotifs test", () => {
 
             describe("and dynamic room predecessors are enabled", () => {
                 beforeEach(() => {
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    vi.spyOn(SettingsStore, "getValue").mockImplementation(
                         (settingName) => settingName === "feature_dynamic_room_predecessors",
                     );
                 });
@@ -343,7 +345,7 @@ describe("RoomNotifs test", () => {
         });
 
         it("indicates the user knock has been denied", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
                 return name === "feature_ask_to_join";
             });
             const roomMember = mkRoomMember(
@@ -355,7 +357,7 @@ describe("RoomNotifs test", () => {
                     membership: KnownMembership.Knock,
                 },
             );
-            jest.spyOn(room, "getMember").mockReturnValue(roomMember);
+            vi.spyOn(room, "getMember").mockReturnValue(roomMember);
             const { level, symbol, count } = determineUnreadState(room);
 
             expect(symbol).toBe("!");
