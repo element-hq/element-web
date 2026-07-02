@@ -118,17 +118,17 @@ describe("PosthogAnalytics", () => {
         it("Should pass event to posthog", () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
                 foo: "bar",
             });
-            expect(vi.mocked(fakePosthog).capture.mock.calls[0][0]).toBe("JestTestEvents");
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][0]).toBe("TestEvents");
             expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["foo"]).toEqual("bar");
         });
 
         it("Should not track events if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
             await analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
                 foo: "bar",
             });
             expect(fakePosthog.capture).not.toHaveBeenCalled();
@@ -137,7 +137,7 @@ describe("PosthogAnalytics", () => {
         it("Should not track any events if disabled", async () => {
             analytics.setAnonymity(Anonymity.Disabled);
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
                 foo: "bar",
             });
             expect(fakePosthog.capture).not.toHaveBeenCalled();
@@ -217,7 +217,7 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
             expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "IRC",
@@ -234,7 +234,7 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
             expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Bubble",
@@ -251,7 +251,7 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
             expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Group",
@@ -269,7 +269,7 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
             console.log(vi.mocked(fakePosthog).capture.mock.calls[0]);
             expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
@@ -308,7 +308,7 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
             expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 URLPreviewsEnabled: true,

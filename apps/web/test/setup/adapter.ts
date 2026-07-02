@@ -22,6 +22,7 @@ const adapter = {
 const mocked = adapter.mocked;
 export { adapter as vi, mocked };
 
-export const expect = isJest ? expect : viExpect;
+const _expect = isJest ? (expect as unknown as typeof viExpect) : viExpect;
+export { _expect as expect };
 
 export { type Mocked, type MockedObject } from "vitest";
