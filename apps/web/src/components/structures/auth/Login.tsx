@@ -428,7 +428,6 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                 onPhoneNumberChanged={this.onPhoneNumberChanged}
                 onForgotPasswordClick={this.props.onForgotPasswordClick}
                 loginIncorrect={this.state.loginIncorrect}
-                serverConfig={this.props.serverConfig}
                 disableSubmit={this.isBusy()}
                 busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
@@ -502,7 +501,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             footer = (
                 <div className="mx_AuthBody_paddedFooter">
                     <div className="mx_AuthBody_paddedFooter_title">
-                        <InlineSpinner w={20} h={20} />
+                        <InlineSpinner size={20} />
                         {this.props.isSyncing ? _t("auth|syncing") : _t("auth|signing_in")}
                     </div>
                     {this.props.isSyncing && (

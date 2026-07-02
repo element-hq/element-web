@@ -7,7 +7,6 @@
 
 import React, { useState, type JSX } from "react";
 import { IconButton, Menu, MenuItem, ReleaseAnnouncement } from "@vector-im/compound-web";
-import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
@@ -37,17 +36,12 @@ interface ComposeMenuViewProps {
 export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const [open, setOpen] = useState(false);
-    const { canCreateRoom, canCreateVideoRoom, canCreateSection, useComposeIcon, displaySectionReleaseAnnouncement } =
-        useViewModel(vm);
+    const { canCreateRoom, canCreateVideoRoom, displaySectionReleaseAnnouncement } = useViewModel(vm);
 
     // 28px button with a 20px icon
     const button = (
         <IconButton size="28px" style={{ padding: "4px" }} tooltip={_t("action|new_conversation")}>
-            {useComposeIcon ? (
-                <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-            ) : (
-                <PlusIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
-            )}
+            <PlusIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
         </IconButton>
     );
 
@@ -86,9 +80,7 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
                     hideChevron
                 />
             )}
-            {canCreateSection && (
-                <MenuItem Icon={SectionIcon} label={_t("action|new_section")} onSelect={vm.createSection} hideChevron />
-            )}
+            <MenuItem Icon={SectionIcon} label={_t("action|new_section")} onSelect={vm.createSection} hideChevron />
         </Menu>
     );
 }

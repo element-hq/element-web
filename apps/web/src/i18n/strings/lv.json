@@ -863,14 +863,6 @@
             "warning": "Ja nenoņēmi atkopšanas veidu, var būt, ka uzbrucējs mēģina piekļūt Tavam kontam. Nekavējoties jānomaina sava konta parole un jāiestata jauns atkopšanas veids."
         },
         "set_up_toast_title": "Iestatīt drošu rezerves dublēšanu",
-        "udd": {
-            "interactive_verification_button": "Mijiedarbīga apliecināšana ar emocijzīmēm",
-            "other_ask_verify_text": "Vaicāt šim lietotājam apliecināt savu sesiju vai zemāk apliecināt to pašrocīgi.",
-            "other_new_session_text": "%(name)s (%(userId)s) pieteicās jaunā sesijā bez tās apliecināšanas:",
-            "own_ask_verify_text": "Cita sesija ir jāapliecina ar vienu no zemāk esošajām iespējām.",
-            "own_new_session_text": "Tu pierakstījies jaunā sesijā bez tās apliecināšanas:",
-            "title": "Neuzticama"
-        },
         "unable_to_setup_keys_error": "Nevar iestatīt atslēgas",
         "verification": {
             "accepting": "Apstiprina…",
@@ -3395,13 +3387,7 @@
         "close_to_view_right_panel": "Aizvērt šo logrīku, lai skatītu to šajā panelī",
         "context_menu": {
             "delete": "Izdzēst ekrānvadīklu",
-            "delete_warning": "Ekrānvadīklas izdzēšana noņems to visiem šīs istabas lietotājiem. Vai tiešām izdzēst šo ekrānvadīklu?",
-            "move_left": "Pārvietot pa kreisi",
-            "move_right": "Pārvietot pa labi",
-            "remove": "Dzēst visiem",
-            "revoke": "Atsaukt atļaujas",
-            "screenshot": "Uzņemt attēlu",
-            "start_audio_stream": "Sākt audio straumēšanu"
+            "delete_warning": "Ekrānvadīklas izdzēšana noņems to visiem šīs istabas lietotājiem. Vai tiešām izdzēst šo ekrānvadīklu?"
         },
         "cookie_warning": "Šis logrīks var izmantot sīkfailus.",
         "error_hangup_description": "Jūs tikāt atvienots no zvana. (Kļūda: %(message)s)",

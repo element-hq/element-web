@@ -16,7 +16,6 @@ import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
-    pending?: boolean;
     displayName?: string; // required if pending is true
 
     /** Details of the other device involved in the verification, if known */
@@ -26,7 +25,6 @@ interface IProps {
     onCancel: () => void;
     sas: GeneratedSas;
     isSelf?: boolean;
-    inDialog?: boolean; // whether this component is being shown in a dialog and to use DialogButtons
 }
 
 interface IState {

@@ -13,6 +13,7 @@ import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../../../core/utils/LinkedText";
 import imageFile from "../../../../../../static/element.png";
 import imageFileWide from "../../../../../../static/wideImage.png";
+import imageFileTall from "../../../../../../static/tallImage.png";
 
 export default {
     title: "EventTiles/LinkPreview",
@@ -163,6 +164,20 @@ WithVeryLongText.args = {
     image: {
         imageThumb: imageFile,
         imageFull: imageFile,
+        alt: "Element logo",
+        playable: false,
+    },
+};
+
+export const WithTallImage = Template.bind({});
+WithTallImage.args = {
+    title: "A simple title",
+    description: "A simple description",
+    link: "https://matrix.org",
+    siteName: "Site name",
+    image: {
+        imageThumb: imageFileTall,
+        imageFull: imageFileTall,
         alt: "Element logo",
         playable: false,
     },

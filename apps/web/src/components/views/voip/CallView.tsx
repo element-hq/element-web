@@ -13,7 +13,7 @@ import { type Call, CallEvent } from "../../../models/Call";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
 import { CallStore } from "../../../stores/CallStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";
 
@@ -38,7 +38,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
         // The stickyPromise has to resolve before the widget actually becomes sticky.
         // We only let the widget become sticky after disconnecting all other active calls.
         const calls = [...CallStore.instance.connectedCalls].filter(
-            (call) => SdkContextClass.instance.roomViewStore.getRoomId() !== call.roomId,
+            (call) => SDKContextClass.instance.roomViewStore.getRoomId() !== call.roomId,
         );
         await Promise.all(calls.map(async (call) => await call.disconnect()));
     }, []);

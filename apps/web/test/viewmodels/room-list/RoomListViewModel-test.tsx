@@ -15,7 +15,7 @@ import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListViewModel";
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
@@ -25,6 +25,8 @@ import { tagRoom } from "../../../src/utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
 import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX } from "../../../src/stores/room-list-v3/section";
 import { MetaSpace } from "../../../src/stores/spaces";
+import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
+import { type RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
 
 jest.mock("../../../src/utils/room/tagRoom", () => ({
     tagRoom: jest.fn(),
@@ -66,7 +68,7 @@ describe("RoomListViewModel", () => {
 
         jest.spyOn(RoomListStoreV3.instance, "isLoadingRooms", "get").mockReturnValue(false);
         jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(null);
-        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+        jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
         mocked(hasCreateRoomRights).mockReturnValue(false);
     });
@@ -221,7 +223,7 @@ describe("RoomListViewModel", () => {
         it("should update active room index when room is selected", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
@@ -237,7 +239,7 @@ describe("RoomListViewModel", () => {
         it("should return undefined active room index when no room is selected", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
@@ -256,7 +258,7 @@ describe("RoomListViewModel", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             // Select room at index 1
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 newRoomId: "!room2:server",
@@ -282,7 +284,7 @@ describe("RoomListViewModel", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             // Select room at index 1
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 newRoomId: "!room2:server",
@@ -291,7 +293,7 @@ describe("RoomListViewModel", () => {
             await flushPromises();
 
             // User switches to room3
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 oldRoomId: "!room2:server",
@@ -478,20 +480,6 @@ describe("RoomListViewModel", () => {
         });
     });
 
-    describe("notifyCollapseState", () => {
-        it("should dispatch collapseSections=undefined when feature_room_list_sections is disabled", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
-
-            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
-
-            expect(dispatchSpy).toHaveBeenCalledWith({
-                action: Action.RoomListSectionsCollapseStateChanged,
-                collapseSections: undefined,
-            });
-        });
-    });
-
     describe("Keyboard navigation (ViewRoomDelta)", () => {
         beforeEach(() => {
             // stubClient sets up MatrixClientPeg which is needed when ViewRoom action is dispatched
@@ -501,7 +489,7 @@ describe("RoomListViewModel", () => {
         it("should navigate to next room when delta is 1", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -524,7 +512,7 @@ describe("RoomListViewModel", () => {
         it("should navigate to previous room when delta is -1", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -547,7 +535,7 @@ describe("RoomListViewModel", () => {
         it("should wrap around to last room when navigating backwards from first room", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -570,7 +558,7 @@ describe("RoomListViewModel", () => {
         it("should not navigate when current room is not found", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
             dispatchSpy.mockClear();
@@ -594,7 +582,7 @@ describe("RoomListViewModel", () => {
         it("should not navigate when no room is selected", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
             dispatchSpy.mockClear();
@@ -688,9 +676,41 @@ describe("RoomListViewModel", () => {
                 jest.advanceTimersByTime(5 * 1000);
                 expect(viewModel.getSnapshot().toast).toBeUndefined();
             });
+
+            /** Make only `room3` report an unread count, so it is the unread room below the fold. */
+            const mockRoom3Unread = (): void => {
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation(
+                    (room) => ({ hasUnreadCount: room === room3 }) as unknown as RoomNotificationState,
+                );
+            };
+
+            it("should show the unread-activity toast when an unread room is below the fold", () => {
+                mockRoom3Unread();
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // room1/room2 visible, room3 (unread) scrolled below the fold.
+                viewModel.updateVisibleFold(1);
+
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
+            });
+
+            it("should prefer the event toast over the unread-activity toast, restoring it on auto-close", () => {
+                mockRoom3Unread();
+                viewModel = new RoomListViewModel({ client: matrixClient });
+                viewModel.updateVisibleFold(1);
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
+
+                // A transient event toast takes precedence over the persistent unread-activity toast…
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.RoomTagged);
+                expect(viewModel.getSnapshot().toast).toBe("chat_moved");
+
+                // …and once it auto-dismisses, the unread-activity toast returns.
+                jest.advanceTimersByTime(15 * 1000);
+                expect(viewModel.getSnapshot().toast).toBe("unread_activity");
+            });
         });
 
-        describe("Sections (feature_room_list_sections)", () => {
+        describe("Sections", () => {
             let favRoom1: Room;
             let favRoom2: Room;
             let lowPriorityRoom: Room;
@@ -698,11 +718,6 @@ describe("RoomListViewModel", () => {
             let regularRoom2: Room;
 
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                    if (setting === "feature_room_list_sections") return true;
-                    return false;
-                });
-
                 favRoom1 = mkStubRoom("!fav1:server", "Fav 1", matrixClient);
                 favRoom2 = mkStubRoom("!fav2:server", "Fav 2", matrixClient);
                 lowPriorityRoom = mkStubRoom("!low1:server", "Low 1", matrixClient);
@@ -844,7 +859,7 @@ describe("RoomListViewModel", () => {
                 expect(favHeader.isExpanded).toBe(false);
 
                 // Select regularRoom1, which is the first room in the chats section
-                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
+                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
                 dispatcher.dispatch({
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!reg1:server",
@@ -996,7 +1011,6 @@ describe("RoomListViewModel", () => {
                         mkStubRoom("!space:server", "My Space", matrixClient),
                     ]);
                     jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                        if (setting === "feature_room_list_sections") return true;
                         if (setting === "RoomList.CustomSectionData")
                             return {
                                 [customTag]: { tag: customTag, name: "My Section", spaceId: "!space:server" },
@@ -1007,7 +1021,6 @@ describe("RoomListViewModel", () => {
 
                 it("shows an empty custom section when viewing its originating space", () => {
                     jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                        if (setting === "feature_room_list_sections") return true;
                         if (setting === "RoomList.CustomSectionData")
                             return { [customTag]: { tag: customTag, name: "My Section", spaceId: MetaSpace.Home } };
                         return false;
@@ -1152,7 +1165,7 @@ describe("RoomListViewModel", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
                 // Select favRoom1 (index 0 globally, index 0 in favourites section)
-                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
+                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
                 dispatcher.dispatch({
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!fav1:server",
@@ -1177,6 +1190,108 @@ describe("RoomListViewModel", () => {
                 const snapshot = viewModel.getSnapshot();
                 expect(snapshot.sections[0].roomIds[0]).toBe("!fav1:server");
                 expect(snapshot.roomListState.activeRoomIndex).toBe(0);
+            });
+
+            describe("Drag and drop", () => {
+                beforeEach(() => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+                    // Ensure section header VMs are created before tests that interact with them
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                    viewModel.getSectionHeaderViewModel(CHATS_TAG);
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority);
+                });
+
+                it("should delegate changeSectionOrder to RoomListStoreV3.reorderSection", async () => {
+                    const reorderSpy = jest
+                        .spyOn(RoomListStoreV3.instance, "reorderSection")
+                        .mockResolvedValue(undefined);
+
+                    await viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
+
+                    expect(reorderSpy).toHaveBeenCalledWith(DefaultTagID.Favourite, CHATS_TAG);
+                });
+
+                it("should scroll the moved section back into view after reordering", async () => {
+                    jest.spyOn(RoomListStoreV3.instance, "reorderSection").mockResolvedValue(undefined);
+
+                    await viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
+                    expect(viewModel.getSnapshot().roomListState.scrollToSectionTag).toBe(DefaultTagID.Favourite);
+                });
+
+                it("should collapse every section on drag start", () => {
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
+
+                    viewModel.onSectionDragStart();
+
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(false);
+
+                    for (const section of viewModel.getSnapshot().sections) {
+                        expect(section.roomIds).toEqual([]);
+                    }
+                });
+
+                it("should restore the pre-drag expansion state on drag end", () => {
+                    // Collapse Favourite before the drag; other sections remain expanded
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
+
+                    viewModel.onSectionDragStart();
+                    viewModel.onSectionDragEnd();
+
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(true);
+
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([]);
+                    expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([
+                        "!reg1:server",
+                        "!reg2:server",
+                    ]);
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.LowPriority)!.roomIds).toEqual([
+                        "!low1:server",
+                    ]);
+                });
+
+                it("should re-snapshot expansion state on each drag start", () => {
+                    // First cycle: Favourite is collapsed before the drag
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).onClick();
+                    viewModel.onSectionDragStart();
+                    viewModel.onSectionDragEnd();
+
+                    // Between cycles: collapse CHATS_TAG as well
+                    viewModel.getSectionHeaderViewModel(CHATS_TAG).onClick();
+                    viewModel.onSectionDragStart();
+                    viewModel.onSectionDragEnd();
+
+                    // The second drag end must restore the state captured at the second drag start
+                    // (Favourite collapsed, CHATS_TAG collapsed, LowPriority expanded), not the first cycle's snapshot.
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(false);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(true);
+                });
+
+                it("should be a no-op when drag end is called without drag start", () => {
+                    viewModel.onSectionDragEnd();
+
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded).toBe(true);
+                    expect(viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded).toBe(true);
+                    expect(viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded).toBe(true);
+
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([
+                        "!fav1:server",
+                        "!fav2:server",
+                    ]);
+                    expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([
+                        "!reg1:server",
+                        "!reg2:server",
+                    ]);
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.LowPriority)!.roomIds).toEqual([
+                        "!low1:server",
+                    ]);
+                });
             });
         });
     });

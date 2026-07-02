@@ -610,7 +610,6 @@ export default class Registration extends React.Component<IProps, IState> {
                         defaultPassword={this.state.formVals.password}
                         onRegisterClick={this.onFormSubmit}
                         flows={this.state.flows}
-                        serverConfig={this.props.serverConfig}
                         canSubmit={!this.state.serverErrorIsFatal}
                         matrixClient={this.state.matrixClient}
                         mobileRegister={this.props.mobileRegister}

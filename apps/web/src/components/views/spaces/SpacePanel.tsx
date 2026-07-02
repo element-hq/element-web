@@ -404,8 +404,6 @@ const SpacePanel: React.FC = () => {
         }
     });
 
-    const newRoomListEnabled = useSettingValue("feature_new_room_list");
-
     const userMenuVm = useCreateAutoDisposedViewModel(
         () => new UserMenuViewModel(defaultDispatcher, client, isPanelCollapsed),
     );
@@ -437,7 +435,6 @@ const SpacePanel: React.FC = () => {
                     <nav
                         className={classNames("mx_SpacePanel", {
                             collapsed: isPanelCollapsed,
-                            newUi: newRoomListEnabled,
                         })}
                         onKeyDown={(ev) => {
                             const navAction = getKeyBindingsManager().getNavigationAction(ev);

@@ -103,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "Open room %(roomName)s",
+            "drag_cancelled": "Dragging cancelled",
+            "drag_end": "%(source)s was dropped on %(target)s",
+            "drag_end_after": "%(source)s was dropped after %(target)s",
+            "drag_end_before": "%(source)s was dropped before %(target)s",
+            "drag_end_original": "%(source)s returned to its original position",
+            "drag_instructions": "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
+            "drag_over": "%(source)s is over %(target)s",
+            "drag_over_after": "%(source)s will be dropped after %(target)s",
+            "drag_over_before": "%(source)s will be dropped before %(target)s",
+            "drag_over_original": "%(source)s will return to its original position",
+            "drag_start": "Dragging %(source)s",
             "invitation": "Open room %(roomName)s invitation.",
             "mention": {
                 "one": "Open room %(roomName)s with 1 unread mention.",
@@ -124,10 +135,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chats yet",
-            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
-            "no_lowpriority": "You don't have any low priority rooms",
             "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
@@ -140,9 +148,7 @@
         "expand_all_sections": "Expand all sections",
         "expand_filters": "Expand filter list",
         "filters": {
-            "favourite": "Favourites",
             "invites": "Invites",
-            "low_priority": "Low priority",
             "mentions": "Mentions",
             "people": "People",
             "rooms": "Rooms",
@@ -172,7 +178,7 @@
             "more_options": "More options",
             "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
-            "toggle_unread": "Toggle %(section)s section with unread room(s)"
+            "toggle_unread": "Toggle %(section)s section with unread rooms"
         },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
@@ -184,7 +190,8 @@
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
-        }
+        },
+        "unread_messages": "Unread messages"
     },
     "terms": {
         "tac_button": "Review terms and conditions"

@@ -21,7 +21,7 @@ import {
 import EventListSummary from "../../../../../src/components/views/elements/EventListSummary";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import * as languageHandler from "../../../../../src/languageHandler";
+import * as languageSettings from "../../../../../src/i18n/settings";
 
 describe("EventListSummary", function () {
     const roomId = "!room:server.org";
@@ -130,7 +130,7 @@ describe("EventListSummary", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
+        jest.spyOn(languageSettings, "getUserLanguage").mockReturnValue("en-GB");
     });
 
     afterAll(() => {
