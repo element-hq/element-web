@@ -151,12 +151,13 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private backgroundAudio = new BackgroundAudio();
     private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
 
+    private static _instance: LegacyCallHandler | null = null;
     public static get instance(): LegacyCallHandler {
-        if (!window.mxLegacyCallHandler) {
-            window.mxLegacyCallHandler = new LegacyCallHandler();
+        if (!LegacyCallHandler._instance) {
+            LegacyCallHandler._instance = new LegacyCallHandler();
         }
 
-        return window.mxLegacyCallHandler;
+        return LegacyCallHandler._instance;
     }
 
     /*
