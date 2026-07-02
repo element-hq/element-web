@@ -11,10 +11,6 @@ import { test, expect } from "../../../element-web-test";
 import { getHeaderSection } from "./utils";
 
 test.describe("Header section of the room list", () => {
-    test.use({
-        labsFlags: ["feature_new_room_list"],
-    });
-
     test.beforeEach(async ({ page, app, user }) => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");

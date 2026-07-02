@@ -609,5 +609,3 @@ export { ContextMenuTooltipButton } from "../../accessibility/context_menu/Conte
 export { MenuItem } from "../../accessibility/context_menu/MenuItem";
 export { MenuItemCheckbox } from "../../accessibility/context_menu/MenuItemCheckbox";
 export { MenuItemRadio } from "../../accessibility/context_menu/MenuItemRadio";
-export { StyledMenuItemCheckbox } from "../../accessibility/context_menu/StyledMenuItemCheckbox";
-export { StyledMenuItemRadio } from "../../accessibility/context_menu/StyledMenuItemRadio";

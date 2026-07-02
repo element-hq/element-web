@@ -4,7 +4,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
 <DocumentFragment>
   <nav
     aria-label="Spaces"
-    class="mx_SpacePanel collapsed newUi"
+    class="mx_SpacePanel collapsed"
   >
     <div
       class="_wrapper_1yyfq_8 mx_UserMenu"
