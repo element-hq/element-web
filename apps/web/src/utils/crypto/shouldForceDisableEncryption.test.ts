@@ -6,12 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { shouldForceDisableEncryption } from "../../../../src/utils/crypto/shouldForceDisableEncryption";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import { shouldForceDisableEncryption } from "./shouldForceDisableEncryption";
 
 describe("shouldForceDisableEncryption()", () => {
     const mockClient = getMockClientWithEventEmitter({
-        getClientWellKnown: jest.fn(),
+        getClientWellKnown: vi.fn(),
     });
 
     beforeEach(() => {
