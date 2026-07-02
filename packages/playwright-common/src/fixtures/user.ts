@@ -31,6 +31,14 @@ export async function populateLocalStorageWithCredentials(page: Page, credential
             window.localStorage.setItem("mx_has_pickle_key", "false");
             window.localStorage.setItem("mx_has_access_token", "true");
 
+            // XXX: If the homeserver is using MAS, then Element uses additional localstorage settings to store more
+            // data. The fact that we don't populate them means that, for example, when you hit "Remove this device" in
+            // the app, it attempts to hit the legacy `/logout` endpoint, which returns a 40x error, which is silently
+            // ignored.
+            //
+            // If you fix this, (1) yay! (2) please remember to update the warning on the doc-comments of this method
+            // and its callers.
+
             window.localStorage.setItem(
                 "mx_local_settings",
                 JSON.stringify({
