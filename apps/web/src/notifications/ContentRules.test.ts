@@ -58,7 +58,7 @@ describe("ContentRules", function () {
             const rules = { global: { content: [NORMAL_RULE, USERNAME_RULE] } };
 
             const parsed = ContentRules.parseContentRules(rules);
-            expect(parsed.rules.length).toEqual(1);
+            expect(parsed.rules).toHaveLength(1);
             expect(parsed.rules[0]).toEqual(NORMAL_RULE);
             expect(parsed.vectorState).toEqual(PushRuleVectorState.ON);
             expect(parsed.externalRules).toEqual([]);
@@ -68,7 +68,7 @@ describe("ContentRules", function () {
             const rules = { global: { content: [LOUD_RULE, USERNAME_RULE] } };
 
             const parsed = ContentRules.parseContentRules(rules);
-            expect(parsed.rules.length).toEqual(1);
+            expect(parsed.rules).toHaveLength(1);
             expect(parsed.rules[0]).toEqual(LOUD_RULE);
             expect(parsed.vectorState).toEqual(PushRuleVectorState.LOUD);
             expect(parsed.externalRules).toEqual([]);
@@ -78,10 +78,10 @@ describe("ContentRules", function () {
             const rules = { global: { content: [LOUD_RULE, NORMAL_RULE, USERNAME_RULE] } };
 
             const parsed = ContentRules.parseContentRules(rules);
-            expect(parsed.rules.length).toEqual(1);
+            expect(parsed.rules).toHaveLength(1);
             expect(parsed.rules[0]).toEqual(LOUD_RULE);
             expect(parsed.vectorState).toEqual(PushRuleVectorState.LOUD);
-            expect(parsed.externalRules.length).toEqual(1);
+            expect(parsed.externalRules).toHaveLength(1);
             expect(parsed.externalRules[0]).toEqual(NORMAL_RULE);
         });
     });

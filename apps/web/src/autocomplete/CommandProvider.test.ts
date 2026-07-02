@@ -84,7 +84,7 @@ describe("CommandProvider", () => {
 
         // Then we should get the completion because the command is enabled
         // The completion preserves the arguments when the command matches
-        expect(enabledCompletions.length).toBe(1);
+        expect(enabledCompletions).toHaveLength(1);
         expect(enabledCompletions[0].completion).toBe("/enabled test");
     });
 });
