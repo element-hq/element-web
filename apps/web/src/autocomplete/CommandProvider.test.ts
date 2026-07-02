@@ -5,14 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import CommandProvider from "../../../src/autocomplete/CommandProvider";
-import { stubClient } from "../../test-utils";
-import { Command } from "../../../src/slash-commands/command";
-import { CommandCategories } from "../../../src/slash-commands/interface";
-import { _td } from "../../../src/languageHandler";
-import * as SlashCommands from "../../../src/slash-commands/SlashCommands";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import CommandProvider from "./CommandProvider";
+import { Command } from "../slash-commands/command";
+import { CommandCategories } from "../slash-commands/interface";
+import { _td } from "../languageHandler";
+import * as SlashCommands from "../slash-commands/SlashCommands";
 
 describe("CommandProvider", () => {
     let room: Room;
@@ -30,7 +33,7 @@ describe("CommandProvider", () => {
             command: "disabled",
             args: "<arg>",
             description: _td("slash_command|spoiler"),
-            runFn: jest.fn(),
+            runFn: vi.fn(),
             category: CommandCategories.messages,
             isEnabled: () => false,
         });
@@ -40,7 +43,7 @@ describe("CommandProvider", () => {
             command: "enabled",
             args: "<arg>",
             description: _td("slash_command|shrug"),
-            runFn: jest.fn(),
+            runFn: vi.fn(),
             category: CommandCategories.messages,
             isEnabled: () => true,
         });

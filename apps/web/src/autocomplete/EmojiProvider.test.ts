@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EmojiProvider from "../../../src/autocomplete/EmojiProvider";
-import { mkStubRoom } from "../../test-utils/test-utils";
-import { add } from "../../../src/emojipicker/recent";
-import { stubClient } from "../../test-utils";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
+import { stubClient, mkStubRoom } from "test-utils";
+
+import EmojiProvider from "./EmojiProvider";
+import { add } from "../emojipicker/recent";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const EMOJI_SHORTCODES = [
     ":+1",

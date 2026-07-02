@@ -6,19 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import RoomProvider from "../../../src/autocomplete/RoomProvider";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { mkRoom, mkSpace, stubClient } from "../../test-utils";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { mkRoom, mkSpace, stubClient } from "test-utils";
+
+import RoomProvider from "./RoomProvider";
+import SettingsStore from "../settings/SettingsStore";
 
 describe("RoomProvider", () => {
     it("suggests a room whose alias matches a prefix", async () => {
         // Given a room
         const client = stubClient();
         const room = makeRoom(client, "room:e.com");
-        mocked(client.getVisibleRooms).mockReturnValue([room]);
+        vi.mocked(client.getVisibleRooms).mockReturnValue([room]);
 
         // When we search for rooms starting with its prefix
         const roomProvider = new RoomProvider(room);
@@ -45,7 +47,7 @@ describe("RoomProvider", () => {
         const room2 = makeRoom(client, "room2:e.com");
         const other = makeRoom(client, "other:e.com");
         const space = makeSpace(client, "room3:e.com");
-        mocked(client.getVisibleRooms).mockReturnValue([room1, room2, other, space]);
+        vi.mocked(client.getVisibleRooms).mockReturnValue([room1, room2, other, space]);
 
         // When we search for rooms starting with a prefix
         const roomProvider = new RoomProvider(room1);
@@ -76,14 +78,14 @@ describe("RoomProvider", () => {
 
     describe("If the feature_dynamic_room_predecessors is not enabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         });
 
         it("Passes through the dynamic predecessor setting", async () => {
             const client = stubClient();
             const room = makeRoom(client, "room:e.com");
-            mocked(client.getVisibleRooms).mockReturnValue([room]);
-            mocked(client.getVisibleRooms).mockClear();
+            vi.mocked(client.getVisibleRooms).mockReturnValue([room]);
+            vi.mocked(client.getVisibleRooms).mockClear();
 
             const roomProvider = new RoomProvider(room);
             await roomProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
@@ -95,7 +97,7 @@ describe("RoomProvider", () => {
     describe("If the feature_dynamic_room_predecessors is enabled", () => {
         beforeEach(() => {
             // Turn on feature_dynamic_room_predecessors setting
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "feature_dynamic_room_predecessors",
             );
         });
@@ -103,8 +105,8 @@ describe("RoomProvider", () => {
         it("Passes through the dynamic predecessor setting", async () => {
             const client = stubClient();
             const room = makeRoom(client, "room:e.com");
-            mocked(client.getVisibleRooms).mockReturnValue([room]);
-            mocked(client.getVisibleRooms).mockClear();
+            vi.mocked(client.getVisibleRooms).mockReturnValue([room]);
+            vi.mocked(client.getVisibleRooms).mockClear();
 
             const roomProvider = new RoomProvider(room);
             await roomProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
