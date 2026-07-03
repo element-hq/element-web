@@ -124,6 +124,8 @@ test.describe("Dehydration", () => {
     test("Can read messages sent while logged out", async ({ homeserver, credentials, page, app }) => {
         const recoveryKey =
             await test.step("Alice logs in and sets up recovery => a dehydrated device is created", async () => {
+                // This test does a page reload to work around a bug, so we need to avoid the `pageWithCredentials` and `user`
+                // fixtures poke credentials into localStorage via a pageload script. We therefore log in manually.
                 await logIntoElement(page, credentials);
 
                 // Logging in will have created a cross-signing identity for us. Now set up recovery, to create a dehydrated device.
@@ -134,6 +136,8 @@ test.describe("Dehydration", () => {
             });
 
         const [bob, testRoomId] = await test.step("Bob and Alice make a shared room", async () => {
+            // As above, we need to avoid the `user` fixture: we therefore also need to avoid the `bot` fixture, which
+            // depends on the `user` fixture. We just create the bot manually.
             const bob = new Bot(page, homeserver, { displayName: "Bob" });
             await autoJoin(bob);
 
