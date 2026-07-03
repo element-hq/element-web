@@ -21,8 +21,8 @@
     /* Override menu defaults */
     padding-block: 0 !important;
     section.profile {
-        margin: var(--cpd-space-8x) var(--cpd-space-6x);
-        margin-bottom: var(--cpd-space-3x);
+        margin-left: var(--cpd-space-6x);
+        margin-right: var(--cpd-space-6x);
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-2x);
@@ -43,6 +43,13 @@
             margin-top: var(--cpd-space-1x);
             margin-bottom: var(--cpd-space-2x);
         }
+    }
+    .profilePrimary {
+        margin-top: var(--cpd-space-8x);
+        margin-bottom: var(--cpd-space-3x);
+    }
+    .profileSecondary {
+        margin-bottom: var(--cpd-space-4x);
     }
     section.actions {
         margin: var(--cpd-space-2x) 0;

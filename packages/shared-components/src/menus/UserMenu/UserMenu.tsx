@@ -165,12 +165,14 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                 side="right"
                 className={styles.container}
             >
-                <section className={styles.profile}>
+                <section className={classNames(styles.profile, styles.profilePrimary)}>
                     {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
                     <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
                     {showUserStatus && <SetStatusView vm={setStatusVm} />}
+                </section>
+                <section className={classNames(styles.profile, styles.profileSecondary)}>
                     <Text data-testid="userId" size="md" as="span" type="body">
                         {userId}
                     </Text>
