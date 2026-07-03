@@ -25,8 +25,8 @@ import {
 import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
+import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";
 import {
@@ -66,9 +66,11 @@ import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
+
 
 // exported for tests
 export function createMessageContent(
@@ -76,6 +78,7 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
+    urlPreviewVm?: MessageComposerUrlPreviewViewModel,
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -108,6 +111,29 @@ export function createMessageContent(
         addReplyToMessageContent(content, replyToEvent);
     }
 
+    const previewsSnapshot = urlPreviewVm?.getSnapshot();
+    if (previewsSnapshot !== undefined && previewsSnapshot.previews.length !== 0) {
+        content["com.beeper.linkpreviews"] = previewsSnapshot.previews.map(preview => ({
+            matched_url: preview.link,
+            "og:url": preview.link, // TODO: og:url may be different from the URL requested
+            "og:title": preview.title,
+            "og:description": preview.description,
+            // TODO: populate these fields
+            /*
+            ...(if_exists ? {
+                "og:image": "TODO",
+                "og:image:width": 0,
+                "og:image:height": 0,
+                "og:image:type": "TODO"
+            } : {}),
+            ...(if_exists ? {
+                "beeper:image:encryption": undefined,
+                "matrix:image:size": 0
+            } : {})
+            */
+        }))
+    }
+
     return content;
 }
 
@@ -137,6 +163,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     disabled?: boolean;
     onChange?(model: EditorModel): void;
     toggleStickerPickerOpen: () => void;
+    urlPreviewVm: MessageComposerUrlPreviewViewModel;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
@@ -225,10 +252,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
                     const editEvent = events
                         ? findEditableEvent({
-                              events,
-                              isForward: false,
-                              matrixClient: MatrixClientPeg.safeGet(),
-                          })
+                            events,
+                            isForward: false,
+                            matrixClient: MatrixClientPeg.safeGet(),
+                        })
                         : undefined;
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else
@@ -418,6 +445,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     model,
                     replyToEvent,
                     this.props.relation,
+                    this.props.urlPreviewVm,
                 );
             }
             // don't bother sending an empty message
