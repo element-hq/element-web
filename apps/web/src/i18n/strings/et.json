@@ -11,8 +11,6 @@
             "one": "1 lugemata mainimine.",
             "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
         },
-        "recent_rooms": "Hiljuti kasutatud jututoad",
-        "room_name": "Jututuba %(name)s",
         "room_status_bar": "Jututoa olekuriba",
         "seek_bar_label": "Heli kerimisriba",
         "unread_messages": "Lugemata sõnumid."
@@ -22,7 +20,6 @@
         "accept": "Võta vastu",
         "add": "Lisa",
         "add_existing_room": "Lisa olemasolev jututuba",
-        "add_people": "Lisa inimesi",
         "apply": "Rakenda",
         "approve": "Nõustu",
         "ask_to_join": "Küsi võimalust liitumiseks",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Lülita täisekraanivaade sisse",
         "exit_fullscreeen": "Lülita täisekraanivaade välja",
         "expand": "Laienda",
-        "explore_public_rooms": "Sirvi avalikke jututubasid",
         "explore_rooms": "Tutvu jututubadega",
         "export": "Ekspordi",
         "forward": "Edasta",
@@ -69,8 +65,6 @@
         "ignore": "Eira",
         "import": "Impordi",
         "invite": "Kutsu",
-        "invite_to_space": "Kutsu kogukonda",
-        "invites_list": "Kutsed",
         "join": "Liitu",
         "learn_more": "Loe lisateavet",
         "leave": "Lahku",
@@ -116,8 +110,6 @@
         "sign_out": "Eemalda see seade",
         "skip": "Jäta vahele",
         "start": "Alusta",
-        "start_chat": "Alusta vestlust",
-        "start_new_chat": "Alusta uut vestlust",
         "stop": "Peata",
         "submit": "Saada",
         "subscribe": "Telli",
@@ -496,7 +488,6 @@
         "go_to_settings": "Ava seadistused",
         "guest": "Külaline",
         "help": "Abiteave",
-        "historical": "Ammune",
         "home": "Avaleht",
         "homeserver": "Koduserver",
         "identity_server": "Isikutuvastusserver",
@@ -508,7 +499,6 @@
         "light": "Hele",
         "loading": "Laadime…",
         "location": "Asukoht",
-        "low_priority": "Vähetähtis",
         "matrix": "Matrix",
         "message": "Sõnum",
         "message_layout": "Sõnumite paigutus",
@@ -574,7 +564,6 @@
         "success": "Õnnestus",
         "suggestions": "Soovitused",
         "support": "Toeta",
-        "system_alerts": "Süsteemi teated",
         "theme": "Kujundus",
         "thread": "Jutulõng",
         "threads": "Jutulõngad",
@@ -591,7 +580,6 @@
         "username": "Kasutajanimi",
         "verified": "Verifitseeritud",
         "version": "Versioon",
-        "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
         "warning": "Hoiatus"
@@ -1562,7 +1550,6 @@
         "group_voip": "Heli ja video",
         "group_widgets": "Vidinad",
         "hidebold": "Peida teavituse täpp (ja näita loendure)",
-        "html_topic": "Näita jututoa teemade teavet html'ina",
         "join_beta": "Hakka kasutama beetaversiooni",
         "join_beta_reload": "Beeta-funktsionaalsuste kasutusele võtmisel laadime uuesti rakenduse %(brand)s.",
         "jump_to_date": "Võimalda kuupäeva valida (lisab /jumptodate käsu ja kuupäeva valimisega seotud päisekirjed)",
@@ -1575,7 +1562,6 @@
         "login_with_qr": "Logi sisse QR-koodiga",
         "mjolnir": "Uued võimalused osalejate eiramiseks",
         "msc3531_hide_messages_pending_moderation": "Luba modereerimist ootavate sõnumite peitmist.",
-        "new_room_list": "Võta kasutusele uus jututubade loend",
         "notification_settings": "Uued teavituste seadistused",
         "notification_settings_beta_caption": "Võtame kasutusele senisest lihtsama viisi teavituste seadistamiseks. Kohanda rakendust %(brand)s nii nagu soovid.",
         "notification_settings_beta_title": "Teavituste seadistused",
@@ -1586,7 +1572,6 @@
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
-        "under_active_development": "Aktiivselt arendamisel.",
         "unrealiable_e2e": "Krüptitud jututubades pole see töökindel",
         "video_rooms": "Videotoad",
         "video_rooms_a_new_way_to_chat": "Uus võimalus videovestlusteks rakenduses %(brand)s.",
@@ -1641,9 +1626,6 @@
         "room_leave_mod_warning": "Sa oled ainus moderaator selles jututoas. Kui sa siis lahkud, ei saa keegi teine jututoa seadistusi muuta ega muid olulisi toiminguid teha.",
         "room_rejoin_warning": "See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.",
         "space_rejoin_warning": "See ei ole avalik kogukond. Ilma kutseta sa ei saa uuesti liituda."
-    },
-    "left_panel": {
-        "open_dial_pad": "Ava numbriklahvistik"
     },
     "lightbox": {
         "rotate_left": "Pööra vasakule",
@@ -1841,7 +1823,6 @@
     },
     "quick_settings": {
         "all_settings": "Kõik seadistused",
-        "metaspace_section": "Kinnita külgpaanile",
         "sidebar_settings": "Täiendavad seadistused",
         "title": "Kiirseadistused"
     },
@@ -2143,46 +2124,21 @@
         "waiting_for_join_title": "Kasutajate liitumise ootel %(brand)s'ga"
     },
     "room_list": {
-        "add_room_label": "Lisa jututuba",
         "add_space_label": "Lisa kogukond",
-        "breadcrumbs_empty": "Hiljuti külastatud jututubasid ei leidu",
-        "breadcrumbs_label": "Hiljuti külastatud jututoad",
         "failed_add_tag": "Sildi %(tagName)s lisamine jututoale ebaõnnestus",
         "failed_remove_tag": "Sildi %(tagName)s eemaldamine jututoast ebaõnnestus",
         "failed_set_dm_tag": "Otsevestluse sildi seadmine ei õnnestunud",
-        "home_menu_label": "Avalehe valikud",
-        "join_public_room_label": "Liitu avaliku jututoaga",
-        "joining_rooms_status": {
-            "other": "Parasjagu liitun %(count)s jututoaga",
-            "one": "Parasjagu liitun %(count)s jututoaga"
-        },
         "list_title": "Jututubade loend",
         "more_options": {
             "leave_room": "Lahku jututoast"
         },
         "notification_options": "Teavituste eelistused",
-        "redacting_messages_status": {
-            "other": "Kustutame sõnumeid %(count)s jututoas",
-            "one": "Kustutame sõnumeid %(count)s jututoas"
-        },
         "section": {
             "chats": "Vestlused",
             "favourites": "Lemmikud",
             "low_priority": "Vähetähtis"
         },
-        "show_less": "Näita vähem",
-        "show_n_more": {
-            "one": "Näita veel %(count)s vestlust",
-            "other": "Näita veel %(count)s vestlust"
-        },
-        "show_previews": "Näita sõnumite eelvaateid",
-        "sort_by": "Järjestamisviis",
-        "sort_by_activity": "Aktiivsuse alusel",
-        "sort_by_alphabet": "Tähestiku järjekorras",
-        "sort_unread_first": "Näita lugemata sõnumitega jututubasid esimesena",
-        "space_menu_label": "%(spaceName)s menüü",
-        "sublist_options": "Loendi valikud",
-        "suggested_rooms_heading": "Soovitatud jututoad"
+        "show_less": "Näita vähem"
     },
     "room_settings": {
         "access": {
@@ -3006,13 +2962,11 @@
         "showbold": "Näita üldist aktiivsust jututubade loendis (punktidena või lugemata sõnumite arvuna)",
         "sidebar": {
             "dialog_title": "<strong>Seadistused:</strong> Külgpaan",
-            "metaspaces_favourites_description": "Koonda oma olulised sõbrad ning lemmikjututoad ühte kohta.",
             "metaspaces_home_all_rooms": "Näita kõiki jututubasid",
             "metaspaces_home_all_rooms_description": "Näita kõiki oma jututubasid avalehel ka siis kui nad on osa mõnest kogukonnast.",
             "metaspaces_home_description": "Avalehelt saad kõigest hea ülevaate.",
             "metaspaces_orphans": "Jututoad väljaspool seda kogukonda",
             "metaspaces_orphans_description": "Koonda ühte kohta kõik oma jututoad, mis ei kuulu mõnda kogukonda.",
-            "metaspaces_people_description": "Koonda oma olulised sõbrad ühte kohta.",
             "metaspaces_subsection": "Näidatavad kogukonnad",
             "metaspaces_video_rooms": "Videojututoad ja -konverentsid",
             "metaspaces_video_rooms_description": "Rühmita kõik privaatsed videotoad ja -konverentsid",
@@ -3231,12 +3185,6 @@
     },
     "space_settings": {
         "title": "Seadistused - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Sul pole õigusi siia kogukonda lisada jututubasid",
-        "error_no_permission_add_space": "Sul pole õigusi siia kogukonda teiste kogukondade lisamiseks",
-        "error_no_permission_create_room": "Sul pole õigusi luua siin kogukonnas uusi jututubasid",
-        "error_no_permission_invite": "Sul pole õigusi siia kogukonda osalejate kutsumiseks"
     },
     "spotlight": {
         "public_rooms": {

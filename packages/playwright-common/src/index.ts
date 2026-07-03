@@ -68,16 +68,6 @@ export interface TestFixtures {
 
     labsFlags: string[];
     disablePresence: boolean;
-    /**
-     * Whether the left panel should have its width fixed.
-     * This is done because the library that we use for rendering collapsible
-     * panels uses math to calculate the width which can sometimes leads to +/-1px
-     * difference. While this does not matter to the user, it can lead to screenshot
-     * tests failing.
-     * Defaults to true, should be set to false via {@link base.use} when you want to test the collapse
-     * behaviour.
-     */
-    lockLeftPanelWidth: boolean;
 }
 
 export const test = base.extend<TestFixtures>({
