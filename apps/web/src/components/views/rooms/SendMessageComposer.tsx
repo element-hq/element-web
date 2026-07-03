@@ -134,14 +134,14 @@ export async function attachUrlPreviews(
                     try {
                         imageBlob = await (await fetch(preview.image.imageFull)).blob();
                     } catch (e) {
-                        console.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
+                        logger.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
                     }
 
                     if (imageBlob !== null) {
                         try {
                             imageUploaded = await uploadFile(mxClient, roomId, imageBlob);
                         } catch (e) {
-                            console.error("Failed to upload image", e);
+                            logger.error("Failed to upload image", e);
                         }
                     }
                 }
