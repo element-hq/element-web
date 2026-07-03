@@ -17,7 +17,10 @@ const adapter = {
     fn: isJest ? (jest.fn as unknown as typeof vi.fn) : vi.fn,
     spyOn: isJest ? (jest.spyOn as unknown as typeof vi.spyOn) : vi.spyOn,
     mocked: isJest ? (jestMocked as typeof vi.mocked) : vi.mocked,
-} as Pick<typeof vi, "fn" | "spyOn" | "mocked">;
+    advanceTimersByTime: isJest
+        ? (jest.advanceTimersByTime as unknown as typeof vi.advanceTimersByTime)
+        : vi.advanceTimersByTime,
+} as Pick<typeof vi, "fn" | "spyOn" | "mocked" | "advanceTimersByTime">;
 
 const mocked = adapter.mocked;
 export { adapter as vi, mocked };

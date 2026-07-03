@@ -6,28 +6,31 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach, type MockedObject } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { mocked, type MockedObject } from "jest-mock";
-import { waitFor } from "jest-matrix-react";
+import { waitFor } from "test-utils-rtl";
+import { stubClient } from "test-utils";
+import "vitest-canvas-mock";
 
-import { UpdateCheckStatus } from "../../../../src/BasePlatform";
-import { Action } from "../../../../src/dispatcher/actions";
-import dispatcher from "../../../../src/dispatcher/dispatcher";
-import * as rageshake from "../../../../src/rageshake/rageshake";
-import { BreadcrumbsStore } from "../../../../src/stores/BreadcrumbsStore";
-import Modal from "../../../../src/Modal";
-import DesktopCapturerSourcePicker from "../../../../src/components/views/elements/DesktopCapturerSourcePicker";
-import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
-import { stubClient } from "../../../test-utils";
-import ToastStore from "../../../../src/stores/ToastStore.ts";
+import { UpdateCheckStatus } from "../../BasePlatform";
+import { Action } from "../../dispatcher/actions";
+import dispatcher from "../../dispatcher/dispatcher";
+import * as rageshake from "../../rageshake/rageshake";
+import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
+import Modal from "../../Modal";
+import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
+import ElectronPlatform from "./ElectronPlatform";
+import ToastStore from "../../stores/ToastStore.ts";
 
-jest.mock("../../../../src/rageshake/rageshake", () => ({
-    flush: jest.fn(),
+vi.mock("../../rageshake/rageshake", () => ({
+    flush: vi.fn(),
 }));
 
 describe("ElectronPlatform", () => {
-    const initialiseValues = jest.fn().mockReturnValue({
+    const initialiseValues = vi.fn().mockReturnValue({
         protocol: "io.element.desktop",
         sessionId: "session-id",
         config: { _config: true },
@@ -38,23 +41,23 @@ describe("ElectronPlatform", () => {
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
         "(KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36";
     const mockElectron = {
-        on: jest.fn(),
-        send: jest.fn(),
+        on: vi.fn(),
+        send: vi.fn(),
         initialise: initialiseValues,
-        setSettingValue: jest.fn().mockResolvedValue(undefined),
-        getSettingValue: jest.fn().mockResolvedValue(undefined),
+        setSettingValue: vi.fn().mockResolvedValue(undefined),
+        getSettingValue: vi.fn().mockResolvedValue(undefined),
     } as unknown as MockedObject<Electron>;
 
-    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-    const dispatchFireSpy = jest.spyOn(dispatcher, "fire");
-    const logSpy = jest.spyOn(logger, "log").mockImplementation(() => {});
+    const dispatchSpy = vi.spyOn(dispatcher, "dispatch");
+    const dispatchFireSpy = vi.spyOn(dispatcher, "fire");
+    const logSpy = vi.spyOn(logger, "log").mockImplementation(() => {});
 
     const userId = "@alice:server.org";
     const deviceId = "device-id";
 
     beforeEach(() => {
         window.electron = mockElectron;
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
     });
 
@@ -99,10 +102,10 @@ describe("ElectronPlatform", () => {
 
     it("creates a modal on openDesktopCapturerSourcePicker", async () => {
         const plat = new ElectronPlatform();
-        Modal.createDialog = jest.fn();
+        Modal.createDialog = vi.fn();
 
         // @ts-ignore mock
-        mocked(Modal.createDialog).mockReturnValue({
+        vi.mocked(Modal.createDialog).mockReturnValue({
             finished: new Promise((r) => r(["source"])),
         });
 
@@ -111,7 +114,7 @@ describe("ElectronPlatform", () => {
             res = r;
         });
         // @ts-ignore mock
-        jest.spyOn(plat.ipc, "call").mockImplementation(() => {
+        vi.spyOn(plat.ipc, "call").mockImplementation(() => {
             res();
         });
 
@@ -134,7 +137,7 @@ describe("ElectronPlatform", () => {
             },
             true,
         );
-        const spy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+        const spy = vi.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
 
         const [event, handler] = getElectronEventHandlerCall("showToast")!;
         handler({} as any, { title: "title", description: "description" });
@@ -335,7 +338,7 @@ describe("ElectronPlatform", () => {
 
     describe("breadcrumbs", () => {
         it("should send breadcrumb updates over the IPC", () => {
-            const spy = jest.spyOn(BreadcrumbsStore.instance, "on");
+            const spy = vi.spyOn(BreadcrumbsStore.instance, "on");
             new ElectronPlatform();
             const cb = spy.mock.calls[0][1];
             cb();
@@ -352,9 +355,9 @@ describe("ElectronPlatform", () => {
     describe("authenticated media", () => {
         it("should respond to relevant ipc requests", async () => {
             const cli = stubClient();
-            mocked(cli.getAccessToken).mockReturnValue("access_token");
-            mocked(cli.getHomeserverUrl).mockReturnValue("homeserver_url");
-            mocked(cli.getVersions).mockResolvedValue({
+            vi.mocked(cli.getAccessToken).mockReturnValue("access_token");
+            vi.mocked(cli.getHomeserverUrl).mockReturnValue("homeserver_url");
+            vi.mocked(cli.getVersions).mockResolvedValue({
                 versions: ["v1.1"],
                 unstable_features: {},
             });
@@ -443,7 +446,7 @@ describe("ElectronPlatform", () => {
         });
 
         afterEach(() => {
-            jest.clearAllMocks();
+            vi.clearAllMocks();
         });
 
         it("should send a badge with a notification count", async () => {
