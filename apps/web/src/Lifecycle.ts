@@ -24,7 +24,6 @@ import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpt
 import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import createMatrixClient from "./utils/createMatrixClient";
-import Notifier from "./Notifier";
 import UserActivity from "./UserActivity";
 import Presence from "./Presence";
 import dis from "./dispatcher/dispatcher";
@@ -1097,7 +1096,7 @@ async function startMatrixClient(
     ToastStore.sharedInstance().reset();
 
     DialogOpener.instance.prepare(client);
-    Notifier.start();
+    SDKContextClass.instance.notifier.start();
     UserActivity.sharedInstance().start();
     DMRoomMap.makeShared(client).start();
     IntegrationManagers.sharedInstance().startWatching();
@@ -1228,7 +1227,7 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
  * on MatrixClientPeg after stopping.
  */
 export function stopMatrixClient(unsetClient = true): void {
-    Notifier.stop();
+    SDKContextClass.instance.notifier.stop();
     LegacyCallHandler.instance.stop();
     UserActivity.sharedInstance().stop();
     SDKContextClass.instance.typingStore.reset();

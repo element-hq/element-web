@@ -36,7 +36,6 @@ import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg"
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
-import Notifier from "../../Notifier";
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from "../../RoomInvite";
 import * as Rooms from "../../Rooms";
@@ -1638,8 +1637,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
-                showNotificationsToast(false);
+            if (this.stores.notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
+                showNotificationsToast(this.stores.notifier, false);
             }
 
             dis.fire(Action.FocusSendMessageComposer);
