@@ -11,8 +11,6 @@
             "other": "%(count)s mensagens não lidas, incluindo menções.",
             "one": "1 menção não lida."
         },
-        "recent_rooms": "Salas recentes",
-        "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de status da sala",
         "seek_bar_label": "Barra de busca de áudio",
         "unread_messages": "Mensagens não lidas."
@@ -22,7 +20,6 @@
         "accept": "Aceitar",
         "add": "Adicionar",
         "add_existing_room": "Adicionar sala existente",
-        "add_people": "Adicionar pessoas",
         "apply": "Aplicar",
         "approve": "Autorizar",
         "ask_to_join": "Pedir para participar",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Entrar em tela cheia",
         "exit_fullscreeen": "Sair da tela cheia",
         "expand": "Expandir",
-        "explore_public_rooms": "Explorar salas públicas",
         "explore_rooms": "Explorar salas",
         "export": "Exportar",
         "forward": "Encaminhar",
@@ -69,8 +65,6 @@
         "ignore": "Bloquear",
         "import": "Importar",
         "invite": "Convidar",
-        "invite_to_space": "Convidar para o espaço",
-        "invites_list": "Convidar",
         "join": "Entrar",
         "learn_more": "Saiba mais",
         "leave": "Sair",
@@ -116,8 +110,6 @@
         "sign_out": "Sair",
         "skip": "Pular",
         "start": "Iniciar",
-        "start_chat": "Iniciar conversa",
-        "start_new_chat": "Comece um novo bate-papo",
         "stop": "Pare",
         "submit": "Enviar",
         "subscribe": "Inscrever-se",
@@ -483,7 +475,6 @@
         "go_to_settings": "Ir para as configurações",
         "guest": "Convidado",
         "help": "Ajuda",
-        "historical": "Histórico",
         "home": "Início",
         "homeserver": "Servidor local",
         "identity_server": "Servidor de identidade",
@@ -495,7 +486,6 @@
         "light": "Claro",
         "loading": "Carregando...",
         "location": "Localidade",
-        "low_priority": "Baixa prioridade",
         "matrix": "Matrix",
         "message": "Mensagem",
         "message_layout": "Aparência da mensagem",
@@ -560,7 +550,6 @@
         "success": "Sucesso",
         "suggestions": "Sugestões",
         "support": "Suporte",
-        "system_alerts": "Alertas do sistema",
         "theme": "Tema",
         "thread": "Tópico",
         "threads": "Tópicos",
@@ -577,7 +566,6 @@
         "username": "Nome de usuário",
         "verified": "Verificado",
         "version": "Versão",
-        "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
         "warning": "Atenção"
@@ -1501,7 +1489,6 @@
         "group_voip": "Voz e vídeo",
         "group_widgets": "Widgets",
         "hidebold": "Ocultar ponto de notificação (exibir somente emblemas de contadores)",
-        "html_topic": "Mostrar representação HTML dos tópicos da sala",
         "join_beta": "Participe da versão beta",
         "join_beta_reload": "Aderir à versão beta irá recarregar %(brand)s.",
         "jump_to_date": "Ir para a data (adiciona cabeçalhos /jumptodate e pular para a data)",
@@ -1513,7 +1500,6 @@
         "location_share_live_description": "Implementação temporária. As localizações persistem no histórico da sala.",
         "mjolnir": "Novas formas de ignorar as pessoas",
         "msc3531_hide_messages_pending_moderation": "Permitir que os moderadores ocultem mensagens com moderação pendente.",
-        "new_room_list": "Habilitar nova lista de salas",
         "notification_settings": "Novas configurações de notificação",
         "notification_settings_beta_caption": "Apresentamos uma maneira mais simples de alterar suas configurações de notificação. Personalize o seu %(brand)s, da forma que quiser.",
         "notification_settings_beta_title": "Configurações de notificação",
@@ -1524,7 +1510,6 @@
         "sliding_sync_description": "Em desenvolvimento ativo, não pode ser desativado.",
         "sliding_sync_disabled_notice": "Saia e entre novamente para desativar",
         "sliding_sync_server_no_support": "Seu servidor não tem suporte",
-        "under_active_development": "Em desenvolvimento ativo.",
         "unrealiable_e2e": "Não confiável em salas criptografadas",
         "video_rooms": "Salas de vídeo",
         "video_rooms_a_new_way_to_chat": "Uma nova maneira de conversar por voz e vídeo em %(brand)s .",
@@ -1579,9 +1564,6 @@
         "room_leave_mod_warning": "Você é o único moderador nesta sala. Se você sair, ninguém poderá alterar as configurações da sala ou realizar outras ações importantes.",
         "room_rejoin_warning": "Esta sala não é pública. Você não poderá entrar novamente sem um convite.",
         "space_rejoin_warning": "Este espaço não é público. Você não poderá entrar novamente sem um convite."
-    },
-    "left_panel": {
-        "open_dial_pad": "Abrir o teclado de discagem"
     },
     "lightbox": {
         "rotate_left": "Girar para a esquerda",
@@ -1768,7 +1750,6 @@
     },
     "quick_settings": {
         "all_settings": "Todas as configurações",
-        "metaspace_section": "Fixar na barra lateral",
         "sidebar_settings": "Mais opções",
         "title": "Configurações rápidas"
     },
@@ -2059,41 +2040,16 @@
         "waiting_for_join_title": "Aguardando​•​que​•​os​•​usuários​•​se​•​juntem​•​a​•​%(brand)s"
     },
     "room_list": {
-        "add_room_label": "Adicionar sala",
         "add_space_label": "Adicionar espaço",
-        "breadcrumbs_empty": "Nenhuma sala foi visitada recentemente",
-        "breadcrumbs_label": "Salas visitadas recentemente",
         "failed_add_tag": "Falha ao adicionar a tag %(tagName)s para a sala",
         "failed_remove_tag": "Falha ao remover a tag %(tagName)s da sala",
         "failed_set_dm_tag": "Falha ao definir a marca de mensagem direta",
-        "home_menu_label": "Opções do Início",
-        "join_public_room_label": "Entrar na sala pública",
-        "joining_rooms_status": {
-            "one": "Entrando na %(count)s sala",
-            "other": "Entrando atualmente em %(count)s salas"
-        },
         "list_title": "Lista de salas",
         "more_options": {
             "leave_room": "Sair da sala"
         },
         "notification_options": "Alterar notificações",
-        "redacting_messages_status": {
-            "one": "Atualmente removendo mensagens em %(count)s sala",
-            "other": "Atualmente removendo mensagens em %(count)s salas"
-        },
-        "show_less": "Mostrar menos",
-        "show_n_more": {
-            "other": "Mostrar %(count)s a mais",
-            "one": "Mostrar %(count)s a mais"
-        },
-        "show_previews": "Mostrar pré-visualizações de mensagens",
-        "sort_by": "Classificar por",
-        "sort_by_activity": "Atividade recente",
-        "sort_by_alphabet": "De A a Z",
-        "sort_unread_first": "Mostrar salas não lidas em primeiro",
-        "space_menu_label": "Menu de %(spaceName)s",
-        "sublist_options": "Opções da Lista",
-        "suggested_rooms_heading": "Salas sugeridas"
+        "show_less": "Mostrar menos"
     },
     "room_settings": {
         "access": {
@@ -2908,13 +2864,11 @@
         "showbold": "Mostrar todas as atividades na lista de salas (pontos ou número de mensagens não lidas)",
         "sidebar": {
             "dialog_title": "<strong>Configurações:</strong> Barra lateral",
-            "metaspaces_favourites_description": "Agrupe todas as suas salas e pessoas favoritas em um só lugar.",
             "metaspaces_home_all_rooms": "Mostrar todas as salas",
             "metaspaces_home_all_rooms_description": "Mostre todas as suas salas no Início, mesmo que elas estejam em um espaço.",
             "metaspaces_home_description": "A página inicial é útil para obter uma visão geral de tudo.",
             "metaspaces_orphans": "Salas fora de um espaço",
             "metaspaces_orphans_description": "Agrupe todas as suas salas que não fazem parte de um espaço em um só lugar.",
-            "metaspaces_people_description": "Agrupe todas as suas pessoas em um só lugar.",
             "metaspaces_subsection": "Espaços para mostrar",
             "metaspaces_video_rooms": "Salas de vídeo e conferências",
             "metaspaces_video_rooms_description": "Agrupar todas as salas de vídeo e conferências privadas.",
@@ -3123,12 +3077,6 @@
     },
     "space_settings": {
         "title": "Configurações - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Você não tem permissão para adicionar salas neste espaço",
-        "error_no_permission_add_space": "Você não tem permissão para adicionar espaços a este espaço",
-        "error_no_permission_create_room": "Você não tem permissão para criar novas salas neste espaço",
-        "error_no_permission_invite": "Você não tem permissão para convidar pessoas para este espaço"
     },
     "spotlight": {
         "public_rooms": {
