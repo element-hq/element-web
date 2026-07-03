@@ -17,7 +17,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
-import { doesTimelineHaveUnreadMessages } from "../../../../Unread";
+import { doesTimelineHaveUnreadMessages, eventTriggersUnreadCount } from "../../../../Unread";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { getThreadNotificationLevel } from "../../../../utils/notifications";
 import { useSettingValue } from "../../../../hooks/useSettings";
@@ -161,7 +161,18 @@ function computeUnreadThreadRooms(
             // Fallback: local timeline inspection — surfaces threads the homeserver
             // hasn't pushed notification counts for. Computed lazily (skip when the
             // server already gave us a signal).
-            const hasLocalActivity = hasServerNotifs || doesTimelineHaveUnreadMessages(room, thread.events);
+            //
+            // doesTimelineHaveUnreadMessages can report a participated thread as
+            // unread when we replied but aren't the *literal* last sender (a later
+            // reaction/edit, or a message that doesn't trigger an unread count,
+            // landed after our reply). The js-sdk's read shortcut only fires for the
+            // very last event (see the "second-last event" TODO in room-receipts.ts),
+            // so the latest incoming message — older than our reply — looks unread.
+            // Guard against it: if our own latest reply is at/after the latest
+            // incoming message, we've read the thread.
+            const hasLocalActivity =
+                hasServerNotifs ||
+                (doesTimelineHaveUnreadMessages(room, thread.events) && hasUnreadAfterMyLatestReply(mxClient, thread));
 
             if (!hasServerNotifs && !hasLocalActivity) continue;
 
@@ -211,6 +222,43 @@ function computeUnreadThreadRooms(
     otherThreads.sort(sortThreads);
 
     return { greatestNotificationLevel, rooms: sortedRooms, participatingThreads, otherThreads };
+}
+
+/**
+ * Whether a thread has an incoming (from someone other than us) unread-triggering
+ * message that is newer than any reply we've sent.
+ *
+ * This closes a false positive in {@link doesTimelineHaveUnreadMessages}: because
+ * our own events never trigger an unread count, its "latest important event" is the
+ * newest message *from someone else*. The js-sdk only treats the thread as read
+ * past our receipt when we sent the very last event, so if a later reaction/edit
+ * (or any event that doesn't trigger an unread count) landed after our reply, that
+ * older incoming message still reads as unread even though we've clearly seen it.
+ *
+ * We consider the thread read once our most recent reply is at/after the latest
+ * incoming message. If there is no incoming message at all, there is nothing for us
+ * to read, so it is not unread either.
+ *
+ * @returns true if there is an incoming message newer than our latest reply.
+ */
+function hasUnreadAfterMyLatestReply(client: MatrixClient, thread: Thread): boolean {
+    const myUserId = client.getSafeUserId();
+
+    let latestIncomingTs = -1;
+    let myLatestTs = -1;
+    for (const event of thread.events) {
+        const ts = event.getTs();
+        if (event.getSender() === myUserId) {
+            if (ts > myLatestTs) myLatestTs = ts;
+        } else if (eventTriggersUnreadCount(client, event) && ts > latestIncomingTs) {
+            latestIncomingTs = ts;
+        }
+    }
+
+    // No incoming unread-triggering message: nothing for us to read.
+    if (latestIncomingTs === -1) return false;
+    // Unread only if the latest incoming message is newer than our latest reply.
+    return latestIncomingTs > myLatestTs;
 }
 
 /**
