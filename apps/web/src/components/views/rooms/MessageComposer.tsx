@@ -54,6 +54,8 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
+import { Type } from "../../../editor/parts";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -101,6 +103,8 @@ interface IState {
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
     initialComposerContent: string;
+    // Specifically for generating previews only.
+    urlPreviewComposerContent: string;
 }
 
 type WysiwygComposerState = {
@@ -142,6 +146,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.state = {
             isComposerEmpty: initialComposerContent?.length === 0,
             composerContent: initialComposerContent,
+            urlPreviewComposerContent: initialComposerContent,
             haveRecording: false,
             recordingTimeLeftSeconds: undefined, // when set to a number, shows a toast
             isMenuOpen: false,
@@ -418,6 +423,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     private onChange = (model: EditorModel): void => {
         this.setState({
+            urlPreviewComposerContent: model
+                .serializeParts()
+                .filter((part) => part.type === Type.Plain)
+                .map((part) => part.text)
+                .join(" "),
             isComposerEmpty: model.isEmpty,
         });
     };
@@ -425,6 +435,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private onWysiwygChange = (content: string): void => {
         this.setState({
             composerContent: content,
+            urlPreviewComposerContent: content,
             isComposerEmpty: content?.length === 0,
         });
     };
@@ -674,6 +685,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                 <div className="mx_MessageComposer_wrapper">
+                    <MessageComposerUrlPreviewWrapper content={this.state.urlPreviewComposerContent} />
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
                         replyToEvent={this.props.replyToEvent}

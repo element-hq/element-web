@@ -52,7 +52,7 @@ import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import type Timer from "../../../../src/utils/Timer";
 
 // ScrollPanel calls this, but jsdom doesn't mock it for us
@@ -162,7 +162,7 @@ const setupPagination = (
 
 describe("TimelinePanel", () => {
     let client: Mocked<MatrixClient>;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
     let userId: string;
 
     filterConsole("checkForPreJoinUISI: showing all messages, skipping check");
@@ -170,7 +170,7 @@ describe("TimelinePanel", () => {
     beforeEach(() => {
         client = mocked(stubClient());
         userId = client.getSafeUserId();
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
     });
 
     describe("read receipts and markers", () => {

@@ -16,17 +16,18 @@ import { mkStubRoom, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
-import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 jest.mock("../../../../../src/components/views/voip/LegacyCallView", () => jest.fn(() => "LegacyCallView"));
 
 describe("LegacyCallViewForRoom", () => {
     const LegacyCallViewMock = LegacyCallView as unknown as jest.Mock;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
 
     beforeEach(() => {
         stubClient();
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
         LegacyCallViewMock.mockClear();
     });
 

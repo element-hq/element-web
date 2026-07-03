@@ -42,14 +42,15 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
-import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContext } from "../../../contexts/SDKContext";
+import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { RoomSettingsTab } from "./RoomSettingsDialog-tab.ts";
 
 interface IProps {
     roomId: string;
     onFinished: (success?: boolean) => void;
     initialTabId?: RoomSettingsTab;
-    sdkContext: SdkContextClass;
+    sdkContext: SDKContextClass;
 }
 
 interface IState {

@@ -10,7 +10,8 @@ import { type IMatrixProfile, type MatrixEvent, type Room, RoomMember } from "ma
 import { useContext, useEffect, useState } from "react";
 
 import { PillType } from "../components/views/elements/PillType";
-import { SDKContext, type SdkContextClass } from "../contexts/SDKContext";
+import { SDKContext } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 
 const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomMember => {
@@ -65,7 +66,7 @@ const determineUserId = (
  *          If sharing at least one room with the user, then the result will be the profile fetched via API.
  *          null in all other cases.
  */
-const determineMember = (userId: string, targetRoom: Room, context: SdkContextClass): RoomMember | null => {
+const determineMember = (userId: string, targetRoom: Room, context: SDKContextClass): RoomMember | null => {
     const targetRoomMember = targetRoom.getMember(userId);
 
     if (targetRoomMember) return targetRoomMember;

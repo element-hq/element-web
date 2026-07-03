@@ -45,8 +45,6 @@ test.describe("Room list unread activity toast", () => {
     }
 
     test.describe("flat list", () => {
-        test.use({ labsFlags: ["feature_new_room_list"] });
-
         test.beforeEach(async ({ page, app, user }) => {
             // Toasts are displayed above the room list; dismiss the unrelated ones.
             await rejectToast(page, "Verify this device");
@@ -139,8 +137,6 @@ test.describe("Room list unread activity toast", () => {
     });
 
     test.describe("sections", () => {
-        test.use({ labsFlags: ["feature_new_room_list", "feature_room_list_sections"] });
-
         test.beforeEach(async ({ page, app, user }) => {
             await rejectToast(page, "Verify this device");
             await rejectToast(page, "Notifications");

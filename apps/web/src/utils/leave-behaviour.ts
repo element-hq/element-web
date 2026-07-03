@@ -24,7 +24,7 @@ import { type ViewHomePagePayload } from "../dispatcher/payloads/ViewHomePagePay
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import { type AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { bulkSpaceBehaviour } from "./space";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
 import LegacyCallHandler from "../LegacyCallHandler";
@@ -161,7 +161,7 @@ export async function leaveRoomBehaviour(
         return;
     }
 
-    if (SdkContextClass.instance.roomViewStore.getRoomId() === roomId) {
+    if (SDKContextClass.instance.roomViewStore.getRoomId() === roomId) {
         // We were viewing the room that was just left. In order to avoid
         // accidentally viewing the next room in the list and clearing its
         // notifications, switch to a neutral ground such as the home page or

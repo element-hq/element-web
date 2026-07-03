@@ -60,6 +60,8 @@ export default defineConfig({
                 "**/src/test/**",
                 // Exclude type definition files
                 "**/*.d.ts",
+                // Exclude playwright-common as it is just test utilities
+                "packages/playwright-common/**",
             ],
             reporter: [["lcov"]],
         },
