@@ -83,7 +83,7 @@ function ResultRow({
             }}
             onMouseEnter={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background =
-                    "var(--cpd-color-bg-subtle-secondary)";
+                    "var(--cpd-color-bg-action-tertiary-hovered)";
             }}
             onMouseLeave={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background = "transparent";

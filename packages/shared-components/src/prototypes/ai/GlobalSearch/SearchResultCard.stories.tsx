@@ -6,7 +6,9 @@
  */
 
 import React from "react";
-import { Avatar } from "@vector-im/compound-web";
+import { Avatar, IconButton, Tooltip } from "@vector-im/compound-web";
+import OverflowHorizontalIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -89,9 +91,13 @@ function HighlightedText({ text, highlight }: { text: string; highlight?: string
 function CardWrapper({
     children,
     onClick,
+    onMouseEnter,
+    onMouseLeave,
 }: {
     children: React.ReactNode;
     onClick?: () => void;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
 }): React.JSX.Element {
     return (
         <div
@@ -111,10 +117,12 @@ function CardWrapper({
             }}
             onMouseEnter={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background =
-                    "var(--cpd-color-bg-subtle-secondary)";
+                    "var(--cpd-color-bg-action-tertiary-hovered)";
+                onMouseEnter?.();
             }}
             onMouseLeave={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background = "transparent";
+                onMouseLeave?.();
             }}
         >
             {children}
@@ -165,10 +173,23 @@ function CardDetails({
 
 export function SearchResultCard(props: SearchResultCardProps): React.JSX.Element {
     if (props.type === "People") {
+        const [hovered, setHovered] = React.useState(false);
         return (
-            <CardWrapper onClick={props.onClick}>
+            <CardWrapper onClick={props.onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
                 <Avatar id={props.userId || props.name} name={props.name} src={props.avatarUrl} size="36px" type="round" />
                 <CardDetails primary={props.name} secondary={props.userId} highlight={props.highlight} />
+                <div style={{ display: "flex", gap: "var(--cpd-space-2x)", alignItems: "center", flexShrink: 0, visibility: hovered ? "visible" : "hidden" }}>
+                    <Tooltip label="More">
+                        <IconButton size="28px" aria-label="More">
+                            <OverflowHorizontalIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip label="Copy link">
+                        <IconButton size="28px" aria-label="Copy link">
+                            <CopyIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
             </CardWrapper>
         );
     }

@@ -40,7 +40,7 @@ function ViewAllResults({ onClick }: { onClick?: () => void }): React.JSX.Elemen
                 }}
                 onMouseEnter={(e) => {
                     (e.currentTarget as HTMLButtonElement).style.background =
-                        "var(--cpd-color-bg-subtle-secondary)";
+                        "var(--cpd-color-bg-action-tertiary-hovered)";
                 }}
                 onMouseLeave={(e) => {
                     (e.currentTarget as HTMLButtonElement).style.background = "none";
