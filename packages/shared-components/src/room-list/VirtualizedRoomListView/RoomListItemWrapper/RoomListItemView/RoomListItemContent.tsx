@@ -6,11 +6,12 @@
  */
 
 import React, { type JSX, memo, type ReactNode } from "react";
-import { Text } from "@vector-im/compound-web";
+import { Text, Tooltip } from "@vector-im/compound-web";
 import classNames from "classnames";
 
 import { Flex } from "../../../../core/utils/Flex";
 import { useViewModel } from "../../../../core/viewmodel";
+import { getUserStatusEmoji } from "../../../../core/userStatus";
 import { NotificationDecoration } from "./NotificationDecoration";
 import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
 import { type Room, type RoomListItemViewModel } from "./RoomListItemView";
@@ -52,9 +53,18 @@ export const RoomListItemContent = memo(function RoomListItemContent({
             <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
                 {/* We truncate the room name when too long. Title here is to show the full name on hover */}
                 <div className={styles.ellipsis}>
-                    <div className={styles.roomName} title={item.name} data-testid="room-name">
-                        {item.name}
-                    </div>
+                    <Flex align="center" gap="var(--cpd-space-1-5x)">
+                        <div className={styles.roomName} title={item.name} data-testid="room-name">
+                            {item.name}
+                        </div>
+                        {item.userStatus && (
+                            <Tooltip description={item.userStatus.text}>
+                                <Text as="span" size="lg" className={styles.userStatusEmoji}>
+                                    {getUserStatusEmoji(item.userStatus)}
+                                </Text>
+                            </Tooltip>
+                        )}
+                    </Flex>
                     {item.messagePreview && (
                         <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
                             {item.messagePreview}

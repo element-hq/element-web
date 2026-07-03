@@ -37,11 +37,16 @@ exports[`<RoomListItemView /> > renders Bold story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="Team Updates"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              Team Updates
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="Team Updates"
+              >
+                Team Updates
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -167,11 +172,16 @@ exports[`<RoomListItemView /> > renders Default story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -297,11 +307,16 @@ exports[`<RoomListItemView /> > renders Invitation story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="Secret Project"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              Secret Project
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="Secret Project"
+              >
+                Secret Project
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -445,11 +460,16 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
           </div>
           <div
@@ -569,11 +589,16 @@ exports[`<RoomListItemView /> > renders Selected story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -699,11 +724,16 @@ exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -847,11 +877,16 @@ exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -977,11 +1012,16 @@ exports[`<RoomListItemView /> > renders WithMention story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -1130,11 +1170,16 @@ exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -1272,11 +1317,16 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -1420,11 +1470,16 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
             class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="RoomListItemView-module_roomName"
-              data-testid="room-name"
-              title="General"
+              class="Flex-module_flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
             >
-              General
+              <div
+                class="RoomListItemView-module_roomName"
+                data-testid="room-name"
+                title="General"
+              >
+                General
+              </div>
             </div>
             <div
               class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"

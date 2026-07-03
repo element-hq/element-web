@@ -99,6 +99,16 @@
     text-overflow: ellipsis;
 }
 
+.roomName {
+    /* Allow the room name to shrink and truncate when displayed next to the user status emoji */
+    min-width: 0;
+}
+
+.userStatusEmoji {
+    flex-shrink: 0;
+    line-height: 1;
+}
+
 .selected {
     .container {
         background-color: var(--cpd-color-bg-action-tertiary-selected);

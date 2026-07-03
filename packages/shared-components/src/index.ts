@@ -90,7 +90,8 @@ export * from "./core/utils/FormattingUtils";
 export * from "./core/utils/ToastContext.tsx";
 export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
-export type * from "./core/userStatus.ts";
+export * from "./core/userStatus.ts";
 export * from "./status/SetStatusView";
+export * from "./status/UserStatusMessageView";
 // MVVM
 export * from "./core/viewmodel";

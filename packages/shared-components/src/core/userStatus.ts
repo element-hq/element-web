@@ -13,3 +13,11 @@ export interface UserStatus {
     emoji: string;
     text: string;
 }
+
+/**
+ * Get the emoji of a user status limited to its first grapheme cluster,
+ * so that a malformed status containing more than one emoji doesn't break the layout.
+ */
+export function getUserStatusEmoji(status: UserStatus): string | undefined {
+    return [...new Intl.Segmenter().segment(status.emoji)][0]?.segment;
+}
