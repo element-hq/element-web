@@ -135,6 +135,8 @@ overrides:
     "@protobufjs/utf8@1 <1.1.1": 1.1.1
     # Workaround for https://github.com/electron/electron/issues/51619
     yauzl: "^3.3.1"
+    # Convince api-extractor to use an up to date Typescript version
+    typescript: "catalog:"
 
 minimumReleaseAgeExclude:
     - "matrix-js-sdk"

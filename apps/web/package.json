@@ -217,6 +217,7 @@
         "postcss-simple-vars": "7.0.1",
         "process": "^0.11.10",
         "semver": "^7.5.2",
+        "shared-types": "workspace:*",
         "source-map-loader": "^5.0.0",
         "stylelint": "^17.0.0",
         "stylelint-config-standard": "^40.0.0",

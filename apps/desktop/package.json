@@ -102,6 +102,7 @@
         "mkdirp": "^3.0.0",
         "pacote": "^22.0.0",
         "rimraf": "^6.0.0",
+        "shared-types": "workspace:*",
         "tar": "^7.5.8",
         "typescript": "catalog:",
         "vitest": "catalog:"
