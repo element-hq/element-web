@@ -593,7 +593,10 @@ describe("RoomListStoreV3", () => {
                 }
             });
 
-            it("supports filtering unread rooms", async () => {
+            it("supports filtering unread rooms when showbold is off", async () => {
+                // Ensure that Notifications.showbold is off
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(() => false);
+
                 const { client, rooms } = getClientAndRooms();
                 // Let's choose 5 rooms to put in space
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
@@ -601,7 +604,47 @@ describe("RoomListStoreV3", () => {
                 // Let's say 8, 27 are unread
                 jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
+                        // This should be used, because showbold is off
                         hasUnreadCount: [rooms[8], rooms[27]].includes(room),
+
+                        // This should not be used
+                        hasAnyNotificationOrActivity: false,
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Should only give us rooms at index 8 and 27
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("supports filtering unread rooms when showbold is on", async () => {
+                // Ensure that Notifications.showbold is on
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                    return setting === "Notifications.showbold";
+                });
+
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say 8, 27 are unread
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        // This should be used, because showbold is off
+                        hasUnreadCount: false,
+
+                        // This should not be used
+                        hasAnyNotificationOrActivity: [rooms[8], rooms[27]].includes(room),
                     } as unknown as RoomNotificationState;
                     return state;
                 });
@@ -777,6 +820,7 @@ describe("RoomListStoreV3", () => {
                 jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
                         hasUnreadCount: [rooms[8], rooms[27]].includes(room),
+                        hasAnyNotificationOrActivity: [rooms[8], rooms[27]].includes(room),
                     } as unknown as RoomNotificationState;
                     return state;
                 });

@@ -8,10 +8,18 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Filter, FilterEnum } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 import { getMarkedUnreadState } from "../../../../utils/notifications";
+import SettingsStore from "../../../../settings/SettingsStore";
 
 export class UnreadFilter implements Filter {
     public matches(room: Room): boolean {
-        return RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount || !!getMarkedUnreadState(room);
+        // If the user marked this room as unread, it's unread
+        if (getMarkedUnreadState(room)) {
+            return true;
+        }
+
+        const showBold = SettingsStore.getValue("Notifications.showbold");
+        const notifState = RoomNotificationStateStore.instance.getRoomState(room);
+        return showBold ? notifState.hasAnyNotificationOrActivity : notifState.hasUnreadCount;
     }
 
     public get key(): FilterEnum.UnreadFilter {
