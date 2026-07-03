@@ -35,6 +35,11 @@ export default defineProject({
                 find: "./recorderWorkletFactory",
                 replacement: resolve(__dirname, "./__mocks__/empty.js"),
             },
+            // Stub out legacy modules so we don't need to build them first
+            {
+                find: "../modules.js",
+                replacement: resolve(__dirname, "./__mocks__/empty.js"),
+            },
         ],
     },
     test: {

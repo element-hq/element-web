@@ -74,7 +74,7 @@ describe("SlidingSyncManager", () => {
                     },
                 }),
             ]);
-            vi.mocked(client.getRoom).mockImplementation((r: string): Room | null => {
+            vi.mocked(client.getRoom).mockImplementation((r?: string): Room | null => {
                 if (roomId === r) {
                     return room;
                 }

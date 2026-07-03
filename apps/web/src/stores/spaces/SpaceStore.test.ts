@@ -342,14 +342,14 @@ describe("SpaceStore", () => {
                 // have dmPartner1 be in space1 with you
                 const mySpace1Member = new RoomMember(space1, testUserId);
                 mySpace1Member.membership = KnownMembership.Join;
-                (rooms.find((r) => r.roomId === space1)!.getMembers as vi.Mock).mockReturnValue([
+                vi.mocked(rooms.find((r) => r.roomId === space1)!.getMembers).mockReturnValue([
                     mySpace1Member,
                     dm1Partner,
                 ]);
                 // have dmPartner2 be in space2 with you
                 const mySpace2Member = new RoomMember(space2, testUserId);
                 mySpace2Member.membership = KnownMembership.Join;
-                (rooms.find((r) => r.roomId === space2)!.getMembers as vi.Mock).mockReturnValue([
+                vi.mocked(rooms.find((r) => r.roomId === space2)!.getMembers).mockReturnValue([
                     mySpace2Member,
                     dm2Partner,
                 ]);
@@ -406,10 +406,10 @@ describe("SpaceStore", () => {
 
                 [videoRoomPrivate, videoRoomPublic].forEach((roomId) => {
                     const videoRoom = client.getRoom(roomId);
-                    (videoRoom!.isCallRoom as vi.Mock).mockReturnValue(true);
+                    vi.mocked(videoRoom!.isCallRoom).mockReturnValue(true);
                 });
                 const videoRoomPublicRoom = client.getRoom(videoRoomPublic);
-                (videoRoomPublicRoom!.getJoinRule as vi.Mock).mockReturnValue(JoinRule.Public);
+                vi.mocked(videoRoomPublicRoom!.getJoinRule).mockReturnValue(JoinRule.Public);
                 await run();
             });
 
@@ -470,7 +470,7 @@ describe("SpaceStore", () => {
 
                 it("updates the video room space when the room type changes", async () => {
                     expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPrivate)).toBeTruthy();
-                    (client.getRoom(videoRoomPublic)!.isCallRoom as vi.Mock).mockReturnValue(false);
+                    vi.mocked(client.getRoom(videoRoomPublic)!.isCallRoom).mockReturnValue(false);
                     client.emit(
                         RoomStateEvent.Events,
                         {
