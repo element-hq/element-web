@@ -24,7 +24,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import RoomListStore from "../room-list/RoomListStore";
+import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
@@ -35,7 +35,6 @@ import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
 import { arrayHasDiff, arrayHasOrderChange, filterBoolean } from "../../utils/arrays";
 import { reorderLexicographically } from "../../utils/stringOrderField";
-import { TAG_ORDER } from "../../components/views/rooms/LegacyRoomList";
 import { type SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import {
     isMetaSpace,
@@ -66,13 +65,7 @@ import { ModuleApi } from "../../modules/Api.ts";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
-const metaSpaceOrder: MetaSpace[] = [
-    MetaSpace.Home,
-    MetaSpace.Favourites,
-    MetaSpace.People,
-    MetaSpace.Orphans,
-    MetaSpace.VideoRooms,
-];
+const metaSpaceOrder: MetaSpace[] = [MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms];
 
 const MAX_SUGGESTED_ROOMS = 20;
 
@@ -167,20 +160,6 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         return this._storeReadyDeferred.promise;
     }
 
-    /**
-     * Get the order of meta spaces to display in the space panel.
-     *
-     * This accessor should be removed when the "feature_new_room_list" labs flag is removed.
-     * "People" and "Favourites" will be removed from the "metaSpaceOrder" array and this filter will no longer be needed.
-     * @private
-     */
-    private get metaSpaceOrder(): MetaSpace[] {
-        if (!SettingsStore.getValue("feature_new_room_list")) return metaSpaceOrder;
-
-        // People and Favourites are not shown when the new room list is enabled
-        return metaSpaceOrder.filter((space) => space !== MetaSpace.People && space !== MetaSpace.Favourites);
-    }
-
     public get invitedSpaces(): Room[] {
         return Array.from(this._invitedSpaces);
     }
@@ -217,16 +196,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         let roomId: string | undefined;
         if (space === MetaSpace.Home && this.allRoomsInHome) {
             const hasMentions = RoomNotificationStateStore.instance.globalState.hasMentions;
-            const lists = RoomListStore.instance.orderedLists;
-            tagLoop: for (let i = 0; i < TAG_ORDER.length; i++) {
-                const t = TAG_ORDER[i];
-                if (!lists[t]) continue;
-                for (const room of lists[t]) {
-                    const state = RoomNotificationStateStore.instance.getRoomState(room);
-                    if (hasMentions ? state.hasMentions : state.isUnread) {
-                        roomId = room.roomId;
-                        break tagLoop;
-                    }
+            const rooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace().sections.flatMap((s) => s.rooms);
+            for (const room of rooms) {
+                const state = RoomNotificationStateStore.instance.getRoomState(room);
+                if (hasMentions ? state.hasMentions : state.isUnread) {
+                    roomId = room.roomId;
+                    break;
                 }
             }
         } else {
@@ -1198,7 +1173,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
         const oldMetaSpaces = this._enabledMetaSpaces;
         const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        this._enabledMetaSpaces = this.metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
+        this._enabledMetaSpaces = metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
 
         this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
         this.sendUserProperties();
@@ -1315,7 +1290,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
 
                     case "Spaces.enabledMetaSpaces": {
                         const newValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-                        const enabledMetaSpaces = this.metaSpaceOrder.filter((k) => newValue[k]);
+                        const enabledMetaSpaces = metaSpaceOrder.filter((k) => newValue[k]);
                         if (arrayHasDiff(this._enabledMetaSpaces, enabledMetaSpaces)) {
                             const hadPeopleOrHomeEnabled = this.enabledMetaSpaces.some((s) => {
                                 return s === MetaSpace.Home || s === MetaSpace.People;

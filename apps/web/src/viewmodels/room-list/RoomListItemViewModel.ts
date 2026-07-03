@@ -44,6 +44,11 @@ import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-lis
 import { _t } from "../../languageHandler";
 import { fetchUserStatus, validateUserStatus } from "../../utils/userStatus";
 
+/**
+ * View section type without `isSelected` field
+ */
+type Sections = Array<Omit<Section, "isSelected">>;
+
 interface RoomItemProps {
     room: Room;
     client: MatrixClient;
@@ -67,14 +72,29 @@ export class RoomListItemViewModel
      * The user ID of the other user if this room is a DM, used to show their user status.
      */
     private readonly dmUserId?: string;
+    /**
+     * The sections available in the "Move to section" submenu (tag + display name), identical
+     * for every update of this item. Computing it reads the custom section settings, so it is
+     * built once and rebuilt only when those settings change (see {@link onCustomSectionsChange})
+     * rather than on every snapshot rebuild; only the per-room isSelected flag is derived per
+     * snapshot (see {@link buildSections}).
+     */
+    private availableSections: Sections;
 
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
         const notifState = RoomNotificationStateStore.instance.getRoomState(props.room);
-        const initialItem = RoomListItemViewModel.generateItemSync(props.room, props.client, notifState);
+        const availableSections = RoomListItemViewModel.computeAvailableSections();
+        const initialItem = RoomListItemViewModel.generateItemSync(
+            props.room,
+            props.client,
+            notifState,
+            availableSections,
+        );
         super(props, initialItem);
 
         this.notifState = notifState;
+        this.availableSections = availableSections;
 
         // Subscribe to notification state changes for this room
         this.disposables.trackListener(this.notifState, NotificationStateEvents.Update, this.onNotificationChanged);
@@ -105,11 +125,16 @@ export class RoomListItemViewModel
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
         this.disposables.trackListener(props.room, RoomEvent.Tags, this.onRoomChanged);
 
+        // Rebuild the available sections when their order changes or when one is created/renamed/removed
         const orderSectionsRef = SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () =>
-            this.onOrderedCustomSectionsChange(),
+            this.onCustomSectionsChange(),
+        );
+        const sectionDataRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
+            this.onCustomSectionsChange(),
         );
         this.disposables.track(() => {
             SettingsStore.unwatchSetting(orderSectionsRef);
+            SettingsStore.unwatchSetting(sectionDataRef);
         });
 
         // Load message preview asynchronously (sync data is already complete)
@@ -211,7 +236,12 @@ export class RoomListItemViewModel
      * Preserves the message preview which is managed separately.
      */
     private updateItem(): void {
-        const newItem = RoomListItemViewModel.generateItemSync(this.props.room, this.props.client, this.notifState);
+        const newItem = RoomListItemViewModel.generateItemSync(
+            this.props.room,
+            this.props.client,
+            this.notifState,
+            this.availableSections,
+        );
         this.snapshot.merge({
             ...newItem,
             notification: keepIfSame(this.snapshot.current.notification, newItem.notification),
@@ -279,6 +309,7 @@ export class RoomListItemViewModel
         room: Room,
         client: MatrixClient,
         notifState: RoomNotificationState,
+        availableSections: Sections,
     ): RoomListItemViewSnapshot {
         // Get room tags for menu state
         const roomTags = room.tags;
@@ -335,7 +366,7 @@ export class RoomListItemViewModel
             call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
 
         // Build sections list for the "Move to section" submenu
-        const sections: Section[] = RoomListItemViewModel.buildSections(roomTags);
+        const sections: Section[] = RoomListItemViewModel.buildSections(roomTags, availableSections);
 
         return {
             id: room.roomId,
@@ -466,17 +497,20 @@ export class RoomListItemViewModel
         }
     };
 
-    private onOrderedCustomSectionsChange = (): void => {
-        // Rebuild sections list to reflect new order
-        const sections = RoomListItemViewModel.buildSections(this.props.room.tags);
+    private onCustomSectionsChange = (): void => {
+        // Rebuild the available sections and the sections list to reflect the new settings
+        this.availableSections = RoomListItemViewModel.computeAvailableSections();
+        const sections = RoomListItemViewModel.buildSections(this.props.room.tags, this.availableSections);
         this.snapshot.merge({ sections: keepIfSame(this.snapshot.current.sections, sections) });
     };
 
     /**
-     * Build the list of available sections for the "Move to section" submenu.
+     * Compute the sections available in the "Move to section" submenu.
      * Order follows the canonical section order from RoomListStoreV3.
+     * Reads the custom section settings, so callers should cache the result and recompute only
+     * when those settings change.
      */
-    private static buildSections(roomTags: Room["tags"]): Section[] {
+    private static computeAvailableSections(): Sections {
         const customSectionData = getCustomSectionData();
 
         return (
@@ -487,9 +521,20 @@ export class RoomListItemViewModel
                 .map((tag) => ({
                     tag,
                     name: RoomListItemViewModel.getSectionName(tag, customSectionData),
-                    isSelected: Boolean(roomTags[tag]),
                 }))
         );
+    }
+
+    /**
+     * Build the list of sections for the "Move to section" submenu by deriving the per-room
+     * selected state from the room's tags.
+     */
+    private static buildSections(roomTags: Room["tags"], availableSections: Sections): Section[] {
+        return availableSections.map(({ tag, name }) => ({
+            tag,
+            name,
+            isSelected: Boolean(roomTags[tag]),
+        }));
     }
 
     /**
