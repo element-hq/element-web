@@ -16,6 +16,7 @@ import { RoomListItemContent } from "./RoomListItemContent";
 import { type RoomNotifState } from "./RoomNotifs";
 import styles from "./RoomListItemView.module.css";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
+import { type UserStatus } from "../../../../core/userStatus";
 import { _t } from "../../../../core/i18n/i18n";
 
 /**
@@ -72,6 +73,8 @@ export interface RoomListItemViewSnapshot {
     isBold: boolean;
     /** Optional message preview text */
     messagePreview?: string;
+    /** The MSC4426 user status of the other user in a DM room, if any */
+    userStatus?: UserStatus;
     /** Notification decoration data */
     notification: NotificationDecorationData;
     /** Whether the more options menu should be shown */

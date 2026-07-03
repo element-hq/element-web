@@ -10,6 +10,7 @@ import classNames from "classnames";
 import { Text, Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+import { getUserStatusEmoji } from "../../../../../core/userStatus";
 import styles from "./DisambiguatedProfile.module.css";
 
 /**
@@ -91,7 +92,7 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus } = useViewModel(vm);
 
-    const userStatusEmoji = userStatus && [...new Intl.Segmenter().segment(userStatus.emoji)][0]?.segment;
+    const userStatusEmoji = userStatus && getUserStatusEmoji(userStatus);
 
     const displayNameClasses = classNames(colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
@@ -128,7 +129,12 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
             )}
             {userStatus && (
                 <Tooltip description={userStatus.text}>
-                    <Text as="span" size="md" className={styles.userStatus}>
+                    {/* mx_DisambiguatedProfile_userStatus is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_userStatus */}
+                    <Text
+                        as="span"
+                        size="lg"
+                        className={classNames("mx_DisambiguatedProfile_userStatus", styles.userStatus)}
+                    >
                         {userStatusEmoji}
                     </Text>
                 </Tooltip>

@@ -63,11 +63,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="General"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        General
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="General"
+                        >
+                          General
+                        </div>
                       </div>
                       <div
                         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -212,11 +217,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Random"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Random
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Random"
+                        >
+                          Random
+                        </div>
                       </div>
                     </div>
                     <div
@@ -334,11 +344,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Engineering"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Engineering
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Engineering"
+                        >
+                          Engineering
+                        </div>
                       </div>
                       <div
                         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -462,11 +477,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Design"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Design
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Design"
+                        >
+                          Design
+                        </div>
                       </div>
                     </div>
                     <div
@@ -584,11 +604,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Product"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Product
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Product"
+                        >
+                          Product
+                        </div>
                       </div>
                       <div
                         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -712,11 +737,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Marketing"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Marketing
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Marketing"
+                        >
+                          Marketing
+                        </div>
                       </div>
                     </div>
                     <div
@@ -857,11 +887,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Sales"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Sales
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Sales"
+                        >
+                          Sales
+                        </div>
                       </div>
                       <div
                         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -985,11 +1020,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Support"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Support
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Support"
+                        >
+                          Support
+                        </div>
                       </div>
                     </div>
                     <div
@@ -1107,11 +1147,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Announcements"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Announcements
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Announcements"
+                        >
+                          Announcements
+                        </div>
                       </div>
                       <div
                         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
@@ -1235,11 +1280,16 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="RoomListItemView-module_roomName"
-                        data-testid="room-name"
-                        title="Off-topic"
+                        class="Flex-module_flex"
+                        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
                       >
-                        Off-topic
+                        <div
+                          class="RoomListItemView-module_roomName"
+                          data-testid="room-name"
+                          title="Off-topic"
+                        >
+                          Off-topic
+                        </div>
                       </div>
                     </div>
                     <div
