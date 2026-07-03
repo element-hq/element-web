@@ -18,7 +18,7 @@ import { renderHook, act } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { muteRoom, stubClient } from "../../../../test-utils";
-import { populateThread } from "../../../../test-utils/threads";
+import { makeThreadEvent, populateThread } from "../../../../test-utils/threads";
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";
 import { useUnreadThreadRooms } from "../../../../../src/components/views/spaces/threads-activity-centre/useUnreadThreadRooms";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -248,6 +248,81 @@ describe("useUnreadThreadRooms", () => {
         expect(participatingThreads[0].notificationLevel).toEqual(NotificationLevel.Highlight);
         expect(otherThreads.length).toEqual(0);
         expect(greatestNotificationLevel).toEqual(NotificationLevel.Highlight);
+    });
+
+    it("a participated thread we've read past is not surfaced in My threads (false-positive local unread)", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+        // Thread: root(@foo) -> reply(current user) -> redacted(@foo).
+        // Our reply is newer than the only unread-triggering incoming message (the
+        // root), but we aren't the *literal* last sender, so the js-sdk read
+        // shortcut doesn't fire and doesTimelineHaveUnreadMessages reports a false
+        // positive. Without server notifications, this must NOT surface in My threads.
+        const threadInfo = await populateThread({
+            room: room,
+            client: client,
+            authorId: "@foo:bar",
+            participantUserIds: ["@userId:matrix.org"], // reply authored by the current user
+            length: 2,
+        });
+        room.setThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total, 0);
+        jest.spyOn(threadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
+
+        // A later, non-unread-triggering event from someone else (e.g. a redaction).
+        const trailing = makeThreadEvent({
+            user: "@foo:bar",
+            room: room.roomId,
+            event: true,
+            msg: "redacted",
+            rootEventId: threadInfo.rootEvent.getId()!,
+            replyToEventId: threadInfo.events.at(-1)!.getId()!,
+            ts: 100,
+        });
+        jest.spyOn(trailing, "isRedacted").mockReturnValue(true);
+        await room.addLiveEvents([trailing], { addToState: false });
+
+        client.getVisibleRooms = jest.fn().mockReturnValue([room]);
+
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
+        );
+
+        const { result } = renderHook(() => useUnreadThreadRooms(true), { wrapper });
+        const { participatingThreads, otherThreads, rooms } = result.current;
+
+        expect(participatingThreads.length).toEqual(0);
+        expect(otherThreads.length).toEqual(0);
+        expect(rooms.length).toEqual(0);
+    });
+
+    it("a participated thread with a genuinely newer incoming message still surfaces in My threads", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+        // Thread: root(@foo) -> reply(current user) -> reply(@foo).
+        // participantUserIds is cycled as replies[i] = participantUserIds[i % len], so
+        // reply 1 (i=1) is the current user and reply 2 (i=2) is @foo — leaving @foo as
+        // the latest sender. The latest incoming message is newer than our reply, so it
+        // is genuinely unread.
+        const threadInfo = await populateThread({
+            room: room,
+            client: client,
+            authorId: "@foo:bar",
+            participantUserIds: ["@foo:bar", "@userId:matrix.org"],
+            length: 3,
+        });
+        room.setThreadUnreadNotificationCount(threadInfo.thread.id, NotificationCountType.Total, 0);
+        jest.spyOn(threadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(true);
+
+        client.getVisibleRooms = jest.fn().mockReturnValue([room]);
+
+        const wrapper = ({ children }: { children: React.ReactNode }) => (
+            <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
+        );
+
+        const { result } = renderHook(() => useUnreadThreadRooms(true), { wrapper });
+        const { participatingThreads } = result.current;
+
+        expect(participatingThreads.length).toEqual(1);
     });
 
     it("a notification and a highlight summarise to a highlight", async () => {
