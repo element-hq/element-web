@@ -869,6 +869,40 @@ describe("RoomListStoreV3", () => {
                     store.getSortedRoomsInActiveSpace([FilterEnum.InvitesFilter]).sections.flatMap((s) => s.rooms),
                 ).toContain(room);
             });
+
+            it("updates filters when showbold setting changes", async () => {
+                // Given one room is "bold" (unread) and one has a notification
+                const { store, rooms } = await getRoomListStore();
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        // Only 27 has notifications
+                        hasUnreadCount: [rooms[27]].includes(room),
+                        // But both 8 and 27 have unread messages (bold)
+                        hasAnyNotificationOrActivity: [rooms[8], rooms[27]].includes(room),
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                // When showbold is set to true
+                await SettingsStore.setValue("Notifications.showbold", null, SettingLevel.DEVICE, true);
+
+                // Then both rooms are in the room list
+                const showboldRooms = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
+                expect(showboldRooms).toContain(rooms[27]);
+                expect(showboldRooms).toContain(rooms[8]);
+
+                // But when showbold is set to false
+                await SettingsStore.setValue("Notifications.showbold", null, SettingLevel.DEVICE, false);
+
+                // Then only the room with a notification is in the room list
+                const noShowboldRooms = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
+                expect(noShowboldRooms).toContain(rooms[27]);
+                expect(noShowboldRooms).not.toContain(rooms[8]);
+            });
         });
 
         describe("getServerNoticeRooms", () => {

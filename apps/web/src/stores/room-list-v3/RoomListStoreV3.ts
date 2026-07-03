@@ -136,6 +136,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         });
         SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
+        SettingsStore.watchSetting("Notifications.showbold", null, () => this.onShowBoldChange());
         this.loadCustomSections();
 
         SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
@@ -514,6 +515,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.loadCustomSections();
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
+        this.scheduleEmit();
+    }
+
+    /**
+     * Handle changes to the showbold setting.
+     * Updates the skip list filters to reflect the new setting and emits an update.
+     * Emit {@link LISTS_UPDATE_EVENT}.
+     */
+    private onShowBoldChange(): void {
+        this.roomSkipList?.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
     }
 
