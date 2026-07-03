@@ -59,7 +59,7 @@ Default.args = {
             link: "https://matrix.org",
             siteName: "matrix.org",
             showTooltipOnLink: false,
-        }
+        },
     ],
 };
 
@@ -74,7 +74,7 @@ WithImage.args = {
                 alt: "The element logo",
                 playable: false,
             },
-        }
+        },
     ],
 };
 export const WithImageAndSiteIcon = Template.bind({});
@@ -90,7 +90,7 @@ WithImageAndSiteIcon.args = {
                 playable: false,
             },
         },
-    ]
+    ],
 };
 
 export const WithImageAndLoadsOfText = Template.bind({});
@@ -113,6 +113,6 @@ WithImageAndLoadsOfText.args = {
                 alt: "The element logo",
                 playable: false,
             },
-        }
+        },
     ],
 };

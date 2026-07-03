@@ -75,7 +75,6 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             .mockRejectedValueOnce(new Error("First URL failed"))
             .mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText("https://example.org/one https://example.org/two");
-        console.log(vm.getSnapshot().previews)
         expect(vm.getSnapshot().previews[0]?.link).toEqual("https://example.org/two");
         expect(vm.getSnapshot().previews).toHaveLength(1);
     });
@@ -115,17 +114,15 @@ describe("MessageComposerUrlPreviewViewModel", () => {
 
     it("should preview a URL with media", async () => {
         const { vm, client } = getViewModel();
-        client.getUrlPreview.mockResolvedValueOnce(
-            {
-                "og:title": "Media example",
-                "og:type": "document",
-                "og:url": "https://example.org",
-                "og:image": IMAGE_MXC,
-                "og:image:height": 128,
-                "og:image:width": 128,
-                "matrix:image:size": 10000,
-            }
-        );
+        client.getUrlPreview.mockResolvedValueOnce({
+            "og:title": "Media example",
+            "og:type": "document",
+            "og:url": "https://example.org",
+            "og:image": IMAGE_MXC,
+            "og:image:height": 128,
+            "og:image:width": 128,
+            "matrix:image:size": 10000,
+        });
         // eslint-disable-next-line no-restricted-properties
         client.mxcUrlToHttp.mockImplementation((url, width) => {
             expect(url).toEqual(IMAGE_MXC);

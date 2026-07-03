@@ -21,6 +21,7 @@ import {
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -67,10 +68,11 @@ import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { uploadFile } from "../../../ContentMessages";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
-
 
 // exported for tests
 export function createMessageContent(
@@ -78,7 +80,6 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
-    urlPreviewVm?: MessageComposerUrlPreviewViewModel,
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -111,30 +112,57 @@ export function createMessageContent(
         addReplyToMessageContent(content, replyToEvent);
     }
 
+    return content;
+}
+
+export async function attachUrlPreviews(
+    mxClient: MatrixClient,
+    roomId: string,
+    urlPreviewVm: MessageComposerUrlPreviewViewModel,
+    content: RoomMessageEventContent,
+): Promise<void> {
     const previewsSnapshot = urlPreviewVm?.getSnapshot();
     if (previewsSnapshot !== undefined && previewsSnapshot.previews.length !== 0) {
-        content["com.beeper.linkpreviews"] = previewsSnapshot.previews.map(preview => ({
-            matched_url: preview.link,
-            "og:url": preview.link, // TODO: og:url may be different from the URL requested
-            "og:title": preview.title,
-            "og:description": preview.description,
-            // TODO: populate these fields
-            /*
-            ...(if_exists ? {
-                "og:image": "TODO",
-                "og:image:width": 0,
-                "og:image:height": 0,
-                "og:image:type": "TODO"
-            } : {}),
-            ...(if_exists ? {
-                "beeper:image:encryption": undefined,
-                "matrix:image:size": 0
-            } : {})
-            */
-        }))
-    }
+        content["com.beeper.linkpreviews"] = await Promise.all(
+            previewsSnapshot.previews.map(async (preview) => {
+                // upload the files to produce the mxc:// url for the images
+                let imageUploaded: { url?: string; file?: EncryptedFile } | null = null;
 
-    return content;
+                if (preview.image) {
+                    let imageBlob: Blob | null = null;
+
+                    try {
+                        imageBlob = await (await fetch(preview.image.imageFull)).blob();
+                    } catch (e) {
+                        console.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
+                    }
+
+                    if (imageBlob !== null) {
+                        try {
+                            imageUploaded = await uploadFile(mxClient, roomId, imageBlob);
+                        } catch (e) {
+                            console.error("Failed to upload image", e);
+                        }
+                    }
+                }
+
+                return {
+                    "matched_url": preview.link,
+                    // TODO: og:url may be different from the URL requested, but is not present in the response of the url_preview
+                    "og:url": preview.link,
+                    "og:title": preview.title,
+                    "og:description": preview.description,
+                    "og:image": imageUploaded?.url,
+                    // TODO: should we trust the declared size? or should we calculate it ourselves
+                    "og:image:width": preview.image?.width,
+                    "og:image:height": preview.image?.height,
+                    "og:image:type": preview.image?.imageType,
+                    "matrix:image:size": preview.image?.fileSize,
+                    "beeper:image:encryption": imageUploaded?.file,
+                };
+            }),
+        );
+    }
 }
 
 // exported for tests
@@ -252,10 +280,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
                     const editEvent = events
                         ? findEditableEvent({
-                            events,
-                            isForward: false,
-                            matrixClient: MatrixClientPeg.safeGet(),
-                        })
+                              events,
+                              isForward: false,
+                              matrixClient: MatrixClientPeg.safeGet(),
+                          })
                         : undefined;
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else
@@ -445,8 +473,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     model,
                     replyToEvent,
                     this.props.relation,
-                    this.props.urlPreviewVm,
                 );
+                // TODO: there is now a noticable delay between pressing enter and sending
+                await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm, content);
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;

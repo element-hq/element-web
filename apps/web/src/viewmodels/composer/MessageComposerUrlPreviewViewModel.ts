@@ -52,18 +52,17 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         // Fetch previews for all links in the message text,
         // And remove the ones with erroneous responses
-        const previewRequests =
-            Array.from(this.links).map(async (link) => {
-                try {
-                    return await this.fetcher.fetchPreview(link, true);
-                } catch (ex) {
-                    logger.warn("Fetching preview failed", ex);
-                    return null;
-                }
-            });
+        const previewRequests = Array.from(this.links).map(async (link) => {
+            try {
+                return await this.fetcher.fetchPreview(link, true);
+            } catch (ex) {
+                logger.warn("Fetching preview failed", ex);
+                return null;
+            }
+        });
 
         const previewResponses = await Promise.all(previewRequests);
-        const previews = previewResponses.filter(res => res !== null);
+        const previews = previewResponses.filter((res) => res !== null);
 
         this.snapshot.set({ previews });
     }

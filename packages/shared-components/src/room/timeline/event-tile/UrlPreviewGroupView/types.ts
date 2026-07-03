@@ -43,6 +43,10 @@ export interface UrlPreview {
          */
         imageFull: string;
         /**
+         * The type/subtype of the image format
+         */
+        imageType?: string;
+        /**
          * File size in bytes.
          */
         fileSize?: number;

@@ -452,7 +452,11 @@ describe("<SendMessageComposer/>", () => {
             <MatrixClientContext.Provider value={cli}>
                 <ScopedRoomContextProvider {...({ room } as unknown as RoomContextType)}>
                     <RoomUploadContextProvider>
-                        <SendMessageComposer room={room} toggleStickerPickerOpen={jest.fn()} urlPreviewVm={urlPreviewVm} />
+                        <SendMessageComposer
+                            room={room}
+                            toggleStickerPickerOpen={jest.fn()}
+                            urlPreviewVm={urlPreviewVm}
+                        />
                     </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,

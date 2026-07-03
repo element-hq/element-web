@@ -36,9 +36,13 @@ export function useMessageComposerUrlPreviewViewModel(): MessageComposerUrlPrevi
     return vm;
 }
 
-export function MessageComposerUrlPreviewWrapper(
-    { content, urlPreviewVm: vm }: { content: string; urlPreviewVm: MessageComposerUrlPreviewViewModel }
-): ReactNode | null {
+export function MessageComposerUrlPreviewWrapper({
+    content,
+    urlPreviewVm: vm,
+}: {
+    content: string;
+    urlPreviewVm: MessageComposerUrlPreviewViewModel;
+}): ReactNode | null {
     useDebouncedCallback<[MessageComposerUrlPreviewViewModel, string]>(
         true,
         (vm, content) => {

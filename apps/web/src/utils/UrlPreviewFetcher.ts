@@ -165,6 +165,7 @@ export class UrlPreviewFetcher {
             const declaredWidth = UrlPreviewFetcher.getNumberFromOpenGraph(response["og:image:width"]);
             const imageSize = UrlPreviewFetcher.getNumberFromOpenGraph(response["matrix:image:size"]);
             const alt = typeof response["og:image:alt"] === "string" ? response["og:image:alt"] : undefined;
+            const imageType = typeof response["og:image:type"] === "string" ? response["og:image:type"] : undefined;
 
             if (UrlPreviewFetcher.isImagePreview(declaredWidth, declaredHeight, imageSize)) {
                 const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
@@ -176,6 +177,7 @@ export class UrlPreviewFetcher {
                     image = {
                         imageThumb: thumb,
                         imageFull: media.srcHttp ?? thumb,
+                        imageType,
                         width,
                         height,
                         fileSize: UrlPreviewFetcher.getNumberFromOpenGraph(response["matrix:image:size"]),
