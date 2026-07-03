@@ -216,14 +216,14 @@ export async function logIntoElement(page: Page, credentials: Credentials) {
 }
 
 /**
- * Fill in the login form in Element with the given creds, and then complete the `CompleteSecurity` step, using the
- * given recovery key. (Normally this will verify the new device using the secrets from 4S.)
+ * Complete the `CompleteSecurity` step that happens after login, using the given recovery key.
+ * (Normally this will verify the new device using the secrets from 4S.)
  *
  * Afterwards, waits for the application to redirect to the home page.
+ *
+ * This is normally useful after a call to {@link logIntoElement} or {@link logInAccountMas}.
  */
-export async function logIntoElementAndVerify(page: Page, credentials: Credentials, recoveryKey: string) {
-    await logIntoElement(page, credentials);
-
+export async function verifyAfterLogin(page: Page, recoveryKey: string) {
     await page.locator(".mx_AuthPage").getByRole("button", { name: "Use recovery key" }).click();
 
     const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "Use recovery key" });
@@ -406,6 +406,7 @@ export async function copyAndContinue(page: Page) {
  * @param opts - other options for the createRoom call
  *
  * @returns a promise which resolves to the room ID
+ * @see createSharedEncryptedRoomWithUser
  */
 export async function createSharedRoomWithUser(
     app: ElementAppPage,
@@ -421,6 +422,32 @@ export async function createSharedRoomWithUser(
     await expect(app.page.getByText(" joined the room", { exact: false })).toBeVisible();
 
     return roomId;
+}
+
+/**
+ * Create a shared, encrypted room with the given user, and wait for them to join
+ *
+ * @param other - UserID of the other user
+ * @param opts - other options for the createRoom call
+ *
+ * @returns a promise which resolves to the room ID
+ * @see createSharedRoomWithUser
+ */
+export async function createSharedEncryptedRoomWithUser(
+    app: ElementAppPage,
+    other: string,
+    opts: Omit<ICreateRoomOpts, "invite"> = { name: "TestRoom" },
+): Promise<string> {
+    opts = structuredClone(opts);
+    opts.initial_state ??= [];
+    opts.initial_state.push({
+        type: "m.room.encryption",
+        state_key: "",
+        content: {
+            algorithm: "m.megolm.v1.aes-sha2",
+        },
+    });
+    return createSharedRoomWithUser(app, other, opts);
 }
 
 /**

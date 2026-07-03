@@ -6,23 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { EventType, KNOWN_SAFE_ROOM_VERSION, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { createTestClient } from "test-utils";
 
-import { canEncryptToAllUsers } from "../../../../src/createRoom";
-import { type LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
-import { DirectoryMember, type Member, ThreepidMember } from "../../../../src/utils/direct-messages";
-import { createDmLocalRoom } from "../../../../src/utils/dm/createDmLocalRoom";
-import { privateShouldBeEncrypted } from "../../../../src/utils/rooms";
-import { createTestClient } from "../../../test-utils";
+import { canEncryptToAllUsers } from "../../createRoom";
+import { type LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../models/LocalRoom";
+import { DirectoryMember, type Member, ThreepidMember } from "../direct-messages";
+import { createDmLocalRoom } from "./createDmLocalRoom";
+import { privateShouldBeEncrypted } from "../rooms";
 
-jest.mock("../../../../src/utils/rooms", () => ({
-    privateShouldBeEncrypted: jest.fn(),
+vi.mock("../rooms", () => ({
+    privateShouldBeEncrypted: vi.fn(),
 }));
 
-jest.mock("../../../../src/createRoom", () => ({
-    canEncryptToAllUsers: jest.fn(),
+vi.mock("../../createRoom", () => ({
+    canEncryptToAllUsers: vi.fn(),
 }));
 
 function assertLocalRoom(room: LocalRoom, targets: Member[], encrypted: boolean) {
@@ -60,7 +62,7 @@ describe("createDmLocalRoom", () => {
 
     describe("when rooms should be encrypted", () => {
         beforeEach(() => {
-            mocked(privateShouldBeEncrypted).mockReturnValue(true);
+            vi.mocked(privateShouldBeEncrypted).mockReturnValue(true);
         });
 
         it("should create an encrytped room for 3PID targets", async () => {
@@ -71,7 +73,7 @@ describe("createDmLocalRoom", () => {
 
         describe("for MXID targets with encryption available", () => {
             beforeEach(() => {
-                mocked(canEncryptToAllUsers).mockResolvedValue(true);
+                vi.mocked(canEncryptToAllUsers).mockResolvedValue(true);
             });
 
             it("should create an encrypted room", async () => {
@@ -83,7 +85,7 @@ describe("createDmLocalRoom", () => {
 
         describe("for MXID targets with encryption unavailable", () => {
             beforeEach(() => {
-                mocked(canEncryptToAllUsers).mockResolvedValue(false);
+                vi.mocked(canEncryptToAllUsers).mockResolvedValue(false);
             });
 
             it("should create an unencrypted room", async () => {
@@ -96,7 +98,7 @@ describe("createDmLocalRoom", () => {
 
     describe("if rooms should not be encrypted", () => {
         beforeEach(() => {
-            mocked(privateShouldBeEncrypted).mockReturnValue(false);
+            vi.mocked(privateShouldBeEncrypted).mockReturnValue(false);
         });
 
         it("should create an unencrypted room", async () => {

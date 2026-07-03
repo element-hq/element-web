@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { getFunctionalMembers } from "../../../../src/utils/room/getFunctionalMembers";
-import { getJoinedNonFunctionalMembers } from "../../../../src/utils/room/getJoinedNonFunctionalMembers";
+import { getFunctionalMembers } from "./getFunctionalMembers";
+import { getJoinedNonFunctionalMembers } from "./getJoinedNonFunctionalMembers";
 
-jest.mock("../../../../src/utils/room/getFunctionalMembers", () => ({
-    getFunctionalMembers: jest.fn(),
+vi.mock("./getFunctionalMembers", () => ({
+    getFunctionalMembers: vi.fn(),
 }));
 
 describe("getJoinedNonFunctionalMembers", () => {
@@ -23,7 +23,7 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     beforeEach(() => {
         room = new Room("!room:example.com", {} as unknown as MatrixClient, "@user:example.com");
-        room.getJoinedMembers = jest.fn();
+        room.getJoinedMembers = vi.fn();
 
         roomMember1 = new RoomMember(room.roomId, "@user1:example.com");
         roomMember2 = new RoomMember(room.roomId, "@user2:example.com");
@@ -31,8 +31,8 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     describe("if there are no members", () => {
         beforeEach(() => {
-            mocked(room.getJoinedMembers).mockReturnValue([]);
-            mocked(getFunctionalMembers).mockReturnValue([]);
+            vi.mocked(room.getJoinedMembers).mockReturnValue([]);
+            vi.mocked(getFunctionalMembers).mockReturnValue([]);
         });
 
         it("should return an empty list", () => {
@@ -42,8 +42,8 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     describe("if there are only regular room members", () => {
         beforeEach(() => {
-            mocked(room.getJoinedMembers).mockReturnValue([roomMember1, roomMember2]);
-            mocked(getFunctionalMembers).mockReturnValue([]);
+            vi.mocked(room.getJoinedMembers).mockReturnValue([roomMember1, roomMember2]);
+            vi.mocked(getFunctionalMembers).mockReturnValue([]);
         });
 
         it("should return the room members", () => {
@@ -55,8 +55,8 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     describe("if there are only functional room members", () => {
         beforeEach(() => {
-            mocked(room.getJoinedMembers).mockReturnValue([]);
-            mocked(getFunctionalMembers).mockReturnValue(["@functional:example.com"]);
+            vi.mocked(room.getJoinedMembers).mockReturnValue([]);
+            vi.mocked(getFunctionalMembers).mockReturnValue(["@functional:example.com"]);
         });
 
         it("should return an empty list", () => {
@@ -66,8 +66,8 @@ describe("getJoinedNonFunctionalMembers", () => {
 
     describe("if there are some functional room members", () => {
         beforeEach(() => {
-            mocked(room.getJoinedMembers).mockReturnValue([roomMember1, roomMember2]);
-            mocked(getFunctionalMembers).mockReturnValue([roomMember1.userId]);
+            vi.mocked(room.getJoinedMembers).mockReturnValue([roomMember1, roomMember2]);
+            vi.mocked(getFunctionalMembers).mockReturnValue([roomMember1.userId]);
         });
 
         it("should only return the non-functional members", () => {

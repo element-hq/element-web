@@ -6,15 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import RoomListActions from "../../../../src/actions/RoomListActions";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { DefaultTagID, type TagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
-import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX } from "../../../../src/stores/room-list-v3/section";
-import { tagRoom } from "../../../../src/utils/room/tagRoom";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
-import * as getSectionTagForRoomUtils from "../../../../src/utils/room/getSectionTagForRoom";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { Room } from "matrix-js-sdk/src/matrix";
+import { getMockClientWithEventEmitter } from "test-utils";
+
+import RoomListActions from "../../actions/RoomListActions";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
+import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX } from "../../stores/room-list-v3/section";
+import { tagRoom } from "./tagRoom";
+import * as getSectionTagForRoomUtils from "./getSectionTagForRoom";
 
 describe("tagRoom()", () => {
     const userId = "@alice:server.org";
@@ -23,23 +26,23 @@ describe("tagRoom()", () => {
 
     const makeRoom = (currentSectionTag: TagID | null = null): Room => {
         const client = getMockClientWithEventEmitter({
-            isGuest: jest.fn(),
+            isGuest: vi.fn(),
         });
         const room = new Room(roomId, client, userId);
 
-        jest.spyOn(getSectionTagForRoomUtils, "getSectionTagForRoom").mockReturnValue(currentSectionTag);
+        vi.spyOn(getSectionTagForRoomUtils, "getSectionTagForRoom").mockReturnValue(currentSectionTag);
 
         return room;
     };
 
     beforeEach(() => {
         // stub
-        jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        jest.spyOn(RoomListActions, "tagRoom").mockReturnValue({ action: "mocked_tag_room_action", fn: () => {} });
+        vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        vi.spyOn(RoomListActions, "tagRoom").mockReturnValue({ action: "mocked_tag_room_action", fn: () => {} });
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("does nothing when room tag is not allowed", () => {

@@ -18,6 +18,7 @@
         "lint:fmt-fix": "oxfmt",
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
         "lint:knip": "knip --no-tag-hints && knip --strict --exclude unlisted,dependencies,binaries",
+        "lint:unused-settings": "node scripts/find-unused-settings.ts",
         "install:git-hooks": "husky",
         "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
         "docs:dev": "vitepress dev docs",

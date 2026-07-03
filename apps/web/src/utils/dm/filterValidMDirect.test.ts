@@ -6,7 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { filterValidMDirect } from "../../../../src/utils/dm/filterValidMDirect";
+import { describe, it, expect } from "vitest";
+
+import { filterValidMDirect } from "./filterValidMDirect";
 
 const roomId1 = "!room1:example.com";
 const roomId2 = "!room2:example.com";

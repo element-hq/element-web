@@ -5,12 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { createTestClient } from "../../../test-utils";
-import { getMockedRooms } from "../../stores/room-list-v3/skip-list/getMockedRooms";
-import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
-import { compareRoomsByRecency, sortRoomsByRecency } from "../../../../src/utils/room/sortRoomsByRecency";
+import { describe, it, expect, beforeEach } from "vitest";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { createTestClient } from "test-utils";
+
+import { getMockedRooms } from "../../../test/unit-tests/stores/room-list-v3/skip-list/getMockedRooms";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
+import { compareRoomsByRecency, sortRoomsByRecency } from "./sortRoomsByRecency";
 
 describe("sortRoomsByRecency", () => {
     let userId: string;

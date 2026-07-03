@@ -5,16 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect } from "vitest";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
-import { CUSTOM_SECTION_TAG_PREFIX } from "../../../../src/stores/room-list-v3/section";
-import { getSectionTagForRoom } from "../../../../src/utils/room/getSectionTagForRoom";
-import { getTagsForRoom } from "../../../../src/utils/room/getTagsForRoom";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
+import { CUSTOM_SECTION_TAG_PREFIX } from "../../stores/room-list-v3/section";
+import { getSectionTagForRoom } from "./getSectionTagForRoom";
+import { getTagsForRoom } from "./getTagsForRoom";
 
-jest.mock("../../../../src/utils/room/getTagsForRoom");
+vi.mock("./getTagsForRoom");
 
-const mockGetTagsForRoom = jest.mocked(getTagsForRoom);
+const mockGetTagsForRoom = vi.mocked(getTagsForRoom);
 
 describe("getSectionTagForRoom", () => {
     const room = {} as Room;

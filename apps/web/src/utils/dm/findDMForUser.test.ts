@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { createTestClient, makeMembershipEvent, mkThirdPartyInviteEvent } from "test-utils";
 
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { createTestClient, makeMembershipEvent, mkThirdPartyInviteEvent } from "../../../test-utils";
-import { LocalRoom } from "../../../../src/models/LocalRoom";
-import { findDMForUser } from "../../../../src/utils/dm/findDMForUser";
-import { getFunctionalMembers } from "../../../../src/utils/room/getFunctionalMembers";
+import DMRoomMap from "../DMRoomMap";
+import { LocalRoom } from "../../models/LocalRoom";
+import { findDMForUser } from "./findDMForUser";
+import { getFunctionalMembers } from "../room/getFunctionalMembers";
 
-jest.mock("../../../../src/utils/room/getFunctionalMembers", () => ({
-    getFunctionalMembers: jest.fn(),
+vi.mock("../room/getFunctionalMembers", () => ({
+    getFunctionalMembers: vi.fn(),
 }));
 
 describe("findDMForUser", () => {
@@ -41,7 +43,7 @@ describe("findDMForUser", () => {
         mockClient = createTestClient();
 
         // always return the bot user as functional member
-        mocked(getFunctionalMembers).mockReturnValue([botId]);
+        vi.mocked(getFunctionalMembers).mockReturnValue([botId]);
 
         room1 = new Room("!room1:example.com", mockClient, userId1);
         room1.getMyMembership = () => KnownMembership.Join;
@@ -92,7 +94,7 @@ describe("findDMForUser", () => {
             mkThirdPartyInviteEvent(thirdPartyId, "third-party", room7.roomId),
         ]);
 
-        mocked(mockClient.getRoom).mockImplementation((roomId: string) => {
+        vi.mocked(mockClient.getRoom).mockImplementation((roomId?: string) => {
             return (
                 {
                     [room1.roomId]: room1,
@@ -102,14 +104,14 @@ describe("findDMForUser", () => {
                     [room5.roomId]: room5,
                     [room6.roomId]: room6,
                     [room7.roomId]: room7,
-                }[roomId] || null
+                }[roomId!] || null
             );
         });
 
         dmRoomMap = {
-            getDMRoomForIdentifiers: jest.fn(),
-            getDMRoomsForUserId: jest.fn(),
-            getRoomIds: jest.fn().mockReturnValue(
+            getDMRoomForIdentifiers: vi.fn(),
+            getDMRoomsForUserId: vi.fn(),
+            getRoomIds: vi.fn().mockReturnValue(
                 new Set([
                     room1.roomId,
                     room2.roomId,
@@ -122,8 +124,8 @@ describe("findDMForUser", () => {
                 ]),
             ),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
-        mocked(dmRoomMap.getDMRoomsForUserId).mockImplementation((userId: string) => {
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+        vi.mocked(dmRoomMap.getDMRoomsForUserId).mockImplementation((userId: string) => {
             if (userId === userId1) {
                 return [room1.roomId, room2.roomId, room3.roomId, room4.roomId, room5.roomId, unknownRoomId];
             }
@@ -138,8 +140,8 @@ describe("findDMForUser", () => {
 
     describe("for an empty DM room list", () => {
         beforeEach(() => {
-            mocked(dmRoomMap.getDMRoomsForUserId).mockReturnValue([]);
-            mocked(dmRoomMap.getRoomIds).mockReturnValue(new Set());
+            vi.mocked(dmRoomMap.getDMRoomsForUserId).mockReturnValue([]);
+            vi.mocked(dmRoomMap.getRoomIds).mockReturnValue(new Set());
         });
 
         it("should return undefined", () => {

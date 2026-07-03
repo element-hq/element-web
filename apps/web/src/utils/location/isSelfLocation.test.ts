@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect } from "vitest";
 import {
     M_TEXT,
     type ILocationContent,
@@ -16,7 +17,7 @@ import {
     ContentHelpers,
 } from "matrix-js-sdk/src/matrix";
 
-import { isSelfLocation } from "../../../../src/utils/location";
+import { isSelfLocation } from "./isSelfLocation";
 
 describe("isSelfLocation", () => {
     it("Returns true for a full m.asset event", () => {

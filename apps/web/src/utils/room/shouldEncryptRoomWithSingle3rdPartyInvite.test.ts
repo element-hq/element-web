@@ -6,16 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeAll, beforeEach } from "vitest";
 import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "test-utils";
 
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../../src/utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
-import { privateShouldBeEncrypted } from "../../../../src/utils/rooms";
-import { mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "../../../test-utils";
+import DMRoomMap from "../DMRoomMap";
+import { shouldEncryptRoomWithSingle3rdPartyInvite } from "./shouldEncryptRoomWithSingle3rdPartyInvite";
+import { privateShouldBeEncrypted } from "../rooms";
 
-jest.mock("../../../../src/utils/rooms", () => ({
-    privateShouldBeEncrypted: jest.fn(),
+vi.mock("../rooms", () => ({
+    privateShouldBeEncrypted: vi.fn(),
 }));
 
 describe("shouldEncryptRoomWithSingle3rdPartyInvite", () => {
@@ -40,12 +42,12 @@ describe("shouldEncryptRoomWithSingle3rdPartyInvite", () => {
             mkRoomMemberJoinEvent(client.getSafeUserId(), roomWithOneThirdPartyInvite.roomId),
             thirdPartyInviteEvent,
         ]);
-        jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([roomWithOneThirdPartyInvite.roomId]));
+        vi.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([roomWithOneThirdPartyInvite.roomId]));
     });
 
     describe("when well-known promotes encryption", () => {
         beforeEach(() => {
-            mocked(privateShouldBeEncrypted).mockReturnValue(true);
+            vi.mocked(privateShouldBeEncrypted).mockReturnValue(true);
         });
 
         it("should return true + invite event for a DM room with one third-party invite", () => {
@@ -56,7 +58,7 @@ describe("shouldEncryptRoomWithSingle3rdPartyInvite", () => {
         });
 
         it("should return false for a non-DM room with one third-party invite", () => {
-            mocked(DMRoomMap.shared().getRoomIds).mockReturnValue(new Set());
+            vi.mocked(DMRoomMap.shared().getRoomIds).mockReturnValue(new Set());
 
             expect(shouldEncryptRoomWithSingle3rdPartyInvite(roomWithOneThirdPartyInvite)).toEqual({
                 shouldEncrypt: false,
@@ -90,7 +92,7 @@ describe("shouldEncryptRoomWithSingle3rdPartyInvite", () => {
 
     describe("when well-known does not promote encryption", () => {
         beforeEach(() => {
-            mocked(privateShouldBeEncrypted).mockReturnValue(false);
+            vi.mocked(privateShouldBeEncrypted).mockReturnValue(false);
         });
 
         it("should return false for a DM room with one third-party invite", () => {
