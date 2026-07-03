@@ -9,3 +9,4 @@ export type * from "./config.json.d.ts";
 export type * from "./utils.d.ts";
 export type * from "./matrix.d.ts";
 export type * from "./json.d.ts";
+export type * from "./electron.d.ts";

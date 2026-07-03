@@ -19,6 +19,7 @@ import {
     MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type DesktopCapturerSource, type GetSourcesOptions } from "shared-types";
 
 import dis from "./dispatcher/dispatcher";
 import type BaseEventIndexManager from "./indexing/BaseEventIndexManager";

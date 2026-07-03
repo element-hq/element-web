@@ -8,48 +8,106 @@ Please see LICENSE files in the repository root for full details.
 
 // This file is compiled to CommonJS rather than ESM otherwise the browser chokes on the import statement.
 
-import { ipcRenderer, contextBridge, IpcRendererEvent } from "electron";
+import { ipcRenderer, contextBridge } from "electron";
+import type {
+    ElectronChannel,
+    Electron,
+    ElectronSettings,
+    IpcHandles,
+    MainRendererEvents,
+    RendererMainEvents,
+} from "shared-types" with {
+    "resolution-mode": "import",
+};
 import type { ConfigOptions } from "./config.js" with { "resolution-mode": "import" };
 
 // Expose only expected IPC wrapper APIs to the renderer process to avoid
 // handing out generalised messaging access.
 
-const CHANNELS = [
-    "app_onAction",
+const CHANNELS: ElectronChannel[] = [
+    "prevent_display_sleep",
     "before-quit",
     "check_updates",
     "install_update",
-    "ipcCall",
-    "ipcReply",
     "loudNotification",
     "preferences",
-    "seshat",
-    "seshatReply",
     "setBadgeCount",
     "update-downloaded",
     "userDownloadCompleted",
     "userDownloadAction",
     "openDesktopCapturerSourcePicker",
+    "showToast",
+    "getUpdateFeedUrl",
+    "setLanguage",
+    "getAppVersion",
+    "focusWindow",
+    "navigateBack",
+    "navigateForward",
+    "setSpellCheckEnabled",
+    "getSpellCheckEnabled",
+    "setSpellCheckLanguages",
+    "getSpellCheckLanguages",
+    "getAvailableSpellCheckLanguages",
+    "getPickleKey",
+    "createPickleKey",
+    "destroyPickleKey",
+    "getDesktopCapturerSources",
+    "callDisplayMediaCallback",
+    "clearStorage",
+    "breadcrumbs",
+
+    // Media auth
     "userAccessToken",
     "homeserverUrl",
     "serverSupportedVersions",
-    "showToast",
+
+    // Seshat
+    "seshat.supportsEventIndexing",
+    "seshat.initEventIndex",
+    "seshat.closeEventIndex",
+    "seshat.deleteEventIndex",
+    "seshat.isEventIndexEmpty",
+    "seshat.isRoomIndexed",
+    "seshat.addEventToIndex",
+    "seshat.deleteEvent",
+    "seshat.commitLiveEvents",
+    "seshat.searchEventIndex",
+    "seshat.addHistoricEvents",
+    "seshat.getStats",
+    "seshat.removeCrawlerCheckpoint",
+    "seshat.addCrawlerCheckpoint",
+    "seshat.loadFileEvents",
+    "seshat.loadCheckpoints",
+    "seshat.setUserVersion",
+    "seshat.getUserVersion",
 ];
 
 contextBridge.exposeInMainWorld("electron", {
-    on(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): void {
+    on<K extends keyof MainRendererEvents>(
+        channel: K,
+        listener: (...args: Parameters<MainRendererEvents[K]>) => void,
+    ): void {
         if (!CHANNELS.includes(channel)) {
-            console.error(`Unknown IPC channel ${channel} ignored`);
-            return;
+            throw new Error(`Unknown IPC channel ${channel} ignored`);
         }
-        ipcRenderer.on(channel, listener);
+        ipcRenderer.on(channel, (_, ...args: Parameters<MainRendererEvents[K]>) => listener(...args));
     },
-    send(channel: string, ...args: any[]): void {
+
+    send<K extends keyof RendererMainEvents>(channel: K, ...args: Parameters<RendererMainEvents[K]>): void {
         if (!CHANNELS.includes(channel)) {
-            console.error(`Unknown IPC channel ${channel} ignored`);
-            return;
+            throw new Error(`Unknown IPC channel ${channel} ignored`);
         }
         ipcRenderer.send(channel, ...args);
+    },
+
+    call<K extends keyof IpcHandles>(
+        channel: K,
+        ...args: Parameters<IpcHandles[K]>
+    ): Promise<Awaited<ReturnType<IpcHandles[K]>>> {
+        if (!CHANNELS.includes(channel)) {
+            throw new Error(`Unknown IPC channel ${channel} ignored`);
+        }
+        return ipcRenderer.invoke(channel, ...args);
     },
 
     async initialise(): Promise<{
@@ -71,10 +129,12 @@ contextBridge.exposeInMainWorld("electron", {
         return { protocol, sessionId, config, supportedSettings, supportsBadgeOverlay: process.platform === "win32" };
     },
 
-    async setSettingValue(settingName: string, value: any): Promise<void> {
+    async setSettingValue<K extends keyof ElectronSettings>(settingName: K, value: ElectronSettings[K]): Promise<void> {
         return ipcRenderer.invoke("setSettingValue", settingName, value);
     },
-    async getSettingValue(settingName: string): Promise<any> {
+    async getSettingValue<K extends keyof ElectronSettings>(settingName: K): Promise<ElectronSettings[K]> {
         return ipcRenderer.invoke("getSettingValue", settingName);
     },
-});
+} satisfies Electron);
+
+export {};

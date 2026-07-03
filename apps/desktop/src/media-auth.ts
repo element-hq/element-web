@@ -5,7 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type BrowserWindow, ipcMain, session } from "electron";
+import { type BrowserWindow, session } from "electron";
+
+import { typedIpcMain } from "./ipc.js";
 
 /**
  * Check for feature support from the server.
@@ -13,7 +15,7 @@ import { type BrowserWindow, ipcMain, session } from "electron";
  */
 async function getSupportedVersions(window: BrowserWindow): Promise<string[]> {
     return new Promise((resolve) => {
-        ipcMain.once("serverSupportedVersions", (_, versionsResponse) => {
+        typedIpcMain.once("serverSupportedVersions", (_, versionsResponse) => {
             resolve(versionsResponse?.versions || []);
         });
         window.webContents.send("serverSupportedVersions"); // ping now that the listener exists
@@ -26,7 +28,7 @@ async function getSupportedVersions(window: BrowserWindow): Promise<string[]> {
  */
 async function getAccessToken(window: BrowserWindow): Promise<string | undefined> {
     return new Promise((resolve) => {
-        ipcMain.once("userAccessToken", (_, accessToken) => {
+        typedIpcMain.once("userAccessToken", (_, accessToken) => {
             resolve(accessToken);
         });
         window.webContents.send("userAccessToken"); // ping now that the listener exists
@@ -37,9 +39,9 @@ async function getAccessToken(window: BrowserWindow): Promise<string | undefined
  * Get the homeserver url
  * This requires asking the renderer process for the homeserver url.
  */
-async function getHomeserverUrl(window: BrowserWindow): Promise<string> {
+async function getHomeserverUrl(window: BrowserWindow): Promise<string | undefined> {
     return new Promise((resolve) => {
-        ipcMain.once("homeserverUrl", (_, homeserver) => {
+        typedIpcMain.once("homeserverUrl", (_, homeserver) => {
             resolve(homeserver);
         });
         window.webContents.send("homeserverUrl"); // ping now that the listener exists

@@ -12,13 +12,11 @@ import {
     MenuItem,
     shell,
     dialog,
-    ipcMain,
     type NativeImage,
     type WebContents,
     type ContextMenuParams,
     type DownloadItem,
     type MenuItemConstructorOptions,
-    type IpcMainEvent,
     type Event,
 } from "electron";
 import url from "node:url";
@@ -28,6 +26,7 @@ import path from "node:path";
 
 import { _t } from "./language-helper.js";
 import { getConfig } from "./config.js";
+import { typedIpcMain } from "./ipc.js";
 
 const MAILTO_PREFIX = "mailto:";
 
@@ -266,7 +265,7 @@ function onEditableContextMenu(ev: Event, params: ContextMenuParams, webContents
 
 let userDownloadIndex = 0;
 const userDownloadMap = new Map<number, string>(); // Map from id to path
-ipcMain.on("userDownloadAction", function (ev: IpcMainEvent, { id, open = false }) {
+typedIpcMain.on("userDownloadAction", (_, { id, open = false }) => {
     const path = userDownloadMap.get(id);
     if (open && path) {
         void shell.openPath(path);

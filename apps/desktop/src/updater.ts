@@ -5,13 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { app, autoUpdater, ipcMain } from "electron";
+import { app, autoUpdater } from "electron";
 import fs from "node:fs/promises";
 import os from "node:os";
 
 import { getSquirrelExecutable } from "./squirrelhooks.js";
 import { _t } from "./language-helper.js";
-import { initialisePromise } from "./ipc.js";
+import { initialisePromise, typedIpcMain } from "./ipc.js";
 import { getConfig } from "./config.js";
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
@@ -148,7 +148,7 @@ async function available(): Promise<boolean> {
             // If the macOS version is too old for modern Electron support then disable auto update to prevent the app updating and bricking itself.
             // The oldest macOS version supported by Chromium/Electron 38 is Monterey (12.x) which started with Darwin 21.0
             initialisePromise.then(() => {
-                ipcMain.emit("showToast", {
+                typedIpcMain.emit("showToast", {
                     title: _t("eol|title"),
                     description: _t("eol|no_more_updates", { brand: getConfig().brand }),
                 });
@@ -159,7 +159,7 @@ async function available(): Promise<boolean> {
             // If the macOS version is EOL then show a warning message.
             // The oldest macOS version still supported by Apple is Ventura (13.x) which started with Darwin 22.0
             initialisePromise.then(() => {
-                ipcMain.emit("showToast", {
+                typedIpcMain.emit("showToast", {
                     title: _t("eol|title"),
                     description: _t("eol|warning", { brand: getConfig().brand }),
                 });
@@ -170,8 +170,8 @@ async function available(): Promise<boolean> {
     return true;
 }
 
-ipcMain.on("install_update", installUpdate);
-ipcMain.on("check_updates", pollForUpdates);
+typedIpcMain.on("install_update", installUpdate);
+typedIpcMain.on("check_updates", pollForUpdates);
 
 function ipcChannelSendUpdateStatus(status: boolean | string): void {
     global.mainWindow?.webContents.send("check_updates", status);

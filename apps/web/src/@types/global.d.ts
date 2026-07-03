@@ -46,27 +46,6 @@ import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
-type ElectronChannel =
-    | "app_onAction"
-    | "before-quit"
-    | "check_updates"
-    | "install_update"
-    | "ipcCall"
-    | "ipcReply"
-    | "loudNotification"
-    | "preferences"
-    | "seshat"
-    | "seshatReply"
-    | "setBadgeCount"
-    | "update-downloaded"
-    | "userDownloadCompleted"
-    | "userDownloadAction"
-    | "openDesktopCapturerSourcePicker"
-    | "userAccessToken"
-    | "homeserverUrl"
-    | "serverSupportedVersions"
-    | "showToast";
-
 declare global {
     // use `number` as the return type in all cases for globalThis.set{Interval,Timeout},
     // so we don't accidentally use the methods on NodeJS.Timeout - they only exist in a subset of environments.
@@ -118,46 +97,11 @@ declare global {
         mxOnRecaptchaLoaded?: () => void;
         mxModuleLoader: ModuleLoader;
         mxModuleApi: ModuleApiType;
-
-        // electron-only
-        electron?: Electron;
         // opera-only
         opera?: any;
 
         // https://developer.mozilla.org/en-US/docs/Web/API/InstallTrigger
         InstallTrigger: any;
-    }
-
-    interface Electron {
-        // Legacy
-        on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
-        send(channel: ElectronChannel, ...args: any[]): void;
-        // Initialisation
-        initialise(): Promise<{
-            protocol: string;
-            sessionId: string;
-            supportsBadgeOverlay: boolean;
-            config: IConfigOptions;
-            supportedSettings: Record<string, boolean>;
-        }>;
-        // Settings
-        setSettingValue(settingName: string, value: any): Promise<void>;
-        getSettingValue(settingName: string): Promise<any>;
-    }
-
-    interface DesktopCapturerSource {
-        id: string;
-        name: string;
-        thumbnailURL: string;
-    }
-
-    interface GetSourcesOptions {
-        types: Array<string>;
-        thumbnailSize?: {
-            height: number;
-            width: number;
-        };
-        fetchWindowIcons?: boolean;
     }
 
     interface StorageEstimate {

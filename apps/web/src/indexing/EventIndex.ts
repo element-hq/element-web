@@ -506,7 +506,7 @@ export default class EventIndex extends EventEmitter {
                     checkpoint.roomId,
                     checkpoint.token,
                     EVENTS_PER_CRAWL,
-                    checkpoint.direction,
+                    checkpoint.direction as Direction,
                 );
             } catch (e) {
                 if (e instanceof HTTPError && e.httpStatus === 403) {
@@ -744,7 +744,7 @@ export default class EventIndex extends EventEmitter {
         room: Room,
         limit = 10,
         fromEvent?: string,
-        direction: string = EventTimeline.BACKWARDS,
+        direction: Direction = EventTimeline.BACKWARDS,
     ): Promise<MatrixEvent[]> {
         const client = MatrixClientPeg.safeGet();
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
@@ -842,7 +842,7 @@ export default class EventIndex extends EventEmitter {
         room: Room,
         limit = 10,
         fromEvent?: string,
-        direction: string = EventTimeline.BACKWARDS,
+        direction: Direction = EventTimeline.BACKWARDS,
     ): Promise<boolean> {
         const matrixEvents = await this.loadFileEvents(room, limit, fromEvent, direction);
 

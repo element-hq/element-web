@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Electron } from "shared-types";
 
 import type BasePlatform from "../../../../src/BasePlatform";
 import { type IConfigOptions } from "../../../../src/IConfigOptions";
