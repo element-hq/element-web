@@ -54,8 +54,9 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
-import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
+import { MessageComposerUrlPreviewWrapper, useMessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreview";
 import { Type } from "../../../editor/parts";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -88,6 +89,7 @@ interface IProps extends MatrixClientProps {
     relation?: IEventRelation;
     e2eStatus?: E2EStatus;
     compact?: boolean;
+    urlPreviewVm: MessageComposerUrlPreviewViewModel;
 }
 
 interface IState {
@@ -685,7 +687,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                 <div className="mx_MessageComposer_wrapper">
-                    <MessageComposerUrlPreviewWrapper content={this.state.urlPreviewComposerContent} />
+                    <MessageComposerUrlPreviewWrapper
+                        content={this.state.urlPreviewComposerContent}
+                        urlPreviewVm={this.props.urlPreviewVm}
+                    />
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
                         replyToEvent={this.props.replyToEvent}
@@ -734,4 +739,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
 }
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
-export default MessageComposerWithMatrixClient;
+
+export function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
+    const urlPreviewVm = useMessageComposerUrlPreviewViewModel();
+    return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
+}
+
+export default MessageComposerWrapper;

@@ -17,8 +17,9 @@ import PlatformPeg from "../../../PlatformPeg";
 
 const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
-export function MessageComposerUrlPreviewWrapper({ content }: { content: string }): ReactNode | null {
+export function useMessageComposerUrlPreviewViewModel(): MessageComposerUrlPreviewViewModel {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
+
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
@@ -28,6 +29,16 @@ export function MessageComposerUrlPreviewWrapper({ content }: { content: string 
             }),
     );
 
+    useEffect(() => {
+        void vm.updateUrlPreviewVisible(showUrlPreview);
+    }, [vm, showUrlPreview]);
+
+    return vm;
+}
+
+export function MessageComposerUrlPreviewWrapper(
+    { content, urlPreviewVm: vm }: { content: string; urlPreviewVm: MessageComposerUrlPreviewViewModel }
+): ReactNode | null {
     useDebouncedCallback<[MessageComposerUrlPreviewViewModel, string]>(
         true,
         (vm, content) => {
@@ -36,10 +47,6 @@ export function MessageComposerUrlPreviewWrapper({ content }: { content: string 
         [vm, content],
         DEBOUNCE_REQUEST_TIMEOUT_MS,
     );
-
-    useEffect(() => {
-        void vm.updateUrlPreviewVisible(showUrlPreview);
-    }, [vm, showUrlPreview]);
 
     return <MessageComposerUrlPreviewView vm={vm} />;
 }
