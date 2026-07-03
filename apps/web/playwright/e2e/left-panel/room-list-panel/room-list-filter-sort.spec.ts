@@ -12,6 +12,7 @@ import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-p
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getFilterCollapseButton, getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -28,6 +29,20 @@ test.describe("Room list filters and sort", () => {
      */
     function getRoomList(page: Page) {
         return page.getByTestId("room-list");
+    }
+
+    async function setShowBold(page: Page, app: ElementAppPage, showbold: boolean) {
+        await app.settings.openUserSettings("Notifications");
+
+        const showAllActivity = page.getByRole("switch", { name: "Show all activity in the room list", exact: false });
+
+        if (showbold) {
+            await showAllActivity.check();
+        } else {
+            await showAllActivity.uncheck();
+        }
+
+        await app.settings.closeDialog();
     }
 
     test.beforeEach(async ({ page, app, bot, user }) => {
@@ -204,36 +219,45 @@ test.describe("Room list filters and sort", () => {
             await expect(primaryFilters.locator("role=option").first()).toHaveText("Invites");
         });
 
-        test(
-            "unread filter should only match unread rooms that have a count",
-            { tag: "@screenshot" },
-            async ({ page, app, bot }) => {
-                const roomListView = getRoomList(page);
-                const primaryFilters = getPrimaryFilters(page);
+        test("unread filter should obey the showbold setting", async ({ page, app, bot }) => {
+            const roomListView = getRoomList(page);
+            const primaryFilters = getPrimaryFilters(page);
 
-                // Let's configure unread dm room so that we only get notification for mentions and keywords
-                await app.viewRoomById(unReadDmId);
-                await app.settings.openRoomSettings("Notifications");
-                await page.getByText("@mentions & keywords").click();
-                await app.settings.closeDialog();
+            // Set the "showbold" setting to off
+            await setShowBold(page, app, false);
 
-                // Let's open a room other than unread room or unread dm
-                await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
+            // The unread DM room only notifies for mentions and keywords
+            await app.viewRoomById(unReadDmId);
+            await app.settings.openRoomSettings("Notifications");
+            await page.getByText("@mentions & keywords").click();
+            await app.settings.closeDialog();
 
-                // Let's make the bot send a new message in both rooms
-                await bot.sendMessage(unReadDmId, "Hello!");
-                await bot.sendMessage(unReadRoomId, "Hello!");
+            // (The unread non-DM room still notifies for all activity)
 
-                // Let's activate the unread filter now
-                await primaryFilters.getByRole("option", { name: "Unread" }).click();
+            // Open some other room
+            await roomListView.getByRole("button", { name: "Open room favourite room" }).click();
 
-                // Unread filter should only show unread room and not unread dm!
-                const unreadDm = roomListView.getByRole("option", { name: "Open room unread room" });
-                await expect(unreadDm).toBeVisible();
-                await expect(unreadDm).toMatchScreenshot("unread-dm.png");
-                await expect(roomListView.getByRole("option", { name: "Open room unread dm" })).not.toBeVisible();
-            },
-        );
+            // Send a message in the unread DM room and the unread non-DM room
+            await bot.sendMessage(unReadDmId, "Hello!");
+            await bot.sendMessage(unReadRoomId, "Hello!");
+
+            // Turn the "Unreads" filter on
+            await primaryFilters.getByRole("option", { name: "Unreads" }).click();
+
+            const unreadRoom = roomListView.getByRole("option", { name: "Open room unread room" });
+            const unreadDm = roomListView.getByRole("option", { name: "Open room unread dm" });
+
+            // Only the unread room is visible. The DM room is hidden.
+            await expect(unreadRoom).toBeVisible();
+            await expect(unreadDm).not.toBeVisible();
+
+            // Now set "showbold" to on
+            await setShowBold(page, app, true);
+
+            // Now both unread rooms are visible
+            await expect(unreadRoom).toBeVisible();
+            await expect(unreadDm).toBeVisible();
+        });
 
         test("should sort the room list alphabetically", async ({ page }) => {
             const roomListView = getRoomList(page);
