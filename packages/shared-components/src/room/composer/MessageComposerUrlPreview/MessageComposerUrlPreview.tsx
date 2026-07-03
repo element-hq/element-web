@@ -41,7 +41,9 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
         return null;
     }
 
-    const previewViews = previews.map(preview => (
+    // Show only the first preview to revert back to previous behaviour
+    // But have previews fetch all URL previews in the message text
+    const previewViews = previews.slice(0, 1).map(preview => (
         <div key={preview.link} className={classNames(className, styles.container)}>
             <div>
                 {preview?.image?.imageThumb && (
