@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { Dropdown, type DropdownTriggerProps, Text } from "@vector-im/compound-web";
+import { Dropdown, type DropdownTriggerProps, Link, Text } from "@vector-im/compound-web";
 import { ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td, type UserStatus } from "..";
@@ -63,16 +63,12 @@ export function SetStatusView({ vm }: SetStatusViewProps): JSX.Element {
 
     const renderTrigger = (props: DropdownTriggerProps): JSX.Element => {
         const trigger = (
-            <button
-                className={styles.setStatusTrigger}
-                aria-label={_t("status|set_status|set_status_prompt")}
-                {...props}
-            >
+            <Link className={styles.setStatusTrigger} aria-label={_t("status|set_status|set_status_prompt")} {...props}>
                 <ReactionIcon />
                 <Text as="span" type="body" size="md" weight="medium">
                     {_t("status|set_status|set_status_prompt")}
                 </Text>
-            </button>
+            </Link>
         );
 
         return trigger;

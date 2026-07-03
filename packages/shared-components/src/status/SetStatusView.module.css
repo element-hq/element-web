@@ -6,10 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .setStatusTrigger {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
     text-decoration: underline solid;
     display: flex;
     align-items: center;
@@ -20,7 +16,7 @@ Please see LICENSE files in the repository root for full details.
     svg {
         width: 20px;
         height: 20px;
-        margin-right: 1.5px;
+        margin-right: var(--cpd-space-1-5x);
     }
 }
 
