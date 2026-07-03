@@ -16,6 +16,7 @@ import {
 
 import { clearUserStatus, setUserStatus } from "../../utils/userStatus";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import dis from "../../dispatcher/dispatcher";
 import { UserTab } from "../../components/views/dialogs/UserTab";
 import { Action } from "../../dispatcher/actions";
@@ -35,7 +36,13 @@ export class SetStatusViewModel
         super(props, {
             userStatus: OwnProfileStore.instance.userStatus,
         });
+
+        this.disposables.trackListener(OwnProfileStore.instance, UPDATE_EVENT, this.onProfileStoreUpdate);
     }
+
+    private onProfileStoreUpdate = (): void => {
+        this.snapshot.merge({ userStatus: OwnProfileStore.instance.userStatus });
+    };
 
     public setStatus = (userStatus: UserStatus): void => {
         const oldStatus = this.snapshot.current.userStatus;

@@ -14,6 +14,7 @@ import { vi, describe, it, expect, beforeEach, afterEach, type MockInstance, typ
 import { SetStatusViewModel, UserMenuSetStatusViewModel } from "./SetStatusViewModel";
 import {
     getMockClientWithEventEmitter,
+    MockEventEmitter,
     mockClientMethodsServer,
     mockClientMethodsUser,
 } from "../../../test/test-utils";
@@ -22,15 +23,18 @@ import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { UserTab } from "../../components/views/dialogs/UserTab";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 const STATUS: MatrixUserStatus = { emoji: "🧪", text: "Testing" };
 
 describe("SetStatusViewModel", () => {
     let client: MockedObject<MatrixClient>;
-    let mockOwnProfileStoreInstance: OwnProfileStore;
+    let mockOwnProfileStoreInstance: MockEventEmitter<OwnProfileStore> & OwnProfileStore;
 
     beforeEach(() => {
-        mockOwnProfileStoreInstance = { userStatus: undefined } as unknown as OwnProfileStore;
+        mockOwnProfileStoreInstance = new MockEventEmitter<OwnProfileStore>({
+            userStatus: undefined,
+        }) as unknown as MockEventEmitter<OwnProfileStore> & OwnProfileStore;
         vi.spyOn(OwnProfileStore, "instance", "get").mockReturnValue(mockOwnProfileStoreInstance);
 
         client = getMockClientWithEventEmitter({
@@ -53,6 +57,26 @@ describe("SetStatusViewModel", () => {
 
     it("initialises snapshot with undefined when no status is set", () => {
         const vm = new SetStatusViewModel({ client });
+        expect(vm.getSnapshot().userStatus).toBeUndefined();
+    });
+
+    it("updates the snapshot when OwnProfileStore emits an update", () => {
+        const vm = new SetStatusViewModel({ client });
+        expect(vm.getSnapshot().userStatus).toBeUndefined();
+
+        vi.mocked(mockOwnProfileStoreInstance).userStatus = STATUS;
+        mockOwnProfileStoreInstance.emit(UPDATE_EVENT);
+
+        expect(vm.getSnapshot().userStatus).toEqual(STATUS);
+    });
+
+    it("stops listening to OwnProfileStore once disposed", () => {
+        const vm = new SetStatusViewModel({ client });
+        vm.dispose();
+
+        vi.mocked(mockOwnProfileStoreInstance).userStatus = STATUS;
+        mockOwnProfileStoreInstance.emit(UPDATE_EVENT);
+
         expect(vm.getSnapshot().userStatus).toBeUndefined();
     });
 
@@ -135,10 +159,12 @@ describe("SetStatusViewModel", () => {
 describe("UserMenuSetStatusViewModel", () => {
     let client: MockedObject<MatrixClient>;
     let dispatchSpy: MockInstance;
-    let mockOwnProfileStoreInstance: OwnProfileStore;
+    let mockOwnProfileStoreInstance: MockEventEmitter<OwnProfileStore> & OwnProfileStore;
 
     beforeEach(() => {
-        mockOwnProfileStoreInstance = { userStatus: undefined } as unknown as OwnProfileStore;
+        mockOwnProfileStoreInstance = new MockEventEmitter<OwnProfileStore>({
+            userStatus: undefined,
+        }) as unknown as MockEventEmitter<OwnProfileStore> & OwnProfileStore;
         vi.spyOn(OwnProfileStore, "instance", "get").mockReturnValue(mockOwnProfileStoreInstance);
 
         client = getMockClientWithEventEmitter({
