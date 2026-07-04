@@ -103,10 +103,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
     // the mac.extraResources reference to its gitignored artifact resolves without a separate CI step.
     // Gate on the build *target* (not the host): only build it when targeting macOS, so a Windows/Linux
     // build on a Mac doesn't produce an unused binary. The helper links Apple frameworks, so it can only
-    // be produced on a macOS host; build.sh is a no-op on any other host.
+    // be produced on a macOS host; build.sh is a no-op on any other host. Forward the target arch so a
+    // single-arch build ships a thin binary (electron-builder calls this once per arch — for a universal
+    // build as "x64" then "arm64", which @electron/universal lipos back together).
     beforeBuild: async (context): Promise<void> => {
         if (context.platform === Platform.MAC) {
-            execFileSync("/bin/bash", ["native/heic-decode/build.sh"], { stdio: "inherit" });
+            // Absolute interpreter + resolved path so nothing resolves via PATH/CWD.
+            execFileSync("/bin/bash", [path.resolve("native/heic-decode/build.sh"), context.arch], {
+                stdio: "inherit",
+            });
         }
     },
     electronFuses: {

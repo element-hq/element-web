@@ -47,8 +47,10 @@ const ALLOWED_BLOB_MIMETYPES = [
     "image/apng",
     "image/webp",
     "image/avif",
-    // HEIC/HEIF: decoded to JPEG before it reaches an <img> (see utils/heic.ts + MediaEventHelper);
-    // allow-listing keeps it on the image path, not the file fallback. Non-scriptable container, so no XSS surface.
+    // HEIC/HEIF: on platforms with an OS decoder (macOS desktop) these are decoded to JPEG before they
+    // reach an <img> (see utils/heic.ts + MediaEventHelper), and allow-listing keeps that decoded blob on
+    // the image path. Where no decoder is present the content is routed to the file fallback instead (gated
+    // by isDecodableHeicContent), so raw HEIC never reaches an <img>. Non-scriptable container, no XSS surface.
     "image/heic",
     "image/heif",
     "image/heic-sequence",
