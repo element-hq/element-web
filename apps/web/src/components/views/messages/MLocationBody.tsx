@@ -132,10 +132,7 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     onClick,
 }) => {
     // Find the message panel boundary so the tooltip hides when it would overlap the composer
-    const boundaryEl = useMemo(
-        () => document.querySelector<HTMLElement>(".mx_RoomView_messagePanel") ?? undefined,
-        [],
-    );
+    const boundaryEl = useMemo(() => document.querySelector<HTMLElement>(".mx_RoomView_messagePanel") ?? undefined, []);
 
     // only pass member to marker when should render avatar marker
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
