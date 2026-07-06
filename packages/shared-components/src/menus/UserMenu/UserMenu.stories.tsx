@@ -169,6 +169,7 @@ export const Guest: Story = {
         manageAccountHref: undefined,
         showAvatar: false,
         setStatusViewModel: new MockSetStatusViewModel({}),
+        showUserStatus: false,
         actions: {
             createAccount: true,
             signIn: true,
