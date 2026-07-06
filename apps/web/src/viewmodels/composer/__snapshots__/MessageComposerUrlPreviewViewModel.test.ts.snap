@@ -12,6 +12,7 @@ exports[`MessageComposerUrlPreviewViewModel > should preview a URL with media 1`
         "height": 128,
         "imageFull": "https://example.org/image/src",
         "imageThumb": "https://example.org/image/thumb",
+        "imageType": undefined,
         "playable": false,
         "width": 128,
       },

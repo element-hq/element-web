@@ -227,10 +227,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
                     const editEvent = events
                         ? findEditableEvent({
-                            events,
-                            isForward: false,
-                            matrixClient: MatrixClientPeg.safeGet(),
-                        })
+                              events,
+                              isForward: false,
+                              matrixClient: MatrixClientPeg.safeGet(),
+                          })
                         : undefined;
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else

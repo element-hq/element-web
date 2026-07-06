@@ -51,29 +51,36 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             return;
         }
 
-        let links: Set<string>;
-
+        let previews;
         if (SettingsStore.getValue("feature_msc4452_url_preview_bundle")) {
-            links = this.links;
+            const previewRequests = Array.from(this.links).map(async (link) => {
+                try {
+                    return await this.fetcher.fetchPreview(link, true);
+                } catch (ex) {
+                    logger.warn("Fetching preview failed", ex);
+                    return null;
+                }
+            });
+
+            // Fetch previews for all links in the message text,
+            // And remove the ones with erroneous responses
+            const previewResponses = await Promise.all(previewRequests);
+            previews = previewResponses.filter((res) => res !== null);
+
+            this.snapshot.set({ previews });
         } else {
-            links = new Set(Array.from(this.links).slice(0, 1)); // only preview first item
-        }
-
-        // Fetch previews for all links in the message text,
-        // And remove the ones with erroneous responses
-        const previewRequests = Array.from(links).map(async (link) => {
-            try {
-                return await this.fetcher.fetchPreview(link, true);
-            } catch (ex) {
-                logger.warn("Fetching preview failed", ex);
-                return null;
+            for (const link of this.links) {
+                try {
+                    const preview = await this.fetcher.fetchPreview(link, true);
+                    if (preview) {
+                        this.snapshot.set({ previews: [preview] });
+                        return;
+                    }
+                } catch (ex) {
+                    logger.warn("Fetching preview failed", ex);
+                }
             }
-        });
-
-        const previewResponses = await Promise.all(previewRequests);
-        const previews = previewResponses.filter((res) => res !== null);
-
-        this.snapshot.set({ previews });
+        }
     }
 
     /**

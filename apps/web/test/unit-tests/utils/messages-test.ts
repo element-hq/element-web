@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, type IContent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type IContent } from "matrix-js-sdk/src/matrix";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { mocked } from "jest-mock";
 
 import { attachMentions, attachUrlPreviews } from "../../../src/utils/messages";
 import EditorModel from "../../../src/editor/model";
 import { createTestClient, mkEvent } from "../../test-utils";
 import { createPartCreator } from "../editor/mock";
-import { RoomMessageEventContent } from "../../../@types/url-preview";
-import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
-import { mocked } from "jest-mock";
+import { type RoomMessageEventContent } from "../../../@types/url-preview";
 import { uploadFile } from "../../../src/ContentMessages";
 
 jest.mock("../../../src/ContentMessages", () => ({
