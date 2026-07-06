@@ -340,6 +340,47 @@ describe("AppTile", () => {
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
     });
 
+    it("should hangup Jitsi call when room is left", async () => {
+        const app: IApp = {
+            id: "3",
+            eventId: "jitsi1",
+            roomId: "r2",
+            type: MatrixWidgetType.JitsiMeet,
+            url: "https://jitsi.example.com",
+            name: "Jitsi Conference",
+            creatorUserId: cli.getSafeUserId(),
+            avatar_url: undefined,
+        };
+
+        const { queryByRole, getByText } = render(
+            <AppTile key={app.id} app={app} room={r2} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
+        await waitForElementToBeRemoved(() => queryByRole("progressbar"));
+
+        expect(getByText("Jitsi Conference")).toBeInTheDocument();
+
+        // Switch to room 1
+        dis.dispatch(
+            {
+                action: Action.ViewRoom,
+                room_id: "r1",
+            },
+            true,
+        );
+        jest.spyOn(ActiveWidgetStore.instance, "getWidgetPersistence").mockReturnValue(true);
+        jest.spyOn(sdkContext.legacyCallHandler, "hangupCallApp");
+        dis.dispatch(
+            {
+                action: Action.AfterLeaveRoom,
+                room_id: "r2",
+            },
+            true,
+        );
+
+        expect(sdkContext.legacyCallHandler.hangupCallApp).toHaveBeenCalledWith(app.roomId);
+    });
+
     describe("for a pinned widget", () => {
         let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
         beforeEach(async () => {
@@ -374,6 +415,22 @@ describe("AppTile", () => {
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Minimise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "right");
+        });
+
+        it("should close right panel timeline when minimising widget", async () => {
+            const renderResult = render(
+                <AppTile key={app1.id} app={app1} room={r1} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
+
+            jest.spyOn(sdkContext.rightPanelStore, "currentCardForRoom").mockReturnValue({
+                phase: RightPanelPhases.Timeline,
+            });
+            jest.spyOn(sdkContext.rightPanelStore, "popCard");
+
+            await userEvent.click(renderResult.getByLabelText("Minimise"));
+            expect(sdkContext.rightPanelStore.popCard).toHaveBeenCalledWith(r1.roomId);
         });
 
         it("clicking 'maximise' should send the widget to the center", async () => {
