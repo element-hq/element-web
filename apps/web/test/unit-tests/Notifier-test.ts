@@ -46,6 +46,7 @@ import { type ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload"
 import { Action } from "../../src/dispatcher/actions";
 import { addReplyToMessageContent } from "../../src/utils/Reply";
 import { TestSDKContext } from "./TestSDKContext.ts";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor.ts";
 
 jest.mock("../../src/utils/notifications", () => ({
     // @ts-ignore
@@ -148,6 +149,8 @@ describe("Notifier", () => {
         mockClient.pushRules = {
             global: {},
         };
+        // @ts-ignore
+        mockClient.pushProcessor = new PushProcessor(mockClient);
         accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId!);
 
         testRoom = new Room(roomId, mockClient, mockClient.getSafeUserId());
@@ -157,6 +160,7 @@ describe("Notifier", () => {
             maySendNotifications: jest.fn().mockReturnValue(true),
             displayNotification: jest.fn().mockReturnValue({ close: jest.fn() }),
             loudNotification: jest.fn(),
+            requestNotificationPermission: jest.fn(),
         });
 
         notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
@@ -763,6 +767,24 @@ describe("Notifier", () => {
             );
 
             expect(fn).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("setEnabled", () => {
+        it("should call fire notifier_enabled when permission is granted", async () => {
+            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const notifier = new Notifier(dis, context);
+
+            jest.mocked(MockPlatform.requestNotificationPermission).mockResolvedValue("granted");
+
+            const resolvers = Promise.withResolvers<void>();
+            notifier.setEnabled(true, resolvers.resolve);
+            await resolvers.promise;
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "notifier_enabled",
+                value: true,
+            });
         });
     });
 });
