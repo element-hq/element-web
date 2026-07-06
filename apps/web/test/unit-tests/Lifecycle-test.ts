@@ -28,6 +28,7 @@ import { persistTokens } from "../../src/utils/tokens/tokens";
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
 import * as StorageManager from "../../src/utils/StorageManager.ts";
 import type BasePlatform from "../../src/BasePlatform.ts";
+import * as createMatrixClientModule from "../../src/utils/createMatrixClient";
 
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
@@ -70,11 +71,12 @@ describe("Lifecycle", () => {
             logout: jest.fn().mockResolvedValue(undefined),
             getAccessToken: jest.fn(),
             getRefreshToken: jest.fn(),
+            setGuest: jest.fn(),
+            setNotifTimelineSet: jest.fn(),
             isInitialSyncComplete: jest.fn(),
-            // getAuthMetadata: jest.fn().mockReturnValue(makeDelegatedAuthMetadata()),
         });
         // stub this
-        jest.spyOn(MatrixClientPeg, "replaceUsingCreds").mockImplementation(() => {});
+        jest.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
         jest.spyOn(MatrixClientPeg, "start").mockResolvedValue(undefined);
 
         // reset any mocking
@@ -187,6 +189,7 @@ describe("Lifecycle", () => {
             jest.spyOn(logger, "log").mockClear();
 
             jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+            jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
 
             // stub this out
             jest.spyOn(Modal, "createDialog").mockReturnValue(
@@ -235,7 +238,7 @@ describe("Lifecycle", () => {
                 it("should restore guest accounts when ignoreGuest is false", async () => {
                     expect(await restoreSessionFromStorage({ ignoreGuest: false })).toEqual(true);
 
-                    expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                         expect.objectContaining({
                             userId,
                             guest: true,
@@ -279,7 +282,7 @@ describe("Lifecycle", () => {
                 it("should create and start new matrix client with credentials", async () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
-                    expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                         {
                             userId,
                             accessToken,
@@ -329,7 +332,7 @@ describe("Lifecycle", () => {
                     it("should create new matrix client with credentials", async () => {
                         expect(await restoreSessionFromStorage()).toEqual(true);
 
-                        expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                             {
                                 userId,
                                 accessToken,
@@ -412,7 +415,7 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
-                    expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                         {
                             userId,
                             // decrypted accessToken
@@ -450,7 +453,7 @@ describe("Lifecycle", () => {
                     it("should create new matrix client with credentials", async () => {
                         expect(await restoreSessionFromStorage()).toEqual(true);
 
-                        expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                        expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                             {
                                 userId,
                                 accessToken,
@@ -503,7 +506,7 @@ describe("Lifecycle", () => {
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     // Ensure that the expected calls were made
-                    expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                    expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                         {
                             userId,
                             // decrypted accessToken
@@ -616,6 +619,7 @@ describe("Lifecycle", () => {
         describe("without a pickle key", () => {
             beforeEach(() => {
                 jest.spyOn(mockPlatform, "createPickleKey").mockResolvedValue(null);
+                jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
             });
 
             it("should persist credentials", async () => {
@@ -668,7 +672,7 @@ describe("Lifecycle", () => {
             it("should create new matrix client with credentials", async () => {
                 expect(await setLoggedIn(credentials)).toEqual(mockClient);
 
-                expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                     {
                         userId,
                         accessToken,
@@ -764,9 +768,10 @@ describe("Lifecycle", () => {
             });
 
             it("should create new matrix client with credentials", async () => {
+                jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
                 expect(await setLoggedIn(credentials)).toEqual(mockClient);
 
-                expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                     {
                         userId,
                         accessToken,
@@ -840,7 +845,7 @@ describe("Lifecycle", () => {
                     }),
                 ).toEqual(mockClient);
 
-                expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                     expect.objectContaining({
                         accessToken,
                         refreshToken,
@@ -861,7 +866,7 @@ describe("Lifecycle", () => {
                     }),
                 ).toEqual(mockClient);
 
-                expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+                expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                     expect.objectContaining({
                         accessToken,
                         refreshToken,
@@ -911,6 +916,7 @@ describe("Lifecycle", () => {
 
         it("should replace the current login with a new one", async () => {
             const stopSpy = jest.spyOn(mockClient, "stopClient").mockReturnValue(undefined);
+            jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
             const dis = window.mxDispatcher;
 
             const firstLoginEvent: Promise<void> = new Promise((resolve) => {
@@ -930,7 +936,7 @@ describe("Lifecycle", () => {
             // So spy on it and make sure it's not called.
             jest.spyOn(MatrixClientPeg, "unset").mockReturnValue(undefined);
 
-            expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+            expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                 expect.objectContaining({
                     userId,
                 }),
@@ -964,7 +970,7 @@ describe("Lifecycle", () => {
             // the client should have been stopped
             expect(stopSpy).toHaveBeenCalledTimes(2);
 
-            expect(MatrixClientPeg.replaceUsingCreds).toHaveBeenCalledWith(
+            expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                 expect.objectContaining({
                     userId: otherCredentials.userId,
                 }),

@@ -11,8 +11,6 @@
             "other": "%(count)s непрочитаних повідомлень включно зі згадками.",
             "one": "1 непрочитана згадка."
         },
-        "recent_rooms": "Недавні кімнати",
-        "room_name": "Кімната %(name)s",
         "room_status_bar": "Панель стану кімнати",
         "seek_bar_label": "Панель гортання аудіо",
         "unread_messages": "Непрочитані повідомлення."
@@ -22,7 +20,6 @@
         "accept": "Погодитись",
         "add": "Додати",
         "add_existing_room": "Додати наявну кімнату",
-        "add_people": "Додати людей",
         "apply": "Застосувати",
         "approve": "Дозволити",
         "ask_to_join": "Запит на приєднання",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Перейти у повноекранний режим",
         "exit_fullscreeen": "Вийти з повноекранного режиму",
         "expand": "Розгорнути",
-        "explore_public_rooms": "Переглянути загальнодоступні кімнати",
         "explore_rooms": "Каталог кімнат",
         "export": "Експортувати",
         "forward": "Переслати",
@@ -69,8 +65,6 @@
         "ignore": "Ігнорувати",
         "import": "Імпорт",
         "invite": "Запросити",
-        "invite_to_space": "Запросити до простору",
-        "invites_list": "Запрошення",
         "join": "Приєднатися",
         "learn_more": "Докладніше",
         "leave": "Вийти",
@@ -116,8 +110,6 @@
         "sign_out": "Вилучити цей пристрій",
         "skip": "Пропустити",
         "start": "Почати",
-        "start_chat": "Почати бесіду",
-        "start_new_chat": "Почати бесіду",
         "stop": "Припинити",
         "submit": "Надіслати",
         "subscribe": "Підписатись",
@@ -496,7 +488,6 @@
         "go_to_settings": "Перейти до налаштувань",
         "guest": "Гість",
         "help": "Довідка",
-        "historical": "Історичні",
         "home": "Домівка",
         "homeserver": "Домашній сервер",
         "identity_server": "Сервер ідентифікації",
@@ -508,7 +499,6 @@
         "light": "Світла",
         "loading": "Завантаження…",
         "location": "Місцеперебування",
-        "low_priority": "Неважливі",
         "matrix": "Matrix",
         "message": "Повідомлення",
         "message_layout": "Макет повідомлення",
@@ -575,7 +565,6 @@
         "success": "Успіх",
         "suggestions": "Пропозиції",
         "support": "Підтримка",
-        "system_alerts": "Системні попередження",
         "theme": "Тема",
         "thread": "Гілка",
         "threads": "Гілки",
@@ -592,7 +581,6 @@
         "username": "Ім'я користувача",
         "verified": "Звірений",
         "version": "Версія",
-        "video": "Відео",
         "video_room": "Відеокімната",
         "view_message": "Переглянути повідомлення",
         "warning": "Попередження"
@@ -1546,7 +1534,6 @@
         "group_voip": "Голос і відео",
         "group_widgets": "Віджети",
         "hidebold": "Сховати крапку сповіщення ( показувати тільки значки лічильників)",
-        "html_topic": "Показати HTML-подання тем кімнати",
         "join_beta": "Долучитися до бета-тестування",
         "join_beta_reload": "Перехід до бета-тестування перезавантажить %(brand)s.",
         "jump_to_date": "Перейти до дати (додає /jumptodate і переходить до заголовків дати)",
@@ -1559,7 +1546,6 @@
         "login_with_qr": "Увійти за допомогою QR-коду",
         "mjolnir": "Нові способи нехтувати людей",
         "msc3531_hide_messages_pending_moderation": "Дозволити модераторам ховати повідомлення у черзі модерування.",
-        "new_room_list": "Увімкнути новий список кімнат",
         "notification_settings": "Нові налаштування сповіщень",
         "notification_settings_beta_caption": "Представляємо простіший спосіб змінювати налаштування сповіщень. Налаштуйте %(brand)s, саме так, як вам подобається.",
         "notification_settings_beta_title": "Налаштування сповіщень",
@@ -1570,7 +1556,6 @@
         "sliding_sync_description": "На стадії активної розробки, вимкнути не можна.",
         "sliding_sync_disabled_notice": "Увійдіть повторно, щоб вимкнути",
         "sliding_sync_server_no_support": "На вашому сервері відсутня підтримка",
-        "under_active_development": "У стадії активної розробки.",
         "unrealiable_e2e": "Ненадійно в зашифрованих кімнатах",
         "video_rooms": "Відеокімнати",
         "video_rooms_a_new_way_to_chat": "Новий спосіб спілкування за допомогою голосового та відеозв’язку в %(brand)s.",
@@ -1625,9 +1610,6 @@
         "room_leave_mod_warning": "Ви єдиний модератор у цій кімнаті. Якщо ви вийдете, ніхто не зможе змінити налаштування кімнати або зробити інші важливі дії.",
         "room_rejoin_warning": "Ця кімната не загальнодоступна. Ви не зможете повторно приєднатися без запрошення.",
         "space_rejoin_warning": "Цей простір не загальнодоступний. Ви не зможете приєднатися знову без запрошення."
-    },
-    "left_panel": {
-        "open_dial_pad": "Відкрити номеронабирач"
     },
     "lightbox": {
         "rotate_left": "Обернути ліворуч",
@@ -1823,7 +1805,6 @@
     },
     "quick_settings": {
         "all_settings": "Усі налаштування",
-        "metaspace_section": "Закріплення на бічній панелі",
         "sidebar_settings": "Інші опції",
         "title": "Швидкі налаштування"
     },
@@ -2127,45 +2108,20 @@
         "waiting_for_join_title": "Очікування приєднання користувача до %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Додати кімнату",
         "add_space_label": "Додати простір",
-        "breadcrumbs_empty": "Немає недавно відвіданих кімнат",
-        "breadcrumbs_label": "Недавно відвідані кімнати",
         "failed_add_tag": "Не вдалось додати до кімнати мітку %(tagName)s",
         "failed_remove_tag": "Не вдалося прибрати з кімнати мітку %(tagName)s",
         "failed_set_dm_tag": "Не вдалося встановити мітку особистого повідомлення",
-        "home_menu_label": "Параметри домівки",
-        "join_public_room_label": "Приєднатись до загальнодоступної кімнати",
-        "joining_rooms_status": {
-            "one": "Приєднання до %(count)s кімнати",
-            "other": "Приєднання до %(count)s кімнат"
-        },
         "list_title": "Список кімнат",
         "more_options": {
             "leave_room": "Вийти з кімнати"
         },
         "notification_options": "Параметри сповіщень",
-        "redacting_messages_status": {
-            "one": "Триває видалення повідомлень в %(count)s кімнаті",
-            "other": "Триває видалення повідомлень у %(count)s кімнатах"
-        },
         "section": {
             "chats": "Бесіди",
             "low_priority": "Неважливі"
         },
-        "show_less": "Згорнути",
-        "show_n_more": {
-            "other": "Показати ще %(count)s",
-            "one": "Показати ще %(count)s"
-        },
-        "show_previews": "Показувати попередній перегляд повідомлень",
-        "sort_by": "Упорядкувати за",
-        "sort_by_activity": "Активністю",
-        "sort_by_alphabet": "А-Я",
-        "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
-        "space_menu_label": "%(spaceName)s — меню",
-        "sublist_options": "Параметри переліку",
-        "suggested_rooms_heading": "Пропоновані кімнати"
+        "show_less": "Згорнути"
     },
     "room_settings": {
         "access": {
@@ -2990,13 +2946,11 @@
         "showbold": "Показати всю діяльність у списку кімнат (крапки або кількість непрочитаних повідомлень)",
         "sidebar": {
             "dialog_title": "<strong>Налаштування:</strong> Бічна панель",
-            "metaspaces_favourites_description": "Групуйте всі свої улюблені кімнати та людей в одному місці.",
             "metaspaces_home_all_rooms": "Показати всі кімнати",
             "metaspaces_home_all_rooms_description": "Показати всі кімнати в домівці, навіть ті, що належать до просторів.",
             "metaspaces_home_description": "Домівка надає загальний огляд усього.",
             "metaspaces_orphans": "Кімнати без просторів",
             "metaspaces_orphans_description": "Групуйте всі свої кімнати, не приєднані до простору, в одному місці.",
-            "metaspaces_people_description": "Групуйте всіх своїх людей в одному місці.",
             "metaspaces_subsection": "Показувати такі простори",
             "metaspaces_video_rooms": "Відеокімнати та конференції",
             "metaspaces_video_rooms_description": "Згрупувати всі приватні відеокімнати та конференції.",
@@ -3205,12 +3159,6 @@
     },
     "space_settings": {
         "title": "Налаштування — %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "У вас немає дозволу додавати кімнати до цього простору",
-        "error_no_permission_add_space": "У вас немає дозволу додавати простори до цього простору",
-        "error_no_permission_create_room": "У вас немає дозволу створювати кімнати в цьому просторі",
-        "error_no_permission_invite": "Ви не маєте дозволу запрошувати людей до цього простору"
     },
     "spotlight": {
         "public_rooms": {

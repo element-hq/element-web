@@ -11,8 +11,6 @@
             "other": "%(count)s messages non lus y compris les mentions.",
             "one": "1 mention non lue."
         },
-        "recent_rooms": "Salons récents",
-        "room_name": "Salon %(name)s",
         "room_status_bar": "Barre de statut du salon",
         "seek_bar_label": "Barre de recherche audio",
         "unread_messages": "Messages non lus."
@@ -22,7 +20,6 @@
         "accept": "Accepter",
         "add": "Ajouter",
         "add_existing_room": "Ajouter un salon existant",
-        "add_people": "Ajouter des personnes",
         "apply": "Appliquer",
         "approve": "Approuver",
         "ask_to_join": "Demander à rejoindre",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Afficher en plein écran",
         "exit_fullscreeen": "Quitter le plein écran",
         "expand": "Développer",
-        "explore_public_rooms": "Parcourir les salons publics",
         "explore_rooms": "Parcourir les salons",
         "export": "Exporter",
         "forward": "Transférer",
@@ -69,8 +65,6 @@
         "ignore": "Ignorer",
         "import": "Importer",
         "invite": "Inviter",
-        "invite_to_space": "Inviter dans l’espace",
-        "invites_list": "Invitations",
         "join": "Rejoindre",
         "learn_more": "En savoir plus",
         "leave": "Quitter",
@@ -116,8 +110,6 @@
         "sign_out": "Supprimer cet appareil",
         "skip": "Passer",
         "start": "Commencer",
-        "start_chat": "Commencer une conversation privée",
-        "start_new_chat": "Commencer une nouvelle conversation privée",
         "stop": "Arrêter",
         "submit": "Soumettre",
         "subscribe": "S’inscrire",
@@ -496,7 +488,6 @@
         "go_to_settings": "Aller aux paramètres",
         "guest": "Visiteur",
         "help": "Aide",
-        "historical": "Historique",
         "home": "Accueil",
         "homeserver": "Serveur d’accueil",
         "identity_server": "Serveur d’identité",
@@ -508,7 +499,6 @@
         "light": "Clair",
         "loading": "Chargement…",
         "location": "Position",
-        "low_priority": "Priorité basse",
         "matrix": "Matrix",
         "message": "Message",
         "message_layout": "Mise en page des messages",
@@ -574,7 +564,6 @@
         "success": "Succès",
         "suggestions": "Suggestions",
         "support": "Prise en charge",
-        "system_alerts": "Alertes système",
         "theme": "Thème",
         "thread": "Discussion",
         "threads": "Fils de discussion",
@@ -591,7 +580,6 @@
         "username": "Nom d’utilisateur",
         "verified": "Vérifiée",
         "version": "Version",
-        "video": "Vidéo",
         "video_room": "Salon vidéo",
         "view_message": "Afficher le message",
         "warning": "Attention"
@@ -1560,7 +1548,6 @@
         "group_voip": "Audio et vidéo",
         "group_widgets": "Widgets",
         "hidebold": "Masquer le point de notification (affiche seulement les badges des compteurs)",
-        "html_topic": "Afficher la version HTML des sujets des salons",
         "join_beta": "Rejoindre la bêta",
         "join_beta_reload": "Rejoindre la bêta va recharger %(brand)s.",
         "jump_to_date": "Aller à la date (ajoute /jumptodate et va sur les en-têtes de date)",
@@ -1573,7 +1560,6 @@
         "login_with_qr": "Se connecter avec un code QR",
         "mjolnir": "Nouvelles manières d’ignorer des gens",
         "msc3531_hide_messages_pending_moderation": "Permettre aux modérateurs de cacher des messages en attente de modération.",
-        "new_room_list": "Activer la nouvelle liste de salons",
         "notification_settings": "Nouveaux paramètres de notification",
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
@@ -1584,7 +1570,6 @@
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Connectez-vous à nouveau pour désactiver",
         "sliding_sync_server_no_support": "Votre serveur n'est pas pris en charge",
-        "under_active_development": "En cours de développement.",
         "unrealiable_e2e": "Non fiable dans les salons chiffrés",
         "video_rooms": "Salons vidéo",
         "video_rooms_a_new_way_to_chat": "Une nouvelle façons de discuter avec la voix et la vidéo dans %(brand)s.",
@@ -1639,9 +1624,6 @@
         "room_leave_mod_warning": "Vous êtes le seul modérateur dans ce salon. Si vous partez, personne ne pourra modifier les paramètres du salon ou entreprendre d’autres actions importantes.",
         "room_rejoin_warning": "Ce salon n’est pas public. Vous ne pourrez pas y revenir sans invitation.",
         "space_rejoin_warning": "Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation."
-    },
-    "left_panel": {
-        "open_dial_pad": "Ouvrir le pavé de numérotation"
     },
     "lightbox": {
         "rotate_left": "Tourner à gauche",
@@ -1839,7 +1821,6 @@
     },
     "quick_settings": {
         "all_settings": "Tous les paramètres",
-        "metaspace_section": "Épingler à la barre latérale",
         "sidebar_settings": "Plus d’options",
         "title": "Paramètres rapides"
     },
@@ -2141,46 +2122,21 @@
         "waiting_for_join_title": "En attente de connexion des utilisateurs à %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Ajouter un salon",
         "add_space_label": "Ajouter un espace",
-        "breadcrumbs_empty": "Aucun salon visité récemment",
-        "breadcrumbs_label": "Salons visités récemment",
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
-        "home_menu_label": "Options de l’accueil",
-        "join_public_room_label": "Rejoindre le salon public",
-        "joining_rooms_status": {
-            "one": "Vous êtes en train de rejoindre %(count)s salon",
-            "other": "Vous êtes en train de rejoindre %(count)s salons"
-        },
         "list_title": "Liste de salons",
         "more_options": {
             "leave_room": "Quitter le salon"
         },
         "notification_options": "Paramètres de notifications",
-        "redacting_messages_status": {
-            "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
-            "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
-        },
         "section": {
             "chats": "Discussions",
             "favourites": "Favoris",
             "low_priority": "Priorité basse"
         },
-        "show_less": "En voir moins",
-        "show_n_more": {
-            "other": "En afficher %(count)s de plus",
-            "one": "En afficher %(count)s de plus"
-        },
-        "show_previews": "Afficher un aperçu des messages",
-        "sort_by": "Trier par",
-        "sort_by_activity": "Activité",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Afficher les salons non lus en premier",
-        "space_menu_label": "Menu %(spaceName)s",
-        "sublist_options": "Options de liste",
-        "suggested_rooms_heading": "Salons recommandés"
+        "show_less": "En voir moins"
     },
     "room_settings": {
         "access": {
@@ -3004,13 +2960,11 @@
         "showbold": "Afficher toute l'activité dans la liste des salons (points ou nombre de messages non lus)",
         "sidebar": {
             "dialog_title": "<strong>Paramètres : </strong> Barre latérale",
-            "metaspaces_favourites_description": "Regroupez tous vos salons et personnes préférés au même endroit.",
             "metaspaces_home_all_rooms": "Afficher tous les salons",
             "metaspaces_home_all_rooms_description": "Affiche tous vos salons dans l’accueil, même s’ils font partis d’un espace.",
             "metaspaces_home_description": "L’accueil permet d’avoir un aperçu global.",
             "metaspaces_orphans": "Salons en dehors d’un espace",
             "metaspaces_orphans_description": "Regroupe tous les salons n’appartenant pas à un espace au même endroit.",
-            "metaspaces_people_description": "Regrouper toutes vos connaissances au même endroit.",
             "metaspaces_subsection": "Espaces à afficher",
             "metaspaces_video_rooms": "Salons vidéo et conférences",
             "metaspaces_video_rooms_description": "Regroupez tous les salons vidéo et conférences.",
@@ -3229,12 +3183,6 @@
     },
     "space_settings": {
         "title": "Paramètres - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Vous n’avez pas la permission d’ajouter des salons à cet espace",
-        "error_no_permission_add_space": "Vous n'avez pas les permissions nécessaires pour ajouter des espaces à cet espace",
-        "error_no_permission_create_room": "Vous n’avez pas la permission de créer de nouveaux salons dans cet espace",
-        "error_no_permission_invite": "Vous n’avez pas la permission d’inviter des personnes dans cet espace"
     },
     "spotlight": {
         "public_rooms": {

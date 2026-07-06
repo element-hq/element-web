@@ -10,52 +10,28 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    EventTimeline,
-    EventTimelineSet,
-    type ICreateClientOpts,
     type IStartClientOpts,
     type MatrixClient,
     MemoryStore,
-    type OAuth2,
     PendingEventOrdering,
-    type RoomNameState,
-    RoomNameType,
-    TokenRefresher,
+    type OAuth2,
 } from "matrix-js-sdk/src/matrix";
-import { VerificationMethod } from "matrix-js-sdk/src/types";
 import * as utils from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import createMatrixClient from "./utils/createMatrixClient";
 import SettingsStore from "./settings/SettingsStore";
 import MatrixActionCreators from "./actions/MatrixActionCreators";
 import Modal from "./Modal";
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from "./utils/StorageManager";
-import IdentityAuthClient from "./IdentityAuthClient";
-import { crossSigningCallbacks } from "./SecurityManager";
 import { SlidingSyncManager } from "./SlidingSyncManager";
 import { _t, UserFriendlyError } from "./languageHandler";
 import MatrixClientBackedController from "./settings/controllers/MatrixClientBackedController";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import PlatformPeg from "./PlatformPeg";
-import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
-import { persistTokens } from "./utils/tokens/tokens.ts";
-
-export interface IMatrixClientCreds {
-    homeserverUrl: string;
-    identityServerUrl?: string;
-    userId: string;
-    deviceId?: string;
-    accessToken: string;
-    refreshToken?: string;
-    guest?: boolean;
-    pickleKey?: string;
-    freshLogin?: boolean;
-}
 
 export interface MatrixClientPegAssignOpts {
     /**
@@ -107,6 +83,13 @@ export interface IMatrixClientPeg {
     get oauth(): OAuth2 | null;
 
     /**
+     * Sets the current MatrixClient.
+     * @param client The MatrixClient instance to set
+     * @param oauth The OAuth2 instance to set for OAuth2-native sessions
+     */
+    set(client: MatrixClient, oauth: OAuth2): void;
+
+    /**
      * Unset the current MatrixClient
      */
     unset(): void;
@@ -150,16 +133,6 @@ export interface IMatrixClientPeg {
      * returns a boolean of whether it was after a given timestamp.
      */
     userRegisteredAfter(date: Date): boolean;
-
-    /**
-     * Replace this MatrixClientPeg's client with a client instance that has
-     * homeserver / identity server URLs and active credentials
-     *
-     * @param creds The new credentials to use.
-     * @param oauth The OAuth2 object to use for token refreshes, or null if not applicable.
-     *     Only specified for OAuth-native sessions.
-     */
-    replaceUsingCreds(creds: IMatrixClientCreds, oauth: OAuth2 | null): void;
 }
 
 /**
@@ -194,6 +167,11 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             throw new UserFriendlyError("error_user_not_logged_in");
         }
         return this.matrixClient;
+    }
+
+    public set(client: MatrixClient, oauth: OAuth2): void {
+        this.matrixClient = client;
+        this.oauth = oauth;
     }
 
     public unset(): void {
@@ -236,10 +214,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         } catch {
             return false;
         }
-    }
-
-    public replaceUsingCreds(creds: IMatrixClientCreds, oauth: OAuth2 | null): void {
-        this.createClient(creds, oauth);
     }
 
     private onUnexpectedStoreClose = async (): Promise<void> => {
@@ -390,114 +364,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         logger.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.matrixClient!.startClient(opts);
         logger.log(`MatrixClientPeg: MatrixClient started`);
-    }
-
-    private namesToRoomName(names: string[], count: number): string | undefined {
-        const countWithoutMe = count - 1;
-        if (!names.length) {
-            return _t("empty_room");
-        }
-        if (names.length === 1 && countWithoutMe <= 1) {
-            return names[0];
-        }
-    }
-
-    private memberNamesToRoomName(names: string[], count: number): string {
-        const name = this.namesToRoomName(names, count);
-        if (name) return name;
-
-        if (names.length === 2 && count === 2) {
-            return formatList(names);
-        }
-        return formatList(names, 1);
-    }
-
-    private inviteeNamesToRoomName(names: string[], count: number): string {
-        const name = this.namesToRoomName(names, count);
-        if (name) return name;
-
-        if (names.length === 2 && count === 2) {
-            return _t("inviting_user1_and_user2", {
-                user1: names[0],
-                user2: names[1],
-            });
-        }
-        return _t("inviting_user_and_n_others", {
-            user: names[0],
-            count: count - 1,
-        });
-    }
-
-    private createClient(creds: IMatrixClientCreds, oauth: OAuth2 | null): void {
-        let tokenRefreshFunction: ICreateClientOpts["tokenRefreshFunction"];
-        if (creds.refreshToken && oauth) {
-            const tokenRefresher = new TokenRefresher(oauth, persistTokens.bind(null, creds.pickleKey));
-            tokenRefreshFunction = tokenRefresher?.tokenRefreshFunction;
-        } else {
-            logger.debug("No refresh token was supplied: access token will not be refreshed");
-        }
-
-        const opts: ICreateClientOpts = {
-            baseUrl: creds.homeserverUrl,
-            idBaseUrl: creds.identityServerUrl,
-            accessToken: creds.accessToken,
-            refreshToken: creds.refreshToken,
-            tokenRefreshFunction,
-            userId: creds.userId,
-            deviceId: creds.deviceId,
-            pickleKey: creds.pickleKey,
-            timelineSupport: true,
-            forceTURN: !SettingsStore.getValue("webRtcAllowPeerToPeer"),
-            fallbackICEServerAllowed: !!SettingsStore.getValue("fallbackICEServerAllowed"),
-            // Gather up to 20 ICE candidates when a call arrives: this should be more than we'd
-            // ever normally need, so effectively this should make all the gathering happen when
-            // the call arrives.
-            iceCandidatePoolSize: 20,
-            verificationMethods: [
-                VerificationMethod.Sas,
-                VerificationMethod.ShowQrCode,
-                VerificationMethod.Reciprocate,
-            ],
-            identityServer: new IdentityAuthClient(),
-            // These are always installed regardless of the labs flag so that cross-signing features
-            // can toggle on without reloading and also be accessed immediately after login.
-            cryptoCallbacks: { ...crossSigningCallbacks },
-            enableEncryptedStateEvents: SettingsStore.getValue("feature_msc4362_encrypted_state_events"),
-            unstableMSC1763Retention: SettingsStore.getValue("feature_retention"),
-            roomNameGenerator: (_: string, state: RoomNameState) => {
-                switch (state.type) {
-                    case RoomNameType.Generated:
-                        switch (state.subtype) {
-                            case "Inviting":
-                                return this.inviteeNamesToRoomName(state.names, state.count);
-                            default:
-                                return this.memberNamesToRoomName(state.names, state.count);
-                        }
-                    case RoomNameType.EmptyRoom:
-                        if (state.oldName) {
-                            return _t("empty_room_was_name", {
-                                oldName: state.oldName,
-                            });
-                        } else {
-                            return _t("empty_room");
-                        }
-                    default:
-                        return null;
-                }
-            },
-        };
-
-        this.matrixClient = createMatrixClient(opts);
-        this.matrixClient.setGuest(Boolean(creds.guest));
-        this.oauth2 = oauth;
-
-        const notifTimelineSet = new EventTimelineSet(undefined, {
-            timelineSupport: true,
-            pendingEvents: false,
-        });
-        // XXX: what is our initial pagination token?! it somehow needs to be synchronised with /sync.
-        notifTimelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);
-        this.matrixClient.setNotifTimelineSet(notifTimelineSet);
     }
 }
 

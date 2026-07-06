@@ -20,7 +20,7 @@ import AuthPage from "../../views/auth/AuthPage";
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { type IMatrixClientCreds } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../utils/createMatrixClient";
 import PasswordLogin from "../../views/auth/PasswordLogin";
 import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";

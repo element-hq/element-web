@@ -14,10 +14,10 @@ import { MatrixClient, OAuth2, createClient, SSOAction, decodeBase64 } from "mat
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
+import { MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
-import createMatrixClient from "./utils/createMatrixClient";
+import { createMatrixClient, createClientWithCreds, type IMatrixClientCreds } from "./utils/createMatrixClient";
 import Notifier from "./Notifier";
 import UserActivity from "./UserActivity";
 import Presence from "./Presence";
@@ -816,7 +816,7 @@ async function doSetLoggedIn(
 
     // check the session lock just before creating the new client
     checkSessionLock();
-    MatrixClientPeg.replaceUsingCreds(credentials, auth ?? null);
+    MatrixClientPeg.set(createClientWithCreds(credentials, auth ?? null));
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);
