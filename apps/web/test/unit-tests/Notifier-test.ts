@@ -21,6 +21,7 @@ import {
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { randomUUID } from "node:crypto";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
@@ -46,7 +47,6 @@ import { type ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload"
 import { Action } from "../../src/dispatcher/actions";
 import { addReplyToMessageContent } from "../../src/utils/Reply";
 import { TestSDKContext } from "./TestSDKContext.ts";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor.ts";
 
 jest.mock("../../src/utils/notifications", () => ({
     // @ts-ignore
@@ -771,7 +771,7 @@ describe("Notifier", () => {
     });
 
     describe("setEnabled", () => {
-        it("should call fire notifier_enabled when permission is granted", async () => {
+        it("should call fire notifier_enabled value=true when permission is granted", async () => {
             const dispatchSpy = jest.spyOn(dis, "dispatch");
             const notifier = new Notifier(dis, context);
 
@@ -784,6 +784,18 @@ describe("Notifier", () => {
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: "notifier_enabled",
                 value: true,
+            });
+        });
+
+        it("should call fire notifier_enabled value=false when disabling", async () => {
+            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const notifier = new Notifier(dis, context);
+
+            notifier.setEnabled(false);
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "notifier_enabled",
+                value: false,
             });
         });
     });
