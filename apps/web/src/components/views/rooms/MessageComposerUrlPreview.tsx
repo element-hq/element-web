@@ -13,7 +13,7 @@ import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import PlatformPeg from "../../../PlatformPeg";
 import { ModuleApi } from "../../../modules/Api";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
@@ -45,7 +45,7 @@ export function MessageComposerUrlPreviewWrapper({
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
     moduleApi?: ModuleApi;
 }): ReactNode | null {
-    const { showUrlPreview, roomId } = useScopedRoomContext("showUrlPreview", "roomId");
+    const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
     const [customComponent, setCustomComponent] = useState<React.JSX.Element | null>(null);
 
     // Rather than checking each time the text changes, we only do a URL check every 500ms to avoid

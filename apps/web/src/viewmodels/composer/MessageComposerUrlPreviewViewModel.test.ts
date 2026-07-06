@@ -30,6 +30,7 @@ function getViewModel({ visible } = { visible: true }): {
     const vm = new MessageComposerUrlPreviewViewModel({ client, visible, showTooltips: false });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }
+
 describe("MessageComposerUrlPreviewViewModel", () => {
     let originalDevicePixelRatio: Window["devicePixelRatio"];
     beforeAll(() => {

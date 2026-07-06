@@ -22,6 +22,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CustomComponentsApi } from "../../../modules/customComponentApi";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 
 // @vitest-environment happy-dom
 
@@ -32,6 +33,14 @@ const BASIC_PREVIEW_OGDATA = {
     "og:url": "https://example.org",
     "og:site_name": "Example.org",
 };
+
+function getUrlPreviewVm(client: MatrixClient): MessageComposerUrlPreviewViewModel {
+    return new MessageComposerUrlPreviewViewModel({
+        client,
+        visible: true,
+        showTooltips: false,
+    });
+}
 
 describe("MessageComposerUrlPreview", () => {
     let client: MatrixClient;
@@ -66,11 +75,11 @@ describe("MessageComposerUrlPreview", () => {
     }
 
     test("to be empty without a link to preview", () => {
-        const { container } = wrapComponent(<MessageComposerUrlPreviewWrapper content="Test a string" />);
+        const { container } = wrapComponent(<MessageComposerUrlPreviewWrapper content="Test a string" urlPreviewVm={getUrlPreviewVm(client)} />);
         expect(container).toMatchInlineSnapshot(`<div />`);
     });
     test("to contain a link when there is a URL", async () => {
-        const { getByText } = wrapComponent(<MessageComposerUrlPreviewWrapper content="https://example.org" />);
+        const { getByText } = wrapComponent(<MessageComposerUrlPreviewWrapper content="https://example.org" urlPreviewVm={getUrlPreviewVm(client)} />);
         await waitFor(
             () => {
                 expect(getByText("Example.org")).toBeDefined();
@@ -87,7 +96,7 @@ describe("MessageComposerUrlPreview", () => {
             () => <strong>Fake preview</strong>,
         );
         const { getByText } = wrapComponent(
-            <MessageComposerUrlPreviewWrapper content="https://example.org" moduleApi={modApi} />,
+            <MessageComposerUrlPreviewWrapper content="https://example.org" moduleApi={modApi} urlPreviewVm={getUrlPreviewVm(client)} />,
         );
         await waitFor(
             () => {
