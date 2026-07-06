@@ -63,6 +63,10 @@ export interface UserMenuViewSnapshot {
      */
     showUserStatus?: boolean;
     /**
+     * ViewModel for the set status view.
+     */
+    setStatusViewModel: SetStatusViewModel;
+    /**
      * A set of actions that the user can perform from the menu.
      */
     actions: Partial<{
@@ -117,14 +121,13 @@ export declare interface UserMenuViewActions {
 
 export type UserMenuViewProps = {
     vm: ViewModel<UserMenuViewSnapshot, UserMenuViewActions>;
-    setStatusVm: SetStatusViewModel;
     /**
      * Class name for the wrapper
      */
     className?: string;
 };
 
-export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps): JSX.Element {
+export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
     const {
         userId,
         displayName,
@@ -135,6 +138,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
         actions,
         showAvatar,
         userStatus,
+        setStatusViewModel,
         showUserStatus = true,
     } = useViewModel(vm);
     const { translate: _t } = useI18n();
@@ -170,7 +174,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                     <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
-                    {showUserStatus && <SetStatusView vm={setStatusVm} />}
+                    {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
                 </section>
                 <section className={classNames(styles.profile, styles.profileSecondary)}>
                     <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>

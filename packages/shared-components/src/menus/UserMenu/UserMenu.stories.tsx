@@ -11,9 +11,14 @@ import { fn } from "storybook/test";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
-import { useMockedViewModel } from "../../core/viewmodel";
+import { MockViewModel, useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
-import { type SetStatusViewActions, type SetStatusViewSnapshot } from "../..";
+import { type SetStatusViewSnapshot } from "../..";
+
+class MockSetStatusViewModel extends MockViewModel<SetStatusViewSnapshot> {
+    public setStatus = fn();
+    public clearStatus = fn();
+}
 
 const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
     const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(snapshot, {
@@ -28,15 +33,7 @@ const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
         clearStatus: fn(),
     });
 
-    const setStatusVm = useMockedViewModel<SetStatusViewSnapshot, SetStatusViewActions>(
-        {},
-        {
-            setStatus: fn(),
-            clearStatus: fn(),
-        },
-    );
-
-    return <UserMenuView vm={vm} setStatusVm={setStatusVm} />;
+    return <UserMenuView vm={vm} />;
 };
 
 const UserMenuWrapper = withViewDocs(UserMenuWrapperImpl, UserMenuView);
@@ -70,11 +67,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+    args: {
+        setStatusViewModel: new MockSetStatusViewModel({}),
+    },
+};
 
 export const LongerName: Story = {
     args: {
         displayName: "Sally Sanderson with a longer name",
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
 };
 
@@ -100,6 +102,7 @@ export const Open: Story = {
         userId: "@person-name:homeserver.com",
         expanded: true,
         showAvatar: true,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
     parameters: {
         a11y: {
@@ -125,6 +128,7 @@ export const OpenVeryLongName: Story = {
         userId: "@person-whose-username-some-might-consider-to-be-a-little-overly-long-although-thats-their-choice-and-we-must-respect-it:homeserver.com",
         expanded: true,
         showAvatar: true,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
     parameters: {
         a11y: {
@@ -142,6 +146,7 @@ export const Condensed: Story = {
     args: {
         displayName: "Sally Sanderson with a longer name",
         expanded: false,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
 };
 
@@ -152,6 +157,7 @@ export const NoAvatar: Story = {
         expanded: true,
         open: true,
         showAvatar: false,
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
     parameters: Open.parameters,
 };
@@ -162,6 +168,7 @@ export const Guest: Story = {
         userId: "@guest:attendees.example.org",
         manageAccountHref: undefined,
         showAvatar: false,
+        setStatusViewModel: new MockSetStatusViewModel({}),
         actions: {
             createAccount: true,
             signIn: true,
@@ -200,6 +207,7 @@ export const WithStatus: Story = {
             emoji: "🐹",
             text: "On the wheel",
         },
+        setStatusViewModel: new MockSetStatusViewModel({}),
     },
 };
 
@@ -210,6 +218,12 @@ export const WithStatusOpen: Story = {
             emoji: "🐹",
             text: "On the wheel",
         },
+        setStatusViewModel: new MockSetStatusViewModel({
+            userStatus: {
+                emoji: "🐹",
+                text: "On the wheel",
+            },
+        }),
     },
     parameters: {
         a11y: {

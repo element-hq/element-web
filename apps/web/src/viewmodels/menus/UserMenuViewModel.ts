@@ -39,6 +39,8 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
 
+        const setStatusViewModel = new UserMenuSetStatusViewModel({ client });
+
         return {
             open: false,
             userId,
@@ -49,6 +51,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             showAvatar: isAuthenticated,
             userStatus: OwnProfileStore.instance.userStatus,
             showUserStatus: SettingsStore.getValue("feature_user_status"),
+            setStatusViewModel,
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,
