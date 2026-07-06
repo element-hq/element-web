@@ -11,7 +11,7 @@ import { mocked } from "jest-mock";
 import { type Command } from "../../../src/slash-commands/command";
 import { getCommand } from "../../../src/slash-commands/SlashCommands";
 import { stubClient } from "../../test-utils";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import { LocalRoom } from "../../../src/models/LocalRoom";
 
 export function setUpCommandTest(
@@ -40,7 +40,7 @@ export function setUpCommandTest(
         room = new Room(roomId, client, client.getSafeUserId());
     }
 
-    jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
+    jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
 
     mocked(client.getRoom).mockImplementation((rId: string): Room | null => {
         if (rId === roomId) {

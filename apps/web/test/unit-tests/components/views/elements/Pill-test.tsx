@@ -13,7 +13,8 @@ import { mocked, type Mocked } from "jest-mock";
 import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../../src/dispatcher/dispatcher";
-import { Pill, type PillProps, PillType } from "../../../../../src/components/views/elements/Pill";
+import { Pill, type PillProps } from "../../../../../src/components/views/elements/Pill";
+import { PillType } from "../../../../../src/components/views/elements/PillType";
 import {
     filterConsole,
     flushPromises,
@@ -26,9 +27,10 @@ import {
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { type ButtonEvent } from "../../../../../src/components/views/elements/AccessibleButton";
-import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg.ts";
-import { TestSdkContext } from "../../../TestSdkContext.ts";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -49,7 +51,7 @@ describe("<Pill>", () => {
 
     const renderPill = (props: PillProps): void => {
         const cli = MatrixClientPeg.safeGet();
-        const mockSdkContext = new TestSdkContext();
+        const mockSdkContext = new TestSDKContext();
         mockSdkContext.client = cli;
 
         const withDefault = {
@@ -77,7 +79,7 @@ describe("<Pill>", () => {
 
     beforeEach(() => {
         client = mocked(stubClient());
-        SdkContextClass.instance.client = client;
+        SDKContextClass.instance.client = client;
         DMRoomMap.makeShared(client);
         room1 = new Room(room1Id, client, user1Id);
         room1.name = "Room 1";

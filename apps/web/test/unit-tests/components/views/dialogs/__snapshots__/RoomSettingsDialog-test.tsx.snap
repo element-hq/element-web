@@ -4,6 +4,7 @@ exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`]
 NodeList [
   <li
     aria-controls="mx_tabpanel_ROOM_GENERAL_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_GENERAL_TAB_label"
     aria-selected="true"
     class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
     data-testid="settings-tab-ROOM_GENERAL_TAB"
@@ -33,6 +34,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_SECURITY_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_SECURITY_TAB"
@@ -59,6 +61,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_ROLES_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_ROLES_TAB"
@@ -87,6 +90,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_NOTIFICATIONS_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_NOTIFICATIONS_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_NOTIFICATIONS_TAB"
@@ -113,6 +117,7 @@ NodeList [
   </li>,
   <li
     aria-controls="mx_tabpanel_ROOM_POLL_HISTORY_TAB"
+    aria-labelledby="mx_tabpanel_ROOM_POLL_HISTORY_TAB_label"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_POLL_HISTORY_TAB"

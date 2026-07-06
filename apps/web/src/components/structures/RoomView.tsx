@@ -72,7 +72,7 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
-import { type IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
@@ -206,8 +206,6 @@ interface IRoomProps extends RoomViewProps {
      */
     enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
-
-export { MainSplitContentType };
 
 export interface IRoomState {
     room?: Room;

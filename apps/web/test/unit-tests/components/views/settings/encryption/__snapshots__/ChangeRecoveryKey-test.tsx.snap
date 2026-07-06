@@ -6,6 +6,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -169,6 +170,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -329,6 +331,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -511,6 +514,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"
@@ -629,6 +633,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     class="_breadcrumb_t96w3_8"
   >
     <button
+      aria-disabled="false"
       aria-label="Back"
       class="_icon-button_1215g_8"
       data-kind="secondary"

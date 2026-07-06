@@ -11,7 +11,7 @@ import type { MockedObject } from "jest-mock-vitest-adapter";
 import { UserMenuViewModel } from "../../../src/viewmodels/menus/UserMenuViewModel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import SdkConfig from "../../../src/SdkConfig";
 import { Action } from "../../../src/dispatcher/actions";
 import { UserTab } from "../../../src/components/views/dialogs/UserTab";
@@ -29,13 +29,13 @@ describe("UserMenuViewModel", () => {
             getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
             setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         });
-        SdkContextClass.instance.client = client;
+        SDKContextClass.instance.client = client;
     });
     afterEach(() => {
         jest.resetAllMocks();
         SdkConfig.reset();
-        SdkContextClass.instance.onLoggedOut();
-        SdkContextClass.instance.client = undefined;
+        SDKContextClass.instance.onLoggedOut();
+        SDKContextClass.instance.client = undefined;
     });
 
     it("should generate a menu options for a logged in client", () => {

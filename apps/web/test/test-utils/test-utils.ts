@@ -70,7 +70,7 @@ export function stubClient(): MatrixClient {
     vi.spyOn(peg, "get");
     vi.spyOn(peg, "safeGet");
     vi.spyOn(peg, "unset");
-    vi.spyOn(peg, "replaceUsingCreds");
+    vi.spyOn(peg, "set");
     // MatrixClientPeg.safeGet() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
     peg.get = () => client;
@@ -125,6 +125,7 @@ export function createTestClient(): MatrixClient {
             getOwnDeviceKeys: vi.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
             getUserDeviceInfo: vi.fn().mockResolvedValue(new Map()),
             getUserVerificationStatus: vi.fn(),
+            getUserCrossSigningKeys: vi.fn().mockResolvedValue(null),
             getDeviceVerificationStatus: vi.fn(),
             resetKeyBackup: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),

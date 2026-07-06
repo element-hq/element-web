@@ -1,0 +1,95 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { 'og:url': 'https://example.org', 'og:type': 'document', 'og:description': 'A description', 'og:title': '' } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "A description",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { 'og:url': 'https://example.org', 'og:type': 'document', 'og:site_name': 'Site name', 'og:title': '' } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "Site name",
+  "title": "Site name",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { 'og:url': 'https://example.org', 'og:type': 'document', 'og:title': 'Basic title' } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "Basic title",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { 'og:url': 'https://example.org', 'og:type': 'document', 'og:title': 'Cool blog', 'og:site_name': 'Cool site' } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "Cool site",
+  "title": "Cool blog",
+}
+`;
+
+exports[`UrlPreviewFetcher > handles different kinds of opengraph responses { 'og:url': 'https://example.org', 'og:type': 'document', 'og:title': 'Media test', 'og:image:height': '500', 'og:image:width': 500, 'matrix:image:size': 10000, 'og:image': 'mxc://example.org/abc' } 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": {
+    "alt": undefined,
+    "fileSize": 10000,
+    "height": 478,
+    "imageFull": "https://example.org/image/src",
+    "imageThumb": "https://example.org/image/thumb",
+    "playable": false,
+    "width": 478,
+  },
+  "link": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "Media test",
+}
+`;
+
+exports[`UrlPreviewFetcher > should preview a URL with media 1`] = `
+{
+  "author": undefined,
+  "description": undefined,
+  "image": {
+    "alt": undefined,
+    "fileSize": 10000,
+    "height": 128,
+    "imageFull": "https://example.org/image/src",
+    "imageThumb": "https://example.org/image/thumb",
+    "playable": false,
+    "width": 128,
+  },
+  "link": "https://example.org",
+  "showTooltipOnLink": false,
+  "siteIcon": undefined,
+  "siteName": "example.org",
+  "title": "This is an example!",
+}
+`;

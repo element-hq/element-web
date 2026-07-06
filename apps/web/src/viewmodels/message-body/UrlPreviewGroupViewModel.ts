@@ -5,175 +5,48 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    type UrlPreviewGroupViewSnapshot,
-    type UrlPreviewGroupViewActions,
     type UrlPreview,
+    type UrlPreviewGroupViewActions,
+    type UrlPreviewGroupViewSnapshot,
 } from "@element-hq/web-shared-components";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { decode } from "html-entities";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
-import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
-import { mediaFromMxc } from "../../customisations/Media";
-import PlatformPeg from "../../PlatformPeg";
-import { thumbHeight } from "../../ImageUtils";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
+import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
+import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 
-const logger = rootLogger.getChild("UrlPreviewGroupViewModel");
+// From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
+export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
+
+export const MAX_PREVIEWS_WHEN_LIMITED = 2;
+
+export enum PreviewVisibility {
+    /** Preview is entirely hidden and cannot be changed. */
+    Hidden,
+    /** Preview is hidden by the user and may be shown again. */
+    UserHidden,
+    /** Preview is visible but media should not be rendered. */
+    MediaHidden,
+    /** Preview is fully visible including media. */
+    Visible,
+}
 
 export interface UrlPreviewGroupViewModelProps {
     client: MatrixClient;
     mxEvent: MatrixEvent;
-    mediaVisible: boolean;
     visible: boolean;
+    mediaVisible: boolean;
+    showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
 }
 
-export const MAX_PREVIEWS_WHEN_LIMITED = 2;
-export const PREVIEW_WIDTH_PX = 478;
-export const PREVIEW_HEIGHT_PX = 200;
-export const MIN_PREVIEW_PX = 96;
-export const MIN_IMAGE_SIZE_BYTES = 8192;
-// From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
-export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
-
-export enum PreviewVisibility {
-    /**
-     * Preview is entirely hidden from view and can not be changed.
-     */
-    Hidden,
-    /**
-     * Preview is entirely hidden from view but the user may change this.
-     */
-    UserHidden,
-    /**
-     * Preview is visible but media should not be rendered.
-     */
-    MediaHidden,
-    /**
-     * Preview is visible and media should be rendered.
-     */
-    Visible,
-}
-
-/**
- * ViewModel for fetching and rendering URL previews for an individual event.
- */
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
     implements UrlPreviewGroupViewActions
 {
-    /**
-     * Parse a numeric value from OpenGraph. The OpenGraph spec defines all values as strings
-     * although Synapse may return these values as numbers. To be compatible, test strings
-     * and numbers.
-     * @param value The numeric value
-     * @returns A number if the value parsed correctly, or undefined otherwise.
-     */
-    private static getNumberFromOpenGraph(value: number | string | undefined): number | undefined {
-        if (typeof value === "number") {
-            return value;
-        } else if (typeof value === "string" && value) {
-            const i = parseInt(value, 10);
-            if (!isNaN(i)) {
-                return i;
-            }
-        }
-        return undefined;
-    }
-
-    /**
-     * Calculate the best possible title from an opengraph response.
-     * @param response The opengraph response
-     * @param link The link being used to preview.
-     * @returns The title value.
-     */
-    private static getBaseMetadataFromResponse(
-        response: IPreviewUrlResponse,
-        link: string,
-    ): Pick<UrlPreview, "title" | "description" | "siteName"> {
-        let title =
-            typeof response["og:title"] === "string" && response["og:title"].trim()
-                ? response["og:title"].trim()
-                : undefined;
-        let description =
-            typeof response["og:description"] === "string" && response["og:description"].trim()
-                ? response["og:description"].trim()
-                : undefined;
-        const siteName =
-            typeof response["og:site_name"] === "string" && response["og:site_name"].trim()
-                ? response["og:site_name"].trim()
-                : new URL(link).hostname;
-
-        // If there is no title, use the description as the title.
-        if (!title && description) {
-            title = description;
-            description = undefined;
-        } else if (!title && siteName) {
-            title = siteName;
-        } else if (!title) {
-            title = link;
-        }
-
-        // If the description matches the site name, don't bother with a description.
-        if (description && description.toLowerCase() === siteName.toLowerCase()) {
-            description = undefined;
-        }
-
-        return {
-            title,
-            description: description && decode(description),
-            siteName,
-        };
-    }
-
-    /**
-     * Calculate the best possible author from an opengraph response.
-     * @param response The opengraph response
-     * @returns The author value, or undefined if no valid author could be found.
-     */
-    private static getAuthorFromResponse(response: IPreviewUrlResponse): UrlPreview["author"] {
-        let calculatedAuthor: string | undefined;
-        if (response["og:type"] === "article") {
-            if (typeof response["article:author"] === "string" && response["article:author"]) {
-                calculatedAuthor = response["article:author"];
-            }
-            // Otherwise fall through to check the profile.
-        }
-        if (typeof response["profile:username"] === "string" && response["profile:username"]) {
-            calculatedAuthor = response["profile:username"];
-        }
-        if (calculatedAuthor && URL.canParse(calculatedAuthor)) {
-            // Some sites return URLs as authors which doesn't look good in Element, so discard it.
-            return;
-        }
-        return calculatedAuthor;
-    }
-
-    /**
-     * Calculate whether the provided image from the preview response is an full size preview or
-     * a site icon.
-     * @returns `true` if the image should be used as a preview, otherwise `false`
-     */
-    private static isImagePreview(width?: number, height?: number, bytes?: number): boolean {
-        // We can't currently distinguish from a preview image and a favicon. Neither OpenGraph nor Matrix
-        // have a clear distinction, so we're using a heuristic here to check the dimensions & size of the file and
-        // deciding whether to render it as a full preview or icon.
-        if (width && width < MIN_PREVIEW_PX) {
-            return false;
-        }
-        if (height && height < MIN_PREVIEW_PX) {
-            return false;
-        }
-        if (bytes && bytes < MIN_IMAGE_SIZE_BYTES) {
-            return false;
-        }
-        return true;
-    }
-
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -181,36 +54,15 @@ export class UrlPreviewGroupViewModel
      * @returns The value of the `href` of the node, or null if this node cannot be previewed.
      */
     private static getAnchorLink(node: HTMLAnchorElement): string | null {
-        // don't try to preview relative links
         const href = node.getAttribute("href");
-        if (!href || !URL.canParse(href)) {
-            return null;
-        }
+        if (!href || !URL.canParse(href)) return null;
 
         const url = new URL(href);
-        if (!["http:", "https:"].includes(url.protocol)) {
-            return null;
-        }
-        // never preview permalinks (if anything we should give a smart
-        // preview of the room/user they point to: nobody needs to be reminded
-        // what the matrix.to site looks like).
-        if (isPermalinkHost(url.host)) {
-            return null;
-        }
+        if (!["http:", "https:"].includes(url.protocol)) return null;
+        if (isPermalinkHost(url.host)) return null;
 
-        // as a random heuristic to avoid highlighting things like "foo.pl"
-        // we require the linked text to either include a / (either from http://
-        // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
-        // link, in which case we check the target text differs from the link value.
-        if (node.textContent?.includes("/")) {
-            return href;
-        }
-
-        if (node.textContent?.toLowerCase().trim().startsWith(url.host.toLowerCase())) {
-            // it's a "foo.pl" style link
-            return null;
-        }
-        // it's a [foo bar](http://foo.com) style link
+        if (node.textContent?.includes("/")) return href;
+        if (node.textContent?.toLowerCase().trim().startsWith(url.host.toLowerCase())) return null;
         return href;
     }
 
@@ -221,43 +73,26 @@ export class UrlPreviewGroupViewModel
      */
     private static findLinks(nodes: Iterable<Element>): string[] {
         let links = new Set<string>();
-
         for (const node of nodes) {
             if (node.tagName === "A") {
                 const href = this.getAnchorLink(node as HTMLAnchorElement);
-                if (href) {
-                    links.add(href);
-                }
+                if (href) links.add(href);
             } else if (node.tagName === "PRE" || node.tagName === "CODE" || node.tagName === "BLOCKQUOTE") {
                 continue;
-            } else if (node.children && node.children.length) {
+            } else if (node.children?.length) {
                 links = new Set([...links, ...this.findLinks(node.children)]);
             }
         }
         return [...links];
     }
 
-    private readonly client: MatrixClient;
     private readonly storageKey: string;
-    private readonly eventSendTime: number;
-
-    /**
-     * Should the URL preview render according to the application.
-     */
-    private urlPreviewVisible: boolean;
-    /**
-     * Should media be rendered in the preview.
-     */
-    private mediaVisible: boolean;
-    /**
-     * Has the user opted to render this individual preview, or hide it.
-     */
-    private urlPreviewEnabledByUser: boolean;
+    private readonly fetcher: UrlPreviewFetcher;
 
     /**
      * Calculated set of links from the provided DOM element.
      */
-    private links: Array<string> = [];
+    private links: string[] = [];
 
     /**
      * Should the preview limit how many links are rendered. If `false`, all
@@ -266,9 +101,19 @@ export class UrlPreviewGroupViewModel
     private limitPreviews = true;
 
     /**
-     * A cache containing all previously calculated previews.
+     * Should the URL preview render according to the application.
      */
-    private readonly previewCache = new Map<string, UrlPreview>();
+    private urlPreviewVisible: boolean;
+
+    /**
+     * Should media be rendered in the preview.
+     */
+    private mediaVisible: boolean;
+
+    /**
+     * Has the user opted to render this individual preview, or hide it.
+     */
+    private urlPreviewEnabledByUser: boolean;
 
     /**
      * Called when the user clicks on the preview thumbnail.
@@ -276,111 +121,31 @@ export class UrlPreviewGroupViewModel
     public readonly onImageClick: (preview: UrlPreview) => void;
 
     public constructor(props: UrlPreviewGroupViewModelProps) {
-        const storageKey = `hide_preview_${props.mxEvent.getId()}`;
         super(props, {
             previews: [],
             totalPreviewCount: 0,
             previewsLimited: true,
             overPreviewLimit: false,
         });
-        this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(storageKey) !== "1";
+        this.onImageClick = props.onImageClicked;
+        this.storageKey = `hide_preview_${props.mxEvent.getId()}`;
         this.urlPreviewVisible = props.visible;
         this.mediaVisible = props.mediaVisible;
-        this.storageKey = storageKey;
-        this.client = props.client;
-        this.eventSendTime = props.mxEvent.getTs();
-        this.onImageClick = props.onImageClicked;
+        this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(this.storageKey) !== "1";
+        this.fetcher = new UrlPreviewFetcher(props.client, props.mxEvent.getTs(), props.showTooltips);
     }
 
     /**
-     * Fetch a complete preview of a given URL.
-     * Will always return a cached response if it was previously calculated.
-     * @param link A URL to be previewed.
-     * @returns A Promise that returns the snapshot needed to render the preview, or null
-     * if the resource could not be previewed.
+     * `true` only when the user has chosen to hide previews.
      */
-    private async fetchPreview(link: string): Promise<UrlPreview | null> {
-        const cached = this.previewCache.get(link);
-        if (cached) {
-            return cached;
-        }
-        let preview: IPreviewUrlResponse;
-
-        try {
-            preview = await this.client.getUrlPreview(link, this.eventSendTime);
-        } catch (error) {
-            if (error instanceof MatrixError && error.httpStatus === 404) {
-                // Quieten 404 Not found errors, not all URLs can have a preview generated
-                logger.debug("Failed to get URL preview: ", error);
-            } else {
-                logger.error("Failed to get URL preview: ", error);
-            }
-            return null;
-        }
-
-        const { title, description, siteName } = UrlPreviewGroupViewModel.getBaseMetadataFromResponse(preview, link);
-        const author = UrlPreviewGroupViewModel.getAuthorFromResponse(preview);
-        const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
-        // Ensure we have something relevant to render.
-        // The title must not just be the link, or we must have an image.
-        if (title === link && !hasImage) {
-            return null;
-        }
-        let image: UrlPreview["image"];
-        let siteIcon: string | undefined;
-        if (typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden) {
-            const media = mediaFromMxc(preview["og:image"], this.client);
-            const declaredHeight = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
-            const declaredWidth = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
-            const imageSize = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]);
-            const alt = typeof preview["og:image:alt"] === "string" ? preview["og:image:alt"] : undefined;
-
-            const isImagePreview = UrlPreviewGroupViewModel.isImagePreview(declaredWidth, declaredHeight, imageSize);
-            if (isImagePreview) {
-                const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
-                const height =
-                    thumbHeight(width, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
-                const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
-                const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
-                // No thumb, no preview.
-                if (thumb) {
-                    image = {
-                        imageThumb: thumb,
-                        imageFull: media.srcHttp ?? thumb,
-                        width,
-                        height,
-                        fileSize: UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
-                        alt,
-                        playable,
-                    };
-                }
-            } else if (media.srcHttp) {
-                siteIcon = media.srcHttp;
-            }
-        }
-
-        const result = {
-            link,
-            title,
-            author,
-            description,
-            siteName,
-            siteIcon,
-            showTooltipOnLink: !!(link !== title && PlatformPeg.get()?.needsUrlTooltips()),
-            image,
-        } satisfies UrlPreview;
-        this.previewCache.set(link, result);
-        return result;
+    public get isPreviewHiddenByUser(): boolean {
+        return this.visibility === PreviewVisibility.UserHidden;
     }
 
     private get visibility(): PreviewVisibility {
-        if (!this.urlPreviewVisible) {
-            return PreviewVisibility.Hidden;
-        } else if (!this.urlPreviewEnabledByUser) {
-            return PreviewVisibility.UserHidden;
-        } else if (!this.mediaVisible) {
-            return PreviewVisibility.MediaHidden;
-        }
+        if (!this.urlPreviewVisible) return PreviewVisibility.Hidden;
+        if (!this.urlPreviewEnabledByUser) return PreviewVisibility.UserHidden;
+        if (!this.mediaVisible) return PreviewVisibility.MediaHidden;
         return PreviewVisibility.Visible;
     }
 
@@ -389,28 +154,29 @@ export class UrlPreviewGroupViewModel
      * for the previously-calculated links.
      */
     private async computeSnapshot(): Promise<void> {
-        // This uses MSC4095. If the sender has sent us an empty URL previews bundle
-        // then they do not want to have URL previews be visible.
+        // MSC4095: an empty bundled previews array means the sender opted out of previews.
         const bundledLinkPreviews = this.props.mxEvent.getContent()[BUNDLED_LINK_PREVIEWS];
         if (Array.isArray(bundledLinkPreviews) && bundledLinkPreviews.length === 0) {
-            return this.snapshot.merge({
+            this.snapshot.merge({
                 previews: [],
                 totalPreviewCount: 0,
                 previewsLimited: false,
                 overPreviewLimit: false,
             });
-        } // otherwise, we do not support bundled previews yet so will fallback to old behaviour.
+            return;
+        }
 
+        const loadMedia = this.visibility === PreviewVisibility.Visible;
         const previews =
             this.visibility <= PreviewVisibility.UserHidden
                 ? []
                 : await Promise.all(
                       this.links
                           .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                          .map((link) => this.fetchPreview(link)),
+                          .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
                   );
         this.snapshot.merge({
-            previews: previews.filter((m) => !!m),
+            previews: previews.filter((p) => !!p),
             totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,
@@ -423,7 +189,6 @@ export class UrlPreviewGroupViewModel
      */
     public async updateEventElement(eventElement: HTMLDivElement | HTMLSpanElement): Promise<void> {
         const newLinks = UrlPreviewGroupViewModel.findLinks([eventElement]);
-        // Only recalculate if the set of links has changed.
         if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {
             this.links = newLinks;
             return this.computeSnapshot();
@@ -431,19 +196,26 @@ export class UrlPreviewGroupViewModel
     }
 
     /**
-     * Update the view model about the status of whether the event should be
-     * viewable.
+     * Update the view model about visible state of previews.
      * @param urlPreviewVisible Whether URL previews are hidden for this room.
-     * @param mediaVisible Whether media is hidden for this room or event.
      *
      * @returns A promise that completes when the snapshot has been recomputed.
      */
-    public readonly updateHidden = (urlPreviewVisible: boolean, mediaVisible: boolean): Promise<void> => {
+    public readonly updateUrlPreviewVisible = (urlPreviewVisible: boolean): Promise<void> => {
         this.urlPreviewVisible = urlPreviewVisible;
+        this.fetcher.clearCache();
+        return this.computeSnapshot();
+    };
+
+    /**
+     * Update the view model about visible state of media.
+     * @param urlPreviewVisible Whether media is hidden for this room or event.
+     *
+     * @returns A promise that completes when the snapshot has been recomputed.
+     */
+    public readonly updateMediaVisible = (mediaVisible: boolean): Promise<void> => {
         this.mediaVisible = mediaVisible;
-        // Changing the visibility here means we need to clear cache as we may need to load
-        // the media again.
-        this.previewCache.clear();
+        this.fetcher.clearCache();
         return this.computeSnapshot();
     };
 
@@ -489,11 +261,4 @@ export class UrlPreviewGroupViewModel
         this.limitPreviews = !this.limitPreviews;
         return this.computeSnapshot();
     };
-
-    /**
-     * `true` only when the user has chosen to hide previews.
-     */
-    public get isPreviewHiddenByUser(): boolean {
-        return this.visibility === PreviewVisibility.UserHidden;
-    }
 }

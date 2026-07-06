@@ -105,7 +105,6 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
-    canMoveToSection: true,
     sections: [],
 });
 
@@ -151,6 +150,9 @@ export const createGetSectionHeaderViewModel = (
             id: sectionId,
             title: sectionId[0].toUpperCase() + sectionId.slice(1),
             isExpanded: true,
+            isUnread: false,
+            displaySectionMenu: false,
+            canBeReordered: true,
         };
         const vm = new MockViewModel(snapshot) as unknown as RoomListSectionHeaderViewModel;
         Object.assign(vm, {
