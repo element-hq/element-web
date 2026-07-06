@@ -65,7 +65,11 @@ describe("message", () => {
     describe("sendMessage", () => {
         it("Should not send empty html message", async () => {
             // When
-            await sendMessage("", true, { roomContext: defaultRoomContext, mxClient: mockClient, urlPreviewSnapshot: { previews: [] } });
+            await sendMessage("", true, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                urlPreviewSnapshot: { previews: [] },
+            });
 
             // Then
             expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
@@ -80,7 +84,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: mockRoomContextWithoutId,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { previews: [] }
+                urlPreviewSnapshot: { previews: [] },
             });
 
             // Then
@@ -94,7 +98,7 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -106,7 +110,7 @@ describe("message", () => {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
                     relation: {},
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -121,7 +125,7 @@ describe("message", () => {
                         event_id: "valid_id",
                         rel_type: "m.does_not_match",
                     },
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -137,7 +141,7 @@ describe("message", () => {
                         event_id: "valid_id",
                         rel_type: "m.thread",
                     },
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -150,7 +154,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { previews: [] }
+                urlPreviewSnapshot: { previews: [] },
             });
 
             // Then
@@ -178,7 +182,7 @@ describe("message", () => {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
                 replyToEvent: mockReplyEvent,
-                urlPreviewSnapshot: { previews: [] }
+                urlPreviewSnapshot: { previews: [] },
             });
 
             // Then
@@ -208,7 +212,7 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                urlPreviewSnapshot: { previews: [] }
+                urlPreviewSnapshot: { previews: [] },
             });
 
             // Then
@@ -220,7 +224,11 @@ describe("message", () => {
 
         it("Should handle emojis", async () => {
             // When
-            await sendMessage("🎉", false, { roomContext: defaultRoomContext, mxClient: mockClient, urlPreviewSnapshot: { previews: [] } });
+            await sendMessage("🎉", false, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                urlPreviewSnapshot: { previews: [] },
+            });
 
             // Then
             expect(spyDispatcher).toHaveBeenCalledWith({ action: "effects.confetti" });
@@ -235,7 +243,7 @@ describe("message", () => {
                 await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -248,7 +256,7 @@ describe("message", () => {
                 await sendMessage(invalidPrefixCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -266,7 +274,7 @@ describe("message", () => {
                 const result = await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // Then
@@ -281,7 +289,7 @@ describe("message", () => {
                     await sendMessage(inputText, true, {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
-                        urlPreviewSnapshot: { previews: [] }
+                        urlPreviewSnapshot: { previews: [] },
                     });
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
                         "myfakeroom",
@@ -301,7 +309,7 @@ describe("message", () => {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
                         relation: mockRelation,
-                        urlPreviewSnapshot: { previews: [] }
+                        urlPreviewSnapshot: { previews: [] },
                     });
 
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
@@ -318,7 +326,7 @@ describe("message", () => {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
                     replyToEvent: mockEvent,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 expect(addReplySpy).toHaveBeenCalledTimes(1);
@@ -333,7 +341,7 @@ describe("message", () => {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
                         replyToEvent: mockEvent,
-                        urlPreviewSnapshot: { previews: [] }
+                        urlPreviewSnapshot: { previews: [] },
                     });
 
                     expect(result).toBeUndefined();
@@ -348,7 +356,7 @@ describe("message", () => {
                 await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 // we expect the message to have been sent
@@ -369,7 +377,7 @@ describe("message", () => {
                 const result = await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    urlPreviewSnapshot: { previews: [] }
+                    urlPreviewSnapshot: { previews: [] },
                 });
 
                 expect(result).toBeUndefined();

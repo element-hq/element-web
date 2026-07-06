@@ -129,10 +129,10 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // Display names are strongly recommended for clarity.
     // Display name can also be an object for different levels.
     displayName?:
-    | TranslationKey
-    | Partial<{
-        [level in SettingLevel]: TranslationKey;
-    }>;
+        | TranslationKey
+        | Partial<{
+              [level in SettingLevel]: TranslationKey;
+          }>;
 
     // Optional description which will be shown as microCopy under SettingsFlags
     description?: TranslationKey | (() => ReactNode);
@@ -664,10 +664,11 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "feature_msc4452_url_preview_bundle": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         labsGroup: LabGroup.Messaging,
         displayName: _td("labs|url_preview_bundle"),
         description: _td("labs|url_preview_bundle_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
         isFeature: true,
         default: false,
     },

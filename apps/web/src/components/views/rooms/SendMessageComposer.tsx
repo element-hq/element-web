@@ -227,10 +227,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
                     const editEvent = events
                         ? findEditableEvent({
-                            events,
-                            isForward: false,
-                            matrixClient: MatrixClientPeg.safeGet(),
-                        })
+                              events,
+                              isForward: false,
+                              matrixClient: MatrixClientPeg.safeGet(),
+                          })
                         : undefined;
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else
@@ -425,7 +425,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     timelineRenderingType: this.context.timelineRenderingType,
                 });
             }
-        }
+        };
 
         if (shouldSend) {
             const { roomId } = this.props.room;
@@ -437,12 +437,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     this.props.relation,
                 );
             }
-            // so the user doesn't actually see the delay of attach URL
-            clearComposerAndPushHistory();
-            await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm.getSnapshot(), content);
 
             // don't bother sending an empty message
             if (!content.body.trim()) return;
+
+            // clear composer first so the user doesn't actually see the delay of attach URL preview image files
+            clearComposerAndPushHistory();
+            await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm.getSnapshot(), content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

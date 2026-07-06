@@ -5,9 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type IContent, type IMentions, type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixEvent,
+    type IContent,
+    type IMentions,
+    type IEventRelation,
+    type MatrixClient,
+} from "matrix-js-sdk/src/matrix";
 import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
@@ -112,6 +119,7 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
         };
     }
 }
+const logger = rootLogger.getChild("attachUrlPreviews");
 
 export async function attachUrlPreviews(
     mxClient: MatrixClient,
@@ -119,7 +127,9 @@ export async function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
 ): Promise<void> {
-    if (!SettingsStore.getValue("feature_msc4452_url_preview_bundle")) { return; }
+    if (!SettingsStore.getValue("feature_msc4452_url_preview_bundle")) {
+        return;
+    }
 
     if (urlPreviewSnapshot.previews.length) {
         content["com.beeper.linkpreviews"] = await Promise.all(
@@ -133,14 +143,14 @@ export async function attachUrlPreviews(
                     try {
                         imageBlob = await (await fetch(preview.image.imageFull)).blob();
                     } catch (e) {
-                        console.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
+                        logger.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
                     }
 
                     if (imageBlob !== null) {
                         try {
                             imageUploaded = await uploadFile(mxClient, roomId, imageBlob);
                         } catch (e) {
-                            console.error("Failed to upload image", e);
+                            logger.error("Failed to upload image", e);
                         }
                     }
                 }
@@ -163,4 +173,3 @@ export async function attachUrlPreviews(
         );
     }
 }
-

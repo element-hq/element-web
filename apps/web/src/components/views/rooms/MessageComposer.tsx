@@ -419,7 +419,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 roomContext: this.context,
                 relation,
                 replyToEvent,
-                urlPreviewSnapshot: this.props.urlPreviewVm.getSnapshot()
+                urlPreviewSnapshot: this.props.urlPreviewVm.getSnapshot(),
             });
         }
     };
@@ -742,9 +742,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 
-export function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
+export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
     const urlPreviewVm = useMessageComposerUrlPreviewViewModel();
     return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
 }
-
-export default MessageComposerWrapper;
