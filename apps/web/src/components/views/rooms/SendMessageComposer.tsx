@@ -412,6 +412,21 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             this.sendQuickReaction();
         }
 
+        const clearComposerAndPushHistory = () => {
+            this.sendHistoryManager.save(model, replyToEvent);
+            // clear composer
+            model.reset([]);
+            this.editorRef.current?.clearUndoHistory();
+            this.editorRef.current?.focus();
+            this.clearStoredEditorState();
+            if (shouldSend && SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+                dis.dispatch({
+                    action: "scroll_to_bottom",
+                    timelineRenderingType: this.context.timelineRenderingType,
+                });
+            }
+        }
+
         if (shouldSend) {
             const { roomId } = this.props.room;
             if (!content) {
@@ -421,9 +436,11 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     replyToEvent,
                     this.props.relation,
                 );
-                // TODO: there is now a noticable delay between pressing enter and sending
-                await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm.getSnapshot(), content);
             }
+            // so the user doesn't actually see the delay of attach URL
+            clearComposerAndPushHistory();
+            await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm.getSnapshot(), content);
+
             // don't bother sending an empty message
             if (!content.body.trim()) return;
 
@@ -464,19 +481,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     sendRoundTripMetric(this.props.mxClient, roomId, resp.event_id);
                 });
             }
-        }
-
-        this.sendHistoryManager.save(model, replyToEvent);
-        // clear composer
-        model.reset([]);
-        this.editorRef.current?.clearUndoHistory();
-        this.editorRef.current?.focus();
-        this.clearStoredEditorState();
-        if (shouldSend && SettingsStore.getValue("scrollToBottomOnMessageSent")) {
-            dis.dispatch({
-                action: "scroll_to_bottom",
-                timelineRenderingType: this.context.timelineRenderingType,
-            });
+        } else {
+            clearComposerAndPushHistory();
         }
     }
 
