@@ -14,9 +14,9 @@ import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import * as AvatarModule from "../../../../../src/Avatar";
 import VideoFeed from "../../../../../src/components/views/voip/VideoFeed";
-import { stubClient, useMockedCalls } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, stubClient, useMockedCalls } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 const FAKE_AVATAR_URL = "http://fakeurl.dummy/fake.png";
 
@@ -24,9 +24,12 @@ describe("VideoFeed", () => {
     useMockedCalls();
 
     let client: MatrixClient;
+    let sdkContext: TestSDKContext;
 
     beforeAll(() => {
         client = stubClient();
+        sdkContext = new TestSDKContext();
+        sdkContext.client = client;
         (AvatarModule as any).avatarUrlForRoom = jest.fn().mockReturnValue(FAKE_AVATAR_URL);
 
         const dmRoomMap = new DMRoomMap(client);
@@ -39,7 +42,7 @@ describe("VideoFeed", () => {
     });
 
     it("Displays the room avatar when no video is available", () => {
-        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "roomIdForCall").mockReturnValue("!this:room.here");
+        jest.spyOn(sdkContext.legacyCallHandler, "roomIdForCall").mockReturnValue("!this:room.here");
 
         const mockCall = {
             room: new Room("!room:example.com", client, client.getSafeUserId()),
@@ -51,7 +54,10 @@ describe("VideoFeed", () => {
             addListener: jest.fn(),
             removeListener: jest.fn(),
         };
-        render(<VideoFeed feed={feed as unknown as CallFeed} call={mockCall as unknown as MatrixCall} />);
+        render(
+            <VideoFeed feed={feed as unknown as CallFeed} call={mockCall as unknown as MatrixCall} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         const avatarImg = screen.getByRole("presentation");
         expect(avatarImg).toHaveAttribute("src", FAKE_AVATAR_URL);
     });
