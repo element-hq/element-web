@@ -6,14 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
-import fetchMock from "@fetch-mock/jest";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import ScalarAuthClient from "../../src/ScalarAuthClient";
-import { stubClient } from "../test-utils";
-import SdkConfig from "../../src/SdkConfig";
-import { WidgetType } from "../../src/widgets/WidgetType";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import ScalarAuthClient from "./ScalarAuthClient";
+import SdkConfig from "./SdkConfig";
+import { WidgetType } from "./widgets/WidgetType";
 
 describe("ScalarAuthClient", function () {
     const apiUrl = "https://test.com/api";
@@ -27,7 +29,7 @@ describe("ScalarAuthClient", function () {
 
     let client: MatrixClient;
     beforeEach(function () {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         client = stubClient();
     });
 
@@ -42,9 +44,9 @@ describe("ScalarAuthClient", function () {
             body: { user_id: client.getUserId() },
         });
 
-        client.getOpenIdToken = jest.fn().mockResolvedValue(tokenObject);
+        client.getOpenIdToken = vi.fn().mockResolvedValue(tokenObject);
 
-        sac.exchangeForScalarToken = jest.fn((arg) => {
+        sac.exchangeForScalarToken = vi.fn((arg) => {
             return Promise.resolve(arg === tokenObject ? "wokentoken" : "othertoken");
         });
 
@@ -91,13 +93,13 @@ describe("ScalarAuthClient", function () {
     describe("registerForToken", () => {
         it("should call `termsInteractionCallback` upon M_TERMS_NOT_SIGNED error", async () => {
             const sac = new ScalarAuthClient(apiUrl + 4, uiUrl);
-            const termsInteractionCallback = jest.fn();
+            const termsInteractionCallback = vi.fn();
             sac.setTermsInteractionCallback(termsInteractionCallback);
             fetchMock.get("https://test.com/api4/account?scalar_token=testtoken1&v=1.1", {
                 body: { errcode: "M_TERMS_NOT_SIGNED" },
             });
-            sac.exchangeForScalarToken = jest.fn(() => Promise.resolve("testtoken1"));
-            mocked(client.getTerms).mockResolvedValue({ policies: {} });
+            sac.exchangeForScalarToken = vi.fn(() => Promise.resolve("testtoken1"));
+            vi.mocked(client.getTerms).mockResolvedValue({ policies: {} });
 
             await expect(sac.registerForToken()).resolves.toBe("testtoken1");
         });
@@ -108,7 +110,7 @@ describe("ScalarAuthClient", function () {
                 body: { errcode: "SERVER_IS_SAD" },
                 status: 500,
             });
-            sac.exchangeForScalarToken = jest.fn(() => Promise.resolve("testtoken2"));
+            sac.exchangeForScalarToken = vi.fn(() => Promise.resolve("testtoken2"));
 
             await expect(sac.registerForToken()).rejects.toBeTruthy();
         });
@@ -118,7 +120,7 @@ describe("ScalarAuthClient", function () {
             fetchMock.get("https://test.com/api6/account?scalar_token=testtoken3&v=1.1", {
                 body: {},
             });
-            sac.exchangeForScalarToken = jest.fn(() => Promise.resolve("testtoken3"));
+            sac.exchangeForScalarToken = vi.fn(() => Promise.resolve("testtoken3"));
 
             await expect(sac.registerForToken()).rejects.toThrow("Missing user_id in response");
         });

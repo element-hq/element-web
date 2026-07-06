@@ -48,7 +48,8 @@ import { CallStore } from "../../../src/stores/CallStore";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
 import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
-import { type Call } from "../../../src/models/Call.ts";
+import { type Call, ConnectionState } from "../../../src/models/Call.ts";
+import ActiveWidgetStore from "../../../src/stores/ActiveWidgetStore";
 import { ModuleApi } from "../../../src/modules/Api";
 
 jest.mock("../../../src/Modal");
@@ -428,6 +429,60 @@ describe("RoomViewStore", function () {
         await untilDispatch(Action.ViewRoom, dis);
 
         expect(call.presented).toEqual(true);
+    });
+
+    it("opens a voice-intent call directly in picture-in-picture rather than maximised", async () => {
+        const call = {
+            presented: false,
+            connectionState: ConnectionState.Disconnected,
+            widget: { id: "!widget:example.org" },
+            start: jest.fn(),
+        } as unknown as Call;
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        const persistenceSpy = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            voiceOnly: true,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
+        // The call is started and marked persistent so it renders in the PiP container...
+        expect(call.presented).toEqual(true);
+        expect(persistenceSpy).toHaveBeenCalledWith("!widget:example.org", roomId, true);
+        expect(call.start).toHaveBeenCalledWith(expect.objectContaining({ voiceOnly: true }));
+        // ...but the room is not switched to the maximised call view.
+        expect(roomViewStore.isViewingCall()).toEqual(false);
+    });
+
+    it("opens a video-intent call maximised in the room", async () => {
+        const call = {
+            presented: false,
+            connectionState: ConnectionState.Disconnected,
+            widget: { id: "!widget:example.org" },
+            start: jest.fn(),
+        } as unknown as Call;
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(call);
+        const persistenceSpy = jest.spyOn(ActiveWidgetStore.instance, "setWidgetPersistence");
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            view_call: true,
+            voiceOnly: false,
+            metricsTrigger: undefined,
+        });
+        await untilDispatch(Action.ViewRoom, dis);
+
+        expect(call.presented).toEqual(true);
+        expect(persistenceSpy).not.toHaveBeenCalled();
+        expect(call.start).toHaveBeenCalledWith(expect.objectContaining({ voiceOnly: false }));
+        expect(roomViewStore.isViewingCall()).toEqual(true);
     });
 
     it("should display an error message when the room is unreachable via the roomId", async () => {

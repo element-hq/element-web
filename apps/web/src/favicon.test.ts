@@ -6,15 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import "jest-canvas-mock";
+// @vitest-environment happy-dom
 
-import Favicon from "../../src/favicon";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import "vitest-canvas-mock";
 
-jest.useFakeTimers();
+import Favicon from "./favicon";
+
+vi.useFakeTimers();
 
 describe("Favicon", () => {
     beforeEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         document.getElementsByTagName("head")[0]?.remove();
         const head = document.createElement("head");
         window.document.documentElement.prepend(head);
@@ -30,14 +33,14 @@ describe("Favicon", () => {
     it("should draw a badge if called with a non-zero value", () => {
         const favicon = new Favicon();
         favicon.badge(123);
-        jest.runAllTimers();
+        vi.runAllTimers();
         expect(favicon["context"].__getDrawCalls()).toMatchSnapshot();
     });
 
     it("should clear a badge if called with a zero value", () => {
         const favicon = new Favicon();
         favicon.badge(123);
-        jest.runAllTimers();
+        vi.runAllTimers();
         favicon.badge(0);
         expect(favicon["context"].__getDrawCalls()).toMatchSnapshot();
     });
@@ -48,7 +51,7 @@ describe("Favicon", () => {
         const favicon = new Favicon();
         const originalLink = window.document.querySelector("link");
         favicon.badge(123);
-        jest.runAllTimers();
+        vi.runAllTimers();
         const newLink = window.document.querySelector("link");
         expect(originalLink).not.toStrictEqual(newLink);
     });
@@ -60,9 +63,9 @@ describe("Favicon", () => {
         link.href = "favicon.png";
         head.appendChild(link);
 
-        const spy = jest.spyOn(document, "createElement");
+        const spy = vi.spyOn(document, "createElement");
         const favicon = new Favicon();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         const img = spy.mock.results[0].value;
         img.onload();
@@ -78,9 +81,9 @@ describe("Favicon", () => {
         link.href = "favicon.png";
         head.appendChild(link);
 
-        const spy = jest.spyOn(document, "createElement");
+        const spy = vi.spyOn(document, "createElement");
         const favicon = new Favicon();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         const img = spy.mock.results[0].value;
         img.height = 512;

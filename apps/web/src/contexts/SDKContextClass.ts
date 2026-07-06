@@ -87,6 +87,16 @@ export class SDKContextClass {
         }
     };
 
+    public constructor() {
+        defaultDispatcher.register(this.onDispatch);
+    }
+
+    private onDispatch = (payload: ActionPayload): void => {
+        if (isAction<OnLoggedInPayload>(payload, Action.OnLoggedIn)) {
+            this._client = payload.client;
+        }
+    };
+
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
      * the dispatcher.

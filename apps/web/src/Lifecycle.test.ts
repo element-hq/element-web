@@ -6,36 +6,33 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Crypto } from "@peculiar/webcrypto";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
 import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
-import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
+import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "test-utils";
+import { makeDelegatedAuthConfig } from "test-utils/oidc";
 
-import StorageEvictedDialog from "../../src/components/views/dialogs/StorageEvictedDialog";
-import * as Lifecycle from "../../src/Lifecycle";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import Modal from "../../src/Modal";
-import * as StorageAccess from "../../src/utils/StorageAccess";
-import { idbSave } from "../../src/utils/StorageAccess";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "../test-utils";
-import { OidcClientStore } from "../../src/stores/oidc/OidcClientStore";
-import { makeDelegatedAuthConfig } from "../test-utils/oidc";
-import { Action } from "../../src/dispatcher/actions";
-import PlatformPeg from "../../src/PlatformPeg";
-import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../../src/utils/tokens/tokens";
-import { encryptPickleKey } from "../../src/utils/tokens/pickling";
-import * as StorageManager from "../../src/utils/StorageManager.ts";
-import type BasePlatform from "../../src/BasePlatform.ts";
-import * as createMatrixClientModule from "../../src/utils/createMatrixClient";
+import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
+import * as Lifecycle from "./Lifecycle";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import Modal from "./Modal";
+import * as StorageAccess from "./utils/StorageAccess";
+import { idbSave } from "./utils/StorageAccess";
+import { OidcClientStore } from "./stores/oidc/OidcClientStore";
+import { Action } from "./dispatcher/actions";
+import PlatformPeg from "./PlatformPeg";
+import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "./utils/tokens/tokens";
+import { encryptPickleKey } from "./utils/tokens/pickling";
+import * as StorageManager from "./utils/StorageManager.ts";
+import type BasePlatform from "./BasePlatform.ts";
+import * as createMatrixClientModule from "./utils/createMatrixClient";
 
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
-
-const webCrypto = new Crypto();
-
-const windowCrypto = window.crypto;
 
 describe("Lifecycle", () => {
     const homeserverUrl = "https://domain";
@@ -46,65 +43,55 @@ describe("Lifecycle", () => {
 
     let mockPlatform: MockedObject<BasePlatform>;
 
-    const realLocalStorage = global.localStorage;
-
     let mockClient!: MockedObject<MatrixJs.MatrixClient>;
 
     beforeEach(() => {
-        jest.restoreAllMocks();
         mockPlatform = mockPlatformPeg();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
-            stopClient: jest.fn(),
-            removeAllListeners: jest.fn(),
-            clearStores: jest.fn(),
-            getAccountData: jest.fn(),
-            getDeviceId: jest.fn().mockReturnValue(deviceId),
-            isVersionSupported: jest.fn().mockResolvedValue(true),
-            getCrypto: jest.fn(),
-            getClientWellKnown: jest.fn(),
-            waitForClientWellKnown: jest.fn(),
-            getThirdpartyProtocols: jest.fn(),
+            stopClient: vi.fn(),
+            removeAllListeners: vi.fn(),
+            clearStores: vi.fn(),
+            getAccountData: vi.fn(),
+            getDeviceId: vi.fn().mockReturnValue(deviceId),
+            isVersionSupported: vi.fn().mockResolvedValue(true),
+            getCrypto: vi.fn(),
+            getClientWellKnown: vi.fn(),
+            waitForClientWellKnown: vi.fn(),
+            getThirdpartyProtocols: vi.fn(),
             store: {
-                destroy: jest.fn(),
+                destroy: vi.fn(),
             },
-            getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
-            logout: jest.fn().mockResolvedValue(undefined),
-            getAccessToken: jest.fn(),
-            getRefreshToken: jest.fn(),
-            setGuest: jest.fn(),
-            setNotifTimelineSet: jest.fn(),
+            getVersions: vi.fn().mockResolvedValue({ versions: ["v1.1"] }),
+            logout: vi.fn().mockResolvedValue(undefined),
+            getAccessToken: vi.fn(),
+            getRefreshToken: vi.fn(),
+            isInitialSyncComplete: vi.fn(),
+            setGuest: vi.fn(),
+            setNotifTimelineSet: vi.fn(),
         });
         // stub this
-        jest.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
-        jest.spyOn(MatrixClientPeg, "start").mockResolvedValue(undefined);
+        vi.spyOn(MatrixClientPeg, "set").mockImplementation(() => {});
+        vi.spyOn(MatrixClientPeg, "start").mockResolvedValue(undefined);
 
-        // reset any mocking
-        // @ts-ignore mocking
-        delete global.localStorage;
-        global.localStorage = realLocalStorage;
+        vi.spyOn(encryptAESSecretStorageItemModule, "default").mockRestore();
 
-        // @ts-ignore mocking
-        delete window.crypto;
-        window.crypto = webCrypto;
-
-        jest.spyOn(encryptAESSecretStorageItemModule, "default").mockRestore();
+        localStorage.clear();
+        sessionStorage.clear();
     });
 
-    afterAll(() => {
-        // @ts-ignore unmocking
-        delete window.crypto;
-        window.crypto = windowCrypto;
+    afterEach(() => {
+        vi.resetAllMocks();
     });
 
     const initIdbMock = (mockStore: Record<string, Record<string, unknown>> = {}): void => {
-        jest.spyOn(StorageAccess, "idbLoad")
+        vi.spyOn(StorageAccess, "idbLoad")
             .mockClear()
             .mockImplementation(
                 // @ts-ignore mock type
                 async (table: string, key: string) => mockStore[table]?.[key] ?? null,
             );
-        jest.spyOn(StorageAccess, "idbSave")
+        vi.spyOn(StorageAccess, "idbSave")
             .mockClear()
             .mockImplementation(
                 // @ts-ignore mock type
@@ -114,13 +101,13 @@ describe("Lifecycle", () => {
                     mockStore[tableKey] = table;
                 },
             );
-        jest.spyOn(StorageAccess, "idbDelete")
+        vi.spyOn(StorageAccess, "idbDelete")
             .mockClear()
             .mockImplementation(async (tableKey: string, key: string | string[]) => {
                 const table = mockStore[tableKey];
                 delete table?.[key as string];
             });
-        jest.spyOn(StorageAccess, "idbClear")
+        vi.spyOn(StorageAccess, "idbClear")
             .mockClear()
             .mockImplementation(async (tableKey: string) => {
                 mockStore[tableKey] = {};
@@ -159,14 +146,14 @@ describe("Lifecycle", () => {
     describe("loadSession", () => {
         beforeEach(() => {
             // stub this out
-            jest.spyOn(Modal, "createDialog").mockReturnValue(
+            vi.spyOn(Modal, "createDialog").mockReturnValue(
                 // @ts-ignore allow bad mock
                 { finished: Promise.resolve([true]) },
             );
         });
 
         it("should not show any error dialog when checkConsistency throws but abortSignal has triggered", async () => {
-            jest.spyOn(StorageManager, "checkConsistency").mockRejectedValue(new Error("test error"));
+            vi.spyOn(StorageManager, "checkConsistency").mockRejectedValue(new Error("test error"));
 
             const abortController = new AbortController();
             const prom = Lifecycle.loadSession({
@@ -183,27 +170,29 @@ describe("Lifecycle", () => {
     });
 
     describe("restoreSessionFromStorage()", () => {
+        const realLocalStorage = localStorage;
+
         beforeEach(() => {
             initIdbMock();
 
-            jest.clearAllMocks();
-            jest.spyOn(logger, "log").mockClear();
+            vi.spyOn(logger, "log").mockClear();
 
-            jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
-            jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+            vi.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
 
             // stub this out
-            jest.spyOn(Modal, "createDialog").mockReturnValue(
+            vi.spyOn(Modal, "createDialog").mockReturnValue(
                 // @ts-ignore allow bad mock
                 { finished: Promise.resolve([true]) },
             );
         });
 
+        afterEach(() => {
+            vi.stubGlobal("localStorage", realLocalStorage);
+        });
+
         it("should return false when localStorage is not available", async () => {
-            // @ts-ignore dirty mocking
-            delete global.localStorage;
-            // @ts-ignore dirty mocking
-            global.localStorage = undefined;
+            vi.stubGlobal("localStorage", undefined);
 
             expect(await restoreSessionFromStorage()).toEqual(false);
         });
@@ -272,7 +261,7 @@ describe("Lifecycle", () => {
                 });
 
                 it("should persist access token when idb is not available", async () => {
-                    jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
+                    vi.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
                     expect(await restoreSessionFromStorage()).toEqual(true);
 
                     expect(StorageAccess.idbSave).toHaveBeenCalledWith("account", "mx_access_token", accessToken);
@@ -384,7 +373,7 @@ describe("Lifecycle", () => {
 
                 it("should persist access token when idb is not available", async () => {
                     // dont fail for pickle key persist
-                    jest.spyOn(StorageAccess, "idbSave").mockImplementation(
+                    vi.spyOn(StorageAccess, "idbSave").mockImplementation(
                         async (table: string, key: string | string[]) => {
                             if (table === "account" && key === "mx_access_token") {
                                 throw new Error("oups");
@@ -406,7 +395,7 @@ describe("Lifecycle", () => {
                 it("should create and start new matrix client with credentials", async () => {
                     // Check that the rust crypto key is as expected. We have to do this during the call, as
                     // the buffer is cleared afterwards.
-                    mocked(MatrixClientPeg.start).mockImplementation(async (opts) => {
+                    vi.mocked(MatrixClientPeg.start).mockImplementation(async (opts) => {
                         expect(opts?.rustCryptoStoreKey).toEqual(decodeBase64(pickleKey));
                     });
 
@@ -559,14 +548,14 @@ describe("Lifecycle", () => {
         beforeEach(() => {
             initIdbMock();
 
-            jest.clearAllMocks();
-            jest.spyOn(logger, "log").mockClear();
+            vi.clearAllMocks();
+            vi.spyOn(logger, "log").mockClear();
 
-            jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
             // remove any mock implementations
-            jest.spyOn(mockPlatform, "createPickleKey").mockRestore();
+            vi.spyOn(mockPlatform, "createPickleKey").mockRestore();
             // but still spy and call through
-            jest.spyOn(mockPlatform, "createPickleKey");
+            vi.spyOn(mockPlatform, "createPickleKey");
         });
 
         const refreshToken = "test-refresh-token";
@@ -617,8 +606,8 @@ describe("Lifecycle", () => {
 
         describe("without a pickle key", () => {
             beforeEach(() => {
-                jest.spyOn(mockPlatform, "createPickleKey").mockResolvedValue(null);
-                jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
+                vi.spyOn(mockPlatform, "createPickleKey").mockResolvedValue(null);
+                vi.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
             });
 
             it("should persist credentials", async () => {
@@ -650,7 +639,7 @@ describe("Lifecycle", () => {
             });
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
-                jest.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
+                vi.spyOn(StorageAccess, "idbSave").mockRejectedValue("oups");
                 await setLoggedIn({
                     ...credentials,
                     // @ts-ignore
@@ -726,7 +715,7 @@ describe("Lifecycle", () => {
             });
 
             it("should persist token when encrypting the token fails", async () => {
-                jest.spyOn(encryptAESSecretStorageItemModule, "default").mockRejectedValue("MOCK REJECT ENCRYPTAES");
+                vi.spyOn(encryptAESSecretStorageItemModule, "default").mockRejectedValue("MOCK REJECT ENCRYPTAES");
                 await setLoggedIn(credentials);
 
                 // persist the unencrypted token
@@ -735,13 +724,11 @@ describe("Lifecycle", () => {
 
             it("should persist token in localStorage when idb fails to save token", async () => {
                 // dont fail for pickle key persist
-                jest.spyOn(StorageAccess, "idbSave").mockImplementation(
-                    async (table: string, key: string | string[]) => {
-                        if (table === "account" && key === "mx_access_token") {
-                            throw new Error("oups");
-                        }
-                    },
-                );
+                vi.spyOn(StorageAccess, "idbSave").mockImplementation(async (table: string, key: string | string[]) => {
+                    if (table === "account" && key === "mx_access_token") {
+                        throw new Error("oups");
+                    }
+                });
                 await setLoggedIn(credentials);
 
                 // put plain accessToken in localstorage when we dont have idb
@@ -750,13 +737,11 @@ describe("Lifecycle", () => {
 
             it("should remove any access token from storage when there is none in credentials and idb save fails", async () => {
                 // dont fail for pickle key persist
-                jest.spyOn(StorageAccess, "idbSave").mockImplementation(
-                    async (table: string, key: string | string[]) => {
-                        if (table === "account" && key === "mx_access_token") {
-                            throw new Error("oups");
-                        }
-                    },
-                );
+                vi.spyOn(StorageAccess, "idbSave").mockImplementation(async (table: string, key: string | string[]) => {
+                    if (table === "account" && key === "mx_access_token") {
+                        throw new Error("oups");
+                    }
+                });
                 await setLoggedIn({
                     ...credentials,
                     // @ts-ignore
@@ -768,7 +753,7 @@ describe("Lifecycle", () => {
             });
 
             it("should create new matrix client with credentials", async () => {
-                jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
+                vi.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
                 expect(await setLoggedIn(credentials)).toEqual(mockClient);
 
                 expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
@@ -903,7 +888,7 @@ describe("Lifecycle", () => {
         beforeEach(() => {
             oidcClientStore = new OidcClientStore(mockClient);
             // stub
-            jest.spyOn(oidcClientStore, "revokeTokens").mockResolvedValue(undefined);
+            vi.spyOn(oidcClientStore, "revokeTokens").mockResolvedValue(undefined);
 
             mockClient.getAccessToken.mockReturnValue(accessToken);
             mockClient.getRefreshToken.mockReturnValue(refreshToken);
@@ -918,7 +903,7 @@ describe("Lifecycle", () => {
         });
 
         it("should call logout on the client when oidcClientStore.isUserAuthenticatedWithOidc is falsy", async () => {
-            jest.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(false);
+            vi.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(false);
             logout(oidcClientStore);
 
             await flushPromises();
@@ -928,7 +913,7 @@ describe("Lifecycle", () => {
         });
 
         it("should revoke tokens when user is authenticated with oidc", async () => {
-            jest.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(true);
+            vi.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(true);
             logout(oidcClientStore);
 
             await flushPromises();
@@ -940,12 +925,12 @@ describe("Lifecycle", () => {
 
     describe("overwritelogin", () => {
         beforeEach(async () => {
-            jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
         });
 
         it("should replace the current login with a new one", async () => {
-            const stopSpy = jest.spyOn(mockClient, "stopClient").mockReturnValue(undefined);
-            jest.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
+            const stopSpy = vi.spyOn(mockClient, "stopClient").mockReturnValue(undefined);
+            vi.spyOn(createMatrixClientModule, "createClientWithCreds").mockReturnValue(mockClient);
             const dis = window.mxDispatcher;
 
             const firstLoginEvent: Promise<void> = new Promise((resolve) => {
@@ -963,7 +948,7 @@ describe("Lifecycle", () => {
             expect(stopSpy).toHaveBeenCalledTimes(1);
             // important the overwrite action should not call unset before replacing.
             // So spy on it and make sure it's not called.
-            jest.spyOn(MatrixClientPeg, "unset").mockReturnValue(undefined);
+            vi.spyOn(MatrixClientPeg, "unset").mockReturnValue(undefined);
 
             expect(createMatrixClientModule.createClientWithCreds).toHaveBeenCalledWith(
                 expect.objectContaining({
