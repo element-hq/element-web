@@ -44,9 +44,9 @@ export function MessageComposerUrlPreviewWrapper({
     // Rather than checking each time the text changes, we only do a URL check every 500ms to avoid
     // hitting the server too frequently. We also only check the module API for a custom component
     // at this frequency to avoid expensive calculations downstream.
-    useDebouncedCallback<[string]>(
+    useDebouncedCallback<[MessageComposerUrlPreviewViewModel, string]>(
         true,
-        (content) => {
+        (vm, content) => {
             const customComponent = moduleApi.customComponents.renderComposerPreview(
                 { text: content, roomId: roomId! },
                 () => <MessageComposerUrlPreviewView vm={vm} />,
