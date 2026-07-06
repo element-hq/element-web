@@ -48,7 +48,7 @@ import { _t } from "../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import SearchBox from "./SearchBox";
-import RoomAvatar from "../views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../views/avatars/RoomAvatar";
 import StyledCheckbox from "../views/elements/StyledCheckbox";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import { mediaFromMxc } from "../../customisations/Media";

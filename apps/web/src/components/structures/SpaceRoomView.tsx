@@ -49,7 +49,7 @@ import {
     showSpaceInvite,
     showSpaceSettings,
 } from "../../utils/space";
-import RoomAvatar from "../views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../views/avatars/RoomAvatar";
 import { BetaPill } from "../views/beta/BetaCard";
 import IconizedContextMenu, {
     IconizedContextMenuOption,

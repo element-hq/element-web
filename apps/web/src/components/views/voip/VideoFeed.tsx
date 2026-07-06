@@ -18,7 +18,7 @@ import { MicOffSolidIcon, MicOnSolidIcon } from "@vector-im/compound-design-toke
 import SettingsStore from "../../../settings/SettingsStore";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 interface IProps {
     call: MatrixCall;

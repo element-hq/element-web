@@ -15,7 +15,7 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
-import RoomAvatar from "../../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../../avatars/RoomAvatar";
 import AccessibleButton from "../../elements/AccessibleButton";
 
 interface LegacyCallControlsProps {

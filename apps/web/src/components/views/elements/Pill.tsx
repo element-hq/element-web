@@ -14,7 +14,7 @@ import { LinkIcon, UserSolidIcon } from "@vector-im/compound-design-tokens/asset
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { usePermalink } from "../../../hooks/usePermalink";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
 import { PillType } from "./PillType";

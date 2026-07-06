@@ -26,7 +26,7 @@ import InviteReason from "../elements/InviteReason";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { ModuleRunner } from "../../../modules/ModuleRunner";

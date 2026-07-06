@@ -38,7 +38,7 @@ import {
 import { AvatarWithDetails } from "@element-hq/web-shared-components";
 
 import { _t } from "../languageHandler";
-import RoomAvatar from "../components/views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";

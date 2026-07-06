@@ -31,7 +31,7 @@ import { type URLParams } from "./url_utils.ts";
 import { UserFriendlyError } from "../languageHandler";
 import { ModuleApi } from "../modules/Api";
 import { RoomView } from "../components/structures/RoomView";
-import RoomAvatar from "../components/views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
 import Login from "../Login.ts";
 import { startOidcLogin } from "../utils/oidc/authorize.ts";

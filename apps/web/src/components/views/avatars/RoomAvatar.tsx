@@ -5,15 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type AriaRole, type JSX, type Ref, useEffect } from "react";
+import React, { type ComponentProps, type JSX, useEffect } from "react";
 import classNames from "classnames";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { RoomAvatarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    RoomAvatarView as RoomAvatarPresentationView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { RoomAvatarViewModel } from "../../../viewmodels/avatars/RoomAvatarViewModel";
 
-interface Props {
+type ViewProps = Omit<ComponentProps<typeof RoomAvatarPresentationView>, "vm" | "size" | "className">;
+
+interface Props extends ViewProps {
     /**
      * The room whose avatar should be displayed.
      * When omitted, `oobData.avatarUrl` must be provided.
@@ -28,6 +33,7 @@ interface Props {
     };
     /**
      * When `true`, clicking the avatar opens a full-size lightbox.
+     * Defaults to `false`; `false` and `undefined` are equivalent.
      */
     "viewAvatarOnClick"?: boolean;
     /**
@@ -39,51 +45,26 @@ interface Props {
      */
     "size"?: string;
     /**
-     * Avatar shape override. When omitted the adapter derives the shape from
-     * the room type (square for spaces, round otherwise).
+     * Avatar shape override. When omitted, the ViewModel derives `"square"` for
+     * spaces and `"round"` for all other rooms and invites.
      */
     "type"?: "round" | "square";
     /**
      * Optional additional CSS class names.
      */
     "className"?: string;
-    /**
-     * Accessible label. Defaults to `"Avatar"`.
-     */
-    "altText"?: string;
-    /**
-     * Browser tooltip shown on hover.
-     */
-    "title"?: string;
-    /**
-     * Tab index forwarded to the avatar element.
-     */
-    "tabIndex"?: number;
-    /**
-     * ARIA role override.
-     */
-    "role"?: AriaRole;
-    /**
-     * When `true`, hides the avatar from the accessibility tree.
-     */
-    "aria-hidden"?: boolean | "true" | "false";
-    /**
-     * Ref forwarded to the underlying avatar element.
-     */
-    "ref"?: Ref<HTMLButtonElement | HTMLSpanElement>;
 }
 
 /**
- * MVVM adapter for a room avatar.
+ * Public room avatar component backed by MVVM.
  *
- * Wires a {@link RoomAvatarViewModel} to {@link RoomAvatarView} and
+ * Wires a {@link RoomAvatarViewModel} to the shared room avatar view and
  * synchronises changing props into the ViewModel via targeted setters.
- * Consumers interact with this adapter exactly as they would with the
- * old `RoomAvatar` component – the MVVM split is an implementation detail.
+ * The MVVM split is an implementation detail for consumers.
  */
-function RoomAvatarAdapter({
+function RoomAvatar({
     room,
-    viewAvatarOnClick,
+    viewAvatarOnClick = false,
     onClick,
     oobData,
     size = "36px",
@@ -119,7 +100,14 @@ function RoomAvatarAdapter({
         vm.setType(type);
     }, [type, vm]);
 
-    return <RoomAvatarView vm={vm} size={size} className={classNames("mx_BaseAvatar", className)} {...viewProps} />;
+    return (
+        <RoomAvatarPresentationView
+            vm={vm}
+            size={size}
+            className={classNames("mx_BaseAvatar", className)}
+            {...viewProps}
+        />
+    );
 }
 
-export default RoomAvatarAdapter;
+export default RoomAvatar;

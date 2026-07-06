@@ -43,7 +43,7 @@ import { Box, Flex, HistoryVisibilityBadge, LinkedText } from "@element-hq/web-s
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
 import { topicToHtml } from "../../../HtmlUtils.tsx";

@@ -13,7 +13,7 @@ import { _t } from "../languageHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { PillCompletion } from "./Components";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
-import RoomAvatar from "../components/views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
 
 const AT_ROOM_REGEX = /@\S*/g;

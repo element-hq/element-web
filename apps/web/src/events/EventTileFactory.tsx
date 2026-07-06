@@ -38,7 +38,7 @@ import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
-import RoomAvatar from "../components/views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";

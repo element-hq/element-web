@@ -37,7 +37,7 @@ import { useEncryptionStatus } from "../../../../hooks/useEncryptionStatus.ts";
 import { E2EStatus } from "../../../../utils/ShieldUtils.ts";
 import FacePile from "../../elements/FacePile.tsx";
 import { useRoomState } from "../../../../hooks/useRoomState.ts";
-import RoomAvatar from "../../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../../avatars/RoomAvatar";
 import { formatCount } from "../../../../utils/FormattingUtils.ts";
 import RightPanelStore from "../../../../stores/right-panel/RightPanelStore.ts";
 import PosthogTrackers from "../../../../PosthogTrackers.ts";

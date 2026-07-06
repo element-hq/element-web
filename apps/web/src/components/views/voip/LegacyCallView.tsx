@@ -19,7 +19,7 @@ import LegacyCallHandler from "../../../LegacyCallHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t, _td } from "../../../languageHandler";
 import VideoFeed from "./VideoFeed";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import { avatarUrlForMember } from "../../../Avatar";
 import LegacyCallViewSidebar from "./LegacyCallViewSidebar";

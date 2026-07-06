@@ -14,7 +14,7 @@ import { EchoStore } from "../../../stores/local-echo/EchoStore";
 import { formatTime } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomEchoContext } from "../../../stores/local-echo/RoomEchoContext";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 import { TransactionStatus } from "../../../stores/local-echo/EchoTransaction";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";

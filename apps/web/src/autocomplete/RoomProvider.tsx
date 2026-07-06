@@ -19,7 +19,7 @@ import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
 import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { type ICompletion, type ISelectionRange } from "./Autocompleter";
-import RoomAvatar from "../components/views/avatars/RoomAvatarAdapter";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { type TimelineRenderingType } from "../contexts/RoomContext";
 import SettingsStore from "../settings/SettingsStore";
 

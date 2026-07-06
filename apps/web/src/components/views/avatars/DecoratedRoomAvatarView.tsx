@@ -17,12 +17,12 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 import { Flex } from "@element-hq/web-shared-components";
 
-import RoomAvatar from "./RoomAvatarAdapter";
+import RoomAvatar from "./RoomAvatar";
 import { AvatarBadgeDecoration, useRoomAvatarViewModel } from "../../viewmodels/avatars/RoomAvatarViewModel";
 import { _t } from "../../../languageHandler";
 import { Presence } from "./WithPresenceIndicator";
 
-interface RoomAvatarViewProps {
+interface DecoratedRoomAvatarViewProps {
     /**
      * The room to display the avatar for.
      */
@@ -33,7 +33,9 @@ interface RoomAvatarViewProps {
  * Component to display the avatar of a room.
  * Currently only 32px size is supported.
  */
-export const RoomAvatarView = memo(function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
+export const DecoratedRoomAvatarView = memo(function DecoratedRoomAvatarView({
+    room,
+}: DecoratedRoomAvatarViewProps): JSX.Element {
     const vm = useRoomAvatarViewModel(room);
     // No decoration, we just show the avatar
     if (!vm.badgeDecoration) return <RoomAvatar size="32px" room={room} />;

@@ -13,7 +13,7 @@ import { type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import StyledRadioGroup, { type IDefinition } from "../elements/StyledRadioGroup";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
-import RoomAvatar from "../avatars/RoomAvatarAdapter";
+import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
