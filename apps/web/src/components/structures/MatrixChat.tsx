@@ -1521,7 +1521,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
      */
     private onLoggedIn(): void {
-        this.stores.client = MatrixClientPeg.safeGet();
         StorageManager.tryPersistStorage();
 
         // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the

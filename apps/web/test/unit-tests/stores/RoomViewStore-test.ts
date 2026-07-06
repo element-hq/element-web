@@ -193,7 +193,7 @@ describe("RoomViewStore", function () {
         dis = new MatrixDispatcher();
         slidingSyncManager = new MockSlidingSyncManager();
         stores = new TestSDKContext();
-        stores.client = mockClient;
+        stores._client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
         // @ts-expect-error

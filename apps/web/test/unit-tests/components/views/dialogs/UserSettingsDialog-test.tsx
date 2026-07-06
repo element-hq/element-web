@@ -26,7 +26,7 @@ import {
 } from "../../../../test-utils";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 import { mockOpenIdConfiguration } from "../../../../test-utils/oidc.ts";
 
@@ -57,7 +57,7 @@ describe("<UserSettingsDialog />", () => {
     const mockSettingsStore = mocked(SettingsStore);
     let mockClient!: MockedObject<MatrixClient>;
 
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
     const defaultProps = { onFinished: jest.fn() };
     const getComponent = (
         props: Partial<typeof defaultProps & { initialTabId?: UserTab; props: Record<string, any> }> = {},
@@ -76,8 +76,8 @@ describe("<UserSettingsDialog />", () => {
             getMediaConfig: jest.fn(),
             getAuthMetadata: jest.fn().mockResolvedValue(mockOpenIdConfiguration()),
         });
-        sdkContext = new SDKContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
         mockSettingsStore.getValue.mockReturnValue(false);
         mockSettingsStore.getValueAt.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);

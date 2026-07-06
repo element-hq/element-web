@@ -25,6 +25,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import UnwrappedSpacePanel from "../../../../../src/components/views/spaces/SpacePanel";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 // DND test utilities based on
 // https://github.com/colinrobertbrooks/react-beautiful-dnd-test-utils/issues/18#issuecomment-1373388693
@@ -129,7 +130,10 @@ describe("<SpacePanel />", () => {
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        SDKContextClass.instance.client = mockClient;
+        const sdkContext = new TestSDKContext();
+        // @ts-ignore SpacePanel uses the SDKContext global
+        SDKContextClass.instance = sdkContext;
+        sdkContext._client = mockClient;
     });
 
     beforeEach(() => {

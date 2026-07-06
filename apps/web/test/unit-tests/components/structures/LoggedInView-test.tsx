@@ -85,7 +85,7 @@ describe("<LoggedInView />", () => {
         mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
         // @ts-expect-error
         mockClient.pushProcessor = new PushProcessor(mockClient);
-        mockSdkContext.client = mockClient;
+        mockSdkContext._client = mockClient;
     });
 
     describe("synced push rules", () => {
