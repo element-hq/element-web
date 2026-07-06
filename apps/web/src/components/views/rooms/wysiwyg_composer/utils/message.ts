@@ -114,7 +114,9 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
-    await attachUrlPreviews(mxClient, roomId, urlPreviewSnapshot, content);
+    if (SettingsStore.getValue("feature_msc4452_url_preview_bundle")) {
+        await attachUrlPreviews(mxClient, roomId, urlPreviewSnapshot, content);
+    }
 
     // TODO replace emotion end of message ?
 

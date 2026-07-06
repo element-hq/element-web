@@ -127,10 +127,6 @@ export async function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
 ): Promise<void> {
-    if (!SettingsStore.getValue("feature_msc4452_url_preview_bundle")) {
-        return;
-    }
-
     if (urlPreviewSnapshot.previews.length) {
         content["com.beeper.linkpreviews"] = await Promise.all(
             urlPreviewSnapshot.previews.map(async (preview) => {
