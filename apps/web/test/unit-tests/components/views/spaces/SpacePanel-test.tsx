@@ -17,7 +17,7 @@ import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
@@ -25,7 +25,6 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import UnwrappedSpacePanel from "../../../../../src/components/views/spaces/SpacePanel";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 // DND test utilities based on
 // https://github.com/colinrobertbrooks/react-beautiful-dnd-test-utils/issues/18#issuecomment-1373388693
@@ -125,14 +124,12 @@ describe("<SpacePanel />", () => {
         isVersionSupported: jest.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
     } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SDKContextClass.instance);
+    const sdkContext = new TestSDKContext();
+    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        const sdkContext = new TestSDKContext();
-        // @ts-ignore SpacePanel uses the SDKContext global
-        SDKContextClass.instance = sdkContext;
         sdkContext._client = mockClient;
     });
 

@@ -54,6 +54,7 @@ describe("SDKContextClass", () => {
         it("onLoggedOut should clear the UserProfilesStore", () => {
             const store = sdkContext.userProfilesStore;
             sdkContext.onLoggedOut();
+            sdkContext._client = client;
             expect(sdkContext.userProfilesStore).not.toBe(store);
         });
 
