@@ -12,10 +12,15 @@ import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
-import { stubClient } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("LegacyCallView", () => {
+    const cli = stubClient();
+    const sdkContext = new TestSDKContext();
+    sdkContext.client = cli;
+
     it("should exit full screen on unmount", () => {
         const element = document.createElement("div");
         // @ts-expect-error
@@ -35,7 +40,10 @@ describe("LegacyCallView", () => {
             isScreensharing: jest.fn().mockReturnValue(false),
         } as unknown as MatrixCall;
 
-        const { unmount } = render(<LegacyCallView call={call} sidebarShown={false} />);
+        const { unmount } = render(
+            <LegacyCallView call={call} sidebarShown={false} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
         expect(document.exitFullscreen).not.toHaveBeenCalled();
         unmount();
         expect(document.exitFullscreen).toHaveBeenCalled();
@@ -75,7 +83,10 @@ describe("LegacyCallView", () => {
             getUserIdForRoomId: jest.fn().mockReturnValue("test-user"),
         } as unknown as DMRoomMap);
 
-        const { container, rerender } = render(<LegacyCallView call={call} sidebarShown={true} />);
+        const { container, rerender } = render(
+            <LegacyCallView call={call} sidebarShown={true} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
         expect(container.querySelector(".mx_LegacyCallViewSidebar")).toBeTruthy();
         rerender(<LegacyCallView call={call} sidebarShown={true} />);
         expect(container.querySelector(".mx_LegacyCallViewSidebar")).toBeTruthy();
@@ -98,7 +109,10 @@ describe("LegacyCallView", () => {
             getUserIdForRoomId: jest.fn().mockReturnValue("test-user"),
         } as unknown as DMRoomMap);
 
-        const { container } = render(<LegacyCallView call={call} sidebarShown={false} pipMode={true} />);
+        const { container } = render(
+            <LegacyCallView call={call} sidebarShown={false} pipMode={true} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
         expect(container.querySelector(".mx_LegacyCallViewButtons_button_sidebar")).toBeFalsy();
     });
 });

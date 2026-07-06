@@ -12,7 +12,12 @@ import React from "react";
 
 import IncomingLegacyCallToast from "../../../src/toasts/IncomingLegacyCallToast";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
+import {
+    clientAndSDKContextRenderOptions,
+    getMockClientWithEventEmitter,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+} from "../../test-utils";
 import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
 
 describe("<IncomingLegacyCallToast />", () => {
@@ -41,16 +46,23 @@ describe("<IncomingLegacyCallToast />", () => {
         jest.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(undefined);
         mockClient.getRoom.mockReturnValue(mockRoom);
+        SDKContextClass.instance.client = mockClient;
     });
 
     it("renders when silence button when call is not silenced", () => {
-        const { getByLabelText } = render(getComponent());
+        const { getByLabelText } = render(
+            getComponent(),
+            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
+        );
         expect(getByLabelText("Silence call")).toMatchSnapshot();
     });
 
     it("renders sound on button when call is silenced", () => {
         SDKContextClass.instance.legacyCallHandler.silenceCall(call.callId);
-        const { getByLabelText } = render(getComponent());
+        const { getByLabelText } = render(
+            getComponent(),
+            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
+        );
         expect(getByLabelText("Sound on")).toMatchSnapshot();
     });
 
@@ -66,7 +78,10 @@ describe("<IncomingLegacyCallToast />", () => {
                 });
             }
         });
-        const { getByLabelText } = render(getComponent());
+        const { getByLabelText } = render(
+            getComponent(),
+            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
+        );
         expect(getByLabelText("Notifications silenced")).toMatchSnapshot();
     });
 });
