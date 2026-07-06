@@ -80,6 +80,8 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                     logger.warn("Fetching preview failed", ex);
                 }
             }
+
+            this.snapshot.set({ previews: [] });
         }
     }
 
