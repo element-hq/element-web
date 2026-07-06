@@ -2,7 +2,7 @@
 
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
-  class="_tooltip_1nqnq_8 _invisible_1nqnq_21"
+  class="_tooltip_1nqnq_8"
   data-floating-ui-focusable=""
   id="react-use-id-1"
   role="tooltip"
