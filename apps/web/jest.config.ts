@@ -26,7 +26,7 @@ const config: Config = {
     },
     testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
-    setupFiles: ["web-streams-polyfill/polyfill"],
+    setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
     moduleNameMapper: {
         // Support CSS module
