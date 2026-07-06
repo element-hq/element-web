@@ -75,11 +75,15 @@ describe("MessageComposerUrlPreview", () => {
     }
 
     test("to be empty without a link to preview", () => {
-        const { container } = wrapComponent(<MessageComposerUrlPreviewWrapper content="Test a string" urlPreviewVm={getUrlPreviewVm(client)} />);
+        const { container } = wrapComponent(
+            <MessageComposerUrlPreviewWrapper content="Test a string" urlPreviewVm={getUrlPreviewVm(client)} />,
+        );
         expect(container).toMatchInlineSnapshot(`<div />`);
     });
     test("to contain a link when there is a URL", async () => {
-        const { getByText } = wrapComponent(<MessageComposerUrlPreviewWrapper content="https://example.org" urlPreviewVm={getUrlPreviewVm(client)} />);
+        const { getByText } = wrapComponent(
+            <MessageComposerUrlPreviewWrapper content="https://example.org" urlPreviewVm={getUrlPreviewVm(client)} />,
+        );
         await waitFor(
             () => {
                 expect(getByText("Example.org")).toBeDefined();
@@ -96,7 +100,11 @@ describe("MessageComposerUrlPreview", () => {
             () => <strong>Fake preview</strong>,
         );
         const { getByText } = wrapComponent(
-            <MessageComposerUrlPreviewWrapper content="https://example.org" moduleApi={modApi} urlPreviewVm={getUrlPreviewVm(client)} />,
+            <MessageComposerUrlPreviewWrapper
+                content="https://example.org"
+                moduleApi={modApi}
+                urlPreviewVm={getUrlPreviewVm(client)}
+            />,
         );
         await waitFor(
             () => {
