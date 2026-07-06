@@ -7,12 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, useMemo } from "react";
-import {
-    VideoCallSolidIcon,
-    HomeSolidIcon,
-    UserProfileSolidIcon,
-    FavouriteSolidIcon,
-} from "@vector-im/compound-design-tokens/assets/web/icons";
+import { VideoCallSolidIcon, HomeSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -53,8 +48,6 @@ export const onMetaSpaceChangeFactory =
 const SidebarUserSettingsTab: React.FC = () => {
     const {
         [MetaSpace.Home]: homeEnabled,
-        [MetaSpace.Favourites]: favouritesEnabled,
-        [MetaSpace.People]: peopleEnabled,
         [MetaSpace.Orphans]: orphansEnabled,
         [MetaSpace.VideoRooms]: videoRoomsEnabled,
     } = useSettingValue("Spaces.enabledMetaSpaces");
@@ -70,9 +63,6 @@ const SidebarUserSettingsTab: React.FC = () => {
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.ACCOUNT, event.target.checked);
         PosthogTrackers.trackInteraction("WebSettingsSidebarTabSpacesCheckbox", event, 1);
     };
-
-    // "Favourites" and "People" meta spaces are not available in the new room list
-    const newRoomListEnabled = useSettingValue("feature_new_room_list");
 
     return (
         <SettingsTab>
@@ -102,36 +92,6 @@ const SidebarUserSettingsTab: React.FC = () => {
                     >
                         {_t("settings|sidebar|metaspaces_home_all_rooms")}
                     </StyledCheckbox>
-
-                    {!newRoomListEnabled && (
-                        <>
-                            <StyledCheckbox
-                                checked={!!favouritesEnabled}
-                                onChange={onMetaSpaceChangeFactory(
-                                    MetaSpace.Favourites,
-                                    "WebSettingsSidebarTabSpacesCheckbox",
-                                )}
-                                className="mx_SidebarUserSettingsTab_checkbox"
-                                description={_t("settings|sidebar|metaspaces_favourites_description")}
-                            >
-                                <FavouriteSolidIcon className="mx_SidebarUserSettingsTab_icon" />
-                                {_t("common|favourites")}
-                            </StyledCheckbox>
-
-                            <StyledCheckbox
-                                checked={!!peopleEnabled}
-                                onChange={onMetaSpaceChangeFactory(
-                                    MetaSpace.People,
-                                    "WebSettingsSidebarTabSpacesCheckbox",
-                                )}
-                                className="mx_SidebarUserSettingsTab_checkbox"
-                                description={_t("settings|sidebar|metaspaces_people_description")}
-                            >
-                                <UserProfileSolidIcon className="mx_SidebarUserSettingsTab_icon" />
-                                {_t("common|people")}
-                            </StyledCheckbox>
-                        </>
-                    )}
 
                     <StyledCheckbox
                         checked={!!orphansEnabled}

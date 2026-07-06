@@ -15,6 +15,8 @@ import { shouldShowComponent } from "../../../../../../src/customisations/helper
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
 import { ReleaseAnnouncementStore } from "../../../../../../src/stores/ReleaseAnnouncementStore";
+import { SDKContext } from "../../../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -35,7 +37,11 @@ jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockRetu
 
 describe("<RoomListPanel />", () => {
     function renderComponent() {
-        return render(<RoomListPanel activeSpace={MetaSpace.Home} />);
+        return render(<RoomListPanel activeSpace={MetaSpace.Home} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
     }
 
     beforeEach(() => {

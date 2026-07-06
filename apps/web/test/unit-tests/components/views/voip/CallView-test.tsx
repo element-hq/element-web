@@ -33,6 +33,8 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { CallStore } from "../../../../../src/stores/CallStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -88,7 +90,11 @@ describe("CallView", () => {
     });
 
     const renderView = async (role: string | undefined = undefined): Promise<void> => {
-        render(<CallView room={room} resizing={false} role={role} onClose={() => {}} />);
+        render(<CallView room={room} resizing={false} role={role} onClose={() => {}} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         await act(() => Promise.resolve()); // Let effects settle
     };
 
