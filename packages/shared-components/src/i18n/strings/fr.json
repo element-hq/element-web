@@ -103,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "Ouvrir salon %(roomName)s",
+            "drag_cancelled": "Glisser-déposer annulé",
+            "drag_end": "%(source)s a été déposé sur %(target)s",
+            "drag_end_after": "%(source)s a été déposé sur %(target)s",
+            "drag_end_before": "%(source)s a été déposé avant %(target)s",
+            "drag_end_original": "%(source)s est revenu à sa position initiale",
+            "drag_instructions": "Appuyer sur la barre Espace pour commencer ou arrêter le glisser-déposer, touches fléchées pour déplacer et Échap pour annuler.",
+            "drag_over": "%(source)s est au dessus de %(target)s",
+            "drag_over_after": "%(source)s sera déposé après %(target)s",
+            "drag_over_before": "%(source)s sera déposé avant %(target)s",
+            "drag_over_original": "%(source)s reprendra sa position initiale.",
+            "drag_start": "Glissé %(source)s",
             "invitation": "Ouvrir l'invitation du salon %(roomName)s.",
             "mention": {
                 "one": "Ouvrir le salon %(roomName)s avec 1 mention non lue.",
@@ -167,7 +178,7 @@
             "more_options": "Plus d’options",
             "remove_section": "Supprimer la section",
             "toggle": "Afficher/masquer la section %(section)s",
-            "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"
+            "toggle_unread": "Afficher ou masquer la section %(section)s avec des salons non lues"
         },
         "show_message_previews": "Afficher les aperçus des messages",
         "sort": "Trier",
@@ -179,7 +190,8 @@
         "space_menu": {
             "home": "Accueil de l’espace",
             "space_settings": "Paramètres de l'espace"
-        }
+        },
+        "unread_messages": "Messages non lus"
     },
     "terms": {
         "tac_button": "Voir les conditions générales"
