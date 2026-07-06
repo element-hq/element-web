@@ -419,6 +419,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 roomContext: this.context,
                 relation,
                 replyToEvent,
+                urlPreviewSnapshot: this.props.urlPreviewVm.getSnapshot()
             });
         }
     };

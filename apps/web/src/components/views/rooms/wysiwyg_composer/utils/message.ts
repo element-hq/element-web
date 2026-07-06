@@ -33,19 +33,21 @@ import { CommandCategories, getCommand } from "../../../../../slash-commands/Sla
 import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/commands";
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
-import { attachRelation } from "../../../../../utils/messages";
+import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
+import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     roomContext: Pick<IRoomState, "timelineRenderingType" | "room">;
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
 }
 
 export async function sendMessage(
     message: string,
     isHTML: boolean,
-    { roomContext, mxClient, ...params }: SendMessageParams,
+    { roomContext, mxClient, urlPreviewSnapshot, ...params }: SendMessageParams,
 ): Promise<ISendEventResponse | undefined> {
     const { relation, replyToEvent } = params;
     const { room } = roomContext;
@@ -112,6 +114,7 @@ export async function sendMessage(
 
     // if content is null, we haven't done any slash command processing, so generate some content
     content ??= await createMessageContent(message, isHTML, params);
+    await attachUrlPreviews(mxClient, roomId, urlPreviewSnapshot, content);
 
     // TODO replace emotion end of message ?
 
