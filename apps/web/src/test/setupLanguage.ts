@@ -10,9 +10,8 @@ import fetchMock from "@fetch-mock/vitest";
 import { afterEach } from "vitest";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 import { merge } from "lodash";
+import { setMissingEntryGenerator, setLanguage } from "@element-hq/web-shared-components";
 
-import { setLanguage } from "../i18n/settings.ts";
-import { setMissingEntryGenerator } from "../languageHandler";
 import enElementWeb from "../i18n/strings/en_EN.json";
 import deElementWeb from "../i18n/strings/de_DE.json";
 // Cheat and import relatively here as these aren't exported by the module (should they be?)
@@ -38,7 +37,7 @@ const lv = {
 // de_DE.json
 // lv.json - mock version with few translations, used to test fallback translation
 
-export function setupLanguageMock(): void {
+export function setupLanguageMock() {
     // Pull the translations from shared components too as they have
     // the strings for things like `humanizeTime` which do appear in
     // snapshots (needs 'merge' which does a deep-merge rather than just
@@ -62,9 +61,11 @@ export function setupLanguageMock(): void {
 }
 afterEach(() => fetchMock.callHistory.flush());
 
+// Initialise the fetchMock before the test starts so the languageHandler.setLanguage call below can function
 fetchMock.mockGlobal();
 fetchMock.catch(404);
 setupLanguageMock();
+
 setLanguage("en");
 setMissingEntryGenerator((key) => key.split("|", 2)[1]);
 

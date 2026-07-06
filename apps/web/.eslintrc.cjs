@@ -235,6 +235,7 @@ module.exports = {
             files: [
                 "src/**/*.test.{ts,tsx}",
                 "src/**/__mocks__/*.{ts,tsx}",
+                "src/test/*.ts",
                 "test/**/*.{ts,tsx}",
                 "playwright/**/*.ts",
             ],
@@ -245,7 +246,6 @@ module.exports = {
                 "@typescript-eslint/explicit-member-accessibility": "off",
                 "@typescript-eslint/no-empty-object-type": "off",
                 "@typescript-eslint/unbound-method": "off",
-                "jest/no-mocks-import": "off",
 
                 // Jest/Playwright specific
 
@@ -264,6 +264,7 @@ module.exports = {
                 // These are fine in tests
                 "no-restricted-globals": "off",
                 "react-compiler/react-compiler": "off",
+                "jest/no-mocks-import": "off",
             },
         },
         {

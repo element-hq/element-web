@@ -16,7 +16,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import { leaveRoomBehaviour } from "./leave-behaviour";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 import DMRoomMap from "../utils/DMRoomMap";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import { MetaSpace } from "../stores/spaces";
@@ -27,7 +27,7 @@ import { type Call } from "../models/Call";
 import LegacyCallHandler from "../LegacyCallHandler";
 
 describe("leaveRoomBehaviour", () => {
-    SdkContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
+    SDKContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
 
     let client: Mocked<MatrixClient>;
     let room: Mocked<Room>;

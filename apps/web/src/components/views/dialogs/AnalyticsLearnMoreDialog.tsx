@@ -14,8 +14,11 @@ import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import Modal, { type ComponentProps, type IHandle } from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-import { getPolicyUrl } from "../../../toasts/AnalyticsToast";
 import ExternalLink from "../elements/ExternalLink";
+
+function getPolicyUrl(): string | undefined {
+    return SdkConfig.get("privacy_policy_url");
+}
 
 export enum ButtonClicked {
     Primary,

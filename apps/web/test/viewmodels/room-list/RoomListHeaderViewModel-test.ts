@@ -26,6 +26,7 @@ import {
 import { createTestClient, mkSpace } from "../../test-utils";
 import { createRoom, hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
 import PosthogTrackers from "../../../src/PosthogTrackers";
+import { ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
 
 jest.mock("../../../src/PosthogTrackers", () => ({
     trackInteraction: jest.fn(),
@@ -59,6 +60,9 @@ describe("RoomListHeaderViewModel", () => {
         mocked(hasCreateRoomRights).mockReturnValue(true);
         mocked(shouldShowSpaceSettings).mockReturnValue(true);
 
+        jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
+        jest.spyOn(ReleaseAnnouncementStore.instance, "nextReleaseAnnouncement").mockResolvedValue(undefined);
+
         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
             if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Recency;
             if (settingName === "feature_video_rooms") return true;
@@ -82,7 +86,6 @@ describe("RoomListHeaderViewModel", () => {
 
             const snapshot = vm.getSnapshot();
             expect(snapshot.title).toBe("Home");
-            expect(snapshot.displayComposeMenu).toBe(true);
             expect(snapshot.displaySpaceMenu).toBe(false);
             expect(snapshot.canCreateRoom).toBe(true);
             expect(snapshot.canCreateVideoRoom).toBe(true);
@@ -119,28 +122,6 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().activeSortOption).toBe("alphabetical");
         });
 
-        it("should hide compose menu when user cannot create rooms", () => {
-            mocked(hasCreateRoomRights).mockReturnValue(false);
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-
-            const snapshot = vm.getSnapshot();
-            expect(snapshot.displayComposeMenu).toBe(false);
-            expect(snapshot.canCreateRoom).toBe(false);
-        });
-
-        it("should display compose menu when section feature is enabled@", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                if (settingName === "feature_room_list_sections") return true;
-                return false;
-            });
-
-            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-
-            const snapshot = vm.getSnapshot();
-            expect(snapshot.displayComposeMenu).toBe(true);
-        });
-
         it("should show invite option when space is public", () => {
             jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
             jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
@@ -175,22 +156,14 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
         });
 
-        it.each([
-            [true, true, false],
-            [false, false, true],
-        ])(
-            "when feature_room_list_sections is %s: canCreateSection=%s, useComposeIcon=%s",
-            (featureEnabled, expectedCanCreateSection, expectedUseComposeIcon) => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
-                    if (settingName === "feature_room_list_sections") return featureEnabled;
-                    return false;
-                });
+        it("should set displaySectionReleaseAnnouncement to true when sections feature is enabled and announcement is active", () => {
+            jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(
+                "room_list_section",
+            );
 
-                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
-                expect(vm.getSnapshot().canCreateSection).toBe(expectedCanCreateSection);
-                expect(vm.getSnapshot().useComposeIcon).toBe(expectedUseComposeIcon);
-            },
-        );
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(true);
+        });
     });
 
     describe("event listeners", () => {
@@ -434,6 +407,15 @@ describe("RoomListHeaderViewModel", () => {
 
             expect(setValueSpy).toHaveBeenCalledWith("RoomList.showMessagePreview", null, expect.anything(), false);
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(false);
+        });
+
+        it("should call nextReleaseAnnouncement and set displaySectionReleaseAnnouncement to false when closeSectionReleaseAnnouncement is called", () => {
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+            vm.closeSectionReleaseAnnouncement();
+
+            expect(ReleaseAnnouncementStore.instance.nextReleaseAnnouncement).toHaveBeenCalled();
+            expect(vm.getSnapshot().displaySectionReleaseAnnouncement).toBe(false);
         });
     });
 });

@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import fetchMock from "@fetch-mock/jest";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 import { merge } from "lodash";
+import { setMissingEntryGenerator } from "@element-hq/web-shared-components";
 
-import * as languageHandler from "../../src/languageHandler";
-import * as languageSettings from "../../src/i18n/settings";
+import { setLanguage } from "../../src/i18n/settings";
 import enElementWeb from "../../src/i18n/strings/en_EN.json";
 import deElementWeb from "../../src/i18n/strings/de_DE.json";
 // Cheat and import relatively here as these aren't exported by the module (should they be?)
@@ -65,8 +65,8 @@ afterEach(() => fetchMock.callHistory.flush());
 
 // Initialise the fetchMock before the test starts so the languageHandler.setLanguage call below can function
 setupLanguageMock();
-languageSettings.setLanguage("en");
-languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+setLanguage("en");
+setMissingEntryGenerator((key) => key.split("|", 2)[1]);
 
 // Set up the module API (so the i18n API exists)
 const moduleLoader = new ModuleLoader(ModuleApi.instance);

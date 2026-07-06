@@ -72,7 +72,7 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
-import { type IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
@@ -207,8 +207,6 @@ interface IRoomProps extends RoomViewProps {
     enableReadReceiptsAndMarkersOnActivity?: boolean;
 }
 
-export { MainSplitContentType };
-
 export interface IRoomState {
     room?: Room;
     roomId?: string;
@@ -303,7 +301,6 @@ interface LocalRoomViewProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement | null>;
-    mainSplitContentType: MainSplitContentType;
     e2eStatus?: E2EStatus;
 }
 
@@ -364,7 +361,6 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
 interface ILocalRoomCreateLoaderProps {
     localRoom: LocalRoom;
     names: string;
-    mainSplitContentType: MainSplitContentType;
 }
 
 /**
@@ -2134,11 +2130,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const names = this.state.room.getDefaultRoomName(this.context.client.getSafeUserId());
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
-                <LocalRoomCreateLoader
-                    localRoom={localRoom}
-                    names={names}
-                    mainSplitContentType={this.state.mainSplitContentType}
-                />
+                <LocalRoomCreateLoader localRoom={localRoom} names={names} />
             </ScopedRoomContextProvider>
         );
     }
@@ -2152,7 +2144,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
-                    mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
         );
@@ -2346,7 +2337,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 onForgetClick={this.onForgetClick}
                                 onDeclineClick={this.onDeclineButtonClicked}
                                 onDeclineAndBlockClick={this.onDeclineAndBlockButtonClicked}
-                                promptRejectionOptions={true}
                                 inviterName={inviterName}
                                 canPreview={false}
                                 joining={this.state.joining}
@@ -2460,7 +2450,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     onJoinClick={this.onJoinButtonClicked}
                     onForgetClick={this.onForgetClick}
                     onDeclineClick={this.onRejectThreepidInviteButtonClicked}
-                    promptRejectionOptions={true}
                     joining={this.state.joining}
                     inviterName={inviterName}
                     invitedEmail={invitedEmail}

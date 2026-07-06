@@ -29,7 +29,8 @@ import { _t } from "../../../languageHandler";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../../../Lifecycle";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../utils/createMatrixClient";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
 import Login, { type OidcNativeFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
@@ -610,7 +611,6 @@ export default class Registration extends React.Component<IProps, IState> {
                         defaultPassword={this.state.formVals.password}
                         onRegisterClick={this.onFormSubmit}
                         flows={this.state.flows}
-                        serverConfig={this.props.serverConfig}
                         canSubmit={!this.state.serverErrorIsFatal}
                         matrixClient={this.state.matrixClient}
                         mobileRegister={this.props.mobileRegister}

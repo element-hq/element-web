@@ -10,14 +10,14 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactElement } from "react";
 import classNames from "classnames";
 
-import * as languageHandler from "../../../languageHandler";
-import { getUserLanguage } from "../../../i18n/settings";
 import { _t } from "../../../languageHandler";
+import { getAllLanguagesWithLabels } from "../../../i18n/utils";
+import { getUserLanguage } from "../../../i18n/settings";
 import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
 import { type NonEmptyArray } from "../../../@types/common";
 
-type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesWithLabels>>;
+type Languages = Awaited<ReturnType<typeof getAllLanguagesWithLabels>>;
 
 function languageMatchesSearchQuery(query: string, language: Languages[0]): boolean {
     if (language.labelInTargetLanguage.toUpperCase().includes(query.toUpperCase())) return true;
@@ -49,8 +49,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        languageHandler
-            .getAllLanguagesWithLabels()
+        getAllLanguagesWithLabels()
             .then((langs) => {
                 langs.sort(function (a, b) {
                     if (a.labelInTargetLanguage < b.labelInTargetLanguage) return -1;
@@ -90,7 +89,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             return <Spinner />;
         }
 
-        let displayedLanguages: Awaited<ReturnType<typeof languageHandler.getAllLanguagesWithLabels>>;
+        let displayedLanguages: Awaited<ReturnType<typeof getAllLanguagesWithLabels>>;
         if (this.state.searchQuery) {
             displayedLanguages = this.state.langs.filter((lang) => {
                 return languageMatchesSearchQuery(this.state.searchQuery, lang);

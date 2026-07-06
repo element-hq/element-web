@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// @vitest-environment happy-dom
+
 import { vi, describe, it, expect, afterEach, type Mocked } from "vitest";
 import {
     Direction,

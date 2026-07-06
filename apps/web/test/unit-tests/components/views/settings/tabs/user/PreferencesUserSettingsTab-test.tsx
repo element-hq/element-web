@@ -31,7 +31,7 @@ describe("PreferencesUserSettingsTab", () => {
     });
 
     const renderTab = (): RenderResult => {
-        return render(<PreferencesUserSettingsTab closeSettingsFn={() => {}} />);
+        return render(<PreferencesUserSettingsTab />);
     };
 
     it("should render", () => {

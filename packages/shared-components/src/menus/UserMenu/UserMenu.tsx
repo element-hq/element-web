@@ -176,7 +176,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                         {displayName}
                     </Text>
                     {userStatus && <StatusButton status={userStatus} clearStatus={vm.clearStatus} />}
-                    <Text data-testid="userId" size="md" as="span" type="body">
+                    <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
                         {userId}
                     </Text>
                     {manageAccountHref && (

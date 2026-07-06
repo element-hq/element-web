@@ -36,11 +36,19 @@ import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
 import { getChangedOverrideRoomMutePushRules } from "./utils";
 import { isRoomVisible } from "./isRoomVisible";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
-import { DefaultTagID } from "./skip-list/tag";
+import { getTagsForRoom } from "../../utils/room/getTagsForRoom";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { CHATS_TAG, createSection, deleteSection, editSection, getOrderedCustomSections } from "./section";
+import {
+    CHATS_TAG,
+    createSection,
+    deleteSection,
+    editSection,
+    getOrderedReorderableSections,
+    reorderSection,
+} from "./section";
+import { DefaultTagID, type TagID } from "./skip-list/tag";
 
 /**
  * These are the filters passed to the room skip list.
@@ -165,16 +173,37 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
         const spaceId = SpaceStore.instance.activeSpace;
 
-        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
-        const sections = areSectionsEnabled
-            ? this.getSections(filterKeys)
-            : [{ tag: CHATS_TAG, rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filterKeys) ?? []) }];
+        const sections = this.getSections(filterKeys);
 
         return {
             spaceId: spaceId,
             filterKeys,
             sections,
         };
+    }
+
+    /**
+     * Get the rooms in the currently active space that are tagged with the given tag.
+     * @param tag The tag to filter the rooms by.
+     */
+    private getRoomsWithTagInActiveSpace(tag: TagID): Room[] {
+        return this.getSortedRoomsInActiveSpace()
+            .sections.flatMap((s) => s.rooms)
+            .filter((room) => getTagsForRoom(room).includes(tag));
+    }
+
+    /**
+     * Get the server notice rooms in the currently active space.
+     */
+    public getServerNoticeRooms(): Room[] {
+        return this.getRoomsWithTagInActiveSpace(DefaultTagID.ServerNotice);
+    }
+
+    /**
+     * Get the direct message (DM) rooms in the currently active space.
+     */
+    public getDmRooms(): Room[] {
+        return this.getRoomsWithTagInActiveSpace(DefaultTagID.DM);
     }
 
     /**
@@ -514,6 +543,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
+     * Reorder custom sections by moving sourceTag to the position of targetTag.
+     * @param sourceTag The tag of the section to move
+     * @param targetTag The tag of the section to move to
+     */
+    public async reorderSection(sourceTag: string, targetTag: string): Promise<void> {
+        await reorderSection(sourceTag, targetTag);
+    }
+
+    /**
      * Returns the ordered section tags.
      */
     public get orderedSectionTags(): string[] {
@@ -524,8 +562,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Load the custom sections from the settings store and update the sorted tags.
      */
     private loadCustomSections(): void {
-        const orderedCustomSections = getOrderedCustomSections();
-        this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
+        // Favourite is pinned to the top and LowPriority to the bottom. Everything in between
+        // (custom sections + Chats) is user-reorderable.
+        const reorderable = getOrderedReorderableSections();
+        this.sortedTags = [DefaultTagID.Favourite, ...reorderable, DefaultTagID.LowPriority];
     }
 }
 

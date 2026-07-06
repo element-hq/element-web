@@ -32,7 +32,7 @@ import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mediaFromMxc } from "../../../../src/customisations/Media";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 
 jest.mock("jszip");
 jest.mock("../../../../src/settings/SettingsStore");
@@ -111,7 +111,7 @@ describe("HTMLExport", () => {
         jest.setSystemTime(REPEATABLE_DATE);
 
         client = stubClient() as jest.Mocked<MatrixClient>;
-        SdkContextClass.instance.client = client;
+        SDKContextClass.instance.client = client;
         DMRoomMap.makeShared(client);
 
         room = new Room("!myroom:example.org", client, "@me:example.org");

@@ -1,8 +1,7 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2026 Element Creations Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -17,8 +16,17 @@ vi.stubGlobal("AudioContext", function () {
 });
 
 if (globalThis.window === undefined) {
-    // We are in a node environment, stub a basic window so singletons work
-    vi.stubGlobal("window", {});
+    // We are in a node environment, stub a basic window so singletons work.
+    // Also stub `location` as a bare global: some libraries (e.g. posthog toolbar) access
+    // `location` directly rather than via `window.location`.
+    const locationStub = new URL("test://test/test");
+    vi.stubGlobal("location", locationStub);
+    vi.stubGlobal("window", {
+        // Mock this as some code assumes it exists (needs to be done at the top level as
+        // things try to access it before the beforeEach blocks run)
+        addEventListener: vi.fn(),
+        location: locationStub,
+    });
 }
 
 // uninitialised SdkConfig causes lots of warnings in console, init with defaults

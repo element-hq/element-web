@@ -13,7 +13,7 @@ import { mocked } from "jest-mock";
 
 import QuickSettingsButton from "../../../../../src/components/views/spaces/QuickSettingsButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 describe("QuickSettingsButton", () => {
     const roomId = "!room:example.com";
@@ -72,11 +72,11 @@ describe("QuickSettingsButton", () => {
 
         describe("and a room is viewed", () => {
             beforeEach(() => {
-                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
+                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(roomId);
             });
 
             afterEach(() => {
-                mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockRestore();
+                mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockRestore();
             });
 
             describe("and the quick settings are open", () => {

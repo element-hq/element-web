@@ -24,7 +24,6 @@ import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { type IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
 import { UserInfoBasicView } from "./user_info/UserInfoBasicView";
@@ -192,12 +191,6 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
 
     const classes = ["mx_UserInfo"];
 
-    let cardState: IRightPanelCardState = {};
-    // We have no previousPhase for when viewing a UserInfo without a Room at this time
-    if (room && phase === RightPanelPhases.EncryptionPanel) {
-        cardState = { member };
-    }
-
     const onEncryptionPanelClose = (): void => {
         RightPanelStore.instance.popCard();
     };
@@ -229,14 +222,12 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     }
 
     const header = (
-        <>
-            <UserInfoHeaderView
-                hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
-                member={member}
-                devices={devices}
-                roomId={room?.roomId}
-            />
-        </>
+        <UserInfoHeaderView
+            hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
+            member={member}
+            devices={devices}
+            roomId={room?.roomId}
+        />
     );
 
     return (
@@ -245,7 +236,6 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             header={_t("common|profile")}
             onClose={onClose}
             closeLabel={closeLabel}
-            cardState={cardState}
             onBack={(ev: ButtonEvent) => {
                 if (RightPanelStore.instance.previousCard.phase === RightPanelPhases.MemberList) {
                     PosthogTrackers.trackInteraction("WebRightPanelRoomUserInfoBackButton", ev);

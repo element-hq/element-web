@@ -11,6 +11,7 @@ import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "ma
 import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import { act, render, waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { setMissingEntryGenerator } from "@element-hq/web-shared-components";
 
 import {
     getMockClientWithEventEmitter,
@@ -19,7 +20,6 @@ import {
     mkStubRoom,
     mockClientPushProcessor,
 } from "../../../../test-utils";
-import * as languageHandler from "../../../../../src/languageHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { TextualBodyFactory as TextualBody } from "../../../../../src/components/views/messages/TextualBodyFactory";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -470,7 +470,7 @@ describe("<TextualBody />", () => {
         let matrixClient: MatrixClient;
 
         beforeEach(() => {
-            languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+            setMissingEntryGenerator((key) => key.split("|", 2)[1]);
             matrixClient = getMockClientWithEventEmitter({
                 getRoom: jest.fn(),
                 getUserId: jest.fn(),

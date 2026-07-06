@@ -654,6 +654,14 @@ exports[`<Users /> should render a single user 1`] = `
         </li>
       </ul>
     </section>
+    <section>
+      <h2>
+        Cryptographic identity
+      </h2>
+      <i>
+        Unknown
+      </i>
+    </section>
   </div>
   <div
     class="mx_Dialog_buttons"
