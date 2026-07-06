@@ -10,8 +10,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/vitest";
-import { advanceDateAndTime, stubClient } from "test-utils";
+import { advanceDateAndTime, stubClient, createTestClient } from "test-utils";
 
 import { type IMatrixClientPeg, MatrixClientPeg as peg } from "./MatrixClientPeg";
 
@@ -73,12 +74,11 @@ describe("MatrixClientPeg", () => {
             // instantiate a MatrixClientPegClass instance, with a new MatrixClient
             testPeg = new PegClass();
             fetchMock.get("http://example.com/_matrix/client/versions", {});
-            testPeg.replaceUsingCreds({
-                accessToken: "SEKRET",
-                homeserverUrl: "http://example.com",
-                userId: "@user:example.com",
-                deviceId: "TEST_DEVICE_ID",
-            });
+
+            const mockClient = createTestClient();
+            mockClient.initRustCrypto = vi.fn();
+            mockClient.startClient = vi.fn();
+            testPeg.set(mockClient as unknown as MatrixClient);
         });
 
         it("should initialise the rust crypto library by default", async () => {

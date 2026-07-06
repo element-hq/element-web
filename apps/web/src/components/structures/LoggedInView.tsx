@@ -28,7 +28,7 @@ import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
 import MediaDeviceHandler from "../../MediaDeviceHandler";
 import dis from "../../dispatcher/dispatcher";
-import { type IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import PlatformPeg from "../../PlatformPeg";

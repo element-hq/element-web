@@ -34,7 +34,8 @@ export function MessageComposerUrlPreviewWrapper({ content }: { content: string 
             void vm.updateWithText(content);
         },
         [vm, content],
-        DEBOUNCE_REQUEST_TIMEOUT_MS,
+        // Update instantly if content is empty (e.g. sent message or cleared input)
+        content ? DEBOUNCE_REQUEST_TIMEOUT_MS : 0,
     );
 
     useEffect(() => {
