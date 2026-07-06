@@ -11,7 +11,7 @@ import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react"
 import { logger } from "matrix-js-sdk/src/logger";
 import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { type IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -188,12 +188,17 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
         let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
             requestButton = (
-                <SettingsSubsection heading={_t("settings|voip|permissions")}>
-                    <p>{_t("settings|voip|missing_permissions_prompt")}</p>
-                    <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
-                        {_t("settings|voip|request_permissions")}
-                    </AccessibleButton>
-                </SettingsSubsection>
+                <Alert
+                    type="info"
+                    title={_t("settings|voip|permissions")}
+                    actions={
+                        <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
+                            {_t("settings|voip|request_permissions")}
+                        </AccessibleButton>
+                    }
+                >
+                    {_t("settings|voip|missing_permissions_prompt")}
+                </Alert>
             );
         } else if (this.state.mediaDevices) {
             speakerDropdown = this.renderDropdown(
