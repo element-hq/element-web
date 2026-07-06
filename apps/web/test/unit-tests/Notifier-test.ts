@@ -38,7 +38,6 @@ import {
     mockPlatformPeg,
 } from "../test-utils";
 import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/IncomingCallToast";
-import { SDKContextClass } from "../../src/contexts/SDKContextClass";
 import UserActivity from "../../src/UserActivity";
 import Modal from "../../src/Modal";
 import { mkThread } from "../test-utils/threads";
