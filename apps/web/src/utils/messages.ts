@@ -20,7 +20,6 @@ import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
 import { type RoomMessageEventContent } from "../../@types/url-preview";
 import { uploadFile } from "../ContentMessages";
-import SettingsStore from "../settings/SettingsStore";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
