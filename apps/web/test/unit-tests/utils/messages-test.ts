@@ -6,28 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type IContent } from "matrix-js-sdk/src/matrix";
+import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
-import { mocked } from "jest-mock";
 
 import { attachMentions, attachUrlPreviews } from "../../../src/utils/messages";
 import EditorModel from "../../../src/editor/model";
-import { createTestClient, mkEvent } from "../../test-utils";
+import { mkEvent } from "../../test-utils";
 import { createPartCreator } from "../editor/mock";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
-import { uploadFile } from "../../../src/ContentMessages";
-
-jest.mock("../../../src/ContentMessages", () => ({
-    uploadFile: jest.fn(),
-}));
-
-// Typed mock reference so the mock-only matchers (toHaveBeenCalled etc.) resolve.
-const uploadFileMock = mocked(uploadFile);
 
 describe("attachUrlPreviews", () => {
-    let client: MatrixClient;
-    let fetchMock: jest.Mock;
-
     const makeContent = (): RoomMessageEventContent =>
         ({ msgtype: "m.text", body: "hi https://example.com" }) as RoomMessageEventContent;
 
@@ -44,43 +32,27 @@ describe("attachUrlPreviews", () => {
         ],
     });
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-        client = createTestClient();
-        // fake fetch → returns something with a .blob(). Keep the mock reference
-        // around so we can assert on it (global.fetch is typed as native fetch).
-        fetchMock = jest.fn().mockResolvedValue({
-            blob: async () => new Blob(["imgdata"], { type: "image/png" }),
-        });
-        global.fetch = fetchMock as unknown as typeof fetch;
-    });
-
-    it("does nothing when there are no previews", async () => {
+    it("does nothing when there are no previews", () => {
         const content = makeContent();
-        await attachUrlPreviews(client, "!r:s", { previews: [] }, content);
+        attachUrlPreviews({ previews: [] }, content);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
-        expect(uploadFileMock).not.toHaveBeenCalled();
     });
 
-    it("attaches a preview with no image (no fetch/upload)", async () => {
+    it("attaches a preview with no image", () => {
         const content = makeContent();
-        await attachUrlPreviews(client, "!r:s", snapshot(), content);
-        expect(fetchMock).not.toHaveBeenCalled();
-        expect(uploadFileMock).not.toHaveBeenCalled();
+        attachUrlPreviews(snapshot(), content);
         expect(content["com.beeper.linkpreviews"]).toEqual([
             expect.objectContaining({ "og:title": "Example", "og:image": undefined }),
         ]);
     });
 
-    it("fetches + uploads the image, embeds the mxc url", async () => {
-        uploadFileMock.mockResolvedValue({ url: "mxc://server/img" });
+    it("embeds the mxc url from the preview image", () => {
         const content = makeContent();
-        await attachUrlPreviews(
-            client,
-            "!r:s",
+        attachUrlPreviews(
             snapshot({
                 imageThumb: "",
                 imageFull: "https://example.com/full.png",
+                mxcImageFull: "mxc://server/img",
                 imageType: "image/png",
                 fileSize: 1234,
                 width: 100,
@@ -90,8 +62,6 @@ describe("attachUrlPreviews", () => {
             content,
         );
 
-        expect(fetchMock).toHaveBeenCalledWith("https://example.com/full.png");
-        expect(uploadFileMock).toHaveBeenCalledWith(client, "!r:s", expect.any(Blob));
         expect(content["com.beeper.linkpreviews"]![0]).toEqual(
             expect.objectContaining({
                 "og:image": "mxc://server/img",
@@ -100,19 +70,6 @@ describe("attachUrlPreviews", () => {
                 "matrix:image:size": 1234,
             }),
         );
-    });
-
-    it("still attaches the preview when upload fails", async () => {
-        uploadFileMock.mockRejectedValue(new Error("boom"));
-        const content = makeContent();
-        await attachUrlPreviews(
-            client,
-            "!r:s",
-            snapshot({ imageThumb: "", imageFull: "https://x/f.png", playable: false }),
-            content,
-        );
-        // error is swallowed by logger.error → og:image just stays undefined
-        expect(content["com.beeper.linkpreviews"]![0]["og:image"]).toBeUndefined();
     });
 });
 

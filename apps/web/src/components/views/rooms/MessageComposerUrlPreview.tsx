@@ -13,17 +13,18 @@ import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import PlatformPeg from "../../../PlatformPeg";
 import { ModuleApi } from "../../../modules/Api";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
 export function useMessageComposerUrlPreviewViewModel(): MessageComposerUrlPreviewViewModel {
     const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
 
+    const client = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new MessageComposerUrlPreviewViewModel({
-                client: MatrixClientPeg.safeGet(),
+                client,
                 visible: showUrlPreview,
                 showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
             }),

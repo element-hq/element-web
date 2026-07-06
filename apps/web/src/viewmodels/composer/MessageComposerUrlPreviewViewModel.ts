@@ -52,7 +52,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         }
 
         let previews;
-        if (SettingsStore.getValue("feature_msc4452_url_preview_bundle")) {
+        if (SettingsStore.getValue("feature_msc4095_url_preview_bundle")) {
             const previewRequests = Array.from(this.links).map(async (link) => {
                 try {
                     return await this.fetcher.fetchPreview(link, true);

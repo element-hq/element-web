@@ -14,17 +14,15 @@ import {
  * Bundled URL previews in MSC-4095
  *
  * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
- * @see https://github.com/gomuks/gomuks/pull/560/changes
  */
 interface UnstableBundledUrlPreviews {
     "com.beeper.linkpreviews"?: UnstableBundledUrlPreviewSingle[];
 }
 
 /**
- * Single item in bundled URL previews in MSC-4095
+ * Single item in bundled URL previews in MSC4095
  *
  * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4095
- * @see https://github.com/gomuks/gomuks/pull/560/changes
  */
 export interface UnstableBundledUrlPreviewSingle {
     "matched_url": string;

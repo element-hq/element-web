@@ -5,21 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    type MatrixEvent,
-    type IContent,
-    type IMentions,
-    type IEventRelation,
-    type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk/src/matrix";
 import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
-import { type EncryptedFile } from "matrix-js-sdk/src/types";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
 import { type RoomMessageEventContent } from "../../@types/url-preview";
-import { uploadFile } from "../ContentMessages";
+import SettingsStore from "../settings/SettingsStore";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -118,53 +110,25 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
         };
     }
 }
-const logger = rootLogger.getChild("attachUrlPreviews");
-
-export async function attachUrlPreviews(
-    mxClient: MatrixClient,
-    roomId: string,
+export function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
-): Promise<void> {
+): void {
+    if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
+
     if (urlPreviewSnapshot.previews.length) {
-        content["com.beeper.linkpreviews"] = await Promise.all(
-            urlPreviewSnapshot.previews.map(async (preview) => {
-                // upload the files to produce the mxc:// url for the images
-                let imageUploaded: { url?: string; file?: EncryptedFile } | null = null;
-
-                if (preview.image) {
-                    let imageBlob: Blob | null = null;
-
-                    try {
-                        imageBlob = await (await fetch(preview.image.imageFull)).blob();
-                    } catch (e) {
-                        logger.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
-                    }
-
-                    if (imageBlob !== null) {
-                        try {
-                            imageUploaded = await uploadFile(mxClient, roomId, imageBlob);
-                        } catch (e) {
-                            logger.error("Failed to upload image", e);
-                        }
-                    }
-                }
-
-                return {
-                    "matched_url": preview.link,
-                    // TODO: og:url may be different from the URL requested, but is not present in the response of the url_preview
-                    "og:url": preview.link,
-                    "og:title": preview.title,
-                    "og:description": preview.description,
-                    "og:image": imageUploaded?.url,
-                    // TODO: should we trust the declared size? or should we calculate it ourselves
-                    "og:image:width": preview.image?.width,
-                    "og:image:height": preview.image?.height,
-                    "og:image:type": preview.image?.imageType,
-                    "matrix:image:size": preview.image?.fileSize,
-                    "beeper:image:encryption": imageUploaded?.file,
-                };
-            }),
-        );
+        content["com.beeper.linkpreviews"] = urlPreviewSnapshot.previews.map((preview) => {
+            return {
+                "matched_url": preview.link,
+                "og:url": preview.ogUrl,
+                "og:title": preview.title,
+                "og:description": preview.description,
+                "og:image": preview.image?.mxcImageFull,
+                "og:image:width": preview.image?.width,
+                "og:image:height": preview.image?.height,
+                "og:image:type": preview.image?.imageType,
+                "matrix:image:size": preview.image?.fileSize,
+            };
+        });
     }
 }
