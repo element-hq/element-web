@@ -14,9 +14,10 @@ import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import * as AvatarModule from "../../../../../src/Avatar";
 import VideoFeed from "../../../../../src/components/views/voip/VideoFeed";
-import { stubClient, useMockedCalls } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, stubClient, useMockedCalls } from "../../../../test-utils";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const FAKE_AVATAR_URL = "http://fakeurl.dummy/fake.png";
 
@@ -51,7 +52,10 @@ describe("VideoFeed", () => {
             addListener: jest.fn(),
             removeListener: jest.fn(),
         };
-        render(<VideoFeed feed={feed as unknown as CallFeed} call={mockCall as unknown as MatrixCall} />);
+        render(
+            <VideoFeed feed={feed as unknown as CallFeed} call={mockCall as unknown as MatrixCall} />,
+            clientAndSDKContextRenderOptions(client, SDKContextClass.instance),
+        );
         const avatarImg = screen.getByRole("presentation");
         expect(avatarImg).toHaveAttribute("src", FAKE_AVATAR_URL);
     });

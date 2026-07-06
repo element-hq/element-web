@@ -42,10 +42,10 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
 
     private readonly roomId: string;
 
-    public constructor(props: IProps) {
-        super(props);
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
-        const roomId = this.context.legacyCallHandler.roomIdForCall(this.props.call);
+        const roomId = context.legacyCallHandler.roomIdForCall(this.props.call);
         if (!roomId) {
             throw new Error("Unable to find room for incoming call");
         }
