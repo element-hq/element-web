@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { _t } from "../languageHandler";
-import Notifier from "../Notifier";
+import type Notifier from "../Notifier";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -15,22 +15,22 @@ import { getLocalNotificationAccountDataEventType } from "../utils/notifications
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 
-const onAccept = async (): Promise<void> => {
-    await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);
-    const cli = MatrixClientPeg.safeGet();
-    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
-    cli.setAccountData(eventType, {
-        is_silenced: false,
-    });
-};
-
-const onReject = (): void => {
-    Notifier.setPromptHidden(true);
-};
-
 const TOAST_KEY = "desktopnotifications";
 
-export const showToast = (fromMessageSend: boolean): void => {
+export const showToast = (notifier: Notifier, fromMessageSend: boolean): void => {
+    const onAccept = async (): Promise<void> => {
+        await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);
+        const cli = MatrixClientPeg.safeGet();
+        const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
+        cli.setAccountData(eventType, {
+            is_silenced: false,
+        });
+    };
+
+    const onReject = (): void => {
+        notifier.setPromptHidden(true);
+    };
+
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
         title: fromMessageSend

@@ -12,7 +12,7 @@ import { type EventTimeline, JoinRule, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { SDKContext } from "../../../../../../src/contexts/SDKContext";
-import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../../TestSDKContext.ts";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
 import {
     CallGuestLinkButton,
@@ -26,7 +26,7 @@ import SettingsStore from "../../../../../../src/settings/SettingsStore";
 
 describe("<CallGuestLinkButton />", () => {
     const roomId = "!room:server.org";
-    let sdkContext!: SDKContextClass;
+    let sdkContext!: TestSDKContext;
     let modalSpy: jest.SpyInstance;
     let modalResolve: (value: unknown[] | PromiseLike<unknown[]>) => void;
     let room: Room;
@@ -78,8 +78,8 @@ describe("<CallGuestLinkButton />", () => {
             ...mockClientMethodsUser(),
             sendStateEvent: jest.fn(),
         });
-        sdkContext = new SDKContextClass();
-        sdkContext.client = client;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = client;
         const modalPromise = new Promise<unknown[]>((resolve) => {
             modalResolve = resolve;
         });
@@ -94,7 +94,7 @@ describe("<CallGuestLinkButton />", () => {
             return oldGet(key);
         });
         jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(true);
-        jest.spyOn(SDKContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+        jest.spyOn(sdkContext.roomViewStore, "isViewingCall").mockReturnValue(true);
     });
     afterEach(() => {
         jest.restoreAllMocks();
@@ -152,7 +152,7 @@ describe("<CallGuestLinkButton />", () => {
 
     it("don't show external conference button if now guest spa link is configured", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
-        jest.spyOn(SDKContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+        jest.spyOn(sdkContext.roomViewStore, "isViewingCall").mockReturnValue(true);
 
         jest.spyOn(SdkConfig, "get").mockImplementation((key) => {
             if (key === "element_call") {
@@ -179,7 +179,7 @@ describe("<CallGuestLinkButton />", () => {
 
     it("opens the share dialog with the correct share link in an encrypted room", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
-        jest.spyOn(SDKContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+        jest.spyOn(sdkContext.roomViewStore, "isViewingCall").mockReturnValue(true);
 
         getComponent(room);
         const modalSpy = jest.spyOn(Modal, "createDialog");
@@ -201,7 +201,7 @@ describe("<CallGuestLinkButton />", () => {
     it("share dialog has correct link in an unencrypted room", () => {
         jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Public);
         jest.spyOn(room, "hasEncryptionStateEvent").mockReturnValue(false);
-        jest.spyOn(SDKContextClass.instance.roomViewStore, "isViewingCall").mockReturnValue(true);
+        jest.spyOn(sdkContext.roomViewStore, "isViewingCall").mockReturnValue(true);
 
         getComponent(room);
         const modalSpy = jest.spyOn(Modal, "createDialog");

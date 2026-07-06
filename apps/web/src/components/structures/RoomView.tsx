@@ -88,7 +88,6 @@ import { containsEmoji } from "../../effects/utils";
 import { CHAT_EFFECTS } from "../../effects";
 import { CallView } from "../views/voip/CallView";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
@@ -1689,8 +1688,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room) return;
         const memberCount = this.state.room.getJoinedMemberCount() + this.state.room.getInvitedMemberCount();
         // if they are not alone prompt the user about notifications so they don't miss replies
-        if (memberCount > 1 && Notifier.shouldShowPrompt()) {
-            showNotificationsToast(true);
+        if (memberCount > 1 && this.context.notifier.shouldShowPrompt()) {
+            showNotificationsToast(this.context.notifier, true);
         }
     }
 
