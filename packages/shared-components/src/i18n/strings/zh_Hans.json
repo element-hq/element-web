@@ -169,7 +169,7 @@
         "sort": "排序",
         "sort_type": {
             "activity": "活动",
-            "atoz": "",
+            "atoz": "A-Z",
             "unread_first": "未读优先"
         },
         "space_menu": {
