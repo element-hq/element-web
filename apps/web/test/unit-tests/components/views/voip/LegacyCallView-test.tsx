@@ -12,8 +12,9 @@ import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
-import { stubClient } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("LegacyCallView", () => {
     it("should exit full screen on unmount", () => {
@@ -22,7 +23,7 @@ describe("LegacyCallView", () => {
         document.fullscreenElement = element;
         document.exitFullscreen = jest.fn();
 
-        stubClient();
+        const cli = stubClient();
 
         const call = {
             on: jest.fn(),
@@ -35,14 +36,17 @@ describe("LegacyCallView", () => {
             isScreensharing: jest.fn().mockReturnValue(false),
         } as unknown as MatrixCall;
 
-        const { unmount } = render(<LegacyCallView call={call} sidebarShown={false} />);
+        const { unmount } = render(
+            <LegacyCallView call={call} sidebarShown={false} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
         expect(document.exitFullscreen).not.toHaveBeenCalled();
         unmount();
         expect(document.exitFullscreen).toHaveBeenCalled();
     });
 
     it("should show/hide the sidebar based on the sidebarShown prop", async () => {
-        stubClient();
+        const cli = stubClient();
 
         const call = {
             roomId: "test-room",
@@ -75,14 +79,17 @@ describe("LegacyCallView", () => {
             getUserIdForRoomId: jest.fn().mockReturnValue("test-user"),
         } as unknown as DMRoomMap);
 
-        const { container, rerender } = render(<LegacyCallView call={call} sidebarShown={true} />);
+        const { container, rerender } = render(
+            <LegacyCallView call={call} sidebarShown={true} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
         expect(container.querySelector(".mx_LegacyCallViewSidebar")).toBeTruthy();
         rerender(<LegacyCallView call={call} sidebarShown={true} />);
         expect(container.querySelector(".mx_LegacyCallViewSidebar")).toBeTruthy();
     });
 
     it("should not show the sidebar button in picture-in-picture mode", async () => {
-        stubClient();
+        const cli = stubClient();
 
         const call = {
             on: jest.fn(),
@@ -98,7 +105,10 @@ describe("LegacyCallView", () => {
             getUserIdForRoomId: jest.fn().mockReturnValue("test-user"),
         } as unknown as DMRoomMap);
 
-        const { container } = render(<LegacyCallView call={call} sidebarShown={false} pipMode={true} />);
+        const { container } = render(
+            <LegacyCallView call={call} sidebarShown={false} pipMode={true} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
         expect(container.querySelector(".mx_LegacyCallViewButtons_button_sidebar")).toBeFalsy();
     });
 });
