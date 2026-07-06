@@ -112,7 +112,7 @@ export interface WebConfigJson {
     voip?: {
         obey_asserted_identity?: boolean; // MSC3086
     };
-    element_call: {
+    element_call?: {
         guest_spa_url?: string;
         brand?: string;
         use_exclusively?: boolean;
