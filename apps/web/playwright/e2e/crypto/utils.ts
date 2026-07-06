@@ -216,14 +216,14 @@ export async function logIntoElement(page: Page, credentials: Credentials) {
 }
 
 /**
- * Fill in the login form in Element with the given creds, and then complete the `CompleteSecurity` step, using the
- * given recovery key. (Normally this will verify the new device using the secrets from 4S.)
+ * Complete the `CompleteSecurity` step that happens after login, using the given recovery key.
+ * (Normally this will verify the new device using the secrets from 4S.)
  *
  * Afterwards, waits for the application to redirect to the home page.
+ *
+ * This is normally useful after a call to {@link logIntoElement} or {@link logInAccountMas}.
  */
-export async function logIntoElementAndVerify(page: Page, credentials: Credentials, recoveryKey: string) {
-    await logIntoElement(page, credentials);
-
+export async function verifyAfterLogin(page: Page, recoveryKey: string) {
     await page.locator(".mx_AuthPage").getByRole("button", { name: "Use recovery key" }).click();
 
     const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "Use recovery key" });

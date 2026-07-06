@@ -14,11 +14,12 @@ import {
     createSharedEncryptedRoomWithUser,
     enableKeyBackup,
     logIntoElement,
-    logIntoElementAndVerify,
     logOutOfElement,
+    verifyAfterLogin,
 } from "./utils.ts";
 import { type Client } from "../../pages/client.ts";
 import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
+import { Bot } from "../../pages/bot.ts";
 
 const NAME = "Alice";
 
@@ -26,7 +27,6 @@ test.use({
     displayName: NAME,
     synapseConfig: {
         experimental_features: {
-            msc2697_enabled: false,
             msc3814_enabled: true,
         },
     },
@@ -120,18 +120,24 @@ test.describe("Dehydration", () => {
         await expectDehydratedDeviceDisabled(app);
     });
 
-    test("Can read messages sent while logged out", async ({ page, user: credentials, app, bot: bob }) => {
+    test("Can read messages sent while logged out", async ({ homeserver, credentials, page, app }) => {
         const recoveryKey =
-            await test.step("Alice sets up cross-signing and recovery => a dehydrated device is created", async () => {
-                // Create an identity, then set up recovery, to create a dehydrated device.
-                await app.client.bootstrapCrossSigning(credentials);
+            await test.step("Alice logs in and sets up recovery => a dehydrated device is created", async () => {
+                // This test does a page reload to work around a bug, so we need to avoid the `pageWithCredentials` and `user`
+                // fixtures poke credentials into localStorage via a pageload script. We therefore log in manually.
+                await logIntoElement(page, credentials);
+
+                // Logging in will have created a cross-signing identity for us. Now set up recovery, to create a dehydrated device.
                 const recoveryKey = await enableKeyBackup(app);
 
                 await expectDehydratedDeviceEnabled(app);
                 return recoveryKey;
             });
 
-        const testRoomId = await test.step("Bob and Alice make a shared room", async () => {
+        const [bob, testRoomId] = await test.step("Bob and Alice make a shared room", async () => {
+            // As above, we need to avoid the `user` fixture: we therefore also need to avoid the `bot` fixture, which
+            // depends on the `user` fixture. We just create the bot manually.
+            const bob = new Bot(page, homeserver, { displayName: "Bob" });
             await autoJoin(bob);
 
             // create an encrypted room, and wait for Bob to join it.
@@ -139,7 +145,7 @@ test.describe("Dehydration", () => {
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
-            return testRoomId;
+            return [bob, testRoomId];
         });
 
         await test.step("Alice logs out", async () => {
@@ -151,7 +157,12 @@ test.describe("Dehydration", () => {
         });
 
         await test.step("Alice logs back in, and should be able to view Bob's message", async () => {
-            await logIntoElementAndVerify(page, credentials, recoveryKey);
+            // Reload to work around a Rust crypto bug where it can hold onto the indexeddb even after logout
+            // https://github.com/element-hq/element-web/issues/25779
+            await page.reload();
+
+            await logIntoElement(page, credentials);
+            await verifyAfterLogin(page, recoveryKey);
             await app.viewRoomById(testRoomId);
             await expect(page.getByText("test encrypted 1")).toBeVisible();
         });
