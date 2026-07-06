@@ -892,6 +892,8 @@
         "user_avatar": "Avatar: %(avatar)s",
         "user_displayname": "Nom d'affichage : %(displayname)s",
         "user_id": "Identifiant utilisateur : %(userId)s",
+        "user_identity": "Identité cryptographique",
+        "user_identity_unknown": "Inconnu",
         "user_no_avatar": "Avatar: <i> Aucun</i>",
         "user_no_displayname": "Nom d'affichage : <i>Aucun</i>",
         "user_read_up_to": "L’utilisateur a lu jusqu’à : ",

@@ -332,10 +332,13 @@ export class RoomListViewModel
      * Update which rooms are currently visible.
      * Called by the view when scroll position changes.
      * Disposes of view models for rooms no longer visible.
+     *
+     * Indices are in room-index space (section header entries excluded):
+     * startIndex is inclusive, endIndex is exclusive.
      */
     public updateVisibleRooms(startIndex: number, endIndex: number): void {
         const allRoomIds = this.roomIds;
-        const newVisibleIds = allRoomIds.slice(startIndex, Math.min(endIndex, allRoomIds.length));
+        const newVisibleIds = allRoomIds.slice(startIndex, endIndex);
 
         const newVisibleSet = new Set(newVisibleIds);
 

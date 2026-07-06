@@ -889,6 +889,8 @@
         "user_avatar": "Profilkép: %(avatar)s",
         "user_displayname": "Megjelenített név: %(displayname)s",
         "user_id": "Felhasználói azonosító: %(userId)s",
+        "user_identity": "Kriptográfiai személyazonosság",
+        "user_identity_unknown": "Ismeretlen",
         "user_no_avatar": "Profilkép: <i>Nincs</i>",
         "user_no_displayname": "Megjelenített név: <i>Nincs</i>",
         "user_read_up_to": "A felhasználó eddig olvasta el: ",
