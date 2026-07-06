@@ -70,6 +70,7 @@ import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewm
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { uploadFile } from "../../../ContentMessages";
 import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -118,13 +119,12 @@ export function createMessageContent(
 export async function attachUrlPreviews(
     mxClient: MatrixClient,
     roomId: string,
-    urlPreviewVm: MessageComposerUrlPreviewViewModel,
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
 ): Promise<void> {
-    const previewsSnapshot = urlPreviewVm?.getSnapshot();
-    if (previewsSnapshot !== undefined && previewsSnapshot.previews.length !== 0) {
+    if (urlPreviewSnapshot.previews.length) {
         content["com.beeper.linkpreviews"] = await Promise.all(
-            previewsSnapshot.previews.map(async (preview) => {
+            urlPreviewSnapshot.previews.map(async (preview) => {
                 // upload the files to produce the mxc:// url for the images
                 let imageUploaded: { url?: string; file?: EncryptedFile } | null = null;
 
@@ -280,10 +280,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
                     const editEvent = events
                         ? findEditableEvent({
-                              events,
-                              isForward: false,
-                              matrixClient: MatrixClientPeg.safeGet(),
-                          })
+                            events,
+                            isForward: false,
+                            matrixClient: MatrixClientPeg.safeGet(),
+                        })
                         : undefined;
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else
@@ -475,7 +475,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     this.props.relation,
                 );
                 // TODO: there is now a noticable delay between pressing enter and sending
-                await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm, content);
+                await attachUrlPreviews(this.props.mxClient, roomId, this.props.urlPreviewVm.getSnapshot(), content);
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
