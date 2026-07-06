@@ -10,6 +10,7 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import SettingsStore from "../../settings/SettingsStore";
 
 const logger = rootLogger.getChild("MessageComposerUrlPreviewViewModel");
 
@@ -50,9 +51,17 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             return;
         }
 
+        let links: Set<string>;
+
+        if (SettingsStore.getValue("feature_msc4452_url_preview_bundle")) {
+            links = this.links;
+        } else {
+            links = new Set(Array.from(this.links).slice(0, 1)); // only preview first item
+        }
+
         // Fetch previews for all links in the message text,
         // And remove the ones with erroneous responses
-        const previewRequests = Array.from(this.links).map(async (link) => {
+        const previewRequests = Array.from(links).map(async (link) => {
             try {
                 return await this.fetcher.fetchPreview(link, true);
             } catch (ex) {

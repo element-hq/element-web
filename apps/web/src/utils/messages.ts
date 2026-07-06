@@ -13,6 +13,7 @@ import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
 import { type RoomMessageEventContent } from "../../@types/url-preview";
 import { uploadFile } from "../ContentMessages";
+import SettingsStore from "../settings/SettingsStore";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -118,6 +119,8 @@ export async function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
 ): Promise<void> {
+    if (!SettingsStore.getValue("feature_msc4452_url_preview_bundle")) { return; }
+
     if (urlPreviewSnapshot.previews.length) {
         content["com.beeper.linkpreviews"] = await Promise.all(
             urlPreviewSnapshot.previews.map(async (preview) => {
