@@ -15,7 +15,7 @@ import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListViewModel";
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
@@ -68,7 +68,7 @@ describe("RoomListViewModel", () => {
 
         jest.spyOn(RoomListStoreV3.instance, "isLoadingRooms", "get").mockReturnValue(false);
         jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(null);
-        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+        jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
         mocked(hasCreateRoomRights).mockReturnValue(false);
     });
@@ -223,7 +223,7 @@ describe("RoomListViewModel", () => {
         it("should update active room index when room is selected", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
@@ -239,7 +239,7 @@ describe("RoomListViewModel", () => {
         it("should return undefined active room index when no room is selected", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
@@ -258,7 +258,7 @@ describe("RoomListViewModel", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             // Select room at index 1
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 newRoomId: "!room2:server",
@@ -284,7 +284,7 @@ describe("RoomListViewModel", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             // Select room at index 1
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 newRoomId: "!room2:server",
@@ -293,7 +293,7 @@ describe("RoomListViewModel", () => {
             await flushPromises();
 
             // User switches to room3
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 oldRoomId: "!room2:server",
@@ -489,7 +489,7 @@ describe("RoomListViewModel", () => {
         it("should navigate to next room when delta is 1", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -512,7 +512,7 @@ describe("RoomListViewModel", () => {
         it("should navigate to previous room when delta is -1", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -535,7 +535,7 @@ describe("RoomListViewModel", () => {
         it("should wrap around to last room when navigating backwards from first room", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -558,7 +558,7 @@ describe("RoomListViewModel", () => {
         it("should not navigate when current room is not found", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
             dispatchSpy.mockClear();
@@ -582,7 +582,7 @@ describe("RoomListViewModel", () => {
         it("should not navigate when no room is selected", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
             dispatchSpy.mockClear();
@@ -859,7 +859,7 @@ describe("RoomListViewModel", () => {
                 expect(favHeader.isExpanded).toBe(false);
 
                 // Select regularRoom1, which is the first room in the chats section
-                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
+                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
                 dispatcher.dispatch({
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!reg1:server",
@@ -1165,7 +1165,7 @@ describe("RoomListViewModel", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
                 // Select favRoom1 (index 0 globally, index 0 in favourites section)
-                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
+                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
                 dispatcher.dispatch({
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!fav1:server",

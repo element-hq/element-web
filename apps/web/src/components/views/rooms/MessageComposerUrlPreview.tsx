@@ -59,8 +59,9 @@ export function MessageComposerUrlPreviewWrapper({
             // the component may choose to render the original component.
             void vm.updateWithText(content);
         },
-        [content],
-        DEBOUNCE_REQUEST_TIMEOUT_MS,
+        [vm, content],
+        // Update instantly if content is empty (e.g. sent message or cleared input)
+        content ? DEBOUNCE_REQUEST_TIMEOUT_MS : 0,
     );
 
     return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;

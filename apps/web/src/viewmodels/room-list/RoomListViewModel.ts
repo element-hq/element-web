@@ -34,7 +34,7 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
@@ -332,10 +332,13 @@ export class RoomListViewModel
      * Update which rooms are currently visible.
      * Called by the view when scroll position changes.
      * Disposes of view models for rooms no longer visible.
+     *
+     * Indices are in room-index space (section header entries excluded):
+     * startIndex is inclusive, endIndex is exclusive.
      */
     public updateVisibleRooms(startIndex: number, endIndex: number): void {
         const allRoomIds = this.roomIds;
-        const newVisibleIds = allRoomIds.slice(startIndex, Math.min(endIndex, allRoomIds.length));
+        const newVisibleIds = allRoomIds.slice(startIndex, endIndex);
 
         const newVisibleSet = new Set(newVisibleIds);
 
@@ -490,7 +493,7 @@ export class RoomListViewModel
      * Migrated from useRoomListNavigation hook.
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
-        const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
@@ -668,7 +671,7 @@ export class RoomListViewModel
     ): Promise<void> {
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
-        const roomId = roomIdOverride ?? SdkContextClass.instance.roomViewStore.getRoomId();
+        const roomId = roomIdOverride ?? SDKContextClass.instance.roomViewStore.getRoomId();
 
         // Apply sticky room logic to keep selected room at same position within its section
         const stickySections = this.applyStickyRoom(isRoomChange, roomId);
