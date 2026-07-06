@@ -14,9 +14,10 @@ import {
     createSecondBotDevice,
     createSharedEncryptedRoomWithUser,
     enableKeyBackup,
-    logIntoElementAndVerify,
+    logIntoElement,
     logOutOfElement,
     verify,
+    verifyAfterLogin,
     waitForDevices,
 } from "./utils";
 import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
@@ -170,7 +171,8 @@ test.describe("Cryptography", function () {
                     window.localStorage.clear();
                 });
                 await page.reload();
-                await logIntoElementAndVerify(page, aliceCredentials, securityKey);
+                await logIntoElement(page, aliceCredentials);
+                await verifyAfterLogin(page, securityKey);
 
                 /* go back to the test room and find Bob's message again */
                 await app.viewRoomById(testRoomId);

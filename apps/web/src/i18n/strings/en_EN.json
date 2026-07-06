@@ -1550,7 +1550,6 @@
         "group_voip": "Voice & Video",
         "group_widgets": "Widgets",
         "hidebold": "Hide notification dot (only display counters badges)",
-        "html_topic": "Show HTML representation of room topics",
         "join_beta": "Join the beta",
         "join_beta_reload": "Joining the beta will reload %(brand)s.",
         "jump_to_date": "Jump to date (adds /jumptodate and jump to date headers)",
