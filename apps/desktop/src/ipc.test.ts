@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, vi } from "vitest";
+// eslint-disable-next-line no-restricted-imports
 import { ipcMain, type IpcMainInvokeEvent } from "electron";
 
 import { getConfig } from "./config.js";
