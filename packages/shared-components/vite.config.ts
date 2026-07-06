@@ -65,7 +65,6 @@ export default defineConfig({
             fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "umd.cjs"}`,
         },
         outDir: "dist",
-        sourcemap: true,
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library

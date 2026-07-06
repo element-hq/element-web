@@ -195,7 +195,6 @@ describe("formatDate", () => {
 
     it("should return time & date string without year if it is within the same year", () => {
         const date = new Date(REPEATABLE_DATE.getTime() - 66 * DAY_MS + 2 * HOUR_MS + 12 * MINUTE_MS);
-        console.warn("@@", REPEATABLE_DATE, date);
         expect(formatDate(date, false, "en-US")).toMatchInlineSnapshot(`"Mon, Sep 12, 19:10"`);
     });
 

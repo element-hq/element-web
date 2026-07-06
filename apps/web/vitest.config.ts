@@ -39,7 +39,7 @@ export default defineProject({
     },
     test: {
         include: ["src/**/*.test.{ts,tsx}"],
-        environment: "happy-dom",
+        environment: "node",
         pool: "threads",
         globals: false,
         setupFiles: ["src/test/setupTests.ts"],
