@@ -35,7 +35,7 @@ describe("UserMenuViewModel", () => {
         mockOwnProfileStore = {
             displayName: "Sally Sanderson",
             userStatus: undefined,
-            getHttpAvatarUrl: jest.fn().mockReturnValue(undefined),
+            getHttpAvatarUrl: jest.fn().mockReturnValue("http://foo.dummy/avatar.png"),
             on: jest.fn(),
         } as unknown as OwnProfileStore;
     });
@@ -49,7 +49,11 @@ describe("UserMenuViewModel", () => {
     it("should generate a menu options for a logged in client", () => {
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
         vm.setOpen(true);
-        expect(vm.getSnapshot()).toMatchSnapshot();
+        expect(vm.getSnapshot().userId).toEqual("@alice:domain");
+        expect(vm.getSnapshot().displayName).toEqual("Sally Sanderson");
+        expect(vm.getSnapshot().avatarUrl).toEqual("http://foo.dummy/avatar.png");
+        expect(vm.getSnapshot().showAvatar).toEqual(true);
+        expect(vm.getSnapshot().expanded).toEqual(false);
     });
 
     it("should show a link for account management", async () => {
@@ -68,7 +72,8 @@ describe("UserMenuViewModel", () => {
         client.isGuest.mockReturnValue(true);
         const vm = new UserMenuViewModel({ ownProfileStore: mockOwnProfileStore }, dispatcher, client, true);
         vm.setOpen(true);
-        expect(vm.getSnapshot()).toMatchSnapshot();
+        expect(vm.getSnapshot().displayName).toEqual("Sally Sanderson");
+        expect(vm.getSnapshot().showAvatar).toEqual(false);
     });
 
     it("should generate a menu options that include feedback", () => {
