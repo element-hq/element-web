@@ -63,7 +63,7 @@ const settingsStoreGetValue = SettingsStore.getValue;
 
 describe("Notifier", () => {
     const context = new TestSDKContext();
-    const notifier = new Notifier(dis, context);
+    let notifier: Notifier;
 
     const roomId = "!room1:server";
     const testEvent = mkEvent({
@@ -163,6 +163,7 @@ describe("Notifier", () => {
             requestNotificationPermission: jest.fn(),
         });
 
+        notifier = new Notifier(dis, context);
         notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
 
         mockClient.getRoom.mockImplementation((id: string | undefined): Room | null => {
@@ -174,12 +175,6 @@ describe("Notifier", () => {
         // @ts-ignore
         notifier.backgroundAudio.audioContext = mockAudioContext;
         context._client = mockClient;
-
-        // Notifier is a singleton, so its audio-notification throttle state
-        // (see NOTIFICATION_SOUND_THROTTLE_MS) leaks between tests. Reset it so
-        // each test exercises a clean instance.
-        // @ts-ignore - lastAudioNotificationMs is private
-        Notifier.lastAudioNotificationMs.clear();
     });
 
     describe("triggering notification from events", () => {
@@ -462,10 +457,10 @@ describe("Notifier", () => {
             mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
 
             // Default sound path (no custom room sound).
-            Notifier.getSoundForRoom = jest.fn().mockReturnValue(null);
+            jest.spyOn(notifier, "getSoundForRoom").mockReturnValue(null);
 
             // @ts-ignore - backgroundAudio is private
-            playSpy = jest.spyOn(Notifier.backgroundAudio, "pickFormatAndPlay").mockResolvedValue({} as any);
+            playSpy = jest.spyOn(notifier.backgroundAudio, "pickFormatAndPlay").mockResolvedValue({} as any);
         });
 
         afterEach(() => {
@@ -475,36 +470,36 @@ describe("Notifier", () => {
 
         it("plays at most one sound for a burst of notifications within the throttle window", async () => {
             // Simulate a backlog of notifications arriving back-to-back on wake.
-            await Notifier.playAudioNotification(testEvent, testRoom);
-            await Notifier.playAudioNotification(testEvent, testRoom);
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
 
             expect(playSpy).toHaveBeenCalledTimes(1);
         });
 
         it("plays again once the throttle window has elapsed", async () => {
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(1);
 
             // Advance the clock just past the throttle window.
             jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS + 1);
 
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(2);
         });
 
         it("throttles right up to the window boundary, then plays again (strict `<`)", async () => {
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(1);
 
             // One ms before the window elapses: still throttled.
             jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS - 1);
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(1);
 
             // Exactly at the window boundary: plays again (the comparison is a strict `<`).
             jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS);
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(2);
         });
 
@@ -512,16 +507,16 @@ describe("Notifier", () => {
             const soundA = { url: "sound-a.mp3", name: "A", type: "audio/mpeg", size: 1 };
             const soundB = { url: "sound-b.mp3", name: "B", type: "audio/mpeg", size: 1 };
             const otherRoom = new Room("!other:server", mockClient, mockClient.getSafeUserId());
-            (Notifier.getSoundForRoom as jest.Mock).mockImplementation((roomId: string) =>
+            jest.mocked(notifier.getSoundForRoom).mockImplementation((roomId: string) =>
                 roomId === testRoom.roomId ? soundA : soundB,
             );
             // @ts-ignore - backgroundAudio is private
-            const customPlaySpy = jest.spyOn(Notifier.backgroundAudio, "play").mockResolvedValue({} as any);
+            const customPlaySpy = jest.spyOn(notifier.backgroundAudio, "play").mockResolvedValue({} as any);
 
             // Two different sounds back-to-back within the window: BOTH must play (only identical
             // backlogged sounds are coalesced).
-            await Notifier.playAudioNotification(testEvent, testRoom);
-            await Notifier.playAudioNotification(testEvent, otherRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, otherRoom);
 
             expect(customPlaySpy).toHaveBeenCalledTimes(2);
             expect(customPlaySpy).toHaveBeenNthCalledWith(1, soundA.url);
@@ -532,8 +527,8 @@ describe("Notifier", () => {
         it("does not play, and does not arm the throttle, when notifications are silenced", async () => {
             mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
 
-            await Notifier.playAudioNotification(testEvent, testRoom);
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
 
             // Silencing gate short-circuits before the sound is played.
             expect(playSpy).not.toHaveBeenCalled();
@@ -541,7 +536,7 @@ describe("Notifier", () => {
             // ...and the silenced calls did NOT arm the throttle: once un-silenced, the next event plays
             // immediately (a regression arming the throttle on silenced events would suppress this).
             mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
-            await Notifier.playAudioNotification(testEvent, testRoom);
+            await notifier.playAudioNotification(testEvent, testRoom);
             expect(playSpy).toHaveBeenCalledTimes(1);
         });
     });
