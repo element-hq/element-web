@@ -34,6 +34,7 @@ import {
     setupAsyncStoreWithClient,
     resetAsyncStoreWithClient,
     mkEvent,
+    clientAndSDKContextRenderOptions,
 } from "../../test-utils";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
@@ -50,6 +51,7 @@ import {
 import LegacyCallHandler, { AudioID } from "../../../src/LegacyCallHandler";
 import { CallEvent } from "../../../src/models/Call";
 import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
 
 function makeNotificationEvent(room: Room, content: IContent = {}): MatrixEvent {
     const ts = Date.now();
@@ -92,6 +94,7 @@ describe("IncomingCallToast", () => {
     beforeEach(async () => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        SDKContextClass.instance.client = client;
 
         const audio = document.createElement("audio");
         audio.id = AudioID.Ring;
@@ -146,6 +149,7 @@ describe("IncomingCallToast", () => {
                 notificationEvent={notificationEvent}
                 toastKey={getIncomingCallToastKey(callId, room.roomId)}
             />,
+            clientAndSDKContextRenderOptions(client, SDKContextClass.instance),
         );
         return callId;
     };
@@ -197,7 +201,10 @@ describe("IncomingCallToast", () => {
     it("start ringing on ring notify event", () => {
         const notificationEvent = makeNotificationEvent(room, { notification_type: "ring" });
         const playMock = jest.spyOn(LegacyCallHandler.instance, "play");
-        render(<IncomingCallToast notificationEvent={notificationEvent} toastKey="" />);
+        render(
+            <IncomingCallToast notificationEvent={notificationEvent} toastKey="" />,
+            clientAndSDKContextRenderOptions(client, SDKContextClass.instance),
+        );
         expect(playMock).toHaveBeenCalled();
     });
 

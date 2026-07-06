@@ -120,6 +120,7 @@ describe("AppTile", () => {
         // Do not carry across settings from previous tests
         SettingsStore.reset();
         sdkContext = new SDKContextClass();
+        sdkContext.client = cli;
         // @ts-ignore
         await WidgetMessagingStore.instance.onReady();
 

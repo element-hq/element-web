@@ -23,6 +23,8 @@ import {
     useRoomSummaryCardViewModel,
 } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel", () => ({
@@ -45,9 +47,11 @@ describe("<RoomSummaryCard />", () => {
 
         return render(<RoomSummaryCardView {...defaultProps} {...props} />, {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={mockClient}>
-                    <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>
-                </MatrixClientContext.Provider>
+                <SDKContext.Provider value={SDKContextClass.instance}>
+                    <MatrixClientContext.Provider value={mockClient}>
+                        <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>
+                    </MatrixClientContext.Provider>
+                </SDKContext.Provider>
             ),
         });
     };
