@@ -67,6 +67,27 @@ describe("<VirtualizedRoomListView />", () => {
         expect(Default.args.updateVisibleRooms).toHaveBeenCalled();
     });
 
+    describe("updateVisibleRooms range reporting", () => {
+        beforeEach(() => {
+            (Default.args.updateVisibleRooms as any).mockClear?.();
+            (Sections.args.updateVisibleRooms as any).mockClear?.();
+        });
+
+        it("reports an exclusive end bound in flat mode", () => {
+            renderWithMockContext(<Default />);
+            // 10 rooms, all rendered by the mock viewport: Virtuoso reports the inclusive
+            // range [0, 9], which must reach the view model as the exclusive window [0, 10).
+            expect(Default.args.updateVisibleRooms).toHaveBeenLastCalledWith(0, 10);
+        });
+
+        it("maps entry-space indices to room indices in grouped mode", () => {
+            renderWithMockContext(<Sections />);
+            // 13 entries (3 section headers + 10 rooms) are all rendered: Virtuoso reports the
+            // inclusive entry range [0, 12], which must map back to the room window [0, 10).
+            expect(Sections.args.updateVisibleRooms).toHaveBeenLastCalledWith(0, 10);
+        });
+    });
+
     describe("drag and drop", () => {
         beforeEach(() => {
             // Storybook fn() spies are shared across tests; vi.clearAllMocks() may not
