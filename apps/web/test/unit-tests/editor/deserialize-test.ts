@@ -5,15 +5,11 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-
-// @vitest-environment happy-dom
-
-import { describe, it, expect } from "vitest";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { parseEvent } from "./deserialize";
-import { type Part } from "./parts";
-import { createPartCreator } from "./__mocks__";
+import { parseEvent } from "../../../src/editor/deserialize";
+import { type Part } from "../../../src/editor/parts";
+import { createPartCreator } from "./mock";
 
 const FOUR_SPACES = " ".repeat(4);
 
@@ -105,19 +101,13 @@ describe("editor/deserialize", function () {
             const html = "<strong>bold</strong> and <em>emphasized</em> text";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(1);
-            expect(parts[0]).toStrictEqual({
-                type: "plain",
-                text: "**bold** and _emphasized_ text",
-            });
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "**bold** and _emphasized_ text" });
         });
         it("hyperlink", function () {
             const html = 'click <a href="http://example.com/">this</a>!';
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(1);
-            expect(parts[0]).toStrictEqual({
-                type: "plain",
-                text: "click [this](http://example.com/)!",
-            });
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "click [this](http://example.com/)!" });
         });
         it("multiple lines with paragraphs", function () {
             const html = "<p>hello</p><p>world</p>";
@@ -163,11 +153,7 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
-            expect(parts[1]).toStrictEqual({
-                type: "user-pill",
-                text: "Alice",
-                resourceId: "@alice:hs.tld",
-            });
+            expect(parts[1]).toStrictEqual({ type: "user-pill", text: "Alice", resourceId: "@alice:hs.tld" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it("user pill with displayname containing backslash", function () {
@@ -175,11 +161,7 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
-            expect(parts[1]).toStrictEqual({
-                type: "user-pill",
-                text: "Alice\\",
-                resourceId: "@alice:hs.tld",
-            });
+            expect(parts[1]).toStrictEqual({ type: "user-pill", text: "Alice\\", resourceId: "@alice:hs.tld" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it("user pill with displayname containing opening square bracket", function () {
@@ -187,11 +169,7 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
-            expect(parts[1]).toStrictEqual({
-                type: "user-pill",
-                text: "Alice[[",
-                resourceId: "@alice:hs.tld",
-            });
+            expect(parts[1]).toStrictEqual({ type: "user-pill", text: "Alice[[", resourceId: "@alice:hs.tld" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it("user pill with displayname containing closing square bracket", function () {
@@ -199,11 +177,7 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
-            expect(parts[1]).toStrictEqual({
-                type: "user-pill",
-                text: "Alice]",
-                resourceId: "@alice:hs.tld",
-            });
+            expect(parts[1]).toStrictEqual({ type: "user-pill", text: "Alice]", resourceId: "@alice:hs.tld" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it("user pill with displayname containing linebreak", function () {
@@ -211,11 +185,7 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
-            expect(parts[1]).toStrictEqual({
-                type: "user-pill",
-                text: "Alice123",
-                resourceId: "@alice:hs.tld",
-            });
+            expect(parts[1]).toStrictEqual({ type: "user-pill", text: "Alice123", resourceId: "@alice:hs.tld" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it("room pill", function () {
@@ -223,11 +193,7 @@ describe("editor/deserialize", function () {
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Try " });
-            expect(parts[1]).toStrictEqual({
-                type: "room-pill",
-                text: "#room:hs.tld",
-                resourceId: "#room:hs.tld",
-            });
+            expect(parts[1]).toStrictEqual({ type: "room-pill", text: "#room:hs.tld", resourceId: "#room:hs.tld" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: "?" });
         });
         it("@room pill", function () {
@@ -241,10 +207,7 @@ describe("editor/deserialize", function () {
             const html = "there is no place like <code>127.0.0.1</code>!";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(1);
-            expect(parts[0]).toStrictEqual({
-                type: "plain",
-                text: "there is no place like `127.0.0.1`!",
-            });
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "there is no place like `127.0.0.1`!" });
         });
         it("code block with no trailing text", function () {
             const html = "<pre><code>0xDEADBEEF\n</code></pre>\n";
@@ -295,10 +258,7 @@ describe("editor/deserialize", function () {
             expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}- Spruce` });
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[4]).toStrictEqual({
-                type: "plain",
-                text: `${FOUR_SPACES.repeat(2)}- Birch`,
-            });
+            expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}- Birch` });
         });
         it("nested ordered lists", () => {
             const html = "<ol><li>Oak<ol><li>Spruce<ol><li>Birch</li></ol></li></ol></li></ol>";
@@ -308,10 +268,7 @@ describe("editor/deserialize", function () {
             expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}1. Spruce` });
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[4]).toStrictEqual({
-                type: "plain",
-                text: `${FOUR_SPACES.repeat(2)}1. Birch`,
-            });
+            expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}1. Birch` });
         });
         it("nested lists", () => {
             const html = "<ol><li>Oak\n<ol><li>Spruce\n<ol><li>Birch</li></ol></li></ol></li></ol>";
@@ -321,10 +278,7 @@ describe("editor/deserialize", function () {
             expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}1. Spruce\n` });
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[4]).toStrictEqual({
-                type: "plain",
-                text: `${FOUR_SPACES.repeat(2)}1. Birch`,
-            });
+            expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}1. Birch` });
         });
         it("mx-reply is stripped", function () {
             const html = "<mx-reply>foo</mx-reply>bar";
