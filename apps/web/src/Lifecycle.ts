@@ -81,6 +81,7 @@ import {
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
+import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -906,9 +907,9 @@ async function doSetLoggedIn(
     }
     checkSessionLock();
 
-    // We are now logged in, so fire this. We have yet to start the client but the
-    // client_started dispatch is for that.
-    dis.fire(Action.OnLoggedIn);
+    // We are now logged in, so fire this. We have yet to start the client but the client_started dispatch is for that.
+    // Dispatch this synchronously so SDKContextClass can set the client for other modules to consume.
+    dis.dispatch<OnLoggedInPayload>({ action: Action.OnLoggedIn, client }, true);
 
     const clientPegOpts: MatrixClientPegAssignOpts = {};
     if (credentials.pickleKey) {

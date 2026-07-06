@@ -5,16 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { PosthogAnalytics } from "../../src/PosthogAnalytics";
-import PosthogTrackers from "../../src/PosthogTrackers";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import { PosthogAnalytics } from "./PosthogAnalytics";
+import PosthogTrackers from "./PosthogTrackers";
 
 describe("PosthogTrackers", () => {
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("tracks URL Previews", () => {
-        jest.spyOn(PosthogAnalytics.instance, "trackEvent");
+        vi.spyOn(PosthogAnalytics.instance, "trackEvent");
         const tracker = new PosthogTrackers();
         tracker.trackUrlPreview("$123456", false, [
             {

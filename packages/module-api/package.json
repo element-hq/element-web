@@ -46,6 +46,7 @@
         "matrix-widget-api": "^1.17.0",
         "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
+        "shared-types": "workspace:*",
         "typescript": "catalog:",
         "unplugin-dts": "catalog:",
         "vite": "catalog:",
