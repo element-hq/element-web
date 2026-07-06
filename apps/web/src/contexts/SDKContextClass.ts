@@ -83,7 +83,7 @@ export class SDKContextClass {
 
     private onDispatch = (payload: ActionPayload): void => {
         if (isAction<OnLoggedInPayload>(payload, Action.OnLoggedIn)) {
-            this.client = payload.client;
+            this._client = payload.client;
         }
     };
 
