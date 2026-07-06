@@ -6,8 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EmojiPart, PlainPart } from "../../../src/editor/parts";
-import { createPartCreator } from "./mock";
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
+
+import { EmojiPart, PlainPart } from "./parts";
+import { createPartCreator } from "./__mocks__";
 
 describe("editor/parts", () => {
     describe("appendUntilRejected", () => {

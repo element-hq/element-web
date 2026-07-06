@@ -29,6 +29,8 @@ import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
 import { type ActionPayload, isAction } from "../dispatcher/payloads.ts";
 import { Action } from "../dispatcher/actions.ts";
 import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
+import Notifier from "../Notifier.ts";
+import SettingController from "../settings/controllers/SettingController.ts";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -71,8 +73,11 @@ export class SDKContextClass {
     protected _OidcClientStore?: OidcClientStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
+    protected _Notifier?: Notifier;
 
     public constructor() {
+        SettingController.sdkContext = this;
+
         defaultDispatcher.register(this.onDispatch);
     }
 
@@ -203,6 +208,13 @@ export class SDKContextClass {
             this._MultiRoomViewStore = new MultiRoomViewStore(defaultDispatcher, this);
         }
         return this._MultiRoomViewStore;
+    }
+
+    public get notifier(): Notifier {
+        if (!this._Notifier) {
+            this._Notifier = new Notifier(defaultDispatcher, this);
+        }
+        return this._Notifier;
     }
 
     public onLoggedOut(): void {

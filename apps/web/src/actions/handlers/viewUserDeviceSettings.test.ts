@@ -6,13 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { viewUserDeviceSettings } from "../../../../src/actions/handlers/viewUserDeviceSettings";
-import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
-import { Action } from "../../../../src/dispatcher/actions";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+
+import { viewUserDeviceSettings } from "./viewUserDeviceSettings";
+import { UserTab } from "../../components/views/dialogs/UserTab";
+import { Action } from "../../dispatcher/actions";
+import defaultDispatcher from "../../dispatcher/dispatcher";
 
 describe("viewUserDeviceSettings()", () => {
-    const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+    const dispatchSpy = vi.spyOn(defaultDispatcher, "dispatch");
 
     beforeEach(() => {
         dispatchSpy.mockClear();

@@ -6,11 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EditorModel from "../../../src/editor/model";
-import { createPartCreator, createRenderer, type MockAutoComplete } from "./mock";
-import DocumentOffset from "../../../src/editor/offset";
-import { type PillPart } from "../../../src/editor/parts";
-import type DocumentPosition from "../../../src/editor/position";
+import { describe, it, expect } from "vitest";
+
+import EditorModel from "./model";
+import { createPartCreator, createRenderer, type MockAutoComplete } from "./__mocks__";
+import DocumentOffset from "./offset";
+import { type PillPart } from "./parts";
+import type DocumentPosition from "./position";
 
 describe("editor/model", function () {
     describe("plain text manipulation", function () {

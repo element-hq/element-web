@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { parseEvent } from "../../../src/editor/deserialize";
-import EditorModel from "../../../src/editor/model";
-import DocumentOffset from "../../../src/editor/offset";
-import { htmlSerializeIfNeeded, textSerialize } from "../../../src/editor/serialize";
-import { createPartCreator } from "./mock";
+import { parseEvent } from "./deserialize";
+import EditorModel from "./model";
+import DocumentOffset from "./offset";
+import { htmlSerializeIfNeeded, textSerialize } from "./serialize";
+import { createPartCreator } from "./__mocks__";
 
 function htmlMessage(formattedBody: string, msgtype = "m.text") {
     return {
@@ -50,7 +53,7 @@ async function roundTripHtml(html: string): Promise<string> {
 
 describe("editor/roundtrip", function () {
     describe("markdown messages should round-trip if they contain", function () {
-        test.each([
+        it.each([
             ["newlines", "hello\nworld"],
             ["pills", "text message for @room"],
             ["pills with interesting characters in mxid", "text message for @alice\\\\\\_\\]#>&:hs.example.com"],
@@ -77,7 +80,7 @@ describe("editor/roundtrip", function () {
             expect(await roundTripMarkdown(markdown)).toEqual(markdown);
         });
 
-        test.skip.each([
+        it.skip.each([
             // Removes trailing spaces
             ["a code block followed by newlines", "```\nfoo(bar).baz();\n\n3\n```\n\n"],
             // Adds a space after the code block
@@ -115,7 +118,7 @@ describe("editor/roundtrip", function () {
     });
 
     describe("HTML messages should round-trip if they contain", function () {
-        test.each([
+        it.each([
             ["backslashes", "C:\\Program Files"],
             [
                 "nested blockquotes",
@@ -140,7 +143,7 @@ describe("editor/roundtrip", function () {
             expect(await roundTripHtml(html)).toEqual(html);
         });
 
-        test.skip.each([
+        it.skip.each([
             // Strips out the pill - maybe needs some user lookup to work?
             ["user pills", '<a href="https://matrix.to/#/@alice:hs.tld">Alice</a>'],
             // Appends a slash to the URL
