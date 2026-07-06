@@ -6,11 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
-import { EventType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { setDMRoom } from "../../src/Rooms";
-import { mkEvent, stubClient } from "../test-utils";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { EventType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { mkEvent, stubClient } from "test-utils";
+
+import { setDMRoom } from "./Rooms";
 
 describe("setDMRoom", () => {
     const userId1 = "@user1:example.com";
@@ -23,8 +25,8 @@ describe("setDMRoom", () => {
     let client: MatrixClient;
 
     beforeEach(() => {
-        client = mocked(stubClient());
-        client.getAccountData = jest.fn().mockImplementation((eventType: string): MatrixEvent | undefined => {
+        client = vi.mocked(stubClient());
+        client.getAccountData = vi.fn().mockImplementation((eventType: string): MatrixEvent | undefined => {
             if (eventType === EventType.Direct) {
                 return mkEvent({
                     event: true,
@@ -43,7 +45,7 @@ describe("setDMRoom", () => {
 
     describe("when logged in as a guest and marking a room as DM", () => {
         beforeEach(() => {
-            mocked(client.isGuest).mockReturnValue(true);
+            vi.mocked(client.isGuest).mockReturnValue(true);
             setDMRoom(client, roomId1, userId1);
         });
 
@@ -94,7 +96,7 @@ describe("setDMRoom", () => {
 
     describe("when the direct event is undefined", () => {
         beforeEach(() => {
-            mocked(client.getAccountData).mockReturnValue(undefined);
+            vi.mocked(client.getAccountData).mockReturnValue(undefined);
             setDMRoom(client, roomId1, userId1);
         });
 
@@ -108,8 +110,8 @@ describe("setDMRoom", () => {
     describe("when the current content is undefined", () => {
         beforeEach(() => {
             // @ts-ignore
-            mocked(client.getAccountData).mockReturnValue({
-                getContent: jest.fn(),
+            vi.mocked(client.getAccountData).mockReturnValue({
+                getContent: vi.fn(),
             });
             setDMRoom(client, roomId1, userId1);
         });

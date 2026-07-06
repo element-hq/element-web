@@ -7,41 +7,38 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type PostHog } from "posthog-js";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { getMockClientWithEventEmitter } from "test-utils";
 
-import {
-    Anonymity,
-    getRedactedCurrentLocation,
-    type IPosthogEvent,
-    PosthogAnalytics,
-} from "../../src/PosthogAnalytics";
-import SdkConfig from "../../src/SdkConfig";
-import { getMockClientWithEventEmitter } from "../test-utils";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { Layout } from "../../src/settings/enums/Layout";
-import defaultDispatcher from "../../src/dispatcher/dispatcher";
-import { Action } from "../../src/dispatcher/actions";
-import { SettingLevel } from "../../src/settings/SettingLevel";
+import { Anonymity, getRedactedCurrentLocation, type IPosthogEvent, PosthogAnalytics } from "./PosthogAnalytics";
+import SdkConfig from "./SdkConfig";
+import SettingsStore from "./settings/SettingsStore";
+import { Layout } from "./settings/enums/Layout";
+import defaultDispatcher from "./dispatcher/dispatcher";
+import { Action } from "./dispatcher/actions";
+import { SettingLevel } from "./settings/SettingLevel";
 
 const getFakePosthog = (): PostHog =>
     ({
-        capture: jest.fn(),
-        init: jest.fn(),
-        identify: jest.fn(),
-        reset: jest.fn(),
-        register: jest.fn(),
-        get_distinct_id: jest.fn(),
+        capture: vi.fn(),
+        init: vi.fn(),
+        identify: vi.fn(),
+        reset: vi.fn(),
+        register: vi.fn(),
+        get_distinct_id: vi.fn(),
         persistence: {
-            get_property: jest.fn(),
+            get_property: vi.fn(),
         },
-        identifyUser: jest.fn(),
+        identifyUser: vi.fn(),
     }) as unknown as PostHog;
 
 interface ITestEvent extends IPosthogEvent {
-    eventName: "JestTestEvents";
+    eventName: "TestEvents";
     foo?: string;
 }
 
@@ -121,17 +118,17 @@ describe("PosthogAnalytics", () => {
         it("Should pass event to posthog", () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
                 foo: "bar",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][0]).toBe("JestTestEvents");
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["foo"]).toEqual("bar");
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][0]).toBe("TestEvents");
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["foo"]).toEqual("bar");
         });
 
         it("Should not track events if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
             await analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
                 foo: "bar",
             });
             expect(fakePosthog.capture).not.toHaveBeenCalled();
@@ -140,7 +137,7 @@ describe("PosthogAnalytics", () => {
         it("Should not track any events if disabled", async () => {
             analytics.setAnonymity(Anonymity.Disabled);
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
                 foo: "bar",
             });
             expect(fakePosthog.capture).not.toHaveBeenCalled();
@@ -164,29 +161,29 @@ describe("PosthogAnalytics", () => {
         it("Should identify the user to posthog if pseudonymous", async () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
             const client = getMockClientWithEventEmitter({
-                getAccountDataFromServer: jest.fn().mockResolvedValue(null),
-                setAccountData: jest.fn().mockResolvedValue({}),
+                getAccountDataFromServer: vi.fn().mockResolvedValue(null),
+                setAccountData: vi.fn().mockResolvedValue({}),
             });
             await analytics.identifyUser(client, () => "analytics_id");
-            expect(mocked(fakePosthog).identify.mock.calls[0][0]).toBe("analytics_id");
+            expect(vi.mocked(fakePosthog).identify.mock.calls[0][0]).toBe("analytics_id");
         });
 
         it("Should not identify the user to posthog if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
             const client = getMockClientWithEventEmitter({});
             await analytics.identifyUser(client, () => "analytics_id");
-            expect(mocked(fakePosthog).identify.mock.calls.length).toBe(0);
+            expect(vi.mocked(fakePosthog).identify.mock.calls.length).toBe(0);
         });
 
         it("Should identify using the server's analytics id if present", async () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
 
             const client = getMockClientWithEventEmitter({
-                getAccountDataFromServer: jest.fn().mockResolvedValue({ id: "existing_analytics_id" }),
-                setAccountData: jest.fn().mockResolvedValue({}),
+                getAccountDataFromServer: vi.fn().mockResolvedValue({ id: "existing_analytics_id" }),
+                setAccountData: vi.fn().mockResolvedValue({}),
             });
             await analytics.identifyUser(client, () => "new_analytics_id");
-            expect(mocked(fakePosthog).identify.mock.calls[0][0]).toBe("existing_analytics_id");
+            expect(vi.mocked(fakePosthog).identify.mock.calls[0][0]).toBe("existing_analytics_id");
         });
     });
 
@@ -220,9 +217,9 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "IRC",
             });
         });
@@ -237,9 +234,9 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Bubble",
             });
         });
@@ -254,9 +251,9 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Group",
             });
         });
@@ -272,10 +269,10 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
-            console.log(mocked(fakePosthog).capture.mock.calls[0]);
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
+            console.log(vi.mocked(fakePosthog).capture.mock.calls[0]);
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Compact",
             });
         });
@@ -311,9 +308,9 @@ describe("PosthogAnalytics", () => {
                 true,
             );
             analytics.trackEvent<ITestEvent>({
-                eventName: "JestTestEvents",
+                eventName: "TestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
+            expect(vi.mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 URLPreviewsEnabled: true,
             });
         });
@@ -323,10 +320,10 @@ describe("PosthogAnalytics", () => {
         let analytics: PosthogAnalytics;
         const getFakeClient = (): MatrixClient =>
             ({
-                getCrypto: jest.fn(),
-                setAccountData: jest.fn(),
+                getCrypto: vi.fn(),
+                setAccountData: vi.fn(),
                 // just fake return an `im.vector.analytics` content
-                getAccountDataFromServer: jest.fn().mockReturnValue({
+                getAccountDataFromServer: vi.fn().mockReturnValue({
                     id: "0000000",
                     pseudonymousAnalyticsOptIn: true,
                 }),
@@ -350,7 +347,7 @@ describe("PosthogAnalytics", () => {
             // To simulate a switch we call updateAnonymityFromSettings.
             // As per documentation this function is called On login.
             const mockClient = getFakeClient();
-            mocked(mockClient.getCrypto).mockReturnValue({
+            vi.mocked(mockClient.getCrypto).mockReturnValue({
                 getVersion: () => {
                     return rustBackend ? "Rust SDK 0.6.0 (9c6b550), Vodozemac 0.5.0" : "Olm 3.2.0";
                 },
@@ -363,7 +360,7 @@ describe("PosthogAnalytics", () => {
 
             await simulateLogin(false);
 
-            expect(mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Legacy");
+            expect(vi.mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Legacy");
         });
 
         it("should send Legacy cryptoSDK superProperty correctly", async () => {
@@ -373,7 +370,7 @@ describe("PosthogAnalytics", () => {
 
             // Super Properties are properties associated with events that are set once and then sent with every capture call.
             // They are set using posthog.register
-            expect(mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Legacy");
+            expect(vi.mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Legacy");
         });
 
         it("should send cryptoSDK superProperty when enabling analytics", async () => {
@@ -383,13 +380,13 @@ describe("PosthogAnalytics", () => {
 
             // This initial call is due to the call to register platformSuperProperties
             // The important thing is that the cryptoSDK superProperty is not set.
-            expect(mocked(fakePosthog).register.mock.lastCall![0]).toStrictEqual({});
+            expect(vi.mocked(fakePosthog).register.mock.lastCall![0]).toStrictEqual({});
 
             // switching to pseudonymous should ensure that the cryptoSDK superProperty is set correctly
             analytics.setAnonymity(Anonymity.Pseudonymous);
             // Super Properties are properties associated with events that are set once and then sent with every capture call.
             // They are set using posthog.register
-            expect(mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Rust");
+            expect(vi.mocked(fakePosthog).register.mock.lastCall![0]["cryptoSDK"]).toStrictEqual("Rust");
         });
     });
 });
