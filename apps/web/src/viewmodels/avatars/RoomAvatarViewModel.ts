@@ -35,14 +35,34 @@ import { arrayHasDiff, filterBoolean } from "../../utils/arrays";
 import { MediaPreviewValue } from "../../@types/media_preview";
 
 interface Props {
+    /**
+     * Room whose avatar data should be rendered.
+     */
     room?: Room;
+    /**
+     * Rendered avatar size in CSS units, used when requesting thumbnail URLs.
+     */
     size: string;
+    /**
+     * Out-of-band room data used when the room object is not available yet.
+     */
     oobData?: IOOBData & {
+        /**
+         * Room ID to use for hash-colour generation before the room exists locally.
+         */
         roomId?: string;
     };
+    /**
+     * Whether clicking the avatar should open the full-size avatar lightbox.
+     */
     viewAvatarOnClick?: boolean;
+    /**
+     * Optional click handler invoked when lightbox behaviour is disabled.
+     */
     onClick?: () => void;
-    /** Optional shape override. When omitted the VM derives the shape from the room type. */
+    /**
+     * Optional shape override. When omitted, the VM derives the shape from the room type.
+     */
     type?: "round" | "square";
 }
 
