@@ -412,7 +412,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             this.sendQuickReaction();
         }
 
-        const clearComposerAndPushHistory = () => {
+        const clearComposerAndPushHistory = (): void => {
             this.sendHistoryManager.save(model, replyToEvent);
             // clear composer
             model.reset([]);

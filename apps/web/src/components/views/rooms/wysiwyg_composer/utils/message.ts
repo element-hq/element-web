@@ -15,6 +15,7 @@ import {
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -34,7 +35,6 @@ import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/command
 import { Action } from "../../../../../dispatcher/actions";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 import { attachRelation, attachUrlPreviews } from "../../../../../utils/messages";
-import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 export interface SendMessageParams {
     mxClient: MatrixClient;

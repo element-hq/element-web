@@ -5,13 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type IContent, type IMentions, type IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type IContent, type IMentions, type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
-import { RoomMessageEventContent } from "../../@types/url-preview";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { type RoomMessageEventContent } from "../../@types/url-preview";
 import { uploadFile } from "../ContentMessages";
 
 /**
