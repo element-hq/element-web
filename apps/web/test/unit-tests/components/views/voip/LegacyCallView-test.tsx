@@ -19,7 +19,7 @@ import { TestSDKContext } from "../../../TestSDKContext.ts";
 describe("LegacyCallView", () => {
     const cli = stubClient();
     const sdkContext = new TestSDKContext();
-    sdkContext.client = cli;
+    sdkContext._client = cli;
 
     it("should exit full screen on unmount", () => {
         const element = document.createElement("div");

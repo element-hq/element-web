@@ -29,7 +29,7 @@ describe("VideoFeed", () => {
     beforeAll(() => {
         client = stubClient();
         sdkContext = new TestSDKContext();
-        sdkContext.client = client;
+        sdkContext._client = client;
         (AvatarModule as any).avatarUrlForRoom = jest.fn().mockReturnValue(FAKE_AVATAR_URL);
 
         const dmRoomMap = new DMRoomMap(client);

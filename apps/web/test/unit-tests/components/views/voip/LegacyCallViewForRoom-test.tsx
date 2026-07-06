@@ -27,7 +27,7 @@ describe("LegacyCallViewForRoom", () => {
 
     beforeEach(() => {
         sdkContext = new TestSDKContext();
-        sdkContext.client = stubClient();
+        sdkContext._client = stubClient();
         LegacyCallViewMock.mockClear();
     });
 

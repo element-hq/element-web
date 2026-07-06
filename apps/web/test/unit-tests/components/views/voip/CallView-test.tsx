@@ -55,7 +55,7 @@ describe("CallView", () => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
         sdkContext = new TestSDKContext();
-        sdkContext.client = client;
+        sdkContext._client = client;
         DMRoomMap.makeShared(client);
 
         room = new Room("!1:example.org", client, "@alice:example.org", {

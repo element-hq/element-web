@@ -38,7 +38,7 @@ jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockRetu
 describe("<RoomListPanel />", () => {
     const client = createTestClient();
     const sdkContext = new TestSDKContext();
-    sdkContext.client = client;
+    sdkContext._client = client;
 
     function renderComponent() {
         return render(

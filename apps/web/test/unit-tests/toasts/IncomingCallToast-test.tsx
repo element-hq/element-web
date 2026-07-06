@@ -96,7 +96,7 @@ describe("IncomingCallToast", () => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
         sdkContext = new TestSDKContext();
-        sdkContext.client = client;
+        sdkContext._client = client;
 
         const audio = document.createElement("audio");
         audio.id = AudioID.Ring;
