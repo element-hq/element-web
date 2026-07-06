@@ -18,6 +18,7 @@ declare module "matrix-seshat" {
         room_id: string;
         origin_server_ts: number;
         content: Record<string, any>;
+        type: string;
     }
 
     interface IMatrixProfile {
@@ -26,7 +27,7 @@ declare module "matrix-seshat" {
     }
 
     interface ISearchArgs {
-        searchTerm: number;
+        search_term: string;
         limit: number;
         before_limit: number;
         after_limit: number;
@@ -54,7 +55,7 @@ declare module "matrix-seshat" {
     interface ICheckpoint {
         roomId: string;
         token: string;
-        fullCrawl: boolean;
+        fullCrawl?: boolean;
         direction: "b" | "f";
     }
 
@@ -67,13 +68,13 @@ declare module "matrix-seshat" {
     interface ILoadArgs {
         roomId: string;
         limit: number;
-        fromEvent: string;
-        direction: "b" | "f";
+        fromEvent?: string;
+        direction?: "b" | "f";
     }
 
     interface ILoadResult {
         event: IMatrixEvent;
-        matrixProfile: IMatrixProfile;
+        profile: IMatrixProfile;
     }
 
     export class Seshat {
@@ -92,12 +93,12 @@ declare module "matrix-seshat" {
             orderByRecency?: boolean,
         ): ISearchResult;
         public addHistoricEventsSync(
-            events: IMatrixEvent[],
+            events: ILoadResult[],
             newCheckpoint?: ICheckpoint,
             oldCheckpoint?: ICheckpoint,
         ): boolean;
         public addHistoricEvents(
-            events: IMatrixEvent[],
+            events: ILoadResult[],
             newCheckpoint?: ICheckpoint,
             oldCheckpoint?: ICheckpoint,
         ): Promise<boolean>;

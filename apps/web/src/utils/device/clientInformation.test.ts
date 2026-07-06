@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { getMockClientWithEventEmitter } from "test-utils";
+import { type Electron } from "shared-types";
 
 import type BasePlatform from "../../BasePlatform";
 import { type IConfigOptions } from "../../IConfigOptions";

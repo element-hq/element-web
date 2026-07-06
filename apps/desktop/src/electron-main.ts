@@ -29,7 +29,7 @@ import windowStateKeeper from "electron-window-state";
 import { URL, fileURLToPath } from "node:url";
 
 import "./ipc.js";
-import "./seshat.js";
+import { setupListeners as setupSeshatListeners } from "./seshat.js";
 import "./settings.js";
 import "./badge.js";
 import * as tray from "./tray.js";
@@ -134,6 +134,7 @@ app.enableSandbox();
 app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling,MediaSessionService");
 
 const store = Store.initialize(args.storageMode); // must be called before any async actions
+setupSeshatListeners(store);
 
 // Disable hardware acceleration if the setting has been set.
 if (store.get("disableHardwareAcceleration")) {

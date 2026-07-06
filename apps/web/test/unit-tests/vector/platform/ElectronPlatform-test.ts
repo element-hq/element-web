@@ -10,6 +10,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
+import { type Electron, type MainRendererEvents } from "shared-types";
 
 import { UpdateCheckStatus } from "../../../../src/BasePlatform";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -26,6 +27,13 @@ jest.mock("../../../../src/rageshake/rageshake", () => ({
     flush: jest.fn(),
 }));
 
+declare module "shared-types" {
+    interface ElectronSettings {
+        setting1: number;
+        setting2: string;
+    }
+}
+
 describe("ElectronPlatform", () => {
     const initialiseValues = jest.fn().mockReturnValue({
         protocol: "io.element.desktop",
@@ -40,6 +48,7 @@ describe("ElectronPlatform", () => {
     const mockElectron = {
         on: jest.fn(),
         send: jest.fn(),
+        call: jest.fn(),
         initialise: initialiseValues,
         setSettingValue: jest.fn().mockResolvedValue(undefined),
         getSettingValue: jest.fn().mockResolvedValue(undefined),
@@ -58,16 +67,14 @@ describe("ElectronPlatform", () => {
         Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
     });
 
-    const getElectronEventHandlerCall = (
-        eventType: string,
-    ): [type: string, handler: (...args: any) => void] | undefined =>
-        mockElectron.on.mock.calls.find(([type]) => type === eventType);
+    const getElectronEventHandlerCall = <K extends keyof MainRendererEvents>(
+        eventType: K,
+    ): ((...args: Parameters<MainRendererEvents[K]>) => void) | undefined =>
+        (mockElectron.on.mock.calls as any).find(([type]: [type: string]) => type === eventType)?.at(1);
 
     it("flushes rageshake before quitting", () => {
         new ElectronPlatform();
-        const [event, handler] = getElectronEventHandlerCall("before-quit")!;
-        // correct event bound
-        expect(event).toBeTruthy();
+        const handler = getElectronEventHandlerCall("before-quit")!;
 
         handler();
 
@@ -88,9 +95,7 @@ describe("ElectronPlatform", () => {
 
     it("dispatches view settings action on preferences event", () => {
         new ElectronPlatform();
-        const [event, handler] = getElectronEventHandlerCall("preferences")!;
-        // correct event bound
-        expect(event).toBeTruthy();
+        const handler = getElectronEventHandlerCall("preferences")!;
 
         handler();
 
@@ -111,19 +116,18 @@ describe("ElectronPlatform", () => {
             res = r;
         });
         // @ts-ignore mock
-        jest.spyOn(plat.ipc, "call").mockImplementation(() => {
+        jest.spyOn(plat.electron, "call").mockImplementation(() => {
             res();
         });
 
-        const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        const handler = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
         handler();
 
         await waitForIPCSend;
 
-        expect(event).toBeTruthy();
         expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
         // @ts-ignore mock
-        expect(plat.ipc.call).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
+        expect(plat.electron.call).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
     });
 
     it("should show a toast when showToast is fired", async () => {
@@ -136,10 +140,9 @@ describe("ElectronPlatform", () => {
         );
         const spy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
 
-        const [event, handler] = getElectronEventHandlerCall("showToast")!;
-        handler({} as any, { title: "title", description: "description" });
+        const handler = getElectronEventHandlerCall("showToast")!;
+        handler({ title: "title", description: "description" });
 
-        expect(event).toBeTruthy();
         await waitFor(() =>
             expect(spy).toHaveBeenCalledWith(
                 expect.objectContaining({
@@ -153,11 +156,9 @@ describe("ElectronPlatform", () => {
     describe("updates", () => {
         it("dispatches on check updates action", () => {
             new ElectronPlatform();
-            const [event, handler] = getElectronEventHandlerCall("check_updates")!;
-            // correct event bound
-            expect(event).toBeTruthy();
+            const handler = getElectronEventHandlerCall("check_updates")!;
 
-            handler({}, true);
+            handler(true);
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CheckUpdates,
                 status: UpdateCheckStatus.Downloading,
@@ -166,9 +167,9 @@ describe("ElectronPlatform", () => {
 
         it("dispatches on check updates action when update not available", () => {
             new ElectronPlatform();
-            const [, handler] = getElectronEventHandlerCall("check_updates")!;
+            const handler = getElectronEventHandlerCall("check_updates")!;
 
-            handler({}, false);
+            handler(false);
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CheckUpdates,
                 status: UpdateCheckStatus.NotAvailable,
@@ -283,42 +284,41 @@ describe("ElectronPlatform", () => {
 
         it("gets available spellcheck languages", () => {
             const platform = new ElectronPlatform();
-            mockElectron.send.mockClear();
+            mockElectron.call.mockClear();
             platform.getAvailableSpellCheckLanguages();
 
-            const [channel, { name }] = mockElectron.send.mock.calls[0];
-            expect(channel).toEqual("ipcCall");
-            expect(name).toEqual("getAvailableSpellCheckLanguages");
+            const [channel] = mockElectron.call.mock.calls[0];
+            expect(channel).toEqual("getAvailableSpellCheckLanguages");
         });
     });
 
     describe("pickle key", () => {
         it("makes correct ipc call to get pickle key", () => {
             const platform = new ElectronPlatform();
-            mockElectron.send.mockClear();
+            mockElectron.call.mockClear();
             platform.getPickleKey(userId, deviceId);
 
-            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            const [name, ...args] = mockElectron.call.mock.calls[0];
             expect(name).toEqual("getPickleKey");
             expect(args).toEqual([userId, deviceId]);
         });
 
         it("makes correct ipc call to create pickle key", () => {
             const platform = new ElectronPlatform();
-            mockElectron.send.mockClear();
+            mockElectron.call.mockClear();
             platform.createPickleKey(userId, deviceId);
 
-            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            const [name, ...args] = mockElectron.call.mock.calls[0];
             expect(name).toEqual("createPickleKey");
             expect(args).toEqual([userId, deviceId]);
         });
 
         it("makes correct ipc call to destroy pickle key", () => {
             const platform = new ElectronPlatform();
-            mockElectron.send.mockClear();
+            mockElectron.call.mockClear();
             platform.destroyPickleKey(userId, deviceId);
 
-            const [, { name, args }] = mockElectron.send.mock.calls[0];
+            const [name, ...args] = mockElectron.call.mock.calls[0];
             expect(name).toEqual("destroyPickleKey");
             expect(args).toEqual([userId, deviceId]);
         });
@@ -340,12 +340,7 @@ describe("ElectronPlatform", () => {
             const cb = spy.mock.calls[0][1];
             cb();
 
-            expect(mockElectron.send).toHaveBeenCalledWith(
-                "ipcCall",
-                expect.objectContaining({
-                    name: "breadcrumbs",
-                }),
-            );
+            expect(mockElectron.send).toHaveBeenCalledWith("breadcrumbs", expect.any(Array));
         });
     });
 
@@ -361,20 +356,18 @@ describe("ElectronPlatform", () => {
 
             new ElectronPlatform();
 
-            const userAccessTokenCall = mockElectron.on.mock.calls.find((call) => call[0] === "userAccessToken");
-            userAccessTokenCall![1]({} as any);
+            const userAccessTokenCall = getElectronEventHandlerCall("userAccessToken")!;
+            userAccessTokenCall();
             const userAccessTokenResponse = mockElectron.send.mock.calls.find((call) => call[0] === "userAccessToken");
             expect(userAccessTokenResponse![1]).toBe("access_token");
 
-            const homeserverUrlCall = mockElectron.on.mock.calls.find((call) => call[0] === "homeserverUrl");
-            homeserverUrlCall![1]({} as any);
+            const homeserverUrlCall = getElectronEventHandlerCall("homeserverUrl")!;
+            homeserverUrlCall();
             const homeserverUrlResponse = mockElectron.send.mock.calls.find((call) => call[0] === "homeserverUrl");
             expect(homeserverUrlResponse![1]).toBe("homeserver_url");
 
-            const serverSupportedVersionsCall = mockElectron.on.mock.calls.find(
-                (call) => call[0] === "serverSupportedVersions",
-            );
-            await (serverSupportedVersionsCall![1]({} as any) as unknown as Promise<unknown>);
+            const serverSupportedVersionsCall = getElectronEventHandlerCall("serverSupportedVersions")!;
+            await (serverSupportedVersionsCall() as unknown as Promise<unknown>);
             const serverSupportedVersionsResponse = mockElectron.send.mock.calls.find(
                 (call) => call[0] === "serverSupportedVersions",
             );
@@ -388,10 +381,6 @@ describe("ElectronPlatform", () => {
             window.electron = mockElectron;
             platform = new ElectronPlatform();
             await platform.getConfig(); // await init
-        });
-
-        it("supportsSetting should return true for the platform", () => {
-            expect(platform.supportsSetting()).toBe(true);
         });
 
         it("supportsSetting should return true for available settings", () => {
@@ -425,11 +414,8 @@ describe("ElectronPlatform", () => {
             true,
         );
 
-        const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "app_onAction");
-        expect(ipcMessage![1]).toEqual({
-            action: "call_state",
-            state: "connected",
-        });
+        const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "prevent_display_sleep");
+        expect(ipcMessage![1]).toEqual(true);
     });
 
     describe("Notification overlay badges", () => {
@@ -453,8 +439,8 @@ describe("ElectronPlatform", () => {
             // Badges are sent asynchronously
             await waitFor(() => {
                 const ipcMessage = mockElectron.send.mock.lastCall;
-                expect(ipcMessage?.[1]).toEqual(1);
-                expect(ipcMessage?.[2].constructor.name).toEqual("ArrayBuffer");
+                expect(ipcMessage![1]).toEqual(1);
+                expect(ipcMessage![2]!.constructor.name).toEqual("ArrayBuffer");
             });
         });
 
@@ -470,11 +456,11 @@ describe("ElectronPlatform", () => {
                     (call) => call[0] === "setBadgeCount",
                 );
 
-                expect(ipcMessageA?.[1]).toEqual(1);
-                expect(ipcMessageA?.[2].constructor.name).toEqual("ArrayBuffer");
+                expect(ipcMessageA![1]).toEqual(1);
+                expect(ipcMessageA![2]!.constructor.name).toEqual("ArrayBuffer");
 
-                expect(ipcMessageB?.[1]).toEqual(2);
-                expect(ipcMessageB?.[2].constructor.name).toEqual("ArrayBuffer");
+                expect(ipcMessageB![1]).toEqual(2);
+                expect(ipcMessageB![2]!.constructor.name).toEqual("ArrayBuffer");
             });
         });
         it("should remove badge when notification count zeros", async () => {
@@ -488,11 +474,11 @@ describe("ElectronPlatform", () => {
                     (call) => call[0] === "setBadgeCount",
                 );
 
-                expect(ipcMessageA?.[1]).toEqual(1);
-                expect(ipcMessageA?.[2].constructor.name).toEqual("ArrayBuffer");
+                expect(ipcMessageA![1]).toEqual(1);
+                expect(ipcMessageA![2]!.constructor.name).toEqual("ArrayBuffer");
 
-                expect(ipcMessageB?.[1]).toEqual(0);
-                expect(ipcMessageB?.[2]).toBeNull();
+                expect(ipcMessageB![1]).toEqual(0);
+                expect(ipcMessageB![2]).toBeUndefined();
             });
         });
         it("should show an error badge when the application errors", async () => {
@@ -503,9 +489,9 @@ describe("ElectronPlatform", () => {
             await waitFor(() => {
                 const ipcMessage = mockElectron.send.mock.calls.find((call) => call[0] === "setBadgeCount");
 
-                expect(ipcMessage?.[1]).toEqual(0);
-                expect(ipcMessage?.[2].constructor.name).toEqual("ArrayBuffer");
-                expect(ipcMessage?.[3]).toEqual(true);
+                expect(ipcMessage![1]).toEqual(0);
+                expect(ipcMessage![2]!.constructor.name).toEqual("ArrayBuffer");
+                expect(ipcMessage![3]).toEqual(true);
             });
         });
         it("should restore after error is resolved", async () => {
@@ -519,12 +505,12 @@ describe("ElectronPlatform", () => {
                     (call) => call[0] === "setBadgeCount",
                 );
 
-                expect(ipcMessageA?.[1]).toEqual(0);
-                expect(ipcMessageA?.[2].constructor.name).toEqual("ArrayBuffer");
-                expect(ipcMessageA?.[3]).toEqual(true);
+                expect(ipcMessageA![1]).toEqual(0);
+                expect(ipcMessageA![2]!.constructor.name).toEqual("ArrayBuffer");
+                expect(ipcMessageA![3]).toEqual(true);
 
-                expect(ipcMessageB?.[1]).toEqual(0);
-                expect(ipcMessageB?.[2]).toBeNull();
+                expect(ipcMessageB![1]).toEqual(0);
+                expect(ipcMessageB![2]).toBeUndefined();
             });
         });
     });

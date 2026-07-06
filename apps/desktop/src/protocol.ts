@@ -6,13 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import { URL } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
 
 import { type Args, getArgsForProtocolRegistration } from "./args.js";
+import { typedIpcMain } from "./ipc.js";
 
 const LEGACY_PROTOCOL = "element";
 const SEARCH_PARAM = "element-desktop-ssoid";
@@ -45,7 +46,7 @@ export default class ProtocolHandler {
         this.store = this.readStore();
         this.sessionId = randomUUID();
 
-        ipcMain.handle("getProtocol", this.onGetProtocol);
+        typedIpcMain.handle("getProtocol", this.onGetProtocol);
     }
 
     private checkArgIsUrl = (arg: string): boolean => {

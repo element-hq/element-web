@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
+import { type DesktopCapturerSource, type GetSourcesOptions } from "shared-types";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "..//dialogs/BaseDialog";

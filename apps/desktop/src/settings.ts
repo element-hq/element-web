@@ -5,11 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ipcMain } from "electron";
+import { type ElectronSettings } from "shared-types";
 
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { AutoLaunch, type AutoLaunchState } from "./auto-launch.js";
+import { typedIpcMain } from "./ipc.js";
 
 interface Setting {
     read(): Promise<any>;
@@ -90,14 +91,14 @@ const Settings: Record<string, Setting> = {
     },
 };
 
-ipcMain.handle("getSupportedSettings", async () => {
-    const supportedSettings: Record<string, boolean> = {};
+typedIpcMain.handle("getSupportedSettings", async () => {
+    const supportedSettings: Partial<Record<keyof ElectronSettings, boolean>> = {};
     for (const [key, setting] of Object.entries(Settings)) {
-        supportedSettings[key] = setting.supported?.() ?? true;
+        supportedSettings[key as keyof ElectronSettings] = setting.supported?.() ?? true;
     }
-    return supportedSettings;
+    return supportedSettings as Record<keyof ElectronSettings, boolean>;
 });
-ipcMain.handle("setSettingValue", async (_ev, settingName: string, value: any) => {
+typedIpcMain.handle("setSettingValue", async (_ev, settingName: string, value: any) => {
     const setting = Settings[settingName];
     if (!setting) {
         throw new Error(`Unknown setting: ${settingName}`);
@@ -105,7 +106,7 @@ ipcMain.handle("setSettingValue", async (_ev, settingName: string, value: any) =
     console.debug(`Writing setting value for: ${settingName} = ${value}`);
     await setting.write(value);
 });
-ipcMain.handle("getSettingValue", async (_ev, settingName: string) => {
+typedIpcMain.handle("getSettingValue", async (_ev, settingName: string) => {
     const setting = Settings[settingName];
     if (!setting) {
         throw new Error(`Unknown setting: ${settingName}`);

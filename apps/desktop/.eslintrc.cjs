@@ -21,6 +21,19 @@ module.exports = {
 
         "n/file-extension-in-import": ["error", "always"],
         "unicorn/prefer-node-protocol": ["error"],
+
+        "no-restricted-imports": [
+            "error",
+            {
+                paths: [
+                    {
+                        name: "electron",
+                        importNames: ["ipcMain"],
+                        message: "Use typedIpcMain instead.",
+                    },
+                ],
+            },
+        ],
     },
     overrides: [
         {

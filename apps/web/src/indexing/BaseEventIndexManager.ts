@@ -10,58 +10,28 @@ import {
     type IMatrixProfile,
     type IEventWithRoomId as IMatrixEvent,
     type IResultRoomEvents,
-    type Direction,
 } from "matrix-js-sdk/src/matrix";
+import {
+    type SeshatSearchArgs,
+    type SeshatLoadArgs,
+    type SeshatIndexStats,
+    type SeshatCheckpoint,
+    type SeshatEventAndProfile,
+} from "shared-types";
 
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
 
 /** A record of a place to resume crawling events in a given room. */
-export interface ICrawlerCheckpoint {
-    /** The room to be indexed */
-    roomId: string;
+export type ICrawlerCheckpoint = SeshatCheckpoint;
 
-    /** The pagination index to resume crawling from. */
-    token: string;
+export type ISearchArgs = SeshatSearchArgs;
 
-    /**
-     * If `fullCrawl` is false (or absent) and we find that we have already indexed the events we find, then we stop crawling.
-     *
-     * If `fullCrawl` is true, then we keep going until we reach the end of the room history.
-     */
-    fullCrawl?: boolean;
+export type IEventAndProfile = SeshatEventAndProfile;
 
-    /** Whether we should crawl in the forward or backward direction. */
-    direction: Direction;
-}
+export type ILoadArgs = SeshatLoadArgs;
 
-export interface ISearchArgs {
-    search_term: string;
-    before_limit: number;
-    after_limit: number;
-    order_by_recency: boolean;
-    room_id?: string;
-    limit: number;
-    next_batch?: string;
-}
-
-export interface IEventAndProfile {
-    event: IMatrixEvent;
-    profile: IMatrixProfile;
-}
-
-export interface ILoadArgs {
-    roomId: string;
-    limit: number;
-    fromEvent?: string;
-    direction?: string;
-}
-
-export interface IIndexStats {
-    size: number;
-    eventCount: number;
-    roomCount: number;
-}
+export type IIndexStats = SeshatIndexStats;
 
 /**
  * Base class for classes that provide platform-specific event indexing.
@@ -136,7 +106,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<IIndexStats>} A promise that will resolve to the index
      * statistics.
      */
-    public async getStats(): Promise<IIndexStats> {
+    public async getStats(): Promise<IIndexStats | undefined> {
         throw new Error("Unimplemented");
     }
 
@@ -145,7 +115,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise<number>} A promise that will resolve to the user stored
      * version number.
      */
-    public async getUserVersion(): Promise<number> {
+    public async getUserVersion(): Promise<number | undefined> {
         throw new Error("Unimplemented");
     }
 
@@ -168,7 +138,7 @@ export default abstract class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the queued up events
      * were added to the index.
      */
-    public async commitLiveEvents(): Promise<void> {
+    public async commitLiveEvents(): Promise<number> {
         throw new Error("Unimplemented");
     }
 

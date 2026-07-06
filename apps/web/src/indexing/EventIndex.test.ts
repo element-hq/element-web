@@ -130,6 +130,7 @@ describe("EventIndex", () => {
         const commitLiveEventsCalled = Promise.withResolvers<void>();
         mockIndexingManager.commitLiveEvents.mockImplementation(async () => {
             commitLiveEventsCalled.resolve();
+            return 4;
         });
 
         const indexer = new EventIndex();

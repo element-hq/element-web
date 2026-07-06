@@ -19,6 +19,14 @@ import {
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqueId } from "lodash";
+import {
+    type Electron,
+    type SquirrelUpdate,
+    type DesktopCapturerSource,
+    type GetSourcesOptions,
+    type ElectronSettings,
+    type DesktopConfigJson,
+} from "shared-types";
 
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
 import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
@@ -41,17 +49,9 @@ import { avatarUrlForRoom, getInitialLetter } from "../../Avatar";
 import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SeshatIndexManager } from "./SeshatIndexManager";
-import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
 import { BadgeOverlayRenderer } from "../../favicon";
 import GenericToast from "../../components/views/toasts/GenericToast.tsx";
-
-interface SquirrelUpdate {
-    releaseNotes: string;
-    releaseName: string;
-    releaseDate: Date;
-    updateURL: string;
-}
 
 const SSO_ID_KEY = "element-desktop-ssoid";
 
@@ -88,14 +88,13 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
 }
 
 export default class ElectronPlatform extends BasePlatform {
-    private readonly ipc = new IPCManager("ipcCall", "ipcReply");
-    private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
+    private readonly eventIndexManager: BaseEventIndexManager;
     public readonly initialised: Promise<void>;
     private readonly electron: Electron;
     private protocol!: string;
     private sessionId!: string;
     private badgeOverlayRenderer?: BadgeOverlayRenderer;
-    private config!: IConfigOptions;
+    private config!: DesktopConfigJson;
     private supportedSettings?: Record<string, boolean>;
     private clientStartedPromiseWithResolvers = Promise.withResolvers<void>();
 
@@ -106,6 +105,7 @@ export default class ElectronPlatform extends BasePlatform {
             throw new Error("Cannot instantiate ElectronPlatform, window.electron is not set");
         }
         this.electron = window.electron;
+        this.eventIndexManager = new SeshatIndexManager(this.electron);
 
         /*
             IPC Call `check_updates` returns:
@@ -113,7 +113,7 @@ export default class ElectronPlatform extends BasePlatform {
             false if there is not
             or the error if one is encountered
          */
-        this.electron.on("check_updates", (event, status) => {
+        this.electron.on("check_updates", (status) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...getUpdateCheckStatus(status),
@@ -123,7 +123,7 @@ export default class ElectronPlatform extends BasePlatform {
         // `userAccessToken` (IPC) is requested by the main process when appending authentication
         // to media downloads. A reply is sent over the same channel.
         this.electron.on("userAccessToken", () => {
-            this.electron.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken());
+            this.electron.send("userAccessToken", MatrixClientPeg.get()?.getAccessToken() ?? undefined);
         });
 
         // `homeserverUrl` (IPC) is requested by the main process. A reply is sent over the same channel.
@@ -150,7 +150,7 @@ export default class ElectronPlatform extends BasePlatform {
             dis.fire(Action.ViewUserSettings);
         });
 
-        this.electron.on("userDownloadCompleted", (ev, { id, name }) => {
+        this.electron.on("userDownloadCompleted", ({ id, name }) => {
             const key = `DOWNLOAD_TOAST_${id}`;
 
             const onAccept = (): void => {
@@ -182,10 +182,10 @@ export default class ElectronPlatform extends BasePlatform {
             const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
             const [source] = await finished;
             // getDisplayMedia promise does not return if no dummy is passed here as source
-            await this.ipc.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
+            await this.electron.call("callDisplayMediaCallback", source ?? { id: "", name: "", thumbnailURL: "" });
         });
 
-        this.electron.on("showToast", async (ev, { title, description, priority = 40 }) => {
+        this.electron.on("showToast", async ({ title, description, priority = 40 }) => {
             await this.clientStartedPromiseWithResolvers.promise;
 
             const key = uniqueId("electron_showToast_");
@@ -213,9 +213,16 @@ export default class ElectronPlatform extends BasePlatform {
 
     protected onAction(payload: ActionPayload): void {
         super.onAction(payload);
-        // Whitelist payload actions, no point sending most across
-        if (["call_state"].includes(payload.action)) {
-            this.electron.send("app_onAction", payload);
+
+        switch (payload.action) {
+            case "call_state": {
+                if (payload.state === "connected") {
+                    this.electron.send("prevent_display_sleep", true);
+                } else if (payload.state === "ended") {
+                    this.electron.send("prevent_display_sleep", false);
+                }
+                break;
+            }
         }
 
         if (payload.action === Action.ClientStarted) {
@@ -237,7 +244,7 @@ export default class ElectronPlatform extends BasePlatform {
 
     public async getConfig(): Promise<IConfigOptions | undefined> {
         await this.initialised;
-        return this.config;
+        return this.config as IConfigOptions;
     }
 
     private onBreadcrumbsUpdate = (): void => {
@@ -251,10 +258,10 @@ export default class ElectronPlatform extends BasePlatform {
             ),
             initial: getInitialLetter(r.name),
         }));
-        void this.ipc.call("breadcrumbs", rooms);
+        void this.electron.send("breadcrumbs", rooms);
     };
 
-    private onUpdateDownloaded = async (ev: Event, { releaseNotes, releaseName }: SquirrelUpdate): Promise<void> => {
+    private onUpdateDownloaded = async ({ releaseNotes, releaseName }: SquirrelUpdate): Promise<void> => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -287,7 +294,7 @@ export default class ElectronPlatform extends BasePlatform {
             this.badgeOverlayRenderer
                 .render(count)
                 .then((buffer) => {
-                    this.electron.send("setBadgeCount", count, buffer);
+                    this.electron.send("setBadgeCount", count, buffer ?? undefined);
                 })
                 .catch((ex) => {
                     logger.warn("Unable to generate badge overlay", ex);
@@ -313,7 +320,7 @@ export default class ElectronPlatform extends BasePlatform {
             }
             promise
                 .then((buffer) => {
-                    this.electron.send("setBadgeCount", this.notificationCount, buffer, errorDidOccur);
+                    this.electron.send("setBadgeCount", this.notificationCount, buffer ?? undefined, errorDidOccur);
                 })
                 .catch((ex) => {
                     logger.warn("Unable to generate badge overlay", ex);
@@ -351,7 +358,7 @@ export default class ElectronPlatform extends BasePlatform {
         const handler = notification.onclick as () => void;
         notification.onclick = (): void => {
             handler?.();
-            void this.ipc.call("focusWindow");
+            void this.electron.call("focusWindow");
         };
 
         return notification;
@@ -366,26 +373,29 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async getAppVersion(): Promise<string> {
-        return this.ipc.call("getAppVersion");
+        return this.electron.call("getAppVersion");
     }
 
-    public supportsSetting(settingName?: string): boolean {
+    public supportsSetting(settingName?: keyof ElectronSettings): boolean {
         if (settingName === undefined) return true;
         return this.supportedSettings?.[settingName] === true;
     }
 
-    public async getSettingValue(settingName: string): Promise<any> {
+    public async getSettingValue<K extends keyof ElectronSettings>(settingName: K): Promise<ElectronSettings[K]> {
         await this.initialised;
         return this.electron.getSettingValue(settingName);
     }
 
-    public async setSettingValue(settingName: string, value: any): Promise<void> {
+    public async setSettingValue<K extends keyof ElectronSettings>(
+        settingName: K,
+        value: ElectronSettings[K],
+    ): Promise<void> {
         await this.initialised;
         return this.electron.setSettingValue(settingName, value);
     }
 
     public async canSelfUpdate(): Promise<boolean> {
-        const feedUrl = await this.ipc.call("getUpdateFeedUrl");
+        const feedUrl = await this.electron.call("getUpdateFeedUrl");
         return Boolean(feedUrl);
     }
 
@@ -422,33 +432,33 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async setLanguage(preferredLangs: string[]): Promise<any> {
-        return this.ipc.call("setLanguage", preferredLangs);
+        return this.electron.call("setLanguage", preferredLangs);
     }
 
     public setSpellCheckEnabled(enabled: boolean): void {
-        this.ipc.call("setSpellCheckEnabled", enabled).catch((error) => {
+        this.electron.call("setSpellCheckEnabled", enabled).catch((error) => {
             logger.log("Failed to send setSpellCheckEnabled IPC to Electron");
             logger.error(error);
         });
     }
 
     public async getSpellCheckEnabled(): Promise<boolean> {
-        return this.ipc.call("getSpellCheckEnabled");
+        return this.electron.call("getSpellCheckEnabled");
     }
 
     public setSpellCheckLanguages(preferredLangs: string[]): void {
-        this.ipc.call("setSpellCheckLanguages", preferredLangs).catch((error) => {
+        this.electron.call("setSpellCheckLanguages", preferredLangs).catch((error) => {
             logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
             logger.error(error);
         });
     }
 
     public async getSpellCheckLanguages(): Promise<string[]> {
-        return this.ipc.call("getSpellCheckLanguages");
+        return this.electron.call("getSpellCheckLanguages");
     }
 
     public async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
-        return this.ipc.call("getDesktopCapturerSources", options);
+        return this.electron.call("getDesktopCapturerSources", options);
     }
 
     public supportsDesktopCapturer(): boolean {
@@ -461,7 +471,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public async getAvailableSpellCheckLanguages(): Promise<string[]> {
-        return this.ipc.call("getAvailableSpellCheckLanguages");
+        return this.electron.call("getAvailableSpellCheckLanguages");
     }
 
     public getSSOCallbackUrl(fragmentAfterLogin?: string): URL {
@@ -486,7 +496,7 @@ export default class ElectronPlatform extends BasePlatform {
     }
 
     public navigateForwardBack(back: boolean): void {
-        void this.ipc.call(back ? "navigateBack" : "navigateForward");
+        void this.electron.call(back ? "navigateBack" : "navigateForward");
     }
 
     public overrideBrowserShortcuts(): boolean {
@@ -495,7 +505,7 @@ export default class ElectronPlatform extends BasePlatform {
 
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this.ipc.call("getPickleKey", userId, deviceId);
+            return await this.electron.call("getPickleKey", userId, deviceId);
         } catch {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -505,7 +515,7 @@ export default class ElectronPlatform extends BasePlatform {
 
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this.ipc.call("createPickleKey", userId, deviceId);
+            return await this.electron.call("createPickleKey", userId, deviceId);
         } catch {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -515,14 +525,14 @@ export default class ElectronPlatform extends BasePlatform {
 
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
-            await this.ipc.call("destroyPickleKey", userId, deviceId);
+            await this.electron.call("destroyPickleKey", userId, deviceId);
         } catch {}
     }
 
     public async clearStorage(): Promise<void> {
         try {
             await super.clearStorage();
-            await this.ipc.call("clearStorage");
+            await this.electron.send("clearStorage");
         } catch {}
     }
 

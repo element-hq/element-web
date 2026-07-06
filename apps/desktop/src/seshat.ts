@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import { promises as afs } from "node:fs";
 import path from "node:path";
 
@@ -14,9 +14,9 @@ import type {
     SeshatRecovery as SeshatRecoveryType,
     ReindexError as ReindexErrorType,
 } from "matrix-seshat"; // Hak dependency type
-import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import Store from "./store.js";
+import type Store from "./store.js";
+import { typedIpcMain } from "./ipc.js";
 
 let seshatSupported = false;
 let Seshat: typeof SeshatType;
@@ -76,240 +76,83 @@ const deleteContents = async (p: string): Promise<void> => {
     }
 };
 
-ipcMain.on("seshat", async function (_ev: IpcMainEvent, payload): Promise<void> {
-    const store = Store.instance;
-    if (!global.mainWindow || !store) return;
-
+export function setupListeners(store: Store): void {
     // We do this here to ensure we get the path after --profile has been resolved
     const eventStorePath = path.join(app.getPath("userData"), "EventStore");
 
-    const sendError = (id: string, e: Error): void => {
-        const error = {
-            message: e.message,
-        };
+    typedIpcMain.handle("seshat.supportsEventIndexing", () => seshatSupported);
+    typedIpcMain.handle("seshat.initEventIndex", async (_, userId, deviceId) => {
+        if (eventIndex !== null) return;
 
-        global.mainWindow?.webContents.send("seshatReply", { id, error });
-    };
+        const passphraseKey = `seshat|${userId}|${deviceId}`;
 
-    const args = payload.args || [];
-    let ret: any;
+        const passphrase = await getOrCreatePassphrase(store, passphraseKey);
 
-    switch (payload.name) {
-        case "supportsEventIndexing":
-            ret = seshatSupported;
-            break;
+        try {
+            await afs.mkdir(eventStorePath, { recursive: true });
+            eventIndex = new Seshat(eventStorePath, { passphrase });
+        } catch (e) {
+            if (e instanceof ReindexError) {
+                // If this is a reindex error, the index schema
+                // changed. Try to open the database in recovery mode,
+                // reindex the database and finally try to open the
+                // database again.
+                const recoveryIndex = new SeshatRecovery(eventStorePath, {
+                    passphrase,
+                });
 
-        case "initEventIndex":
-            if (eventIndex === null) {
-                const userId = args[0];
-                const deviceId = args[1];
-                const passphraseKey = `seshat|${userId}|${deviceId}`;
+                const userVersion = await recoveryIndex.getUserVersion();
 
-                const passphrase = await getOrCreatePassphrase(store, passphraseKey);
-
-                try {
-                    await afs.mkdir(eventStorePath, { recursive: true });
-                    eventIndex = new Seshat(eventStorePath, { passphrase });
-                } catch (e) {
-                    if (e instanceof ReindexError) {
-                        // If this is a reindex error, the index schema
-                        // changed. Try to open the database in recovery mode,
-                        // reindex the database and finally try to open the
-                        // database again.
-                        const recoveryIndex = new SeshatRecovery(eventStorePath, {
-                            passphrase,
-                        });
-
-                        const userVersion = await recoveryIndex.getUserVersion();
-
-                        // If our user version is 0 we'll delete the db
-                        // anyways so reindexing it is a waste of time.
-                        if (userVersion === 0) {
-                            await recoveryIndex.shutdown();
-                            await deleteContents(eventStorePath);
-                        } else {
-                            await recoveryIndex.reindex();
-                        }
-
-                        eventIndex = new Seshat(eventStorePath, { passphrase });
-                    } else {
-                        sendError(payload.id, <Error>e);
-                        return;
-                    }
+                // If our user version is 0 we'll delete the db
+                // anyways so reindexing it is a waste of time.
+                if (userVersion === 0) {
+                    await recoveryIndex.shutdown();
+                    await deleteContents(eventStorePath);
+                } else {
+                    await recoveryIndex.reindex();
                 }
+
+                eventIndex = new Seshat(eventStorePath, { passphrase });
+            } else {
+                throw e;
             }
-            break;
-
-        case "closeEventIndex":
-            if (eventIndex !== null) {
-                const index = eventIndex;
-                eventIndex = null;
-
-                try {
-                    await index.shutdown();
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "deleteEventIndex": {
-            await deleteContents(eventStorePath);
-            break;
         }
-
-        case "isEventIndexEmpty":
-            if (eventIndex === null) ret = true;
-            else ret = await eventIndex.isEmpty();
-            break;
-
-        case "isRoomIndexed":
-            if (eventIndex === null) ret = false;
-            else ret = await eventIndex.isRoomIndexed(args[0]);
-            break;
-
-        case "addEventToIndex":
-            try {
-                eventIndex?.addEvent(args[0], args[1]);
-            } catch (e) {
-                sendError(payload.id, <Error>e);
-                return;
-            }
-            break;
-
-        case "deleteEvent":
-            try {
-                ret = await eventIndex?.deleteEvent(args[0]);
-            } catch (e) {
-                sendError(payload.id, <Error>e);
-                return;
-            }
-            break;
-
-        case "commitLiveEvents":
-            try {
-                ret = await eventIndex?.commit();
-            } catch (e) {
-                sendError(payload.id, <Error>e);
-                return;
-            }
-            break;
-
-        case "searchEventIndex":
-            try {
-                ret = await eventIndex?.search(args[0]);
-            } catch (e) {
-                sendError(payload.id, <Error>e);
-                return;
-            }
-            break;
-
-        case "addHistoricEvents":
-            if (eventIndex === null) ret = false;
-            else {
-                try {
-                    ret = await eventIndex.addHistoricEvents(args[0], args[1], args[2]);
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "getStats":
-            if (eventIndex === null) ret = 0;
-            else {
-                try {
-                    ret = await eventIndex.getStats();
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "removeCrawlerCheckpoint":
-            if (eventIndex === null) ret = false;
-            else {
-                try {
-                    ret = await eventIndex.removeCrawlerCheckpoint(args[0]);
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "addCrawlerCheckpoint":
-            if (eventIndex === null) ret = false;
-            else {
-                try {
-                    ret = await eventIndex.addCrawlerCheckpoint(args[0]);
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "loadFileEvents":
-            if (eventIndex === null) ret = [];
-            else {
-                try {
-                    ret = await eventIndex.loadFileEvents(args[0]);
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "loadCheckpoints":
-            if (eventIndex === null) ret = [];
-            else {
-                try {
-                    ret = await eventIndex.loadCheckpoints();
-                } catch {
-                    ret = [];
-                }
-            }
-            break;
-
-        case "setUserVersion":
-            if (eventIndex === null) break;
-            else {
-                try {
-                    await eventIndex.setUserVersion(args[0]);
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        case "getUserVersion":
-            if (eventIndex === null) ret = 0;
-            else {
-                try {
-                    ret = await eventIndex.getUserVersion();
-                } catch (e) {
-                    sendError(payload.id, <Error>e);
-                    return;
-                }
-            }
-            break;
-
-        default:
-            global.mainWindow?.webContents.send("seshatReply", {
-                id: payload.id,
-                error: "Unknown IPC Call: " + payload.name,
-            });
-            return;
-    }
-
-    global.mainWindow?.webContents.send("seshatReply", {
-        id: payload.id,
-        reply: ret,
     });
-});
+    typedIpcMain.handle("seshat.closeEventIndex", async () => {
+        if (eventIndex === null) return;
+
+        const index = eventIndex;
+        eventIndex = null;
+
+        await index.shutdown();
+    });
+    typedIpcMain.handle("seshat.deleteEventIndex", () => deleteContents(eventStorePath));
+    typedIpcMain.handle("seshat.isEventIndexEmpty", () => eventIndex?.isEmpty() ?? true);
+    typedIpcMain.handle("seshat.isRoomIndexed", (_, roomId) => eventIndex?.isRoomIndexed(roomId) ?? false);
+    typedIpcMain.handle("seshat.addEventToIndex", (_, matrixEvent, profile) =>
+        eventIndex?.addEvent(matrixEvent, profile),
+    );
+    typedIpcMain.handle("seshat.deleteEvent", (_, eventId) => eventIndex?.deleteEvent(eventId) ?? false);
+    typedIpcMain.handle("seshat.commitLiveEvents", () => eventIndex?.commit() ?? 0);
+    typedIpcMain.handle("seshat.searchEventIndex", (_, searchArgs) => eventIndex?.search(searchArgs));
+    typedIpcMain.handle(
+        "seshat.addHistoricEvents",
+        (_, events, newCheckpoint, oldCheckpoint) =>
+            eventIndex?.addHistoricEvents(events, newCheckpoint ?? undefined, oldCheckpoint ?? undefined) ?? false,
+    );
+    typedIpcMain.handle("seshat.getStats", () => eventIndex?.getStats());
+    typedIpcMain.handle("seshat.removeCrawlerCheckpoint", (_, checkpoint) =>
+        eventIndex?.removeCrawlerCheckpoint(checkpoint),
+    );
+    typedIpcMain.handle("seshat.addCrawlerCheckpoint", (_, checkpoint) => eventIndex?.addCrawlerCheckpoint(checkpoint));
+    typedIpcMain.handle("seshat.loadFileEvents", (_, args) => eventIndex?.loadFileEvents(args) ?? []);
+    typedIpcMain.handle("seshat.loadCheckpoints", async () => {
+        try {
+            return (await eventIndex?.loadCheckpoints()) ?? [];
+        } catch {
+            return [];
+        }
+    });
+    typedIpcMain.handle("seshat.setUserVersion", (_, version) => eventIndex?.setUserVersion(version));
+    typedIpcMain.handle("seshat.getUserVersion", () => eventIndex?.getUserVersion());
+}
