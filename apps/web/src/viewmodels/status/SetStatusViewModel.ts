@@ -15,17 +15,18 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { clearUserStatus, setUserStatus } from "../../utils/userStatus";
-import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import dis from "../../dispatcher/dispatcher";
 import { UserTab } from "../../components/views/dialogs/UserTab";
 import { Action } from "../../dispatcher/actions";
+import { type OwnProfileStore } from "../../stores/OwnProfileStore";
 
 export interface SetStatusViewModelProps {
     /**
      * The Matrix client instance.
      */
     client: MatrixClient;
+    ownProfileStore: OwnProfileStore;
 }
 
 export class SetStatusViewModel
@@ -34,14 +35,14 @@ export class SetStatusViewModel
 {
     public constructor(props: SetStatusViewModelProps) {
         super(props, {
-            userStatus: OwnProfileStore.instance.userStatus,
+            userStatus: props.ownProfileStore.userStatus,
         });
 
-        this.disposables.trackListener(OwnProfileStore.instance, UPDATE_EVENT, this.onProfileStoreUpdate);
+        this.disposables.trackListener(props.ownProfileStore, UPDATE_EVENT, this.onProfileStoreUpdate);
     }
 
     private onProfileStoreUpdate = (): void => {
-        this.snapshot.merge({ userStatus: OwnProfileStore.instance.userStatus });
+        this.snapshot.merge({ userStatus: this.props.ownProfileStore.userStatus });
     };
 
     public setStatus = (userStatus: UserStatus): void => {

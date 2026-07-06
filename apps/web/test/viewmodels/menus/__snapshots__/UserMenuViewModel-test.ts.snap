@@ -12,10 +12,155 @@ exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
     "signIn": true,
   },
   "avatarUrl": undefined,
-  "displayName": "@alice:domain",
+  "displayName": "Sally Sanderson",
   "expanded": false,
   "manageAccountHref": undefined,
   "open": true,
+  "setStatusViewModel": UserMenuSetStatusViewModel {
+    "clearStatus": [Function],
+    "disposables": sC {
+      "_isDisposed": false,
+      "disposables": [
+        [Function],
+      ],
+    },
+    "getSnapshot": [Function],
+    "onProfileStoreUpdate": [Function],
+    "onSetStatusClick": [Function],
+    "props": {
+      "client": MockClientWithEventEmitter {
+        "_events": {},
+        "_eventsCount": 0,
+        "_maxListeners": undefined,
+        "canSupport": Map {
+          "Thread" => 0,
+          "ThreadUnreadNotifications" => 0,
+          "LoginTokenRequest" => 0,
+          "RelationBasedRedactions" => 0,
+          "AccountDataDeletion" => 0,
+          "RelationsRecursion" => 0,
+          "IntentionalMentions" => 0,
+        },
+        "credentials": {
+          "userId": "@alice:domain",
+        },
+        "doesServerSupportUnstableFeature": [MockFunction],
+        "getAccessToken": [MockFunction],
+        "getAccountData": [MockFunction],
+        "getAuthMetadata": [MockFunction],
+        "getCachedCapabilities": [MockFunction],
+        "getCapabilities": [MockFunction],
+        "getClientWellKnown": [MockFunction] {
+          "calls": [
+            [],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": {},
+            },
+          ],
+        },
+        "getDeviceId": [MockFunction],
+        "getDomain": [MockFunction],
+        "getHomeserverUrl": [MockFunction],
+        "getIdentityServerUrl": [MockFunction],
+        "getSafeUserId": [MockFunction] {
+          "calls": [
+            [],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": "@alice:domain",
+            },
+          ],
+        },
+        "getThreePids": [MockFunction],
+        "getUser": [MockFunction],
+        "getUserId": [MockFunction],
+        "getVersions": [MockFunction],
+        "isFallbackICEServerAllowed": [MockFunction],
+        "isGuest": [MockFunction] {
+          "calls": [
+            [],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": true,
+            },
+          ],
+        },
+        "isVersionSupported": [MockFunction],
+        "mxcUrlToHttp": [MockFunction],
+        "setExtendedProfileProperty": [MockFunction],
+        "waitForClientWellKnown": [MockFunction],
+        Symbol(shapeMode): false,
+        Symbol(kCapture): false,
+      },
+      "ownProfileStore": {
+        "displayName": "Sally Sanderson",
+        "getHttpAvatarUrl": [MockFunction] {
+          "calls": [
+            [
+              88,
+            ],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+        "on": [MockFunction] {
+          "calls": [
+            [
+              "update",
+              [Function],
+            ],
+            [
+              "update",
+              [Function],
+            ],
+            [
+              "update",
+              [Function],
+            ],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
+            {
+              "type": "return",
+              "value": undefined,
+            },
+            {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+        "userStatus": undefined,
+      },
+    },
+    "setStatus": [Function],
+    "snapshot": cC {
+      "emit": [Function],
+      "snapshot": {
+        "userStatus": undefined,
+      },
+    },
+    "subs": lC {
+      "add": [Function],
+      "emit": [Function],
+      "listeners": Set {},
+    },
+    "subscribe": [Function],
+  },
   "showAvatar": false,
   "showUserStatus": false,
   "userId": "@alice:domain",
@@ -35,10 +180,155 @@ exports[`UserMenuViewModel should generate a menu options for a logged in client
     "signIn": false,
   },
   "avatarUrl": undefined,
-  "displayName": "@alice:domain",
+  "displayName": "Sally Sanderson",
   "expanded": false,
   "manageAccountHref": undefined,
   "open": true,
+  "setStatusViewModel": UserMenuSetStatusViewModel {
+    "clearStatus": [Function],
+    "disposables": sC {
+      "_isDisposed": false,
+      "disposables": [
+        [Function],
+      ],
+    },
+    "getSnapshot": [Function],
+    "onProfileStoreUpdate": [Function],
+    "onSetStatusClick": [Function],
+    "props": {
+      "client": MockClientWithEventEmitter {
+        "_events": {},
+        "_eventsCount": 0,
+        "_maxListeners": undefined,
+        "canSupport": Map {
+          "Thread" => 0,
+          "ThreadUnreadNotifications" => 0,
+          "LoginTokenRequest" => 0,
+          "RelationBasedRedactions" => 0,
+          "AccountDataDeletion" => 0,
+          "RelationsRecursion" => 0,
+          "IntentionalMentions" => 0,
+        },
+        "credentials": {
+          "userId": "@alice:domain",
+        },
+        "doesServerSupportUnstableFeature": [MockFunction],
+        "getAccessToken": [MockFunction],
+        "getAccountData": [MockFunction],
+        "getAuthMetadata": [MockFunction],
+        "getCachedCapabilities": [MockFunction],
+        "getCapabilities": [MockFunction],
+        "getClientWellKnown": [MockFunction] {
+          "calls": [
+            [],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": {},
+            },
+          ],
+        },
+        "getDeviceId": [MockFunction],
+        "getDomain": [MockFunction],
+        "getHomeserverUrl": [MockFunction],
+        "getIdentityServerUrl": [MockFunction],
+        "getSafeUserId": [MockFunction] {
+          "calls": [
+            [],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": "@alice:domain",
+            },
+          ],
+        },
+        "getThreePids": [MockFunction],
+        "getUser": [MockFunction],
+        "getUserId": [MockFunction],
+        "getVersions": [MockFunction],
+        "isFallbackICEServerAllowed": [MockFunction],
+        "isGuest": [MockFunction] {
+          "calls": [
+            [],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": false,
+            },
+          ],
+        },
+        "isVersionSupported": [MockFunction],
+        "mxcUrlToHttp": [MockFunction],
+        "setExtendedProfileProperty": [MockFunction],
+        "waitForClientWellKnown": [MockFunction],
+        Symbol(shapeMode): false,
+        Symbol(kCapture): false,
+      },
+      "ownProfileStore": {
+        "displayName": "Sally Sanderson",
+        "getHttpAvatarUrl": [MockFunction] {
+          "calls": [
+            [
+              88,
+            ],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+        "on": [MockFunction] {
+          "calls": [
+            [
+              "update",
+              [Function],
+            ],
+            [
+              "update",
+              [Function],
+            ],
+            [
+              "update",
+              [Function],
+            ],
+          ],
+          "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
+            {
+              "type": "return",
+              "value": undefined,
+            },
+            {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+        "userStatus": undefined,
+      },
+    },
+    "setStatus": [Function],
+    "snapshot": cC {
+      "emit": [Function],
+      "snapshot": {
+        "userStatus": undefined,
+      },
+    },
+    "subs": lC {
+      "add": [Function],
+      "emit": [Function],
+      "listeners": Set {},
+    },
+    "subscribe": [Function],
+  },
   "showAvatar": true,
   "showUserStatus": false,
   "userId": "@alice:domain",

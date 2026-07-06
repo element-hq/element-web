@@ -139,7 +139,9 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
     }, [client]);
 
     const userStatusEnabled = SettingsStore.getValue("feature_user_status");
-    const setStatusVM = useCreateAutoDisposedViewModel(() => new SetStatusViewModel({ client }));
+    const setStatusVM = useCreateAutoDisposedViewModel(
+        () => new SetStatusViewModel({ client, ownProfileStore: OwnProfileStore.instance }),
+    );
 
     const onAvatarRemove = useCallback(async () => {
         const removeToast = toastRack.displayToast(
