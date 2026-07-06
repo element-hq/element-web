@@ -9,7 +9,7 @@ import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import { RoomAvatarView } from "../../../../../src/components/views/avatars/RoomAvatarView";
+import { DecoratedRoomAvatarView } from "../../../../../src/components/views/avatars/DecoratedRoomAvatarView";
 import { mkStubRoom, stubClient } from "../../../../test-utils";
 import {
     AvatarBadgeDecoration,
@@ -24,7 +24,7 @@ jest.mock("../../../../../src/components/viewmodels/avatars/RoomAvatarViewModel"
     useRoomAvatarViewModel: jest.fn(),
 }));
 
-describe("<RoomAvatarView />", () => {
+describe("<DecoratedRoomAvatarView />", () => {
     const matrixClient = stubClient();
     const room = mkStubRoom("roomId", "roomName", matrixClient);
 
@@ -44,7 +44,7 @@ describe("<RoomAvatarView />", () => {
 
     it("should not render a decoration", () => {
         mocked(useRoomAvatarViewModel).mockReturnValue({ ...defaultValue });
-        const { asFragment } = render(<RoomAvatarView room={room} />);
+        const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -53,7 +53,7 @@ describe("<RoomAvatarView />", () => {
             ...defaultValue,
             badgeDecoration: AvatarBadgeDecoration.LowPriority,
         });
-        const { asFragment } = render(<RoomAvatarView room={room} />);
+        const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
 
         expect(screen.getByLabelText("This is a low priority room")).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
@@ -64,7 +64,7 @@ describe("<RoomAvatarView />", () => {
             ...defaultValue,
             badgeDecoration: AvatarBadgeDecoration.VideoRoom,
         });
-        const { asFragment } = render(<RoomAvatarView room={room} />);
+        const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
 
         expect(screen.getByLabelText("This room is a video room")).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
@@ -75,7 +75,7 @@ describe("<RoomAvatarView />", () => {
             ...defaultValue,
             badgeDecoration: AvatarBadgeDecoration.PublicRoom,
         });
-        const { asFragment } = render(<RoomAvatarView room={room} />);
+        const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
 
         expect(screen.getByLabelText("This room is public")).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
@@ -92,7 +92,7 @@ describe("<RoomAvatarView />", () => {
             badgeDecoration: AvatarBadgeDecoration.Presence,
             presence,
         });
-        const { asFragment } = render(<RoomAvatarView room={room} />);
+        const { asFragment } = render(<DecoratedRoomAvatarView room={room} />);
 
         expect(screen.getByLabelText(label)).toBeInTheDocument();
         expect(asFragment()).toMatchSnapshot();
