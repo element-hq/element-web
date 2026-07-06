@@ -35,7 +35,7 @@ describe("UserMenuViewModel", () => {
         mockOwnProfileStore = {
             displayName: "Sally Sanderson",
             userStatus: undefined,
-            getHttpAvatarUrl: jest.fn().mockReturnValue("http://foo.dummy/avatar.png"),
+            getHttpAvatarUrl: jest.fn().mockReturnValue("https://foo.dummy/avatar.png"),
             on: jest.fn(),
         } as unknown as OwnProfileStore;
     });
