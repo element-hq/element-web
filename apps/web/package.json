@@ -1,15 +1,17 @@
 {
     "name": "element-web",
     "version": "1.12.22",
-    "private": true,
     "description": "Element: the future of secure communication",
-    "license": "SEE LICENSE IN README.md",
     "author": "New Vector Ltd.",
     "repository": {
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
     },
+    "license": "SEE LICENSE IN README.md",
     "type": "module",
+    "matrix_i18n_extra_translation_funcs": [
+        "UserFriendlyError"
+    ],
     "scripts": {
         "i18n": "matrix-gen-i18n src res && pnpm i18n:sort && pnpm i18n:lint",
         "i18n:sort": "matrix-sort-i18n src/i18n/strings/en_EN.json",
@@ -238,7 +240,5 @@
     "engines": {
         "node": ">=22.18"
     },
-    "matrix_i18n_extra_translation_funcs": [
-        "UserFriendlyError"
-    ]
+    "private": true
 }

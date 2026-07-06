@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { describe, it, expect, beforeEach } from "vitest";
-import { renderHook, act } from "jest-matrix-react";
+import { renderHook, act } from "test-utils-rtl";
 
 import UIStore, { UI_EVENTS } from "../stores/UIStore";
 import { useWindowWidth } from "./useWindowWidth";
