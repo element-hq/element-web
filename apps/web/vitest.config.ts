@@ -43,5 +43,10 @@ export default defineProject({
         pool: "threads",
         globals: false,
         setupFiles: ["src/test/setupTests.ts"],
+        environmentOptions: {
+            happyDOM: {
+                url: "http://localhost/",
+            },
+        },
     },
 });

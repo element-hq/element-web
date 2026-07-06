@@ -32,7 +32,8 @@ import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icon
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";

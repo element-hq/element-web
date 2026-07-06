@@ -19,7 +19,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { type IMatrixClientCreds } from "./MatrixClientPeg";
+import { type IMatrixClientCreds } from "./utils/createMatrixClient";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import { getOidcClientId } from "./utils/oidc/registerClient";
 import { type IConfigOptions } from "./IConfigOptions";
