@@ -18,7 +18,7 @@ import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { CommandPartCreator } from "../../../../../src/editor/parts";
 import DocumentOffset from "../../../../../src/editor/offset";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("BasicMessageComposer", () => {
@@ -114,7 +114,7 @@ describe("BasicMessageComposer", () => {
         const model = new EditorModel([commandPart], commandPc, renderer);
 
         // spy on typingStore.setSelfTyping
-        const spy = jest.spyOn(SdkContextClass.instance.typingStore, "setSelfTyping");
+        const spy = jest.spyOn(SDKContextClass.instance.typingStore, "setSelfTyping");
 
         render(<BasicMessageComposer model={model} room={room} />);
 

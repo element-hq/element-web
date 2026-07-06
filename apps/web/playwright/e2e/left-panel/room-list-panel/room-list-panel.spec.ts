@@ -11,10 +11,6 @@ import { test, expect } from "../../../element-web-test";
 import { getRoomListView } from "./utils";
 
 test.describe("Room list panel", () => {
-    test.use({
-        labsFlags: ["feature_new_room_list"],
-    });
-
     test.beforeEach(async ({ page, app, user }) => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");

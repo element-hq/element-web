@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX, type FocusEvent, useEffect, useRef } from "react";
+import React, { memo, type JSX, type FocusEvent, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { useDraggable, useDragOperation, useDroppable } from "@dnd-kit/react";
 import { useMergeRefs } from "react-merge-refs";
@@ -168,6 +168,29 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
         }
     }, [isFocused]);
 
+    // Reveal the menu only on keyboard focus (not mouse), kept while focus is on the menu button so
+    // it stays reachable by Tab. See RoomListItemView for the full rationale.
+    const [keyboardActive, setKeyboardActive] = useState(false);
+
+    const onHeaderFocus = (e: React.FocusEvent<HTMLButtonElement>): void => {
+        onFocus(id, e);
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null) && e.currentTarget.matches(":focus-visible")) {
+            setKeyboardActive(true);
+        }
+    };
+
+    const onHeaderBlur = (e: React.FocusEvent<HTMLButtonElement>): void => {
+        // Keep it revealed while focus is on the menu button, and while the menu is open (focus is
+        // then in the portaled popover, outside the header). That way closing with Escape restores
+        // focus to the still-revealed trigger instead of dropping to <body>. Clear once focus leaves.
+        if (
+            !e.currentTarget.contains(e.relatedTarget as Node | null) &&
+            !e.currentTarget.querySelector('[data-state="open"]')
+        ) {
+            setKeyboardActive(false);
+        }
+    };
+
     return (
         <div
             aria-expanded={ariaExpanded}
@@ -178,6 +201,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                     ref={buttonRef}
                     type="button"
                     className={classNames(styles.header, {
+                        [styles.keyboardActive]: keyboardActive,
                         [styles.firstHeader]: sectionIndex === 0,
                         // If the section is collapsed and it's the last one
                         [styles.lastHeader]: !isExpanded && isLastSection,
@@ -207,7 +231,8 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         }
                     }}
                     aria-expanded={ariaExpanded}
-                    onFocus={(e) => onFocus(id, e)}
+                    onFocus={onHeaderFocus}
+                    onBlur={onHeaderBlur}
                     tabIndex={isFocused ? 0 : -1}
                     aria-label={
                         isUnread

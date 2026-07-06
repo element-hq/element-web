@@ -23,7 +23,7 @@ import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelS
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 const RightPanelBase = wrapInMatrixClientContext(_RightPanel);
@@ -32,13 +32,13 @@ describe("RightPanel", () => {
     const resizeNotifier = new ResizeNotifier();
 
     let cli: MockedObject<MatrixClient>;
-    let context: SdkContextClass;
+    let context: SDKContextClass;
     let RightPanel: React.ComponentType<React.ComponentProps<typeof RightPanelBase>>;
     beforeEach(() => {
         stubClient();
         cli = mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(cli);
-        context = new SdkContextClass();
+        context = new SDKContextClass();
         context.client = cli;
         RightPanel = wrapInSdkContext(RightPanelBase, context);
     });

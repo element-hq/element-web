@@ -41,7 +41,7 @@ import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
 
@@ -251,7 +251,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 isTyping = false;
             }
         }
-        SdkContextClass.instance.typingStore.setSelfTyping(
+        SDKContextClass.instance.typingStore.setSelfTyping(
             this.props.room.roomId,
             this.props.threadId ?? null,
             isTyping,

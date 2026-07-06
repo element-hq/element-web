@@ -37,7 +37,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Action } from "../../../src/dispatcher/actions";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import RoomListStore from "../../../src/stores/room-list/RoomListStore";
+import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
@@ -141,8 +141,6 @@ describe("SpaceStore", () => {
     });
 
     afterEach(async () => {
-        // Disable the new room list feature flag
-        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, false);
         await testUtils.resetAsyncStoreWithClient(store);
     });
 
@@ -444,12 +442,6 @@ describe("SpaceStore", () => {
                     expect(store.isRoomInSpace(MetaSpace.Home, room1)).toBeTruthy();
                 });
 
-                it("favourites space does contain favourites even if they are also shown in a space", async () => {
-                    expect(store.isRoomInSpace(MetaSpace.Favourites, fav1)).toBeTruthy();
-                    expect(store.isRoomInSpace(MetaSpace.Favourites, fav2)).toBeTruthy();
-                    expect(store.isRoomInSpace(MetaSpace.Favourites, fav3)).toBeTruthy();
-                });
-
                 it("people space does contain people even if they are also shown in a space", async () => {
                     expect(store.isRoomInSpace(MetaSpace.People, dm1)).toBeTruthy();
                     expect(store.isRoomInSpace(MetaSpace.People, dm2)).toBeTruthy();
@@ -573,27 +565,6 @@ describe("SpaceStore", () => {
                 });
             });
 
-            it("dms are only added to Notification States for only the People Space", async () => {
-                [dm1, dm2, dm3].forEach((d) => {
-                    expect(
-                        store
-                            .getNotificationState(MetaSpace.People)
-                            .rooms.map((r) => r.roomId)
-                            .includes(d),
-                    ).toBeTruthy();
-                });
-                [space1, space2, space3, MetaSpace.Home, MetaSpace.Orphans, MetaSpace.Favourites].forEach((s) => {
-                    [dm1, dm2, dm3].forEach((d) => {
-                        expect(
-                            store
-                                .getNotificationState(s)
-                                .rooms.map((r) => r.roomId)
-                                .includes(d),
-                        ).toBeFalsy();
-                    });
-                });
-            });
-
             it("orphan rooms are added to Notification States for only the Home Space", async () => {
                 await setShowAllRooms(false);
                 [orphan1, orphan2].forEach((d) => {
@@ -707,29 +678,6 @@ describe("SpaceStore", () => {
             it("does not honour m.space.parent if sender does not have permission in parent space", () => {
                 expect(store.isRoomInSpace(space3, room3)).toBeFalsy();
             });
-        });
-    });
-
-    it("should add new DM Invites to the People Space Notification State", async () => {
-        mkRoom(dm1);
-        mocked(client.getRoom(dm1)!).getMyMembership.mockReturnValue(KnownMembership.Join);
-        mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
-
-        await run();
-
-        mkRoom(dm2);
-        const cliDm2 = client.getRoom(dm2)!;
-        mocked(cliDm2).getMyMembership.mockReturnValue(KnownMembership.Invite);
-        mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
-        client.emit(RoomEvent.MyMembership, cliDm2, KnownMembership.Invite);
-
-        [dm1, dm2].forEach((d) => {
-            expect(
-                store
-                    .getNotificationState(MetaSpace.People)
-                    .rooms.map((r) => r.roomId)
-                    .includes(d),
-            ).toBeTruthy();
         });
     });
 
@@ -1199,16 +1147,15 @@ describe("SpaceStore", () => {
         });
 
         it("switch to first valid space when selected metaspace is disabled", async () => {
-            store.setActiveSpace(MetaSpace.People, false);
-            expect(store.activeSpace).toBe(MetaSpace.People);
+            viewRoom(room1);
+            store.setActiveSpace(MetaSpace.Orphans, false);
+            expect(store.activeSpace).toBe(MetaSpace.Orphans);
             await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.DEVICE, {
-                [MetaSpace.Home]: false,
-                [MetaSpace.Favourites]: true,
-                [MetaSpace.People]: false,
-                [MetaSpace.Orphans]: true,
+                [MetaSpace.Home]: true,
+                [MetaSpace.Orphans]: false,
             });
             jest.runAllTimers();
-            expect(store.activeSpace).toBe(MetaSpace.Orphans);
+            expect(store.activeSpace).toBe(space1);
         });
 
         it("when switching rooms in the all rooms home space don't switch to related space", async () => {
@@ -1402,12 +1349,9 @@ describe("SpaceStore", () => {
         removeListener();
     });
 
-    it("Favourites and People meta spaces should not be returned when the feature_new_room_list labs flag is enabled", async () => {
-        // Enable the new room list
-        await SettingsStore.setValue("feature_new_room_list", null, SettingLevel.DEVICE, true);
-
+    it("Favourites and People meta spaces should not be returned", async () => {
         await run();
-        // Favourites and People meta spaces should not be returned
+        // Favourites and People meta spaces are not part of the meta space order
         expect(SpaceStore.instance.enabledMetaSpaces).toStrictEqual([MetaSpace.Home, MetaSpace.Orphans]);
     });
 
@@ -1515,8 +1459,9 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.Notification;
-            jest.spyOn(RoomListStore.instance, "orderedLists", "get").mockReturnValue({
-                [DefaultTagID.Untagged]: [room],
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: MetaSpace.Home,
+                sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });
 
             // init the store

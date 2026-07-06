@@ -320,8 +320,8 @@ async function collectLogs(
         let buf = new TextEncoder().encode(entry.lines);
 
         // compress
-        if (gzipLogs) {
-            buf = pako!.gzip(buf);
+        if (pako) {
+            buf = pako.gzip(buf).slice();
         }
 
         body.append("compressed-log", new Blob([buf]), entry.id);

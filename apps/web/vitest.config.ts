@@ -12,6 +12,7 @@ export default defineProject({
     resolve: {
         alias: [
             { find: "test-utils-rtl", replacement: resolve(__dirname, "./test/test-utils/jest-matrix-react") },
+            { find: "test-utils", replacement: resolve(__dirname, "./test/test-utils") },
             // Stub out workers as they do not play well under test
             {
                 find: /.*workers\/(.+)Factory/,
@@ -42,5 +43,10 @@ export default defineProject({
         pool: "threads",
         globals: false,
         setupFiles: ["src/test/setupTests.ts"],
+        environmentOptions: {
+            happyDOM: {
+                url: "http://localhost/",
+            },
+        },
     },
 });
