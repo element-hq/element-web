@@ -61,7 +61,7 @@ export class UserMenuViewModel
             manageAccountHref: accountManagementEndpoint,
             showAvatar: isAuthenticated,
             userStatus: ownProfileStore.userStatus,
-            showUserStatus: SettingsStore.getValue("feature_user_status"),
+            showUserStatus: SettingsStore.getValue("feature_user_status") && isAuthenticated,
             setStatusViewModel,
             actions: {
                 createAccount: !isAuthenticated,

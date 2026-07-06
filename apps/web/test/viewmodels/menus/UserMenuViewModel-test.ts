@@ -74,6 +74,7 @@ describe("UserMenuViewModel", () => {
         vm.setOpen(true);
         expect(vm.getSnapshot().displayName).toEqual("Sally Sanderson");
         expect(vm.getSnapshot().showAvatar).toEqual(false);
+        expect(vm.getSnapshot().showUserStatus).toEqual(false);
     });
 
     it("should generate a menu options that include feedback", () => {
