@@ -39,6 +39,10 @@
             text-align: center;
         }
 
+        .userId {
+            color: var(--cpd-color-text-secondary);
+        }
+
         .createAccount {
             margin-top: var(--cpd-space-1x);
             margin-bottom: var(--cpd-space-2x);

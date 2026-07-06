@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX } from "react";
-import { fn } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { FilterId } from "../RoomListPrimaryFilters";
@@ -264,5 +264,35 @@ export const Toast: Story = {
 export const UnreadActivityBelow: Story = {
     args: {
         toast: "unread_activity",
+    },
+};
+
+export const ToastOverStickySection: Story = {
+    tags: ["autodocs", "!snapshot"],
+    args: {
+        isFlatList: false,
+        toast: "unread_activity",
+    },
+    play: async ({ canvas, canvasElement }) => {
+        // Wait for the virtualized list to mount its rows before scrolling.
+        await canvas.findByRole("button", { name: "Toggle Favourites section" });
+        const scroller = canvasElement.querySelector<HTMLElement>('[role="treegrid"]')!;
+
+        // Scroll to the end of the list so the last section header ("Low-priority") gets mounted.
+        scroller.scrollTop = scroller.scrollHeight;
+        await canvas.findByRole("button", { name: "Toggle Low-priority section" });
+
+        // Scroll until the header row sits just above the bottom edge of the viewport, overlapping the toast.
+        const bottomOffset = 28;
+        await waitFor(() => {
+            const header = canvas.getByRole("button", { name: "Toggle Low-priority section" });
+            const gap = scroller.getBoundingClientRect().bottom - header.getBoundingClientRect().bottom;
+            if (Math.abs(gap - bottomOffset) > 1) {
+                scroller.scrollTop -= gap - bottomOffset;
+                throw new Error(`Header is not parked over the toast yet (gap: ${gap}px)`);
+            }
+        });
+
+        await expect(canvasElement).toMatchImageSnapshot();
     },
 };

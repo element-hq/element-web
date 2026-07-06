@@ -388,7 +388,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
           data-testid="userId"
         >
           @person-name:homeserver.com
@@ -814,7 +814,7 @@ exports[`UserMenu > renders an open menu 1`] = `
         class="UserMenu-module_profile UserMenu-module_profileSecondary"
       >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
           data-testid="userId"
         >
           @person-name:homeserver.com

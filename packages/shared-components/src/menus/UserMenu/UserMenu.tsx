@@ -173,7 +173,7 @@ export function UserMenuView({ vm, setStatusVm, className }: UserMenuViewProps):
                     {showUserStatus && <SetStatusView vm={setStatusVm} />}
                 </section>
                 <section className={classNames(styles.profile, styles.profileSecondary)}>
-                    <Text data-testid="userId" size="md" as="span" type="body">
+                    <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
                         {userId}
                     </Text>
                     {manageAccountHref && (
