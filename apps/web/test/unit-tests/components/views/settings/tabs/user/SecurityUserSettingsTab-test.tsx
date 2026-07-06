@@ -19,16 +19,13 @@ import {
     mockClientMethodsDevice,
     mockPlatformPeg,
 } from "../../../../../../test-utils";
-import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
 import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 
 describe("<SecurityUserSettingsTab />", () => {
-    const defaultProps = {
-        closeSettingsFn: jest.fn(),
-    };
-
     const getIgnoredUsers = jest.fn();
     const setIgnoredUsers = jest.fn();
 
@@ -45,13 +42,13 @@ describe("<SecurityUserSettingsTab />", () => {
         setIgnoredUsers,
     });
 
-    const sdkContext = new SdkContextClass();
+    const sdkContext = new SDKContextClass();
     sdkContext.client = mockClient;
 
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>
             <SDKContext.Provider value={sdkContext}>
-                <SecurityUserSettingsTab {...defaultProps} />
+                <SecurityUserSettingsTab />
             </SDKContext.Provider>
         </MatrixClientContext.Provider>
     );

@@ -99,11 +99,6 @@ interface IProps {
     canAskToJoinAndMembershipIsLeave?: boolean;
     promptAskToJoin?: boolean;
 
-    /**
-     * If true, this will prompt for additional safety options
-     * like reporting an invite or ignoring the user.
-     */
-    promptRejectionOptions?: boolean;
     knocked?: boolean;
     onSubmitAskToJoin?(reason?: string): void;
     onCancelAskToJoin?(): void;
@@ -322,7 +317,6 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
         let dangerActionHandler: (() => void) | undefined;
         let dangerActionLabel: string | undefined;
         let footer: JSX.Element | undefined;
-        const extraComponents: JSX.Element[] = [];
 
         const messageCase = this.getMessageCase();
         switch (messageCase) {
@@ -715,13 +709,11 @@ class RoomPreviewBar extends React.Component<IProps, IState> {
             <>
                 {dangerActionButton}
                 {secondaryButton}
-                {extraComponents}
                 {primaryButton}
             </>
         ) : (
             <>
                 {primaryButton}
-                {extraComponents}
                 {secondaryButton}
                 {dangerActionButton}
             </>

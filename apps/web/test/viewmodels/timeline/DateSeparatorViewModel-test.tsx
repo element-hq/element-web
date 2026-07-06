@@ -16,13 +16,13 @@ import Modal from "../../../src/Modal";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../src/settings/UIFeature";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
 import { flushPromisesWithFakeTimers } from "../../test-utils";
 
 jest.mock("../../../src/settings/SettingsStore");
-jest.mock("../../../src/contexts/SDKContext", () => ({
-    SdkContextClass: {
+jest.mock("../../../src/contexts/SDKContextClass", () => ({
+    SDKContextClass: {
         instance: {
             roomViewStore: {
                 getRoomId: jest.fn(),
@@ -97,7 +97,7 @@ describe("DateSeparatorViewModel", () => {
         jest.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
         jest.spyOn(Modal, "createDialog").mockImplementation(() => ({ close: jest.fn() }) as any);
 
-        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
+        mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
     });
 
     afterEach(() => {
@@ -193,7 +193,7 @@ describe("DateSeparatorViewModel", () => {
             event_id: "$event",
             origin_server_ts: nowDate.getTime(),
         });
-        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!other:example.org");
+        mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!other:example.org");
         const vm = createViewModel();
 
         await vm.pickDate(nowDate.getTime() - HOUR_MS);
@@ -299,7 +299,7 @@ describe("DateSeparatorViewModel", () => {
         });
 
         it("does not jump when room changed before request resolves", async () => {
-            mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+            mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
             mockTimestampToEvent.mockResolvedValue({
                 event_id: "$abc",
                 origin_server_ts: 0,
@@ -313,7 +313,7 @@ describe("DateSeparatorViewModel", () => {
         });
 
         it("does not show jump to date error if user switched room", async () => {
-            mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+            mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
             mockTimestampToEvent.mockRejectedValue(new Error("Fake error in test"));
             const vm = createViewModel();
 

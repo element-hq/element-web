@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked, mocked, type MockedObject } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 import {
     MatrixEvent,
     type Room,
@@ -1468,7 +1468,7 @@ describe("DeviceListener", () => {
     });
 });
 
-function mockKeyBackupFromServer(client: MockedObject<MatrixClient>, enabled: boolean) {
+function mockKeyBackupFromServer(client: Mocked<MatrixClient>, enabled: boolean) {
     client.getAccountDataFromServer.mockImplementation(async (eventType: string) => {
         switch (eventType) {
             case ACCOUNT_DATA_KEY_M_KEY_BACKUP:

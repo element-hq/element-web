@@ -56,7 +56,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
@@ -257,7 +257,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         );
         if (isActiveWidget) {
             // We just left the room that the active widget was from.
-            if (this.props.room && SdkContextClass.instance.roomViewStore.getRoomId() !== this.props.room.roomId) {
+            if (this.props.room && SDKContextClass.instance.roomViewStore.getRoomId() !== this.props.room.roomId) {
                 // If we are not actively looking at the room then destroy this widget entirely.
                 this.endWidgetActions();
             } else if (WidgetType.JITSI.matches(this.props.app.type)) {
@@ -848,55 +848,53 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         return (
-            <React.Fragment>
-                <div className={appTileClasses} id={this.props.app.id}>
-                    {this.props.showMenubar && (
-                        <div className="mx_AppTileMenuBar">
-                            <span
-                                className="mx_AppTileMenuBar_title"
-                                style={{ pointerEvents: this.props.handleMinimisePointerEvents ? "all" : "none" }}
-                            >
-                                {this.props.showTitle && this.getTileTitle()}
-                            </span>
-                            <span className="mx_AppTileMenuBar_widgets">
-                                {layoutButtons}
-                                {this.props.showPopout && !this.state.requiresClient && (
-                                    <AccessibleButton
-                                        className="mx_AppTileMenuBar_widgets_button"
-                                        title={_t("widget|popout")}
-                                        onClick={this.onPopoutWidgetClick}
-                                    >
-                                        <PopOutIcon className="mx_Icon mx_Icon_12" />
-                                    </AccessibleButton>
-                                )}
-                                <I18nContext.Provider value={window.mxModuleApi.i18n}>
-                                    <WidgetContextMenu
-                                        trigger={
-                                            <ContextMenuButton
-                                                className="mx_AppTileMenuBar_widgets_button"
-                                                label={_t("common|options")}
-                                                isExpanded={this.state.menuDisplayed}
-                                                ref={this.contextMenuButton}
-                                                onClick={this.onContextMenuClick}
-                                            >
-                                                <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
-                                            </ContextMenuButton>
-                                        }
-                                        app={this.props.app}
-                                        onFinished={this.closeContextMenu}
-                                        showUnpin={!this.props.userWidget}
-                                        userWidget={this.props.userWidget}
-                                        onEditClick={this.props.onEditClick}
-                                        onDeleteClick={this.props.onDeleteClick}
-                                        menuDisplayed={this.state.menuDisplayed}
-                                    />
-                                </I18nContext.Provider>
-                            </span>
-                        </div>
-                    )}
-                    {appTileBody}
-                </div>
-            </React.Fragment>
+            <div className={appTileClasses} id={this.props.app.id}>
+                {this.props.showMenubar && (
+                    <div className="mx_AppTileMenuBar">
+                        <span
+                            className="mx_AppTileMenuBar_title"
+                            style={{ pointerEvents: this.props.handleMinimisePointerEvents ? "all" : "none" }}
+                        >
+                            {this.props.showTitle && this.getTileTitle()}
+                        </span>
+                        <span className="mx_AppTileMenuBar_widgets">
+                            {layoutButtons}
+                            {this.props.showPopout && !this.state.requiresClient && (
+                                <AccessibleButton
+                                    className="mx_AppTileMenuBar_widgets_button"
+                                    title={_t("widget|popout")}
+                                    onClick={this.onPopoutWidgetClick}
+                                >
+                                    <PopOutIcon className="mx_Icon mx_Icon_12" />
+                                </AccessibleButton>
+                            )}
+                            <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                                <WidgetContextMenu
+                                    trigger={
+                                        <ContextMenuButton
+                                            className="mx_AppTileMenuBar_widgets_button"
+                                            label={_t("common|options")}
+                                            isExpanded={this.state.menuDisplayed}
+                                            ref={this.contextMenuButton}
+                                            onClick={this.onContextMenuClick}
+                                        >
+                                            <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
+                                        </ContextMenuButton>
+                                    }
+                                    app={this.props.app}
+                                    onFinished={this.closeContextMenu}
+                                    showUnpin={!this.props.userWidget}
+                                    userWidget={this.props.userWidget}
+                                    onEditClick={this.props.onEditClick}
+                                    onDeleteClick={this.props.onDeleteClick}
+                                    menuDisplayed={this.state.menuDisplayed}
+                                />
+                            </I18nContext.Provider>
+                        </span>
+                    </div>
+                )}
+                {appTileBody}
+            </div>
         );
     }
 }

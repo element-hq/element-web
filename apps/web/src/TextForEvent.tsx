@@ -33,7 +33,7 @@ import { ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES } f
 import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
-import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog-tab";
 import AccessibleButton from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";

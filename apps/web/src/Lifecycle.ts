@@ -20,10 +20,10 @@ import {
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
+import { MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
-import createMatrixClient from "./utils/createMatrixClient";
+import { createMatrixClient, createClientWithCreds, type IMatrixClientCreds } from "./utils/createMatrixClient";
 import Notifier from "./Notifier";
 import UserActivity from "./UserActivity";
 import Presence from "./Presence";
@@ -56,7 +56,7 @@ import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
-import { SdkContextClass } from "./contexts/SDKContext";
+import { SDKContextClass } from "./contexts/SDKContextClass";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oidc/authorize";
 import { getOidcErrorMessage } from "./utils/oidc/error";
@@ -115,7 +115,10 @@ dis.register((payload) => {
  */
 let sessionLockStolen = false;
 
-// this is exposed solely for unit tests.
+/**
+ * this is exposed solely for unit tests.
+ * @knipignore
+ */
 export function setSessionLockNotStolen(): void {
     sessionLockStolen = false;
 }
@@ -881,7 +884,7 @@ async function doSetLoggedIn(
 
     // check the session lock just before creating the new client
     checkSessionLock();
-    MatrixClientPeg.replaceUsingCreds(credentials, tokenRefresher?.doRefreshAccessToken.bind(tokenRefresher));
+    MatrixClientPeg.set(createClientWithCreds(credentials, tokenRefresher?.doRefreshAccessToken.bind(tokenRefresher)));
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);
@@ -1090,7 +1093,7 @@ async function startMatrixClient(
     dis.dispatch({ action: Action.WillStartClient }, true);
 
     // reset things first just in case
-    SdkContextClass.instance.typingStore.reset();
+    SDKContextClass.instance.typingStore.reset();
     ToastStore.sharedInstance().reset();
 
     DialogOpener.instance.prepare(client);
@@ -1228,7 +1231,7 @@ export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
     LegacyCallHandler.instance.stop();
     UserActivity.sharedInstance().stop();
-    SdkContextClass.instance.typingStore.reset();
+    SDKContextClass.instance.typingStore.reset();
     Presence.stop();
     ActiveWidgetStore.instance.stop();
     IntegrationManagers.sharedInstance().stopWatching();

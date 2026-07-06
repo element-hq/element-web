@@ -43,7 +43,7 @@ import { isPushNotifyDisabled } from "./settings/controllers/NotificationControl
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import { SdkContextClass } from "./contexts/SDKContext";
+import { SDKContextClass } from "./contexts/SDKContextClass";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, getNotificationEventSendTs, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
@@ -514,7 +514,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         if (actions?.notify) {
             this.performCustomEventHandling(ev);
 
-            const store = SdkContextClass.instance.roomViewStore;
+            const store = SDKContextClass.instance.roomViewStore;
             const isViewingRoom = store.getRoomId() === room.roomId;
             const threadId: string | undefined = ev.getId() !== ev.threadRootId ? ev.threadRootId : undefined;
             const isViewingThread = store.getThreadId() === threadId;

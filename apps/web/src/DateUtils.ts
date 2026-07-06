@@ -8,7 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _t, getUserLanguage } from "./languageHandler";
+import { _t } from "./languageHandler";
+import { getUserLanguage } from "./i18n/settings";
 import { getUserTimezone } from "./TimezoneHandler";
 
 export { formatSeconds } from "@element-hq/web-shared-components";

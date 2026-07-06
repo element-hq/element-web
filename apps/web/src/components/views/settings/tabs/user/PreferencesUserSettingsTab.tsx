@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 import { SettingsToggleInput } from "@vector-im/compound-web";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
@@ -36,14 +37,9 @@ import { MediaPreviewAccountSettings } from "./MediaPreviewAccountSettings.tsx";
 import { InviteRulesAccountSetting } from "./InviteRulesAccountSettings.tsx";
 import SettingsDropdown from "../../../elements/SettingsDropdown.tsx";
 
-interface IProps {
-    closeSettingsFn(success: boolean): void;
-}
-
 interface IState {
     timezone: string | undefined;
     timezones: string[];
-    timezoneSearch: string | undefined;
     autocompleteDelay: string;
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
@@ -120,9 +116,7 @@ const SpellCheckSection: React.FC = () => {
     );
 };
 
-export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
-    private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs"];
-
+export default class PreferencesUserSettingsTab extends React.Component<EmptyObject, IState> {
     private static SPACES_SETTINGS: BooleanSettingKey[] = ["Spaces.allRoomsInHome"];
 
     private static KEYBINDINGS_SETTINGS: BooleanSettingKey[] = ["ctrlFForSearch"];
@@ -171,13 +165,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         // Autocomplete delay (niche text box)
     ];
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
             timezone: TimezoneHandler.getUserTimezone(),
             timezones: TimezoneHandler.getAllTimezones(),
-            timezoneSearch: undefined,
             autocompleteDelay: SettingsStore.getValueAt(SettingLevel.DEVICE, "autocompleteDelay").toString(10),
             readMarkerInViewThresholdMs: SettingsStore.getValueAt(
                 SettingLevel.DEVICE,
@@ -206,7 +199,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
               })
             : TimezoneHandler.getAllTimezones();
 
-        this.setState({ timezones, timezoneSearch });
+        this.setState({ timezones });
     };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -246,7 +239,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             timezone: TimezoneHandler.shortBrowserTimezone(),
         });
 
-        const newRoomListEnabled = SettingsStore.getValue("feature_new_room_list");
         const brand = SdkConfig.get().brand;
 
         const timezones = this.state.timezones.map((tz) => {
@@ -279,11 +271,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     )}
 
                     <SettingsSubsection heading={_t("settings|preferences|room_list_heading")} formWrap>
-                        {!newRoomListEnabled && this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
-                        {/* The settings is on device level where the other room list settings are on account level  */}
-                        {newRoomListEnabled && (
-                            <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
-                        )}
+                        <SettingsFlag name="RoomList.showMessagePreview" level={SettingLevel.DEVICE} />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|spaces")} formWrap>

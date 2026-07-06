@@ -14,6 +14,7 @@ import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwrigh
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 import rootConfig from "../../vitest.config";
+import react from "@vitejs/plugin-react";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
@@ -116,6 +117,15 @@ export default defineConfig({
             "vite-plugin-node-polyfills/shims/process",
             "@vector-im/compound-design-tokens/assets/web/icons",
             "storybook/preview-api",
+            // The room-list view pulls in a heavy dnd-kit + react-virtuoso graph. If these are left to
+            // runtime discovery, the browser-mode dep optimizer can re-bundle mid-run and reload the page,
+            // which fails the in-flight setupTests.ts import for the room-list unit suites. Pre-bundle the
+            // whole graph up front so the optimizer never needs to re-run while tests are loading.
+            "@dnd-kit/abstract",
+            "@dnd-kit/abstract/modifiers",
+            "@dnd-kit/dom",
+            "@dnd-kit/react",
+            "react-virtuoso",
         ],
     },
     resolve: {
@@ -123,4 +133,5 @@ export default defineConfig({
             "@test-utils": path.resolve(__dirname, "./src/test/utils/index.tsx"),
         },
     },
+    plugins: [react()],
 });

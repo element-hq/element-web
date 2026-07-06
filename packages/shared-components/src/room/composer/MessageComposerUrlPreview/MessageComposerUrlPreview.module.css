@@ -1,0 +1,50 @@
+/*
+ * Copyright (c) 2025 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.container {
+    container-type: inline-size;
+    container-name: banner;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cpd-space-4x);
+    padding: var(--cpd-space-3x) var(--cpd-space-4x);
+    border-top: 1px solid var(--cpd-color-gray-400);
+
+    > div {
+        display: flex;
+        gap: var(--cpd-space-4x);
+        align-items: center;
+    }
+
+    .text {
+        display: flex;
+        flex-direction: column;
+        > a {
+            color: var(--cpd-color-text-action-accent);
+            font-weight: 400;
+            font-size: 13px;
+        }
+        > .description {
+            margin: 0;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            overflow: hidden;
+            /* Cap the max width of a line so it doesn't go on forever. */
+            max-width: 40em;
+        }
+    }
+}
+
+.image {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: scale-down;
+}

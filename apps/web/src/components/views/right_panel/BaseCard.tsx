@@ -31,7 +31,6 @@ interface IProps {
     onClose?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
     onBack?(this: void, ev: MouseEvent<HTMLButtonElement>): void;
     onKeyDown?(this: void, ev: KeyboardEvent): void;
-    cardState?: any;
     ref?: Ref<HTMLDivElement>;
     // Ref for the 'close' button the card
     closeButtonRef?: Ref<HTMLButtonElement>;

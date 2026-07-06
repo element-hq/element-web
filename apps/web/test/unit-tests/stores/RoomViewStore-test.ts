@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+import { mocked } from "jest-mock-vitest-adapter";
 import { KnownMembership, MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import {
@@ -35,7 +35,7 @@ import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
-import { TestSdkContext } from "../TestSdkContext";
+import { TestSDKContext } from "../TestSDKContext";
 import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
@@ -175,13 +175,13 @@ describe("RoomViewStore", function () {
     let roomViewStore: RoomViewStore;
     let slidingSyncManager: SlidingSyncManager;
     let dis: MatrixDispatcher;
-    let stores: TestSdkContext;
+    let stores: TestSDKContext;
 
     beforeEach(function () {
         jest.clearAllMocks();
         mockClient.credentials = { userId: userId };
         mockClient.joinRoom.mockResolvedValue(room);
-        mockClient.getRoom.mockImplementation((roomId: string): Room | null => {
+        mockClient.getRoom.mockImplementation((roomId?: string): Room | null => {
             if (roomId === room.roomId) return room;
             if (roomId === room2.roomId) return room2;
             return null;
@@ -192,7 +192,7 @@ describe("RoomViewStore", function () {
         // Make the RVS to test
         dis = new MatrixDispatcher();
         slidingSyncManager = new MockSlidingSyncManager();
-        stores = new TestSdkContext();
+        stores = new TestSDKContext();
         stores.client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();

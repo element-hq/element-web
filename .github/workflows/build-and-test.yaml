@@ -62,12 +62,12 @@ jobs:
             run-modules: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'A-Modules') }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
               with:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
@@ -138,7 +138,7 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
@@ -149,7 +149,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
@@ -191,7 +191,7 @@ jobs:
         if: needs.prepare.outputs.skip == 'false' && needs.prepare.outputs.run-modules == 'true'
         runs-on: ubuntu-24.04-arm
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
@@ -202,7 +202,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
@@ -303,13 +303,13 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         steps:
-            - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
               if: needs.prepare.outputs.skip == 'false'
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+            - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
               if: needs.prepare.outputs.skip == 'false'
             - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               if: needs.prepare.outputs.skip == 'false'

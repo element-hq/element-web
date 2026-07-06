@@ -35,7 +35,7 @@ jobs:
             REPOS: matrix-js-sdk element-web
         steps:
             - name: Checkout Element Web
-              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
               if: inputs.element-web
               with:
                   repository: element-hq/element-web
@@ -46,7 +46,7 @@ jobs:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   persist-credentials: true
             - name: Checkout Matrix JS SDK
-              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
               if: inputs.matrix-js-sdk
               with:
                   repository: matrix-org/matrix-js-sdk

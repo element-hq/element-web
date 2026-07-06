@@ -33,7 +33,7 @@ import {
     MatrixError,
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import fetchMock from "@fetch-mock/jest";
 
 import {
@@ -56,7 +56,8 @@ import {
 import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../../src/components/views/settings/devices/filter";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
-import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
 import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import { makeDelegatedAuthConfig } from "../../../../../../test-utils/oidc";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
@@ -133,7 +134,7 @@ describe("<SessionManagerTab />", () => {
     } as unknown as CryptoApi);
 
     let mockClient!: MockedObject<MatrixClient>;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
 
     const defaultProps = {};
     const getComponent = (props = {}): React.ReactElement => (
@@ -249,7 +250,7 @@ describe("<SessionManagerTab />", () => {
             }
         });
 
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
         sdkContext.client = mockClient;
 
         // @ts-ignore allow delete of non-optional prop

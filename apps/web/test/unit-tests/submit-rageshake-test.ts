@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock-vitest-adapter";
 import {
     type HttpApiEvent,
     type HttpApiEventHandlerMap,
@@ -15,6 +15,7 @@ import {
     TypedEventEmitter,
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKey } from "matrix-js-sdk/src/crypto-api";
 import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
@@ -193,7 +194,7 @@ describe("Rageshakes", () => {
                 const crossSigningPubKey = "crossSigningPubKey";
                 mocked(mockClient.getCrypto()!.getCrossSigningKeyId).mockImplementation(
                     async (type): Promise<string | null> => {
-                        if (!type || type === "master") {
+                        if (!type || type === CrossSigningKey.Master) {
                             return crossSigningPubKey;
                         }
                         return null;

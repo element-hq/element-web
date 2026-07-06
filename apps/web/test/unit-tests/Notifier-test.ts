@@ -5,7 +5,7 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { mocked, type MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import {
     ClientEvent,
     type MatrixClient,
@@ -38,7 +38,7 @@ import {
     mockPlatformPeg,
 } from "../test-utils";
 import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/IncomingCallToast";
-import { SdkContextClass } from "../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass";
 import UserActivity from "../../src/UserActivity";
 import Modal from "../../src/Modal";
 import { mkThread } from "../test-utils/threads";
@@ -602,7 +602,7 @@ describe("Notifier", () => {
                 slotDescription: { application: "m.call", id: "" },
             } as unknown as MatrixRTCSession;
 
-            mockClient.matrixRTC.getRoomSession.mockReturnValue(mockRtcSession);
+            mocked(mockClient.matrixRTC.getRoomSession).mockReturnValue(mockRtcSession);
 
             emitCallNotificationEvent();
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
@@ -665,7 +665,7 @@ describe("Notifier", () => {
 
     describe("evaluateEvent", () => {
         beforeEach(() => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
 
             jest.spyOn(UserActivity.sharedInstance(), "userActiveRecently").mockReturnValue(true);
 
@@ -720,7 +720,7 @@ describe("Notifier", () => {
                 thread_id: rootEvent.getId()!,
             });
 
-            await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
+            await waitFor(() => expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
 
             Notifier.evaluateEvent(events[1]);
             expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);

@@ -7,11 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { type MethodLikeKeys, mocked, type MockedObject, type PropertyLikeKeys } from "jest-mock";
+import { type MockedObject } from "vitest";
+import { type MethodLikeKeys, type PropertyLikeKeys } from "jest-mock";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { type MatrixClient, type Room, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import { vi } from "../setup/adapter.ts";
 
 /**
  * Mocked generic class with a real EventEmitter.
@@ -53,7 +56,7 @@ export class MockClientWithEventEmitter extends EventEmitter {
  * eg
  * ```
  * const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(aliceId),
+        getUserId: vi.fn().mockReturnValue(aliceId),
     });
  * ```
  *
@@ -62,10 +65,10 @@ export class MockClientWithEventEmitter extends EventEmitter {
 export const getMockClientWithEventEmitter = (
     mockProperties: Partial<Record<keyof MatrixClient, unknown>>,
 ): MockedObject<MatrixClient> => {
-    const mock = mocked(new MockClientWithEventEmitter(mockProperties) as unknown as MatrixClient);
+    const mock = vi.mocked(new MockClientWithEventEmitter(mockProperties) as unknown as MatrixClient);
 
-    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mock);
-    jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mock);
+    vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mock);
+    vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mock);
 
     // @ts-ignore simplified test stub
     mock.canSupport = new Map();
@@ -76,8 +79,8 @@ export const getMockClientWithEventEmitter = (
 };
 
 export const unmockClientPeg = () => {
-    jest.spyOn(MatrixClientPeg, "get").mockRestore();
-    jest.spyOn(MatrixClientPeg, "safeGet").mockRestore();
+    vi.spyOn(MatrixClientPeg, "get").mockRestore();
+    vi.spyOn(MatrixClientPeg, "safeGet").mockRestore();
 };
 
 /**
@@ -88,19 +91,20 @@ export const unmockClientPeg = () => {
     });
  * ```
  */
-export const mockClientMethodsUser = (userId = "@alice:domain") => ({
-    getUserId: jest.fn().mockReturnValue(userId),
-    getDomain: jest.fn().mockReturnValue(userId.split(":")[1]),
-    getSafeUserId: jest.fn().mockReturnValue(userId),
-    getUser: jest.fn().mockReturnValue(new User(userId)),
-    isGuest: jest.fn().mockReturnValue(false),
-    mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
-    credentials: { userId },
-    getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
-    getAccessToken: jest.fn(),
-    getDeviceId: jest.fn(),
-    getAccountData: jest.fn(),
-});
+export const mockClientMethodsUser = (userId = "@alice:domain") =>
+    ({
+        getUserId: vi.fn().mockReturnValue(userId),
+        getDomain: vi.fn().mockReturnValue(userId.split(":")[1]),
+        getSafeUserId: vi.fn().mockReturnValue(userId),
+        getUser: vi.fn().mockReturnValue(new User(userId)),
+        isGuest: vi.fn().mockReturnValue(false),
+        mxcUrlToHttp: vi.fn().mockReturnValue("mock-mxcUrlToHttp"),
+        credentials: { userId },
+        getThreePids: vi.fn().mockResolvedValue({ threepids: [] }),
+        getAccessToken: vi.fn(),
+        getDeviceId: vi.fn(),
+        getAccountData: vi.fn(),
+    }) satisfies MockedObjectDeep<any>;
 
 /**
  * Returns basic mocked client methods related to rendering events
@@ -110,58 +114,60 @@ export const mockClientMethodsUser = (userId = "@alice:domain") => ({
     });
  * ```
  */
-export const mockClientMethodsEvents = () => ({
-    decryptEventIfNeeded: jest.fn(),
-    getPushActionsForEvent: jest.fn(),
-});
+export const mockClientMethodsEvents = () =>
+    ({
+        decryptEventIfNeeded: vi.fn(),
+        getPushActionsForEvent: vi.fn(),
+    }) satisfies MockedObjectDeep<any>;
 
 /**
  * Returns basic mocked pushProcessor
  */
-export const mockClientPushProcessor = () => ({
-    pushProcessor: {
-        getPushRuleById: jest.fn(),
-        ruleMatchesEvent: jest.fn(),
-    },
-});
+export const mockClientPushProcessor = () =>
+    ({
+        pushProcessor: {
+            getPushRuleById: vi.fn(),
+            ruleMatchesEvent: vi.fn(),
+        },
+    }) satisfies MockedObjectDeep<any>;
 
 /**
  * Returns basic mocked client methods related to server support
  */
 export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
-    getIdentityServerUrl: jest.fn(),
-    getHomeserverUrl: jest.fn(),
-    getCapabilities: jest.fn().mockResolvedValue({}),
-    getCachedCapabilities: jest.fn().mockResolvedValue({}),
-    getClientWellKnown: jest.fn().mockReturnValue({}),
-    waitForClientWellKnown: jest.fn().mockResolvedValue({}),
-    doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
-    isVersionSupported: jest.fn().mockResolvedValue(false),
-    getVersions: jest.fn().mockResolvedValue({}),
-    isFallbackICEServerAllowed: jest.fn(),
+    getIdentityServerUrl: vi.fn(),
+    getHomeserverUrl: vi.fn(),
+    getCapabilities: vi.fn().mockResolvedValue({}),
+    getCachedCapabilities: vi.fn().mockResolvedValue({}),
+    getClientWellKnown: vi.fn().mockReturnValue({}),
+    waitForClientWellKnown: vi.fn().mockResolvedValue({}),
+    doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
+    isVersionSupported: vi.fn().mockResolvedValue(false),
+    getVersions: vi.fn().mockResolvedValue({}),
+    isFallbackICEServerAllowed: vi.fn(),
 });
 
 export const mockClientMethodsDevice = (
     deviceId = "test-device-id",
 ): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
-    getDeviceId: jest.fn().mockReturnValue(deviceId),
-    getDevices: jest.fn().mockResolvedValue({ devices: [] }),
+    getDeviceId: vi.fn().mockReturnValue(deviceId),
+    getDevices: vi.fn().mockResolvedValue({ devices: [] }),
 });
 
 export const mockClientMethodsCrypto = (): Partial<
     Record<MethodLikeKeys<MatrixClient> & PropertyLikeKeys<MatrixClient>, unknown>
 > => ({
-    isKeyBackupKeyStored: jest.fn(),
-    getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
+    isKeyBackupKeyStored: vi.fn(),
+    getCrossSigningCacheCallbacks: vi.fn().mockReturnValue({ getCrossSigningKeyCache: vi.fn() }),
     secretStorage: {
-        hasKey: jest.fn(),
-        isStored: jest.fn().mockResolvedValue(null),
-        getDefaultKeyId: jest.fn().mockResolvedValue(null),
+        hasKey: vi.fn(),
+        isStored: vi.fn().mockResolvedValue(null),
+        getDefaultKeyId: vi.fn().mockResolvedValue(null),
     },
-    getCrypto: jest.fn().mockReturnValue({
-        getUserDeviceInfo: jest.fn(),
-        getDeviceVerificationStatus: jest.fn().mockResolvedValue(null),
-        getCrossSigningStatus: jest.fn().mockResolvedValue({
+    getCrypto: vi.fn().mockReturnValue({
+        getUserDeviceInfo: vi.fn(),
+        getDeviceVerificationStatus: vi.fn().mockResolvedValue(null),
+        getCrossSigningStatus: vi.fn().mockResolvedValue({
             publicKeysOnDevice: true,
             privateKeysInSecretStorage: false,
             privateKeysCachedLocally: {
@@ -170,19 +176,19 @@ export const mockClientMethodsCrypto = (): Partial<
                 userSigningKey: true,
             },
         }),
-        isCrossSigningReady: jest.fn().mockResolvedValue(true),
-        isSecretStorageReady: jest.fn(),
-        getSessionBackupPrivateKey: jest.fn(),
-        getVersion: jest.fn().mockReturnValue("Version 0"),
-        getOwnDeviceKeys: jest.fn().mockReturnValue(new Promise(() => {})),
-        getCrossSigningKeyId: jest.fn(),
-        isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
-        getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+        isCrossSigningReady: vi.fn().mockResolvedValue(true),
+        isSecretStorageReady: vi.fn(),
+        getSessionBackupPrivateKey: vi.fn(),
+        getVersion: vi.fn().mockReturnValue("Version 0"),
+        getOwnDeviceKeys: vi.fn().mockReturnValue(new Promise(() => {})),
+        getCrossSigningKeyId: vi.fn(),
+        isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
+        getKeyBackupInfo: vi.fn().mockResolvedValue(null),
     }),
 });
 
 export const mockClientMethodsRooms = (rooms: Room[] = []): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
-    getRooms: jest.fn().mockReturnValue(rooms),
-    getRoom: jest.fn((roomId) => rooms.find((r) => r.roomId === roomId) ?? null),
-    isRoomEncrypted: jest.fn(),
+    getRooms: vi.fn().mockReturnValue(rooms),
+    getRoom: vi.fn((roomId) => rooms.find((r) => r.roomId === roomId) ?? null),
+    isRoomEncrypted: vi.fn(),
 });

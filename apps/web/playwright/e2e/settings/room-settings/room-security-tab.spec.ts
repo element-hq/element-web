@@ -6,6 +6,7 @@
  */
 
 import { type Locator } from "@playwright/test";
+import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../../element-web-test";
 
@@ -18,13 +19,18 @@ test.describe("Roles & Permissions room settings tab", () => {
 
     let settings: Locator;
 
-    test.beforeEach(async ({ user, app }) => {
+    test.beforeEach(async ({ user, app, page }) => {
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
+
         await app.client.createRoom({
             name: roomName,
             power_level_content_override: {
                 events: {
                     // Set the join rules as lower than the history vis to test an edge case.
-                    ["m.room.join_rules"]: 80,
+                    ["m.room.join_rules"]: 50,
                     ["m.room.history_visibility"]: 100,
                 },
             },
@@ -99,14 +105,22 @@ test.describe("Roles & Permissions room settings tab", () => {
             const ourComboBox = settings.getByRole("combobox", { name: user.userId });
             await ourComboBox.selectOption("Custom level");
             const ourPl = settings.getByRole("spinbutton", { name: user.userId });
-            await ourPl.fill("80");
+            await ourPl.fill("50");
             await page.keyboard.press("Tab"); // Shows a warning on
 
             // Accept the de-op
             await page.getByRole("button", { name: "Continue" }).click();
             await settings.getByRole("button", { name: "Apply", disabled: false }).click();
 
-            await app.settings.switchTab("Security & Privacy");
+            // Close and await power level
+            await app.settings.closeDialog();
+            const timeline = page.getByTestId("timeline");
+            await timeline.getByRole("button", { name: "expand" }).click();
+            await expect(
+                timeline.getByText("Alice changed the power level of Alice from Admin to Moderator."),
+            ).toBeInViewport();
+
+            settings = await app.settings.openRoomSettings("Security & Privacy");
 
             await settingsGroupAccess.getByText("Invite only").click();
             // Element should have automatically set the room to "sharing" history visibility
