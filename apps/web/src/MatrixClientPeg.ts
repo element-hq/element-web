@@ -9,13 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    type IStartClientOpts,
-    type MatrixClient,
-    MemoryStore,
-    PendingEventOrdering,
-    type OAuth2,
-} from "matrix-js-sdk/src/matrix";
+import { type IStartClientOpts, type MatrixClient, MemoryStore, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 import * as utils from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -77,17 +71,10 @@ export interface IMatrixClientPeg {
     safeGet(): MatrixClient;
 
     /**
-     * The Matrix JS SDK OAuth2 instance response for this session.
-     * Only present when a client is set and the session is OAuth2-native.
-     */
-    get oauth(): OAuth2 | null;
-
-    /**
      * Sets the current MatrixClient.
      * @param client The MatrixClient instance to set
-     * @param oauth The OAuth2 instance to set for OAuth2-native sessions
      */
-    set(client: MatrixClient, oauth: OAuth2): void;
+    set(client: MatrixClient): void;
 
     /**
      * Unset the current MatrixClient
@@ -150,13 +137,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         initialSyncLimit: 20,
     };
 
-    private oauth2: OAuth2 | null = null;
     private matrixClient: MatrixClient | null = null;
     private justRegisteredUserId: string | null = null;
-
-    public get oauth(): OAuth2 | null {
-        return this.oauth2;
-    }
 
     public get(): MatrixClient | null {
         return this.matrixClient;
@@ -169,14 +151,12 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         return this.matrixClient;
     }
 
-    public set(client: MatrixClient, oauth: OAuth2): void {
+    public set(client: MatrixClient): void {
         this.matrixClient = client;
-        this.oauth = oauth;
     }
 
     public unset(): void {
         this.matrixClient = null;
-        this.oauth2 = null;
 
         MatrixActionCreators.stop();
     }

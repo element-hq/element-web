@@ -816,7 +816,7 @@ async function doSetLoggedIn(
 
     // check the session lock just before creating the new client
     checkSessionLock();
-    MatrixClientPeg.set(createClientWithCreds(credentials, auth ?? null));
+    MatrixClientPeg.set(createClientWithCreds(credentials, auth));
     const client = MatrixClientPeg.safeGet();
 
     setSentryUser(credentials.userId);
@@ -944,10 +944,19 @@ async function doLogout(client: MatrixClient, oauth: OAuth2 | null): Promise<voi
 /**
  * Logs the current session out and transitions to the logged-out state
  */
-export function logout(): void {
+export async function logout(): Promise<void> {
     const client = MatrixClientPeg.get();
-    const oauth = MatrixClientPeg.oauth;
     if (!client) return;
+
+    let oauth: OAuth2 | undefined;
+    try {
+        oauth = await hydrateAuth({
+            homeserverUrl: client.getHomeserverUrl(),
+            deviceId: client.getDeviceId()!,
+        });
+    } catch (e) {
+        console.error("@@", e);
+    }
 
     PosthogAnalytics.instance.logout();
 
@@ -962,7 +971,7 @@ export function logout(): void {
     _isLoggingOut = true;
     PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId() ?? "");
 
-    doLogout(client, oauth).then(onLoggedOut, (err) => {
+    doLogout(client, oauth ?? null).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
         // if you're trying to log out because your server's down and
         // you want to log into a different server, so just forget the
@@ -1214,7 +1223,9 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
  * Instantiate an OAuth2 instance from storage
  * Returned promise will reject if the session or the server are not OAuth2-native.
  */
-async function hydrateAuth(credentials: IMatrixClientCreds): Promise<OAuth2> {
+export async function hydrateAuth(
+    credentials: Pick<IMatrixClientCreds, "homeserverUrl" | "deviceId">,
+): Promise<OAuth2> {
     const storedClientId = getStoredOAuthClientId();
 
     const tempClient = new MatrixClient({ baseUrl: credentials.homeserverUrl });

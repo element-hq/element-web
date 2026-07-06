@@ -20,7 +20,13 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal from "../../src/Modal";
 import * as StorageAccess from "../../src/utils/StorageAccess";
 import { idbSave } from "../../src/utils/StorageAccess";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "../test-utils";
+import {
+    flushPromises,
+    getMockClientWithEventEmitter,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+    mockPlatformPeg,
+} from "../test-utils";
 import { makeDelegatedAuthMetadata } from "../test-utils/auth";
 import { Action } from "../../src/dispatcher/actions";
 import PlatformPeg from "../../src/PlatformPeg";
@@ -54,6 +60,7 @@ describe("Lifecycle", () => {
         mockPlatform = mockPlatformPeg();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
+            ...mockClientMethodsServer(),
             stopClient: jest.fn(),
             removeAllListeners: jest.fn(),
             clearStores: jest.fn(),
@@ -243,7 +250,7 @@ describe("Lifecycle", () => {
                             userId,
                             guest: true,
                         }),
-                        null,
+                        undefined,
                     );
                     expect(localStorage.getItem("mx_is_guest")).toEqual("true");
                 });
@@ -293,7 +300,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey: undefined,
                         },
-                        null,
+                        undefined,
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({});
@@ -518,7 +525,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey,
                         },
-                        null,
+                        undefined,
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStorePassword: pickleKey });
@@ -683,7 +690,7 @@ describe("Lifecycle", () => {
                         guest: false,
                         pickleKey: undefined,
                     },
-                    null,
+                    undefined,
                 );
             });
         });
@@ -782,7 +789,7 @@ describe("Lifecycle", () => {
                         guest: false,
                         pickleKey: expect.any(String),
                     },
-                    null,
+                    undefined,
                 );
             });
         });
@@ -897,15 +904,14 @@ describe("Lifecycle", () => {
         });
 
         it("should revoke tokens when user is authenticated with oauth2", async () => {
-            const mockOAuth = { revokeToken: jest.fn() };
-            jest.spyOn(MatrixClientPeg, "oauth", "get").mockReturnValue(mockOAuth as any);
+            localStorage.setItem("mx_oidc_client_id", "test-client-id");
             logout();
 
             await flushPromises();
 
             expect(mockClient.logout).not.toHaveBeenCalled();
-            expect(mockOAuth.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
-            expect(mockOAuth.revokeToken).toHaveBeenCalledWith(refreshToken, "refresh_token");
+            expect(OAuth2.prototype.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
+            expect(OAuth2.prototype.revokeToken).toHaveBeenCalledWith(refreshToken, "refresh_token");
         });
     });
 
@@ -940,7 +946,7 @@ describe("Lifecycle", () => {
                 expect.objectContaining({
                     userId,
                 }),
-                null,
+                undefined,
             );
 
             const otherCredentials = {
@@ -974,7 +980,7 @@ describe("Lifecycle", () => {
                 expect.objectContaining({
                     userId: otherCredentials.userId,
                 }),
-                null,
+                undefined,
             );
 
             expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
