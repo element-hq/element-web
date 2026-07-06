@@ -15,7 +15,11 @@ import { sample, uniqueId } from "lodash-es";
 import { test as base } from "./panel.js";
 import { type Credentials } from "../utils/api.js";
 
-/** Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials. */
+/**
+ * Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials.
+ *
+ * Warning: this is an incomplete implementation, particularly in MAS environments: for example, a logout operation will not work correctly.
+ */
 export async function populateLocalStorageWithCredentials(page: Page, credentials: Credentials) {
     await page.addInitScript(
         ({ credentials }) => {
@@ -26,6 +30,14 @@ export async function populateLocalStorageWithCredentials(page: Page, credential
             window.localStorage.setItem("mx_is_guest", "false");
             window.localStorage.setItem("mx_has_pickle_key", "false");
             window.localStorage.setItem("mx_has_access_token", "true");
+
+            // XXX: If the homeserver is using MAS, then Element uses additional localstorage settings to store more
+            // data. The fact that we don't populate them means that, for example, when you hit "Remove this device" in
+            // the app, it attempts to hit the legacy `/logout` endpoint, which returns a 40x error, which is silently
+            // ignored.
+            //
+            // If you fix this, (1) yay! (2) please remember to update the warning on the doc-comments of this method
+            // and its callers.
 
             window.localStorage.setItem(
                 "mx_local_settings",
@@ -41,7 +53,7 @@ export async function populateLocalStorageWithCredentials(page: Page, credential
     );
 }
 
-export const test = base.extend<{
+export interface TestFixtures {
     /**
      * The displayname to use for the user registered in {@link #credentials}.
      *
@@ -61,6 +73,9 @@ export const test = base.extend<{
      * but adds an initScript which will populate localStorage with the user's details from
      * {@link #credentials} and {@link #homeserver}.
      *
+     * Warning: this is an incomplete implementation, particularly in MAS environments: for example, a logout operation
+     * will not work correctly.
+     *
      * Similar to {@link #user}, but doesn't load the app.
      */
     pageWithCredentials: Page;
@@ -69,9 +84,14 @@ export const test = base.extend<{
      * A (rather poorly-named) test fixture which registers a user per {@link #credentials}, stores
      * the credentials into localStorage per {@link #pageWithCredentials}, and then loads the front page of the
      * app.
+     *
+     * Warning: the user credentials are an incomplete implementation, particularly in MAS environments: for example, a logout operation
+     * will not work correctly.
      */
     user: Credentials;
-}>({
+}
+
+export const test = base.extend<TestFixtures>({
     displayName: undefined,
 
     // We don't directly depend upon the `context` fixture, but we do need to make sure that it has been run

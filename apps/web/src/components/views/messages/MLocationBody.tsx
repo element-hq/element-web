@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { type MatrixEvent, ClientEvent, type ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { Tooltip } from "@vector-im/compound-web";
@@ -131,6 +131,9 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     onError,
     onClick,
 }) => {
+    // Find the message panel boundary so the tooltip hides when it would overlap the composer
+    const boundaryEl = useMemo(() => document.querySelector<HTMLElement>(".mx_RoomView_messagePanel") ?? undefined, []);
+
     // only pass member to marker when should render avatar marker
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
     const geoUri = locationEventGeoUri(mxEvent);
@@ -150,7 +153,7 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
 
     return (
         <div className="mx_MLocationBody">
-            <Tooltip label={tooltip}>
+            <Tooltip label={tooltip} boundary={boundaryEl}>
                 <div className="mx_MLocationBody_map">{mapElement}</div>
             </Tooltip>
         </div>
