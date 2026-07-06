@@ -21,7 +21,6 @@ import {
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
-    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -65,12 +64,9 @@ import { type Caret } from "../../../editor/caret";
 import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
-import { attachMentions, attachRelation } from "../../../utils/messages";
+import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import { uploadFile } from "../../../ContentMessages";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
-import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -114,55 +110,6 @@ export function createMessageContent(
     }
 
     return content;
-}
-
-export async function attachUrlPreviews(
-    mxClient: MatrixClient,
-    roomId: string,
-    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
-    content: RoomMessageEventContent,
-): Promise<void> {
-    if (urlPreviewSnapshot.previews.length) {
-        content["com.beeper.linkpreviews"] = await Promise.all(
-            urlPreviewSnapshot.previews.map(async (preview) => {
-                // upload the files to produce the mxc:// url for the images
-                let imageUploaded: { url?: string; file?: EncryptedFile } | null = null;
-
-                if (preview.image) {
-                    let imageBlob: Blob | null = null;
-
-                    try {
-                        imageBlob = await (await fetch(preview.image.imageFull)).blob();
-                    } catch (e) {
-                        logger.error(`Failed to fetch image from ${preview.image.imageFull}`, e);
-                    }
-
-                    if (imageBlob !== null) {
-                        try {
-                            imageUploaded = await uploadFile(mxClient, roomId, imageBlob);
-                        } catch (e) {
-                            logger.error("Failed to upload image", e);
-                        }
-                    }
-                }
-
-                return {
-                    "matched_url": preview.link,
-                    // TODO: og:url may be different from the URL requested, but is not present in the response of the url_preview
-                    "og:url": preview.link,
-                    "og:title": preview.title,
-                    "og:description": preview.description,
-                    "og:image": imageUploaded?.url,
-                    // TODO: should we trust the declared size? or should we calculate it ourselves
-                    "og:image:width": preview.image?.width,
-                    "og:image:height": preview.image?.height,
-                    "og:image:type": preview.image?.imageType,
-                    "matrix:image:size": preview.image?.fileSize,
-                    "beeper:image:encryption": imageUploaded?.file,
-                };
-            }),
-        );
-    }
 }
 
 // exported for tests
