@@ -51,7 +51,7 @@ describe("UserMenuViewModel", () => {
         vm.setOpen(true);
         expect(vm.getSnapshot().userId).toEqual("@alice:domain");
         expect(vm.getSnapshot().displayName).toEqual("Sally Sanderson");
-        expect(vm.getSnapshot().avatarUrl).toEqual("http://foo.dummy/avatar.png");
+        expect(vm.getSnapshot().avatarUrl).toEqual("https://foo.dummy/avatar.png");
         expect(vm.getSnapshot().showAvatar).toEqual(true);
         expect(vm.getSnapshot().expanded).toEqual(false);
     });
