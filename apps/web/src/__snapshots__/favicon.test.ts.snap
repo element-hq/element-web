@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Favicon should clear a badge if called with a zero value 1`] = `
+exports[`Favicon > should clear a badge if called with a zero value 1`] = `
 [
   {
     "props": {
@@ -236,7 +236,7 @@ exports[`Favicon should clear a badge if called with a zero value 1`] = `
 ]
 `;
 
-exports[`Favicon should draw a badge if called with a non-zero value 1`] = `
+exports[`Favicon > should draw a badge if called with a non-zero value 1`] = `
 [
   {
     "props": {

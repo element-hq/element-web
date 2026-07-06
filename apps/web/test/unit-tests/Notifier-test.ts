@@ -23,7 +23,7 @@ import { CallMembership, type SessionMembershipData, type MatrixRTCSession } fro
 import { randomUUID } from "node:crypto";
 
 import type BasePlatform from "../../src/BasePlatform";
-import Notifier from "../../src/Notifier";
+import Notifier, { NOTIFICATION_SOUND_THROTTLE_MS } from "../../src/Notifier";
 import SettingsStore from "../../src/settings/SettingsStore";
 import ToastStore from "../../src/stores/ToastStore";
 import {
@@ -166,6 +166,12 @@ describe("Notifier", () => {
 
         // @ts-ignore
         Notifier.backgroundAudio.audioContext = mockAudioContext;
+
+        // Notifier is a singleton, so its audio-notification throttle state
+        // (see NOTIFICATION_SOUND_THROTTLE_MS) leaks between tests. Reset it so
+        // each test exercises a clean instance.
+        // @ts-ignore - lastAudioNotificationMs is private
+        Notifier.lastAudioNotificationMs.clear();
     });
 
     describe("triggering notification from events", () => {
@@ -426,6 +432,109 @@ describe("Notifier", () => {
             mockClient.setAccountData(accountDataEventKey, event!);
             Notifier.playAudioNotification(testEvent, testRoom);
             expect(Notifier.getSoundForRoom).toHaveBeenCalledTimes(count);
+        });
+    });
+
+    // Regression test for https://github.com/element-hq/element-web/issues/31996
+    // On macOS Sequoia, waking from sleep delivers the whole sync backlog in one
+    // batch, firing playAudioNotification for every backlogged notifying event
+    // near-simultaneously. Without throttling, the identical sound buffers
+    // superimpose into one loud "stacked" sound. We coalesce a burst into at
+    // most one audible play within NOTIFICATION_SOUND_THROTTLE_MS.
+    describe("playAudioNotification throttle (macOS wake-from-sleep stacking)", () => {
+        let playSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+            jest.setSystemTime(0);
+
+            // Ensure notifications are not silenced so we exercise the throttle,
+            // not the silencing gate.
+            accountDataStore = {};
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+
+            // Default sound path (no custom room sound).
+            Notifier.getSoundForRoom = jest.fn().mockReturnValue(null);
+
+            // @ts-ignore - backgroundAudio is private
+            playSpy = jest.spyOn(Notifier.backgroundAudio, "pickFormatAndPlay").mockResolvedValue({} as any);
+        });
+
+        afterEach(() => {
+            playSpy.mockRestore();
+            jest.useRealTimers();
+        });
+
+        it("plays at most one sound for a burst of notifications within the throttle window", async () => {
+            // Simulate a backlog of notifications arriving back-to-back on wake.
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            await Notifier.playAudioNotification(testEvent, testRoom);
+
+            expect(playSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("plays again once the throttle window has elapsed", async () => {
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
+
+            // Advance the clock just past the throttle window.
+            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS + 1);
+
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("throttles right up to the window boundary, then plays again (strict `<`)", async () => {
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
+
+            // One ms before the window elapses: still throttled.
+            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS - 1);
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
+
+            // Exactly at the window boundary: plays again (the comparison is a strict `<`).
+            jest.setSystemTime(NOTIFICATION_SOUND_THROTTLE_MS);
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("does not coalesce two genuinely different sounds within the window (#31996 per-sound keying)", async () => {
+            const soundA = { url: "sound-a.mp3", name: "A", type: "audio/mpeg", size: 1 };
+            const soundB = { url: "sound-b.mp3", name: "B", type: "audio/mpeg", size: 1 };
+            const otherRoom = new Room("!other:server", mockClient, mockClient.getSafeUserId());
+            (Notifier.getSoundForRoom as jest.Mock).mockImplementation((roomId: string) =>
+                roomId === testRoom.roomId ? soundA : soundB,
+            );
+            // @ts-ignore - backgroundAudio is private
+            const customPlaySpy = jest.spyOn(Notifier.backgroundAudio, "play").mockResolvedValue({} as any);
+
+            // Two different sounds back-to-back within the window: BOTH must play (only identical
+            // backlogged sounds are coalesced).
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            await Notifier.playAudioNotification(testEvent, otherRoom);
+
+            expect(customPlaySpy).toHaveBeenCalledTimes(2);
+            expect(customPlaySpy).toHaveBeenNthCalledWith(1, soundA.url);
+            expect(customPlaySpy).toHaveBeenNthCalledWith(2, soundB.url);
+            customPlaySpy.mockRestore();
+        });
+
+        it("does not play, and does not arm the throttle, when notifications are silenced", async () => {
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
+
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            await Notifier.playAudioNotification(testEvent, testRoom);
+
+            // Silencing gate short-circuits before the sound is played.
+            expect(playSpy).not.toHaveBeenCalled();
+
+            // ...and the silenced calls did NOT arm the throttle: once un-silenced, the next event plays
+            // immediately (a regression arming the throttle on silenced events would suppress this).
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+            await Notifier.playAudioNotification(testEvent, testRoom);
+            expect(playSpy).toHaveBeenCalledTimes(1);
         });
     });
 

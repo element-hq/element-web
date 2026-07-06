@@ -17,10 +17,13 @@ import { Action } from "../../../src/dispatcher/actions";
 import { UserTab } from "../../../src/components/views/dialogs/UserTab";
 import Modal from "../../../src/Modal";
 import FeedbackDialog from "../../../src/components/views/dialogs/FeedbackDialog";
+import { TestSDKContext } from "../../unit-tests/TestSDKContext.ts";
 
 describe("UserMenuViewModel", () => {
     let dispatcher: MatrixDispatcher;
     let client: MockedObject<MatrixClient>;
+    let sdkContext: TestSDKContext;
+
     beforeEach(() => {
         dispatcher = new MatrixDispatcher();
         client = getMockClientWithEventEmitter({
@@ -29,13 +32,15 @@ describe("UserMenuViewModel", () => {
             getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
             setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         });
-        SDKContextClass.instance.client = client;
+        sdkContext = new TestSDKContext();
+        // @ts-ignore UserMenuViewModel uses SDKContext in the constructor
+        SDKContextClass.instance = sdkContext;
+        sdkContext._client = client;
     });
     afterEach(() => {
         jest.resetAllMocks();
         SdkConfig.reset();
         SDKContextClass.instance.onLoggedOut();
-        SDKContextClass.instance.client = undefined;
     });
 
     it("should generate a menu options for a logged in client", () => {

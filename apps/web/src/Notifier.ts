@@ -60,6 +60,29 @@ import { BackgroundAudio } from "./audio/BackgroundAudio";
 
 const MAX_PENDING_ENCRYPTED = 20;
 
+/**
+ * Minimum interval (in milliseconds) between two *audible* notification plays.
+ *
+ * Coalesces bursts of backlogged notifications into a single sound. This is the
+ * in-repo remedy for https://github.com/element-hq/element-web/issues/31996: on
+ * macOS Sequoia, waking from sleep delivers the entire sync backlog in one
+ * batch, so every backlogged notifying event fires {@link
+ * NotifierClass.playAudioNotification} near-simultaneously and the identical
+ * audio buffers superimpose into one loud "stacked" sound.
+ *
+ * The throttle is keyed on the resolved sound, so a backlog of identical sounds
+ * coalesces to one play while two genuinely *different* sounds (e.g. a custom
+ * per-room sound) arriving within the window each still play. A conservative
+ * window is intentional: merging a burst of the same sound is preferable to a
+ * wall of overlapping audio.
+ *
+ * NOTE: This only cures the sounds-enabled renderer Web-Audio path (the default
+ * config). It does NOT fix the variant where macOS Sequoia ignores the OS
+ * banner's `silent: true` and plays its own coalesced banner sound on wake;
+ * that is purely OS/Electron behaviour with no in-repo lever.
+ */
+export const NOTIFICATION_SOUND_THROTTLE_MS = 1000;
+
 /*
 Override both the content body and the TextForEvent handler for specific msgtypes, in notifications.
 This is useful when the content body contains fallback text that would explain that the client can't handle a particular
@@ -164,6 +187,14 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     private isSyncing?: boolean;
 
     private backgroundAudio = new BackgroundAudio();
+
+    /**
+     * Per-sound timestamp (ms, from {@link Date.now}) of the last *audible* notification, keyed by the
+     * resolved sound (custom sound url, or `"default"`). Used to throttle a burst of backlogged
+     * notifications of the *same* sound into a single play while letting distinct sounds through -
+     * see {@link NOTIFICATION_SOUND_THROTTLE_MS}.
+     */
+    private readonly lastAudioNotificationMs = new Map<string, number>();
 
     public notificationMessageForEvent(ev: MatrixEvent): string | null {
         const msgType = ev.getContent().msgtype;
@@ -277,6 +308,20 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         // Play notification sound here
         const sound = this.getSoundForRoom(room.roomId);
         logger.log(`Got sound ${sound?.name || "default"} for ${room.roomId}`);
+
+        // Throttle audible plays so a burst of backlogged notifications - e.g. the whole sync backlog
+        // delivered at once when macOS wakes from sleep - produces at most one sound per distinct sound
+        // within NOTIFICATION_SOUND_THROTTLE_MS, instead of many identical buffers superimposing into one
+        // loud "stacked" sound (#31996). Keyed on the resolved sound so two *different* sounds within the
+        // window both still play. Runs only after the silencing gate above, so it suppresses redundant
+        // *audible* plays, never the gating logic. We bail cleanly (no throw).
+        const soundKey = sound?.url ?? "default";
+        const now = Date.now();
+        const lastPlayed = this.lastAudioNotificationMs.get(soundKey);
+        if (lastPlayed !== undefined && now - lastPlayed < NOTIFICATION_SOUND_THROTTLE_MS) {
+            return;
+        }
+        this.lastAudioNotificationMs.set(soundKey, now);
 
         if (sound) {
             await this.backgroundAudio.play(sound.url);
