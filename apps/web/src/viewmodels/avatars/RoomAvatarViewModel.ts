@@ -18,6 +18,7 @@ import {
 import { type RoomAvatarEventContent } from "matrix-js-sdk/src/types";
 import {
     BaseViewModel,
+    Disposables,
     type RoomAvatarViewModel as RoomAvatarViewModelInterface,
     type RoomAvatarViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -30,7 +31,7 @@ import { LocalRoom } from "../../models/LocalRoom";
 import { type IOOBData } from "../../stores/ThreepidInviteStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
-import { filterBoolean } from "../../utils/arrays";
+import { arrayHasDiff, filterBoolean } from "../../utils/arrays";
 import { MediaPreviewValue } from "../../@types/media_preview";
 
 interface Props {
@@ -49,8 +50,8 @@ export class RoomAvatarViewModel
     extends BaseViewModel<RoomAvatarViewSnapshot, Props>
     implements RoomAvatarViewModelInterface
 {
-    private roomListenersCleanup?: () => void;
-    private mediaPreviewSettingWatcherRef?: string;
+    private roomDisposables?: Disposables;
+    private mediaPreviewSettingDisposables?: Disposables;
 
     public constructor(props: Props) {
         super(props, RoomAvatarViewModel.computeSnapshot(props));
@@ -63,8 +64,6 @@ export class RoomAvatarViewModel
     }
 
     public setRoom(room?: Room): void {
-        if (this.props.room === room) return;
-
         this.props = { ...this.props, room };
         this.bindRoomListeners(room);
         this.bindMediaPreviewSettingWatcher(room);
@@ -72,36 +71,26 @@ export class RoomAvatarViewModel
     }
 
     public setSize(size: string): void {
-        if (this.props.size === size) return;
-
         this.props = { ...this.props, size };
         this.refreshSnapshot();
     }
 
     public setOobData(oobData?: IOOBData & { roomId?: string }): void {
-        if (this.props.oobData === oobData) return;
-
         this.props = { ...this.props, oobData };
         this.refreshSnapshot();
     }
 
     public setViewAvatarOnClick(viewAvatarOnClick?: boolean): void {
-        if (this.props.viewAvatarOnClick === viewAvatarOnClick) return;
-
         this.props = { ...this.props, viewAvatarOnClick };
         this.refreshSnapshot();
     }
 
     public setOnClick(onClick?: () => void): void {
-        if (this.props.onClick === onClick) return;
-
         this.props = { ...this.props, onClick };
         this.refreshSnapshot();
     }
 
     public setType(type?: "round" | "square"): void {
-        if (this.props.type === type) return;
-
         this.props = { ...this.props, type };
         this.refreshSnapshot();
     }
@@ -197,59 +186,36 @@ export class RoomAvatarViewModel
     private refreshSnapshot = (): void => {
         const nextSnapshot = RoomAvatarViewModel.computeSnapshot(this.props);
         const current = this.snapshot.current;
-        const updates: Partial<RoomAvatarViewSnapshot> = {};
 
-        if (current.name !== nextSnapshot.name) updates.name = nextSnapshot.name;
-        if (current.idName !== nextSnapshot.idName) updates.idName = nextSnapshot.idName;
-        if (!RoomAvatarViewModel.areStringArraysEqual(current.urls, nextSnapshot.urls))
-            updates.urls = nextSnapshot.urls;
-        if (current.type !== nextSnapshot.type) updates.type = nextSnapshot.type;
-        if (current.isClickable !== nextSnapshot.isClickable) updates.isClickable = nextSnapshot.isClickable;
-
-        if (Object.keys(updates).length === 0) return;
-
-        this.snapshot.merge(updates);
+        this.snapshot.merge({
+            ...nextSnapshot,
+            urls: arrayHasDiff(current.urls, nextSnapshot.urls) ? nextSnapshot.urls : current.urls,
+        });
     };
-
-    private static areStringArraysEqual(left: string[], right: string[]): boolean {
-        if (left === right) return true;
-        if (left.length !== right.length) return false;
-
-        for (let i = 0; i < left.length; i += 1) {
-            if (left[i] !== right[i]) return false;
-        }
-
-        return true;
-    }
 
     private bindRoomListeners(room?: Room): void {
         this.clearRoomListeners();
         if (!room) return;
 
-        room.on(RoomEvent.Name, this.refreshSnapshot);
-        room.on(RoomEvent.MyMembership, this.refreshSnapshot);
-        room.on(RoomStateEvent.Update, this.refreshSnapshot);
-        room.currentState.on(RoomStateEvent.Update, this.refreshSnapshot);
-        room.currentState.on(RoomStateEvent.Members, this.refreshSnapshot);
-        room.client.on(ClientEvent.AccountData, this.refreshSnapshot);
-
-        this.roomListenersCleanup = (): void => {
-            room.off(RoomEvent.Name, this.refreshSnapshot);
-            room.off(RoomEvent.MyMembership, this.refreshSnapshot);
-            room.off(RoomStateEvent.Update, this.refreshSnapshot);
-            room.currentState.off(RoomStateEvent.Update, this.refreshSnapshot);
-            room.currentState.off(RoomStateEvent.Members, this.refreshSnapshot);
-            room.client.off(ClientEvent.AccountData, this.refreshSnapshot);
-        };
+        this.roomDisposables = new Disposables();
+        this.roomDisposables.trackListener(room, RoomEvent.Name, this.refreshSnapshot);
+        this.roomDisposables.trackListener(room, RoomEvent.MyMembership, this.refreshSnapshot);
+        this.roomDisposables.trackListener(room, RoomStateEvent.Update, this.refreshSnapshot);
+        this.roomDisposables.trackListener(room.currentState, RoomStateEvent.Update, this.refreshSnapshot);
+        this.roomDisposables.trackListener(room.currentState, RoomStateEvent.Members, this.refreshSnapshot);
+        this.roomDisposables.trackListener(room.client, ClientEvent.AccountData, this.refreshSnapshot);
     }
 
     private bindMediaPreviewSettingWatcher(room?: Room): void {
         this.clearMediaPreviewSettingWatcher();
-        this.mediaPreviewSettingWatcherRef = SettingsStore.watchSetting(
+        this.mediaPreviewSettingDisposables = new Disposables();
+
+        const mediaPreviewSettingWatcherRef = SettingsStore.watchSetting(
             "mediaPreviewConfig",
             room?.roomId ?? null,
             this.onMediaPreviewSettingChanged,
         );
+        this.mediaPreviewSettingDisposables.track(() => SettingsStore.unwatchSetting(mediaPreviewSettingWatcherRef));
     }
 
     private clearTrackedListeners(): void {
@@ -258,13 +224,13 @@ export class RoomAvatarViewModel
     }
 
     private clearRoomListeners(): void {
-        this.roomListenersCleanup?.();
-        this.roomListenersCleanup = undefined;
+        this.roomDisposables?.dispose();
+        this.roomDisposables = undefined;
     }
 
     private clearMediaPreviewSettingWatcher(): void {
-        SettingsStore.unwatchSetting(this.mediaPreviewSettingWatcherRef);
-        this.mediaPreviewSettingWatcherRef = undefined;
+        this.mediaPreviewSettingDisposables?.dispose();
+        this.mediaPreviewSettingDisposables = undefined;
     }
 
     private readonly onMediaPreviewSettingChanged = (): void => {
