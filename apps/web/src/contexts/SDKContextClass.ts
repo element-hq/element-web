@@ -28,6 +28,9 @@ import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
 import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
+import { type ActionPayload, isAction } from "../dispatcher/payloads.ts";
+import { Action } from "../dispatcher/actions.ts";
+import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -72,7 +75,15 @@ export class SDKContextClass {
 
     public constructor() {
         SettingController.sdkContext = this;
+
+        defaultDispatcher.register(this.onDispatch);
     }
+
+    private onDispatch = (payload: ActionPayload): void => {
+        if (isAction<OnLoggedInPayload>(payload, Action.OnLoggedIn)) {
+            this.client = payload.client;
+        }
+    };
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
