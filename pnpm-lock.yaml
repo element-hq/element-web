@@ -14290,7 +14290,7 @@ snapshots:
   '@arcmantle/vite-plugin-import-css-sheet@1.0.14(patch_hash=8019aa9feca17db6bab3483612b4150c911d70b58fddc52bf2d7258a1484a747)':
     dependencies:
       lightningcss: 1.32.0
-      typescript: 5.9.3
+      typescript: 6.0.3
 
   '@asamuzakjp/css-color@3.2.0':
     dependencies:
