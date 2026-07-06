@@ -21,6 +21,7 @@ import {
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 import { randomUUID } from "node:crypto";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
@@ -148,6 +149,8 @@ describe("Notifier", () => {
         mockClient.pushRules = {
             global: {},
         };
+        // @ts-ignore
+        mockClient.pushProcessor = new PushProcessor(mockClient);
         accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId!);
 
         testRoom = new Room(roomId, mockClient, mockClient.getSafeUserId());
@@ -157,6 +160,7 @@ describe("Notifier", () => {
             maySendNotifications: jest.fn().mockReturnValue(true),
             displayNotification: jest.fn().mockReturnValue({ close: jest.fn() }),
             loudNotification: jest.fn(),
+            requestNotificationPermission: jest.fn(),
         });
 
         notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
@@ -763,6 +767,36 @@ describe("Notifier", () => {
             );
 
             expect(fn).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("setEnabled", () => {
+        it("should call fire notifier_enabled value=true when permission is granted", async () => {
+            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const notifier = new Notifier(dis, context);
+
+            jest.mocked(MockPlatform.requestNotificationPermission).mockResolvedValue("granted");
+
+            const resolvers = Promise.withResolvers<void>();
+            notifier.setEnabled(true, resolvers.resolve);
+            await resolvers.promise;
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "notifier_enabled",
+                value: true,
+            });
+        });
+
+        it("should call fire notifier_enabled value=false when disabling", async () => {
+            const dispatchSpy = jest.spyOn(dis, "dispatch");
+            const notifier = new Notifier(dis, context);
+
+            notifier.setEnabled(false);
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: "notifier_enabled",
+                value: false,
+            });
         });
     });
 });
