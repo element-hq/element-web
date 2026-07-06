@@ -294,10 +294,10 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
     }
 
     public start(): void {
-        this.sdkContext.client?.on(RoomEvent.Timeline, this.onEvent);
-        this.sdkContext.client?.on(RoomEvent.Receipt, this.onRoomReceipt);
-        this.sdkContext.client?.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-        this.sdkContext.client?.on(ClientEvent.Sync, this.onSyncStateChange);
+        this.sdkContext.client!.on(RoomEvent.Timeline, this.onEvent);
+        this.sdkContext.client!.on(RoomEvent.Receipt, this.onRoomReceipt);
+        this.sdkContext.client!.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.sdkContext.client!.on(ClientEvent.Sync, this.onSyncStateChange);
         this.toolbarHidden = false;
         this.isSyncing = false;
     }

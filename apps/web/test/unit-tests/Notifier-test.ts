@@ -62,7 +62,8 @@ jest.mock("../../src/audio/compat", () => ({
 const settingsStoreGetValue = SettingsStore.getValue;
 
 describe("Notifier", () => {
-    const notifier = new Notifier(dis, new TestSDKContext());
+    const context = new TestSDKContext();
+    const notifier = new Notifier(dis, context);
 
     const roomId = "!room1:server";
     const testEvent = mkEvent({
@@ -169,6 +170,7 @@ describe("Notifier", () => {
 
         // @ts-ignore
         notifier.backgroundAudio.audioContext = mockAudioContext;
+        context.client = mockClient;
     });
 
     describe("triggering notification from events", () => {
@@ -668,7 +670,7 @@ describe("Notifier", () => {
 
     describe("evaluateEvent", () => {
         beforeEach(() => {
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
+            jest.spyOn(context.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
 
             jest.spyOn(UserActivity.sharedInstance(), "userActiveRecently").mockReturnValue(true);
 
@@ -723,7 +725,7 @@ describe("Notifier", () => {
                 thread_id: rootEvent.getId()!,
             });
 
-            await waitFor(() => expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
+            await waitFor(() => expect(context.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
 
             notifier.evaluateEvent(events[1]);
             expect(notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
