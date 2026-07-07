@@ -406,7 +406,13 @@ const SpacePanel: React.FC = () => {
     });
 
     const userMenuVm = useCreateAutoDisposedViewModel(
-        () => new UserMenuViewModel({ ownProfileStore: OwnProfileStore.instance }, defaultDispatcher, client, isPanelCollapsed),
+        () =>
+            new UserMenuViewModel(
+                { ownProfileStore: OwnProfileStore.instance },
+                defaultDispatcher,
+                client,
+                isPanelCollapsed,
+            ),
     );
 
     useDispatcher(defaultDispatcher, (payload) => {
