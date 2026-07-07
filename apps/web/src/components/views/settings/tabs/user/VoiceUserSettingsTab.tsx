@@ -197,7 +197,7 @@ export default class VoiceUserSettingsTab extends React.Component<EmptyObject, I
                         </AccessibleButton>
                     }
                 >
-                    {_t("settings|voip|missing_permissions_prompt")}
+                    {_t("settings|voip|missing_permissions_prompt", { brand: SdkConfig.get("brand") })}
                 </Alert>
             );
         } else if (this.state.mediaDevices) {
