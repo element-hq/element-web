@@ -19,7 +19,6 @@ import { type PlatformPeg } from "../PlatformPeg";
 import { type IntegrationManagers } from "../integrations/IntegrationManagers";
 import { type ModalManager } from "../Modal";
 import type SettingsStore from "../settings/SettingsStore";
-import { type Notifier } from "../Notifier";
 import type RightPanelStore from "../stores/right-panel/RightPanelStore";
 import type WidgetStore from "../stores/WidgetStore";
 import type LegacyCallHandler from "../LegacyCallHandler";
@@ -97,7 +96,6 @@ declare global {
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
-        mxNotifier: typeof Notifier;
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxWidgetLayoutStore: WidgetLayoutStore;

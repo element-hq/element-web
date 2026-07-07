@@ -53,4 +53,5 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
             isSelected: false,
         },
     ],
+    areSectionsEnabled: true,
 };

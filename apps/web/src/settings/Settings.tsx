@@ -366,6 +366,7 @@ export interface Settings {
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
+    "RoomList.showSections": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1224,6 +1225,11 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
         displayName: _td("settings|show_message_previews"),
+    },
+    "RoomList.showSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+        displayName: _td("settings|show_sections"),
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

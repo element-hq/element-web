@@ -52,6 +52,7 @@ import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
 import { ModuleApi } from "../modules/Api";
+import ActiveWidgetStore from "./ActiveWidgetStore";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -377,6 +378,12 @@ export class RoomViewStore extends EventEmitter {
                     ElementCall.create(room);
                     call = CallStore.instance.getCall(payload.room_id)!;
                 }
+
+                // Custom case where we start voice calls in pip
+                if (payload.voiceOnly ?? false) {
+                    viewingCall = false;
+                    ActiveWidgetStore.instance.setWidgetPersistence(call.widget.id, room.roomId, true);
+                }
                 call.presented = true;
                 // Immediately start the call. This will connect to all required widget events
                 // and allow the widget to show the lobby.
@@ -401,7 +408,7 @@ export class RoomViewStore extends EventEmitter {
                     roomLoadError: null,
                     viaServers: payload.via_servers,
                     wasContextSwitch: payload.context_switch,
-                    viewingCall: payload.view_call ?? false,
+                    viewingCall,
                 });
                 // set this room as the room subscription. We need to await for it as this will fetch
                 // all room state for this room, which is required before we get the state below.

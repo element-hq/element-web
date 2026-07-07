@@ -6,9 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import HistoryManager, { type IHistory, MAX_STEP_LENGTH } from "../../../src/editor/history";
-import type EditorModel from "../../../src/editor/model";
-import DocumentPosition from "../../../src/editor/position";
+import { describe, it, expect } from "vitest";
+
+import HistoryManager, { type IHistory, MAX_STEP_LENGTH } from "./history";
+import type EditorModel from "./model";
+import DocumentPosition from "./position";
 
 describe("editor/history", function () {
     it("push, then undo", function () {
@@ -107,7 +109,9 @@ describe("editor/history", function () {
         const firstCaret = new DocumentPosition(0, 0);
         history.tryPush(model, firstCaret, "insertText", {});
         parts[0] = "helloo";
-        const result = history.tryPush(model, new DocumentPosition(0, 0), "insertText", { added: "o" });
+        const result = history.tryPush(model, new DocumentPosition(0, 0), "insertText", {
+            added: "o",
+        });
         expect(result).toEqual(false);
         expect(history.canUndo()).toEqual(true);
         const undoState = history.undo(model) as IHistory;
