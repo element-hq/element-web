@@ -141,7 +141,7 @@ describe("MLocationBody", () => {
                     .mockReturnValue({ finished: new Promise(() => {}), close: jest.fn() });
                 const component = getComponent();
 
-                await fireEvent.click(component.container.querySelector(".mx_Map")!);
+                fireEvent.click(component.container.querySelector(".mx_Map")!);
 
                 expect(modalSpy).toHaveBeenCalled();
             });

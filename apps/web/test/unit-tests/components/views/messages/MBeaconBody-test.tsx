@@ -343,7 +343,7 @@ describe("<MBeaconBody />", () => {
             const { beaconInfoEvent } = makeEvents();
             // no locations
             const room = setupRoomWithBeacon(beaconInfoEvent, []);
-            const getRelationsForEvent = await mockGetRelationsForEvent();
+            const getRelationsForEvent = mockGetRelationsForEvent();
 
             getComponent({ mxEvent: beaconInfoEvent, getRelationsForEvent });
 
@@ -363,7 +363,7 @@ describe("<MBeaconBody />", () => {
             const { beaconInfoEvent, location1, location2 } = makeEvents();
             const room = setupRoomWithBeacon(beaconInfoEvent, [location1, location2]);
 
-            const getRelationsForEvent = await mockGetRelationsForEvent([location1, location2]);
+            const getRelationsForEvent = mockGetRelationsForEvent([location1, location2]);
 
             getComponent({ mxEvent: beaconInfoEvent, getRelationsForEvent });
 

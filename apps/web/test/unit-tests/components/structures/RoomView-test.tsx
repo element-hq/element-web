@@ -398,7 +398,7 @@ describe("RoomView", () => {
         it("handles accepting an invite", async () => {
             const { getByRole } = await mountRoomView();
 
-            await fireEvent.click(getByRole("button", { name: "Accept" }));
+            fireEvent.click(getByRole("button", { name: "Accept" }));
 
             await untilDispatch(Action.JoinRoomReady, defaultDispatcher);
         });
@@ -408,7 +408,7 @@ describe("RoomView", () => {
                 finished: Promise.resolve([true, false, false]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Decline" }));
+            fireEvent.click(getByRole("button", { name: "Decline" }));
             await waitFor(() => expect(cli.leave).toHaveBeenCalledWith(room.roomId));
             expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
         });
@@ -464,7 +464,7 @@ describe("RoomView", () => {
                 finished: Promise.resolve([true, false, "with a reason"]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
+            fireEvent.click(getByRole("button", { name: "Decline and block" }));
             expect(cli.leave).toHaveBeenCalledWith(room.roomId);
             expect(cli.reportRoom).toHaveBeenCalledWith(room.roomId, "with a reason");
         });

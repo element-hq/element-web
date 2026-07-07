@@ -161,7 +161,7 @@ describe("useRoomSummaryCardViewModel", () => {
             const { result } = render();
 
             await act(async () => {
-                await result.current.onRoomPollHistoryClick();
+                result.current.onRoomPollHistoryClick();
             });
             expect(createDialogSpy).toHaveBeenCalledWith(PollHistoryDialog, {
                 room,
@@ -184,7 +184,7 @@ describe("useRoomSummaryCardViewModel", () => {
             const { result } = render();
 
             await act(async () => {
-                await result.current.onShareRoomClick();
+                result.current.onShareRoomClick();
             });
 
             expect(createDialogSpy).toHaveBeenCalledWith(ShareDialog, {

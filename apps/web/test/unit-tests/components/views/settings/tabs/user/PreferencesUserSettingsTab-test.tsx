@@ -66,19 +66,19 @@ describe("PreferencesUserSettingsTab", () => {
         await userEvent.click(timezoneDropdown);
 
         // Without filtering `expect(screen.queryByRole("option" ...` take over 1s.
-        await fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
+        fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
             target: { value: "Africa/Abidjan" },
         });
 
         expect(screen.queryByRole("option", { name: "Africa/Abidjan" })).toBeInTheDocument();
         expect(screen.queryByRole("option", { name: "Europe/Paris" })).not.toBeInTheDocument();
 
-        await fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
+        fireEvent.change(screen.getByRole("combobox", { name: "Set timezone" }), {
             target: { value: "Europe/Paris" },
         });
 
         expect(screen.queryByRole("option", { name: "Africa/Abidjan" })).not.toBeInTheDocument();
-        const option = await screen.getByRole("option", { name: "Europe/Paris" });
+        const option = screen.getByRole("option", { name: "Europe/Paris" });
         await userEvent.click(option);
 
         expect(await screen.findByText("Europe/Paris")).toBeInTheDocument();

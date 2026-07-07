@@ -115,8 +115,8 @@ describe("ProfileSettings", () => {
         mocked(client).uploadContent.mockResolvedValue({ content_uri: returnedMxcUri });
 
         const fileSentinel = {};
-        await act(async () => {
-            await changeAvatarFn(fileSentinel as File);
+        act(() => {
+            changeAvatarFn(fileSentinel as File);
         });
 
         expect(client.uploadContent).toHaveBeenCalledWith(fileSentinel);
@@ -139,8 +139,8 @@ describe("ProfileSettings", () => {
         mocked(client).uploadContent.mockReturnValue(uploadPromise);
 
         const fileSentinel = {};
-        const changeAvatarActPromise = act(async () => {
-            await changeAvatarFn(fileSentinel as File);
+        act(() => {
+            changeAvatarFn(fileSentinel as File);
         });
 
         expect(toastRack.displayToast).toHaveBeenCalled();
@@ -148,7 +148,6 @@ describe("ProfileSettings", () => {
         act(() => {
             resolveUploadPromise({ content_uri: "bloop" });
         });
-        await changeAvatarActPromise;
 
         expect(clearToastFn).toHaveBeenCalled();
     });
@@ -167,8 +166,8 @@ describe("ProfileSettings", () => {
             } as ChangeEvent<HTMLInputElement>);
         });
 
-        await act(async () => {
-            await editInPlaceOnSave();
+        act(() => {
+            editInPlaceOnSave();
         });
 
         expect(client.setDisplayName).toHaveBeenCalledWith("The Value");

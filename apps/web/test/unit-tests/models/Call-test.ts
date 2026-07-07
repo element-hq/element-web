@@ -536,7 +536,7 @@ describe("ElementCall", () => {
                     ? originalGetValue(name, roomId, excludeDefault)
                     : originalGetValue(name, roomId, excludeDefault);
             };
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = ElementCall.get(room);
             expect(call?.widget.url.startsWith("https://call.element.dev/")).toBeTruthy();
             SettingsStore.getValue = originalGetValue;

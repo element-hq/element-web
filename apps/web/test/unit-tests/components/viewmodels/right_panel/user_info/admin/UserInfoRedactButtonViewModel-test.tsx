@@ -88,7 +88,7 @@ describe("useRedactMessagesButtonViewModel", () => {
         );
 
         const { result } = renderRedactButtonHook();
-        await result.current.onRedactAllMessagesClick();
+        result.current.onRedactAllMessagesClick();
 
         expect(spy).toHaveBeenCalledWith(
             BulkRedactDialog,

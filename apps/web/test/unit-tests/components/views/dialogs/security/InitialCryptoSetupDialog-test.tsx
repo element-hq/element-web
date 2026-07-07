@@ -43,7 +43,7 @@ describe("InitialCryptoSetupDialog", () => {
 
         render(<InitialCryptoSetupDialog onCancelled={jest.fn()} />);
 
-        await expect(await screen.findByRole("button", { name: "Retry" })).toBeInTheDocument();
+        await expect(screen.findByRole("button", { name: "Retry" })).resolves.toBeInTheDocument();
     });
 
     it("calls retry when retry button pressed", async () => {

@@ -44,7 +44,7 @@ describe("RoomSummaryCardTopicViewModel", () => {
     it("should toggle expanded state on click", async () => {
         const { result } = render();
 
-        await act(() => {
+        act(() => {
             result.current.onExpandedClick(mockEvent);
         });
 

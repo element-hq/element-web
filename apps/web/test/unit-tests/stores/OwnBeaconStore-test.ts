@@ -443,7 +443,7 @@ describe("OwnBeaconStore", () => {
             expect(store.hasLiveBeacons()).toBe(true);
             const emitSpy = jest.spyOn(store, "emit");
 
-            await expireBeaconAndEmit(store, alicesRoom1BeaconInfo);
+            expireBeaconAndEmit(store, alicesRoom1BeaconInfo);
 
             expect(store.hasLiveBeacons()).toBe(false);
             expect(store.hasLiveBeacons(room1Id)).toBe(false);
@@ -455,7 +455,7 @@ describe("OwnBeaconStore", () => {
             const store = await makeOwnBeaconStore();
             const prevEventContent = alicesRoom1BeaconInfo.getContent();
 
-            await expireBeaconAndEmit(store, alicesRoom1BeaconInfo);
+            expireBeaconAndEmit(store, alicesRoom1BeaconInfo);
 
             // matches original state of event content
             // except for live property
@@ -771,7 +771,7 @@ describe("OwnBeaconStore", () => {
 
             // expire the beacon
             // user now has no live beacons
-            await expireBeaconAndEmit(store, alicesRoom1BeaconInfo);
+            expireBeaconAndEmit(store, alicesRoom1BeaconInfo);
 
             // stop watching location
             expect(geolocation.clearWatch).toHaveBeenCalled();
