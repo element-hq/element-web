@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { JSX, ReactNode } from "react";
 import type { MatrixEvent } from "../models/event";
 import type { AccountAuthInfo } from "./auth.ts";
-import { ComposerApiTarget } from "./composer.ts";
+import type { ComposerApiTarget } from "./composer.ts";
 
 /**
  * Properties for all message components.

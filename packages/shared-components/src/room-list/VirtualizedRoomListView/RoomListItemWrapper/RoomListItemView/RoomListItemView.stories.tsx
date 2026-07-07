@@ -9,8 +9,12 @@ import React, { type JSX, useEffect } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "./RoomListItemView";
-import { RoomListItemView, type RoomListItemViewSnapshot, type RoomListItemViewActions } from "./RoomListItemView";
+import {
+    type Room,
+    RoomListItemView,
+    type RoomListItemViewSnapshot,
+    type RoomListItemViewActions,
+} from "./RoomListItemView";
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
