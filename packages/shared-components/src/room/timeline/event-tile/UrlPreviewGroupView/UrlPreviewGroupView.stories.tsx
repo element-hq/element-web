@@ -174,7 +174,7 @@ InBubbleLayout.args = {
 };
 InBubbleLayout.globals = { eventLayout: "bubble" };
 // Purely for testing that bubbles have not regressed
-InBubbleLayout.tags =  ["!autodocs"]
+InBubbleLayout.tags = ["!autodocs"];
 InBubbleLayout.decorators = [withBubbleLayoutContext];
 
 export const InBubbleLayoutNarrow = Default.bind({});
