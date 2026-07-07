@@ -246,6 +246,12 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       Use Ctrl + F to search timeline
                     </label>
+                    <span
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="radix-react-use-id-2"
+                    >
+                      When enabled, the search shortcut opens in-room message search instead of your browser's find-on-page. Searching encrypted rooms requires the desktop app with message search enabled.
+                    </span>
                   </div>
                 </div>
               </div>
@@ -403,7 +409,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_1o4d9_86 _help-message_1o4d9_92"
-                      id="radix-react-use-id-2"
+                      id="radix-react-use-id-3"
                     >
                       Requires your server to support MSC4133
                     </span>
@@ -472,7 +478,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_1o4d9_86 _help-message_1o4d9_92"
-                      id="radix-react-use-id-3"
+                      id="radix-react-use-id-4"
                     >
                       Your server doesn't support disabling sending read receipts.
                     </span>
@@ -597,7 +603,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_1o4d9_86 _help-message_1o4d9_92"
-                      id="radix-react-use-id-4"
+                      id="radix-react-use-id-5"
                     >
                       <span>
                         Start messages with 
@@ -1484,7 +1490,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <input
                         class="_input_udcm8_24"
-                        id="react-use-id-5"
+                        id="react-use-id-6"
                         role="switch"
                         type="checkbox"
                       />
@@ -1498,7 +1504,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_1o4d9_60"
-                      for="react-use-id-5"
+                      for="react-use-id-6"
                     >
                       Hide avatars of room and inviter
                     </label>
@@ -1512,13 +1518,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_1o4d9_60"
-                    for="radix-react-use-id-6"
+                    for="radix-react-use-id-7"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_1o4d9_86 _help-message_1o4d9_92 mx_MediaPreviewAccountSetting_RadioHelp"
-                    id="radix-react-use-id-7"
+                    id="radix-react-use-id-8"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
@@ -1631,7 +1637,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="react-use-id-8"
+                        id="react-use-id-9"
                         role="switch"
                         type="checkbox"
                       />
@@ -1645,13 +1651,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_1o4d9_60"
-                      for="react-use-id-8"
+                      for="react-use-id-9"
                     >
                       Allow users to invite you to rooms
                     </label>
                     <span
                       class="_message_1o4d9_86 _help-message_1o4d9_92"
-                      id="radix-react-use-id-9"
+                      id="radix-react-use-id-10"
                     >
                       Your server does not implement this feature.
                     </span>

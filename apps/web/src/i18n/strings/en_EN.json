@@ -2095,6 +2095,8 @@
         "room_is_low_priority": "This is a low priority room",
         "search": {
             "all_rooms_button": "Search all rooms",
+            "nudge_description": "Enable the in-room search shortcut to search this conversation instead of your browser's find-on-page.",
+            "nudge_title": "Search this room",
             "placeholder": "Search messages…",
             "summary": {
                 "one": "1 result found for “<query/>”",
@@ -2985,6 +2987,7 @@
         "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
         "use_command_enter_send_message": "Use Command + Enter to send a message",
         "use_command_f_search": "Use Command + F to search timeline",
+        "use_command_f_search_description": "When enabled, the search shortcut opens in-room message search instead of your browser's find-on-page. Searching encrypted rooms requires the desktop app with message search enabled.",
         "use_control_enter_send_message": "Use Ctrl + Enter to send a message",
         "use_control_f_search": "Use Ctrl + F to search timeline",
         "voip": {

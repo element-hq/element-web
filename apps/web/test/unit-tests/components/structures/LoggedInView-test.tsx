@@ -414,6 +414,28 @@ describe("<LoggedInView />", () => {
         expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.FocusMessageSearch);
     });
 
+    it("shows the one-time in-room search nudge on Ctrl+F when the shortcut is disabled (web)", async () => {
+        const addOrReplaceToast = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+        await SettingsStore.setValue("ctrlFForSearch", null, SettingLevel.DEVICE, false);
+        await SettingsStore.setValue("ctrlFForSearchNudgeShown", null, SettingLevel.DEVICE, false);
+
+        getComponent();
+        await userEvent.keyboard("{Control>}f{/Control}");
+
+        expect(addOrReplaceToast).toHaveBeenCalledWith(expect.objectContaining({ key: "in-room-search-nudge" }));
+    });
+
+    it("does not show the in-room search nudge when the shortcut is enabled", async () => {
+        const addOrReplaceToast = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+        await SettingsStore.setValue("ctrlFForSearch", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue("ctrlFForSearchNudgeShown", null, SettingLevel.DEVICE, false);
+
+        getComponent();
+        await userEvent.keyboard("{Control>}f{/Control}");
+
+        expect(addOrReplaceToast).not.toHaveBeenCalledWith(expect.objectContaining({ key: "in-room-search-nudge" }));
+    });
+
     it("should go home on home shortcut", async () => {
         jest.spyOn(defaultDispatcher, "dispatch");
 

@@ -26,7 +26,7 @@ import FontSizeController from "./controllers/FontSizeController";
 import SystemFontController from "./controllers/SystemFontController";
 import { SettingLevel } from "./SettingLevel";
 import type SettingController from "./controllers/SettingController";
-import { IS_MAC } from "../Keyboard";
+import { IS_MAC, IS_ELECTRON } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { Layout } from "./enums/Layout";
@@ -270,6 +270,7 @@ export interface Settings {
     "sendTypingNotifications": IBaseSetting<boolean>;
     "showTypingNotifications": IBaseSetting<boolean>;
     "ctrlFForSearch": IBaseSetting<boolean>;
+    "ctrlFForSearchNudgeShown": IBaseSetting<boolean>;
     "MessageComposerInput.ctrlEnterToSend": IBaseSetting<boolean>;
     "MessageComposerInput.surroundWith": IBaseSetting<boolean>;
     "MessageComposerInput.autoReplaceEmoji": IBaseSetting<boolean>;
@@ -912,6 +913,16 @@ export const SETTINGS: Settings = {
     "ctrlFForSearch": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: IS_MAC ? _td("settings|use_command_f_search") : _td("settings|use_control_f_search"),
+        description: _td("settings|use_command_f_search_description"),
+        // Default the in-room search shortcut on for the desktop app, where Seshat makes
+        // encrypted-room search work and there is no browser "find on page" to override. Web
+        // stays opt-in so the browser's native find bar is preserved (see element-web #24359/#33360).
+        default: !!IS_ELECTRON,
+    },
+    // Device-local flag tracking whether the one-time web nudge towards the opt-in in-room search
+    // shortcut has been shown, so it never nags the user more than once per browser.
+    "ctrlFForSearchNudgeShown": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
