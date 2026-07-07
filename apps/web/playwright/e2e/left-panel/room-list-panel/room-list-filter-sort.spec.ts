@@ -31,20 +31,6 @@ test.describe("Room list filters and sort", () => {
         return page.getByTestId("room-list");
     }
 
-    async function setShowBold(page: Page, app: ElementAppPage, showbold: boolean) {
-        await app.settings.openUserSettings("Notifications");
-
-        const showAllActivity = page.getByRole("switch", { name: "Show all activity in the room list", exact: false });
-
-        if (showbold) {
-            await showAllActivity.check();
-        } else {
-            await showAllActivity.uncheck();
-        }
-
-        await app.settings.closeDialog();
-    }
-
     test.beforeEach(async ({ page, app, bot, user }) => {
         // The toasts are displayed above the search section
         await rejectToast(page, "Verify this device");
