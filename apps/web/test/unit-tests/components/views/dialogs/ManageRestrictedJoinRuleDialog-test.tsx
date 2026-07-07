@@ -10,7 +10,7 @@ import React from "react";
 import { render } from "jest-matrix-react";
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
+import { getMockClientWithEventEmitter, mockClientMethodsRooms, mockClientMethodsUser } from "../../../../test-utils";
 import ManageRestrictedJoinRuleDialog from "../../../../../src/components/views/dialogs/ManageRestrictedJoinRuleDialog";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
@@ -19,7 +19,7 @@ describe("<ManageRestrictedJoinRuleDialog />", () => {
     const userId = "@alice:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
+        ...mockClientMethodsRooms([]),
     });
     const room = new Room("!roomId:server", mockClient, userId);
     mockClient.getRoom.mockReturnValue(room);
