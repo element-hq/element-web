@@ -224,7 +224,7 @@ test.describe("Room list filters and sort", () => {
             const primaryFilters = getPrimaryFilters(page);
 
             // Set the "showbold" setting to off
-            await setShowBold(page, app, false);
+            await app.settings.setValue("Notifications.showbold", null, SettingLevel.ACCOUNT, false);
 
             // The unread DM room only notifies for mentions and keywords
             await app.viewRoomById(unReadDmId);
@@ -252,7 +252,7 @@ test.describe("Room list filters and sort", () => {
             await expect(unreadDm).not.toBeVisible();
 
             // Now set "showbold" to on
-            await setShowBold(page, app, true);
+            await app.settings.setValue("Notifications.showbold", null, SettingLevel.ACCOUNT, true);
 
             // Now both unread rooms are visible
             await expect(unreadRoom).toBeVisible();
