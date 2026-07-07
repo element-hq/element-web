@@ -182,9 +182,9 @@ InBubbleLayoutNarrow.args = {
     ...InBubbleLayout.args,
 };
 InBubbleLayoutNarrow.globals = { ...InBubbleLayout.globals };
-InBubbleLayoutNarrow.decorators = [...InBubbleLayout.decorators ];
+InBubbleLayoutNarrow.decorators = [...InBubbleLayout.decorators];
 InBubbleLayoutNarrow.parameters = {
     initialGlobals: {
-      viewport: { value: 'mobile1', isRotated: false },
+        viewport: { value: "mobile1", isRotated: false },
     },
 };
