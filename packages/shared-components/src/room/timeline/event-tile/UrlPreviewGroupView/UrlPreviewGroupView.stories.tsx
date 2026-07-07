@@ -185,7 +185,6 @@ InBubbleLayoutNarrow.globals = { ...InBubbleLayout.globals };
 InBubbleLayoutNarrow.decorators = [...InBubbleLayout.decorators ];
 InBubbleLayoutNarrow.parameters = {
     initialGlobals: {
-      // 👇 Override viewport for this story
       viewport: { value: 'mobile1', isRotated: false },
     },
 };
