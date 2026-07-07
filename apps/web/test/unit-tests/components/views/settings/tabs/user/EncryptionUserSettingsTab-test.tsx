@@ -78,7 +78,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
         renderComponent();
-        expect(screen.queryByText("Recovery")).not.toBeInTheDocument();
+        await expect(screen.queryByText("Recovery")).not.toBeInTheDocument();
     });
 
     it("should display the recovery out of sync panel when secrets are not cached", async () => {
@@ -173,7 +173,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         renderComponent();
 
-        await expect(screen.findByRole("heading", { name: "Backup" })).resolves.toBeVisible();
+        await expect(await screen.findByRole("heading", { name: "Backup" })).toBeVisible();
 
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
 

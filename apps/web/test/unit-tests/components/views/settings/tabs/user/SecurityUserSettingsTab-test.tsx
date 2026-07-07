@@ -77,7 +77,7 @@ describe("<SecurityUserSettingsTab />", () => {
         const { getByText, getByRole } = render(getComponent());
         await userEvent.click(getByRole("button", { name: "Unignore" }));
         expect(setIgnoredUsers).toHaveBeenCalledWith([]);
-        act(() => {
+        await act(() => {
             getIgnoredUsers.mockReturnValue([]);
             defaultDispatcher.dispatch(
                 {

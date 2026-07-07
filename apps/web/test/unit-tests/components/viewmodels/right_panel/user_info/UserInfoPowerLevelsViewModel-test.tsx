@@ -137,7 +137,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
 
-        result.current.onPowerChange(changedPowerLevel);
+        await result.current.onPowerChange(changedPowerLevel);
 
         expect(mockClient.setPowerLevel).toHaveBeenCalledTimes(1);
         expect(mockClient.setPowerLevel).toHaveBeenCalledWith(mockRoom.roomId, defaultMember.userId, changedPowerLevel);
@@ -159,7 +159,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
 
-        result.current.onPowerChange(changedPowerLevel);
+        await result.current.onPowerChange(changedPowerLevel);
 
         expect(Modal.createDialog).toHaveBeenCalled();
         expect(mockClient.setPowerLevel).toHaveBeenCalled();
@@ -178,7 +178,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom, user: selfUser }, mockClient);
 
-        result.current.onPowerChange(startPowerLevel);
+        await result.current.onPowerChange(startPowerLevel);
 
         expect(warnSelfDemote).toHaveBeenCalled();
         expect(mockClient.setPowerLevel).toHaveBeenCalled();
@@ -204,7 +204,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
 
-        result.current.onPowerChange(changedPowerLevel);
+        await result.current.onPowerChange(changedPowerLevel);
 
         expect(Modal.createDialog).toHaveBeenCalled();
         expect(mockClient.setPowerLevel).not.toHaveBeenCalled();
@@ -215,7 +215,7 @@ describe("UserInfoAdminPowerlevelViewModel", () => {
 
         const { result } = renderComponentHook({ ...defaultProps, room: mockRoom }, mockClient);
 
-        result.current.onPowerChange(changedPowerLevel);
+        await result.current.onPowerChange(changedPowerLevel);
 
         expect(mockClient.setPowerLevel).not.toHaveBeenCalled();
     });

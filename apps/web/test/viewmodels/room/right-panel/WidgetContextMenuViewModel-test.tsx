@@ -161,7 +161,7 @@ describe("WidgetContextMenuViewModel", () => {
         };
         const vm = new WidgetContextMenuViewModel(props);
         vm.onStreamAudioClick();
-        expect(livestream.startJitsiAudioLivestream).toHaveBeenCalled();
+        await expect(livestream.startJitsiAudioLivestream).toHaveBeenCalled();
         expect(props.onFinished).toHaveBeenCalled();
     });
 

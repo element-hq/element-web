@@ -1374,9 +1374,10 @@ describe("EventTile", () => {
                 shieldReason: EventShieldReason.UNSIGNED_DEVICE,
             } as EventEncryptionInfo);
 
-            act(() => {
+            await act(async () => {
                 mxEvent.makeReplaced(replacementEvent);
                 rerender(<WrappedEventTile roomContext={roomContext} />);
+                await flushPromises;
             });
 
             // check it was updated
@@ -1411,16 +1412,17 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
 
             // then we replace the event with an unencrypted one
-            const replacementEvent = mkMessage({
+            const replacementEvent = await mkMessage({
                 msg: "msg2",
                 user: "@alice:example.org",
                 room: room.roomId,
                 event: true,
             });
 
-            act(() => {
+            await act(async () => {
                 mxEvent.makeReplaced(replacementEvent);
                 rerender(<WrappedEventTile roomContext={roomContext} />);
+                await flushPromises;
             });
 
             // check it was updated

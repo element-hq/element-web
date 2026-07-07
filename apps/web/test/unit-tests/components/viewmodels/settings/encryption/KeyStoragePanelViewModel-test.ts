@@ -63,7 +63,7 @@ describe("KeyStoragePanelViewModel", () => {
             withClientContextRenderOptions(matrixClient),
         );
 
-        result.current.setEnabled(true);
+        await result.current.setEnabled(true);
         expect(mocked(matrixClient.getCrypto()!.resetKeyBackup)).toHaveBeenCalled();
     });
 
@@ -88,7 +88,7 @@ describe("KeyStoragePanelViewModel", () => {
             withClientContextRenderOptions(matrixClient),
         );
 
-        result.current.setEnabled(true);
+        await result.current.setEnabled(true);
         expect(mocked(matrixClient.getCrypto()!.resetKeyBackup)).not.toHaveBeenCalled();
     });
 
@@ -112,7 +112,7 @@ describe("KeyStoragePanelViewModel", () => {
             withClientContextRenderOptions(matrixClient),
         );
 
-        result.current.setEnabled(true);
+        await result.current.setEnabled(true);
         expect(mocked(matrixClient.getCrypto()!.resetKeyBackup)).toHaveBeenCalled();
     });
 
@@ -124,7 +124,7 @@ describe("KeyStoragePanelViewModel", () => {
             withClientContextRenderOptions(matrixClient),
         );
 
-        result.current.setEnabled(true);
+        await result.current.setEnabled(true);
         expect(mocked(matrixClient.setAccountData)).toHaveBeenCalledWith("m.org.matrix.custom.backup_disabled", {
             disabled: false,
         });
@@ -143,7 +143,7 @@ describe("KeyStoragePanelViewModel", () => {
             withClientContextRenderOptions(matrixClient),
         );
 
-        result.current.setEnabled(false);
+        await result.current.setEnabled(false);
 
         expect(mocked(matrixClient.getCrypto()!.disableKeyStorage)).toHaveBeenCalled();
         expect(mocked(matrixClient.setAccountData)).toHaveBeenCalledWith("m.org.matrix.custom.backup_disabled", {

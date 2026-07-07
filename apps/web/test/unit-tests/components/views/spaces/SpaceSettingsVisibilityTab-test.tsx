@@ -174,7 +174,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 (mockMatrixClient.sendStateEvent as jest.Mock).mockRejectedValue({});
                 const component = getComponent({ space });
                 await toggleGuestAccessSection(component);
-                act(() => {
+                await act(() => {
                     fireEvent.click(getGuestAccessToggle(component)!);
                 });
 
@@ -224,7 +224,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 (mockMatrixClient.sendStateEvent as jest.Mock).mockRejectedValue({});
                 const component = getComponent({ space });
 
-                act(() => {
+                await act(() => {
                     fireEvent.click(getHistoryVisibilityToggle(component)!);
                 });
 

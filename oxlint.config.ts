@@ -412,6 +412,9 @@ export default defineConfig({
                 "jsx-a11y/media-has-caption": "off",
                 "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
                 "react/forbid-elements": "off",
+                // This would be good to enable in the future
+                "typescript/await-thenable": "off",
+                "promise/no-callback-in-promise": "off",
             },
         },
         {

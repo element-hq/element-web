@@ -634,7 +634,7 @@ describe("DecryptionFailureTracker", function () {
         // @ts-ignore access to private method
         await tracker.calculateClientProperties(client);
         // @ts-ignore access to private method
-        tracker.registerHandlers(client);
+        await tracker.registerHandlers(client);
 
         // use three different errors so that we can distinguish the reports
         const error1 = DecryptionFailureCode.MEGOLM_UNKNOWN_INBOUND_SESSION_ID;

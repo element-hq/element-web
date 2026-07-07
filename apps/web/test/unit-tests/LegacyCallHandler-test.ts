@@ -441,7 +441,7 @@ describe("LegacyCallHandler without third party protocols", () => {
 
     it("should allow silencing an incoming call ring", async () => {
         await callHandler.play(AudioID.Ring);
-        callHandler.silenceCall("call123");
+        await callHandler.silenceCall("call123");
         expect(mockAudioBufferSourceNode.stop).toHaveBeenCalled();
     });
 

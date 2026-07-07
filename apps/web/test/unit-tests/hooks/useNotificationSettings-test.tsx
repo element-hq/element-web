@@ -79,7 +79,7 @@ describe("useNotificationSettings", () => {
         expect(result.current.model).toEqual(null);
         await waitFor(() => expect(result.current.model).toEqual(expectedModel));
         expect(result.current.hasPendingChanges).toBeFalsy();
-        result.current.reconcile(DefaultNotificationSettings);
+        await result.current.reconcile(DefaultNotificationSettings);
         await waitFor(() => expect(result.current.hasPendingChanges).toBeFalsy());
         expect(addPushRule).toHaveBeenCalledTimes(0);
         expect(deletePushRule).toHaveBeenCalledTimes(9);

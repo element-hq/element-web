@@ -180,7 +180,7 @@ describe("ElementWidgetDriver", () => {
         const listener = jest.fn();
         const observer = new SimpleObservable<IOpenIDUpdate>();
         observer.onUpdate(listener);
-        driver.askOpenID(observer);
+        await driver.askOpenID(observer);
 
         const openIdUpdate: IOpenIDUpdate = {
             state: OpenIDRequestState.Allowed,
@@ -228,7 +228,7 @@ describe("ElementWidgetDriver", () => {
         const listener = jest.fn();
         const observer = new SimpleObservable<IOpenIDUpdate>();
         observer.onUpdate(listener);
-        driver.askOpenID(observer);
+        await driver.askOpenID(observer);
 
         const openIdUpdate: IOpenIDUpdate = {
             state: OpenIDRequestState.Allowed,
@@ -250,7 +250,7 @@ describe("ElementWidgetDriver", () => {
         const listener = jest.fn();
         const observer = new SimpleObservable<IOpenIDUpdate>();
         observer.onUpdate(listener);
-        driver.askOpenID(observer);
+        await driver.askOpenID(observer);
 
         const openIdUpdate: IOpenIDUpdate = {
             state: OpenIDRequestState.Allowed,

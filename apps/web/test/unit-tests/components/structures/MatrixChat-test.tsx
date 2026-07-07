@@ -1323,7 +1323,7 @@ describe("<MatrixChat />", () => {
 
         describe("showScreen", () => {
             it("should show the 'share' screen", async () => {
-                getComponent({
+                await getComponent({
                     initialScreenAfterLogin: { screen: "share", params: { msg: "Hello", format: ShareFormat.Text } },
                 });
 

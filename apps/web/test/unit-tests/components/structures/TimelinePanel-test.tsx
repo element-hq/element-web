@@ -671,8 +671,10 @@ describe("TimelinePanel", () => {
             thread.initialEventsFetched = true;
             // @ts-ignore
             thread.fetchEditsWhereNeeded = () => Promise.resolve();
-            thread.addEvent(reply1, false, true);
-            allThreads.getLiveTimeline().addEvent(thread.rootEvent!, { toStartOfTimeline: true, addToState: true });
+            await thread.addEvent(reply1, false, true);
+            await allThreads
+                .getLiveTimeline()
+                .addEvent(thread.rootEvent!, { toStartOfTimeline: true, addToState: true });
             const replyToEvent = jest.spyOn(thread, "replyToEvent", "get");
 
             const dom = render(
@@ -684,7 +686,7 @@ describe("TimelinePanel", () => {
             expect(replyToEvent).toHaveBeenCalled();
 
             replyToEvent.mockClear();
-            thread.addEvent(reply2, false, true);
+            await thread.addEvent(reply2, false, true);
             await dom.findByText("RootEvent");
             await dom.findByText("ReplyEvent2");
             expect(replyToEvent).toHaveBeenCalled();
@@ -706,8 +708,10 @@ describe("TimelinePanel", () => {
             realThread.initialEventsFetched = true;
             // @ts-ignore
             realThread.fetchEditsWhereNeeded = () => Promise.resolve();
-            realThread.addEvent(reply1, true);
-            allThreads.getLiveTimeline().addEvent(realThread.rootEvent!, { toStartOfTimeline: true, addToState: true });
+            await realThread.addEvent(reply1, true);
+            await allThreads
+                .getLiveTimeline()
+                .addEvent(realThread.rootEvent!, { toStartOfTimeline: true, addToState: true });
             const replyToEvent = jest.spyOn(realThread, "replyToEvent", "get");
 
             // @ts-ignore
