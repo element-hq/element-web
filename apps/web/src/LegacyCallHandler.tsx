@@ -34,7 +34,6 @@ import { WidgetType } from "./widgets/WidgetType";
 import { SettingLevel } from "./settings/SettingLevel";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { UIFeature } from "./settings/UIFeature";
@@ -42,7 +41,6 @@ import { Action } from "./dispatcher/actions";
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./widgets/ManagedHybrid";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
-import { WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore";
 import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts/IncomingLegacyCallToast";
 import ToastStore from "./stores/ToastStore";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
@@ -54,40 +52,12 @@ import { localNotificationsAreSilenced } from "./utils/notifications";
 import { isNotNull } from "./Typeguards";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 import { Jitsi } from "./widgets/Jitsi.ts";
+import { type SDKContextClass } from "./contexts/SDKContextClass.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
 
 const CHECK_PROTOCOLS_ATTEMPTS = 3;
-
-type MediaEventType = keyof HTMLMediaElementEventMap;
-const MEDIA_ERROR_EVENT_TYPES: MediaEventType[] = [
-    "error",
-    // The media has become empty; for example, this event is sent if the media has
-    // already been loaded (or partially loaded), and the HTMLMediaElement.load method
-    // is called to reload it.
-    "emptied",
-    // The user agent is trying to fetch media data, but data is unexpectedly not
-    // forthcoming.
-    "stalled",
-    // Media data loading has been suspended.
-    "suspend",
-    // Playback has stopped because of a temporary lack of data
-    "waiting",
-];
-const MEDIA_DEBUG_EVENT_TYPES: MediaEventType[] = [
-    "play",
-    "pause",
-    "playing",
-    "ended",
-    "loadeddata",
-    "loadedmetadata",
-    "canplay",
-    "canplaythrough",
-    "volumechange",
-];
-
-const MEDIA_EVENT_TYPES = [...MEDIA_ERROR_EVENT_TYPES, ...MEDIA_DEBUG_EVENT_TYPES];
 
 export enum AudioID {
     Ring = "ringAudio",
@@ -95,13 +65,6 @@ export enum AudioID {
     CallEnd = "callendAudio",
     Busy = "busyAudio",
 }
-
-/* istanbul ignore next */
-const debuglog = (...args: any[]): void => {
-    if (SettingsStore.getValue("debug_legacy_call_handler")) {
-        logger.log.call(console, "LegacyCallHandler debuglog:", ...args);
-    }
-};
 
 interface ThirdpartyLookupResponse {
     userid: string;
@@ -151,12 +114,8 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     private backgroundAudio = new BackgroundAudio();
     private playingSources: Record<string, AudioBufferSourceNode> = {}; // Record them for stopping
 
-    public static get instance(): LegacyCallHandler {
-        if (!window.mxLegacyCallHandler) {
-            window.mxLegacyCallHandler = new LegacyCallHandler();
-        }
-
-        return window.mxLegacyCallHandler;
+    public constructor(private readonly sdkContext: SDKContextClass) {
+        super();
     }
 
     /*
@@ -190,18 +149,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener(CallEventHandlerEvent.Incoming, this.onCallIncoming);
-        }
-    }
-
-    /* istanbul ignore next (remove if we start using this function for things other than debug logging) */
-    public handleEvent(e: Event): void {
-        const target = e.target as HTMLElement;
-        const audioId = target?.id;
-
-        if (MEDIA_ERROR_EVENT_TYPES.includes(e.type as MediaEventType)) {
-            logger.error(`LegacyCallHandler: encountered "${e.type}" event with <audio id="${audioId}">`, e);
-        } else if (MEDIA_EVENT_TYPES.includes(e.type as MediaEventType)) {
-            debuglog(`encountered "${e.type}" event with <audio id="${audioId}">`, e);
         }
     }
 
@@ -308,7 +255,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             return;
         }
 
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
         if (!mappedRoomId) return;
         if (this.getCallForRoom(mappedRoomId)) {
             logger.log(
@@ -365,7 +312,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     public getAllActiveCallsForPip(roomId: string): MatrixCall[] {
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
-        if (room && WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
+        if (room && this.sdkContext.widgetLayoutStore.hasMaximisedWidget(room)) {
             // This checks if there is space for the call view in the aux panel
             // If there is no space any call should be displayed in PiP
             return this.getAllActiveCalls();
@@ -667,7 +614,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     private setCallState(call: MatrixCall, status: CallState): void {
-        const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        const mappedRoomId = this.roomIdForCall(call);
 
         logger.log(`Call state in ${mappedRoomId} changed to ${status}`);
 
@@ -1022,12 +969,12 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         dis.dispatch({ action: "appsDrawer", show: true });
 
         // Prevent double clicking the call button
-        const widget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
+        const widget = this.sdkContext.widgetStore.getApps(roomId).find((app) => WidgetType.JITSI.matches(app.type));
         if (widget) {
             // If there already is a Jitsi widget, pin it
             const room = client.getRoom(roomId);
             if (isNotNull(room)) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+                this.sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             }
             return;
         }
@@ -1049,7 +996,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     public hangupCallApp(roomId: string): void {
         logger.info("Leaving conference call in " + roomId);
 
-        const roomInfo = WidgetStore.instance.getRoom(roomId);
+        const roomInfo = this.sdkContext.widgetStore.getRoom(roomId);
         if (!roomInfo) return; // "should never happen" clauses go here
 
         const jitsiWidgets = roomInfo.widgets.filter((w) => WidgetType.JITSI.matches(w.type));

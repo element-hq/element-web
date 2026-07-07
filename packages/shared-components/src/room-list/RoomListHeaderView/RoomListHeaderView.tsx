@@ -7,7 +7,7 @@
 
 import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
-import { CollapseAllIcon, ExpandAllIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CollapseAllIcon, ExpandAllIcon, ChatIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -59,6 +59,10 @@ export interface RoomListHeaderViewSnapshot {
      * Whether message previews are enabled in the room list.
      */
     isMessagePreviewEnabled: boolean;
+    /**
+     * Whether sections are enabled in the room list.
+     */
+    areSectionsEnabled: boolean;
     /**
      * If "collapse", an icon to collapse all sections is shown.
      * If "expand", an icon to expand all sections is shown.
@@ -145,7 +149,9 @@ interface RoomListHeaderViewProps {
  */
 export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { title, displaySpaceMenu, collapseSections } = useViewModel(vm);
+    const { title, displaySpaceMenu, collapseSections, areSectionsEnabled, canCreateRoom, canCreateVideoRoom } =
+        useViewModel(vm);
+    const canOnlyStartChat = !areSectionsEnabled && !canCreateRoom && !canCreateVideoRoom;
 
     return (
         <Flex
@@ -164,7 +170,7 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                 </Flex>
                 <Flex align="center" gap="var(--cpd-space-2x)">
                     <OptionMenuView vm={vm} />
-                    {collapseSections && (
+                    {areSectionsEnabled && collapseSections && (
                         <IconButton
                             size="28px"
                             style={{ padding: "4px" }}
@@ -182,7 +188,18 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                             )}
                         </IconButton>
                     )}
-                    <ComposeMenuView vm={vm} />
+                    {canOnlyStartChat ? (
+                        <IconButton
+                            size="28px"
+                            style={{ padding: "4px" }}
+                            onClick={(e) => vm.createChatRoom(e.nativeEvent)}
+                            tooltip={_t("action|start_chat")}
+                        >
+                            <ChatIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                        </IconButton>
+                    ) : (
+                        <ComposeMenuView vm={vm} />
+                    )}
                 </Flex>
             </Flex>
         </Flex>

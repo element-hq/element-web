@@ -664,6 +664,36 @@ describe("RoomListItemViewModel", () => {
 
             expect(viewModel.getSnapshot().sections.map((s) => s.tag)).toEqual([]);
         });
+
+        it("should set areSectionsEnabled to true when RoomList.showSections is enabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showSections") return true;
+                return false;
+            });
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
+        });
+
+        it("should update areSectionsEnabled when RoomList.showSections setting changes", () => {
+            let watchCallback: CallbackFn<"RoomList.showSections"> = () => {};
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                if (setting === "RoomList.showSections") watchCallback = callback;
+                return "watcher-id";
+            });
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().areSectionsEnabled).toBe(false);
+
+            // Enable sections
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showSections") return true;
+                return false;
+            });
+            watchCallback("RoomList.showSections", null, null as any, null, null);
+
+            expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
+        });
     });
 
     describe("Cleanup", () => {

@@ -6,6 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeAll, afterAll } from "vitest";
+
 import {
     formatSeconds,
     formatRelativeTime,
@@ -25,9 +29,11 @@ import {
     HOUR_MS,
     MINUTE_MS,
     DAY_MS,
-} from "../../../src/DateUtils";
-import { REPEATABLE_DATE, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../test-utils";
-import * as languageSettings from "../../../src/i18n/settings";
+} from "./DateUtils";
+import { REPEATABLE_DATE, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../test/test-utils";
+import * as languageSettings from "./i18n/settings";
+
+vi.mock("./TimezoneHandler", () => ({ getUserTimezone: () => "UTC" }));
 
 describe("getDaysArray", () => {
     it("should return Sunday-Saturday in long mode", () => {
@@ -166,13 +172,13 @@ describe("getMonthsArray", () => {
 
 describe("formatDate", () => {
     beforeAll(() => {
-        jest.useFakeTimers();
-        jest.setSystemTime(REPEATABLE_DATE);
+        vi.useFakeTimers();
+        vi.setSystemTime(REPEATABLE_DATE);
     });
 
     afterAll(() => {
-        jest.setSystemTime(jest.getRealSystemTime());
-        jest.useRealTimers();
+        vi.setSystemTime(vi.getRealSystemTime());
+        vi.useRealTimers();
     });
 
     it("should return time string if date is within same day", () => {
@@ -255,14 +261,14 @@ describe("formatSeconds", () => {
 
 describe("formatRelativeTime", () => {
     beforeAll(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         // Tuesday, 2 November 2021 11:18:03 UTC
-        jest.setSystemTime(1635851883000);
+        vi.setSystemTime(1635851883000);
     });
 
     afterAll(() => {
-        jest.setSystemTime(jest.getRealSystemTime());
-        jest.useRealTimers();
+        vi.setSystemTime(vi.getRealSystemTime());
+        vi.useRealTimers();
     });
 
     it("returns hour format for events created in the same day", () => {
@@ -369,7 +375,7 @@ describe("formatLocalDateShort()", () => {
     });
     const timestamp = new Date("Fri Dec 17 2021 09:09:00 GMT+0100 (Central European Standard Time)").getTime();
     it("formats date correctly by locale", () => {
-        const locale = jest.spyOn(languageSettings, "getUserLanguage");
+        const locale = vi.spyOn(languageSettings, "getUserLanguage");
         mockIntlDateTimeFormat();
 
         // format is DD/MM/YY

@@ -6,26 +6,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
+import { advanceDateAndTime, stubClient, createTestClient } from "test-utils";
 
-import { advanceDateAndTime, createTestClient, stubClient } from "../test-utils";
-import { type IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
+import { type IMatrixClientPeg, MatrixClientPeg as peg } from "./MatrixClientPeg";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 const PegClass = Object.getPrototypeOf(peg).constructor;
 
 describe("MatrixClientPeg", () => {
     beforeEach(() => {
         // stub out Logger.log which gets called a lot and clutters up the test output
-        jest.spyOn(logger, "log").mockImplementation(() => {});
+        vi.spyOn(logger, "log").mockImplementation(() => {});
     });
 
     afterEach(() => {
         localStorage.clear();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
 
         // some of the tests assign `MatrixClientPeg.matrixClient`: clear it, to prevent leakage between tests
         peg.unset();
@@ -73,13 +76,13 @@ describe("MatrixClientPeg", () => {
             fetchMock.get("http://example.com/_matrix/client/versions", {});
 
             const mockClient = createTestClient();
-            mockClient.initRustCrypto = jest.fn();
-            mockClient.startClient = jest.fn();
+            mockClient.initRustCrypto = vi.fn();
+            mockClient.startClient = vi.fn();
             testPeg.set(mockClient as unknown as MatrixClient);
         });
 
         it("should initialise the rust crypto library by default", async () => {
-            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockInitRustCrypto = vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
@@ -87,14 +90,14 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should try to start dehydration if dehydration is enabled", async () => {
-            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
-            const mockStartDehydration = jest.fn();
-            jest.spyOn(testPeg.safeGet(), "getCrypto").mockReturnValue({
-                isDehydrationSupported: jest.fn().mockResolvedValue(true),
+            const mockInitRustCrypto = vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockStartDehydration = vi.fn();
+            vi.spyOn(testPeg.safeGet(), "getCrypto").mockReturnValue({
+                isDehydrationSupported: vi.fn().mockResolvedValue(true),
                 startDehydration: mockStartDehydration,
-                setDeviceIsolationMode: jest.fn(),
+                setDeviceIsolationMode: vi.fn(),
             } as any);
-            jest.spyOn(testPeg.safeGet(), "waitForClientWellKnown").mockResolvedValue({
+            vi.spyOn(testPeg.safeGet(), "waitForClientWellKnown").mockResolvedValue({
                 "m.homeserver": {
                     base_url: "http://example.com",
                 },
@@ -108,7 +111,7 @@ describe("MatrixClientPeg", () => {
         });
 
         it("Should migrate existing login", async () => {
-            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockInitRustCrypto = vi.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             await testPeg.start();
             expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
