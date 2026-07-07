@@ -70,7 +70,7 @@ export class RoomAvatarViewModel
     extends BaseViewModel<RoomAvatarViewSnapshot, Props>
     implements RoomAvatarViewModelInterface
 {
-    private roomDisposables?: Disposables;
+    private roomWithListeners?: Room;
     private mediaPreviewSettingDisposables?: Disposables;
 
     public constructor(props: Props) {
@@ -217,13 +217,14 @@ export class RoomAvatarViewModel
         this.clearRoomListeners();
         if (!room) return;
 
-        this.roomDisposables = new Disposables();
-        this.roomDisposables.trackListener(room, RoomEvent.Name, this.refreshSnapshot);
-        this.roomDisposables.trackListener(room, RoomEvent.MyMembership, this.refreshSnapshot);
-        this.roomDisposables.trackListener(room, RoomStateEvent.Update, this.refreshSnapshot);
-        this.roomDisposables.trackListener(room.currentState, RoomStateEvent.Update, this.refreshSnapshot);
-        this.roomDisposables.trackListener(room.currentState, RoomStateEvent.Members, this.refreshSnapshot);
-        this.roomDisposables.trackListener(room.client, ClientEvent.AccountData, this.refreshSnapshot);
+        this.disposables.trackListener(room, RoomEvent.Name, this.refreshSnapshot);
+        this.disposables.trackListener(room, RoomEvent.MyMembership, this.refreshSnapshot);
+        this.disposables.trackListener(room, RoomStateEvent.Update, this.refreshSnapshot);
+        this.disposables.trackListener(room.currentState, RoomStateEvent.Update, this.refreshSnapshot);
+        this.disposables.trackListener(room.currentState, RoomStateEvent.Members, this.refreshSnapshot);
+        this.disposables.trackListener(room.client, ClientEvent.AccountData, this.refreshSnapshot);
+
+        this.roomWithListeners = room;
     }
 
     private bindMediaPreviewSettingWatcher(room?: Room): void {
@@ -244,8 +245,13 @@ export class RoomAvatarViewModel
     }
 
     private clearRoomListeners(): void {
-        this.roomDisposables?.dispose();
-        this.roomDisposables = undefined;
+        this.roomWithListeners?.off(RoomEvent.Name, this.refreshSnapshot);
+        this.roomWithListeners?.off(RoomEvent.MyMembership, this.refreshSnapshot);
+        this.roomWithListeners?.off(RoomStateEvent.Update, this.refreshSnapshot);
+        this.roomWithListeners?.currentState.off(RoomStateEvent.Update, this.refreshSnapshot);
+        this.roomWithListeners?.currentState.off(RoomStateEvent.Members, this.refreshSnapshot);
+        this.roomWithListeners?.client.off(ClientEvent.AccountData, this.refreshSnapshot);
+        this.roomWithListeners = undefined;
     }
 
     private clearMediaPreviewSettingWatcher(): void {
