@@ -14,12 +14,13 @@ import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
+import { _t } from "../../../../../core/i18n/i18n";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export type LinkPreviewProps = UrlPreview & LinkPreviewActions;
+export type LinkPreviewProps = UrlPreview & LinkPreviewActions & { collapsed: boolean };
 
 export function LinkTitle({
     title,
@@ -84,7 +85,41 @@ function LinkPreviewInline({
  * LinkPreview renders a single preview component for a single link on an event. It is usually rendered as part of
  * a `UrlPreviewGroupView`.
  */
-export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX.Element {
+export function LinkPreview(props: LinkPreviewProps): JSX.Element {
+    if (props.collapsed) {
+        return LinkPreviewCollapsed(props);
+    } else {
+        return LinkPreviewExpanded(props);
+    }
+}
+
+export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
+    let img: JSX.Element | undefined;
+
+    if (preview.image && !preview.image.playable) {
+        img = (
+            <button
+                style={{
+                    backgroundImage: `url('${preview.image.imageThumb}')`,
+                }}
+                className={styles.preview}
+                aria-label={_t("timeline|url_preview|view_image")}
+            />
+        );
+    }
+
+    return (
+        <div className={styles.container}>
+            {img}
+            <div className={styles.textContent}>
+                <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
+                {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
+            </div>
+        </div>
+    );
+}
+
+export function LinkPreviewExpanded({ onImageClick, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
 
     const onImageClickHandler = useCallback<MouseEventHandler>(
