@@ -242,7 +242,6 @@ describe("<MatrixChat />", () => {
                 brand: "Test",
                 help_url: "help_url",
                 help_encryption_url: "help_encryption_url",
-                element_call: {},
                 feedback: {
                     existing_issues_url: "https://feedback.org/existing",
                     new_issue_url: "https://feedback.org/new",
