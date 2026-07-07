@@ -153,4 +153,55 @@ describe("useUserStatus", () => {
         // Should still have original status
         expect(result.current).toEqual({ emoji: "🐎", text: "on a horse" });
     });
+
+    it("returns 'On a call' when m.call is set and there is no m.status", async () => {
+        client.getExtendedProfileProperty.mockImplementation((_uid, key) => {
+            if (key === "org.matrix.msc4426.call") return Promise.resolve({});
+            return Promise.resolve(undefined);
+        });
+        const { result } = render();
+        await waitFor(() => expect(result.current).toEqual({ emoji: "🎧", text: "On a call" }));
+    });
+
+    it("prefers m.status over m.call when both are set", async () => {
+        client.getExtendedProfileProperty.mockImplementation((_uid, key) => {
+            if (key === "org.matrix.msc4426.status") return Promise.resolve({ emoji: "🐎", text: "on a horse" });
+            if (key === "org.matrix.msc4426.call") return Promise.resolve({});
+            return Promise.resolve(undefined);
+        });
+        const { result } = render();
+        await waitFor(() => expect(result.current).toEqual({ emoji: "🐎", text: "on a horse" }));
+    });
+
+    it("reverts to m.status when a call ends", async () => {
+        client.getExtendedProfileProperty.mockImplementation((_uid, key) => {
+            if (key === "org.matrix.msc4426.status") return Promise.resolve({ emoji: "🐎", text: "on a horse" });
+            if (key === "org.matrix.msc4426.call") return Promise.resolve({});
+            return Promise.resolve(undefined);
+        });
+        const { result } = render();
+        await waitFor(() => expect(result.current).toEqual({ emoji: "🐎", text: "on a horse" }));
+
+        client.emit(ClientEvent.UserProfileUpdate, userId, {
+            "org.matrix.msc4426.status": { emoji: "🐎", text: "on a horse" },
+            "org.matrix.msc4426.call": undefined,
+        });
+
+        await waitFor(() => expect(result.current).toEqual({ emoji: "🐎", text: "on a horse" }));
+    });
+
+    it("returns undefined when a call ends and there is no m.status", async () => {
+        client.getExtendedProfileProperty.mockImplementation((_uid, key) => {
+            if (key === "org.matrix.msc4426.call") return Promise.resolve({});
+            return Promise.resolve(undefined);
+        });
+        const { result } = render();
+        await waitFor(() => expect(result.current).toEqual({ emoji: "🎧", text: "On a call" }));
+
+        client.emit(ClientEvent.UserProfileUpdate, userId, {
+            "org.matrix.msc4426.call": undefined,
+        });
+
+        await waitFor(() => expect(result.current).toBeUndefined());
+    });
 });

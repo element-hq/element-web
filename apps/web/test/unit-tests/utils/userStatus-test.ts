@@ -7,7 +7,15 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { clearUserStatus, setUserStatus, userStatusTextWithinMaxLength } from "../../../src/utils/userStatus";
+import {
+    clearUserOnCall,
+    clearUserStatus,
+    isUserOnCall,
+    resolveUserStatus,
+    setUserOnCall,
+    setUserStatus,
+    userStatusTextWithinMaxLength,
+} from "../../../src/utils/userStatus";
 import { stubClient } from "../../test-utils";
 
 describe("userStatus utils", () => {
@@ -19,6 +27,43 @@ describe("userStatus utils", () => {
         it("returns false for text exceeding the max length", () => {
             const text = "a".repeat(257);
             expect(userStatusTextWithinMaxLength(text)).toBe(false);
+        });
+    });
+
+    describe("isUserOnCall", () => {
+        it("returns true for an object value", () => {
+            expect(isUserOnCall({})).toBe(true);
+            expect(isUserOnCall({ call_joined_ts: 12345 })).toBe(true);
+        });
+        it("returns false for undefined", () => {
+            expect(isUserOnCall(undefined)).toBe(false);
+        });
+        it("returns false for null", () => {
+            expect(isUserOnCall(null)).toBe(false);
+        });
+        it("returns false for a non-object value", () => {
+            expect(isUserOnCall("in a call")).toBe(false);
+        });
+    });
+
+    describe("resolveUserStatus", () => {
+        it("returns undefined when neither m.status nor m.call are set", () => {
+            expect(resolveUserStatus(undefined, undefined)).toBeUndefined();
+        });
+        it("returns the m.status value when only m.status is set", () => {
+            expect(resolveUserStatus({ emoji: "🐎", text: "on a horse" }, undefined)).toEqual({
+                emoji: "🐎",
+                text: "on a horse",
+            });
+        });
+        it("returns the call status when only m.call is set", () => {
+            expect(resolveUserStatus(undefined, {})).toEqual({ emoji: "🎧", text: "On a call" });
+        });
+        it("prefers m.status over m.call when both are set", () => {
+            expect(resolveUserStatus({ emoji: "🐎", text: "on a horse" }, {})).toEqual({
+                emoji: "🐎",
+                text: "on a horse",
+            });
         });
     });
 
@@ -50,6 +95,36 @@ describe("userStatus utils", () => {
             clearUserStatus(client);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+        });
+    });
+
+    describe("setUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("sets the m.call profile field with a join timestamp", async () => {
+            setUserOnCall(client);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", {
+                call_joined_ts: expect.any(Number),
+            });
+        });
+    });
+
+    describe("clearUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("clears the m.call profile field", async () => {
+            clearUserOnCall(client);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
     });
 });

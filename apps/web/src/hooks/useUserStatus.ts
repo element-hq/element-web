@@ -6,13 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixError } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { fetchUserStatus, validateUserStatus } from "../utils/userStatus";
+import { fetchUserStatus, validateUserStatus, resolveUserStatus } from "../utils/userStatus";
 
 /**
  * Hook to get the MSC4426 user status for a given user ID. Returns undefined if the feature is disabled,
@@ -24,14 +25,16 @@ import { fetchUserStatus, validateUserStatus } from "../utils/userStatus";
 export function useUserStatus(userId: string | undefined): UserStatus | undefined {
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
-    const [userStatus, setUserStatus] = useState<UserStatus | undefined>();
+    const [rawUserStatus, setRawUserStatus] = useState<unknown>();
+    const [rawCallStatus, setRawCallStatus] = useState<unknown>();
 
     useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, (syncedUserId, syncProfile) => {
         if (syncedUserId !== userId) {
             return;
         }
 
-        setUserStatus(validateUserStatus(syncProfile["org.matrix.msc4426.status"]));
+        setRawUserStatus(validateUserStatus(syncProfile["org.matrix.msc4426.status"]));
+        setRawCallStatus(syncProfile["org.matrix.msc4426.call"]);
     });
     useEffect(() => {
         (async () => {
@@ -39,15 +42,39 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
                 return;
             }
             if (!userId) {
-                setUserStatus(undefined);
+                setRawUserStatus(undefined);
+                setRawCallStatus(undefined);
                 return;
             }
-            setUserStatus(await fetchUserStatus(matrixClient, userId));
+            if ((await matrixClient.doesServerSupportExtendedProfiles()) === false) {
+                setRawUserStatus(undefined);
+                setRawCallStatus(undefined);
+                return;
+            }
+            try {
+                setRawUserStatus(await fetchUserStatus(matrixClient, userId));
+            } catch (ex) {
+                if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
+                    setRawUserStatus(undefined);
+                } else {
+                    logger.warn(`Failed to get userStatus for ${userId}`, ex);
+                }
+            }
+            try {
+                const result = await matrixClient.getExtendedProfileProperty(userId, "org.matrix.msc4426.call");
+                setRawCallStatus(result);
+            } catch (ex) {
+                if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
+                    setRawCallStatus(undefined);
+                } else {
+                    logger.warn(`Failed to get call status for ${userId}`, ex);
+                }
+            }
         })();
     }, [isEnabled, userId, matrixClient]);
     if (!isEnabled) {
         return;
     }
 
-    return userStatus;
+    return resolveUserStatus(rawUserStatus, rawCallStatus);
 }

@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { type UserStatus } from "@element-hq/web-shared-components";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/src/logger";
 
-const logger = rootLogger.getChild("userStatus");
+import { _t } from "../languageHandler";
 
 // MSC4426 defines the maximum length of a status to be 256 bytes of UTF-8,
 // so we truncate anything longer than that.
@@ -59,6 +59,26 @@ export async function fetchUserStatus(client: MatrixClient, userId: string): Pro
     }
 }
 
+export function isUserOnCall(rawCallStatus: unknown): boolean {
+    return typeof rawCallStatus === "object" && rawCallStatus !== null;
+}
+
+/**
+ * Resolves the effective user status to display, given the raw `m.status` and `m.call` profile
+ * field values. `m.status` always takes precedence; `m.call` is only shown as a fallback ("On a
+ * call") when there is no valid `m.status` set.
+ */
+export function resolveUserStatus(rawUserStatus: unknown, rawCallStatus: unknown): UserStatus | undefined {
+    const userStatus = validateUserStatus(rawUserStatus);
+    if (userStatus) {
+        return userStatus;
+    }
+    if (isUserOnCall(rawCallStatus)) {
+        return { emoji: "🎧", text: _t("user_status|on_a_call") };
+    }
+    return undefined;
+}
+
 export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Promise<void> {
     return client.setExtendedProfileProperty("org.matrix.msc4426.status", {
         emoji: userStatus.emoji,
@@ -68,4 +88,14 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
 
 export function clearUserStatus(client: MatrixClient): Promise<void> {
     return client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
+}
+
+export function setUserOnCall(client: MatrixClient): Promise<void> {
+    return client.setExtendedProfileProperty("org.matrix.msc4426.call", {
+        call_joined_ts: Date.now(),
+    });
+}
+
+export function clearUserOnCall(client: MatrixClient): Promise<void> {
+    return client.setExtendedProfileProperty("org.matrix.msc4426.call", null);
 }
