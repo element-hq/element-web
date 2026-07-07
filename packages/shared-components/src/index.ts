@@ -91,11 +91,7 @@ export * from "./core/utils/ToastContext.tsx";
 export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";
-<<<<<<< refactor/room-avatar-mvvm
 export * from "./room/avatar/RoomAvatar";
-
-=======
 export * from "./status/SetStatusView";
->>>>>>> develop
 // MVVM
 export * from "./core/viewmodel";
