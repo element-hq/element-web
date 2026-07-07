@@ -46,7 +46,6 @@ import { ScopedRoomContextProvider } from "../../../../../../src/contexts/Scoped
 import RoomContext, { type RoomContextType } from "../../../../../../src/contexts/RoomContext";
 import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
-import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import dispatcher from "../../../../../../src/dispatcher/dispatcher";
@@ -369,7 +368,7 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
 
             await user.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
@@ -380,7 +379,7 @@ describe("RoomHeader", () => {
 
         it("you can't call if there's already a call", () => {
             mockRoomMembers(room, 2);
-            jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue(
+            jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
@@ -512,7 +511,7 @@ describe("RoomHeader", () => {
 
         it("disables calling if there's a jitsi call", () => {
             mockRoomMembers(room, 2);
-            jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue(
+            jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
@@ -536,7 +535,7 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
             await user.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
 
@@ -558,7 +557,7 @@ describe("RoomHeader", () => {
             const videoButton = screen.getByRole("button", { name: "Video call" });
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
             await user.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });

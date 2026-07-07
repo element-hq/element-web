@@ -6,18 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
+import { stubClient } from "test-utils";
 
-import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../../src/widgets/ManagedHybrid";
-import { stubClient } from "../../test-utils";
-import SdkConfig from "../../../src/SdkConfig";
-import WidgetUtils from "../../../src/utils/WidgetUtils";
-import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./ManagedHybrid";
+import SdkConfig from "../SdkConfig";
+import WidgetUtils from "../utils/WidgetUtils";
+import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 
-jest.mock("../../../src/utils/room/getJoinedNonFunctionalMembers", () => ({
-    getJoinedNonFunctionalMembers: jest.fn().mockReturnValue([1, 2]),
+vi.mock("../utils/room/getJoinedNonFunctionalMembers", () => ({
+    getJoinedNonFunctionalMembers: vi.fn().mockReturnValue([1, 2]),
 }));
 
 describe("isManagedHybridWidgetEnabled", () => {
@@ -57,8 +60,8 @@ describe("addManagedHybridWidget", () => {
     });
 
     it("should noop if user lacks permission", async () => {
-        const logSpy = jest.spyOn(logger, "error").mockImplementation();
-        jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(false);
+        const logSpy = vi.spyOn(logger, "error").mockImplementation(() => {});
+        vi.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(false);
 
         fetchMock.mockClear();
         await addManagedHybridWidget(room);
@@ -67,7 +70,7 @@ describe("addManagedHybridWidget", () => {
     });
 
     it("should noop if no widget_build_url", async () => {
-        jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
+        vi.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
 
         fetchMock.mockClear();
         await addManagedHybridWidget(room);
@@ -79,9 +82,9 @@ describe("addManagedHybridWidget", () => {
             widget_id: "WIDGET_ID",
             widget: { key: "value" },
         });
-        jest.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
-        jest.spyOn(WidgetLayoutStore.instance, "canCopyLayoutToRoom").mockReturnValue(true);
-        const setRoomWidgetContentSpy = jest.spyOn(WidgetUtils, "setRoomWidgetContent").mockResolvedValue();
+        vi.spyOn(WidgetUtils, "canUserModifyWidgets").mockReturnValue(true);
+        vi.spyOn(WidgetLayoutStore.instance, "canCopyLayoutToRoom").mockReturnValue(true);
+        const setRoomWidgetContentSpy = vi.spyOn(WidgetUtils, "setRoomWidgetContent").mockResolvedValue();
         SdkConfig.put({
             widget_build_url: "https://widget-build-url",
         });

@@ -97,7 +97,7 @@ export class SDKContextClass {
 
     public get legacyCallHandler(): LegacyCallHandler {
         if (!this._LegacyCallHandler) {
-            this._LegacyCallHandler = LegacyCallHandler.instance;
+            this._LegacyCallHandler = new LegacyCallHandler(this);
         }
         return this._LegacyCallHandler;
     }

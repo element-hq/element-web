@@ -24,7 +24,6 @@ import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-u
 import { Action } from "../../../../../src/dispatcher/actions";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
@@ -39,8 +38,7 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";
 import { ModuleApi } from "../../../../../src/modules/Api";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 jest.mock("../../../../../src/stores/OwnProfileStore", () => ({
     OwnProfileStore: {
@@ -57,7 +55,7 @@ const realGetValue = SettingsStore.getValue;
 
 describe("AppTile", () => {
     let cli: MatrixClient;
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
     let r1: Room;
     let r2: Room;
     const resizeNotifier = new ResizeNotifier();
@@ -119,18 +117,19 @@ describe("AppTile", () => {
     beforeEach(async () => {
         // Do not carry across settings from previous tests
         SettingsStore.reset();
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = cli;
         // @ts-ignore
         await WidgetMessagingStore.instance.onReady();
 
         // Wake up various stores we rely on
-        WidgetLayoutStore.instance.useUnitTestClient(cli);
+        sdkContext.widgetLayoutStore.useUnitTestClient(cli);
         // @ts-ignore
-        await WidgetLayoutStore.instance.onReady();
+        await sdkContext.widgetLayoutStore.onReady();
 
-        RightPanelStore.instance.useUnitTestClient(cli);
+        sdkContext.rightPanelStore.useUnitTestClient(cli);
         // @ts-ignore
-        await RightPanelStore.instance.onReady();
+        await sdkContext.rightPanelStore.onReady();
     });
 
     afterEach(async () => {
@@ -168,13 +167,7 @@ describe("AppTile", () => {
                 resizeNotifier={resizeNotifier}
                 permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
             />,
-            {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                    </SDKContext.Provider>
-                ),
-            },
+            clientAndSDKContextRenderOptions(cli, sdkContext),
         );
         act(() =>
             dis.dispatch({
@@ -241,13 +234,7 @@ describe("AppTile", () => {
                 resizeNotifier={resizeNotifier}
                 permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
             />,
-            {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                    </SDKContext.Provider>
-                ),
-            },
+            clientAndSDKContextRenderOptions(cli, sdkContext),
         );
         act(() =>
             dis.dispatch({
@@ -348,6 +335,47 @@ describe("AppTile", () => {
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
     });
 
+    it("should hangup Jitsi call when room is left", async () => {
+        const app: IApp = {
+            id: "3",
+            eventId: "jitsi1",
+            roomId: "r2",
+            type: MatrixWidgetType.JitsiMeet,
+            url: "https://jitsi.example.com",
+            name: "Jitsi Conference",
+            creatorUserId: cli.getSafeUserId(),
+            avatar_url: undefined,
+        };
+
+        const { queryByRole, getByText } = render(
+            <AppTile key={app.id} app={app} room={r2} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
+        await waitForElementToBeRemoved(() => queryByRole("progressbar"));
+
+        expect(getByText("Jitsi Conference")).toBeInTheDocument();
+
+        // Switch to room 1
+        dis.dispatch(
+            {
+                action: Action.ViewRoom,
+                room_id: "r1",
+            },
+            true,
+        );
+        jest.spyOn(ActiveWidgetStore.instance, "getWidgetPersistence").mockReturnValue(true);
+        jest.spyOn(sdkContext.legacyCallHandler, "hangupCallApp");
+        dis.dispatch(
+            {
+                action: Action.AfterLeaveRoom,
+                room_id: "r2",
+            },
+            true,
+        );
+
+        expect(sdkContext.legacyCallHandler.hangupCallApp).toHaveBeenCalledWith(app.roomId);
+    });
+
     describe("for a pinned widget", () => {
         let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
         beforeEach(async () => {
@@ -355,13 +383,10 @@ describe("AppTile", () => {
         });
 
         it("should render", async () => {
-            const renderResult = render(<AppTile key={app1.id} app={app1} room={r1} />, {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                    </SDKContext.Provider>
-                ),
-            });
+            const renderResult = render(
+                <AppTile key={app1.id} app={app1} room={r1} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             const { asFragment } = renderResult;
 
@@ -369,38 +394,45 @@ describe("AppTile", () => {
         });
 
         it("should not display the »Popout widget« button", async () => {
-            const renderResult = render(<AppTile key={app1.id} app={app1} room={r1} />, {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                    </SDKContext.Provider>
-                ),
-            });
+            const renderResult = render(
+                <AppTile key={app1.id} app={app1} room={r1} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             expect(renderResult.queryByLabelText("Popout widget")).not.toBeInTheDocument();
         });
 
         it("clicking 'minimise' should send the widget to the right", async () => {
-            const renderResult = render(<AppTile key={app1.id} app={app1} room={r1} />, {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                    </SDKContext.Provider>
-                ),
-            });
+            const renderResult = render(
+                <AppTile key={app1.id} app={app1} room={r1} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Minimise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "right");
         });
 
-        it("clicking 'maximise' should send the widget to the center", async () => {
-            const renderResult = render(<AppTile key={app1.id} app={app1} room={r1} />, {
-                wrapper: ({ children }) => (
-                    <SDKContext.Provider value={sdkContext}>
-                        <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                    </SDKContext.Provider>
-                ),
+        it("should close right panel timeline when minimising widget", async () => {
+            const renderResult = render(
+                <AppTile key={app1.id} app={app1} room={r1} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
+
+            jest.spyOn(sdkContext.rightPanelStore, "currentCardForRoom").mockReturnValue({
+                phase: RightPanelPhases.Timeline,
             });
+            jest.spyOn(sdkContext.rightPanelStore, "popCard");
+
+            await userEvent.click(renderResult.getByLabelText("Minimise"));
+            expect(sdkContext.rightPanelStore.popCard).toHaveBeenCalledWith(r1.roomId);
+        });
+
+        it("clicking 'maximise' should send the widget to the center", async () => {
+            const renderResult = render(
+                <AppTile key={app1.id} app={app1} room={r1} />,
+                clientAndSDKContextRenderOptions(cli, sdkContext),
+            );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Maximise"));
             expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "center");
@@ -416,13 +448,7 @@ describe("AppTile", () => {
             // userId and creatorUserId are different
             const { container, asFragment, queryByRole } = render(
                 <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />,
-                {
-                    wrapper: ({ children }) => (
-                        <SDKContext.Provider value={sdkContext}>
-                            <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                        </SDKContext.Provider>
-                    ),
-                },
+                clientAndSDKContextRenderOptions(cli, sdkContext),
             );
             expect(container.querySelector(".mx_Spinner")).toBeFalsy();
             expect(queryByRole("button", { name: "Continue" })).toBeInTheDocument();
@@ -439,13 +465,7 @@ describe("AppTile", () => {
             // userId and creatorUserId are different
             const renderResult = render(
                 <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />,
-                {
-                    wrapper: ({ children }) => (
-                        <SDKContext.Provider value={sdkContext}>
-                            <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                        </SDKContext.Provider>
-                    ),
-                },
+                clientAndSDKContextRenderOptions(cli, sdkContext),
             );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
 
@@ -466,13 +486,7 @@ describe("AppTile", () => {
             // userId and creatorUserId are different so legacy path would show "Continue"
             const renderResult = render(
                 <AppTile key={app1.id} app={app1} room={r1} userId="@user1" creatorUserId="@userAnother" />,
-                {
-                    wrapper: ({ children }) => (
-                        <SDKContext.Provider value={sdkContext}>
-                            <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                        </SDKContext.Provider>
-                    ),
-                },
+                clientAndSDKContextRenderOptions(cli, sdkContext),
             );
 
             // The new API runs async in componentDidMount, so wait for it to take effect
@@ -495,13 +509,10 @@ describe("AppTile", () => {
             });
 
             it("clicking 'un-maximise' should send the widget to the top", async () => {
-                const renderResult = render(<AppTile key={app1.id} app={app1} room={r1} />, {
-                    wrapper: ({ children }) => (
-                        <SDKContext.Provider value={sdkContext}>
-                            <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                        </SDKContext.Provider>
-                    ),
-                });
+                const renderResult = render(
+                    <AppTile key={app1.id} app={app1} room={r1} />,
+                    clientAndSDKContextRenderOptions(cli, sdkContext),
+                );
                 await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
                 await userEvent.click(renderResult.getByLabelText("Un-maximise"));
                 expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "top");
@@ -527,13 +538,10 @@ describe("AppTile", () => {
             });
 
             it("should display the »Popout widget« button", async () => {
-                const renderResult = render(<AppTile key={app1.id} app={app1} room={r1} />, {
-                    wrapper: ({ children }) => (
-                        <SDKContext.Provider value={sdkContext}>
-                            <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                        </SDKContext.Provider>
-                    ),
-                });
+                const renderResult = render(
+                    <AppTile key={app1.id} app={app1} room={r1} />,
+                    clientAndSDKContextRenderOptions(cli, sdkContext),
+                );
                 await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
                 expect(renderResult.getByLabelText("Popout widget")).toBeInTheDocument();
             });
@@ -544,13 +552,7 @@ describe("AppTile", () => {
         it("should render", async () => {
             const { asFragment, queryByRole } = render(
                 <AppTile key={app1.id} app={app1} room={r1} fullWidth={true} miniMode={true} showMenubar={false} />,
-                {
-                    wrapper: ({ children }) => (
-                        <SDKContext.Provider value={sdkContext}>
-                            <MatrixClientContext.Provider value={cli}>{children}</MatrixClientContext.Provider>
-                        </SDKContext.Provider>
-                    ),
-                },
+                clientAndSDKContextRenderOptions(cli, sdkContext),
             );
             await waitForElementToBeRemoved(() => queryByRole("progressbar"));
             expect(asFragment()).toMatchSnapshot();

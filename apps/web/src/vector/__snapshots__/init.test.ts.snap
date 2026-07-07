@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`showError should match snapshot 1`] = `
+exports[`showError > should match snapshot 1`] = `
 <div
   id="matrixchat"
 >
@@ -36,7 +36,7 @@ exports[`showError should match snapshot 1`] = `
 </div>
 `;
 
-exports[`showIncompatibleBrowser should match snapshot 1`] = `
+exports[`showIncompatibleBrowser > should match snapshot 1`] = `
 <div
   id="matrixchat"
 >

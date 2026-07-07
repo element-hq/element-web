@@ -6,17 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
 
-import { SettingLevel } from "../../src/settings/SettingLevel";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { stubClient } from "../test-utils";
-import MediaDeviceHandler from "../../src/MediaDeviceHandler";
-import SettingsStore from "../../src/settings/SettingsStore";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { stubClient } from "test-utils";
 
-jest.mock("../../src/settings/SettingsStore");
+import { SettingLevel } from "./settings/SettingLevel";
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import MediaDeviceHandler from "./MediaDeviceHandler";
+import SettingsStore from "./settings/SettingsStore";
 
-const SettingsStoreMock = mocked(SettingsStore);
+vi.mock("./settings/SettingsStore");
+
+const SettingsStoreMock = vi.mocked(SettingsStore);
 
 describe("MediaDeviceHandler", () => {
     beforeEach(() => {
@@ -24,7 +26,7 @@ describe("MediaDeviceHandler", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("sets audio settings", async () => {

@@ -18,6 +18,7 @@ import { type SpaceStoreClass } from "../../src/stores/spaces/SpaceStore";
 import { type WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
 import { type WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
 import type WidgetStore from "../../src/stores/WidgetStore";
+import type LegacyCallHandler from "../../src/LegacyCallHandler.tsx";
 
 /**
  * A class which provides the same API as SDKContextClass but adds additional unsafe setters which can
@@ -34,6 +35,7 @@ export class TestSDKContext extends SDKContextClass {
     declare public _PosthogAnalytics?: PosthogAnalytics;
     declare public _SlidingSyncManager?: SlidingSyncManager;
     declare public _SpaceStore?: SpaceStoreClass;
+    declare public _LegacyCallHandler?: LegacyCallHandler;
 
     constructor() {
         super();

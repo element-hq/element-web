@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import {
     M_LOCATION,
     EventStatus,
@@ -19,8 +21,9 @@ import {
     Room,
     Thread,
 } from "matrix-js-sdk/src/matrix";
+import { vi, describe, it, expect, beforeEach, afterAll } from "vitest";
 
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import {
     canCancel,
     canEditContent,
@@ -31,25 +34,30 @@ import {
     isContentActionable,
     isLocationEvent,
     isVoiceMessage,
-} from "../../../src/utils/EventUtils";
-import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "../../test-utils";
-import dis from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
+} from "./EventUtils";
+import {
+    getMockClientWithEventEmitter,
+    makeBeaconInfoEvent,
+    makePollStartEvent,
+    stubClient,
+} from "../../test/test-utils";
+import dis from "../dispatcher/dispatcher";
+import { Action } from "../dispatcher/actions";
 
-jest.mock("../../../src/dispatcher/dispatcher");
+vi.mock("../dispatcher/dispatcher");
 
 describe("EventUtils", () => {
     const userId = "@user:server";
     const roomId = "!room:server";
     const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(userId),
+        getUserId: vi.fn().mockReturnValue(userId),
     });
 
     beforeEach(() => {
         mockClient.getUserId.mockClear().mockReturnValue(userId);
     });
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockRestore();
+        vi.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
     // setup events
@@ -404,7 +412,7 @@ describe("EventUtils", () => {
         };
 
         beforeEach(() => {
-            jest.clearAllMocks();
+            vi.clearAllMocks();
 
             stubClient();
             client = MatrixClientPeg.safeGet();
@@ -413,9 +421,9 @@ describe("EventUtils", () => {
                 pendingEventOrdering: PendingEventOrdering.Detached,
             });
 
-            jest.spyOn(client, "supportsThreads").mockReturnValue(true);
-            jest.spyOn(client, "getRoom").mockReturnValue(room);
-            jest.spyOn(client, "fetchRoomEvent").mockImplementation(async (roomId, eventId) => {
+            vi.spyOn(client, "supportsThreads").mockReturnValue(true);
+            vi.spyOn(client, "getRoom").mockReturnValue(room);
+            vi.spyOn(client, "fetchRoomEvent").mockImplementation(async (roomId, eventId) => {
                 return events[eventId] ?? Promise.reject();
             });
         });

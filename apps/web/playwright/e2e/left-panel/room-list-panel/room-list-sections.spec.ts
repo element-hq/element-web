@@ -8,6 +8,7 @@
 import { rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
 
 test.describe("Room list sections", () => {
@@ -86,6 +87,45 @@ test.describe("Room list sections", () => {
             // It should be a flat list (using listbox a11y role)
             await expect(page.getByRole("listbox", { name: "Room list", exact: true })).toBeVisible();
             await expect(getRoomList(page).getByRole("option", { name: "Open room room0" })).toBeVisible();
+        });
+    });
+
+    test.describe("Show sections setting", () => {
+        test.beforeEach(async ({ app }) => {
+            // A favourite room and a regular room so that, when sections are enabled, we get
+            // two meaningful sections (Favourites + Chats).
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("toggling RoomList.showSections switches between a sectioned and a flat list", async ({ page, app }) => {
+            const roomList = getRoomList(page);
+
+            // Sections are enabled by default: section headers are visible and rooms render as treegrid rows.
+            await expect(getSectionHeader(page, "Favourites")).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
+
+            // Disable sections
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+
+            // The list becomes flat: no section headers, rooms render as listbox options.
+            await expect(getSectionHeader(page, "Favourites")).not.toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).not.toBeVisible();
+            await expect(page.getByRole("listbox", { name: "Room list", exact: true })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room favourite room" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room regular room" })).toBeVisible();
+
+            // Re-enable sections
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, true);
+
+            // The sections reappear.
+            await expect(getSectionHeader(page, "Favourites")).toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(roomList.getByRole("row", { name: "Open room favourite room" })).toBeVisible();
         });
     });
 

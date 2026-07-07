@@ -22,7 +22,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import { type SpaceStoreClass as SpaceStore } from "../../stores/spaces/SpaceStore";
+import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
@@ -41,6 +41,7 @@ import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel
 import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import SettingsStore from "../../settings/SettingsStore";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 /**
@@ -58,7 +59,7 @@ interface StickyRoomPosition {
 interface RoomListViewModelProps {
     client: MatrixClient;
     roomViewStore: RoomViewStore;
-    spaceStore: SpaceStore;
+    spaceStore: SpaceStoreClass;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
@@ -801,6 +802,10 @@ export class RoomListViewModel
     };
 
     public onRoomTagged = (): void => {
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+        // Only show the "chat moved" toast if sections are enabled
+        if (!areSectionsEnabled) return;
+
         this.showToast("chat_moved");
     };
 
