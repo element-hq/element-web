@@ -335,7 +335,7 @@ export enum Action {
      * access token from local storage). Note that this does not necessarily mean that a login action has happened,
      * just that authentication creds have been set up.
      *
-     * No additional payload information required.
+     * Use with a OnLoggedInPayload.
      */
     OnLoggedIn = "on_logged_in",
 

@@ -1,0 +1,20 @@
+{
+    "name": "shared-types",
+    "type": "module",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Shared types for Element Web & Desktop",
+    "author": "element-hq",
+    "license": "SEE LICENSE IN README.md",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "lint:types": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "typescript": "catalog:"
+    }
+}

@@ -11,7 +11,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { EditInPlace, Alert, ErrorMessage } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
-import { Flex, useToastContext } from "@element-hq/web-shared-components";
+import {
+    Flex,
+    SetStatusView,
+    useCreateAutoDisposedViewModel,
+    useToastContext,
+} from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
@@ -27,6 +32,8 @@ import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { SettingsSection } from "./shared/SettingsSection.tsx";
+import { SetStatusViewModel } from "../../../viewmodels/status/SetStatusViewModel.ts";
+import SettingsStore from "../../../settings/SettingsStore.ts";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -131,6 +138,11 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
         })();
     }, [client]);
 
+    const userStatusEnabled = SettingsStore.getValue("feature_user_status");
+    const setStatusVM = useCreateAutoDisposedViewModel(
+        () => new SetStatusViewModel({ client, ownProfileStore: OwnProfileStore.instance }),
+    );
+
     const onAvatarRemove = useCallback(async () => {
         const removeToast = toastRack.displayToast(
             <SpinnerToast>{_t("settings|general|avatar_remove_progress")}</SpinnerToast>,
@@ -212,21 +224,27 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                         placeholderId={client.getUserId() ?? ""}
                         disabled={!canSetAvatar}
                     />
-                    <EditInPlace
-                        className="mx_UserProfileSettings_profile_displayName"
-                        label={_t("settings|general|display_name")}
-                        value={displayName}
-                        saveButtonLabel={_t("common|save")}
-                        cancelButtonLabel={_t("common|cancel")}
-                        savedLabel={_t("common|saved")}
-                        savingLabel={_t("common|updating")}
-                        onChange={onDisplayNameChanged}
-                        onCancel={onDisplayNameCancel}
-                        onSave={onDisplayNameSave}
-                        disabled={!canSetDisplayName}
-                    >
-                        {displayNameError && <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>}
-                    </EditInPlace>
+
+                    <Flex direction="column" className="mx_UserProfileSettings_profile_nameAndStatus">
+                        <EditInPlace
+                            className="mx_UserProfileSettings_profile_displayName"
+                            label={_t("settings|general|display_name")}
+                            value={displayName}
+                            saveButtonLabel={_t("common|save")}
+                            cancelButtonLabel={_t("common|cancel")}
+                            savedLabel={_t("common|saved")}
+                            savingLabel={_t("common|updating")}
+                            onChange={onDisplayNameChanged}
+                            onCancel={onDisplayNameCancel}
+                            onSave={onDisplayNameSave}
+                            disabled={!canSetDisplayName}
+                        >
+                            {displayNameError && (
+                                <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>
+                            )}
+                        </EditInPlace>
+                        {userStatusEnabled && <SetStatusView vm={setStatusVM} />}
+                    </Flex>
                 </div>
                 {avatarError && (
                     <Alert title={_t("settings|general|avatar_upload_error_title")} type="critical">

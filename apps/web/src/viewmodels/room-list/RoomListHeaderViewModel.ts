@@ -70,6 +70,13 @@ export class RoomListHeaderViewModel
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(settingsFeatureVideoRef));
 
+        const settingsShowSectionsRef = SettingsStore.watchSetting(
+            "RoomList.showSections",
+            null,
+            this.onShowSectionsChange,
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(settingsShowSectionsRef));
+
         // Listen for space changes
         this.disposables.trackListener(props.spaceStore, UPDATE_SELECTED_SPACE, this.onSpaceChange);
         this.disposables.trackListener(props.spaceStore, UPDATE_HOME_BEHAVIOUR, this.onHomeBehaviourChange);
@@ -130,6 +137,15 @@ export class RoomListHeaderViewModel
     private readonly onVideoRoomsFeatureFlagChange = (): void => {
         this.snapshot.merge({
             canCreateVideoRoom: getCanCreateVideoRoom(this.snapshot.current.canCreateRoom),
+        });
+    };
+
+    /**
+     * Handles show sections setting change events.
+     */
+    private readonly onShowSectionsChange = (): void => {
+        this.snapshot.merge({
+            areSectionsEnabled: SettingsStore.getValue("RoomList.showSections"),
         });
     };
 
@@ -310,6 +326,7 @@ function computeHeaderSpaceState(
 ): Omit<RoomListHeaderViewSnapshot, "activeSortOption" | "isMessagePreviewEnabled"> {
     const displaySectionReleaseAnnouncement =
         ReleaseAnnouncementStore.instance.getReleaseAnnouncement() === "room_list_section";
+    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
     const activeSpace = spaceStore.activeSpaceRoom;
     const title = getHeaderTitle(spaceStore);
@@ -330,5 +347,6 @@ function computeHeaderSpaceState(
         canInviteInSpace,
         canAccessSpaceSettings,
         displaySectionReleaseAnnouncement,
+        areSectionsEnabled,
     };
 }

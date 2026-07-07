@@ -32,11 +32,11 @@ import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icon
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../utils/createMatrixClient";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
-import Notifier from "../../Notifier";
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from "../../RoomInvite";
 import * as Rooms from "../../Rooms";
@@ -75,8 +75,6 @@ import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import RoomListStore from "../../stores/room-list/RoomListStore";
-import { RoomUpdateCause } from "../../stores/room-list/models";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
@@ -190,8 +188,6 @@ interface IState {
     currentRoomId: string | null;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId: string | null;
-    // this is persisted as mx_lhs_size, loaded in LoggedInView
-    collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
     // eslint-disable-next-line camelcase
     register_client_secret?: string;
@@ -252,7 +248,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         this.state = {
             view: Views.LOADING,
-            collapseLhs: false,
             currentRoomId: null,
             currentUserId: null,
 
@@ -872,24 +867,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case "hide_left_panel":
-                this.setState(
-                    {
-                        collapseLhs: true,
-                    },
-                    () => {
-                        this.stores.resizeNotifier.notifyLeftHandleResized();
-                    },
-                );
-                break;
             case "show_left_panel":
-                this.setState(
-                    {
-                        collapseLhs: false,
-                    },
-                    () => {
-                        this.stores.resizeNotifier.notifyLeftHandleResized();
-                    },
-                );
+                this.stores.resizeNotifier.notifyLeftHandleResized();
                 break;
             case Action.OpenDialPad:
                 Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
@@ -1363,9 +1342,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
 
                 if (room) {
-                    // Legacy room list store needs to be told to manually remove this room
-                    RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
-                    // New room list store will remove the room on the following dispatch
+                    // The room list store will remove the room on the following dispatch
                     dis.dispatch<AfterForgetRoomPayload>({ action: Action.AfterForgetRoom, room });
                 }
             })
@@ -1542,7 +1519,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
      */
     private onLoggedIn(): void {
-        this.stores.client = MatrixClientPeg.safeGet();
         StorageManager.tryPersistStorage();
 
         // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the
@@ -1575,7 +1551,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private onLoggedOut(): void {
         this.viewWelcome({
             ready: false,
-            collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = "";
@@ -1591,7 +1566,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView({
             view: Views.SOFT_LOGOUT,
             ready: false,
-            collapseLhs: false,
             currentRoomId: null,
         });
         this.subTitleStatus = "";
@@ -1662,8 +1636,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
-                showNotificationsToast(false);
+            if (this.stores.notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
+                showNotificationsToast(this.stores.notifier, false);
             }
 
             dis.fire(Action.FocusSendMessageComposer);

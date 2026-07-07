@@ -12,7 +12,7 @@ import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
 import LegacyCallViewForRoom from "../../../../../src/components/views/voip/LegacyCallViewForRoom";
-import { mkStubRoom, stubClient } from "../../../../test-utils";
+import { clientAndSDKContextRenderOptions, mkStubRoom, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
@@ -26,8 +26,8 @@ describe("LegacyCallViewForRoom", () => {
     let sdkContext: TestSDKContext;
 
     beforeEach(() => {
-        stubClient();
         sdkContext = new TestSDKContext();
+        sdkContext._client = stubClient();
         LegacyCallViewMock.mockClear();
     });
 
@@ -49,7 +49,10 @@ describe("LegacyCallViewForRoom", () => {
         const cli = MatrixClientPeg.safeGet();
         cli.emit(CallEventHandlerEvent.Incoming, call);
 
-        const { rerender } = render(<LegacyCallViewForRoom roomId={call.roomId} />);
+        const { rerender } = render(
+            <LegacyCallViewForRoom roomId={call.roomId} />,
+            clientAndSDKContextRenderOptions(cli, sdkContext),
+        );
 
         let props = LegacyCallViewMock.mock.lastCall![0];
         expect(props.sidebarShown).toBeTruthy(); // Sidebar defaults to shown
