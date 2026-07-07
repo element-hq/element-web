@@ -202,7 +202,7 @@ export class Client {
     /**
      * Create a room with given options.
      * @param options the options to apply when creating the room
-     * @return the ID of the newly created room
+     * @returns the ID of the newly created room
      */
     public async createRoom(options: ICreateRoomOpts): Promise<string> {
         const client = await this.prepareClient();
@@ -217,7 +217,7 @@ export class Client {
     /**
      * Create a space with given options.
      * @param options the options to apply when creating the space
-     * @return the ID of the newly created space (room)
+     * @returns the ID of the newly created space (room)
      */
     public async createSpace(options: ICreateRoomOpts): Promise<string> {
         return this.createRoom({
@@ -412,8 +412,8 @@ export class Client {
     /**
      * @param {string} name
      * @param {module:client.callback} callback Optional.
-     * @return {Promise} Resolves: {} an empty object.
-     * @return {module:http-api.MatrixError} Rejects: with an error response.
+     * @returns {Promise} Resolves: {} an empty object.
+     * @returns {module:http-api.MatrixError} Rejects: with an error response.
      */
     public async setDisplayName(name: string): Promise<EmptyObject> {
         const client = await this.prepareClient();
@@ -423,8 +423,8 @@ export class Client {
     /**
      * @param {string} url
      * @param {module:client.callback} callback Optional.
-     * @return {Promise} Resolves: {} an empty object.
-     * @return {module:http-api.MatrixError} Rejects: with an error response.
+     * @returns {Promise} Resolves: {} an empty object.
+     * @returns {module:http-api.MatrixError} Rejects: with an error response.
      */
     public async setAvatarUrl(url: string): Promise<EmptyObject> {
         const client = await this.prepareClient();

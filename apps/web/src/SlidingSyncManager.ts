@@ -391,7 +391,7 @@ export class SlidingSyncManager {
     /**
      * Check if the server "natively" supports sliding sync (with an unstable endpoint).
      * @param client The MatrixClient to use
-     * @return Whether the "native" (unstable) endpoint is supported
+     * @returns Whether the "native" (unstable) endpoint is supported
      */
     public async nativeSlidingSyncSupport(client: MatrixClient): Promise<boolean> {
         // Per https://github.com/matrix-org/matrix-spec-proposals/pull/3575/files#r1589542561

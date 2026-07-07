@@ -896,7 +896,7 @@ interface ICmd {
  * Process the given text for /commands and returns a parsed command that can be used for running the operation.
  * @param {string} roomId The room ID where the command was issued.
  * @param {string} input The raw text input by the user.
- * @return {ICmd} The parsed command object.
+ * @returns {ICmd} The parsed command object.
  * Returns an empty object if the input didn't match a command.
  */
 export function getCommand(roomId: string, input: string): ICmd {

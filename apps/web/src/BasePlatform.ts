@@ -279,7 +279,7 @@ export default abstract class BasePlatform {
     /**
      * Get our platform specific EventIndexManager.
      *
-     * @return {BaseEventIndexManager} The EventIndex manager for our platform,
+     * @returns {BaseEventIndexManager} The EventIndex manager for our platform,
      * can be null if the platform doesn't support event indexing.
      */
     public getEventIndexingManager(): BaseEventIndexManager | null {
