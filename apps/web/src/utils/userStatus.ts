@@ -67,3 +67,13 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
 export function clearUserStatus(client: MatrixClient): Promise<void> {
     return client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
 }
+
+export function setUserOnCall(client: MatrixClient): Promise<void> {
+    return client.setExtendedProfileProperty("org.matrix.msc4426.call", {
+        call_joined_ts: Date.now(),
+    });
+}
+
+export function clearUserOnCall(client: MatrixClient): Promise<void> {
+    return client.setExtendedProfileProperty("org.matrix.msc4426.call", null);
+}

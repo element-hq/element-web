@@ -17,6 +17,7 @@ import WidgetStore from "./WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import { clearUserOnCall, setUserOnCall } from "../utils/userStatus";
 
 export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
@@ -132,8 +133,20 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return this._connectedCalls;
     }
     private set connectedCalls(value: Set<Call>) {
+        const wasInCall = this._connectedCalls.size > 0;
         this._connectedCalls = value;
+        const nowInCall = value.size > 0;
         this.emit(CallStoreEvent.ConnectedCalls, value);
+
+        // While the user is participating in a call, advertise an `m.call` profile field (MSC4426)
+        // so their "on a call" status is visible to others, clearing it once they leave all calls.
+        // Only act on the empty<->non-empty edge so concurrent calls don't re-write the field.
+        if (wasInCall !== nowInCall && SettingsStore.getValue("feature_user_status") && this.matrixClient) {
+            const client = this.matrixClient;
+            void (nowInCall ? setUserOnCall(client) : clearUserOnCall(client)).catch((err) =>
+                logger.warn("Failed to update m.call profile field", err),
+            );
+        }
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
         SettingsStore.setValue(

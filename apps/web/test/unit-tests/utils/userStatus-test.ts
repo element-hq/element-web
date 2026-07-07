@@ -8,9 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import {
+    clearUserOnCall,
     clearUserStatus,
     isUserOnCall,
     resolveUserStatus,
+    setUserOnCall,
     setUserStatus,
     userStatusTextWithinMaxLength,
 } from "../../../src/utils/userStatus";
@@ -93,6 +95,36 @@ describe("userStatus utils", () => {
             clearUserStatus(client);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+        });
+    });
+
+    describe("setUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("sets the m.call profile field with a join timestamp", async () => {
+            setUserOnCall(client);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", {
+                call_joined_ts: expect.any(Number),
+            });
+        });
+    });
+
+    describe("clearUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("clears the m.call profile field", async () => {
+            clearUserOnCall(client);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
     });
 });
