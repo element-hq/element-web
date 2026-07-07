@@ -13,7 +13,7 @@ import { type UserStatus } from "@element-hq/web-shared-components";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { validateUserStatus } from "../utils/userStatus";
+import { resolveUserStatus } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
 
@@ -28,6 +28,7 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
     const [rawUserStatus, setRawUserStatus] = useState<unknown>();
+    const [rawCallStatus, setRawCallStatus] = useState<unknown>();
 
     useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, (syncedUserId, syncProfile) => {
         if (syncedUserId !== userId) {
@@ -35,6 +36,7 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
         }
 
         setRawUserStatus(syncProfile["org.matrix.msc4426.status"]);
+        setRawCallStatus(syncProfile["org.matrix.msc4426.call"]);
     });
     useEffect(() => {
         (async () => {
@@ -43,10 +45,12 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
             }
             if (!userId) {
                 setRawUserStatus(undefined);
+                setRawCallStatus(undefined);
                 return;
             }
             if ((await matrixClient.doesServerSupportExtendedProfiles()) === false) {
                 setRawUserStatus(undefined);
+                setRawCallStatus(undefined);
                 return;
             }
             try {
@@ -59,11 +63,21 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
                     logger.warn(`Failed to get userStatus for ${userId}`, ex);
                 }
             }
+            try {
+                const result = await matrixClient.getExtendedProfileProperty(userId, "org.matrix.msc4426.call");
+                setRawCallStatus(result);
+            } catch (ex) {
+                if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
+                    setRawCallStatus(undefined);
+                } else {
+                    logger.warn(`Failed to get call status for ${userId}`, ex);
+                }
+            }
         })();
     }, [isEnabled, userId, matrixClient]);
     if (!isEnabled) {
         return;
     }
 
-    return validateUserStatus(rawUserStatus);
+    return resolveUserStatus(rawUserStatus, rawCallStatus);
 }

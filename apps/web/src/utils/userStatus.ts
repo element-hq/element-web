@@ -8,6 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import { type UserStatus } from "@element-hq/web-shared-components";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
+import { _t } from "../languageHandler";
+
 // MSC4426 defines the maximum length of a status to be 256 bytes of UTF-8,
 // so we truncate anything longer than that.
 const MAX_STATUS_TEXT_BYTES = 256;
@@ -33,6 +35,26 @@ export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefin
             ? rawUserStatus.text
             : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
     };
+}
+
+export function isUserOnCall(rawCallStatus: unknown): boolean {
+    return typeof rawCallStatus === "object" && rawCallStatus !== null;
+}
+
+/**
+ * Resolves the effective user status to display, given the raw `m.status` and `m.call` profile
+ * field values. `m.status` always takes precedence; `m.call` is only shown as a fallback ("On a
+ * call") when there is no valid `m.status` set.
+ */
+export function resolveUserStatus(rawUserStatus: unknown, rawCallStatus: unknown): UserStatus | undefined {
+    const userStatus = validateUserStatus(rawUserStatus);
+    if (userStatus) {
+        return userStatus;
+    }
+    if (isUserOnCall(rawCallStatus)) {
+        return { emoji: "🎧", text: _t("user_status|on_a_call") };
+    }
+    return undefined;
 }
 
 export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Promise<void> {
