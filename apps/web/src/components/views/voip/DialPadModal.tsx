@@ -13,7 +13,7 @@ import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton
 import Field from "../elements/Field";
 import DialPad from "./DialPad";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import LegacyCallHandler from "../../../LegacyCallHandler";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     onFinished: (dialled: boolean) => void;
@@ -70,7 +70,7 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
     };
 
     public onDialPress = async (): Promise<void> => {
-        LegacyCallHandler.instance.dialNumber(this.state.value);
+        SDKContextClass.instance.legacyCallHandler.dialNumber(this.state.value);
         this.props.onFinished(true);
     };
 

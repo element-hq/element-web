@@ -26,7 +26,6 @@ import { type ActionPayload } from "../dispatcher/payloads";
 import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
 import { type Call } from "../models/Call";
-import LegacyCallHandler from "../LegacyCallHandler";
 
 vi.mock("../Modal.tsx");
 
@@ -84,7 +83,9 @@ describe("leaveRoomBehaviour", () => {
     };
 
     it("hangs up legacy calls when leaving a room", async () => {
-        const hangupSpy = vi.spyOn(LegacyCallHandler.instance, "hangupOrReject").mockImplementation(() => {});
+        const hangupSpy = vi
+            .spyOn(SDKContextClass.instance.legacyCallHandler, "hangupOrReject")
+            .mockImplementation(() => {});
 
         viewRoom(room);
         await leaveRoomBehaviour(client, room.roomId);

@@ -16,6 +16,7 @@ import React, {
     useRef,
     useState,
     useId,
+    useContext,
 } from "react";
 import {
     type Room,
@@ -39,7 +40,6 @@ import { AvatarWithDetails } from "@element-hq/web-shared-components";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
@@ -49,11 +49,12 @@ import AccessibleButton, { type ButtonEvent } from "../components/views/elements
 import { useDispatcher } from "../hooks/useDispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
 import { type Call, CallEvent } from "../models/Call";
-import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
+import { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import DMRoomMap from "../utils/DMRoomMap";
 import MemberAvatar from "../components/views/avatars/MemberAvatar";
+import { SDKContext } from "../contexts/SDKContext.ts";
 
 /**
  * Get the key for the incoming call toast. A combination of the call ID and room ID.
@@ -158,10 +159,11 @@ interface Props {
 }
 
 export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.Element {
+    const sdkContext = useContext(SDKContext);
     const roomId = notificationEvent.getRoomId()!;
     // Use a partial type so ts still helps us to not miss any type checks.
     const notificationContent = notificationEvent.getContent() as Partial<IRTCNotificationContent>;
-    const room = MatrixClientPeg.safeGet().getRoom(roomId) ?? undefined;
+    const room = sdkContext.client?.getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
     const [connectedCalls, setConnectedCalls] = useState<Call[]>(Array.from(CallStore.instance.connectedCalls));
     useEventEmitter(CallStore.instance, CallStoreEvent.ConnectedCalls, () => {
@@ -174,18 +176,18 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
         // This is because `LegacyCallHandler.play` tries to load the sound and then play it asynchonously
         // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing.
         const isRingToast = notificationContent.notification_type === "ring";
-        if (isRingToast && !soundHasStarted.current && !LegacyCallHandler.instance.isPlaying(AudioID.Ring)) {
+        if (isRingToast && !soundHasStarted.current && !sdkContext.legacyCallHandler.isPlaying(AudioID.Ring)) {
             // Start ringing if not already.
             soundHasStarted.current = true;
-            void LegacyCallHandler.instance.play(AudioID.Ring);
+            void sdkContext.legacyCallHandler.play(AudioID.Ring);
         }
-    }, [notificationContent.notification_type, soundHasStarted]);
+    }, [notificationContent.notification_type, soundHasStarted, sdkContext.legacyCallHandler]);
 
     // Stop ringing on dismiss.
     const dismissToast = useCallback((): void => {
         ToastStore.sharedInstance().dismissToast(toastKey);
-        LegacyCallHandler.instance.pause(AudioID.Ring);
-    }, [toastKey]);
+        sdkContext.legacyCallHandler.pause(AudioID.Ring);
+    }, [toastKey, sdkContext.legacyCallHandler]);
 
     // Dismiss if the notification event or call event is redacted
     useTypedEventEmitter(room, MatrixEventEvent.BeforeRedaction, (ev: MatrixEvent) => {

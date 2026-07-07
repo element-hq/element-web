@@ -46,7 +46,6 @@ import {
 } from "../../../test-utils";
 import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
 import { OidcClientError } from "../../../../src/utils/oidc/error";
-import LegacyCallHandler from "../../../../src/LegacyCallHandler";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { type Call } from "../../../../src/models/Call";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics";
@@ -1109,7 +1108,7 @@ describe("<MatrixChat />", () => {
 
                 beforeEach(() => {
                     // stub out various cleanup functions
-                    jest.spyOn(LegacyCallHandler.instance, "hangupAllCalls")
+                    jest.spyOn(SDKContextClass.instance.legacyCallHandler, "hangupAllCalls")
                         .mockClear()
                         .mockImplementation(() => {});
                     jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
@@ -1134,7 +1133,7 @@ describe("<MatrixChat />", () => {
                 it("should hangup all legacy calls", async () => {
                     await getComponentAndWaitForReady();
                     await dispatchLogoutAndWait();
-                    expect(LegacyCallHandler.instance.hangupAllCalls).toHaveBeenCalled();
+                    expect(SDKContextClass.instance.legacyCallHandler.hangupAllCalls).toHaveBeenCalled();
                 });
 
                 it("should disconnect all calls", async () => {
