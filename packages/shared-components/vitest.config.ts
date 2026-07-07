@@ -10,7 +10,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
-import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
+import { playwright, type PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 import rootConfig from "../../vitest.config";

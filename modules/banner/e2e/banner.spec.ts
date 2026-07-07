@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { input } from "zod/mini";
+import { type input } from "zod/mini";
 
 import { test as base, expect } from "../../playwright/element-web-test.ts";
 import { type ConfigSchema } from "../src/config.ts";
