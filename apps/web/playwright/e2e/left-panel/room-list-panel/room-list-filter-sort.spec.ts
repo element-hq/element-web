@@ -12,7 +12,6 @@ import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-p
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getFilterCollapseButton, getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
-import { type ElementAppPage } from "../../../pages/ElementAppPage";
 
 test.describe("Room list filters and sort", () => {
     test.use({
