@@ -112,7 +112,7 @@ describe("PipContainer", () => {
         sdkContext = new TestSDKContext();
         // @ts-ignore PipContainer uses SDKContext in the constructor
         SDKContextClass.instance = sdkContext;
-        sdkContext.client = client;
+        sdkContext._client = client;
     });
 
     afterEach(async () => {

@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { useDebouncedCallback } from "../../../src/hooks/spotlight/useDebouncedCallback";
+import { vi, describe, it, expect, beforeAll, afterAll } from "vitest";
+import { renderHook } from "test-utils-rtl";
+
+import { useDebouncedCallback } from "./useDebouncedCallback";
 
 describe("useDebouncedCallback", () => {
-    beforeAll(() => jest.useFakeTimers());
-    afterAll(() => jest.useRealTimers());
+    beforeAll(() => vi.useFakeTimers());
+    afterAll(() => vi.useRealTimers());
 
     function render(enabled: boolean, callback: (...params: any[]) => void, params: any[]) {
         return renderHook(({ enabled, callback, params }) => useDebouncedCallback(enabled, callback, params), {
@@ -27,15 +30,15 @@ describe("useDebouncedCallback", () => {
     it("should be able to handle empty parameters", async () => {
         // When
         const params: any[] = [];
-        const callback = jest.fn();
+        const callback = vi.fn();
         render(true, callback, params);
-        jest.advanceTimersByTime(1);
+        vi.advanceTimersByTime(1);
 
         // Then
         expect(callback).toHaveBeenCalledTimes(0);
 
         // When
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         expect(callback).toHaveBeenCalledTimes(1);
@@ -44,9 +47,9 @@ describe("useDebouncedCallback", () => {
     it("should call the callback with the parameters", async () => {
         // When
         const params = ["USER NAME"];
-        const callback = jest.fn();
+        const callback = vi.fn();
         render(true, callback, params);
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         expect(callback).toHaveBeenCalledTimes(1);
@@ -56,12 +59,12 @@ describe("useDebouncedCallback", () => {
     it("should call the callback with the parameters when parameters change during the timeout", async () => {
         // When
         const params = ["USER NAME"];
-        const callback = jest.fn();
+        const callback = vi.fn();
         const { rerender } = render(true, callback, []);
 
-        jest.advanceTimersByTime(1);
+        vi.advanceTimersByTime(1);
         rerender({ enabled: true, callback, params });
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         expect(callback).toHaveBeenCalledTimes(1);
@@ -71,12 +74,12 @@ describe("useDebouncedCallback", () => {
     it("should handle multiple parameters", async () => {
         // When
         const params = [4, 8, 15, 16, 23, 42];
-        const callback = jest.fn();
+        const callback = vi.fn();
         const { rerender } = render(true, callback, []);
 
-        jest.advanceTimersByTime(1);
+        vi.advanceTimersByTime(1);
         rerender({ enabled: true, callback, params });
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         expect(callback).toHaveBeenCalledTimes(1);
@@ -100,17 +103,17 @@ describe("useDebouncedCallback", () => {
             "USER NAM",
             "USER NAME",
         ];
-        const callback = jest.fn();
+        const callback = vi.fn();
 
         const { rerender } = render(true, callback, []);
-        jest.advanceTimersByTime(1);
+        vi.advanceTimersByTime(1);
 
         for (const query of queries) {
             rerender({ enabled: true, callback, params: [query] });
-            jest.advanceTimersByTime(50);
+            vi.advanceTimersByTime(50);
         }
 
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         const query = queries[queries.length - 1];
@@ -135,16 +138,16 @@ describe("useDebouncedCallback", () => {
             "USER NAM",
             "USER NAME",
         ];
-        const callback = jest.fn();
+        const callback = vi.fn();
 
         const { rerender } = render(true, callback, []);
-        jest.advanceTimersByTime(1);
+        vi.advanceTimersByTime(1);
         for (const query of queries) {
             rerender({ enabled: true, callback, params: [query] });
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
         }
 
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         const query = queries[queries.length - 1];
@@ -169,16 +172,16 @@ describe("useDebouncedCallback", () => {
             "USER NAM",
             "USER NAME",
         ];
-        const callback = jest.fn();
+        const callback = vi.fn();
 
         const { rerender } = render(false, callback, []);
-        jest.advanceTimersByTime(1);
+        vi.advanceTimersByTime(1);
         for (const query of queries) {
             rerender({ enabled: false, callback, params: [query] });
-            jest.advanceTimersByTime(200);
+            vi.advanceTimersByTime(200);
         }
 
-        jest.advanceTimersByTime(500);
+        vi.advanceTimersByTime(500);
 
         // Then
         expect(callback).toHaveBeenCalledTimes(0);

@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EditorModel from "../../../src/editor/model";
-import { createPartCreator, createRenderer } from "./mock";
+import { describe, it, expect } from "vitest";
+
+import EditorModel from "./model";
+import { createPartCreator, createRenderer } from "./__mocks__";
 import {
     formatRange,
     formatRangeAsCode,
     formatRangeAsLink,
     selectRangeOfWordAtCaret,
     toggleInlineFormat,
-} from "../../../src/editor/operations";
-import { Formatting } from "../../../src/components/views/rooms/MessageComposerFormatBar";
-import { longestBacktickSequence } from "../../../src/editor/deserialize";
-import type DocumentPosition from "../../../src/editor/position";
+} from "./operations";
+import { Formatting } from "../components/views/rooms/MessageComposerFormatBar";
+import { longestBacktickSequence } from "./deserialize";
+import type DocumentPosition from "./position";
 
 const SERIALIZED_NEWLINE = { text: "\n", type: "newline" };
 

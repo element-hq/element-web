@@ -6,14 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
 
-import EditorModel from "../../../src/editor/model";
-import { htmlSerializeFromMdIfNeeded, htmlSerializeIfNeeded } from "../../../src/editor/serialize";
-import { createPartCreator } from "./mock";
-import { type IConfigOptions } from "../../../src/IConfigOptions";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import SdkConfig from "../../../src/SdkConfig";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+
+import EditorModel from "./model";
+import { htmlSerializeFromMdIfNeeded, htmlSerializeIfNeeded } from "./serialize";
+import { createPartCreator } from "./__mocks__";
+import { type IConfigOptions } from "../IConfigOptions";
+import SettingsStore from "../settings/SettingsStore";
+import SdkConfig from "../SdkConfig";
 
 describe("editor/serialize", function () {
     describe("with markdown", function () {
@@ -109,7 +111,7 @@ describe("editor/serialize", function () {
         describe("with permalink_prefix set", function () {
             const sdkConfigGet = SdkConfig.get;
             beforeEach(() => {
-                jest.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
+                vi.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
                     if (key === "permalink_prefix") {
                         return "https://element.fs.tld";
                     } else return sdkConfigGet(key, altCaseName);
@@ -129,7 +131,7 @@ describe("editor/serialize", function () {
                 expect(html).toBe('<a href="https://matrix.to/#/#room:hs.tld">#room:hs.tld</a>');
             });
             afterEach(() => {
-                mocked(SdkConfig.get).mockRestore();
+                vi.mocked(SdkConfig.get).mockRestore();
             });
         });
     });
@@ -171,7 +173,7 @@ describe("editor/serialize", function () {
 
     describe("feature_latex_maths", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_latex_maths");
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_latex_maths");
         });
 
         it("should support inline katex", () => {

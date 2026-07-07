@@ -24,7 +24,7 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";
@@ -44,7 +44,7 @@ describe("<RoomSettingsDialog />", () => {
     const room2 = new Room("!room2:server.org", mockClient, userId);
     room2.name = "Another Room";
 
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
 
     jest.spyOn(SettingsStore, "getValue");
 
@@ -57,8 +57,8 @@ describe("<RoomSettingsDialog />", () => {
             return null;
         });
 
-        sdkContext = new SDKContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
 
         jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);
 

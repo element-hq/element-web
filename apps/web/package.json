@@ -233,7 +233,7 @@
         "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^5.0.0",
         "webpack-cli": "^7.0.0",
-        "webpack-dev-server": "^5.0.0",
+        "webpack-dev-server": "^6.0.0",
         "webpack-retry-chunk-load-plugin": "^3.1.1",
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
