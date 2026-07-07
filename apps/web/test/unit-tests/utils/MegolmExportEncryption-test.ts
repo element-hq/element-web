@@ -130,6 +130,7 @@ cissyYBxjsfsAn
                 const [plain, password, input] = TEST_VECTORS[i];
                 return MegolmExportEncryption.decryptMegolmKeyFile(stringToArray(input), password).then((decrypted) => {
                     expect(decrypted).toEqual(plain);
+                    // oxlint-disable-next-line promise/no-callback-in-promise
                     return next(i + 1);
                 });
             }

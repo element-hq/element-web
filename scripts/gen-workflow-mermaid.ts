@@ -192,19 +192,19 @@ interface WorkflowYaml {
         workflow_run?: {
             workflows: string[];
         }; // Magic
-        workflow_call?: {}; // Reusable
-        workflow_dispatch?: {}; // Manual
-        pull_request?: {};
-        merge_group?: {};
+        workflow_call?: unknown; // Reusable
+        workflow_dispatch?: unknown; // Manual
+        pull_request?: unknown;
+        merge_group?: unknown;
         push?: {
             tags?: string[];
             branches?: string[];
         };
         schedule?: { cron: string }[];
-        release?: {};
+        release?: unknown;
         //
-        label?: {};
-        issues?: {};
+        label?: unknown;
+        issues?: unknown;
     };
     jobs: {
         [job: string]: {

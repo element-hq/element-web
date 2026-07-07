@@ -165,7 +165,7 @@ function BundlePicker() {
                 setBundle(name);
             }
         }, console.log.bind(console));
-    }, [baseUrl]);
+    }, [baseUrl, bundle]);
 
     /* ------------------------- */
     /* Follow user state changes */
