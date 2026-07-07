@@ -71,7 +71,7 @@ const sendImage = async (
 ): Promise<ISendEventResponse> => {
     const upload = await client.uploadContent(pngBytes, { name: "image.png", type: "image/png" });
     return client.sendEvent(roomId, null, "m.room.message" as EventType, {
-        ...(additionalContent ?? {}),
+        ...additionalContent,
 
         msgtype: "m.image" as MsgType,
         body: "image.png",
