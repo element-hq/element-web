@@ -5,37 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useState, type ReactNode } from "react";
-import { MessageComposerUrlPreviewView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import React, { useState, type ReactNode } from "react";
+import { MessageComposerUrlPreviewView } from "@element-hq/web-shared-components";
 
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
-import PlatformPeg from "../../../PlatformPeg";
 import { ModuleApi } from "../../../modules/Api";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
-
-export function useMessageComposerUrlPreviewViewModel(): MessageComposerUrlPreviewViewModel {
-    const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
-
-    const client = useMatrixClientContext();
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new MessageComposerUrlPreviewViewModel({
-                client,
-                visible: showUrlPreview,
-                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-            }),
-    );
-
-    useEffect(() => {
-        void vm.updateUrlPreviewVisible(showUrlPreview);
-    }, [vm, showUrlPreview]);
-
-    return vm;
-}
 
 export function MessageComposerUrlPreviewWrapper({
     content,

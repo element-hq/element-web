@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode } from "react";
+import React, { type JSX, createRef, type ReactNode, useEffect } from "react";
 import classNames from "classnames";
 import {
     type IEventRelation,
@@ -50,13 +50,16 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
-import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
+import { type MatrixClientProps, withMatrixClientHOC, useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 import { MessageComposerUrlPreviewWrapper, useMessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreview";
 import { Type } from "../../../editor/parts";
-import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
+import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import PlatformPeg from "../../../PlatformPeg";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -744,6 +747,20 @@ export class MessageComposer extends React.Component<IProps, IState> {
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
 
 export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
-    const urlPreviewVm = useMessageComposerUrlPreviewViewModel();
+    const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
+    const client = useMatrixClientContext();
+    const urlPreviewVm = useCreateAutoDisposedViewModel(
+        () =>
+            new MessageComposerUrlPreviewViewModel({
+                client,
+                visible: showUrlPreview,
+                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
+            }),
+    );
+
+    useEffect(() => {
+        void urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
+    }, [urlPreviewVm, showUrlPreview]);
+
     return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
 }
