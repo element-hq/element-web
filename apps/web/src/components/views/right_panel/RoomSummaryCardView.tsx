@@ -50,6 +50,8 @@ import { topicToHtml } from "../../../HtmlUtils.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 import { useRoomName } from "../../../hooks/useRoomName.ts";
+import { useSettingValue } from "../../../hooks/useSettings.ts";
+import { UIFeature } from "../../../settings/UIFeature.ts";
 
 interface IProps {
     room: Room;
@@ -288,6 +290,11 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                             label={_t("right_panel|polls_button")}
                             onSelect={vm.onRoomPollHistoryClick}
                         />
+                    </>
+                )}
+
+                {!vm.isVideoRoom && useSettingValue(UIFeature.AllowChatExport) && (
+                    <>
                         <MenuItem
                             Icon={ExportArchiveIcon}
                             label={_t("export_chat|title")}

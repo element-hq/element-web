@@ -26,6 +26,7 @@ export const enum UIFeature {
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
     AllowCreatingPublicRooms = "UIFeature.allowCreatingPublicRooms",
     AllowCreatingPublicSpaces = "UIFeature.allowCreatingPublicSpaces",
+    AllowChatExport = "UIFeature.allowChatExport",
 }
 
 export { UIComponent } from "@element-hq/element-web-module-api";

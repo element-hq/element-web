@@ -581,6 +581,7 @@ Currently, the following UI feature flags are supported:
 - `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 - `UIFeature.allowCreatingPublicRooms` - Whether or not public rooms can be created.
 - `UIFeature.allowCreatingPublicSpaces` - Whether or not public spaces can be created.
+- `UIFeature.allowChatExport` - Whether or not chats can be exported.
 
 ## Modules
 
