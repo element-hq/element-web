@@ -56,7 +56,7 @@ import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../../src/components/view
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
 import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
-import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../../../TestSDKContext.ts";
 import { makeDelegatedAuthMetadata } from "../../../../../../test-utils/auth";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
@@ -132,7 +132,7 @@ describe("<SessionManagerTab />", () => {
     } as unknown as CryptoApi);
 
     let mockClient!: MockedObject<MatrixClient>;
-    let sdkContext: SDKContextClass;
+    let sdkContext: TestSDKContext;
 
     const defaultProps = {};
     const getComponent = (props = {}): React.ReactElement => (
@@ -248,8 +248,8 @@ describe("<SessionManagerTab />", () => {
             }
         });
 
-        sdkContext = new SDKContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
 
         // @ts-ignore allow delete of non-optional prop
         delete window.location;

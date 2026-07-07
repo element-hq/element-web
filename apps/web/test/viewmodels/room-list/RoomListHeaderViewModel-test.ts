@@ -156,6 +156,36 @@ describe("RoomListHeaderViewModel", () => {
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
         });
 
+        it("should set areSectionsEnabled to true when RoomList.showSections is enabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "RoomList.showSections") return true;
+                return false;
+            });
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().areSectionsEnabled).toBe(true);
+        });
+
+        it("should update areSectionsEnabled when RoomList.showSections setting changes", () => {
+            let watchCallback: () => void = () => {};
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
+                if (settingName === "RoomList.showSections") watchCallback = callback as () => void;
+                return "watcher-id";
+            });
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().areSectionsEnabled).toBe(false);
+
+            // Enable sections
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "RoomList.showSections") return true;
+                return false;
+            });
+            watchCallback();
+
+            expect(vm.getSnapshot().areSectionsEnabled).toBe(true);
+        });
+
         it("should set displaySectionReleaseAnnouncement to true when sections feature is enabled and announcement is active", () => {
             jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(
                 "room_list_section",

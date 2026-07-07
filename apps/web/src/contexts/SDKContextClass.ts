@@ -25,6 +25,11 @@ import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../stores/WidgetStore";
 import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
+import { type ActionPayload, isAction } from "../dispatcher/payloads.ts";
+import { Action } from "../dispatcher/actions.ts";
+import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
+import Notifier from "../Notifier.ts";
+import SettingController from "../settings/controllers/SettingController.ts";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -42,11 +47,13 @@ export class SDKContextClass {
      */
     public static readonly instance = new SDKContextClass();
 
-    // Optional as we don't have a client on initial load if unregistered. This should be set
-    // when the MatrixClient is first acquired in the dispatcher event Action.OnLoggedIn.
+    // Optional as we don't have a client on initial load if unregistered.
     // It is only safe to set this once, as updating this value will NOT notify components using
     // this Context.
-    public client?: MatrixClient;
+    protected _client?: MatrixClient;
+    public get client(): MatrixClient | undefined {
+        return this._client;
+    }
 
     // All protected fields to make it easier to derive test stores
     protected _WidgetPermissionStore?: WidgetPermissionStore;
@@ -64,6 +71,19 @@ export class SDKContextClass {
     protected _UserProfilesStore?: UserProfilesStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
+    protected _Notifier?: Notifier;
+
+    public constructor() {
+        SettingController.sdkContext = this;
+
+        defaultDispatcher.register(this.onDispatch);
+    }
+
+    private onDispatch = (payload: ActionPayload): void => {
+        if (isAction<OnLoggedInPayload>(payload, Action.OnLoggedIn)) {
+            this._client = payload.client;
+        }
+    };
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -75,7 +95,7 @@ export class SDKContextClass {
 
     public get legacyCallHandler(): LegacyCallHandler {
         if (!this._LegacyCallHandler) {
-            this._LegacyCallHandler = LegacyCallHandler.instance;
+            this._LegacyCallHandler = new LegacyCallHandler(this);
         }
         return this._LegacyCallHandler;
     }
@@ -176,7 +196,15 @@ export class SDKContextClass {
         return this._MultiRoomViewStore;
     }
 
+    public get notifier(): Notifier {
+        if (!this._Notifier) {
+            this._Notifier = new Notifier(defaultDispatcher, this);
+        }
+        return this._Notifier;
+    }
+
     public onLoggedOut(): void {
         this._UserProfilesStore = undefined;
+        this._client = undefined;
     }
 }

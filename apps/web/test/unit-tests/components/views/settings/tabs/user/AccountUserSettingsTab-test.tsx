@@ -16,7 +16,7 @@ import { ToastContext, ToastRack } from "@element-hq/web-shared-components";
 
 import AccountUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
 import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
-import { SDKContextClass } from "../../../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../../../TestSDKContext.ts";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import {
     getMockClientWithEventEmitter,
@@ -50,7 +50,7 @@ describe("<AccountUserSettingsTab />", () => {
     const userId = "@alice:server.org";
     let mockClient: MockedObject<MatrixClient>;
 
-    let stores: SDKContextClass;
+    let stores: TestSDKContext;
 
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>
@@ -88,8 +88,8 @@ describe("<AccountUserSettingsTab />", () => {
             id_server_unbind_result: "success",
         });
 
-        stores = new SDKContextClass();
-        stores.client = mockClient;
+        stores = new TestSDKContext();
+        stores._client = mockClient;
     });
 
     afterEach(() => {

@@ -83,6 +83,7 @@ import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
 import { UserMenuViewModel } from "../../../viewmodels/menus/UserMenuViewModel.ts";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
+import { OwnProfileStore } from "../../../stores/OwnProfileStore.ts";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -405,7 +406,7 @@ const SpacePanel: React.FC = () => {
     });
 
     const userMenuVm = useCreateAutoDisposedViewModel(
-        () => new UserMenuViewModel(defaultDispatcher, client, isPanelCollapsed),
+        () => new UserMenuViewModel({ ownProfileStore: OwnProfileStore.instance }, defaultDispatcher, client, isPanelCollapsed),
     );
 
     useDispatcher(defaultDispatcher, (payload) => {

@@ -42,6 +42,7 @@ import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel
 import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -799,6 +800,10 @@ export class RoomListViewModel
     };
 
     public onRoomTagged = (): void => {
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+        // Only show the "chat moved" toast if sections are enabled
+        if (!areSectionsEnabled) return;
+
         this.showToast("chat_moved");
     };
 
