@@ -39,7 +39,13 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
-import { Box, Flex, HistoryVisibilityBadge, LinkedText } from "@element-hq/web-shared-components";
+import {
+    Box,
+    Flex,
+    HistoryVisibilityBadge,
+    LinkedText,
+    UserStatusMessageView,
+} from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
@@ -153,6 +159,9 @@ const RoomSummaryCardView: React.FC<IProps> = ({
             >
                 {name}
             </Heading>
+            {vm.userStatus && (
+                <UserStatusMessageView status={vm.userStatus} className="mx_RoomSummaryCard_userStatus" />
+            )}
             <Text
                 as="div"
                 size="sm"

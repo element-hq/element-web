@@ -13,6 +13,7 @@ import {
     RoomEvent,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
+import { type UserStatus } from "@element-hq/web-shared-components";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -41,9 +42,17 @@ import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
 import { getTagsForRoom } from "../../../utils/room/getTagsForRoom";
+import { useDmMember } from "../../views/avatars/WithPresenceIndicator";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 
 export interface RoomSummaryCardState {
     isDirectMessage: boolean;
+    /**
+     * The MSC4426 status of the other user in a direct message, shown below the name.
+     * Undefined for non-DM rooms, when the user status feature is disabled, or when the
+     * user has no status.
+     */
+    userStatus: UserStatus | undefined;
     /**
      * Whether the room is encrypted, used to display the correct badge and icon
      */
@@ -182,6 +191,8 @@ export function useRoomSummaryCardViewModel(
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
 
     const isDirectMessage = useIsDirectMessage(room);
+    const dmMember = useDmMember(room);
+    const userStatus = useUserStatus(dmMember?.userId);
 
     const onRoomMembersClick = (): void => {
         RightPanelStore.instance.pushCard({ phase: RightPanelPhases.MemberList }, true);
@@ -261,6 +272,7 @@ export function useRoomSummaryCardViewModel(
 
     return {
         isDirectMessage,
+        userStatus,
         isRoomEncrypted,
         roomJoinRule,
         e2eStatus,

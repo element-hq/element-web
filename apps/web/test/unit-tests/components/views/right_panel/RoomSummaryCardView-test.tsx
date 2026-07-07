@@ -55,6 +55,7 @@ describe("<RoomSummaryCard />", () => {
     // Setup mock view models
     const vmDefaultValues: RoomSummaryCardState = {
         isDirectMessage: false,
+        userStatus: undefined,
         isRoomEncrypted: false,
         e2eStatus: undefined,
         isVideoRoom: false,
@@ -323,6 +324,33 @@ describe("<RoomSummaryCard />", () => {
             await flushPromises();
 
             expect(screen.queryByText("Public room")).toBeInTheDocument();
+        });
+    });
+
+    describe("user status", () => {
+        it("shows the other user's status when set", () => {
+            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+                ...vmDefaultValues,
+                isDirectMessage: true,
+                userStatus: { emoji: "💬", text: "In a meeting" },
+            });
+
+            getComponent();
+
+            expect(screen.getByText("In a meeting")).toBeInTheDocument();
+            expect(screen.getByText("💬")).toBeInTheDocument();
+        });
+
+        it("does not show a status when there is none", () => {
+            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+                ...vmDefaultValues,
+                isDirectMessage: true,
+                userStatus: undefined,
+            });
+
+            getComponent();
+
+            expect(screen.queryByText("In a meeting")).not.toBeInTheDocument();
         });
     });
 });
