@@ -165,6 +165,7 @@ export default class PersistedElement extends React.Component<IProps> {
     private renderApp(): void {
         const content = (
             <StrictMode>
+                {/* oxlint-disable-next-line react/jsx-no-constructed-context-values */}
                 <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
                     <TooltipProvider>
                         <div ref={this.collectChild} style={this.props.style}>
