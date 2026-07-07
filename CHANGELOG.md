@@ -1,3 +1,25 @@
+Changes in [1.12.23](https://github.com/element-hq/element-web/releases/tag/v1.12.23) (2026-07-07)
+==================================================================================================
+## ✨ Features
+
+* Sticky Header for Room List Sections ([#33968](https://github.com/element-hq/element-web/pull/33968)). Contributed by @langleyd.
+* Improve link preview look and feel ([#33981](https://github.com/element-hq/element-web/pull/33981)). Contributed by @Half-Shot.
+* Room list: move sections out of labs to all the users ([#33810](https://github.com/element-hq/element-web/pull/33810)). Contributed by @florianduros.
+* Add "user identity" display to dev tools ([#33977](https://github.com/element-hq/element-web/pull/33977)). Contributed by @richvdh.
+* Add unread toast to room list sections ([#33961](https://github.com/element-hq/element-web/pull/33961)). Contributed by @langleyd.
+* Room list: add drag and drop of sections to reorder them ([#33606](https://github.com/element-hq/element-web/pull/33606)). Contributed by @florianduros.
+* Room list: add release announcement for sections ([#33800](https://github.com/element-hq/element-web/pull/33800)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Room list: put toast over sticky headers ([#34137](https://github.com/element-hq/element-web/pull/34137)). Contributed by @RiotRobot.
+* [Backport staging] Update Compound to fix tooltips ([#34097](https://github.com/element-hq/element-web/pull/34097)). Contributed by @RiotRobot.
+* Fix: Focusing a room in the room list(without hovering) doesn't allow tabbing to the more menu ([#34043](https://github.com/element-hq/element-web/pull/34043)). Contributed by @langleyd.
+* Fix double tooltip on collapsed Quick Settings button ([#33923](https://github.com/element-hq/element-web/pull/33923)). Contributed by @t3chguy.
+* Fix long display / user names in UserMenu ([#33900](https://github.com/element-hq/element-web/pull/33900)). Contributed by @dbkr.
+* Fix handling of deeplinks on Element Desktop ([#33827](https://github.com/element-hq/element-web/pull/33827)). Contributed by @t3chguy.
+
+
 Changes in [1.12.22](https://github.com/element-hq/element-web/releases/tag/v1.12.22) (2026-06-23)
 ==================================================================================================
 ## ✨ Features
