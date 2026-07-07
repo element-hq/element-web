@@ -129,12 +129,12 @@ export type CustomLoginComponentProps = {
      * Function to complete login
      * @param data - the data to authenticate the user with
      */
-    onLoggedIn(data: AccountAuthInfo): void;
+    onLoggedIn(this: void, data: AccountAuthInfo): void;
     /**
      * Function to change the selected server
      * @param config - new server configuration details
      */
-    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+    onServerConfigChange(this: void, config: CustomLoginComponentPropsServerConfig): void;
 };
 
 /**
