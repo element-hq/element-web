@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX } from "react";
-import { Avatar, Button, IconButton, Link, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
+import { Avatar, Button, Link, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
 import {
     ChatProblemIcon,
     DevicesIcon,
@@ -14,7 +14,6 @@ import {
     LockIcon,
     PopOutIcon,
     SettingsIcon,
-    CloseIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import classNames from "classnames";
 
@@ -22,7 +21,7 @@ import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
 import { type UserStatus } from "../../core/userStatus";
-import { _t } from "../..";
+import { SetStatusView, type SetStatusViewModel } from "../../status/SetStatusView";
 
 export interface UserMenuViewSnapshot {
     /**
@@ -57,6 +56,16 @@ export interface UserMenuViewSnapshot {
      * The user status to display, or undefined for no icon / status.
      */
     userStatus?: UserStatus;
+    /**
+     * Whether to show UI for user status.
+     * Temporary while user status is in labs.
+     * Default: true
+     */
+    showUserStatus?: boolean;
+    /**
+     * ViewModel for the set status view.
+     */
+    setStatusViewModel: SetStatusViewModel;
     /**
      * A set of actions that the user can perform from the menu.
      */
@@ -105,7 +114,7 @@ export declare interface UserMenuViewActions {
      */
     openSettings: () => void;
     /**
-     * Called when the user clicks the button to clear theirt status.
+     * Called when the user clicks the button to clear their status.
      */
     clearStatus: () => void;
 }
@@ -118,30 +127,20 @@ export type UserMenuViewProps = {
     className?: string;
 };
 
-function StatusButton({ status, clearStatus }: { status: UserStatus; clearStatus: () => void }): JSX.Element {
-    return (
-        <div className={styles.statusButton}>
-            <Text as="span" className={styles.menuStatusEmoji}>
-                {status.emoji}
-            </Text>
-            <Text as="span" className={styles.menuStatusText}>
-                {status.text}
-            </Text>
-            <IconButton
-                onClick={clearStatus}
-                aria-label={_t("menus|user_menu|clear_status")}
-                tooltip={_t("menus|user_menu|clear_status")}
-                size="28px"
-            >
-                <CloseIcon />
-            </IconButton>
-        </div>
-    );
-}
-
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar, userStatus } =
-        useViewModel(vm);
+    const {
+        userId,
+        displayName,
+        avatarUrl,
+        expanded,
+        open,
+        manageAccountHref,
+        actions,
+        showAvatar,
+        userStatus,
+        setStatusViewModel,
+        showUserStatus = true,
+    } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
@@ -170,12 +169,14 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                 side="right"
                 className={styles.container}
             >
-                <section className={styles.profile}>
+                <section className={classNames(styles.profile, styles.profilePrimary)}>
                     {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
                     <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
-                    {userStatus && <StatusButton status={userStatus} clearStatus={vm.clearStatus} />}
+                    {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
+                </section>
+                <section className={classNames(styles.profile, styles.profileSecondary)}>
                     <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
                         {userId}
                     </Text>

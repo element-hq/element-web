@@ -26,6 +26,7 @@ if (globalThis.window === undefined) {
         // things try to access it before the beforeEach blocks run)
         addEventListener: vi.fn(),
         location: locationStub,
+        setTimeout: globalThis.setTimeout,
     });
 }
 
