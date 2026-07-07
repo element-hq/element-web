@@ -8,7 +8,7 @@
 import { BaseViewModel, type UserMenuSnapshot, type UserMenuViewActions } from "@element-hq/web-shared-components";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { type OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
@@ -20,21 +20,37 @@ import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { clearUserStatus } from "../../utils/userStatus";
+import { type SetStatusViewModel, UserMenuSetStatusViewModel } from "../status/SetStatusViewModel";
+import SettingsStore from "../../settings/SettingsStore";
 
 // Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
 
-export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
+interface UserMenuViewModelProps {
+    ownProfileStore: OwnProfileStore;
+}
+
+export class UserMenuViewModel
+    extends BaseViewModel<UserMenuSnapshot, UserMenuViewModelProps>
+    implements UserMenuViewActions
+{
+    public readonly setStatusVm: SetStatusViewModel;
     private static computeSnapshot(
         client: MatrixClient,
+        ownProfileStore: OwnProfileStore,
         isPanelCollapsed: boolean,
         accountManagementEndpoint?: string,
     ): UserMenuSnapshot {
         const hasHomePage = !!getHomePageUrl(SdkConfig.get(), client);
         const isAuthenticated = !client.isGuest();
         const userId = client.getSafeUserId();
-        const displayName = OwnProfileStore.instance.displayName || userId;
-        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
+        const displayName = ownProfileStore.displayName || userId;
+        const avatarUrl = ownProfileStore.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
+
+        const setStatusViewModel = new UserMenuSetStatusViewModel({
+            client,
+            ownProfileStore,
+        });
 
         return {
             open: false,
@@ -44,7 +60,9 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             expanded: !isPanelCollapsed,
             manageAccountHref: accountManagementEndpoint,
             showAvatar: isAuthenticated,
-            userStatus: OwnProfileStore.instance.userStatus,
+            userStatus: ownProfileStore.userStatus,
+            showUserStatus: SettingsStore.getValue("feature_user_status") && isAuthenticated,
+            setStatusViewModel,
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,
@@ -58,24 +76,35 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     }
 
     public constructor(
+        props: UserMenuViewModelProps,
         private readonly dispatcher: MatrixDispatcher,
         private readonly client: MatrixClient,
         isPanelCollapsed: boolean,
         accountManagementEndpoint?: string,
     ) {
-        super(undefined, UserMenuViewModel.computeSnapshot(client, isPanelCollapsed, accountManagementEndpoint));
-        OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
+        super(
+            props,
+            UserMenuViewModel.computeSnapshot(
+                client,
+                props.ownProfileStore,
+                isPanelCollapsed,
+                accountManagementEndpoint,
+            ),
+        );
+        this.setStatusVm = new UserMenuSetStatusViewModel({ client, ownProfileStore: props.ownProfileStore });
+        props.ownProfileStore.on(UPDATE_EVENT, this.recalculateProfile);
     }
 
     public dispose(): void {
-        OwnProfileStore.instance.off(UPDATE_EVENT, this.recalculateProfile);
+        this.props.ownProfileStore.off(UPDATE_EVENT, this.recalculateProfile);
+        this.setStatusVm.dispose();
         super.dispose();
     }
 
     public readonly recalculateProfile = (): void => {
-        const displayName = OwnProfileStore.instance.displayName || this.snapshot.current.userId;
-        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
-        const userStatus = OwnProfileStore.instance.userStatus;
+        const displayName = this.props.ownProfileStore.displayName || this.snapshot.current.userId;
+        const avatarUrl = this.props.ownProfileStore.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
+        const userStatus = this.props.ownProfileStore.userStatus;
         this.snapshot.merge({ displayName, avatarUrl, userStatus });
     };
 

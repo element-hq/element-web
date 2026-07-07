@@ -125,8 +125,10 @@ export type ComposerApiTarget = {
     view: "thread";
 };
 
+// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point index.d.ts
+//
 // @public
-export interface Config {
+export interface Config extends WebConfigJson {
     // (undocumented)
     brand: string;
 }
