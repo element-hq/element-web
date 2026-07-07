@@ -200,4 +200,29 @@ describe("LegacyCallEventGrouper", () => {
         grouper.callBack();
         expect(SDKContextClass.instance.legacyCallHandler.placeCall).toHaveBeenCalledWith("!room:server", "video");
     });
+
+    it("should be able to toggle call silenced", () => {
+        const grouper = new LegacyCallEventGrouper();
+        grouper.add(
+            new MatrixEvent({
+                content: {
+                    call_id: "callId",
+                },
+                type: EventType.CallHangup,
+                sender: THEIR_USER_ID,
+                room_id: "!room:server",
+            }),
+        );
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "unSilenceCall");
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "silenceCall");
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "isCallSilenced").mockReturnValue(false);
+        grouper.toggleSilenced();
+        expect(SDKContextClass.instance.legacyCallHandler.silenceCall).toHaveBeenCalledWith("callId");
+
+        jest.spyOn(SDKContextClass.instance.legacyCallHandler, "isCallSilenced").mockReturnValue(true);
+        grouper.toggleSilenced();
+        expect(SDKContextClass.instance.legacyCallHandler.unSilenceCall).toHaveBeenCalledWith("callId");
+    });
 });
