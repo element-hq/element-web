@@ -5,11 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
 import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { createRef } from "react";
+import { mkRoom, stubClient } from "test-utils";
 
-import { mkRoom, stubClient } from "../../../test/test-utils";
 import { WidgetPipViewModel } from "./WidgetPipViewModel";
 import WidgetStore, { type IApp } from "../../stores/WidgetStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";

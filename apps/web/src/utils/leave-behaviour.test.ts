@@ -6,12 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { mkRoom, resetAsyncStoreWithClient, setupAsyncStoreWithClient, stubClient } from "test-utils/test-utils";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { mkRoom, resetAsyncStoreWithClient, setupAsyncStoreWithClient, stubClient } from "../../test/test-utils";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
@@ -25,6 +27,8 @@ import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
 import { type Call } from "../models/Call";
 import LegacyCallHandler from "../LegacyCallHandler";
+
+vi.mock("../Modal.tsx");
 
 describe("leaveRoomBehaviour", () => {
     SDKContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
