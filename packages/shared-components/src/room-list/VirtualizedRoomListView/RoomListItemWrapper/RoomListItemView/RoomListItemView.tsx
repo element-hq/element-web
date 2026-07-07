@@ -94,6 +94,8 @@ export interface RoomListItemViewSnapshot {
     roomNotifState: RoomNotifState;
     /** Available sections the room can be assigned to */
     sections: Section[];
+    /** Whether sections are enabled in the room list */
+    areSectionsEnabled: boolean;
 }
 
 /**
