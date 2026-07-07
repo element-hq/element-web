@@ -37,7 +37,6 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
-import Notifier from "../../Notifier";
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from "../../RoomInvite";
 import * as Rooms from "../../Rooms";
@@ -96,7 +95,6 @@ import SoftLogout from "./auth/SoftLogout";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
-import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { type ActionPayload } from "../../dispatcher/payloads";
@@ -696,7 +694,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             case "logout":
-                LegacyCallHandler.instance.hangupAllCalls();
+                this.stores.legacyCallHandler.hangupAllCalls();
                 Promise.all([...[...CallStore.instance.connectedCalls].map((call) => call.disconnect())]).finally(() =>
                     Lifecycle.logout(this.stores.oidcClientStore),
                 );
@@ -1521,7 +1519,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Handle an {@link Action.OnLoggedIn} action (i.e, we now have a client with working credentials).
      */
     private onLoggedIn(): void {
-        this.stores.client = MatrixClientPeg.safeGet();
         StorageManager.tryPersistStorage();
 
         // If we're loading the app for the first time, we can now transition to a splash screen while we wait for the
@@ -1639,8 +1636,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
-                showNotificationsToast(false);
+            if (this.stores.notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
+                showNotificationsToast(this.stores.notifier, false);
             }
 
             dis.fire(Action.FocusSendMessageComposer);

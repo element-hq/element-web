@@ -48,11 +48,12 @@ describe("<Pill>", () => {
     const user3Id = "@user3:example.com";
     let renderResult: RenderResult;
     let pillParentClickHandler: (e: ButtonEvent) => void;
+    let sdkContext: TestSDKContext;
 
     const renderPill = (props: PillProps): void => {
         const cli = MatrixClientPeg.safeGet();
         const mockSdkContext = new TestSDKContext();
-        mockSdkContext.client = cli;
+        mockSdkContext._client = cli;
 
         const withDefault = {
             inMessage: true,
@@ -79,7 +80,10 @@ describe("<Pill>", () => {
 
     beforeEach(() => {
         client = mocked(stubClient());
-        SDKContextClass.instance.client = client;
+        sdkContext = new TestSDKContext();
+        // @ts-ignore Pill uses the SDKContext global
+        SDKContextClass.instance = sdkContext;
+        sdkContext._client = client;
         DMRoomMap.makeShared(client);
         room1 = new Room(room1Id, client, user1Id);
         room1.name = "Room 1";

@@ -27,13 +27,10 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 import { type SessionMembershipData, type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
-import { PosthogAnalytics } from "./PosthogAnalytics";
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import * as TextForEvent from "./TextForEvent";
 import * as Avatar from "./Avatar";
-import dis from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";
 import Modal from "./Modal";
 import SettingsStore from "./settings/SettingsStore";
@@ -43,12 +40,13 @@ import { isPushNotifyDisabled } from "./settings/controllers/NotificationControl
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import { SDKContextClass } from "./contexts/SDKContextClass";
+import { type SDKContextClass } from "./contexts/SDKContextClass.ts";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, getNotificationEventSendTs, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
 import { stripPlainReply } from "./utils/Reply";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
+import { type MatrixDispatcher } from "./dispatcher/dispatcher.ts";
 
 /*
  * Dispatches:
@@ -60,26 +58,28 @@ import { BackgroundAudio } from "./audio/BackgroundAudio";
 
 const MAX_PENDING_ENCRYPTED = 20;
 
-/*
-Override both the content body and the TextForEvent handler for specific msgtypes, in notifications.
-This is useful when the content body contains fallback text that would explain that the client can't handle a particular
-type of tile.
-*/
-const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
-    [MsgType.KeyVerificationRequest]: (event: MatrixEvent) => {
-        const name = event.sender?.name;
-        return _t("notifier|m.key.verification.request", { name });
-    },
-    [M_LOCATION.name]: (event: MatrixEvent) => {
-        return TextForEvent.textForLocationEvent(event)();
-    },
-    [M_LOCATION.altName]: (event: MatrixEvent) => {
-        return TextForEvent.textForLocationEvent(event)();
-    },
-    [MsgType.Audio]: (event: MatrixEvent): string | null => {
-        return TextForEvent.textForEvent(event, MatrixClientPeg.safeGet());
-    },
-};
+/**
+ * Minimum interval (in milliseconds) between two *audible* notification plays.
+ *
+ * Coalesces bursts of backlogged notifications into a single sound. This is the
+ * in-repo remedy for https://github.com/element-hq/element-web/issues/31996: on
+ * macOS Sequoia, waking from sleep delivers the entire sync backlog in one
+ * batch, so every backlogged notifying event fires {@link
+ * NotifierClass.playAudioNotification} near-simultaneously and the identical
+ * audio buffers superimpose into one loud "stacked" sound.
+ *
+ * The throttle is keyed on the resolved sound, so a backlog of identical sounds
+ * coalesces to one play while two genuinely *different* sounds (e.g. a custom
+ * per-room sound) arriving within the window each still play. A conservative
+ * window is intentional: merging a burst of the same sound is preferable to a
+ * wall of overlapping audio.
+ *
+ * NOTE: This only cures the sounds-enabled renderer Web-Audio path (the default
+ * config). It does NOT fix the variant where macOS Sequoia ignores the OS
+ * banner's `silent: true` and plays its own coalesced banner sound on wake;
+ * that is purely OS/Electron behaviour with no in-repo lever.
+ */
+export const NOTIFICATION_SOUND_THROTTLE_MS = 1000;
 
 /**
  * Extracts plain text from a message body, replacing any spoilered content
@@ -152,7 +152,7 @@ export type NotificationSound = {
     size?: number;
 };
 
-class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
+export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
 
     // A list of event IDs that we've received but need to wait until
@@ -165,19 +165,58 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     private backgroundAudio = new BackgroundAudio();
 
+    /**
+     * Per-sound timestamp (ms, from {@link Date.now}) of the last *audible* notification, keyed by the
+     * resolved sound (custom sound url, or `"default"`). Used to throttle a burst of backlogged
+     * notifications of the *same* sound into a single play while letting distinct sounds through -
+     * see {@link NOTIFICATION_SOUND_THROTTLE_MS}.
+     */
+    private readonly lastAudioNotificationMs = new Map<string, number>();
+
+    private msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null>;
+
+    public constructor(
+        private readonly dispatcher: MatrixDispatcher,
+        private readonly sdkContext: SDKContextClass,
+    ) {
+        super();
+
+        /*
+        Override both the content body and the TextForEvent handler for specific msgtypes, in notifications.
+        This is useful when the content body contains fallback text that would explain that the client can't handle a particular
+        type of tile.
+        */
+        this.msgTypeHandlers = {
+            [MsgType.KeyVerificationRequest]: (event: MatrixEvent) => {
+                const name = event.sender?.name;
+                return _t("notifier|m.key.verification.request", { name });
+            },
+            [M_LOCATION.name]: (event: MatrixEvent) => {
+                return TextForEvent.textForLocationEvent(event)();
+            },
+            [M_LOCATION.altName]: (event: MatrixEvent) => {
+                return TextForEvent.textForLocationEvent(event)();
+            },
+            [MsgType.Audio]: (event: MatrixEvent): string | null => {
+                return TextForEvent.textForEvent(event, this.sdkContext.client!);
+            },
+        };
+    }
+
     public notificationMessageForEvent(ev: MatrixEvent): string | null {
+        if (!this.sdkContext.client) return null;
         const msgType = ev.getContent().msgtype;
-        if (msgType && msgTypeHandlers.hasOwnProperty(msgType)) {
-            return msgTypeHandlers[msgType](ev);
+        if (msgType && this.msgTypeHandlers.hasOwnProperty(msgType)) {
+            return this.msgTypeHandlers[msgType](ev);
         }
-        return TextForEvent.textForEvent(ev, MatrixClientPeg.safeGet());
+        return TextForEvent.textForEvent(ev, this.sdkContext.client);
     }
 
     // XXX: exported for tests
     public displayPopupNotification(ev: MatrixEvent, room: Room): void {
         const plaf = PlatformPeg.get();
-        const cli = MatrixClientPeg.safeGet();
-        if (!plaf) {
+        const cli = this.sdkContext.client;
+        if (!plaf || !cli) {
             return;
         }
         if (!plaf.supportsNotifications() || !plaf.maySendNotifications()) {
@@ -196,7 +235,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             title = room.name;
             // notificationMessageForEvent includes sender, but we already have the sender here
             const msgType = ev.getContent().msgtype;
-            if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
+            if (ev.getContent().body && (!msgType || !this.msgTypeHandlers.hasOwnProperty(msgType))) {
                 msg = stripPlainReply(getNotificationBodyWithoutSpoilers(ev));
             }
         } else if (ev.getType() === "m.room.member") {
@@ -207,7 +246,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             title = ev.sender.name + " (" + room.name + ")";
             // notificationMessageForEvent includes sender, but we've just out sender in the title
             const msgType = ev.getContent().msgtype;
-            if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
+            if (ev.getContent().body && (!msgType || !this.msgTypeHandlers.hasOwnProperty(msgType))) {
                 msg = stripPlainReply(getNotificationBodyWithoutSpoilers(ev));
             }
         }
@@ -269,14 +308,28 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: Exported for tests
     public async playAudioNotification(ev: MatrixEvent, room: Room): Promise<void> {
-        const cli = MatrixClientPeg.safeGet();
-        if (localNotificationsAreSilenced(cli)) {
+        const cli = this.sdkContext.client;
+        if (!cli || localNotificationsAreSilenced(cli)) {
             return;
         }
 
         // Play notification sound here
         const sound = this.getSoundForRoom(room.roomId);
         logger.log(`Got sound ${sound?.name || "default"} for ${room.roomId}`);
+
+        // Throttle audible plays so a burst of backlogged notifications - e.g. the whole sync backlog
+        // delivered at once when macOS wakes from sleep - produces at most one sound per distinct sound
+        // within NOTIFICATION_SOUND_THROTTLE_MS, instead of many identical buffers superimposing into one
+        // loud "stacked" sound (#31996). Keyed on the resolved sound so two *different* sounds within the
+        // window both still play. Runs only after the silencing gate above, so it suppresses redundant
+        // *audible* plays, never the gating logic. We bail cleanly (no throw).
+        const soundKey = sound?.url ?? "default";
+        const now = Date.now();
+        const lastPlayed = this.lastAudioNotificationMs.get(soundKey);
+        if (lastPlayed !== undefined && now - lastPlayed < NOTIFICATION_SOUND_THROTTLE_MS) {
+            return;
+        }
+        this.lastAudioNotificationMs.set(soundKey, now);
 
         if (sound) {
             await this.backgroundAudio.play(sound.url);
@@ -286,22 +339,19 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     }
 
     public start(): void {
-        const cli = MatrixClientPeg.safeGet();
-        cli.on(RoomEvent.Timeline, this.onEvent);
-        cli.on(RoomEvent.Receipt, this.onRoomReceipt);
-        cli.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-        cli.on(ClientEvent.Sync, this.onSyncStateChange);
+        this.sdkContext.client!.on(RoomEvent.Timeline, this.onEvent);
+        this.sdkContext.client!.on(RoomEvent.Receipt, this.onRoomReceipt);
+        this.sdkContext.client!.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.sdkContext.client!.on(ClientEvent.Sync, this.onSyncStateChange);
         this.toolbarHidden = false;
         this.isSyncing = false;
     }
 
     public stop(): void {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get()!.removeListener(RoomEvent.Timeline, this.onEvent);
-            MatrixClientPeg.get()!.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
-            MatrixClientPeg.get()!.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
-            MatrixClientPeg.get()!.removeListener(ClientEvent.Sync, this.onSyncStateChange);
-        }
+        this.sdkContext.client?.removeListener(RoomEvent.Timeline, this.onEvent);
+        this.sdkContext.client?.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
+        this.sdkContext.client?.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.sdkContext.client?.removeListener(ClientEvent.Sync, this.onSyncStateChange);
         this.isSyncing = false;
     }
 
@@ -345,23 +395,23 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
                 if (callback) callback();
 
-                PosthogAnalytics.instance.trackEvent<PermissionChangedEvent>({
+                this.sdkContext.posthogAnalytics.trackEvent<PermissionChangedEvent>({
                     eventName: "PermissionChanged",
                     permission: "Notification",
                     granted: true,
                 });
-                dis.dispatch({
+                this.dispatcher.dispatch({
                     action: "notifier_enabled",
                     value: true,
                 });
             });
         } else {
-            PosthogAnalytics.instance.trackEvent<PermissionChangedEvent>({
+            this.sdkContext.posthogAnalytics.trackEvent<PermissionChangedEvent>({
                 eventName: "PermissionChanged",
                 permission: "Notification",
                 granted: false,
             });
-            dis.dispatch({
+            this.dispatcher.dispatch({
                 action: "notifier_enabled",
                 value: false,
             });
@@ -405,7 +455,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
     }
 
     public shouldShowPrompt(): boolean {
-        const client = MatrixClientPeg.get();
+        const client = this.sdkContext.client;
         if (!client) {
             return false;
         }
@@ -430,6 +480,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: Exported for tests
     public onSyncStateChange = (state: SyncState, prevState: SyncState | null, data?: SyncStateData): void => {
+        if (!this.sdkContext.client) return;
         if (state === SyncState.Syncing) {
             this.isSyncing = true;
         } else if (state === SyncState.Stopped || state === SyncState.Error) {
@@ -438,7 +489,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
         // wait for first non-cached sync to complete
         if (![SyncState.Stopped, SyncState.Error].includes(state) && !data?.fromCache) {
-            createLocalNotificationSettingsIfNeeded(MatrixClientPeg.safeGet());
+            createLocalNotificationSettingsIfNeeded(this.sdkContext.client);
         }
     };
 
@@ -449,13 +500,14 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         removed: boolean,
         data: IRoomTimelineData,
     ): void => {
+        if (!this.sdkContext.client) return;
         if (removed) return; // only notify for new events, not removed ones
         if (!data.liveEvent || !!toStartOfTimeline) return; // only notify for new things, not old.
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.getSender() === MatrixClientPeg.safeGet().getUserId()) return;
+        if (ev.getSender() === this.sdkContext.client.getUserId()) return;
         if (data.timeline.getTimelineSet().threadListType !== null) return; // Ignore events on the thread list generated timelines
 
-        MatrixClientPeg.safeGet().decryptEventIfNeeded(ev);
+        this.sdkContext.client.decryptEventIfNeeded(ev);
 
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
@@ -501,20 +553,21 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: exported for tests
     public evaluateEvent(ev: MatrixEvent): void {
+        if (!this.sdkContext.client) return;
         const roomId = ev.getRoomId()!;
-        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        const room = this.sdkContext.client.getRoom(roomId);
         if (!room) {
             // e.g we are in the process of joining a room.
             // Seen in the Playwright lazy-loading test.
             return;
         }
 
-        const actions = MatrixClientPeg.safeGet().getPushActionsForEvent(ev);
+        const actions = this.sdkContext.client.getPushActionsForEvent(ev);
 
         if (actions?.notify) {
             this.performCustomEventHandling(ev);
 
-            const store = SDKContextClass.instance.roomViewStore;
+            const store = this.sdkContext.roomViewStore;
             const isViewingRoom = store.getRoomId() === room.roomId;
             const threadId: string | undefined = ev.getId() !== ev.threadRootId ? ev.threadRootId : undefined;
             const isViewingThread = store.getThreadId() === threadId;
@@ -625,8 +678,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
      */
     private performCustomEventHandling(ev: MatrixEvent): void {
         const toaster = ToastStore.sharedInstance();
-        const cli = MatrixClientPeg.safeGet();
-        const room = cli.getRoom(ev.getRoomId());
+        const room = this.sdkContext.client?.getRoom(ev.getRoomId());
 
         if (room && EventType.RTCNotification === ev.getType()) {
             // We don't need to await this.
@@ -634,10 +686,3 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
     }
 }
-
-if (!window.mxNotifier) {
-    window.mxNotifier = new NotifierClass();
-}
-
-export default window.mxNotifier;
-export const Notifier: NotifierClass = window.mxNotifier;

@@ -118,7 +118,7 @@ function RoomHeaderButtons({
         >
             <Button
                 size="md"
-                onClick={videoClick}
+                onClick={activeCallSessionType === CallType.Video ? videoClick : voiceClick}
                 // If we know this is a voice session, show the voice call. All other kinds of call are video calls.
                 Icon={activeCallSessionType === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
                 className="mx_RoomHeader_join_button"
