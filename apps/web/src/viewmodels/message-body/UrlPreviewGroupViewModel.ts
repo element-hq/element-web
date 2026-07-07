@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     type UrlPreview,
@@ -17,6 +17,8 @@ import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/t
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import SettingsStore from "../../settings/SettingsStore";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -45,8 +47,7 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions
-{
+    implements UrlPreviewGroupViewActions {
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -167,14 +168,31 @@ export class UrlPreviewGroupViewModel
         }
 
         const loadMedia = this.visibility === PreviewVisibility.Visible;
-        const previews =
-            this.visibility <= PreviewVisibility.UserHidden
-                ? []
-                : await Promise.all(
-                      this.links
-                          .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                          .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
-                  );
+        let previews: (UrlPreview | null)[] | undefined;
+
+        if (this.visibility <= PreviewVisibility.UserHidden) {
+            previews = [];
+        }
+
+        const content = this.props.mxEvent.getContent();
+        if (content.msgtype === MsgType.Text && SettingsStore.getValue("feature_msc4095_url_preview_bundle")) {
+            const messageContent = content as RoomMessageEventContent;
+
+            if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
+                previews = messageContent[BUNDLED_LINK_PREVIEWS]
+                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                    .map((preview) => this.fetcher.previewFromBundle(preview));
+            }
+        }
+
+        if (previews === undefined) {
+            previews = await Promise.all(
+                this.links
+                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                    .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+            );
+        }
+
         this.snapshot.merge({
             previews: previews.filter((p) => !!p),
             totalPreviewCount: this.links.length,

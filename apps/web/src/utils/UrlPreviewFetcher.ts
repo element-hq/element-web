@@ -12,6 +12,7 @@ import { decode } from "html-entities";
 import type { UrlPreview } from "@element-hq/web-shared-components";
 import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
+import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -205,5 +206,51 @@ export class UrlPreviewFetcher {
         } satisfies UrlPreview;
         this.cache.set(link, result);
         return result;
+    }
+
+    // Convert an MSC4095 URL preview bundle item to a UrlPreview
+    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+        // TODO: missing fields from the bundle are:
+        // - siteName (can be computed)
+        // - siteIcon
+        // - media is a video or audio?
+        // TODO: URL previews in encrypted chat?
+        const hasImage =
+            typeof single["og:image"] === "string" &&
+            typeof single["og:image:type"] === "string" &&
+            typeof single["og:image:width"] === "number" &&
+            typeof single["og:image:height"] === "number";
+
+        const preview: UrlPreview = {
+            link: single.matched_url,
+            title: single["og:title"] ?? single.matched_url,
+            siteName: new URL(single.matched_url).hostname,
+            showTooltipOnLink: !!(single.matched_url !== single["og:title"] && this.showTooltips),
+            description: single["og:description"],
+            ogUrl: single["og:url"],
+        };
+
+        if (hasImage) {
+            const media = mediaFromMxc(single["og:image"], this.client);
+            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
+
+            // cannot rule out the mxc:// url is malformed because
+            // the sender can specify anything
+            if (media.srcHttp === null || thumb === null) {
+                return preview;
+            }
+
+            preview.image = {
+                imageThumb: thumb,
+                imageFull: media.srcHttp,
+                imageType: single["og:image:type"] as string,
+                mxcImageFull: single["og:image"] as string,
+                width: single["og:image:width"] as number,
+                height: single["og:image:height"] as number,
+                playable: false, // TODO: do we know?
+            };
+        }
+
+        return preview;
     }
 }
