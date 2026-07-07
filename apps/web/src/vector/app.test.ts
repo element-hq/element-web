@@ -80,7 +80,7 @@ describe("sso_redirect_options", () => {
 
             await loadApp({}, vi.fn() as RefCallback<MatrixChat>);
             expect(startOAuthLoginSpy).toHaveBeenCalledWith(
-                "https://auth.org/auth?response_type=code&response_mode=fragment&client_id=12345&redirect_uri=https%3A%2F%2Fapp.element.io%2F%3Fno_universal_links%3Dtrue&scope=urn%3Amatrix%3Aclient%3Aapi%3A*+urn%3Amatrix%3Aclient%3Adevice%3AefiPqpMRMw&state=38QgU2PomxwKpa6hpi3YEetmBG4yVCeE&code_challenge_method=S256&code_challenge=K7YiVESe7aP10nby6-SgZB3z4qblEkAKhrONGnqQN7k",
+                "https://auth.org/auth?response_type=code&response_mode=fragment&client_id=12345&redirect_uri=https%3A%2F%2Fapp.element.io%2F%3Fno_universal_links%3Dtrue&scope=urn%3Amatrix%3Aclient%3Aapi%3A*+urn%3Amatrix%3Aclient%3Adevice%3AABCDEFGHIJ&state=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef&code_challenge_method=S256&code_challenge=ymW9_yTzfYF1Km4N7W4OC6jQ7xoj91DUulQHWfmrROM",
             );
         });
     });
