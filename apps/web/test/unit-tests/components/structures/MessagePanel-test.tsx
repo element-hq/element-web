@@ -25,6 +25,7 @@ import {
     makeBeaconInfoEvent,
     mockClientMethodsCrypto,
     mockClientMethodsEvents,
+    mockClientMethodsServer,
     mockClientMethodsUser,
     mockClientPushProcessor,
 } from "../../../test-utils";
@@ -47,12 +48,13 @@ describe("MessagePanel", function () {
         ...mockClientMethodsEvents(),
         ...mockClientMethodsCrypto(),
         ...mockClientPushProcessor(),
+        ...mockClientMethodsServer(),
         getAccountData: jest.fn(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         getRoom: jest.fn(),
-        getClientWellKnown: jest.fn().mockReturnValue({}),
         supportsThreads: jest.fn().mockReturnValue(true),
+        getVisibleRooms: jest.fn().mockReturnValue([]),
     });
     let sdkContext: SDKContextClass;
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
@@ -107,6 +109,7 @@ describe("MessagePanel", function () {
         });
 
         sdkContext = new SDKContextClass();
+        sdkContext._client = client;
 
         DMRoomMap.makeShared(client);
     });

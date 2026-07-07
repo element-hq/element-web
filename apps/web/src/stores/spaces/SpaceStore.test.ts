@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import * as testUtils from "test-utils";
-import { mkEvent, stubClient } from "test-utils";
+import { mkEvent, setupAsyncStoreWithClient, stubClient } from "test-utils";
 
 import SpaceStore from "./SpaceStore";
 import {
@@ -1401,6 +1401,7 @@ describe("SpaceStore", () => {
             // Given a store
             const store = new SpaceStore(defaultDispatcher, sdkContext);
             sdkContext._SpaceStore = store;
+            setupAsyncStoreWithClient(store, client);
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);
@@ -1454,6 +1455,7 @@ describe("SpaceStore", () => {
             // Given a store
             const store = new SpaceStore(defaultDispatcher, sdkContext);
             sdkContext._SpaceStore = store;
+            setupAsyncStoreWithClient(store, client);
 
             // When we ask for filtered room ids
             store.getSpaceFilteredRoomIds(MetaSpace.Home);

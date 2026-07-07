@@ -98,10 +98,9 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
         getNotificationState = () => null as SpaceNotificationState | null;
         setActiveSpace = jest.fn();
         moveRootSpace = jest.fn();
+        start = jest.fn();
     }
-    return {
-        instance: new MockSpaceStore(),
-    };
+    return MockSpaceStore;
 });
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -177,11 +176,11 @@ describe("<SpacePanel />", () => {
     });
 
     it("should allow rearranging via drag and drop", async () => {
-        jest.spyOn(sdkContext.spaceStore, "spacePanelSpaces", "get").mockReturnValue([
+        (sdkContext.spaceStore.spacePanelSpaces as any) = [
             mkStubRoom("!room1:server", "Room 1", mockClient),
             mkStubRoom("!room2:server", "Room 2", mockClient),
             mkStubRoom("!room3:server", "Room 3", mockClient),
-        ]);
+        ];
         DMRoomMap.makeShared(mockClient);
         jest.useFakeTimers();
 
