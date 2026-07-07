@@ -6,13 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import DeviceSettingsHandler from "../../../../src/settings/handlers/DeviceSettingsHandler";
-import { type CallbackFn, WatchManager } from "../../../../src/settings/WatchManager";
-import { stubClient } from "../../../test-utils/test-utils";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import DeviceSettingsHandler from "./DeviceSettingsHandler";
+import { type CallbackFn, WatchManager } from "../WatchManager";
 
 describe("DeviceSettingsHandler", () => {
     const ROOM_ID_IS_UNUSED = "";
@@ -27,7 +29,7 @@ describe("DeviceSettingsHandler", () => {
     beforeEach(() => {
         watchers = new WatchManager();
         handler = new DeviceSettingsHandler([featureKey], watchers);
-        settingListener = jest.fn();
+        settingListener = vi.fn();
     });
 
     afterEach(() => {
@@ -53,7 +55,7 @@ describe("DeviceSettingsHandler", () => {
 
         beforeEach(() => {
             client = stubClient();
-            mocked(client.isGuest).mockReturnValue(true);
+            vi.mocked(client.isGuest).mockReturnValue(true);
         });
 
         afterEach(() => {

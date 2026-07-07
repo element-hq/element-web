@@ -6,8 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
 import { type ReactElement } from "react";
-import { render } from "jest-matrix-react";
+import { render } from "test-utils-rtl";
+import { describe, it, expect } from "vitest";
 import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
 
 import {
@@ -17,7 +20,7 @@ import {
     messageForResourceLimitError,
     messageForSyncError,
     resourceLimitStrings,
-} from "../../../src/utils/ErrorUtils";
+} from "./ErrorUtils";
 
 describe("messageForResourceLimitError", () => {
     it("should match snapshot for monthly_active_user", () => {

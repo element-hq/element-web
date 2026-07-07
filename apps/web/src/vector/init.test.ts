@@ -1,8 +1,3 @@
-/**
- * @jest-environment jest-fixed-jsdom
- * @jest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
- */
-
 /*
 Copyright 2024 New Vector Ltd.
 
@@ -10,13 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
-import { waitFor, screen } from "jest-matrix-react";
+// @vitest-environment happy-dom
+// @vitest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
 
-import { loadApp, showError, showIncompatibleBrowser } from "../../../src/vector/init.tsx";
-import SdkConfig from "../../../src/SdkConfig.ts";
-import MatrixChat from "../../../src/components/structures/MatrixChat.tsx";
-import { parseAppUrl } from "../../../src/vector/url_utils.ts";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+import { waitFor, screen } from "test-utils-rtl";
+
+import { loadApp, showError, showIncompatibleBrowser } from "./init.tsx";
+import SdkConfig from "../SdkConfig.ts";
+import MatrixChat from "../components/structures/MatrixChat.tsx";
+import { parseAppUrl } from "./url_utils.ts";
 
 function setUpMatrixChatDiv() {
     document.getElementById("matrixchat")?.remove();
@@ -29,7 +28,7 @@ describe("showIncompatibleBrowser", () => {
     beforeEach(setUpMatrixChatDiv);
 
     it("should match snapshot", async () => {
-        await showIncompatibleBrowser(jest.fn());
+        await showIncompatibleBrowser(vi.fn());
         await screen.findByText("Element does not support this browser");
         expect(document.getElementById("matrixchat")).toMatchSnapshot();
     });
@@ -59,7 +58,7 @@ describe("loadApp", () => {
     });
 
     it("should pass onTokenLoginCompleted which strips searchParams & fragment to MatrixChat", async () => {
-        const spy = jest.spyOn(window.history, "replaceState");
+        const spy = vi.spyOn(window.history, "replaceState");
 
         await loadApp({});
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));

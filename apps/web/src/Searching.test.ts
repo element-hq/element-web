@@ -5,21 +5,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IResultRoomEvents } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import eventSearch from "../../src/Searching";
-import EventIndexPeg from "../../src/indexing/EventIndexPeg";
-import { createTestClient } from "../test-utils";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { type IResultRoomEvents } from "matrix-js-sdk/src/matrix";
+import { createTestClient } from "test-utils";
+
+import eventSearch from "./Searching";
+import EventIndexPeg from "./indexing/EventIndexPeg";
 
 describe("Searching", () => {
     const mockClient = createTestClient();
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     describe("localSearch", () => {
@@ -89,13 +92,13 @@ describe("Searching", () => {
 
             // Mock EventIndex.search to return results with state_key: null
             const mockEventIndex = {
-                search: jest.fn().mockResolvedValue(mockSearchResults),
+                search: vi.fn().mockResolvedValue(mockSearchResults),
             };
-            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            vi.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
 
             // Mock crypto to indicate room is encrypted
-            jest.spyOn(mockClient, "getCrypto").mockReturnValue({
-                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            vi.spyOn(mockClient, "getCrypto").mockReturnValue({
+                isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(true),
             } as any);
 
             // Perform search in an encrypted room
@@ -152,12 +155,12 @@ describe("Searching", () => {
             };
 
             const mockEventIndex = {
-                search: jest.fn().mockResolvedValue(mockSearchResults),
+                search: vi.fn().mockResolvedValue(mockSearchResults),
             };
-            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            vi.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
 
-            jest.spyOn(mockClient, "getCrypto").mockReturnValue({
-                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            vi.spyOn(mockClient, "getCrypto").mockReturnValue({
+                isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(true),
             } as any);
 
             const roomId = "!room:example.org";
@@ -222,15 +225,15 @@ describe("Searching", () => {
             };
 
             const mockEventIndex = {
-                search: jest
+                search: vi
                     .fn()
                     .mockResolvedValueOnce(mockSearchResults)
                     .mockResolvedValueOnce({ count: 0, highlights: ["test"] } as IResultRoomEvents),
             };
-            jest.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
+            vi.spyOn(EventIndexPeg, "get").mockReturnValue(mockEventIndex as any);
 
-            jest.spyOn(mockClient, "getCrypto").mockReturnValue({
-                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(true),
+            vi.spyOn(mockClient, "getCrypto").mockReturnValue({
+                isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(true),
             } as any);
 
             const roomId = "!room:example.org";

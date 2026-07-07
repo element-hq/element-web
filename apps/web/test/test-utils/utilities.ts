@@ -13,6 +13,7 @@ import { type ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { type DispatcherAction } from "../../src/dispatcher/actions";
 import Modal from "../../src/Modal";
+import { vi } from "../setup/adapter.ts";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
 
@@ -128,7 +129,7 @@ export const flushPromises = () => act(async () => await new Promise<void>((reso
 // https://gist.github.com/apieceofbart/e6dea8d884d29cf88cdb54ef14ddbcc4?permalink_comment_id=4018174#gistcomment-4018174
 export const flushPromisesWithFakeTimers = async (): Promise<void> => {
     const promise = new Promise((resolve) => process.nextTick(resolve));
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
     await promise;
 };
 
@@ -165,8 +166,8 @@ export function waitForUpdate(inst: React.Component, updates = 1): Promise<void>
  * that also checks timestamps
  */
 export const advanceDateAndTime = (ms: number) => {
-    jest.spyOn(global.Date, "now").mockReturnValue(Date.now() + ms);
-    jest.advanceTimersByTime(ms);
+    vi.spyOn(global.Date, "now").mockReturnValue(Date.now() + ms);
+    vi.advanceTimersByTime(ms);
 };
 
 /**
@@ -199,8 +200,8 @@ export const clearAllModals = async (): Promise<void> => {
 export function useMockMediaDevices(): void {
     // @ts-ignore assignment of a thing that isn't a `MediaDevices` to read-only property
     navigator["mediaDevices"] = {
-        enumerateDevices: jest.fn().mockResolvedValue([]),
-        getUserMedia: jest.fn(),
+        enumerateDevices: vi.fn().mockResolvedValue([]),
+        getUserMedia: vi.fn(),
     };
 }
 
@@ -234,7 +235,7 @@ export function resetJsDomAfterEach(): void {
 
         // intercept setTimeout and setInterval, and clear them at the end.
         //
-        // *Don't* use jest.spyOn for this because it makes the DOM testing library think we are using fake timers.
+        // *Don't* use vi.spyOn for this because it makes the DOM testing library think we are using fake timers.
         //
         ["setTimeout", "setInterval"].forEach((name) => {
             const originalFn = window[name as keyof Window];

@@ -6,24 +6,28 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, type Mocked } from "jest-mock-vitest-adapter";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { mkRoom, resetAsyncStoreWithClient, setupAsyncStoreWithClient, stubClient } from "test-utils/test-utils";
 
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { mkRoom, resetAsyncStoreWithClient, setupAsyncStoreWithClient, stubClient } from "../../test-utils";
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
-import { Action } from "../../../src/dispatcher/actions";
-import { leaveRoomBehaviour } from "../../../src/utils/leave-behaviour";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
-import DMRoomMap from "../../../src/utils/DMRoomMap";
-import SpaceStore from "../../../src/stores/spaces/SpaceStore";
-import { MetaSpace } from "../../../src/stores/spaces";
-import { type ActionPayload } from "../../../src/dispatcher/payloads";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { CallStore } from "../../../src/stores/CallStore";
-import { type Call } from "../../../src/models/Call";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { Action } from "../dispatcher/actions";
+import { leaveRoomBehaviour } from "./leave-behaviour";
+import { SDKContextClass } from "../contexts/SDKContextClass";
+import DMRoomMap from "../utils/DMRoomMap";
+import SpaceStore from "../stores/spaces/SpaceStore";
+import { MetaSpace } from "../stores/spaces";
+import { type ActionPayload } from "../dispatcher/payloads";
+import SettingsStore from "../settings/SettingsStore";
+import { CallStore } from "../stores/CallStore";
+import { type Call } from "../models/Call";
+
+vi.mock("../Modal.tsx");
 
 describe("leaveRoomBehaviour", () => {
     SDKContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
@@ -34,7 +38,7 @@ describe("leaveRoomBehaviour", () => {
 
     beforeEach(async () => {
         stubClient();
-        client = mocked(MatrixClientPeg.safeGet());
+        client = vi.mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(client);
 
         room = mkRoom(client, "!1:example.org");
@@ -57,7 +61,7 @@ describe("leaveRoomBehaviour", () => {
     afterEach(async () => {
         SpaceStore.instance.setActiveSpace(MetaSpace.Home);
         await resetAsyncStoreWithClient(SpaceStore.instance);
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const viewRoom = (room: Room) =>
@@ -71,7 +75,7 @@ describe("leaveRoomBehaviour", () => {
         );
 
     const expectDispatch = async <T extends ActionPayload>(payload: T) => {
-        const dispatcherSpy = jest.fn();
+        const dispatcherSpy = vi.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
         await sleep(0);
         expect(dispatcherSpy).toHaveBeenCalledWith(payload);
@@ -79,7 +83,7 @@ describe("leaveRoomBehaviour", () => {
     };
 
     it("hangs up legacy calls when leaving a room", async () => {
-        const hangupSpy = jest
+        const hangupSpy = vi
             .spyOn(SDKContextClass.instance.legacyCallHandler, "hangupOrReject")
             .mockImplementation(() => {});
 
@@ -91,10 +95,10 @@ describe("leaveRoomBehaviour", () => {
 
     it("disconnects widget-based calls when leaving a room", async () => {
         const mockCall = {
-            disconnect: jest.fn().mockResolvedValue(undefined),
+            disconnect: vi.fn().mockResolvedValue(undefined),
         } as unknown as Call;
 
-        jest.spyOn(CallStore.instance, "getActiveCall").mockReturnValue(mockCall);
+        vi.spyOn(CallStore.instance, "getActiveCall").mockReturnValue(mockCall);
 
         viewRoom(room);
         await leaveRoomBehaviour(client, room.roomId);
@@ -110,7 +114,7 @@ describe("leaveRoomBehaviour", () => {
     });
 
     it("returns to the parent space after leaving a room inside of a space that was being viewed", async () => {
-        jest.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
+        vi.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
             roomId === room.roomId ? space : null,
         );
         viewRoom(room);
@@ -134,7 +138,7 @@ describe("leaveRoomBehaviour", () => {
 
     it("returns to the parent space after leaving a subspace that was being viewed", async () => {
         room.isSpaceRoom.mockReturnValue(true);
-        jest.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
+        vi.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
             roomId === room.roomId ? space : null,
         );
         viewRoom(room);
@@ -150,7 +154,7 @@ describe("leaveRoomBehaviour", () => {
 
     describe("If the feature_dynamic_room_predecessors is not enabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         });
 
         it("Passes through the dynamic predecessor setting", async () => {
@@ -162,7 +166,7 @@ describe("leaveRoomBehaviour", () => {
     describe("If the feature_dynamic_room_predecessors is enabled", () => {
         beforeEach(() => {
             // Turn on feature_dynamic_room_predecessors setting
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "feature_dynamic_room_predecessors",
             );
         });

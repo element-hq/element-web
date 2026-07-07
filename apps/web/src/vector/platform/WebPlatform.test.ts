@@ -6,26 +6,30 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
+// @vitest-environment happy-dom
 
-import { UpdateCheckStatus } from "../../../../src/BasePlatform";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import WebPlatform from "../../../../src/vector/platform/WebPlatform";
-import ToastStore from "../../../../src/stores/ToastStore.ts";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher.ts";
-import { emitPromise } from "../../../test-utils";
-import { Action } from "../../../../src/dispatcher/actions.ts";
+import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
+import { emitPromise } from "test-utils/utilities";
+import "vitest-canvas-mock";
+
+import { UpdateCheckStatus } from "../../BasePlatform";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import WebPlatform from "./WebPlatform";
+import ToastStore from "../../stores/ToastStore.ts";
+import defaultDispatcher from "../../dispatcher/dispatcher.ts";
+import { Action } from "../../dispatcher/actions.ts";
 
 describe("WebPlatform", () => {
     beforeEach(() => {
-        jest.spyOn(global, "navigator", "get").mockReturnValue({
+        vi.spyOn(global, "navigator", "get").mockReturnValue({
             ...navigator,
             // @ts-expect-error - mocking readonly object
             serviceWorker: {
-                register: jest.fn().mockResolvedValue({
-                    update: jest.fn(),
+                register: vi.fn().mockResolvedValue({
+                    update: vi.fn(),
                 }),
-                addEventListener: jest.fn(),
+                addEventListener: vi.fn(),
             },
         });
     });
@@ -42,7 +46,7 @@ describe("WebPlatform", () => {
         });
 
         it("handles errors", async () => {
-            jest.spyOn(global, "navigator", "get").mockReturnValue({
+            vi.spyOn(global, "navigator", "get").mockReturnValue({
                 serviceWorker: {
                     // @ts-expect-error - mocking readonly object
                     register: undefined,
@@ -59,7 +63,7 @@ describe("WebPlatform", () => {
     });
 
     it("should call reload on window location object", () => {
-        Object.defineProperty(window, "location", { value: { reload: jest.fn() }, writable: true });
+        Object.defineProperty(window, "location", { value: { reload: vi.fn() }, writable: true });
 
         const platform = new WebPlatform();
         expect(window.location.reload).not.toHaveBeenCalled();
@@ -68,7 +72,7 @@ describe("WebPlatform", () => {
     });
 
     it("should call reload to install update", () => {
-        Object.defineProperty(window, "location", { value: { reload: jest.fn() }, writable: true });
+        Object.defineProperty(window, "location", { value: { reload: vi.fn() }, writable: true });
 
         const platform = new WebPlatform();
         expect(window.location.reload).not.toHaveBeenCalled();
@@ -85,7 +89,7 @@ describe("WebPlatform", () => {
                 "develop.element.io: Chrome on macOS",
             ],
         ])("%s & %s = %s", (url, userAgent, result) => {
-            jest.spyOn(global, "navigator", "get").mockReturnValue({ userAgent } as Navigator);
+            vi.spyOn(global, "navigator", "get").mockReturnValue({ userAgent } as Navigator);
             Object.defineProperty(window, "location", { value: { href: url }, writable: true });
             const platform = new WebPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
@@ -94,7 +98,7 @@ describe("WebPlatform", () => {
 
     describe("notification support", () => {
         const mockNotification = {
-            requestPermission: jest.fn(),
+            requestPermission: vi.fn(),
             permission: "notGranted",
         };
         beforeEach(() => {
@@ -136,7 +140,7 @@ describe("WebPlatform", () => {
         const prodVersion = "1.10.13";
 
         beforeEach(() => {
-            jest.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(false);
+            vi.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(false);
         });
 
         afterAll(() => {
@@ -177,8 +181,8 @@ describe("WebPlatform", () => {
                 fetchMock.getOnce("end:/version", prodVersion);
                 const platform = new WebPlatform();
 
-                const showUpdate = jest.fn();
-                const showNoUpdate = jest.fn();
+                const showUpdate = vi.fn();
+                const showNoUpdate = vi.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
                 expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
@@ -192,8 +196,8 @@ describe("WebPlatform", () => {
                 fetchMock.getOnce("end:/version", `v${prodVersion}`);
                 const platform = new WebPlatform();
 
-                const showUpdate = jest.fn();
-                const showNoUpdate = jest.fn();
+                const showUpdate = vi.fn();
+                const showNoUpdate = vi.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
                 // versions only differ by v prefix, no update
@@ -210,8 +214,8 @@ describe("WebPlatform", () => {
                     fetchMock.getOnce("end:/version", prodVersion);
                     const platform = new WebPlatform();
 
-                    const showUpdate = jest.fn();
-                    const showNoUpdate = jest.fn();
+                    const showUpdate = vi.fn();
+                    const showNoUpdate = vi.fn();
                     const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
                     expect(result).toEqual({ status: UpdateCheckStatus.Ready });
@@ -223,12 +227,12 @@ describe("WebPlatform", () => {
             it("should return ready without showing update when user registered in last 24", async () => {
                 // @ts-ignore
                 WebPlatform.VERSION = "0.0.0"; // old version
-                jest.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(true);
+                vi.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(true);
                 fetchMock.getOnce("end:/version", prodVersion);
                 const platform = new WebPlatform();
 
-                const showUpdate = jest.fn();
-                const showNoUpdate = jest.fn();
+                const showUpdate = vi.fn();
+                const showNoUpdate = vi.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
                 expect(result).toEqual({ status: UpdateCheckStatus.Ready });
@@ -240,8 +244,8 @@ describe("WebPlatform", () => {
                 fetchMock.getOnce("end:/version", { throws: "oups" });
                 const platform = new WebPlatform();
 
-                const showUpdate = jest.fn();
-                const showNoUpdate = jest.fn();
+                const showUpdate = vi.fn();
+                const showNoUpdate = vi.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
 
                 expect(result).toEqual({ status: UpdateCheckStatus.Error, detail: "Unknown Error" });
@@ -260,7 +264,7 @@ describe("WebPlatform", () => {
 
     it("should re-render favicon when setting error status", () => {
         const platform = new WebPlatform();
-        const spy = jest.spyOn(platform.favicon, "badge");
+        const spy = vi.spyOn(platform.favicon, "badge");
         platform.setErrorStatus(true);
         expect(spy).toHaveBeenCalledWith(expect.anything(), { bgColor: "#f00" });
     });
