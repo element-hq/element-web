@@ -12,9 +12,10 @@ import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import { OidcClientStore } from "../../../src/stores/oidc/OidcClientStore";
 import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
 import { createTestClient } from "../../test-utils";
+import { TestSDKContext } from "../TestSDKContext.ts";
 
 describe("SDKContextClass", () => {
-    let sdkContext = SDKContextClass.instance;
+    let sdkContext: TestSDKContext;
     let client: MatrixClient;
 
     beforeAll(() => {
@@ -22,7 +23,7 @@ describe("SDKContextClass", () => {
     });
 
     beforeEach(() => {
-        sdkContext = new SDKContextClass();
+        sdkContext = new TestSDKContext();
     });
 
     it("instance should always return the same instance", () => {
@@ -40,7 +41,7 @@ describe("SDKContextClass", () => {
 
     describe("when SDKContext has a client", () => {
         beforeEach(() => {
-            sdkContext.client = client;
+            sdkContext._client = client;
         });
 
         it("userProfilesStore should return a UserProfilesStore", () => {
@@ -53,6 +54,7 @@ describe("SDKContextClass", () => {
         it("onLoggedOut should clear the UserProfilesStore", () => {
             const store = sdkContext.userProfilesStore;
             sdkContext.onLoggedOut();
+            sdkContext._client = client;
             expect(sdkContext.userProfilesStore).not.toBe(store);
         });
 

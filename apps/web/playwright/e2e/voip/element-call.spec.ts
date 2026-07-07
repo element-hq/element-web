@@ -217,8 +217,23 @@ test.describe("Element Call", () => {
                 const hash = new URLSearchParams(url.hash.slice(1));
                 assertCommonCallParameters(url.searchParams, hash, user, room);
 
-                expect(hash.get("intent")).toEqual("join_existing");
+                const expectedIntent = callType === "voice" ? "join_existing_voice" : "join_existing";
+                expect(hash.get("intent")).toEqual(expectedIntent);
                 expect(hash.get("skipLobby")).toEqual(null);
+
+                // pip layout check
+                switch (callType) {
+                    case "voice": {
+                        const pipContainer = page.getByTestId("widget-pip-container");
+                        await expect(pipContainer).toBeVisible();
+                        break;
+                    }
+                    case "video": {
+                        const pipContainer = page.getByTestId("widget-pip-container");
+                        await expect(pipContainer).not.toBeVisible();
+                        break;
+                    }
+                }
             });
         });
 
@@ -334,6 +349,22 @@ test.describe("Element Call", () => {
             assertCommonCallParameters(url.searchParams, hash, user, room);
             expect(hash.get("intent")).toEqual("start_call_dm");
             expect(hash.get("skipLobby")).toEqual("true");
+        });
+
+        test("should start a voice call in PiP", async ({ page, user, room, app }) => {
+            await app.viewRoomById(room.roomId);
+            await expect(page.getByText("Bob joined the room")).toBeVisible();
+
+            await page.getByRole("button", { name: "Voice call" }).click();
+            await page.getByRole("menuitem", { name: "Element Call" }).click();
+
+            const frameUrlStr = await page.locator("iframe").getAttribute("src");
+            await expect(frameUrlStr).toBeDefined();
+
+            // The call should be presented in the picture-in-picture container, right in the room we started it
+            // from, rather than taking over the room view.
+            const pipContainer = page.getByTestId("widget-pip-container");
+            await expect(pipContainer).toBeVisible();
         });
 
         test("should be able to join a call in progress", async ({ page, user, bot, room, app }) => {

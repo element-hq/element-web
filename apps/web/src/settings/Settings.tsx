@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { type JsonDocument, type JsonValue } from "shared-types";
 // Import these directly from shared-components to avoid circular deps
 import { _t, _td } from "@element-hq/web-shared-components";
 
@@ -44,7 +45,6 @@ import FallbackIceServerController from "./controllers/FallbackIceServerControll
 import { type IRightPanelForRoomStored } from "../stores/right-panel/RightPanelStoreIPanelState.ts";
 import { type ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
-import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
@@ -121,7 +121,7 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Ui]: _td("labs|group_ui"),
 };
 
-export type SettingValueType = Json | JsonValue | Record<string, unknown> | Record<string, unknown>[];
+export type SettingValueType = JsonDocument | JsonValue | Record<string, unknown> | Record<string, unknown>[];
 
 export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     isFeature?: false | undefined;
@@ -366,6 +366,7 @@ export interface Settings {
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
+    "RoomList.showSections": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1224,6 +1225,11 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
         displayName: _td("settings|show_message_previews"),
+    },
+    "RoomList.showSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+        displayName: _td("settings|show_sections"),
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

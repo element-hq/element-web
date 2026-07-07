@@ -193,6 +193,16 @@
         },
         "unread_messages": "Unread messages"
     },
+    "status": {
+        "set_status": {
+            "away": "Away",
+            "be_right_back": "Be right back",
+            "focus_time": "Focus Time",
+            "in_a_meeting": "In a meeting",
+            "on_the_road": "On the road",
+            "set_status_prompt": "What's your status?"
+        }
+    },
     "terms": {
         "tac_button": "Review terms and conditions"
     },
