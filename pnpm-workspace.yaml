@@ -3,6 +3,8 @@ cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
+strictStorePkgContentCheck: false
+
 packages:
     - "apps/*"
     - "packages/*"
