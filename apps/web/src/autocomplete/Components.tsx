@@ -22,6 +22,8 @@ interface ITextualCompletionProps {
     "className"?: string;
     "aria-selected"?: boolean;
     "ref"?: Ref<HTMLDivElement>;
+    /** Optional node rendered immediately after the title, e.g. a user status emoji. */
+    "titleAdornment"?: React.ReactNode;
 }
 
 export const TextualCompletion = (props: ITextualCompletionProps): JSX.Element => {
@@ -30,6 +32,7 @@ export const TextualCompletion = (props: ITextualCompletionProps): JSX.Element =
         subtitle,
         description,
         className,
+        titleAdornment,
         "aria-selected": ariaSelectedAttribute,
         ref,
         ...restProps
@@ -43,6 +46,7 @@ export const TextualCompletion = (props: ITextualCompletionProps): JSX.Element =
             ref={ref}
         >
             <span className="mx_Autocomplete_Completion_title">{title}</span>
+            {titleAdornment}
             <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
             <span className="mx_Autocomplete_Completion_description">{description}</span>
         </div>
@@ -60,6 +64,7 @@ export const PillCompletion = (props: IPillCompletionProps): JSX.Element => {
         description,
         className,
         children,
+        titleAdornment,
         "aria-selected": ariaSelectedAttribute,
         ref,
         ...restProps
@@ -74,6 +79,7 @@ export const PillCompletion = (props: IPillCompletionProps): JSX.Element => {
         >
             {children}
             <span className="mx_Autocomplete_Completion_title">{title}</span>
+            {titleAdornment}
             <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
             <span className="mx_Autocomplete_Completion_description">{description}</span>
         </div>
