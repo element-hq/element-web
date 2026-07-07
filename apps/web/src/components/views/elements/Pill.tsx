@@ -17,15 +17,7 @@ import { usePermalink } from "../../../hooks/usePermalink";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
-
-export enum PillType {
-    UserMention = "TYPE_USER_MENTION",
-    RoomMention = "TYPE_ROOM_MENTION",
-    AtRoomMention = "TYPE_AT_ROOM_MENTION", // '@room' mention
-    EventInSameRoom = "TYPE_EVENT_IN_SAME_ROOM",
-    EventInOtherRoom = "TYPE_EVENT_IN_OTHER_ROOM",
-    Keyword = "TYPE_KEYWORD", // Used to highlight keywords that triggered a notification rule
-}
+import { PillType } from "./PillType";
 
 const linkIcon = <LinkIcon className="mx_Pill_LinkIcon mx_BaseAvatar" />;
 

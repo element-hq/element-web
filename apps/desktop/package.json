@@ -86,7 +86,7 @@
         "app-builder-lib": "26.15.3",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
-        "electron": "42.4.1",
+        "electron": "43.0.0",
         "electron-builder": "26.15.3",
         "electron-builder-squirrel-windows": "26.15.3",
         "electron-devtools-installer": "^4.0.0",
@@ -102,6 +102,7 @@
         "mkdirp": "^3.0.0",
         "pacote": "^22.0.0",
         "rimraf": "^6.0.0",
+        "shared-types": "workspace:*",
         "tar": "^7.5.8",
         "typescript": "catalog:",
         "vitest": "catalog:"

@@ -38,7 +38,7 @@ import {
     mockPlatformPeg,
 } from "../test-utils";
 import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/IncomingCallToast";
-import { SdkContextClass } from "../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass";
 import UserActivity from "../../src/UserActivity";
 import Modal from "../../src/Modal";
 import { mkThread } from "../test-utils/threads";
@@ -665,7 +665,7 @@ describe("Notifier", () => {
 
     describe("evaluateEvent", () => {
         beforeEach(() => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(testRoom.roomId);
 
             jest.spyOn(UserActivity.sharedInstance(), "userActiveRecently").mockReturnValue(true);
 
@@ -720,7 +720,7 @@ describe("Notifier", () => {
                 thread_id: rootEvent.getId()!,
             });
 
-            await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
+            await waitFor(() => expect(SDKContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
 
             Notifier.evaluateEvent(events[1]);
             expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);

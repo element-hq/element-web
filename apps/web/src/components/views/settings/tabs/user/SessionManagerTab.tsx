@@ -40,7 +40,7 @@ const LoginWithQR = lazy(() => import("../../../auth/LoginWithQR"));
 
 const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
-        title: _t("action|sign_out"),
+        title: _t("settings|sessions|sign_out_n_sessions", { count: sessionsToSignOutCount }),
         description: (
             <div>
                 <p>
@@ -51,7 +51,7 @@ const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> 
             </div>
         ),
         cancelButton: _t("action|cancel"),
-        button: _t("action|sign_out"),
+        button: _t("settings|sessions|sign_out_n_sessions", { count: sessionsToSignOutCount }),
     });
     const [confirmed] = await finished;
 

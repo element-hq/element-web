@@ -40,6 +40,7 @@ import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { MediaPreviewValue } from "../@types/media_preview";
+import SettingController from "./controllers/SettingController.ts";
 
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings: Record<string, any> = {};
@@ -887,5 +888,6 @@ export default class SettingsStore {
     }
 }
 
+SettingController.settingsStore = SettingsStore;
 // For debugging purposes
 window.mxSettingsStore = SettingsStore;

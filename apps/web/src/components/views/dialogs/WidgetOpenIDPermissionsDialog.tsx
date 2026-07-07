@@ -16,7 +16,7 @@ import { _t } from "../../../languageHandler";
 import { OIDCState } from "../../../stores/widgets/WidgetPermissionStore";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 
 interface IProps {
     widget: Widget;
@@ -50,7 +50,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         if (this.state.rememberSelection) {
             logger.log(`Remembering ${this.props.widget.id} as allowed=${allowed} for OpenID`);
 
-            SdkContextClass.instance.widgetPermissionStore.setOIDCState(
+            SDKContextClass.instance.widgetPermissionStore.setOIDCState(
                 this.props.widget,
                 this.props.widgetKind,
                 this.props.inRoomId,
