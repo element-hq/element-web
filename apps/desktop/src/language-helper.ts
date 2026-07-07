@@ -121,7 +121,7 @@ export class AppLocalization {
             return !!translations;
         });
 
-        counterpart.setLocale(chosenLocale);
+        counterpart.setLocale(chosenLocale!);
         this.store.set(AppLocalization.STORE_KEY, locales);
 
         this.resetLocalizedUI();

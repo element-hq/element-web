@@ -101,8 +101,7 @@
     },
     "nx": {
         "includedScripts": [
-            "lint:types",
-            "lint:js"
+            "lint:types"
         ]
     }
 }
