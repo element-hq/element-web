@@ -38,7 +38,7 @@ button.preview {
     }
 }
 
-.container {
+.containerExpanded {
     max-width: 100%;
     width: 478px;
     display: flex;
