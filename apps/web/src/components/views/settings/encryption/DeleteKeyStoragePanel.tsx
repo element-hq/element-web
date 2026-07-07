@@ -34,7 +34,7 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
     const onDeleteClick = useCallback(async () => {
         setBusy(true);
         try {
-            setEnabled(false);
+            await setEnabled(false);
         } finally {
             setBusy(false);
         }
