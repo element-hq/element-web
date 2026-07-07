@@ -34,6 +34,7 @@ import { NotificationPusherSettings } from "./NotificationPusherSettings";
 import SettingsFlag from "../../elements/SettingsFlag";
 import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
 import { onSubmitPreventDefault } from "../../../../utils/form.ts";
+import PlatformPeg from "../../../../PlatformPeg";
 
 enum NotificationDefaultLevels {
     AllMessages = "all_messages",
@@ -132,6 +133,12 @@ export default function NotificationSettings2(): JSX.Element {
                         level={SettingLevel.DEVICE}
                     />
                     <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
+                    {PlatformPeg.get()?.supportsWindowFocus() && (
+                        <>
+                            <SettingsFlag name="fullScreenCallNotification" level={SettingLevel.DEVICE} />
+                            <SettingsFlag name="raiseWindowOnCall" level={SettingLevel.DEVICE} />
+                        </>
+                    )}
                 </Form.Root>
                 <SettingsSubsection
                     heading={

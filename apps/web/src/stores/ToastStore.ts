@@ -24,6 +24,13 @@ export interface IToast<C extends ComponentClass> {
     bodyClassName?: string;
 
     /**
+     * Marks an incoming-call toast and its call type, so the prominent
+     * {@link IncomingCallPopup} can identify and route it without depending on
+     * the (presentational) bodyClassName. See {@link isIncomingCallToast}.
+     */
+    callKind?: "ec" | "legacy";
+
+    /**
      * What to do if the user clicks the close button. If this is undefined, the
      * close button is not displayed.
      *

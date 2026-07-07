@@ -30,6 +30,7 @@ import { _t } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import WidgetUtils from "./utils/WidgetUtils";
 import SettingsStore from "./settings/SettingsStore";
+import PlatformPeg from "./PlatformPeg";
 import { WidgetType } from "./widgets/WidgetType";
 import { SettingLevel } from "./settings/SettingLevel";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
@@ -620,11 +621,19 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         const toastKey = getIncomingLegacyCallToastKey(call.callId);
         if (status === CallState.Ringing) {
+            // Bring the app window to the front for an incoming call, if opted in.
+            // Not for force-silenced calls (e.g. already in another call) — yanking
+            // focus would interrupt the active call. No-op where the OS forbids it
+            // (e.g. Wayland); there the native notification's click raises the window.
+            if (SettingsStore.getValue("raiseWindowOnCall") && !this.isForcedSilent()) {
+                PlatformPeg.get()?.focusWindow();
+            }
             ToastStore.sharedInstance().addOrReplaceToast({
                 key: toastKey,
                 priority: 100,
                 component: IncomingLegacyCallToast,
                 bodyClassName: "mx_IncomingLegacyCallToast",
+                callKind: "legacy",
                 props: { call },
             });
         } else {

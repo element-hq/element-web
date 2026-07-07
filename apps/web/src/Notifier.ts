@@ -662,11 +662,20 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
             return;
         }
 
+        // Bring the app window to the front for an actual incoming (ringing) call,
+        // if the user opted in. No-op on platforms that can't focus their window
+        // (e.g. Wayland, where the existing native call notification's click is
+        // the only way to raise the window).
+        if (content.notification_type === "ring" && SettingsStore.getValue("raiseWindowOnCall")) {
+            PlatformPeg.get()?.focusWindow();
+        }
+
         toaster.addOrReplaceToast({
             key,
             priority: 100,
             component: IncomingCallToast,
             bodyClassName: "mx_IncomingCallToast",
+            callKind: "ec",
             props: { notificationEvent: ev },
         });
     }

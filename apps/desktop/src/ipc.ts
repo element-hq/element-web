@@ -13,18 +13,20 @@ import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMedia
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
-let focusHandlerAttached = false;
+// Flash the taskbar entry until the window is next focused. Best-effort attention
+// cue where a programmatic raise/focus is refused (Wayland compositors, Windows
+// foreground-lock). The once("focus") listener auto-removes when it fires; repeated
+// calls while unfocused just stack idempotent flashFrame handlers, all cleared on
+// the next focus — no module-level state to wedge if the window is destroyed mid-flash.
+function flashFrameUntilFocused(): void {
+    if (process.platform !== "win32" && process.platform !== "linux") return;
+    if (!global.mainWindow || global.mainWindow.isFocused()) return;
+    global.mainWindow.flashFrame(true);
+    global.mainWindow.once("focus", () => global.mainWindow?.flashFrame(false));
+}
+
 ipcMain.on("loudNotification", function (): void {
-    if (process.platform === "win32" || process.platform === "linux") {
-        if (global.mainWindow && !global.mainWindow.isFocused() && !focusHandlerAttached) {
-            global.mainWindow.flashFrame(true);
-            global.mainWindow.once("focus", () => {
-                global.mainWindow?.flashFrame(false);
-                focusHandlerAttached = false;
-            });
-            focusHandlerAttached = true;
-        }
-    }
+    flashFrameUntilFocused();
 });
 
 let powerSaveBlockerId: number | null = null;
@@ -64,12 +66,17 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             ret = app.getVersion();
             break;
         case "focusWindow":
-            if (global.mainWindow.isMinimized()) {
-                global.mainWindow.restore();
-            } else {
-                global.mainWindow.show();
-                global.mainWindow.focus();
-            }
+            // Reliably bring the window to the foreground regardless of its
+            // current state (minimized to tray, hidden, or merely unfocused).
+            // Mirrors the tray toggleWin() raise path.
+            if (global.mainWindow.isMinimized()) global.mainWindow.restore();
+            if (!global.mainWindow.isVisible()) global.mainWindow.show();
+            global.mainWindow.focus();
+            // Best-effort attention fallback: Wayland compositors (and Windows'
+            // foreground-lock) often refuse a programmatic raise/focus. If we
+            // still don't have focus, flash the taskbar entry until the user
+            // interacts (guarded so repeated calls don't leak focus listeners).
+            flashFrameUntilFocused();
             break;
 
         case "navigateBack":

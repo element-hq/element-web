@@ -33,6 +33,7 @@ import {
 } from "../../../notifications";
 import { _t, type TranslatedString } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
+import PlatformPeg from "../../../PlatformPeg";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import Modal from "../../../Modal";
@@ -680,6 +681,12 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
                             <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
                             <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
                             <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
+                            {PlatformPeg.get()?.supportsWindowFocus() && (
+                                <>
+                                    <SettingsFlag name="fullScreenCallNotification" level={SettingLevel.DEVICE} />
+                                    <SettingsFlag name="raiseWindowOnCall" level={SettingLevel.DEVICE} />
+                                </>
+                            )}
                         </>
                     )}
 

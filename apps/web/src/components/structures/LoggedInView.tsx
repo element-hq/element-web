@@ -49,6 +49,7 @@ import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { RoomView } from "./RoomView";
 import ToastContainer from "./ToastContainer";
+import IncomingCallPopup from "./IncomingCallPopup";
 import UserView from "./UserView";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
@@ -738,6 +739,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     <div className={bodyClasses}>{content}</div>
                 </div>
                 <PipContainer />
+                <IncomingCallPopup />
                 <NonUrgentToastContainer />
                 {audioFeedArraysForCalls}
             </MatrixClientContextProvider>

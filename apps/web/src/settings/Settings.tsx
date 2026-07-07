@@ -312,6 +312,8 @@ export interface Settings {
     "notificationSound": IBaseSetting<NotificationSound | false>;
     "notificationBodyEnabled": IBaseSetting<boolean>;
     "audioNotificationsEnabled": IBaseSetting<boolean>;
+    "fullScreenCallNotification": IBaseSetting<boolean>;
+    "raiseWindowOnCall": IBaseSetting<boolean>;
     "enableWidgetScreenshots": IBaseSetting<boolean>;
     "promptBeforeInviteUnknownUsers": IBaseSetting<boolean>;
     "widgetOpenIDPermissions": IBaseSetting<{
@@ -1160,6 +1162,16 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         displayName: _td("settings|notifications|enable_audible_notifications_session"),
+    },
+    "fullScreenCallNotification": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("settings|notifications|full_screen_call_notification"),
+    },
+    "raiseWindowOnCall": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("settings|notifications|raise_window_on_call"),
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
