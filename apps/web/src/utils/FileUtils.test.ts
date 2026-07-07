@@ -6,8 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { describe, it, expect } from "vitest";
 
-import { downloadLabelForFile } from "../../../src/utils/FileUtils.ts";
+import { downloadLabelForFile } from "./FileUtils.ts";
 
 describe("FileUtils", () => {
     describe("downloadLabelForFile", () => {

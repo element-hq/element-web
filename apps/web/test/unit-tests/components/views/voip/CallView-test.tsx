@@ -26,6 +26,7 @@ import {
     MockedCall,
     setupAsyncStoreWithClient,
     useMockMediaDevices,
+    clientAndSDKContextRenderOptions,
 } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { CallView as _CallView } from "../../../../../src/components/views/voip/CallView";
@@ -33,6 +34,7 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { CallStore } from "../../../../../src/stores/CallStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -41,6 +43,7 @@ describe("CallView", () => {
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
     let client: Mocked<MatrixClient>;
+    let sdkContext: TestSDKContext;
     let room: Room;
     let alice: RoomMember;
     let call: MockedCall;
@@ -51,6 +54,8 @@ describe("CallView", () => {
 
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
+        sdkContext = new TestSDKContext();
+        sdkContext._client = client;
         DMRoomMap.makeShared(client);
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
@@ -88,7 +93,10 @@ describe("CallView", () => {
     });
 
     const renderView = async (role: string | undefined = undefined): Promise<void> => {
-        render(<CallView room={room} resizing={false} role={role} onClose={() => {}} />);
+        render(
+            <CallView room={room} resizing={false} role={role} onClose={() => {}} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
         await act(() => Promise.resolve()); // Let effects settle
     };
 

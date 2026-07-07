@@ -349,7 +349,6 @@ export interface Settings {
     "debug_timeline_panel": IBaseSetting<boolean>;
     "debug_registration": IBaseSetting<boolean>;
     "debug_animation": IBaseSetting<boolean>;
-    "debug_legacy_call_handler": IBaseSetting<boolean>;
     "audioInputMuted": IBaseSetting<boolean>;
     "videoInputMuted": IBaseSetting<boolean>;
     "activeCallRoomIds": IBaseSetting<string[]>;
@@ -1319,10 +1318,6 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "debug_animation": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-    },
-    "debug_legacy_call_handler": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
