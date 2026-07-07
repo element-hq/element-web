@@ -19,6 +19,7 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -50,15 +51,18 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
-import { type MatrixClientProps, withMatrixClientHOC, useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import {
+    type MatrixClientProps,
+    withMatrixClientHOC,
+    useMatrixClientContext,
+} from "../../../contexts/MatrixClientContext";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
-import { MessageComposerUrlPreviewWrapper, useMessageComposerUrlPreviewViewModel } from "./MessageComposerUrlPreview";
+import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import { Type } from "../../../editor/parts";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 import PlatformPeg from "../../../PlatformPeg";
 
 // The prefix used when persisting editor drafts to localstorage.
@@ -414,6 +418,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             const { relation, replyToEvent } = this.props;
             const composerContent = this.state.composerContent;
             this.setState({ composerContent: "", initialComposerContent: "" });
+            this.props.urlPreviewVm.updateWithText("");
             dis.dispatch({
                 action: Action.ClearAndFocusSendMessageComposer,
                 timelineRenderingType: this.context.timelineRenderingType,

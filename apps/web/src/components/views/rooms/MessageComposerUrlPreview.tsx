@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useState, type ReactNode } from "react";
 import { MessageComposerUrlPreviewView } from "@element-hq/web-shared-components";
 
-import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import { ModuleApi } from "../../../modules/Api";
