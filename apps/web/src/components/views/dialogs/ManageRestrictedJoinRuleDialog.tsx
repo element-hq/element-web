@@ -78,7 +78,7 @@ const addAllParents = (set: Set<Room>, room: Room): void => {
     });
 };
 
-const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [], onFinished }) => {
+const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected, onFinished }) => {
     const cli = room.client;
     const [newSelected, setNewSelected] = useState(new Set<string>(selected));
     const [query, setQuery] = useState("");
@@ -92,7 +92,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
             Array.from(parents),
             SpaceStore.instance.spacePanelSpaces.filter((s) => !parents.has(s)),
             filterBoolean(
-                selected.map((roomId) => {
+                selected?.map((roomId) => {
                     const room = cli.getRoom(roomId);
                     if (!room) {
                         return { roomId, name: roomId } as Room;
@@ -100,7 +100,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     if (room.getMyMembership() !== KnownMembership.Join || !room.isSpaceRoom()) {
                         return room;
                     }
-                }),
+                }) ?? [],
             ),
         ];
     }, [cli, selected, room]);
