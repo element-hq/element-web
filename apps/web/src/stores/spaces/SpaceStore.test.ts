@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import { type EventEmitter } from "events";
-import { mocked } from "jest-mock";
 import {
     EventType,
     RoomMember,
@@ -20,30 +22,30 @@ import {
     type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import * as testUtils from "test-utils";
+import { mkEvent, stubClient } from "test-utils";
 
-import SpaceStore from "../../../src/stores/spaces/SpaceStore";
+import SpaceStore from "./SpaceStore";
 import {
     MetaSpace,
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
-} from "../../../src/stores/spaces";
-import * as testUtils from "../../test-utils";
-import { mkEvent, stubClient } from "../../test-utils";
+} from ".";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
-import { Action } from "../../../src/dispatcher/actions";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
-import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
-import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
-import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
-import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
+import { SettingLevel } from "../../settings/SettingLevel";
+import { Action } from "../../dispatcher/actions";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import RoomListStoreV3 from "../room-list-v3/RoomListStoreV3";
+import { DefaultTagID } from "../room-list-v3/skip-list/tag";
+import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
+import { NotificationLevel } from "../notifications/NotificationLevel";
+import { storeRoomAliasInCache } from "../../RoomAliasCache.ts";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 const testUserId = "@test:user";
 
@@ -74,14 +76,14 @@ const space2 = "!space2:server";
 const space3 = "!space3:server";
 const space4 = "!space4:server";
 
-const getUserIdForRoomId = jest.fn((roomId: string) => {
+const getUserIdForRoomId = vi.fn((roomId: string) => {
     return {
         [dm1]: dm1Partner.userId,
         [dm2]: dm2Partner.userId,
         [dm3]: dm3Partner.userId,
     }[roomId];
 });
-const getDMRoomsForUserId = jest.fn((userId) => {
+const getDMRoomsForUserId = vi.fn((userId) => {
     switch (userId) {
         case dm1Partner.userId:
             return [dm1];
@@ -101,7 +103,7 @@ describe("SpaceStore", () => {
     const store = SpaceStore.instance;
     const client = MatrixClientPeg.safeGet();
 
-    const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
+    const spyDispatcher = vi.spyOn(defaultDispatcher, "dispatch");
 
     let rooms: Room[] = [];
     const mkRoom = (roomId: string) => testUtils.mkRoom(client, roomId, rooms);
@@ -109,26 +111,26 @@ describe("SpaceStore", () => {
     const viewRoom = (roomId: string) => defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: roomId }, true);
 
     const run = async () => {
-        mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
-        mocked(client).getRoomUpgradeHistory.mockImplementation((roomId) => {
+        vi.mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
+        vi.mocked(client).getRoomUpgradeHistory.mockImplementation((roomId) => {
             const room = rooms.find((room) => room.roomId === roomId);
             return room ? [room] : [];
         });
         await testUtils.setupAsyncStoreWithClient(store, client);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
     };
 
     const setShowAllRooms = async (value: boolean) => {
         if (store.allRoomsInHome === value) return;
         const emitProm = testUtils.emitPromise(store, UPDATE_HOME_BEHAVIOUR);
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, value);
-        jest.runOnlyPendingTimers(); // run async dispatch
+        vi.runOnlyPendingTimers(); // run async dispatch
         await emitProm;
     };
 
     beforeEach(async () => {
-        jest.runOnlyPendingTimers(); // run async dispatch
-        mocked(client).getVisibleRooms.mockReturnValue((rooms = []));
+        vi.runOnlyPendingTimers(); // run async dispatch
+        vi.mocked(client).getVisibleRooms.mockReturnValue((rooms = []));
 
         await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.DEVICE, {
             [MetaSpace.Home]: true,
@@ -321,7 +323,7 @@ describe("SpaceStore", () => {
                 mkSpace(space3, [invite2]);
                 mkSpace(space4, [room4, fav2, space2, space3]);
 
-                mocked(client).getRoom.mockImplementation(
+                vi.mocked(client).getRoom.mockImplementation(
                     (roomId) => rooms.find((room) => room.roomId === roomId) || null,
                 );
 
@@ -334,20 +336,20 @@ describe("SpaceStore", () => {
                 });
 
                 [invite1, invite2].forEach((roomId) => {
-                    mocked(client.getRoom(roomId)!).getMyMembership.mockReturnValue(KnownMembership.Invite);
+                    vi.mocked(client.getRoom(roomId)!).getMyMembership.mockReturnValue(KnownMembership.Invite);
                 });
 
                 // have dmPartner1 be in space1 with you
                 const mySpace1Member = new RoomMember(space1, testUserId);
                 mySpace1Member.membership = KnownMembership.Join;
-                (rooms.find((r) => r.roomId === space1)!.getMembers as jest.Mock).mockReturnValue([
+                vi.mocked(rooms.find((r) => r.roomId === space1)!.getMembers).mockReturnValue([
                     mySpace1Member,
                     dm1Partner,
                 ]);
                 // have dmPartner2 be in space2 with you
                 const mySpace2Member = new RoomMember(space2, testUserId);
                 mySpace2Member.membership = KnownMembership.Join;
-                (rooms.find((r) => r.roomId === space2)!.getMembers as jest.Mock).mockReturnValue([
+                vi.mocked(rooms.find((r) => r.roomId === space2)!.getMembers).mockReturnValue([
                     mySpace2Member,
                     dm2Partner,
                 ]);
@@ -366,9 +368,9 @@ describe("SpaceStore", () => {
                         ts: Date.now(),
                     }) as MatrixEvent,
                 ]);
-                mocked(cliRoom2!.currentState).getStateEvents.mockImplementation(room2MockStateEvents);
+                vi.mocked(cliRoom2!.currentState).getStateEvents.mockImplementation(room2MockStateEvents);
                 const cliSpace2 = client.getRoom(space2);
-                mocked(cliSpace2!.currentState).maySendStateEvent.mockImplementation(
+                vi.mocked(cliSpace2!.currentState).maySendStateEvent.mockImplementation(
                     (evType: string, userId: string) => {
                         if (evType === EventType.SpaceChild) {
                             return userId === client.getUserId();
@@ -379,7 +381,7 @@ describe("SpaceStore", () => {
 
                 // room 3 claims to be a child of space3 but is not due to invalid m.space.parent (permissions)
                 const cliRoom3 = client.getRoom(room3);
-                mocked(cliRoom3!.currentState).getStateEvents.mockImplementation(
+                vi.mocked(cliRoom3!.currentState).getStateEvents.mockImplementation(
                     testUtils.mockStateEventImplementation([
                         mkEvent({
                             event: true,
@@ -393,7 +395,7 @@ describe("SpaceStore", () => {
                     ]),
                 );
                 const cliSpace3 = client.getRoom(space3);
-                mocked(cliSpace3!.currentState).maySendStateEvent.mockImplementation(
+                vi.mocked(cliSpace3!.currentState).maySendStateEvent.mockImplementation(
                     (evType: string, userId: string) => {
                         if (evType === EventType.SpaceChild) {
                             return false;
@@ -404,10 +406,10 @@ describe("SpaceStore", () => {
 
                 [videoRoomPrivate, videoRoomPublic].forEach((roomId) => {
                     const videoRoom = client.getRoom(roomId);
-                    (videoRoom!.isCallRoom as jest.Mock).mockReturnValue(true);
+                    vi.mocked(videoRoom!.isCallRoom).mockReturnValue(true);
                 });
                 const videoRoomPublicRoom = client.getRoom(videoRoomPublic);
-                (videoRoomPublicRoom!.getJoinRule as jest.Mock).mockReturnValue(JoinRule.Public);
+                vi.mocked(videoRoomPublicRoom!.getJoinRule).mockReturnValue(JoinRule.Public);
                 await run();
             });
 
@@ -468,7 +470,7 @@ describe("SpaceStore", () => {
 
                 it("updates the video room space when the room type changes", async () => {
                     expect(store.isRoomInSpace(MetaSpace.VideoRooms, videoRoomPrivate)).toBeTruthy();
-                    (client.getRoom(videoRoomPublic)!.isCallRoom as jest.Mock).mockReturnValue(false);
+                    vi.mocked(client.getRoom(videoRoomPublic)!.isCallRoom).mockReturnValue(false);
                     client.emit(
                         RoomStateEvent.Events,
                         {
@@ -808,7 +810,7 @@ describe("SpaceStore", () => {
                     ts: Date.now(),
                 });
                 const spaceRoom = client.getRoom(spaceId)!;
-                mocked(spaceRoom.currentState).getStateEvents.mockImplementation(
+                vi.mocked(spaceRoom.currentState).getStateEvents.mockImplementation(
                     testUtils.mockStateEventImplementation([childEvent]),
                 );
 
@@ -826,10 +828,10 @@ describe("SpaceStore", () => {
                     ts: Date.now(),
                 });
                 const spaceRoom = client.getRoom(spaceId)!;
-                mocked(spaceRoom.currentState).getStateEvents.mockImplementation(
+                vi.mocked(spaceRoom.currentState).getStateEvents.mockImplementation(
                     testUtils.mockStateEventImplementation([memberEvent]),
                 );
-                mocked(spaceRoom).getMember.mockReturnValue(user);
+                vi.mocked(spaceRoom).getMember.mockReturnValue(user);
 
                 client.emit(RoomStateEvent.Members, memberEvent, spaceRoom.currentState, user);
             };
@@ -838,7 +840,7 @@ describe("SpaceStore", () => {
                 await run();
 
                 const room5 = mkRoom("!room5:server");
-                const emitSpy = jest.spyOn(store, "emit").mockClear();
+                const emitSpy = vi.spyOn(store, "emit").mockClear();
                 // add room5 into space2
                 addChildRoom(space2, room5.roomId);
 
@@ -870,7 +872,7 @@ describe("SpaceStore", () => {
             it("emits events for parent spaces when a member is added", async () => {
                 await run();
 
-                const emitSpy = jest.spyOn(store, "emit").mockClear();
+                const emitSpy = vi.spyOn(store, "emit").mockClear();
                 // add into space2
                 addMember(space2, dm1Partner);
 
@@ -898,7 +900,7 @@ describe("SpaceStore", () => {
     });
 
     describe("active space switching tests", () => {
-        const fn = jest.spyOn(store, "emit");
+        const fn = vi.spyOn(store, "emit");
 
         beforeEach(async () => {
             mkRoom(room1); // not a space
@@ -994,9 +996,9 @@ describe("SpaceStore", () => {
         expect(space.loadMembersIfNeeded).not.toHaveBeenCalled();
 
         store.setActiveSpace(space1, true);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(space.loadMembersIfNeeded).toHaveBeenCalled();
-        jest.runAllTimers();
+        vi.runAllTimers();
 
         expect(store.activeSpace).toBe(space1);
         expect(getCurrentRoom()).toBe(room1);
@@ -1005,7 +1007,7 @@ describe("SpaceStore", () => {
         expect(store.activeSpace).toBe(space1);
         expect(getCurrentRoom()).toBe(room1);
 
-        jest.runAllTimers();
+        vi.runAllTimers();
         expect(store.activeSpace).toBe(space1);
         expect(getCurrentRoom()).toBe(room1);
     });
@@ -1033,7 +1035,7 @@ describe("SpaceStore", () => {
         });
 
         const getCurrentRoom = () => {
-            jest.runOnlyPendingTimers();
+            vi.runOnlyPendingTimers();
             return currentRoom;
         };
 
@@ -1102,7 +1104,7 @@ describe("SpaceStore", () => {
             mkSpace(space2, [room1, room2]);
 
             const cliRoom2 = client.getRoom(room2)!;
-            mocked(cliRoom2.currentState).getStateEvents.mockImplementation(
+            vi.mocked(cliRoom2.currentState).getStateEvents.mockImplementation(
                 testUtils.mockStateEventImplementation([
                     mkEvent({
                         event: true,
@@ -1154,7 +1156,7 @@ describe("SpaceStore", () => {
                 [MetaSpace.Home]: true,
                 [MetaSpace.Orphans]: false,
             });
-            jest.runAllTimers();
+            vi.runAllTimers();
             expect(store.activeSpace).toBe(space1);
         });
 
@@ -1193,7 +1195,7 @@ describe("SpaceStore", () => {
         });
 
         it("avoids cycles", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             store.traverseSpace("!b:server", fn);
 
             expect(fn).toHaveBeenCalledTimes(3);
@@ -1203,7 +1205,7 @@ describe("SpaceStore", () => {
         });
 
         it("including rooms", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             store.traverseSpace("!b:server", fn, true);
 
             expect(fn).toHaveBeenCalledTimes(8); // twice for shared-child
@@ -1217,7 +1219,7 @@ describe("SpaceStore", () => {
         });
 
         it("excluding rooms", () => {
-            const fn = jest.fn();
+            const fn = vi.fn();
             store.traverseSpace("!b:server", fn, false);
 
             expect(fn).toHaveBeenCalledTimes(3);
@@ -1236,14 +1238,14 @@ describe("SpaceStore", () => {
         const rootSpace = mkSpace(space1, [room1, room2, space2]);
         rootSpace.getMyMembership.mockReturnValue(KnownMembership.Invite);
         client.emit(ClientEvent.Room, rootSpace);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([]);
 
         // accept invite to space
         rootSpace.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(RoomEvent.MyMembership, rootSpace, KnownMembership.Join, KnownMembership.Invite);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
 
@@ -1252,7 +1254,7 @@ describe("SpaceStore", () => {
         const rootSpaceRoom1 = mkRoom(room1);
         rootSpaceRoom1.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(ClientEvent.Room, rootSpaceRoom1);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.isRoomInSpace(space1, room1)).toBeTruthy();
@@ -1266,7 +1268,7 @@ describe("SpaceStore", () => {
         const rootSpaceRoom2 = mkRoom(room2);
         rootSpaceRoom2.getMyMembership.mockReturnValue(KnownMembership.Invite);
         client.emit(ClientEvent.Room, rootSpaceRoom2);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.isRoomInSpace(space1, room2)).toBeTruthy();
@@ -1302,12 +1304,12 @@ describe("SpaceStore", () => {
             room: space1,
         });
         client.emit(RoomStateEvent.Members, memberEvent, rootSpace.currentState, dm1Partner);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.getSpaceFilteredUserIds(space1)!.has(dm1Partner.userId)).toBeTruthy();
         const dm1Room = mkRoom(dm1);
         dm1Room.getMyMembership.mockReturnValue(KnownMembership.Join);
         client.emit(ClientEvent.Room, dm1Room);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.isRoomInSpace(space1, dm1)).toBeTruthy();
@@ -1321,7 +1323,7 @@ describe("SpaceStore", () => {
         subspace.getMyMembership.mockReturnValue(KnownMembership.Join);
         const prom = testUtils.emitPromise(SpaceStore.instance, space1);
         client.emit(ClientEvent.Room, subspace);
-        jest.runOnlyPendingTimers();
+        vi.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces.map((r) => r.roomId)).toStrictEqual([rootSpace.roomId]);
         await prom;
@@ -1357,7 +1359,7 @@ describe("SpaceStore", () => {
 
     describe("when feature_dynamic_room_predecessors is not enabled", () => {
         beforeAll(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "Spaces.allRoomsInHome",
             );
             // @ts-ignore calling a private function
@@ -1372,7 +1374,7 @@ describe("SpaceStore", () => {
         });
 
         beforeEach(() => {
-            jest.clearAllMocks();
+            vi.clearAllMocks();
         });
 
         it("passes that value in calls to getVisibleRooms and getRoomUpgradeHistory during startup", async () => {
@@ -1406,7 +1408,7 @@ describe("SpaceStore", () => {
 
     describe("when feature_dynamic_room_predecessors is enabled", () => {
         beforeAll(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            vi.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) =>
                     settingName === "Spaces.allRoomsInHome" || settingName === "feature_dynamic_room_predecessors",
             );
@@ -1422,7 +1424,7 @@ describe("SpaceStore", () => {
         });
 
         beforeEach(() => {
-            jest.clearAllMocks();
+            vi.clearAllMocks();
         });
 
         it("passes that value in calls to getVisibleRooms and getRoomUpgradeHistory during startup", async () => {
@@ -1459,7 +1461,7 @@ describe("SpaceStore", () => {
             const state = RoomNotificationStateStore.instance.getRoomState(room);
             // @ts-ignore
             state._level = NotificationLevel.Notification;
-            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+            vi.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: MetaSpace.Home,
                 sections: [{ tag: DefaultTagID.Untagged, rooms: [room] }],
             });

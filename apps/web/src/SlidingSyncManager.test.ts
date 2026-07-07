@@ -6,30 +6,32 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/src/sliding-sync";
-import { mocked } from "jest-mock";
-import { ClientEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import fetchMock from "@fetch-mock/jest";
-import EventEmitter from "events";
-import { waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
 
-import { SlidingSyncManager } from "../../src/SlidingSyncManager";
-import { mkStubRoom, stubClient } from "../test-utils";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/src/sliding-sync";
+import { ClientEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import fetchMock from "@fetch-mock/vitest";
+import EventEmitter from "events";
+import { waitFor } from "test-utils-rtl";
+import { mkStubRoom, stubClient } from "test-utils";
+
+import { SlidingSyncManager } from "./SlidingSyncManager";
 
 class MockSlidingSync extends EventEmitter {
     lists = {};
     listModifiedCount = 0;
     terminated = false;
     needsResend = false;
-    modifyRoomSubscriptions = jest.fn();
-    getRoomSubscriptions = jest.fn();
-    useCustomSubscription = jest.fn();
-    getListParams = jest.fn();
-    setList = jest.fn();
-    setListRanges = jest.fn();
-    getListData = jest.fn();
-    extensions = jest.fn();
-    desiredRoomSubscriptions = jest.fn();
+    modifyRoomSubscriptions = vi.fn();
+    getRoomSubscriptions = vi.fn();
+    useCustomSubscription = vi.fn();
+    getListParams = vi.fn();
+    setList = vi.fn();
+    setListRanges = vi.fn();
+    getListData = vi.fn();
+    extensions = vi.fn();
+    desiredRoomSubscriptions = vi.fn();
 }
 
 describe("SlidingSyncManager", () => {
@@ -42,7 +44,7 @@ describe("SlidingSyncManager", () => {
         manager = new SlidingSyncManager();
         client = stubClient();
         // by default the client has no rooms: stubClient magically makes rooms annoyingly.
-        mocked(client.getRoom).mockReturnValue(null);
+        vi.mocked(client.getRoom).mockReturnValue(null);
         (manager as any).configure(client, "invalid");
         manager.slidingSync = slidingSync;
         fetchMock.get("https://proxy/client/server.json", {});
@@ -51,9 +53,9 @@ describe("SlidingSyncManager", () => {
     describe("setRoomVisible", () => {
         it("adds a subscription for the room", async () => {
             const roomId = "!room:id";
-            mocked(client.getRoom).mockReturnValue(mkStubRoom(roomId, "foo", client));
+            vi.mocked(client.getRoom).mockReturnValue(mkStubRoom(roomId, "foo", client));
             const subs = new Set<string>();
-            mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
+            vi.mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
             await manager.setRoomVisible(roomId);
             expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
         });
@@ -72,14 +74,14 @@ describe("SlidingSyncManager", () => {
                     },
                 }),
             ]);
-            mocked(client.getRoom).mockImplementation((r: string): Room | null => {
+            vi.mocked(client.getRoom).mockImplementation((r?: string): Room | null => {
                 if (roomId === r) {
                     return room;
                 }
                 return null;
             });
             const subs = new Set<string>();
-            mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
+            vi.mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
             await manager.setRoomVisible(roomId);
             expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
             // we aren't prescriptive about what the sub name is.
@@ -88,11 +90,11 @@ describe("SlidingSyncManager", () => {
 
         it("waits if the room is not yet known", async () => {
             const roomId = "!room:id";
-            mocked(client.getRoom).mockReturnValue(null);
+            vi.mocked(client.getRoom).mockReturnValue(null);
             const subs = new Set<string>();
-            mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
+            vi.mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
 
-            const setVisibleDone = jest.fn();
+            const setVisibleDone = vi.fn();
             manager.setRoomVisible(roomId).then(setVisibleDone);
 
             await waitFor(() => expect(client.getRoom).toHaveBeenCalledWith(roomId));
@@ -100,7 +102,7 @@ describe("SlidingSyncManager", () => {
             expect(setVisibleDone).not.toHaveBeenCalled();
 
             const stubRoom = mkStubRoom(roomId, "foo", client);
-            mocked(client.getRoom).mockReturnValue(stubRoom);
+            vi.mocked(client.getRoom).mockReturnValue(stubRoom);
             client.emit(ClientEvent.Room, stubRoom);
 
             await waitFor(() => expect(setVisibleDone).toHaveBeenCalled());
@@ -110,7 +112,7 @@ describe("SlidingSyncManager", () => {
     describe("ensureListRegistered", () => {
         it("creates a new list based on the key", async () => {
             const listKey = "key";
-            mocked(slidingSync.getListParams).mockReturnValue(null);
+            vi.mocked(slidingSync.getListParams).mockReturnValue(null);
             await manager.ensureListRegistered(listKey, {
                 sort: ["by_recency"],
             });
@@ -124,7 +126,7 @@ describe("SlidingSyncManager", () => {
 
         it("updates an existing list based on the key", async () => {
             const listKey = "key";
-            mocked(slidingSync.getListParams).mockReturnValue({
+            vi.mocked(slidingSync.getListParams).mockReturnValue({
                 ranges: [[0, 42]],
             });
             await manager.ensureListRegistered(listKey, {
@@ -141,7 +143,7 @@ describe("SlidingSyncManager", () => {
 
         it("updates ranges on an existing list based on the key if there's no other changes", async () => {
             const listKey = "key";
-            mocked(slidingSync.getListParams).mockReturnValue({
+            vi.mocked(slidingSync.getListParams).mockReturnValue({
                 ranges: [[0, 42]],
             });
             await manager.ensureListRegistered(listKey, {
@@ -153,7 +155,7 @@ describe("SlidingSyncManager", () => {
 
         it("no-ops for idential changes", async () => {
             const listKey = "key";
-            mocked(slidingSync.getListParams).mockReturnValue({
+            vi.mocked(slidingSync.getListParams).mockReturnValue({
                 ranges: [[0, 42]],
                 sort: ["by_recency"],
             });
@@ -170,7 +172,7 @@ describe("SlidingSyncManager", () => {
         it("requests in expanding batchSizes", async () => {
             const gapMs = 1;
             const batchSize = 10;
-            mocked(slidingSync.getListData).mockImplementation((key) => {
+            vi.mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 64,
                     roomIndexToRoomId: {},
@@ -201,7 +203,7 @@ describe("SlidingSyncManager", () => {
         it("handles accounts with zero rooms", async () => {
             const gapMs = 1;
             const batchSize = 10;
-            mocked(slidingSync.getListData).mockImplementation((key) => {
+            vi.mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 0,
                     roomIndexToRoomId: {},
@@ -219,7 +221,7 @@ describe("SlidingSyncManager", () => {
             SlidingSyncManager.serverSupportsSlidingSync = false;
         });
         it("shorts out if the server has 'native' sliding sync support", async () => {
-            jest.spyOn(manager, "nativeSlidingSyncSupport").mockResolvedValue(true);
+            vi.spyOn(manager, "nativeSlidingSyncSupport").mockResolvedValue(true);
             expect(SlidingSyncManager.serverSupportsSlidingSync).toBeFalsy();
             await manager.checkSupport(client);
             expect(SlidingSyncManager.serverSupportsSlidingSync).toBeTruthy();
@@ -230,8 +232,8 @@ describe("SlidingSyncManager", () => {
 
         beforeEach(() => {
             untypedManager = manager;
-            jest.spyOn(untypedManager, "configure");
-            jest.spyOn(untypedManager, "startSpidering");
+            vi.spyOn(untypedManager, "configure");
+            vi.spyOn(untypedManager, "startSpidering");
         });
         it("uses the baseUrl", async () => {
             await manager.setup(client);

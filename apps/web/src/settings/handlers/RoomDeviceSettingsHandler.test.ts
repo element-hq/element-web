@@ -6,9 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import RoomDeviceSettingsHandler from "../../../../src/settings/handlers/RoomDeviceSettingsHandler";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { type CallbackFn, WatchManager } from "../../../../src/settings/WatchManager";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+
+import RoomDeviceSettingsHandler from "./RoomDeviceSettingsHandler";
+import { SettingLevel } from "../SettingLevel";
+import { type CallbackFn, WatchManager } from "../WatchManager";
 
 describe("RoomDeviceSettingsHandler", () => {
     const roomId = "!room:example.com";
@@ -25,7 +29,7 @@ describe("RoomDeviceSettingsHandler", () => {
     beforeEach(() => {
         watchers = new WatchManager();
         handler = new RoomDeviceSettingsHandler(watchers);
-        settingListener = jest.fn();
+        settingListener = vi.fn();
     });
 
     afterEach(() => {

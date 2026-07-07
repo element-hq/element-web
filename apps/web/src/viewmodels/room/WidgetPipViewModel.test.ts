@@ -5,18 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { type MockedObject } from "jest-mock-vitest-adapter";
-import { createRef } from "react";
+// @vitest-environment happy-dom
 
-import { mkRoom, stubClient } from "../../test-utils";
-import { WidgetPipViewModel } from "../../../src/viewmodels/room/WidgetPipViewModel";
-import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
-import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
-import { CallStore, CallStoreEvent } from "../../../src/stores/CallStore";
-import { type Call } from "../../../src/models/Call";
+import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
+import { createRef } from "react";
+import { mkRoom, stubClient } from "test-utils";
+
+import { WidgetPipViewModel } from "./WidgetPipViewModel";
+import WidgetStore, { type IApp } from "../../stores/WidgetStore";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
+import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { CallStore, CallStoreEvent } from "../../stores/CallStore";
+import { type Call } from "../../models/Call";
 
 const userId = "@example:example.org";
 const widgetId = "test-widget-id";
@@ -25,8 +27,8 @@ type BackClickEvent = Parameters<WidgetPipViewModel["onBackClick"]>[0];
 
 const createBackClickEvent = (): BackClickEvent =>
     ({
-        preventDefault: jest.fn(),
-        stopPropagation: jest.fn(),
+        preventDefault: vi.fn(),
+        stopPropagation: vi.fn(),
     }) as unknown as BackClickEvent;
 
 describe("WidgetPipViewModel", () => {
@@ -46,7 +48,7 @@ describe("WidgetPipViewModel", () => {
             name: "Test Widget",
             data: {},
         } as unknown as IApp;
-        jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
+        vi.spyOn(WidgetStore.instance, "getApps").mockReturnValue([widget]);
 
         vm = new WidgetPipViewModel({
             room,
@@ -58,7 +60,7 @@ describe("WidgetPipViewModel", () => {
 
     afterEach(() => {
         vm.dispose();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("updates room name", () => {
@@ -68,7 +70,7 @@ describe("WidgetPipViewModel", () => {
     });
 
     it("updates onBackClick if call changes", () => {
-        const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const dispatchSpy = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
 
         vm.onBackClick(createBackClickEvent());
         expect(dispatchSpy).toHaveBeenCalledWith({
@@ -91,8 +93,8 @@ describe("WidgetPipViewModel", () => {
     });
 
     it("updates onBackClick if viewingRoom changes", () => {
-        const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
-        const moveSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer").mockImplementation(() => {});
+        const dispatchSpy = vi.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        const moveSpy = vi.spyOn(WidgetLayoutStore.instance, "moveToContainer").mockImplementation(() => {});
 
         vm.setViewingRoom(true);
         vm.onBackClick(createBackClickEvent());

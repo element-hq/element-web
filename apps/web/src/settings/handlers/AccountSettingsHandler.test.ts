@@ -5,12 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
 
-import AccountSettingsHandler from "../../../../src/settings/handlers/AccountSettingsHandler.ts";
-import { WatchManager } from "../../../../src/settings/WatchManager.ts";
-import { stubClient } from "../../../test-utils";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import AccountSettingsHandler from "./AccountSettingsHandler.ts";
+import { WatchManager } from "../WatchManager.ts";
 
 describe("AccountSettingsHandler", () => {
     const watchManager = new WatchManager();
@@ -19,7 +21,7 @@ describe("AccountSettingsHandler", () => {
     beforeEach(stubClient);
 
     it("should notify watchers of recent_emoji on account data update", async () => {
-        const fn = jest.fn();
+        const fn = vi.fn();
         handler.watchers.watchSetting("recent_emoji", null, fn);
 
         const ev = new MatrixEvent({
@@ -28,7 +30,7 @@ describe("AccountSettingsHandler", () => {
                 recent_emoji: [["🤒", 1]],
             },
         });
-        mocked(handler.client.getAccountData).mockImplementation((eventType) =>
+        vi.mocked(handler.client.getAccountData).mockImplementation((eventType) =>
             eventType === "io.element.recent_emoji" ? ev : undefined,
         );
         handler.client.emit(ClientEvent.AccountData, ev);

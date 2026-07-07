@@ -117,6 +117,14 @@ export class RoomListItemViewModel
             SettingsStore.unwatchSetting(settingsWatchRef);
         });
 
+        // Subscribe to settings changes for section toggle
+        const settingsShowSectionsRef = SettingsStore.watchSetting(
+            "RoomList.showSections",
+            null,
+            this.onShowSectionsChange,
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(settingsShowSectionsRef));
+
         // Subscribe to call state changes
         this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallStateChanged);
         // If there is an active call for this room, listen to participant changes
@@ -176,6 +184,11 @@ export class RoomListItemViewModel
 
     private onMessagePreviewSettingChanged = (): void => {
         void this.loadAndSetMessagePreview();
+    };
+
+    private readonly onShowSectionsChange = (): void => {
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+        this.snapshot.merge({ areSectionsEnabled });
     };
 
     /**
@@ -368,6 +381,7 @@ export class RoomListItemViewModel
 
         // Build sections list for the "Move to section" submenu
         const sections: Section[] = RoomListItemViewModel.buildSections(roomTags, availableSections);
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
         return {
             id: room.roomId,
@@ -397,6 +411,7 @@ export class RoomListItemViewModel
             canMarkAsUnread,
             roomNotifState,
             sections,
+            areSectionsEnabled,
         };
     }
 

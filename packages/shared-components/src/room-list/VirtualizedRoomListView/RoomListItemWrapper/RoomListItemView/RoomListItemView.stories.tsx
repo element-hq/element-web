@@ -308,3 +308,9 @@ export const LastItem: Story = {
         isSelected: true,
     },
 };
+
+export const SectionDisabled: Story = {
+    args: {
+        areSectionsEnabled: false,
+    },
+};
