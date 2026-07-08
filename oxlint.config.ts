@@ -9,8 +9,7 @@ import { defineConfig } from "oxlint";
 
 const defaultRestrictedProperties = [
     { object: "window", property: "setImmediate", message: "Use setTimeout instead" },
-    // TODO we will enable this in a follow up PR
-    // ...buildRestrictedPropertiesOptions(["React.forwardRef", "*.forwardRef", "forwardRef"], "Use ref props instead."),
+    ...buildRestrictedPropertiesOptions(["React.forwardRef", "*.forwardRef", "forwardRef"], "Use ref props instead."),
 ] as const;
 const defaultRestrictedGlobals = [
     {
