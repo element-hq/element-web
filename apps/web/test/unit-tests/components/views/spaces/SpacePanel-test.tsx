@@ -135,13 +135,7 @@ describe("<SpacePanel />", () => {
     });
 
     beforeEach(() => {
-        SpaceStore.instance.enabledMetaSpaces.push(
-            MetaSpace.Home,
-            MetaSpace.Favourites,
-            MetaSpace.People,
-            MetaSpace.Orphans,
-            MetaSpace.VideoRooms,
-        );
+        SpaceStore.instance.enabledMetaSpaces.push(MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms);
         mocked(shouldShowComponent).mockClear().mockReturnValue(true);
     });
     afterEach(() => {
