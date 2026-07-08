@@ -21,3 +21,14 @@ exports[`Clock > renders the clock with a lot of seconds 1`] = `
   </time>
 </div>
 `;
+
+exports[`Clock > renders the clock with single digit minute 1`] = `
+<div>
+  <time
+    class="mx_Clock"
+    datetime="PT1M40S"
+  >
+    1:40
+  </time>
+</div>
+`;
