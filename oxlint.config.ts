@@ -98,6 +98,7 @@ export default defineConfig({
         "no-restricted-globals": ["error", ...defaultRestrictedGlobals],
         "no-restricted-properties": ["error", ...defaultRestrictedProperties],
         "import/no-duplicates": ["error"],
+        "typescript/no-require-imports": "error",
 
         "element-call/copyright-header": [
             "error",
@@ -436,6 +437,12 @@ export default defineConfig({
                 "storybook/use-storybook-expect": "error",
                 "storybook/use-storybook-testing-library": "error",
                 "storybook/no-uninstalled-addons": "error",
+            },
+        },
+        {
+            files: ["**/*.{cjs,js}"],
+            rules: {
+                "typescript/no-require-imports": "off",
             },
         },
     ],
