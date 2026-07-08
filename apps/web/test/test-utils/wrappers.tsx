@@ -14,7 +14,7 @@ import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
 import { SDKContext } from "../../src/contexts/SDKContext";
 import { type SDKContextClass } from "../../src/contexts/SDKContextClass";
-import { RoomContextType } from "../../src/contexts/RoomContext.ts";
+import { type RoomContextType } from "../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../src/contexts/ScopedRoomContext.tsx";
 
 type WrapperProps<T> = { wrappedRef?: Ref<ComponentType<T>> } & T;
