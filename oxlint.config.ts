@@ -146,7 +146,6 @@ export default defineConfig({
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
         "typescript/no-floating-promises": "off",
-        "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",
         "no-extra-boolean-cast": "off",
