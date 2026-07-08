@@ -42,12 +42,10 @@ describe("buildMenuTemplate", () => {
             ({ buildMenuTemplate } = await import("./vectormenu.js"));
         });
 
-        if (platform === "darwin") {
-            it("should have an app-named item first", () => {
-                const menu = buildMenuTemplate();
-                expect(menu.items[0].label).toBe("ChatApp");
-            });
-        }
+        it.runIf(platform === "darwin")("should have an app-named item first", () => {
+            const menu = buildMenuTemplate();
+            expect(menu.items[0].label).toBe("ChatApp");
+        });
 
         it("should include expected `help` menu", () => {
             const menu = buildMenuTemplate();
