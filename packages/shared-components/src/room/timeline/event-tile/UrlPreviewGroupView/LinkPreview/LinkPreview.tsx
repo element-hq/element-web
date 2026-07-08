@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type MouseEventHandler, type JSX, useCallback } from "react";
+import React, { type JSX } from "react";
 import { Tooltip, Text, Avatar, Button } from "@vector-im/compound-web";
 import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 import classNames from "classnames";
@@ -14,7 +14,6 @@ import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
-import { _t } from "../../../../../core/i18n/i18n";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
@@ -93,7 +92,20 @@ export function LinkPreview(props: LinkPreviewProps): JSX.Element {
     }
 }
 
+function createImageClickHandler({ onImageClick, ...preview }: LinkPreviewProps): React.MouseEventHandler {
+    return (ev) => {
+        if (ev.button != 0 || ev.metaKey) return;
+        ev.preventDefault();
+
+        if (!preview.image?.imageFull) {
+            return;
+        }
+        onImageClick();
+    };
+}
+
 export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
+    const { translate: _t } = useI18n();
     let img: JSX.Element | undefined;
 
     if (preview.image && !preview.image.playable) {
@@ -103,38 +115,25 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
                     backgroundImage: `url('${preview.image.imageThumb}')`,
                 }}
                 className={styles.preview}
+                onClick={createImageClickHandler(preview)}
                 aria-label={_t("timeline|url_preview|view_image")}
             />
         );
     }
 
     return (
-        // className to be changed after I get the CSS from design
-        <div className={styles.containerExpanded}>
+        <div className={styles.containerCollapsed}>
             {img}
             <div className={styles.textContent}>
                 <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
-                {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
+                {preview.siteName && <LinkSiteName siteName={preview.siteName} />}
             </div>
         </div>
     );
 }
 
-export function LinkPreviewExpanded({ onImageClick, ...preview }: LinkPreviewProps): JSX.Element {
+export function LinkPreviewExpanded(preview: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
-
-    const onImageClickHandler = useCallback<MouseEventHandler>(
-        (ev) => {
-            if (ev.button != 0 || ev.metaKey) return;
-            ev.preventDefault();
-
-            if (!preview.image?.imageFull) {
-                return;
-            }
-            onImageClick();
-        },
-        [preview.image?.imageFull, onImageClick],
-    );
 
     if (!preview.image && !preview.author && !preview.description) {
         return <LinkPreviewInline {...preview} />;
@@ -175,7 +174,7 @@ export function LinkPreviewExpanded({ onImageClick, ...preview }: LinkPreviewPro
                         backgroundImage: `url('${preview.image.imageThumb}')`,
                     }}
                     className={styles.preview}
-                    onClick={onImageClickHandler}
+                    onClick={createImageClickHandler(preview)}
                     aria-label={_t("timeline|url_preview|view_image")}
                 />
             );

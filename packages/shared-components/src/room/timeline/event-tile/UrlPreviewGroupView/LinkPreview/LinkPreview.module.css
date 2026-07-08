@@ -9,32 +9,82 @@ button.preview {
     background-color: #fff;
 }
 
-.preview {
-    display: flex;
-    position: relative;
+.containerCollapsed {
     max-width: 100%;
-    width: 478px;
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-    border: none;
-    padding: 0;
-    > img {
-        height: 200px;
-        width: 478px;
-        object-fit: cover;
-    }
-    .playButton[data-kind="primary"] {
-        padding: 0;
-        width: 50px;
-        height: 50px;
-        margin: auto;
-        background: var(--cpd-color-text-on-solid-primary);
-        > svg {
-            margin: auto;
-            border-radius: 50px;
-            color: var(--cpd-color-icon-primary);
+    width: calc(478px - 32px);
+    /* minus the padding */
+    display: flex;
+    border: 1px solid var(--cpd-color-border-interactive-primary);
+    border-radius: 12px;
+    /* Get radius from cpd */
+    flex-direction: row;
+    color: var(--cpd-color-gray-900);
+    overflow: clip;
+    gap: 8px;
+    padding: 12px 16px;
+
+    background: var(--cpd-color-bg-subtle-secondary);
+
+    &.inline {
+        flex-direction: row;
+        gap: var(--cpd-space-4x);
+        padding: var(--cpd-space-3x) var(--cpd-space-4x);
+
+        .title {
+            margin: 0;
         }
+
+        .siteAvatar {
+            margin: auto 0;
+        }
+
+        .siteName {
+            margin: 0;
+        }
+    }
+
+    .textContent {
+        &.inline {
+            padding: 0;
+        }
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview {
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 8px;
+        border: none;
+        flex-shrink: 0;
+    }
+
+    .siteName {
+        line-height: 17.5px;
+    }
+
+    .title,
+    .siteName > span {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        overflow: hidden;
+        min-width: 0;
+    }
+}
+
+.siteName {
+    vertical-align: middle;
+    display: flex;
+
+    > * {
+        /* Center everything */
+        margin: auto 0;
     }
 }
 
@@ -43,7 +93,8 @@ button.preview {
     width: 478px;
     display: flex;
     border: 1px solid var(--cpd-color-border-interactive-primary);
-    border-radius: 12px; /* Get radius from cpd */
+    border-radius: 12px;
+    /* Get radius from cpd */
     flex-direction: column;
     color: var(--cpd-color-gray-900);
     overflow: clip;
@@ -70,9 +121,11 @@ button.preview {
 
     .textContent {
         padding: var(--cpd-space-3x) var(--cpd-space-4x);
+
         &.inline {
             padding: 0;
         }
+
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-1x);
@@ -81,19 +134,64 @@ button.preview {
     .caption {
         display: inline-flex;
         flex-direction: column;
-        min-width: 0; /* Prevent blowout */
+        min-width: 0;
+        /* Prevent blowout */
     }
+
     .caption {
         flex: 1;
-        overflow: hidden; /* cause it to wrap rather than clip */
+        overflow: hidden;
+        /* cause it to wrap rather than clip */
+    }
+
+    .preview {
+        display: flex;
+        position: relative;
+        max-width: 100%;
+        width: 478px;
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        border: none;
+        padding: 0;
+
+        > img {
+            height: 200px;
+            width: 478px;
+            object-fit: cover;
+        }
+
+        .playButton[data-kind="primary"] {
+            padding: 0;
+            width: 50px;
+            height: 50px;
+            margin: auto;
+            background: var(--cpd-color-text-on-solid-primary);
+
+            > svg {
+                margin: auto;
+                border-radius: 50px;
+                color: var(--cpd-color-icon-primary);
+            }
+        }
+    }
+
+    .siteName {
+        margin-top: var(--cpd-space-1x);
+    }
+
+    .title,
+    .description {
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
     }
 }
 
 .siteName {
-    margin-top: var(--cpd-space-1x);
     vertical-align: middle;
     display: flex;
     gap: var(--cpd-space-1-5x);
+
     > * {
         /* Center everything */
         margin: auto 0;
@@ -101,13 +199,11 @@ button.preview {
 }
 
 .title,
-.description {
+.siteName > Text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     white-space: normal;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
     margin: 0;
 }
 
