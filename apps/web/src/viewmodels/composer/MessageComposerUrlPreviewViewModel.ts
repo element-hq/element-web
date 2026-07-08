@@ -42,6 +42,9 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private urlPreviewVisible: boolean;
 
+    /**
+     * Content at the latest call of updateWithText
+     */
     private content: string = "";
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
