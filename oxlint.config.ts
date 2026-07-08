@@ -135,7 +135,6 @@ export default defineConfig({
         // These would be nice to enable at some point
         "unicorn/prefer-set-has": "off",
         "unicorn/no-new-array": "off",
-        "require-unicode-regexp": "off",
         "typescript/restrict-template-expressions": "off",
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
