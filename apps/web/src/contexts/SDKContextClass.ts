@@ -30,6 +30,8 @@ import { Action } from "../dispatcher/actions.ts";
 import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
 import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
+import { CallStore } from "../stores/CallStore";
+import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -73,6 +75,7 @@ export class SDKContextClass {
     protected _MultiRoomViewStore?: MultiRoomViewStore;
     protected _Notifier?: Notifier;
     protected _CallStore?: CallStore;
+    protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
 
     public constructor() {
         SettingController.sdkContext = this;
@@ -207,6 +210,14 @@ export class SDKContextClass {
     public get callStore(): CallStore {
         this._CallStore ??= CallStore.instance;
         return this._CallStore;
+    }
+
+    public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
+        if (!this._LatestRtcNotificationEventStore) {
+            this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
+            this._LatestRtcNotificationEventStore.start();
+        }
+        return this._LatestRtcNotificationEventStore;
     }
 
     public onLoggedOut(): void {
