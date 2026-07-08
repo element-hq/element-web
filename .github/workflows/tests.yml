@@ -119,8 +119,15 @@ jobs:
                   node-version: "lts/*"
                   cache: "pnpm"
 
-            - name: Install Deps
+            - name: Install Deps (layered)
+              run: "./scripts/layered.sh"
+              if: matrix.path != 'packages/shared-components'
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+
+            - name: Install Deps (normal)
               run: "pnpm install"
+              if: matrix.path == 'packages/shared-components'
 
             - name: Cache storybook & vitest
               uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6

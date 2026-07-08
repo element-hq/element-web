@@ -27,7 +27,7 @@ import {
     type IPushRules,
     RelationType,
     JoinRule,
-    type OidcClientConfig,
+    type ValidatedAuthMetadata,
     type GroupCall,
     type EventStatus,
     type ICreateRoomOpts,
@@ -781,7 +781,7 @@ export function mkRoomState(
 export function mkServerConfig(
     hsUrl: string,
     isUrl: string,
-    delegatedAuthentication?: OidcClientConfig,
+    delegatedAuthentication?: ValidatedAuthMetadata,
 ): ValidatedServerConfig {
     return {
         hsUrl,

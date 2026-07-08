@@ -137,7 +137,7 @@ export default withMermaid({
                     { text: "Memory profiling", link: "/memory-profiles-and-leaks.md" },
                     { text: "Jitsi", link: "/jitsi-dev.md" },
                     { text: "Feature flags", link: "/feature-flags.md" },
-                    { text: "OIDC and delegated authentication", link: "/oidc.md" },
+                    { text: "OAuth and delegated authentication", link: "/oauth.md" },
                     { text: "Release Process", link: "/release.md" },
                     { text: "MVVM", link: "/MVVM.md" },
                     { text: "Settings", link: "/settings.md" },
