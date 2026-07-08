@@ -14,6 +14,8 @@ import { debounce } from "lodash";
 
 const logger = rootLogger.getChild("MessageComposerUrlPreviewViewModel");
 
+export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
+
 export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
     visible: boolean;
@@ -113,7 +115,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         }
     }
 
-    private computeSnapshotDebounced = debounce(this.computeSnapshot, 500);
+    private computeSnapshotDebounced = debounce(this.computeSnapshot, DEBOUNCE_REQUEST_TIMEOUT_MS);
 
     /**
      * Update the view model about visible state of previews.

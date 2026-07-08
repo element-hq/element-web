@@ -5,15 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { MessageComposerUrlPreviewView } from "@element-hq/web-shared-components";
 
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
-import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
 import { ModuleApi } from "../../../modules/Api";
-
-export const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
 
 export function MessageComposerUrlPreviewWrapper({
     content,
