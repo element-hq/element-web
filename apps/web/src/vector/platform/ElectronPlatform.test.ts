@@ -86,7 +86,7 @@ describe("ElectronPlatform", () => {
     it("should return oidc client state as expected", async () => {
         const platform = new ElectronPlatform();
         await platform.getConfig();
-        expect(platform.getOidcClientState()).toMatchInlineSnapshot(`":element-desktop-ssoid:session-id"`);
+        expect(platform.getOAuthClientState()).toMatchInlineSnapshot(`":element-desktop-ssoid:session-id"`);
     });
 
     it("dispatches view settings action on preferences event", () => {

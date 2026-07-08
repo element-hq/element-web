@@ -1547,7 +1547,6 @@
             "required_msc_support": "Wymaga MSC4429 (aktualizacje profilu dla starszej wersji synchronizacji)"
         },
         "feature_wysiwyg_composer_description": "Użyj bogatego edytora tekstu zamiast edytora Markdown podczas tworzenia wiadomości.",
-        "group_calls": "Nowe wrażenia rozmów grupowych",
         "group_developer": "Deweloper",
         "group_encryption": "Szyfrowanie",
         "group_experimental": "Eksperymentalne",
@@ -3034,7 +3033,6 @@
             "audio_output": "Wyjście audio",
             "audio_output_empty": "Nie wykryto wyjść audio",
             "auto_gain_control": "Automatyczna regulacja głośności",
-            "connection_section": "Połączenie",
             "dialog_title": "<strong>Ustawienia:</strong> Głos i wideo",
             "echo_cancellation": "Usuwanie echa",
             "echo_cancellation_description": "Usuwa echo z mikrofonu podczas połączeń. To ustawienie dotyczy również połączenia Element Call.",

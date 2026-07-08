@@ -35,7 +35,6 @@ export const DEFAULTS = {
         preferred_domain: "meet.element.io",
     },
     element_call: {
-        use_exclusively: false,
         brand: "Element Call",
     },
 

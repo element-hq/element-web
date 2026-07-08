@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
-import { OidcClientStore } from "../../../src/stores/oidc/OidcClientStore";
 import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
 import { createTestClient } from "../../test-utils";
 import { TestSDKContext } from "../TestSDKContext.ts";
@@ -35,10 +34,6 @@ describe("SDKContextClass", () => {
         expect(() => sdkContext.userProfilesStore).toThrow("Unable to create UserProfilesStore without a client");
     });
 
-    it("oidcClientStore should raise an error without a client", () => {
-        expect(() => sdkContext.oidcClientStore).toThrow("Unable to create OidcClientStore without a client");
-    });
-
     describe("when SDKContext has a client", () => {
         beforeEach(() => {
             sdkContext._client = client;
@@ -56,13 +51,6 @@ describe("SDKContextClass", () => {
             sdkContext.onLoggedOut();
             sdkContext._client = client;
             expect(sdkContext.userProfilesStore).not.toBe(store);
-        });
-
-        it("oidcClientstore should return a OidcClientStore", () => {
-            const store = sdkContext.oidcClientStore;
-            expect(store).toBeInstanceOf(OidcClientStore);
-            // it should return the same instance
-            expect(sdkContext.oidcClientStore).toBe(store);
         });
     });
 });
