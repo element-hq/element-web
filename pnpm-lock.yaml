@@ -261,8 +261,6 @@ overrides:
   pretty-format@30>react-is: 19.2.6
   '@types/react': ^19.2.10
   '@types/react-dom': ^19.2.3
-  oidc-client-ts: 3.5.0
-  jwt-decode: 4.0.0
   caniuse-lite: 1.0.30001799
   markdown-it: 14.1.1
   matrix-widget-api: ^1.17.0
@@ -649,9 +647,6 @@ importers:
       mime:
         specifier: ^4.0.4
         version: 4.1.0
-      oidc-client-ts:
-        specifier: 3.5.0
-        version: 3.5.0
       opus-recorder:
         specifier: ^8.0.3
         version: 8.0.5
@@ -6563,7 +6558,7 @@ packages:
       focus-trap: ^7
       fuse.js: ^7
       idb-keyval: ^6
-      jwt-decode: 4.0.0
+      jwt-decode: ^4
       nprogress: ^0.2
       qrcode: ^1.5
       sortablejs: ^1

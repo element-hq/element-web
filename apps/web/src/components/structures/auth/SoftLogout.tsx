@@ -26,7 +26,6 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
-import { SDKContext } from "../../../contexts/SDKContext";
 import { type URLParams } from "../../../vector/url_utils.ts";
 
 enum LoginView {
@@ -61,9 +60,6 @@ interface IState {
 }
 
 export default class SoftLogout extends React.Component<IProps, IState> {
-    public static contextType = SDKContext;
-    declare public context: React.ContextType<typeof SDKContext>;
-
     public constructor(props: IProps) {
         super(props);
 
@@ -92,7 +88,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             if (!wipeData) return;
 
             logger.log("Clearing data from soft-logged-out session");
-            Lifecycle.logout(this.context.oidcClientStore);
+            Lifecycle.logout();
         });
     };
 

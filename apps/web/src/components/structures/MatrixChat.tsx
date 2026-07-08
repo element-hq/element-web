@@ -340,11 +340,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         );
 
         // remove the loginToken or auth code from the URL regardless
-        if (
-            !!this.props.urlParams.legacy_sso ||
-            !!this.props.urlParams.oidc_fragment ||
-            !!this.props.urlParams.oidc_query
-        ) {
+        if (!!this.props.urlParams.legacy_sso || !!this.props.urlParams.oauth2) {
             this.props.onTokenLoginCompleted(this.props.urlParams, this.getFragmentAfterLogin());
         }
 
@@ -696,7 +692,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case "logout":
                 this.stores.legacyCallHandler.hangupAllCalls();
                 Promise.all([...[...CallStore.instance.connectedCalls].map((call) => call.disconnect())]).finally(() =>
-                    Lifecycle.logout(this.stores.oidcClientStore),
+                    Lifecycle.logout(),
                 );
                 break;
             case "require_registration":

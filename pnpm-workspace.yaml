@@ -114,8 +114,6 @@ overrides:
     pretty-format@30>react-is: 19.2.6
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    oidc-client-ts: 3.5.0
-    jwt-decode: 4.0.0
     caniuse-lite: 1.0.30001799
     markdown-it: 14.1.1
     matrix-widget-api: "^1.17.0"
