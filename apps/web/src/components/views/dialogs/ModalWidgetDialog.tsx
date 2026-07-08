@@ -207,6 +207,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     <iframe
                         title={this.widget.name ?? undefined}
                         ref={this.appFrame}
+                        // oxlint-disable-next-line react/iframe-missing-sandbox
                         sandbox="allow-forms allow-scripts allow-same-origin"
                         src={widgetUrl}
                         onLoad={this.onLoad}

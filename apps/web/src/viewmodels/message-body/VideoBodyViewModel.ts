@@ -129,7 +129,7 @@ export class VideoBodyViewModel
             error: null,
             posterLoading: false,
             blurhashUrl: null,
-            imageSize: SettingsStore.getValue("Images.size") as ImageSize,
+            imageSize: SettingsStore.getValue("Images.size"),
         };
     }
 
@@ -196,7 +196,7 @@ export class VideoBodyViewModel
 
     private static computeSnapshot(props: VideoBodyViewModelProps, state: InternalState): VideoBodyViewSnapshot {
         const content = props.mxEvent.getContent<MediaEventContent>();
-        const autoplay = !props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
+        const autoplay = !props.inhibitInteraction && SettingsStore.getValue("autoplayVideo");
         const aspectRatio = VideoBodyViewModel.getAspectRatio(props.mxEvent);
         const { w: maxWidth, h: maxHeight } = VideoBodyViewModel.getDimensions(props.mxEvent, state.imageSize);
 
@@ -352,7 +352,7 @@ export class VideoBodyViewModel
         const currentEvent = this.props.mxEvent;
         const currentHelper = this.props.mediaEventHelper;
         try {
-            const autoplay = !this.props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
+            const autoplay = !this.props.inhibitInteraction && SettingsStore.getValue("autoplayVideo");
             const thumbnailUrl = await currentHelper.thumbnailUrl.value;
 
             if (

@@ -306,10 +306,10 @@ describe("InviteDialog", () => {
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
-        await userEvent.paste(`${bobbob}`);
+        await userEvent.paste(bobbob);
 
         await screen.findAllByText(bobId);
-        expect(input).toHaveValue(`${bobbob}`);
+        expect(input).toHaveValue(bobbob);
     });
 
     it("should allow to invite multiple emails to a room", async () => {
@@ -392,9 +392,9 @@ describe("InviteDialog", () => {
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
-        await userEvent.paste(`${bobId}`);
-        await userEvent.paste(`${bobId}`);
-        await userEvent.paste(`${bobId}`);
+        await userEvent.paste(bobId);
+        await userEvent.paste(bobId);
+        await userEvent.paste(bobId);
 
         expect(input).toHaveValue("");
         await expect(screen.findAllByText(bobId, { selector: "a" })).resolves.toHaveLength(1);
@@ -405,7 +405,7 @@ describe("InviteDialog", () => {
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
-        await userEvent.keyboard(`${aliceId}`);
+        await userEvent.keyboard(aliceId);
 
         const btn = await screen.findByRole("option", { name: aliceId });
         fireEvent.click(btn);

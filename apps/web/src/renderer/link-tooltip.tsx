@@ -22,7 +22,7 @@ export const ambiguousLinkTooltipRenderer: RendererMap = {
 
         const href = anchor.attribs["href"];
         if (href && href !== getSingleTextContentNode(anchor)) {
-            let tooltip = href as string;
+            let tooltip = href;
             try {
                 tooltip = new URL(href, window.location.href).toString();
             } catch {

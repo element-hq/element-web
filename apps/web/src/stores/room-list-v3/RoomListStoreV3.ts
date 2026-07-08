@@ -574,6 +574,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 }
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class RoomListStoreV3 {
     private static internalInstance: RoomListStoreV3Class;
 

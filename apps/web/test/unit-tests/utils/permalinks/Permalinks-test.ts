@@ -440,7 +440,7 @@ describe("Permalinks", function () {
 
         it("should correctly parse event permalink via arguments", () => {
             const result = parsePermalink(
-                "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar" + "?via=m1.org&via=m2.org",
+                "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar?via=m1.org&via=m2.org",
             );
             expect(result?.eventId).toBe("$event_id/some_thing_here/foobar");
             expect(result?.roomIdOrAlias).toBe("!room_id:server");

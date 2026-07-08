@@ -53,8 +53,8 @@ describe("buildMenuTemplate", () => {
             const helpMenu = menu.items.at(-1)!;
             expect(helpMenu.label).toBe("common|help");
             const helpSubmenu = helpMenu.submenu as unknown as MenuItemConstructorOptions[];
-            expect(helpSubmenu[0]!.label).toBe("common|brand_help");
-            helpSubmenu[0]!.click!(menu.items.at(-1)!, undefined, new Event("click") as KeyboardEvent);
+            expect(helpSubmenu[0].label).toBe("common|brand_help");
+            helpSubmenu[0].click!(menu.items.at(-1)!, undefined, new Event("click") as KeyboardEvent);
             expect(shell.openExternal).toHaveBeenCalledWith("https://i.need.help");
         });
     });

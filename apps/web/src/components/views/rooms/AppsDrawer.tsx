@@ -349,7 +349,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
                 resizeNotifier.notifyTimelineHeightChanged();
             }}
             onResizeStop={(e, dir, ref, d) => {
-                let newHeight = defaultHeight! + d.height;
+                let newHeight = defaultHeight + d.height;
                 newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
 
                 WidgetLayoutStore.instance.setContainerHeight(room, "top", newHeight);

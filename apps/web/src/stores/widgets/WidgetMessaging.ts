@@ -502,7 +502,7 @@ export class WidgetMessaging extends TypedEventEmitter<WidgetMessagingEvent, Wid
             // optimized out by a browser. Instead, we'll just point the iframe
             // at a page that is reasonably safe to use in the event the iframe
             // doesn't wink away.
-            this.iframe!.src = "about:blank";
+            this.iframe.src = "about:blank";
         } else if (ActiveWidgetStore.instance.getWidgetPersistence(this.widget.id, this.roomId ?? null)) {
             logger.log("Skipping destroy - persistent widget");
             return;

@@ -46,7 +46,7 @@ interface IProps {
     pipMode?: boolean;
 
     // Used for dragging the PiP LegacyCallView
-    onMouseDownOnHeader?: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onMouseDownOnHeader?: (event: React.MouseEvent) => void;
 
     showApps?: boolean;
 

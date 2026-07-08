@@ -107,4 +107,5 @@ let singletonWidgetEchoStore: WidgetEchoStore | null = null;
 if (!singletonWidgetEchoStore) {
     singletonWidgetEchoStore = new WidgetEchoStore();
 }
+// oxlint-disable-next-line typescript/no-unnecessary-type-assertion
 export default singletonWidgetEchoStore!;

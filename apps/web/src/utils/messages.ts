@@ -80,7 +80,7 @@ export function attachMentions(
         // mentioned users.
         const prevMentions = editedContent["m.mentions"];
         if (Array.isArray(prevMentions?.user_ids)) {
-            prevMentions!.user_ids.forEach((userId) => userMentions.delete(userId));
+            prevMentions.user_ids.forEach((userId) => userMentions.delete(userId));
         }
 
         // If the original event mentioned the room, nothing to do here.

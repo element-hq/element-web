@@ -13,6 +13,7 @@ declare module "webpack-version-file-plugin" {
         extras?: Record<string, string>;
     }
 
+    // oxlint-disable-next-line typescript/no-extraneous-class
     export default class VersionFilePlugin {
         public constructor(opts: Opts);
     }

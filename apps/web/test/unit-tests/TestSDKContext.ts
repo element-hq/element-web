@@ -36,8 +36,4 @@ export class TestSDKContext extends SDKContextClass {
     declare public _SlidingSyncManager?: SlidingSyncManager;
     declare public _SpaceStore?: SpaceStoreClass;
     declare public _LegacyCallHandler?: LegacyCallHandler;
-
-    constructor() {
-        super();
-    }
 }

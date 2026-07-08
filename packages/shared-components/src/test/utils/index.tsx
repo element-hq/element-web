@@ -61,7 +61,7 @@ const customRender = (ui: ReactElement, options: SharedRenderOptions = {}): Retu
     return render(ui, {
         ...renderOptions,
         wrapper: wrapWithTooltipProvider(wrapper, presentation) as RenderOptions["wrapper"],
-    }) as ReturnType<typeof render>;
+    });
 };
 
 // eslint-disable-next-line no-restricted-imports

@@ -180,7 +180,7 @@ const NewRoomIntro: React.FC = () => {
         let parentSpace: Room | undefined;
         if (
             SpaceStore.instance.activeSpaceRoom?.canInvite(cli.getSafeUserId()) &&
-            SpaceStore.instance.isRoomInSpace(SpaceStore.instance.activeSpace!, room.roomId)
+            SpaceStore.instance.isRoomInSpace(SpaceStore.instance.activeSpace, room.roomId)
         ) {
             parentSpace = SpaceStore.instance.activeSpaceRoom;
         }
@@ -193,7 +193,7 @@ const NewRoomIntro: React.FC = () => {
                         className="mx_NewRoomIntro_inviteButton"
                         kind="primary"
                         onClick={() => {
-                            showSpaceInvite(parentSpace!);
+                            showSpaceInvite(parentSpace);
                         }}
                     >
                         <UserAddIcon />

@@ -39,7 +39,7 @@ const OptionalTooltip: React.FC<{
 
     const show = (): void => setIsVisible(true);
     const hide = (): void => setIsVisible(false);
-    const toggleVisibility = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    const toggleVisibility = (e: React.MouseEvent<HTMLDivElement>): void => {
         // stop map from zooming in on click
         e.stopPropagation();
         setIsVisible(!isVisible);

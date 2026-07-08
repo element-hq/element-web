@@ -1405,6 +1405,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     }
 }
 
+// oxlint-disable-next-line typescript/no-extraneous-class
 export default class SpaceStore {
     private static readonly internalInstance = (() => {
         const instance = new SpaceStoreClass();

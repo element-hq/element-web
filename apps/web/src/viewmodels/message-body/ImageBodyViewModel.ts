@@ -143,7 +143,7 @@ export class ImageBodyViewModel
             placeholder: mxEvent.getContent<ImageContent>().info?.[BLURHASH_FIELD]
                 ? ImageBodyViewPlaceholder.NONE
                 : ImageBodyViewPlaceholder.SPINNER,
-            imageSize: SettingsStore.getValue("Images.size") as ImageSize,
+            imageSize: SettingsStore.getValue("Images.size"),
             generatedThumbnailUrl: null,
         };
     }
@@ -195,7 +195,7 @@ export class ImageBodyViewModel
     private static computeSnapshot(props: ImageBodyViewModelProps, state: InternalState): ImageBodyViewSnapshot {
         const content = props.mxEvent.getContent<ImageContent>();
         const dimensions = ImageBodyViewModel.getImageDimensions(props, state);
-        const autoplayGifs = SettingsStore.getValue("autoplayGifs") as boolean;
+        const autoplayGifs = SettingsStore.getValue("autoplayGifs");
         const contentUrl = ImageBodyViewModel.getContentUrl(props, state);
         const thumbnailSrc = props.forExport
             ? (contentUrl ?? undefined)
@@ -385,7 +385,7 @@ export class ImageBodyViewModel
             isAnimated = mayBeAnimated(content.info?.mimetype);
         }
 
-        const autoplayGifs = SettingsStore.getValue("autoplayGifs") as boolean;
+        const autoplayGifs = SettingsStore.getValue("autoplayGifs");
         if (isAnimated && !autoplayGifs) {
             if (!thumbUrl || !content.info?.thumbnail_info || mayBeAnimated(content.info.thumbnail_info.mimetype)) {
                 const image = document.createElement("img");

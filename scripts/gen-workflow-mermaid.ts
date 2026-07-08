@@ -279,7 +279,7 @@ const triggers = new Map<string, Trigger>(); // keyed by trigger id
 const projects = new Map<string, Project>(); // keyed by project name
 const workflows = new Map<string, Workflow>(); // keyed by workflow name
 
-function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: Workflow, on?: string[]): Trigger[] {
+function getTriggerNodes(key: keyof WorkflowYaml["on"], workflow: Workflow, on?: string[]): Trigger[] {
     if (!TRIGGERS[key]) return [];
 
     if (on && !on.includes(key)) {
@@ -287,7 +287,7 @@ function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: W
     }
 
     const data = workflow.on[key]!;
-    const nodes = toArray(TRIGGERS[key]!(data, workflow));
+    const nodes = toArray(TRIGGERS[key](data, workflow));
     return nodes.map((node) => {
         if (triggers.has(node.id)) return triggers.get(node.id)!;
         triggers.set(node.id, node);

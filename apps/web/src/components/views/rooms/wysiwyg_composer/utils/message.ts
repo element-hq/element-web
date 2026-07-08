@@ -130,7 +130,7 @@ export async function sendMessage(
 
     const prom = doMaybeLocalRoomAction(
         roomId,
-        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content!),
+        (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content),
         mxClient,
     );
 
