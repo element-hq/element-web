@@ -141,7 +141,6 @@ export default defineConfig({
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-floating-promises": "off",
         "typescript/no-misused-spread": "off",
-        "promise/valid-params": "off",
         "no-extra-boolean-cast": "off",
         "react-perf/jsx-no-new-function-as-prop": "off",
         "react-perf/jsx-no-new-object-as-prop": "off",

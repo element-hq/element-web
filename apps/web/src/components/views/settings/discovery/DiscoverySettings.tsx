@@ -73,7 +73,7 @@ export const DiscoverySettings: React.FC = () => {
                 if (payload.action === "id_server_changed") {
                     setIdServerName(abbreviateUrl(client.getIdentityServerUrl()));
 
-                    getThreepidState().then();
+                    getThreepidState();
                 }
             },
             [client, getThreepidState],
