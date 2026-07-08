@@ -157,7 +157,7 @@ describe("<SpacePanel />", () => {
                     label &&
                     !["User menu", "Expand", "Options", "Create a space", "Threads", "Quick settings"].includes(label),
             );
-        expect(metaSpaceLabels).toEqual(["Home", "Favourites", "People", "Other rooms", "Conferences"]);
+        expect(metaSpaceLabels).toEqual(["Home", "Other rooms", "Conferences"]);
 
         spySettingsStore.mockRestore();
     });
