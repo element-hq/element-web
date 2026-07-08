@@ -5,33 +5,35 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+import { createTestClient, flushPromises, mkRoom } from "test-utils";
 
-import RoomListActions from "../../../src/actions/RoomListActions";
-import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
-import Modal from "../../../src/Modal";
-import * as Rooms from "../../../src/Rooms";
-import { createTestClient, flushPromises, mkRoom } from "../../test-utils";
+import RoomListActions from "./RoomListActions";
+import { DefaultTagID } from "../stores/room-list-v3/skip-list/tag";
+import Modal from "../Modal";
+import * as Rooms from "../Rooms";
 
-jest.mock("../../../src/Modal");
-jest.mock("../../../src/Rooms");
+vi.mock("../Modal");
+vi.mock("../Rooms");
 
 describe("RoomListActions", () => {
     const ROOM_ID = "!room:example.org";
 
     let client: MatrixClient;
     let room: Room;
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     beforeEach(() => {
         client = createTestClient();
         room = mkRoom(client, ROOM_ID);
-        mocked(Rooms.guessAndSetDMRoom).mockResolvedValue(undefined);
+        vi.mocked(Rooms.guessAndSetDMRoom).mockResolvedValue(undefined);
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("tagRoom", () => {
@@ -81,7 +83,7 @@ describe("RoomListActions", () => {
 
             it("opens an ErrorDialog and swallows the error if guessAndSetDMRoom rejects", async () => {
                 const error = new Error("DM tag error");
-                mocked(Rooms.guessAndSetDMRoom).mockRejectedValue(error);
+                vi.mocked(Rooms.guessAndSetDMRoom).mockRejectedValue(error);
 
                 await invokeTagRoom(undefined, DefaultTagID.DM);
 
@@ -140,7 +142,7 @@ describe("RoomListActions", () => {
 
             it("shows an ErrorDialog but still dispatches success when deleteRoomTag fails", async () => {
                 const error = new Error("delete failed");
-                jest.spyOn(client, "deleteRoomTag").mockRejectedValue(error);
+                vi.spyOn(client, "deleteRoomTag").mockRejectedValue(error);
 
                 await invokeTagRoom(DefaultTagID.Favourite, DefaultTagID.LowPriority);
 
@@ -156,7 +158,7 @@ describe("RoomListActions", () => {
 
             it("shows an ErrorDialog and dispatches failure when setRoomTag fails", async () => {
                 const error = new Error("set failed");
-                jest.spyOn(client, "setRoomTag").mockRejectedValue(error);
+                vi.spyOn(client, "setRoomTag").mockRejectedValue(error);
 
                 await invokeTagRoom(DefaultTagID.Favourite, DefaultTagID.LowPriority);
 

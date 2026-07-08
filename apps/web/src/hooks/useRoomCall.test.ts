@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook, waitFor } from "jest-matrix-react";
-import React from "react";
+// @vitest-environment happy-dom
 
-import { PlatformCallType, useRoomCall } from "../../../src/hooks/room/useRoomCall";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { renderHook, waitFor } from "test-utils-rtl";
 import {
     getMockClientWithEventEmitter,
     mkRoom,
@@ -17,13 +17,14 @@ import {
     mockClientMethodsUser,
     MockEventEmitter,
     setupAsyncStoreWithClient,
-} from "../../test-utils";
-import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomContext";
-import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
-import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
-import type LegacyCallHandler from "../../../src/LegacyCallHandler";
-import { CallStore } from "../../../src/stores/CallStore";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
+    withContexts,
+} from "test-utils";
+
+import { PlatformCallType, useRoomCall } from "./room/useRoomCall";
+import RoomContext, { type RoomContextType } from "../contexts/RoomContext";
+import type LegacyCallHandler from "../LegacyCallHandler";
+import { CallStore } from "../stores/CallStore";
+import { SDKContextClass } from "../contexts/SDKContextClass";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -31,16 +32,16 @@ describe("useRoomCall", () => {
         ...mockClientMethodsServer(),
         ...mockClientMethodsRooms(),
         matrixRTC: new MockEventEmitter(),
-        _unstable_getRTCTransports: jest.fn().mockResolvedValue([]),
+        _unstable_getRTCTransports: vi.fn().mockResolvedValue([]),
         getCrypto: () => null,
     });
     const room = mkRoom(client, "!test-room");
     // Create a stable room context for this test
     const mockRoomViewStore = {
-        isViewingCall: jest.fn().mockReturnValue(false),
-        on: jest.fn(),
-        off: jest.fn(),
-        emit: jest.fn(),
+        isViewingCall: vi.fn().mockReturnValue(false),
+        on: vi.fn(),
+        off: vi.fn(),
+        emit: vi.fn(),
     };
 
     const roomContext = {
@@ -51,30 +52,24 @@ describe("useRoomCall", () => {
 
     beforeEach(() => {
         const callHandler = {
-            getCallForRoom: jest.fn().mockReturnValue(null),
-            isCallSidebarShown: jest.fn().mockReturnValue(true),
-            addListener: jest.fn(),
-            removeListener: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
+            getCallForRoom: vi.fn().mockReturnValue(null),
+            isCallSidebarShown: vi.fn().mockReturnValue(true),
+            addListener: vi.fn(),
+            removeListener: vi.fn(),
+            on: vi.fn(),
+            off: vi.fn(),
         };
-        jest.spyOn(SDKContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
+        vi.spyOn(SDKContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
             callHandler as unknown as LegacyCallHandler,
         );
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     function render() {
-        return renderHook(() => useRoomCall(room), {
-            wrapper: ({ children }) => (
-                <MatrixClientContextProvider client={client}>
-                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
-                </MatrixClientContextProvider>
-            ),
-        });
+        return renderHook(() => useRoomCall(room), withContexts({ matrixClient: client, roomContext }));
     }
 
     describe("Element Call focus detection", () => {

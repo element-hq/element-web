@@ -11,7 +11,7 @@ import { resolve } from "node:path";
 export default defineProject({
     resolve: {
         alias: [
-            { find: "test-utils-rtl", replacement: resolve(__dirname, "./test/test-utils/jest-matrix-react") },
+            { find: "test-utils-rtl", replacement: resolve(__dirname, "./test/test-utils/vitest-matrix-react") },
             { find: "test-utils", replacement: resolve(__dirname, "./test/test-utils") },
             // Stub out workers as they do not play well under test
             {

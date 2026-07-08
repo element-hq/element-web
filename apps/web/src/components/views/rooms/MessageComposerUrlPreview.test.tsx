@@ -104,21 +104,16 @@ describe("MessageComposerUrlPreview", () => {
             (text) => text === "show-fake-preview",
             () => <strong>Fake preview</strong>,
         );
-        const { container, getByText, rerender } = wrapComponent(
+        const { container, getByText, queryByText, rerender } = wrapComponent(
             <MessageComposerUrlPreviewWrapper content="show-fake-preview" moduleApi={modApi} />,
         );
-        await waitFor(
-            () => {
-                expect(getByText("Fake preview")).toBeDefined();
-            },
-            { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
-        );
+        await waitFor(() => {
+            expect(getByText("Fake preview")).toBeDefined();
+        });
         rerender(<MessageComposerUrlPreviewWrapper content="other-text" moduleApi={modApi} />);
-        await waitFor(
-            () => {
-                expect(container).toMatchInlineSnapshot(`<div />`);
-            },
-            { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
-        );
+        await waitFor(() => {
+            expect(queryByText("Fake preview")).toBeNull();
+        });
+        expect(container).toMatchInlineSnapshot(`<div />`);
     });
 });

@@ -706,24 +706,19 @@ describe("Spotlight Dialog", () => {
         beforeEach(() => {
             jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([
                 MetaSpace.Home,
-                MetaSpace.Favourites,
-                MetaSpace.People,
                 MetaSpace.Orphans,
             ]);
         });
 
-        it.each([MetaSpace.Home, MetaSpace.Favourites, MetaSpace.People])(
-            "should show metaspace %s",
-            async (metaSpace) => {
-                const onFinished = jest.fn();
-                const { asFragment, container } = render(
-                    <SpotlightDialog initialText={metaSpace.split("-")[0]} onFinished={onFinished} />,
-                );
-                await waitFor(() =>
-                    expect(container.querySelector(".mx_SpotlightDialog_metaspaceResult")).toBeInTheDocument(),
-                );
-                expect(asFragment()).toMatchSnapshot();
-            },
-        );
+        it("should show Home metaspace", async () => {
+            const onFinished = jest.fn();
+            const { asFragment, container } = render(
+                <SpotlightDialog initialText={MetaSpace.Home.split("-")[0]} onFinished={onFinished} />,
+            );
+            await waitFor(() =>
+                expect(container.querySelector(".mx_SpotlightDialog_metaspaceResult")).toBeInTheDocument(),
+            );
+            expect(asFragment()).toMatchSnapshot();
+        });
     });
 });

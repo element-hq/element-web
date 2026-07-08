@@ -6,18 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { waitFor, renderHook } from "jest-matrix-react";
-import { type IPushRules, type MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { useNotificationSettings } from "../../../src/hooks/useNotificationSettings";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { waitFor, renderHook } from "test-utils-rtl";
+import { type IPushRules, type MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { useNotificationSettings } from "./useNotificationSettings";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import {
     DefaultNotificationSettings,
     type NotificationSettings,
-} from "../../../src/models/notificationsettings/NotificationSettings";
-import { StandardActions } from "../../../src/notifications/StandardActions";
-import { RoomNotifState } from "../../../src/RoomNotifs";
-import { stubClient } from "../../test-utils";
+} from "../models/notificationsettings/NotificationSettings";
+import { StandardActions } from "../notifications/StandardActions";
+import { RoomNotifState } from "../RoomNotifs";
+import samplePushRules from "../../test/unit-tests/models/notificationsettings/pushrules_sample.json" with { type: "json" };
 
 const expectedModel: NotificationSettings = {
     globalMute: false,
@@ -42,20 +46,16 @@ const expectedModel: NotificationSettings = {
     },
     keywords: ["justjann3", "justj4nn3", "justj4nne", "Janne", "J4nne", "Jann3", "jann3", "j4nne", "janne"],
 };
+const pushRules = samplePushRules as IPushRules;
 
 describe("useNotificationSettings", () => {
     let cli: MatrixClient;
-    let pushRules: IPushRules;
-
-    beforeAll(async () => {
-        pushRules = (await import("../models/notificationsettings/pushrules_sample.json")) as IPushRules;
-    });
 
     beforeEach(() => {
         stubClient();
         cli = MatrixClientPeg.safeGet();
-        cli.getPushRules = jest.fn(cli.getPushRules).mockResolvedValue(pushRules);
-        cli.supportsIntentionalMentions = jest.fn(cli.supportsIntentionalMentions).mockReturnValue(false);
+        cli.getPushRules = vi.fn(cli.getPushRules).mockResolvedValue(pushRules);
+        cli.supportsIntentionalMentions = vi.fn(cli.supportsIntentionalMentions).mockReturnValue(false);
     });
 
     it("correctly parses model", async () => {
@@ -66,13 +66,13 @@ describe("useNotificationSettings", () => {
     });
 
     it("correctly generates change calls", async () => {
-        const addPushRule = jest.fn(cli.addPushRule);
+        const addPushRule = vi.fn(cli.addPushRule);
         cli.addPushRule = addPushRule;
-        const deletePushRule = jest.fn(cli.deletePushRule);
+        const deletePushRule = vi.fn(cli.deletePushRule);
         cli.deletePushRule = deletePushRule;
-        const setPushRuleEnabled = jest.fn(cli.setPushRuleEnabled);
+        const setPushRuleEnabled = vi.fn(cli.setPushRuleEnabled);
         cli.setPushRuleEnabled = setPushRuleEnabled;
-        const setPushRuleActions = jest.fn(cli.setPushRuleActions);
+        const setPushRuleActions = vi.fn(cli.setPushRuleActions);
         cli.setPushRuleActions = setPushRuleActions;
 
         const { result } = renderHook(() => useNotificationSettings(cli));
