@@ -26,6 +26,8 @@ import {
     clearAllModals,
     flushPromises,
     getMockClientWithEventEmitter,
+    mockClientMethodsRooms,
+    mockClientMethodsServer,
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import { filterBoolean } from "../../../../../src/utils/arrays";
@@ -35,12 +37,14 @@ import JoinRuleSettings, {
 import { PreferredRoomVersions } from "../../../../../src/utils/PreferredRoomVersions";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import DMRoomMap from "../../../../../src/utils/DMRoomMap.ts";
 
 describe("<JoinRuleSettings />", () => {
     const userId = "@alice:server.org";
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
+        ...mockClientMethodsServer(),
+        ...mockClientMethodsRooms([]),
         getDomain: jest.fn(),
         getLocalAliases: jest.fn().mockReturnValue([]),
         sendStateEvent: jest.fn(),
@@ -50,6 +54,7 @@ describe("<JoinRuleSettings />", () => {
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         getRoomDirectoryVisibility: jest.fn(),
         setRoomDirectoryVisibility: jest.fn(),
+        matrixRTC: { on: jest.fn() },
     });
     const roomId = "!room:server.org";
     const newRoomId = "!roomUpgraded:server.org";
@@ -112,6 +117,7 @@ describe("<JoinRuleSettings />", () => {
         client.upgradeRoom.mockResolvedValue({ replacement_room: newRoomId });
         client.getRoom.mockReturnValue(null);
         jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
+        DMRoomMap.makeShared(client);
     });
 
     type TestCase = [string, { label: string; unsupportedRoomVersion: string; preferredRoomVersion: string }];

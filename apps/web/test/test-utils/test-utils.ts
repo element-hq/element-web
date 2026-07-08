@@ -49,6 +49,7 @@ import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 import { vi } from "../setup/adapter.ts";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -70,12 +71,14 @@ export function stubClient(): MatrixClient {
     vi.spyOn(peg, "get");
     vi.spyOn(peg, "safeGet");
     vi.spyOn(peg, "unset");
-    vi.spyOn(peg, "replaceUsingCreds");
+    vi.spyOn(peg, "set");
     // MatrixClientPeg.safeGet() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
     peg.get = () => client;
     peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
+    // @ts-ignore
+    SDKContextClass.instance._client = client;
     return client;
 }
 

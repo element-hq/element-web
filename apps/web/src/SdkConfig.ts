@@ -8,15 +8,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mergeWith } from "lodash";
+import { type DeepReadonly } from "shared-types";
 
 import { SnakedObject } from "./utils/SnakedObject";
-import { type IConfigOptions } from "./IConfigOptions";
+import { type IConfigOptions, type ConfigOptions } from "./IConfigOptions";
 import { isObject, objectClone } from "./utils/objects";
-import { type DeepPartial, type DeepReadonly, type Defaultize } from "./@types/common";
 import ElementDesktopLogoSvg from "../res/img/element-desktop-logo.svg";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
-export const DEFAULTS: DeepReadonly<IConfigOptions> = {
+export const DEFAULTS = {
     brand: "Element",
     branding: {
         logo_link_url: "https://element.io",
@@ -35,7 +35,6 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         preferred_domain: "meet.element.io",
     },
     element_call: {
-        use_exclusively: false,
         brand: "Element Call",
     },
 
@@ -69,13 +68,13 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         android: "https://play.google.com/store/apps/details?id=im.vector.app",
         fdroid: "https://f-droid.org/repository/browse/?fdid=im.vector.app",
     },
-};
+} satisfies ConfigOptions;
 
-export type ConfigOptions = Defaultize<IConfigOptions, typeof DEFAULTS>;
+export type { ConfigOptions };
 
 function mergeConfig(
     config: DeepReadonly<IConfigOptions>,
-    changes: DeepReadonly<DeepPartial<IConfigOptions>>,
+    changes: DeepReadonly<ConfigOptions>,
 ): DeepReadonly<IConfigOptions> {
     // return { ...config, ...changes };
     return mergeWith(objectClone(config), changes, (objValue, srcValue) => {
@@ -141,7 +140,7 @@ export default class SdkConfig {
         SdkConfig.setInstance(mergeConfig(DEFAULTS, {})); // safe to cast - defaults will be applied
     }
 
-    public static add(cfg: DeepPartial<ConfigOptions>): void {
+    public static add(cfg: DeepReadonly<ConfigOptions>): void {
         SdkConfig.put(mergeConfig(SdkConfig.get(), cfg));
     }
 }

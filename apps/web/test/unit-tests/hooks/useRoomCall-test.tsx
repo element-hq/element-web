@@ -22,9 +22,8 @@ import { ScopedRoomContextProvider } from "../../../src/contexts/ScopedRoomConte
 import RoomContext, { type RoomContextType } from "../../../src/contexts/RoomContext";
 import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
 import type LegacyCallHandler from "../../../src/LegacyCallHandler";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
-import SettingsStore from "../../../src/settings/SettingsStore";
 import { CallStore } from "../../../src/stores/CallStore";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 
 describe("useRoomCall", () => {
     const client = getMockClientWithEventEmitter({
@@ -62,11 +61,6 @@ describe("useRoomCall", () => {
         jest.spyOn(SDKContextClass.instance, "legacyCallHandler", "get").mockReturnValue(
             callHandler as unknown as LegacyCallHandler,
         );
-        const origGetValue = SettingsStore.getValue;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name, ...params): any => {
-            if (name === "feature_group_calls") return true;
-            return origGetValue(name, ...params);
-        });
     });
 
     afterEach(() => {

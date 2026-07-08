@@ -20,6 +20,8 @@
         "paths": {
             "jest-matrix-react": ["./test/test-utils/jest-matrix-react"],
             "test-utils-rtl": ["./test/test-utils/jest-matrix-react"],
+            "test-utils": ["./test/test-utils"],
+            "test-utils/*": ["./test/test-utils/*"],
             "jest-mock-vitest-adapter": ["./test/setup/adapter.ts"]
         }
     },

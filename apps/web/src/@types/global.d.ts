@@ -15,13 +15,10 @@ import type ContentMessages from "../ContentMessages";
 import { type IMatrixClientPeg } from "../MatrixClientPeg";
 import type ToastStore from "../stores/ToastStore";
 import { type DeviceListener } from "../device-listener";
-import { type RoomListStore } from "../stores/room-list/Interface";
 import { type PlatformPeg } from "../PlatformPeg";
-import type RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import { type IntegrationManagers } from "../integrations/IntegrationManagers";
 import { type ModalManager } from "../Modal";
 import type SettingsStore from "../settings/SettingsStore";
-import { type Notifier } from "../Notifier";
 import type RightPanelStore from "../stores/right-panel/RightPanelStore";
 import type WidgetStore from "../stores/WidgetStore";
 import type UserActivity from "../UserActivity";
@@ -43,7 +40,6 @@ import { type DeepReadonly } from "./common";
 import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
-import type RoomListStoreV3 from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -93,14 +89,10 @@ declare global {
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
-        mxRoomListStore: RoomListStore;
-        roomListStoreV3: RoomListStoreV3;
-        mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
-        mxNotifier: typeof Notifier;
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxWidgetLayoutStore: WidgetLayoutStore;

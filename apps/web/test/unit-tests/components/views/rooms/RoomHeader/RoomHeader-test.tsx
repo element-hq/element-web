@@ -409,11 +409,7 @@ describe("RoomHeader", () => {
 
     describe("group call enabled", () => {
         beforeEach(async () => {
-            SdkConfig.put({
-                features: {
-                    feature_group_calls: true,
-                },
-            });
+            SdkConfig.put({});
             // Enable Element Call
             client._unstable_getRTCTransports = jest
                 .fn()
@@ -478,11 +474,9 @@ describe("RoomHeader", () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
             SdkConfig.add({
+                element_call: { disable: true }, // This test is about Jitsi widget re-pinning, not Element Call
                 setting_defaults: {
                     [UIFeature.Widgets]: true,
-                },
-                features: {
-                    feature_group_calls: false,
                 },
             });
             // allow calls
@@ -607,6 +601,30 @@ describe("RoomHeader", () => {
             render(<RoomHeader room={room} />, getWrapper());
             const joinButton = getByLabelText(document.body, "Join voice call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
+        });
+
+        it("clicking the join button of an ongoing video call joins as a video call", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 3);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Video, true));
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const dispatcherSpy = jest.spyOn(dispatcher, "dispatch").mockImplementation();
+            await user.click(getByLabelText(document.body, "Join video call"));
+
+            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: false }));
+        });
+
+        it("clicking the join button of an ongoing voice call joins as a voice call", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 3);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice, true));
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const dispatcherSpy = jest.spyOn(dispatcher, "dispatch").mockImplementation();
+            await user.click(getByLabelText(document.body, "Join voice call"));
+
+            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: true }));
         });
 
         it("join button is disabled if there is an other ongoing call", async () => {
@@ -919,6 +937,7 @@ function createMockCall(
     roomId: string = "!1:example.org",
     participantCount: number = 0,
     callType: CallType = CallType.Video,
+    isElementCall: boolean = false,
 ): Call {
     const participants = new Map();
 
@@ -936,7 +955,7 @@ function createMockCall(
     return {
         roomId,
         participants,
-        widget: { id: "test-widget" },
+        widget: { id: "test-widget", type: isElementCall ? "m.call" : undefined },
         connectionState: "disconnected",
         callType,
         on: jest.fn(),

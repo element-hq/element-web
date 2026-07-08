@@ -17,7 +17,7 @@ import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -98,10 +98,9 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
         getNotificationState = () => null as SpaceNotificationState | null;
         setActiveSpace = jest.fn();
         moveRootSpace = jest.fn();
+        start = jest.fn();
     }
-    return {
-        instance: new MockSpaceStore(),
-    };
+    return MockSpaceStore;
 });
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -123,16 +122,17 @@ describe("<SpacePanel />", () => {
         isVersionSupported: jest.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
     } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SDKContextClass.instance);
+    const sdkContext = new TestSDKContext();
+    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        SDKContextClass.instance.client = mockClient;
+        sdkContext._client = mockClient;
     });
 
     beforeEach(() => {
-        SDKContextClass.instance.spaceStore.enabledMetaSpaces.push(
+        sdkContext.spaceStore.enabledMetaSpaces.push(
             MetaSpace.Home,
             MetaSpace.Favourites,
             MetaSpace.People,
@@ -176,7 +176,7 @@ describe("<SpacePanel />", () => {
     });
 
     it("should allow rearranging via drag and drop", async () => {
-        (SDKContextClass.instance.spaceStore.spacePanelSpaces as any) = [
+        (sdkContext.spaceStore.spacePanelSpaces as any) = [
             mkStubRoom("!room1:server", "Room 1", mockClient),
             mkStubRoom("!room2:server", "Room 2", mockClient),
             mkStubRoom("!room3:server", "Room 3", mockClient),
@@ -191,7 +191,7 @@ describe("<SpacePanel />", () => {
         await move(room1, DragDirection.DOWN);
         await drop(room1);
 
-        expect(SDKContextClass.instance.spaceStore.moveRootSpace).toHaveBeenCalledWith(0, 1);
+        expect(sdkContext.spaceStore.moveRootSpace).toHaveBeenCalledWith(0, 1);
     });
 
     it("should be able to open the user menu via dispatcher", async () => {

@@ -33,6 +33,7 @@ import { RoomListItemViewModel } from "../../../src/viewmodels/room-list/RoomLis
 import * as tagRoomModule from "../../../src/utils/room/tagRoom";
 import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
 import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
+import { TestSDKContext } from "../../unit-tests/TestSDKContext.ts";
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
@@ -59,6 +60,7 @@ describe("RoomListItemViewModel", () => {
     let room: Room;
     let notificationState: RoomNotificationState;
     let viewModel: RoomListItemViewModel;
+    const sdkContext = new TestSDKContext();
 
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -807,6 +809,44 @@ describe("RoomListItemViewModel", () => {
             watchCallback("RoomList.OrderedCustomSections", null, null as any, null, null);
 
             expect(viewModel.getSnapshot().sections.map((s) => s.tag)).toEqual([]);
+        });
+
+        it("should set areSectionsEnabled to true when RoomList.showSections is enabled", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showSections") return true;
+                return false;
+            });
+
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: sdkContext.roomListStore,
+            });
+            expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
+        });
+
+        it("should update areSectionsEnabled when RoomList.showSections setting changes", () => {
+            let watchCallback: CallbackFn<"RoomList.showSections"> = () => {};
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                if (setting === "RoomList.showSections") watchCallback = callback;
+                return "watcher-id";
+            });
+
+            viewModel = new RoomListItemViewModel({
+                room,
+                client: matrixClient,
+                roomListStore: sdkContext.roomListStore,
+            });
+            expect(viewModel.getSnapshot().areSectionsEnabled).toBe(false);
+
+            // Enable sections
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.showSections") return true;
+                return false;
+            });
+            watchCallback("RoomList.showSections", null, null as any, null, null);
+
+            expect(viewModel.getSnapshot().areSectionsEnabled).toBe(true);
         });
     });
 

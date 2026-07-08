@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi } from "vitest";
 
 import { mocks } from "../../test/setup/mocks.ts";
+import SdkConfig, { DEFAULTS } from "../SdkConfig";
 
 // set up AudioContext API mock
 vi.stubGlobal("AudioContext", function () {
@@ -25,5 +26,9 @@ if (globalThis.window === undefined) {
         // things try to access it before the beforeEach blocks run)
         addEventListener: vi.fn(),
         location: locationStub,
+        setTimeout: globalThis.setTimeout,
     });
 }
+
+// uninitialised SdkConfig causes lots of warnings in console, init with defaults
+SdkConfig.put(DEFAULTS);

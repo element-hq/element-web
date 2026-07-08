@@ -10,8 +10,7 @@ import React from "react";
 import { fireEvent, getByTestId, render } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import { mkRoom, stubClient } from "../../../../test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { clientAndSDKContextRenderOptions, mkRoom, stubClient } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
@@ -29,15 +28,16 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
         setActiveSpace = jest.fn();
         getChildSpaces = jest.fn();
         getNotificationState = jest.fn();
+        start = jest.fn();
     }
 
-    return { instance: new MockSpaceStore() };
+    return MockSpaceStore;
 });
 
 describe("SpaceButton", () => {
-    stubClient();
-    const space = mkRoom(MatrixClientPeg.safeGet(), "!1:example.org");
-    DMRoomMap.makeShared(MatrixClientPeg.safeGet());
+    const cli = stubClient();
+    const space = mkRoom(cli, "!1:example.org");
+    DMRoomMap.makeShared(cli);
 
     const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
 
@@ -53,6 +53,7 @@ describe("SpaceButton", () => {
                     data-testid="create-space-button"
                     size="32px"
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
             expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
@@ -87,6 +88,7 @@ describe("SpaceButton", () => {
                     data-testid="create-space-button"
                     size="32px"
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
             expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
@@ -103,6 +105,7 @@ describe("SpaceButton", () => {
                     data-testid="create-space-button"
                     size="32px"
                 />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
             fireEvent.click(getByTestId(container, "create-space-button"));
@@ -143,7 +146,10 @@ describe("SpaceItem", () => {
             spaceId === space.roomId ? [subspace] : [],
         );
 
-        const { asFragment, queryByText, getByLabelText } = render(<SpaceItem space={space} activeSpaces={[]} />);
+        const { asFragment, queryByText, getByLabelText } = render(
+            <SpaceItem space={space} activeSpaces={[]} />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
+        );
 
         expect(queryByText("Root Space")).toBeVisible();
         expect(queryByText("Subspace")).toBeNull();

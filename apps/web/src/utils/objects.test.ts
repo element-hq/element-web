@@ -15,7 +15,6 @@ import {
     objectHasDiff,
     objectKeyChanges,
     objectShallowClone,
-    objectWithOnly,
 } from "./objects";
 
 describe("objects", () => {
@@ -25,17 +24,6 @@ describe("objects", () => {
             const output = { hello: "world" };
             const props = ["test", "doesnotexist"]; // we also make sure it doesn't explode on missing props
             const result = objectExcluding(input, <any>props); // any is to test the missing prop
-            expect(result).toBeDefined();
-            expect(result).toMatchObject(output);
-        });
-    });
-
-    describe("objectWithOnly", () => {
-        it("should exclusively use the given properties", () => {
-            const input = { hello: "world", test: true };
-            const output = { hello: "world" };
-            const props = ["hello", "doesnotexist"]; // we also make sure it doesn't explode on missing props
-            const result = objectWithOnly(input, <any>props); // any is to test the missing prop
             expect(result).toBeDefined();
             expect(result).toMatchObject(output);
         });

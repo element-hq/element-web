@@ -139,6 +139,8 @@ export default class RoomListStoreV3 extends AsyncStoreWithClient<EmptyObject> {
         this.sdkContext.spaceStore.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
         this.loadCustomSections();
+
+        SettingsStore.watchSetting("RoomList.showSections", null, () => this.scheduleEmit());
     }
 
     /**
@@ -174,8 +176,11 @@ export default class RoomListStoreV3 extends AsyncStoreWithClient<EmptyObject> {
      */
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
         const spaceId = this.sdkContext.spaceStore.activeSpace;
+        const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
 
-        const sections = this.getSections(filterKeys);
+        const sections = areSectionsEnabled
+            ? this.getSections(filterKeys)
+            : [{ tag: CHATS_TAG, rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filterKeys) ?? []) }];
 
         return {
             spaceId: spaceId,

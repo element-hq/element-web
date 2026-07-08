@@ -45,6 +45,7 @@ import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsT
 import { SDKContext } from "../../../contexts/SDKContext";
 import { type SDKContextClass } from "../../../contexts/SDKContextClass";
 import { RoomSettingsTab } from "./RoomSettingsDialog-tab.ts";
+import SdkConfig from "../../../SdkConfig";
 
 interface IProps {
     roomId: string;
@@ -147,7 +148,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 ),
             );
         }
-        if (SettingsStore.getValue("feature_group_calls")) {
+        if (!SdkConfig.get("element_call").disable) {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.Voip,

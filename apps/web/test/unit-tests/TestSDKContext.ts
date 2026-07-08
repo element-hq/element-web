@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+
 import { SDKContextClass } from "../../src/contexts/SDKContextClass";
 import { type PosthogAnalytics } from "../../src/PosthogAnalytics";
 import { type SlidingSyncManager } from "../../src/SlidingSyncManager";
@@ -23,6 +25,7 @@ import type LegacyCallHandler from "../../src/LegacyCallHandler.tsx";
  * replace individual stores. This is useful for tests which need to mock out stores.
  */
 export class TestSDKContext extends SDKContextClass {
+    declare public _client?: MatrixClient;
     declare public _RightPanelStore?: RightPanelStore;
     declare public _RoomNotificationStateStore?: RoomNotificationStateStore;
     declare public _RoomViewStore?: RoomViewStore;

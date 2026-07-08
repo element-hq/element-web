@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import "fake-indexeddb/auto";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock-vitest-adapter";
@@ -67,7 +66,6 @@ import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
-import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
@@ -244,7 +242,6 @@ describe("<MatrixChat />", () => {
                 brand: "Test",
                 help_url: "help_url",
                 help_encryption_url: "help_encryption_url",
-                element_call: {},
                 feedback: {
                     existing_issues_url: "https://feedback.org/existing",
                     new_issue_url: "https://feedback.org/new",
@@ -474,7 +471,7 @@ describe("<MatrixChat />", () => {
 
         const tokenResponse: BearerTokenResponse = {
             access_token: accessToken,
-            refresh_token: "def456",
+            refresh_token: undefined,
             id_token: "ghi789",
             scope: "test",
             token_type: "Bearer",
@@ -644,12 +641,6 @@ describe("<MatrixChat />", () => {
         });
 
         describe("when login succeeds", () => {
-            beforeEach(() => {
-                jest.spyOn(StorageAccess, "idbLoad").mockImplementation(
-                    async (_table: string, key: string | string[]) => (key === "mx_access_token" ? accessToken : null),
-                );
-            });
-
             afterEach(() => {
                 SettingsStore.reset();
             });
@@ -852,9 +843,6 @@ describe("<MatrixChat />", () => {
                     it("should dispatch after_forget_room action on successful forget", async () => {
                         await clearAllModals();
                         await getComponentAndWaitForReady();
-
-                        // Mock out the old room list store
-                        jest.spyOn(RoomListStore.instance, "manualRoomUpdate").mockImplementation(async () => {});
 
                         // Register a mock function to the dispatcher
                         const fn = jest.fn();
@@ -1369,7 +1357,7 @@ describe("<MatrixChat />", () => {
             // but as the exception was swallowed, the test was passing (see in `initClientCrypto`).
             // There are several uses of the peg in the app, so during all these tests you might end-up
             // with a real client instead of the mocked one. Not sure how reliable all these tests are.
-            jest.spyOn(MatrixClientPeg, "replaceUsingCreds");
+            jest.spyOn(MatrixClientPeg, "set");
             jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
 
             const result = getComponent();

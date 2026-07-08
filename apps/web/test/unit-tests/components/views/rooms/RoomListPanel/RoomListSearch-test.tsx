@@ -13,6 +13,7 @@ import { RoomListSearch } from "../../../../../../src/components/views/rooms/Roo
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass.ts";
+import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -20,7 +21,10 @@ jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
 
 describe("<RoomListSearch />", () => {
     function renderComponent(activeSpace = MetaSpace.Home) {
-        return render(<RoomListSearch activeSpace={activeSpace} />);
+        return render(
+            <RoomListSearch activeSpace={activeSpace} />,
+            clientAndSDKContextRenderOptions(createTestClient(), SDKContextClass.instance),
+        );
     }
 
     beforeEach(() => {
