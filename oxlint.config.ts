@@ -420,7 +420,6 @@ export default defineConfig({
                 "react/forbid-elements": "off",
                 // This would be good to enable in the future
                 "typescript/await-thenable": "off",
-                "promise/no-callback-in-promise": "off",
             },
         },
         {
