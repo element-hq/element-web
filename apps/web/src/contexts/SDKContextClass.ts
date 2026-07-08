@@ -72,6 +72,7 @@ export class SDKContextClass {
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
     protected _Notifier?: Notifier;
+    protected _CallStore?: CallStore;
 
     public constructor() {
         SettingController.sdkContext = this;
@@ -201,6 +202,11 @@ export class SDKContextClass {
             this._Notifier = new Notifier(defaultDispatcher, this);
         }
         return this._Notifier;
+    }
+
+    public get callStore(): CallStore {
+        this._CallStore ??= CallStore.instance;
+        return this._CallStore;
     }
 
     public onLoggedOut(): void {
