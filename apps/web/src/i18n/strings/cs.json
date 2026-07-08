@@ -1528,7 +1528,6 @@
             "required_msc_support": "Vyžaduje MSC4429 (aktualizace profilu pro starší synchronizaci)"
         },
         "feature_wysiwyg_composer_description": "V editoru zpráv použít formátovaný text namísto Markdown.",
-        "group_calls": "Nový zážitek ze skupinových hovorů",
         "group_developer": "Pro vývojáře",
         "group_encryption": "Šifrování",
         "group_experimental": "Experimentální",
@@ -3000,7 +2999,6 @@
             "audio_output": "Zvukový výstup",
             "audio_output_empty": "Nebyly rozpoznány žádné zvukové výstupy",
             "auto_gain_control": "Automatická úprava zesílení",
-            "connection_section": "Připojení",
             "dialog_title": "<strong>Nastavení:</strong> Hlas a video",
             "echo_cancellation": "Potlačení ozvěny",
             "echo_cancellation_description": "Odstraňuje ozvěnu z mikrofonu během hovorů. Toto nastavení se vztahuje také na Element Call.",
