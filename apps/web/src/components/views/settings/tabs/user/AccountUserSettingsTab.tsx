@@ -23,9 +23,8 @@ import ChangePassword from "../../ChangePassword";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
-import { SDKContext } from "../../../../../contexts/SDKContext";
 import { UserPersonalInfoSettings } from "../../UserPersonalInfoSettings";
-import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
+import { SDKContext } from "../../../../../contexts/SDKContext.ts";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -90,8 +89,8 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
     const [canSetAvatar, setCanSetAvatar] = React.useState<boolean>(false);
     const [canChangePassword, setCanChangePassword] = React.useState<boolean>(false);
 
-    const cli = useMatrixClientContext();
     const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
 
     useEffect(() => {
         (async () => {
@@ -103,8 +102,8 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
             // the enabled flag value.
             const canChangePassword = !changePasswordCap || changePasswordCap["enabled"] !== false;
 
-            await sdkContext.oidcClientStore.readyPromise; // wait for the store to be ready
-            const externalAccountManagementUrl = sdkContext.oidcClientStore.accountManagementEndpoint;
+            const authMetadata = await cli.getAuthMetadata().catch(() => {});
+            const externalAccountManagementUrl = authMetadata?.account_management_uri;
             // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
             // We support as far back as v1.1 which doesn't have m.3pid_changes
             // so the behaviour for when it is missing has to be assume true
@@ -121,7 +120,7 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
             setExternalAccountManagementUrl(externalAccountManagementUrl);
             setCanChangePassword(canChangePassword);
         })();
-    }, [cli, sdkContext.oidcClientStore]);
+    }, [cli]);
 
     const onPasswordChangeError = useCallback((err: Error): void => {
         logger.error("Failed to change password: " + err);

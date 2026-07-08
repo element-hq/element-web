@@ -18,7 +18,6 @@ import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from "../../SettingsFieldset";
-import SettingsStore from "../../../../../settings/SettingsStore";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
 import SettingsTab from "../SettingsTab";
@@ -270,17 +269,14 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
             [EventType.Reaction]: _td("room_settings|permissions|m.reaction"),
             [EventType.RoomRedaction]: _td("room_settings|permissions|m.room.redaction"),
             [EventType.RoomPinnedEvents]: _td("room_settings|permissions|m.room.pinned_events"),
-
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
         };
-
         // MSC3401: Native Group VoIP signaling
-        if (SettingsStore.getValue("feature_group_calls")) {
+        if (!SdkConfig.get("element_call").disable) {
             plEventsToLabels[ElementCallEventType.name] = _td("room_settings|permissions|m.call");
             plEventsToLabels[ElementCallMemberEventType.name] = _td("room_settings|permissions|m.call.member");
         }
-
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
                 desc: _t("room_settings|permissions|users_default"),

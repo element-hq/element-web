@@ -219,7 +219,6 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
@@ -282,6 +281,7 @@ export interface Settings {
     "useSystemFont": IBaseSetting<boolean>;
     "systemFont": IBaseSetting<string>;
     "webRtcAllowPeerToPeer": IBaseSetting<boolean>;
+    "enableLegacyCallsVoip": IBaseSetting<boolean>;
     "webrtc_audiooutput": IBaseSetting<string>;
     "webrtc_audioinput": IBaseSetting<string>;
     "webrtc_videoinput": IBaseSetting<string>;
@@ -584,15 +584,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|element_call_video_rooms"),
-        controller: new ReloadOnChangeController(),
-        default: false,
-    },
-    "feature_group_calls": {
-        isFeature: true,
-        labsGroup: LabGroup.VoiceAndVideo,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|group_calls"),
         controller: new ReloadOnChangeController(),
         default: false,
     },
@@ -979,6 +970,12 @@ export const SETTINGS: Settings = {
         default: "",
         displayName: _td("settings|appearance|custom_font_name"),
         controller: new SystemFontController(),
+    },
+    "enableLegacyCallsVoip": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|voip|enable_legacy_calls"),
+        description: _td("settings|voip|enable_legacy_calls_description"),
+        default: true,
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

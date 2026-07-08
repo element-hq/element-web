@@ -461,7 +461,48 @@ export class RoomListViewModel
         if (target) this.scrollToIndex?.(target.index);
     };
 
-    private onDispatch = (payload: any): void => {
+    /**
+     * Scroll a room into view, expanding its section first if it is collapsed so the tile can
+     * actually be shown.
+     */
+    private async scrollRoomIntoView(roomId: string): Promise<void> {
+        // Look in the full (pre-collapse) sections so we can find rooms hidden in collapsed sections.
+        const section = this.roomsResult.sections.find((s) => s.rooms.some((room) => room.roomId === roomId));
+        // Room not found
+        if (!section) return;
+
+        const headerViewModel = this.roomSectionHeaderViewModels.get(section.tag);
+        // Expand and rebuild the section
+        if (headerViewModel && !headerViewModel.isExpanded) {
+            headerViewModel.isExpanded = true;
+            await this.updateRoomListData();
+        }
+
+        // Scroll to the room
+        const index = this.getRoomEntryIndex(roomId);
+        if (index !== undefined) this.scrollToIndex?.(index);
+    }
+
+    /**
+     * Compute a room's index in the list's entry space, or undefined if it is not in the displayed
+     * sections (e.g. collapsed or filtered out). Flat list: the room index; grouped list: includes
+     * one slot per section header (matching {@link firstUnreadRoomBelowFold}).
+     */
+    private getRoomEntryIndex(roomId: string): number | undefined {
+        // A grouped list renders a header entry before each section's rooms; a flat list does not.
+        const hasSectionHeaders = !this.snapshot.current.isFlatList;
+
+        let entryIndex = 0;
+        for (const section of this.sections) {
+            if (hasSectionHeaders) entryIndex++; // section header entry
+            const indexInSection = section.rooms.findIndex((room) => room.roomId === roomId);
+            if (indexInSection !== -1) return entryIndex + indexInSection;
+            entryIndex += section.rooms.length;
+        }
+        return undefined;
+    }
+
+    private onDispatch = async (payload: any): Promise<void> => {
         if (payload.action === Action.ActiveRoomChanged) {
             // When the active room changes, update the room list data to reflect the new selected room
             // Pass isRoomChange=true so sticky logic doesn't prevent the index from updating
@@ -470,6 +511,8 @@ export class RoomListViewModel
             // Handle keyboard navigation shortcuts (Alt+ArrowUp/Down)
             // This was previously handled by useRoomListNavigation hook
             this.handleViewRoomDelta(payload as ViewRoomDeltaPayload);
+        } else if (payload.action === Action.ViewRoom && payload.show_room_tile && payload.room_id) {
+            await this.scrollRoomIntoView(payload.room_id);
         } else if (payload.action === Action.RoomListCollapseAllSections) {
             this.onCollapseAllSections(false);
         } else if (payload.action === Action.RoomListExpandAllSections) {
