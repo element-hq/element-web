@@ -25,30 +25,13 @@ export function MessageComposerUrlPreviewWrapper({
     moduleApi?: ModuleApi;
 }): ReactNode | null {
     const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
-    const [customComponent, setCustomComponent] = useState<React.JSX.Element | null>(null);
+    const customComponent = moduleApi.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
+        <MessageComposerUrlPreviewView vm={vm} />
+    ));
 
-    // Rather than checking each time the text changes, we only do a URL check every 500ms to avoid
-    // hitting the server too frequently. We also only check the module API for a custom component
-    // at this frequency to avoid expensive calculations downstream.
-    useDebouncedCallback<[MessageComposerUrlPreviewViewModel, string]>(
-        true,
-        (vm, content) => {
-            const customComponent = moduleApi.customComponents.renderComposerPreview(
-                { text: content, roomId: roomId! },
-                () => <MessageComposerUrlPreviewView vm={vm} />,
-            );
-
-            if (customComponent) {
-                setCustomComponent(customComponent);
-            }
-            // We still update the VM even if the custom component is used since
-            // the component may choose to render the original component.
-            void vm.updateWithText(content);
-        },
-        [vm, content],
-        // Update instantly if content is empty (e.g. sent message or cleared input)
-        content ? DEBOUNCE_REQUEST_TIMEOUT_MS : 0,
-    );
+    // We still update the VM even if the custom component is used since
+    // the component may choose to render the original component.
+    void vm.updateWithText(content);
 
     return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;
 }

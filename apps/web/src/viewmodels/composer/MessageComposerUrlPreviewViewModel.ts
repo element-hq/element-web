@@ -10,6 +10,7 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import { debounce } from "lodash";
 
 const logger = rootLogger.getChild("MessageComposerUrlPreviewViewModel");
 
@@ -39,6 +40,8 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private urlPreviewVisible: boolean;
 
+    private content: string = "";
+
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
         super(props, { previews: [] });
         this.urlPreviewVisible = props.visible;
@@ -46,6 +49,17 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     }
 
     private async computeSnapshot(): Promise<void> {
+        const newLinksOrdered = this.content
+            .split(" ")
+            .map((w) => w.trim())
+            .filter((word) => URL.canParse(word));
+        const newLinks = new Set(newLinksOrdered);
+        if (this.links.symmetricDifference(newLinks).size === 0) {
+            // Skip if the URL set hasn't changed
+            return;
+        }
+        this.links = newLinks;
+
         if (!this.urlPreviewVisible) {
             this.snapshot.set({ previews: [] });
             return;
@@ -90,18 +104,16 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * @param content Plaintext from the message composer.
      */
     public async updateWithText(content: string): Promise<void> {
-        const newLinksOrdered = content
-            .split(" ")
-            .map((w) => w.trim())
-            .filter((word) => URL.canParse(word));
-        const newLinks = new Set(newLinksOrdered);
-        if (this.links.symmetricDifference(newLinks).size === 0) {
-            // Skip if the URL set hasn't changed
-            return;
+        this.content = content;
+
+        if (content === "") {
+            return this.computeSnapshot();
+        } else {
+            return this.computeSnapshotDebounced();
         }
-        this.links = newLinks;
-        return this.computeSnapshot();
     }
+
+    private computeSnapshotDebounced = debounce(this.computeSnapshot, 500);
 
     /**
      * Update the view model about visible state of previews.
