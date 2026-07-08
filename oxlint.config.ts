@@ -144,7 +144,6 @@ export default defineConfig({
         "typescript/restrict-template-expressions": "off",
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
-        "typescript/no-duplicate-type-constituents": "off",
         "typescript/no-floating-promises": "off",
         "typescript/no-misused-spread": "off",
         "promise/valid-params": "off",

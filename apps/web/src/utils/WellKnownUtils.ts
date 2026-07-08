@@ -61,7 +61,7 @@ export function getTileServerWellKnown(matrixClient: MatrixClient): ITileServerW
     return tileServerFromWellKnown(matrixClient.getClientWellKnown());
 }
 
-export function tileServerFromWellKnown(clientWellKnown?: IClientWellKnown | undefined): ITileServerWellKnown {
+export function tileServerFromWellKnown(clientWellKnown?: IClientWellKnown): ITileServerWellKnown {
     return clientWellKnown?.[TILE_SERVER_WK_KEY.name] ?? clientWellKnown?.[TILE_SERVER_WK_KEY.altName];
 }
 
