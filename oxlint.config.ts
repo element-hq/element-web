@@ -138,7 +138,6 @@ export default defineConfig({
         "unicorn/prefer-at": "off",
         "unicorn/no-new-array": "off",
         "unicorn/no-array-for-each": "off",
-        "unicorn/explicit-length-check": "off",
         "unicorn/catch-error-name": "off",
         "require-unicode-regexp": "off",
         "typescript/restrict-template-expressions": "off",
