@@ -545,9 +545,22 @@ export class RoomViewStore extends EventEmitter {
         });
 
         // take a copy of roomAlias, roomId & viaServers as they may change by the time the join is complete
-        const { roomAlias, roomId = payload.roomId, viaServers = [] } = this.state;
+        const { roomAlias, viaServers = [] } = this.state;
+        // fall back to the payload's roomId explicitly since it is always the room we were asked to join
+        const roomId = this.state.roomId ?? payload.roomId;
         // prefer the room alias if we have one as it allows joining over federation even with no viaServers
-        const address = roomAlias || roomId!;
+        const address = roomAlias || roomId;
+
+        if (!address) {
+            logger.error("Cannot join room: no room ID or alias to join", payload);
+            this.dis?.dispatch<JoinRoomErrorPayload>({
+                action: Action.JoinRoomError,
+                roomId,
+                err: new UserFriendlyError("room|error_join_unknown", { cause: undefined }),
+                canAskToJoin: payload.canAskToJoin,
+            });
+            return;
+        }
 
         const joinOpts: IJoinRoomOpts = {
             viaServers,
@@ -570,7 +583,7 @@ export class RoomViewStore extends EventEmitter {
             // room.
             this.dis?.dispatch<JoinRoomReadyPayload>({
                 action: Action.JoinRoomReady,
-                roomId: roomId!,
+                roomId,
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {
