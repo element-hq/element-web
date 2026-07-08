@@ -6,10 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { render, screen } from "jest-matrix-react";
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
+import { render } from "test-utils-rtl";
 import { EventType, type MatrixClient, MatrixEvent, MsgType, Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { createTestClient, mkEvent, withClientContextRenderOptions } from "test-utils";
 
 import {
     JSONEventFactory,
@@ -17,14 +19,12 @@ import {
     pickFactory,
     renderTile,
     RoomCreateEventFactory,
-} from "../../../src/events/EventTileFactory";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { createTestClient, mkEvent } from "../../test-utils";
-import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import { ModuleApi } from "../../../src/modules/Api";
-import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
-import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+} from "./EventTileFactory";
+import SettingsStore from "../settings/SettingsStore";
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import { ModuleApi } from "../modules/Api";
+import DMRoomMap from "../utils/DMRoomMap";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const roomId = "!room:example.com";
 
@@ -70,7 +70,7 @@ describe("pickFactory", () => {
         client = createTestClient();
 
         room = new Room(roomId, client, client.getSafeUserId());
-        mocked(client.getRoom).mockImplementation((getRoomId: string): Room | null => {
+        vi.mocked(client.getRoom).mockImplementation((getRoomId?: string): Room | null => {
             if (getRoomId === room.roomId) return room;
             return null;
         });
@@ -159,7 +159,7 @@ describe("pickFactory", () => {
     describe("when not showing hidden events", () => {
         describe("without dynamic predecessor support", () => {
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockReset();
+                vi.spyOn(SettingsStore, "getValue").mockReset();
             });
 
             it("should return undefined for a room without predecessor", () => {
@@ -195,7 +195,7 @@ describe("pickFactory", () => {
 
         describe("with dynamic predecessor support", () => {
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue")
+                vi.spyOn(SettingsStore, "getValue")
                     .mockReset()
                     .mockImplementation((settingName) => settingName === "feature_dynamic_room_predecessors");
             });
@@ -261,11 +261,11 @@ describe("renderTile", () => {
 
     afterEach(() => {
         ModuleApi.instance.customComponents.renderMessage = originalRenderMessage;
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("rendering a tile defers to the module API", () => {
-        ModuleApi.instance.customComponents.renderMessage = jest.fn();
+        ModuleApi.instance.customComponents.renderMessage = vi.fn();
 
         const messageEvent = mkEvent({
             event: true,
@@ -288,7 +288,7 @@ describe("renderTile", () => {
     });
 
     it("rendering a tile for a message of unknown type defers to the module API", () => {
-        ModuleApi.instance.customComponents.renderMessage = jest.fn();
+        ModuleApi.instance.customComponents.renderMessage = vi.fn();
 
         const messageEvent = mkEvent({
             event: true,
@@ -310,11 +310,11 @@ describe("renderTile", () => {
     it("renders an incoming key verification request with the wrapped shared-components view", () => {
         const sender = "@alice:example.com";
         const room = new Room(roomId, client, client.getSafeUserId());
-        jest.spyOn(room, "getMember").mockImplementation((userId: string) => {
+        vi.spyOn(room, "getMember").mockImplementation((userId: string) => {
             if (userId === sender) return { name: "Alice" } as RoomMember;
             return null;
         });
-        mocked(client.getRoom).mockReturnValue(room);
+        vi.mocked(client.getRoom).mockReturnValue(room);
 
         const verificationRequestEvent = makeVerificationRequestEvent({
             sender,
@@ -327,21 +327,20 @@ describe("renderTile", () => {
             client,
         );
         if (!tile) throw new Error("Expected a key verification request tile");
+        const { getByText } = render(tile, withClientContextRenderOptions(client));
 
-        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
-
-        expect(screen.getByText("Alice wants to verify")).toBeInTheDocument();
-        expect(screen.getByText("Alice (@alice:example.com)")).toBeInTheDocument();
+        expect(getByText("Alice wants to verify")).toBeVisible();
+        expect(getByText("Alice (@alice:example.com)")).toBeVisible();
     });
 
     it("renders an outgoing key verification request with the wrapped shared-components view", () => {
         const recipient = "@alice:example.com";
         const room = new Room(roomId, client, client.getSafeUserId());
-        jest.spyOn(room, "getMember").mockImplementation((userId: string) => {
+        vi.spyOn(room, "getMember").mockImplementation((userId: string) => {
             if (userId === recipient) return { name: "Alice" } as RoomMember;
             return null;
         });
-        mocked(client.getRoom).mockReturnValue(room);
+        vi.mocked(client.getRoom).mockReturnValue(room);
 
         const verificationRequestEvent = makeVerificationRequestEvent({
             sender: client.getUserId()!,
@@ -354,15 +353,14 @@ describe("renderTile", () => {
             client,
         );
         if (!tile) throw new Error("Expected a key verification request tile");
+        const { getByText } = render(tile, withClientContextRenderOptions(client));
 
-        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
-
-        expect(screen.getByText("You sent a verification request")).toBeInTheDocument();
-        expect(screen.getByText("Alice (@alice:example.com)")).toBeInTheDocument();
+        expect(getByText("You sent a verification request")).toBeInTheDocument();
+        expect(getByText("Alice (@alice:example.com)")).toBeInTheDocument();
     });
 
     it("throws when a key verification request tile is rendered without a client context", () => {
-        jest.spyOn(console, "error").mockImplementation(() => {});
+        vi.spyOn(console, "error").mockImplementation(() => {});
         const verificationRequestEvent = makeVerificationRequestEvent({
             sender: client.getUserId()!,
             to: "@alice:example.com",
@@ -393,11 +391,11 @@ describe("renderTile", () => {
                 },
             }),
         ]);
-        mocked(client.getRoom).mockReturnValue(room);
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
-            getUserIdForRoomId: jest.fn().mockReturnValue(null),
+        vi.mocked(client.getRoom).mockReturnValue(room);
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: vi.fn().mockReturnValue(null),
         } as unknown as DMRoomMap);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
         const roomAvatarEvent = makeRoomAvatarEvent();
         roomAvatarEvent.sender = { name: "Alice" } as MatrixEvent["sender"];
 
@@ -407,10 +405,9 @@ describe("renderTile", () => {
             client,
         );
         if (!tile) throw new Error("Expected a room avatar event tile");
+        const { getByText, getByRole } = render(tile, withClientContextRenderOptions(client));
 
-        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
-
-        expect(screen.getByText("Alice changed the room avatar to")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Alice changed the avatar for General" })).toBeInTheDocument();
+        expect(getByText("Alice changed the room avatar to")).toBeInTheDocument();
+        expect(getByRole("button", { name: "Alice changed the avatar for General" })).toBeInTheDocument();
     });
 });

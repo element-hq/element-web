@@ -6,12 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
-import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
-import { createTestClient } from "../../test-utils";
-import { TestSDKContext } from "../TestSDKContext.ts";
+import { describe, it, expect, beforeAll, beforeEach } from "vitest";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { createTestClient, TestSDKContext } from "test-utils";
+
+import { SDKContextClass } from "./SDKContextClass";
+import { UserProfilesStore } from "../stores/UserProfilesStore";
 
 describe("SDKContextClass", () => {
     let sdkContext: TestSDKContext;

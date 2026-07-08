@@ -6,12 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { waitFor, renderHook, act } from "jest-matrix-react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { useUserDirectory } from "../../../src/hooks/useUserDirectory";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { stubClient } from "../../test-utils";
+import { describe, it, expect, beforeEach } from "vitest";
+import { waitFor, renderHook, act } from "test-utils-rtl";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { useUserDirectory } from "./useUserDirectory";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 function render() {
     return renderHook(() => useUserDirectory());
