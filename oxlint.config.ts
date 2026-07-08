@@ -134,7 +134,6 @@ export default defineConfig({
         // These would be nice to enable at some point
         "unicorn/prefer-set-has": "off",
         "unicorn/prefer-string-slice": "off",
-        "unicorn/prefer-number-properties": "off",
         "unicorn/prefer-at": "off",
         "unicorn/no-new-array": "off",
         "unicorn/no-array-for-each": "off",
