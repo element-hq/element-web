@@ -45,10 +45,10 @@ import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/PreferredRoomVersions";
-import SettingsStore from "./settings/SettingsStore";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallMemberEventType } from "./call-types";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
+import SdkConfig from "./SdkConfig";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -86,15 +86,26 @@ export interface IOpts {
     joinRule?: JoinRule;
 }
 
-const DEFAULT_EVENT_POWER_LEVELS = {
-    [EventType.RoomName]: 50,
+/**
+ * The power levels set by synapse as of 30.06.2026.
+ * If power_level_content_override is used, these values should be used
+ * as a starting point to ensure the expected room power levels.
+ *
+ * NOTE: power_level_content_override does do a merge but NOT a deep merge.
+ * e.g. "ban": 50, will still be set by the server when `power_level_content_override = {events: {"custom": 0}}`
+ * BUT `events` will lose all the other default props listed below.
+ * So we have to do: `power_level_content_override = {events: {...POWER_LEVEL_EVENTS_DEFAULT, "custom": 0}}`
+ * This is very unfortunate if defaults change in synapse we have to keep the sdk in sync... (todo)
+ */
+export const DEFAULT_EVENTS_POWER_LEVEL = {
     [EventType.RoomAvatar]: 50,
-    [EventType.RoomPowerLevels]: 100,
-    [EventType.RoomHistoryVisibility]: 100,
     [EventType.RoomCanonicalAlias]: 50,
-    [EventType.RoomTombstone]: 100,
-    [EventType.RoomServerAcl]: 100,
     [EventType.RoomEncryption]: 100,
+    [EventType.RoomHistoryVisibility]: 100,
+    [EventType.RoomName]: 50,
+    [EventType.RoomPowerLevels]: 100,
+    [EventType.RoomServerAcl]: 100,
+    [EventType.RoomTombstone]: 100,
 };
 
 /**
@@ -173,7 +184,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         if (opts.roomType === RoomType.ElementVideo || opts.roomType === RoomType.UnstableCall) {
             createOpts.power_level_content_override = {
                 events: {
-                    ...DEFAULT_EVENT_POWER_LEVELS,
+                    ...DEFAULT_EVENTS_POWER_LEVEL,
                     // Allow all users to send call membership updates
                     [opts.roomType === RoomType.ElementVideo
                         ? JitsiCall.MEMBER_EVENT_TYPE
@@ -186,10 +197,10 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 },
             };
         }
-    } else if (SettingsStore.getValue("feature_group_calls")) {
+    } else if (!SdkConfig.get("element_call").disable) {
         createOpts.power_level_content_override = {
             events: {
-                ...DEFAULT_EVENT_POWER_LEVELS,
+                ...DEFAULT_EVENTS_POWER_LEVEL,
                 // It should always (including non video rooms) be possible to join a group call.
                 [ElementCallMemberEventType.name]: 0,
             },

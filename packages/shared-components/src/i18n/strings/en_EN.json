@@ -231,6 +231,11 @@
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
             },
+            "tombstone": {
+                "room": {
+                    "title": "Group call ended"
+                }
+            },
             "video_call_title": "Video call",
             "voice_call_title": "Voice call"
         },

@@ -57,10 +57,11 @@ button.preview {
 }
 
 .containerExpanded {
+    box-sizing: border-box;
     max-width: 100%;
     width: 478px;
     display: flex;
-    border: 1px solid var(--cpd-color-border-interactive-primary);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: 12px;
     /* Get radius from cpd */
     flex-direction: column;
@@ -122,12 +123,6 @@ button.preview {
         background-position: center;
         border: none;
         padding: 0;
-
-        >img {
-            height: 200px;
-            width: 478px;
-            object-fit: cover;
-        }
 
         .playButton[data-kind="primary"] {
             padding: 0;

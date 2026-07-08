@@ -1535,7 +1535,6 @@
             "required_msc_support": "Eeldab MSC4429 kasutamist (Profiilide uuendused pärandsünkroonimisel)"
         },
         "feature_wysiwyg_composer_description": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
-        "group_calls": "Uus rühmakõnede lahendus",
         "group_developer": "Arendajad",
         "group_encryption": "Krüptimine",
         "group_experimental": "Katsed",
@@ -2993,7 +2992,6 @@
             "audio_output": "Heliväljund",
             "audio_output_empty": "Ei leidnud ühtegi heliväljundit",
             "auto_gain_control": "Automaatne esitusvaljuse tundlikkus",
-            "connection_section": "Ühendus",
             "dialog_title": "<strong>Seadistused:</strong> Heli ja video",
             "echo_cancellation": "Kaja eemaldamine",
             "echo_cancellation_description": "Eemaldab kõnede ajal mikrofonisisendi taustamüra. See seadistus kehtib ka Element Calli puhul.",

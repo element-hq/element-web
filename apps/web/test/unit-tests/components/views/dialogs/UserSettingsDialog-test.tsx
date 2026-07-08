@@ -28,7 +28,7 @@ import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { TestSDKContext } from "../../../TestSDKContext.ts";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
-import { mockOpenIdConfiguration } from "../../../../test-utils/oidc.ts";
+import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth.ts";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -74,7 +74,7 @@ describe("<UserSettingsDialog />", () => {
             getPushers: jest.fn().mockResolvedValue([]),
             getProfileInfo: jest.fn().mockResolvedValue({}),
             getMediaConfig: jest.fn(),
-            getAuthMetadata: jest.fn().mockResolvedValue(mockOpenIdConfiguration()),
+            getAuthMetadata: jest.fn().mockResolvedValue(makeDelegatedAuthMetadata()),
         });
         sdkContext = new TestSDKContext();
         sdkContext._client = mockClient;

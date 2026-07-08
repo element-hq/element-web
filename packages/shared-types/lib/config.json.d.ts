@@ -114,8 +114,9 @@ export interface WebConfigJson {
     };
     element_call?: {
         guest_spa_url?: string;
-        use_exclusively?: boolean;
         brand?: string;
+        use_exclusively?: boolean;
+        disable?: boolean;
     };
 
     logout_redirect_url?: string;

@@ -123,6 +123,7 @@ describe("<SpacePanel />", () => {
         removeListener: jest.fn(),
         isVersionSupported: jest.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     } as unknown as MatrixClient;
     const sdkContext = new TestSDKContext();
     const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);
