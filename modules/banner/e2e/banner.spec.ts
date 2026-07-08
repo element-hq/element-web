@@ -160,7 +160,6 @@ test.describe("Banner", () => {
                         await expect(sidebar).toMatchScreenshot(`${type}_menu_loading.png`);
                         navigationJsonResolver.resolve();
                     }
-                    await page.pause();
 
                     const emailApp = page.getByText("E-Mail");
                     await expect(emailApp).toHaveAttribute("href", "https://example.com/email");
