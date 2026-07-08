@@ -303,6 +303,81 @@ describe("RoomListViewModel", () => {
             await flushPromises();
             expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(2);
         });
+
+        /**
+         * Set up a displayed order of room1, room2, room3 where room3 is the active room kept sticky
+         * at the bottom even though the store bumped it to the top (so the displayed order differs
+         * from the store's real order of room3, room1, room2).
+         */
+        const setUpStickyRoom3 = async (): Promise<void> => {
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
+            dispatcher.dispatch({ action: Action.ActiveRoomChanged, newRoomId: "!room3:server" });
+            await flushPromises();
+
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [{ tag: CHATS_TAG, rooms: [room3, room1, room2] }],
+            });
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                "!room1:server",
+                "!room2:server",
+                "!room3:server",
+            ]);
+        };
+
+        it("should not reshuffle when navigating with the keyboard (show_room_tile)", async () => {
+            stubClient();
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            await setUpStickyRoom3();
+
+            // Navigate to room1 with the keyboard: dispatches ViewRoom with show_room_tile.
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!room1:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                oldRoomId: "!room3:server",
+                newRoomId: "!room1:server",
+            });
+            await flushPromises();
+
+            // A no-op list update (e.g. a read receipt from selecting the room) must not move any room.
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                "!room1:server",
+                "!room2:server",
+                "!room3:server",
+            ]);
+        });
+
+        it("should reshuffle to the real order when switching rooms with a click", async () => {
+            stubClient();
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            await setUpStickyRoom3();
+
+            // Click room1: dispatches ViewRoom without show_room_tile.
+            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            dispatcher.dispatch({ action: Action.ViewRoom, room_id: "!room1:server", metricsTrigger: undefined });
+            dispatcher.dispatch({
+                action: Action.ActiveRoomChanged,
+                oldRoomId: "!room3:server",
+                newRoomId: "!room1:server",
+            });
+            await flushPromises();
+
+            // The no-op list update now lets the list settle to the store's real order (room1 sticky).
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                "!room1:server",
+                "!room3:server",
+                "!room2:server",
+            ]);
+        });
     });
 
     describe("Filters", () => {
