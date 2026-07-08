@@ -10,7 +10,6 @@ import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
-import SettingsStore from "../../settings/SettingsStore";
 
 const logger = rootLogger.getChild("MessageComposerUrlPreviewViewModel");
 
@@ -18,6 +17,7 @@ export interface MessageComposerUrlPreviewViewModelProps {
     client: MatrixClient;
     visible: boolean;
     showTooltips: boolean;
+    urlPreviewBundle: boolean;
 }
 
 export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
@@ -52,7 +52,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         }
 
         let previews;
-        if (SettingsStore.getValue("feature_msc4095_url_preview_bundle")) {
+        if (this.props.urlPreviewBundle) {
             const previewRequests = Array.from(this.links).map(async (link) => {
                 try {
                     return await this.fetcher.fetchPreview(link, true);
