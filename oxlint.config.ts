@@ -145,8 +145,6 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "no-unused-vars": "off",
-        "eslint/no-unused-vars": "off",
         "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
