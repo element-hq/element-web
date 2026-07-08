@@ -153,8 +153,14 @@ describe("<SpacePanel />", () => {
         const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             return setting === "feature_video_rooms" ? true : originalGetValue(setting);
         });
-        const renderResult = render(<SpacePanel />);
-        expect(renderResult.asFragment()).toMatchSnapshot();
+        const { container } = render(<SpacePanel />);
+
+        // Inspect the order of the rendered MetaSpaces, excluding the "Create a space" button.
+        const metaSpaceLabels = Array.from(
+            container.querySelectorAll(".mx_SpaceButton:not(.mx_SpaceButton_new)"),
+        ).map((button) => button.getAttribute("aria-label"));
+        expect(metaSpaceLabels).toEqual(["Home", "Favourites", "People", "Other rooms", "Conferences"]);
+
         spySettingsStore.mockRestore();
     });
 
