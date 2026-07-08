@@ -252,7 +252,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
-                "oidc-client-ts": getPackageRoot("oidc-client-ts"),
 
                 // Make shared-components imports resolve to EW deps
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),

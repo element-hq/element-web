@@ -10,7 +10,7 @@ import { fn } from "storybook/test";
 
 import imageFile from "../../../../../static/element.png";
 import tallImageFile from "../../../../../static/tallImage.png";
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Decorator, Meta, StoryFn } from "@storybook/react-vite";
 import {
     UrlPreviewGroupView,
     type UrlPreviewGroupViewActions,
@@ -41,6 +41,27 @@ const UrlPreviewGroupViewWrapperImpl = ({
 };
 
 const UrlPreviewGroupViewWrapper = withViewDocs(UrlPreviewGroupViewWrapperImpl, UrlPreviewGroupView);
+
+/**
+ * Mimics the CSS context of .mx_EventTile_line (bubble layout) + TextualBodyView.root that
+ * surrounds UrlPreviewGroupView in the real app.
+ */
+const withBubbleLayoutContext: Decorator = (Story) => (
+    <div
+        style={{
+            display: "flex",
+            width: "fit-content",
+            maxWidth: "70%",
+            padding: "9px 60px 9px 9px",
+            background: "var(--cpd-color-bg-subtle-primary)",
+            borderRadius: "12px",
+        }}
+    >
+        <div style={{ overflowX: "hidden", overflowY: "hidden", maxWidth: "100%" }}>
+            <Story />
+        </div>
+    </div>
+);
 
 export default {
     title: "Timeline/Timeline Event/UrlPreviewGroupView",
@@ -143,4 +164,27 @@ WithCompactView.args = {
 };
 WithCompactView.globals = {
     eventDensity: "compact",
+};
+
+// Testing that within the bubble layout, we still scale appropriately.
+
+export const InBubbleLayout = Default.bind({});
+InBubbleLayout.args = {
+    ...Default.args,
+};
+InBubbleLayout.globals = { eventLayout: "bubble" };
+// Purely for testing that bubbles have not regressed
+InBubbleLayout.tags = ["!autodocs"];
+InBubbleLayout.decorators = [withBubbleLayoutContext];
+
+export const InBubbleLayoutNarrow = Default.bind({});
+InBubbleLayoutNarrow.args = {
+    ...InBubbleLayout.args,
+};
+InBubbleLayoutNarrow.globals = { ...InBubbleLayout.globals };
+InBubbleLayoutNarrow.decorators = [...InBubbleLayout.decorators];
+InBubbleLayoutNarrow.parameters = {
+    initialGlobals: {
+        viewport: { value: "mobile1", isRotated: false },
+    },
 };

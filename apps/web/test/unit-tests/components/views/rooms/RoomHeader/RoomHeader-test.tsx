@@ -409,11 +409,7 @@ describe("RoomHeader", () => {
 
     describe("group call enabled", () => {
         beforeEach(async () => {
-            SdkConfig.put({
-                features: {
-                    feature_group_calls: true,
-                },
-            });
+            SdkConfig.put({});
             // Enable Element Call
             client._unstable_getRTCTransports = jest
                 .fn()
@@ -478,11 +474,9 @@ describe("RoomHeader", () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
             SdkConfig.add({
+                element_call: { disable: true }, // This test is about Jitsi widget re-pinning, not Element Call
                 setting_defaults: {
                     [UIFeature.Widgets]: true,
-                },
-                features: {
-                    feature_group_calls: false,
                 },
             });
             // allow calls
