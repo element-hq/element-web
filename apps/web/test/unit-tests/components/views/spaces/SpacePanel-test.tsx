@@ -153,12 +153,16 @@ describe("<SpacePanel />", () => {
         const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             return setting === "feature_video_rooms" ? true : originalGetValue(setting);
         });
-        const { container } = render(<SpacePanel />);
+        render(<SpacePanel />);
 
         // Inspect the order of the rendered MetaSpaces, excluding the "Create a space" button.
-        const metaSpaceLabels = Array.from(container.querySelectorAll(".mx_SpaceButton:not(.mx_SpaceButton_new)")).map(
-            (button) => button.getAttribute("aria-label"),
-        );
+        const metaSpaceLabels = Array.from(screen.getAllByRole("button"))
+            .map((button) => button.getAttribute("aria-label"))
+            .filter(
+                (label) =>
+                    label &&
+                    !["User menu", "Expand", "Options", "Create a space", "Threads", "Quick settings"].includes(label),
+            );
         expect(metaSpaceLabels).toEqual(["Home", "Favourites", "People", "Other rooms", "Conferences"]);
 
         spySettingsStore.mockRestore();
