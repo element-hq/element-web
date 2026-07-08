@@ -210,6 +210,14 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return call !== null && this.connectedCalls.has(call) ? call : null;
     }
 
+    /**
+     * Get all the ongoing calls
+     * @returns Map from room-id to the ongoing call in that room
+     */
+    public getAllCalls(): Map<string, Call> {
+        return this.calls;
+    }
+
     private onWidgets = (roomId: string | null): void => {
         if (!this.matrixClient) return;
         if (roomId === null) {
