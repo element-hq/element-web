@@ -199,6 +199,7 @@ export const TimelineEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack })
                 rel_type: "m.replace",
                 event_id: getBaseEventId(mxEvent),
             },
+            ...("com.beeper.linkpreviews" in originalContent ? { "com.beeper.linkpreviews": originalContent["com.beeper.linkpreviews"] } : {}),
         };
 
         defaultContent = stringify(newContent);
