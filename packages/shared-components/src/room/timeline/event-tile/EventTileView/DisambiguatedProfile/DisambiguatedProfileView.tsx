@@ -91,7 +91,7 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName, userStatus } = useViewModel(vm);
 
-    const userStatusEmoji = userStatus && [...new Intl.Segmenter().segment(userStatus.emoji)][0]?.segment;
+    const userStatusEmoji = userStatus && userStatus.emoji;
 
     const displayNameClasses = classNames(colorClass, {
         [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
