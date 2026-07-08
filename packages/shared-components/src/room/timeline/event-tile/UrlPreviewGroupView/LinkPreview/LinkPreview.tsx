@@ -66,7 +66,7 @@ function LinkPreviewInline({
     link,
 }: Omit<LinkPreviewProps, "image" | "description" | "author" | "onImageClick">): JSX.Element {
     return (
-        <div className={classNames(styles.container, styles.inline)}>
+        <div className={classNames(styles.containerExpanded, styles.inline)}>
             {siteIcon && (
                 <div className={styles.siteAvatar}>
                     <Avatar type="square" size="48px" name={title} id={title} src={siteIcon} />
