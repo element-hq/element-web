@@ -7,7 +7,6 @@
 
 import { type FacePileViewModel } from "../../../../../core/FacePile/FacePileView";
 import { type MemberAvatarViewModel } from "../../../../../core/MemberAvatar/MemberAvatarView";
-import { type ViewModel } from "../../../../../core/viewmodel";
 import { type CallDirection } from "../common";
 import { type DurationViewModel } from "./components/Duration/DurationView";
 
@@ -63,5 +62,3 @@ export interface CommonOngoingCallTileViewAction {
      */
     join: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
-
-export type CallStartedTileFooViewModel = ViewModel<CommonOngoingCallTileViewSnapshot>;
