@@ -66,6 +66,7 @@ describe("<LoggedInView />", () => {
         matrixRTC: {
             on: jest.fn(),
         },
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     });
     const mediaHandler = new MediaHandler(mockClient);
     const mockSdkContext = new TestSDKContext();

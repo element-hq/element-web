@@ -11,11 +11,17 @@ Please see LICENSE files in the repository root for full details.
 import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
-import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
+import { decodeBase64, encodeUnpaddedBase64, MatrixClient, OAuth2 } from "matrix-js-sdk/src/matrix";
 import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
 import fetchMock from "@fetch-mock/vitest";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser, mockPlatformPeg } from "test-utils";
-import { makeDelegatedAuthConfig } from "test-utils/oidc";
+import {
+    flushPromises,
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+    mockClientMethodsServer,
+    mockPlatformPeg,
+} from "test-utils";
+import { makeDelegatedAuthMetadata } from "test-utils/auth";
 
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 import * as Lifecycle from "./Lifecycle";
@@ -23,10 +29,9 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";
 import * as StorageAccess from "./utils/StorageAccess";
 import { idbSave } from "./utils/StorageAccess";
-import { OidcClientStore } from "./stores/oidc/OidcClientStore";
 import { Action } from "./dispatcher/actions";
 import PlatformPeg from "./PlatformPeg";
-import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "./utils/tokens/tokens";
+import { persistTokens } from "./utils/tokens/tokens";
 import { encryptPickleKey } from "./utils/tokens/pickling";
 import * as StorageManager from "./utils/StorageManager.ts";
 import type BasePlatform from "./BasePlatform.ts";
@@ -49,22 +54,19 @@ describe("Lifecycle", () => {
         mockPlatform = mockPlatformPeg();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
+            ...mockClientMethodsServer(),
             stopClient: vi.fn(),
             removeAllListeners: vi.fn(),
             clearStores: vi.fn(),
-            getAccountData: vi.fn(),
             getDeviceId: vi.fn().mockReturnValue(deviceId),
             isVersionSupported: vi.fn().mockResolvedValue(true),
             getCrypto: vi.fn(),
-            getClientWellKnown: vi.fn(),
-            waitForClientWellKnown: vi.fn(),
             getThirdpartyProtocols: vi.fn(),
             store: {
                 destroy: vi.fn(),
             },
             getVersions: vi.fn().mockResolvedValue({ versions: ["v1.1"] }),
             logout: vi.fn().mockResolvedValue(undefined),
-            getAccessToken: vi.fn(),
             getRefreshToken: vi.fn(),
             isInitialSyncComplete: vi.fn(),
             setGuest: vi.fn(),
@@ -78,6 +80,7 @@ describe("Lifecycle", () => {
 
         localStorage.clear();
         sessionStorage.clear();
+        vi.spyOn(MatrixClient.prototype, "getAuthMetadata").mockResolvedValue(makeDelegatedAuthMetadata());
     });
 
     afterEach(() => {
@@ -119,8 +122,6 @@ describe("Lifecycle", () => {
         mx_is_url: identityServerUrl,
         mx_user_id: userId,
         mx_device_id: deviceId,
-        mx_oidc_token_issuer: "test-issuer.dummy",
-        mx_oidc_client_id: "test-client-id",
     };
     const idbStorageSession = {
         account: {
@@ -304,6 +305,7 @@ describe("Lifecycle", () => {
                 describe("with a refresh token", () => {
                     beforeEach(() => {
                         localStorage.setItem("mx_refresh_token", refreshToken);
+                        localStorage.setItem("mx_oidc_client_id", "test-client-id");
                         for (const key in localStorageSession) {
                             localStorage.setItem(key, localStorageSession[key]);
                         }
@@ -334,7 +336,7 @@ describe("Lifecycle", () => {
                                 guest: false,
                                 pickleKey: undefined,
                             },
-                            expect.any(Function),
+                            expect.any(OAuth2),
                         );
                     });
                 });
@@ -344,6 +346,7 @@ describe("Lifecycle", () => {
                 let pickleKey: string;
 
                 beforeEach(async () => {
+                    localStorage.setItem("mx_oidc_client_id", "test-client-id");
                     for (const key in localStorageSession) {
                         localStorage.setItem(key, localStorageSession[key]);
                     }
@@ -355,7 +358,7 @@ describe("Lifecycle", () => {
                     // Indicate that we should have a pickle key
                     localStorage.setItem("mx_has_pickle_key", "true");
 
-                    await persistAccessTokenInStorage(credentials.accessToken, pickleKey);
+                    await persistTokens(pickleKey, credentials);
                 });
 
                 it("should persist credentials", async () => {
@@ -415,7 +418,7 @@ describe("Lifecycle", () => {
                             guest: false,
                             pickleKey,
                         },
-                        undefined,
+                        expect.any(OAuth2),
                     );
 
                     expect(MatrixClientPeg.start).toHaveBeenCalledWith({ rustCryptoStoreKey: expect.any(Uint8Array) });
@@ -423,7 +426,7 @@ describe("Lifecycle", () => {
 
                 describe("with a refresh token", () => {
                     beforeEach(async () => {
-                        await persistRefreshTokenInStorage(refreshToken, pickleKey);
+                        await persistTokens(pickleKey, { ...credentials, refreshToken });
                     });
 
                     it("should persist credentials", async () => {
@@ -454,7 +457,7 @@ describe("Lifecycle", () => {
                                 guest: false,
                                 pickleKey: pickleKey,
                             },
-                            expect.any(Function),
+                            expect.any(OAuth2),
                         );
                     });
                 });
@@ -486,7 +489,7 @@ describe("Lifecycle", () => {
                     // Indicate that we should have a pickle key
                     localStorage.setItem("mx_has_pickle_key", "true");
 
-                    await persistAccessTokenInStorage(credentials.accessToken, pickleKey);
+                    await persistTokens(pickleKey, credentials);
                 });
 
                 it("should create and start new matrix client with credentials", async () => {
@@ -532,7 +535,7 @@ describe("Lifecycle", () => {
                 // Create a pickle key, and store it, encrypted, in IDB.
                 const pickleKey = (await PlatformPeg.get()!.createPickleKey(credentials.userId, credentials.deviceId))!;
                 localStorage.setItem("mx_has_pickle_key", "true");
-                await persistAccessTokenInStorage(credentials.accessToken, pickleKey);
+                await persistTokens(pickleKey, credentials);
 
                 // Now destroy the pickle key
                 await PlatformPeg.get()!.destroyPickleKey(credentials.userId, credentials.deviceId);
@@ -624,7 +627,6 @@ describe("Lifecycle", () => {
             });
 
             it("should persist a refreshToken when present", async () => {
-                localStorage.setItem("mx_oidc_token_issuer", "test-issuer.dummy");
                 localStorage.setItem("mx_oidc_client_id", "test-client-id");
 
                 await setLoggedIn({
@@ -777,34 +779,18 @@ describe("Lifecycle", () => {
             const clientId = "test-client-id";
             const issuer = "https://auth.com/";
 
-            const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
-            const idToken =
-                "eyJhbGciOiJSUzI1NiIsImtpZCI6Imh4ZEhXb0Y5bW4ifQ.eyJzdWIiOiIwMUhQUDJGU0JZREU5UDlFTU04REQ3V1pIUiIsImlzcyI6Imh0dHBzOi8vYXV0aC1vaWRjLmxhYi5lbGVtZW50LmRldi8iLCJpYXQiOjE3MTUwNzE5ODUsImF1dGhfdGltZSI6MTcwNzk5MDMxMiwiY19oYXNoIjoidGt5R1RhUjU5aTk3YXoyTU4yMGdidyIsImV4cCI6MTcxNTA3NTU4NSwibm9uY2UiOiJxaXhwM0hFMmVaIiwiYXVkIjoiMDFIWDk0Mlg3QTg3REgxRUs2UDRaNjI4WEciLCJhdF9oYXNoIjoiNFlFUjdPRlVKTmRTeEVHV2hJUDlnZyJ9.HxODneXvSTfWB5Vc4cf7b8GiN2gdwUuTiyVqZuupWske2HkZiJZUt5Lsxg9BW3gz28POkE0Ln17snlkmy02B_AD3DQxKOOxQCzIIARHdfFvZxgGWsMdFcVQZDW7rtXcqgj-SpVaUQ_8acsgxSrz_DF2o0O4tto0PT6wVUiw8KlBmgWTscWPeAWe-39T-8EiQ8Wi16h6oSPcz2NzOQ7eOM_S9fDkOorgcBkRGLl1nrahrPSdWJSGAeruk5mX4YxN714YThFDyEA2t9YmKpjaiSQ2tT-Xkd7tgsZqeirNs2ni9mIiFX3bRX6t2AhUNzA7MaX9ZyizKGa6go3BESO_oDg";
+            const delegatedAuthConfig = makeDelegatedAuthMetadata(issuer);
 
             beforeEach(() => {
-                fetchMock.get(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`, delegatedAuthConfig);
-                fetchMock.get(`${delegatedAuthConfig.issuer}jwks`, {
-                    status: 200,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    keys: [],
-                });
-
                 // set values in local storage as they would be after a successful oidc authentication
                 localStorage.setItem("mx_oidc_client_id", clientId);
-                localStorage.setItem("mx_oidc_token_issuer", issuer);
-                localStorage.setItem("mx_oidc_id_token", idToken);
             });
 
             it("should not try to create a token refresher without a refresh token", async () => {
-                await setLoggedIn(credentials);
+                const cli = await setLoggedIn(credentials);
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).toHaveFetchedTimes(
-                    0,
-                    `${delegatedAuthConfig.issuer}.well-known/openid-configuration`,
-                );
+                expect(cli.http.opts.tokenRefreshFunction).toBeUndefined();
             });
 
             it("should not try to create a token refresher without a deviceId", async () => {
@@ -824,7 +810,6 @@ describe("Lifecycle", () => {
             });
 
             it("should not try to create a token refresher without an issuer in session storage", async () => {
-                localStorage.removeItem("mx_oidc_token_issuer");
                 await expect(
                     setLoggedIn({
                         ...credentials,
@@ -881,20 +866,16 @@ describe("Lifecycle", () => {
     });
 
     describe("logout()", () => {
-        let oidcClientStore!: OidcClientStore;
         const accessToken = "test-access-token";
         const refreshToken = "test-refresh-token";
 
         beforeEach(() => {
-            oidcClientStore = new OidcClientStore(mockClient);
-            // stub
-            vi.spyOn(oidcClientStore, "revokeTokens").mockResolvedValue(undefined);
-
             mockClient.getAccessToken.mockReturnValue(accessToken);
             mockClient.getRefreshToken.mockReturnValue(refreshToken);
+            vi.spyOn(OAuth2.prototype, "revokeToken").mockResolvedValue(undefined);
         });
 
-        it("should call logout on the client when oidcClientStore is falsy", async () => {
+        it("should call logout on the client when oauth is not used", async () => {
             logout();
 
             await flushPromises();
@@ -902,24 +883,15 @@ describe("Lifecycle", () => {
             expect(mockClient.logout).toHaveBeenCalledWith(true);
         });
 
-        it("should call logout on the client when oidcClientStore.isUserAuthenticatedWithOidc is falsy", async () => {
-            vi.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(false);
-            logout(oidcClientStore);
-
-            await flushPromises();
-
-            expect(mockClient.logout).toHaveBeenCalledWith(true);
-            expect(oidcClientStore.revokeTokens).not.toHaveBeenCalled();
-        });
-
-        it("should revoke tokens when user is authenticated with oidc", async () => {
-            vi.spyOn(oidcClientStore, "isUserAuthenticatedWithOidc", "get").mockReturnValue(true);
-            logout(oidcClientStore);
+        it("should revoke tokens when user is authenticated with oauth2", async () => {
+            localStorage.setItem("mx_oidc_client_id", "test-client-id");
+            logout();
 
             await flushPromises();
 
             expect(mockClient.logout).not.toHaveBeenCalled();
-            expect(oidcClientStore.revokeTokens).toHaveBeenCalledWith(accessToken, refreshToken);
+            expect(OAuth2.prototype.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
+            expect(OAuth2.prototype.revokeToken).toHaveBeenCalledWith(refreshToken, "refresh_token");
         });
     });
 

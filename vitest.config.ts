@@ -58,6 +58,8 @@ export default defineConfig({
                 "**/*.{stories,test}.{ts,tsx}",
                 // Exclude test utilities
                 "**/src/test/**",
+                // Exclude mocks
+                "**/src/**/*-{mock,mocks}.{ts,tsx}",
                 // Exclude type definition files
                 "**/*.d.ts",
                 // Exclude playwright-common as it is just test utilities

@@ -96,4 +96,29 @@ describe("MessageComposerUrlPreview", () => {
             { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
         );
     });
+    test("to reset module component override when filter function does not match ", async () => {
+        const modApi = {
+            customComponents: new CustomComponentsApi(),
+        } as ModuleApi;
+        modApi.customComponents.registerComposerPreview(
+            (text) => text === "show-fake-preview",
+            () => <strong>Fake preview</strong>,
+        );
+        const { container, getByText, rerender } = wrapComponent(
+            <MessageComposerUrlPreviewWrapper content="show-fake-preview" moduleApi={modApi} />,
+        );
+        await waitFor(
+            () => {
+                expect(getByText("Fake preview")).toBeDefined();
+            },
+            { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
+        );
+        rerender(<MessageComposerUrlPreviewWrapper content="other-text" moduleApi={modApi} />);
+        await waitFor(
+            () => {
+                expect(container).toMatchInlineSnapshot(`<div />`);
+            },
+            { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
+        );
+    });
 });
