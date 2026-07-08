@@ -24,7 +24,6 @@ import { MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientP
 import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import { createMatrixClient, createClientWithCreds, type IMatrixClientCreds } from "./utils/createMatrixClient";
-import Notifier from "./Notifier";
 import UserActivity from "./UserActivity";
 import Presence from "./Presence";
 import dis from "./dispatcher/dispatcher";
@@ -45,7 +44,6 @@ import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 import { PosthogAnalytics } from "./PosthogAnalytics";
-import LegacyCallHandler from "./LegacyCallHandler";
 import LifecycleCustomisations from "./customisations/Lifecycle";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { _t } from "./languageHandler";
@@ -81,6 +79,7 @@ import {
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
+import { type OnLoggedInPayload } from "./dispatcher/payloads/OnLoggedInPayload.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -906,9 +905,9 @@ async function doSetLoggedIn(
     }
     checkSessionLock();
 
-    // We are now logged in, so fire this. We have yet to start the client but the
-    // client_started dispatch is for that.
-    dis.fire(Action.OnLoggedIn);
+    // We are now logged in, so fire this. We have yet to start the client but the client_started dispatch is for that.
+    // Dispatch this synchronously so SDKContextClass can set the client for other modules to consume.
+    dis.dispatch<OnLoggedInPayload>({ action: Action.OnLoggedIn, client }, true);
 
     const clientPegOpts: MatrixClientPegAssignOpts = {};
     if (credentials.pickleKey) {
@@ -1097,12 +1096,12 @@ async function startMatrixClient(
     ToastStore.sharedInstance().reset();
 
     DialogOpener.instance.prepare(client);
-    Notifier.start();
+    SDKContextClass.instance.notifier.start();
     UserActivity.sharedInstance().start();
     DMRoomMap.makeShared(client).start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
-    LegacyCallHandler.instance.start();
+    SDKContextClass.instance.legacyCallHandler.start();
     checkBrowserSupport();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
@@ -1228,8 +1227,8 @@ export async function clearStorage(opts?: { deleteEverything?: boolean }): Promi
  * on MatrixClientPeg after stopping.
  */
 export function stopMatrixClient(unsetClient = true): void {
-    Notifier.stop();
-    LegacyCallHandler.instance.stop();
+    SDKContextClass.instance.legacyCallHandler.stop();
+    SDKContextClass.instance.notifier.stop();
     UserActivity.sharedInstance().stop();
     SDKContextClass.instance.typingStore.reset();
     Presence.stop();

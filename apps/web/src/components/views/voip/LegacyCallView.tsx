@@ -423,12 +423,11 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
             let holdTransferContent: React.ReactNode;
             if (transfereeCall) {
-                const cli = this.context.client;
                 const callRoomId = this.context.legacyCallHandler.roomIdForCall(call);
-                const transferTargetRoom = callRoomId ? cli?.getRoom(callRoomId) : null;
+                const transferTargetRoom = callRoomId ? this.context.client?.getRoom(callRoomId) : null;
                 const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("voip|unknown_person");
                 const transfereeCallRoomId = this.context.legacyCallHandler.roomIdForCall(transfereeCall);
-                const transfereeRoom = transfereeCallRoomId ? cli?.getRoom(transfereeCallRoomId) : null;
+                const transfereeRoom = transfereeCallRoomId ? this.context.client?.getRoom(transfereeCallRoomId) : null;
                 const transfereeName = transfereeRoom ? transfereeRoom.name : _t("voip|unknown_person");
 
                 holdTransferContent = (
@@ -546,13 +545,12 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const { call, secondaryCall, pipMode, showApps, onMouseDownOnHeader, sidebarShown } = this.props;
         const { sidebarFeeds } = this.state;
 
-        const client = this.context.client;
         const callRoomId = this.context.legacyCallHandler.roomIdForCall(call);
         const secondaryCallRoomId = this.context.legacyCallHandler.roomIdForCall(secondaryCall);
-        const callRoom = callRoomId ? client?.getRoom(callRoomId) : null;
+        const callRoom = callRoomId ? this.context.client?.getRoom(callRoomId) : null;
         if (!callRoom) return null;
 
-        const secCallRoom = secondaryCallRoomId ? client?.getRoom(secondaryCallRoomId) : null;
+        const secCallRoom = secondaryCallRoomId ? this.context.client?.getRoom(secondaryCallRoomId) : null;
 
         const callViewClasses = classNames({
             mx_LegacyCallView: true,

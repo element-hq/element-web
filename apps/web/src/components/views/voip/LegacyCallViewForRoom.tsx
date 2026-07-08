@@ -39,7 +39,7 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         const call = this.getCall();
         this.state = {
             call,
-            sidebarShown: !!call && this.context.legacyCallHandler.isCallSidebarShown(call.callId),
+            sidebarShown: !!call && context.legacyCallHandler.isCallSidebarShown(call.callId),
         };
     }
 

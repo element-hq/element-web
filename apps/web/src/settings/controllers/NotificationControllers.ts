@@ -29,14 +29,6 @@ export function isPushNotifyDisabled(): boolean {
     return masterRule.enabled && !masterRule.actions.includes(PushRuleActionName.Notify);
 }
 
-function getNotifier(): any {
-    // TODO: [TS] Formal type that doesn't cause a cyclical reference.
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    let Notifier = require("../../Notifier"); // avoids cyclical references
-    if (Notifier.default) Notifier = Notifier.default; // correct for webpack require() weirdness
-    return Notifier;
-}
-
 export class NotificationsEnabledController extends SettingController {
     public getValueOverride(
         level: SettingLevel,
@@ -44,7 +36,7 @@ export class NotificationsEnabledController extends SettingController {
         calculatedValue: any,
         calculatedAtLevel: SettingLevel | null,
     ): any {
-        if (!getNotifier().isPossible()) return false;
+        if (!this.sdkContext.notifier.isPossible()) return false;
 
         if (calculatedValue === null || calculatedAtLevel === "default") {
             return !isPushNotifyDisabled();
@@ -54,15 +46,15 @@ export class NotificationsEnabledController extends SettingController {
     }
 
     public onChange(level: SettingLevel, roomId: string, newValue: any): void {
-        if (getNotifier().supportsDesktopNotifications()) {
-            getNotifier().setEnabled(newValue);
+        if (this.sdkContext.notifier.supportsDesktopNotifications()) {
+            this.sdkContext.notifier.setEnabled(newValue);
         }
     }
 }
 
 export class NotificationBodyEnabledController extends SettingController {
     public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any): any {
-        if (!getNotifier().isPossible()) return false;
+        if (!this.sdkContext.notifier.isPossible()) return false;
 
         if (calculatedValue === null) {
             return !isPushNotifyDisabled();

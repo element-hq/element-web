@@ -122,7 +122,7 @@ export async function renderMemberList(
     }
 
     const context = new TestSDKContext();
-    context.client = client;
+    context._client = client;
     context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
     const root = render(
         <MatrixClientContext.Provider value={client}>

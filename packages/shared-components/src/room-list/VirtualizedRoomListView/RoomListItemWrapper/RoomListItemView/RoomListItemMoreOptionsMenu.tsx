@@ -131,41 +131,45 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                     hideChevron={true}
                 />
             )}
-            <SubMenu
-                trigger={
-                    <MenuItem
-                        Icon={ArrowRightIcon}
-                        label={_t("room_list|more_options|move_to_section")}
-                        onSelect={null}
-                    />
-                }
-            >
-                {snapshot.sections.map((section) => (
-                    <MenuItem
-                        key={section.tag}
-                        label={section.name}
-                        labelProps={{ className: styles.sectionLabel }}
-                        onSelect={() => vm.onToggleSection(section.tag)}
-                        onClick={(evt) => evt.stopPropagation()}
-                        hideChevron={true}
-                        aria-checked={section.isSelected}
+            {snapshot.areSectionsEnabled && (
+                <>
+                    <SubMenu
+                        trigger={
+                            <MenuItem
+                                Icon={ArrowRightIcon}
+                                label={_t("room_list|more_options|move_to_section")}
+                                onSelect={null}
+                            />
+                        }
                     >
-                        {section.isSelected && (
-                            <CheckIcon color="var(--cpd-color-icon-tertiary)" width="24px" height="24px" />
-                        )}
-                    </MenuItem>
-                ))}
-                {hasSections && <Separator />}
-                <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
-            </SubMenu>
-            {isInSection && (
-                <MenuItem
-                    Icon={MinusIcon}
-                    label={_t("room_list|more_options|remove_from_section")}
-                    onSelect={vm.onRemoveFromSection}
-                    onClick={(evt) => evt.stopPropagation()}
-                    hideChevron={true}
-                />
+                        {snapshot.sections.map((section) => (
+                            <MenuItem
+                                key={section.tag}
+                                label={section.name}
+                                labelProps={{ className: styles.sectionLabel }}
+                                onSelect={() => vm.onToggleSection(section.tag)}
+                                onClick={(evt) => evt.stopPropagation()}
+                                hideChevron={true}
+                                aria-checked={section.isSelected}
+                            >
+                                {section.isSelected && (
+                                    <CheckIcon color="var(--cpd-color-icon-tertiary)" width="24px" height="24px" />
+                                )}
+                            </MenuItem>
+                        ))}
+                        {hasSections && <Separator />}
+                        <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
+                    </SubMenu>
+                    {isInSection && (
+                        <MenuItem
+                            Icon={MinusIcon}
+                            label={_t("room_list|more_options|remove_from_section")}
+                            onSelect={vm.onRemoveFromSection}
+                            onClick={(evt) => evt.stopPropagation()}
+                            hideChevron={true}
+                        />
+                    )}
+                </>
             )}
             <Separator />
             <MenuItem

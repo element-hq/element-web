@@ -52,7 +52,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
         this.roomId = roomId;
 
         this.state = {
-            silenced: this.context.legacyCallHandler.isCallSilenced(this.props.call.callId),
+            silenced: context.legacyCallHandler.isCallSilenced(this.props.call.callId),
         };
     }
 

@@ -46,7 +46,6 @@ import { ScopedRoomContextProvider } from "../../../../../../src/contexts/Scoped
 import RoomContext, { type RoomContextType } from "../../../../../../src/contexts/RoomContext";
 import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
-import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import dispatcher from "../../../../../../src/dispatcher/dispatcher";
@@ -369,7 +368,7 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
 
             await user.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
@@ -380,7 +379,7 @@ describe("RoomHeader", () => {
 
         it("you can't call if there's already a call", () => {
             mockRoomMembers(room, 2);
-            jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue(
+            jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
@@ -512,7 +511,7 @@ describe("RoomHeader", () => {
 
         it("disables calling if there's a jitsi call", () => {
             mockRoomMembers(room, 2);
-            jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue(
+            jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
@@ -536,7 +535,7 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
             await user.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
 
@@ -558,7 +557,7 @@ describe("RoomHeader", () => {
             const videoButton = screen.getByRole("button", { name: "Video call" });
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
             await user.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
@@ -611,6 +610,30 @@ describe("RoomHeader", () => {
             render(<RoomHeader room={room} />, getWrapper());
             const joinButton = getByLabelText(document.body, "Join voice call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
+        });
+
+        it("clicking the join button of an ongoing video call joins as a video call", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 3);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Video, true));
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const dispatcherSpy = jest.spyOn(dispatcher, "dispatch").mockImplementation();
+            await user.click(getByLabelText(document.body, "Join video call"));
+
+            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: false }));
+        });
+
+        it("clicking the join button of an ongoing voice call joins as a voice call", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 3);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice, true));
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const dispatcherSpy = jest.spyOn(dispatcher, "dispatch").mockImplementation();
+            await user.click(getByLabelText(document.body, "Join voice call"));
+
+            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: true }));
         });
 
         it("join button is disabled if there is an other ongoing call", async () => {
@@ -923,6 +946,7 @@ function createMockCall(
     roomId: string = "!1:example.org",
     participantCount: number = 0,
     callType: CallType = CallType.Video,
+    isElementCall: boolean = false,
 ): Call {
     const participants = new Map();
 
@@ -940,7 +964,7 @@ function createMockCall(
     return {
         roomId,
         participants,
-        widget: { id: "test-widget" },
+        widget: { id: "test-widget", type: isElementCall ? "m.call" : undefined },
         connectionState: "disconnected",
         callType,
         on: jest.fn(),

@@ -19,7 +19,6 @@ import { type PlatformPeg } from "../PlatformPeg";
 import { type IntegrationManagers } from "../integrations/IntegrationManagers";
 import { type ModalManager } from "../Modal";
 import type SettingsStore from "../settings/SettingsStore";
-import { type Notifier } from "../Notifier";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
@@ -92,7 +91,6 @@ declare global {
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
-        mxNotifier: typeof Notifier;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
         mxVoiceRecordingStore: VoiceRecordingStore;

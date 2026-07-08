@@ -48,10 +48,10 @@ import {
     getNotificationEventSendTs,
     IncomingCallToast,
 } from "../../../src/toasts/IncomingCallToast";
-import LegacyCallHandler, { AudioID } from "../../../src/LegacyCallHandler";
+import { AudioID } from "../../../src/LegacyCallHandler";
 import { CallEvent } from "../../../src/models/Call";
 import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
+import { TestSDKContext } from "../TestSDKContext.ts";
 
 function makeNotificationEvent(room: Room, content: IContent = {}): MatrixEvent {
     const ts = Date.now();
@@ -78,6 +78,7 @@ describe("IncomingCallToast", () => {
     useMockedCalls();
 
     let client: Mocked<MatrixClient>;
+    let sdkContext: TestSDKContext;
     let room: Room;
 
     let alice: RoomMember;
@@ -94,7 +95,8 @@ describe("IncomingCallToast", () => {
     beforeEach(async () => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
-        SDKContextClass.instance.client = client;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = client;
 
         const audio = document.createElement("audio");
         audio.id = AudioID.Ring;
@@ -149,7 +151,7 @@ describe("IncomingCallToast", () => {
                 notificationEvent={notificationEvent}
                 toastKey={getIncomingCallToastKey(callId, room.roomId)}
             />,
-            clientAndSDKContextRenderOptions(client, SDKContextClass.instance),
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
         return callId;
     };
@@ -200,10 +202,10 @@ describe("IncomingCallToast", () => {
 
     it("start ringing on ring notify event", () => {
         const notificationEvent = makeNotificationEvent(room, { notification_type: "ring" });
-        const playMock = jest.spyOn(LegacyCallHandler.instance, "play");
+        const playMock = jest.spyOn(sdkContext.legacyCallHandler, "play");
         render(
             <IncomingCallToast notificationEvent={notificationEvent} toastKey="" />,
-            clientAndSDKContextRenderOptions(client, SDKContextClass.instance),
+            clientAndSDKContextRenderOptions(client, sdkContext),
         );
         expect(playMock).toHaveBeenCalled();
     });

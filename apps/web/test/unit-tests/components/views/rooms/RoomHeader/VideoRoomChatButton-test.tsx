@@ -13,7 +13,7 @@ import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 
 import { VideoRoomChatButton } from "../../../../../../src/components/views/rooms/RoomHeader/VideoRoomChatButton";
 import { SDKContext } from "../../../../../../src/contexts/SDKContext";
-import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../../TestSDKContext.ts";
 import type RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
 import { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
@@ -23,7 +23,7 @@ import { RightPanelPhases } from "../../../../../../src/stores/right-panel/Right
 
 describe("<VideoRoomChatButton />", () => {
     const roomId = "!room:server.org";
-    let sdkContext!: SDKContextClass;
+    let sdkContext!: TestSDKContext;
     let rightPanelStore!: MockedObject<RightPanelStore>;
 
     /**
@@ -59,8 +59,8 @@ describe("<VideoRoomChatButton />", () => {
         rightPanelStore = {
             showOrHidePhase: jest.fn(),
         } as unknown as MockedObject<RightPanelStore>;
-        sdkContext = new SDKContextClass();
-        sdkContext.client = client;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = client;
         jest.spyOn(sdkContext, "rightPanelStore", "get").mockReturnValue(rightPanelStore);
     });
 
