@@ -156,9 +156,9 @@ describe("<SpacePanel />", () => {
         const { container } = render(<SpacePanel />);
 
         // Inspect the order of the rendered MetaSpaces, excluding the "Create a space" button.
-        const metaSpaceLabels = Array.from(
-            container.querySelectorAll(".mx_SpaceButton:not(.mx_SpaceButton_new)"),
-        ).map((button) => button.getAttribute("aria-label"));
+        const metaSpaceLabels = Array.from(container.querySelectorAll(".mx_SpaceButton:not(.mx_SpaceButton_new)")).map(
+            (button) => button.getAttribute("aria-label"),
+        );
         expect(metaSpaceLabels).toEqual(["Home", "Favourites", "People", "Other rooms", "Conferences"]);
 
         spySettingsStore.mockRestore();
