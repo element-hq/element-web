@@ -161,6 +161,25 @@ export async function assertSectionsOrder(page: Page, expectedOrder: string[]): 
 }
 
 /**
+ * Assert that the given rooms appear in the room list in the given top-to-bottom order.
+ * Retries until the list settles so it is robust to async re-sorts.
+ * @param page
+ * @param roomNames the room names, in the expected top-to-bottom order
+ */
+export async function assertRoomListOrder(page: Page, roomNames: string[]): Promise<void> {
+    const roomList = getRoomList(page);
+    await expect(async () => {
+        let previousY = -Infinity;
+        for (const name of roomNames) {
+            const box = await roomList.getByRole("option", { name: `Open room ${name}` }).boundingBox();
+            expect(box, `expected room "${name}" to be visible in the room list`).not.toBeNull();
+            expect(box!.y, `expected room "${name}" to be below the previous room`).toBeGreaterThan(previousY);
+            previousY = box!.y;
+        }
+    }).toPass();
+}
+
+/**
  * Get the primary filters container
  * @param page
  */
