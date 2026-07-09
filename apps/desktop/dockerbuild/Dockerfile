@@ -18,7 +18,8 @@ RUN apt-get -qq update && apt-get -y -qq dist-upgrade && \
   tcl \
   # Used by seshat (when not SQLCIPHER_STATIC) \
   libsqlcipher-dev && \
-  apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
+  apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* && \
+  npm install --global yarn@1
 RUN ln -s /usr/bin/python3 /usr/bin/python & ln -s /usr/bin/pip3 /usr/bin/pip
 
 ENV DEBUG_COLORS=true
