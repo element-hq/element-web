@@ -351,10 +351,10 @@ importers:
         version: 6.0.3
       vitepress:
         specifier: ^1.6.4
-        version: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(jwt-decode@4.0.0)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3)
+        version: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3)
       vitepress-plugin-mermaid:
         specifier: ^2.0.17
-        version: 2.0.17(mermaid@11.16.0)(vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(jwt-decode@4.0.0)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3))
+        version: 2.0.17(mermaid@11.16.0)(vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3))
       vitest:
         specifier: 'catalog:'
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@4.1.9)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.1.3(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(yaml@2.8.4))
@@ -637,7 +637,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/86eec8a514554b56a3ad6dbd16d4c189f6c2b434
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be09f070cb397614bad6865d59b978474ceef229
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -1599,13 +1599,13 @@ importers:
         version: 4.2.3(@storybook/addon-vitest@10.4.6(@vitest/browser-playwright@4.1.9)(@vitest/browser@4.1.9)(@vitest/runner@4.1.9)(react@19.2.7)(storybook@10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.14)(prettier@2.8.8)(react@19.2.7))(vitest@4.1.9))(@vitest/browser-playwright@4.1.9)(@vitest/browser@4.1.9)(babel-plugin-macros@3.1.0)(react@19.2.7)(storybook@10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.14)(prettier@2.8.8)(react@19.2.7))(typescript@6.0.3)(vitest@4.1.9)
       typedoc:
         specifier: ^0.28.16
-        version: 0.28.19(typescript@6.0.3)
+        version: 0.28.20(typescript@6.0.3)
       typedoc-plugin-markdown:
         specifier: ^4.9.0
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+        version: 4.12.0(typedoc@0.28.20(typescript@6.0.3))
       typedoc-plugin-missing-exports:
         specifier: ^4.1.2
-        version: 4.1.3(typedoc@0.28.19(typescript@6.0.3))
+        version: 4.1.3(typedoc@0.28.20(typescript@6.0.3))
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -10041,10 +10041,6 @@ packages:
   jszip@3.10.1:
     resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
 
-  jwt-decode@4.0.0:
-    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
-    engines: {node: '>=18'}
-
   katex@0.16.47:
     resolution: {integrity: sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==}
     hasBin: true
@@ -10386,8 +10382,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/86eec8a514554b56a3ad6dbd16d4c189f6c2b434:
-    resolution: {gitHosted: true, integrity: sha512-1aU2DoEWsAkglh5t4DDYq1uS4J3iqJQgCs95KfZlhoEy6zpmbFvHP2S6+0jbKUXshtv4weeCKcwVXIT33KFUWg==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/86eec8a514554b56a3ad6dbd16d4c189f6c2b434}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be09f070cb397614bad6865d59b978474ceef229:
+    resolution: {gitHosted: true, integrity: sha512-qd8uia9ekRGH04YFysPwNePu+GAYVOh/d/XDZGe6K7EGdV9kxry3QthIk7wsL+jBdXbidlX4IB44/PsyqFhIVw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be09f070cb397614bad6865d59b978474ceef229}
     version: 41.9.0
     engines: {node: '>=22.0.0'}
 
@@ -10916,10 +10912,6 @@ packages:
 
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
-
-  oidc-client-ts@3.5.0:
-    resolution: {integrity: sha512-l2q8l9CTCTOlbX+AnK4p3M+4CEpKpyQhle6blQkdFhm0IsBqsxm15bYaSa11G7pWdsYr6epdsRZxJpCyCRbT8A==}
-    engines: {node: '>=18'}
 
   on-finished@2.4.1:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
@@ -13156,8 +13148,8 @@ packages:
     peerDependencies:
       typedoc: ^0.28.1
 
-  typedoc@0.28.19:
-    resolution: {integrity: sha512-wKh+lhdmMFivMlc6vRRcMGXeGEHGU2g8a2CkPTJjJlwRf1iXbimWIPcFolCqe4E0d/FRtGszpIrsp3WLpDB8Pw==}
+  typedoc@0.28.20:
+    resolution: {integrity: sha512-uSKqkh8Cr48vllnEy+jdaAgOeR6Y+QCBW7usgUsKj7gJEfR7stw9U/fE49LBnj2tPRKPY0c0EBJSWe9Appmplg==}
     engines: {node: '>= 18', pnpm: '>= 10'}
     hasBin: true
     peerDependencies:
@@ -19273,7 +19265,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@vueuse/integrations@12.8.2(axios@1.16.1)(focus-trap@7.8.0)(jwt-decode@4.0.0)(qrcode@1.5.4)(typescript@6.0.3)':
+  '@vueuse/integrations@12.8.2(axios@1.16.1)(focus-trap@7.8.0)(qrcode@1.5.4)(typescript@6.0.3)':
     dependencies:
       '@vueuse/core': 12.8.2(typescript@6.0.3)
       '@vueuse/shared': 12.8.2(typescript@6.0.3)
@@ -19281,7 +19273,6 @@ snapshots:
     optionalDependencies:
       axios: 1.16.1
       focus-trap: 7.8.0
-      jwt-decode: 4.0.0
       qrcode: 1.5.4
     transitivePeerDependencies:
       - typescript
@@ -23429,8 +23420,6 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
-  jwt-decode@4.0.0: {}
-
   katex@0.16.47:
     dependencies:
       commander: 8.3.0
@@ -23786,18 +23775,16 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/86eec8a514554b56a3ad6dbd16d4c189f6c2b434:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be09f070cb397614bad6865d59b978474ceef229:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
       another-json: 0.2.0
       bs58: 6.0.0
       content-type: 2.0.0
-      jwt-decode: 4.0.0
       loglevel: 1.9.2
       matrix-events-sdk: 0.0.1
       matrix-widget-api: 1.17.0
-      oidc-client-ts: 3.5.0
       p-retry: 8.0.0
       sdp-transform: 3.0.0
       unhomoglyph: 1.0.6
@@ -24531,10 +24518,6 @@ snapshots:
       es-object-atoms: 1.1.1
 
   obug@2.1.1: {}
-
-  oidc-client-ts@3.5.0:
-    dependencies:
-      jwt-decode: 4.0.0
 
   on-finished@2.4.1:
     dependencies:
@@ -27182,22 +27165,22 @@ snapshots:
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
 
-  typedoc-plugin-markdown@4.12.0(typedoc@0.28.19(typescript@6.0.3)):
+  typedoc-plugin-markdown@4.12.0(typedoc@0.28.20(typescript@6.0.3)):
     dependencies:
-      typedoc: 0.28.19(typescript@6.0.3)
+      typedoc: 0.28.20(typescript@6.0.3)
 
-  typedoc-plugin-missing-exports@4.1.3(typedoc@0.28.19(typescript@6.0.3)):
+  typedoc-plugin-missing-exports@4.1.3(typedoc@0.28.20(typescript@6.0.3)):
     dependencies:
-      typedoc: 0.28.19(typescript@6.0.3)
+      typedoc: 0.28.20(typescript@6.0.3)
 
-  typedoc@0.28.19(typescript@6.0.3):
+  typedoc@0.28.20(typescript@6.0.3):
     dependencies:
       '@gerrit0/mini-shiki': 3.23.0
       lunr: 2.3.9
       markdown-it: 14.1.1
       minimatch: 10.2.5
       typescript: 6.0.3
-      yaml: 2.8.4
+      yaml: 2.9.0
 
   typescript@6.0.3: {}
 
@@ -27488,14 +27471,14 @@ snapshots:
       terser: 5.48.0
       yaml: 2.8.4
 
-  vitepress-plugin-mermaid@2.0.17(mermaid@11.16.0)(vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(jwt-decode@4.0.0)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3)):
+  vitepress-plugin-mermaid@2.0.17(mermaid@11.16.0)(vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3)):
     dependencies:
       mermaid: 11.16.0
-      vitepress: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(jwt-decode@4.0.0)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3)
+      vitepress: 1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3)
     optionalDependencies:
       '@mermaid-js/mermaid-mindmap': 9.3.0
 
-  vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(jwt-decode@4.0.0)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3):
+  vitepress@1.6.4(@algolia/client-search@5.50.0)(@types/node@25.9.3)(@types/react@19.2.14)(axios@1.16.1)(lightningcss@1.32.0)(postcss@8.5.16)(qrcode@1.5.4)(search-insights@2.17.3)(sugarss@5.0.1(postcss@8.5.16))(terser@5.48.0)(typescript@6.0.3):
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.50.0)(@types/react@19.2.14)(search-insights@2.17.3)
@@ -27508,7 +27491,7 @@ snapshots:
       '@vue/devtools-api': 7.7.9
       '@vue/shared': 3.5.31
       '@vueuse/core': 12.8.2(typescript@6.0.3)
-      '@vueuse/integrations': 12.8.2(axios@1.16.1)(focus-trap@7.8.0)(jwt-decode@4.0.0)(qrcode@1.5.4)(typescript@6.0.3)
+      '@vueuse/integrations': 12.8.2(axios@1.16.1)(focus-trap@7.8.0)(qrcode@1.5.4)(typescript@6.0.3)
       focus-trap: 7.8.0
       mark.js: 8.11.1
       minisearch: 7.2.0
