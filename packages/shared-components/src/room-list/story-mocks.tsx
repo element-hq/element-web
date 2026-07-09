@@ -106,6 +106,7 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
     sections: [],
+    areSectionsEnabled: true,
 });
 
 export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {

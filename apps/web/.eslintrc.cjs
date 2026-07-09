@@ -138,12 +138,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/PollResponseEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
-                            "!matrix-js-sdk/src/oidc",
-                            "!matrix-js-sdk/src/oidc/discovery",
-                            "!matrix-js-sdk/src/oidc/authorize",
-                            "!matrix-js-sdk/src/oidc/validate",
-                            "!matrix-js-sdk/src/oidc/error",
-                            "!matrix-js-sdk/src/oidc/register",
                             "!matrix-js-sdk/src/webrtc",
                             "!matrix-js-sdk/src/webrtc/call",
                             "!matrix-js-sdk/src/webrtc/callFeed",
@@ -234,21 +228,27 @@ module.exports = {
         {
             files: [
                 "src/**/*.test.{ts,tsx}",
+                "src/test/**/*.{ts,tsx}",
                 "src/**/__mocks__/*.{ts,tsx}",
-                "src/test/*.ts",
                 "test/**/*.{ts,tsx}",
                 "playwright/**/*.ts",
             ],
-            extends: ["plugin:matrix-org/jest"],
+            extends: [],
             rules: {
                 // We don't need super strict typing in test utilities
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
                 "@typescript-eslint/no-empty-object-type": "off",
                 "@typescript-eslint/unbound-method": "off",
-
-                // Jest/Playwright specific
-
+                // These are fine in tests
+                "no-restricted-globals": "off",
+                "react-compiler/react-compiler": "off",
+            },
+        },
+        {
+            files: ["test/**/*.{ts,tsx}"],
+            extends: ["plugin:matrix-org/jest"],
+            rules: {
                 // Disabled tests are a reality for now but as soon as all of the xits are
                 // eliminated, we should enforce this.
                 "jest/no-disabled-tests": "off",
@@ -260,11 +260,6 @@ module.exports = {
                         additionalTestBlockFunctions: ["beforeAll", "beforeEach", "oldBackendOnly"],
                     },
                 ],
-
-                // These are fine in tests
-                "no-restricted-globals": "off",
-                "react-compiler/react-compiler": "off",
-                "jest/no-mocks-import": "off",
             },
         },
         {

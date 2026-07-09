@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.22",
+    "version": "1.12.23",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -87,7 +87,6 @@
         "matrix-widget-api": "^1.16.1",
         "memoize-one": "^6.0.0",
         "mime": "^4.0.4",
-        "oidc-client-ts": "^3.0.1",
         "opus-recorder": "^8.0.3",
         "pako": "^3.0.0",
         "png-chunks-extract": "^1.0.0",
@@ -217,6 +216,7 @@
         "postcss-simple-vars": "7.0.1",
         "process": "^0.11.10",
         "semver": "^7.5.2",
+        "shared-types": "workspace:*",
         "source-map-loader": "^5.0.0",
         "stylelint": "^17.0.0",
         "stylelint-config-standard": "^40.0.0",
@@ -227,11 +227,12 @@
         "typescript": "catalog:",
         "util": "^0.12.5",
         "vitest": "catalog:",
+        "vitest-canvas-mock": "^1.1.4",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^5.0.0",
         "webpack-cli": "^7.0.0",
-        "webpack-dev-server": "^5.0.0",
+        "webpack-dev-server": "^6.0.0",
         "webpack-retry-chunk-load-plugin": "^3.1.1",
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"

@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { type JsonDocument, type JsonValue } from "shared-types";
 // Import these directly from shared-components to avoid circular deps
 import { _t, _td } from "@element-hq/web-shared-components";
 
@@ -44,7 +45,6 @@ import FallbackIceServerController from "./controllers/FallbackIceServerControll
 import { type IRightPanelForRoomStored } from "../stores/right-panel/RightPanelStoreIPanelState.ts";
 import { type ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
-import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
@@ -121,7 +121,7 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Ui]: _td("labs|group_ui"),
 };
 
-export type SettingValueType = Json | JsonValue | Record<string, unknown> | Record<string, unknown>[];
+export type SettingValueType = JsonDocument | JsonValue | Record<string, unknown> | Record<string, unknown>[];
 
 export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     isFeature?: false | undefined;
@@ -219,7 +219,6 @@ export interface Settings {
     "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
-    "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
@@ -283,6 +282,7 @@ export interface Settings {
     "useSystemFont": IBaseSetting<boolean>;
     "systemFont": IBaseSetting<string>;
     "webRtcAllowPeerToPeer": IBaseSetting<boolean>;
+    "enableLegacyCallsVoip": IBaseSetting<boolean>;
     "webrtc_audiooutput": IBaseSetting<string>;
     "webrtc_audioinput": IBaseSetting<string>;
     "webrtc_videoinput": IBaseSetting<string>;
@@ -350,7 +350,6 @@ export interface Settings {
     "debug_timeline_panel": IBaseSetting<boolean>;
     "debug_registration": IBaseSetting<boolean>;
     "debug_animation": IBaseSetting<boolean>;
-    "debug_legacy_call_handler": IBaseSetting<boolean>;
     "audioInputMuted": IBaseSetting<boolean>;
     "videoInputMuted": IBaseSetting<boolean>;
     "activeCallRoomIds": IBaseSetting<string[]>;
@@ -367,6 +366,7 @@ export interface Settings {
     "Developer.elementCallUrl": IBaseSetting<string>;
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
+    "RoomList.showSections": IBaseSetting<boolean>;
 }
 
 export type SettingKey = keyof Settings;
@@ -585,15 +585,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         displayName: _td("labs|element_call_video_rooms"),
-        controller: new ReloadOnChangeController(),
-        default: false,
-    },
-    "feature_group_calls": {
-        isFeature: true,
-        labsGroup: LabGroup.VoiceAndVideo,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|group_calls"),
         controller: new ReloadOnChangeController(),
         default: false,
     },
@@ -990,6 +981,12 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|appearance|custom_font_name"),
         controller: new SystemFontController(),
     },
+    "enableLegacyCallsVoip": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("settings|voip|enable_legacy_calls"),
+        description: _td("settings|voip|enable_legacy_calls_description"),
+        default: true,
+    },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("settings|voip|allow_p2p"),
@@ -1235,6 +1232,11 @@ export const SETTINGS: Settings = {
         default: false,
         displayName: _td("settings|show_message_previews"),
     },
+    "RoomList.showSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: true,
+        displayName: _td("settings|show_sections"),
+    },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
         default: null,
@@ -1323,10 +1325,6 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "debug_animation": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-    },
-    "debug_legacy_call_handler": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },

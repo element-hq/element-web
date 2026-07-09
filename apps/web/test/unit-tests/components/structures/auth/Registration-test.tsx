@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { createClient, type MatrixClient, MatrixError, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { createClient, type MatrixClient, MatrixError, type ValidatedAuthMetadata } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import fetchMock from "@fetch-mock/jest";
 
@@ -21,11 +21,11 @@ import {
     unmockPlatformPeg,
 } from "../../../../test-utils";
 import Registration from "../../../../../src/components/structures/auth/Registration";
-import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
-import { startOidcLogin } from "../../../../../src/utils/oidc/authorize";
+import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth";
+import { startOAuthLogin } from "../../../../../src/utils/oauth/authorize";
 
-jest.mock("../../../../../src/utils/oidc/authorize", () => ({
-    startOidcLogin: jest.fn(),
+jest.mock("../../../../../src/utils/oauth/authorize", () => ({
+    startOAuthLogin: jest.fn(),
 }));
 
 jest.mock("matrix-js-sdk/src/matrix", () => ({
@@ -92,7 +92,7 @@ describe("Registration", function () {
     function getRawComponent(
         hsUrl = defaultHsUrl,
         isUrl = defaultIsUrl,
-        authConfig?: OidcClientConfig,
+        authConfig?: ValidatedAuthMetadata,
         mobileRegister?: boolean,
     ) {
         return (
@@ -104,7 +104,12 @@ describe("Registration", function () {
         );
     }
 
-    function getComponent(hsUrl?: string, isUrl?: string, authConfig?: OidcClientConfig, mobileRegister?: boolean) {
+    function getComponent(
+        hsUrl?: string,
+        isUrl?: string,
+        authConfig?: ValidatedAuthMetadata,
+        mobileRegister?: boolean,
+    ) {
         return render(getRawComponent(hsUrl, isUrl, authConfig, mobileRegister));
     }
 
@@ -155,7 +160,7 @@ describe("Registration", function () {
     });
 
     describe("when delegated authentication is configured and enabled", () => {
-        const authConfig = makeDelegatedAuthConfig();
+        const authConfig = makeDelegatedAuthMetadata();
         const clientId = "test-client-id";
         authConfig.prompt_values_supported = ["create"];
 
@@ -168,15 +173,6 @@ describe("Registration", function () {
                     },
                 },
             });
-
-            fetchMock.get(`${defaultHsUrl}/_matrix/client/unstable/org.matrix.msc2965/auth_issuer`, {
-                issuer: authConfig.issuer,
-            });
-            fetchMock.get("https://auth.org/.well-known/openid-configuration", {
-                ...authConfig,
-                signingKeys: undefined,
-            });
-            fetchMock.get(authConfig.jwks_uri!, { keys: [] });
         });
 
         it("should display oidc-native continue button", async () => {
@@ -194,7 +190,7 @@ describe("Registration", function () {
 
             fireEvent.click(await screen.findByText("Continue"));
 
-            expect(startOidcLogin).toHaveBeenCalledWith(
+            expect(startOAuthLogin).toHaveBeenCalledWith(
                 authConfig,
                 clientId,
                 defaultHsUrl,

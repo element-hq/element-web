@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type SettingLevel } from "../SettingLevel";
 import type SettingsStore from "../SettingsStore";
+import { type SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * Represents a controller for individual settings to alter the reading behaviour
@@ -19,6 +20,7 @@ import type SettingsStore from "../SettingsStore";
  * intended to handle environmental factors for specific settings.
  */
 export default abstract class SettingController {
+    public static sdkContext: SDKContextClass;
     public static settingsStore: typeof SettingsStore;
 
     /**
@@ -76,5 +78,13 @@ export default abstract class SettingController {
      */
     protected get settingsStore(): typeof SettingsStore {
         return SettingController.settingsStore;
+    }
+
+    /**
+     * Accessor to the SDKContext injected at runtime.
+     * Preferred to direct imports in order to avoid import cycles.
+     */
+    protected get sdkContext(): SDKContextClass {
+        return SettingController.sdkContext;
     }
 }

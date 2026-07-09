@@ -51,15 +51,11 @@
     "features": {
         "threadsActivityCentre": true,
         "feature_spotlight": true,
-        "feature_group_calls": true,
         "feature_video_rooms": true,
         "feature_element_call_video_rooms": true
     },
     "setting_defaults": {
         "RustCrypto.staged_rollout_percent": 100
-    },
-    "element_call": {
-        "url": "https://call.element.dev"
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }

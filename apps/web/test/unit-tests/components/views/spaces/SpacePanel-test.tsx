@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, fireEvent, act, cleanup, waitFor } from "jest-matrix-react";
+import { render, screen, fireEvent, act, cleanup, waitFor, within } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -17,7 +17,7 @@ import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
@@ -123,23 +123,19 @@ describe("<SpacePanel />", () => {
         removeListener: jest.fn(),
         isVersionSupported: jest.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SDKContextClass.instance);
+    const sdkContext = new TestSDKContext();
+    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        SDKContextClass.instance.client = mockClient;
+        sdkContext._client = mockClient;
     });
 
     beforeEach(() => {
-        SpaceStore.instance.enabledMetaSpaces.push(
-            MetaSpace.Home,
-            MetaSpace.Favourites,
-            MetaSpace.People,
-            MetaSpace.Orphans,
-            MetaSpace.VideoRooms,
-        );
+        SpaceStore.instance.enabledMetaSpaces.push(MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms);
         mocked(shouldShowComponent).mockClear().mockReturnValue(true);
     });
     afterEach(() => {
@@ -151,8 +147,21 @@ describe("<SpacePanel />", () => {
         const spySettingsStore = jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             return setting === "feature_video_rooms" ? true : originalGetValue(setting);
         });
-        const renderResult = render(<SpacePanel />);
-        expect(renderResult.asFragment()).toMatchSnapshot();
+        render(<SpacePanel />);
+
+        // Inspect the order of the rendered MetaSpaces, excluding the "Create a space" button.
+        const tree = screen.getByRole("tree", { name: "Spaces" });
+        const spaceButtons = within(tree)
+            .getAllByRole("treeitem")
+            .filter((el) => within(el).queryByRole("button", { name: "Create a space" }) === null);
+
+        const metaSpaceLabels = Array.from(spaceButtons).map((li) =>
+            within(li)
+                .getByRole("button", { name: /^(?!Options$).*/ }) // filter out the 'options' buttons within the buttons
+                .getAttribute("aria-label"),
+        );
+        expect(metaSpaceLabels).toEqual(["Home", "Other rooms", "Conferences"]);
+
         spySettingsStore.mockRestore();
     });
 

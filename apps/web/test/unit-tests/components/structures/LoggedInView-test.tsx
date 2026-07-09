@@ -57,6 +57,7 @@ describe("<LoggedInView />", () => {
         setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         deleteExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(true),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     });
     const mediaHandler = new MediaHandler(mockClient);
     const mockSdkContext = new TestSDKContext();
@@ -68,7 +69,6 @@ describe("<LoggedInView />", () => {
         hideToSRUsers: false,
         config: {
             brand: "Test",
-            element_call: {},
         },
         currentRoomId: "",
         currentUserId: "@bob:server",
@@ -85,7 +85,7 @@ describe("<LoggedInView />", () => {
         mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
         // @ts-expect-error
         mockClient.pushProcessor = new PushProcessor(mockClient);
-        mockSdkContext.client = mockClient;
+        mockSdkContext._client = mockClient;
     });
 
     describe("synced push rules", () => {

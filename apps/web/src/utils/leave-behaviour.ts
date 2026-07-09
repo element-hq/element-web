@@ -27,7 +27,6 @@ import { bulkSpaceBehaviour } from "./space";
 import { SDKContextClass } from "../contexts/SDKContextClass";
 import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
-import LegacyCallHandler from "../LegacyCallHandler";
 
 export async function leaveRoomBehaviour(
     matrixClient: MatrixClient,
@@ -64,7 +63,7 @@ export async function leaveRoomBehaviour(
 
     // attempt to hang up legacy based calls
     try {
-        LegacyCallHandler.instance.hangupOrReject(roomId);
+        SDKContextClass.instance.legacyCallHandler.hangupOrReject(roomId);
     } catch (e) {
         logger.warn("Failed to hangup call before leaving room: ", e);
     }

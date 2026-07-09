@@ -62,6 +62,8 @@ const config: Config = {
         // Ignore vitest tests
         "!<rootDir>/src/**/*.test.{ts,tsx}",
         "!<rootDir>/src/test/**",
+        // Exclude mocks
+        "!<rootDir>/src/**/*-{mock,mocks}.{ts,tsx}",
     ],
     coverageReporters: ["text-summary", ["lcov", { projectRoot: "../../" }]],
     prettierPath: null,
