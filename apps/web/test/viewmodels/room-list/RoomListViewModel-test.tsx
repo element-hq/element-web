@@ -9,7 +9,14 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 
-import { createTestClient, flushPromises, flushPromisesWithFakeTimers, mkStubRoom, stubClient } from "../../test-utils";
+import {
+    createTestClient,
+    flushPromises,
+    flushPromisesWithFakeTimers,
+    mkStubRoom,
+    stubClient,
+    TestSDKContext,
+} from "../../test-utils";
 import RoomListStoreV3, { RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
@@ -44,6 +51,7 @@ jest.mock("../../../src/viewmodels/room-list/utils", () => ({
 
 describe("RoomListViewModel", () => {
     let matrixClient: MatrixClient;
+    let sdkContext: TestSDKContext;
     let room1: Room;
     let room2: Room;
     let room3: Room;
@@ -51,6 +59,8 @@ describe("RoomListViewModel", () => {
 
     beforeEach(() => {
         matrixClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = matrixClient;
         room1 = mkStubRoom("!room1:server", "Room 1", matrixClient);
         room2 = mkStubRoom("!room2:server", "Room 2", matrixClient);
         room3 = mkStubRoom("!room3:server", "Room 3", matrixClient);
@@ -423,7 +433,11 @@ describe("RoomListViewModel", () => {
 
             it("hides the Favourites and Low Priority filters when sections are enabled", () => {
                 mockShowSections(true);
-                viewModel = new RoomListViewModel({ client: matrixClient });
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
 
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).not.toContain("favourite");
@@ -432,7 +446,11 @@ describe("RoomListViewModel", () => {
 
             it("shows the Favourites and Low Priority filters when sections are disabled", () => {
                 mockShowSections(false);
-                viewModel = new RoomListViewModel({ client: matrixClient });
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
 
                 const { filterIds } = viewModel.getSnapshot();
                 expect(filterIds).toContain("favourite");
@@ -453,7 +471,11 @@ describe("RoomListViewModel", () => {
                     return "watcher-id";
                 });
 
-                viewModel = new RoomListViewModel({ client: matrixClient });
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                });
                 expect(viewModel.getSnapshot().filterIds).toContain("favourite");
 
                 // Activate the Favourites filter
@@ -1662,7 +1684,11 @@ describe("RoomListViewModel", () => {
         });
 
         it("should scroll a room into view in a flat list", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
             const scrollSpy = jest.fn();
             viewModel.setScrollToIndex(scrollSpy);
 
@@ -1688,7 +1714,11 @@ describe("RoomListViewModel", () => {
                     { tag: CHATS_TAG, rooms: [regularRoom1] },
                 ],
             });
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
             const scrollSpy = jest.fn();
             viewModel.setScrollToIndex(scrollSpy);
 
@@ -1704,7 +1734,11 @@ describe("RoomListViewModel", () => {
         });
 
         it("should not scroll when the room is not in the current list", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
             const scrollSpy = jest.fn();
             viewModel.setScrollToIndex(scrollSpy);
 
