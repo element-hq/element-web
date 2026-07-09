@@ -48,8 +48,8 @@ describe("LegacyCallView", () => {
     });
 
     it("should show/hide the sidebar based on the sidebarShown prop", async () => {
-        const call = {
         const cli = stubClient();
+        const call = {
             roomId: "test-room",
             on: jest.fn(),
             removeListener: jest.fn(),
@@ -90,8 +90,8 @@ describe("LegacyCallView", () => {
     });
 
     it("should not show the sidebar button in picture-in-picture mode", async () => {
-        const call = {
         const cli = stubClient();
+        const call = {
             on: jest.fn(),
             removeListener: jest.fn(),
             getFeeds: jest.fn().mockReturnValue([]),
