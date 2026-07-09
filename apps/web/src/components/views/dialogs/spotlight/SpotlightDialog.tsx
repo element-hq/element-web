@@ -35,7 +35,6 @@ import {
     RoomIcon,
     SpaceIcon,
     UserProfileIcon,
-    FavouriteIcon,
     HomeIcon,
     GroupIcon,
     CloseIcon,
@@ -71,7 +70,7 @@ import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
 import { compareRoomsByRecency } from "../../../../utils/room/sortRoomsByRecency";
-import { SdkContextClass } from "../../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";
 import { DirectoryMember, type Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
@@ -156,10 +155,6 @@ function metaspaceToIcon(key: MetaSpace): JSX.Element | undefined {
     switch (key) {
         case MetaSpace.Home:
             return <HomeIcon />;
-        case MetaSpace.Favourites:
-            return <FavouriteIcon />;
-        case MetaSpace.People:
-            return <UserProfileIcon />;
         case MetaSpace.Orphans:
             return <RoomIcon />;
     }
@@ -1119,7 +1114,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     </h4>
                     <div>
                         {BreadcrumbsStore.instance.rooms
-                            .filter((r) => r.roomId !== SdkContextClass.instance.roomViewStore.getRoomId())
+                            .filter((r) => r.roomId !== SDKContextClass.instance.roomViewStore.getRoomId())
                             .map((room) => (
                                 <TooltipOption
                                     id={`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`}

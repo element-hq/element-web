@@ -81,12 +81,6 @@ Enables support for video rooms that use Element Call rather than Jitsi, and cau
 
 This flag will not have any effect unless `feature_video_rooms` is also enabled.
 
-## New group call experience (`feature_group_calls`) [In Development]
-
-This feature allows users to place native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
-
-If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
-
 ## Disable per-sender encryption for Element Call (`feature_disable_call_per_sender_encryption`)
 
 The default for embedded Element Call in Element Web is per-participant encryption.
@@ -103,10 +97,6 @@ Unreliable in encrypted rooms.
 ## Knock rooms (`feature_ask_to_join`) [In Development]
 
 Enables knock feature for rooms. This allows users to ask to join a room.
-
-## New room list (`feature_new_room_list`) [In Development]
-
-Enable the new room list that is currently in development.
 
 ## Exclude insecure devices when sending/receiving messages (`feature_exclude_insecure_devices`)
 

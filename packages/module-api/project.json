@@ -5,14 +5,10 @@
     "targets": {
         "build": {
             "cache": true,
-            "executor": "nx:run-commands",
             "inputs": ["src"],
             "outputs": ["{projectRoot}/lib"],
-            "options": {
-                "commands": ["vite build", "api-extractor run"],
-                "parallel": false,
-                "cwd": "packages/module-api"
-            }
+            "command": "vite build",
+            "options": { "cwd": "packages/module-api" }
         },
         "start": {
             "command": "vite build --watch",

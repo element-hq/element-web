@@ -55,7 +55,8 @@ import { type LocalRoom, LocalRoomState } from "../../../../src/models/LocalRoom
 import { DirectoryMember } from "../../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
-import { SDKContext, SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../TestSDKContext.ts";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import WidgetStore from "../../../../src/stores/WidgetStore";
@@ -85,7 +86,7 @@ describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
     let rooms: Map<string, Room>;
-    let stores: SdkContextClass;
+    let stores: TestSDKContext;
     let crypto: CryptoApi;
 
     // mute some noise
@@ -110,8 +111,8 @@ describe("RoomView", () => {
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
 
         DMRoomMap.makeShared(cli);
-        stores = new SdkContextClass();
-        stores.client = cli;
+        stores = new TestSDKContext();
+        stores._client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
 
         crypto = cli.getCrypto()!;

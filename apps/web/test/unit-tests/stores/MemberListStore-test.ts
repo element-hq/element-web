@@ -14,7 +14,7 @@ import SdkConfig from "../../../src/SdkConfig";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { MemberListStore } from "../../../src/stores/MemberListStore";
 import { stubClient } from "../../test-utils";
-import { TestSdkContext } from "../TestSdkContext";
+import { TestSDKContext } from "../TestSDKContext";
 
 describe("MemberListStore", () => {
     const alice = "@alice:bar";
@@ -26,10 +26,10 @@ describe("MemberListStore", () => {
     let room: Room;
 
     beforeEach(() => {
-        const context = new TestSdkContext();
+        const context = new TestSDKContext();
         client = stubClient();
         client.baseUrl = "https://invalid.base.url.here";
-        context.client = client;
+        context._client = client;
         store = new MemberListStore(context);
         // alice is joined to the room.
         room = new Room(roomId, client, client.getUserId()!);

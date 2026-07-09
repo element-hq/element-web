@@ -17,7 +17,7 @@ import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
@@ -123,23 +123,19 @@ describe("<SpacePanel />", () => {
         removeListener: jest.fn(),
         isVersionSupported: jest.fn().mockResolvedValue(true),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SdkContextClass.instance);
+    const sdkContext = new TestSDKContext();
+    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), sdkContext);
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-        SdkContextClass.instance.client = mockClient;
+        sdkContext._client = mockClient;
     });
 
     beforeEach(() => {
-        SpaceStore.instance.enabledMetaSpaces.push(
-            MetaSpace.Home,
-            MetaSpace.Favourites,
-            MetaSpace.People,
-            MetaSpace.Orphans,
-            MetaSpace.VideoRooms,
-        );
+        SpaceStore.instance.enabledMetaSpaces.push(MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms);
         mocked(shouldShowComponent).mockClear().mockReturnValue(true);
     });
     afterEach(() => {

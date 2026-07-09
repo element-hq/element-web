@@ -15,7 +15,8 @@ import { type MockedObject } from "jest-mock-vitest-adapter";
 import { ToastContext, ToastRack } from "@element-hq/web-shared-components";
 
 import AccountUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
-import { SdkContextClass, SDKContext } from "../../../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../../../../TestSDKContext.ts";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import {
     getMockClientWithEventEmitter,
@@ -25,7 +26,6 @@ import {
     flushPromises,
 } from "../../../../../../test-utils";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
-import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../../src/Modal";
 
@@ -50,7 +50,7 @@ describe("<AccountUserSettingsTab />", () => {
     const userId = "@alice:server.org";
     let mockClient: MockedObject<MatrixClient>;
 
-    let stores: SdkContextClass;
+    let stores: TestSDKContext;
 
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>
@@ -76,6 +76,8 @@ describe("<AccountUserSettingsTab />", () => {
             getThreePids: jest.fn(),
             getIdentityServerUrl: jest.fn(),
             deleteThreePid: jest.fn(),
+            getMediaConfig: jest.fn(),
+            getAuthMetadata: jest.fn().mockRejectedValue(new Error("not implemented")),
         });
 
         mockClient.getCapabilities.mockResolvedValue({});
@@ -86,11 +88,8 @@ describe("<AccountUserSettingsTab />", () => {
             id_server_unbind_result: "success",
         });
 
-        stores = new SdkContextClass();
-        stores.client = mockClient;
-        // stub out this store completely to avoid mocking initialisation
-        const mockOidcClientStore = {} as unknown as OidcClientStore;
-        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+        stores = new TestSDKContext();
+        stores._client = mockClient;
     });
 
     afterEach(() => {
@@ -106,10 +105,9 @@ describe("<AccountUserSettingsTab />", () => {
 
     it("show account management link in expected format", async () => {
         const accountManagementLink = "https://id.server.org/my-account";
-        const mockOidcClientStore = {
-            accountManagementEndpoint: accountManagementLink,
-        } as unknown as OidcClientStore;
-        jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+        mockClient.getAuthMetadata.mockResolvedValue({
+            account_management_uri: accountManagementLink,
+        } as any);
 
         render(getComponent());
 
@@ -133,10 +131,9 @@ describe("<AccountUserSettingsTab />", () => {
             );
             // account is managed externally when we have delegated auth configured
             const accountManagementLink = "https://id.server.org/my-account";
-            const mockOidcClientStore = {
-                accountManagementEndpoint: accountManagementLink,
-            } as unknown as OidcClientStore;
-            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+            mockClient.getAuthMetadata.mockResolvedValue({
+                account_management_uri: accountManagementLink,
+            } as any);
             render(getComponent());
 
             await flushPromises();
@@ -206,11 +203,6 @@ describe("<AccountUserSettingsTab />", () => {
 
     describe("3pids", () => {
         beforeEach(() => {
-            const mockOidcClientStore = {
-                accountManagementEndpoint: undefined,
-            } as unknown as OidcClientStore;
-            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
-
             mockClient.getCapabilities.mockResolvedValue({
                 "m.3pid_changes": {
                     enabled: true,

@@ -27,7 +27,7 @@ import {
     type IPushRules,
     RelationType,
     JoinRule,
-    type OidcClientConfig,
+    type ValidatedAuthMetadata,
     type GroupCall,
     type EventStatus,
     type ICreateRoomOpts,
@@ -70,7 +70,7 @@ export function stubClient(): MatrixClient {
     vi.spyOn(peg, "get");
     vi.spyOn(peg, "safeGet");
     vi.spyOn(peg, "unset");
-    vi.spyOn(peg, "replaceUsingCreds");
+    vi.spyOn(peg, "set");
     // MatrixClientPeg.safeGet() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
     peg.get = () => client;
@@ -778,7 +778,7 @@ export function mkRoomState(
 export function mkServerConfig(
     hsUrl: string,
     isUrl: string,
-    delegatedAuthentication?: OidcClientConfig,
+    delegatedAuthentication?: ValidatedAuthMetadata,
 ): ValidatedServerConfig {
     return {
         hsUrl,

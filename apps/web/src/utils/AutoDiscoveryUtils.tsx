@@ -14,7 +14,7 @@ import {
     type IClientWellKnown,
     MatrixClient,
     MatrixError,
-    type OidcClientConfig,
+    type ValidatedAuthMetadata,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -288,7 +288,7 @@ export default class AutoDiscoveryUtils {
 
         // This isn't inherently auto-discovery but used to be in an earlier incarnation of the MSC,
         // and shuttling the data together makes a lot of sense
-        let delegatedAuthentication: OidcClientConfig | undefined;
+        let delegatedAuthentication: ValidatedAuthMetadata | undefined;
         let delegatedAuthenticationError: Error | undefined;
         try {
             const tempClient = new MatrixClient({ baseUrl: preferredHomeserverUrl });

@@ -15,6 +15,8 @@ import { shouldShowComponent } from "../../../../../../src/customisations/helper
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { LandmarkNavigation } from "../../../../../../src/accessibility/LandmarkNavigation";
 import { ReleaseAnnouncementStore } from "../../../../../../src/stores/ReleaseAnnouncementStore";
+import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
+import { TestSDKContext } from "../../../../TestSDKContext.ts";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -34,8 +36,15 @@ jest.mock("../../../../../../src/accessibility/LandmarkNavigation", () => ({
 jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
 
 describe("<RoomListPanel />", () => {
+    const client = createTestClient();
+    const sdkContext = new TestSDKContext();
+    sdkContext._client = client;
+
     function renderComponent() {
-        return render(<RoomListPanel activeSpace={MetaSpace.Home} />);
+        return render(
+            <RoomListPanel activeSpace={MetaSpace.Home} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
     }
 
     beforeEach(() => {
