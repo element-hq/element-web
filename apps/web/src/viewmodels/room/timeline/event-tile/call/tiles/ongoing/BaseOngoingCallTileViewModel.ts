@@ -23,7 +23,7 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type CallStore } from "../../../../../../../stores/CallStore";
 import { MemberAvatarViewModel } from "../../../../../../../components/viewmodels/avatars/MemberAvatarViewModel";
 import { FacePileViewModel } from "../../../../../../../components/viewmodels/avatars/FacePileViewModel";
-import { CallEvent, ElementCall } from "../../../../../../../models/Call";
+import { CallEvent, type ElementCall } from "../../../../../../../models/Call";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
@@ -108,8 +108,8 @@ function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
     const callDirection = cli.getUserId() === startedUserId ? CallDirection.Outgoing : CallDirection.Incoming;
 
     // Create the avatar vms
-    const facePileViewModel = new FacePileViewModel({ size: 20, members: participants, cli });
-    const memberAvatarViewModel = new MemberAvatarViewModel({ member: startedMember, size: 20, cli });
+    const facePileViewModel = new FacePileViewModel({ size: "20", members: participants, cli });
+    const memberAvatarViewModel = new MemberAvatarViewModel({ member: startedMember, size: "20", cli });
 
     const isJoinable = !!room
         .getLiveTimeline()
@@ -171,7 +171,7 @@ export class BaseOngoingCallViewModel<
     }
 
     /**
-     * Update the snapshot when the call participants have changed.
+     * Recomputes the snapshot when the call participants are updated.
      */
     protected onParticipantsChange(participants: Map<RoomMember, Set<string>>, extraSnapshot: Partial<T> = {}): void {
         const roomId = this.props.roomId;
