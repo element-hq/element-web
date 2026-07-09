@@ -18,6 +18,7 @@ import {
     LatestRtcNotificationEventUpdate,
     type LatestRtcNotificationEventStore,
 } from "../../../../../stores/LatestRtcNotificationEventStore";
+import { JitsiCall } from "../../../../../models/Call";
 
 interface Props {
     /**
@@ -61,7 +62,8 @@ function computeSnapshot(props: Props): RootCallTileViewSnapshot {
     const isLocalEvent = notificationEvent.getId()?.startsWith("~");
 
     // Check if there's an ongoing call
-    const hasOngoingCall = !!props.callStore.getCall(roomId);
+    const call = props.callStore.getCall(roomId);
+    const hasOngoingCall = !!call && !(call instanceof JitsiCall);
 
     // This is the same logic used for hiding/showing the voice call button.
     const isDmRoom = room.getMembers().length <= 2;
