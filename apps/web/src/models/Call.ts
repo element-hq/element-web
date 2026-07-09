@@ -763,6 +763,8 @@ export class ElementCall extends Call {
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
+            // on EW we do not want the gradient EC background.
+            background: "solid",
         });
 
         if (typeof opts.skipLobby === "boolean") {
