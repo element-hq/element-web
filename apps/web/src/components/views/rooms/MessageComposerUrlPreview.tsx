@@ -26,9 +26,5 @@ export function MessageComposerUrlPreviewWrapper({
         <MessageComposerUrlPreviewView vm={vm} />
     ));
 
-    // We still update the VM even if the custom component is used since
-    // the component may choose to render the original component.
-    void vm.updateWithText(content);
-
     return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;
 }

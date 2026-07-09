@@ -9,7 +9,7 @@ import React from "react";
 import { render, waitFor } from "test-utils-rtl";
 import { test, describe, beforeEach, expect, vi, afterEach } from "vitest";
 
-import { MessageComposerUrlPreviewWrapper, DEBOUNCE_REQUEST_TIMEOUT_MS } from "./MessageComposerUrlPreview";
+import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import {
     getMockClientWithEventEmitter,
     getRoomContext,
@@ -22,7 +22,10 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CustomComponentsApi } from "../../../modules/customComponentApi";
-import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import {
+    DEBOUNCE_REQUEST_TIMEOUT_MS,
+    MessageComposerUrlPreviewViewModel,
+} from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 
 // @vitest-environment happy-dom
 
@@ -39,6 +42,7 @@ function getUrlPreviewVm(client: MatrixClient): MessageComposerUrlPreviewViewMod
         client,
         visible: true,
         showTooltips: false,
+        urlPreviewBundle: false,
     });
 }
 

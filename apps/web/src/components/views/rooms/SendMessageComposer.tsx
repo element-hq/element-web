@@ -416,7 +416,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             this.sendHistoryManager.save(model, replyToEvent);
             // clear composer
             model.reset([]);
-            this.props.urlPreviewVm.updateWithText("");
             this.editorRef.current?.clearUndoHistory();
             this.editorRef.current?.focus();
             this.clearStoredEditorState();

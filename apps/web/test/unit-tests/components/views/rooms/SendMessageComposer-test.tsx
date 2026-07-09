@@ -187,6 +187,7 @@ describe("<SendMessageComposer/>", () => {
             client: mockClient,
             visible: false,
             showTooltips: false,
+            urlPreviewBundle: false,
         });
         const defaultProps = {
             room: mockRoom,
@@ -441,6 +442,7 @@ describe("<SendMessageComposer/>", () => {
             client: cli,
             visible: false,
             showTooltips: false,
+            urlPreviewBundle: false,
         });
 
         cli.isRoomEncrypted = jest.fn().mockReturnValue(true);

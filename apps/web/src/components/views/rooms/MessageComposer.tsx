@@ -60,7 +60,6 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
-import { Type } from "../../../editor/parts";
 import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import PlatformPeg from "../../../PlatformPeg";
@@ -113,8 +112,6 @@ interface IState {
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
     initialComposerContent: string;
-    // Specifically for generating previews only.
-    urlPreviewComposerContent: string;
 }
 
 type WysiwygComposerState = {
@@ -156,7 +153,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.state = {
             isComposerEmpty: initialComposerContent?.length === 0,
             composerContent: initialComposerContent,
-            urlPreviewComposerContent: initialComposerContent,
             haveRecording: false,
             recordingTimeLeftSeconds: undefined, // when set to a number, shows a toast
             isMenuOpen: false,
@@ -405,7 +401,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private sendMessage = async (): Promise<void> => {
-        this.setState({ urlPreviewComposerContent: "" });
+        this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
             // There shouldn't be any text message to send when a voice recording is active, so
             // just send out the voice recording.
@@ -419,7 +415,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
             const { relation, replyToEvent } = this.props;
             const composerContent = this.state.composerContent;
             this.setState({ composerContent: "", initialComposerContent: "" });
-            this.props.urlPreviewVm.updateWithText("");
             dis.dispatch({
                 action: Action.ClearAndFocusSendMessageComposer,
                 timelineRenderingType: this.context.timelineRenderingType,
@@ -435,20 +430,19 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onChange = (model: EditorModel): void => {
+        this.props.urlPreviewVm.updateWithText({
+            content: model.contentPlainText,
+            debounced: true,
+        });
         this.setState({
-            urlPreviewComposerContent: model
-                .serializeParts()
-                .filter((part) => part.type === Type.Plain)
-                .map((part) => part.text)
-                .join(" "),
             isComposerEmpty: model.isEmpty,
         });
     };
 
     private onWysiwygChange = (content: string): void => {
+        this.props.urlPreviewVm.updateWithText({ content, debounced: true });
         this.setState({
             composerContent: content,
-            urlPreviewComposerContent: content,
             isComposerEmpty: content?.length === 0,
         });
     };
@@ -700,7 +694,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                 <div className="mx_MessageComposer_wrapper">
                     <MessageComposerUrlPreviewWrapper
-                        content={this.state.urlPreviewComposerContent}
+                        content={this.props.urlPreviewVm.getSnapshot().content}
                         urlPreviewVm={this.props.urlPreviewVm}
                     />
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />

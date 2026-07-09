@@ -30,11 +30,12 @@ describe("attachUrlPreviews", () => {
                 ...(image ? { image } : {}),
             } as any,
         ],
+        content: "https://example.com",
     });
 
     it("does nothing when there are no previews", () => {
         const content = makeContent();
-        attachUrlPreviews({ previews: [] }, content);
+        attachUrlPreviews({ previews: [], content: "" }, content);
         expect(content["com.beeper.linkpreviews"]).toBeUndefined();
     });
 

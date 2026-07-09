@@ -27,7 +27,12 @@ function getViewModel({ visible } = { visible: true }): {
         getUrlPreview: vi.fn(),
         mxcUrlToHttp: vi.fn(),
     } as unknown as MatrixClient;
-    const vm = new MessageComposerUrlPreviewViewModel({ client, visible, showTooltips: false });
+    const vm = new MessageComposerUrlPreviewViewModel({
+        client,
+        visible,
+        showTooltips: false,
+        urlPreviewBundle: false,
+    });
     return { vm, client: client as unknown as { getUrlPreview: Mock; mxcUrlToHttp: Mock } };
 }
 
@@ -52,13 +57,13 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     it("should preview a valid URL in text", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
-        await vm.updateWithText("Check out https://example.org today");
+        await vm.updateWithText({ content: "Check out https://example.org today", debounced: false });
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
 
     it("should return empty list when preview is not visible", async () => {
         const { vm, client } = getViewModel({ visible: false });
-        await vm.updateWithText("https://example.org");
+        await vm.updateWithText({ content: "https://example.org", debounced: false });
         expect(vm.getSnapshot().previews).toHaveLength(0);
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
@@ -66,7 +71,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     it("should return empty list when all URL fetches fail", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockRejectedValue(new Error("Forced test failure"));
-        await vm.updateWithText("https://example.org");
+        await vm.updateWithText({ content: "https://example.org", debounced: false });
         expect(vm.getSnapshot().previews).toHaveLength(0);
     });
 
@@ -75,7 +80,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         client.getUrlPreview
             .mockRejectedValueOnce(new Error("First URL failed"))
             .mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
-        await vm.updateWithText("https://example.org/one https://example.org/two");
+        await vm.updateWithText({ content: "https://example.org/one https://example.org/two", debounced: false });
         expect(vm.getSnapshot().previews[0]?.link).toEqual("https://example.org/two");
         expect(vm.getSnapshot().previews).toHaveLength(1);
     });
@@ -83,22 +88,25 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     it("should not re-fetch when text changes but the URL set does not", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-        await vm.updateWithText("https://example.org");
-        await vm.updateWithText("https://example.org some extra words");
+        await vm.updateWithText({ content: "https://example.org", debounced: false });
+        await vm.updateWithText({ content: "https://example.org some extra words", debounced: false });
         expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
     });
 
     it("should deduplicate repeated URLs", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-        await vm.updateWithText("https://example.org https://example.org https://example.org");
+        await vm.updateWithText({
+            content: "https://example.org https://example.org https://example.org",
+            debounced: false,
+        });
         expect(client.getUrlPreview).toHaveBeenCalledTimes(1);
     });
 
     it("should hide preview when made invisible", async () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-        await vm.updateWithText("https://example.org");
+        await vm.updateWithText({ content: "https://example.org", debounced: false });
         expect(vm.getSnapshot().previews).not.toHaveLength(0);
         await vm.updateUrlPreviewVisible(false);
         expect(vm.getSnapshot().previews).toHaveLength(0);
@@ -107,7 +115,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     it("should restore preview when made visible again", async () => {
         const { vm, client } = getViewModel({ visible: false });
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
-        await vm.updateWithText("https://example.org");
+        await vm.updateWithText({ content: "https://example.org", debounced: false });
         expect(vm.getSnapshot().previews).toHaveLength(0);
         await vm.updateUrlPreviewVisible(true);
         expect(vm.getSnapshot().previews).not.toHaveLength(0);
@@ -130,7 +138,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             if (width) return "https://example.org/image/thumb";
             return "https://example.org/image/src";
         });
-        await vm.updateWithText("https://example.org");
+        await vm.updateWithText({ content: "https://example.org", debounced: false });
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
 });

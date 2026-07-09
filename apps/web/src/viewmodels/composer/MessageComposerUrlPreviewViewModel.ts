@@ -8,9 +8,9 @@
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel, type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { debounce } from "lodash";
 
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
-import { debounce } from "lodash";
 
 const logger = rootLogger.getChild("MessageComposerUrlPreviewViewModel");
 
@@ -42,19 +42,16 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private urlPreviewVisible: boolean;
 
-    /**
-     * Content at the latest call of updateWithText
-     */
     private content: string = "";
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
-        super(props, { previews: [] });
+        super(props, { previews: [], content: "" });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
     }
 
-    private async computeSnapshot(): Promise<void> {
-        const newLinksOrdered = this.content
+    private async computeSnapshot(content: string): Promise<void> {
+        const newLinksOrdered = content
             .split(" ")
             .map((w) => w.trim())
             .filter((word) => URL.canParse(word));
@@ -63,12 +60,13 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             // Skip if the URL set hasn't changed
             return;
         }
-        this.links = newLinks;
 
         if (!this.urlPreviewVisible) {
-            this.snapshot.set({ previews: [] });
+            this.snapshot.set({ previews: [], content });
             return;
         }
+
+        this.links = newLinks;
 
         let previews;
         if (this.props.urlPreviewBundle) {
@@ -86,13 +84,13 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             const previewResponses = await Promise.all(previewRequests);
             previews = previewResponses.filter((res) => res !== null);
 
-            this.snapshot.set({ previews });
+            this.snapshot.set({ previews, content });
         } else {
             for (const link of this.links) {
                 try {
                     const preview = await this.fetcher.fetchPreview(link, true);
                     if (preview) {
-                        this.snapshot.set({ previews: [preview] });
+                        this.snapshot.set({ previews: [preview], content });
                         return;
                     }
                 } catch (ex) {
@@ -100,7 +98,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                 }
             }
 
-            this.snapshot.set({ previews: [] });
+            this.snapshot.set({ previews: [], content });
         }
     }
 
@@ -108,17 +106,22 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * Trigger a recalculation of the links in the provided text.
      * @param content Plaintext from the message composer.
      */
-    public async updateWithText(content: string): Promise<void> {
-        this.content = content;
+    public async updateWithText({ content, debounced }: { content?: string; debounced: boolean }): Promise<void> {
+        if (content !== undefined) {
+            this.content = content;
+        }
 
-        if (content === "") {
-            return this.computeSnapshot();
+        if (debounced) {
+            return this.computeSnapshotDebounced(this.content);
         } else {
-            return this.computeSnapshotDebounced();
+            return this.computeSnapshot(this.content);
         }
     }
 
-    private computeSnapshotDebounced = debounce(this.computeSnapshot, DEBOUNCE_REQUEST_TIMEOUT_MS);
+    private computeSnapshotDebounced = debounce(
+        (content) => this.computeSnapshot(content),
+        DEBOUNCE_REQUEST_TIMEOUT_MS,
+    );
 
     /**
      * Update the view model about visible state of previews.
@@ -129,6 +132,6 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     public readonly updateUrlPreviewVisible = (urlPreviewVisible: boolean): Promise<void> => {
         this.urlPreviewVisible = urlPreviewVisible;
         this.fetcher.clearCache();
-        return this.computeSnapshot();
+        return this.computeSnapshot(this.content);
     };
 }

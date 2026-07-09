@@ -18,6 +18,8 @@ import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 export interface MessageComposerUrlPreviewSnapshot {
     /** URL preview to render. */
     previews: UrlPreview[];
+    /** Content of the composer when the snapshot is computed */
+    content: string;
 }
 
 /** Props for MessageComposerUrlPreviewView. */
