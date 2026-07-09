@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, fireEvent, act, cleanup, waitFor } from "jest-matrix-react";
+import { render, screen, fireEvent, act, cleanup, waitFor, within } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -150,13 +150,16 @@ describe("<SpacePanel />", () => {
         render(<SpacePanel />);
 
         // Inspect the order of the rendered MetaSpaces, excluding the "Create a space" button.
-        const metaSpaceLabels = Array.from(screen.getAllByRole("button"))
-            .map((button) => button.getAttribute("aria-label"))
-            .filter(
-                (label) =>
-                    label &&
-                    !["User menu", "Expand", "Options", "Create a space", "Threads", "Quick settings"].includes(label),
-            );
+        const tree = screen.getByRole("tree", { name: "Spaces" });
+        const spaceButtons = within(tree)
+            .getAllByRole("treeitem")
+            .filter((el) => within(el).queryByRole("button", { name: "Create a space" }) === null);
+
+        const metaSpaceLabels = Array.from(spaceButtons).map((li) =>
+            within(li)
+                .getByRole("button", { name: /^(?!Options$).*/ }) // filter out the 'options' buttons within the buttons
+                .getAttribute("aria-label"),
+        );
         expect(metaSpaceLabels).toEqual(["Home", "Other rooms", "Conferences"]);
 
         spySettingsStore.mockRestore();
