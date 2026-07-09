@@ -41,6 +41,7 @@
 
         .userId {
             color: var(--cpd-color-text-secondary);
+            text-align: center;
         }
 
         .createAccount {

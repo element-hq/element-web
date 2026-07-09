@@ -6,14 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
-import { type MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { useRoomThreadNotifications } from "../../../../src/hooks/room/useRoomThreadNotifications";
-import { stubClient } from "../../../test-utils";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { NotificationLevel } from "../../../../src/stores/notifications/NotificationLevel";
-import { populateThread } from "../../../test-utils/threads";
+import { describe, it, expect, beforeEach } from "vitest";
+import { renderHook } from "test-utils-rtl";
+import { type MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+import { populateThread } from "test-utils/threads";
+
+import { useRoomThreadNotifications } from "../../hooks/room/useRoomThreadNotifications";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
 
 function render(room: Room) {
     return renderHook(() => useRoomThreadNotifications(room));

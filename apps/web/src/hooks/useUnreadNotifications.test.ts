@@ -6,14 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { renderHook } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { describe, it, expect, beforeEach } from "vitest";
+import { renderHook } from "test-utils-rtl";
 import { EventStatus, NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { mkEvent, muteRoom, stubClient } from "test-utils";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { useUnreadNotifications } from "../../../src/hooks/useUnreadNotifications";
-import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
-import { mkEvent, muteRoom, stubClient } from "../../test-utils";
+import { useUnreadNotifications } from "./useUnreadNotifications";
+import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 
 describe("useUnreadNotifications", () => {
     let client: MatrixClient;

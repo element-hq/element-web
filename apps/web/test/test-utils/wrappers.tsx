@@ -14,6 +14,8 @@ import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
 import { SDKContext } from "../../src/contexts/SDKContext";
 import { type SDKContextClass } from "../../src/contexts/SDKContextClass";
+import { type RoomContextType } from "../../src/contexts/RoomContext.ts";
+import { ScopedRoomContextProvider } from "../../src/contexts/ScopedRoomContext.tsx";
 
 type WrapperProps<T> = { wrappedRef?: Ref<ComponentType<T>> } & T;
 
@@ -71,5 +73,30 @@ export function clientAndSDKContextRenderOptions(client: MatrixClient, sdkContex
                 <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
             </SDKContext.Provider>
         ),
+    };
+}
+export function withContexts({
+    sdkContext,
+    matrixClient,
+    roomContext,
+}: {
+    sdkContext?: SDKContextClass;
+    matrixClient?: MatrixClient;
+    roomContext?: RoomContextType;
+}): RenderOptions {
+    return {
+        wrapper: ({ children }) => {
+            const client = matrixClient || sdkContext?.client;
+            if (client) {
+                children = <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>;
+            }
+            if (sdkContext) {
+                children = <SDKContext.Provider value={sdkContext}>{children}</SDKContext.Provider>;
+            }
+            if (roomContext) {
+                children = <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>;
+            }
+            return children;
+        },
     };
 }
