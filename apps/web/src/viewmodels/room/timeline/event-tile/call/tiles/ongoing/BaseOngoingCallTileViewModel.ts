@@ -171,7 +171,7 @@ export class BaseOngoingCallViewModel<
     }
 
     /**
-     * Recomputes the snapshot when the call participants are updated.
+     * Update the snapshot when the call participants have changed.
      */
     protected onParticipantsChange(participants: Map<RoomMember, Set<string>>, extraSnapshot: Partial<T> = {}): void {
         const roomId = this.props.roomId;
