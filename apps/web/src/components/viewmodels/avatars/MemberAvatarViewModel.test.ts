@@ -8,9 +8,9 @@
 // @vitest-environment happy-dom
 
 import { it, describe, expect, vi } from "vitest";
-import { RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, type RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
-import { mkRoom, mkRoomMember, stubClient } from "../../../../test/test-utils";
+import { mkEvent, mkRoom, mkRoomMember, stubClient } from "../../../../test/test-utils";
 import { MemberAvatarViewModel } from "./MemberAvatarViewModel";
 
 vi.mock(import("../../../customisations/Media"), () => {
@@ -49,8 +49,30 @@ describe("MemberAvatarViewModel", () => {
 
         // On room event, name should update to Bob
         member.name = "Bob";
-        // @ts-ignore
-        room.emit(RoomStateEvent.Members, undefined, undefined, member);
+
+        const event = mkEvent({
+            type: "m.room.member",
+            user: "@alice.m.org",
+            content: {
+                displayname: "Bob",
+            },
+        });
+        vi.spyOn(room, "getLiveTimeline").mockImplementation(() => {
+            return {
+                getState: (): RoomState => {
+                    return {
+                        mayClientSendStateEvent: () => true,
+                    } as unknown as RoomState;
+                },
+            } as unknown as EventTimeline;
+        });
+        vi.mocked(room).emit(
+            RoomStateEvent.Members,
+            event,
+            room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
+            member,
+        );
+
         expect(vm.getSnapshot().name).toStrictEqual("Bob");
     });
 });
