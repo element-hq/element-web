@@ -6,29 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, {
-    type JSX,
-    type ReactNode,
-    type ComponentType,
-    type SVGAttributes,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-    useId,
-    useContext,
-} from "react";
-import {
-    type Room,
-    type MatrixEvent,
-    type RoomMember,
-    RoomEvent,
-    EventType,
-    MatrixEventEvent,
-} from "matrix-js-sdk/src/matrix";
+import React, { type JSX, type ReactNode, type ComponentType, type SVGAttributes, useId } from "react";
 import { AvatarStack, Button, Form, Heading, InlineField, Label, ToggleInput, Tooltip } from "@vector-im/compound-web";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     CheckIcon,
     CloseIcon,
@@ -40,50 +20,17 @@ import { AvatarWithDetails } from "@element-hq/web-shared-components";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import { Action } from "../dispatcher/actions";
-import ToastStore from "../stores/ToastStore";
-import { useCall, useParticipatingMembers } from "../hooks/useCall";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
-import { useDispatcher } from "../hooks/useDispatcher";
-import { type ActionPayload } from "../dispatcher/payloads";
-import { type Call, CallEvent } from "../models/Call";
-import { AudioID } from "../LegacyCallHandler";
-import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
-import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import DMRoomMap from "../utils/DMRoomMap";
+import { useIncomingCallToast } from "../hooks/useIncomingCallToast";
 import MemberAvatar from "../components/views/avatars/MemberAvatar";
-import { SDKContext } from "../contexts/SDKContext.ts";
+
+// Re-exported for backwards compatibility with existing importers.
+export { getNotificationEventSendTs } from "../hooks/useIncomingCallToast";
 
 /**
  * Get the key for the incoming call toast. A combination of the call ID and room ID.
- * @param callId The ID of the call.
- * @param roomId The ID of the room.
- * @returns The key for the incoming call toast.
  */
 export const getIncomingCallToastKey = (callId: string, roomId: string): string => `call_${callId}_${roomId}`;
-
-/**
- * Get the ts when the notification event was sent.
- * This can be either the origin_server_ts or a ts the sender of this event claims as
- * the time they sent it (sender_ts).
- * The origin_server_ts is the fallback if sender_ts seems wrong.
- * @param event The RTCNotification event.
- * @returns The timestamp to use as the expect start time to apply the `lifetime` to.
- */
-export const getNotificationEventSendTs = (event: MatrixEvent): number => {
-    const content = event.getContent() as Partial<IRTCNotificationContent>;
-    const sendTs = content.sender_ts;
-    if (sendTs && Math.abs(sendTs - event.getTs()) >= 15000) {
-        logger.warn(
-            "Received RTCNotification event. With large sender_ts origin_server_ts offset -> using origin_server_ts",
-        );
-        return event.getTs();
-    }
-    return sendTs ?? event.getTs();
-};
-const MAX_RING_TIME_MS = 90 * 1000;
 
 interface JoinCallButtonWithCallProps {
     onClick: (e: ButtonEvent) => void;
@@ -104,46 +51,7 @@ function JoinCallButtonWithCall({ onClick, disabledTooltip }: JoinCallButtonWith
         </Button>
     );
 
-    return disabledTooltip === undefined ? (
-        button
-    ) : (
-        <Tooltip description={disabledTooltip ?? _t("voip|video_call")}>{button}</Tooltip>
-    );
-}
-
-interface DeclineCallButtonWithNotificationEventProps {
-    onDeclined: (e: ButtonEvent) => void;
-    notificationEvent: MatrixEvent;
-    room?: Room;
-}
-
-function DeclineCallButtonWithNotificationEvent({
-    notificationEvent,
-    room,
-    onDeclined,
-}: DeclineCallButtonWithNotificationEventProps): JSX.Element {
-    const [declining, setDeclining] = useState(false);
-    const onClick = useCallback(
-        async (e: ButtonEvent) => {
-            e.stopPropagation();
-            setDeclining(true);
-            await room?.client.sendRtcDecline(room.roomId, notificationEvent.getId() ?? "");
-            onDeclined(e);
-        },
-        [notificationEvent, onDeclined, room?.client, room?.roomId],
-    );
-    return (
-        <Button
-            className="mx_IncomingCallToast_actionButton"
-            onClick={onClick}
-            kind="secondary"
-            disabled={declining}
-            Icon={CloseIcon}
-            size="md"
-        >
-            {_t("action|decline")}
-        </Button>
-    );
+    return disabledTooltip === undefined ? button : <Tooltip description={disabledTooltip}>{button}</Tooltip>;
 }
 
 interface Props {
@@ -159,139 +67,21 @@ interface Props {
 }
 
 export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.Element {
-    const sdkContext = useContext(SDKContext);
-    const roomId = notificationEvent.getRoomId()!;
-    // Use a partial type so ts still helps us to not miss any type checks.
-    const notificationContent = notificationEvent.getContent() as Partial<IRTCNotificationContent>;
-    const room = sdkContext.client?.getRoom(roomId) ?? undefined;
-    const call = useCall(roomId);
-    const [connectedCalls, setConnectedCalls] = useState<Call[]>(Array.from(CallStore.instance.connectedCalls));
-    useEventEmitter(CallStore.instance, CallStoreEvent.ConnectedCalls, () => {
-        setConnectedCalls(Array.from(CallStore.instance.connectedCalls));
-    });
-    const otherCallIsOngoing = connectedCalls.find((call) => call.roomId !== roomId);
-    const soundHasStarted = useRef<boolean>(false);
-    useEffect(() => {
-        // This section can race, so we use a ref to keep track of whether we have started trying to play.
-        // This is because `LegacyCallHandler.play` tries to load the sound and then play it asynchonously
-        // and `LegacyCallHandler.isPlaying` will not be `true` until the sound starts playing.
-        const isRingToast = notificationContent.notification_type === "ring";
-        if (isRingToast && !soundHasStarted.current && !sdkContext.legacyCallHandler.isPlaying(AudioID.Ring)) {
-            // Start ringing if not already.
-            soundHasStarted.current = true;
-            void sdkContext.legacyCallHandler.play(AudioID.Ring);
-        }
-    }, [notificationContent.notification_type, soundHasStarted, sdkContext.legacyCallHandler]);
-
-    // Stop ringing on dismiss.
-    const dismissToast = useCallback((): void => {
-        ToastStore.sharedInstance().dismissToast(toastKey);
-        sdkContext.legacyCallHandler.pause(AudioID.Ring);
-    }, [toastKey, sdkContext.legacyCallHandler]);
-
-    // Dismiss if the notification event or call event is redacted
-    useTypedEventEmitter(room, MatrixEventEvent.BeforeRedaction, (ev: MatrixEvent) => {
-        if ([ev.getId(), ev.getRelation()?.event_id].includes(ev.getId())) {
-            dismissToast();
-        }
-    });
-
-    // Dismiss if session got ended remotely.
-    const onCall = useCallback(
-        (call: Call, callRoomId: string): void => {
-            const roomId = notificationEvent.getRoomId();
-            if (!roomId && roomId !== callRoomId) return;
-            if (call === null || call.participants.size === 0) {
-                dismissToast();
-            }
-        },
-        [dismissToast, notificationEvent],
-    );
-
-    // Dismiss if session got declined remotely.
-    const onTimelineChange = useCallback(
-        (ev: MatrixEvent) => {
-            const userId = room?.client.getUserId();
-            if (
-                ev.getType() === EventType.RTCDecline &&
-                userId !== undefined &&
-                ev.getSender() === userId && // It is our decline not someone elses
-                ev.relationEventId === notificationEvent.getId() // The event declines this ringing toast.
-            ) {
-                dismissToast();
-            }
-        },
-        [dismissToast, notificationEvent, room?.client],
-    );
-
-    // Dismiss if another device from this user joins.
-    const onParticipantChange = useCallback(
-        (participants: Map<RoomMember, Set<string>>) => {
-            if (Array.from(participants.keys()).some((p) => p.userId == room?.client.getUserId())) {
-                dismissToast();
-            }
-        },
-        [dismissToast, room?.client],
-    );
-
-    // Dismiss on timeout.
-    useEffect(() => {
-        const lifetime = notificationContent.lifetime ?? MAX_RING_TIME_MS;
-        const timeout = setTimeout(dismissToast, getNotificationEventSendTs(notificationEvent) + lifetime - Date.now());
-        return () => clearTimeout(timeout);
-    });
-
-    // Dismiss on viewing call.
-    useDispatcher(
-        defaultDispatcher,
-        useCallback(
-            (payload: ActionPayload) => {
-                if (payload.action === Action.ViewRoom && payload.room_id === roomId && payload.view_call) {
-                    dismissToast();
-                }
-            },
-            [roomId, dismissToast],
-        ),
-    );
-
-    const [videoToggle, setVideoToggle] = useState(true);
+    const {
+        room,
+        isVoice,
+        isRing,
+        otherUserId,
+        members,
+        otherCallIsOngoing,
+        videoToggle,
+        setVideoToggle,
+        onJoin,
+        onExpand,
+        onDecline,
+    } = useIncomingCallToast(notificationEvent, toastKey);
     const videoToggleId = useId();
 
-    const isVoice = notificationContent["m.call.intent"] === "audio";
-
-    const viewCall = useCallback(
-        (skipLobby: boolean) => {
-            // The toast will be automatically dismissed by the dispatcher callback above
-            defaultDispatcher.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: room?.roomId,
-                view_call: true,
-                skipLobby,
-                voiceOnly: isVoice || !videoToggle,
-                metricsTrigger: undefined,
-            });
-        },
-        [room, isVoice, videoToggle],
-    );
-
-    const onJoinClick = useCallback(() => viewCall(true), [viewCall]);
-    const onExpandClick = useCallback(() => viewCall(false), [viewCall]);
-
-    // Dismiss on closing toast.
-    const onCloseClick = useCallback(
-        (e: ButtonEvent): void => {
-            e.stopPropagation();
-            dismissToast();
-        },
-        [dismissToast],
-    );
-
-    useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
-    useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
-    useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
-
-    const otherUserId = DMRoomMap.shared().getUserIdForRoomId(roomId);
-    const members = useParticipatingMembers(call);
     const avatars = (): ReactNode => (
         <AvatarStack className="mx_IncomingCallToast_avatars">
             {members.slice(0, 3).map((m) => (
@@ -301,7 +91,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     );
 
     let detailsInformation: ReactNode;
-    if (notificationContent.notification_type === "ring") {
+    if (isRing) {
         detailsInformation = <span>{otherUserId}</span>;
     } else if (members.length > 0) {
         detailsInformation =
@@ -338,7 +128,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
                 </Heading>
                 <AccessibleButton
                     className="mx_IncomingCallToast_expandButton"
-                    onClick={onExpandClick}
+                    onClick={onExpand}
                     title={_t("action|expand")}
                 >
                     <ExpandIcon width={16} height={16} aria-hidden />
@@ -372,13 +162,19 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
                 </Form.Root>
             )}
             <div className="mx_IncomingCallToast_buttons">
-                <DeclineCallButtonWithNotificationEvent
-                    notificationEvent={notificationEvent}
-                    room={room}
-                    onDeclined={onCloseClick}
-                />
+                <Button
+                    className="mx_IncomingCallToast_actionButton"
+                    onClick={(e) => {
+                        void onDecline(e);
+                    }}
+                    kind="secondary"
+                    Icon={CloseIcon}
+                    size="md"
+                >
+                    {_t("action|decline")}
+                </Button>
                 <JoinCallButtonWithCall
-                    onClick={onJoinClick}
+                    onClick={onJoin}
                     disabledTooltip={otherCallIsOngoing ? "Ongoing call" : undefined}
                 />
             </div>
