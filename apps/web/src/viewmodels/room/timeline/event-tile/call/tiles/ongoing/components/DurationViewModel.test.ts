@@ -23,7 +23,7 @@ describe("DurationViewModel", () => {
         vi.advanceTimersByTime(100 * 1000);
         const vm = new DurationViewModel({ callStartTs });
 
-        // Initial duration is 100 seconds
+        // Time elapsed from callStartTs is 100 seconds, so expect duration to be 100
         expect(vm.getSnapshot().duration).toStrictEqual(100);
 
         // Snapshot must update as time goes on
