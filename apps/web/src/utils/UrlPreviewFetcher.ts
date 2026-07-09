@@ -209,7 +209,10 @@ export class UrlPreviewFetcher {
     }
 
     // Convert an MSC4095 URL preview bundle item to a UrlPreview
-    public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
+    public async previewFromBundle(
+        single: UnstableBundledUrlPreviewSingle,
+        loadMedia: boolean,
+    ): Promise<UrlPreview | null> {
         // TODO: missing fields from the bundle are:
         // - siteName (can be computed)
         // - siteIcon
@@ -221,6 +224,11 @@ export class UrlPreviewFetcher {
             typeof single["og:image:width"] === "number" &&
             typeof single["og:image:height"] === "number";
 
+        const keys = Object.keys(single);
+        if (keys.length === 1 && keys[0] === "matched_url") {
+            return this.fetchPreview(single.matched_url, loadMedia);
+        }
+
         const preview: UrlPreview = {
             link: single.matched_url,
             title: single["og:title"] ?? single.matched_url,
@@ -230,7 +238,7 @@ export class UrlPreviewFetcher {
             ogUrl: single["og:url"],
         };
 
-        if (hasImage) {
+        if (loadMedia && hasImage) {
             const media = mediaFromMxc(single["og:image"], this.client);
             const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
 
