@@ -18,7 +18,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../src/settings/UIFeature";
 import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
-import { flushPromisesWithFakeTimers } from "../../test-utils";
+import { flushPromisesWithFakeTimers } from "../../test-utils/utilities";
 
 jest.mock("../../../src/settings/SettingsStore");
 jest.mock("../../../src/contexts/SDKContextClass", () => ({

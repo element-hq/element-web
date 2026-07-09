@@ -3,7 +3,7 @@
 exports[`SpaceButton metaspace should render notificationState if one is provided 1`] = `
 <DocumentFragment>
   <div
-    aria-label="People"
+    aria-label="Home"
     class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_active"
     data-testid="create-space-button"
     role="button"
@@ -41,7 +41,7 @@ exports[`SpaceButton metaspace should render notificationState if one is provide
       <span
         class="mx_SpaceButton_name"
       >
-        People
+        Home
       </span>
     </div>
   </div>

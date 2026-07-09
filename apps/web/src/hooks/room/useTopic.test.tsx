@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { describe, it, expect } from "vitest";
 import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { act, render, screen } from "jest-matrix-react";
+import { act, render, screen } from "test-utils-rtl";
+import { mkEvent, stubClient } from "test-utils";
 
-import { useTopic } from "../../src/hooks/room/useTopic";
-import { mkEvent, stubClient } from "../test-utils";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import { useTopic } from "./useTopic";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 describe("useTopic", () => {
     it("should display the room topic", () => {

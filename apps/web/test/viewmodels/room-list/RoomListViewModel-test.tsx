@@ -410,6 +410,75 @@ describe("RoomListViewModel", () => {
                 "!room3:server",
             ]);
         });
+
+        describe("Favourites and Low Priority filters (RoomList.showSections)", () => {
+            function mockShowSections(showSections: boolean): void {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                    if (setting === "RoomList.showSections") return showSections;
+                    if (setting === "RoomList.CustomSectionData") return {};
+                    if (setting === "RoomList.OrderedCustomSections") return [];
+                    return undefined as any;
+                });
+            }
+
+            it("hides the Favourites and Low Priority filters when sections are enabled", () => {
+                mockShowSections(true);
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const { filterIds } = viewModel.getSnapshot();
+                expect(filterIds).not.toContain("favourite");
+                expect(filterIds).not.toContain("low_priority");
+            });
+
+            it("shows the Favourites and Low Priority filters when sections are disabled", () => {
+                mockShowSections(false);
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const { filterIds } = viewModel.getSnapshot();
+                expect(filterIds).toContain("favourite");
+                expect(filterIds).toContain("low_priority");
+            });
+
+            it("recomputes the filters and clears the active filter when the setting changes", () => {
+                let showSections = false;
+                let watchCallback: () => void = () => {};
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                    if (setting === "RoomList.showSections") return showSections;
+                    if (setting === "RoomList.CustomSectionData") return {};
+                    if (setting === "RoomList.OrderedCustomSections") return [];
+                    return undefined as any;
+                });
+                jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                    if (setting === "RoomList.showSections") watchCallback = callback as () => void;
+                    return "watcher-id";
+                });
+
+                viewModel = new RoomListViewModel({ client: matrixClient });
+                expect(viewModel.getSnapshot().filterIds).toContain("favourite");
+
+                // Activate the Favourites filter
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                    filterKeys: [FilterEnum.FavouriteFilter],
+                });
+                viewModel.onToggleFilter("favourite");
+                expect(viewModel.getSnapshot().activeFilterId).toBe("favourite");
+
+                // Enabling sections hides the Favourites filter and resets the active filter
+                showSections = true;
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
+                });
+                watchCallback();
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.filterIds).not.toContain("favourite");
+                expect(snapshot.filterIds).not.toContain("low_priority");
+                expect(snapshot.activeFilterId).toBeUndefined();
+            });
+        });
     });
 
     describe("Room item view models", () => {
@@ -1582,6 +1651,72 @@ describe("RoomListViewModel", () => {
             viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
 
             expect(tagRoom).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("show_room_tile scroll", () => {
+        beforeEach(() => {
+            // Dispatching ViewRoom is also handled by the global RoomViewStore, which calls
+            // MatrixClientPeg.safeGet(); stubClient sets up the peg so that doesn't throw.
+            stubClient();
+        });
+
+        it("should scroll a room into view in a flat list", async () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!room2:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            // Flat list: entry index == room index.
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(1));
+        });
+
+        it("should scroll a room into view in a grouped list, accounting for section headers", async () => {
+            const favRoom1 = mkStubRoom("!fav1:server", "Fav 1", matrixClient);
+            const favRoom2 = mkStubRoom("!fav2:server", "Fav 2", matrixClient);
+            const regularRoom1 = mkStubRoom("!reg1:server", "Reg 1", matrixClient);
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [
+                    { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                    { tag: CHATS_TAG, rooms: [regularRoom1] },
+                ],
+            });
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!reg1:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            // Entry space: [Fav header(0), fav1(1), fav2(2), Chats header(3), reg1(4)]
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(4));
+        });
+
+        it("should not scroll when the room is not in the current list", async () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!room3:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(2));
+            expect(scrollSpy).toHaveBeenCalledTimes(1);
         });
     });
 });
