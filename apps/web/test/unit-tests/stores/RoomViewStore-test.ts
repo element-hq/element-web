@@ -584,8 +584,8 @@ describe("RoomViewStore", function () {
         });
     });
 
-    describe.only("Action.JoinRoom", () => {
-        it.only("dispatches Action.JoinRoomError and Action.AskToJoin when the join fails with 403", async () => {
+    describe("Action.JoinRoom", () => {
+        it("dispatches Action.JoinRoomError and Action.AskToJoin when the join fails with 403", async () => {
             const err = new MatrixError({}, 403);
 
             jest.spyOn(dis, "dispatch");
