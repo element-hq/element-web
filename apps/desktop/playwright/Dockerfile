@@ -6,9 +6,8 @@ RUN apt-get update && \
     apt-get -y install xvfb dbus-x11 && \
     apt-get purge -y --auto-remove && \
     rm -rf /var/lib/apt/lists/* && \
-    corepack enable
+    wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
 
-ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 ENV GITHUB_ACTIONS=1
 ENV DEBUG=pw:browser
 
