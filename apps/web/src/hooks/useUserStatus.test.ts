@@ -5,32 +5,34 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { renderHook, waitFor } from "jest-matrix-react";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { useUserStatus } from "../../../src/hooks/useUserStatus";
-import { getMockClientWithEventEmitter, mockClientMethodsUser, mockClientMethodsServer } from "../../test-utils";
-import { MatrixClientContextProvider } from "../../../src/components/structures/MatrixClientContextProvider";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { userStatusTextWithinMaxLength } from "../../../src/utils/userStatus";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { renderHook, waitFor } from "test-utils-rtl";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import {
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+    mockClientMethodsServer,
+    withContexts,
+} from "test-utils";
+
+import { useUserStatus } from "./useUserStatus";
+import SettingsStore from "../settings/SettingsStore";
+import { userStatusTextWithinMaxLength } from "../utils/userStatus";
 
 const userId = "@alice:example.com";
 
 const client = getMockClientWithEventEmitter({
     ...mockClientMethodsUser(),
     ...mockClientMethodsServer(),
-    getCrypto: jest.fn().mockReturnValue(null),
-    doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(true),
-    getExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
+    getCrypto: vi.fn().mockReturnValue(null),
+    doesServerSupportExtendedProfiles: vi.fn().mockResolvedValue(true),
+    getExtendedProfileProperty: vi.fn().mockResolvedValue(undefined),
 });
 
 function render(uid: string | undefined = userId) {
-    return renderHook(() => useUserStatus(uid), {
-        wrapper: ({ children }) => (
-            <MatrixClientContextProvider client={client}>{children}</MatrixClientContextProvider>
-        ),
-    });
+    return renderHook(() => useUserStatus(uid), withContexts({ matrixClient: client }));
 }
 
 describe("userStatusTextWithinMaxLength", () => {
@@ -49,7 +51,7 @@ describe("userStatusTextWithinMaxLength", () => {
 
 describe("useUserStatus", () => {
     beforeEach(() => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name): any => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((name): any => {
             if (name === "feature_user_status") return true;
         });
         client.doesServerSupportExtendedProfiles.mockResolvedValue(true);
@@ -57,11 +59,11 @@ describe("useUserStatus", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("returns undefined when feature is disabled", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         const { result } = render();
         expect(result.current).toBeUndefined();
     });

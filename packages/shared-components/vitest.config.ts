@@ -40,6 +40,11 @@ export default defineConfig({
             reporter: [["lcov", { projectRoot: "../../" }]],
         },
         reporters: rootConfig.test?.reporters,
+        onConsoleLog(log: string): boolean | void {
+            // Suppress the i18n language-loading log; it fires on every
+            // setLanguage() call in setup and adds noise to test output.
+            if (log.startsWith("Loading language from")) return false;
+        },
         environment: "node",
         pool: "threads",
         globals: false,
