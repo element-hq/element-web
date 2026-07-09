@@ -5,14 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    type EmptyObject,
-    EventType,
-    type MatrixEvent,
-    MatrixEventEvent,
-    type Room,
-    RoomEvent,
-} from "matrix-js-sdk/src/matrix";
+import { type EmptyObject, EventType, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -132,15 +125,8 @@ async function getLastRtcNotificationEvent(room: Room): Promise<MatrixEvent | un
     const events = room.getLiveTimeline().getEvents();
     for (let i = events.length - 1; i >= 0; i--) {
         const event = events[i];
-
-        if (event.getType() === EventType.RoomMessageEncrypted) {
-            await new Promise<void>((r) => {
-                event.once(MatrixEventEvent.Decrypted, () => {
-                    r();
-                });
-            });
-        }
-
+        // Wait for decryption if necessary
+        await event.getDecryptionPromise();
         if (event.getType() === EventType.RTCNotification) {
             return event;
         }
@@ -154,6 +140,12 @@ async function getLastRtcNotificationEvent(room: Room): Promise<MatrixEvent | un
  * @returns A promise that resolves to the event-id of the notification event.
  */
 async function getNotificationEventId(room: Room, callMemberEventId: string): Promise<string> {
+    // We might already have the notification event in the timeline, so check that first.
+    const event = await getLastRtcNotificationEvent(room);
+    const relatedEventId = event?.getRelation()?.event_id;
+    const eventId = event?.getId();
+    if (relatedEventId === callMemberEventId && eventId) return eventId;
+
     const { promise, resolve, reject } = Promise.withResolvers<string>();
 
     // This callback will run with new events that are added to the timeline.
@@ -161,13 +153,7 @@ async function getNotificationEventId(room: Room, callMemberEventId: string): Pr
     // new notification event that corresponds to the call membership event.
     const onNewEvent = async (event: MatrixEvent): Promise<void> => {
         // Wait for decryption if necessary
-        if (event.getType() === EventType.RoomMessageEncrypted) {
-            await new Promise<void>((r) => {
-                event.once(MatrixEventEvent.Decrypted, () => {
-                    r();
-                });
-            });
-        }
+        await event.getDecryptionPromise();
 
         const type = event.getType();
         const relatedEventId = event.getRelation()?.event_id;
@@ -186,10 +172,5 @@ async function getNotificationEventId(room: Room, callMemberEventId: string): Pr
         reject(new Error("Timeout waiting for rtc notification event"));
     }, 10000);
 
-    // We might already have the notification event in the timeline, so check that as well.
-    const event = await getLastRtcNotificationEvent(room);
-    const relatedEventId = event?.getRelation()?.event_id;
-    const eventId = event?.getId();
-    if (relatedEventId === callMemberEventId && eventId) return eventId;
-    else return await promise;
+    return await promise;
 }
