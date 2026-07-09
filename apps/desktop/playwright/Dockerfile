@@ -6,7 +6,8 @@ RUN apt-get update && \
     apt-get -y install xvfb dbus-x11 && \
     apt-get purge -y --auto-remove && \
     rm -rf /var/lib/apt/lists/* && \
-    wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+    wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash - && \
+    source /root/.bashrc
 
 ENV GITHUB_ACTIONS=1
 ENV DEBUG=pw:browser
