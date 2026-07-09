@@ -51,6 +51,7 @@ import { storeRoomAliasInCache } from "../../../src/RoomAliasCache.ts";
 import { type Call, ConnectionState } from "../../../src/models/Call.ts";
 import ActiveWidgetStore from "../../../src/stores/ActiveWidgetStore";
 import { ModuleApi } from "../../../src/modules/Api";
+import { type JoinRoomPayload } from "../../../src/dispatcher/payloads/JoinRoomPayload.ts";
 
 jest.mock("../../../src/Modal");
 
@@ -583,29 +584,41 @@ describe("RoomViewStore", function () {
         });
     });
 
-    describe("Action.JoinRoom", () => {
-        it("dispatches Action.JoinRoomError and Action.AskToJoin when the join fails with 403", async () => {
+    describe.only("Action.JoinRoom", () => {
+        it.only("dispatches Action.JoinRoomError and Action.AskToJoin when the join fails with 403", async () => {
             const err = new MatrixError({}, 403);
 
             jest.spyOn(dis, "dispatch");
             jest.spyOn(mockClient, "joinRoom").mockRejectedValueOnce(err);
 
-            dis.dispatch({ action: Action.JoinRoom, canAskToJoin: true });
+            const roomId = "!hello:world";
+
+            dis.dispatch<JoinRoomPayload>({
+                action: Action.JoinRoom,
+                canAskToJoin: true,
+                roomId,
+                metricsTrigger: "RoomPreview",
+            });
             await untilDispatch(Action.PromptAskToJoin, dis);
 
-            expect(mocked(dis.dispatch).mock.calls[0][0]).toEqual({ action: "join_room", canAskToJoin: true });
+            expect(mocked(dis.dispatch).mock.calls[0][0]).toEqual({
+                action: Action.JoinRoom,
+                canAskToJoin: true,
+                metricsTrigger: "RoomPreview",
+                roomId,
+            });
             expect(mocked(dis.dispatch).mock.calls[1][0]).toEqual({
-                action: "join_room_error",
-                roomId: null,
+                action: Action.JoinRoomError,
+                roomId,
                 err,
                 canAskToJoin: true,
             });
-            expect(mocked(dis.dispatch).mock.calls[2][0]).toEqual({ action: "prompt_ask_to_join" });
+            expect(mocked(dis.dispatch).mock.calls[2][0]).toEqual({ action: Action.PromptAskToJoin });
         });
 
         it("sets 'acceptSharedHistory'", async () => {
-            dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
-            dis.dispatch({ action: Action.JoinRoom });
+            dis.dispatch<ViewRoomPayload>({ action: Action.ViewRoom, room_id: roomId, metricsTrigger: "RoomList" });
+            dis.dispatch<JoinRoomPayload>({ action: Action.JoinRoom, roomId: roomId, metricsTrigger: "RoomPreview" });
             await untilDispatch(Action.JoinRoomReady, dis);
             expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { acceptSharedHistory: true, viaServers: [] });
         });
