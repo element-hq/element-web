@@ -23,7 +23,7 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { type CallStore } from "../../../../../../../stores/CallStore";
 import { MemberAvatarViewModel } from "../../../../../../../components/viewmodels/avatars/MemberAvatarViewModel";
 import { FacePileViewModel } from "../../../../../../../components/viewmodels/avatars/FacePileViewModel";
-import { CallEvent, type ElementCall } from "../../../../../../../models/Call";
+import { CallEvent, ElementCall } from "../../../../../../../models/Call";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
@@ -53,12 +53,12 @@ export interface Props {
     callStore: CallStore;
 }
 
-function getCallInRoom(store: CallStore, roomId: string): ElementCall {
-    const call = store.getCall(roomId) as ElementCall | null;
+function getCallOrThrow(store: CallStore, roomId: string): ElementCall {
+    const call = store.getCall(roomId);
     if (!call) {
         throw new Error(`No call in room ${roomId}`);
     }
-    return call;
+    return call as ElementCall;
 }
 
 /**
@@ -78,7 +78,7 @@ function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
     }
 
     // Get the call in the room
-    const call = getCallInRoom(callStore, roomId);
+    const call = getCallOrThrow(callStore, roomId);
 
     // Find the mx-id of the user who started this call
     const startedUserId = mxEvent.getSender();
@@ -149,7 +149,7 @@ export class BaseOngoingCallViewModel<
     }
 
     private setupListener(): void {
-        const call = getCallInRoom(this.props.callStore, this.props.roomId);
+        const call = getCallOrThrow(this.props.callStore, this.props.roomId);
         this.disposables.trackListener(call, CallEvent.Participants, ((participants: Map<RoomMember, Set<string>>) => {
             this.onParticipantsChange(participants);
         }) as (...args: unknown[]) => void);
