@@ -23,7 +23,7 @@ describe("FacePileViewModel", () => {
         const vm = new FacePileViewModel({
             cli,
             members,
-            size: "20",
+            size: 20,
         });
         expect(vm.getSnapshot().memberAvatarViewModels).toHaveLength(3);
     });
@@ -34,7 +34,7 @@ describe("FacePileViewModel", () => {
         const vm = new FacePileViewModel({
             cli,
             members,
-            size: "20",
+            size: 20,
         });
         expect(vm.getSnapshot().memberAvatarViewModels).toHaveLength(2);
 

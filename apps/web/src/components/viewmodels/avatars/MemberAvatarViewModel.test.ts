@@ -27,7 +27,7 @@ describe("MemberAvatarViewModel", () => {
         const member = mkRoomMember("!my-room:m.org", "@alice:m.org");
         member.getMxcAvatarUrl = () => "avatar-mxc-url";
         member.name = "Alice";
-        const vm = new MemberAvatarViewModel({ cli, member, size: "20" });
+        const vm = new MemberAvatarViewModel({ cli, member, size: 20 });
         const snapshot = vm.getSnapshot();
         expect(snapshot.id).toStrictEqual("@alice:m.org");
         expect(snapshot.title).toStrictEqual("@alice:m.org");
@@ -44,7 +44,7 @@ describe("MemberAvatarViewModel", () => {
         member.name = "Alice";
 
         // The name is initially Alice
-        const vm = new MemberAvatarViewModel({ cli, member, size: "20" });
+        const vm = new MemberAvatarViewModel({ cli, member, size: 20 });
         expect(vm.getSnapshot().name).toStrictEqual("Alice");
 
         // On room event, name should update to Bob

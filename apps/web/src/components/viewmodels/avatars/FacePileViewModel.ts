@@ -12,9 +12,9 @@ import { MemberAvatarViewModel } from "./MemberAvatarViewModel";
 
 interface Props {
     /**
-     * The size of each avatar in the face-pile.
+     * The size of each avatar in the face-pile in pixels, eg: 20.
      */
-    size: string;
+    size: number;
     /**
      * List of room-members from which to render the face-pile..
      */

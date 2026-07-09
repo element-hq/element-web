@@ -108,8 +108,8 @@ function computeSnapshot(props: Props): CommonOngoingCallTileViewSnapshot {
     const callDirection = cli.getUserId() === startedUserId ? CallDirection.Outgoing : CallDirection.Incoming;
 
     // Create the avatar vms
-    const facePileViewModel = new FacePileViewModel({ size: "20", members: participants, cli });
-    const memberAvatarViewModel = new MemberAvatarViewModel({ member: startedMember, size: "20", cli });
+    const facePileViewModel = new FacePileViewModel({ size: 20, members: participants, cli });
+    const memberAvatarViewModel = new MemberAvatarViewModel({ member: startedMember, size: 20, cli });
 
     const isJoinable = !!room
         .getLiveTimeline()

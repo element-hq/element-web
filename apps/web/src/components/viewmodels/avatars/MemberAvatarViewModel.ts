@@ -13,9 +13,9 @@ import { mediaFromMxc } from "../../../customisations/Media";
 
 interface Props {
     /**
-     * The size of the avatar.
+     * The size of the avatar in pixels, eg: 20.
      */
-    size: string;
+    size: number;
     /**
      * The room member for this avatar.
      */
@@ -39,11 +39,8 @@ function computeSnapshot(props: Props): MemberAvatarViewSnapshot {
     let url: string | undefined;
     if (member.getMxcAvatarUrl()) {
         url =
-            mediaFromMxc(member.getMxcAvatarUrl() ?? "", props.cli).getThumbnailOfSourceHttp(
-                parseInt(size, 10),
-                parseInt(size, 10),
-                "crop",
-            ) ?? undefined;
+            mediaFromMxc(member.getMxcAvatarUrl() ?? "", props.cli).getThumbnailOfSourceHttp(size, size, "crop") ??
+            undefined;
     }
     return {
         name,
