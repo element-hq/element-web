@@ -746,6 +746,9 @@ export class RoomListViewModel
 
         // Room list / sections changed: re-evaluate the unread-activity toast.
         this.updateUnreadActivityBelow();
+
+        // Ensure the room list updates its filters based on the new rooms data
+        RoomListStoreV3.instance.updateRoomSkipList();
     }
 
     /**

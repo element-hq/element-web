@@ -9,11 +9,19 @@ import { type Filter, FilterEnum } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 import { getMarkedUnreadState } from "../../../../utils/notifications";
 import SettingsStore from "../../../../settings/SettingsStore";
+import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 
 export class UnreadFilter implements Filter {
     public matches(room: Room): boolean {
         // If the user marked this room as unread, it's unread
         if (getMarkedUnreadState(room)) {
+            return true;
+        }
+
+        // The current room is always visible, whether it's read or not
+        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+
+        if (room.roomId === currentRoomId) {
             return true;
         }
 
