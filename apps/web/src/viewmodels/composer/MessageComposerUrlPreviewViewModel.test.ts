@@ -48,10 +48,11 @@ describe("MessageComposerUrlPreviewViewModel", () => {
 
     it("should return no preview by default", () => {
         expect(getViewModel().vm.getSnapshot()).toMatchInlineSnapshot(`
-{
-  "previews": [],
-}
-`);
+          {
+            "content": "",
+            "previews": [],
+          }
+        `);
     });
 
     it("should preview a valid URL in text", async () => {
