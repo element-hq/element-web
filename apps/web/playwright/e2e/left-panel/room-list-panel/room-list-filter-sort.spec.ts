@@ -229,8 +229,8 @@ test.describe("Room list filters and sort", () => {
             // Turn the "Unreads" filter on
             await primaryFilters.getByRole("option", { name: "Unreads" }).click();
 
-            const unreadRoom = roomListView.getByRole("option", { name: "Open room unread room" });
-            const unreadDm = roomListView.getByRole("option", { name: "Open room unread dm" });
+            const unreadRoom = roomListView.getByRole("button", { name: "Open room unread room" });
+            const unreadDm = roomListView.getByRole("button", { name: "Open room unread dm" });
 
             // Only the unread room is visible. The DM room is hidden.
             await expect(unreadRoom).toBeVisible();
