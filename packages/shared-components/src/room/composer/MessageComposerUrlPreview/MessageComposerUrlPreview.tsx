@@ -72,23 +72,44 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
     // Show only the first preview to revert back to previous behaviour
     // But have previews fetch all URL previews in the message text
     const previewViews = entries
-        .slice(0, 1)
-        .filter((entry) => entry.status === "loaded")
-        .map((entry) => entry.preview)
-        .map((preview) => (
-            <div key={preview.link} className={classNames(className, styles.container)}>
-                <div>
-                    {preview?.image?.imageThumb && (
-                        <img className={styles.image} src={preview.image?.imageThumb} alt={preview.image.alt} />
-                    )}
-                    <div className={styles.text}>
-                        <LinkSiteName {...preview} />
-                        <LinkTitle {...preview} />
-                        <Text className={styles.description}>{preview?.description}</Text>
-                    </div>
-                </div>
-            </div>
-        ));
+        .filter((entry) => entry.include)
+        .map((entry) => {
+            switch (entry.status) {
+                case "loaded":
+                    return <div key={entry.preview.link} className={classNames(className, styles.container)}>
+                        <div>
+                            {entry.preview?.image?.imageThumb && (
+                                <img className={styles.image} src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
+                            )}
+                            <div className={styles.text}>
+                                <LinkSiteName {...entry.preview} />
+                                <LinkTitle {...entry.preview} />
+                                <Text className={styles.description}>{entry.preview?.description}</Text>
+                            </div>
+                        </div>
+                    </div>;
+                case "loading":
+                    return <div key={entry.matched_url} className={classNames(className, styles.container)}>
+                        <div>
+                            <div className={styles.text}>
+                                <LinkSiteName siteName={new URL(entry.matched_url).hostname} />
+                                <LinkTitle title="Loading..." showTooltipOnLink={false} link={entry.matched_url} />
+                                <Text className={styles.description}>{"Loading..."}</Text>
+                            </div>
+                        </div>
+                    </div>;
+                case "failed":
+                    return <div key={entry.matched_url} className={classNames(className, styles.container)}>
+                        <div>
+                            <div className={styles.text}>
+                                <LinkSiteName siteName={new URL(entry.matched_url).hostname} />
+                                <LinkTitle title="Failed" showTooltipOnLink={false} link={entry.matched_url} />
+                                <Text className={styles.description}>{"Failed"}</Text>
+                            </div>
+                        </div>
+                    </div>;
+            }
+        });
 
     return <>{previewViews}</>;
 }
