@@ -120,18 +120,22 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
+            {userStatus && (
+                <Tooltip description={userStatus.text}>
+                    <Text
+                        as="span"
+                        size="md"
+                        className={classNames("mx_DisambiguatedProfile_userStatus", styles.userStatus)}
+                    >
+                        {userStatusEmoji}
+                    </Text>
+                </Tooltip>
+            )}
             {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
             {displayIdentifier && (
                 <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
                     {displayIdentifier}
                 </span>
-            )}
-            {userStatus && (
-                <Tooltip description={userStatus.text}>
-                    <Text as="span" size="md" className={styles.userStatus}>
-                        {userStatusEmoji}
-                    </Text>
-                </Tooltip>
             )}
         </div>
     );
