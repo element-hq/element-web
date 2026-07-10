@@ -5,14 +5,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, renderHook, waitFor } from "jest-matrix-react";
-import { JoinRule, MatrixEvent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { useMediaVisible } from "../../../src/hooks/useMediaVisible";
-import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../test-utils";
-import { type MediaPreviewConfig, MediaPreviewValue } from "../../../src/@types/media_preview";
-import MediaPreviewConfigController from "../../../src/settings/controllers/MediaPreviewConfigController";
-import SettingsStore from "../../../src/settings/SettingsStore";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { act, renderHook, waitFor } from "test-utils-rtl";
+import { JoinRule, MatrixEvent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "test-utils";
+
+import { useMediaVisible } from "./useMediaVisible";
+import { type MediaPreviewConfig, MediaPreviewValue } from "../@types/media_preview";
+import MediaPreviewConfigController from "../settings/controllers/MediaPreviewConfigController";
+import SettingsStore from "../settings/SettingsStore";
 
 const EVENT_ID = "$fibble:example.org";
 const ROOM_ID = "!foobar:example.org";
@@ -43,9 +46,9 @@ describe("useMediaVisible", () => {
     beforeEach(() => {
         matrixClient = createTestClient();
         room = mkStubRoom(ROOM_ID, undefined, matrixClient);
-        matrixClient.getRoom = jest.fn().mockReturnValue(room);
+        matrixClient.getRoom = vi.fn().mockReturnValue(room);
         const origFn = SettingsStore.getValue;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
             if (setting === "mediaPreviewConfig") {
                 return mediaPreviewConfig;
             }
@@ -54,7 +57,7 @@ describe("useMediaVisible", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should display media by default", () => {
@@ -86,7 +89,7 @@ describe("useMediaVisible", () => {
         "should display media when media previews are Private and the join rule is %s",
         (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
-            room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
+            room.currentState.getJoinRule = vi.fn().mockReturnValue(rule);
             const [visible] = render().result.current;
             expect(visible).toEqual(true);
         },
@@ -96,7 +99,7 @@ describe("useMediaVisible", () => {
         "should hide media when media previews are Private and the join rule is %s",
         (rule) => {
             mediaPreviewConfig.media_previews = MediaPreviewValue.Private;
-            room.currentState.getJoinRule = jest.fn().mockReturnValue(rule);
+            room.currentState.getJoinRule = vi.fn().mockReturnValue(rule);
             const [visible] = render().result.current;
             expect(visible).toEqual(false);
         },

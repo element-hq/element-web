@@ -6,22 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { getForwardableEvent } from "../../../../src/events";
+import { vi, describe, it, expect } from "vitest";
+import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import {
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
     makePollStartEvent,
     makeRoomWithBeacons,
-} from "../../../test-utils";
+} from "test-utils";
+
+import { getForwardableEvent } from "./getForwardableEvent";
 
 describe("getForwardableEvent()", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
     const client = getMockClientWithEventEmitter({
-        getRoom: jest.fn(),
+        getRoom: vi.fn(),
     });
 
     it("returns the event for a room message", () => {
