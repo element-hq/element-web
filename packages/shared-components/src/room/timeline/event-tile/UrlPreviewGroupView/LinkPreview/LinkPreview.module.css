@@ -11,10 +11,8 @@ button.preview {
 
 .containerCollapsed {
     max-width: 100%;
-    width: calc(478px - 32px);
-    /* minus the padding */
     display: flex;
-    border: 1px solid var(--cpd-color-border-interactive-primary);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: 12px;
     /* Get radius from cpd */
     flex-direction: row;
