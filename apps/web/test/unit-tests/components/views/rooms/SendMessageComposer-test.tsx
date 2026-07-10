@@ -17,7 +17,11 @@ import SendMessageComposer, {
     isQuickReaction,
 } from "../../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import {
+    type RoomContextType,
+    TimelineRenderingType,
+    MainSplitContentType,
+} from "../../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
@@ -25,7 +29,6 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { MainSplitContentType } from "../../../../../src/contexts/RoomContext";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
@@ -33,6 +36,7 @@ import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoo
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 import { MessageComposerUrlPreviewViewModel } from "../../../../../src/viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -203,7 +207,11 @@ describe("<SendMessageComposer/>", () => {
             </MatrixClientContext.Provider>
         );
         const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {
-            return render(getRawComponent(props, roomContext, client));
+            return render(getRawComponent(props, roomContext, client), {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            });
         };
 
         it("renders text and placeholder correctly", () => {
@@ -462,6 +470,11 @@ describe("<SendMessageComposer/>", () => {
                     </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
+            {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            },
         );
 
         const composer = container.querySelector<HTMLDivElement>(".mx_BasicMessageComposer_input")!;

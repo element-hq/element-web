@@ -123,7 +123,7 @@ describe("MessageComposerUrlPreview", () => {
             { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
         );
     });
-    test("to reset module component override when filter function does not match ", async () => {
+    test("to reset module component override when filter function does not match", async () => {
         const modApi = {
             customComponents: new CustomComponentsApi(),
         } as ModuleApi;

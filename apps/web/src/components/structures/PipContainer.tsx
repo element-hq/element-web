@@ -12,7 +12,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useCreateAutoDisposedViewModel, WidgetPipView } from "@element-hq/web-shared-components";
 
 import LegacyCallView from "../views/voip/LegacyCallView";
-import type LegacyCallHandler from "../../LegacyCallHandler";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import PictureInPictureDragger, { type CreatePipChildren } from "./PictureInPictureDragger";
 import dis from "../../dispatcher/dispatcher";
@@ -54,44 +53,6 @@ interface IState {
     showWidgetInPip: boolean;
 }
 
-// Splits a list of calls into one 'primary' one and a list
-// (which should be a single element) of other calls.
-// The primary will be the one not on hold, or an arbitrary one
-// if they're all on hold)
-function getPrimarySecondaryCallsForPip(
-    legacyCallHandler: LegacyCallHandler,
-    roomId: string | null,
-): [MatrixCall | null, MatrixCall[]] {
-    if (!roomId) return [null, []];
-
-    const calls = legacyCallHandler.getAllActiveCallsForPip(roomId);
-
-    let primary: MatrixCall | null = null;
-    let secondaries: MatrixCall[] = [];
-
-    for (const call of calls) {
-        if (!SHOW_CALL_IN_STATES.includes(call.state)) continue;
-
-        if (!call.isRemoteOnHold() && primary === null) {
-            primary = call;
-        } else {
-            secondaries.push(call);
-        }
-    }
-
-    if (primary === null && secondaries.length > 0) {
-        primary = secondaries[0];
-        secondaries = secondaries.slice(1);
-    }
-
-    if (secondaries.length > 1) {
-        // We should never be in more than two calls so this shouldn't happen
-        logger.log("Found more than 1 secondary call! Other calls will not be shown.");
-    }
-
-    return [primary, secondaries];
-}
-
 /**
  * PipContainer shows a small version of the LegacyCallView or a sticky widget hovering over the UI in
  * 'picture-in-picture' (PiP mode). It displays the call(s) which is *not* in the room the user is currently viewing
@@ -103,11 +64,11 @@ class PipContainerInner extends React.Component<IProps, IState> {
     declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props);
+        super(props, context);
 
-        const roomId = context.roomViewStore.getRoomId();
+        const roomId = this.context.roomViewStore.getRoomId();
 
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(context.legacyCallHandler, roomId);
+        const [primaryCall, secondaryCalls] = this.getPrimarySecondaryCallsForPip(roomId);
 
         this.state = {
             viewedRoomId: roomId || undefined,
@@ -147,6 +108,43 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
     }
 
+    /**
+     * Splits a list of calls into one 'primary' one and a list
+     * (which should be a single element) of other calls.
+     * The primary will be the one not on hold, or an arbitrary one
+     * if they're all on hold)
+     */
+    private getPrimarySecondaryCallsForPip(roomId: string | null): [MatrixCall | null, MatrixCall[]] {
+        if (!roomId) return [null, []];
+
+        const calls = this.context.legacyCallHandler.getAllActiveCallsForPip(roomId);
+
+        let primary: MatrixCall | null = null;
+        let secondaries: MatrixCall[] = [];
+
+        for (const call of calls) {
+            if (!SHOW_CALL_IN_STATES.includes(call.state)) continue;
+
+            if (!call.isRemoteOnHold() && primary === null) {
+                primary = call;
+            } else {
+                secondaries.push(call);
+            }
+        }
+
+        if (primary === null && secondaries.length > 0) {
+            primary = secondaries[0];
+            secondaries = secondaries.slice(1);
+        }
+
+        if (secondaries.length > 1) {
+            // We should never be in more than two calls so this shouldn't happen
+            logger.log("Found more than 1 secondary call! Other calls will not be shown.");
+        }
+
+        return [primary, secondaries];
+    }
+
     private onMove = (): void => this.props.movePersistedElement.current?.();
 
     private onRoomViewStoreUpdate = (): void => {
@@ -165,7 +163,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         }
         if (!newRoomId) return;
 
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.context.legacyCallHandler, newRoomId);
+        const [primaryCall, secondaryCalls] = this.getPrimarySecondaryCallsForPip(newRoomId);
         this.setState({
             viewedRoomId: newRoomId,
             primaryCall: primaryCall,
@@ -184,10 +182,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
     private updateCalls = (): void => {
         if (!this.state.viewedRoomId) return;
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(
-            this.context.legacyCallHandler,
-            this.state.viewedRoomId,
-        );
+        const [primaryCall, secondaryCalls] = this.getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
 
         this.setState({
             primaryCall: primaryCall,
@@ -198,10 +193,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
     private onCallRemoteHold = (): void => {
         if (!this.state.viewedRoomId) return;
-        const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(
-            this.context.legacyCallHandler,
-            this.state.viewedRoomId,
-        );
+        const [primaryCall, secondaryCalls] = this.getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
 
         this.setState({
             primaryCall: primaryCall,

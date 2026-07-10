@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { isEqual } from "lodash";
-import React, { type JSX, type ComponentProps, type PropsWithChildren, type Reducer, useReducer } from "react";
+import React, { type JSX, type ComponentProps, type PropsWithChildren, type Reducer, useReducer, useMemo } from "react";
 
 import { AuthHeaderContext } from "./AuthHeaderContext";
 import { type AuthHeaderModifier } from "./AuthHeaderModifier";
@@ -36,5 +36,6 @@ export function AuthHeaderProvider({ children }: PropsWithChildren): JSX.Element
         },
         [] as ComponentProps<typeof AuthHeaderModifier>[],
     );
-    return <AuthHeaderContext.Provider value={{ state, dispatch }}>{children}</AuthHeaderContext.Provider>;
+    const context = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+    return <AuthHeaderContext.Provider value={context}>{children}</AuthHeaderContext.Provider>;
 }

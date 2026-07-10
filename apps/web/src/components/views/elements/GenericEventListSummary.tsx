@@ -43,7 +43,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     threshold = 3,
     onToggle,
     startExpanded = false,
-    summaryMembers = [],
+    summaryMembers,
     summaryText,
     layout = Layout.Group,
     "data-testid": testId,
@@ -83,7 +83,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
         );
     } else {
         const uniqueMembers = uniqBy(
-            summaryMembers.filter((member) => {
+            summaryMembers?.filter((member) => {
                 if (!member?.getMxcAvatarUrl) {
                     logger.error(
                         "EventListSummary given null summaryMember, termites may be afoot eating event senders",

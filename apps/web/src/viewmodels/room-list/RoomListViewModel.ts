@@ -22,7 +22,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import SpaceStore from "../../stores/spaces/SpaceStore";
+import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
@@ -34,7 +34,6 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
@@ -43,6 +42,7 @@ import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../store
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -58,6 +58,8 @@ interface StickyRoomPosition {
 
 interface RoomListViewModelProps {
     client: MatrixClient;
+    roomViewStore: RoomViewStore;
+    spaceStore: SpaceStoreClass;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
@@ -158,7 +160,7 @@ export class RoomListViewModel
     private scrollToIndex?: (index: number) => void;
 
     public constructor(props: RoomListViewModelProps) {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = props.spaceStore.activeSpaceRoom;
 
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
@@ -575,7 +577,7 @@ export class RoomListViewModel
      * Migrated from useRoomListNavigation hook.
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
-        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        const currentRoomId = this.props.roomViewStore.getRoomId();
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
@@ -646,7 +648,7 @@ export class RoomListViewModel
             }
 
             // Space changed - get the last selected room for the new space to prevent flicker
-            const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
+            const lastSelectedRoom = this.props.spaceStore.getLastSelectedRoomIdForSpace(newSpaceId);
 
             this.updateRoomListData(true, lastSelectedRoom);
             return;
@@ -753,7 +755,7 @@ export class RoomListViewModel
     ): Promise<void> {
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
-        const roomId = roomIdOverride ?? SDKContextClass.instance.roomViewStore.getRoomId();
+        const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
 
         // Apply sticky room logic to keep selected room at same position within its section
         const stickySections = this.applyStickyRoom(isRoomChange, roomId);
@@ -858,7 +860,7 @@ export class RoomListViewModel
     };
 
     public createRoom = (): void => {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = this.props.spaceStore.activeSpaceRoom;
         if (activeSpace) {
             dispatcher.dispatch({
                 action: Action.CreateRoom,

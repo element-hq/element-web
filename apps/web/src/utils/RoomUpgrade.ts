@@ -132,7 +132,7 @@ export async function upgradeRoom(
                     parent.roomId,
                     EventType.SpaceChild,
                     {
-                        ...(currentEv?.getContent() || {}), // copy existing attributes like suggested
+                        ...currentEv?.getContent(), // copy existing attributes like suggested
                         via: [cli.getDomain()!],
                     },
                     newRoomId,
