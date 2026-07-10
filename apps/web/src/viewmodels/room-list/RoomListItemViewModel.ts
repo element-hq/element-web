@@ -11,11 +11,13 @@ import {
     type RoomListItemViewSnapshot,
     type RoomListItemViewActions,
     type Section,
+    type UserStatus,
 } from "@element-hq/web-shared-components";
-import { RoomEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import type { Room, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import type { Room, MatrixClient, RoomMember, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
@@ -41,6 +43,7 @@ import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
+import { fetchUserStatus, validateUserStatus } from "../../utils/userStatus";
 
 /**
  * View section type without `isSelected` field
@@ -74,6 +77,11 @@ export class RoomListItemViewModel
      * snapshot (see {@link buildSections}).
      */
     private availableSections: Sections;
+
+    /**
+     * The user ID of the other user if this room is a DM, used to show their user status.
+     */
+    private readonly dmUserId?: string;
 
     public constructor(props: RoomItemProps) {
         // Get notification state first so we can generate a complete initial snapshot
@@ -141,6 +149,17 @@ export class RoomListItemViewModel
 
         // Load message preview asynchronously (sync data is already complete)
         void this.loadAndSetMessagePreview();
+
+        // If this room is a DM, show the MSC4426 user status of the other user
+        this.dmUserId = DMRoomMap.shared().getUserIdForRoomId(props.room.roomId) ?? undefined;
+        if (this.dmUserId) {
+            props.client.on(ClientEvent.UserProfileUpdate, this.onUserProfileUpdate);
+            this.disposables.track(() => {
+                props.client.off(ClientEvent.UserProfileUpdate, this.onUserProfileUpdate);
+            });
+
+            this.updateUserStatus();
+        }
     }
 
     public dispose(): void {
@@ -266,6 +285,30 @@ export class RoomListItemViewModel
     private async loadAndSetMessagePreview(): Promise<void> {
         const messagePreview = await this.loadMessagePreview();
         this.snapshot.merge({ messagePreview });
+    }
+
+    /**
+     * Handler for profile updates received via sync, to keep the DM user's status up to date.
+     */
+    private onUserProfileUpdate: ClientEventHandlerMap[ClientEvent.UserProfileUpdate] = (userId, profile) => {
+        if (userId !== this.dmUserId || !SettingsStore.getValue("feature_user_status")) return;
+        this.snapshot.merge({ userStatus: validateUserStatus(profile?.["org.matrix.msc4426.status"]) });
+    };
+
+    /**
+     * Fetch and set the user status of the DM user, if the feature is enabled.
+     */
+    private updateUserStatus(): void {
+        (async () => {
+            let userStatus: UserStatus | undefined;
+            if (this.dmUserId && SettingsStore.getValue("feature_user_status")) {
+                userStatus = await fetchUserStatus(this.props.client, this.dmUserId);
+            }
+            if (this.disposables.isDisposed) return;
+            this.snapshot.merge({ userStatus });
+        })().catch((ex) => {
+            logger.warn(`Failed to update userStatus for ${this.dmUserId}`, ex);
+        });
     }
 
     /**

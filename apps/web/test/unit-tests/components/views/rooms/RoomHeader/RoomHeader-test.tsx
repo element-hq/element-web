@@ -59,6 +59,7 @@ import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
+import { SDKContext } from "../../../../../../src/contexts/SDKContext";
 import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
@@ -93,9 +94,11 @@ describe("RoomHeader", () => {
     function getWrapper(): RenderOptions {
         return {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={client}>
-                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>
+                <SDKContext.Provider value={SDKContextClass.instance}>
+                    <MatrixClientContext.Provider value={client}>
+                        <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>
+                </SDKContext.Provider>
             ),
         };
     }

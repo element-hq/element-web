@@ -1,4 +1,11 @@
 /*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE in the repository root for full details.
+*/
+
+/*
  * Quick-n-dirty algebraic datatypes.
  *
  * These let us handle the possibility of failure without having to constantly write code to check for it.
