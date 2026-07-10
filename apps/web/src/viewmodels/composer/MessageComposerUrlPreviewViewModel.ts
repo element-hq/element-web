@@ -21,6 +21,7 @@ export interface MessageComposerUrlPreviewViewModelProps {
     visible: boolean;
     showTooltips: boolean;
     urlPreviewBundle: boolean;
+    content?: string;
 }
 
 export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
@@ -42,12 +43,13 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private urlPreviewVisible: boolean;
 
-    private content: string = "";
+    private content: string;
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
-        super(props, { previews: [], content: "" });
+        super(props, { previews: [], content: props.content ?? "" });
         this.urlPreviewVisible = props.visible;
         this.fetcher = new UrlPreviewFetcher(props.client, Date.now(), props.showTooltips);
+        this.content = this.snapshot.current.content;
     }
 
     private async computeSnapshot(content: string): Promise<void> {

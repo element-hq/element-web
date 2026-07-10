@@ -6,22 +6,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { MessageComposerUrlPreviewView } from "@element-hq/web-shared-components";
+import { MessageComposerUrlPreviewView, useViewModel } from "@element-hq/web-shared-components";
 
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { ModuleApi } from "../../../modules/Api";
 
 export function MessageComposerUrlPreviewWrapper({
-    content,
     urlPreviewVm: vm,
     moduleApi = ModuleApi.instance,
 }: {
-    content: string;
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
     moduleApi?: ModuleApi;
 }): ReactNode | null {
     const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
+    const { content } = useViewModel(vm);
     const customComponent = moduleApi.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
         <MessageComposerUrlPreviewView vm={vm} />
     ));

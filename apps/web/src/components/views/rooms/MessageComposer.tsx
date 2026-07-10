@@ -693,10 +693,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                 <div className="mx_MessageComposer_wrapper">
-                    <MessageComposerUrlPreviewWrapper
-                        content={this.props.urlPreviewVm.getSnapshot().content}
-                        urlPreviewVm={this.props.urlPreviewVm}
-                    />
+                    <MessageComposerUrlPreviewWrapper urlPreviewVm={this.props.urlPreviewVm} />
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
                         replyToEvent={this.props.replyToEvent}
