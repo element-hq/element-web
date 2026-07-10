@@ -50,7 +50,12 @@ function getUrlPreviewVm(client: MatrixClient, content?: string): MessageCompose
         props.content = content;
     }
 
-    return new MessageComposerUrlPreviewViewModel(props);
+    const vm = new MessageComposerUrlPreviewViewModel(props);
+    if (content !== undefined) {
+        // Mirror how MessageComposer drives the view model so previews are actually computed.
+        void vm.updateWithText({ content, debounced: false });
+    }
+    return vm;
 }
 
 describe("MessageComposerUrlPreview", () => {
@@ -142,7 +147,7 @@ describe("MessageComposerUrlPreview", () => {
         });
         rerender(
             <MessageComposerUrlPreviewWrapper
-                urlPreviewVm={getUrlPreviewVm(client, "show-fake-preview")}
+                urlPreviewVm={getUrlPreviewVm(client, "no-longer-matching")}
                 moduleApi={modApi}
             />,
         );
