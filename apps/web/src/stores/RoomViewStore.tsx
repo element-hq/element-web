@@ -552,7 +552,7 @@ export class RoomViewStore extends EventEmitter {
         const joinOpts: IJoinRoomOpts = {
             viaServers,
             acceptSharedHistory: true,
-            ...(payload.opts ?? {}),
+            ...payload.opts,
         };
         try {
             const cli = MatrixClientPeg.safeGet();

@@ -37,6 +37,7 @@ import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomCo
 import { untilDispatch } from "../../../test-utils/utilities.ts";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext.ts";
 import { type ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
+import { SDKContext } from "../../../../src/contexts/SDKContext.ts";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -73,7 +74,11 @@ describe("ThreadView", () => {
     }
 
     async function getComponent(initialEvent?: MatrixEvent): Promise<RenderResult> {
-        const renderResult = render(<TestThreadView initialEvent={initialEvent} />);
+        const renderResult = render(<TestThreadView initialEvent={initialEvent} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
 
         await waitFor(() => {
             expect(() => getByTestId(renderResult.container, "spinner")).toThrow();

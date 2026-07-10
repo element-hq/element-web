@@ -798,7 +798,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
 
         // Walk back up the tree to find all parents of the direct matches to show their place in the hierarchy
         const visited = new Set<string>();
-        const queue = [...directMatches.map((r) => r.room_id)];
+        const queue = directMatches.map((r) => r.room_id);
         while (queue.length) {
             const roomId = queue.pop()!;
             visited.add(roomId);

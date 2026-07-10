@@ -73,7 +73,7 @@ export default class PasswordReset {
     /**
      * Checks if the email link has been clicked by attempting to change the password
      * for the mxid linked to the email.
-     * @return {Promise} Resolves if the password was reset. Rejects with an object
+     * @returns {Promise} Resolves if the password was reset. Rejects with an object
      * with a "message" property which contains a human-readable message detailing why
      * the reset failed, e.g. "There is no mapped matrix user ID for the given email address".
      */

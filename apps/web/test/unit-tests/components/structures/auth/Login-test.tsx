@@ -9,22 +9,26 @@ import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
 import fetchMock from "@fetch-mock/jest";
-import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import {
+    OAUTH_AWARE_PREFERRED_FLOW_FIELD,
+    IdentityProviderBrand,
+    type ValidatedAuthMetadata,
+    OAuth2Error,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
-import { OidcError } from "matrix-js-sdk/src/oidc/error";
 
 import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
 import Login from "../../../../../src/components/structures/auth/Login";
 import type BasePlatform from "../../../../../src/BasePlatform";
-import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
-import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
+import * as registerClientUtils from "../../../../../src/utils/oauth/registerClient";
+import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth";
 import { ModuleApi } from "../../../../../src/modules/Api.ts";
 
 jest.useRealTimers();
 
-const oidcStaticClientsConfig = {
+const oauthStaticClientsConfig = {
     "https://staticallyregisteredissuer.org/": {
         client_id: "static-clientId-123",
     },
@@ -42,7 +46,7 @@ describe("Login", function () {
         SdkConfig.put({
             brand: "test-brand",
             disable_custom_urls: true,
-            oidc_static_clients: oidcStaticClientsConfig,
+            oidc_static_clients: oauthStaticClientsConfig,
         });
         mockClient.login.mockClear().mockResolvedValue({
             access_token: "TOKEN",
@@ -72,7 +76,7 @@ describe("Login", function () {
     function getRawComponent(
         hsUrl = "https://matrix.org",
         isUrl = "https://vector.im",
-        delegatedAuthentication?: OidcClientConfig,
+        delegatedAuthentication?: ValidatedAuthMetadata,
     ) {
         return (
             <Login
@@ -84,7 +88,7 @@ describe("Login", function () {
         );
     }
 
-    function getComponent(hsUrl?: string, isUrl?: string, delegatedAuthentication?: OidcClientConfig) {
+    function getComponent(hsUrl?: string, isUrl?: string, delegatedAuthentication?: ValidatedAuthMetadata) {
         return render(getRawComponent(hsUrl, isUrl, delegatedAuthentication));
     }
 
@@ -269,7 +273,7 @@ describe("Login", function () {
             flows: [
                 {
                     type: "m.login.sso",
-                    [DELEGATED_OIDC_COMPATIBILITY.name]: true,
+                    [OAUTH_AWARE_PREFERRED_FLOW_FIELD.name]: true,
                 },
                 {
                     type: "m.login.password",
@@ -393,7 +397,7 @@ describe("Login", function () {
         const hsUrl = "https://matrix.org";
         const isUrl = "https://vector.im";
         const issuer = "https://test.com/";
-        const delegatedAuth = makeDelegatedAuthConfig(issuer);
+        const delegatedAuth = makeDelegatedAuthMetadata(issuer);
         beforeEach(() => {
             jest.spyOn(logger, "error");
         });
@@ -402,9 +406,9 @@ describe("Login", function () {
             jest.spyOn(logger, "error").mockRestore();
         });
 
-        it("should attempt to register oidc client", async () => {
+        it("should attempt to register oauth client", async () => {
             // dont mock, spy so we can check config values were correctly passed
-            jest.spyOn(registerClientUtils, "getOidcClientId");
+            jest.spyOn(registerClientUtils, "getOAuthClientId");
             fetchMock.post(delegatedAuth.registration_endpoint!, { status: 500 });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
@@ -413,7 +417,7 @@ describe("Login", function () {
             // tried to register
             expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             // called with values from config
-            expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(delegatedAuth, oidcStaticClientsConfig);
+            expect(registerClientUtils.getOAuthClientId).toHaveBeenCalledWith(delegatedAuth, oauthStaticClientsConfig);
         });
 
         it("should fallback to normal login when client registration fails", async () => {
@@ -425,8 +429,8 @@ describe("Login", function () {
             // tried to register
             expect(fetchMock).toHaveFetched(delegatedAuth.registration_endpoint);
             expect(logger.error).toHaveBeenCalledWith(
-                "Failed to get oidc native flow",
-                new Error(OidcError.DynamicRegistrationFailed),
+                "Failed to get OAuth2 native flow",
+                new Error(OAuth2Error.DynamicRegistrationFailed),
             );
 
             // continued with normal setup
@@ -436,7 +440,7 @@ describe("Login", function () {
         });
 
         // short term during active development, UI will be added in next PRs
-        it("should show continue button when oidc native flow is correctly configured", async () => {
+        it("should show continue button when oauth native flow is correctly configured", async () => {
             fetchMock.post(delegatedAuth.registration_endpoint!, { client_id: "abc123" });
             getComponent(hsUrl, isUrl, delegatedAuth);
 

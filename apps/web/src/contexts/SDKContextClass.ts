@@ -22,7 +22,6 @@ import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
-import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
 import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
@@ -70,7 +69,6 @@ export class SDKContextClass {
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
     protected _UserProfilesStore?: UserProfilesStore;
-    protected _OidcClientStore?: OidcClientStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
     protected _Notifier?: Notifier;
@@ -97,7 +95,7 @@ export class SDKContextClass {
 
     public get legacyCallHandler(): LegacyCallHandler {
         if (!this._LegacyCallHandler) {
-            this._LegacyCallHandler = LegacyCallHandler.instance;
+            this._LegacyCallHandler = new LegacyCallHandler(this);
         }
         return this._LegacyCallHandler;
     }
@@ -164,7 +162,6 @@ export class SDKContextClass {
     public get typingStore(): TypingStore {
         if (!this._TypingStore) {
             this._TypingStore = new TypingStore(this);
-            window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
     }
@@ -179,18 +176,6 @@ export class SDKContextClass {
         }
 
         return this._UserProfilesStore;
-    }
-
-    public get oidcClientStore(): OidcClientStore {
-        if (!this.client) {
-            throw new Error("Unable to create OidcClientStore without a client");
-        }
-
-        if (!this._OidcClientStore) {
-            this._OidcClientStore = new OidcClientStore(this.client);
-        }
-
-        return this._OidcClientStore;
     }
 
     // This is getting increasingly tenuous to have here but we still have class components so it's
@@ -219,7 +204,6 @@ export class SDKContextClass {
 
     public onLoggedOut(): void {
         this._UserProfilesStore = undefined;
-        this._OidcClientStore = undefined;
         this._client = undefined;
     }
 }

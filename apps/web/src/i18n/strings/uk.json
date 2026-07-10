@@ -1531,7 +1531,6 @@
             "required_msc_support": "Потрібно MSC4429 (Оновлення профілів для Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Використовувати розширений текст замість розмітки в редакторі повідомлень.",
-        "group_calls": "Нові можливості групових викликів",
         "group_developer": "Розробка",
         "group_encryption": "Шифрування",
         "group_experimental": "Експериментально",
@@ -2990,7 +2989,6 @@
             "audio_output": "Звуковий вивід",
             "audio_output_empty": "Звуковий вивід не виявлено",
             "auto_gain_control": "Авторегулювання підсилення",
-            "connection_section": "З'єднання",
             "dialog_title": "<strong>Налаштування:</strong> Голос і відео",
             "echo_cancellation": "Пригнічення відлуння",
             "echo_cancellation_description": "Прибирає відлуння з мікрофонного вводу під час викликів. Це налаштування також застосовується до Element Call.",

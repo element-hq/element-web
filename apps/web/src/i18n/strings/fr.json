@@ -990,8 +990,8 @@
             "title": "Nouvelle méthode de récupération",
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
-        "pinned_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b> a été réinitialisée.<a>En savoir plus</a>",
-        "pinned_identity_changed_no_displayname": "L' identité numérique de <b>%(userId)s</b> a été réinitialisée.<a>En savoir plus</a>",
+        "pinned_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
+        "pinned_identity_changed_no_displayname": "L' identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase de sécurité et clé de sécurité pour les messages sécurisés ont été supprimées.",
             "description_2": "Si vous l’avez fait accidentellement, vous pouvez configurer les messages sécurisés sur cette session ce qui re-chiffrera l’historique des messages de cette session avec une nouvelle méthode de récupération.",
@@ -1103,7 +1103,7 @@
         },
         "verification_requested_toast_title": "Vérification requise",
         "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
-        "verified_identity_changed_no_displayname": "L'identité de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus </a>",
+        "verified_identity_changed_no_displayname": "L'identité numérique de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus</a>",
         "verify_toast_description": "À compter de fin octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
         "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
@@ -1535,7 +1535,6 @@
             "required_msc_support": "Nécessite MSC4429 (Mises à jour de profil pour Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Utilise le texte formaté au lieu de Markdown dans le compositeur de message.",
-        "group_calls": "Nouvelle expérience d’appel de groupe",
         "group_developer": "Développeur",
         "group_encryption": "Chiffrement",
         "group_experimental": "Expérimental",
@@ -2957,6 +2956,7 @@
         "show_nsfw_content": "Afficher le contenu sensible (NSFW)",
         "show_read_receipts": "Afficher les accusés de lecture envoyés par les autres utilisateurs",
         "show_redaction_placeholder": "Afficher les messages supprimés",
+        "show_sections": "Afficher les sections",
         "show_stickers_button": "Afficher le bouton des autocollants",
         "show_typing_notifications": "Afficher les notifications de saisie",
         "showbold": "Afficher toute l'activité dans la liste des salons (points ou nombre de messages non lus)",
@@ -2993,7 +2993,6 @@
             "audio_output": "Sortie audio",
             "audio_output_empty": "Aucune sortie audio détectée",
             "auto_gain_control": "Contrôle automatique du gain",
-            "connection_section": "Connexion",
             "dialog_title": "<strong>Paramètres : </strong> Audio et vidéo",
             "echo_cancellation": "Annulation d’écho",
             "echo_cancellation_description": "Supprime l'écho de votre microphone pendant les appels. Ce paramètre s'applique également à Element Call.",

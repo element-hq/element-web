@@ -193,6 +193,16 @@
         },
         "unread_messages": "Messages non lus"
     },
+    "status": {
+        "set_status": {
+            "away": "Absent",
+            "be_right_back": "Je reviens tout de suite",
+            "focus_time": "Temps de Concentration",
+            "in_a_meeting": "En réunion",
+            "on_the_road": "Sur la route",
+            "set_status_prompt": "Quel est votre statut ?"
+        }
+    },
     "terms": {
         "tac_button": "Voir les conditions générales"
     },

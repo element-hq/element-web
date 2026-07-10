@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export * from "./CallStartedTile/CallStartedTileView";
-export * from "./CallDeclinedTile/CallDeclinedTileView";
-export * from "./common/types";
+export * from "./tombstone/room/RoomTombstoneCallTileView";
+export * from "./tombstone/dm/DmTombstoneCallTileView";
+export * from "./RootCallTileView";
+export * from "./common";

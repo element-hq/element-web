@@ -269,7 +269,7 @@ describe("WebPlatform", () => {
         expect(spy).toHaveBeenCalledWith(expect.anything(), { bgColor: "#f00" });
     });
 
-    describe("getOidcCallbackUrl()", () => {
+    describe("getOAuthCallbackUrl()", () => {
         it("should not include the 'updated' query param in the redirect URI", () => {
             Object.defineProperty(window, "location", {
                 value: {
@@ -280,7 +280,7 @@ describe("WebPlatform", () => {
                 writable: true,
             });
             const platform = new WebPlatform();
-            const url = platform.getOidcCallbackUrl();
+            const url = platform.getOAuthCallbackUrl();
 
             expect(url.searchParams.has("updated")).toBe(false);
             expect(url.searchParams.get("no_universal_links")).toEqual("true");
