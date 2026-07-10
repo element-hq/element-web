@@ -50,7 +50,7 @@ export default class EditorModel {
     private transformCallback: TransformCallback | null = null;
 
     /**
-     * Returns the plain text parts of the editor content only (excludes mentions)
+     * Returns the plain text parts of the editor content only (skipping mentions)
      */
     public get contentPlainText(): string {
         return this.serializeParts()
