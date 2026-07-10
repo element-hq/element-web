@@ -6,7 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk/src/matrix";
-import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import {
+    type MessageComposerUrlPreviewSnapshotEntryLoaded,
+    type MessageComposerUrlPreviewSnapshot,
+} from "@element-hq/web-shared-components";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
@@ -110,14 +113,18 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
         };
     }
 }
+
+// Attaches URL preview bundle to message event (MSC4095)
 export function attachUrlPreviews(
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
 ): void {
     if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
 
-    if (urlPreviewSnapshot.previews.length) {
-        content["com.beeper.linkpreviews"] = urlPreviewSnapshot.previews.map((preview) => {
+    const bundle = urlPreviewSnapshot.entries
+        .filter((entry) => entry.include && entry.status === "loaded")
+        .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview)
+        .map((preview) => {
             return {
                 "matched_url": preview.link,
                 "og:url": preview.ogUrl,
@@ -130,5 +137,8 @@ export function attachUrlPreviews(
                 "matrix:image:size": preview.image?.fileSize,
             };
         });
+
+    if (bundle.length) {
+        content["com.beeper.linkpreviews"] = bundle;
     }
 }
