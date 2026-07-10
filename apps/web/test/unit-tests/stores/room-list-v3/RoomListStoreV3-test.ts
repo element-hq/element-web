@@ -640,10 +640,10 @@ describe("RoomListStoreV3", () => {
                 // Let's say 8, 27 are unread
                 jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
-                        // This should be used, because showbold is off
+                        // This should not be used
                         hasUnreadCount: false,
 
-                        // This should not be used
+                        // This should be used, because showbold is on
                         hasAnyNotificationOrActivity: [rooms[8], rooms[27]].includes(room),
                     } as unknown as RoomNotificationState;
                     return state;
@@ -1167,6 +1167,7 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                 const state = {
                     hasUnreadCount: room === rooms[7],
+                    hasAnyNotificationOrActivity: room === rooms[7],
                 } as unknown as RoomNotificationState;
                 return state;
             });
@@ -1191,6 +1192,7 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                 const state = {
                     hasUnreadCount: room === rooms[3],
+                    hasAnyNotificationOrActivity: room === rooms[3],
                 } as unknown as RoomNotificationState;
                 return state;
             });
