@@ -49,6 +49,9 @@ export default class EditorModel {
     private autoCompletePartCount = 0;
     private transformCallback: TransformCallback | null = null;
 
+    /**
+     * Returns the plain text parts of the editor content only (excludes mentions)
+     */
     public get contentPlainText(): string {
         return this.serializeParts()
             .filter((part) => part.type === Type.Plain)
