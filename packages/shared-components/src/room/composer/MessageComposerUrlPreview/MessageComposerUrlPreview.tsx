@@ -14,10 +14,36 @@ import styles from "./MessageComposerUrlPreview.module.css";
 import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 
+export interface MessageComposerUrlPreviewSnapshotEntryLoaded {
+    status: "loaded";
+    preview: UrlPreview;
+}
+
+export interface MessageComposerUrlPreviewSnapshotEntryLoading {
+    status: "loading";
+}
+
+export interface MessageComposerUrlPreviewSnapshotEntryFailed {
+    status: "failed";
+}
+
+export type MessageComposerUrlPreviewSnapshotEntryState =
+    | MessageComposerUrlPreviewSnapshotEntryFailed
+    | MessageComposerUrlPreviewSnapshotEntryLoaded
+    | MessageComposerUrlPreviewSnapshotEntryLoading;
+
+/**
+ * An entry in the URL preview box
+ */
+export type MessageComposerUrlPreviewSnapshotEntry = MessageComposerUrlPreviewSnapshotEntryState & {
+    include: boolean;
+    matched_url: string;
+};
+
 /** Snapshot data for rendering a URL preview attached to the composer. */
 export interface MessageComposerUrlPreviewSnapshot {
     /** URL preview to render. */
-    previews: UrlPreview[];
+    entries: MessageComposerUrlPreviewSnapshotEntry[];
     /** Content of the composer when the snapshot is computed */
     content: string;
 }
@@ -38,27 +64,31 @@ export interface MessageComposerUrlPreviewProps {
  * MessageComposerUrlPreviewView renders a preview of all previewable URLs above the messasge composer.
  */
 export function MessageComposerUrlPreviewView({ vm, className }: MessageComposerUrlPreviewProps): JSX.Element | null {
-    const { previews } = useViewModel(vm);
-    if (previews.length === 0) {
+    const { entries } = useViewModel(vm);
+    if (entries.length === 0) {
         return null;
     }
 
     // Show only the first preview to revert back to previous behaviour
     // But have previews fetch all URL previews in the message text
-    const previewViews = previews.slice(0, 1).map((preview) => (
-        <div key={preview.link} className={classNames(className, styles.container)}>
-            <div>
-                {preview?.image?.imageThumb && (
-                    <img className={styles.image} src={preview.image?.imageThumb} alt={preview.image.alt} />
-                )}
-                <div className={styles.text}>
-                    <LinkSiteName {...preview} />
-                    <LinkTitle {...preview} />
-                    <Text className={styles.description}>{preview?.description}</Text>
+    const previewViews = entries
+        .slice(0, 1)
+        .filter((entry) => entry.status === "loaded")
+        .map((entry) => entry.preview)
+        .map((preview) => (
+            <div key={preview.link} className={classNames(className, styles.container)}>
+                <div>
+                    {preview?.image?.imageThumb && (
+                        <img className={styles.image} src={preview.image?.imageThumb} alt={preview.image.alt} />
+                    )}
+                    <div className={styles.text}>
+                        <LinkSiteName {...preview} />
+                        <LinkTitle {...preview} />
+                        <Text className={styles.description}>{preview?.description}</Text>
+                    </div>
                 </div>
             </div>
-        </div>
-    ));
+        ));
 
     return <>{previewViews}</>;
 }

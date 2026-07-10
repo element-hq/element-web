@@ -64,7 +64,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
     it("should return empty list when preview is not visible", async () => {
         const { vm, client } = getViewModel({ visible: false });
         await vm.updateWithText({ content: "https://example.org", debounced: false });
-        expect(vm.getSnapshot().previews).toHaveLength(0);
+        expect(vm.getSnapshot().entries).toHaveLength(0);
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
 
@@ -72,7 +72,7 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockRejectedValue(new Error("Forced test failure"));
         await vm.updateWithText({ content: "https://example.org", debounced: false });
-        expect(vm.getSnapshot().previews).toHaveLength(0);
+        expect(vm.getSnapshot().entries).toHaveLength(0);
     });
 
     it("should use all URLs with a valid preview when multiple are given", async () => {
@@ -81,8 +81,8 @@ describe("MessageComposerUrlPreviewViewModel", () => {
             .mockRejectedValueOnce(new Error("First URL failed"))
             .mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText({ content: "https://example.org/one https://example.org/two", debounced: false });
-        expect(vm.getSnapshot().previews[0]?.link).toEqual("https://example.org/two");
-        expect(vm.getSnapshot().previews).toHaveLength(1);
+        expect(vm.getSnapshot().entries[0]?.matched_url).toEqual("https://example.org/two");
+        expect(vm.getSnapshot().entries).toHaveLength(1);
     });
 
     it("should not re-fetch when text changes but the URL set does not", async () => {
@@ -107,18 +107,18 @@ describe("MessageComposerUrlPreviewViewModel", () => {
         const { vm, client } = getViewModel();
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText({ content: "https://example.org", debounced: false });
-        expect(vm.getSnapshot().previews).not.toHaveLength(0);
+        expect(vm.getSnapshot().entries).not.toHaveLength(0);
         await vm.updateUrlPreviewVisible(false);
-        expect(vm.getSnapshot().previews).toHaveLength(0);
+        expect(vm.getSnapshot().entries).toHaveLength(0);
     });
 
     it("should restore preview when made visible again", async () => {
         const { vm, client } = getViewModel({ visible: false });
         client.getUrlPreview.mockResolvedValue(BASIC_PREVIEW_OGDATA);
         await vm.updateWithText({ content: "https://example.org", debounced: false });
-        expect(vm.getSnapshot().previews).toHaveLength(0);
+        expect(vm.getSnapshot().entries).toHaveLength(0);
         await vm.updateUrlPreviewVisible(true);
-        expect(vm.getSnapshot().previews).not.toHaveLength(0);
+        expect(vm.getSnapshot().entries).not.toHaveLength(0);
     });
 
     it("should preview a URL with media", async () => {
