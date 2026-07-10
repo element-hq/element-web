@@ -3,7 +3,7 @@
 # with broader compatibility, down to Debian bullseye & Ubuntu focal.
 
 # PNPM source
-FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:11.10.0@sha256:9a6eb06d5f861d830fe27d85a91415e60527fa45ec45b52ee43c92a8aaf3bf8a AS pnpm
+FROM ghcr.io/pnpm/pnpm:11.10.0@sha256:9a6eb06d5f861d830fe27d85a91415e60527fa45ec45b52ee43c92a8aaf3bf8a AS pnpm
 
 FROM rust:bullseye@sha256:21d112adb6ab370d39eef8f861f10b42342419b9569e7a05dac15e19eb65a3b4
 
