@@ -42,8 +42,8 @@ export class RoomOngoingCallTileViewModel
             throw new Error(`No call in room ${props.roomId}`);
         }
         const totalParticipants = call.participants.size;
-        const isCallIgnored = isCallDeclinedByOwnUser(props.mxEvent, props.getRelationsForEvent, props.cli);
-        super(props, { totalParticipants, isCallIgnored });
+        const isCallDeclined = isCallDeclinedByOwnUser(props.mxEvent, props.getRelationsForEvent, props.cli);
+        super(props, { totalParticipants, isCallIgnored: isCallDeclined });
 
         // When a relation is added to the event, recompute the state.
         this.disposables.trackListener(props.mxEvent, MatrixEventEvent.RelationsCreated, () => {
