@@ -14,7 +14,10 @@ import { EventEmitter } from "node:stream";
 import { mkEvent, mkMessage, mkRoomMember, mkStubRoom, stubClient } from "../../../../../../test/test-utils";
 import { getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "./call-mocks";
 import { RootCallTileViewModel } from "./RootCallTileViewModel";
-import { type LatestRtcNotificationEventStore } from "../../../../../stores/LatestRtcNotificationEventStore";
+import {
+    LatestRtcNotificationEventUpdate,
+    type LatestRtcNotificationEventStore,
+} from "../../../../../stores/LatestRtcNotificationEventStore";
 
 function getEvents(): MatrixEvent[] {
     const message1 = mkMessage({
@@ -126,5 +129,21 @@ describe("RootCallTileViewModel", () => {
         ]);
         const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-room");
+    });
+
+    it("recomputes snapshot on event from LatestRtcNotificationEventUpdate", () => {
+        // When there's an ongoing call
+        const { callStore, cli, mxEvent, latestRtcNotificationEventStore } = getMocked([
+            "@alice:m.org",
+            "@bob:m.org",
+            "@jack:m.org",
+        ]);
+        const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
+        expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-room");
+
+        // Tile type should update on event
+        latestRtcNotificationEventStore.getLatestEventId = () => "new-event";
+        latestRtcNotificationEventStore.emit(LatestRtcNotificationEventUpdate, "!my-room:m.org", "new-event");
+        expect(vm.getSnapshot().tileType).toStrictEqual("ongoing-call-room");
     });
 });
