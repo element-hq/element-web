@@ -65,8 +65,8 @@ const SpacePreferencesDialog: React.FC<IProps> = ({ space, onFinished }) => {
         new Tab(
             SpacePreferenceTab.Appearance,
             _td("common|appearance"),
-            <VisibilityOnIcon />,
-            <SpacePreferencesAppearanceTab space={space} />,
+            <VisibilityOnIcon key={SpacePreferenceTab.Appearance} />,
+            <SpacePreferencesAppearanceTab key={SpacePreferenceTab.Appearance} space={space} />,
         ),
     ];
 

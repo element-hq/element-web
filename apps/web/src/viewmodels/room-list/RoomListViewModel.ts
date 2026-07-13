@@ -34,7 +34,6 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
@@ -43,6 +42,7 @@ import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../store
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -58,6 +58,7 @@ interface StickyRoomPosition {
 
 interface RoomListViewModelProps {
     client: MatrixClient;
+    roomViewStore: RoomViewStore;
     spaceStore: SpaceStore;
 }
 
@@ -576,7 +577,7 @@ export class RoomListViewModel
      * Migrated from useRoomListNavigation hook.
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
-        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        const currentRoomId = this.props.roomViewStore.getRoomId();
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
@@ -754,7 +755,7 @@ export class RoomListViewModel
     ): Promise<void> {
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
-        const roomId = roomIdOverride ?? SDKContextClass.instance.roomViewStore.getRoomId();
+        const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
 
         // Apply sticky room logic to keep selected room at same position within its section
         const stickySections = this.applyStickyRoom(isRoomChange, roomId);

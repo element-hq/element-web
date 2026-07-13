@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useContext } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
@@ -22,6 +22,7 @@ import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGr
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     // a list of strings to be highlighted in the results
@@ -39,7 +40,10 @@ interface IProps {
  * Creates and auto-disposes the DateSeparatorViewModel for search result rendering.
  */
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
+    const sdkContext = useContext(SDKContext);
+    const vm = useCreateAutoDisposedViewModel(
+        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
+    );
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 

@@ -157,14 +157,12 @@ export class SDKContextClass {
         if (!this._SpaceStore) {
             this._SpaceStore = new SpaceStore(defaultDispatcher, this);
             this._SpaceStore.start();
-            window.mxSpaceStore = this._SpaceStore;
         }
         return this._SpaceStore;
     }
     public get typingStore(): TypingStore {
         if (!this._TypingStore) {
             this._TypingStore = new TypingStore(this);
-            window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
     }

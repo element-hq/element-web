@@ -28,7 +28,12 @@ export function RoomListView(): JSX.Element {
 
     // Create and auto-dispose ViewModel instance
     const vm = useCreateAutoDisposedViewModel(
-        () => new RoomListViewModel({ client: sdkContext.client!, spaceStore: sdkContext.spaceStore }),
+        () =>
+            new RoomListViewModel({
+                client: sdkContext.client!,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            }),
     );
 
     // Render avatar for each room - memoized to prevent re-renders
