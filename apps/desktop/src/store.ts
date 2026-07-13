@@ -447,13 +447,27 @@ class Store extends ElectronStore<StoreData> {
         console.info("Performing safeStorage migration");
         const data = this.get("safeStorage");
         if (data) {
-            for (const key in data) {
-                try {
-                    this.set(secrets.getKey(key), secrets.get(key));
-                } catch (e) {
-                    // Skip secrets that cannot be decrypted rather than overwriting them with undefined.
-                    console.error(`Skipping migration of undecryptable secret '${key}'`, e);
+            // Decrypt everything up front: if any secret cannot be decrypted we must not migrate.
+            // Recording "plaintext" while a secret is still ciphertext would make the next launch
+            // re-encrypt that ciphertext as though it were the secret itself, silently corrupting it
+            // and defeating the do-not-overwrite protection in isSecretUndecryptable.
+            const decrypted = new Map<string, string | undefined>();
+            try {
+                for (const key in data) {
+                    decrypted.set(secrets.getKey(key), secrets.get(key));
                 }
+            } catch (e) {
+                // Abort the migration with the data untouched and stick with the basic_text backend
+                // (the same escape hatch as a failed backend change) so the app keeps working and no
+                // secret is destroyed or corrupted.
+                console.error("Aborting safeStorage migration: a secret cannot be decrypted", e);
+                this.set("safeStorageBackendOverride", true);
+                this.delete("safeStorageBackendMigrate");
+                relaunchApp();
+                return;
+            }
+            for (const [key, value] of decrypted) {
+                if (value !== undefined) this.set(key, value);
             }
             this.recordSafeStorageBackend("plaintext");
         }
@@ -486,10 +500,12 @@ class Store extends ElectronStore<StoreData> {
     }
 
     /**
-     * Returns true if a secret is stored for the key but cannot currently be decrypted.
+     * Returns true if a secret is stored for the key but cannot currently be read and decrypted.
      *
      * Used to avoid destroying a recoverable secret by overwriting it with a freshly-generated one
-     * when the keychain is only temporarily unavailable. See element-web#32521 / #32715.
+     * when the keychain is only temporarily unavailable. Fails closed: any error while reading an
+     * existing secret counts as undecryptable, so callers never overwrite a secret this method
+     * cannot prove is safe to replace. See element-web#32521 / #32715.
      *
      * @param key The string key name.
      */
@@ -500,7 +516,10 @@ class Store extends ElectronStore<StoreData> {
             this.secrets!.get(key);
             return false;
         } catch (e) {
-            return e instanceof SafeStorageDecryptionError;
+            if (!(e instanceof SafeStorageDecryptionError)) {
+                console.error("Unexpected error reading existing secret; treating it as undecryptable", e);
+            }
+            return true;
         }
     }
 

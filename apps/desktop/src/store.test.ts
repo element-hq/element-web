@@ -1,12 +1,13 @@
 /*
 Copyright 2026 New Vector Ltd.
+Copyright 2026 hayaksi1
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, describe, it, beforeAll, beforeEach, vi } from "vitest";
-import { safeStorage } from "electron";
+import { app, safeStorage } from "electron";
 
 import Store, { SafeStorageDecryptionError } from "./store.js";
 
@@ -121,6 +122,67 @@ describe("Store secret encryption (safeStorage)", () => {
                 throw new Error("keychain unavailable");
             });
             await expect(store.isSecretUndecryptable(KEY)).resolves.toBe(true);
+        });
+
+        it("fails closed: is true when reading an existing secret fails with an unexpected error", async () => {
+            await store.setSecret(KEY, "s3cr3t");
+            // An error from the storage layer itself, not a decryption failure: the guard must not
+            // report the secret as safe to overwrite when it cannot prove it is.
+            const getSpy = vi.spyOn(store, "get").mockImplementationOnce(() => {
+                throw new Error("storage layer exploded");
+            });
+            try {
+                await expect(store.isSecretUndecryptable(KEY)).resolves.toBe(true);
+            } finally {
+                getSpy.mockRestore();
+            }
+        });
+    });
+
+    describe("basic_text -> plaintext migration", () => {
+        // The private migration step normally runs via prepareSafeStorage on a relaunch with
+        // safeStorageBackendMigrate set; drive it directly to keep the singleton harness simple.
+        const migrate = (): void =>
+            (store as unknown as { migrateBasicTextToPlaintext(): void }).migrateBasicTextToPlaintext();
+
+        const GOOD_CIPHERTEXT = Buffer.from(`${PREFIX}goodsecret`, "utf8").toString("base64");
+        const BAD_CIPHERTEXT = Buffer.from("not-decryptable", "utf8").toString("base64");
+
+        beforeEach(() => {
+            backing.set("safeStorageBackend", "basic_text");
+            backing.set("safeStorageBackendMigrate", true);
+        });
+
+        it("migrates all secrets to plaintext and records the plaintext backend", () => {
+            backing.set("safeStorage", { good: GOOD_CIPHERTEXT });
+            backing.set("safeStorage.good", GOOD_CIPHERTEXT);
+
+            migrate();
+
+            expect(backing.get("safeStorage.good")).toBe("goodsecret");
+            expect(backing.get("safeStorageBackend")).toBe("plaintext");
+            expect(backing.get("safeStorageBackendOverride")).toBeUndefined();
+            expect(backing.has("safeStorageBackendMigrate")).toBe(false);
+            expect(app.relaunch).toHaveBeenCalled();
+        });
+
+        it("defers the whole migration when any secret cannot be decrypted", () => {
+            backing.set("safeStorage", { good: GOOD_CIPHERTEXT, bad: BAD_CIPHERTEXT });
+            backing.set("safeStorage.good", GOOD_CIPHERTEXT);
+            backing.set("safeStorage.bad", BAD_CIPHERTEXT);
+
+            migrate();
+
+            // Nothing may be rewritten: recording "plaintext" while `bad` is still ciphertext would
+            // make the next launch re-encrypt the ciphertext as though it were the secret itself,
+            // silently corrupting it and defeating the do-not-overwrite protection.
+            expect(backing.get("safeStorage.good")).toBe(GOOD_CIPHERTEXT);
+            expect(backing.get("safeStorage.bad")).toBe(BAD_CIPHERTEXT);
+            expect(backing.get("safeStorageBackend")).toBe("basic_text");
+            // Sticks with the working basic_text backend instead of retrying the migration forever.
+            expect(backing.get("safeStorageBackendOverride")).toBe(true);
+            expect(backing.has("safeStorageBackendMigrate")).toBe(false);
+            expect(app.relaunch).toHaveBeenCalled();
         });
     });
 });
