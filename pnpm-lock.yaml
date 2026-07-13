@@ -324,7 +324,7 @@ importers:
         version: 3.24.0
       eslint-plugin-element-call:
         specifier: github:element-hq/element-call#livekit&path:/eslint
-        version: https://codeload.github.com/element-hq/element-call/tar.gz/3e5edd03a62f35419263726feecc45396a9d976e#path:/eslint
+        version: https://codeload.github.com/element-hq/element-call/tar.gz/f23eb965551ffb0fb4a8f4a80b58c4ea6376593d#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
         version: 10.4.6(eslint@8.57.1)(storybook@10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.14)(prettier@2.8.8)(react@19.2.7))(typescript@6.0.3)
@@ -444,8 +444,8 @@ importers:
         specifier: ^2.0.0
         version: 2.1.2
       electron:
-        specifier: 43.0.0
-        version: 43.0.0
+        specifier: 43.1.0
+        version: 43.1.0
       electron-builder:
         specifier: 26.15.3
         version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
@@ -622,7 +622,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/040fc6026befc58fcec2904c711a2372f51bad7e
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3c786b052fad94e2c4ec03d489c31e63e25ea363
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -8164,8 +8164,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@43.0.0:
-    resolution: {integrity: sha512-PV60GsWU6qufhuOhw3n+Yix3WPDcqDtBqE8orbEQGQGHEkgp9o/JCPgb7L4vIL0r1HnfPdqSRtboOTqbDkcFDQ==}
+  electron@43.1.0:
+    resolution: {integrity: sha512-DPfxpQLd4NL3BJ8DBxYAfmLUKKesF5Rx9dQx5FyczAP8bhOPScjHE48GArVeXu68LlAainuwkmQTQvdZwpIIAQ==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -8322,8 +8322,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/3e5edd03a62f35419263726feecc45396a9d976e#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/3e5edd03a62f35419263726feecc45396a9d976e}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/f23eb965551ffb0fb4a8f4a80b58c4ea6376593d#path:/eslint:
+    resolution: {gitHosted: true, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/f23eb965551ffb0fb4a8f4a80b58c4ea6376593d}
     version: 0.0.0
 
   eslint-plugin-storybook@10.4.6:
@@ -9906,8 +9906,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/040fc6026befc58fcec2904c711a2372f51bad7e:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/040fc6026befc58fcec2904c711a2372f51bad7e}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3c786b052fad94e2c4ec03d489c31e63e25ea363:
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3c786b052fad94e2c4ec03d489c31e63e25ea363}
     version: 41.9.0
     engines: {node: '>=22.0.0'}
 
@@ -20493,7 +20493,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@43.0.0:
+  electron@43.1.0:
     dependencies:
       '@electron-internal/extract-zip': 1.0.3
       '@electron/get': 5.0.0
@@ -20637,7 +20637,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/3e5edd03a62f35419263726feecc45396a9d976e#path:/eslint: {}
+  eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/f23eb965551ffb0fb4a8f4a80b58c4ea6376593d#path:/eslint: {}
 
   eslint-plugin-storybook@10.4.6(eslint@8.57.1)(storybook@10.4.6(@testing-library/dom@10.4.1)(@types/react@19.2.14)(prettier@2.8.8)(react@19.2.7))(typescript@6.0.3):
     dependencies:
@@ -22499,7 +22499,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/040fc6026befc58fcec2904c711a2372f51bad7e:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3c786b052fad94e2c4ec03d489c31e63e25ea363:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
