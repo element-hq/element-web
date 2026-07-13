@@ -300,7 +300,7 @@ export default class AppTile extends React.Component<IProps, IState> {
      * Set initial component state when the App wUrl (widget URL) is being updated.
      * Component props *must* be passed (rather than relying on this.props).
      * @param  {Object} newProps The new properties of the component
-     * @return {Object} Updated component state to be set with setState
+     * @returns {Object} Updated component state to be set with setState
      */
     private getNewState(newProps: IProps): IState {
         return {

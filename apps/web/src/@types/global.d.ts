@@ -66,8 +66,8 @@ declare global {
     // so we don't accidentally use the methods on NodeJS.Timeout - they only exist in a subset of environments.
     // The overload for clear{Interval,Timeout} is resolved as expected.
     // We use `ReturnType<typeof setTimeout>` in the code to be agnostic of if this definition gets loaded.
-    function setInterval(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
-    function setTimeout(handler: TimerHandler, timeout: number, ...arguments: any[]): number;
+    function setInterval(handler: TimerHandler, timeout: number, ...args: any[]): number;
+    function setTimeout(handler: TimerHandler, timeout: number, ...args: any[]): number;
 
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => Promise<void>;
