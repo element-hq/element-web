@@ -385,11 +385,13 @@ app.on("ready", async () => {
                 desktopCapturer
                     .getSources({ types: ["screen", "window"] })
                     .then((sources) => {
+                        // oxlint-disable-next-line promise/no-callback-in-promise
                         callback({ video: sources[0] });
                     })
                     .catch((err) => {
                         // If the user cancels the dialog an error occurs "Failed to get sources"
                         console.error("Wayland: failed to get user-selected source:", err);
+                        // oxlint-disable-next-line promise/no-callback-in-promise
                         callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
                     });
             } else {

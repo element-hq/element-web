@@ -17,9 +17,10 @@ import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
     type VirtualizedListContext,
+    GroupedVirtualizedList,
+    type GroupedVirtualizedListProps,
 } from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView, RoomListStickySectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";

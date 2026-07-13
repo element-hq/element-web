@@ -57,6 +57,7 @@ describe("<LoggedInView />", () => {
         setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         deleteExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(true),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     });
     const mediaHandler = new MediaHandler(mockClient);
     const mockSdkContext = new TestSDKContext();

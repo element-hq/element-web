@@ -16,7 +16,7 @@ type Fn<T> = () => Promise<T>;
  * @param fn function to memoize
  * @param deps React hooks dependencies for the function
  * @param initialValue initial value
- * @return tuple of cached value and refresh callback
+ * @returns tuple of cached value and refresh callback
  */
 export function useAsyncRefreshMemo<T>(fn: Fn<T>, deps: DependencyList, initialValue: T): [T, () => void];
 export function useAsyncRefreshMemo<T>(fn: Fn<T>, deps: DependencyList, initialValue?: T): [T | undefined, () => void];

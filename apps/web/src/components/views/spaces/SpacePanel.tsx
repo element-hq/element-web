@@ -25,11 +25,9 @@ import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } fr
 import classNames from "classnames";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
-    FavouriteSolidIcon,
     HomeSolidIcon,
     RoomIcon,
     VideoCallSolidIcon,
-    UserProfileSolidIcon,
     PlusIcon,
     ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -82,7 +80,6 @@ import { KeyboardShortcut } from "../settings/KeyboardShortcut";
 import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
 import { UserMenuViewModel } from "../../../viewmodels/menus/UserMenuViewModel.ts";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore.ts";
 
@@ -179,34 +176,6 @@ const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed
     );
 };
 
-const FavouritesButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
-    return (
-        <MetaSpaceButton
-            spaceKey={MetaSpace.Favourites}
-            selected={selected}
-            isPanelCollapsed={isPanelCollapsed}
-            label={getMetaSpaceName(MetaSpace.Favourites)}
-            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Favourites)}
-            size="32px"
-            icon={<FavouriteSolidIcon />}
-        />
-    );
-};
-
-const PeopleButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
-    return (
-        <MetaSpaceButton
-            spaceKey={MetaSpace.People}
-            selected={selected}
-            isPanelCollapsed={isPanelCollapsed}
-            label={getMetaSpaceName(MetaSpace.People)}
-            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.People)}
-            size="32px"
-            icon={<UserProfileSolidIcon />}
-        />
-    );
-};
-
 const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
     return (
         <MetaSpaceButton
@@ -287,8 +256,6 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
 
 const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
     [MetaSpace.Home]: HomeButton,
-    [MetaSpace.Favourites]: FavouritesButton,
-    [MetaSpace.People]: PeopleButton,
     [MetaSpace.Orphans]: OrphansButton,
     [MetaSpace.VideoRooms]: VideoRoomsButton,
 };
@@ -390,7 +357,8 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
 );
 
 const SpacePanel: React.FC = () => {
-    const client = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
+    const client = sdkContext.client!;
     const [dragging, setDragging] = useState(false);
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLDivElement>(null);
@@ -398,7 +366,6 @@ const SpacePanel: React.FC = () => {
         if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
         return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
-    const sdkContext = useContext(SDKContext);
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
         if (payload.action === Action.ToggleSpacePanel) {
@@ -413,7 +380,6 @@ const SpacePanel: React.FC = () => {
                 defaultDispatcher,
                 client,
                 isPanelCollapsed,
-                sdkContext.oidcClientStore.accountManagementEndpoint,
             ),
     );
 

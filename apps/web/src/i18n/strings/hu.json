@@ -1527,7 +1527,6 @@
             "required_msc_support": "MSC4429 szükséges (profilfrissítések a régi szinkronizáláshoz)"
         },
         "feature_wysiwyg_composer_description": "Szövegszerkesztő használata a Markdown formázás helyett az üzenet írásakor.",
-        "group_calls": "Új konferenciahívási élmény",
         "group_developer": "Fejlesztői",
         "group_encryption": "Titkosítás",
         "group_experimental": "Kísérleti",
@@ -2975,7 +2974,6 @@
             "audio_output": "Hangkimenet",
             "audio_output_empty": "Nem található hangkimenet",
             "auto_gain_control": "Automatikus hangerőszabályozás",
-            "connection_section": "Kapcsolat",
             "dialog_title": "<strong>Beállítások:</strong> Hang és videó",
             "echo_cancellation": "Visszhangcsillapítás",
             "echo_cancellation_description": "Eltávolítja a mikrofonbemenet visszhangját hívások közben. Ez a beállítás az Element Call funkcióra is vonatkozik.",

@@ -46,7 +46,7 @@ export interface EncryptedPickleKey {
  *
  * @param {string} userId The user ID who owns the pickle key.
  * @param {string} deviceId The device ID which owns the pickle key.
- * @return {Uint8Array} The additional data as a Uint8Array.
+ * @returns {Uint8Array} The additional data as a Uint8Array.
  */
 export function getPickleAdditionalData(userId: string, deviceId: string): Uint8Array<ArrayBuffer> {
     const additionalData = new Uint8Array(userId.length + deviceId.length + 1);

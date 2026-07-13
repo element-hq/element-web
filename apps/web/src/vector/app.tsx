@@ -34,7 +34,7 @@ import { RoomView } from "../components/structures/RoomView";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { ModuleNotificationDecoration } from "../modules/components/ModuleNotificationDecoration";
 import Login from "../Login.ts";
-import { startOidcLogin } from "../utils/oidc/authorize.ts";
+import { startOAuthLogin } from "../utils/oauth/authorize.ts";
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
@@ -44,7 +44,7 @@ function onTokenLoginCompleted(urlParams: URLParams, fragmentAfterLogin: string)
     const url = new URL(window.location.href);
 
     // if we did a token login, we're now left with the login token as query param in the url; clear it out
-    for (const param in { ...urlParams.legacy_sso, ...urlParams.oidc_query }) {
+    for (const param in { ...urlParams.legacy_sso }) {
         url.searchParams.delete(param);
     }
 
@@ -68,9 +68,9 @@ async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
         });
         const flows = await login.getFlows();
 
-        const nativeOidcFlow = flows.find((flow) => "clientId" in flow);
-        if (nativeOidcFlow && config.delegatedAuthentication) {
-            await startOidcLogin(config.delegatedAuthentication, nativeOidcFlow.clientId, config.hsUrl, config.isUrl);
+        const nativeOAuthFlow = flows.find((flow) => "clientId" in flow);
+        if (nativeOAuthFlow && config.delegatedAuthentication) {
+            await startOAuthLogin(config.delegatedAuthentication, nativeOAuthFlow.clientId, config.hsUrl, config.isUrl);
             return true;
         }
 
@@ -112,7 +112,7 @@ export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<Mat
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
-    const isReturningFromSso = !!urlParams.legacy_sso || !!urlParams.oidc_fragment || !!urlParams.oidc_query;
+    const isReturningFromSso = !!urlParams.legacy_sso || !!urlParams.oauth2;
     const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
