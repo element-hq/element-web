@@ -18,6 +18,7 @@ import {
     RoomStateEvent,
     RoomMember,
     type MatrixClient,
+    ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -831,6 +832,20 @@ describe("RoomHeader", () => {
 
             await waitFor(() => expect(screen.getByText("on a horse")).toBeInTheDocument());
             expect(screen.getByText("🐎")).toBeInTheDocument();
+        });
+
+        it("updates user status when it changes", async () => {
+            SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, true);
+            client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+            render(<RoomHeader room={room} />, getWrapper());
+
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐴", text: "is a horse" });
+            client.emit(ClientEvent.UserProfileUpdate, "@bob:example.org", { emoji: "🐴", text: "is a horse" });
+
+            await waitFor(() => expect(screen.getByText("is a horse")).toBeInTheDocument());
+            expect(screen.getByText("🐴")).toBeInTheDocument();
         });
 
         it("does not show the user status when the feature is disabled", async () => {
