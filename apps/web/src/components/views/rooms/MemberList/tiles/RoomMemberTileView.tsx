@@ -101,7 +101,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
             userLabel={vm.userLabel}
-            ariaLabel={name}
+            ariaLabel={props.isCallParticipant && !member.isInvite ? _t("member_list|in_call_label", { name }) : name}
             iconJsx={iconJsx}
             focused={props.focused}
             tabIndex={props.tabIndex}

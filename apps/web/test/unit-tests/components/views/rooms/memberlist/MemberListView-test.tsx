@@ -157,7 +157,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
             expect(preventDefaultSpy).toHaveBeenCalled();
         });
 
-        it("shows and hides the call icon when a member joins and leaves the room call", async () => {
+        it("should show and hide the call icon when a member joins and leaves the room call", async () => {
             const { root, roomSession, adminUsers } = rendered;
             const memberTile = root.container.querySelector(`[aria-label="${adminUsers[0].userId}"]`)!;
             expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
@@ -176,16 +176,19 @@ describe("MemberListView and MemberlistHeaderView", () => {
             expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
         });
 
-        it("shows one call icon for a member with multiple devices in the room call", async () => {
+        it("should show one call icon for a member with multiple devices in the room call", async () => {
             const userId = "@admin0:localhost";
-            const memberships = [{ userId }, { userId }] as CallMembership[];
+            const memberships = [
+                { userId, deviceId: "DEVICE_1", memberId: `${userId}:DEVICE_1` },
+                { userId, deviceId: "DEVICE_2", memberId: `${userId}:DEVICE_2` },
+            ] as CallMembership[];
             const { root, memberListRoom, client } = await renderMemberList(true, undefined, 2, memberships);
 
             expect(client.matrixRTC.getRoomSession).toHaveBeenCalledWith(memberListRoom);
             expect(root.container.querySelectorAll(".mx_RoomMemberTileView_callIcon")).toHaveLength(1);
             expect(
                 root.container
-                    .querySelector(`[aria-label="${userId}"]`)!
+                    .querySelector(`[aria-label="${userId}, in a call"]`)!
                     .querySelector(".mx_RoomMemberTileView_callIcon"),
             ).not.toBeNull();
             expect(
@@ -193,6 +196,23 @@ describe("MemberListView and MemberlistHeaderView", () => {
                     .querySelector('[aria-label="@default0:localhost"]')!
                     .querySelector(".mx_RoomMemberTileView_callIcon"),
             ).toBeNull();
+        });
+
+        it("should ignore call memberships and updates from other rooms", async () => {
+            const userId = "@admin0:localhost";
+            const otherRoomMembership = {
+                userId,
+                deviceId: "OTHER_ROOM_DEVICE",
+                memberId: `${userId}:OTHER_ROOM_DEVICE`,
+            } as CallMembership;
+            const { root, otherRoomSession } = await renderMemberList(true, undefined, 2, [], [otherRoomMembership]);
+            const memberTile = root.container.querySelector(`[aria-label="${userId}"]`)!;
+
+            expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
+            await act(async () => {
+                otherRoomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], [otherRoomMembership]);
+            });
+            expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
         });
     });
 

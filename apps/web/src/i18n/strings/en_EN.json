@@ -1684,6 +1684,7 @@
             "other": "%(count)s Members"
         },
         "filter_placeholder": "Search room members",
+        "in_call_label": "%(name)s, in a call",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
         "invited_label": "Invited",
         "list_title": "Member list",

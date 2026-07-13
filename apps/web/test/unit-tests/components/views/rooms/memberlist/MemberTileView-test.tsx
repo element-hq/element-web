@@ -115,7 +115,7 @@ describe("MemberTileView", () => {
             expect(container4).toHaveTextContent("Invited");
         });
 
-        it("renders a call icon alongside the member role", () => {
+        it("should render a call icon alongside the member role", () => {
             member.powerLevel = 100;
             const { container } = render(
                 <RoomMemberTileView
@@ -134,9 +134,10 @@ describe("MemberTileView", () => {
                 "fill",
                 "var(--cpd-color-icon-accent-primary)",
             );
+            expect(screen.getByRole("option")).toHaveAccessibleName(`${member.name}, in a call`);
         });
 
-        it("renders the call icon alongside the E2E status", async () => {
+        it("should render the call icon alongside the E2E status", async () => {
             mocked(matrixClient.getCrypto()!.getUserVerificationStatus).mockResolvedValue({
                 isCrossSigningVerified: jest.fn().mockReturnValue(false),
                 wasCrossSigningVerified: jest.fn().mockReturnValue(true),
@@ -157,7 +158,7 @@ describe("MemberTileView", () => {
             expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).not.toBeNull();
         });
 
-        it("does not render a call icon for an invited member", () => {
+        it("should not render a call icon for an invited member", () => {
             member.isInvite = true;
             const { container } = render(
                 <RoomMemberTileView

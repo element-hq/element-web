@@ -46,10 +46,12 @@ export type Rendered = {
     client: MatrixClient;
     root: RenderResult;
     memberListRoom: Room;
+    otherRoom: Room;
     adminUsers: RoomMember[];
     moderatorUsers: RoomMember[];
     defaultUsers: RoomMember[];
     roomSession: MatrixRTCSession;
+    otherRoomSession: MatrixRTCSession;
     reRender: () => Promise<void>;
 };
 
@@ -58,16 +60,22 @@ export async function renderMemberList(
     roomSetup?: (room: Room) => void,
     usersPerLevel: number = 2,
     callMemberships: CallMembership[] = [],
+    otherRoomCallMemberships: CallMembership[] = [],
 ): Promise<Rendered> {
     TestUtils.stubClient();
     const client = MatrixClientPeg.safeGet();
     client.hasLazyLoadMembersEnabled = () => false;
     const roomSession = new EventEmitter() as MatrixRTCSession;
     roomSession.memberships = callMemberships;
-    client.matrixRTC.getRoomSession = jest.fn().mockReturnValue(roomSession);
+    const otherRoomSession = new EventEmitter() as MatrixRTCSession;
+    otherRoomSession.memberships = otherRoomCallMemberships;
 
     // Make room
     const memberListRoom = createRoom(client);
+    const otherRoom = createRoom(client);
+    client.matrixRTC.getRoomSession = jest
+        .fn()
+        .mockImplementation((room: Room) => (room === memberListRoom ? roomSession : otherRoomSession));
     expect(memberListRoom.roomId).toBeTruthy();
 
     // Give the test an opportunity to make changes to room before first render
@@ -155,10 +163,12 @@ export async function renderMemberList(
         client,
         root,
         memberListRoom,
+        otherRoom,
         adminUsers,
         moderatorUsers,
         defaultUsers,
         roomSession,
+        otherRoomSession,
         reRender,
     };
 }

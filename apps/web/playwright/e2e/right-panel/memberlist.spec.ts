@@ -133,7 +133,7 @@ test.describe("Memberlist", () => {
 
         await app.viewRoomByName(ROOM_NAME);
         const memberlist = await app.toggleMemberlistPanel();
-        const callerTile = memberlist.locator(`.mx_MemberTileView[aria-label="Caller"]`);
+        const callerTile = memberlist.locator(`.mx_MemberTileView[aria-label="Caller, in a call"]`);
         const callIcon = callerTile.locator(".mx_RoomMemberTileView_callIcon");
         await expect(callIcon).toBeVisible();
         await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(1);
