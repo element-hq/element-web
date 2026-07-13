@@ -34,7 +34,7 @@ import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
-import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
+import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { TestSDKContext } from "../TestSDKContext";
 import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
@@ -60,7 +60,7 @@ const MockPosthogAnalytics = <jest.Mock<PosthogAnalytics>>(<unknown>PosthogAnaly
 jest.mock("../../../src/SlidingSyncManager");
 const MockSlidingSyncManager = <jest.Mock<SlidingSyncManager>>(<unknown>SlidingSyncManager);
 jest.mock("../../../src/stores/spaces/SpaceStore");
-const MockSpaceStore = <jest.Mock<SpaceStoreClass>>(<unknown>SpaceStoreClass);
+const MockSpaceStore = <jest.Mock<SpaceStore>>(<unknown>SpaceStore);
 
 // mock VoiceRecording because it contains all the audio APIs
 jest.mock("../../../src/audio/VoiceRecording", () => ({

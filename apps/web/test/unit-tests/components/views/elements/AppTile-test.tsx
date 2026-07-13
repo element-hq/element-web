@@ -24,7 +24,6 @@ import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-u
 import { Action } from "../../../../../src/dispatcher/actions";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
@@ -74,6 +73,8 @@ describe("AppTile", () => {
         r1 = new Room("r1", cli, "@name:example.com");
         r2 = new Room("r2", cli, "@name:example.com");
 
+        jest.spyOn(r1, "getPendingEvents").mockReturnValue([]);
+        jest.spyOn(r2, "getPendingEvents").mockReturnValue([]);
         jest.spyOn(cli, "getRoom").mockImplementation((roomId) => {
             if (roomId === "r1") return r1;
             if (roomId === "r2") return r2;
@@ -194,13 +195,11 @@ describe("AppTile", () => {
         );
 
         renderResult.rerender(
-            <MatrixClientContext.Provider value={cli}>
-                <RightPanel
-                    room={r2}
-                    resizeNotifier={resizeNotifier}
-                    permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
-                />
-            </MatrixClientContext.Provider>,
+            <RightPanel
+                room={r2}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
+            />,
         );
 
         expect(renderResult.queryByText("Example 1")).not.toBeInTheDocument();
@@ -278,13 +277,11 @@ describe("AppTile", () => {
             }),
         );
         renderResult.rerender(
-            <MatrixClientContext.Provider value={cli}>
-                <RightPanel
-                    room={r2}
-                    resizeNotifier={resizeNotifier}
-                    permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
-                />
-            </MatrixClientContext.Provider>,
+            <RightPanel
+                room={r2}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
+            />,
         );
 
         await waitFor(() => {

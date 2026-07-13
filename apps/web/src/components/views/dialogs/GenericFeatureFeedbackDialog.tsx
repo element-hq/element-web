@@ -30,7 +30,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
     subheading,
     children,
     rageshakeLabel,
-    rageshakeData = {},
+    rageshakeData,
     onFinished,
 }) => {
     const [comment, setComment] = useState("");

@@ -233,6 +233,20 @@
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
             },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s started a call",
+                    "join_button": "Join"
+                },
+                "dm": {
+                    "call_started": "Call started",
+                    "title": "Call in progress"
+                },
+                "room": {
+                    "join_count": "%(joinedCount)s joined",
+                    "title": "Group call in progress"
+                }
+            },
             "tombstone": {
                 "room": {
                     "title": "Group call ended"

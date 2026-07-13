@@ -12,6 +12,10 @@ import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { _t, type UserStatus } from "..";
 import styles from "./StatusPillView.module.css";
 
+/**
+ * Displays a user's status message in a pill format with a button that can be used
+ * to clear the status.
+ */
 export const StatusPillView = React.forwardRef<
     HTMLDivElement,
     {

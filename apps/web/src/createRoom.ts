@@ -33,7 +33,6 @@ import { _t, UserFriendlyError } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import { getAddressType } from "./UserAddress";
-import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { JitsiCall, ElementCall } from "./models/Call";
 import { Action } from "./dispatcher/actions";
@@ -48,6 +47,7 @@ import { doesRoomVersionSupport, PreferredRoomVersions } from "./utils/Preferred
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";
 import { ElementCallMemberEventType } from "./call-types";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
+import { SDKContextClass } from "./contexts/SDKContextClass.ts";
 import SdkConfig from "./SdkConfig";
 
 // we define a number of interfaces which take their names from the js-sdk
@@ -384,7 +384,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         })
         .then(() => {
             if (opts.parentSpace) {
-                return SpaceStore.instance.addRoomToSpace(
+                return SDKContextClass.instance.spaceStore.addRoomToSpace(
                     opts.parentSpace,
                     roomId,
                     [client.getDomain()!],

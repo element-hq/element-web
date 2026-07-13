@@ -276,7 +276,7 @@ export default class SettingsStore {
      * @param {string} settingName The setting to look up.
      * @param {SettingLevel} atLevel
      * The level to get the display name for; Defaults to 'default'.
-     * @return {String} The display name for the setting, or null if not found.
+     * @returns {String} The display name for the setting, or null if not found.
      */
     public static getDisplayName(settingName: SettingKey, atLevel = SettingLevel.DEFAULT): string | null {
         if (!SETTINGS[settingName] || !SETTINGS[settingName].displayName) return null;
@@ -299,7 +299,7 @@ export default class SettingsStore {
     /**
      * Gets the translated description for a given setting
      * @param {string} settingName The setting to look up.
-     * @return {String} The description for the setting, or null if not found.
+     * @returns {String} The description for the setting, or null if not found.
      */
     public static getDescription(settingName: SettingKey): string | ReactNode {
         const description = SETTINGS[settingName]?.description;
@@ -311,7 +311,7 @@ export default class SettingsStore {
     /**
      * Determines if a setting is also a feature.
      * @param {string} settingName The setting to look up.
-     * @return {boolean} True if the setting is a feature.
+     * @returns {boolean} True if the setting is a feature.
      */
     public static isFeature(settingName: SettingKey): boolean {
         if (!SETTINGS[settingName]) return false;
@@ -321,7 +321,7 @@ export default class SettingsStore {
     /**
      * Determines if a setting should have a warning sign in the microcopy
      * @param {string} settingName The setting to look up.
-     * @return {boolean} True if the setting should have a warning sign.
+     * @returns {boolean} True if the setting should have a warning sign.
      */
     public static shouldHaveWarning(settingName: SettingKey): boolean {
         if (!SETTINGS[settingName]) return false;
@@ -354,7 +354,7 @@ export default class SettingsStore {
      * If a setting is not disabled, or no reason is given by the `SettingController`,
      * this will return undefined.
      * @param {string} settingName The setting to look up.
-     * @return {string} The reason the setting is disabled.
+     * @returns {string} The reason the setting is disabled.
      */
     public static disabledMessage(settingName: SettingKey): string | undefined {
         const disabled = SETTINGS[settingName].controller?.settingDisabled;
@@ -367,7 +367,7 @@ export default class SettingsStore {
      * @param {string} settingName The name of the setting to read the value of.
      * @param {String} roomId The room ID to read the setting value in, may be null.
      * @param {boolean} excludeDefault True to disable using the default value.
-     * @return {*} The value, or null if not found
+     * @returns {*} The value, or null if not found
      */
     public static getValue<S extends SettingKey>(
         settingName: S,
@@ -404,7 +404,7 @@ export default class SettingsStore {
      * @param {boolean} explicit If true, this method will not consider other levels, just the one
      * provided. Defaults to false.
      * @param {boolean} excludeDefault True to disable using the default value.
-     * @return {*} The value, or null if not found.
+     * @returns {*} The value, or null if not found.
      */
     public static getValueAt<S extends SettingKey>(
         level: SettingLevel,
@@ -460,7 +460,7 @@ export default class SettingsStore {
     /**
      * Gets the default value of a setting.
      * @param settingName The name of the setting to read the value of.
-     * @return The default value
+     * @returns The default value
      */
     public static getDefaultValue<S extends SettingKey>(settingName: S): Settings[S]["default"] {
         // Verify that the setting is actually a setting
@@ -498,7 +498,7 @@ export default class SettingsStore {
      * @param level The level
      * to change the value at.
      * @param value The new value of the setting, may be null.
-     * @return Resolves when the setting has been changed.
+     * @returns Resolves when the setting has been changed.
      */
     public static async setValue<S extends SettingKey>(
         settingName: S,
@@ -556,7 +556,7 @@ export default class SettingsStore {
      * @param {string} settingName The name of the setting to check.
      * @param {String} roomId The room ID to check in, may be null.
      * @param {SettingLevel} level The level to check at.
-     * @return {boolean} True if the user may set the setting, false otherwise.
+     * @returns {boolean} True if the user may set the setting, false otherwise.
      */
     public static canSetValue(settingName: SettingKey, roomId: string | null, level: SettingLevel): boolean {
         const setting = SETTINGS[settingName];
@@ -610,7 +610,7 @@ export default class SettingsStore {
      * Determines if the given level is supported on this device.
      * @param {SettingLevel} level The level
      * to check the feasibility of.
-     * @return {boolean} True if the level is supported, false otherwise.
+     * @returns {boolean} True if the level is supported, false otherwise.
      */
     public static isLevelSupported(level: SettingLevel): boolean {
         if (!LEVEL_HANDLERS[level]) return false;
@@ -638,7 +638,7 @@ export default class SettingsStore {
      * Determines the first supported level out of all the levels that can be used for a
      * specific setting.
      * @param {string} settingName The setting name.
-     * @return {SettingLevel}
+     * @returns {SettingLevel}
      */
     public static firstSupportedLevel(settingName: SettingKey): SettingLevel | null {
         // Verify that the setting is actually a setting

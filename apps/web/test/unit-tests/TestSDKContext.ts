@@ -14,7 +14,7 @@ import { type SlidingSyncManager } from "../../src/SlidingSyncManager";
 import { type RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
 import type RightPanelStore from "../../src/stores/right-panel/RightPanelStore";
 import { type RoomViewStore } from "../../src/stores/RoomViewStore";
-import { type SpaceStoreClass } from "../../src/stores/spaces/SpaceStore";
+import type SpaceStore from "../../src/stores/spaces/SpaceStore";
 import { type WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
 import { type WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
 import type WidgetStore from "../../src/stores/WidgetStore";
@@ -34,7 +34,7 @@ export class TestSDKContext extends SDKContextClass {
     declare public _WidgetStore?: WidgetStore;
     declare public _PosthogAnalytics?: PosthogAnalytics;
     declare public _SlidingSyncManager?: SlidingSyncManager;
-    declare public _SpaceStore?: SpaceStoreClass;
+    declare public _SpaceStore?: SpaceStore;
     declare public _LegacyCallHandler?: LegacyCallHandler;
 
     constructor() {

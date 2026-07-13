@@ -13,10 +13,10 @@ import {
     OAUTH_AWARE_PREFERRED_FLOW_FIELD,
     IdentityProviderBrand,
     type ValidatedAuthMetadata,
+    OAuth2Error,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
-import { OAuth2Error } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
