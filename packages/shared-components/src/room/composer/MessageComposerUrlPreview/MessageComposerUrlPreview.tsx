@@ -124,7 +124,7 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
 
                     const siteName = new URL(entry.matched_url).hostname;
                     if (entry.status === "loaded" && entry.preview.image !== undefined) {
-                        return <div className={styles.summaryIcon}><img src={entry.preview.image.imageThumb} /></div>
+                        return <div className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
                     } else {
                         return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{entry.matched_url.split("://")[1].toString().slice(0, 1).toUpperCase()}</div>
                     }
