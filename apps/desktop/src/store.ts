@@ -80,6 +80,8 @@ interface StoreData {
     safeStorageBackendMigrate?: boolean;
     /** whether to open the app at login minimised, only valid when app.openAtLogin is true */
     openAtLoginMinimised: boolean;
+    /** whether the one-time migration off the legacy `auto-launch` package has run (see AutoLaunch.migrate) */
+    autoLaunchMigrated?: boolean;
 }
 
 /**
@@ -226,6 +228,9 @@ class Store extends ElectronStore<StoreData> {
                 openAtLoginMinimised: {
                     type: "boolean",
                     default: true,
+                },
+                autoLaunchMigrated: {
+                    type: "boolean",
                 },
             },
         });
