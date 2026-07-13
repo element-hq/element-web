@@ -1,5 +1,5 @@
 /*
-Copyright 2026 New Vector Ltd.
+Copyright 2026 hayaksi1
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -28,10 +28,6 @@ vi.mock("./config.js", () => ({
 }));
 
 describe("decideRendererRecoveryAction", () => {
-    beforeEach(() => {
-        // A clean default state for every case; individual tests override what they exercise.
-    });
-
     it.each(CRASH_REASONS)("returns 'reload' for the crash-class reason %s", (reason) => {
         expect(decideRendererRecoveryAction({ reason, appQuitting: false, attemptsInWindow: 0 })).toBe("reload");
     });
