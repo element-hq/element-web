@@ -8,6 +8,7 @@
 .title {
     font: var(--cpd-font-body-md-semibold);
     color: var(--cpd-color-text-primary);
+    /* This height is from the figma design */
     min-height: 23px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -18,6 +19,7 @@
 .content {
     flex: 1;
     overflow: hidden;
+    /* Width specified to allow the children to overflow and render with ellipsis */
     min-width: 47px;
 }
 

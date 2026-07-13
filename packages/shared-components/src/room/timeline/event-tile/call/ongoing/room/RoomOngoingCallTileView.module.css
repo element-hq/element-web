@@ -6,6 +6,7 @@
  */
 
 .subContainer {
+    /* This height is from the figma design */
     min-height: 23px;
     width: 100%;
     font: var(--cpd-font-body-md-regular);
