@@ -48,7 +48,7 @@ describe("VerificationRequestToast", () => {
             getDevice: jest.fn(),
         });
         sdkContext = new TestSDKContext();
-        sdkContext.client = client;
+        sdkContext._client = client;
     });
 
     it("should render a self-verification", async () => {

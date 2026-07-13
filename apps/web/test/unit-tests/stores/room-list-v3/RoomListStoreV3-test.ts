@@ -24,7 +24,6 @@ import { mkEvent, mkMessage, mkSpace, mkStubRoom, stubClient, upsertRoomStateEve
 import { getMockedRooms } from "./skip-list/getMockedRooms";
 import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
-import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { FilterEnum } from "../../../../src/stores/room-list-v3/skip-list/filters";
@@ -37,6 +36,7 @@ import * as utilsRLS from "../../../../src/stores/room-list-v3/utils.ts";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
 import { CHATS_TAG } from "../../../../src/stores/room-list-v3/section";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -54,9 +54,13 @@ describe("RoomListStoreV3", () => {
             cb(0);
             return 0;
         });
-        jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
-        jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
-        jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
+        jest.spyOn(SDKContextClass.instance.spaceStore, "isRoomInSpace").mockImplementation(
+            (space) => space === MetaSpace.Home,
+        );
+        jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
+        jest.spyOn(SDKContextClass.instance.spaceStore, "storeReadyPromise", "get").mockImplementation(() =>
+            Promise.resolve(),
+        );
         jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
             const state = {
                 isUnread: false,
@@ -448,12 +452,14 @@ describe("RoomListStoreV3", () => {
         }
 
         function setupMocks(spaceRoom: Room, roomIds: string[]) {
-            jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
+            jest.spyOn(SDKContextClass.instance.spaceStore, "isRoomInSpace").mockImplementation((space, id) => {
                 if (space === MetaSpace.Home && !roomIds.includes(id)) return true;
                 if (space === spaceRoom.roomId && roomIds.includes(id)) return true;
                 return false;
             });
-            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(
+                () => spaceRoom.roomId,
+            );
         }
 
         function getClientAndRooms() {
@@ -497,7 +503,7 @@ describe("RoomListStoreV3", () => {
                 const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
 
                 // Mock the space store
-                jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
+                jest.spyOn(SDKContextClass.instance.spaceStore, "isRoomInSpace").mockImplementation((space, id) => {
                     if (space === MetaSpace.Home && !roomIds.includes(id)) return true;
                     if (space === spaceRoom.roomId && roomIds.includes(id)) return true;
                     return false;
@@ -518,8 +524,10 @@ describe("RoomListStoreV3", () => {
                 }
 
                 // Lets switch to the space
-                jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
-                SpaceStore.instance.emit(UPDATE_SELECTED_SPACE);
+                jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(
+                    () => spaceRoom.roomId,
+                );
+                SDKContextClass.instance.spaceStore.emit(UPDATE_SELECTED_SPACE);
                 expect(fn).toHaveBeenCalled();
                 const result2 = store
                     .getSortedRoomsInActiveSpace()
@@ -1152,11 +1160,11 @@ describe("RoomListStoreV3", () => {
 
             const spaceRoomId = "!space1:matrix.org";
             const inSpaceIds = [3, 10, 20].map((i) => rooms[i].roomId);
-            jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
+            jest.spyOn(SDKContextClass.instance.spaceStore, "isRoomInSpace").mockImplementation((space, id) => {
                 if (space === spaceRoomId && inSpaceIds.includes(id)) return true;
                 return false;
             });
-            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoomId);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpace", "get").mockImplementation(() => spaceRoomId);
 
             const store = new RoomListStoreV3Class(dispatcher);
             await store.start();

@@ -65,7 +65,7 @@ describe("<UserInfoHeaderView />", () => {
         mockClient = createTestClient();
         mockClient.doesServerSupportExtendedProfiles = () => Promise.resolve(false);
         sdkContext = new TestSDKContext();
-        sdkContext.client = mockClient;
+        sdkContext._client = mockClient;
 
         jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);

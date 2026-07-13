@@ -34,7 +34,7 @@ describe("<IncomingLegacyCallToast />", () => {
         getRoom: jest.fn(),
     });
     const sdkContext = new TestSDKContext();
-    sdkContext.client = mockClient;
+    sdkContext._client = mockClient;
     const mockRoom = new Room("!room:server.org", mockClient, userId);
     mockClient.deviceId = deviceId;
 

@@ -31,7 +31,7 @@ describe("<ExtensionsCard />", () => {
     beforeEach(() => {
         client = mocked(stubClient());
         sdkContext = new TestSDKContext();
-        sdkContext.client = client;
+        sdkContext._client = client;
         room = new Room("!room:server", client, client.getSafeUserId());
         mocked(WidgetUtils.getWidgetName).mockImplementation((app) => app?.name ?? "No Name");
     });

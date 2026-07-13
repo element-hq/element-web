@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
-import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { stubClient } from "../../test-utils";
 import { roomContextDetails } from "../../../src/utils/i18n-helpers";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
 
 describe("roomContextDetails", () => {
     const client = stubClient();
@@ -30,21 +30,23 @@ describe("roomContextDetails", () => {
     });
 
     it("should return 1-parent variant", () => {
-        jest.spyOn(SpaceStore.instance, "getKnownParents").mockReturnValue(new Set([parent1.roomId]));
+        jest.spyOn(SDKContextClass.instance.spaceStore, "getKnownParents").mockReturnValue(new Set([parent1.roomId]));
         const res = roomContextDetails(room);
         expect(res!.details).toMatchInlineSnapshot(`"Alpha"`);
         expect(res!.ariaLabel).toMatchInlineSnapshot(`"In Alpha."`);
     });
 
     it("should return 2-parent variant", () => {
-        jest.spyOn(SpaceStore.instance, "getKnownParents").mockReturnValue(new Set([parent2.roomId, parent3.roomId]));
+        jest.spyOn(SDKContextClass.instance.spaceStore, "getKnownParents").mockReturnValue(
+            new Set([parent2.roomId, parent3.roomId]),
+        );
         const res = roomContextDetails(room);
         expect(res!.details).toMatchInlineSnapshot(`"Beta and Charlie"`);
         expect(res!.ariaLabel).toMatchInlineSnapshot(`"In spaces Beta and Charlie."`);
     });
 
     it("should return n-parent variant", () => {
-        jest.spyOn(SpaceStore.instance, "getKnownParents").mockReturnValue(
+        jest.spyOn(SDKContextClass.instance.spaceStore, "getKnownParents").mockReturnValue(
             new Set([parent1.roomId, parent2.roomId, parent3.roomId]),
         );
         const res = roomContextDetails(room);

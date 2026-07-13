@@ -46,7 +46,7 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
 
         mockClient = createTestClient();
         sdkContext = new TestSDKContext();
-        sdkContext.client = mockClient;
+        sdkContext._client = mockClient;
 
         jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);

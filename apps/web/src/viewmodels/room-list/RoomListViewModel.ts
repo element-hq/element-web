@@ -22,7 +22,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
+import type SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
@@ -59,7 +59,7 @@ interface StickyRoomPosition {
 interface RoomListViewModelProps {
     client: MatrixClient;
     roomViewStore: RoomViewStore;
-    spaceStore: SpaceStoreClass;
+    spaceStore: SpaceStore;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([

@@ -133,7 +133,7 @@ beforeEach(() => {
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
     } as unknown as MatrixClient);
     sdkContext = new TestSDKContext();
-    sdkContext.client = mockClient;
+    sdkContext._client = mockClient;
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
     jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);

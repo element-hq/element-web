@@ -13,10 +13,10 @@ import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icon
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
 import { filterBoolean } from "../../../utils/arrays";
 import { isOnlyAdmin } from "../../../utils/membership";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     space: Room;
@@ -25,8 +25,8 @@ interface IProps {
 
 const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     const spaceChildren = useMemo(() => {
-        const roomSet = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(space.roomId));
-        SpaceStore.instance.traverseSpace(
+        const roomSet = new Set(SDKContextClass.instance.spaceStore.getSpaceFilteredRoomIds(space.roomId));
+        SDKContextClass.instance.spaceStore.traverseSpace(
             space.roomId,
             (spaceId) => {
                 if (space.roomId === spaceId) return; // skip the root node
