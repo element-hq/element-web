@@ -25,7 +25,7 @@ const Button = (props: HTMLAttributes<HTMLButtonElement>): React.JSX.Element => 
     return <button {...props} onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref} />;
 };
 
-const checkTabIndexes = (buttons: NodeListOf<HTMLElement>, expectations: number[]): void => {
+const expectTabIndexes = (buttons: NodeListOf<HTMLElement>, expectations: number[]): void => {
     expect([...buttons].map((b) => b.tabIndex)).toStrictEqual(expectations);
 };
 
@@ -89,16 +89,16 @@ describe("RovingTabIndex", () => {
             </RovingTabIndexProvider>,
         );
 
-        checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+        expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         act(() => container.querySelectorAll("button")[2].focus());
-        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
+        expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
 
         act(() => container.querySelectorAll("button")[1].focus());
-        checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+        expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         act(() => container.querySelectorAll("button")[1].blur());
-        checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+        expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         rerender(
             <RovingTabIndexProvider>
@@ -112,7 +112,7 @@ describe("RovingTabIndex", () => {
                 )}
             </RovingTabIndexProvider>,
         );
-        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0, -1]);
+        expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0, -1]);
 
         rerender(
             <RovingTabIndexProvider>
@@ -125,7 +125,7 @@ describe("RovingTabIndex", () => {
                 )}
             </RovingTabIndexProvider>,
         );
-        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
+        expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
     it("provides a ref to the dom element", () => {
@@ -165,10 +165,10 @@ describe("RovingTabIndex", () => {
             </RovingTabIndexProvider>,
         );
 
-        checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+        expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         act(() => container.querySelectorAll("button")[2].focus());
-        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
+        expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
     describe("reducer functions as expected", () => {
@@ -390,22 +390,22 @@ describe("RovingTabIndex", () => {
             );
 
             act(() => container.querySelectorAll("button")[0].focus());
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             await userEvent.keyboard("[ArrowDown]");
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
             await userEvent.keyboard("[ArrowDown]");
-            checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
 
             await userEvent.keyboard("[ArrowUp]");
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
             await userEvent.keyboard("[ArrowUp]");
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             await userEvent.keyboard("[ArrowUp]");
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
         });
 
         it("handles left/right arrow keys when handleLeftRight=true", async () => {
@@ -420,10 +420,10 @@ describe("RovingTabIndex", () => {
 
             act(() => container.querySelectorAll("button")[0].focus());
             await userEvent.keyboard("[ArrowRight]");
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
             await userEvent.keyboard("[ArrowLeft]");
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
         });
 
         it("moves between multiple toolbar containers in one roving group", async () => {
@@ -446,15 +446,15 @@ describe("RovingTabIndex", () => {
 
             const buttons = container.querySelectorAll("button");
             act(() => buttons[1].focus());
-            checkTabIndexes(buttons, [-1, 0, -1, -1]);
+            expectTabIndexes(buttons, [-1, 0, -1, -1]);
 
             await userEvent.keyboard("[ArrowRight]");
             expect(buttons[2]).toHaveFocus();
-            checkTabIndexes(buttons, [-1, -1, 0, -1]);
+            expectTabIndexes(buttons, [-1, -1, 0, -1]);
 
             await userEvent.keyboard("[ArrowLeft]");
             expect(buttons[1]).toHaveFocus();
-            checkTabIndexes(buttons, [-1, 0, -1, -1]);
+            expectTabIndexes(buttons, [-1, 0, -1, -1]);
         });
 
         it("handles Home, End, and loop across multiple toolbar containers", async () => {
@@ -477,19 +477,19 @@ describe("RovingTabIndex", () => {
 
             const buttons = container.querySelectorAll("button");
             act(() => buttons[2].focus());
-            checkTabIndexes(buttons, [-1, -1, 0, -1]);
+            expectTabIndexes(buttons, [-1, -1, 0, -1]);
 
             await userEvent.keyboard("[End]");
             expect(buttons[3]).toHaveFocus();
-            checkTabIndexes(buttons, [-1, -1, -1, 0]);
+            expectTabIndexes(buttons, [-1, -1, -1, 0]);
 
             await userEvent.keyboard("[ArrowRight]");
             expect(buttons[0]).toHaveFocus();
-            checkTabIndexes(buttons, [0, -1, -1, -1]);
+            expectTabIndexes(buttons, [0, -1, -1, -1]);
 
             await userEvent.keyboard("[Home]");
             expect(buttons[0]).toHaveFocus();
-            checkTabIndexes(buttons, [0, -1, -1, -1]);
+            expectTabIndexes(buttons, [0, -1, -1, -1]);
         });
 
         it("handles Home and End when handleHomeEnd=true", async () => {
@@ -503,13 +503,13 @@ describe("RovingTabIndex", () => {
             );
 
             act(() => container.querySelectorAll("button")[1].focus());
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
             await userEvent.keyboard("[End]");
-            checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
 
             await userEvent.keyboard("[Home]");
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
         });
 
         it("loops when handleLoop=true", async () => {
@@ -524,10 +524,10 @@ describe("RovingTabIndex", () => {
 
             act(() => container.querySelectorAll("button")[2].focus());
             await userEvent.keyboard("[ArrowDown]");
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             await userEvent.keyboard("[ArrowUp]");
-            checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
         });
 
         it("uses a custom getAction mapper", async () => {
@@ -552,7 +552,7 @@ describe("RovingTabIndex", () => {
             await userEvent.keyboard("j");
 
             expect(getAction).toHaveBeenCalled();
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
         });
 
         it("handles input fields when handleInputFields=true", () => {
@@ -569,7 +569,7 @@ describe("RovingTabIndex", () => {
             const input = getByRole("textbox", { name: "Search input" });
 
             fireEvent.keyDown(input, { key: "ArrowDown" });
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0]);
         });
 
         it("moves from an input field with Tab when handleInputFields=false", () => {
@@ -586,7 +586,7 @@ describe("RovingTabIndex", () => {
             act(() => (input as HTMLElement).focus());
 
             fireEvent.keyDown(input, { key: "Tab" });
-            checkTabIndexes(container.querySelectorAll("button"), [-1, 0]);
+            expectTabIndexes(container.querySelectorAll("button"), [-1, 0]);
         });
 
         it("stops provider processing when onKeyDown prevents default", () => {
@@ -606,7 +606,7 @@ describe("RovingTabIndex", () => {
             fireEvent.keyDown(container.querySelector('[role="toolbar"]')!, { key: "ArrowDown" });
 
             expect(onKeyDown).toHaveBeenCalled();
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
         });
 
         it("calls scrollIntoView if specified", async () => {
@@ -620,7 +620,7 @@ describe("RovingTabIndex", () => {
             );
 
             act(() => container.querySelectorAll("button")[0].focus());
-            checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
+            expectTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             const button = container.querySelectorAll("button")[1];
             const mock = vi.spyOn(button, "scrollIntoView");
