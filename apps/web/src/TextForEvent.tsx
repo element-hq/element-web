@@ -17,6 +17,7 @@ import {
     MsgType,
     M_POLL_START,
     M_POLL_END,
+    M_BEACON_INFO,
     ContentHelpers,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -888,6 +889,14 @@ function textForPollEndEvent(event: MatrixEvent): (() => string) | null {
         });
 }
 
+function textForBeaconInfoEvent(event: MatrixEvent): (() => string) | null {
+    if (event.getContent().live !== true) return null;
+    return () =>
+        _t("timeline|m.beacon_info|live_location_started", {
+            senderName: getSenderName(event),
+        });
+}
+
 type Renderable = string | React.ReactNode | null;
 
 interface IHandlers {
@@ -923,6 +932,8 @@ const stateHandlers: IHandlers = {
     [EventType.RoomTombstone]: textForTombstoneEvent,
     [EventType.RoomJoinRules]: textForJoinRulesEvent,
     [EventType.RoomGuestAccess]: textForGuestAccessEvent,
+    [M_BEACON_INFO.name]: textForBeaconInfoEvent,
+    [M_BEACON_INFO.altName]: textForBeaconInfoEvent,
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": textForWidgetEvent,

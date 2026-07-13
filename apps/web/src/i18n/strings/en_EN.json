@@ -3339,6 +3339,7 @@
             "error_processing_voice_message": "Error processing voice message"
         },
         "m.beacon_info": {
+            "live_location_started": "%(senderName)s started sharing their live location",
             "view_live_location": "View live location"
         },
         "m.call": {

@@ -425,6 +425,43 @@ describe("TextForEvent", () => {
         });
     });
 
+    describe("textForBeaconInfoEvent()", () => {
+        const mockBeaconInfoEvent = (live: boolean | undefined, type = "org.matrix.msc3672.beacon_info"): MatrixEvent =>
+            new MatrixEvent({
+                type,
+                state_key: "@a:example.com",
+                sender: "@a:example.com",
+                content: {
+                    description: "test beacon",
+                    timeout: 300000,
+                    ...(live !== undefined ? { live } : {}),
+                },
+            });
+
+        it("returns correct message for a live beacon start", () => {
+            const event = mockBeaconInfoEvent(true);
+            expect(textForEvent(event, mockClient)).toEqual("@a:example.com started sharing their live location");
+            expect(hasText(event, mockClient)).toBe(true);
+        });
+
+        it("returns correct message for a live beacon start with the stable event type", () => {
+            const event = mockBeaconInfoEvent(true, "m.beacon_info");
+            expect(textForEvent(event, mockClient)).toEqual("@a:example.com started sharing their live location");
+        });
+
+        it("returns nothing for a beacon stop", () => {
+            const event = mockBeaconInfoEvent(false);
+            expect(textForEvent(event, mockClient)).toEqual("");
+            expect(hasText(event, mockClient)).toBe(false);
+        });
+
+        it("returns nothing when live is absent", () => {
+            const event = mockBeaconInfoEvent(undefined);
+            expect(textForEvent(event, mockClient)).toEqual("");
+            expect(hasText(event, mockClient)).toBe(false);
+        });
+    });
+
     describe("textForMessageEvent()", () => {
         let messageEvent: MatrixEvent;
 
