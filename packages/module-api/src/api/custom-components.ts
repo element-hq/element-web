@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { JSX, ReactNode } from "react";
 import type { MatrixEvent } from "../models/event";
 import type { AccountAuthInfo } from "./auth.ts";
-import { ComposerApiTarget } from "./composer.ts";
+import type { ComposerApiTarget } from "./composer.ts";
 
 /**
  * Properties for all message components.
@@ -129,12 +129,12 @@ export type CustomLoginComponentProps = {
      * Function to complete login
      * @param data - the data to authenticate the user with
      */
-    onLoggedIn(data: AccountAuthInfo): void;
+    onLoggedIn(this: void, data: AccountAuthInfo): void;
     /**
      * Function to change the selected server
      * @param config - new server configuration details
      */
-    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+    onServerConfigChange(this: void, config: CustomLoginComponentPropsServerConfig): void;
 };
 
 /**

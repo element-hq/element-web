@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createContext } from "react";
+import React, { createContext, useMemo } from "react";
 
 import { useCurrentPhase } from "../hooks/right-panel/useCurrentPhase";
 import { type RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
@@ -26,9 +26,6 @@ export const CurrentRightPanelPhaseContextProvider: React.FC<React.PropsWithChil
     children,
 }) => {
     const { currentPhase, isOpen } = useCurrentPhase(roomId);
-    return (
-        <CurrentRightPanelPhaseContext.Provider value={{ currentPhase, isPanelOpen: isOpen }}>
-            {children}
-        </CurrentRightPanelPhaseContext.Provider>
-    );
+    const context = useMemo(() => ({ currentPhase, isPanelOpen: isOpen }), [currentPhase, isOpen]);
+    return <CurrentRightPanelPhaseContext.Provider value={context}>{children}</CurrentRightPanelPhaseContext.Provider>;
 };

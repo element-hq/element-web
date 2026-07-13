@@ -70,7 +70,11 @@ describe("DateSeparatorViewModel", () => {
     const createViewModel = (
         props: Partial<typeof defaultProps> & { forExport?: boolean } = {},
     ): DateSeparatorViewModel => {
-        return new DateSeparatorViewModel({ ...defaultProps, ...props });
+        return new DateSeparatorViewModel({
+            ...defaultProps,
+            ...props,
+            roomViewStore: SDKContextClass.instance.roomViewStore,
+        });
     };
 
     beforeEach(() => {

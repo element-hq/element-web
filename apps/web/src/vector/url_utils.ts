@@ -94,7 +94,7 @@ export type URLParams = Partial<{
  * Utility to parse parameters held in the app's URL.
  * Currently focusing only on at-load URL parameters.
  * @param url - the URL to parse.
- * @return an object keyed by the groups defined in {@link urlParameterConfig} with values for each key listed,
+ * @returns an object keyed by the groups defined in {@link urlParameterConfig} with values for each key listed,
  *     sourced from the location (query/fragment/either) specified. If no parameters in a group are found the entire group
  *     will be omitted from the returned object to simplify presence checking.
  */

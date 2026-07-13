@@ -1370,5 +1370,3 @@ export default class SpaceStore {
         return store;
     }
 }
-
-window.mxSpaceStore = SpaceStore.instance;

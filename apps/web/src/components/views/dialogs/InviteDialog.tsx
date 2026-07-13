@@ -1390,7 +1390,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             new Tab(
                 TabId.UserDirectory,
                 _td("invite|transfer_user_directory_tab"),
-                <UserProfileSolidIcon />,
+                <UserProfileSolidIcon key={TabId.UserDirectory} />,
                 usersSection,
             ),
         ];
