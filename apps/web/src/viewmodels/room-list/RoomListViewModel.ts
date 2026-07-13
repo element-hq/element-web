@@ -22,7 +22,7 @@ import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
-import SpaceStore from "../../stores/spaces/SpaceStore";
+import { type SpaceStoreClass } from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
     RoomListStoreV3Event,
     type RoomsResult,
@@ -34,7 +34,6 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
-import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
@@ -43,6 +42,7 @@ import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../store
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
 import SettingsStore from "../../settings/SettingsStore";
+import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -58,15 +58,37 @@ interface StickyRoomPosition {
 
 interface RoomListViewModelProps {
     client: MatrixClient;
+    roomViewStore: RoomViewStore;
+    spaceStore: SpaceStoreClass;
 }
 
 const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
     [FilterEnum.UnreadFilter, "unread"],
     [FilterEnum.PeopleFilter, "people"],
     [FilterEnum.RoomsFilter, "rooms"],
+    [FilterEnum.FavouriteFilter, "favourite"],
     [FilterEnum.MentionsFilter, "mentions"],
     [FilterEnum.InvitesFilter, "invites"],
+    [FilterEnum.LowPriorityFilter, "low_priority"],
 ]);
+
+/**
+ * Filters that are redundant when sections are enabled: Favourites and Low Priority rooms
+ * already have their own sections, so these filters are only shown as chips when sectioning
+ * is disabled (see {@link getVisibleFilterIds}).
+ */
+const SECTION_ONLY_FILTER_IDS: ReadonlySet<FilterId> = new Set<FilterId>(["favourite", "low_priority"]);
+
+/**
+ * Compute the filter ids to display as primary filter chips.
+ * When sections are enabled, the Favourites and Low Priority filters are hidden because those
+ * rooms are surfaced as dedicated sections instead.
+ */
+function getVisibleFilterIds(): FilterId[] {
+    const areSectionsEnabled = SettingsStore.getValue("RoomList.showSections");
+    const filterIds = [...filterKeyToIdMap.values()];
+    return areSectionsEnabled ? filterIds.filter((id) => !SECTION_ONLY_FILTER_IDS.has(id)) : filterIds;
+}
 
 const TAG_TO_TITLE_MAP: Record<string, string> = {
     [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
@@ -138,13 +160,13 @@ export class RoomListViewModel
     private scrollToIndex?: (index: number) => void;
 
     public constructor(props: RoomListViewModelProps) {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = props.spaceStore.activeSpaceRoom;
 
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
 
-        const filterIds = [...filterKeyToIdMap.values()];
+        const filterIds = getVisibleFilterIds();
 
         // By default, all sections are expanded
         const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
@@ -214,6 +236,10 @@ export class RoomListViewModel
             dispatcher.unregister(dispatcherRef);
         });
 
+        // Recompute the lis when setting changes
+        const showSectionsRef = SettingsStore.watchSetting("RoomList.showSections", null, this.onShowSectionsChange);
+        this.disposables.track(() => SettingsStore.unwatchSetting(showSectionsRef));
+
         // Track cleanup of all child view models
         this.disposables.track(() => {
             for (const viewModel of this.roomItemViewModels.values()) {
@@ -246,6 +272,20 @@ export class RoomListViewModel
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
 
+        this.updateRoomListData();
+    };
+
+    /**
+     * Handle changes to the {@link RoomList.showSections} setting.
+     * Toggling sections is a rare action, so we simply reset the filters and rebuild
+     * the list from scratch rather than trying to reconcile the previous state.
+     */
+    private readonly onShowSectionsChange = (): void => {
+        this.activeFilter = undefined;
+        this.clearViewModels();
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace();
+        this.updateRoomsMap(this.roomsResult);
+        this.snapshot.merge({ filterIds: getVisibleFilterIds() });
         this.updateRoomListData();
     };
 
@@ -537,7 +577,7 @@ export class RoomListViewModel
      * Migrated from useRoomListNavigation hook.
      */
     private handleViewRoomDelta(payload: ViewRoomDeltaPayload): void {
-        const currentRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
+        const currentRoomId = this.props.roomViewStore.getRoomId();
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
@@ -608,7 +648,7 @@ export class RoomListViewModel
             }
 
             // Space changed - get the last selected room for the new space to prevent flicker
-            const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
+            const lastSelectedRoom = this.props.spaceStore.getLastSelectedRoomIdForSpace(newSpaceId);
 
             this.updateRoomListData(true, lastSelectedRoom);
             return;
@@ -715,7 +755,7 @@ export class RoomListViewModel
     ): Promise<void> {
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
-        const roomId = roomIdOverride ?? SDKContextClass.instance.roomViewStore.getRoomId();
+        const roomId = roomIdOverride ?? this.props.roomViewStore.getRoomId();
 
         // Apply sticky room logic to keep selected room at same position within its section
         const stickySections = this.applyStickyRoom(isRoomChange, roomId);
@@ -820,7 +860,7 @@ export class RoomListViewModel
     };
 
     public createRoom = (): void => {
-        const activeSpace = SpaceStore.instance.activeSpaceRoom;
+        const activeSpace = this.props.spaceStore.activeSpaceRoom;
         if (activeSpace) {
             dispatcher.dispatch({
                 action: Action.CreateRoom,
