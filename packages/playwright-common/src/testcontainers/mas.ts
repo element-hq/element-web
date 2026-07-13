@@ -139,6 +139,12 @@ const DEFAULT_CONFIG = {
             per_second: 1,
         },
     },
+    clients: [
+        {
+            client_id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+            client_auth_method: "none",
+        },
+    ],
 } satisfies MasConfig;
 
 /**
@@ -209,6 +215,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
             `http://localhost:${port}`,
             this.args,
             this.config.matrix.secret,
+            this.config.clients![0].client_id,
         );
     }
 }
@@ -224,6 +231,7 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
         public readonly baseUrl: string,
         private readonly args: string[],
         public readonly sharedSecret: string,
+        public readonly staticClientId: string,
     ) {
         super(container);
     }
