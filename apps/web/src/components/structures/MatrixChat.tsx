@@ -93,7 +93,6 @@ import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from "./auth/SoftLogout";
 import { copyPlaintext } from "../../utils/strings";
-import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
 import { showSpaceInvite } from "../../utils/space";
 import { type ButtonEvent } from "../views/elements/AccessibleButton";
@@ -245,6 +244,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         super(props);
         this.stores = SDKContextClass.instance;
         this.stores.constructEagerStores();
+        window.mxSdkContext = this.stores;
 
         this.state = {
             view: Views.LOADING,
@@ -691,7 +691,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case "logout":
                 this.stores.legacyCallHandler.hangupAllCalls();
-                Promise.all([...[...CallStore.instance.connectedCalls].map((call) => call.disconnect())]).finally(() =>
+                Promise.all([...CallStore.instance.connectedCalls].map((call) => call.disconnect())).finally(() =>
                     Lifecycle.logout(),
                 );
                 break;
@@ -1792,7 +1792,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
         // Will be moved to a pre-login flow as well
-        if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
+        if (this.stores.posthogAnalytics.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
         }
 

@@ -24,7 +24,7 @@ if (globalThis.window === undefined) {
     vi.stubGlobal("window", {
         // Mock this as some code assumes it exists (needs to be done at the top level as
         // things try to access it before the beforeEach blocks run)
-        addEventListener: vi.fn(),
+        addEventListener: vi.fn<typeof window.addEventListener>(),
         location: locationStub,
         setTimeout: globalThis.setTimeout,
     });

@@ -129,6 +129,46 @@ test.describe("Room list sections", () => {
         });
     });
 
+    test.describe("Filters when sections are disabled", () => {
+        test.beforeEach(async ({ app }) => {
+            await app.settings.setValue("RoomList.showSections", null, SettingLevel.ACCOUNT, false);
+
+            // A favourite room, a low priority room, and a regular room.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            const lowPrioId = await app.client.createRoom({ name: "low prio room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.lowpriority");
+            }, lowPrioId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("shows the Favourites and Low Priority filters and filters the flat list", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const primaryFilters = getPrimaryFilters(page);
+
+            // Expand the filter list to reveal all filters
+            await primaryFilters.getByRole("button", { name: "Expand filter list" }).click();
+
+            // The Favourites and Low Priority filters are available again when sections are disabled
+            await expect(primaryFilters.getByRole("option", { name: "Favourites" })).toBeVisible();
+            await expect(primaryFilters.getByRole("option", { name: "Low priority" })).toBeVisible();
+
+            // Filtering by Favourites shows only the favourite room
+            await primaryFilters.getByRole("option", { name: "Favourites" }).click();
+            await expect(roomList.getByRole("option", { name: "Open room favourite room" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room regular room" })).not.toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room low prio room" })).not.toBeVisible();
+
+            // Switching to the Low Priority filter shows only the low priority room
+            await primaryFilters.getByRole("option", { name: "Low priority" }).click();
+            await expect(roomList.getByRole("option", { name: "Open room low prio room" })).toBeVisible();
+            await expect(roomList.getByRole("option", { name: "Open room favourite room" })).not.toBeVisible();
+        });
+    });
+
     test.describe("Section collapse and expand", () => {
         [
             { section: "Favourites", roomName: "favourite room", tag: "m.favourite" },

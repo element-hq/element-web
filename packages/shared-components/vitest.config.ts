@@ -10,7 +10,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
-import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
+import { playwright, type PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 import rootConfig from "../../vitest.config";
@@ -40,6 +40,11 @@ export default defineConfig({
             reporter: [["lcov", { projectRoot: "../../" }]],
         },
         reporters: rootConfig.test?.reporters,
+        onConsoleLog(log: string): boolean | void {
+            // Suppress the i18n language-loading log; it fires on every
+            // setLanguage() call in setup and adds noise to test output.
+            if (log.startsWith("Loading language from")) return false;
+        },
         environment: "node",
         pool: "threads",
         globals: false,

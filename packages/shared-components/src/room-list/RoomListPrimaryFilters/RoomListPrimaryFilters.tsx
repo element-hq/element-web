@@ -26,10 +26,14 @@ const filterIdToLabel = (filterId: FilterId): string => {
             return _t("room_list|filters|people");
         case "rooms":
             return _t("room_list|filters|rooms");
+        case "favourite":
+            return _t("room_list|filters|favourite");
         case "mentions":
             return _t("room_list|filters|mentions");
         case "invites":
             return _t("room_list|filters|invites");
+        case "low_priority":
+            return _t("room_list|filters|low_priority");
     }
 };
 

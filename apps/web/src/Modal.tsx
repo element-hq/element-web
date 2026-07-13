@@ -185,7 +185,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
      * caused a chunk of tests to fail, so for now they continue to use this.
      *
      * @param reason either "backgroundClick" or undefined
-     * @return whether a modal was closed
+     * @returns whether a modal was closed
      */
     public closeCurrentModal(reason?: ModalCloseReason): boolean {
         const modal = this.getCurrentModal();
@@ -297,7 +297,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     /**
      * @callback onBeforeClose
      * @param {string?} reason either "backgroundClick" or null
-     * @return {Promise<bool>} whether the dialog should close
+     * @returns {Promise<bool>} whether the dialog should close
      */
 
     /**

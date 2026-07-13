@@ -10,7 +10,8 @@
         "strict": true,
         "lib": ["es2022"],
         "types": ["node"],
-        "allowImportingTsExtensions": true
+        "allowImportingTsExtensions": true,
+        "noEmit": true
     },
     "include": ["../src/@types", "./**/*.ts"]
 }
