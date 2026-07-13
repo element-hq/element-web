@@ -1572,6 +1572,8 @@
         "sliding_sync_disabled_notice": "Sign in again to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
+        "url_preview_bundle": "URL Preview Bundle (MSC4095)",
+        "url_preview_bundle_description": "Send URL previews in message alongside message content",
         "video_rooms": "Video rooms",
         "video_rooms_a_new_way_to_chat": "A new way to chat over voice and video in %(brand)s.",
         "video_rooms_always_on_voip_channels": "Video rooms are always-on VoIP channels embedded within a room in %(brand)s.",
