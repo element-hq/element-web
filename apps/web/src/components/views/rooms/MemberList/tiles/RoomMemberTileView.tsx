@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useEffect } from "react";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
+import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type RoomMember } from "../../../../../models/rooms/RoomMember";
 import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
@@ -26,6 +27,7 @@ interface IProps {
      */
     item: MemberWithSeparator;
     member: RoomMember;
+    isCallParticipant?: boolean;
     index: number;
     memberCount: number;
     showPresence?: boolean;
@@ -72,12 +74,23 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         presenceJSX = <AvatarPresenceIconView presenceState={presenceState} />;
     }
 
-    let iconJsx;
-    if (vm.e2eStatus) {
-        iconJsx = <E2EIconView status={vm.e2eStatus} />;
-    }
+    let iconJsx: JSX.Element | undefined;
     if (member.isInvite) {
         iconJsx = <InvitedIconView isThreePid={false} />;
+    } else if (vm.e2eStatus || props.isCallParticipant) {
+        iconJsx = (
+            <>
+                {vm.e2eStatus && <E2EIconView status={vm.e2eStatus} />}
+                {props.isCallParticipant && (
+                    <VideoCallSolidIcon
+                        className="mx_RoomMemberTileView_callIcon"
+                        width="20px"
+                        height="20px"
+                        fill="var(--cpd-color-icon-accent-primary)"
+                    />
+                )}
+            </>
+        );
     }
 
     return (

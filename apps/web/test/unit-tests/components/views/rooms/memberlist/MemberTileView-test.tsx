@@ -115,6 +115,65 @@ describe("MemberTileView", () => {
             expect(container4).toHaveTextContent("Invited");
         });
 
+        it("renders a call icon alongside the member role", () => {
+            member.powerLevel = 100;
+            const { container } = render(
+                <RoomMemberTileView
+                    item={item}
+                    member={member}
+                    isCallParticipant
+                    index={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
+
+            expect(container).toHaveTextContent("Admin");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute("width", "20px");
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toHaveAttribute(
+                "fill",
+                "var(--cpd-color-icon-accent-primary)",
+            );
+        });
+
+        it("renders the call icon alongside the E2E status", async () => {
+            mocked(matrixClient.getCrypto()!.getUserVerificationStatus).mockResolvedValue({
+                isCrossSigningVerified: jest.fn().mockReturnValue(false),
+                wasCrossSigningVerified: jest.fn().mockReturnValue(true),
+            } as unknown as UserVerificationStatus);
+
+            const { container } = render(
+                <RoomMemberTileView
+                    item={item}
+                    member={member}
+                    isCallParticipant
+                    index={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
+
+            await waitFor(() => expect(container.querySelector(".mx_E2EIconView")).not.toBeNull());
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).not.toBeNull();
+        });
+
+        it("does not render a call icon for an invited member", () => {
+            member.isInvite = true;
+            const { container } = render(
+                <RoomMemberTileView
+                    item={item}
+                    member={member}
+                    isCallParticipant
+                    index={0}
+                    memberCount={1}
+                    onFocus={jest.fn()}
+                />,
+            );
+
+            expect(container.querySelector(".mx_InvitedIconView")).not.toBeNull();
+            expect(container.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
+        });
+
         it("should call onFocus handler when focused", async () => {
             const user = userEvent.setup();
             const onFocus = jest.fn();

@@ -19,6 +19,7 @@ import {
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { throttle } from "lodash";
 
@@ -37,7 +38,7 @@ import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
-import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
@@ -106,6 +107,7 @@ export type MemberWithSeparator = Member | typeof SEPARATOR;
 export interface MemberListViewState {
     members: MemberWithSeparator[];
     memberCount: number;
+    callParticipantUserIds: ReadonlySet<string>;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
     shouldShowInvite: boolean;
@@ -121,6 +123,17 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     if (!room) {
         throw new Error(`Room with id ${roomId} does not exist!`);
     }
+
+    const roomSession = useMemo(() => cli.matrixRTC.getRoomSession(room), [cli, room]);
+    const getCallParticipantUserIds = useCallback(
+        (): ReadonlySet<string> => new Set(roomSession.memberships.map((membership) => membership.userId)),
+        [roomSession],
+    );
+    const callParticipantUserIds = useTypedEventEmitterState(
+        roomSession,
+        MatrixRTCSessionEvent.MembershipsChanged,
+        getCallParticipantUserIds,
+    );
 
     const sdkContext = useContext(SDKContext);
     const [memberMap, setMemberMap] = useState<Map<string, MemberWithSeparator>>(new Map());
@@ -266,6 +279,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     return {
         members: Array.from(memberMap.values()),
         memberCount,
+        callParticipantUserIds,
         search: loadMembers,
         shouldShowInvite,
         isPresenceEnabled,

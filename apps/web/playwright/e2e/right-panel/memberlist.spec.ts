@@ -49,10 +49,12 @@ test.use({
 });
 
 test.describe("Memberlist", () => {
+    let roomId: string;
+
     test.beforeEach(async ({ app, user, page, homeserver }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 30_000);
         const names = ["Bob", "Bob", "Susan"];
-        await setupRoomWithMembers(app, page, homeserver, ROOM_NAME, names);
+        roomId = await setupRoomWithMembers(app, page, homeserver, ROOM_NAME, names);
     });
 
     test("Renders correctly", { tag: "@screenshot" }, async ({ page, app }) => {
@@ -93,5 +95,53 @@ test.describe("Memberlist", () => {
         // Verify that the user info screen is shown and hasn't scrolled back to top
         await expect(page.locator(".mx_UserInfo")).toBeVisible();
         await expect(page.locator(".mx_UserInfo_profile").getByText(targetName)).toBeVisible();
+    });
+
+    test("shows which room members are participating in a call", async ({ page, app, homeserver }) => {
+        const caller = new Bot(page, homeserver, {
+            displayName: "Caller",
+            autoAcceptInvites: false,
+            startClient: true,
+        });
+        await caller.joinRoom(roomId);
+        const callerUserId = await caller.evaluate((client) => client.getSafeUserId());
+
+        await caller.evaluate((client, roomId) => {
+            const room = client.getRoom(roomId)!;
+            const userId = client.getSafeUserId();
+            const deviceId = client.getDeviceId()!;
+            client.matrixRTC
+                .getRoomSession(room)
+                .joinRTCSession({ userId, deviceId, memberId: `${userId}:${deviceId}` }, [], undefined, {
+                    callIntent: "video",
+                });
+        }, roomId);
+
+        await expect
+            .poll(() =>
+                app.client.evaluate(
+                    (client, { roomId, callerUserId }) => {
+                        const room = client.getRoom(roomId)!;
+                        return client.matrixRTC
+                            .getRoomSession(room)
+                            .memberships.some((membership) => membership.userId === callerUserId);
+                    },
+                    { roomId, callerUserId },
+                ),
+            )
+            .toBe(true);
+
+        await app.viewRoomByName(ROOM_NAME);
+        const memberlist = await app.toggleMemberlistPanel();
+        const callerTile = memberlist.locator(`.mx_MemberTileView[aria-label="Caller"]`);
+        const callIcon = callerTile.locator(".mx_RoomMemberTileView_callIcon");
+        await expect(callIcon).toBeVisible();
+        await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(1);
+
+        await caller.evaluate(async (client, roomId) => {
+            const room = client.getRoom(roomId)!;
+            await client.matrixRTC.getRoomSession(room).leaveRoomSession(5_000);
+        }, roomId);
+        await expect(callIcon).toHaveCount(0);
     });
 });

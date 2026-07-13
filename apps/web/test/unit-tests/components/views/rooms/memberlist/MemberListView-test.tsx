@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { act } from "react";
 import { waitFor, fireEvent } from "jest-matrix-react";
 import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type CallMembership, MatrixRTCSessionEvent } from "matrix-js-sdk/src/matrixrtc";
 
 import { filterConsole } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";
@@ -154,6 +155,44 @@ describe("MemberListView and MemberlistHeaderView", () => {
             const preventDefaultSpy = jest.spyOn(submitEvent, "preventDefault");
             fireEvent(form!, submitEvent);
             expect(preventDefaultSpy).toHaveBeenCalled();
+        });
+
+        it("shows and hides the call icon when a member joins and leaves the room call", async () => {
+            const { root, roomSession, adminUsers } = rendered;
+            const memberTile = root.container.querySelector(`[aria-label="${adminUsers[0].userId}"]`)!;
+            expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
+
+            const membership = { userId: adminUsers[0].userId } as CallMembership;
+            await act(async () => {
+                roomSession.memberships = [membership];
+                roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], [membership]);
+            });
+            expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).not.toBeNull();
+
+            await act(async () => {
+                roomSession.memberships = [];
+                roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [membership], []);
+            });
+            expect(memberTile.querySelector(".mx_RoomMemberTileView_callIcon")).toBeNull();
+        });
+
+        it("shows one call icon for a member with multiple devices in the room call", async () => {
+            const userId = "@admin0:localhost";
+            const memberships = [{ userId }, { userId }] as CallMembership[];
+            const { root, memberListRoom, client } = await renderMemberList(true, undefined, 2, memberships);
+
+            expect(client.matrixRTC.getRoomSession).toHaveBeenCalledWith(memberListRoom);
+            expect(root.container.querySelectorAll(".mx_RoomMemberTileView_callIcon")).toHaveLength(1);
+            expect(
+                root.container
+                    .querySelector(`[aria-label="${userId}"]`)!
+                    .querySelector(".mx_RoomMemberTileView_callIcon"),
+            ).not.toBeNull();
+            expect(
+                root.container
+                    .querySelector('[aria-label="@default0:localhost"]')!
+                    .querySelector(".mx_RoomMemberTileView_callIcon"),
+            ).toBeNull();
         });
     });
 
