@@ -61,8 +61,7 @@ There you can also require all translations to be redone if the meaning of the s
 
 ### Editing English UK (en_EN) strings
 
-Edits to `en_EN.json` **require** a PR, since there is a high chance that a test covers the string in use and may be impacted if it were to change. This
-also gives us a clean change history.
+Edits to `en_EN.json` **require** a PR, since there is a high chance that a test covers the string in use and may be impacted if it were to change. This also gives us a clean change history.
 
 When changing a string, be careful to rename the key if the meaning changes. For instance, if the key `button_click_biscuits` changed from "Click for biscuits" to "Click for vegetables", then they key should have changed to `button_click_vegetables`.
 
