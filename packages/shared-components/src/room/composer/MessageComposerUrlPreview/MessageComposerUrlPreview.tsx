@@ -59,6 +59,18 @@ export interface MessageComposerUrlPreviewProps {
     className?: string;
 }
 
+function hashCode(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
+    }
+    return hash;
+}
+
+function urlFirstChar(url: string): string {
+    return (url.split("://")[1] ?? "?").slice(0, 1).toUpperCase()
+}
+
 /**
  * MessageComposerUrlPreviewView renders a preview of all previewable URLs above the messasge composer.
  */
@@ -80,9 +92,11 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                 case "loaded":
                     return <div key={entry.preview.link} className={classNames(className, styles.container)}>
                         <div>
-                            {entry.preview?.image?.imageThumb && (
-                                <img className={styles.image} src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
-                            )}
+                            <div className={styles.entryIcon} style={{ backgroundColor: `hsl(${hashCode(hostName)}, 100%, var(--icon-lightness))` }}>
+                                {(entry.preview?.image?.imageThumb && (
+                                    <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
+                                )) || urlFirstChar(entry.matched_url)}
+                            </div>
                             <div className={styles.text}>
                                 <LinkTitle {...entry.preview} />
                                 <LinkSiteName siteName={hostName} />
@@ -114,19 +128,11 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
         <span className={styles.left}>
             <span className={styles.icons}>
                 {links.map(entry => {
-                    function hashCode(str: string): number {
-                        let hash = 0;
-                        for (let i = 0; i < str.length; i++) {
-                            hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
-                        }
-                        return hash;
-                    }
-
                     const siteName = new URL(entry.matched_url).hostname;
                     if (entry.status === "loaded" && entry.preview.image !== undefined) {
                         return <div className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
                     } else {
-                        return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{entry.matched_url.split("://")[1].toString().slice(0, 1).toUpperCase()}</div>
+                        return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
                     }
                 })
                 }

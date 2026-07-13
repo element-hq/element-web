@@ -11,12 +11,20 @@
     border-radius: 10px;
 }
 
-:global(.cpd-theme-light) .summaryIcon {
-    --icon-lightness: 40%;
+:global(.cpd-theme-light) {
+
+    .summaryIcon,
+    .entryIcon {
+        --icon-lightness: 40%;
+    }
 }
 
 :global(.cpd-theme-dark) .summaryIcon {
-    --icon-lightness: 60%;
+
+    .summaryIcon,
+    .entryIcon {
+        --icon-lightness: 60%;
+    }
 }
 
 .summary {
@@ -57,9 +65,15 @@
         font-weight: 700;
         color: var(--cpd-color-text-on-solid-primary);
 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
         img {
-            width: 18px;
-            height: 18px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
     }
 
@@ -119,9 +133,23 @@
     }
 }
 
-.image {
+.entryIcon {
     width: 40px;
     height: 40px;
     border-radius: 6px;
-    object-fit: scale-down;
+    overflow: hidden;
+
+    text-align: center;
+    line-height: 40px;
+    font-weight: 700;
+    font-size: 20px;
+
+    color: var(--cpd-color-text-on-solid-primary);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
 }
