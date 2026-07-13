@@ -167,7 +167,7 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
  * @param spaceId The space in which the section is being created. Used to control visibility of the empty section.
- * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
+ * @returns A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
 export async function createSection(spaceId: SpaceKey): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);

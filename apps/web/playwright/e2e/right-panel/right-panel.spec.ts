@@ -75,7 +75,7 @@ test.describe("RightPanel", () => {
         test("should have padding under leave room", { tag: "@screenshot" }, async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
-            const leaveButton = await page.getByRole("menuitem", { name: "Leave Room" });
+            const leaveButton = page.getByRole("menuitem", { name: "Leave Room" });
             await leaveButton.scrollIntoViewIfNeeded();
 
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-leave-room.png");
@@ -177,7 +177,7 @@ test.describe("RightPanel", () => {
                 await viewRoomSummaryByName(page, app, ROOM_NAME);
 
                 await page.getByRole("menuitem", { name: "Report room" }).click();
-                const dialog = await page.getByRole("dialog", { name: "Report Room" });
+                const dialog = page.getByRole("dialog", { name: "Report Room" });
                 await dialog.getByLabel("reason").fill("This room should be reported");
                 await expect(dialog).toMatchScreenshot("room-report-dialog.png");
                 await dialog.getByRole("button", { name: "Send report" }).click();
@@ -189,7 +189,7 @@ test.describe("RightPanel", () => {
                 await viewRoomSummaryByName(page, app, ROOM_NAME);
 
                 await page.getByRole("menuitem", { name: "Report room" }).click();
-                const dialog = await page.getByRole("dialog", { name: "Report room" });
+                const dialog = page.getByRole("dialog", { name: "Report room" });
                 await dialog.getByRole("switch", { name: "Leave room" }).click();
                 await dialog.getByLabel("reason").fill("This room should be reported");
                 await dialog.getByRole("button", { name: "Send report" }).click();

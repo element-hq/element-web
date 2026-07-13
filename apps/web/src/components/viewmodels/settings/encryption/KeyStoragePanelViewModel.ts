@@ -29,7 +29,7 @@ interface KeyStoragePanelState {
      * A function that can be called to enable or disable key storage.
      * @param enable True to turn key storage on or false to turn it off
      */
-    setEnabled: (enable: boolean) => void;
+    setEnabled: (enable: boolean) => Promise<void>;
 
     /**
      * True if the state is still loading for the first time

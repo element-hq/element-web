@@ -366,7 +366,7 @@ interface ILocalRoomCreateLoaderProps {
  * Room create loader view displaying a message and a spinner.
  *
  * @param {ILocalRoomCreateLoaderProps} props Room view props
- * @return {ReactElement}
+ * @returns {ReactElement}
  */
 function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement {
     const text = _t("room|creating_room_text", { names: props.names });

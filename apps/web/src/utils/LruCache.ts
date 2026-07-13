@@ -131,6 +131,7 @@ export class LruCache<K, V> {
 
     /**
      * Returns an iterator over the cached values.
+     * @yields each value in the cache
      */
     public *values(): IterableIterator<V> {
         for (const item of this.map.values()) {

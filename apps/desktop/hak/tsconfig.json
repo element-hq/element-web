@@ -9,7 +9,8 @@
         "lib": ["es2022"],
         "types": ["node"],
         "allowImportingTsExtensions": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "noEmit": true
     },
     "include": ["../scripts/@types/*.d.ts", "./**/*.ts"]
 }

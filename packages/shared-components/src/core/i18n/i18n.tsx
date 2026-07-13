@@ -19,7 +19,7 @@
  * you will end up with literal "<a>" in your output, rather than HTML. Note that you can also use variable
  * substitution to insert React components, but you can't use it to translate text between tags.
  *
- * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
+ * @returns a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 import React from "react";
 import { KEY_SEPARATOR } from "matrix-web-i18n";
@@ -204,7 +204,7 @@ export function lookupString(key: TranslationKey): string {
  * @param {object} variables Variable substitutions, e.g { foo: 'bar' }
  * @param {object} tags Tag substitutions e.g. { 'a': (sub) => <a>{sub}</a> }
  *
- * @return a React <span> component if any non-strings were used in substitutions
+ * @returns a React <span> component if any non-strings were used in substitutions
  * or translation used a fallback locale, otherwise a string
  */
 // eslint-next-line @typescript-eslint/naming-convention
@@ -243,7 +243,7 @@ export function sanitizeForTranslation(text: string): string {
  * the substitution (e.g. return a React component). In case of a tag replacement, the function receives as
  * the argument the text inside the element corresponding to the tag.
  *
- * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
+ * @returns a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function substitute(text: string, variables?: StringVariables): string;
 export function substitute(text: string, variables?: RichVariables): React.ReactNode;
@@ -277,7 +277,7 @@ export function substitute(text: string, variables?: IVariables, tags?: Tags): s
  * function which will receive as the argument the capture groups defined in the regexp. E.g.
  * { 'Hello (.?) World': (sub) => sub.toUpperCase() }
  *
- * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
+ * @returns a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function replaceByRegexes(text: string, mapping: IVariables): string;
 export function replaceByRegexes(text: string, mapping: Tags): React.ReactNode;

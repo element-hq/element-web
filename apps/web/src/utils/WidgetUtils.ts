@@ -44,7 +44,7 @@ export default class WidgetUtils {
      * (Does not apply to non-room-based / user widgets)
      * @param client The matrix client of the logged-in user
      * @param roomId -- The ID of the room to check
-     * @return Boolean -- true if the user can modify widgets in this room
+     * @returns Boolean -- true if the user can modify widgets in this room
      * @throws Error -- specifies the error reason
      */
     public static canUserModifyWidgets(client: MatrixClient, roomId?: string): boolean {
@@ -84,7 +84,7 @@ export default class WidgetUtils {
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
      * @param matrixClient The matrix client of the logged-in user
      * @param  {[type]}  testUrlString URL to check
-     * @return {Boolean} True if specified URL is a scalar URL
+     * @returns {Boolean} True if specified URL is a scalar URL
      */
     public static isScalarUrl(testUrlString?: string): boolean {
         if (!testUrlString) {
@@ -339,7 +339,7 @@ export default class WidgetUtils {
     /**
      * Get room specific widgets
      * @param  {Room} room The room to get widgets force
-     * @return {[object]} Array containing current / active room widgets
+     * @returns {[object]} Array containing current / active room widgets
      */
     public static getRoomWidgets(room: Room): MatrixEvent[] {
         // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
@@ -356,7 +356,7 @@ export default class WidgetUtils {
     /**
      * Get user specific widgets (not linked to a specific room)
      * @param client The matrix client of the logged-in user
-     * @return {object} Event content object containing current / active user widgets
+     * @returns {object} Event content object containing current / active user widgets
      */
     public static getUserWidgets(client: MatrixClient | undefined): Record<string, UserWidget> {
         if (!client) {
@@ -372,7 +372,7 @@ export default class WidgetUtils {
     /**
      * Get user specific widgets (not linked to a specific room) as an array
      * @param client The matrix client of the logged-in user
-     * @return {[object]} Array containing current / active user widgets
+     * @returns {[object]} Array containing current / active user widgets
      */
     public static getUserWidgetsArray(client: MatrixClient | undefined): UserWidget[] {
         return Object.values(WidgetUtils.getUserWidgets(client));
@@ -381,7 +381,7 @@ export default class WidgetUtils {
     /**
      * Get active stickerpicker widgets (stickerpickers are user widgets by nature)
      * @param client The matrix client of the logged-in user
-     * @return {[object]} Array containing current / active stickerpicker widgets
+     * @returns {[object]} Array containing current / active stickerpicker widgets
      */
     public static getStickerpickerWidgets(client: MatrixClient | undefined): UserWidget[] {
         const widgets = WidgetUtils.getUserWidgetsArray(client);
@@ -401,7 +401,7 @@ export default class WidgetUtils {
     /**
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @param client The matrix client of the logged-in user
-     * @return {Promise} Resolves on account data updated
+     * @returns {Promise} Resolves on account data updated
      */
     public static async removeStickerpickerWidgets(client: MatrixClient | undefined): Promise<void> {
         if (!client) {

@@ -92,5 +92,6 @@ export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";
 export * from "./status/SetStatusView";
+export * from "./status/StatusTextView";
 // MVVM
 export * from "./core/viewmodel";
