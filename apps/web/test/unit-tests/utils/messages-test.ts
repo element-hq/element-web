@@ -14,8 +14,20 @@ import EditorModel from "../../../src/editor/model";
 import { mkEvent } from "../../test-utils";
 import { createPartCreator } from "../editor/mock";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("attachUrlPreviews", () => {
+    beforeEach(() => {
+        const original = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (setting) => setting === "feature_msc4095_url_preview_bundle" || original(setting),
+        );
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     const makeContent = (): RoomMessageEventContent =>
         ({ msgtype: "m.text", body: "hi https://example.com" }) as RoomMessageEventContent;
 
