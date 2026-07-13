@@ -14,7 +14,7 @@ import {
     logOutOfElement,
     verifyAfterLogin,
 } from "./utils.ts";
-import { logInAccountMas } from "../oidc";
+import { registerAccountMas } from "../oidc";
 import { Bot } from "../../pages/bot.ts";
 
 test.use({
@@ -27,12 +27,19 @@ test.use({
 });
 
 test.describe("Device dehydration, on a MAS-enabled homeserver", () => {
-    test("Can read messages sent while logged out", async ({ homeserver, page, app, user }) => {
+    test("Can read messages sent while logged out", async ({ mailpitClient, homeserver, page, app }, testInfo) => {
         test.slow();
+        const aliceUserId = `alice_${testInfo.testId}`;
+        const alicePassword = "Pa$sW0rD!";
 
-        const recoveryKey = await test.step("Alice sets up recovery => a dehydrated device is created", async () => {
-            return await enableKeyBackup(app);
-        });
+        const recoveryKey =
+            await test.step("Alice registers and sets up recovery => a dehydrated device is created", async () => {
+                await page.goto("/#/login");
+                await page.getByRole("button", { name: "Continue" }).click();
+
+                await registerAccountMas(page, mailpitClient, aliceUserId, `${aliceUserId}@email.com`, alicePassword);
+                return await enableKeyBackup(app);
+            });
 
         const [bob, testRoomId] = await test.step("Bob registers and joins a room with Alice", async () => {
             const bob = new Bot(page, homeserver, { displayName: "Bob" });
@@ -58,7 +65,8 @@ test.describe("Device dehydration, on a MAS-enabled homeserver", () => {
             await page.getByRole("link", { name: "Sign in" }).click();
             await page.getByRole("button", { name: "Continue" }).click();
 
-            await logInAccountMas(page, user.username, user.password);
+            await expect(page.getByText("Continue to Element?")).toBeVisible();
+            await page.getByRole("button", { name: "Continue" }).click();
 
             await verifyAfterLogin(page, recoveryKey);
             await app.viewRoomById(testRoomId);
