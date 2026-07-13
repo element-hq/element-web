@@ -25,6 +25,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
+import { UserStatusIcon } from "./UserStatusIcon";
 import AutocompleteProvider from "./AutocompleteProvider";
 import { _t } from "../languageHandler";
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
@@ -127,7 +128,11 @@ export default class UserProvider extends AutocompleteProvider {
                     suffix: selection.beginning && range!.start === 0 ? ": " : " ",
                     href: makeUserPermalink(user.userId),
                     component: (
-                        <PillCompletion title={displayName} description={description ?? undefined}>
+                        <PillCompletion
+                            title={displayName}
+                            titleIcon={<UserStatusIcon userId={user.userId} />}
+                            description={description ?? undefined}
+                        >
                             <MemberAvatar member={user} size="24px" />
                         </PillCompletion>
                     ),
