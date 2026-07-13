@@ -557,7 +557,7 @@ export class RoomViewStore extends EventEmitter {
             this.dis.dispatch<JoinRoomErrorPayload>({
                 action: Action.JoinRoomError,
                 roomId,
-                err: new UserFriendlyError("room|error_join_unknown", { cause: undefined }),
+                err: new UserFriendlyError("room|error_join_unknown", { cause: new Error("Cannot join room: no room ID or alias to join") }),
                 canAskToJoin: payload.canAskToJoin,
             });
             return;
