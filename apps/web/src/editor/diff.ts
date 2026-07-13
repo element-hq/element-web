@@ -54,7 +54,7 @@ export function diffDeletion(oldStr: string, newStr: string): IDiff {
  * @param {String} oldValue the previous value
  * @param {String} newValue the new value
  * @param {Number} caretPosition the position of the caret after `newValue` was applied.
- * @return {object} an object with `at` as the offset where characters were removed and/or added,
+ * @returns {object} an object with `at` as the offset where characters were removed and/or added,
  *                  `added` with the added string (if any), and
  *                  `removed` with the removed string (if any)
  */

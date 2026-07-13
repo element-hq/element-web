@@ -162,7 +162,6 @@ export class SDKContextClass {
     public get typingStore(): TypingStore {
         if (!this._TypingStore) {
             this._TypingStore = new TypingStore(this);
-            window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
     }

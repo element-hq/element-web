@@ -246,7 +246,7 @@ function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatc
  * Renders a message with the changes made in an edit shown visually.
  * @param {IContent} originalContent the content for the base message
  * @param {IContent} editContent the content for the edit message
- * @return {JSX.Element} a react element similar to what `bodyToHtml` returns
+ * @returns {JSX.Element} a react element similar to what `bodyToHtml` returns
  */
 export function editBodyDiffToHtml(originalContent: IContent, editContent: IContent): JSX.Element {
     // wrap the body in a div, DiffDOM needs a root element

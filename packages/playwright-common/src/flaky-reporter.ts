@@ -24,6 +24,7 @@ type PaginationLinks = {
     first?: string;
 };
 
+// oxlint-disable-next-line no-control-regex
 const ANSI_COLOUR_REGEX = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
 // We see quite a few test flakes which are caused by the app exploding

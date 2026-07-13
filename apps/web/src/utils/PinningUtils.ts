@@ -33,7 +33,7 @@ export default class PinningUtils {
      * Determines if the given event can be pinned.
      * This is a simple check to see if the event is of a type that can be pinned.
      * @param {MatrixEvent} event The event to check.
-     * @return {boolean} True if the event may be pinned, false otherwise.
+     * @returns {boolean} True if the event may be pinned, false otherwise.
      */
     public static isPinnable(event: MatrixEvent): boolean {
         if (event.isRedacted()) return false;
@@ -43,7 +43,7 @@ export default class PinningUtils {
     /**
      * Determines if the given event may be unpinned.
      * @param {MatrixEvent} event The event to check.
-     * @return {boolean} True if the event may be unpinned, false otherwise.
+     * @returns {boolean} True if the event may be unpinned, false otherwise.
      */
     public static isUnpinnable(event: MatrixEvent): boolean {
         if (!event) return false;

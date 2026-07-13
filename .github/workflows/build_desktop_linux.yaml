@@ -134,7 +134,7 @@ jobs:
             # This allows contributors to test changes to the dockerbuild image within a pull request
             - name: Build docker image
               uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
-              if: steps.changed_files.outputs.any_modified == 'true'
+              if: steps.changed_files.outputs.any_modified == 'true' || github.event_name == 'merge_group'
               with:
                   file: apps/desktop/dockerbuild/Dockerfile
                   context: apps/desktop

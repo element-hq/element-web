@@ -393,6 +393,7 @@ export default class Notifier extends TypedEventEmitter<keyof EmittedEvents, Emi
                     return;
                 }
 
+                // oxlint-disable-next-line promise/no-callback-in-promise
                 if (callback) callback();
 
                 this.sdkContext.posthogAnalytics.trackEvent<PermissionChangedEvent>({

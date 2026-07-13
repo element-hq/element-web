@@ -58,7 +58,7 @@ export default abstract class AutocompleteProvider {
      * @param {string} query The query string
      * @param {ISelectionRange} selection Selection to search
      * @param {boolean} force True if the user is forcing completion
-     * @return {object} { command, range } where both objects fields are null if no match
+     * @returns {object} { command, range } where both objects fields are null if no match
      */
     public getCurrentCommand(query: string, selection: ISelectionRange, force = false): Partial<ICommand> {
         let commandRegex = this.commandRegex;

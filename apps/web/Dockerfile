@@ -1,8 +1,14 @@
 # syntax=docker.io/docker/dockerfile:1.25-labs@sha256:4426b5e269e36911b94fb79cf67f1fd7155ef11b2bbc8ab23cbfcbc97130efe9
 # Context must be the root of the monorepo
 
+# PNPM source
+FROM --platform=$BUILDPLATFORM ghcr.io/pnpm/pnpm:11.10.0@sha256:9a6eb06d5f861d830fe27d85a91415e60527fa45ec45b52ee43c92a8aaf3bf8a AS pnpm
+
 # Builder
 FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:b2f4f5e6553256d611490b757e7aa80da1faae9d264d77ac8c2ddca96ace9d68 AS builder
+
+COPY --from=pnpm /opt/pnpm /opt/pnpm
+RUN ln -s /opt/pnpm/pnpm /usr/local/bin/pnpm
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
@@ -13,7 +19,6 @@ WORKDIR /src
 
 # Install dependencies
 COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml patches scripts **/package.json /src/
-RUN corepack enable
 RUN pnpm install --frozen-lockfile
 RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 

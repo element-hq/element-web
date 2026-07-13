@@ -283,6 +283,14 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
           </svg>
         </div>
       </div>
+      <a
+        class="_link_k9ljz_8"
+        data-kind="primary"
+        data-size="md"
+        rel="noreferrer noopener"
+      >
+        Set layout for everyone
+      </a>
     </div>
   </div>
 </DocumentFragment>

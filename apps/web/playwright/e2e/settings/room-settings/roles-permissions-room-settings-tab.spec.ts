@@ -38,7 +38,7 @@ test.describe("Roles & Permissions room settings tab", () => {
         await combobox.selectOption("Moderator");
 
         // Should display a modal to warn that we are demoting the only admin user
-        const modal = await page.locator(".mx_Dialog", {
+        const modal = page.locator(".mx_Dialog", {
             hasText: "Warning",
         });
         await expect(modal).toBeVisible();
