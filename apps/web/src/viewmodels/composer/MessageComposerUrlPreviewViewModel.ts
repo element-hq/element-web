@@ -73,6 +73,14 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
                 .map((w) => w.trim())
                 .filter((word) => URL.canParse(word)),
         );
+
+        // add quoted links in form of `"XX://XXXXX"` for wysiwyg hyperlinks
+        content
+            .match(/"(http|https):\/\/[^"]*"/g)
+            ?.map((w) => w.slice(1, -1))
+            ?.filter((word) => URL.canParse(word))
+            ?.forEach((w) => newLinks.add(w));
+
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
             return;
