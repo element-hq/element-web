@@ -188,6 +188,7 @@ export const mockClientMethodsCrypto = (): Partial<
 });
 
 export const mockClientMethodsRooms = (rooms: Room[] = []): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
+    getVisibleRooms: vi.fn().mockReturnValue(rooms),
     getRooms: vi.fn().mockReturnValue(rooms),
     getRoom: vi.fn((roomId) => rooms.find((r) => r.roomId === roomId) ?? null),
     isRoomEncrypted: vi.fn(),

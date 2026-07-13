@@ -144,7 +144,7 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             }));
             break;
         case "callDisplayMediaCallback":
-            await getDisplayMediaCallback()?.({ video: args[0] });
+            getDisplayMediaCallback()?.({ video: args[0] });
             setDisplayMediaCallback(null);
             ret = null;
             break;

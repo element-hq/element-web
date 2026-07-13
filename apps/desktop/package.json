@@ -29,9 +29,7 @@
         "fetch": "pnpm run mkdirs && node scripts/fetch-package.ts",
         "asar-webapp": "asar p webapp webapp.asar",
         "start": "nx start",
-        "lint": "pnpm lint:types && pnpm lint:js",
-        "lint:js": "eslint --max-warnings 0 src hak playwright scripts",
-        "lint:js-fix": "eslint --fix --max-warnings 0 src hak playwright scripts",
+        "lint": "pnpm lint:types",
         "lint:types": "pnpm lint:types:src && pnpm lint:types:node && pnpm lint:types:test && pnpm lint:types:scripts && pnpm lint:types:hak",
         "lint:types:src": "tsc --noEmit",
         "lint:types:node": "tsc --noEmit -p tsconfig.node.json",
@@ -75,14 +73,11 @@
         "@electron/asar": "4.2.0",
         "@electron/fuses": "^2.1.1",
         "@playwright/test": "catalog:",
-        "@stylistic/eslint-plugin": "^5.0.0",
         "@types/auto-launch": "^5.0.1",
         "@types/counterpart": "^0.18.1",
         "@types/minimist": "^1.2.1",
         "@types/node": "catalog:",
         "@types/pacote": "^11.1.1",
-        "@typescript-eslint/eslint-plugin": "^8.0.0",
-        "@typescript-eslint/parser": "^8.0.0",
         "app-builder-lib": "26.15.3",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
@@ -90,12 +85,6 @@
         "electron-builder": "26.15.3",
         "electron-builder-squirrel-windows": "26.15.3",
         "electron-devtools-installer": "^4.0.0",
-        "eslint": "^8.26.0",
-        "eslint-config-google": "^0.14.0",
-        "eslint-plugin-import": "^2.25.4",
-        "eslint-plugin-matrix-org": "^3.0.0",
-        "eslint-plugin-n": "^17.12.0",
-        "eslint-plugin-unicorn": "^56.0.0",
         "glob": "^13.0.0",
         "matrix-web-i18n": "catalog:",
         "memfs": "^4.57.2",
@@ -112,8 +101,7 @@
     },
     "nx": {
         "includedScripts": [
-            "lint:types",
-            "lint:js"
+            "lint:types"
         ]
     }
 }

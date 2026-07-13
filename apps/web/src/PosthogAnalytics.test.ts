@@ -127,7 +127,7 @@ describe("PosthogAnalytics", () => {
 
         it("Should not track events if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
-            await analytics.trackEvent<ITestEvent>({
+            analytics.trackEvent<ITestEvent>({
                 eventName: "TestEvents",
                 foo: "bar",
             });

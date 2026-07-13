@@ -78,7 +78,7 @@ export abstract class AsyncStore<T extends object> extends EventEmitter {
             this.storeState = Object.freeze(Object.assign(<T>{}, this.storeState, newState));
             this.emit(UPDATE_EVENT, this);
         } finally {
-            await this.lock.release();
+            this.lock.release();
         }
     }
 
@@ -93,7 +93,7 @@ export abstract class AsyncStore<T extends object> extends EventEmitter {
             this.storeState = Object.freeze(<T>(newState || {}));
             if (!quiet) this.emit(UPDATE_EVENT, this);
         } finally {
-            await this.lock.release();
+            this.lock.release();
         }
     }
 
