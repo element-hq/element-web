@@ -729,6 +729,17 @@ describe("RoomHeader", () => {
         });
     });
 
+    it("does not show a user status for non-DM rooms", async () => {
+        SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, true);
+        client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+        mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+        render(<RoomHeader room={room} />, getWrapper());
+
+        expect(screen.queryByText("on a horse")).not.toBeInTheDocument();
+        expect(client.doesServerSupportExtendedProfiles).not.toHaveBeenCalled();
+    });
+
     it("shows a history icon if the room is encrypted and has shared history", async () => {
         mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
         await room.addLiveEvents(
@@ -809,6 +820,28 @@ describe("RoomHeader", () => {
             render(<RoomHeader room={room} />, getWrapper());
 
             await waitFor(() => expect(getByLabelText(document.body, expectedLabel)).toBeInTheDocument());
+        });
+
+        it("shows the user status", async () => {
+            SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, true);
+            client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+            render(<RoomHeader room={room} />, getWrapper());
+
+            await waitFor(() => expect(screen.getByText("on a horse")).toBeInTheDocument());
+            expect(screen.getByText("🐎")).toBeInTheDocument();
+        });
+
+        it("does not show the user status when the feature is disabled", async () => {
+            SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, false);
+            client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+            render(<RoomHeader room={room} />, getWrapper());
+
+            expect(screen.queryByText("on a horse")).not.toBeInTheDocument();
+            expect(client.doesServerSupportExtendedProfiles).not.toHaveBeenCalled();
         });
 
         it("does not show the face pile for DMs", () => {
