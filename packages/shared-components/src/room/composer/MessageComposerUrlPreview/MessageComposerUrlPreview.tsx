@@ -6,7 +6,6 @@
  */
 
 import React, { type JSX } from "react";
-import { Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
 import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
@@ -69,11 +68,14 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
         return null;
     }
 
+
+    const links = entries.filter(entry => entry.include);
+
     // Show only the first preview to revert back to previous behaviour
     // But have previews fetch all URL previews in the message text
-    const previewViews = entries
-        .filter((entry) => entry.include)
+    const previewViews = links
         .map((entry) => {
+            const hostName = new URL(entry.matched_url).hostname;
             switch (entry.status) {
                 case "loaded":
                     return <div key={entry.preview.link} className={classNames(className, styles.container)}>
@@ -82,9 +84,8 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                                 <img className={styles.image} src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
                             )}
                             <div className={styles.text}>
-                                <LinkSiteName {...entry.preview} />
                                 <LinkTitle {...entry.preview} />
-                                <Text className={styles.description}>{entry.preview?.description}</Text>
+                                <LinkSiteName siteName={hostName} />
                             </div>
                         </div>
                     </div>;
@@ -92,9 +93,8 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                     return <div key={entry.matched_url} className={classNames(className, styles.container)}>
                         <div>
                             <div className={styles.text}>
-                                <LinkSiteName siteName={new URL(entry.matched_url).hostname} />
                                 <LinkTitle title="Loading..." showTooltipOnLink={false} link={entry.matched_url} />
-                                <Text className={styles.description}>{"Loading..."}</Text>
+                                <LinkSiteName siteName={hostName} />
                             </div>
                         </div>
                     </div>;
@@ -102,14 +102,45 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                     return <div key={entry.matched_url} className={classNames(className, styles.container)}>
                         <div>
                             <div className={styles.text}>
-                                <LinkSiteName siteName={new URL(entry.matched_url).hostname} />
                                 <LinkTitle title="Failed" showTooltipOnLink={false} link={entry.matched_url} />
-                                <Text className={styles.description}>{"Failed"}</Text>
+                                <LinkSiteName siteName={hostName} />
                             </div>
                         </div>
                     </div>;
             }
         });
 
-    return <>{previewViews}</>;
+    const summary = <div className={styles.summary}>
+        <span className={styles.left}>
+            <span className={styles.icons}>
+                {links.map(entry => {
+                    function hashCode(str: string): number {
+                        let hash = 0;
+                        for (let i = 0; i < str.length; i++) {
+                            hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
+                        }
+                        return hash;
+                    }
+
+                    const siteName = new URL(entry.matched_url).hostname;
+                    if (entry.status === "loaded" && entry.preview.image !== undefined) {
+                        return <div className={styles.summaryIcon}><img src={entry.preview.image.imageThumb} /></div>
+                    } else {
+                        return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{entry.matched_url.split("://")[1].toString().slice(0, 1).toUpperCase()}</div>
+                    }
+                })
+                }
+            </span>
+            <span className={styles.linkCount}>{links.length} link{links.length <= 1 ? "" : "s"}</span>
+        </span>
+        <span className={styles.right}>
+            <span className={styles.clearAll}>Clear all</span>
+            <span className={styles.collapse}>›</span>
+        </span>
+    </div>;
+
+    return <div className={styles.wrapper}>
+        {summary}
+        {previewViews}
+    </div>;
 }
