@@ -21,6 +21,7 @@ import {
     session,
     protocol,
     desktopCapturer,
+    nativeTheme,
 } from "electron";
 // eslint-disable-next-line n/file-extension-in-import
 import * as Sentry from "@sentry/electron/main";
@@ -42,6 +43,7 @@ import { _t, AppLocalization } from "./language-helper.js";
 import { setDisplayMediaCallback } from "./displayMediaCallback.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
+import { resolveBackgroundColor } from "./background-color.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
@@ -246,8 +248,11 @@ app.on("ready", async () => {
     console.debug("Opening main window");
     const preloadScript = path.normalize(`${__dirname}/preload.cjs`);
     global.mainWindow = new BrowserWindow({
-        // https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
-        backgroundColor: "#fff",
+        // An opaque background avoids blurry font rendering
+        // (https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do)
+        // and paints the window in the user's theme colour before the web app's CSS loads,
+        // avoiding the white launch flash (https://github.com/element-hq/element-web/issues/32260).
+        backgroundColor: resolveBackgroundColor(store.get("backgroundColor"), nativeTheme.shouldUseDarkColors),
 
         titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
         trafficLightPosition: { x: 9, y: 8 },

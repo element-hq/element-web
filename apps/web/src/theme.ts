@@ -387,6 +387,10 @@ export async function setTheme(theme?: string): Promise<void> {
             if (bodyStyles.backgroundColor) {
                 const metaElement = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')!;
                 metaElement.content = bodyStyles.backgroundColor;
+                // On desktop, report the resolved theme background colour to the main process so it can
+                // paint the native window in the same colour on the next launch, avoiding a white flash.
+                // https://github.com/element-hq/element-web/issues/32260
+                window.electron?.send("setThemeColor", bodyStyles.backgroundColor);
             }
             resolve();
         };

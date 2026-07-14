@@ -12,6 +12,7 @@ import { randomArray } from "./utils.js";
 import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
+import { isValidThemeColor } from "./background-color.js";
 
 let focusHandlerAttached = false;
 ipcMain.on("loudNotification", function (): void {
@@ -25,6 +26,19 @@ ipcMain.on("loudNotification", function (): void {
             focusHandlerAttached = true;
         }
     }
+});
+
+// The renderer reports its resolved theme background colour here. We persist it so the next
+// launch can paint the native window in the same colour (avoiding the white launch flash,
+// https://github.com/element-hq/element-web/issues/32260) and update the live window too.
+ipcMain.on("setThemeColor", function (_ev: IpcMainEvent, color: unknown): void {
+    const store = Store.instance;
+    if (!store || !isValidThemeColor(color)) return;
+    // switchTheme() fires this on every theme resolution, so skip the synchronous disk write
+    // and repaint when nothing changed.
+    if (store.get("backgroundColor") === color) return;
+    store.set("backgroundColor", color);
+    global.mainWindow?.setBackgroundColor(color);
 });
 
 let powerSaveBlockerId: number | null = null;

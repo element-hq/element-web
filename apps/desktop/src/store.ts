@@ -80,6 +80,11 @@ interface StoreData {
     safeStorageBackendMigrate?: boolean;
     /** whether to open the app at login minimised, only valid when app.openAtLogin is true */
     openAtLoginMinimised: boolean;
+    /**
+     * the last theme background colour reported by the renderer, used to paint the native
+     * window before the web app's CSS loads and avoid a white flash on launch (#32260)
+     */
+    backgroundColor?: string;
 }
 
 /**
@@ -226,6 +231,9 @@ class Store extends ElectronStore<StoreData> {
                 openAtLoginMinimised: {
                     type: "boolean",
                     default: true,
+                },
+                backgroundColor: {
+                    type: "string",
                 },
             },
         });
