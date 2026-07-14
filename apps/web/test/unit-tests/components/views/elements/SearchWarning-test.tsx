@@ -14,18 +14,24 @@ import SdkConfig from "../../../../../src/SdkConfig";
 import SearchWarning, { WarningKind } from "../../../../../src/components/views/elements/SearchWarning";
 import EventIndexPeg from "../../../../../src/indexing/EventIndexPeg";
 import { type default as EventIndex } from "../../../../../src/indexing/EventIndex";
+import { SearchScope } from "../../../../../src/Searching";
+
+const SEARCHED_ROOM = "!searched:example.org";
+const OTHER_ROOM = "!other:example.org";
+const PARTIAL_WARNING = "Results may be incomplete because your search index is still being built.";
 
 /**
  * A minimal fake EventIndex exposing only the surface that SearchWarning consumes:
- * `currentRoom()` (null once the crawl is complete) and the `changedCheckpoint` emitter.
+ * `crawlingRooms()` (the rooms with outstanding crawler checkpoints) and the `changedCheckpoint`
+ * emitter.
  */
 class FakeEventIndex {
     private listeners = new Map<string, Set<(...args: any[]) => void>>();
 
-    public constructor(private current: Room | null) {}
+    public constructor(private crawling: string[] = []) {}
 
-    public currentRoom(): Room | null {
-        return this.current;
+    public crawlingRooms(): { crawlingRooms: Set<string>; totalRooms: Set<string> } {
+        return { crawlingRooms: new Set(this.crawling), totalRooms: new Set(this.crawling) };
     }
 
     public on(event: string, listener: (...args: any[]) => void): void {
@@ -37,10 +43,15 @@ class FakeEventIndex {
         this.listeners.get(event)?.delete(listener);
     }
 
-    /** Test helper: simulate the crawler advancing (or finishing, when `current` is null). */
-    public emitChangedCheckpoint(current: Room | null): void {
-        this.current = current;
-        this.listeners.get("changedCheckpoint")?.forEach((listener) => listener(current));
+    /**
+     * Test helper: simulate the crawler advancing (or finishing, when `crawling` is empty).
+     *
+     * The real index emits only the globally-current room, which cannot answer a per-room
+     * question, so `currentRoom` is passed through purely to prove consumers ignore it.
+     */
+    public emitChangedCheckpoint(crawling: string[], currentRoom: Room | null = null): void {
+        this.crawling = crawling;
+        this.listeners.get("changedCheckpoint")?.forEach((listener) => listener(currentRoom));
     }
 }
 
@@ -86,61 +97,137 @@ describe("<SearchWarning />", () => {
             EventIndexPeg.index = index as unknown as EventIndex;
         };
 
-        it("renders the partial-index warning while the crawl is still in progress", () => {
-            setIndex(new FakeEventIndex({ name: "Encrypted room" } as Room));
+        it("warns a room-scoped search while the searched room is still being crawled", () => {
+            setIndex(new FakeEventIndex([SEARCHED_ROOM]));
 
             const { queryByText, queryByRole } = render(
-                <SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} />,
+                <SearchWarning
+                    isRoomEncrypted={true}
+                    kind={WarningKind.Search}
+                    scope={SearchScope.Room}
+                    roomId={SEARCHED_ROOM}
+                />,
             );
 
-            expect(
-                queryByText("Results may be incomplete because your search index is still being built."),
-            ).toBeInTheDocument();
+            expect(queryByText(PARTIAL_WARNING)).toBeInTheDocument();
             // The notice appears dynamically while the panel is open, so it must be a live region (#32253).
             expect(queryByRole("status")).toBeInTheDocument();
         });
 
-        it("renders nothing once the index has finished crawling", () => {
-            // currentRoom() returns null when the crawl is complete (fully indexed).
-            setIndex(new FakeEventIndex(null));
+        it("does not warn a room-scoped search when only an unrelated room is still being crawled", () => {
+            setIndex(new FakeEventIndex([OTHER_ROOM]));
 
-            const { container } = render(<SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} />);
+            const { container } = render(
+                <SearchWarning
+                    isRoomEncrypted={true}
+                    kind={WarningKind.Search}
+                    scope={SearchScope.Room}
+                    roomId={SEARCHED_ROOM}
+                />,
+            );
+
+            expect(container).toBeEmptyDOMElement();
+        });
+
+        it("warns an all-rooms search while any room is still being crawled", () => {
+            setIndex(new FakeEventIndex([OTHER_ROOM]));
+
+            const { queryByText } = render(
+                <SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} scope={SearchScope.All} />,
+            );
+
+            expect(queryByText(PARTIAL_WARNING)).toBeInTheDocument();
+        });
+
+        it("falls back to the global check when the searched room is not yet known", () => {
+            // RoomView can render before a room alias has resolved to an id.
+            setIndex(new FakeEventIndex([OTHER_ROOM]));
+
+            const { queryByText } = render(
+                <SearchWarning
+                    isRoomEncrypted={true}
+                    kind={WarningKind.Search}
+                    scope={SearchScope.Room}
+                    roomId={undefined}
+                />,
+            );
+
+            expect(queryByText(PARTIAL_WARNING)).toBeInTheDocument();
+        });
+
+        it("renders nothing once the index has finished crawling", () => {
+            setIndex(new FakeEventIndex([]));
+
+            const { container } = render(
+                <SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} scope={SearchScope.All} />,
+            );
 
             expect(container).toBeEmptyDOMElement();
         });
 
         it("does not warn for the Files kind even while crawling", () => {
-            setIndex(new FakeEventIndex({ name: "Encrypted room" } as Room));
+            setIndex(new FakeEventIndex([SEARCHED_ROOM]));
 
             const { container } = render(<SearchWarning isRoomEncrypted={true} kind={WarningKind.Files} />);
 
             expect(container).toBeEmptyDOMElement();
         });
 
-        it("clears the warning when a changedCheckpoint event reports completion", () => {
-            const index = new FakeEventIndex({ name: "Encrypted room" } as Room);
+        it("clears the warning when the searched room's checkpoint drains", () => {
+            const index = new FakeEventIndex([SEARCHED_ROOM]);
             setIndex(index);
 
-            const { queryByText } = render(<SearchWarning isRoomEncrypted={true} kind={WarningKind.Search} />);
+            const { queryByText } = render(
+                <SearchWarning
+                    isRoomEncrypted={true}
+                    kind={WarningKind.Search}
+                    scope={SearchScope.Room}
+                    roomId={SEARCHED_ROOM}
+                />,
+            );
 
-            expect(
-                queryByText("Results may be incomplete because your search index is still being built."),
-            ).toBeInTheDocument();
+            expect(queryByText(PARTIAL_WARNING)).toBeInTheDocument();
 
-            // The crawler drains its last checkpoint: currentRoom() becomes null.
             act(() => {
-                index.emitChangedCheckpoint(null);
+                index.emitChangedCheckpoint([]);
             });
 
-            expect(
-                queryByText("Results may be incomplete because your search index is still being built."),
-            ).not.toBeInTheDocument();
+            expect(queryByText(PARTIAL_WARNING)).not.toBeInTheDocument();
+        });
+
+        it("keeps warning when the crawler moves to another room but the searched room is still queued", () => {
+            const index = new FakeEventIndex([SEARCHED_ROOM, OTHER_ROOM]);
+            setIndex(index);
+
+            const { queryByText } = render(
+                <SearchWarning
+                    isRoomEncrypted={true}
+                    kind={WarningKind.Search}
+                    scope={SearchScope.Room}
+                    roomId={SEARCHED_ROOM}
+                />,
+            );
+
+            // The event payload names a different room; the searched room is still outstanding, so
+            // the warning must survive. This fails if the handler trusts the payload.
+            act(() => {
+                index.emitChangedCheckpoint([SEARCHED_ROOM], { roomId: OTHER_ROOM } as Room);
+            });
+
+            expect(queryByText(PARTIAL_WARNING)).toBeInTheDocument();
         });
 
         it("renders nothing when the room is not encrypted even while crawling", () => {
-            setIndex(new FakeEventIndex({ name: "Encrypted room" } as Room));
+            setIndex(new FakeEventIndex([SEARCHED_ROOM]));
 
-            const { container } = render(<SearchWarning isRoomEncrypted={false} kind={WarningKind.Search} />);
+            const { container } = render(
+                <SearchWarning
+                    isRoomEncrypted={false}
+                    kind={WarningKind.Search}
+                    scope={SearchScope.Room}
+                    roomId={SEARCHED_ROOM}
+                />,
+            );
 
             expect(container).toBeEmptyDOMElement();
         });
