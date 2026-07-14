@@ -30,6 +30,10 @@ export default defineConfig({
         dts({
             bundleTypes: {
                 configPath: "./api-extractor.json",
+                invokeOptions: {
+                    localBuild: !!process.env.CI,
+                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                },
             },
         }),
         externalGlobals({

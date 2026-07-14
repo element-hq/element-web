@@ -135,7 +135,7 @@ interface IState {
 
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    declare public context: ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
@@ -300,7 +300,7 @@ export default class AppTile extends React.Component<IProps, IState> {
      * Set initial component state when the App wUrl (widget URL) is being updated.
      * Component props *must* be passed (rather than relying on this.props).
      * @param  {Object} newProps The new properties of the component
-     * @return {Object} Updated component state to be set with setState
+     * @returns {Object} Updated component state to be set with setState
      */
     private getNewState(newProps: IProps): IState {
         return {

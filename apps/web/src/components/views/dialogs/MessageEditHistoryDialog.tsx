@@ -20,6 +20,7 @@ import ScrollPanel from "../../structures/ScrollPanel";
 import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -54,7 +55,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const key = `${roomId}-${ts}`;
         let vm = this.dateSeparatorVms.get(key);
         if (!vm) {
-            vm = new DateSeparatorViewModel({ roomId, ts });
+            vm = new DateSeparatorViewModel({ roomId, ts, roomViewStore: SDKContextClass.instance.roomViewStore });
             this.dateSeparatorVms.set(key, vm);
         }
         return vm;

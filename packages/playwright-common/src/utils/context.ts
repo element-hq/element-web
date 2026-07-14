@@ -15,8 +15,6 @@ import { populateLocalStorageWithCredentials } from "../fixtures/user.js";
 
 /** Create a new instance of the application, in a separate browser context, using the given credentials.
  *
- * Warning: `populateLocalStorageWithCredentials` is an incomplete implementation, particularly in MAS environments: for example, a logout operation will not work correctly.
- *
  * @param browser - the browser to use
  * @param credentials - the credentials to use for the new instance
  * @param additionalConfig - additional config for the `config.json` for the new instance

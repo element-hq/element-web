@@ -72,7 +72,7 @@ export default class Resizer<C extends IConfig, I extends ResizeItem<C> = Resize
     Gives the distributor for a specific resize handle, as if you would have started
     to drag that handle. Can be used to manipulate the size of an item programmatically.
     @param {number} handleIndex the index of the resize handle in the container
-    @return {FixedDistributor} a new distributor for the given handle
+    @returns {FixedDistributor} a new distributor for the given handle
     */
     public forHandleAt(handleIndex: number): FixedDistributor<C, I> | undefined {
         const handles = this.getResizeHandles();

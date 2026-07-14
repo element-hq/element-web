@@ -13,7 +13,6 @@ import {
 } from "@element-hq/web-shared-components";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -26,13 +25,13 @@ import { SDKContext } from "../../../../contexts/SDKContext.ts";
  */
 export function RoomListView(): JSX.Element {
     const sdkContext = useContext(SDKContext);
-    const matrixClient = useMatrixClientContext();
 
     // Create and auto-dispose ViewModel instance
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new RoomListViewModel({
-                client: matrixClient,
+                client: sdkContext.client!,
+                roomViewStore: sdkContext.roomViewStore,
                 spaceStore: sdkContext.spaceStore,
                 roomListStore: sdkContext.roomListStore,
             }),

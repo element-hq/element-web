@@ -9,12 +9,18 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 
-import { createTestClient, flushPromises, flushPromisesWithFakeTimers, mkStubRoom, stubClient } from "../../test-utils";
+import {
+    createTestClient,
+    flushPromises,
+    flushPromisesWithFakeTimers,
+    mkStubRoom,
+    stubClient,
+    TestSDKContext,
+} from "../../test-utils";
 import { RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListViewModel";
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
@@ -43,6 +49,7 @@ jest.mock("../../../src/viewmodels/room-list/utils", () => ({
 
 describe("RoomListViewModel", () => {
     let matrixClient: MatrixClient;
+    let sdkContext: TestSDKContext;
     let room1: Room;
     let room2: Room;
     let room3: Room;
@@ -50,6 +57,8 @@ describe("RoomListViewModel", () => {
 
     beforeEach(() => {
         matrixClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = matrixClient;
         room1 = mkStubRoom("!room1:server", "Room 1", matrixClient);
         room2 = mkStubRoom("!room2:server", "Room 2", matrixClient);
         room3 = mkStubRoom("!room3:server", "Room 3", matrixClient);
@@ -60,14 +69,14 @@ describe("RoomListViewModel", () => {
         } as unknown as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
 
-        jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+        jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
             spaceId: "home",
             sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
         });
 
-        jest.spyOn(SDKContextClass.instance.roomListStore, "isLoadingRooms", "get").mockReturnValue(false);
-        jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpaceRoom", "get").mockReturnValue(null);
-        jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+        jest.spyOn(sdkContext.roomListStore, "isLoadingRooms", "get").mockReturnValue(false);
+        jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(null);
+        jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue(null);
 
         mocked(hasCreateRoomRights).mockReturnValue(false);
     });
@@ -81,8 +90,9 @@ describe("RoomListViewModel", () => {
         it("should initialize with correct snapshot", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const snapshot = viewModel.getSnapshot();
@@ -95,15 +105,16 @@ describe("RoomListViewModel", () => {
         });
 
         it("should initialize with empty room list", () => {
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [] }],
             });
 
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             expect(viewModel.getSnapshot().sections).toEqual([]);
@@ -115,8 +126,9 @@ describe("RoomListViewModel", () => {
             mocked(hasCreateRoomRights).mockReturnValue(true);
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             expect(viewModel.getSnapshot().canCreateRoom).toBe(true);
@@ -127,17 +139,18 @@ describe("RoomListViewModel", () => {
         it("should update room list when ListsUpdate event fires", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const newRoom = mkStubRoom("!room4:server", "Room 4", matrixClient);
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3, newRoom] }],
             });
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
                 "!room1:server",
@@ -148,16 +161,17 @@ describe("RoomListViewModel", () => {
         });
 
         it("should update loading state when ListsLoaded event fires", () => {
-            jest.spyOn(SDKContextClass.instance.roomListStore, "isLoadingRooms", "get").mockReturnValue(true);
+            jest.spyOn(sdkContext.roomListStore, "isLoadingRooms", "get").mockReturnValue(true);
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             expect(viewModel.getSnapshot().isLoadingRooms).toBe(true);
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsLoaded);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsLoaded);
 
             expect(viewModel.getSnapshot().isLoadingRooms).toBe(false);
         });
@@ -166,15 +180,16 @@ describe("RoomListViewModel", () => {
         it("should keep existing view model when ListsUpdate event fires", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Create view model for room1
             const room1VM = viewModel.getRoomItemViewModel("!room1:server");
             expect(room1VM).toBeDefined();
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             // View model should be still valid
             expect(room1VM!.isDisposed).toBe(false);
@@ -185,22 +200,21 @@ describe("RoomListViewModel", () => {
         it("should update room list when space changes", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const spaceRoomList = [room1, room2];
 
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
                 sections: [{ tag: CHATS_TAG, rooms: spaceRoomList }],
             });
 
-            jest.spyOn(SDKContextClass.instance.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(
-                "!room1:server",
-            );
+            jest.spyOn(sdkContext.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue("!room1:server");
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             expect(viewModel.getSnapshot().roomListState.spaceId).toBe("!space:server");
             expect(viewModel.getSnapshot().sections[0].roomIds).toEqual(["!room1:server", "!room2:server"]);
@@ -209,8 +223,9 @@ describe("RoomListViewModel", () => {
         it("should clear view models when space changes", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Get view models for visible rooms
@@ -221,12 +236,12 @@ describe("RoomListViewModel", () => {
             const disposeSpy2 = jest.spyOn(vm2, "dispose");
 
             // Change space
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
                 sections: [{ tag: CHATS_TAG, rooms: [room3] }],
             });
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             expect(disposeSpy1).toHaveBeenCalled();
             expect(disposeSpy2).toHaveBeenCalled();
@@ -235,19 +250,20 @@ describe("RoomListViewModel", () => {
         it("should clear roomsMap when space changes and repopulate with new rooms", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const newSpaceRoom = mkStubRoom("!spaceroom:server", "Space Room", matrixClient);
 
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
                 sections: [{ tag: CHATS_TAG, rooms: [newSpaceRoom] }],
             });
-            jest.spyOn(SDKContextClass.instance.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+            jest.spyOn(sdkContext.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             // New space room should be accessible
             expect(() => viewModel.getRoomItemViewModel("!spaceroom:server")).not.toThrow();
@@ -260,11 +276,12 @@ describe("RoomListViewModel", () => {
         it("should update active room index when room is selected", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
@@ -280,11 +297,12 @@ describe("RoomListViewModel", () => {
         it("should return undefined active room index when no room is selected", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue(null);
 
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
@@ -302,12 +320,13 @@ describe("RoomListViewModel", () => {
         it("should keep selected room at same index when room list updates", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Select room at index 1
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 newRoomId: "!room2:server",
@@ -317,12 +336,12 @@ describe("RoomListViewModel", () => {
             expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(1);
 
             // Simulate room list update that would move room2 to front
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [room2, room1, room3] }], // room2 moved to front
             });
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             // Active room should still be at index 1 (sticky behavior)
             expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(1);
@@ -332,12 +351,13 @@ describe("RoomListViewModel", () => {
         it("should not apply sticky behavior when user changes rooms", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Select room at index 1
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 newRoomId: "!room2:server",
@@ -346,7 +366,7 @@ describe("RoomListViewModel", () => {
             await flushPromises();
 
             // User switches to room3
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room3:server");
             dispatcher.dispatch({
                 action: Action.ActiveRoomChanged,
                 oldRoomId: "!room2:server",
@@ -362,13 +382,14 @@ describe("RoomListViewModel", () => {
         it("should toggle filter on", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
 
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [room1] }],
                 filterKeys: [FilterEnum.UnreadFilter],
@@ -383,12 +404,13 @@ describe("RoomListViewModel", () => {
         it("should toggle filter off", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Turn filter on
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [room1] }],
                 filterKeys: [FilterEnum.UnreadFilter],
@@ -398,7 +420,7 @@ describe("RoomListViewModel", () => {
             expect(viewModel.getSnapshot().activeFilterId).toBe("unread");
 
             // Turn filter off
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
             });
@@ -411,14 +433,99 @@ describe("RoomListViewModel", () => {
                 "!room3:server",
             ]);
         });
+
+        describe("Favourites and Low Priority filters (RoomList.showSections)", () => {
+            function mockShowSections(showSections: boolean): void {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                    if (setting === "RoomList.showSections") return showSections;
+                    if (setting === "RoomList.CustomSectionData") return {};
+                    if (setting === "RoomList.OrderedCustomSections") return [];
+                    return undefined as any;
+                });
+            }
+
+            it("hides the Favourites and Low Priority filters when sections are enabled", () => {
+                mockShowSections(true);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
+
+                const { filterIds } = viewModel.getSnapshot();
+                expect(filterIds).not.toContain("favourite");
+                expect(filterIds).not.toContain("low_priority");
+            });
+
+            it("shows the Favourites and Low Priority filters when sections are disabled", () => {
+                mockShowSections(false);
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
+
+                const { filterIds } = viewModel.getSnapshot();
+                expect(filterIds).toContain("favourite");
+                expect(filterIds).toContain("low_priority");
+            });
+
+            it("recomputes the filters and clears the active filter when the setting changes", () => {
+                let showSections = false;
+                let watchCallback: () => void = () => {};
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                    if (setting === "RoomList.showSections") return showSections;
+                    if (setting === "RoomList.CustomSectionData") return {};
+                    if (setting === "RoomList.OrderedCustomSections") return [];
+                    return undefined as any;
+                });
+                jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
+                    if (setting === "RoomList.showSections") watchCallback = callback as () => void;
+                    return "watcher-id";
+                });
+
+                viewModel = new RoomListViewModel({
+                    client: matrixClient,
+                    roomViewStore: sdkContext.roomViewStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomListStore: sdkContext.roomListStore,
+                });
+                expect(viewModel.getSnapshot().filterIds).toContain("favourite");
+
+                // Activate the Favourites filter
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                    filterKeys: [FilterEnum.FavouriteFilter],
+                });
+                viewModel.onToggleFilter("favourite");
+                expect(viewModel.getSnapshot().activeFilterId).toBe("favourite");
+
+                // Enabling sections hides the Favourites filter and resets the active filter
+                showSections = true;
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
+                });
+                watchCallback();
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.filterIds).not.toContain("favourite");
+                expect(snapshot.filterIds).not.toContain("low_priority");
+                expect(snapshot.activeFilterId).toBeUndefined();
+            });
+        });
     });
 
     describe("Room item view models", () => {
         it("should create room item view model on demand", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const itemViewModel = viewModel.getRoomItemViewModel("!room1:server");
@@ -430,8 +537,9 @@ describe("RoomListViewModel", () => {
         it("should reuse existing room item view model", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const itemViewModel1 = viewModel.getRoomItemViewModel("!room1:server");
@@ -443,8 +551,9 @@ describe("RoomListViewModel", () => {
         it("should return undefined for non-existent room", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             expect(viewModel.getRoomItemViewModel("!nonexistent:server")).toBeUndefined();
@@ -453,17 +562,18 @@ describe("RoomListViewModel", () => {
         it("should not throw when requesting view model for a room removed from the list but still in roomsMap", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Normal list update removes room2 from the list
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
                 sections: [{ tag: CHATS_TAG, rooms: [room1, room3] }],
             });
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             expect(() => viewModel.getRoomItemViewModel("!room2:server")).not.toThrow();
         });
@@ -471,20 +581,21 @@ describe("RoomListViewModel", () => {
         it("should return undefined for a room from old space after space change", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const spaceRoom = mkStubRoom("!newroom:server", "New Room", matrixClient);
 
             // Space change: new space only has spaceRoom
-            jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
                 sections: [{ tag: CHATS_TAG, rooms: [spaceRoom] }],
             });
-            jest.spyOn(SDKContextClass.instance.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+            jest.spyOn(sdkContext.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
 
-            SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+            sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
             expect(viewModel.getRoomItemViewModel("!room1:server")).toBeUndefined();
         });
@@ -492,8 +603,9 @@ describe("RoomListViewModel", () => {
         it("should recover when roomsMap is stale but roomsResult has the room", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             // Manually clear roomsMap to simulate stale cache, but keep roomsResult intact
@@ -506,8 +618,9 @@ describe("RoomListViewModel", () => {
         it("should dispose view models for rooms no longer visible", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const vm1 = viewModel.getRoomItemViewModel("!room1:server")!;
@@ -533,8 +646,9 @@ describe("RoomListViewModel", () => {
         it("should dispatch CreateChat action when createChatRoom is called", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const dispatchSpy = jest.spyOn(dispatcher, "fire");
@@ -547,8 +661,9 @@ describe("RoomListViewModel", () => {
         it("should dispatch CreateRoom action without parent space", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
@@ -562,12 +677,13 @@ describe("RoomListViewModel", () => {
 
         it("should dispatch CreateRoom action with parent space", () => {
             const spaceRoom = mkStubRoom("!space:server", "Space", matrixClient);
-            jest.spyOn(SDKContextClass.instance.spaceStore, "activeSpaceRoom", "get").mockReturnValue(spaceRoom);
+            jest.spyOn(sdkContext.spaceStore, "activeSpaceRoom", "get").mockReturnValue(spaceRoom);
 
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
@@ -590,11 +706,12 @@ describe("RoomListViewModel", () => {
         it("should navigate to next room when delta is 1", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -617,11 +734,12 @@ describe("RoomListViewModel", () => {
         it("should navigate to previous room when delta is -1", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -644,11 +762,12 @@ describe("RoomListViewModel", () => {
         it("should wrap around to last room when navigating backwards from first room", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -671,11 +790,12 @@ describe("RoomListViewModel", () => {
         it("should not navigate when current room is not found", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
             dispatchSpy.mockClear();
@@ -699,11 +819,12 @@ describe("RoomListViewModel", () => {
         it("should not navigate when no room is selected", async () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
-            jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
+            jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue(null);
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
             dispatchSpy.mockClear();
@@ -736,8 +857,9 @@ describe("RoomListViewModel", () => {
         it("should dispose all room item view models on dispose", () => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
 
             const vm1 = viewModel.getRoomItemViewModel("!room1:server")!;
@@ -756,31 +878,34 @@ describe("RoomListViewModel", () => {
             it("should show toast when SectionCreated event fires", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
                 expect(viewModel.getSnapshot().toast).toBe("section_created");
             });
 
             it("should show toast when RoomTagged event fires", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.RoomTagged);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.RoomTagged);
                 expect(viewModel.getSnapshot().toast).toBe("chat_moved");
             });
 
             it("should clear toast when closeToast is called", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
                 expect(viewModel.getSnapshot().toast).toBe("section_created");
 
                 viewModel.closeToast();
@@ -790,11 +915,12 @@ describe("RoomListViewModel", () => {
             it("should auto-close toast after 15 seconds", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
                 expect(viewModel.getSnapshot().toast).toBe("section_created");
 
                 jest.advanceTimersByTime(15 * 1000);
@@ -804,15 +930,16 @@ describe("RoomListViewModel", () => {
             it("should reset the auto-close timer when a new section is created", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
                 jest.advanceTimersByTime(10 * 1000);
 
                 // Second section created — resets the timer
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.SectionCreated);
                 jest.advanceTimersByTime(10 * 1000);
 
                 // Toast should still be visible (only 10s since last emit)
@@ -833,8 +960,9 @@ describe("RoomListViewModel", () => {
                 mockRoom3Unread();
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // room1/room2 visible, room3 (unread) scrolled below the fold.
@@ -847,14 +975,15 @@ describe("RoomListViewModel", () => {
                 mockRoom3Unread();
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
                 viewModel.updateVisibleFold(1);
                 expect(viewModel.getSnapshot().toast).toBe("unread_activity");
 
                 // A transient event toast takes precedence over the persistent unread-activity toast…
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.RoomTagged);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.RoomTagged);
                 expect(viewModel.getSnapshot().toast).toBe("chat_moved");
 
                 // …and once it auto-dismisses, the unread-activity toast returns.
@@ -877,7 +1006,7 @@ describe("RoomListViewModel", () => {
                 regularRoom1 = mkStubRoom("!reg1:server", "Reg 1", matrixClient);
                 regularRoom2 = mkStubRoom("!reg2:server", "Reg 2", matrixClient);
 
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
@@ -890,8 +1019,9 @@ describe("RoomListViewModel", () => {
             it("should initialize with multiple sections", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const snapshot = viewModel.getSnapshot();
@@ -907,15 +1037,16 @@ describe("RoomListViewModel", () => {
             it("should not be a flat list when multiple sections exist", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 expect(viewModel.getSnapshot().isFlatList).toBe(false);
             });
 
             it("should be a flat list when only chats section has rooms", () => {
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [] },
@@ -926,8 +1057,9 @@ describe("RoomListViewModel", () => {
 
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 expect(viewModel.getSnapshot().isFlatList).toBe(true);
@@ -936,7 +1068,7 @@ describe("RoomListViewModel", () => {
             });
 
             it("should be a flat list when the room list is empty", () => {
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [] },
@@ -947,8 +1079,9 @@ describe("RoomListViewModel", () => {
 
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 expect(viewModel.getSnapshot().isFlatList).toBe(true);
@@ -958,8 +1091,9 @@ describe("RoomListViewModel", () => {
             it("should exclude favourite and low_priority from filter list", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const snapshot = viewModel.getSnapshot();
@@ -971,7 +1105,7 @@ describe("RoomListViewModel", () => {
             });
 
             it("should omit empty sections from snapshot", () => {
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [] },
@@ -982,8 +1116,9 @@ describe("RoomListViewModel", () => {
 
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const snapshot = viewModel.getSnapshot();
@@ -994,8 +1129,9 @@ describe("RoomListViewModel", () => {
             it("should create section header view models on demand", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const headerVM = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
@@ -1007,8 +1143,9 @@ describe("RoomListViewModel", () => {
             it("should reuse section header view models", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const headerVM1 = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
@@ -1019,8 +1156,9 @@ describe("RoomListViewModel", () => {
             it("should hide room IDs when a section is collapsed", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // Collapse the favourite section
@@ -1042,8 +1180,9 @@ describe("RoomListViewModel", () => {
             it("should compute activeRoomIndex relative to visible rooms when a section is collapsed", async () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // Collapse the favourite section (which has 2 rooms: fav1, fav2)
@@ -1052,7 +1191,7 @@ describe("RoomListViewModel", () => {
                 expect(favHeader.isExpanded).toBe(false);
 
                 // Select regularRoom1, which is the first room in the chats section
-                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
+                jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
                 dispatcher.dispatch({
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!reg1:server",
@@ -1069,8 +1208,9 @@ describe("RoomListViewModel", () => {
             it("should restore room IDs when a section is re-expanded", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
@@ -1088,13 +1228,14 @@ describe("RoomListViewModel", () => {
             it("should update sections when room list changes", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 const newFav = mkStubRoom("!fav3:server", "Fav 3", matrixClient);
 
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2, newFav] },
@@ -1103,7 +1244,7 @@ describe("RoomListViewModel", () => {
                     ],
                 });
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                 const snapshot = viewModel.getSnapshot();
                 expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server", "!fav2:server", "!fav3:server"]);
@@ -1112,8 +1253,9 @@ describe("RoomListViewModel", () => {
             it("should preserve section collapse state across list updates", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // Collapse favourites
@@ -1121,7 +1263,7 @@ describe("RoomListViewModel", () => {
                 favHeader.onClick();
 
                 // Trigger a list update
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                 const snapshot = viewModel.getSnapshot();
                 const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
@@ -1131,8 +1273,9 @@ describe("RoomListViewModel", () => {
             it("should track section collapse state per space", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // Collapse favourites in the home space
@@ -1142,7 +1285,7 @@ describe("RoomListViewModel", () => {
                 // Switch to a different space with its own rooms
                 const spaceFav = mkStubRoom("!spacefav:server", "Space Fav", matrixClient);
                 const spaceReg = mkStubRoom("!spacereg:server", "Space Reg", matrixClient);
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "!space:server",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [spaceFav] },
@@ -1150,9 +1293,9 @@ describe("RoomListViewModel", () => {
                         { tag: DefaultTagID.LowPriority, rooms: [] },
                     ],
                 });
-                jest.spyOn(SDKContextClass.instance.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+                jest.spyOn(sdkContext.spaceStore, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                 let snapshot = viewModel.getSnapshot();
                 // Favourites should be expanded in the new space (per-space state)
@@ -1165,7 +1308,7 @@ describe("RoomListViewModel", () => {
                 expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
 
                 // Switch back to home space
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
@@ -1174,7 +1317,7 @@ describe("RoomListViewModel", () => {
                     ],
                 });
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                 snapshot = viewModel.getSnapshot();
                 // Favourites should still be collapsed in the home space
@@ -1190,12 +1333,13 @@ describe("RoomListViewModel", () => {
             it("should apply filters across all sections", () => {
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // Only favRoom1 is unread
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [favRoom1] },
@@ -1219,10 +1363,8 @@ describe("RoomListViewModel", () => {
                 const customTag = `${CUSTOM_SECTION_TAG_PREFIX}test-uuid` as const;
 
                 beforeEach(() => {
-                    jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
-                        MetaSpace.Home,
-                    ]);
-                    jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([
+                    jest.spyOn(sdkContext.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([MetaSpace.Home]);
+                    jest.spyOn(sdkContext.spaceStore, "spacePanelSpaces", "get").mockReturnValue([
                         mkStubRoom("!space:server", "My Space", matrixClient),
                     ]);
                     jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
@@ -1240,7 +1382,7 @@ describe("RoomListViewModel", () => {
                             return { [customTag]: { tag: customTag, name: "My Section", spaceId: MetaSpace.Home } };
                         return false;
                     });
-                    jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                         spaceId: MetaSpace.Home,
                         sections: [
                             { tag: customTag, rooms: [] },
@@ -1250,15 +1392,16 @@ describe("RoomListViewModel", () => {
 
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     expect(viewModel.getSnapshot().sections.some((s) => s.id === customTag)).toBe(true);
                 });
 
                 it("hides an empty custom section in a different space", () => {
-                    jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                         spaceId: MetaSpace.Home,
                         sections: [
                             { tag: customTag, rooms: [] },
@@ -1268,15 +1411,16 @@ describe("RoomListViewModel", () => {
 
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     expect(viewModel.getSnapshot().sections.some((s) => s.id === customTag)).toBe(false);
                 });
 
                 it("shows a non-empty custom section regardless of originating space", () => {
-                    jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                         spaceId: MetaSpace.Home,
                         sections: [
                             { tag: customTag, rooms: [regularRoom1] },
@@ -1286,8 +1430,9 @@ describe("RoomListViewModel", () => {
 
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     expect(viewModel.getSnapshot().sections.some((s) => s.id === customTag)).toBe(true);
@@ -1298,8 +1443,9 @@ describe("RoomListViewModel", () => {
                 it("should collapse all sections when Action.RoomListCollapseAllSections is dispatched", async () => {
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
@@ -1320,8 +1466,9 @@ describe("RoomListViewModel", () => {
                 it("should expand all sections when Action.RoomListExpandAllSections is dispatched", async () => {
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     // Collapse first
@@ -1345,12 +1492,13 @@ describe("RoomListViewModel", () => {
                 it("should dispatch collapseSections=expand when all sections are expanded (default)", () => {
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-                    SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                    sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                     expect(dispatchSpy).toHaveBeenCalledWith({
                         action: Action.RoomListSectionsCollapseStateChanged,
@@ -1361,8 +1509,9 @@ describe("RoomListViewModel", () => {
                 it("should dispatch collapseSection=collapse when all sections are collapsed", () => {
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     // Collapse all sections
@@ -1371,7 +1520,7 @@ describe("RoomListViewModel", () => {
                     viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded = false;
 
                     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-                    SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                    sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                     expect(dispatchSpy).toHaveBeenCalledWith({
                         action: Action.RoomListSectionsCollapseStateChanged,
@@ -1383,7 +1532,7 @@ describe("RoomListViewModel", () => {
                     { label: "flat list", chatsRooms: true },
                     { label: "empty room list", chatsRooms: false },
                 ])("should dispatch collapseSection=undefined when it is a $label", ({ chatsRooms }) => {
-                    jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                         spaceId: "home",
                         sections: [
                             { tag: DefaultTagID.Favourite, rooms: [] },
@@ -1393,12 +1542,13 @@ describe("RoomListViewModel", () => {
                     });
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
 
                     const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-                    SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                    sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                     expect(dispatchSpy).toHaveBeenCalledWith({
                         action: Action.RoomListSectionsCollapseStateChanged,
@@ -1411,12 +1561,13 @@ describe("RoomListViewModel", () => {
                 stubClient();
                 viewModel = new RoomListViewModel({
                     client: matrixClient,
-                    spaceStore: SDKContextClass.instance.spaceStore,
-                    roomListStore: SDKContextClass.instance.roomListStore,
+                    spaceStore: sdkContext.spaceStore,
+                    roomViewStore: sdkContext.roomViewStore,
+                    roomListStore: sdkContext.roomListStore,
                 });
 
                 // Select favRoom1 (index 0 globally, index 0 in favourites section)
-                jest.spyOn(SDKContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
+                jest.spyOn(sdkContext.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
                 dispatcher.dispatch({
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!fav1:server",
@@ -1426,7 +1577,7 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
 
                 // Room list update moves favRoom1 to second position within favourites
-                jest.spyOn(SDKContextClass.instance.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
                     spaceId: "home",
                     sections: [
                         { tag: DefaultTagID.Favourite, rooms: [favRoom2, favRoom1] },
@@ -1435,7 +1586,7 @@ describe("RoomListViewModel", () => {
                     ],
                 });
 
-                SDKContextClass.instance.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
+                sdkContext.roomListStore.emit(RoomListStoreV3Event.ListsUpdate);
 
                 // Sticky room should keep favRoom1 at index 0 within the favourites section
                 const snapshot = viewModel.getSnapshot();
@@ -1447,8 +1598,9 @@ describe("RoomListViewModel", () => {
                 beforeEach(() => {
                     viewModel = new RoomListViewModel({
                         client: matrixClient,
-                        spaceStore: SDKContextClass.instance.spaceStore,
-                        roomListStore: SDKContextClass.instance.roomListStore,
+                        spaceStore: sdkContext.spaceStore,
+                        roomViewStore: sdkContext.roomViewStore,
+                        roomListStore: sdkContext.roomListStore,
                     });
                     // Ensure section header VMs are created before tests that interact with them
                     viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
@@ -1458,7 +1610,7 @@ describe("RoomListViewModel", () => {
 
                 it("should delegate changeSectionOrder to RoomListStoreV3.reorderSection", async () => {
                     const reorderSpy = jest
-                        .spyOn(SDKContextClass.instance.roomListStore, "reorderSection")
+                        .spyOn(sdkContext.roomListStore, "reorderSection")
                         .mockResolvedValue(undefined);
 
                     await viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
@@ -1467,7 +1619,7 @@ describe("RoomListViewModel", () => {
                 });
 
                 it("should scroll the moved section back into view after reordering", async () => {
-                    jest.spyOn(SDKContextClass.instance.roomListStore, "reorderSection").mockResolvedValue(undefined);
+                    jest.spyOn(sdkContext.roomListStore, "reorderSection").mockResolvedValue(undefined);
 
                     await viewModel.changeSectionOrder(DefaultTagID.Favourite, CHATS_TAG);
                     expect(viewModel.getSnapshot().roomListState.scrollToSectionTag).toBe(DefaultTagID.Favourite);
@@ -1555,8 +1707,9 @@ describe("RoomListViewModel", () => {
         beforeEach(() => {
             viewModel = new RoomListViewModel({
                 client: matrixClient,
-                spaceStore: SDKContextClass.instance.spaceStore,
-                roomListStore: SDKContextClass.instance.roomListStore,
+                spaceStore: sdkContext.spaceStore,
+                roomViewStore: sdkContext.roomViewStore,
+                roomListStore: sdkContext.roomListStore,
             });
             mocked(tagRoom).mockClear();
         });
@@ -1585,6 +1738,87 @@ describe("RoomListViewModel", () => {
             viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
 
             expect(tagRoom).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("show_room_tile scroll", () => {
+        beforeEach(() => {
+            // Dispatching ViewRoom is also handled by the global RoomViewStore, which calls
+            // MatrixClientPeg.safeGet(); stubClient sets up the peg so that doesn't throw.
+            stubClient();
+        });
+
+        it("should scroll a room into view in a flat list", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!room2:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            // Flat list: entry index == room index.
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(1));
+        });
+
+        it("should scroll a room into view in a grouped list, accounting for section headers", async () => {
+            const favRoom1 = mkStubRoom("!fav1:server", "Fav 1", matrixClient);
+            const favRoom2 = mkStubRoom("!fav2:server", "Fav 2", matrixClient);
+            const regularRoom1 = mkStubRoom("!reg1:server", "Reg 1", matrixClient);
+            jest.spyOn(sdkContext.roomListStore, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [
+                    { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                    { tag: CHATS_TAG, rooms: [regularRoom1] },
+                ],
+            });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!reg1:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            // Entry space: [Fav header(0), fav1(1), fav2(2), Chats header(3), reg1(4)]
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(4));
+        });
+
+        it("should not scroll when the room is not in the current list", async () => {
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+                roomListStore: sdkContext.roomListStore,
+            });
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!room3:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(2));
+            expect(scrollSpy).toHaveBeenCalledTimes(1);
         });
     });
 });

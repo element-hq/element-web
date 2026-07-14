@@ -136,8 +136,6 @@ describe("SpaceStore", () => {
 
         await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.DEVICE, {
             [MetaSpace.Home]: true,
-            [MetaSpace.Favourites]: true,
-            [MetaSpace.People]: true,
             [MetaSpace.Orphans]: true,
         });
 
@@ -444,12 +442,6 @@ describe("SpaceStore", () => {
                 it("all rooms space does contain rooms/low priority even if they are also shown in a space", async () => {
                     await setShowAllRooms(true);
                     expect(store.isRoomInSpace(MetaSpace.Home, room1)).toBeTruthy();
-                });
-
-                it("people space does contain people even if they are also shown in a space", async () => {
-                    expect(store.isRoomInSpace(MetaSpace.People, dm1)).toBeTruthy();
-                    expect(store.isRoomInSpace(MetaSpace.People, dm2)).toBeTruthy();
-                    expect(store.isRoomInSpace(MetaSpace.People, dm3)).toBeTruthy();
                 });
 
                 it("orphans space does contain orphans even if they are also shown in all rooms", async () => {
@@ -1261,8 +1253,6 @@ describe("SpaceStore", () => {
         expect(sdkContext.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(sdkContext.spaceStore.isRoomInSpace(space1, room1)).toBeTruthy();
         expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Home, room1)).toBeFalsy();
-        expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Favourites, room1)).toBeFalsy();
-        expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.People, room1)).toBeFalsy();
         expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Orphans, room1)).toBeFalsy();
 
         // receive room invite
@@ -1275,8 +1265,6 @@ describe("SpaceStore", () => {
         expect(sdkContext.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(sdkContext.spaceStore.isRoomInSpace(space1, room2)).toBeTruthy();
         expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Home, room2)).toBeTruthy();
-        expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Favourites, room2)).toBeFalsy();
-        expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.People, room2)).toBeFalsy();
         expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Orphans, room2)).toBeFalsy();
 
         // start DM in space
@@ -1316,8 +1304,6 @@ describe("SpaceStore", () => {
         expect(sdkContext.spaceStore.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(sdkContext.spaceStore.isRoomInSpace(space1, dm1)).toBeTruthy();
         expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Home, dm1)).toBeTruthy();
-        expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Favourites, dm1)).toBeFalsy();
-        expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.People, dm1)).toBeTruthy();
         expect(sdkContext.spaceStore.isRoomInSpace(MetaSpace.Orphans, dm1)).toBeFalsy();
 
         // join subspace

@@ -109,7 +109,7 @@ export class ConsoleLogger {
     /**
      * Retrieve log lines to flush to disk.
      * @param {boolean} keepLogs True to not delete logs after flushing.
-     * @return {string} \n delimited log lines to flush.
+     * @returns {string} \n delimited log lines to flush.
      */
     public flush(keepLogs?: boolean): string {
         // The ConsoleLogger doesn't care how these end up on disk, it just
@@ -139,7 +139,7 @@ export class IndexedDBLogStore {
     }
 
     /**
-     * @return {Promise} Resolves when the store is ready.
+     * @returns {Promise} Resolves when the store is ready.
      */
     public connect(): Promise<void> {
         const req = this.indexedDB.open("logs");
@@ -195,7 +195,7 @@ export class IndexedDBLogStore {
      * This guarantees that we will always eventually do a flush when flush() is
      * called.
      *
-     * @return {Promise} Resolved when the logs have been flushed.
+     * @returns {Promise} Resolved when the logs have been flushed.
      */
     public flush(): Promise<void> {
         // check if a flush() operation is ongoing
@@ -250,7 +250,7 @@ export class IndexedDBLogStore {
      * returned are deleted at the same time, so this can be called at startup
      * to do house-keeping to keep the logs from growing too large.
      *
-     * @return {Promise<Object[]>} Resolves to an array of objects. The array is
+     * @returns {Promise<Object[]>} Resolves to an array of objects. The array is
      * sorted in time (oldest first) based on when the log file was created (the
      * log ID). The objects have said log ID in an "id" field and "lines" which
      * is a big string with all the new-line delimited logs.
@@ -455,7 +455,7 @@ export class IndexedDBLogStore {
  * @param {Function} resultMapper A function which is repeatedly called with a
  * Cursor.
  * Return the data you want to keep.
- * @return {Promise<T[]>} Resolves to an array of whatever you returned from
+ * @returns {Promise<T[]>} Resolves to an array of whatever you returned from
  * resultMapper.
  */
 function selectQuery<T>(
@@ -487,7 +487,7 @@ function selectQuery<T>(
  * Modifies globals.
  * @param {boolean} setUpPersistence When true (default), the persistence will
  * be set up immediately for the logs.
- * @return {Promise} Resolves when set up.
+ * @returns {Promise} Resolves when set up.
  */
 export function init(setUpPersistence = true): Promise<void> {
     if (global.mx_rage_initPromise) {
@@ -512,7 +512,7 @@ export function init(setUpPersistence = true): Promise<void> {
 /**
  * Try to start up the rageshake storage for logs. If not possible (client unsupported)
  * then this no-ops.
- * @return {Promise} Resolves when complete.
+ * @returns {Promise} Resolves when complete.
  */
 export function tryInitStorage(): Promise<void> {
     if (global.mx_rage_initStoragePromise) {
@@ -558,7 +558,7 @@ export function flush(): void {
  * @deprecated There is no need to call this explicitly: it will be done as a side-effect of {@link tryInitStorage},
  * or {@link init} with `setUpPersistence: true`.
  *
- * @return {Promise} Resolves if cleaned logs.
+ * @returns {Promise} Resolves if cleaned logs.
  */
 export async function cleanup(): Promise<void> {
     if (!global.mx_rage_store) {
@@ -570,7 +570,7 @@ export async function cleanup(): Promise<void> {
 /**
  * Get a recent snapshot of the logs, ready for attaching to a bug report
  *
- * @return {Array<{lines: string, id, string}>}  list of log data
+ * @returns {Array<{lines: string, id, string}>}  list of log data
  */
 export async function getLogsForReport(): Promise<{ lines: string; id: string }[]> {
     if (!global.mx_rage_logger) {

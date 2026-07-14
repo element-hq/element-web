@@ -32,7 +32,7 @@ export default abstract class SettingController {
      * may be null.
      * @param {SettingLevel} calculatedAtLevel The level for which the calculated value was
      * calculated at. May be null.
-     * @return {*} The value that should be used, or null if no override is applicable.
+     * @returns {*} The value that should be used, or null if no override is applicable.
      */
     public getValueOverride(
         level: SettingLevel,
@@ -48,7 +48,7 @@ export default abstract class SettingController {
      * @param {string} level The level at which the setting has been modified.
      * @param {String} roomId The room ID, may be null.
      * @param {*} newValue The new value for the setting, may be null.
-     * @return {boolean} Whether the settings change should be accepted.
+     * @returns {boolean} Whether the settings change should be accepted.
      */
     public async beforeChange(level: SettingLevel, roomId: string | null, newValue: any): Promise<boolean> {
         return true;

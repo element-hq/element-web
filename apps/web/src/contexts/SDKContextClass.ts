@@ -30,6 +30,8 @@ import { Action } from "../dispatcher/actions.ts";
 import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
 import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
+import { CallStore } from "../stores/CallStore";
+import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
 import RoomListStoreV3 from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /**
@@ -74,6 +76,8 @@ export class SDKContextClass {
     protected _MultiRoomViewStore?: MultiRoomViewStore;
     protected _RoomListStore?: RoomListStoreV3;
     protected _Notifier?: Notifier;
+    protected _CallStore?: CallStore;
+    protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
 
     public constructor() {
         SettingController.sdkContext = this;
@@ -159,14 +163,12 @@ export class SDKContextClass {
         if (!this._SpaceStore) {
             this._SpaceStore = new SpaceStore(defaultDispatcher, this);
             this._SpaceStore.start();
-            window.mxSpaceStore = this._SpaceStore;
         }
         return this._SpaceStore;
     }
     public get typingStore(): TypingStore {
         if (!this._TypingStore) {
             this._TypingStore = new TypingStore(this);
-            window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
     }
@@ -213,6 +215,19 @@ export class SDKContextClass {
             this._Notifier = new Notifier(defaultDispatcher, this);
         }
         return this._Notifier;
+    }
+
+    public get callStore(): CallStore {
+        this._CallStore ??= CallStore.instance;
+        return this._CallStore;
+    }
+
+    public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
+        if (!this._LatestRtcNotificationEventStore) {
+            this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
+            this._LatestRtcNotificationEventStore.start();
+        }
+        return this._LatestRtcNotificationEventStore;
     }
 
     public onLoggedOut(): void {

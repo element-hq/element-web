@@ -160,11 +160,13 @@ export class UrlPreviewFetcher {
         let siteIcon: string | undefined;
 
         if (typeof response["og:image"] === "string" && loadMedia) {
+            const mxcImageFull = response["og:image"];
             const media = mediaFromMxc(response["og:image"], this.client);
             const declaredHeight = UrlPreviewFetcher.getNumberFromOpenGraph(response["og:image:height"]);
             const declaredWidth = UrlPreviewFetcher.getNumberFromOpenGraph(response["og:image:width"]);
             const imageSize = UrlPreviewFetcher.getNumberFromOpenGraph(response["matrix:image:size"]);
             const alt = typeof response["og:image:alt"] === "string" ? response["og:image:alt"] : undefined;
+            const imageType = typeof response["og:image:type"] === "string" ? response["og:image:type"] : undefined;
 
             if (UrlPreviewFetcher.isImagePreview(declaredWidth, declaredHeight, imageSize)) {
                 const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
@@ -176,6 +178,8 @@ export class UrlPreviewFetcher {
                     image = {
                         imageThumb: thumb,
                         imageFull: media.srcHttp ?? thumb,
+                        mxcImageFull,
+                        imageType,
                         width,
                         height,
                         fileSize: UrlPreviewFetcher.getNumberFromOpenGraph(response["matrix:image:size"]),
@@ -195,6 +199,7 @@ export class UrlPreviewFetcher {
             description,
             siteName,
             siteIcon,
+            ogUrl: response["og:url"],
             showTooltipOnLink: !!(link !== title && this.showTooltips),
             image,
         } satisfies UrlPreview;

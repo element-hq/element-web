@@ -134,9 +134,9 @@ function getOptionalDepNames(pkgJsonStr: string): string[] {
 function findDepVersionInPackageJson(dep: string, pkgJsonStr: string): string {
     const pkgJson = JSON.parse(pkgJsonStr);
     const packages = {
-        ...(pkgJson["optionalDependencies"] ?? {}),
-        ...(pkgJson["devDependencies"] ?? {}),
-        ...(pkgJson["dependencies"] ?? {}),
+        ...pkgJson["optionalDependencies"],
+        ...pkgJson["devDependencies"],
+        ...pkgJson["dependencies"],
     };
     return packages[dep];
 }

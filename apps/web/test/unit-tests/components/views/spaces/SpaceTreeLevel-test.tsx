@@ -82,9 +82,9 @@ describe("SpaceButton", () => {
         it("activates the metaspace on click", () => {
             const { container } = render(
                 <SpaceButton
-                    spaceKey={MetaSpace.People}
+                    spaceKey={MetaSpace.Home}
                     selected={false}
-                    label="People"
+                    label="Home"
                     data-testid="create-space-button"
                     size="32px"
                 />,
@@ -93,15 +93,15 @@ describe("SpaceButton", () => {
 
             expect(SDKContextClass.instance.spaceStore.setActiveSpace).not.toHaveBeenCalled();
             fireEvent.click(getByTestId(container, "create-space-button"));
-            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.Home);
         });
 
         it("does nothing on click if already active", () => {
             const { container } = render(
                 <SpaceButton
-                    spaceKey={MetaSpace.People}
+                    spaceKey={MetaSpace.Home}
                     selected={true}
-                    label="People"
+                    label="Home"
                     data-testid="create-space-button"
                     size="32px"
                 />,
@@ -111,7 +111,7 @@ describe("SpaceButton", () => {
             fireEvent.click(getByTestId(container, "create-space-button"));
             expect(dispatchSpy).not.toHaveBeenCalled();
             // Re-activating the metaspace is a no-op
-            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+            expect(SDKContextClass.instance.spaceStore.setActiveSpace).toHaveBeenCalledWith(MetaSpace.Home);
         });
 
         it("should render notificationState if one is provided", () => {
@@ -119,9 +119,9 @@ describe("SpaceButton", () => {
 
             const { container, asFragment } = render(
                 <SpaceButton
-                    spaceKey={MetaSpace.People}
+                    spaceKey={MetaSpace.Home}
                     selected={true}
-                    label="People"
+                    label="Home"
                     data-testid="create-space-button"
                     notificationState={notificationState}
                     size="32px"

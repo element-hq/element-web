@@ -35,7 +35,6 @@ import {
     RoomIcon,
     SpaceIcon,
     UserProfileIcon,
-    FavouriteIcon,
     HomeIcon,
     GroupIcon,
     CloseIcon,
@@ -155,10 +154,6 @@ function metaspaceToIcon(key: MetaSpace): JSX.Element | undefined {
     switch (key) {
         case MetaSpace.Home:
             return <HomeIcon />;
-        case MetaSpace.Favourites:
-            return <FavouriteIcon />;
-        case MetaSpace.People:
-            return <UserProfileIcon />;
         case MetaSpace.Orphans:
             return <RoomIcon />;
     }

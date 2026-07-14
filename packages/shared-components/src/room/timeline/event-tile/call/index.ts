@@ -7,5 +7,9 @@
 
 export * from "./tombstone/room/RoomTombstoneCallTileView";
 export * from "./tombstone/dm/DmTombstoneCallTileView";
+export type * from "./ongoing/common";
+export * from "./ongoing/room/RoomOngoingCallTileView";
+export * from "./ongoing/components/Duration/DurationView";
+export * from "./ongoing/dm/DmOngoingCallTileView";
 export * from "./RootCallTileView";
 export * from "./common";

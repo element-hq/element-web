@@ -46,6 +46,7 @@ import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
 import ToastStore from "../../../../src/stores/ToastStore";
 import { ModuleApi } from "../../../../src/modules/Api";
+import { fireEvent } from "@testing-library/dom";
 
 describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
@@ -67,6 +68,8 @@ describe("<LoggedInView />", () => {
             on: jest.fn(),
         },
         getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
+        hasLazyLoadMembersEnabled: jest.fn(),
+        isInitialSyncComplete: jest.fn(),
     });
     const mediaHandler = new MediaHandler(mockClient);
     const mockSdkContext = new TestSDKContext();
@@ -554,5 +557,12 @@ describe("<LoggedInView />", () => {
             // ...while the space panel rail remains visible.
             expect(container.querySelector(".mx_SpacePanel")).toBeInTheDocument();
         });
+    });
+
+    it("should handle KeyBindingAction.ToggleRoomSidePanel", async () => {
+        getComponent({ page_type: "room_view" });
+        jest.spyOn(mockSdkContext.rightPanelStore, "togglePanel");
+        fireEvent.keyDown(document.body, { key: ".", code: "Period", ctrlKey: true, keyCode: 190 });
+        expect(mockSdkContext.rightPanelStore.togglePanel).toHaveBeenCalledWith(null);
     });
 });

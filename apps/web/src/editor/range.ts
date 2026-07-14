@@ -93,7 +93,7 @@ export default class Range {
      * Splits the model at the range boundaries and replaces with the given parts.
      * Should be run inside a `model.transform()` callback.
      * @param {Part[]} parts the parts to replace the range with
-     * @return {Number} the net amount of characters added, can be negative.
+     * @returns {Number} the net amount of characters added, can be negative.
      */
     public replace(parts: Part[]): number {
         const newLength = parts.reduce((sum, part) => sum + part.text.length, 0);

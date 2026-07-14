@@ -57,6 +57,12 @@ If both `default_server_config` and `default_server_name` are used, Element will
 information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
 information.
 
+1. `enable_client_well_known_lookups`: Controls whether Element makes runtime requests to the logged-in user's
+   [`<server_name>/.well-known/matrix/...`](https://spec.matrix.org/latest/client-server-api/#getwell-knownmatrixclient)
+   endpoints (for example, polling for client configuration after login). Set it to `false` to stop Element making these
+   requests, so it only contacts the homeserver base URL; the `well_known` object returned inline in the `/login` response
+   is unaffected. Defaults to `true`.
+
 ## Labs flags
 
 Labs flags are optional, typically beta or in-development, features that can be turned on or off. The full range of

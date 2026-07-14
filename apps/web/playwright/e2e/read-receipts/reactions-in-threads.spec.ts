@@ -193,7 +193,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await page.getByRole("button", { name: "React" }).click();
                 await page.locator(".mx_EmojiPicker_body").getByText("😀").first().click();
                 await page.locator(".mx_ThreadPanel").getByLabel("Mae reacted with 😀").click();
-                await expect(await page.locator(".mx_ThreadPanel").getByLabel("Mae reacted with 😀")).not.toBeVisible();
+                await expect(page.locator(".mx_ThreadPanel").getByLabel("Mae reacted with 😀")).not.toBeVisible();
             });
         });
     });
