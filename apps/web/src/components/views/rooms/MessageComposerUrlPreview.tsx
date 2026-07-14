@@ -32,5 +32,12 @@ export function MessageComposerUrlPreviewWrapper({
         SettingsStore.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, !collapsed);
     }
 
-    return customComponent ?? <MessageComposerUrlPreviewView vm={vm} collapsed={collapsed} toggleCollapsed={toggleCollapsed} />;
+    const urlPreviewBundles = useSettingValue("feature_msc4095_url_preview_bundle");
+
+    return customComponent ?? <MessageComposerUrlPreviewView
+        vm={vm}
+        collapsed={collapsed}
+        toggleCollapsed={toggleCollapsed}
+        removePreview={urlPreviewBundles ? vm.removePreview : undefined}
+    />;
 }

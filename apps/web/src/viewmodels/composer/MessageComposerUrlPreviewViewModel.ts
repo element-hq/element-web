@@ -158,4 +158,17 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         this.fetcher.clearCache();
         return this.computeSnapshot(this.content);
     };
+
+    public readonly removePreview = (url: string): void => {
+        let entry = this.previewCache.get(url);
+        if (entry === undefined) return;
+        entry.include = false;
+
+        const snapshot = this.snapshot.current;
+
+        this.snapshot.set({
+            content: snapshot.content,
+            entries: snapshot.entries.filter(entry => entry.include)
+        });
+    }
 }

@@ -94,6 +94,8 @@
         font-size: 11.5px;
         margin-right: 10px;
         color: var(--cpd-color-gray-900);
+
+        cursor: pointer;
     }
 
     .collapse {
@@ -107,6 +109,8 @@
         width: 18px;
         transition: rotate 300ms ease;
         color: var(--cpd-color-gray-900);
+
+        cursor: pointer;
     }
 }
 
