@@ -56,7 +56,7 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -119,11 +119,18 @@ jobs:
                   node-version: "lts/*"
                   cache: "pnpm"
 
-            - name: Install Deps
+            - name: Install Deps (layered)
+              run: "./scripts/layered.sh"
+              if: matrix.path != 'packages/shared-components'
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+
+            - name: Install Deps (normal)
               run: "pnpm install"
+              if: matrix.path == 'packages/shared-components'
 
             - name: Cache storybook & vitest
-              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
               with:
                   path: |
                       ${{ matrix.path }}/node_modules/.cache
@@ -203,7 +210,7 @@ jobs:
             - name: Diff Coverage
               id: coverage
               if: needs.jest_ew.result == 'success' && needs.vitest.result == 'success' && env.ENABLE_COVERAGE == 'true'
-              uses: Affanmir/diff-cover-action@0d8c98f613bbd2428df50b3109b1e3b1d5ab59d3 # v2.1.0
+              uses: Affanmir/diff-cover-action@a35ea05c1c458490473f6fc2233737e809678273 # v2.1.1
               with:
                   compare-branch: origin/${{ github.base_ref || 'develop' }}
                   mode: coverage

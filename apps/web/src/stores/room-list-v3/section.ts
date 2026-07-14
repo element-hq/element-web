@@ -14,7 +14,7 @@ import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectio
 import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID, type TagID } from "./skip-list/tag";
 import { isMetaSpace, MetaSpace, type SpaceKey } from "../spaces";
-import SpaceStore from "../spaces/SpaceStore";
+import { SDKContextClass } from "../../contexts/SDKContextClass.ts";
 
 /**
  * A synthetic tag used to represent the "Chats" section, which contains
@@ -105,8 +105,8 @@ function isReorderableSection(tag: string, customData: CustomSectionsData): tag 
  * Returns true if the given space key corresponds to an enabled meta-space or a known top-level space room.
  */
 function doesSpaceExist(spaceId: SpaceKey): boolean {
-    if (isMetaSpace(spaceId)) return SpaceStore.instance.enabledMetaSpaces.includes(spaceId);
-    return SpaceStore.instance.spacePanelSpaces.some((room) => room.roomId === spaceId);
+    if (isMetaSpace(spaceId)) return SDKContextClass.instance.spaceStore.enabledMetaSpaces.includes(spaceId);
+    return SDKContextClass.instance.spaceStore.spacePanelSpaces.some((room) => room.roomId === spaceId);
 }
 
 /**
@@ -167,7 +167,7 @@ export function getOrderedReorderableSections(): ReorderableSection[] {
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
  * @param spaceId The space in which the section is being created. Used to control visibility of the empty section.
- * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
+ * @returns A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
 export async function createSection(spaceId: SpaceKey): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);

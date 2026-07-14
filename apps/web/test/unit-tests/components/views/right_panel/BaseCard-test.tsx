@@ -10,6 +10,8 @@ import { fireEvent, render, screen } from "jest-matrix-react";
 
 import BaseCard from "../../../../../src/components/views/right_panel/BaseCard.tsx";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore.ts";
+import { clientAndSDKContextRenderOptions } from "../../../../test-utils";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../src/stores/right-panel/RightPanelStore", () => ({
     instance: {
@@ -24,6 +26,7 @@ describe("<BaseCard />", () => {
             <BaseCard header="Heading text">
                 <div>Content</div>
             </BaseCard>,
+            clientAndSDKContextRenderOptions(SDKContextClass.instance.client!, SDKContextClass.instance),
         );
 
         expect(screen.getByRole("heading")).toHaveTextContent("Heading text");

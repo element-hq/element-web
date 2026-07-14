@@ -10,7 +10,9 @@ import React, { type ReactElement } from "react";
 // eslint-disable-next-line no-restricted-imports
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { I18nContext } from "@element-hq/web-shared-components";
+import { I18nApi, I18nContext } from "@element-hq/web-shared-components";
+
+const i18nApi = new I18nApi();
 
 /**
  * Wraps the provided components in:
@@ -26,7 +28,7 @@ const wrapWithStandardContexts = (Wrapper: RenderOptions["wrapper"]) => {
         if (Wrapper) {
             return (
                 <Wrapper>
-                    <I18nContext.Provider value={window.mxModuleApi.i18n}>
+                    <I18nContext.Provider value={i18nApi}>
                         <TooltipProvider>{children}</TooltipProvider>
                     </I18nContext.Provider>
                 </Wrapper>
@@ -34,7 +36,7 @@ const wrapWithStandardContexts = (Wrapper: RenderOptions["wrapper"]) => {
         } else {
             return (
                 <TooltipProvider>
-                    <I18nContext.Provider value={window.mxModuleApi.i18n}>{children}</I18nContext.Provider>
+                    <I18nContext.Provider value={i18nApi}>{children}</I18nContext.Provider>
                 </TooltipProvider>
             );
         }

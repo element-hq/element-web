@@ -1,0 +1,32 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.setStatusContainer {
+    /* Floats in a 28px tall box so it doesn't visually shift when it changes to the pill */
+    min-height: 28px;
+}
+
+.setStatusTrigger {
+    text-decoration: underline solid;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        margin-right: var(--cpd-space-1-5x);
+    }
+}
+
+.menuItem {
+    place-items: start;
+    gap: var(--cpd-space-1x);
+    color: var(--cpd-color-text-secondary);
+    font-weight: var(--cpd-font-weight-medium);
+    font-size: var(--cpd-font-size-body-md);
+}

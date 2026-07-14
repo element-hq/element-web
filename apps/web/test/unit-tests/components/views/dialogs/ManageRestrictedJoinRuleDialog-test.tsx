@@ -10,16 +10,16 @@ import React from "react";
 import { render } from "jest-matrix-react";
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
+import { getMockClientWithEventEmitter, mockClientMethodsRooms, mockClientMethodsUser } from "../../../../test-utils";
 import ManageRestrictedJoinRuleDialog from "../../../../../src/components/views/dialogs/ManageRestrictedJoinRuleDialog";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("<ManageRestrictedJoinRuleDialog />", () => {
     const userId = "@alice:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
+        ...mockClientMethodsRooms([]),
     });
     const room = new Room("!roomId:server", mockClient, userId);
     mockClient.getRoom.mockReturnValue(room);
@@ -36,7 +36,7 @@ describe("<ManageRestrictedJoinRuleDialog />", () => {
     it("should list spaces which are not parents of the room", () => {
         const space1 = new Room("!space:server", mockClient, userId);
         space1.name = "Other Space";
-        jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([space1]);
+        jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([space1]);
 
         expect(getComponent().asFragment()).toMatchSnapshot();
     });

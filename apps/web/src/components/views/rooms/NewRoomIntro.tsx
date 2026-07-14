@@ -12,7 +12,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { ErrorSolidIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { EventTileBubble, LinkedText } from "@element-hq/web-shared-components";
 
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t, _td } from "../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -21,10 +20,8 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { type ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../../dispatcher/actions";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { showSpaceInvite } from "../../../utils/space";
-import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog-tab";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
@@ -33,6 +30,7 @@ import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/s
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useTopic } from "../../../hooks/room/useTopic";
 import { topicToHtml } from "../../../HtmlUtils";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -53,7 +51,8 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
 };
 
 const NewRoomIntro: React.FC = () => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
+    const cli = sdkContext.client!;
     const { room, roomId } = useScopedRoomContext("room", "roomId");
     const topic = useTopic(room);
     const isLocalRoom = room instanceof LocalRoom;
@@ -179,10 +178,10 @@ const NewRoomIntro: React.FC = () => {
 
         let parentSpace: Room | undefined;
         if (
-            SpaceStore.instance.activeSpaceRoom?.canInvite(cli.getSafeUserId()) &&
-            SpaceStore.instance.isRoomInSpace(SpaceStore.instance.activeSpace!, room.roomId)
+            sdkContext.spaceStore.activeSpaceRoom?.canInvite(cli.getSafeUserId()) &&
+            sdkContext.spaceStore.isRoomInSpace(sdkContext.spaceStore.activeSpace!, room.roomId)
         ) {
-            parentSpace = SpaceStore.instance.activeSpaceRoom;
+            parentSpace = sdkContext.spaceStore.activeSpaceRoom;
         }
 
         let buttons: JSX.Element | undefined;
@@ -278,10 +277,7 @@ const NewRoomIntro: React.FC = () => {
     const subText = _t("room|intro|private_unencrypted_warning");
 
     let subButton: JSX.Element | undefined;
-    if (
-        room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, MatrixClientPeg.safeGet()) &&
-        !isLocalRoom
-    ) {
+    if (room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, cli) && !isLocalRoom) {
         subButton = (
             <AccessibleButton kind="link_inline" onClick={openRoomSettings}>
                 {_t("room|intro|enable_encryption_prompt")}

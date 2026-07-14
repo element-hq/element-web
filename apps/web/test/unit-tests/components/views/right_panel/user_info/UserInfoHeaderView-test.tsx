@@ -13,10 +13,10 @@ import { fireEvent, render, screen } from "jest-matrix-react";
 import React from "react";
 
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { UserInfoHeaderView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoHeaderView";
-import { createTestClient } from "../../../../../test-utils";
+import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
 import { useUserfoHeaderViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel";
+import { TestSDKContext } from "../../../../TestSDKContext.ts";
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderViewModel", () => ({
@@ -45,6 +45,7 @@ describe("<UserInfoHeaderView />", () => {
 
     let mockClient: MatrixClient;
     let mockCrypto: Mocked<CryptoApi>;
+    let sdkContext: TestSDKContext;
 
     beforeEach(() => {
         mockCrypto = mocked({
@@ -63,6 +64,8 @@ describe("<UserInfoHeaderView />", () => {
 
         mockClient = createTestClient();
         mockClient.doesServerSupportExtendedProfiles = () => Promise.resolve(false);
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
 
         jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
@@ -90,10 +93,6 @@ describe("<UserInfoHeaderView />", () => {
 
         mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
 
-        const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
-        };
-
         return render(
             <UserInfoHeaderView
                 {...defaultProps}
@@ -101,9 +100,7 @@ describe("<UserInfoHeaderView />", () => {
                 devices={[device1]}
                 hideVerificationSection={props.hideVerificationSection}
             />,
-            {
-                wrapper: Wrapper,
-            },
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
         );
     };
 
