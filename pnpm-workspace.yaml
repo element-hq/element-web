@@ -58,6 +58,7 @@ packageExtensions:
 
 allowBuilds:
     # Needed to make the git dependency in layered.sh happy
+    "github:matrix-org/matrix-js-sdk#develop": true
     matrix-js-sdk: true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
