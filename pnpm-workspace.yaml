@@ -3,6 +3,7 @@ cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
+strictDepBuilds: false
 
 packages:
     - "apps/*"
@@ -57,9 +58,6 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
-    # Needed to make the git dependency in layered.sh happy
-    "matrix-js-sdk@git+ssh://git@github.com/matrix-org/matrix-js-sdk.git": true
-    "matrix-js-sdk@github:matrix-org/matrix-js-sdk": true
     matrix-js-sdk: false
     # Installs the CLI, which we do not need
     "@sentry/cli": false
