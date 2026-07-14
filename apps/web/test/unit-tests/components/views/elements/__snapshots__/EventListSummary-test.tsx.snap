@@ -16,7 +16,7 @@ exports[`EventListSummary correctly identifies transitions 1`] = `
       </span>
     </button>
      
-    was invited, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was removed, left and was removed
+    was invited, requested to join, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was removed, left and was removed
   </span>
 </span>
 `;
@@ -167,6 +167,30 @@ exports[`EventListSummary handles multiple users following the same sequence of 
     </span>
      
     were unbanned, joined and left 2 times and were banned
+  </span>
+</span>
+`;
+
+exports[`EventListSummary knocks (ask to join enabled) summarises a knock that is accepted and joined 1`] = `
+<span
+  class="mx_TextualEvent mx_GenericEventListSummary_summary"
+>
+  <span>
+    user_1
+     
+    requested to join, was granted access and joined
+  </span>
+</span>
+`;
+
+exports[`EventListSummary knocks (ask to join enabled) summarises a knock that is retracted and one that is denied 1`] = `
+<span
+  class="mx_TextualEvent mx_GenericEventListSummary_summary"
+>
+  <span>
+    user_1
+     
+    requested to join, cancelled their request to join, requested to join and had their request to join rejected
   </span>
 </span>
 `;

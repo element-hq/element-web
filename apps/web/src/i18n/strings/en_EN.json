@@ -3457,6 +3457,11 @@
             "join": "%(targetName)s joined the room",
             "kick": "%(senderName)s removed %(targetName)s",
             "kick_reason": "%(senderName)s removed %(targetName)s: %(reason)s",
+            "knock": "%(senderName)s is requesting to join",
+            "knock_accepted": "%(senderName)s granted access to %(targetName)s",
+            "knock_denied": "%(senderName)s rejected %(targetName)s's request to join",
+            "knock_reason": "%(senderName)s is requesting to join: %(reason)s",
+            "knock_retracted": "%(targetName)s is no longer interested in joining",
             "left": "%(targetName)s left the room",
             "left_reason": "%(targetName)s left the room: %(reason)s",
             "no_change": "%(senderName)s made no change",
@@ -3640,6 +3645,38 @@
             "kicked_multiple": {
                 "one": "were removed",
                 "other": "were removed %(count)s times"
+            },
+            "knock_accepted": {
+                "one": "was granted access",
+                "other": "was granted access %(count)s times"
+            },
+            "knock_accepted_multiple": {
+                "one": "were granted access",
+                "other": "were granted access %(count)s times"
+            },
+            "knock_denied": {
+                "one": "had their request to join rejected",
+                "other": "had their request to join rejected %(count)s times"
+            },
+            "knock_denied_multiple": {
+                "one": "had their requests to join rejected",
+                "other": "had their requests to join rejected %(count)s times"
+            },
+            "knock_retracted": {
+                "one": "%(oneUser)scancelled their request to join",
+                "other": "%(oneUser)scancelled their request to join %(count)s times"
+            },
+            "knock_retracted_multiple": {
+                "one": "%(severalUsers)scancelled their requests to join",
+                "other": "%(severalUsers)scancelled their requests to join %(count)s times"
+            },
+            "knocked": {
+                "one": "%(oneUser)srequested to join",
+                "other": "%(oneUser)srequested to join %(count)s times"
+            },
+            "knocked_multiple": {
+                "one": "%(severalUsers)srequested to join",
+                "other": "%(severalUsers)srequested to join %(count)s times"
             },
             "left": {
                 "one": "%(oneUser)sleft",
