@@ -35,47 +35,89 @@ interface IProps {
 }
 
 /**
- * Track whether the index still has history left to crawl that is relevant to the given search.
+ * Track whether the index is still missing history that is relevant to the given search.
  *
- * Seshat has no notion of a room being *fully* indexed: {@link EventIndex.isRoomIndexed} only
- * reports whether the index holds any events for a room, not whether it holds all of them. The
- * closest available signal is whether the crawler still holds an outstanding checkpoint for the
- * room, exposed via {@link EventIndex.crawlingRooms}. A room-scoped search therefore asks about
- * that room alone, while an all-rooms search is affected by any outstanding checkpoint.
+ * A room-scoped search is incomplete if the crawler still holds a checkpoint for the room
+ * ({@link EventIndex.crawlingRooms}, which covers both the checkpoint being crawled right now and
+ * those still queued behind it), or if the index holds no events for it at all
+ * ({@link EventIndex.isRoomIndexed}) — which is how a room looks before its checkpoint has been
+ * seeded, and is the case the checkpoint set alone cannot see.
  *
- * Note that the absence of a checkpoint is not proof of completeness: a room also has no
- * checkpoint if it never had a back-pagination token to crawl from, if its checkpoint was dropped
- * because the server rejected the request, or before the initial checkpoints have been seeded. So
- * this signal under-warns rather than over-warns.
+ * The second question is only asked while the crawler still has work outstanding, for two reasons.
+ * It is what the warning claims ("your search index is still being built"), and the index has no
+ * event for its contents changing — `changedCheckpoint` fires only on checkpoint transitions, and
+ * an idle crawler is silent — so a warning raised once the crawler has drained would never be
+ * re-evaluated and would stick.
  *
- * The index emits `changedCheckpoint` on each checkpoint transition, but the payload carries only
- * the globally-current room, so we re-read the checkpoint set on each event rather than trust it.
+ * Neither signal proves completeness: `isRoomIndexed` reports only that the index holds *some*
+ * events for a room, not all of them, and a room has no checkpoint if it never had a
+ * back-pagination token to crawl from or if its checkpoint was dropped because the server rejected
+ * the request. So this under-warns rather than over-warns.
+ *
+ * An all-rooms search cannot ask the per-room question, so it uses the checkpoint set alone.
+ *
+ * The `changedCheckpoint` payload carries only the globally-current room and so cannot answer a
+ * per-room question: we re-read the index on each event rather than trust it.
  *
  * @param index The event index to observe, or `null` if there is no index.
  * @param scope The scope of the search, if this warning is being rendered for one.
  * @param roomId The room being searched, or `undefined` when searching all rooms.
- * @returns `true` while history relevant to the search is still being crawled, `false` otherwise.
+ * @returns `true` while the index is known to be missing history for the search, `false` otherwise.
  */
-function useIsCrawlInProgress(index: EventIndex | null, scope?: SearchScope, roomId?: string): boolean {
-    const readCrawlInProgress = useCallback((): boolean => {
-        if (!index) return false;
+function useIsIndexIncomplete(index: EventIndex | null, scope?: SearchScope, roomId?: string): boolean {
+    const readCheckpoints = useCallback((): { relevant: boolean; anyOutstanding: boolean } => {
+        if (!index) return { relevant: false, anyOutstanding: false };
         const { crawlingRooms } = index.crawlingRooms();
         // Fall back to the global check when we don't know which room is being searched: the room
         // id may still be undefined while a room alias is being resolved.
-        if (scope !== SearchScope.Room || roomId === undefined) return crawlingRooms.size > 0;
-        return crawlingRooms.has(roomId);
+        const roomScoped = scope === SearchScope.Room && roomId !== undefined;
+        return {
+            relevant: roomScoped ? crawlingRooms.has(roomId) : crawlingRooms.size > 0,
+            anyOutstanding: crawlingRooms.size > 0,
+        };
     }, [index, scope, roomId]);
 
-    const [crawlInProgress, setCrawlInProgress] = useState<boolean>(readCrawlInProgress);
+    // The checkpoint half of the answer is known synchronously, so seed from it rather than
+    // rendering an unwarned search for a room we already know is being crawled.
+    const [incomplete, setIncomplete] = useState<boolean>(() => readCheckpoints().relevant);
 
     useEffect(() => {
         if (!index) {
-            setCrawlInProgress(false);
+            setIncomplete(false);
             return;
         }
 
+        // Guards against a slow isRoomIndexed() response overwriting a newer one, or landing after
+        // the scope changed or the component unmounted.
+        let generation = 0;
+
+        // Answer this scope and room from the checkpoint set up front, so that the previous
+        // search's result is not left on screen while the first lookup below is in flight. Doing
+        // this per effect run rather than per event matters: a checkpoint change is not a new
+        // question, and resetting on one would blink an already-earned warning off and on again.
+        setIncomplete(readCheckpoints().relevant);
+
+        const update = async (): Promise<void> => {
+            const current = ++generation;
+            const { relevant, anyOutstanding } = readCheckpoints();
+
+            if (relevant) {
+                setIncomplete(true);
+                return;
+            }
+            if (!anyOutstanding || scope !== SearchScope.Room || roomId === undefined) {
+                setIncomplete(false);
+                return;
+            }
+
+            // Nothing is queued for this room yet, but the index may hold nothing for it at all.
+            // `undefined` means there is no index manager to ask, which is not evidence either way.
+            const indexed = await index.isRoomIndexed(roomId);
+            if (current === generation) setIncomplete(indexed === false);
+        };
+
         const onChangedCheckpoint = (): void => {
-            setCrawlInProgress(readCrawlInProgress());
+            void update();
         };
 
         // Re-sync in case the crawl state changed between the initial render and the subscription.
@@ -83,23 +125,24 @@ function useIsCrawlInProgress(index: EventIndex | null, scope?: SearchScope, roo
         index.on("changedCheckpoint", onChangedCheckpoint);
 
         return () => {
+            generation++;
             index.removeListener("changedCheckpoint", onChangedCheckpoint);
         };
-    }, [index, readCrawlInProgress]);
+    }, [index, scope, roomId, readCheckpoints]);
 
-    return crawlInProgress;
+    return incomplete;
 }
 
 export default function SearchWarning({ isRoomEncrypted, kind, showLogo = true, scope, roomId }: IProps): JSX.Element {
     const eventIndex = EventIndexPeg.get();
-    const crawlInProgress = useIsCrawlInProgress(eventIndex, scope, roomId);
+    const indexIncomplete = useIsIndexIncomplete(eventIndex, scope, roomId);
 
     if (!isRoomEncrypted) return <></>;
 
     if (eventIndex) {
-        // The index exists but still has history to crawl for this search, so it may silently
-        // return partial results (#32253). Warn the user.
-        if (crawlInProgress && kind === WarningKind.Search) {
+        // The index is still missing history for this search, so it may silently return partial
+        // results (#32253). Warn the user.
+        if (indexIncomplete && kind === WarningKind.Search) {
             // This warning appears dynamically while a search panel is already open (the crawler
             // finishes draining mid-session), so mark it as a polite live region for screen readers.
             return (
