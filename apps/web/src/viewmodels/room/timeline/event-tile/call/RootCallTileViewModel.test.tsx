@@ -11,7 +11,14 @@ import { it, describe, expect, vi } from "vitest";
 import { type EventTimeline, EventType, type MatrixEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "node:stream";
 
-import { mkEvent, mkMessage, mkRoomMember, mkStubRoom, stubClient } from "../../../../../../test/test-utils";
+import {
+    mkEvent,
+    mkMessage,
+    mkRoomMember,
+    mkStubRoom,
+    stubClient,
+    TestSDKContext,
+} from "../../../../../../test/test-utils";
 import { getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "./call-mocks";
 import { RootCallTileViewModel } from "./RootCallTileViewModel";
 import {
@@ -92,10 +99,19 @@ function getMocked(userIds: string[]) {
 }
 
 describe("RootCallTileViewModel", () => {
+    const sdkContext = new TestSDKContext();
+    const legacyCallHandler = sdkContext.legacyCallHandler;
+
     it("computes correct tileType for ongoing call in DM", () => {
         const { callStore, cli, mxEvent, latestRtcNotificationEventStore } = getMocked(["@alice:m.org", "@bob:m.org"]);
         latestRtcNotificationEventStore.getLatestEventId = () => "new-event";
-        const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
+        const vm = new RootCallTileViewModel({
+            latestRtcNotificationEventStore,
+            callStore,
+            cli,
+            mxEvent,
+            legacyCallHandler,
+        });
 
         expect(vm.getSnapshot().tileType).toStrictEqual("ongoing-call-dm");
     });
@@ -107,7 +123,13 @@ describe("RootCallTileViewModel", () => {
             "@jack:m.org",
         ]);
         latestRtcNotificationEventStore.getLatestEventId = () => "new-event";
-        const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
+        const vm = new RootCallTileViewModel({
+            latestRtcNotificationEventStore,
+            callStore,
+            cli,
+            mxEvent,
+            legacyCallHandler,
+        });
 
         expect(vm.getSnapshot().tileType).toStrictEqual("ongoing-call-room");
     });
@@ -115,7 +137,13 @@ describe("RootCallTileViewModel", () => {
     it("computes correct tileType for tombstone call in DM", () => {
         // When there's an ongoing call
         const { callStore, cli, mxEvent, latestRtcNotificationEventStore } = getMocked(["@alice:m.org", "@bob:m.org"]);
-        const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
+        const vm = new RootCallTileViewModel({
+            latestRtcNotificationEventStore,
+            callStore,
+            cli,
+            mxEvent,
+            legacyCallHandler,
+        });
 
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-dm");
     });
@@ -127,7 +155,13 @@ describe("RootCallTileViewModel", () => {
             "@bob:m.org",
             "@jack:m.org",
         ]);
-        const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
+        const vm = new RootCallTileViewModel({
+            latestRtcNotificationEventStore,
+            callStore,
+            cli,
+            mxEvent,
+            legacyCallHandler,
+        });
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-room");
     });
 
@@ -138,7 +172,13 @@ describe("RootCallTileViewModel", () => {
             "@bob:m.org",
             "@jack:m.org",
         ]);
-        const vm = new RootCallTileViewModel({ latestRtcNotificationEventStore, callStore, cli, mxEvent });
+        const vm = new RootCallTileViewModel({
+            latestRtcNotificationEventStore,
+            callStore,
+            cli,
+            mxEvent,
+            legacyCallHandler,
+        });
         expect(vm.getSnapshot().tileType).toStrictEqual("tombstone-call-room");
 
         // Tile type should update on event

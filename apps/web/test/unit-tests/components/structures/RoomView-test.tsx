@@ -21,6 +21,7 @@ import {
     RoomMember,
     RoomStateEvent,
     SearchResult,
+    User,
 } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -1264,5 +1265,35 @@ describe("RoomView", () => {
                 room_id: room2.roomId,
             }),
         );
+    });
+
+    it("should handle Action.ViewUser", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "setCards");
+        const member = new User("@user:server");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.ViewUser,
+                member,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.setCards).toHaveBeenCalledWith([
+            { phase: RightPanelPhases.RoomSummary },
+            { phase: RightPanelPhases.MemberList },
+            { phase: RightPanelPhases.MemberInfo, state: { member } },
+        ]);
+    });
+
+    it("should handle Action.View3pidInvite", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.View3pidInvite,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.showOrHidePhase).toHaveBeenCalledWith("MemberList");
     });
 });

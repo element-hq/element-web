@@ -10,7 +10,7 @@
 import { it, describe, expect, vi } from "vitest";
 import { EventType, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 
-import { stubClient } from "../../../../../../../../test/test-utils";
+import { stubClient, TestSDKContext } from "../../../../../../../../test/test-utils";
 import {
     getMockedMember,
     getMockedRtcDeclineEvent,
@@ -24,6 +24,9 @@ import { CallEvent } from "../../../../../../../models/Call";
 const roomId = "!my-room:m.org";
 
 describe("RoomOngoingCallTileViewModel", () => {
+    const sdkContext = new TestSDKContext();
+    const legacyCallHandler = sdkContext.legacyCallHandler;
+
     describe("should compute the correct snapshot", () => {
         it("totalParticipants", () => {
             const cli = stubClient();
@@ -35,7 +38,7 @@ describe("RoomOngoingCallTileViewModel", () => {
             const james = getMockedMember(roomId, "@james:m.org", "James");
             const call = MockedCall.create().withParticipants([mxEvent.sender, bob, james]);
             const callStore = MockedCallStore.create(call);
-            const vm = new RoomOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId });
+            const vm = new RoomOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
 
             // Call has 3 participants now
             expect(vm.getSnapshot().totalParticipants).toStrictEqual(3);
@@ -59,7 +62,14 @@ describe("RoomOngoingCallTileViewModel", () => {
 
             const call = MockedCall.create().withParticipants([mxEvent.sender]);
             const callStore = MockedCallStore.create(call);
-            const vm = new RoomOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, getRelationsForEvent });
+            const vm = new RoomOngoingCallTileViewModel({
+                mxEvent,
+                cli,
+                callStore,
+                roomId,
+                getRelationsForEvent,
+                legacyCallHandler,
+            });
 
             // Call hasn't been ignored yet
             expect(vm.getSnapshot().isCallIgnored).toStrictEqual(false);
