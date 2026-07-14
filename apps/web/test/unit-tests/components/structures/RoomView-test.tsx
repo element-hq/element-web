@@ -1151,6 +1151,24 @@ describe("RoomView", () => {
         ]);
     });
 
+    it("should handle Action.ViewUser with push", async () => {
+        await mountRoomView();
+        jest.spyOn(stores.rightPanelStore, "pushCard");
+        const member = new User("@user:server");
+        defaultDispatcher.dispatch(
+            {
+                action: Action.ViewUser,
+                member,
+                push: true,
+            },
+            true,
+        );
+        expect(stores.rightPanelStore.pushCard).toHaveBeenCalledWith({
+            phase: RightPanelPhases.MemberInfo,
+            state: { member },
+        });
+    });
+
     it("should handle Action.View3pidInvite", async () => {
         await mountRoomView();
         jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
