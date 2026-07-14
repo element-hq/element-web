@@ -9,7 +9,7 @@ import React from "react";
 import { render, waitFor } from "test-utils-rtl";
 import { test, describe, beforeEach, expect, vi, afterEach } from "vitest";
 
-import { MessageComposerUrlPreviewWrapper, DEBOUNCE_REQUEST_TIMEOUT_MS } from "./MessageComposerUrlPreview";
+import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
 import {
     getMockClientWithEventEmitter,
     getRoomContext,
@@ -22,6 +22,11 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CustomComponentsApi } from "../../../modules/customComponentApi";
+import {
+    DEBOUNCE_REQUEST_TIMEOUT_MS,
+    MessageComposerUrlPreviewViewModel,
+    type MessageComposerUrlPreviewViewModelProps,
+} from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 
 // @vitest-environment happy-dom
 
@@ -32,6 +37,26 @@ const BASIC_PREVIEW_OGDATA = {
     "og:url": "https://example.org",
     "og:site_name": "Example.org",
 };
+
+function getUrlPreviewVm(client: MatrixClient, content?: string): MessageComposerUrlPreviewViewModel {
+    const props: MessageComposerUrlPreviewViewModelProps = {
+        client,
+        visible: true,
+        showTooltips: false,
+        urlPreviewBundle: false,
+    };
+
+    if (content !== undefined) {
+        props.content = content;
+    }
+
+    const vm = new MessageComposerUrlPreviewViewModel(props);
+    if (content !== undefined) {
+        // Mirror how MessageComposer drives the view model so previews are actually computed.
+        void vm.updateWithText({ content, debounced: false });
+    }
+    return vm;
+}
 
 describe("MessageComposerUrlPreview", () => {
     let client: MatrixClient;
@@ -66,11 +91,15 @@ describe("MessageComposerUrlPreview", () => {
     }
 
     test("to be empty without a link to preview", () => {
-        const { container } = wrapComponent(<MessageComposerUrlPreviewWrapper content="Test a string" />);
+        const { container } = wrapComponent(
+            <MessageComposerUrlPreviewWrapper urlPreviewVm={getUrlPreviewVm(client, "Test a string")} />,
+        );
         expect(container).toMatchInlineSnapshot(`<div />`);
     });
     test("to contain a link when there is a URL", async () => {
-        const { getByText } = wrapComponent(<MessageComposerUrlPreviewWrapper content="https://example.org" />);
+        const { getByText } = wrapComponent(
+            <MessageComposerUrlPreviewWrapper urlPreviewVm={getUrlPreviewVm(client, "https://example.org")} />,
+        );
         await waitFor(
             () => {
                 expect(getByText("Example.org")).toBeDefined();
@@ -87,7 +116,10 @@ describe("MessageComposerUrlPreview", () => {
             () => <strong>Fake preview</strong>,
         );
         const { getByText } = wrapComponent(
-            <MessageComposerUrlPreviewWrapper content="https://example.org" moduleApi={modApi} />,
+            <MessageComposerUrlPreviewWrapper
+                moduleApi={modApi}
+                urlPreviewVm={getUrlPreviewVm(client, "https://example.org")}
+            />,
         );
         await waitFor(
             () => {
@@ -105,12 +137,20 @@ describe("MessageComposerUrlPreview", () => {
             () => <strong>Fake preview</strong>,
         );
         const { container, getByText, queryByText, rerender } = wrapComponent(
-            <MessageComposerUrlPreviewWrapper content="show-fake-preview" moduleApi={modApi} />,
+            <MessageComposerUrlPreviewWrapper
+                urlPreviewVm={getUrlPreviewVm(client, "show-fake-preview")}
+                moduleApi={modApi}
+            />,
         );
         await waitFor(() => {
             expect(getByText("Fake preview")).toBeDefined();
         });
-        rerender(<MessageComposerUrlPreviewWrapper content="other-text" moduleApi={modApi} />);
+        rerender(
+            <MessageComposerUrlPreviewWrapper
+                urlPreviewVm={getUrlPreviewVm(client, "no-longer-matching")}
+                moduleApi={modApi}
+            />,
+        );
         await waitFor(() => {
             expect(queryByText("Fake preview")).toBeNull();
         });

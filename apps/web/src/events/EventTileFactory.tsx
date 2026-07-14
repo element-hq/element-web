@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect } from "react";
+import React, { type JSX, useContext, useEffect } from "react";
 import {
     type MatrixEvent,
     EventType,
@@ -57,6 +57,7 @@ import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body
 import { ViewSourceEventViewModel } from "../viewmodels/room/timeline/event-tile/body/ViewSourceEventViewModel";
 import { ElementCallEventType } from "../call-types";
 import { RootCallTileViewModel } from "../viewmodels/room/timeline/event-tile/call/RootCallTileViewModel";
+import { SDKContext } from "../contexts/SDKContext";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps extends Pick<
@@ -188,6 +189,7 @@ function RoomAvatarEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 const RoomAvatarEventFactory: Factory = (ref, props) => <RoomAvatarEventWrappedView ref={ref} {...props} />;
 
 function CallStartedTileViewWrapped({ mxEvent, getRelationsForEvent }: IBodyProps): JSX.Element {
+    const sdkContext = useContext(SDKContext);
     const cli = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -195,6 +197,8 @@ function CallStartedTileViewWrapped({ mxEvent, getRelationsForEvent }: IBodyProp
                 mxEvent,
                 getRelationsForEvent,
                 cli,
+                callStore: sdkContext.callStore,
+                latestRtcNotificationEventStore: sdkContext.latestRtcNotificationEventStore,
             }),
     );
     return <RootCallTileView vm={vm} />;
