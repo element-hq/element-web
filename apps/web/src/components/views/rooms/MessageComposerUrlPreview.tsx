@@ -11,6 +11,9 @@ import { MessageComposerUrlPreviewView, useViewModel } from "@element-hq/web-sha
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
 import { ModuleApi } from "../../../modules/Api";
+import { useSettingValue } from "../../../hooks/useSettings";
+import SettingsStore from "../../../settings/SettingsStore";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
 export function MessageComposerUrlPreviewWrapper({
     urlPreviewVm: vm,
@@ -24,6 +27,10 @@ export function MessageComposerUrlPreviewWrapper({
     const customComponent = moduleApi.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
         <MessageComposerUrlPreviewView vm={vm} />
     ));
+    const collapsed = useSettingValue("composerUrlPreviewCollapsed");
+    function toggleCollapsed() {
+        SettingsStore.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, !collapsed);
+    }
 
-    return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;
+    return customComponent ?? <MessageComposerUrlPreviewView vm={vm} collapsed={collapsed} toggleCollapsed={toggleCollapsed} />;
 }

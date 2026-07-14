@@ -11,7 +11,12 @@
     border-radius: 10px;
 }
 
+.wrapper.collapsed {
+    padding-bottom: 4px;
+}
+
 :global(.cpd-theme-light) {
+
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 40%;
@@ -19,6 +24,7 @@
 }
 
 :global(.cpd-theme-dark) .summaryIcon {
+
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 60%;
@@ -104,6 +110,10 @@
     }
 }
 
+.wrapper.collapsed .collapse {
+    rotate: -90deg;
+}
+
 .container {
     container-type: inline-size;
     container-name: banner;
@@ -111,7 +121,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--cpd-space-4x);
-    padding: var(--cpd-space-3x) var(--cpd-space-4x);
+    padding: var(--cpd-space-2x) var(--cpd-space-4x);
     border-top: 1px solid var(--cpd-color-gray-400);
 
     >div {
@@ -130,6 +140,10 @@
             font-size: 13px;
         }
     }
+}
+
+.container:last-of-type {
+    padding-bottom: 0;
 }
 
 .entryIcon,
