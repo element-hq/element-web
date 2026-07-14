@@ -135,6 +135,11 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             this.content = content;
         }
 
+        if (content === "") {
+            this.previewCache.clear();
+            return this.computeSnapshot("");
+        }
+
         if (debounced) {
             return this.computeSnapshotDebounced(this.content);
         } else {
