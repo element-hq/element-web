@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import IncompatibleController from "../../../../src/settings/controllers/IncompatibleController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import SettingsStore from "../../../../src/settings/SettingsStore";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 
-declare module "../../../../src/settings/Settings.tsx" {
+import IncompatibleController from "./IncompatibleController";
+import { SettingLevel } from "../SettingLevel";
+import SettingsStore from "../SettingsStore";
+
+declare module "../Settings.tsx" {
     interface Settings {
         test_setting: IBaseSetting<string>;
     }
 }
 
 describe("IncompatibleController", () => {
-    const settingsGetValueSpy = jest.spyOn(SettingsStore, "getValue");
+    const settingsGetValueSpy = vi.spyOn(SettingsStore, "getValue");
     beforeEach(() => {
         settingsGetValueSpy.mockClear();
     });
@@ -58,7 +60,7 @@ describe("IncompatibleController", () => {
 
         describe("when incompatibleValue is set to a function", () => {
             it("returns result from incompatibleValue function", () => {
-                const incompatibleValueFn = jest.fn().mockReturnValue(false);
+                const incompatibleValueFn = vi.fn().mockReturnValue(false);
                 const controller = new IncompatibleController("test_setting", { key: null }, incompatibleValueFn);
                 settingsGetValueSpy.mockReturnValue("test");
                 expect(controller.incompatibleSetting).toBe(false);

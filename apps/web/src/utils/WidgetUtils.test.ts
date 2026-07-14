@@ -7,8 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import WidgetUtils from "../../../src/utils/WidgetUtils";
-import { mockPlatformPeg } from "../../test-utils";
+import { describe, it, expect, beforeEach } from "vitest";
+import { mockPlatformPeg } from "test-utils/platform";
+
+import WidgetUtils from "./WidgetUtils";
 
 describe("getLocalJitsiWrapperUrl", () => {
     beforeEach(() => {

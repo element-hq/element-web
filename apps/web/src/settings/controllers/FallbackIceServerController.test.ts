@@ -5,13 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import fetchMock from "@fetch-mock/jest";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import fetchMock from "@fetch-mock/vitest";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import FallbackIceServerController from "../../../../src/settings/controllers/FallbackIceServerController.ts";
-import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController.ts";
-import SettingsStore from "../../../../src/settings/SettingsStore.ts";
+import { SettingLevel } from "../SettingLevel";
+import FallbackIceServerController from "./FallbackIceServerController.ts";
+import MatrixClientBackedController from "./MatrixClientBackedController.ts";
+import SettingsStore from "../SettingsStore.ts";
 
 describe("FallbackIceServerController", () => {
     beforeEach(() => {
@@ -19,7 +22,7 @@ describe("FallbackIceServerController", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should update MatrixClient's state when the setting is updated", async () => {

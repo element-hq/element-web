@@ -6,14 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import ServerSupportUnstableFeatureController from "../../../../src/settings/controllers/ServerSupportUnstableFeatureController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { type FeatureSettingKey, LabGroup, SETTINGS } from "../../../../src/settings/Settings";
-import { stubClient } from "../../../test-utils";
-import { WatchManager } from "../../../../src/settings/WatchManager";
-import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
+import { vi, describe, it, expect } from "vitest";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import ServerSupportUnstableFeatureController from "./ServerSupportUnstableFeatureController";
+import { SettingLevel } from "../SettingLevel";
+import { type FeatureSettingKey, LabGroup, SETTINGS } from "../Settings";
+import { WatchManager } from "../WatchManager";
+import MatrixClientBackedController from "./MatrixClientBackedController";
 
 describe("ServerSupportUnstableFeatureController", () => {
     const watchers = new WatchManager();
@@ -41,7 +44,7 @@ describe("ServerSupportUnstableFeatureController", () => {
     describe("getValueOverride()", () => {
         it("should return forced value is setting is disabled", async () => {
             const cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async () => false);
+            cli.doesServerSupportUnstableFeature = vi.fn(async () => false);
 
             const controller = new ServerSupportUnstableFeatureController(
                 setting,
@@ -60,7 +63,7 @@ describe("ServerSupportUnstableFeatureController", () => {
 
         it("should pass through to the handler if setting is not disabled", async () => {
             const cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async () => true);
+            cli.doesServerSupportUnstableFeature = vi.fn(async () => true);
 
             const controller = new ServerSupportUnstableFeatureController(
                 setting,
@@ -82,7 +85,7 @@ describe("ServerSupportUnstableFeatureController", () => {
 
         it("considered disabled if not all required features in the only feature group are supported", async () => {
             const cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
+            cli.doesServerSupportUnstableFeature = vi.fn(async (featureName) => {
                 return featureName === "org.matrix.msc3827.stable";
             });
 
@@ -96,7 +99,7 @@ describe("ServerSupportUnstableFeatureController", () => {
 
         it("considered enabled if all required features in the only feature group are supported", async () => {
             const cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
+            cli.doesServerSupportUnstableFeature = vi.fn(async (featureName) => {
                 return featureName === "org.matrix.msc3827.stable" || featureName === "org.matrix.msc3030";
             });
             const controller = new ServerSupportUnstableFeatureController(setting, watchers, [
@@ -109,7 +112,7 @@ describe("ServerSupportUnstableFeatureController", () => {
 
         it("considered enabled if all required features in one of the feature groups are supported", async () => {
             const cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
+            cli.doesServerSupportUnstableFeature = vi.fn(async (featureName) => {
                 return featureName === "org.matrix.msc3827.stable" || featureName === "org.matrix.msc3030";
             });
             const controller = new ServerSupportUnstableFeatureController(setting, watchers, [
@@ -123,7 +126,7 @@ describe("ServerSupportUnstableFeatureController", () => {
 
         it("considered disabled if not all required features in one of the feature groups are supported", async () => {
             const cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
+            cli.doesServerSupportUnstableFeature = vi.fn(async (featureName) => {
                 return featureName === "org.matrix.msc3827.stable";
             });
 
