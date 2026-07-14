@@ -44,9 +44,6 @@ export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className"
 
     return (
         <IconButton
-            // aria-label as otherwise there's no accessible name when the tooltip
-            // is not visible
-            aria-label={tooltip ?? _t("action|copy")}
             tooltip={tooltip ?? _t("action|copy")}
             onClick={onCopyClickInternal}
             className={className}
