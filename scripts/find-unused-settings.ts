@@ -36,7 +36,7 @@ const SETTINGS_FILE_RELATIVE = path.relative(ROOT, SETTINGS_FILE);
 // search terms, but keep this list as a manual escape hatch for cases the heuristic can't
 // see (e.g. usage mediated through a helper function rather than a literal reference).
 const KNOWN_USED_OVERRIDES = new Set<string>([
-    // e.g. "someSettingName",
+    "test_setting", // only used in tests
 ]);
 
 interface DeclaredSetting {
