@@ -64,6 +64,10 @@ export interface MessageComposerUrlPreviewProps {
      */
     toggleCollapsed: () => void,
     /**
+     * Function to call to toggle collapsed state
+     */
+    removePreview?: (url: string) => void,
+    /**
      * Extra CSS classes to apply to the component.
      */
     className?: string;
@@ -84,14 +88,13 @@ function urlFirstChar(url: string): string {
 /**
  * MessageComposerUrlPreviewView renders a preview of all previewable URLs above the messasge composer.
  */
-export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggleCollapsed }: MessageComposerUrlPreviewProps): JSX.Element | null {
+export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggleCollapsed, removePreview }: MessageComposerUrlPreviewProps): JSX.Element | null {
     const { entries } = useViewModel(vm);
-    if (entries.length === 0) {
+    const links = entries.filter(entry => entry.include);
+
+    if (links.length === 0) {
         return null;
     }
-
-
-    const links = entries.filter(entry => entry.include);
 
     // Show only the first preview to revert back to previous behaviour
     // But have previews fetch all URL previews in the message text
@@ -143,18 +146,18 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
     const summary = <div className={styles.summary}>
         <span className={styles.left}>
             <span className={styles.icons}>
-                {links.map(entry => {
+                {links.map((entry, i) => {
                     switch (entry.status) {
                         case "failed":
-                            return <div className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-critical-primary)" }}><ErrorIcon /></div>
+                            return <div key={i} className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-critical-primary)" }}><ErrorIcon /></div>
                         case "loading":
-                            return <div className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-subtle-primary)" }}><InlineSpinner /></div>
+                            return <div key={i} className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-subtle-primary)" }}><InlineSpinner /></div>
                         case "loaded":
                             const siteName = new URL(entry.matched_url).hostname;
                             if (entry.preview.image !== undefined) {
-                                return <div className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
+                                return <div key={i} className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
                             } else {
-                                return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
+                                return <div key={i} className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
                             }
                     }
                 })
@@ -163,7 +166,7 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
             <span className={styles.linkCount}>{links.length} link{links.length <= 1 ? "" : "s"}</span>
         </span>
         <span className={styles.right}>
-            <span className={styles.clearAll}>Clear all</span>
+            {removePreview && <span className={styles.clearAll} onClick={() => links.forEach(entry => removePreview(entry.matched_url))}>Clear all</span>}
             <span className={styles.collapse} onClick={toggleCollapsed}>›</span>
         </span>
     </div>;
