@@ -20,11 +20,7 @@ import { findDMForUser } from "./utils/dm/findDMForUser";
  *
  * Note: cross-signing must be set up before calling this function.
  */
-export async function verifyUser(
-    rightPanelStore: RightPanelStore,
-    matrixClient: MatrixClient,
-    user: User,
-): Promise<void> {
+export function verifyUser(rightPanelStore: RightPanelStore, matrixClient: MatrixClient, user: User): void {
     if (matrixClient.isGuest()) {
         dis.dispatch({ action: "require_registration" });
         return;
