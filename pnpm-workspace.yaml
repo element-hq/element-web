@@ -58,8 +58,9 @@ packageExtensions:
 
 allowBuilds:
     # Needed to make the git dependency in layered.sh happy
-    "github:matrix-org/matrix-js-sdk#develop": true
-    matrix-js-sdk: true
+    "matrix-js-sdk@git+ssh://git@github.com/matrix-org/matrix-js-sdk.git": true
+    "matrix-js-sdk@github:matrix-org/matrix-js-sdk": true
+    matrix-js-sdk: false
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -81,6 +82,7 @@ allowBuilds:
     # The following are to make wrangler-action happy - https://github.com/cloudflare/wrangler-action/issues/436
     sharp: true
     workerd: true
+    matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c76f6e44afc13194cf2d27d9faa19c2806fdacd3: set this to true or false
 
 patchedDependencies:
     # Workaround for missing types export
