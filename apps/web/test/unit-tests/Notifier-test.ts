@@ -154,6 +154,7 @@ describe("Notifier", () => {
             maySendNotifications: jest.fn().mockReturnValue(true),
             displayNotification: jest.fn().mockReturnValue({ close: jest.fn() }),
             loudNotification: jest.fn(),
+            focusWindow: jest.fn(),
         });
 
         Notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
@@ -513,6 +514,26 @@ describe("Notifier", () => {
                     props: { notificationEvent },
                 }),
             );
+        });
+
+        it("brings the window to the front for a ringing call notification", () => {
+            emitCallNotificationEvent();
+
+            expect(MockPlatform.focusWindow).toHaveBeenCalled();
+        });
+
+        it("does not bring the window to the front when this device is silenced", () => {
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
+
+            emitCallNotificationEvent();
+
+            expect(MockPlatform.focusWindow).not.toHaveBeenCalled();
+        });
+
+        it("does not bring the window to the front for a call notification that does not ring", () => {
+            emitCallNotificationEvent({ content: { notification_type: "notification" } });
+
+            expect(MockPlatform.focusWindow).not.toHaveBeenCalled();
         });
 
         it("shows group call toast once for multiple notifications to the same call", () => {

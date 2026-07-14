@@ -609,10 +609,10 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             return;
         }
 
-        // Bring the app window to the front for an actual incoming (ringing) call.
-        // No-op on platforms that can't focus their own window (e.g. the browser, or
-        // Wayland, where clicking the native call notification is the only way to raise it).
-        if (content.notification_type === "ring") {
+        // Bring the app window to the front for an actual incoming (ringing) call, unless
+        // this device is silenced — same condition the legacy call path applies. No-op on
+        // platforms that can't focus their own window (e.g. the browser).
+        if (content.notification_type === "ring" && !localNotificationsAreSilenced(room.client)) {
             PlatformPeg.get()?.focusWindow();
         }
 

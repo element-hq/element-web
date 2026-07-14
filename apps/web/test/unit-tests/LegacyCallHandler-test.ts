@@ -31,7 +31,7 @@ import LegacyCallHandler, {
     PROTOCOL_PSTN_PREFIXED,
 } from "../../src/LegacyCallHandler";
 import { mkStubRoom, stubClient, untilDispatch } from "../test-utils";
-import { mockPlatformPeg } from "../test-utils/platform";
+import { mockPlatformPeg, unmockPlatformPeg } from "../test-utils/platform";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import SdkConfig from "../../src/SdkConfig";
@@ -459,6 +459,12 @@ describe("LegacyCallHandler without third party protocols", () => {
 
     describe("incoming calls", () => {
         const roomId = "test-room-id";
+
+        afterEach(() => {
+            // mockPlatformPeg spies on the PlatformPeg singleton, which clearAllMocks does
+            // not undo, so it would otherwise leak into the tests that follow.
+            unmockPlatformPeg();
+        });
 
         beforeEach(() => {
             jest.clearAllMocks();

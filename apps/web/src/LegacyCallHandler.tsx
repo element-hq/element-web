@@ -674,12 +674,11 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         const toastKey = getIncomingLegacyCallToastKey(call.callId);
         if (status === CallState.Ringing) {
-            // Bring the app window to the front for an incoming call. Not for
-            // force-silenced calls (e.g. we're already in another call), where yanking
-            // focus would interrupt the active call. No-op where the OS forbids a
-            // programmatic raise (e.g. Wayland); there the native notification's click
-            // raises the window.
-            if (!this.isForcedSilent()) {
+            // Bring the app window to the front for an incoming call, unless the call is
+            // silenced (this device is silenced, or the call was silenced before it got
+            // here) — if it isn't worth ringing for, it isn't worth stealing focus for.
+            // No-op on platforms that can't focus their own window (e.g. the browser).
+            if (!this.isCallSilenced(call.callId)) {
                 PlatformPeg.get()?.focusWindow();
             }
             ToastStore.sharedInstance().addOrReplaceToast({

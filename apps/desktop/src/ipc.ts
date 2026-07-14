@@ -13,20 +13,38 @@ import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMedia
 import Store, { clearDataAndRelaunch } from "./store.js";
 import { getConfig } from "./config.js";
 
-// Flash the taskbar entry until the window is next focused. Best-effort attention
-// cue where a programmatic raise/focus is refused (Wayland compositors, Windows
-// foreground-lock). The once("focus") listener auto-removes when it fires; repeated
-// calls while unfocused just stack idempotent flashFrame handlers, all cleared on
-// the next focus.
-function flashFrameUntilFocused(): void {
+// How long to give the OS to honour a programmatic focus() before we assume it was
+// refused and fall back to a taskbar flash / dock bounce.
+const FOCUS_GRACE_MS = 500;
+
+// Tracks the windows that already have a listener clearing their flash on focus, so
+// repeated calls while unfocused don't stack listeners (which would trip Node's
+// max-listeners warning), and a recreated window still gets one of its own.
+const flashClearHandlerAttached = new WeakSet<Electron.BrowserWindow>();
+
+// Ask the OS for the user's attention without stealing focus: flash the taskbar entry
+// (Windows/Linux) or bounce the dock icon (macOS) until the app is next focused.
+function requestUserAttention(): void {
+    if (process.platform === "darwin") {
+        // Bounces until the user activates the app.
+        app.dock?.bounce("critical");
+        return;
+    }
     if (process.platform !== "win32" && process.platform !== "linux") return;
-    if (!global.mainWindow || global.mainWindow.isFocused()) return;
-    global.mainWindow.flashFrame(true);
-    global.mainWindow.once("focus", () => global.mainWindow?.flashFrame(false));
+
+    const window = global.mainWindow;
+    if (!window || window.isFocused()) return;
+    window.flashFrame(true);
+    if (flashClearHandlerAttached.has(window)) return;
+    flashClearHandlerAttached.add(window);
+    window.once("focus", () => {
+        flashClearHandlerAttached.delete(window);
+        window.flashFrame(false);
+    });
 }
 
 ipcMain.on("loudNotification", function (): void {
-    flashFrameUntilFocused();
+    requestUserAttention();
 });
 
 let powerSaveBlockerId: number | null = null;
@@ -72,11 +90,12 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
             if (global.mainWindow.isMinimized()) global.mainWindow.restore();
             if (!global.mainWindow.isVisible()) global.mainWindow.show();
             global.mainWindow.focus();
-            // Best-effort attention fallback: Wayland compositors (and Windows'
-            // foreground-lock) often refuse a programmatic raise/focus. If we
-            // still don't have focus, flash the taskbar entry until the user
-            // interacts.
-            flashFrameUntilFocused();
+            // focus() is asynchronous and can be refused outright (Wayland compositors,
+            // Windows' foreground-lock, macOS background apps), so we can't tell whether
+            // it worked until the compositor has had a chance to honour it. Check back
+            // shortly and fall back to a taskbar flash / dock bounce if we still don't
+            // have focus.
+            setTimeout(requestUserAttention, FOCUS_GRACE_MS);
             break;
 
         case "navigateBack":
