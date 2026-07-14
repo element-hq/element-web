@@ -18,7 +18,7 @@ describe("PillCompletion", () => {
         render(<PillCompletion title="Alice" titleIcon={<span>💡</span>} description="@alice:example.org" />);
 
         const title = screen.getByText("Alice");
-        const adornment = screen.getByText("💡");
-        expect(title.nextElementSibling).toBe(adornment);
+        const icon = screen.getByText("💡");
+        expect(title.nextElementSibling).toBe(icon);
     });
 });
