@@ -12,7 +12,6 @@
 }
 
 :global(.cpd-theme-light) {
-
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 40%;
@@ -20,7 +19,6 @@
 }
 
 :global(.cpd-theme-dark) .summaryIcon {
-
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 60%;
@@ -40,8 +38,6 @@
     .left {
         flex-grow: 1;
     }
-
-    .right {}
 
     .summaryIcon:not(:first-child) {
         margin-left: -8px;
@@ -75,9 +71,12 @@
             object-fit: cover;
             object-position: center;
         }
-    }
 
-    .icons {}
+        svg {
+            width: 50% !important;
+            height: 50% !important;
+        }
+    }
 
     .linkCount {
         margin-left: 13px;
@@ -133,11 +132,16 @@
     }
 }
 
-.entryIcon {
+.entryIcon,
+.loadingSpinner,
+.failedIcon {
     width: 40px;
     height: 40px;
     border-radius: 6px;
     overflow: hidden;
+
+    align-items: center;
+    vertical-align: middle;
 
     text-align: center;
     line-height: 40px;
@@ -152,4 +156,12 @@
         object-fit: cover;
         object-position: center;
     }
+
+    svg {
+        vertical-align: middle;
+    }
+}
+
+.failedIcon {
+    color: var(--cpd-color-icon-critical-primary);
 }
