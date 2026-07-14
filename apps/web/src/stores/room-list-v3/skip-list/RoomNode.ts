@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Filter, FilterKey } from "./filters";
-import SpaceStore from "../../spaces/SpaceStore";
+import { SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 /**
  * Room skip list stores room nodes.
@@ -34,7 +34,7 @@ export class RoomNode {
     /**
      * Whether the room associated with this room node belongs to
      * the currently active space.
-     * @see {@link SpaceStoreClass#activeSpace} to understand what active
+     * @see {@link SpaceStore#activeSpace} to understand what active
      * space means.
      */
     public get isInActiveSpace(): boolean {
@@ -46,8 +46,8 @@ export class RoomNode {
      * in {@link RoomNode#isInActiveSpace}.
      */
     public checkIfRoomBelongsToActiveSpace(): void {
-        const activeSpace = SpaceStore.instance.activeSpace;
-        this._isInActiveSpace = SpaceStore.instance.isRoomInSpace(activeSpace, this.room.roomId);
+        const activeSpace = SDKContextClass.instance.spaceStore.activeSpace;
+        this._isInActiveSpace = SDKContextClass.instance.spaceStore.isRoomInSpace(activeSpace, this.room.roomId);
     }
 
     /**

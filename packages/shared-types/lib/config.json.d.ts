@@ -37,6 +37,14 @@ export interface WebConfigJson {
     disable_login_language_selector?: boolean;
     disable_3pid_login?: boolean;
 
+    /**
+     * Whether the app may make runtime requests to the user's `<server_name>/.well-known/matrix/...`
+     * endpoints (such as the post-login client well-known poll). Set to false to disable these, so the app
+     * only contacts the homeserver base URL. Does not affect the `well_known` returned inline in the
+     * `/login` response. Defaults to true.
+     */
+    enable_client_well_known_lookups?: boolean;
+
     brand?: string;
     branding?: {
         welcome_background_url?: string | string[]; // chosen at random if array

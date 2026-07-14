@@ -30,7 +30,13 @@ import LoggedInView from "../../../../src/components/structures/LoggedInView";
 import { SDKContext } from "../../../../src/contexts/SDKContext";
 import { StandardActions } from "../../../../src/notifications/StandardActions";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
+import {
+    flushPromises,
+    getMockClientWithEventEmitter,
+    mockClientMethodsRooms,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+} from "../../../test-utils";
 import { TestSDKContext } from "../../TestSDKContext";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -45,9 +51,9 @@ describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
-        getClientWellKnown: jest.fn(),
+        ...mockClientMethodsServer(),
+        ...mockClientMethodsRooms([]),
         getAccountData: jest.fn(),
-        getRoom: jest.fn(),
         getSyncState: jest.fn().mockReturnValue(null),
         getSyncStateData: jest.fn().mockReturnValue(null),
         getMediaHandler: jest.fn(),
@@ -57,6 +63,9 @@ describe("<LoggedInView />", () => {
         setExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         deleteExtendedProfileProperty: jest.fn().mockResolvedValue(undefined),
         doesServerSupportExtendedProfiles: jest.fn().mockResolvedValue(true),
+        matrixRTC: {
+            on: jest.fn(),
+        },
         getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     });
     const mediaHandler = new MediaHandler(mockClient);
