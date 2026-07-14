@@ -95,5 +95,6 @@ export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";
 export * from "./status/SetStatusView";
 export * from "./status/StatusTextView";
+export * from "./status/UserStatusIconView";
 // MVVM
 export * from "./core/viewmodel";
