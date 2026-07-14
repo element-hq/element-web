@@ -54,36 +54,27 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
             new Tab(
                 SpaceSettingsTab.General,
                 _td("common|general"),
-                <SettingsSolidIcon key={SpaceSettingsTab.General} />,
-                <SpaceSettingsGeneralTab key={SpaceSettingsTab.General} matrixClient={cli} space={space} />,
+                <SettingsSolidIcon />,
+                <SpaceSettingsGeneralTab matrixClient={cli} space={space} />,
             ),
             new Tab(
                 SpaceSettingsTab.Visibility,
                 _td("room_settings|visibility|title"),
-                <VisibilityOnIcon key={SpaceSettingsTab.Visibility} />,
-                <SpaceSettingsVisibilityTab
-                    key={SpaceSettingsTab.Visibility}
-                    matrixClient={cli}
-                    space={space}
-                    closeSettingsFn={onFinished}
-                />,
+                <VisibilityOnIcon />,
+                <SpaceSettingsVisibilityTab matrixClient={cli} space={space} closeSettingsFn={onFinished} />,
             ),
             new Tab(
                 SpaceSettingsTab.Roles,
                 _td("room_settings|permissions|title"),
-                <AdminIcon key={SpaceSettingsTab.Roles} />,
-                <RolesRoomSettingsTab key={SpaceSettingsTab.Roles} room={space} />,
+                <AdminIcon />,
+                <RolesRoomSettingsTab room={space} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(
                       SpaceSettingsTab.Advanced,
                       _td("common|advanced"),
-                      <AdvancedSettingsIcon key={SpaceSettingsTab.Advanced} />,
-                      <AdvancedRoomSettingsTab
-                          key={SpaceSettingsTab.Advanced}
-                          room={space}
-                          closeSettingsFn={onFinished}
-                      />,
+                      <AdvancedSettingsIcon />,
+                      <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )
                 : null,
         ].filter(Boolean) as NonEmptyArray<Tab<SpaceSettingsTab>>;

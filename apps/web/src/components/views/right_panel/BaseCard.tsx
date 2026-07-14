@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, type KeyboardEvent, type Ref, type MouseEvent, useMemo } from "react";
+import React, { type ReactNode, type KeyboardEvent, type Ref, type MouseEvent } from "react";
 import classNames from "classnames";
 import { IconButton, Text } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -103,10 +103,9 @@ const BaseCard: React.FC<IProps> = ({
     }
 
     const shouldRenderHeader = header || !hideHeaderButtons;
-    const context = useMemo(() => ({ isCard: true }), []);
 
     return (
-        <CardContext.Provider value={context}>
+        <CardContext.Provider value={{ isCard: true }}>
             <div
                 id={id}
                 aria-labelledby={ariaLabelledBy}

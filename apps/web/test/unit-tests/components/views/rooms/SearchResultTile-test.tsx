@@ -10,10 +10,9 @@ import React from "react";
 import { MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
 import { render, type RenderResult } from "jest-matrix-react";
 
-import { clientAndSDKContextRenderOptions, stubClient } from "../../../../test-utils";
+import { stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import SearchResultTile from "../../../../../src/components/views/rooms/SearchResultTile";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const ROOM_ID = "!qPewotXpIctQySfjSy:localhost";
 
@@ -31,7 +30,7 @@ describe("SearchResultTile", () => {
     function renderComponent(props: Partial<Props>): RenderResult {
         return render(
             <SearchResultTile timeline={[]} ourEventsIndexes={[1]} {...props} />,
-            clientAndSDKContextRenderOptions(MatrixClientPeg.safeGet(), SDKContextClass.instance),
+            withClientContextRenderOptions(MatrixClientPeg.safeGet()),
         );
     }
 

@@ -35,7 +35,7 @@ function cryptoFailMsg(): string {
  *
  * @param {ArrayBuffer} data file to decrypt
  * @param {String} password
- * @returns {Promise<String>} promise for decrypted output
+ * @return {Promise<String>} promise for decrypted output
  *
  *
  */
@@ -103,7 +103,7 @@ export async function decryptMegolmKeyFile(data: ArrayBuffer, password: string):
  * @param {Object=} options
  * @param {Number=} options.kdf_rounds Number of iterations to perform of the
  *    key-derivation function.
- * @returns {Promise<ArrayBuffer>} promise for encrypted output
+ * @return {Promise<ArrayBuffer>} promise for encrypted output
  */
 export async function encryptMegolmKeyFile(
     data: string,
@@ -178,7 +178,7 @@ export async function encryptMegolmKeyFile(
  * @param {Unit8Array} salt  salt for pbkdf
  * @param {Number} iterations number of pbkdf iterations
  * @param {String} password  password
- * @returns {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
+ * @return {Promise<[CryptoKey, CryptoKey]>} promise for [aes key, hmac key]
  */
 async function deriveKeys(
     salt: Uint8Array<ArrayBuffer>,
@@ -251,7 +251,7 @@ const TRAILER_LINE = "-----END MEGOLM SESSION DATA-----";
  * Strips the header and trailer lines, and unbase64s the content
  *
  * @param {ArrayBuffer} data  input file
- * @returns {Uint8Array} unbase64ed content
+ * @return {Uint8Array} unbase64ed content
  */
 function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array<ArrayBuffer> {
     // parse the file as a great big String. This should be safe, because there
@@ -306,7 +306,7 @@ function unpackMegolmKeyFile(data: ArrayBuffer): Uint8Array<ArrayBuffer> {
  * base64s the content, and adds header and trailer lines
  *
  * @param {Uint8Array} data  raw data
- * @returns {ArrayBuffer} formatted file
+ * @return {ArrayBuffer} formatted file
  */
 function packMegolmKeyFile(data: Uint8Array): ArrayBuffer {
     // we split into lines before base64ing, because encodeBase64 doesn't deal
@@ -329,7 +329,7 @@ function packMegolmKeyFile(data: Uint8Array): ArrayBuffer {
 /**
  * Encode a typed array of uint8 as base64.
  * @param {Uint8Array} uint8Array The data to encode.
- * @returns {string} The base64.
+ * @return {string} The base64.
  */
 function encodeBase64(uint8Array: Uint8Array): string {
     // Misinterpt the Uint8Array as Latin-1.
@@ -342,7 +342,7 @@ function encodeBase64(uint8Array: Uint8Array): string {
 /**
  * Decode a base64 string to a typed array of uint8.
  * @param {string} base64 The base64 to decode.
- * @returns {Uint8Array} The decoded data.
+ * @return {Uint8Array} The decoded data.
  */
 function decodeBase64(base64: string): Uint8Array<ArrayBuffer> {
     // window.atob returns a unicode string with codepoints in the range 0-255.

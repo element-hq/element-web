@@ -33,8 +33,6 @@ import NotifProvider from "../../../../../src/autocomplete/NotifProvider";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("<EditMessageComposer/>", () => {
     const userId = "@alice:server.org";
@@ -80,11 +78,9 @@ describe("<EditMessageComposer/>", () => {
     const getComponent = (editState: EditorStateTransfer, roomContext: RoomContextType = defaultRoomContext) =>
         render(<EditMessageComposerWithMatrixClient editState={editState} />, {
             wrapper: ({ children }) => (
-                <SDKContext.Provider value={SDKContextClass.instance}>
-                    <MatrixClientContext.Provider value={mockClient}>
-                        <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
-                    </MatrixClientContext.Provider>
-                </SDKContext.Provider>
+                <MatrixClientContext.Provider value={mockClient}>
+                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                </MatrixClientContext.Provider>
             ),
         });
 

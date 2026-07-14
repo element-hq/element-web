@@ -14,17 +14,12 @@ import { mocked } from "jest-mock";
 import QuickSettingsButton from "../../../../../src/components/views/spaces/QuickSettingsButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 describe("QuickSettingsButton", () => {
     const roomId = "!room:example.com";
 
     const renderQuickSettingsButton = () => {
-        render(<QuickSettingsButton isPanelCollapsed={true} />, {
-            wrapper: ({ children }) => (
-                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
-            ),
-        });
+        render(<QuickSettingsButton isPanelCollapsed={true} />);
     };
 
     const getQuickSettingsButton = () => {
@@ -42,11 +37,7 @@ describe("QuickSettingsButton", () => {
     });
 
     it("should render the quick settings button in expanded mode", () => {
-        const { asFragment } = render(<QuickSettingsButton isPanelCollapsed={false} />, {
-            wrapper: ({ children }) => (
-                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
-            ),
-        });
+        const { asFragment } = render(<QuickSettingsButton isPanelCollapsed={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 

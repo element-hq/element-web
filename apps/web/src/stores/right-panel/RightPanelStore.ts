@@ -454,3 +454,5 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return this.internalInstance;
     }
 }
+
+window.mxRightPanelStore = RightPanelStore.instance;

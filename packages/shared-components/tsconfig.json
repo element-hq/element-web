@@ -18,8 +18,7 @@
         "strict": true,
         "paths": {
             "@test-utils": ["./src/test/utils/index"]
-        },
-        "noEmit": true
+        }
     },
     "include": ["./src/**/*.ts", "./src/**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx"],
     "references": [{ "path": "./tsconfig.node.json" }]

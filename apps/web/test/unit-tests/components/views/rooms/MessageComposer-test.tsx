@@ -37,8 +37,6 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { TimelineRenderingType, type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
-import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
-import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -471,15 +469,13 @@ function wrapAndRender(
     };
 
     const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
-        <SDKContext.Provider value={SDKContextClass.instance}>
-            <MatrixClientContext.Provider value={client}>
-                <ScopedRoomContextProvider {...context}>
-                    <RoomUploadContextProvider>
-                        <MessageComposer {...defaultProps} {...props} />
-                    </RoomUploadContextProvider>
-                </ScopedRoomContextProvider>
-            </MatrixClientContext.Provider>
-        </SDKContext.Provider>
+        <MatrixClientContext.Provider value={client}>
+            <ScopedRoomContextProvider {...context}>
+                <RoomUploadContextProvider>
+                    <MessageComposer {...defaultProps} {...props} />
+                </RoomUploadContextProvider>
+            </ScopedRoomContextProvider>
+        </MatrixClientContext.Provider>
     );
     return {
         rawComponent: getRawComponent(props, roomContext, mockClient),

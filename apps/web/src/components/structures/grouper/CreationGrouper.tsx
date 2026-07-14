@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, useContext } from "react";
+import React, { type ReactNode } from "react";
 import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
@@ -19,7 +19,6 @@ import { _t } from "../../../languageHandler";
 import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
-import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
@@ -29,10 +28,7 @@ import { SDKContext } from "../../../contexts/SDKContext.ts";
  * Creates and auto-disposes the DateSeparatorViewModel for creation-group rendering.
  */
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): ReactNode {
-    const sdkContext = useContext(SDKContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () => new DateSeparatorViewModel({ roomId, ts, roomViewStore: sdkContext.roomViewStore }),
-    );
+    const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 

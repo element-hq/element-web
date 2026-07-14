@@ -105,7 +105,7 @@ export default class Timer {
     /**
      *promise that will resolve when the timer elapses,
      *or is rejected when abort is called
-     *@returns {Promise}
+     *@return {Promise}
      */
     public finished(): Promise<void> {
         return this.deferred.promise;

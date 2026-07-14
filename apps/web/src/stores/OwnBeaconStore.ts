@@ -579,9 +579,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.lastPublishedPositionTimestamp = Date.now();
         await Promise.all(
             this.healthyLiveBeaconIds.map((beaconId) =>
-                this.beacons.has(beaconId)
-                    ? this.sendLocationToBeacon(this.beacons.get(beaconId)!, position)
-                    : Promise.resolve(),
+                this.beacons.has(beaconId) ? this.sendLocationToBeacon(this.beacons.get(beaconId)!, position) : null,
             ),
         );
     };

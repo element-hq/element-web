@@ -28,7 +28,7 @@ jobs:
                     - name: Oxfmt
                       install: normal
                       command: "lint:fmt"
-                    - name: Oxlint
+                    - name: ESLint
                       install: normal
                       command: "lint:js"
                     - name: Style Lint

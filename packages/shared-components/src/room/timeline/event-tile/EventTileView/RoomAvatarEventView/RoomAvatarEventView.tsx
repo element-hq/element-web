@@ -40,7 +40,7 @@ export interface RoomAvatarEventViewActions {
     /**
      * Invoked when the user opens the avatar image.
      */
-    onAvatarClick(this: void): void;
+    onAvatarClick(): void;
 }
 
 export type RoomAvatarEventViewModel = ViewModel<RoomAvatarEventViewSnapshot, RoomAvatarEventViewActions>;

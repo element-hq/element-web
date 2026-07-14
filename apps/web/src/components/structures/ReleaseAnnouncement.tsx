@@ -25,6 +25,7 @@ interface ReleaseAnnouncementProps extends Omit<
  * @param feature - the feature to announce, should be listed in {@link Feature}
  * @param children
  * @param props
+ * @constructor
  */
 export function ReleaseAnnouncement({
     feature,

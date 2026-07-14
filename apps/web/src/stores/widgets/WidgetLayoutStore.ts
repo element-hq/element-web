@@ -514,3 +514,5 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.recalculateRoom(room); // call to try local echo on changes (the catch above undoes any errors)
     }
 }
+
+window.mxWidgetLayoutStore = WidgetLayoutStore.instance;

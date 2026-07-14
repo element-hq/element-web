@@ -37,7 +37,7 @@ export class EventIndexPeg {
      * Initialize the EventIndexPeg and if event indexing is enabled initialize
      * the event index.
      *
-     * @returns {Promise<boolean>} A promise that will resolve to true if an
+     * @return {Promise<boolean>} A promise that will resolve to true if an
      * EventIndex was successfully initialized, false otherwise.
      */
     public async init(): Promise<boolean> {
@@ -111,7 +111,7 @@ export class EventIndexPeg {
     /**
      * Check if the current platform has support for event indexing.
      *
-     * @returns {boolean} True if it has support, false otherwise. Note that this
+     * @return {boolean} True if it has support, false otherwise. Note that this
      * does not mean that support is installed.
      */
     public platformHasSupport(): boolean {
@@ -125,7 +125,7 @@ export class EventIndexPeg {
      * this tells us if those are installed. Note that this should only be
      * called after the init() method was called.
      *
-     * @returns {boolean} True if support is installed, false otherwise.
+     * @return {boolean} True if support is installed, false otherwise.
      */
     public supportIsInstalled(): boolean {
         return this._supportIsInstalled;
@@ -134,7 +134,7 @@ export class EventIndexPeg {
     /**
      * Get the current event index.
      *
-     * @returns {EventIndex} The current event index.
+     * @return {EventIndex} The current event index.
      */
     public get(): EventIndex | null {
         return this.index;
@@ -155,7 +155,7 @@ export class EventIndexPeg {
      *
      * After a call to this the init() method will need to be called again.
      *
-     * @returns {Promise} A promise that will resolve once the event index is
+     * @return {Promise} A promise that will resolve once the event index is
      * closed.
      */
     public async unset(): Promise<void> {
@@ -169,7 +169,7 @@ export class EventIndexPeg {
      *
      * After a call to this the init() method will need to be called again.
      *
-     * @returns {Promise} A promise that will resolve once the event index is
+     * @return {Promise} A promise that will resolve once the event index is
      * deleted.
      */
     public async deleteEventIndex(): Promise<void> {

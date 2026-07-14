@@ -22,6 +22,7 @@ export function getUserTimezone(): string | undefined {
 
 /**
  * Set in the settings the given timezone
+ * @timezone
  */
 export function setUserTimezone(timezone: string): Promise<void> {
     return SettingsStore.setValue(USER_TIMEZONE_KEY, null, SettingLevel.DEVICE, timezone);

@@ -16,7 +16,7 @@ import RegisterDialog from "./RegisterDialog.tsx";
 interface Props {
     api: Api;
     config: ModuleConfig;
-    onLoggedIn(this: void, data: AccountAuthInfo): void;
+    onLoggedIn(data: AccountAuthInfo): void;
 }
 
 const Container = styled.aside`

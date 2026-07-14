@@ -1,10 +1,3 @@
-/*
-Copyright 2026 Element Creations Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE in the repository root for full details.
-*/
-
 import fs from "node:fs/promises";
 import path from "node:path";
 import YAML from "yaml";
@@ -199,19 +192,19 @@ interface WorkflowYaml {
         workflow_run?: {
             workflows: string[];
         }; // Magic
-        workflow_call?: unknown; // Reusable
-        workflow_dispatch?: unknown; // Manual
-        pull_request?: unknown;
-        merge_group?: unknown;
+        workflow_call?: {}; // Reusable
+        workflow_dispatch?: {}; // Manual
+        pull_request?: {};
+        merge_group?: {};
         push?: {
             tags?: string[];
             branches?: string[];
         };
         schedule?: { cron: string }[];
-        release?: unknown;
+        release?: {};
         //
-        label?: unknown;
-        issues?: unknown;
+        label?: {};
+        issues?: {};
     };
     jobs: {
         [job: string]: {

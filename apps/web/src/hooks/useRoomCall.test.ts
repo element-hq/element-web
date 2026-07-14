@@ -69,10 +69,7 @@ describe("useRoomCall", () => {
     });
 
     function render() {
-        return renderHook(
-            () => useRoomCall(room),
-            withContexts({ matrixClient: client, roomContext, sdkContext: SDKContextClass.instance }),
-        );
+        return renderHook(() => useRoomCall(room), withContexts({ matrixClient: client, roomContext }));
     }
 
     describe("Element Call focus detection", () => {

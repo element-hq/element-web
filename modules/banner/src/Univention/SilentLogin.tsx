@@ -14,7 +14,7 @@ const HiddenIFrame = styled.iframe`
 
 interface Props {
     icsUrl: string;
-    onLoggedIn(this: void, success: boolean): void;
+    onLoggedIn(success: boolean): void;
 }
 
 const SilentLogin: FC<Props> = ({ onLoggedIn, icsUrl }) => {

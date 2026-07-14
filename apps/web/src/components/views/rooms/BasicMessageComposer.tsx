@@ -41,8 +41,9 @@ import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
-import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp("(?:^|\\s)(" + EMOTICON_REGEX.source + ")\\s|:^$");
@@ -114,9 +115,6 @@ interface IState {
 }
 
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
-    public static contextType = SDKContext;
-    declare public context: React.ContextType<typeof SDKContext>;
-
     public readonly editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
     private formatBarRef = createRef<MessageComposerFormatBar>();
@@ -247,13 +245,17 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const { cmd } = parseCommandString(this.props.model.parts[0].text);
             const command = CommandMap.get(cmd!);
             if (
-                !command?.isEnabled(this.context.client!, this.props.room.roomId) ||
+                !command?.isEnabled(MatrixClientPeg.get(), this.props.room.roomId) ||
                 command.category !== CommandCategories.messages
             ) {
                 isTyping = false;
             }
         }
-        this.context.typingStore.setSelfTyping(this.props.room.roomId, this.props.threadId ?? null, isTyping);
+        SDKContextClass.instance.typingStore.setSelfTyping(
+            this.props.room.roomId,
+            this.props.threadId ?? null,
+            isTyping,
+        );
 
         this.props.onChange?.(selection, inputType, diff);
     };

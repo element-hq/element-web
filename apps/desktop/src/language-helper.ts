@@ -113,7 +113,7 @@ export class AppLocalization {
             locales = [locales];
         }
 
-        const chosenLocale = locales.find((locale) => {
+        const loadedLocales = locales.filter((locale) => {
             const translations = this.fetchTranslationJson(locale);
             if (translations !== null) {
                 counterpart.registerTranslations(locale, translations);
@@ -121,7 +121,7 @@ export class AppLocalization {
             return !!translations;
         });
 
-        counterpart.setLocale(chosenLocale!);
+        counterpart.setLocale(loadedLocales[0]);
         this.store.set(AppLocalization.STORE_KEY, locales);
 
         this.resetLocalizedUI();

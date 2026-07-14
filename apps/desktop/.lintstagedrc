@@ -1,0 +1,4 @@
+{
+    "*": "oxfmt --no-error-on-unmatched-pattern",
+    "*.(ts|tsx)": ["eslint --fix"]
+}

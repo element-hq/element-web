@@ -85,7 +85,7 @@ cacheDownloadIcon();
 /**
  * Get the current CSS style for a DOMElement.
  * @param {HTMLElement} element The element to get the current style of.
- * @returns {string} The CSS style encoded as a string.
+ * @return {string} The CSS style encoded as a string.
  */
 function computedStyle(element: HTMLElement | null): string {
     if (!element) {

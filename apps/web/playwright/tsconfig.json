@@ -10,8 +10,7 @@
         "allowImportingTsExtensions": true,
         "strictNullChecks": false,
         "noImplicitAny": false,
-        "types": ["node"],
-        "noEmit": true
+        "types": ["node"]
     },
     "include": [
         "**/*.ts",

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type ComponentType, type SVGAttributes } from "react";
+import { ComponentType, SVGAttributes } from "react";
 
 /**
  * An option presented to the user for uploading a file.

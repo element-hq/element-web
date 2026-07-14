@@ -116,7 +116,6 @@ export default class ViewSource extends React.Component<IProps, IState> {
             return (
                 <MatrixClientContext.Consumer>
                     {(cli) => (
-                        // oxlint-disable-next-line react/jsx-no-constructed-context-values
                         <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)! }}>
                             <StateEventEditor onBack={this.onBack} mxEvent={mxEvent} />
                         </DevtoolsContext.Provider>
@@ -128,7 +127,6 @@ export default class ViewSource extends React.Component<IProps, IState> {
         return (
             <MatrixClientContext.Consumer>
                 {(cli) => (
-                    // oxlint-disable-next-line react/jsx-no-constructed-context-values
                     <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)! }}>
                         <TimelineEventEditor onBack={this.onBack} mxEvent={mxEvent} />
                     </DevtoolsContext.Provider>

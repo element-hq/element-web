@@ -202,3 +202,5 @@ export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
         this.emit(UPDATE_EVENT, roomId);
     }
 }
+
+window.mxWidgetStore = WidgetStore.instance;

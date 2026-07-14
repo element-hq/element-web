@@ -10,11 +10,12 @@ import React, { type FC, useContext, useEffect, type AriaRole, useCallback } fro
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type Call, CallEvent } from "../../../models/Call";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
 import { CallStore } from "../../../stores/CallStore";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { useCall } from "../../../hooks/useCall";
-import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface JoinCallViewProps {
     room: Room;
@@ -25,7 +26,7 @@ interface JoinCallViewProps {
 }
 
 const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClose }) => {
-    const sdkContext = useContext(SDKContext);
+    const cli = useContext(MatrixClientContext);
     useTypedEventEmitter(call, CallEvent.Close, onClose);
 
     useEffect(() => {
@@ -37,17 +38,17 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, role, onClo
         // The stickyPromise has to resolve before the widget actually becomes sticky.
         // We only let the widget become sticky after disconnecting all other active calls.
         const calls = [...CallStore.instance.connectedCalls].filter(
-            (call) => sdkContext.roomViewStore.getRoomId() !== call.roomId,
+            (call) => SDKContextClass.instance.roomViewStore.getRoomId() !== call.roomId,
         );
         await Promise.all(calls.map(async (call) => await call.disconnect()));
-    }, [sdkContext.roomViewStore]);
+    }, []);
 
     return (
         <div className="mx_CallView" role={role}>
             <AppTile
                 app={call.widget}
                 room={room}
-                userId={sdkContext.client?.credentials.userId ?? undefined}
+                userId={cli.credentials.userId!}
                 creatorUserId={call.widget.creatorUserId}
                 waitForIframeLoad={call.widget.waitForIframeLoad}
                 showMenubar={false}

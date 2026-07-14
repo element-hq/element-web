@@ -124,7 +124,7 @@ export async function waitForRoomReadyAndApplyAfterCreateCallbacks(
  */
 async function applyAfterCreateCallbacks(localRoom: LocalRoom, roomId: string): Promise<void> {
     for (const afterCreateCallback of localRoom.afterCreateCallbacks) {
-        afterCreateCallback(roomId);
+        await afterCreateCallback(roomId);
     }
 
     localRoom.afterCreateCallbacks = [];

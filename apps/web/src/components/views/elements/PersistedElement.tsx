@@ -12,6 +12,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 
 import dis from "../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 
@@ -169,7 +170,7 @@ export default class PersistedElement extends React.Component<IProps> {
         const content = (
             <StrictMode>
                 <SDKContext.Provider value={this.context}>
-                    <MatrixClientContext.Provider value={this.context.client!}>
+                    <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
                         <TooltipProvider>
                             <div ref={this.collectChild} style={this.props.style}>
                                 {this.props.children}
