@@ -124,12 +124,6 @@ export function buildTitleBarCss(): string {
                 content: "";
                 /* Aligned with the 32px traffic-light offset so the empty top band is grabbable (#32018) */
                 height: 32px;
-                -webkit-app-region: drag;
-            }
-
-            .mx_LeftPanel_newRoomList::before {
-                /* Aligned with the room header (#32018) */
-                height: 32px;
                 border-right: 1px solid var(--cpd-color-bg-subtle-primary);
                 -webkit-app-region: drag;
             }
