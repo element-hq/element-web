@@ -56,6 +56,14 @@ export interface MessageComposerUrlPreviewProps {
      */
     vm: ViewModel<MessageComposerUrlPreviewSnapshot>;
     /**
+     * Whether the preview is collapsed
+     */
+    collapsed: boolean,
+    /**
+     * Function to call to toggle collapsed state
+     */
+    toggleCollapsed: () => void,
+    /**
      * Extra CSS classes to apply to the component.
      */
     className?: string;
@@ -76,7 +84,7 @@ function urlFirstChar(url: string): string {
 /**
  * MessageComposerUrlPreviewView renders a preview of all previewable URLs above the messasge composer.
  */
-export function MessageComposerUrlPreviewView({ vm, className }: MessageComposerUrlPreviewProps): JSX.Element | null {
+export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggleCollapsed }: MessageComposerUrlPreviewProps): JSX.Element | null {
     const { entries } = useViewModel(vm);
     if (entries.length === 0) {
         return null;
@@ -87,7 +95,7 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
 
     // Show only the first preview to revert back to previous behaviour
     // But have previews fetch all URL previews in the message text
-    const previewViews = links
+    const previewViews = collapsed ? null : links
         .map((entry) => {
             const hostName = new URL(entry.matched_url).hostname;
             switch (entry.status) {
@@ -156,11 +164,11 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
         </span>
         <span className={styles.right}>
             <span className={styles.clearAll}>Clear all</span>
-            <span className={styles.collapse}>›</span>
+            <span className={styles.collapse} onClick={toggleCollapsed}>›</span>
         </span>
     </div>;
 
-    return <div className={styles.wrapper}>
+    return <div className={collapsed ? classNames(styles.wrapper, styles.collapsed) : styles.wrapper}>
         {summary}
         {previewViews}
     </div>;
