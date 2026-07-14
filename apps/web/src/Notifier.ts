@@ -609,6 +609,13 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             return;
         }
 
+        // Bring the app window to the front for an actual incoming (ringing) call.
+        // No-op on platforms that can't focus their own window (e.g. the browser, or
+        // Wayland, where clicking the native call notification is the only way to raise it).
+        if (content.notification_type === "ring") {
+            PlatformPeg.get()?.focusWindow();
+        }
+
         toaster.addOrReplaceToast({
             key,
             priority: 100,
