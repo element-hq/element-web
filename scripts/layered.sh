@@ -14,7 +14,7 @@ set -ex
 # for the primary repo (element-web in this case).
 
 # Install dependencies
-pnpm install --frozen-lockfile $@
+pnpm install --frozen-lockfile --ignore-scripts $@
 
 # Pass appropriate repo to fetchdep.sh
 export PR_ORG=element-hq
