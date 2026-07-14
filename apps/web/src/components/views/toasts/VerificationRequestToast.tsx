@@ -106,7 +106,6 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const { request } = this.props;
         // no room id for to_device requests
-        const cli = this.context.client;
         try {
             if (request.roomId) {
                 dis.dispatch<ViewRoomPayload>({
@@ -115,7 +114,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     should_peek: false,
                     metricsTrigger: "VerificationRequest",
                 });
-                const member = cli?.getUser(request.otherUserId) ?? undefined;
+                const member = this.context.client?.getUser(request.otherUserId) ?? undefined;
                 this.context.rightPanelStore.setCards(
                     [
                         { phase: RightPanelPhases.RoomSummary },
