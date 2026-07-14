@@ -22,8 +22,8 @@ function log(msg: string): void {
     logger.log(`StorageManager: ${msg}`);
 }
 
-function warn(msg: string): void {
-    logger.warn(`StorageManager: ${msg}`);
+function warn(msg: string, ...args: any[]): void {
+    logger.warn(`StorageManager: ${msg}`, ...args);
 }
 
 function error(msg: string, ...args: any[]): void {
@@ -43,15 +43,11 @@ function error(msg: string, ...args: any[]): void {
  * StorageEvictedDialog.
  */
 function warnPersistenceDenied(): void {
-    let msg =
+    warn(
         "Persistent storage was not granted. The browser may evict locally stored data " +
-        "(including the end-to-end encryption keys in the crypto store) under storage pressure, " +
-        "which can force a re-login. See https://github.com/element-hq/element-web/issues/32198.";
-    if (window.electron) {
-        // On desktop, eviction means silent session/crypto-store loss; flag it more strongly.
-        msg += " Running on desktop: ensure key backup is enabled so encrypted messages can be recovered.";
-    }
-    warn(msg);
+            "(including the end-to-end encryption keys in the crypto store) under storage pressure, " +
+            "which can force a re-login. See https://github.com/element-hq/element-web/issues/32198.",
+    );
 }
 
 /**
@@ -61,7 +57,7 @@ function warnPersistenceDenied(): void {
  * Invoked on every login *and* session restore, so we first check whether storage is
  * already persistent and short-circuit to avoid re-requesting (some browsers re-prompt).
  *
- * Never rejects — the sole caller treats it as fire-and-forget.
+ * Never rejects, so it is safe to call fire-and-forget.
  *
  * @returns whether storage is persistent after the attempt.
  */
@@ -75,8 +71,8 @@ export async function tryPersistStorage(): Promise<boolean> {
                     log("Persistent storage already granted");
                     return true;
                 }
-            } catch {
-                warn("Could not query persisted-storage state; requesting persistence anyway");
+            } catch (e) {
+                warn("Could not query persisted-storage state; requesting persistence anyway", e);
             }
             const persistent = await navigator.storage.persist();
             log(`Persistent? ${persistent}`);
@@ -84,17 +80,6 @@ export async function tryPersistStorage(): Promise<boolean> {
                 warnPersistenceDenied();
             }
             return persistent;
-        } else if (document.requestStorageAccess) {
-            // Safari
-            try {
-                await document.requestStorageAccess();
-                log("Persistent? true");
-                return true;
-            } catch {
-                log("Persistent? false");
-                warnPersistenceDenied();
-                return false;
-            }
         } else {
             log("Persistence unsupported");
             return false;
