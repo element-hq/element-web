@@ -2075,6 +2075,14 @@
         "leave_unexpected_error": "Unexpected server error trying to leave the room",
         "link_email_to_receive_3pid_invite": "Link this email with your account in Settings to receive invites directly in %(brand)s.",
         "loading_preview": "Loading preview",
+        "message_list_label": {
+            "file_panel": "Files",
+            "notifications_panel": "Notifications",
+            "pinned_messages": "Pinned messages",
+            "room": "Messages",
+            "thread": "Thread",
+            "threads_list": "Threads"
+        },
         "no_peek_join_prompt": "%(roomName)s can't be previewed. Do you want to join it?",
         "no_peek_no_name_join_prompt": "There's no preview, would you like to join?",
         "not_found_subtitle": "Are you sure you're at the right place?",
@@ -2097,6 +2105,7 @@
         "search": {
             "all_rooms_button": "Search all rooms",
             "placeholder": "Search messages…",
+            "results_label": "Search results",
             "summary": {
                 "one": "1 result found for “<query/>”",
                 "other": "%(count)s results found for “<query/>”"

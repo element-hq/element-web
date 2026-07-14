@@ -298,6 +298,7 @@ export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inPr
             ref={onRef}
             className={"mx_RoomView_searchResultsPanel " + className}
             onFillRequest={onSearchResultsFillRequest}
+            ariaLabel={_t("room|search|results_label")}
         >
             <li className="mx_RoomView_scrollheader" />
             {ret}
