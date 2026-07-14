@@ -48,8 +48,6 @@ describe("<IncomingLegacyCallToast />", () => {
         jest.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(undefined);
         mockClient.getRoom.mockReturnValue(mockRoom);
-        // @ts-ignore
-        SDKContextClass.instance._client = mockClient;
     });
 
     it("renders when silence button when call is not silenced", () => {
