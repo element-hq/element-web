@@ -173,4 +173,35 @@ describe("<ExtensionsCard />", () => {
         await userEvent.click(screen.getByText("Add extensions"));
         expect(spy).toHaveBeenCalled();
     });
+
+    it("should set room layout on click", async () => {
+        mocked(useWidgets).mockReturnValue([
+            {
+                id: "id",
+                roomId: room.roomId,
+                eventId: "$event1",
+                creatorUserId: client.getSafeUserId(),
+                type: MatrixWidgetType.Custom,
+                name: "Custom Widget",
+                url: "http://url1",
+            },
+            {
+                id: "jitsi",
+                roomId: room.roomId,
+                eventId: "$event2",
+                creatorUserId: client.getSafeUserId(),
+                type: MatrixWidgetType.JitsiMeet,
+                name: "Jitsi",
+                url: "http://jitsi",
+            },
+        ] satisfies IApp[]);
+
+        jest.spyOn(sdkContext.widgetLayoutStore, "copyLayoutToRoom");
+        render(
+            <ExtensionsCard room={room} onClose={jest.fn()} />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        await userEvent.click(screen.getByText("Set layout for everyone"));
+        expect(sdkContext.widgetLayoutStore.copyLayoutToRoom).toHaveBeenCalledWith(room);
+    });
 });
