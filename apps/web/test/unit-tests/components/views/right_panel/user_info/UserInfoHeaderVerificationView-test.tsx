@@ -13,9 +13,9 @@ import { render, waitFor, screen } from "jest-matrix-react";
 import React from "react";
 
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { UserInfoHeaderVerificationView } from "../../../../../../src/components/views/right_panel/user_info/UserInfoHeaderVerificationView";
-import { createTestClient } from "../../../../../test-utils";
+import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
+import { TestSDKContext } from "../../../../TestSDKContext.ts";
 
 describe("<UserInfoHeaderVerificationView />", () => {
     const defaultRoomId = "!fkfk";
@@ -25,6 +25,7 @@ describe("<UserInfoHeaderVerificationView />", () => {
 
     let mockClient: MatrixClient;
     let mockCrypto: Mocked<CryptoApi>;
+    let sdkContext: TestSDKContext;
 
     beforeEach(() => {
         mockCrypto = mocked({
@@ -42,6 +43,8 @@ describe("<UserInfoHeaderVerificationView />", () => {
         } as unknown as CryptoApi);
 
         mockClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
         jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
         jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
@@ -62,13 +65,11 @@ describe("<UserInfoHeaderVerificationView />", () => {
 
         mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
         jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
-        const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
-        };
 
-        return render(<UserInfoHeaderVerificationView member={defaultMember} devices={[device1]} />, {
-            wrapper: Wrapper,
-        });
+        return render(
+            <UserInfoHeaderVerificationView member={defaultMember} devices={[device1]} />,
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
+        );
     };
 
     it("renders verified badge when user is verified", async () => {

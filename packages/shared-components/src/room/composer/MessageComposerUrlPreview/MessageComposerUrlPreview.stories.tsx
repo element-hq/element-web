@@ -52,46 +52,55 @@ const Template: StoryFn<typeof MessageComposerUrlPreviewViewWrapper> = (args) =>
 
 export const Default = Template.bind({});
 Default.args = {
-    preview: {
-        title: "A simple title",
-        description: "A simple description",
-        link: "https://matrix.org",
-        siteName: "matrix.org",
-        showTooltipOnLink: false,
-    },
+    previews: [
+        {
+            title: "A simple title",
+            description: "A simple description",
+            link: "https://matrix.org",
+            siteName: "matrix.org",
+            showTooltipOnLink: false,
+        },
+    ],
 };
 
 export const WithImage = Template.bind({});
 WithImage.args = {
-    preview: {
-        ...Default.args.preview!,
-        image: {
-            imageThumb: imagePreviewFile,
-            imageFull: imagePreviewFile,
-            alt: "The element logo",
-            playable: false,
+    previews: [
+        {
+            ...Default.args.previews![0]!,
+            image: {
+                imageThumb: imagePreviewFile,
+                imageFull: imagePreviewFile,
+                alt: "The element logo",
+                playable: false,
+                mxcImageFull: "mxc://server/file",
+            },
         },
-    },
+    ],
 };
 export const WithImageAndSiteIcon = Template.bind({});
 WithImageAndSiteIcon.args = {
-    preview: {
-        ...Default.args.preview!,
-        siteIcon: siteIconFile,
-        image: {
-            imageThumb: imagePreviewFile,
-            imageFull: imagePreviewFile,
-            alt: "The element logo",
-            playable: false,
+    previews: [
+        {
+            ...Default.args.previews![0]!,
+            siteIcon: siteIconFile,
+            image: {
+                imageThumb: imagePreviewFile,
+                imageFull: imagePreviewFile,
+                alt: "The element logo",
+                playable: false,
+                mxcImageFull: "mxc://server/file",
+            },
         },
-    },
+    ],
 };
 
 export const WithImageAndLoadsOfText = Template.bind({});
 WithImageAndLoadsOfText.args = {
-    preview: {
-        ...Default.args.preview!,
-        description: `Molestiae aliquam quos possimus molestiae id sit nulla rerum. Sunt cumque illum alias. Illo ipsa ut iure quia nulla magnam repellat.
+    previews: [
+        {
+            ...Default.args.previews![0]!,
+            description: `Molestiae aliquam quos possimus molestiae id sit nulla rerum. Sunt cumque illum alias. Illo ipsa ut iure quia nulla magnam repellat.
 
     Esse velit corporis sapiente temporibus quia ipsam. Pariatur est rem veritatis. Inventore sit consequatur odio ipsa error non assumenda. Est eum ex dignissimos voluptatibus voluptatem delectus modi. Nisi quia eius ea quibusdam. Aut eveniet maxime non.
 
@@ -100,11 +109,13 @@ WithImageAndLoadsOfText.args = {
     Incidunt ut ea quae nobis. Reiciendis inventore quas qui eum voluptatem ex et qui. Adipisci quibusdam dolores hic inventore et suscipit cupiditate consequuntur.
 
     Temporibus similique sint quo. Omnis tempora quidem explicabo in quidem magnam quia. Aut sunt accusantium ut et ut laborum debitis in. Enim nihil sit consectetur facilis quidem voluptatem. Quod impedit odit veritatis est laudantium tempore sit labore. Atque minima aliquam nostrum et.`,
-        image: {
-            imageThumb: imagePreviewFile,
-            imageFull: imagePreviewFile,
-            alt: "The element logo",
-            playable: false,
+            image: {
+                imageThumb: imagePreviewFile,
+                imageFull: imagePreviewFile,
+                alt: "The element logo",
+                playable: false,
+                mxcImageFull: "mxc://server/file",
+            },
         },
-    },
+    ],
 };

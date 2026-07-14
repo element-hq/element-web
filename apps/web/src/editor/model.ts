@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { diffAtCaret, diffDeletion, type IDiff } from "./diff";
 import DocumentPosition, { type IPosition } from "./position";
 import Range from "./range";
-import { type SerializedPart, type Part, type PartCreator } from "./parts";
+import { type SerializedPart, type Part, type PartCreator, Type } from "./parts";
 import { type ICallback } from "./autocomplete";
 import type AutocompleteWrapperModel from "./autocomplete";
 import type DocumentOffset from "./offset";
@@ -48,6 +48,16 @@ export default class EditorModel {
     private autoCompletePartIdx: number | null = null;
     private autoCompletePartCount = 0;
     private transformCallback: TransformCallback | null = null;
+
+    /**
+     * Returns the plain text parts of the editor content only (skipping mentions)
+     */
+    public get contentPlainText(): string {
+        return this.serializeParts()
+            .filter((part) => part.type === Type.Plain)
+            .map((part) => part.text)
+            .join(" ");
+    }
 
     public constructor(
         parts: Part[],

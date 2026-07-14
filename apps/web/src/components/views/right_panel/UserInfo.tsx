@@ -23,10 +23,10 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UserInfoHeaderView } from "./user_info/UserInfoHeaderView";
 import { UserInfoBasicView } from "./user_info/UserInfoBasicView";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -181,18 +181,18 @@ interface IProps {
 }
 
 const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPhases.MemberInfo, ...props }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
 
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
     const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
 
-    const isRoomEncrypted = useIsEncrypted(cli, room);
+    const isRoomEncrypted = useIsEncrypted(sdkContext.client!, room);
     const devices = useDevices(user.userId) ?? [];
 
     const classes = ["mx_UserInfo"];
 
     const onEncryptionPanelClose = (): void => {
-        RightPanelStore.instance.popCard();
+        sdkContext.rightPanelStore.popCard();
     };
 
     let content: JSX.Element | undefined;
@@ -237,7 +237,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             onClose={onClose}
             closeLabel={closeLabel}
             onBack={(ev: ButtonEvent) => {
-                if (RightPanelStore.instance.previousCard.phase === RightPanelPhases.MemberList) {
+                if (sdkContext.rightPanelStore.previousCard.phase === RightPanelPhases.MemberList) {
                     PosthogTrackers.trackInteraction("WebRightPanelRoomUserInfoBackButton", ev);
                 }
             }}

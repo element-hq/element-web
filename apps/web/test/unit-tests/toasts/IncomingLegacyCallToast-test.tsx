@@ -18,7 +18,7 @@ import {
     mockClientMethodsServer,
     mockClientMethodsUser,
 } from "../../test-utils";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass.ts";
+import { TestSDKContext } from "../TestSDKContext.ts";
 
 describe("<IncomingLegacyCallToast />", () => {
     const userId = "@alice:server.org";
@@ -33,6 +33,8 @@ describe("<IncomingLegacyCallToast />", () => {
         ...mockClientMethodsServer(),
         getRoom: jest.fn(),
     });
+    const sdkContext = new TestSDKContext();
+    sdkContext._client = mockClient;
     const mockRoom = new Room("!room:server.org", mockClient, userId);
     mockClient.deviceId = deviceId;
 
@@ -46,24 +48,16 @@ describe("<IncomingLegacyCallToast />", () => {
         jest.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(undefined);
         mockClient.getRoom.mockReturnValue(mockRoom);
-        // @ts-ignore
-        SDKContextClass.instance._client = mockClient;
     });
 
     it("renders when silence button when call is not silenced", () => {
-        const { getByLabelText } = render(
-            getComponent(),
-            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
-        );
+        const { getByLabelText } = render(getComponent(), clientAndSDKContextRenderOptions(mockClient, sdkContext));
         expect(getByLabelText("Silence call")).toMatchSnapshot();
     });
 
     it("renders sound on button when call is silenced", () => {
-        SDKContextClass.instance.legacyCallHandler.silenceCall(call.callId);
-        const { getByLabelText } = render(
-            getComponent(),
-            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
-        );
+        sdkContext.legacyCallHandler.silenceCall(call.callId);
+        const { getByLabelText } = render(getComponent(), clientAndSDKContextRenderOptions(mockClient, sdkContext));
         expect(getByLabelText("Sound on")).toMatchSnapshot();
     });
 
@@ -79,10 +73,7 @@ describe("<IncomingLegacyCallToast />", () => {
                 });
             }
         });
-        const { getByLabelText } = render(
-            getComponent(),
-            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
-        );
+        const { getByLabelText } = render(getComponent(), clientAndSDKContextRenderOptions(mockClient, sdkContext));
         expect(getByLabelText("Notifications silenced")).toMatchSnapshot();
     });
 });
