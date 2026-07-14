@@ -67,6 +67,7 @@ import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -139,6 +140,10 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     onChange?(model: EditorModel): void;
     toggleStickerPickerOpen: () => void;
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
+}
+
+interface ISendMessageActionProps {
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
@@ -330,7 +335,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
-    public async sendMessage(): Promise<void> {
+    public async sendMessage({ urlPreviewSnapshot }: ISendMessageActionProps): Promise<void> {
         const model = this.model;
 
         if (model.isEmpty) {
@@ -443,7 +448,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
-            attachUrlPreviews(this.props.urlPreviewVm.getSnapshot(), content);
+            attachUrlPreviews(urlPreviewSnapshot, content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);
