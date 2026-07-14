@@ -12,6 +12,13 @@
             "matchPackageNames": ["*"]
         },
         {
+            "description": "Group all devengines updates",
+            "groupName": "devengines",
+            "groupSlug": "devengines",
+            "matchDepTypes": ["devengines"],
+            "matchPackageNames": ["*"]
+        },
+        {
             "description": "Separate updates to overrides from other groups",
             "matchManagers": ["npm"],
             "matchFileNames": ["pnpm-workspace.yaml"],
@@ -45,6 +52,18 @@
             "matchStrings": ["hakDependencies.$each(function($v, $k) { { 'packageName': $k, 'currentValue': $v } })"],
             "datasourceTemplate": "npm",
             "depTypeTemplate": "hak"
+        },
+        {
+            "description": "Update pnpm in devEngines",
+            "customType": "jsonata",
+            "fileFormat": "json",
+            "fileMatch": ["(^|/)package\\.json$"],
+            "matchStrings": [
+                "devEngines.packageManager.name = 'pnpm' ? { 'currentValue': devEngines.packageManager.version } : null"
+            ],
+            "depNameTemplate": "pnpm",
+            "datasourceTemplate": "npm",
+            "depTypeTemplate": "devengines"
         }
     ],
     "toolSettings": {
