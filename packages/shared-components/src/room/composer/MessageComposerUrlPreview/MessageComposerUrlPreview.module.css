@@ -31,6 +31,11 @@
     }
 }
 
+.left {
+    flex-grow: 1;
+}
+
+
 .summary {
     justify-content: space-between;
     display: flex;
@@ -39,10 +44,6 @@
     * {
         vertical-align: center;
         line-height: 18px;
-    }
-
-    .left {
-        flex-grow: 1;
     }
 
     .summaryIcon:not(:first-child) {
@@ -94,13 +95,11 @@
         font-size: 11.5px;
         margin-right: 10px;
         color: var(--cpd-color-gray-900);
-
         cursor: pointer;
     }
 
     .collapse {
         width: 18px;
-        rotate: 90deg;
 
         display: inline-block;
         height: 18px;
@@ -115,7 +114,7 @@
 }
 
 .wrapper.collapsed .collapse {
-    rotate: -90deg;
+    rotate: 180deg;
 }
 
 .container {
@@ -150,9 +149,15 @@
     padding-bottom: 0;
 }
 
+.removePreview {
+    color: var(--cpd-color-gray-900);
+    cursor: pointer;
+}
+
 .entryIcon,
 .loadingSpinner,
 .failedIcon {
+    flex-shrink: 0;
     width: 40px;
     height: 40px;
     border-radius: 6px;

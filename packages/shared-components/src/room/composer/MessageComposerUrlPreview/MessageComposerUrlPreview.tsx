@@ -14,6 +14,8 @@ import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGro
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import { InlineSpinner } from "@vector-im/compound-web";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
+import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 export interface MessageComposerUrlPreviewSnapshotEntryLoaded {
     status: "loaded";
@@ -103,8 +105,8 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
             const hostName = new URL(entry.matched_url).hostname;
             switch (entry.status) {
                 case "loaded":
-                    return <div key={entry.preview.link} className={classNames(className, styles.container)}>
-                        <div>
+                    return <div key={entry.matched_url} className={classNames(className, styles.container)}>
+                        <div className={styles.left}>
                             <div className={styles.entryIcon} style={{ backgroundColor: `hsl(${hashCode(hostName)}, 100%, var(--icon-lightness))` }}>
                                 {(entry.preview?.image?.imageThumb && (
                                     <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
@@ -115,10 +117,11 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
                                 <LinkSiteName siteName={hostName} />
                             </div>
                         </div>
+                        {removePreview ? <CloseIcon className={styles.removePreview} onClick={() => removePreview(entry.matched_url)} /> : null}
                     </div>;
                 case "loading":
                     return <div key={entry.matched_url} className={classNames(className, styles.container)}>
-                        <div>
+                        <div className={styles.left}>
                             <div className={styles.loadingSpinner}>
                                 <InlineSpinner />
                             </div>
@@ -127,10 +130,11 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
                                 <LinkSiteName siteName={hostName} />
                             </div>
                         </div>
+                        {removePreview ? <CloseIcon className={styles.removePreview} onClick={() => removePreview(entry.matched_url)} /> : null}
                     </div>;
                 case "failed":
                     return <div key={entry.matched_url} className={classNames(className, styles.container)}>
-                        <div>
+                        <div className={styles.left}>
                             <div className={styles.failedIcon}>
                                 <ErrorIcon />
                             </div>
@@ -139,6 +143,7 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
                                 <LinkSiteName siteName={hostName} />
                             </div>
                         </div>
+                        {removePreview ? <CloseIcon className={styles.removePreview} onClick={() => removePreview(entry.matched_url)} /> : null}
                     </div>;
             }
         });
@@ -146,18 +151,18 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
     const summary = <div className={styles.summary}>
         <span className={styles.left}>
             <span className={styles.icons}>
-                {links.map((entry, i) => {
+                {links.map((entry) => {
                     switch (entry.status) {
                         case "failed":
-                            return <div key={i} className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-critical-primary)" }}><ErrorIcon /></div>
+                            return <div key={entry.matched_url} className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-critical-primary)" }}><ErrorIcon /></div>
                         case "loading":
-                            return <div key={i} className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-subtle-primary)" }}><InlineSpinner /></div>
+                            return <div key={entry.matched_url} className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-subtle-primary)" }}><InlineSpinner /></div>
                         case "loaded":
                             const siteName = new URL(entry.matched_url).hostname;
                             if (entry.preview.image !== undefined) {
-                                return <div key={i} className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
+                                return <div key={entry.matched_url} className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
                             } else {
-                                return <div key={i} className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
+                                return <div key={entry.matched_url} className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
                             }
                     }
                 })
@@ -167,7 +172,7 @@ export function MessageComposerUrlPreviewView({ vm, className, collapsed, toggle
         </span>
         <span className={styles.right}>
             {removePreview && <span className={styles.clearAll} onClick={() => links.forEach(entry => removePreview(entry.matched_url))}>Clear all</span>}
-            <span className={styles.collapse} onClick={toggleCollapsed}>›</span>
+            <ChevronDownIcon className={styles.collapse} onClick={toggleCollapsed} />
         </span>
     </div>;
 
