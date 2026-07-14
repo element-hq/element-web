@@ -138,7 +138,7 @@ export function attachUrlPreviews(
             };
         });
 
-    if (bundle.length) {
+    if (urlPreviewSnapshot.entries.length !== 0) {
         content["com.beeper.linkpreviews"] = bundle;
     }
 }
