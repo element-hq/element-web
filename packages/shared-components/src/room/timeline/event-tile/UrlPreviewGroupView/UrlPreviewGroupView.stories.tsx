@@ -96,7 +96,6 @@ Default.args = {
                 imageFull: imageFile,
                 alt: "The element logo",
                 playable: false,
-                mxcImageFull: "mxc://server/file",
             },
         },
     ],
@@ -124,7 +123,6 @@ MultiplePreviewsVisible.args = {
                 imageFull: imageFile,
                 alt: "The element logo",
                 playable: false,
-                mxcImageFull: "mxc://server/file",
             },
         },
         // These images should appear the same size despite having different dimensions.
@@ -139,7 +137,6 @@ MultiplePreviewsVisible.args = {
                 imageFull: tallImageFile,
                 alt: "A dog",
                 playable: false,
-                mxcImageFull: "mxc://server/file",
             },
         },
         {
@@ -153,7 +150,6 @@ MultiplePreviewsVisible.args = {
                 imageFull: imageFile,
                 alt: "The element logo",
                 playable: false,
-                mxcImageFull: "mxc://server/file",
             },
         },
     ],

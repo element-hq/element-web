@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, useEffect } from "react";
+import React, { type JSX, createRef, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     type IEventRelation,
@@ -19,7 +19,6 @@ import {
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -51,19 +50,12 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
-import {
-    type MatrixClientProps,
-    withMatrixClientHOC,
-    useMatrixClientContext,
-} from "../../../contexts/MatrixClientContext";
+import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 import { MessageComposerUrlPreviewWrapper } from "./MessageComposerUrlPreview";
-import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
-import PlatformPeg from "../../../PlatformPeg";
-import { useSettingValue } from "../../../hooks/useSettings";
+import { Type } from "../../../editor/parts";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -96,7 +88,6 @@ interface IProps extends MatrixClientProps {
     relation?: IEventRelation;
     e2eStatus?: E2EStatus;
     compact?: boolean;
-    urlPreviewVm: MessageComposerUrlPreviewViewModel;
 }
 
 interface IState {
@@ -112,6 +103,8 @@ interface IState {
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
     initialComposerContent: string;
+    // Specifically for generating previews only.
+    urlPreviewComposerContent: string;
 }
 
 type WysiwygComposerState = {
@@ -153,6 +146,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.state = {
             isComposerEmpty: initialComposerContent?.length === 0,
             composerContent: initialComposerContent,
+            urlPreviewComposerContent: initialComposerContent,
             haveRecording: false,
             recordingTimeLeftSeconds: undefined, // when set to a number, shows a toast
             isMenuOpen: false,
@@ -401,7 +395,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private sendMessage = async (): Promise<void> => {
-        this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
+        this.setState({ urlPreviewComposerContent: "" });
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
             // There shouldn't be any text message to send when a voice recording is active, so
             // just send out the voice recording.
@@ -424,25 +418,25 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 roomContext: this.context,
                 relation,
                 replyToEvent,
-                urlPreviewSnapshot: this.props.urlPreviewVm.getSnapshot(),
             });
         }
     };
 
     private onChange = (model: EditorModel): void => {
-        this.props.urlPreviewVm.updateWithText({
-            content: model.contentPlainText,
-            debounced: true,
-        });
         this.setState({
+            urlPreviewComposerContent: model
+                .serializeParts()
+                .filter((part) => part.type === Type.Plain)
+                .map((part) => part.text)
+                .join(" "),
             isComposerEmpty: model.isEmpty,
         });
     };
 
     private onWysiwygChange = (content: string): void => {
-        this.props.urlPreviewVm.updateWithText({ content, debounced: true });
         this.setState({
             composerContent: content,
+            urlPreviewComposerContent: content,
             isComposerEmpty: content?.length === 0,
         });
     };
@@ -607,7 +601,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         onChange={this.onChange}
                         disabled={this.state.haveRecording}
                         toggleStickerPickerOpen={this.toggleStickerPickerOpen}
-                        urlPreviewVm={this.props.urlPreviewVm}
                     />
                 );
             }
@@ -693,7 +686,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                 <div className="mx_MessageComposer_wrapper">
-                    <MessageComposerUrlPreviewWrapper urlPreviewVm={this.props.urlPreviewVm} />
+                    <MessageComposerUrlPreviewWrapper content={this.state.urlPreviewComposerContent} />
                     <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                     <ReplyPreview
                         replyToEvent={this.props.replyToEvent}
@@ -742,24 +735,4 @@ export class MessageComposer extends React.Component<IProps, IState> {
 }
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
-
-export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | "urlPreviewVm">): JSX.Element {
-    const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
-    const client = useMatrixClientContext();
-    const urlPreviewBundle = useSettingValue("feature_msc4095_url_preview_bundle");
-    const urlPreviewVm = useCreateAutoDisposedViewModel(
-        () =>
-            new MessageComposerUrlPreviewViewModel({
-                client,
-                visible: showUrlPreview,
-                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-                urlPreviewBundle,
-            }),
-    );
-
-    useEffect(() => {
-        void urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
-    }, [urlPreviewVm, showUrlPreview]);
-
-    return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
-}
+export default MessageComposerWithMatrixClient;

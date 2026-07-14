@@ -57,7 +57,6 @@ Default.args = {
         imageFull: imageFile,
         alt: "Element logo",
         playable: false,
-        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -113,7 +112,6 @@ Article.args = {
         imageFull: imageFileWide,
         alt: "A dog",
         playable: false,
-        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -129,7 +127,6 @@ Video.args = {
         imageFull: imageFileWide,
         alt: "A dog",
         playable: true,
-        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -154,7 +151,6 @@ SocialWithImage.args = {
         imageFull: imageFileWide,
         alt: "A dog",
         playable: false,
-        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -170,7 +166,6 @@ WithVeryLongText.args = {
         imageFull: imageFile,
         alt: "Element logo",
         playable: false,
-        mxcImageFull: "mxc://server/file",
     },
 };
 
@@ -185,6 +180,5 @@ WithTallImage.args = {
         imageFull: imageFileTall,
         alt: "Element logo",
         playable: false,
-        mxcImageFull: "mxc://server/file",
     },
 };

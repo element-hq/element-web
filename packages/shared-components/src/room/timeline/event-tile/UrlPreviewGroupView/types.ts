@@ -23,10 +23,6 @@ export interface UrlPreview {
      */
     siteName: string;
     /**
-     * The og:url value of the page, could be different from link
-     */
-    ogUrl?: string;
-    /**
      * The HTTP URI of the the sites icon.
      */
     siteIcon?: string;
@@ -46,14 +42,6 @@ export interface UrlPreview {
          * The HTTP URI of the full image.
          */
         imageFull: string;
-        /**
-         * The mxc:// URI of the full image.
-         */
-        mxcImageFull: string;
-        /**
-         * The type/subtype of the image format
-         */
-        imageType?: string;
         /**
          * File size in bytes.
          */
