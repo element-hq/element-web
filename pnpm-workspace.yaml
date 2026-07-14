@@ -3,7 +3,9 @@ cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
 minimumReleaseAgeStrict: true
+# Workaround as part of https://github.com/element-hq/element-web/pull/34254
 strictDepBuilds: false
+allowUnusedPatches: true
 
 packages:
     - "apps/*"
