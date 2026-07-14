@@ -17,7 +17,6 @@ export enum DefaultTagID {
     DM = "im.vector.fake.direct",
     Conference = "im.vector.fake.conferences",
     ServerNotice = "m.server_notice",
-    Suggested = "im.vector.fake.suggested",
 }
 
 /**

@@ -15,21 +15,22 @@ import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { SDKContext, SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContext } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 
 const ROOM_ID = "!room:id";
 
 describe("AppsDrawer", () => {
     let client: MatrixClient;
     let room: Room;
-    let sdkContext: SdkContextClass;
+    let sdkContext: SDKContextClass;
 
     beforeEach(async () => {
         client = stubClient();
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        sdkContext = new SdkContextClass();
+        sdkContext = new SDKContextClass();
     });
 
     afterEach(() => {

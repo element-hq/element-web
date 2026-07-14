@@ -26,8 +26,7 @@ import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
-import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
+import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
@@ -39,7 +38,6 @@ import Dialpad from "../voip/DialPad";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import LegacyCallHandler from "../../../LegacyCallHandler";
 import CopyableText from "../elements/CopyableText";
 import { type ScreenName } from "../../../PosthogTrackers";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -56,7 +54,7 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { type NonEmptyArray } from "../../../@types/common";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
@@ -205,7 +203,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             throw new Error("When using InviteKind.CallTransfer a call is required for an InviteDialog");
         }
 
-        this.profilesStore = SdkContextClass.instance.userProfilesStore;
+        this.profilesStore = SDKContextClass.instance.userProfilesStore;
         const cli = MatrixClientPeg.safeGet();
 
         const excludedIds = new Set([cli.getSafeUserId()]);
@@ -279,9 +277,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     public static buildRecents(excludedTargetIds: Set<string>): Result[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
-        // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
-        // room list doesn't tag the room for the DMRoomMap, but does for the room list.
-        const dmTaggedRooms = RoomListStore.instance.orderedLists[DefaultTagID.DM] || [];
+        // Also pull in all the rooms that the room list tags as DMs so we don't miss anything: sometimes
+        // a room is absent from getUniqueRoomsWithIndividuals() above but is still tagged as a DM.
+        const dmTaggedRooms = RoomListStoreV3.instance.getDmRooms();
         const myUserId = MatrixClientPeg.safeGet().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter((u) => u.userId !== myUserId);
@@ -484,9 +482,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 return;
             }
 
-            LegacyCallHandler.instance.startTransferToMatrixID(this.props.call, targetIds[0], this.state.consultFirst);
+            SDKContextClass.instance.legacyCallHandler.startTransferToMatrixID(
+                this.props.call,
+                targetIds[0],
+                this.state.consultFirst,
+            );
         } else {
-            LegacyCallHandler.instance.startTransferToPhoneNumber(
+            SDKContextClass.instance.legacyCallHandler.startTransferToPhoneNumber(
                 this.props.call,
                 this.state.dialPadValue,
                 this.state.consultFirst,
@@ -1388,7 +1390,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             new Tab(
                 TabId.UserDirectory,
                 _td("invite|transfer_user_directory_tab"),
-                <UserProfileSolidIcon />,
+                <UserProfileSolidIcon key={TabId.UserDirectory} />,
                 usersSection,
             ),
         ];

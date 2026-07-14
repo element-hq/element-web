@@ -11,6 +11,7 @@ import { type MockedObject } from "jest-mock";
 
 import { ElementCall } from "../../../src/models/Call";
 import { CallStore } from "../../../src/stores/CallStore";
+import SdkConfig from "../../../src/SdkConfig";
 import {
     setUpClientRoomAndStores,
     cleanUpClientRoomAndStores,
@@ -65,5 +66,21 @@ describe("CallStore", () => {
             { type: "type-c", other_data: "bar" },
             { type: "type-d", other_data: "baz" },
         ]);
+    });
+    it("does not fall back to client well-known when enable_client_well_known_lookups is false", async () => {
+        const sdkConfigGet = SdkConfig.get;
+        jest.spyOn(SdkConfig, "get").mockImplementation((key?: any, altCaseName?: string): any => {
+            if (key === "enable_client_well_known_lookups") return false;
+            return sdkConfigGet(key, altCaseName);
+        });
+        client._unstable_getRTCTransports.mockResolvedValue([{ type: "type-a", some_data: "value" }]);
+        client.getClientWellKnown.mockReturnValue({
+            "org.matrix.msc4143.rtc_foci": [{ type: "type-c", other_data: "bar" }],
+        });
+        await setupAsyncStoreWithClient(CallStore.instance, client);
+        // Only the modern endpoint contributes; the legacy well-known fallback is skipped entirely.
+        expect(CallStore.instance.getConfiguredRTCTransports()).toEqual([{ type: "type-a", some_data: "value" }]);
+        expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
+        expect(client.getClientWellKnown).not.toHaveBeenCalled();
     });
 });

@@ -68,10 +68,6 @@ const onLearnMorePreviouslyOptedIn = (): void => {
 
 const TOAST_KEY = "analytics";
 
-export function getPolicyUrl(): string | undefined {
-    return SdkConfig.get("privacy_policy_url");
-}
-
 export const showToast = (): void => {
     const legacyAnalyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);
 

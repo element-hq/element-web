@@ -18,7 +18,7 @@ const I18N_BASE_PATH = "./src/i18n/strings/";
 const I18N_DEST = "storybook-static/i18n/";
 
 // List of languages to include
-const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH)])]
+const INCLUDE_LANGS = [...new Set(fs.readdirSync(I18N_BASE_PATH))]
     .filter((fn) => fn.endsWith(".json"))
     .map((f) => f.slice(0, -5));
 

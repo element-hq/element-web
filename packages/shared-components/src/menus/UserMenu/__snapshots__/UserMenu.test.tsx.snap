@@ -286,15 +286,109 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       tabindex="-1"
     >
       <section
-        class="UserMenu-module_profile"
+        class="UserMenu-module_profile UserMenu-module_profilePrimary"
       >
         <span
           class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 UserMenu-module_displayname"
         >
           Sally Sanderson
         </span>
+        <div
+          aria-invalid="false"
+          class="_container_1xtut_8"
+        >
+          <div
+            class="SetStatusView-module_setStatusContainer"
+          >
+            <a
+              aria-controls="react-use-id-3"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="What's your status?"
+              class="_link_13esb_8 SetStatusView-module_setStatusTrigger"
+              data-kind="primary"
+              data-size="md"
+              rel="noreferrer noopener"
+              role="combobox"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                />
+                <path
+                  d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                />
+              </svg>
+              <span
+                class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60"
+              >
+                What's your status?
+              </span>
+            </a>
+          </div>
+          <div
+            class="_content_1xtut_62"
+          >
+            <ul
+              class="_content_1xtut_62"
+              id="react-use-id-3"
+              role="listbox"
+            >
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                💬 In a meeting
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                💡 Focus Time
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                🚙 On the road
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                ☕️ Be right back
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                🌴 Away
+                 
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section
+        class="UserMenu-module_profile UserMenu-module_profileSecondary"
+      >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
           data-testid="userId"
         >
           @person-name:homeserver.com
@@ -599,7 +693,7 @@ exports[`UserMenu > renders an open menu 1`] = `
       tabindex="-1"
     >
       <section
-        class="UserMenu-module_profile"
+        class="UserMenu-module_profile UserMenu-module_profilePrimary"
       >
         <span
           aria-label="@person-name:homeserver.com"
@@ -625,8 +719,102 @@ exports[`UserMenu > renders an open menu 1`] = `
         >
           Sally Sanderson with a longer name
         </span>
+        <div
+          aria-invalid="false"
+          class="_container_1xtut_8"
+        >
+          <div
+            class="SetStatusView-module_setStatusContainer"
+          >
+            <a
+              aria-controls="react-use-id-3"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="What's your status?"
+              class="_link_13esb_8 SetStatusView-module_setStatusTrigger"
+              data-kind="primary"
+              data-size="md"
+              rel="noreferrer noopener"
+              role="combobox"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.536 15.536a1 1 0 0 0-1.415-1.415 3 3 0 0 1-2.12.879 3 3 0 0 1-2.122-.879 1 1 0 1 0-1.414 1.415A5 5 0 0 0 12 17c1.38 0 2.632-.56 3.536-1.464M10 10.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m5.5 1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                />
+                <path
+                  d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0"
+                />
+              </svg>
+              <span
+                class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60"
+              >
+                What's your status?
+              </span>
+            </a>
+          </div>
+          <div
+            class="_content_1xtut_62"
+          >
+            <ul
+              class="_content_1xtut_62"
+              id="react-use-id-3"
+              role="listbox"
+            >
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                💬 In a meeting
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                💡 Focus Time
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                🚙 On the road
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                ☕️ Be right back
+                 
+              </li>
+              <li
+                aria-selected="false"
+                role="option"
+                tabindex="0"
+              >
+                🌴 Away
+                 
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section
+        class="UserMenu-module_profile UserMenu-module_profileSecondary"
+      >
         <span
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 UserMenu-module_userId"
           data-testid="userId"
         >
           @person-name:homeserver.com

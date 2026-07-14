@@ -12,10 +12,10 @@ import { type MatrixClient, type UploadResponse } from "matrix-js-sdk/src/matrix
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { ToastContext, type ToastRack } from "@element-hq/web-shared-components";
 
 import UserProfileSettings from "../../../../../src/components/views/settings/UserProfileSettings";
 import { mkStubRoom, stubClient } from "../../../../test-utils";
-import { ToastContext, type ToastRack } from "../../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../src/Modal";
@@ -72,7 +72,7 @@ const renderProfileSettings = (toastRack: Partial<ToastRack>, client: MatrixClie
     return render(
         <TooltipProvider>
             <MatrixClientContext.Provider value={client}>
-                <ToastContext.Provider value={toastRack}>
+                <ToastContext.Provider value={toastRack as ToastRack}>
                     <UserProfileSettings canSetAvatar={true} canSetDisplayName={true} />
                 </ToastContext.Provider>
             </MatrixClientContext.Provider>

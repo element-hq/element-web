@@ -8,6 +8,35 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
     data-event-layout="group"
   >
     <div
+      class="UrlPreviewGroupView-module_hideButton"
+    >
+      <button
+        aria-label="Close preview"
+        class="_icon-button_1215g_8"
+        data-kind="secondary"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
@@ -16,13 +45,8 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -51,31 +75,6 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
         </div>
       </div>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="secondary"
-      role="button"
-      style="--cpd-icon-button-size: 28px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -88,6 +87,35 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
     data-event-layout="group"
   >
     <div
+      class="UrlPreviewGroupView-module_hideButton"
+    >
+      <button
+        aria-label="Close preview"
+        class="_icon-button_1215g_8"
+        data-kind="secondary"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
@@ -96,13 +124,8 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -136,13 +159,8 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="A dog"
-            src="/static/tallImage.png"
-            title="A dog"
-          />
-        </button>
+          style="background-image: url("/static/tallImage.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -176,13 +194,8 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -220,31 +233,6 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         Collapse
       </button>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="secondary"
-      role="button"
-      style="--cpd-icon-button-size: 28px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -257,6 +245,35 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
     data-event-layout="group"
   >
     <div
+      class="UrlPreviewGroupView-module_hideButton"
+    >
+      <button
+        aria-label="Close preview"
+        class="_icon-button_1215g_8"
+        data-kind="secondary"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
@@ -265,13 +282,8 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -309,31 +321,6 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
         Show 9 other previews
       </button>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="secondary"
-      role="button"
-      style="--cpd-icon-button-size: 28px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;
@@ -346,6 +333,35 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
     data-event-layout="group"
   >
     <div
+      class="UrlPreviewGroupView-module_hideButton"
+    >
+      <button
+        aria-label="Close preview"
+        class="_icon-button_1215g_8"
+        data-kind="secondary"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_147l5_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
       class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
@@ -354,13 +370,8 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -394,13 +405,8 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="A dog"
-            src="/static/tallImage.png"
-            title="A dog"
-          />
-        </button>
+          style="background-image: url("/static/tallImage.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -434,13 +440,8 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         <button
           aria-label="View image"
           class="LinkPreview-module_preview"
-        >
-          <img
-            alt="The element logo"
-            src="/static/element.png"
-            title="The element logo"
-          />
-        </button>
+          style="background-image: url("/static/element.png");"
+        />
         <div
           class="LinkPreview-module_textContent"
         >
@@ -478,31 +479,6 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         Collapse
       </button>
     </div>
-    <button
-      aria-label="Close preview"
-      class="_icon-button_1215g_8"
-      data-kind="secondary"
-      role="button"
-      style="--cpd-icon-button-size: 28px;"
-      tabindex="0"
-    >
-      <div
-        class="_indicator-icon_147l5_17"
-        style="--cpd-icon-button-size: 100%;"
-      >
-        <svg
-          fill="currentColor"
-          height="1em"
-          viewBox="0 0 24 24"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
-          />
-        </svg>
-      </div>
-    </button>
   </div>
 </div>
 `;

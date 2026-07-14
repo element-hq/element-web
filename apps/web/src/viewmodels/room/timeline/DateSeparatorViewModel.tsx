@@ -28,7 +28,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
 import BugReportDialog from "../../../components/views/dialogs/BugReportDialog";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
-import { SdkContextClass } from "../../../contexts/SDKContext";
+import { type RoomViewStore } from "../../../stores/RoomViewStore.tsx";
 
 export interface DateSeparatorViewModelProps {
     /**
@@ -43,6 +43,10 @@ export interface DateSeparatorViewModelProps {
      * Export mode disables relative date labels and jump-to-date menu UI.
      */
     forExport?: boolean;
+    /**
+     * The room view store instance to use
+     */
+    roomViewStore: RoomViewStore;
 }
 
 /**
@@ -159,7 +163,7 @@ export class DateSeparatorViewModel
             // Only try to navigate to the room if the user is still viewing the same
             // room. We don't want to jump someone back to a room after a slow request
             // if they've already navigated away to another room.
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.props.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 dispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
@@ -185,7 +189,7 @@ export class DateSeparatorViewModel
             // don't want to worry someone about an error in a room they no longer care
             // about after a slow request if they've already navigated away to another
             // room.
-            const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            const currentRoomId = this.props.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
                 let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
                 let submitDebugLogsContent: React.ReactElement = <></>;

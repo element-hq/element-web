@@ -7,27 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { app, dialog } from "electron";
 import path from "node:path";
+import { type ResolveDefaults, type DesktopConfigJson, type JsonDocument } from "shared-types";
 
 import { getAsarPath } from "./asar.js";
-import { type Json, loadJsonFile } from "./utils.js";
+import { loadJsonFile } from "./utils.js";
 
-export interface ConfigOptions {
-    brand: string;
-    help_url: string;
-    web_base_url: string;
-    modules?: string[];
-    sentry?: {
-        dsn?: string;
-        environment?: string;
-    };
-    update_base_url?: string;
-
-    // homeserver props
-    default_is_url?: string;
-    default_hs_url?: string;
-    default_server_name?: string;
-    default_server_config?: object;
-}
+export type ConfigOptions = ResolveDefaults<DesktopConfigJson, typeof DEFAULTS>;
 
 const ConfigFilename = "config.json";
 
@@ -35,7 +20,7 @@ let config: ConfigOptions;
 
 const homeserverProps = ["default_is_url", "default_hs_url", "default_server_name", "default_server_config"] as const;
 
-function loadLocalConfigFile(location: string | undefined): Json {
+function loadLocalConfigFile(location: string | undefined): JsonDocument {
     if (location) {
         console.log("Loading local config: " + location);
         return loadJsonFile(location);
@@ -50,9 +35,9 @@ const DEFAULTS = {
     brand: "Element",
     help_url: "https://element.io/help",
     web_base_url: "https://app.element.io/",
-} satisfies ConfigOptions;
+} satisfies DesktopConfigJson;
 
-function applyDefaults(conf: ConfigOptions): void {
+function applyDefaults(conf: DesktopConfigJson): asserts conf is ConfigOptions {
     for (const k in DEFAULTS) {
         const key = k as keyof typeof DEFAULTS;
         conf[key] ||= DEFAULTS[key];
@@ -71,7 +56,9 @@ export function loadConfig(localConfigPath: string | undefined): Promise<ConfigO
         try {
             console.log(`Loading app config: ${path.join(asarPath, ConfigFilename)}`);
             // XXX: we trust that we built the package with a sane config, but should use something like zod here in future
-            config = loadJsonFile(asarPath, ConfigFilename) as unknown as ConfigOptions;
+            const loadedConfig = loadJsonFile(asarPath, ConfigFilename) as unknown as DesktopConfigJson;
+            applyDefaults(loadedConfig);
+            config = loadedConfig;
         } catch {
             // it would be nice to check the error code here and bail if the config
             // is unparsable, but we get MODULE_NOT_FOUND in the case of a missing
@@ -79,8 +66,6 @@ export function loadConfig(localConfigPath: string | undefined): Promise<ConfigO
             // Continue with the defaults (ie. an empty config)
             config = { ...DEFAULTS };
         }
-
-        applyDefaults(config);
 
         try {
             // Load local config and use it to override values from the one baked with the build

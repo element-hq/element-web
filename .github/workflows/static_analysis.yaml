@@ -28,7 +28,7 @@ jobs:
                     - name: Oxfmt
                       install: normal
                       command: "lint:fmt"
-                    - name: ESLint
+                    - name: Oxlint
                       install: normal
                       command: "lint:js"
                     - name: Style Lint
@@ -46,6 +46,9 @@ jobs:
                     - name: Docs
                       install: layered
                       command: "docs:build"
+                    - name: Unused settings
+                      install: normal
+                      command: "lint:unused-settings"
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:

@@ -57,6 +57,12 @@ If both `default_server_config` and `default_server_name` are used, Element will
 information using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
 information.
 
+1. `enable_client_well_known_lookups`: Controls whether Element makes runtime requests to the logged-in user's
+   [`<server_name>/.well-known/matrix/...`](https://spec.matrix.org/latest/client-server-api/#getwell-knownmatrixclient)
+   endpoints (for example, polling for client configuration after login). Set it to `false` to stop Element making these
+   requests, so it only contacts the homeserver base URL; the `well_known` object returned inline in the `/login` response
+   is unaffected. Defaults to `true`.
+
 ## Labs flags
 
 Labs flags are optional, typically beta or in-development, features that can be turned on or off. The full range of
@@ -298,7 +304,6 @@ The following subproperties are available:
 2. `logo_uri`: Optional URI for the client logo.
 3. `tos_uri`: Optional URI for the client's terms of service.
 4. `policy_uri`: Optional URI for the client's privacy policy.
-5. `contacts`: Optional list of contact emails for the client.
 
 As an example:
 
@@ -308,8 +313,7 @@ As an example:
         "client_uri": "https://example.com",
         "logo_uri": "https://example.com/logo.png",
         "tos_uri": "https://example.com/tos",
-        "policy_uri": "https://example.com/policy",
-        "contacts": ["support@example.com"]
+        "policy_uri": "https://example.com/policy"
     }
 }
 ```
@@ -390,7 +394,12 @@ The VoIP and Jitsi options are:
    at any time without notice.
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
     - `use_exclusively`: A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in
-      the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.
+      the app, removing the ability to enable legacy 1:1 calls or Jitsi calls.
+      It is a misconfiguration if its set to true while `element_call.disable` is also true!
+      Defaults to `false`.
+    - `disabled`: A boolean flag specifying whether Element Call should be disabled.
+      If it is disabled `element_call.use_exclusively` has no effect!
+      Defaults to `false`.
     - `brand`: Optional name for the app. Defaults to `Element Call`. This is
       used throughout the application in various strings/locations.
     - `guest_spa_url`: Optional URL for an Element Call single-page app (SPA),

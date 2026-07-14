@@ -8,12 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import type React from "react";
-import { useFeatureEnabled, useSettingValue } from "../useSettings";
-import SdkConfig from "../../SdkConfig";
+import { useSettingValue } from "../useSettings";
 import { useEventEmitter, useEventEmitterState } from "../useEventEmitter";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { useWidgets } from "../../utils/WidgetUtils";
@@ -38,7 +37,8 @@ import { type InteractionName } from "../../PosthogTrackers";
 import { ElementCallMemberEventType } from "../../call-types";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContext } from "../../contexts/SDKContext.ts";
+import SdkConfig from "../../SdkConfig";
 
 const logger = rootLogger.getChild("useRoomCall");
 
@@ -107,14 +107,16 @@ export const useRoomCall = (
     showVideoCallButton: boolean;
     showVoiceCallButton: boolean;
 } => {
+    const sdkContext = useContext(SDKContext);
     const roomViewStore = useScopedRoomContext("roomViewStore").roomViewStore;
     // settings
-    const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const widgetsFeatureEnabled = useSettingValue(UIFeature.Widgets);
     const voipFeatureEnabled = useSettingValue(UIFeature.Voip);
-    const useElementCallExclusively = useMemo(() => {
+    const enableLegacyCallsVoip = useSettingValue("enableLegacyCallsVoip");
+    const sdkConfigEcOnly = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively;
     }, []);
+    const useElementCallExclusively = !enableLegacyCallsVoip || sdkConfigEcOnly;
 
     const serverIsConfiguredForElementCall = useEventEmitterState(
         CallStore.instance,
@@ -132,9 +134,9 @@ export const useRoomCall = (
     }, [useElementCallExclusively, serverIsConfiguredForElementCall]);
 
     const hasLegacyCall = useEventEmitterState(
-        SdkContextClass.instance.legacyCallHandler,
+        sdkContext.legacyCallHandler,
         LegacyCallHandlerEvent.CallsChanged,
-        () => SdkContextClass.instance.legacyCallHandler.getCallForRoom(room.roomId) !== null,
+        () => sdkContext.legacyCallHandler.getCallForRoom(room.roomId) !== null,
     );
     // settings
     const widgets = useWidgets(room);
@@ -175,12 +177,12 @@ export const useRoomCall = (
     // If there are multiple options, the user will be prompted to choose.
     const callOptions = useMemo((): PlatformCallType[] => {
         const options: PlatformCallType[] = [];
-        if (groupCallsEnabled) {
-            if (hasGroupCall || mayCreateElementCalls) {
-                options.push(PlatformCallType.ElementCall);
-            }
+        if (!SdkConfig.get("element_call").disable) {
             if (useElementCallExclusively && !hasJitsiWidget) {
                 return [PlatformCallType.ElementCall];
+            }
+            if (hasGroupCall || mayCreateElementCalls) {
+                options.push(PlatformCallType.ElementCall);
             }
         }
         if (memberCount <= 2) {
@@ -197,7 +199,6 @@ export const useRoomCall = (
         memberCount,
         mayEditWidgets,
         hasJitsiWidget,
-        groupCallsEnabled,
         hasGroupCall,
         mayCreateElementCalls,
         useElementCallExclusively,

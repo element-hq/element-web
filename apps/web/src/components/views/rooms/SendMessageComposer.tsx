@@ -25,8 +25,8 @@ import {
 import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
+import { type RoomMessageEventContent } from "../../../../@types/url-preview";
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";
 import {
@@ -64,8 +64,9 @@ import { type Caret } from "../../../editor/caret";
 import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
-import { attachMentions, attachRelation } from "../../../utils/messages";
+import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
+import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -137,6 +138,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     disabled?: boolean;
     onChange?(model: EditorModel): void;
     toggleStickerPickerOpen: () => void;
+    urlPreviewVm: MessageComposerUrlPreviewViewModel;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
@@ -410,6 +412,21 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             this.sendQuickReaction();
         }
 
+        const clearComposerAndPushHistory = (): void => {
+            this.sendHistoryManager.save(model, replyToEvent);
+            // clear composer
+            model.reset([]);
+            this.editorRef.current?.clearUndoHistory();
+            this.editorRef.current?.focus();
+            this.clearStoredEditorState();
+            if (shouldSend && SettingsStore.getValue("scrollToBottomOnMessageSent")) {
+                dis.dispatch({
+                    action: "scroll_to_bottom",
+                    timelineRenderingType: this.context.timelineRenderingType,
+                });
+            }
+        };
+
         if (shouldSend) {
             const { roomId } = this.props.room;
             if (!content) {
@@ -420,8 +437,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     this.props.relation,
                 );
             }
+
             // don't bother sending an empty message
             if (!content.body.trim()) return;
+
+            // clear composer first so the user doesn't actually see the delay of attach URL preview image files
+            clearComposerAndPushHistory();
+            attachUrlPreviews(this.props.urlPreviewVm.getSnapshot(), content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);
@@ -460,19 +482,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     sendRoundTripMetric(this.props.mxClient, roomId, resp.event_id);
                 });
             }
-        }
-
-        this.sendHistoryManager.save(model, replyToEvent);
-        // clear composer
-        model.reset([]);
-        this.editorRef.current?.clearUndoHistory();
-        this.editorRef.current?.focus();
-        this.clearStoredEditorState();
-        if (shouldSend && SettingsStore.getValue("scrollToBottomOnMessageSent")) {
-            dis.dispatch({
-                action: "scroll_to_bottom",
-                timelineRenderingType: this.context.timelineRenderingType,
-            });
+        } else {
+            clearComposerAndPushHistory();
         }
     }
 
