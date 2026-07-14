@@ -10,6 +10,7 @@ import { BaseViewModel, type UserStatusIconViewSnapshot } from "@element-hq/web-
 
 import { fetchUserStatus, validateUserStatus } from "../../utils/userStatus";
 import SettingsStore from "../../settings/SettingsStore";
+import { logger } from "matrix-js-sdk/src/logger";
 
 export interface UserStatusIconViewModelProps {
     /**
@@ -36,10 +37,14 @@ export class UserStatusIconViewModel extends BaseViewModel<UserStatusIconViewSna
             this.onUserProfileUpdate as (...args: unknown[]) => void,
         );
 
-        fetchUserStatus(props.matrixClient, props.userId).then((status) => {
-            if (this.isDisposed) return;
-            this.snapshot.merge({ status });
-        });
+        fetchUserStatus(props.matrixClient, props.userId)
+            .then((status) => {
+                if (this.isDisposed) return;
+                this.snapshot.merge({ status });
+            })
+            .catch((err) => {
+                logger.warn("Failed to fetch user status:", err);
+            });
     }
 
     private onUserProfileUpdate = (syncedUserId: string, syncProfile: Record<string, unknown> | null): void => {
