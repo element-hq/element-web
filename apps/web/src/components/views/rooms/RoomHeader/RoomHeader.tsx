@@ -49,9 +49,9 @@ import { CallGuestLinkButton } from "./CallGuestLinkButton.tsx";
 import { type ButtonEvent } from "../../elements/AccessibleButton.tsx";
 import WithPresenceIndicator, { useDmMember } from "../../avatars/WithPresenceIndicator.tsx";
 import { type IOOBData } from "../../../../stores/ThreepidInviteStore.ts";
-import { MainSplitContentType } from "../../../structures/RoomView.tsx";
+import { MainSplitContentType } from "../../../../contexts/RoomContext.ts";
 import defaultDispatcher from "../../../../dispatcher/dispatcher.ts";
-import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";
+import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog-tab";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
 import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
@@ -118,7 +118,7 @@ function RoomHeaderButtons({
         >
             <Button
                 size="md"
-                onClick={videoClick}
+                onClick={activeCallSessionType === CallType.Video ? videoClick : voiceClick}
                 // If we know this is a voice session, show the voice call. All other kinds of call are video calls.
                 Icon={activeCallSessionType === CallType.Voice ? VoiceCallIcon : VideoCallIcon}
                 className="mx_RoomHeader_join_button"

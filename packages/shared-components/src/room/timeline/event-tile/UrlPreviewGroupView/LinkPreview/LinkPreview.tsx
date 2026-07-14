@@ -21,7 +21,7 @@ export interface LinkPreviewActions {
 
 export type LinkPreviewProps = UrlPreview & LinkPreviewActions;
 
-function LinkTitle({
+export function LinkTitle({
     title,
     showTooltipOnLink,
     link,
@@ -44,7 +44,7 @@ function LinkTitle({
     return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
 }
 
-function LinkSiteName({ siteIcon, siteName }: { siteIcon?: string; siteName: string }): JSX.Element {
+export function LinkSiteName({ siteIcon, siteName }: { siteIcon?: string; siteName: string }): JSX.Element {
     return (
         <div className={styles.siteName}>
             {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
@@ -135,12 +135,13 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             // Otherwise, the preview can be clicked on.
             img = (
                 <button
+                    style={{
+                        backgroundImage: `url('${preview.image.imageThumb}')`,
+                    }}
                     className={styles.preview}
                     onClick={onImageClickHandler}
                     aria-label={_t("timeline|url_preview|view_image")}
-                >
-                    <img src={preview.image.imageThumb} alt={preview.image.alt} title={preview.image.alt} />
-                </button>
+                />
             );
         }
     }

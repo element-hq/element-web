@@ -6,17 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import "fake-indexeddb/auto";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock-vitest-adapter";
-import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    type MatrixClient,
+    MatrixEvent,
+    Room,
+    SyncState,
+    OAuth2,
+    type BearerTokenResponse,
+    OAuth2Error,
+} from "matrix-js-sdk/src/matrix";
 import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
-import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
 import { logger } from "matrix-js-sdk/src/logger";
-import { OidcError } from "matrix-js-sdk/src/oidc/error";
-import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 import { sleep } from "matrix-js-sdk/src/utils";
 import {
     CryptoEvent,
@@ -46,8 +51,7 @@ import {
     unmockClientPeg,
 } from "../../../test-utils";
 import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
-import { OidcClientError } from "../../../../src/utils/oidc/error";
-import LegacyCallHandler from "../../../../src/LegacyCallHandler";
+import { OAuthClientError } from "../../../../src/utils/oauth/error";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { type Call } from "../../../../src/models/Call";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics";
@@ -68,15 +72,11 @@ import Modal from "../../../../src/Modal.tsx";
 import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
 import { clearStorage } from "../../../../src/Lifecycle";
-import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
-import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
+import { makeDelegatedAuthMetadata } from "../../../test-utils/auth.ts";
 import { type QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
-
-jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
-    completeAuthorizationCodeGrant: jest.fn(),
-}));
+import { storeAuthContext } from "../../../../src/utils/oauth/persistOAuthSettings.ts";
 
 // Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
 // plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
@@ -196,6 +196,7 @@ describe("<MatrixChat />", () => {
         logout: jest.fn(),
         getDeviceId: jest.fn(),
         forget: () => Promise.resolve(),
+        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -245,7 +246,6 @@ describe("<MatrixChat />", () => {
                 brand: "Test",
                 help_url: "help_url",
                 help_encryption_url: "help_encryption_url",
-                element_call: {},
                 feedback: {
                     existing_issues_url: "https://feedback.org/existing",
                     new_issue_url: "https://feedback.org/new",
@@ -272,6 +272,10 @@ describe("<MatrixChat />", () => {
         bootstrapDeferred = Promise.withResolvers();
 
         await clearAllModals();
+
+        jest.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockImplementation(
+            (code) => new Promise<BearerTokenResponse>(() => {}),
+        );
     });
 
     afterEach(async () => {
@@ -322,39 +326,39 @@ describe("<MatrixChat />", () => {
     it("should notify resizenotifier when left panel hidden", async () => {
         getComponent();
 
-        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+        jest.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
 
         defaultDispatcher.dispatch({ action: "hide_left_panel" });
 
         await waitFor(() =>
-            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+            expect(mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
     });
 
     it("should notify resizenotifier when left panel shown", async () => {
         getComponent();
 
-        jest.spyOn(SdkContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+        jest.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
 
         defaultDispatcher.dispatch({ action: "show_left_panel" });
 
         await waitFor(() =>
-            expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+            expect(mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
     });
 
     describe("qr login", () => {
         beforeEach(() => {
-            const authConfig = makeDelegatedAuthConfig();
+            const authConfig = makeDelegatedAuthMetadata();
             defaultProps.config.validated_server_config!.delegatedAuthentication = authConfig;
             fetchMock.post(authConfig.registration_endpoint!, { client_id: "abc123" });
             mockPlatformPeg({
-                getOidcClientMetadata: jest.fn().mockReturnValue({
-                    clientName: "App name",
-                    clientUri: "https://company",
-                    redirectUris: ["https://app"],
-                    logoUri: "https://company/logo.png",
-                    applicationType: "web",
+                getOAuthClientMetadata: jest.fn().mockReturnValue({
+                    client_name: "App name",
+                    client_uri: "https://company",
+                    redirect_uris: ["https://app"],
+                    logo_uri: "https://company/logo.png",
+                    application_type: "web",
                 }),
             });
             jest.spyOn(qrLogin, "signInByGeneratingQR").mockReturnValue(new Promise(() => {}));
@@ -388,8 +392,6 @@ describe("<MatrixChat />", () => {
                 accessToken: "at",
                 homeserverUrl: "https://homeserver",
                 clientId: "ci",
-                idToken: "it",
-                issuer: defaultProps.config.validated_server_config!.delegatedAuthentication!.issuer,
                 deviceId: "di",
                 secrets: {
                     cross_signing: {
@@ -456,7 +458,6 @@ describe("<MatrixChat />", () => {
     });
 
     describe("when query params have a OIDC params", () => {
-        const issuer = "https://auth.com/";
         const homeserverUrl = "https://matrix.org";
         const identityServerUrl = "https://is.org";
         const clientId = "xyz789";
@@ -464,7 +465,7 @@ describe("<MatrixChat />", () => {
         const code = "test-oidc-auth-code";
         const state = "test-oidc-state";
         const urlParams = {
-            oidc_fragment: {
+            oauth2: {
                 code,
                 state: state,
             },
@@ -475,16 +476,15 @@ describe("<MatrixChat />", () => {
 
         const tokenResponse: BearerTokenResponse = {
             access_token: accessToken,
-            refresh_token: "def456",
-            id_token: "ghi789",
+            refresh_token: undefined,
             scope: "test",
             token_type: "Bearer",
-            expires_at: 12345,
+            expires_in: 12345,
         };
 
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
 
-        const expectOIDCError = async (
+        const expectOAuthError = async (
             errorMessage = "Something went wrong during authentication. Go to the sign in page and try again.",
         ): Promise<void> => {
             await flushPromises();
@@ -494,24 +494,7 @@ describe("<MatrixChat />", () => {
         };
 
         beforeEach(() => {
-            mocked(completeAuthorizationCodeGrant)
-                .mockClear()
-                .mockResolvedValue({
-                    oidcClientSettings: {
-                        clientId,
-                        issuer,
-                    },
-                    tokenResponse,
-                    homeserverUrl,
-                    identityServerUrl,
-                    idTokenClaims: {
-                        aud: "123",
-                        iss: issuer,
-                        sub: "123",
-                        exp: 123,
-                        iat: 456,
-                    },
-                });
+            mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockResolvedValue(tokenResponse);
 
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
@@ -525,11 +508,23 @@ describe("<MatrixChat />", () => {
                 device_id: deviceId,
                 is_guest: false,
             });
+            storeAuthContext({
+                homeserverUrl,
+                identityServerUrl,
+                metadata: makeDelegatedAuthMetadata(),
+                state,
+                authContext: {
+                    clientId,
+                    codeVerifier: "123456",
+                    deviceId,
+                    redirectUri: "https://cb",
+                },
+            });
         });
 
-        it("should fail when query params do not include valid code and state", async () => {
+        it("should fail when fragment params do not include valid code and state", async () => {
             const urlParams = {
-                oidc_query: {
+                oauth2: {
                     code: "",
                     state: "abc",
                 },
@@ -539,11 +534,11 @@ describe("<MatrixChat />", () => {
             await flushPromises();
 
             expect(logger.error).toHaveBeenCalledWith(
-                "Failed to login via OIDC",
-                new Error(OidcClientError.InvalidQueryParameters),
+                "Failed to login via OAuth",
+                new Error(OAuthClientError.InvalidFragmentParameters),
             );
 
-            await expectOIDCError();
+            await expectOAuthError();
         });
 
         it("should make correct request to complete authorization", async () => {
@@ -551,7 +546,7 @@ describe("<MatrixChat />", () => {
 
             await flushPromises();
 
-            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state, "fragment");
+            expect(OAuth2.prototype.completeAuthorizationCodeGrant).toHaveBeenCalledWith(code);
         });
 
         it("should look up userId using access token", async () => {
@@ -575,10 +570,10 @@ describe("<MatrixChat />", () => {
             await flushPromises();
 
             expect(logger.error).toHaveBeenCalledWith(
-                "Failed to login via OIDC",
+                "Failed to login via OAuth",
                 new Error("Failed to retrieve userId using accessToken"),
             );
-            await expectOIDCError();
+            await expectOAuthError();
         });
 
         it("should call onTokenLoginCompleted", async () => {
@@ -590,23 +585,26 @@ describe("<MatrixChat />", () => {
 
         describe("when login fails", () => {
             beforeEach(() => {
-                mocked(completeAuthorizationCodeGrant).mockRejectedValue(new Error(OidcError.CodeExchangeFailed));
+                mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockRejectedValue(
+                    new Error(OAuth2Error.CodeExchangeFailed),
+                );
             });
 
             it("should log and return to welcome page with correct error when login state is not found", async () => {
-                mocked(completeAuthorizationCodeGrant).mockRejectedValue(
-                    new Error(OidcError.MissingOrInvalidStoredState),
+                sessionStorage.clear();
+                mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockRejectedValue(
+                    new Error(OAuth2Error.MissingOrInvalidStoredState),
                 );
                 getComponent({ urlParams });
 
                 await flushPromises();
 
                 expect(logger.error).toHaveBeenCalledWith(
-                    "Failed to login via OIDC",
-                    new Error(OidcError.MissingOrInvalidStoredState),
+                    "Failed to login via OAuth",
+                    new Error(OAuth2Error.MissingOrInvalidStoredState),
                 );
 
-                await expectOIDCError(
+                await expectOAuthError(
                     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
                 );
             });
@@ -617,12 +615,12 @@ describe("<MatrixChat />", () => {
                 await flushPromises();
 
                 expect(logger.error).toHaveBeenCalledWith(
-                    "Failed to login via OIDC",
-                    new Error(OidcError.CodeExchangeFailed),
+                    "Failed to login via OAuth",
+                    new Error(OAuth2Error.CodeExchangeFailed),
                 );
 
                 // warning dialog
-                await expectOIDCError();
+                await expectOAuthError();
             });
 
             it("should not clear storage", async () => {
@@ -640,17 +638,10 @@ describe("<MatrixChat />", () => {
                 await flushPromises();
 
                 expect(sessionStorageSetSpy).not.toHaveBeenCalledWith("mx_oidc_client_id", clientId);
-                expect(sessionStorageSetSpy).not.toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
             });
         });
 
         describe("when login succeeds", () => {
-            beforeEach(() => {
-                jest.spyOn(StorageAccess, "idbLoad").mockImplementation(
-                    async (_table: string, key: string | string[]) => (key === "mx_access_token" ? accessToken : null),
-                );
-            });
-
             afterEach(() => {
                 SettingsStore.reset();
             });
@@ -668,7 +659,6 @@ describe("<MatrixChat />", () => {
                 getComponent({ urlParams });
 
                 await waitFor(() => expect(localStorage.getItem("mx_oidc_client_id")).toEqual(clientId));
-                await waitFor(() => expect(localStorage.getItem("mx_oidc_token_issuer")).toEqual(issuer));
             });
 
             it("should set logged in and start MatrixClient", async () => {
@@ -823,7 +813,7 @@ describe("<MatrixChat />", () => {
                     await waitFor(() =>
                         expect(createDialog).toHaveBeenCalledWith(
                             UserSettingsDialog,
-                            { initialTabId: UserTab.SessionManager, sdkContext: expect.any(SdkContextClass) },
+                            { initialTabId: UserTab.SessionManager, sdkContext: expect.any(SDKContextClass) },
                             /*className=*/ undefined,
                             /*isPriority=*/ false,
                             /*isStatic=*/ true,
@@ -853,9 +843,6 @@ describe("<MatrixChat />", () => {
                     it("should dispatch after_forget_room action on successful forget", async () => {
                         await clearAllModals();
                         await getComponentAndWaitForReady();
-
-                        // Mock out the old room list store
-                        jest.spyOn(RoomListStore.instance, "manualRoomUpdate").mockImplementation(async () => {});
 
                         // Register a mock function to the dispatcher
                         const fn = jest.fn();
@@ -1120,7 +1107,7 @@ describe("<MatrixChat />", () => {
 
                 beforeEach(() => {
                     // stub out various cleanup functions
-                    jest.spyOn(LegacyCallHandler.instance, "hangupAllCalls")
+                    jest.spyOn(SDKContextClass.instance.legacyCallHandler, "hangupAllCalls")
                         .mockClear()
                         .mockImplementation(() => {});
                     jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
@@ -1145,7 +1132,7 @@ describe("<MatrixChat />", () => {
                 it("should hangup all legacy calls", async () => {
                     await getComponentAndWaitForReady();
                     await dispatchLogoutAndWait();
-                    expect(LegacyCallHandler.instance.hangupAllCalls).toHaveBeenCalled();
+                    expect(SDKContextClass.instance.legacyCallHandler.hangupAllCalls).toHaveBeenCalled();
                 });
 
                 it("should disconnect all calls", async () => {
@@ -1370,7 +1357,7 @@ describe("<MatrixChat />", () => {
             // but as the exception was swallowed, the test was passing (see in `initClientCrypto`).
             // There are several uses of the peg in the app, so during all these tests you might end-up
             // with a real client instead of the mocked one. Not sure how reliable all these tests are.
-            jest.spyOn(MatrixClientPeg, "replaceUsingCreds");
+            jest.spyOn(MatrixClientPeg, "set");
             jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
 
             const result = getComponent();

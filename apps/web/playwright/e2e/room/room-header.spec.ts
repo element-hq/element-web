@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Page } from "@playwright/test";
 import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-playwright-common";
 
 import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
@@ -15,11 +16,15 @@ import { type ElementAppPage } from "../../pages/ElementAppPage";
 test.describe("Room Header", () => {
     test.use({
         displayName: "Sakura",
-        config: {
-            features: {
-                feature_new_room_list: false,
-            },
-        },
+    });
+
+    test.beforeEach(async ({ page, app, user }) => {
+        // The toasts are displayed above the search section
+        await rejectToast(page, "Verify this device");
+        await rejectToast(page, "Notifications");
+
+        // Close the release announcement about the new room list sections
+        await closeReleaseAnnouncement(page, "Introducing Sections");
     });
 
     test.describe("with feature_notifications enabled", () => {
@@ -28,7 +33,7 @@ test.describe("Room Header", () => {
         });
         test("should render default buttons properly", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room" });
-            await app.viewRoomByNameOnOldRoomList("Test Room");
+            await app.viewRoomByName("Test Room");
 
             const header = page.locator(".mx_RoomHeader");
 
@@ -66,7 +71,7 @@ test.describe("Room Header", () => {
                     "officia deserunt mollit anim id est laborum.";
 
                 await app.client.createRoom({ name: LONG_ROOM_NAME });
-                await app.viewRoomByNameOnOldRoomList(LONG_ROOM_NAME);
+                await app.viewRoomByName(LONG_ROOM_NAME);
 
                 const header = page.locator(".mx_RoomHeader");
                 // Wait until the room name is set
@@ -91,7 +96,7 @@ test.describe("Room Header", () => {
 
         test("should render room header icon correctly", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room", visibility: "public" as Visibility });
-            await app.viewRoomByNameOnOldRoomList("Test Room");
+            await app.viewRoomByName("Test Room");
 
             const header = page.locator(".mx_RoomHeader");
 
@@ -103,15 +108,15 @@ test.describe("Room Header", () => {
         test.use({ labsFlags: ["feature_video_rooms"] });
 
         const createVideoRoom = async (page: Page, app: ElementAppPage) => {
-            await page.locator(".mx_LeftPanel_roomListContainer").getByRole("button", { name: "Add room" }).click();
-
+            const roomListHeader = page.getByTestId("room-list-header");
+            await roomListHeader.getByRole("button", { name: "New conversation" }).click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
 
             await page.getByRole("textbox", { name: "Name" }).type("Test video room");
 
             await page.getByRole("button", { name: "Create video room" }).click();
 
-            await app.viewRoomByNameOnOldRoomList("Test video room");
+            await app.viewRoomByName("Test video room");
         };
 
         test.describe("and with feature_notifications enabled", () => {
@@ -122,11 +127,6 @@ test.describe("Room Header", () => {
                 { tag: "@screenshot" },
                 async ({ page, app, user }) => {
                     await createVideoRoom(page, app);
-
-                    // Dismiss a toast that is otherwise in the way (it's the other
-                    // side but there's no need to have it in the screenshot)
-                    await page.getByRole("button", { name: "Later" }).click();
-
                     const header = page.locator(".mx_RoomHeader");
 
                     // There's two room info button - the header itself and the i button

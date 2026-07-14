@@ -131,6 +131,7 @@ export function buildTitleBarCss(): string {
                 /* Aligned with the room header (#32018) */
                 height: 32px;
                 border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+                -webkit-app-region: drag;
             }
 
             .mx_RoomView::before,

@@ -16,6 +16,7 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import WidgetStore from "./WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
+import SdkConfig from "../SdkConfig";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
 
 export enum CallStoreEvent {
@@ -71,10 +72,13 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         }
         // See https://github.com/matrix-org/matrix-spec-proposals/blob/d61969a9a3696b6c54d7987b1643b5bc03670927/proposals/4143-matrix-rtc.md#discovery-of-foci-using-well-knownmatrixclient
         // This well-known option has since been removed from the spec but is still widely deployed.
-        await this.matrixClient.waitForClientWellKnown();
-        const foci = this.matrixClient.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
-        if (Array.isArray(foci)) {
-            foci.forEach((foci) => this.configuredMatrixRTCTransports.add(foci));
+        // Reading it can be disabled via config; the modern endpoint above is unaffected.
+        if (SdkConfig.get("enable_client_well_known_lookups")) {
+            await this.matrixClient.waitForClientWellKnown();
+            const foci = this.matrixClient.getClientWellKnown()?.["org.matrix.msc4143.rtc_foci"];
+            if (Array.isArray(foci)) {
+                foci.forEach((foci) => this.configuredMatrixRTCTransports.add(foci));
+            }
         }
         this.emit(CallStoreEvent.TransportsUpdated);
     }
@@ -208,6 +212,14 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     public getActiveCall(roomId: string): Call | null {
         const call = this.getCall(roomId);
         return call !== null && this.connectedCalls.has(call) ? call : null;
+    }
+
+    /**
+     * Get all the ongoing calls
+     * @returns Map from room-id to the ongoing call in that room
+     */
+    public getAllCalls(): Map<string, Call> {
+        return this.calls;
     }
 
     private onWidgets = (roomId: string | null): void => {

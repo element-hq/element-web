@@ -91,12 +91,6 @@ export const NoSpaceMenu: Story = {
     },
 };
 
-export const NoComposeMenu: Story = {
-    args: {
-        displayComposeMenu: false,
-    },
-};
-
 export const LongTitle: Story = {
     decorators: [
         (Story) => (
@@ -107,12 +101,6 @@ export const LongTitle: Story = {
     ],
     args: {
         title: "Loooooooooooooooooooooooooooooooooooooong title",
-    },
-};
-
-export const PlusIcon: Story = {
-    args: {
-        useComposeIcon: false,
     },
 };
 
@@ -152,5 +140,19 @@ export const DisplaySectionReleaseAnnouncement: Story = {
                 ],
             },
         },
+    },
+};
+
+export const SectionsDisabled: Story = {
+    args: {
+        areSectionsEnabled: false,
+    },
+};
+
+export const NoComposeMenu: Story = {
+    args: {
+        canCreateRoom: false,
+        canCreateVideoRoom: false,
+        areSectionsEnabled: false,
     },
 };

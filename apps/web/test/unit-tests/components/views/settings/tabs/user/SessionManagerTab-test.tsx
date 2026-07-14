@@ -34,7 +34,6 @@ import {
     type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
-import fetchMock from "@fetch-mock/jest";
 
 import {
     clearAllModals,
@@ -56,9 +55,9 @@ import {
 import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../../src/components/views/settings/devices/filter";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
-import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
-import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
-import { makeDelegatedAuthConfig } from "../../../../../../test-utils/oidc";
+import { SDKContext } from "../../../../../../../src/contexts/SDKContext";
+import { TestSDKContext } from "../../../../../TestSDKContext.ts";
+import { makeDelegatedAuthMetadata } from "../../../../../../test-utils/auth";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
 mockPlatformPeg();
@@ -133,7 +132,7 @@ describe("<SessionManagerTab />", () => {
     } as unknown as CryptoApi);
 
     let mockClient!: MockedObject<MatrixClient>;
-    let sdkContext: SdkContextClass;
+    let sdkContext: TestSDKContext;
 
     const defaultProps = {};
     const getComponent = (props = {}): React.ReactElement => (
@@ -249,8 +248,8 @@ describe("<SessionManagerTab />", () => {
             }
         });
 
-        sdkContext = new SdkContextClass();
-        sdkContext.client = mockClient;
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
 
         // @ts-ignore allow delete of non-optional prop
         delete window.location;
@@ -1179,10 +1178,10 @@ describe("<SessionManagerTab />", () => {
         describe("for an OIDC-aware server", () => {
             beforeEach(() => {
                 // just do an ugly mock here to avoid mocking initialisation
-                const mockOidcClientStore = {
-                    accountManagementEndpoint: "https://issuer.org/account",
-                } as unknown as OidcClientStore;
-                jest.spyOn(sdkContext, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+                mockClient.getAuthMetadata.mockResolvedValue({
+                    ...makeDelegatedAuthMetadata(),
+                    account_management_uri: "https://issuer.org/account",
+                } as any);
             });
 
             // signing out the current device works as usual
@@ -1636,7 +1635,7 @@ describe("<SessionManagerTab />", () => {
                     enabled: true,
                 },
             });
-            const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
+            const delegatedAuthConfig = makeDelegatedAuthMetadata(issuer);
             mockClient.getAuthMetadata.mockResolvedValue({
                 ...delegatedAuthConfig,
                 grant_types_supported: [
@@ -1645,13 +1644,6 @@ describe("<SessionManagerTab />", () => {
                 ],
             });
             mockCrypto.exportSecretsBundle = jest.fn();
-            fetchMock.route(delegatedAuthConfig.jwks_uri!, {
-                status: 200,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                keys: [],
-            });
         });
 
         it("renders qr code login section", async () => {

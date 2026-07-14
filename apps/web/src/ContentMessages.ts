@@ -77,7 +77,7 @@ interface IMediaConfig {
  * Load a file into a newly created image element.
  *
  * @param {File} imageFile The file to load in an image element.
- * @return {Promise} A promise that resolves with the html image element.
+ * @returns {Promise} A promise that resolves with the html image element.
  */
 async function loadImageElement(imageFile: File): Promise<{
     width: number;
@@ -148,7 +148,7 @@ const ALWAYS_INCLUDE_THUMBNAIL = ["image/avif", "image/webp", "image/svg+xml"];
  * @param {MatrixClient} matrixClient A matrixClient to upload the thumbnail with.
  * @param {String} roomId The ID of the room the image will be uploaded in.
  * @param {File} imageFile The image to read and thumbnail.
- * @return {Promise} A promise that resolves with the attachment info.
+ * @returns {Promise} A promise that resolves with the attachment info.
  */
 async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imageFile: File): Promise<ImageInfo> {
     let thumbnailType = "image/png";
@@ -196,7 +196,7 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
  * Load a file into a newly created audio element and load the metadata
  *
  * @param {File} audioFile The file to load in an audio element.
- * @return {Promise} A promise that resolves with the audio element.
+ * @returns {Promise} A promise that resolves with the audio element.
  */
 function loadAudioElement(audioFile: File): Promise<HTMLAudioElement> {
     return new Promise((resolve, reject) => {
@@ -228,7 +228,7 @@ function loadAudioElement(audioFile: File): Promise<HTMLAudioElement> {
  * Read the metadata for an audio file.
  *
  * @param {File} audioFile The audio to read.
- * @return {Promise} A promise that resolves with the attachment info.
+ * @returns {Promise} A promise that resolves with the attachment info.
  */
 async function infoForAudioFile(audioFile: File): Promise<AudioInfo> {
     const audio = await loadAudioElement(audioFile);
@@ -240,7 +240,7 @@ async function infoForAudioFile(audioFile: File): Promise<AudioInfo> {
  * in an attempt to guarantee the first frame will be showing.
  *
  * @param {File} videoFile The file to load in a video element.
- * @return {Promise} A promise that resolves with the video element.
+ * @returns {Promise} A promise that resolves with the video element.
  */
 function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
     return new Promise((resolve, reject) => {
@@ -286,7 +286,7 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
  * @param {MatrixClient} matrixClient A matrixClient to upload the thumbnail with.
  * @param {String} roomId The ID of the room the video will be uploaded to.
  * @param {File} videoFile The video to read and thumbnail.
- * @return {Promise} A promise that resolves with the attachment info.
+ * @returns {Promise} A promise that resolves with the attachment info.
  */
 function infoForVideoFile(matrixClient: MatrixClient, roomId: string, videoFile: File): Promise<VideoInfo> {
     const thumbnailType = "image/jpeg";
@@ -311,7 +311,7 @@ function infoForVideoFile(matrixClient: MatrixClient, roomId: string, videoFile:
 /**
  * Read the file as an ArrayBuffer.
  * @param {File} file The file to read
- * @return {Promise} A promise that resolves with an ArrayBuffer when the file
+ * @returns {Promise} A promise that resolves with an ArrayBuffer when the file
  *   is read.
  */
 function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
@@ -337,7 +337,7 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  * @param {Function?} progressHandler optional callback to be called when a chunk of
  *    data is uploaded.
  * @param {AbortController?} controller optional abortController to use for this upload.
- * @return {Promise} A promise that resolves with an object.
+ * @returns {Promise} A promise that resolves with an object.
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */

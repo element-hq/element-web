@@ -252,7 +252,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
-                "oidc-client-ts": getPackageRoot("oidc-client-ts"),
 
                 // Make shared-components imports resolve to EW deps
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
@@ -826,7 +825,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
  *
  * @param url The adjusted name of the file, such as `warning.1234567.svg`.
  * @param resourcePath The absolute path to the source file with unmodified name.
- * @return The returned paths will look like `img/warning.1234567.svg`.
+ * @returns The returned paths will look like `img/warning.1234567.svg`.
  */
 function getAssetOutputPath(url: string, resourcePath: string): string {
     const isKaTeX = resourcePath.includes("KaTeX");

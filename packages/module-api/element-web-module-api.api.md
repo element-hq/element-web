@@ -125,8 +125,10 @@ export type ComposerApiTarget = {
     view: "thread";
 };
 
+// Warning: (ae-forgotten-export) The symbol "WebConfigJson" needs to be exported by the entry point index.d.ts
+//
 // @public
-export interface Config {
+export interface Config extends WebConfigJson {
     // (undocumented)
     brand: string;
 }
@@ -146,10 +148,25 @@ export type Container = "top" | "right" | "center";
 
 // @alpha
 export interface CustomComponentsApi {
+    registerComposerPreview(filterFn: (composerText: string, roomId: string) => boolean, renderer: CustomComposerPreviewRenderFunction): void;
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
     registerMessageRenderer(eventTypeOrFilter: string | ((mxEvent: MatrixEvent) => boolean), renderer: CustomMessageRenderFunction, hints?: CustomMessageRenderHints): void;
     registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void;
 }
+
+// @alpha
+export type CustomComposerPreviewComponentProps = {
+    text: string;
+    roomId: string;
+    target?: ComposerApiTarget;
+    relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    };
+};
+
+// @alpha
+export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<CustomComposerPreviewComponentProps>;
 
 // @alpha
 export interface CustomisationsApi {

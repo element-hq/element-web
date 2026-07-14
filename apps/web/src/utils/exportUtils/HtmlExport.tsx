@@ -30,7 +30,8 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext.ts";
+import { SDKContext } from "../../contexts/SDKContext.ts";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 import exportJS from "./exportJS.js?raw";
 
@@ -261,6 +262,7 @@ export default class HTMLExporter extends Exporter {
             roomId: event.getRoomId()!,
             ts,
             forExport: true,
+            roomViewStore: SDKContextClass.instance.roomViewStore,
         });
         try {
             const dateSeparator = (
@@ -285,7 +287,7 @@ export default class HTMLExporter extends Exporter {
                 {/* Export rendering uses an isolated root, so provide I18nContext explicitly. */}
                 <I18nContext.Provider value={window.mxModuleApi.i18n}>
                     <MatrixClientContext.Provider value={this.room.client}>
-                        <SDKContext.Provider value={SdkContextClass.instance}>
+                        <SDKContext.Provider value={SDKContextClass.instance}>
                             <TooltipProvider>
                                 <EventTile
                                     mxEvent={mxEv}

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type SdkContextClass } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import SettingsStore from "../settings/SettingsStore";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Timer from "../utils/Timer";
@@ -26,7 +26,7 @@ export default class TypingStore {
         };
     } = {};
 
-    public constructor(private readonly context: SdkContextClass) {
+    public constructor(private readonly context: SDKContextClass) {
         this.reset();
     }
 

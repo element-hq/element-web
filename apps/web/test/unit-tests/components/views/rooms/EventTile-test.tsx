@@ -51,6 +51,8 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -1652,7 +1654,11 @@ describe("EventTile", () => {
             return Element.prototype.matches.call(this, selector);
         });
 
-        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />);
+        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const editingTile = container.querySelector(".mx_EventTile_isEditing");
 
         expect(editingTile).not.toBeNull();

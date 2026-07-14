@@ -11,8 +11,6 @@
             "one": "1 unread mention.",
             "other": "%(count)s unread messages including mentions."
         },
-        "recent_rooms": "Recent rooms",
-        "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
         "seek_bar_label": "Audio seek bar",
         "unread_messages": "Unread messages."
@@ -22,7 +20,6 @@
         "accept": "Accept",
         "add": "Add",
         "add_existing_room": "Add existing room",
-        "add_people": "Add people",
         "apply": "Apply",
         "approve": "Approve",
         "ask_to_join": "Ask to join",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Enter fullscreen",
         "exit_fullscreeen": "Exit fullscreen",
         "expand": "Expand",
-        "explore_public_rooms": "Explore public rooms",
         "explore_rooms": "Explore rooms",
         "export": "Export",
         "forward": "Forward",
@@ -69,8 +65,6 @@
         "ignore": "Ignore",
         "import": "Import",
         "invite": "Invite",
-        "invite_to_space": "Invite to space",
-        "invites_list": "Invites",
         "join": "Join",
         "learn_more": "Learn more",
         "leave": "Leave",
@@ -116,8 +110,6 @@
         "sign_out": "Remove this device",
         "skip": "Skip",
         "start": "Start",
-        "start_chat": "Start chat",
-        "start_new_chat": "Start new chat",
         "stop": "Stop",
         "submit": "Submit",
         "subscribe": "Subscribe",
@@ -488,7 +480,6 @@
         "encrypted": "Encrypted",
         "error": "Error",
         "faq": "FAQ",
-        "favourites": "Favourites",
         "feedback": "Feedback",
         "filter_results": "Filter results",
         "forward_message": "Forward message",
@@ -496,7 +487,6 @@
         "go_to_settings": "Go to Settings",
         "guest": "Guest",
         "help": "Help",
-        "historical": "Historical",
         "home": "Home",
         "homeserver": "Homeserver",
         "identity_server": "Identity server",
@@ -504,11 +494,11 @@
         "integration_manager": "Integration manager",
         "joined": "Joined",
         "labs": "Labs",
+        "legacy_voice_and_video_settings": "Matrix 1:1 Calls (Legacy)",
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
         "location": "Location",
-        "low_priority": "Low priority",
         "matrix": "Matrix",
         "message": "Message",
         "message_layout": "Message layout",
@@ -574,7 +564,6 @@
         "success": "Success",
         "suggestions": "Suggestions",
         "support": "Support",
-        "system_alerts": "System Alerts",
         "theme": "Theme",
         "thread": "Thread",
         "threads": "Threads",
@@ -591,7 +580,6 @@
         "username": "Username",
         "verified": "Verified",
         "version": "Version",
-        "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
         "warning": "Warning"
@@ -904,6 +892,8 @@
         "user_avatar": "Avatar: %(avatar)s",
         "user_displayname": "Displayname: %(displayname)s",
         "user_id": "User ID: %(userId)s",
+        "user_identity": "Cryptographic identity",
+        "user_identity_unknown": "Unknown",
         "user_no_avatar": "Avatar: <i>None</i>",
         "user_no_displayname": "Displayname: <i>None</i>",
         "user_read_up_to": "User read up to: ",
@@ -1545,7 +1535,6 @@
             "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
-        "group_calls": "New group call experience",
         "group_developer": "Developer",
         "group_encryption": "Encryption",
         "group_experimental": "Experimental",
@@ -1560,7 +1549,6 @@
         "group_voip": "Voice & Video",
         "group_widgets": "Widgets",
         "hidebold": "Hide notification dot (only display counters badges)",
-        "html_topic": "Show HTML representation of room topics",
         "join_beta": "Join the beta",
         "join_beta_reload": "Joining the beta will reload %(brand)s.",
         "jump_to_date": "Jump to date (adds /jumptodate and jump to date headers)",
@@ -1573,20 +1561,19 @@
         "login_with_qr": "Log in with QR code",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
-        "new_room_list": "Enable new room list",
         "notification_settings": "New Notification Settings",
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
-        "room_list_sections": "Room list sections",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Sign in again to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
-        "under_active_development": "Under active development.",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
+        "url_preview_bundle": "URL Preview Bundle (MSC4095)",
+        "url_preview_bundle_description": "Send URL previews in message alongside message content",
         "video_rooms": "Video rooms",
         "video_rooms_a_new_way_to_chat": "A new way to chat over voice and video in %(brand)s.",
         "video_rooms_always_on_voip_channels": "Video rooms are always-on VoIP channels embedded within a room in %(brand)s.",
@@ -1640,9 +1627,6 @@
         "room_leave_mod_warning": "You're the only moderator in this room. If you leave, nobody will be able to change room settings or take other important actions.",
         "room_rejoin_warning": "This room is not public. You will not be able to rejoin without an invite.",
         "space_rejoin_warning": "This space is not public. You will not be able to rejoin without an invite."
-    },
-    "left_panel": {
-        "open_dial_pad": "Open dial pad"
     },
     "lightbox": {
         "rotate_left": "Rotate Left",
@@ -1840,7 +1824,6 @@
     },
     "quick_settings": {
         "all_settings": "All settings",
-        "metaspace_section": "Pin to sidebar",
         "sidebar_settings": "More options",
         "title": "Quick settings"
     },
@@ -2143,46 +2126,21 @@
         "waiting_for_join_title": "Waiting for users to join %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Add room",
         "add_space_label": "Add space",
-        "breadcrumbs_empty": "No recently visited rooms",
-        "breadcrumbs_label": "Recently visited rooms",
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
-        "home_menu_label": "Home options",
-        "join_public_room_label": "Join public room",
-        "joining_rooms_status": {
-            "one": "Currently joining %(count)s room",
-            "other": "Currently joining %(count)s rooms"
-        },
         "list_title": "Room list",
         "more_options": {
             "leave_room": "Leave room"
         },
         "notification_options": "Notification options",
-        "redacting_messages_status": {
-            "one": "Currently removing messages in %(count)s room",
-            "other": "Currently removing messages in %(count)s rooms"
-        },
         "section": {
             "chats": "Chats",
             "favourites": "Favourites",
             "low_priority": "Low Priority"
         },
-        "show_less": "Show less",
-        "show_n_more": {
-            "one": "Show %(count)s more",
-            "other": "Show %(count)s more"
-        },
-        "show_previews": "Show previews of messages",
-        "sort_by": "Sort by",
-        "sort_by_activity": "Activity",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Show rooms with unread messages first",
-        "space_menu_label": "%(spaceName)s menu",
-        "sublist_options": "List options",
-        "suggested_rooms_heading": "Suggested Rooms"
+        "show_less": "Show less"
     },
     "room_settings": {
         "access": {
@@ -3001,18 +2959,17 @@
         "show_nsfw_content": "Show NSFW content",
         "show_read_receipts": "Show read receipts sent by other users",
         "show_redaction_placeholder": "Show a placeholder for removed messages",
+        "show_sections": "Show sections",
         "show_stickers_button": "Show stickers button",
         "show_typing_notifications": "Show typing notifications",
         "showbold": "Show all activity in the room list (dots or number of unread messages)",
         "sidebar": {
             "dialog_title": "<strong>Settings:</strong> Sidebar",
-            "metaspaces_favourites_description": "Group all your favourite rooms and people in one place.",
             "metaspaces_home_all_rooms": "Show all rooms",
             "metaspaces_home_all_rooms_description": "Show all your rooms in Home, even if they're in a space.",
             "metaspaces_home_description": "Home is useful for getting an overview of everything.",
             "metaspaces_orphans": "Rooms outside of a space",
             "metaspaces_orphans_description": "Group all your rooms that aren't part of a space in one place.",
-            "metaspaces_people_description": "Group all your people in one place.",
             "metaspaces_subsection": "Spaces to show",
             "metaspaces_video_rooms": "Video rooms and conferences",
             "metaspaces_video_rooms_description": "Group all private video rooms and conferences.",
@@ -3039,21 +2996,25 @@
             "audio_output": "Audio Output",
             "audio_output_empty": "No Audio Outputs detected",
             "auto_gain_control": "Automatic gain control",
-            "connection_section": "Connection",
             "dialog_title": "<strong>Settings:</strong> Voice & Video",
             "echo_cancellation": "Echo cancellation",
             "echo_cancellation_description": "Removes echo from your microphone input during calls. This setting also applies to Element Call.",
             "enable_fallback_ice_server": "Allow fallback call assist server (%(server)s)",
             "enable_fallback_ice_server_description": "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
+            "enable_legacy_calls": "Enable Legacy voice/video calls",
+            "enable_legacy_calls_description": "Applies to Jitsi and 1:1 WebRTC calls",
             "mirror_local_feed": "Mirror local video feed",
-            "missing_permissions_prompt": "Missing media permissions, click the button below to request.",
+            "missing_permissions_prompt": "To participate in calls, give %(brand)s permission to access your audio and video device.",
             "noise_suppression": "Noise suppression",
             "noise_suppression_description": "Reduces background noise in your microphone input during calls. This setting also applies to Element Call.",
-            "request_permissions": "Request media permissions",
+            "permissions": "Allow microphone and camera access",
+            "request_permissions": "Request",
             "title": "Voice & Video",
             "video_input_empty": "No Webcams detected",
             "video_section": "Video settings",
             "voice_agc": "Automatically adjust the microphone volume",
+            "voice_input_description": "The audio input configured here is used for voice messages and calls (Legacy/1:1).",
+            "voice_input_section": "Audio Input",
             "voice_processing": "Voice processing",
             "voice_section": "Voice settings"
         },
@@ -3231,12 +3192,6 @@
     },
     "space_settings": {
         "title": "Settings - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "You do not have permissions to add rooms to this space",
-        "error_no_permission_add_space": "You do not have permissions to add spaces to this space",
-        "error_no_permission_create_room": "You do not have permissions to create new rooms in this space",
-        "error_no_permission_invite": "You do not have permissions to invite people to this space"
     },
     "spotlight": {
         "public_rooms": {
