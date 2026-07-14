@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
-    padding-left: 30px;
+    padding-left: 42px;
     padding-right: 16px;
 }
 
@@ -65,8 +65,9 @@ Please see LICENSE files in the repository root for full details.
 .mx_MessageComposer_e2eIconWrapper {
     height: 12px; /* Match the height of the E2E icon for alignment */
     width: 12px;
-    position: relative;
-    left: -8px;
+    position: absolute;
+    left: 20px;
+    top: 22px;
     margin-right: 0; /* Counteract the E2EIcon class */
     margin-left: 3px; /* Counteract the E2EIcon class */
 
@@ -250,7 +251,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_MessageComposer_e2eIconWrapper {
-        left: -8px;
+        left: 0;
     }
 
     &:not(.mx_MessageComposer_e2eStatus) {
