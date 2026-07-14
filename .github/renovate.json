@@ -12,11 +12,10 @@
             "matchPackageNames": ["*"]
         },
         {
-            "description": "Group all devengines updates",
-            "groupName": "devengines",
-            "groupSlug": "devengines",
-            "matchDepTypes": ["devengines"],
-            "matchPackageNames": ["*"]
+            "description": "Group all pnpm updates",
+            "groupName": "pnpm",
+            "groupSlug": "pnpm",
+            "matchPackageNames": ["pnpm", "ghcr.io/pnpm/pnpm"]
         },
         {
             "description": "Separate updates to overrides from other groups",
