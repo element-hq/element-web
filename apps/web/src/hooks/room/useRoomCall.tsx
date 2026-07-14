@@ -215,10 +215,10 @@ export const useRoomCall = (
         widget = groupCall?.widget ?? jitsiWidget;
     }
     const updateWidgetState = useCallback((): void => {
-        setCanPinWidget(WidgetLayoutStore.instance.canAddToContainer(room, "top"));
-        setWidgetPinned(!!widget && WidgetLayoutStore.instance.isInContainer(room, widget, "top"));
-    }, [room, widget]);
-    useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateWidgetState);
+        setCanPinWidget(sdkContext.widgetLayoutStore.canAddToContainer(room, "top"));
+        setWidgetPinned(!!widget && sdkContext.widgetLayoutStore.isInContainer(room, widget, "top"));
+    }, [room, widget, sdkContext.widgetLayoutStore]);
+    useEventEmitter(sdkContext.widgetLayoutStore, WidgetLayoutStore.emissionForRoom(room), updateWidgetState);
     useEffect(() => {
         updateWidgetState();
     }, [room, jitsiWidget, groupCall, updateWidgetState]);
@@ -267,25 +267,39 @@ export const useRoomCall = (
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+                sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             } else {
-                placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined, true);
+                placeCall(
+                    sdkContext.legacyCallHandler,
+                    room,
+                    CallType.Voice,
+                    callPlatformType,
+                    evt?.shiftKey || undefined,
+                    true,
+                );
             }
         },
-        [promptPinWidget, room, widget],
+        [promptPinWidget, room, widget, sdkContext.widgetLayoutStore, sdkContext.legacyCallHandler],
     );
     const videoCallClick = useCallback(
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
+                sdkContext.widgetLayoutStore.moveToContainer(room, widget, "top");
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.
-                placeCall(room, CallType.Video, callPlatformType, evt?.shiftKey || undefined, false);
+                placeCall(
+                    sdkContext.legacyCallHandler,
+                    room,
+                    CallType.Video,
+                    callPlatformType,
+                    evt?.shiftKey || undefined,
+                    false,
+                );
             }
         },
-        [widget, promptPinWidget, room],
+        [widget, promptPinWidget, room, sdkContext.widgetLayoutStore, sdkContext.legacyCallHandler],
     );
 
     let voiceCallDisabledReason: string | null;

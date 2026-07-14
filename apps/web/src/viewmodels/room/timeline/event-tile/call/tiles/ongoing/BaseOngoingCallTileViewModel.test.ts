@@ -18,6 +18,7 @@ import { getMockedMember, getMockedRtcNotificationEvent, MockedCall, MockedCallS
 import type { EventTimeline, RoomState } from "matrix-js-sdk/src/matrix";
 import { placeCall } from "../../../../../../../utils/room/placeCall";
 import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
+import { SDKContextClass } from "../../../../../../../contexts/SDKContextClass.ts";
 
 /**
  * There's a nasty circular dependency in useRoomCall so that we end up with:
@@ -40,6 +41,8 @@ vi.mock(import("../../../../../../../utils/room/placeCall"), () => {
 const roomId = "!my-room:m.org";
 
 describe("BaseOngoingCallViewModel", () => {
+    const legacyCallHandler = SDKContextClass.instance.legacyCallHandler;
+
     describe("should compute the correct snapshot", () => {
         it("startedByDisplayName", () => {
             const cli = stubClient();
@@ -50,7 +53,7 @@ describe("BaseOngoingCallViewModel", () => {
             const call = MockedCall.create();
             const callStore = MockedCallStore.create(call);
 
-            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm.getSnapshot().startedByDisplayName).toStrictEqual("Alice");
         });
 
@@ -65,7 +68,7 @@ describe("BaseOngoingCallViewModel", () => {
             const callStore = MockedCallStore.create(call);
 
             // Alice hasn't joined the call yet
-            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm.getSnapshot().isJoined).toStrictEqual(false);
 
             // Alice has joined call
@@ -85,11 +88,11 @@ describe("BaseOngoingCallViewModel", () => {
             const call = MockedCall.create();
             const callStore = MockedCallStore.create(call);
 
-            const vm1 = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+            const vm1 = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm1.getSnapshot().callDirection).toStrictEqual(CallDirection.Incoming);
 
             vi.spyOn(cli, "getUserId").mockReturnValue("@alice:m.org");
-            const vm2 = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+            const vm2 = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm2.getSnapshot().callDirection).toStrictEqual(CallDirection.Outgoing);
         });
 
@@ -103,7 +106,7 @@ describe("BaseOngoingCallViewModel", () => {
             const callStore = MockedCallStore.create(call);
 
             // Call has no other participants other than alice
-            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm.getSnapshot().callHasOtherParticipants).toStrictEqual(false);
 
             // Let's say others join
@@ -135,7 +138,7 @@ describe("BaseOngoingCallViewModel", () => {
             const call = MockedCall.create();
             const callStore = MockedCallStore.create(call);
 
-            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+            const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
             expect(vm.getSnapshot().isJoinable).toStrictEqual(true);
         });
     });
@@ -148,10 +151,10 @@ describe("BaseOngoingCallViewModel", () => {
 
         const call = MockedCall.create().withParticipants([mxEvent.sender]);
         const callStore = MockedCallStore.create(call);
-        const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId });
+        const vm = new BaseOngoingCallViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
 
         vm.join();
-        const [room, callType, platformCallType] = vi.mocked(placeCall).mock.calls[0];
+        const [_, room, callType, platformCallType] = vi.mocked(placeCall).mock.calls[0];
         expect(room.roomId).toStrictEqual(roomId);
         expect(callType).toStrictEqual(CallType.Video);
         expect(platformCallType).toStrictEqual(PlatformCallType.ElementCall);

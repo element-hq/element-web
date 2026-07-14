@@ -10,9 +10,10 @@ import { type Mocked } from "jest-mock";
 import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { renderHook, waitFor } from "jest-matrix-react";
 
-import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
+import { clientAndSDKContextRenderOptions, createTestClient } from "../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { useUserInfoVerificationViewModel } from "../../../../../../src/components/viewmodels/right_panel/user_info/UserInfoHeaderVerificationViewModel";
+import { TestSDKContext } from "../../../../TestSDKContext.ts";
 
 describe("useUserInfoVerificationHeaderViewModel", () => {
     const defaultRoomId = "!fkfk";
@@ -26,6 +27,7 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
     };
     let mockClient: MatrixClient;
     let mockCrypto: Mocked<CryptoApi>;
+    let sdkContext: TestSDKContext;
 
     beforeEach(() => {
         mockCrypto = {
@@ -43,6 +45,9 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
         } as unknown as Mocked<CryptoApi>;
 
         mockClient = createTestClient();
+        sdkContext = new TestSDKContext();
+        sdkContext._client = mockClient;
+
         jest.spyOn(mockClient, "doesServerSupportUnstableFeature").mockResolvedValue(true);
         jest.spyOn(mockClient.secretStorage, "hasKey").mockResolvedValue(true);
         jest.spyOn(mockClient, "getCrypto").mockReturnValue(mockCrypto);
@@ -57,7 +62,7 @@ describe("useUserInfoVerificationHeaderViewModel", () => {
     const renderUserInfoHeaderVerificationHook = (props = defaultProps) => {
         return renderHook(
             () => useUserInfoVerificationViewModel(props.member, props.devices),
-            withClientContextRenderOptions(mockClient),
+            clientAndSDKContextRenderOptions(mockClient, sdkContext),
         );
     };
 

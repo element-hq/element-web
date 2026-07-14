@@ -10,13 +10,16 @@
 import { it, describe, expect } from "vitest";
 import { CallType } from "@element-hq/web-shared-components";
 
-import { stubClient } from "../../../../../../../../test/test-utils";
+import { stubClient, TestSDKContext } from "../../../../../../../../test/test-utils";
 import { getMockedMember, getMockedRtcNotificationEvent, MockedCall, MockedCallStore } from "../../call-mocks";
 import { DmOngoingCallTileViewModel } from "./DmOngoingCallTileViewModel";
 
 const roomId = "!my-room:m.org";
 
 describe("DmOngoingCallTileViewModel", () => {
+    const sdkContext = new TestSDKContext();
+    const legacyCallHandler = sdkContext.legacyCallHandler;
+
     describe("should compute the correct snapshot", () => {
         describe("callType", () => {
             it("voice", () => {
@@ -27,7 +30,7 @@ describe("DmOngoingCallTileViewModel", () => {
 
                 const call = MockedCall.create().withParticipants([mxEvent.sender]);
                 const callStore = MockedCallStore.create(call);
-                const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId });
+                const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
 
                 expect(vm.getSnapshot().callType).toStrictEqual(CallType.Voice);
             });
@@ -40,7 +43,7 @@ describe("DmOngoingCallTileViewModel", () => {
 
                 const call = MockedCall.create().withParticipants([mxEvent.sender]);
                 const callStore = MockedCallStore.create(call);
-                const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId });
+                const vm = new DmOngoingCallTileViewModel({ mxEvent, cli, callStore, roomId, legacyCallHandler });
 
                 expect(vm.getSnapshot().callType).toStrictEqual(CallType.Video);
             });
