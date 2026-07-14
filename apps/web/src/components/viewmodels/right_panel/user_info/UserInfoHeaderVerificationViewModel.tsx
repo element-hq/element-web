@@ -26,7 +26,7 @@ export interface UserInfoVerificationSectionState {
     /**
      * callback function when verifyUser button is clicked
      */
-    verifySelectedUser: () => Promise<void>;
+    verifySelectedUser: () => void;
 }
 
 const useHasCrossSigningKeys = (cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined => {
@@ -58,8 +58,7 @@ export const useUserInfoVerificationViewModel = (
     const canVerify = hasUserVerificationStatus && !isUserVerified && !isMe && devices && devices.length > 0;
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(sdkContext.client!, member as User, canVerify);
-    const verifySelectedUser = (): Promise<void> =>
-        verifyUser(sdkContext.rightPanelStore, sdkContext.client!, member as User);
+    const verifySelectedUser = (): void => verifyUser(sdkContext.rightPanelStore, sdkContext.client!, member as User);
 
     return {
         canVerify,
