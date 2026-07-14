@@ -1,0 +1,13 @@
+diff --git a/package.json b/package.json
+index 38e67612b92677a11658b48fe640acf1e4a8c6ef..f4caf4da2c3d9228a3d76a9a1f492f2227f856d7 100644
+--- a/package.json
++++ b/package.json
+@@ -13,7 +13,7 @@
+         }
+     },
+     "scripts": {
+-        "prepare": "pnpm build",
++        "//prepare": "pnpm build",
+         "start": "concurrently 'pnpm run build:compile --watch' 'pnpm run build:types --watch'",
+         "build": "pnpm build:compile && pnpm build:types",
+         "build:types": "tsc -p tsconfig-build.json --emitDeclarationOnly",

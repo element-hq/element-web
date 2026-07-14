@@ -58,7 +58,6 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
-    matrix-js-sdk: false
     # Installs the CLI, which we do not need
     "@sentry/cli": false
     # Installs nx cloud client, which we do not need
@@ -107,6 +106,8 @@ patchedDependencies:
     plist: patches/plist.patch
     # Workaround for type fails
     "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
+    # Disable prepare script - we don't need it and it causes issues in the git dependency
+    matrix-js-sdk@41.9.0: patches/matrix-js-sdk@41.9.0.patch
 
 peerDependencyRules:
     allowedVersions:
