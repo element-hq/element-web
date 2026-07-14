@@ -24,9 +24,6 @@ export function MessageComposerUrlPreviewWrapper({
 }): ReactNode | null {
     const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
     const { content } = useViewModel(vm);
-    const customComponent = moduleApi.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
-        <MessageComposerUrlPreviewView vm={vm} />
-    ));
     const collapsed = useSettingValue("composerUrlPreviewCollapsed");
     function toggleCollapsed() {
         SettingsStore.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, !collapsed);
@@ -34,10 +31,18 @@ export function MessageComposerUrlPreviewWrapper({
 
     const urlPreviewBundles = useSettingValue("feature_msc4095_url_preview_bundle");
 
-    return customComponent ?? <MessageComposerUrlPreviewView
-        vm={vm}
-        collapsed={collapsed}
-        toggleCollapsed={toggleCollapsed}
-        removePreview={urlPreviewBundles ? vm.removePreview : undefined}
-    />;
+    const previewView = (
+        <MessageComposerUrlPreviewView
+            vm={vm}
+            collapsed={collapsed}
+            toggleCollapsed={toggleCollapsed}
+            removePreview={urlPreviewBundles ? vm.removePreview : undefined}
+        />
+    );
+    const customComponent = moduleApi.customComponents.renderComposerPreview(
+        { text: content, roomId: roomId! },
+        () => previewView,
+    );
+
+    return customComponent ?? previewView;
 }

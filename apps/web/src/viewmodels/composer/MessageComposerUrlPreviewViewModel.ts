@@ -64,11 +64,8 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
             .map((w) => w.trim())
             .filter((word) => URL.canParse(word));
         const newLinks = new Set(newLinksOrdered);
-
-        if (!this.urlPreviewVisible) {
-            // Clear any existing previews whenever previews are hidden, regardless of
-            // whether the URL set has changed (e.g. when toggled invisible).
-            this.snapshot.set({ previews: [], content });
+        if (this.links.symmetricDifference(newLinks).size === 0) {
+            // Skip if the URL set hasn't changed
             return;
         }
 
