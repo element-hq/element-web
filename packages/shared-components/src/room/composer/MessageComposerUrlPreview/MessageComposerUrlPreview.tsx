@@ -12,6 +12,8 @@ import { type UrlPreview } from "../../timeline/event-tile/UrlPreviewGroupView";
 import styles from "./MessageComposerUrlPreview.module.css";
 import { LinkSiteName, LinkTitle } from "../../timeline/event-tile/UrlPreviewGroupView/LinkPreview/LinkPreview";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
+import { InlineSpinner } from "@vector-im/compound-web";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 
 export interface MessageComposerUrlPreviewSnapshotEntryLoaded {
     status: "loaded";
@@ -106,6 +108,9 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                 case "loading":
                     return <div key={entry.matched_url} className={classNames(className, styles.container)}>
                         <div>
+                            <div className={styles.loadingSpinner}>
+                                <InlineSpinner />
+                            </div>
                             <div className={styles.text}>
                                 <LinkTitle title="Loading..." showTooltipOnLink={false} link={entry.matched_url} />
                                 <LinkSiteName siteName={hostName} />
@@ -115,6 +120,9 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                 case "failed":
                     return <div key={entry.matched_url} className={classNames(className, styles.container)}>
                         <div>
+                            <div className={styles.failedIcon}>
+                                <ErrorIcon />
+                            </div>
                             <div className={styles.text}>
                                 <LinkTitle title="Failed" showTooltipOnLink={false} link={entry.matched_url} />
                                 <LinkSiteName siteName={hostName} />
@@ -128,11 +136,18 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
         <span className={styles.left}>
             <span className={styles.icons}>
                 {links.map(entry => {
-                    const siteName = new URL(entry.matched_url).hostname;
-                    if (entry.status === "loaded" && entry.preview.image !== undefined) {
-                        return <div className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
-                    } else {
-                        return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
+                    switch (entry.status) {
+                        case "failed":
+                            return <div className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-critical-primary)" }}><ErrorIcon /></div>
+                        case "loading":
+                            return <div className={styles.summaryIcon} style={{ backgroundColor: "var(--cpd-color-bg-subtle-primary)" }}><InlineSpinner /></div>
+                        case "loaded":
+                            const siteName = new URL(entry.matched_url).hostname;
+                            if (entry.preview.image !== undefined) {
+                                return <div className={styles.summaryIcon}><img src={entry.preview.siteIcon || entry.preview.image.imageThumb} /></div>
+                            } else {
+                                return <div className={styles.summaryIcon} style={{ backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))` }}>{urlFirstChar(entry.matched_url)}</div>
+                            }
                     }
                 })
                 }
