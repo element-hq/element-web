@@ -45,7 +45,7 @@ export abstract class AsyncStore<T extends object> extends EventEmitter {
      * @param {T} initialState The initial state for the store.
      */
     protected constructor(
-        private dispatcher: MatrixDispatcher,
+        protected dispatcher: MatrixDispatcher,
         initialState: T = <T>{},
     ) {
         super();

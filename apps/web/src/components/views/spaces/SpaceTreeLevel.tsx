@@ -15,6 +15,7 @@ import React, {
     type InputHTMLAttributes,
     type LegacyRef,
     type RefObject,
+    useContext,
 } from "react";
 import classNames from "classnames";
 import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
@@ -27,7 +28,6 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import RoomAvatar from "../avatars/RoomAvatar";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { type SpaceKey } from "../../../stores/spaces";
 import SpaceTreeLevelLayoutStore from "../../../stores/spaces/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
@@ -47,6 +47,7 @@ import { type NotificationState } from "../../../stores/notifications/Notificati
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     AccessibleButtonProps<T>,
@@ -83,6 +84,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
     ContextMenuComponent,
     ...props
 }: ButtonProps<T>): JSX.Element => {
+    const sdkContext = useContext(SDKContext);
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>(innerRef);
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>(handle);
     const tabIndex = isActive ? 0 : -1;
@@ -108,7 +110,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
         const jumpToNotification = (ev: MouseEvent): void => {
             ev.stopPropagation();
             ev.preventDefault();
-            SpaceStore.instance.setActiveRoomInSpace(spaceKey);
+            sdkContext.spaceStore.setActiveRoomInSpace(spaceKey);
         };
 
         notifBadge = (
@@ -139,7 +141,7 @@ export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
         // space is set here because of the assignment condition of onClick
         defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: space!.roomId });
     const activateSpace = (): void => {
-        if (spaceKey) SpaceStore.instance.setActiveSpace(spaceKey);
+        if (spaceKey) sdkContext.spaceStore.setActiveSpace(spaceKey);
     };
     const onClick = props.onClick ?? (selected && space ? viewSpaceHome : activateSpace);
 
@@ -203,10 +205,13 @@ interface IItemState {
 }
 
 export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private buttonRef = createRef<HTMLDivElement>();
 
-    public constructor(props: IItemProps) {
-        super(props);
+    public constructor(props: IItemProps, context: React.ContextType<typeof SDKContext>) {
+        super(props, context);
 
         const collapsed = SpaceTreeLevelLayoutStore.instance.getSpaceCollapsedState(
             props.space.roomId,
@@ -222,12 +227,12 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     }
 
     public componentDidMount(): void {
-        SpaceStore.instance.on(this.props.space.roomId, this.onSpaceUpdate);
+        this.context.spaceStore.on(this.props.space.roomId, this.onSpaceUpdate);
         this.props.space.on(RoomEvent.Name, this.onRoomNameChange);
     }
 
     public componentWillUnmount(): void {
-        SpaceStore.instance.off(this.props.space.roomId, this.onSpaceUpdate);
+        this.context.spaceStore.off(this.props.space.roomId, this.onSpaceUpdate);
         this.props.space.off(RoomEvent.Name, this.onRoomNameChange);
     }
 
@@ -244,7 +249,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     };
 
     private get childSpaces(): Room[] {
-        return SpaceStore.instance
+        return this.context.spaceStore
             .getChildSpaces(this.props.space.roomId)
             .filter((s) => !this.props.parents?.has(s.roomId));
     }
@@ -334,7 +339,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
         const notificationState = isInvite
             ? StaticNotificationState.forSymbol("!", NotificationLevel.Highlight)
-            : SpaceStore.instance.getNotificationState(space.roomId);
+            : this.context.spaceStore.getNotificationState(space.roomId);
 
         const hasChildren = this.state.childSpaces?.length;
 

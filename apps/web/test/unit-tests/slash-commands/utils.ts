@@ -13,6 +13,7 @@ import { getCommand } from "../../../src/slash-commands/SlashCommands";
 import { stubClient } from "../../test-utils";
 import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
 import { LocalRoom } from "../../../src/models/LocalRoom";
+import DMRoomMap from "../../../src/utils/DMRoomMap.ts";
 
 export function setUpCommandTest(
     roomId: string,
@@ -30,6 +31,7 @@ export function setUpCommandTest(
     // createTestClient here instead of stubClient (i.e. avoid setting
     // MatrixClientPeg.)
     const client = stubClient();
+    DMRoomMap.makeShared(client);
     const { cmd: command, args } = getCommand(roomId, input);
 
     let room: Room;

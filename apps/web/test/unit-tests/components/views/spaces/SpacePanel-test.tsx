@@ -18,7 +18,6 @@ import { shouldShowComponent } from "../../../../../src/customisations/helpers/U
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
 import { TestSDKContext } from "../../../TestSDKContext.ts";
-import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -99,10 +98,9 @@ jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
         getNotificationState = () => null as SpaceNotificationState | null;
         setActiveSpace = jest.fn();
         moveRootSpace = jest.fn();
+        start = jest.fn();
     }
-    return {
-        instance: new MockSpaceStore(),
-    };
+    return MockSpaceStore;
 });
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -135,7 +133,7 @@ describe("<SpacePanel />", () => {
     });
 
     beforeEach(() => {
-        SpaceStore.instance.enabledMetaSpaces.push(MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms);
+        sdkContext.spaceStore.enabledMetaSpaces.push(MetaSpace.Home, MetaSpace.Orphans, MetaSpace.VideoRooms);
         mocked(shouldShowComponent).mockClear().mockReturnValue(true);
     });
     afterEach(() => {
@@ -186,7 +184,7 @@ describe("<SpacePanel />", () => {
     });
 
     it("should allow rearranging via drag and drop", async () => {
-        (SpaceStore.instance.spacePanelSpaces as any) = [
+        (sdkContext.spaceStore.spacePanelSpaces as any) = [
             mkStubRoom("!room1:server", "Room 1", mockClient),
             mkStubRoom("!room2:server", "Room 2", mockClient),
             mkStubRoom("!room3:server", "Room 3", mockClient),
@@ -201,7 +199,7 @@ describe("<SpacePanel />", () => {
         await move(room1, DragDirection.DOWN);
         await drop(room1);
 
-        expect(SpaceStore.instance.moveRootSpace).toHaveBeenCalledWith(0, 1);
+        expect(sdkContext.spaceStore.moveRootSpace).toHaveBeenCalledWith(0, 1);
     });
 
     it("should be able to open the user menu via dispatcher", async () => {

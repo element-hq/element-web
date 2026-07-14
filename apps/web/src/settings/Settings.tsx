@@ -229,6 +229,7 @@ export interface Settings {
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
+    "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -638,6 +639,15 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Ui,
         displayName: _td("labs|login_with_qr"),
         description: _td("labs|config_only"),
+        isFeature: true,
+        default: false,
+    },
+    "feature_msc4095_url_preview_bundle": {
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|url_preview_bundle"),
+        description: _td("labs|url_preview_bundle_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
         isFeature: true,
         default: false,
     },

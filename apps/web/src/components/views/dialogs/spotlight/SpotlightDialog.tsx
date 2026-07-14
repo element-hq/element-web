@@ -72,7 +72,6 @@ import { RoomNotificationStateStore } from "../../../../stores/notifications/Roo
 import { compareRoomsByRecency } from "../../../../utils/room/sortRoomsByRecency";
 import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
-import SpaceStore from "../../../../stores/spaces/SpaceStore";
 import { DirectoryMember, type Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { makeUserPermalink } from "../../../../utils/permalinks/Permalinks";
@@ -420,13 +419,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return [
-            ...SpaceStore.instance.enabledMetaSpaces.map((spaceKey) => ({
+            ...SDKContextClass.instance.spaceStore.enabledMetaSpaces.map((spaceKey) => ({
                 section: Section.Spaces,
                 filter: [] as Filter[],
                 avatar: <div className="mx_SpotlightDialog_metaspaceResult">{metaspaceToIcon(spaceKey)}</div>,
-                name: getMetaSpaceName(spaceKey, SpaceStore.instance.allRoomsInHome),
+                name: getMetaSpaceName(spaceKey, SDKContextClass.instance.spaceStore.allRoomsInHome),
                 onClick() {
-                    SpaceStore.instance.setActiveSpace(spaceKey);
+                    SDKContextClass.instance.spaceStore.setActiveSpace(spaceKey);
                 },
             })),
             ...roomResults,
@@ -517,7 +516,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const numResults = sum(Object.values(results).map((it) => it.length));
     useWebSearchMetrics(numResults, query.length, true);
 
-    const activeSpace = SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = SDKContextClass.instance.spaceStore.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace ?? undefined, query);
 
     const setQuery = (e: ChangeEvent<HTMLInputElement>): void => {

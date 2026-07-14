@@ -18,7 +18,7 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore.ts";
 import DMRoomMap from "../../../../src/utils/DMRoomMap.ts";
 import { type IOpts } from "../../../../src/createRoom.ts";
-import SpaceStore from "../../../../src/stores/spaces/SpaceStore.ts";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 describe("SpaceRoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -132,7 +132,7 @@ describe("SpaceRoomView", () => {
     describe("Spaces: creating a new community space", () => {
         it("asks what topics you want to discuss, creates rooms for them and offers to share", async () => {
             cli.createRoom.mockResolvedValueOnce({ room_id: "room1" }).mockResolvedValueOnce({ room_id: "room2" });
-            SpaceStore.instance.addRoomToSpace = jest.fn();
+            SDKContextClass.instance.spaceStore.addRoomToSpace = jest.fn();
 
             // Given we are creating a space
             const view = await renderSpaceRoomView({
@@ -243,7 +243,7 @@ describe("SpaceRoomView", () => {
     describe("Spaces: creating a new private space", () => {
         it("creates rooms inside a private space for a team", async () => {
             cli.createRoom.mockResolvedValueOnce({ room_id: "room1" }).mockResolvedValueOnce({ room_id: "room2" });
-            SpaceStore.instance.addRoomToSpace = jest.fn();
+            SDKContextClass.instance.spaceStore.addRoomToSpace = jest.fn();
 
             // When I create a private space
             const view = await renderSpaceRoomView({
