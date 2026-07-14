@@ -20,7 +20,7 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import { HistoryVisibility, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import { Flex, Box } from "@element-hq/web-shared-components";
+import { Flex, Box, StatusTextView } from "@element-hq/web-shared-components";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -57,6 +57,7 @@ import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
 import { LocalRoom } from "../../../../models/LocalRoom.ts";
 import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
+import { useUserStatus } from "../../../../hooks/useUserStatus.ts";
 
 function RoomHeaderButtons({
     room,
@@ -448,6 +449,7 @@ export default function RoomHeader({
     const historyVisibility = useRoomState(room, (state) => state.getHistoryVisibility());
     const dmMember = useDmMember(room);
     const isDirectMessage = !!dmMember;
+    const dmUserStatus = useUserStatus(dmMember?.userId);
     const isRoomEncrypted = useIsEncrypted(client, room);
     const e2eStatus = useEncryptionStatus(client, room);
     const askToJoinEnabled = useFeatureEnabled("feature_ask_to_join");
@@ -495,6 +497,10 @@ export default function RoomHeader({
                             className="mx_RoomHeader_heading"
                         >
                             <span className="mx_RoomHeader_truncated mx_lineClamp">{roomName}</span>
+
+                            {isDirectMessage && dmUserStatus && (
+                                <StatusTextView status={dmUserStatus} className="mx_RoomHeader_userStatus" />
+                            )}
 
                             {!isDirectMessage && joinRule === JoinRule.Public && (
                                 <Tooltip label={_t("common|public_room")} placement="right">
