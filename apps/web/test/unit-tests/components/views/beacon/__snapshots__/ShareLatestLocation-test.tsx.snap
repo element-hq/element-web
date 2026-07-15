@@ -29,7 +29,6 @@ exports[`<ShareLatestLocation /> renders share buttons when there is a location 
     class="mx_CopyableText mx_ShareLatestLocation_copy"
   >
     <button
-      aria-label="Copy"
       aria-labelledby="react-use-id-2"
       class="_icon-button_1215g_8 mx_CopyableText_copyButton"
       data-kind="primary"

@@ -34,7 +34,6 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     >
       Room ID: !id
       <button
-        aria-label="Copy"
         aria-labelledby="react-use-id-1"
         class="_icon-button_1215g_8 mx_CopyableText_copyButton"
         data-kind="primary"

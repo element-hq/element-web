@@ -43,7 +43,6 @@ exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
                 >
                   !room:example.com
                   <button
-                    aria-label="Copy"
                     aria-labelledby="react-use-id-1"
                     class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                     data-kind="primary"

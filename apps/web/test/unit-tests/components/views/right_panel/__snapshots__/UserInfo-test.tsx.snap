@@ -104,7 +104,6 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             >
               customUserIdentifier
               <button
-                aria-label="Copy"
                 aria-labelledby="react-use-id-2"
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
@@ -414,7 +413,6 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             >
               customUserIdentifier
               <button
-                aria-label="Copy"
                 aria-labelledby="react-use-id-2"
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
