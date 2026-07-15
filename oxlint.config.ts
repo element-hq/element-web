@@ -163,7 +163,6 @@ export default defineConfig({
         "react-perf/jsx-no-new-array-as-prop": "off",
         "react/no-did-update-set-state": "off",
         "react/no-did-mount-set-state": "off",
-        "jsx-a11y/interactive-supports-focus": "off",
         "jsx-a11y/no-static-element-interactions": "off",
         "jsx-a11y/click-events-have-key-events": "off",
         "vitest/no-conditional-tests": "off",

@@ -104,6 +104,7 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
                     <ChatFilter
                         key={`${filterId}-${index}`}
                         role="option"
+                        tabIndex={0}
                         aria-selected={filterId === activeFilterId}
                         selected={filterId === activeFilterId}
                         onClick={() => onToggleFilter(filterId)}
