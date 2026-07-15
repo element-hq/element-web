@@ -49,7 +49,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      */
     private content: string;
 
-    private previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry> = new Map();
+    private readonly previewCache: Map<string, MessageComposerUrlPreviewSnapshotEntry> = new Map();
 
     public constructor(props: MessageComposerUrlPreviewViewModelProps) {
         super(props, { entries: [], content: props.content ?? "" });
