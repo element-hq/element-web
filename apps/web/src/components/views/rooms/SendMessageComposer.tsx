@@ -67,7 +67,7 @@ import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import { MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -203,7 +203,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
             case KeyBindingAction.SendMessage:
-                this.sendMessage();
+                const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
+                this.sendMessage({ urlPreviewSnapshot });
                 event.preventDefault();
                 break;
             case KeyBindingAction.SelectPrevSendHistory:
