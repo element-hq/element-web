@@ -24,6 +24,7 @@ import { type WidgetLifecycleApi } from "./widget-lifecycle.ts";
 import { type WidgetApi } from "./widget.ts";
 import { type CustomisationsApi } from "./customisations.ts";
 import { type ComposerApi } from "./composer.ts";
+import { type PlatformApi } from "./platform.ts";
 
 /**
  * Module interface for modules to implement.
@@ -165,6 +166,12 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly composer: ComposerApi;
+
+    /**
+     * Allows modules to access platform-specific functionality.
+     * @alpha Subject to change.
+     */
+    readonly platform: PlatformApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

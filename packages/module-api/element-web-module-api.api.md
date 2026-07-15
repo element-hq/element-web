@@ -60,6 +60,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly extras: ExtrasApi;
     readonly i18n: I18nApi;
     readonly navigation: NavigationApi;
+    // @alpha
+    readonly platform: PlatformApi;
     readonly rootNode: HTMLElement;
     readonly stores: StoresApi;
     // @alpha
@@ -420,6 +422,11 @@ export interface OpenRoomOptions {
 export type OriginalMessageComponentProps = {
     showUrlPreview?: boolean;
 };
+
+// @alpha
+export interface PlatformApi {
+    getPickleKey(userId: string, deviceId: string): Promise<string | null>;
+}
 
 // @alpha
 export type PreloadApprover = (widget: WidgetDescriptor) => MaybePromise<boolean | undefined>;

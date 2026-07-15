@@ -34,6 +34,7 @@ import { WidgetLifecycleApi } from "./WidgetLifecycleApi.ts";
 import { WidgetApi } from "./WidgetApi.ts";
 import { CustomisationsApi } from "./customisationsApi.ts";
 import { ComposerApi } from "./ComposerApi.ts";
+import { PlatformApi } from "./PlatformApi.ts";
 import defaultDispatcher from "../dispatcher/dispatcher.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
@@ -98,6 +99,7 @@ export class ModuleApi implements Api {
     public readonly client = new ClientApi();
     public readonly stores = new StoresApi();
     public readonly composer = new ComposerApi(defaultDispatcher);
+    public readonly platform = new PlatformApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
