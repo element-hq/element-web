@@ -11,8 +11,6 @@
             "one": " Voalaza tsy voavaky.",
             "other": "%(count)shafatra tsy novakiana anisan'izany ny filazana."
         },
-        "recent_rooms": "Efitrano vao haingana",
-        "room_name": "Efitra%(name)s",
         "room_status_bar": "Bara momba ny efitrano",
         "seek_bar_label": "Audio mitady bar",
         "unread_messages": "Hafatra tsy novakiana."
@@ -22,7 +20,6 @@
         "accept": "Manaiky",
         "add": "Ametraka",
         "add_existing_room": "Anampy ny efitrano misy",
-        "add_people": "Ampiditra olona",
         "apply": "Manatontonsa",
         "approve": "Hanaiky",
         "ask_to_join": "Mangataka ny hiaraka",
@@ -54,7 +51,6 @@
         "enter_fullscreen": "Ampidiro ny efijery feno",
         "exit_fullscreeen": "Hivoaka ny efijery feno",
         "expand": "Fampivoarana",
-        "explore_public_rooms": "Tsidiho ny efitranom-bahoaka",
         "explore_rooms": "Tsidiho ny efitrano",
         "export": "Fanondranana",
         "forward": "Teo aloa",
@@ -66,8 +62,6 @@
         "ignore": "Dingiavina",
         "import": "Manafatra",
         "invite": "Asao",
-        "invite_to_space": "Asao hoany amin'ny habakabaka",
-        "invites_list": "Fanasana",
         "join": "Iombona",
         "learn_more": "Hamantatra bebekokoa",
         "leave": "Lasa",
@@ -110,8 +104,6 @@
         "sign_out": "Ivoaka",
         "skip": "Itsambikina",
         "start": "Manomboka",
-        "start_chat": "Manomboka",
-        "start_new_chat": "Manomboka chat vaovao",
         "stop": "Atsaharo",
         "submit": "Manolotra",
         "subscribe": "Anaraka",
@@ -424,7 +416,6 @@
         "encrypted": "Nafenina",
         "error": "Fahadisoana",
         "faq": "Soloky",
-        "favourites": "Ankafizina",
         "feedback": "Iverina",
         "filter_results": "Sivana ny valiny",
         "forward_message": "Talohan'ny",
@@ -432,7 +423,6 @@
         "go_to_settings": "Mandehana any amin'ny fanitsiana",
         "guest": "Hivahiny",
         "help": "Vonjy",
-        "historical": "ara-tantara",
         "home": "Trano",
         "homeserver": "Mpizara an-trano",
         "identity_server": "Mpizara famantarana",
@@ -444,7 +434,6 @@
         "light": "Fahazavana",
         "loading": "Manatontonsa",
         "location": "Toerana isihany",
-        "low_priority": "Laharam-pahamehana ambany",
         "matrix": "Matrix",
         "message": "Hafatra",
         "message_layout": "Fandaharana",
@@ -504,7 +493,6 @@
         "success": "Fahombiazana",
         "suggestions": "Hevitra",
         "support": "Manampy",
-        "system_alerts": "Fanairana momba ny rafitra",
         "theme": "Foto-kevitra",
         "thread": "Taridresaka",
         "threads": "Zanaka lahy",
@@ -520,7 +508,6 @@
         "username": "Anarany mpampiasa",
         "verified": "Fanamariana",
         "version": "Dikan-teny",
-        "video": "Ainamanjery",
         "video_room": "Efitranon'ny Lahatsary",
         "view_message": "Jereo ny hafatra",
         "warning": "Fampitandremana"
@@ -1248,7 +1235,6 @@
         "experimental_section": "Fijery mialoha",
         "feature_disable_call_per_sender_encryption": "Atsaharo ny encryption isaky ny mpandefa hoany Element Call",
         "feature_wysiwyg_composer_description": "Mampiasà lahatsoratra manankarena fa tsy Markdown ao amin'ny mpamoron-dahatsoratra.",
-        "group_calls": "Traikefa antso vondrona vaovao",
         "group_developer": "Fampandrosoana",
         "group_encryption": "Fanafenana",
         "group_experimental": "Fanandramana",
@@ -1262,7 +1248,6 @@
         "group_voip": "Feo sy Orinan-tsary",
         "group_widgets": "Widgets",
         "hidebold": "Afeno ny teboka fampandrenesana (asehoy fotsiny ny mari-pamantarana kaontinanta)",
-        "html_topic": "Asehoy ny fanehoana HTML momba ny lohahevitra efitrano",
         "join_beta": "Midira amin'ny beta",
         "join_beta_reload": "Hamerina ny fidirana amin'ny beta%(brand)s .",
         "jump_to_date": "Hanketo amin'ny daty (manampy / hitsambikina ary hitsambikina amin'ny lohateniny daty)",
@@ -1284,7 +1269,6 @@
         "sliding_sync_description": "Eo ambany fampandrosoana mavitrika, tsy azo kilemaina.",
         "sliding_sync_disabled_notice": "Miala aloa de miverena mba hahafahana mampiato",
         "sliding_sync_server_no_support": "Tsy manana fanohanana avy amin'ny teratany ny mpizaranao",
-        "under_active_development": "Eo ambanin'ny fampandrosoana mavitrika.",
         "unrealiable_e2e": "Tsy azo ianteherana amin'ny efitrano misy miafina",
         "video_rooms": "Efi-trano fandraisan-tsary",
         "video_rooms_a_new_way_to_chat": "Fomba vaovao hiresahana amin'ny feo sy sary mietsika%(brand)s .",
@@ -1337,9 +1321,6 @@
         "leave_space_question": "Tena te hiala amin'ilay toerana ve ianao%(spaceName)s ?",
         "room_rejoin_warning": "Tsy ampahibemaso ity efitrano ity. Tsy afaka miditra indray ianao raha tsy misy fanasana.",
         "space_rejoin_warning": "Tsy ampahibemaso ity habaka ity. Tsy afaka miditra indray ianao raha tsy misy fanasana."
-    },
-    "left_panel": {
-        "open_dial_pad": "Sokafy ny dial pad"
     },
     "lightbox": {
         "rotate_left": "Ahodina ankavia",
@@ -1517,7 +1498,6 @@
     },
     "quick_settings": {
         "all_settings": "Fikirana rehetra",
-        "metaspace_section": "Ampiantona aminy bar lateraly",
         "sidebar_settings": "Safidy bebe kokoa",
         "title": "Fandrindrana haingana"
     },
@@ -1766,37 +1746,12 @@
         "waiting_for_join_title": "Miandry ny mpampiasa hiditra%(brand)s"
     },
     "room_list": {
-        "add_room_label": "Hanampy efitrano",
         "add_space_label": "Ampio toerana",
-        "breadcrumbs_empty": "Tsy misy efitrano notsidihina vao haingana",
-        "breadcrumbs_label": "Efitrano notsidihina vao haingana",
         "failed_add_tag": "Tsy nety nanampy tag%(tagName)s mankany amin'ny efitrano",
         "failed_remove_tag": "Tsy nesorina ny marika%(tagName)s avy amin'ny efitrano",
         "failed_set_dm_tag": "Tsy nahavita nametraka tenifototra hafatra mivantana",
-        "home_menu_label": "Safidy an-trano",
-        "join_public_room_label": "Midira amin'ny efitranom-bahoaka",
-        "joining_rooms_status": {
-            "one": "Miditra amin'izao fotoana izao%(count)s efitra",
-            "other": "Miditra amin'izao fotoana izao%(count)s ROOM"
-        },
         "notification_options": "Safidy fampahafantarana",
-        "redacting_messages_status": {
-            "one": "Esory ny hafatra ao%(count)s efitra",
-            "other": "Esory ny hafatra ao%(count)s efitra"
-        },
-        "show_less": "Asehoy kely",
-        "show_n_more": {
-            "one": "Fampiseona%(nombre) s Bebekokoa",
-            "other": "Fampiseona%(nombre)s Bebekokoa"
-        },
-        "show_previews": "Asehoy mialoha ny hafatra",
-        "sort_by": "Sivanina araka",
-        "sort_by_activity": "Asa atao",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Asehoy aloha ny efitrano misy hafatra tsy novakiana",
-        "space_menu_label": "%(spaceName)ssakafo",
-        "sublist_options": "Lisitra safidy",
-        "suggested_rooms_heading": "Efitrano Soso-kevitra"
+        "show_less": "Asehoy kely"
     },
     "room_settings": {
         "access": {
@@ -2459,13 +2414,11 @@
         "show_stickers_button": "Asehoy ny bokotra an-tsary",
         "show_typing_notifications": "Asehoy ny fampandrenesana fanoratana",
         "sidebar": {
-            "metaspaces_favourites_description": "Vorio amin'ny toerana iray ny efitranonao sy ny olona tianao rehetra.",
             "metaspaces_home_all_rooms": "Asehoy ny efitrano rehetra",
             "metaspaces_home_all_rooms_description": "Asehoy ny efitranonao rehetra ao an-trano, na dia ao anaty habakabaka aza.",
             "metaspaces_home_description": "Ny trano dia ilaina amin'ny fijerena ny zava-drehetra.",
             "metaspaces_orphans": "Efitrano ivelan'ny toerana iray",
             "metaspaces_orphans_description": "Vondrona amin'ny toerana iray ny efitranonao rehetra izay tsy anisan'ny habaka.",
-            "metaspaces_people_description": "Vorio amin'ny toerana iray ny olonao rehetra.",
             "metaspaces_subsection": "Toerana hanehoana",
             "spaces_explainer": "Ny habaka dia fomba ivondronana efitrano sy olona. Miaraka amin'ireo habaka misy anao, azonao atao koa ny mampiasa ireo efa vita.",
             "title": "Sidebar"
@@ -2482,7 +2435,6 @@
             "audio_output": "Fivoaham-peo",
             "audio_output_empty": "Tsy misy fivoaham-peo voatsikiaritra",
             "auto_gain_control": "Fanaraha-maso ny fahazoana mandeha ho azy",
-            "connection_section": "Fifandraisana",
             "echo_cancellation": "Fanafoanana ny echo",
             "enable_fallback_ice_server": "Avelao ny mpizara fanampiana antso miverina (%(server)s )",
             "enable_fallback_ice_server_description": "Mihatra ihany raha tsy manolotra iray ny homeserver anao. Ny adiresy IP anao dia hozaraina mandritra ny antso.",
@@ -2655,12 +2607,6 @@
     },
     "space_settings": {
         "title": "Fikirana -%(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Tsy manana alalana hanampy efitrano amin'ity habaka ity ianao",
-        "error_no_permission_add_space": "Tsy manana alalana hanisy habaka amin'ity habaka ity ianao",
-        "error_no_permission_create_room": "Tsy manana alalana hamorona efitrano vaovao amin'ity habaka ity ianao",
-        "error_no_permission_invite": "Tsy manana alalana hanasa olona ho amin'ity habaka ity ianao"
     },
     "spotlight": {
         "public_rooms": {

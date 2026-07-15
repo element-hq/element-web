@@ -79,7 +79,9 @@
         },
         "expand_filters": "Ehangu rhestr hidlo",
         "filters": {
+            "favourite": "Ffefrynnau",
             "invites": "Gwahoddiadau",
+            "low_priority": "Blaenoriaeth isel",
             "mentions": "Crybwylliadau",
             "people": "Pobl",
             "rooms": "Ystafelloedd",

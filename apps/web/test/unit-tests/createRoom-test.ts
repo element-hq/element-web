@@ -36,10 +36,29 @@ import createRoom, {
     canEncryptToAllUsers,
     waitForRoomEncryption,
 } from "../../src/createRoom";
-import SettingsStore from "../../src/settings/SettingsStore";
 import { ElementCallMemberEventType } from "../../src/call-types";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { PreferredRoomVersions } from "../../src/utils/PreferredRoomVersions";
+import SdkConfig from "../../src/SdkConfig";
+
+/**
+ * This should be the same as
+ * { POWER_LEVEL_EVENTS_DEFAULT, [ElementCallMemberEventType.name]: 0 }
+ * to get the most regression coverage we provide the string based snapshot here.
+ */
+const POWER_LEVELS_WITH_CALL_MEMBER = {
+    // Default events power levels we always expect
+    "m.room.avatar": 50,
+    "m.room.canonical_alias": 50,
+    "m.room.encryption": 100,
+    "m.room.history_visibility": 100,
+    "m.room.name": 50,
+    "m.room.power_levels": 100,
+    "m.room.server_acl": 100,
+    "m.room.tombstone": 100,
+    // Custom rtc.member event we expect to be 0
+    [ElementCallMemberEventType.name]: 0,
+};
 
 describe("createRoom", () => {
     mockPlatformPeg();
@@ -51,7 +70,10 @@ describe("createRoom", () => {
         DMRoomMap.makeShared(client);
     });
 
-    afterEach(() => jest.clearAllMocks());
+    afterEach(() => {
+        jest.clearAllMocks();
+        SdkConfig.reset();
+    });
 
     it("creates a private room", async () => {
         await createRoom(client, { createOpts: { preset: Preset.PrivateChat } });
@@ -63,6 +85,7 @@ describe("createRoom", () => {
                 { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
     });
 
@@ -83,6 +106,7 @@ describe("createRoom", () => {
                 },
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
     });
 
@@ -112,6 +136,7 @@ describe("createRoom", () => {
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
 
         // And the room name, topic and avatar are set later
@@ -155,6 +180,7 @@ describe("createRoom", () => {
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
 
         // And the avatar is set later
@@ -188,6 +214,7 @@ describe("createRoom", () => {
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
                 // Room name is NOT included, since it needs to be encrypted.
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
 
         // And the room name, topic and avatar were not set since we didn't
@@ -228,6 +255,7 @@ describe("createRoom", () => {
                 { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
                 { type: "m.room.history_visibility", content: { history_visibility: "invited" } },
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
     });
 
@@ -238,6 +266,7 @@ describe("createRoom", () => {
             preset: "public_chat",
             visibility: "private",
             initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
     });
 
@@ -249,6 +278,7 @@ describe("createRoom", () => {
             visibility: "private",
             topic: "My topic",
             initial_state: [{ state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } }],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
     });
 
@@ -266,6 +296,7 @@ describe("createRoom", () => {
                 { state_key: "", type: "m.room.guest_access", content: { guest_access: "can_join" } },
                 { type: "m.space.parent", state_key: parentSpace.roomId, content: { canonical: true, via: [] } },
             ],
+            power_level_content_override: { events: POWER_LEVELS_WITH_CALL_MEMBER },
         });
     });
 
@@ -324,10 +355,6 @@ describe("createRoom", () => {
     });
 
     it("correctly sets up MSC3401 power levels", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
-            if (name === "feature_group_calls") return true;
-        });
-
         await createRoom(client, {});
 
         const callMemberPower =

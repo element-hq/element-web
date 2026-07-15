@@ -96,7 +96,12 @@ export default defineConfig({
         react(),
         layerCssAssets(),
         dts({
-            bundleTypes: true,
+            bundleTypes: {
+                invokeOptions: {
+                    localBuild: !!process.env.CI,
+                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                },
+            },
             include: ["src/**/*.{ts,tsx}"],
             exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: false,

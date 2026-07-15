@@ -1,45 +1,29 @@
 /*
-Copyright 2024 New Vector Ltd.
-Copyright 2015-2022 The Matrix.org Foundation C.I.C.
+Copyright 2026 Element Creations Ltd
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, type ReactNode } from "react";
-import { MessageComposerUrlPreviewView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import React, { type ReactNode } from "react";
+import { MessageComposerUrlPreviewView, useViewModel } from "@element-hq/web-shared-components";
 
-import { MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
-import { useDebouncedCallback } from "../../../hooks/spotlight/useDebouncedCallback";
-import PlatformPeg from "../../../PlatformPeg";
+import { ModuleApi } from "../../../modules/Api";
 
-const DEBOUNCE_REQUEST_TIMEOUT_MS = 500;
+export function MessageComposerUrlPreviewWrapper({
+    urlPreviewVm: vm,
+    moduleApi = ModuleApi.instance,
+}: {
+    urlPreviewVm: MessageComposerUrlPreviewViewModel;
+    moduleApi?: ModuleApi;
+}): ReactNode | null {
+    const { roomId } = useScopedRoomContext("showUrlPreview", "roomId");
+    const { content } = useViewModel(vm);
+    const customComponent = moduleApi.customComponents.renderComposerPreview({ text: content, roomId: roomId! }, () => (
+        <MessageComposerUrlPreviewView vm={vm} />
+    ));
 
-export function MessageComposerUrlPreviewWrapper({ content }: { content: string }): ReactNode | null {
-    const { showUrlPreview } = useScopedRoomContext("showUrlPreview");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new MessageComposerUrlPreviewViewModel({
-                client: MatrixClientPeg.safeGet(),
-                visible: showUrlPreview,
-                showTooltips: PlatformPeg.get()?.needsUrlTooltips() ?? true,
-            }),
-    );
-
-    useDebouncedCallback<[MessageComposerUrlPreviewViewModel, string]>(
-        true,
-        (vm, content) => {
-            void vm.updateWithText(content);
-        },
-        [vm, content],
-        DEBOUNCE_REQUEST_TIMEOUT_MS,
-    );
-
-    useEffect(() => {
-        void vm.updateUrlPreviewVisible(showUrlPreview);
-    }, [vm, showUrlPreview]);
-
-    return <MessageComposerUrlPreviewView vm={vm} />;
+    return customComponent ?? <MessageComposerUrlPreviewView vm={vm} />;
 }

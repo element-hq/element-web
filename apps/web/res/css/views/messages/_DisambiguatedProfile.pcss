@@ -9,10 +9,17 @@ Please see LICENSE files in the repository root for full details.
 
 /** Disambiguated profile needs to have a different layout in the member tile */
 .mx_MemberTileView .mx_DisambiguatedProfile {
-    display: flex;
-    flex-direction: column;
+    /* Name and the user status emoji share the first row (with the name truncating and the emoji always visible)
+       Disambiguated MXID gets a full row below. */
+    display: grid;
+    grid-template-columns: min-content 1fr;
+
+    .mx_DisambiguatedProfile_userStatus {
+        margin-inline-start: var(--cpd-space-0-5x);
+    }
 
     .mx_DisambiguatedProfile_mxid {
+        grid-column: 1 / -1;
         margin-inline-start: 0;
         font: var(--cpd-font-body-sm-regular);
         text-overflow: ellipsis;
@@ -21,7 +28,7 @@ Please see LICENSE files in the repository root for full details.
 
     span:not(.mx_DisambiguatedProfile_mxid) {
         /**
-        In a member tile, this span element is a flex child and so
+        In a member tile, this span element is a grid child and so
         we need the following for text overflow to work.
         **/
         overflow: hidden;

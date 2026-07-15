@@ -17,8 +17,9 @@ import ThreadListContextMenu, {
 } from "../../../../../src/components/views/context_menus/ThreadListContextMenu";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { stubClient } from "../../../../test-utils/test-utils";
+import { stubClient, clientAndSDKContextRenderOptions } from "../../../../test-utils";
 import { mkThread } from "../../../../test-utils/threads";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("ThreadListContextMenu", () => {
     const ROOM_ID = "!123:matrix.org";
@@ -28,7 +29,10 @@ describe("ThreadListContextMenu", () => {
     let event: MatrixEvent;
 
     function getComponent(props: Partial<ThreadListContextMenuProps>) {
-        return render(<ThreadListContextMenu mxEvent={event} {...props} />);
+        return render(
+            <ThreadListContextMenu mxEvent={event} {...props} />,
+            clientAndSDKContextRenderOptions(mockClient, SDKContextClass.instance),
+        );
     }
 
     beforeEach(() => {

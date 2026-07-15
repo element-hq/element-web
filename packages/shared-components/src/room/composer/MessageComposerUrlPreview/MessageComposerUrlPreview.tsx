@@ -17,7 +17,9 @@ import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 /** Snapshot data for rendering a URL preview attached to the composer. */
 export interface MessageComposerUrlPreviewSnapshot {
     /** URL preview to render. */
-    preview: UrlPreview | null;
+    previews: UrlPreview[];
+    /** Content of the composer when the snapshot is computed */
+    content: string;
 }
 
 /** Props for MessageComposerUrlPreviewView. */
@@ -33,15 +35,18 @@ export interface MessageComposerUrlPreviewProps {
 }
 
 /**
- * MessageComposerUrlPreviewView renders a preview of a single URL above the messasge composer.
+ * MessageComposerUrlPreviewView renders a preview of all previewable URLs above the messasge composer.
  */
 export function MessageComposerUrlPreviewView({ vm, className }: MessageComposerUrlPreviewProps): JSX.Element | null {
-    const { preview } = useViewModel(vm);
-    if (!preview) {
+    const { previews } = useViewModel(vm);
+    if (previews.length === 0) {
         return null;
     }
-    return (
-        <div className={classNames(className, styles.container)}>
+
+    // Show only the first preview to revert back to previous behaviour
+    // But have previews fetch all URL previews in the message text
+    const previewViews = previews.slice(0, 1).map((preview) => (
+        <div key={preview.link} className={classNames(className, styles.container)}>
             <div>
                 {preview?.image?.imageThumb && (
                     <img className={styles.image} src={preview.image?.imageThumb} alt={preview.image.alt} />
@@ -53,5 +58,7 @@ export function MessageComposerUrlPreviewView({ vm, className }: MessageComposer
                 </div>
             </div>
         </div>
-    );
+    ));
+
+    return <>{previewViews}</>;
 }

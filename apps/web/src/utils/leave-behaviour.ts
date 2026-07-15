@@ -16,7 +16,6 @@ import Spinner from "../components/views/elements/Spinner";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { isMetaSpace } from "../stores/spaces";
-import SpaceStore from "../stores/spaces/SpaceStore";
 import dis from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
@@ -27,7 +26,6 @@ import { bulkSpaceBehaviour } from "./space";
 import { SDKContextClass } from "../contexts/SDKContextClass";
 import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
-import LegacyCallHandler from "../LegacyCallHandler";
 
 export async function leaveRoomBehaviour(
     matrixClient: MatrixClient,
@@ -64,7 +62,7 @@ export async function leaveRoomBehaviour(
 
     // attempt to hang up legacy based calls
     try {
-        LegacyCallHandler.instance.hangupOrReject(roomId);
+        SDKContextClass.instance.legacyCallHandler.hangupOrReject(roomId);
     } catch (e) {
         logger.warn("Failed to hangup call before leaving room: ", e);
     }
@@ -166,11 +164,11 @@ export async function leaveRoomBehaviour(
         // accidentally viewing the next room in the list and clearing its
         // notifications, switch to a neutral ground such as the home page or
         // space landing page.
-        if (isMetaSpace(SpaceStore.instance.activeSpace)) {
+        if (isMetaSpace(SDKContextClass.instance.spaceStore.activeSpace)) {
             dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
-        } else if (SpaceStore.instance.activeSpace === roomId) {
+        } else if (SDKContextClass.instance.spaceStore.activeSpace === roomId) {
             // View the parent space, if there is one
-            const parent = SpaceStore.instance.getCanonicalParent(roomId);
+            const parent = SDKContextClass.instance.spaceStore.getCanonicalParent(roomId);
             if (parent !== null) {
                 dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
@@ -183,7 +181,7 @@ export async function leaveRoomBehaviour(
         } else {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: SpaceStore.instance.activeSpace,
+                room_id: SDKContextClass.instance.spaceStore.activeSpace,
                 metricsTrigger: undefined, // other
             });
         }

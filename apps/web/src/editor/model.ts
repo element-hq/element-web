@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { diffAtCaret, diffDeletion, type IDiff } from "./diff";
 import DocumentPosition, { type IPosition } from "./position";
 import Range from "./range";
-import { type SerializedPart, type Part, type PartCreator } from "./parts";
+import { type SerializedPart, type Part, type PartCreator, Type } from "./parts";
 import { type ICallback } from "./autocomplete";
 import type AutocompleteWrapperModel from "./autocomplete";
 import type DocumentOffset from "./offset";
@@ -27,13 +27,13 @@ import { type Caret } from "./caret";
  * @param {DocumentPosition?} caretPosition the position where the caret should be position
  * @param {string?} inputType the inputType of the DOM input event
  * @param {object?} diff an object with `removed` and `added` strings
- * @return {Number?} addedLen how many characters were added/removed (-) before the caret during the transformation step.
+ * @returns {Number?} addedLen how many characters were added/removed (-) before the caret during the transformation step.
  *    This is used to adjust the caret position.
  */
 
 /**
  * @callback ManualTransformCallback
- * @return the caret position
+ * @returns the caret position
  */
 
 type TransformCallback = (caretPosition: DocumentPosition, inputType: string | undefined, diff: IDiff) => number | void;
@@ -48,6 +48,16 @@ export default class EditorModel {
     private autoCompletePartIdx: number | null = null;
     private autoCompletePartCount = 0;
     private transformCallback: TransformCallback | null = null;
+
+    /**
+     * Returns the plain text parts of the editor content only (skipping mentions)
+     */
+    public get contentPlainText(): string {
+        return this.serializeParts()
+            .filter((part) => part.type === Type.Plain)
+            .map((part) => part.text)
+            .join(" ");
+    }
 
     public constructor(
         parts: Part[],
@@ -179,7 +189,7 @@ export default class EditorModel {
      * Should be run inside a `model.transform()` callback.
      * @param {Part[]} parts the parts to replace the range with
      * @param {DocumentPosition} position the position to start inserting at
-     * @return {Number} the amount of characters added
+     * @returns {Number} the amount of characters added
      */
     public insert(parts: Part[], position: IPosition): number {
         const insertIndex = this.splitAt(position);
@@ -303,7 +313,7 @@ export default class EditorModel {
      * removes `len` amount of characters at `pos`.
      * @param {Object} pos
      * @param {Number} len
-     * @return {Number} how many characters before pos were also removed,
+     * @returns {Number} how many characters before pos were also removed,
      * usually because of non-editable parts that can only be removed in their entirety.
      */
     public removeText(pos: IPosition, len: number): number {
@@ -363,7 +373,7 @@ export default class EditorModel {
      * @param {Object} pos
      * @param {string} str
      * @param {string} inputType the source of the input, see html InputEvent.inputType
-     * @return {Number} how far from position (in characters) the insertion ended.
+     * @returns {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
     private addText(pos: IPosition, str: string, inputType: string | undefined): number {
@@ -434,7 +444,7 @@ export default class EditorModel {
      * Starts a range, which can span across multiple parts, to find and replace text.
      * @param {DocumentPosition} positionA a boundary of the range
      * @param {DocumentPosition?} positionB the other boundary of the range, optional
-     * @return {Range}
+     * @returns {Range}
      */
     public startRange(positionA: DocumentPosition, positionB = positionA): Range {
         return new Range(this, positionA, positionB);
@@ -463,7 +473,7 @@ export default class EditorModel {
      * Performs a transformation not part of an update cycle.
      * Modifying the model should only happen inside a transform call if not part of an update call.
      * @param {ManualTransformCallback} callback to run the transformations in
-     * @return {Promise} a promise when auto-complete (if applicable) is done updating
+     * @returns {Promise} a promise when auto-complete (if applicable) is done updating
      */
     public transform(callback: ManualTransformCallback): Promise<void> {
         const pos = callback();

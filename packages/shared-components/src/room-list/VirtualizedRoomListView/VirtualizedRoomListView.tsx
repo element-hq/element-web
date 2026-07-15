@@ -17,9 +17,10 @@ import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
     type VirtualizedListContext,
+    GroupedVirtualizedList,
+    type GroupedVirtualizedListProps,
 } from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView, RoomListStickySectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
@@ -241,17 +242,63 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         [sections],
     );
 
+    // In a grouped list, Virtuoso's range counts section headers as entries, so entry indices
+    // don't match room indices. This maps an inclusive entry range to a [start, end) room-index
+    // range. A header entry maps to the section boundary: "from this section's first room" as a
+    // start, "up to the previous section's last room" as an end.
+    const mapEntryRangeToRoomRange = useCallback(
+        (startEntry: number, endEntry: number): [start: number, endExclusive: number] => {
+            let start: number | undefined;
+            let end: number | undefined;
+            let headerEntry = 0; // entry index of the current section's header
+            let roomsBefore = 0; // number of rooms in the sections above the current one
+            for (const section of sections) {
+                // Last entry of this section: the header entry followed by one entry per room
+                const lastEntry = headerEntry + section.roomIds.length;
+
+                // The range starts in this section: on the header (-1 clamped to the first room)
+                // or on one of its rooms
+                if (start === undefined && startEntry <= lastEntry) {
+                    start = roomsBefore + Math.max(0, startEntry - headerEntry - 1);
+                }
+
+                // The range ends in this section: on the header (0 rooms of this section
+                // included) or on one of its rooms (exclusive bound, hence no -1)
+                if (end === undefined && endEntry <= lastEntry) {
+                    end = roomsBefore + Math.max(0, endEntry - headerEntry);
+                }
+
+                // Both bounds found, no need to look at the remaining sections
+                if (start !== undefined && end !== undefined) break;
+
+                // Move to the next section
+                headerEntry = lastEntry + 1;
+                roomsBefore += section.roomIds.length;
+            }
+            // The range can transiently point past the sections when the list shrinks before
+            // Virtuoso reports the new range; fall back to the widest valid window.
+            return [start ?? 0, end ?? roomsBefore];
+        },
+        [sections],
+    );
+
     /**
      * Callback when the visible range changes
      * Notifies the view model which rooms are visible
      */
     const rangeChanged = useCallback(
         (range: { startIndex: number; endIndex: number }) => {
-            vm.updateVisibleRooms(range.startIndex, range.endIndex);
+            // Virtuoso's endIndex is inclusive; updateVisibleRooms takes an exclusive end.
+            if (isFlatList) {
+                vm.updateVisibleRooms(range.startIndex, range.endIndex + 1);
+            } else {
+                const [start, end] = mapEntryRangeToRoomRange(range.startIndex, range.endIndex);
+                vm.updateVisibleRooms(start, end);
+            }
             // The rendered set changed; (un)observe items so the fold stays accurate.
             scheduleSyncObservedItems();
         },
-        [vm, scheduleSyncObservedItems],
+        [vm, scheduleSyncObservedItems, isFlatList, mapEntryRangeToRoomRange],
     );
 
     // Builds the accessibility plugin (live-region announcements) for keyboard/pointer drags,

@@ -36,7 +36,8 @@ interface ComposeMenuViewProps {
 export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const [open, setOpen] = useState(false);
-    const { canCreateRoom, canCreateVideoRoom, displaySectionReleaseAnnouncement } = useViewModel(vm);
+    const { canCreateRoom, canCreateVideoRoom, displaySectionReleaseAnnouncement, areSectionsEnabled } =
+        useViewModel(vm);
 
     // 28px button with a 20px icon
     const button = (
@@ -80,7 +81,9 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
                     hideChevron
                 />
             )}
-            <MenuItem Icon={SectionIcon} label={_t("action|new_section")} onSelect={vm.createSection} hideChevron />
+            {areSectionsEnabled && (
+                <MenuItem Icon={SectionIcon} label={_t("action|new_section")} onSelect={vm.createSection} hideChevron />
+            )}
         </Menu>
     );
 }

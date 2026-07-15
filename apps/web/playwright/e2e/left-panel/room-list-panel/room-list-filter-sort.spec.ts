@@ -214,7 +214,7 @@ test.describe("Room list filters and sort", () => {
                 // Let's configure unread dm room so that we only get notification for mentions and keywords
                 await app.viewRoomById(unReadDmId);
                 await app.settings.openRoomSettings("Notifications");
-                await page.getByText("@mentions & keywords").click();
+                await page.getByText("@mentions and replies").click();
                 await app.settings.closeDialog();
 
                 // Let's open a room other than unread room or unread dm

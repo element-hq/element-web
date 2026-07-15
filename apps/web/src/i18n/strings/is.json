@@ -9,7 +9,6 @@
             "one": "1 ólesin tilvísun í þig.",
             "other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig."
         },
-        "room_name": "Spjallrás %(name)s",
         "unread_messages": "Ólesin skilaboð."
     },
     "a11y_jump_first_unread_room": "Fara í fyrstu ólesnu spjallrásIna.",
@@ -17,7 +16,6 @@
         "accept": "Samþykkja",
         "add": "Bæta við",
         "add_existing_room": "Bæta við fyrirliggjandi spjallrás",
-        "add_people": "Bæta við fólki",
         "apply": "Virkja",
         "approve": "Samþykkja",
         "back": "Til baka",
@@ -48,7 +46,6 @@
         "enter_fullscreen": "Fara í fullskjásstillingu",
         "exit_fullscreeen": "Fara úr fullskjásstillingu",
         "expand": "Fletta út",
-        "explore_public_rooms": "Kanna almenningsspjallrásir",
         "explore_rooms": "Kanna spjallrásir",
         "export": "Flytja út",
         "forward": "Áfram",
@@ -60,8 +57,6 @@
         "ignore": "Hunsa",
         "import": "Flytja inn",
         "invite": "Bjóða",
-        "invite_to_space": "Bjóða inn á svæði",
-        "invites_list": "Boðsgestir",
         "join": "Taka þátt",
         "learn_more": "Kanna nánar",
         "leave": "Fara út",
@@ -103,8 +98,6 @@
         "sign_out": "Skrá út",
         "skip": "Sleppa",
         "start": "Byrja",
-        "start_chat": "Hefja spjall",
-        "start_new_chat": "Hefja nýtt spjall",
         "stop": "Stöðva",
         "submit": "Senda inn",
         "subscribe": "Skrá",
@@ -369,7 +362,6 @@
         "encrypted": "Dulritað",
         "error": "Villa",
         "faq": "Algengar spurningar",
-        "favourites": "Eftirlæti",
         "feedback": "Umsagnir",
         "filter_results": "Sía niðurstöður",
         "forward_message": "Áframsenda skilaboð",
@@ -377,7 +369,6 @@
         "go_to_settings": "Fara í stillingar",
         "guest": "Gestur",
         "help": "Hjálp",
-        "historical": "Ferilskráning",
         "home": "Forsíða",
         "homeserver": "Heimaþjónn",
         "identity_server": "Auðkennisþjónn",
@@ -388,7 +379,6 @@
         "legal": "Lagalegir fyrirvarar",
         "light": "Ljóst",
         "location": "Staðsetning",
-        "low_priority": "Lítill forgangur",
         "message": "Skilaboð",
         "message_layout": "Framsetning skilaboða",
         "microphone": "Hljóðnemi",
@@ -446,7 +436,6 @@
         "success": "Tókst",
         "suggestions": "Tillögur",
         "support": "Aðstoð",
-        "system_alerts": "Aðvaranir kerfis",
         "theme": "Þema",
         "thread": "Spjallþráður",
         "threads": "Spjallþræðir",
@@ -460,7 +449,6 @@
         "username": "Notandanafn",
         "verified": "Staðfest",
         "version": "Útgáfa",
-        "video": "Myndskeið",
         "video_room": "Myndspjallrás",
         "view_message": "Sjá skilaboð",
         "warning": "Aðvörun"
@@ -1045,7 +1033,6 @@
         "click_for_info": "Smelltu til að sjá frekari upplýsingar",
         "currently_experimental": "Í augnablikinu á tilraunastigi.",
         "custom_themes": "Stuðningur við að bæta við sérsniðnum þemum",
-        "group_calls": "Ný upplifun við hópsamtöl",
         "group_developer": "Forritari",
         "group_encryption": "Dulritun",
         "group_experimental": "Á tilraunastigi",
@@ -1058,7 +1045,6 @@
         "group_threads": "Spjallþræðir",
         "group_voip": "Tal og myndmerki",
         "group_widgets": "Viðmótshlutar",
-        "html_topic": "Birta HTML-framsetningu umfjöllunarefnis spjallrása",
         "join_beta": "Taka þátt í Beta-prófunum",
         "join_beta_reload": "Ef tekið er þátt í beta-prófunum verður %(brand)s endurhlaðið.",
         "jump_to_date": "Hoppa á dagsetningu (bætir við /jumptodate og jump to date hausum)",
@@ -1068,7 +1054,6 @@
         "location_share_live_description": "Bráðabirgðaútfærsla. Staðsetningar haldast í ferli spjallrása.",
         "mjolnir": "Nýjar leiðir til að hunsa fólk",
         "msc3531_hide_messages_pending_moderation": "Láta umsjónarmenn fela skilaboð sem bíða yfirferðar.",
-        "under_active_development": "Í virkri þróun.",
         "video_rooms": "Myndspjallrásir",
         "video_rooms_a_new_way_to_chat": "Ný leið til að spjalla með tali og myndmerki í %(brand)s.",
         "video_rooms_always_on_voip_channels": "Myndspjallrásir eru sívirkar VoIP-rásir sem ívafðar eru í spjallrásir innan %(brand)s.",
@@ -1114,9 +1099,6 @@
         "leave_space_question": "Ertu viss um að þú viljir yfirgefa svæðið '%(spaceName)s'?",
         "room_rejoin_warning": "Þessi spjallrás er ekki opinber. Þú munt ekki geta tekið aftur þátt nema að vera boðið.",
         "space_rejoin_warning": "Þetta svæði er ekki opinbert. Þú munt ekki geta tekið aftur þátt nema að vera boðið."
-    },
-    "left_panel": {
-        "open_dial_pad": "Opna talnaborð"
     },
     "lightbox": {
         "rotate_left": "Snúa til vinstri",
@@ -1270,7 +1252,6 @@
     },
     "quick_settings": {
         "all_settings": "Allar stillingar",
-        "metaspace_section": "Festa á hliðarspjald",
         "sidebar_settings": "Fleiri valkostir",
         "title": "Flýtistillingar"
     },
@@ -1434,37 +1415,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "Bæta við spjallrás",
         "add_space_label": "Bæta við svæði",
-        "breadcrumbs_empty": "Engar nýlega skoðaðar spjallrásir",
-        "breadcrumbs_label": "Nýlega skoðaðar spjallrásir",
         "failed_add_tag": "Mistókst að bæta merkinu %(tagName)s á spjallrás",
         "failed_remove_tag": "Mistókst að fjarlægja merkið %(tagName)s af spjallrás",
         "failed_set_dm_tag": "Ekki tókst að stilla merki um bein skilaboð",
-        "home_menu_label": "Valkostir forsíðu",
-        "join_public_room_label": "Taka þátt í almenningsspjallrás",
-        "joining_rooms_status": {
-            "one": "Er núna að ganga til liðs við %(count)s spjallrás",
-            "other": "Er núna að ganga til liðs við %(count)s spjallrásir"
-        },
         "notification_options": "Valkostir tilkynninga",
-        "redacting_messages_status": {
-            "one": "Er núna að fjarlægja skilaboð í %(count)s spjallrás",
-            "other": "Er núna að fjarlægja skilaboð í %(count)s spjallrásum"
-        },
-        "show_less": "Sýna minna",
-        "show_n_more": {
-            "one": "Birta %(count)s til viðbótar",
-            "other": "Birta %(count)s til viðbótar"
-        },
-        "show_previews": "Sýna forskoðun skilaboða",
-        "sort_by": "Raða eftir",
-        "sort_by_activity": "Virkni",
-        "sort_by_alphabet": "A-Ö",
-        "sort_unread_first": "Birta spjallrásir með ólesnum skilaboðum fyrst",
-        "space_menu_label": "Valmynd %(spaceName)s",
-        "sublist_options": "Lista valkosti",
-        "suggested_rooms_heading": "Tillögur að spjallrásum"
+        "show_less": "Sýna minna"
     },
     "room_settings": {
         "access": {
@@ -1978,13 +1934,11 @@
         "show_stickers_button": "Birta límmerkjahnapp",
         "show_typing_notifications": "Sýna skriftilkynningar",
         "sidebar": {
-            "metaspaces_favourites_description": "Hópaðu allar eftirlætisspjallrásir og fólk á einum stað.",
             "metaspaces_home_all_rooms": "Sýna allar spjallrásir",
             "metaspaces_home_all_rooms_description": "Birtu allar spjallrásirnar þínar á forsíðunni, jafnvel þótt þær tilheyri svæði.",
             "metaspaces_home_description": "Forsíðan nýtist til að hafa yfirsýn yfir allt.",
             "metaspaces_orphans": "Spjallrásir utan svæðis",
             "metaspaces_orphans_description": "Hópaðu allar spjallrásir sem ekki eru hluti af svæðum á einum stað.",
-            "metaspaces_people_description": "Hópaðu allt fólk á einum stað.",
             "metaspaces_subsection": "Svæði sem á að birta",
             "title": "Hliðarspjald"
         },
@@ -2000,7 +1954,6 @@
             "audio_output": "Hljóðúttak",
             "audio_output_empty": "Engir hljóðútgangar fundust",
             "auto_gain_control": "Sjálfvirk stýring styrkaukningar",
-            "connection_section": "Tenging",
             "echo_cancellation": "Útrýming bergmáls",
             "mirror_local_feed": "Spegla staðværu myndmerki",
             "missing_permissions_prompt": "Vantar heimildir fyrir margmiðlunarefni, smelltu á hnappinn hér fyrir neðan til að biðja um þær.",
@@ -2157,12 +2110,6 @@
     },
     "space_settings": {
         "title": "Stillingar - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Þú hefur ekki heimild til að bæta spjallrásum í þetta svæði",
-        "error_no_permission_add_space": "Þú hefur ekki heimild til að bæta svæðum í þetta svæði",
-        "error_no_permission_create_room": "Þú hefur ekki heimild til að búa til nýjar spjallrásir í þessu svæði",
-        "error_no_permission_invite": "Þú hefur ekki heimild til að bjóða fólk á þetta svæði"
     },
     "spotlight": {
         "public_rooms": {
