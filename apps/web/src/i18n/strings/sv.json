@@ -11,8 +11,6 @@
             "other": "%(count)s olästa meddelanden inklusive omnämnanden.",
             "one": "1 oläst omnämnande."
         },
-        "recent_rooms": "Nyliga rum",
-        "room_name": "Rum %(name)s",
         "room_status_bar": "Rumsstatusfält",
         "seek_bar_label": "Förloppsfält för ljud",
         "unread_messages": "Olästa meddelanden."
@@ -22,7 +20,6 @@
         "accept": "Godkänn",
         "add": "Lägg till",
         "add_existing_room": "Lägg till existerande rum",
-        "add_people": "Lägg till personer",
         "apply": "Tillämpa",
         "approve": "Godta",
         "ask_to_join": "Be om att gå med",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Gå till fullskärm",
         "exit_fullscreeen": "Gå ur fullskärm",
         "expand": "Expandera",
-        "explore_public_rooms": "Utforska offentliga rum",
         "explore_rooms": "Utforska rum",
         "export": "Exportera",
         "forward": "Vidarebefordra",
@@ -69,8 +65,6 @@
         "ignore": "Ignorera",
         "import": "Importera",
         "invite": "Bjud in",
-        "invite_to_space": "Bjud in till utrymme",
-        "invites_list": "Inbjudningar",
         "join": "Gå med",
         "learn_more": "Läs mer",
         "leave": "Lämna",
@@ -116,8 +110,6 @@
         "sign_out": "Ta bort den här enheten",
         "skip": "Hoppa över",
         "start": "Starta",
-        "start_chat": "Starta chatt",
-        "start_new_chat": "Starta ny chatt",
         "stop": "Stoppa",
         "submit": "Skicka in",
         "subscribe": "Prenumerera",
@@ -475,7 +467,6 @@
         "encrypted": "Krypterat",
         "error": "Fel",
         "faq": "Vanliga frågor",
-        "favourites": "Favoriter",
         "feedback": "Återkoppling",
         "filter_results": "Filtrera resultaten",
         "forward_message": "Vidarebefordra meddelande",
@@ -483,7 +474,6 @@
         "go_to_settings": "Gå till inställningarna",
         "guest": "Gäst",
         "help": "Hjälp",
-        "historical": "Historiska",
         "home": "Hem",
         "homeserver": "Hemserver",
         "identity_server": "Identitetsserver",
@@ -495,7 +485,6 @@
         "light": "Ljust",
         "loading": "Laddar …",
         "location": "Plats",
-        "low_priority": "Låg prioritet",
         "matrix": "Matrix",
         "message": "Meddelande",
         "message_layout": "Meddelandearrangemang",
@@ -560,7 +549,6 @@
         "success": "Lyckades",
         "suggestions": "Förslag",
         "support": "Hjälp",
-        "system_alerts": "Systemvarningar",
         "theme": "Tema",
         "thread": "Tråd",
         "threads": "Trådar",
@@ -577,7 +565,6 @@
         "username": "Användarnamn",
         "verified": "Verifierad",
         "version": "Version",
-        "video": "Video",
         "video_room": "Videorum",
         "view_message": "Visa meddelande",
         "warning": "Varning"
@@ -1437,7 +1424,6 @@
         "extended_profiles_msc_support": "Kräver att din server har stöd för MSC4133",
         "feature_disable_call_per_sender_encryption": "Inaktivera kryptering per avsändare för Element Call",
         "feature_wysiwyg_composer_description": "Använd rik text istället för Markdown i meddelanderedigeraren.",
-        "group_calls": "Ny gruppsamtalsupplevelse",
         "group_developer": "Utvecklare",
         "group_encryption": "Kryptering",
         "group_experimental": "Experimentellt",
@@ -1452,7 +1438,6 @@
         "group_voip": "Röst & video",
         "group_widgets": "Widgets",
         "hidebold": "Dölj aviseringspunkt (visa bara räknarmärken)",
-        "html_topic": "Visa HTML-representation av rumsämnen",
         "join_beta": "Gå med i betan",
         "join_beta_reload": "Att gå med i betan kommer att ladda om %(brand)s.",
         "jump_to_date": "Hoppa till datum (lägger till /jumptodate och hopp till datumrubriker)",
@@ -1464,7 +1449,6 @@
         "location_share_live_description": "Temporär implementation. Platser stannar kvar i rumshistoriken.",
         "mjolnir": "Nya sätt att ignorera personer",
         "msc3531_hide_messages_pending_moderation": "Låt moderatorer dölja meddelanden i väntan på moderering.",
-        "new_room_list": "Aktivera ny rumslista",
         "notification_settings": "Nya aviseringsinställningar",
         "notification_settings_beta_caption": "Vi introducerar ett enklare sätt att ändra dina aviseringsinställningar. Anpassa din %(brand)s precis som du vill ha den.",
         "notification_settings_beta_title": "Aviseringsinställningar",
@@ -1475,7 +1459,6 @@
         "sliding_sync_description": "Under aktiv utveckling, kan inte inaktiveras.",
         "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
         "sliding_sync_server_no_support": "Din server saknar support",
-        "under_active_development": "Under aktiv utveckling.",
         "unrealiable_e2e": "Otillförlitlig i krypterade rum",
         "video_rooms": "Videorum",
         "video_rooms_a_new_way_to_chat": "Ett nytt sätt att chatta över röst och video i %(brand)s.",
@@ -1530,9 +1513,6 @@
         "room_leave_mod_warning": "Du är den enda moderatorn i det här rummet. Om du lämnar kommer ingen att kunna ändra rumsinställningar eller vidta andra viktiga åtgärder.",
         "room_rejoin_warning": "Det här rummet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.",
         "space_rejoin_warning": "Det här utrymmet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan."
-    },
-    "left_panel": {
-        "open_dial_pad": "Öppna knappsats"
     },
     "lightbox": {
         "rotate_left": "Rotera vänster",
@@ -1719,7 +1699,6 @@
     },
     "quick_settings": {
         "all_settings": "Alla inställningar",
-        "metaspace_section": "Fäst i sidopanelen",
         "sidebar_settings": "Fler alternativ",
         "title": "Snabbinställningar"
     },
@@ -2006,41 +1985,16 @@
         "waiting_for_join_title": "Väntar på att användare går med i %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Lägg till rum",
         "add_space_label": "Lägg till utrymme",
-        "breadcrumbs_empty": "Inga nyligen besökta rum",
-        "breadcrumbs_label": "Nyligen besökta rum",
         "failed_add_tag": "Misslyckades att lägga till etiketten %(tagName)s till rummet",
         "failed_remove_tag": "Misslyckades att radera etiketten %(tagName)s från rummet",
         "failed_set_dm_tag": "Misslyckades att sätta direktmeddelandetagg",
-        "home_menu_label": "Hemalternativ",
-        "join_public_room_label": "Gå med i offentligt rum",
-        "joining_rooms_status": {
-            "one": "Går just nu med i %(count)s rum",
-            "other": "Går just nu med i %(count)s rum"
-        },
         "list_title": "Rumslista",
         "more_options": {
             "leave_room": "Lämna rum"
         },
         "notification_options": "Aviseringsinställningar",
-        "redacting_messages_status": {
-            "one": "Tar just nu bort meddelanden i %(count)s rum",
-            "other": "Tar just nu bort meddelanden i %(count)s rum"
-        },
-        "show_less": "Visa mindre",
-        "show_n_more": {
-            "other": "Visa %(count)s till",
-            "one": "Visa %(count)s till"
-        },
-        "show_previews": "Visa förhandsgranskningar av meddelanden",
-        "sort_by": "Sortera efter",
-        "sort_by_activity": "Aktivitet",
-        "sort_by_alphabet": "A-Ö",
-        "sort_unread_first": "Visa rum med olästa meddelanden först",
-        "space_menu_label": "%(spaceName)s-alternativ",
-        "sublist_options": "Listalternativ",
-        "suggested_rooms_heading": "Föreslagna rum"
+        "show_less": "Visa mindre"
     },
     "room_settings": {
         "access": {
@@ -2847,13 +2801,11 @@
         "showbold": "Visa all aktivitet i rumslistan (prickar eller antal olästa meddelanden)",
         "sidebar": {
             "dialog_title": "<strong>Inställningar:</strong> Sidofält",
-            "metaspaces_favourites_description": "Gruppera alla dina favoritrum och -personer på ett ställe.",
             "metaspaces_home_all_rooms": "Visa alla rum",
             "metaspaces_home_all_rooms_description": "Visa alla dina rum i Hem, även om de är i ett utrymme.",
             "metaspaces_home_description": "Hem är användbar för att få en översikt över allt.",
             "metaspaces_orphans": "Rum utanför ett utrymme",
             "metaspaces_orphans_description": "Gruppera alla dina rum som inte är en del av ett utrymme på ett ställe.",
-            "metaspaces_people_description": "Gruppera alla dina personer på ett ställe.",
             "metaspaces_subsection": "Utrymmen att visa",
             "metaspaces_video_rooms": "Videorum och konferenser",
             "metaspaces_video_rooms_description": "Gruppera alla privata videorum och konferenser.",
@@ -2874,7 +2826,6 @@
             "audio_output": "Ljudutgång",
             "audio_output_empty": "Inga ljudutgångar hittades",
             "auto_gain_control": "Automatisk förstärkningskontroll",
-            "connection_section": "Anslutning",
             "dialog_title": "<strong>Inställningar: </strong> Röst och video",
             "echo_cancellation": "Ekoreducering",
             "enable_fallback_ice_server": "Tillåt reservserver för samtalsassistans (%(server)s)",
@@ -3056,12 +3007,6 @@
     },
     "space_settings": {
         "title": "Inställningar - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Du är inte behörig att lägga till rum till det här utrymmet",
-        "error_no_permission_add_space": "Du är inte behörig att lägga till utrymmen till det här utrymmet",
-        "error_no_permission_create_room": "Du är inte behörig att skapa nya rum i det här utrymmet",
-        "error_no_permission_invite": "Du är inte behörig att bjuda in personer till det här utrymmet"
     },
     "spotlight": {
         "public_rooms": {

@@ -27,7 +27,15 @@ export default defineConfig({
         sourcemap: true,
     },
     plugins: [
-        dts(),
+        dts({
+            bundleTypes: {
+                configPath: "./api-extractor.json",
+                invokeOptions: {
+                    localBuild: !!process.env.CI,
+                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                },
+            },
+        }),
         externalGlobals({
             // Reuse React from the host app
             react: "window.React",

@@ -488,7 +488,7 @@ test.describe("Room list", () => {
 
             await app.viewRoomById(roomId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
+            await page.getByText("@mentions and replies only").click();
             await app.settings.closeDialog();
 
             await app.settings.openUserSettings("Notifications");

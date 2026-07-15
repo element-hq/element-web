@@ -14,7 +14,8 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import * as Lifecycle from "../../../Lifecycle";
 import Modal from "../../../Modal";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../utils/createMatrixClient";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
@@ -25,7 +26,6 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
-import { SDKContext } from "../../../contexts/SDKContext";
 import { type URLParams } from "../../../vector/url_utils.ts";
 
 enum LoginView {
@@ -60,9 +60,6 @@ interface IState {
 }
 
 export default class SoftLogout extends React.Component<IProps, IState> {
-    public static contextType = SDKContext;
-    declare public context: React.ContextType<typeof SDKContext>;
-
     public constructor(props: IProps) {
         super(props);
 
@@ -91,7 +88,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             if (!wipeData) return;
 
             logger.log("Clearing data from soft-logged-out session");
-            Lifecycle.logout(this.context.oidcClientStore);
+            Lifecycle.logout();
         });
     };
 
@@ -111,7 +108,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         const loginViews = flows.map((f) => STATIC_FLOWS_TO_VIEWS[f.type]);
 
         const isSocialSignOn = loginViews.includes(LoginView.Password) && loginViews.includes(LoginView.SSO);
-        const firstView = loginViews.filter((f) => !!f)[0] || LoginView.Unsupported;
+        const firstView = loginViews.find((f) => !!f) || LoginView.Unsupported;
         const chosenView = isSocialSignOn ? LoginView.PasswordWithSocialSignOn : firstView;
         this.setState({ flows, loginView: chosenView });
     }

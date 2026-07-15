@@ -11,7 +11,6 @@
             "one": "1 đề cập chưa đọc.",
             "other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập."
         },
-        "room_name": "Phòng %(name)s",
         "unread_messages": "Các tin nhắn chưa đọc."
     },
     "a11y_jump_first_unread_room": "Chuyển đến phòng chưa đọc đầu tiên.",
@@ -19,7 +18,6 @@
         "accept": "Đồng ý",
         "add": "Thêm",
         "add_existing_room": "Thêm phòng hiện có",
-        "add_people": "Thêm người",
         "apply": "Áp dụng",
         "approve": "Chấp thuận",
         "ask_to_join": "Yêu cầu để tham gia",
@@ -52,7 +50,6 @@
         "enter_fullscreen": "Vào toàn màn hình",
         "exit_fullscreeen": "Thoát toàn màn hình",
         "expand": "Mở rộng",
-        "explore_public_rooms": "Khám phá các phòng chung",
         "explore_rooms": "Khám phá các phòng",
         "export": "Xuất",
         "forward": "Chuyển tiếp",
@@ -64,8 +61,6 @@
         "ignore": "Tảng lờ",
         "import": "Nhập",
         "invite": "Mời",
-        "invite_to_space": "Mời vào space",
-        "invites_list": "Mời",
         "join": "Tham gia",
         "learn_more": "Tìm hiểu thêm",
         "leave": "Rời khỏi",
@@ -109,8 +104,6 @@
         "sign_out": "Đăng xuất",
         "skip": "Bỏ qua",
         "start": "Bắt đầu",
-        "start_chat": "Bắt đầu trò chuyện",
-        "start_new_chat": "Bắt đầu trò chuyện mới",
         "stop": "Dừng",
         "submit": "Xác nhận",
         "subscribe": "Đặt mua",
@@ -390,7 +383,6 @@
         "encrypted": "Được mã hóa",
         "error": "Lỗi",
         "faq": "Câu hỏi thường gặp",
-        "favourites": "Yêu thích",
         "feedback": "Phản hồi",
         "filter_results": "Lọc kết quả",
         "forward_message": "Chuyển tiếp tin nhắn",
@@ -398,7 +390,6 @@
         "go_to_settings": "Đi tới Cài đặt",
         "guest": "Khách",
         "help": "Hỗ trợ",
-        "historical": "Lịch sử",
         "home": "Nhà",
         "homeserver": "Máy chủ",
         "identity_server": "Máy chủ định danh",
@@ -410,7 +401,6 @@
         "light": "Sáng",
         "loading": "Đang tải…",
         "location": "Vị trí",
-        "low_priority": "Ưu tiên thấp",
         "matrix": "Matrix",
         "message": "Tin nhắn",
         "message_layout": "Bố cục tin nhắn",
@@ -470,7 +460,6 @@
         "success": "Thành công",
         "suggestions": "Gợi ý",
         "support": "Hỗ trợ",
-        "system_alerts": "Cảnh báo hệ thống",
         "theme": "Chủ đề",
         "thread": "Chủ đề",
         "threads": "Chủ đề",
@@ -486,7 +475,6 @@
         "username": "Tên đăng nhập",
         "verified": "Đã xác thực",
         "version": "Phiên bản",
-        "video": "Truyền hình",
         "video_room": "Phòng truyền hình",
         "view_message": "Xem tin nhăn",
         "warning": "Cảnh báo"
@@ -1181,7 +1169,6 @@
         "experimental_description": "Muốn trải nghiệm? Thử các ý tưởng mới nhất còn đang được phát triển của chúng tôi. Các tính năng này chưa được hoàn thiện, chúng có thể không ổn định, có thể thay đổi, hay bị loại bỏ hoàn toàn. <a>Tìm hiểu thêm</a>.",
         "experimental_section": "Thử trước tính năng mới",
         "feature_wysiwyg_composer_description": "Dùng văn bản giàu tính chất thay cho định dạng Markdown ở thanh soạn tin nhắn.",
-        "group_calls": "Trải nghiệm gọi nhóm mới",
         "group_developer": "Nhà phát triển",
         "group_encryption": "Mã hóa",
         "group_experimental": "Thử nghiệm",
@@ -1195,7 +1182,6 @@
         "group_voip": "Âm thanh & Hình ảnh",
         "group_widgets": "Vật dụng",
         "hidebold": "Ẩn dấu chấm thông báo (chỉ hiển thị bộ đếm)",
-        "html_topic": "Hiện chủ đề phòng bằng HTML",
         "join_beta": "Tham gia phiên bản beta",
         "join_beta_reload": "Tham gia thử nghiệm sẽ tải lại %(brand)s.",
         "jump_to_date": "Nhảy đến ngày (thêm lệnh /jumptodate và nhảy đến ngày)",
@@ -1213,7 +1199,6 @@
         "sliding_sync_description": "Đang được phát triển tích cực, không thể vô hiệu.",
         "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa",
         "sliding_sync_server_no_support": "Máy chủ của bạn không hoàn toàn hỗ trợ",
-        "under_active_development": "Đang được phát triển tích cực.",
         "video_rooms": "Phòng video",
         "video_rooms_a_new_way_to_chat": "Một cách mới để trò chuyện bằng thoại và video trong %(brand)s.",
         "video_rooms_always_on_voip_channels": "Các phòng video là các kênh VoIP luôn bật được nhúng trong một phòng ở %(brand)s.",
@@ -1264,9 +1249,6 @@
         "leave_space_question": "Bạn có chắc chắn muốn để khoảng trắng '%(spaceName)s' không?",
         "room_rejoin_warning": "Phòng này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời.",
         "space_rejoin_warning": "space này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời."
-    },
-    "left_panel": {
-        "open_dial_pad": "Mở bàn phím quay số"
     },
     "lightbox": {
         "rotate_left": "Xoay trái",
@@ -1405,7 +1387,6 @@
     },
     "quick_settings": {
         "all_settings": "Tất cả cài đặt",
-        "metaspace_section": "Ghim vào sidebar",
         "sidebar_settings": "Thêm tùy chọn",
         "title": "Cài đặt nhanh"
     },
@@ -1606,35 +1587,11 @@
         }
     },
     "room_list": {
-        "add_room_label": "Thêm phòng",
         "add_space_label": "Thêm space",
-        "breadcrumbs_empty": "Không có phòng nào được truy cập gần đây",
-        "breadcrumbs_label": "Các phòng đã ghé thăm gần đây",
         "failed_add_tag": "Không thêm được thẻ %(tagName)s vào phòng",
         "failed_remove_tag": "Không xóa được thẻ %(tagName)s khỏi phòng",
-        "home_menu_label": "Các tùy chọn Home",
-        "join_public_room_label": "Tham gia vào phòng công cộng",
-        "joining_rooms_status": {
-            "one": "Hiện đang tham gia %(count)s phòng",
-            "other": "Hiện đang tham gia %(count)s phòng"
-        },
         "notification_options": "Tùy chọn thông báo",
-        "redacting_messages_status": {
-            "one": "Hiện đang xóa tin nhắn ở %(count)s phòng",
-            "other": "Hiện đang xóa tin nhắn ở %(count)s phòng"
-        },
-        "show_less": "Hiện ít hơn",
-        "show_n_more": {
-            "one": "Hiển thị %(count)s thêm",
-            "other": "Hiển thị %(count)s thêm"
-        },
-        "show_previews": "Hiển thị bản xem trước của tin nhắn",
-        "sort_by": "Sắp xếp theo",
-        "sort_by_activity": "Hoạt động",
-        "sort_by_alphabet": "AZ",
-        "sort_unread_first": "Hiển thị các phòng có tin nhắn chưa đọc trước",
-        "sublist_options": "Liệt kê các tùy chọn",
-        "suggested_rooms_heading": "Phòng được đề xuất"
+        "show_less": "Hiện ít hơn"
     },
     "room_settings": {
         "access": {
@@ -2260,13 +2217,11 @@
         "show_stickers_button": "Hiển thị nút sticker cảm xúc",
         "show_typing_notifications": "Hiển thị thông báo \"đang gõ\"",
         "sidebar": {
-            "metaspaces_favourites_description": "Nhóm tất cả các phòng và người mà bạn yêu thích ở một nơi.",
             "metaspaces_home_all_rooms": "Hiển thị tất cả các phòng",
             "metaspaces_home_all_rooms_description": "Hiển thị tất cả các phòng trong Home, ngay cả nếu chúng ở trong space.",
             "metaspaces_home_description": "Home rất hữu ích để có cái nhìn tổng quan về mọi thứ.",
             "metaspaces_orphans": "Các phòng bên ngoài một space",
             "metaspaces_orphans_description": "Nhóm tất cả các phòng của bạn mà không phải là một phần của không gian ở một nơi.",
-            "metaspaces_people_description": "Đưa tất cả mọi người vào một chỗ.",
             "metaspaces_subsection": "Space để hiển thị",
             "title": "Thanh bên"
         },
@@ -2282,7 +2237,6 @@
             "audio_output": "Đầu ra âm thanh",
             "audio_output_empty": "Không phát hiện thấy đầu ra âm thanh",
             "auto_gain_control": "Tự động chiếm quyền điều khiển",
-            "connection_section": "Kết nối",
             "echo_cancellation": "Loại bỏ tiếng vang",
             "enable_fallback_ice_server": "Cho phép máy chủ hỗ trợ cuộc gọi dự phòng (%(server)s)",
             "enable_fallback_ice_server_description": "Chỉ áp dụng nếu máy chủ nhà của bạn không cung cấp. Địa chỉ Internet (IP) của bạn có thể được chia sẻ trong một cuộc gọi.",
@@ -2452,12 +2406,6 @@
     },
     "space_settings": {
         "title": "Cài đặt - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Bạn không có quyền thêm phòng vào space này",
-        "error_no_permission_add_space": "Bạn không có quyền để thêm space khác vào trong space này",
-        "error_no_permission_create_room": "Bạn không có quyền tạo phòng mới trong space này",
-        "error_no_permission_invite": "Bạn không có quyền mời mọi người vào space này"
     },
     "spotlight": {
         "public_rooms": {

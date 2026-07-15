@@ -9,7 +9,6 @@
             "one": "ການກ່າວເຖິງທີ່ຍັງບໍ່ໄດ້ອ່ານ 1.",
             "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
         },
-        "room_name": "ຫ້ອງ %(name)s",
         "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
     },
     "a11y_jump_first_unread_room": "ໄປຫາຫ້ອງທໍາອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
@@ -17,7 +16,6 @@
         "accept": "ຍອມຮັບ",
         "add": "ຕື່ມ",
         "add_existing_room": "ເພີ່ມຫ້ອງທີ່ມີຢູ່",
-        "add_people": "ເພີ່ມຄົນ",
         "approve": "ອະນຸມັດ",
         "back": "ກັບຄືນ",
         "call": "ໂທ",
@@ -45,7 +43,6 @@
         "edit": "ແກ້ໄຂ",
         "enable": "ເປີດໃຊ້ງານ",
         "expand": "ຂະຫຍາຍ",
-        "explore_public_rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ",
         "explore_rooms": "ການສຳຫຼວດຫ້ອງ",
         "export": "ສົ່ງອອກ",
         "forward": "ສົ່ງຕໍ່",
@@ -57,8 +54,6 @@
         "ignore": "ບໍ່ສົນໃຈ/ຍົກເວັ້ນ",
         "import": "ນໍາເຂົ້າ",
         "invite": "ເຊີນ",
-        "invite_to_space": "ເຊີນໄປຍັງພື້ນທີ່",
-        "invites_list": "ເຊີນ",
         "join": "ເຂົ້າຮ່ວມ",
         "learn_more": "ສຶກສາເພີ່ມເຕີມ",
         "leave": "ອອກຈາກ",
@@ -98,8 +93,6 @@
         "sign_out": "ອອກຈາກລະບົບ",
         "skip": "ຂ້າມ",
         "start": "ເລີ່ມຕົ້ນ",
-        "start_chat": "ເລີ່ມການສົນທະນາ",
-        "start_new_chat": "ເລີ່ມການສົນທະນາໃໝ່",
         "stop": "ຢຸດ",
         "submit": "ສົ່ງ",
         "subscribe": "ຕິດຕາມ",
@@ -368,7 +361,6 @@
         "encrypted": "ເຂົ້າລະຫັດແລ້ວ",
         "error": "ມີບັນຫາ",
         "faq": "ຄໍາຖາມທີ່ພົບເປັນປະຈໍາ",
-        "favourites": "ລາຍການທີ່ມັກ",
         "feedback": "ຄໍາຕິຊົມ",
         "filter_results": "ການກັ່ນຕອງຜົນຮັບ",
         "forward_message": "ສົ່ງຂໍ້ຄວາມຕໍ່",
@@ -376,7 +368,6 @@
         "go_to_settings": "ໄປທີ່ການຕັ້ງຄ່າ",
         "guest": "ແຂກ",
         "help": "ຊ່ວຍເຫຼືອ",
-        "historical": "ປະຫວັດ",
         "home": "ໜ້າຫຼັກ",
         "identity_server": "ຕົວເຊີບເວີ",
         "image": "ຮູບພາບ",
@@ -386,7 +377,6 @@
         "legal": "ຖືກກົດໝາຍ",
         "light": "ແສງສະຫວ່າງ",
         "location": "ສະຖານທີ່",
-        "low_priority": "ບູລິມະສິດຕໍ່າ",
         "message": "ຂໍ້ຄວາມ",
         "message_layout": "ຮູບແບບຂໍ້ຄວາມ",
         "microphone": "ໄມໂຄຣໂຟນ",
@@ -442,7 +432,6 @@
         "success": "ຄວາມສໍາເລັດ",
         "suggestions": "ຄຳແນະນຳ",
         "support": "ສະຫນັບສະຫນູນ",
-        "system_alerts": "ການແຈ້ງເຕືອນລະບົບ",
         "theme": "ຫົວຂໍ້",
         "thread": "ກະທູ້",
         "threads": "ກະທູ້",
@@ -453,7 +442,6 @@
         "unnamed_space": "ພື້ນທີ່ບໍ່ລະບຸຊື່",
         "user_avatar": "ຮູບໂປຣໄຟລ໌",
         "username": "ຊື່ຜູ້ໃຊ້",
-        "video": "ວິດີໂອ",
         "video_room": "ຫ້ອງວີດີໂອ",
         "view_message": "ເບິ່ງຂໍ້ຄວາມ",
         "warning": "ຄຳເຕືອນ"
@@ -1123,9 +1111,6 @@
         "room_rejoin_warning": "ຫ້ອງນີ້ບໍ່ແມ່ນສາທາລະນະ. ທ່ານຈະບໍ່ສາມາດເຂົ້າຮ່ວມຄືນໃໝ່ໄດ້ໂດຍບໍ່ມີການເຊີນ.",
         "space_rejoin_warning": "ພື້ນທີ່ນີ້ບໍ່ແມ່ນສາທາລະນະ. ທ່ານຈະບໍ່ສາມາດເຂົ້າຮ່ວມຄືນໃໝ່ໄດ້ໂດຍບໍ່ມີການເຊີນ."
     },
-    "left_panel": {
-        "open_dial_pad": "ເປີດແຜ່ນປັດ"
-    },
     "lightbox": {
         "rotate_left": "ໝຸນດ້ານຊ້າຍ",
         "rotate_right": "ໝຸນດ້ານຂວາ"
@@ -1279,7 +1264,6 @@
     },
     "quick_settings": {
         "all_settings": "ການຕັ້ງຄ່າທັງໝົດ",
-        "metaspace_section": "ປັກໝຸດໃສ່ແຖບດ້ານຂ້າງ",
         "sidebar_settings": "ທາງເລືອກເພີ່ມເຕີມ",
         "title": "ການຕັ້ງຄ່າດ່ວນ"
     },
@@ -1459,35 +1443,11 @@
         }
     },
     "room_list": {
-        "add_room_label": "ເພີ່ມຫ້ອງ",
         "add_space_label": "ເພີ່ມພື້ນທີ່",
-        "breadcrumbs_empty": "ບໍ່ມີຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
-        "breadcrumbs_label": "ຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
         "failed_add_tag": "ເພີ່ມແທັກ %(tagName)s ໃສ່ຫ້ອງບໍ່ສຳເລັດ",
         "failed_remove_tag": "ລຶບແທັກ %(tagName)s ອອກຈາກຫ້ອງບໍ່ສຳເລັດ",
-        "home_menu_label": "ຕົວເລືອກໜ້າຫຼັກ",
-        "join_public_room_label": "ເຂົ້າຮ່ວມຫ້ອງສາທາລະນະ",
-        "joining_rooms_status": {
-            "one": "ກຳລັງເຂົ້າຮ່ວມຫ້ອງ %(count)s",
-            "other": "ປະຈຸບັນກຳລັງເຂົ້າຮ່ວມ %(count)s ຫ້ອງ"
-        },
         "notification_options": "ຕົວເລືອກການແຈ້ງເຕືອນ",
-        "redacting_messages_status": {
-            "one": "ຕອນນີ້ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນຫ້ອງ %(count)s",
-            "other": "ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນ %(count)s ຫ້ອງ"
-        },
-        "show_less": "ສະແດງໜ້ອຍລົງ",
-        "show_n_more": {
-            "one": "ສະແດງ %(count)s ເພີ່ມເຕີມ",
-            "other": "ສະແດງ %(count)s ເພີ່ມເຕີມ"
-        },
-        "show_previews": "ສະແດງຕົວຢ່າງຂອງຂໍ້ຄວາມ",
-        "sort_by": "ຈັດຮຽງຕາມ",
-        "sort_by_activity": "ກິດຈະກໍາ",
-        "sort_unread_first": "ສະແດງຫ້ອງຂໍ້ຄວາມທີ່ຍັງບໍ່ທັນໄດ້ອ່ານກ່ອນ",
-        "space_menu_label": "ເມນູ %(spaceName)s",
-        "sublist_options": "ລາຍຊື່ຕົວເລືອກ",
-        "suggested_rooms_heading": "ຫ້ອງແນະນຳ"
+        "show_less": "ສະແດງໜ້ອຍລົງ"
     },
     "room_settings": {
         "access": {
@@ -1981,13 +1941,11 @@
         "show_stickers_button": "ສະແດງປຸ່ມສະຕິກເກີ",
         "show_typing_notifications": "ສະແດງການແຈ້ງເຕືອນການພິມ",
         "sidebar": {
-            "metaspaces_favourites_description": "ຈັດກຸ່ມຫ້ອງ ແລະ ຄົນທີ່ທ່ານມັກທັງໝົດຢູ່ບ່ອນດຽວ.",
             "metaspaces_home_all_rooms": "ສະແດງຫ້ອງທັງໝົດ",
             "metaspaces_home_all_rooms_description": "ສະແດງຫ້ອງທັງໝົດຂອງທ່ານໃນໜ້າຫຼັກ, ເຖິງແມ່ນວ່າພວກມັນຢູ່ໃນບ່ອນໃດນຶ່ງກໍ່ຕາມ.",
             "metaspaces_home_description": "ຫນ້າHome ເປັນປະໂຫຍດສໍາລັບການເບິ່ງລາຍການລວມທັງໝົດ.",
             "metaspaces_orphans": "ຫ້ອງຢູ່ນອກພື້ນທີ່",
             "metaspaces_orphans_description": "ຈັດກຸ່ມຫ້ອງທັງໝົດຂອງທ່ານທີ່ບໍ່ໄດ້ເປັນສ່ວນໜຶ່ງຂອງພື້ນທີ່ຢູ່ໃນບ່ອນດຽວກັນ.",
-            "metaspaces_people_description": "ຈັດກຸ່ມຄົນທັງໝົດຂອງເຈົ້າຢູ່ບ່ອນດຽວ.",
             "metaspaces_subsection": "ພຶ້ນທີ່ຈະສະແດງ",
             "title": "ແຖບດ້ານຂ້າງ"
         },
@@ -2156,12 +2114,6 @@
     },
     "space_settings": {
         "title": "ການຕັ້ງຄ່າ - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "ທ່ານບໍ່ມີສິດໃນການເພີ່ມຫ້ອງໃສ່ພື້ນທີ່ນີ້",
-        "error_no_permission_add_space": "ທ່ານບໍ່ມີການອະນຸຍາດໃຫ້ເພີ່ມພື້ນທີ່ໃສ່ພື້ນທີ່ນີ້",
-        "error_no_permission_create_room": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ສ້າງຫ້ອງໃຫມ່ໃນພື້ນທີ່ນີ້",
-        "error_no_permission_invite": "ທ່ານບໍ່ມີສິດທີ່ຈະເຊີນຄົນເຂົ້າມາໃນພື້ນທີ່ນີ້"
     },
     "spotlight": {
         "public_rooms": {

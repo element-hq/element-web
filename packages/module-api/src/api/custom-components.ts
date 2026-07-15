@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { JSX, ReactNode } from "react";
 import type { MatrixEvent } from "../models/event";
 import type { AccountAuthInfo } from "./auth.ts";
+import type { ComposerApiTarget } from "./composer.ts";
 
 /**
  * Properties for all message components.
@@ -128,12 +129,12 @@ export type CustomLoginComponentProps = {
      * Function to complete login
      * @param data - the data to authenticate the user with
      */
-    onLoggedIn(data: AccountAuthInfo): void;
+    onLoggedIn(this: void, data: AccountAuthInfo): void;
     /**
      * Function to change the selected server
      * @param config - new server configuration details
      */
-    onServerConfigChange(config: CustomLoginComponentPropsServerConfig): void;
+    onServerConfigChange(this: void, config: CustomLoginComponentPropsServerConfig): void;
 };
 
 /**
@@ -156,6 +157,38 @@ export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
  * @alpha Unlikely to change
  */
 export type CustomLoginRenderFunction = ExtendablePropsRenderFunction<CustomLoginComponentProps>;
+
+/**
+ * Properties for composer preview.
+ * @alpha Subject to change.
+ */
+export type CustomComposerPreviewComponentProps = {
+    /**
+     * The plain text currently inside the composer.
+     */
+    text: string;
+    /**
+     * The ID of the room currently in focus.
+     */
+    roomId: string;
+    /**
+     * Details about the target of the composer.
+     */
+    target?: ComposerApiTarget;
+    /**
+     * Details about what relation the user may be responding to.
+     */
+    relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    };
+};
+
+/**
+ * Function used to render a composer preview.
+ * @alpha Unlikely to change
+ */
+export type CustomComposerPreviewRenderFunction = ExtendablePropsRenderFunction<CustomComposerPreviewComponentProps>;
 
 /**
  * API for inserting custom components into Element.
@@ -224,4 +257,29 @@ export interface CustomComponentsApi {
      * ```
      */
     registerLoginComponent(renderer: CustomLoginRenderFunction): void;
+
+    /**
+     * Register a renderer for replacing the preview above the message composer.
+     *
+     * The render function should return a rendered component.
+     *
+     * Multiple render function may be registered, however the first matching result will be used.
+     * If no events match or are registered then the originalComponent is rendered.
+     *
+     * @param filterFn - A filter function to determine if this renderer should be used.
+     * @param renderer - The render function.
+     * @example
+     * ```
+     *  customComponents.registerComposerPreview(
+     *      (composerText) => composerText === "hello!",
+     *      (props, originalComponent) => {
+     *          return <b>You've said hello!</b>;
+     *      }
+     * );
+     * ```
+     */
+    registerComposerPreview(
+        filterFn: (composerText: string, roomId: string) => boolean,
+        renderer: CustomComposerPreviewRenderFunction,
+    ): void;
 }

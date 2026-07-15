@@ -13,8 +13,6 @@
             "few": "%(count)s nepročitane poruke, uključujući spominjanja.",
             "other": "%(count)s nepročitanih poruka, uključujući spominjanja."
         },
-        "recent_rooms": "Nedavne sobe",
-        "room_name": "Soba %(name)s",
         "room_status_bar": "Traka statusa sobe",
         "seek_bar_label": "Traka za traženje zvuka",
         "unread_messages": "Nepročitane poruke."
@@ -24,7 +22,6 @@
         "accept": "Prihvati",
         "add": "Dodaj",
         "add_existing_room": "Dodaj postojeću sobu",
-        "add_people": "Dodaj osobe",
         "apply": "Primijeni",
         "approve": "Odobri",
         "ask_to_join": "Zatraži pridruživanje",
@@ -59,7 +56,6 @@
         "enter_fullscreen": "Otvori prikaz preko cijelog zaslona",
         "exit_fullscreeen": "Iziđi iz prikaza preko cijelog zaslona",
         "expand": "Proširi",
-        "explore_public_rooms": "Pretražuj javne sobe",
         "explore_rooms": "Pretražuj sobe",
         "export": "Izvoz",
         "forward": "Proslijedi",
@@ -71,8 +67,6 @@
         "ignore": "Ignoriraj",
         "import": "Uvezi",
         "invite": "Pozovi",
-        "invite_to_space": "Pozovi u prostor",
-        "invites_list": "Pozivnice",
         "join": "Pridruži se",
         "learn_more": "Saznajte više",
         "leave": "Napusti",
@@ -118,8 +112,6 @@
         "sign_out": "Odjava",
         "skip": "Preskoči",
         "start": "Započni",
-        "start_chat": "Započni razgovor",
-        "start_new_chat": "Započni novi razgovor",
         "stop": "Zaustavi",
         "submit": "Pošalji",
         "subscribe": "Pretplati se",
@@ -478,7 +470,6 @@
         "encrypted": "Šifrirano",
         "error": "Geška",
         "faq": "Česta pitanja",
-        "favourites": "Favoriti",
         "feedback": "Povratne informacije",
         "filter_results": "Filtriraj rezultate",
         "forward_message": "Proslijedi poruku",
@@ -486,7 +477,6 @@
         "go_to_settings": "Idi na postavke",
         "guest": "Gost",
         "help": "Pomoć",
-        "historical": "Povijest",
         "home": "Početna stranica",
         "homeserver": "Matični poslužitelj",
         "identity_server": "Poslužitelj identiteta",
@@ -498,7 +488,6 @@
         "light": "Svijetlo",
         "loading": "Učitavanje…",
         "location": "Lokacija",
-        "low_priority": "Niski prioritet",
         "matrix": "Matrix",
         "message": "Poruka",
         "message_layout": "Izgled poruke",
@@ -566,7 +555,6 @@
         "success": "Uspjeh",
         "suggestions": "Prijedlozi",
         "support": "Podrška",
-        "system_alerts": "Upozorenja sustava",
         "theme": "Tema",
         "thread": "Nit",
         "threads": "Niti",
@@ -583,7 +571,6 @@
         "username": "Korisničko ime",
         "verified": "Potvrđeno",
         "version": "Inačica",
-        "video": "Videozapis",
         "video_room": "Videosoba",
         "view_message": "Prikaži poruku",
         "warning": "Upozorenje"
@@ -1508,7 +1495,6 @@
         "extended_profiles_msc_support": "Zahtijeva da vaš poslužitelj podržava MSC4133",
         "feature_disable_call_per_sender_encryption": "Onemogući šifriranje po pošiljatelju za Element Call",
         "feature_wysiwyg_composer_description": "Upotrebljavaj obogaćeni tekst umjesto Markdowna u sastavljaču poruka.",
-        "group_calls": "Novo iskustvo grupnih poziva",
         "group_developer": "Razvojni inženjer",
         "group_encryption": "Šifriranje",
         "group_experimental": "Eksperimentalno",
@@ -1523,7 +1509,6 @@
         "group_voip": "Glas i videozapis",
         "group_widgets": "Widgeti",
         "hidebold": "Sakrij indikator obavijesti (prikaži samo brojčane oznake)",
-        "html_topic": "Prikaži HTML prikaz tema soba",
         "join_beta": "Pridruži se beta inačici",
         "join_beta_reload": "Pridruživanjem beta inačici ponovno će se pokrenuti %(brand)s.",
         "jump_to_date": "Skoči na datum (dodaje zaglavlja /jumptodate i skok na datum)",
@@ -1535,7 +1520,6 @@
         "location_share_live_description": "Privremena implementacija. Lokacije ostaju u povijesti sobe.",
         "mjolnir": "Novi načini ignoriranja osoba",
         "msc3531_hide_messages_pending_moderation": "Dopusti moderatorima da sakriju poruke koje čekaju moderiranje.",
-        "new_room_list": "Omogući novi popis soba",
         "notification_settings": "Nove postavke obavijesti",
         "notification_settings_beta_caption": "Predstavljamo jednostavniji način promjene postavki obavijesti. Prilagodite svoj %(brand)s tako da bude po vašoj mjeri.",
         "notification_settings_beta_title": "Postavke obavijesti",
@@ -1546,7 +1530,6 @@
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
         "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
         "sliding_sync_server_no_support": "Vaš poslužitelj nema podršku",
-        "under_active_development": "Trenutačno je u razvoju.",
         "unrealiable_e2e": "Nepouzdano u šifriranim sobama",
         "video_rooms": "Videosobe",
         "video_rooms_a_new_way_to_chat": "Nov način razgovora putem glasa i videa u %(brand)s.",
@@ -1601,9 +1584,6 @@
         "room_leave_mod_warning": "Vi ste jedini moderator u ovoj sobi. Ako odete, nitko neće moći mijenjati postavke sobe ili poduzimati druge važne radnje.",
         "room_rejoin_warning": "Ova soba nije javna. Nećete se moći ponovno pridružiti bez pozivnice.",
         "space_rejoin_warning": "Ovaj prostor nije javan. Nećete se moći ponovno pridružiti bez pozivnice."
-    },
-    "left_panel": {
-        "open_dial_pad": "Otvori brojčanik"
     },
     "lightbox": {
         "rotate_left": "Zakreni ulijevo",
@@ -1806,7 +1786,6 @@
     },
     "quick_settings": {
         "all_settings": "Sve postavke",
-        "metaspace_section": "Prikvači na bočnu traku",
         "sidebar_settings": "Više mogućnosti",
         "title": "Brze postavke"
     },
@@ -2111,44 +2090,16 @@
         "waiting_for_join_title": "Čeka se da se korisnici pridruže %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Dodaj sobu",
         "add_space_label": "Dodaj prostor",
-        "breadcrumbs_empty": "Nema nedavno posjećenih soba",
-        "breadcrumbs_label": "Nedavno posjećene sobe",
         "failed_add_tag": "Nije uspjelo dodavanje oznake %(tagName)s na sobu",
         "failed_remove_tag": "Nije uspjelo uklanjanje oznake %(tagName)s sa sobe",
         "failed_set_dm_tag": "Nije uspjelo postavljanje oznake za izravnu poruku",
-        "home_menu_label": "Mogućnosti početne stranice",
-        "join_public_room_label": "Pridruži se javnoj sobi",
-        "joining_rooms_status": {
-            "one": "Trenutačno se pridružuje %(count)s sobi",
-            "few": "Trenutačno se pridružuje %(count)s sobe",
-            "other": "Trenutačno se pridružuje %(count)s soba"
-        },
         "list_title": "Popis soba",
         "more_options": {
             "leave_room": "Napusti sobu"
         },
         "notification_options": "Mogućnosti obavijesti",
-        "redacting_messages_status": {
-            "one": "Trenutačno se uklanjaju poruke u %(count)s sobi",
-            "few": "Trenutačno se uklanjaju poruke u %(count)s sobe",
-            "other": "Trenutačno se uklanjaju poruke u %(count)s soba"
-        },
-        "show_less": "Prikaži manje",
-        "show_n_more": {
-            "one": "Prikaži još %(count)s",
-            "few": "Prikaži još %(count)s",
-            "other": "Prikaži još %(count)s"
-        },
-        "show_previews": "Prikaži preglede poruka",
-        "sort_by": "Poredaj po",
-        "sort_by_activity": "Aktivnost",
-        "sort_by_alphabet": "A – Z",
-        "sort_unread_first": "Prvo prikaži sobe s nepročitanim porukama",
-        "space_menu_label": "Izbornik za %(spaceName)s",
-        "sublist_options": "Mogućnosti popisa",
-        "suggested_rooms_heading": "Predložene sobe"
+        "show_less": "Prikaži manje"
     },
     "room_settings": {
         "access": {
@@ -2980,13 +2931,11 @@
         "showbold": "Prikaži sve aktivnosti na popisu soba (točke ili broj nepročitanih poruka)",
         "sidebar": {
             "dialog_title": "<strong>Postavke:</strong> Bočna traka",
-            "metaspaces_favourites_description": "Grupirajte sve svoje omiljene sobe i osobe na jednom mjestu.",
             "metaspaces_home_all_rooms": "Prikaži sve sobe",
             "metaspaces_home_all_rooms_description": "Prikažite sve svoje sobe na početnoj stranici, čak i ako se nalaze u prostoru.",
             "metaspaces_home_description": "Početna stranica je korisna jer vam omogućuje pregled svih aktivnosti.",
             "metaspaces_orphans": "Sobe izvan prostora",
             "metaspaces_orphans_description": "Grupirajte sve sobe koje nisu dio prostora na jednom mjestu.",
-            "metaspaces_people_description": "Grupirajte sve osobe na jednom mjestu.",
             "metaspaces_subsection": "Prostori za prikaz",
             "metaspaces_video_rooms": "Videosobe i konferencijski pozivi",
             "metaspaces_video_rooms_description": "Grupirajte sve privatne videosobe i konferencijske pozive.",
@@ -3013,7 +2962,6 @@
             "audio_output": "Izlaz zvuka",
             "audio_output_empty": "Nisu otkriveni izlazi zvuka",
             "auto_gain_control": "Automatska kontrola pojačanja",
-            "connection_section": "Veza",
             "dialog_title": "<strong>Postavke:</strong> Glas i videozapis",
             "echo_cancellation": "Poništavanje jeke",
             "enable_fallback_ice_server": "Dopusti pričuvni poslužitelj za pomoć pri pozivu (%(server)s)",
@@ -3196,12 +3144,6 @@
     },
     "space_settings": {
         "title": "Postavke – %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Nemate dopuštenja za dodavanje soba u ovaj prostor",
-        "error_no_permission_add_space": "Nemate dopuštenja za dodavanje prostora u ovaj prostor",
-        "error_no_permission_create_room": "Nemate dopuštenja za izradu novih soba u ovom prostoru",
-        "error_no_permission_invite": "Nemate dopuštenja za pozivanje korisnika u ovaj prostor"
     },
     "spotlight": {
         "public_rooms": {

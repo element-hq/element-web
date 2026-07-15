@@ -27,3 +27,10 @@ export const LotOfSeconds: Story = {
         seconds: 99999999999999,
     },
 };
+
+export const SingleDigitMinutes: Story = {
+    args: {
+        seconds: 100,
+        minutesMaxLength: 1,
+    },
+};

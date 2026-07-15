@@ -36,10 +36,14 @@ test.describe("Composer URL preview", () => {
                 );
 
                 await page.goto(`#/room/${room.roomId}`);
-                const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
+                const composerRegion = page.getByRole("region", { name: "Message composer" });
+                const composer = composerRegion.getByRole("textbox", { name: "Send an unencrypted message…" });
                 await composer.pressSequentially("https://example.org/");
-
-                await expect(page.getByRole("link", { name: "Example Site" })).toBeVisible();
+                const preview = composerRegion.getByRole("link", { name: "Example Site" });
+                await expect(preview).toBeVisible();
+                await composer.press("Enter");
+                await expect(composer).toBeEmpty();
+                await expect(preview).toBeHidden();
             });
 
             test("does not show a preview when the server returns a 404", async ({ page, app, room }) => {

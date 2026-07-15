@@ -11,8 +11,6 @@
             "other": "%(count)s непрочитаних повідомлень включно зі згадками.",
             "one": "1 непрочитана згадка."
         },
-        "recent_rooms": "Недавні кімнати",
-        "room_name": "Кімната %(name)s",
         "room_status_bar": "Панель стану кімнати",
         "seek_bar_label": "Панель гортання аудіо",
         "unread_messages": "Непрочитані повідомлення."
@@ -22,7 +20,6 @@
         "accept": "Погодитись",
         "add": "Додати",
         "add_existing_room": "Додати наявну кімнату",
-        "add_people": "Додати людей",
         "apply": "Застосувати",
         "approve": "Дозволити",
         "ask_to_join": "Запит на приєднання",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Перейти у повноекранний режим",
         "exit_fullscreeen": "Вийти з повноекранного режиму",
         "expand": "Розгорнути",
-        "explore_public_rooms": "Переглянути загальнодоступні кімнати",
         "explore_rooms": "Каталог кімнат",
         "export": "Експортувати",
         "forward": "Переслати",
@@ -69,8 +65,6 @@
         "ignore": "Ігнорувати",
         "import": "Імпорт",
         "invite": "Запросити",
-        "invite_to_space": "Запросити до простору",
-        "invites_list": "Запрошення",
         "join": "Приєднатися",
         "learn_more": "Докладніше",
         "leave": "Вийти",
@@ -116,8 +110,6 @@
         "sign_out": "Вилучити цей пристрій",
         "skip": "Пропустити",
         "start": "Почати",
-        "start_chat": "Почати бесіду",
-        "start_new_chat": "Почати бесіду",
         "stop": "Припинити",
         "submit": "Надіслати",
         "subscribe": "Підписатись",
@@ -488,7 +480,6 @@
         "encrypted": "Зашифроване",
         "error": "Помилка",
         "faq": "ЧаПи",
-        "favourites": "Вибрані",
         "feedback": "Відгук",
         "filter_results": "Відфільтрувати результати",
         "forward_message": "Переслати повідомлення",
@@ -496,7 +487,6 @@
         "go_to_settings": "Перейти до налаштувань",
         "guest": "Гість",
         "help": "Довідка",
-        "historical": "Історичні",
         "home": "Домівка",
         "homeserver": "Домашній сервер",
         "identity_server": "Сервер ідентифікації",
@@ -508,7 +498,6 @@
         "light": "Світла",
         "loading": "Завантаження…",
         "location": "Місцеперебування",
-        "low_priority": "Неважливі",
         "matrix": "Matrix",
         "message": "Повідомлення",
         "message_layout": "Макет повідомлення",
@@ -575,7 +564,6 @@
         "success": "Успіх",
         "suggestions": "Пропозиції",
         "support": "Підтримка",
-        "system_alerts": "Системні попередження",
         "theme": "Тема",
         "thread": "Гілка",
         "threads": "Гілки",
@@ -592,7 +580,6 @@
         "username": "Ім'я користувача",
         "verified": "Звірений",
         "version": "Версія",
-        "video": "Відео",
         "video_room": "Відеокімната",
         "view_message": "Переглянути повідомлення",
         "warning": "Попередження"
@@ -763,6 +750,7 @@
         "category_other": "Інше",
         "category_room": "Кімната",
         "caution_colon": "Попередження:",
+        "checking_sticky_events_support": "Перевірка підтримки закріплених подій...",
         "client_versions": "Версії клієнта",
         "crypto": {
             "4s_public_key_in_account_data": "у даних облікового запису",
@@ -807,6 +795,8 @@
         },
         "developer_mode": "Режим розробника",
         "developer_tools": "Інструменти розробника",
+        "device_dehydrated_no": "Підготовлено до відновлення: ні",
+        "device_dehydrated_yes": "Підготовлено до відновлення: так",
         "device_id": "ID пристрою: %(deviceId)s",
         "device_keys": "Ключі пристрою",
         "device_verification_status": {
@@ -819,13 +809,18 @@
         "edit_setting": "Змінити налаштування",
         "edit_values": "Редагувати значення",
         "empty_string": "<порожній рядок>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration має бути числом",
+        "error_sticky_duration_out_of_range": "Значення stickyDuration має бути від 0 до 36000 мілісекунд (1 год)",
         "event_content": "Зміст події",
         "event_id": "ID події: %(eventId)s",
         "event_sent": "Подію надіслано!",
         "event_type": "Тип події",
+        "expired": "Термін дії минув",
+        "expires_in": "Діє до",
         "explore_account_data": "Переглянути дані облікового запису",
         "explore_room_account_data": "Переглянути дані облікового запису кімнати",
         "explore_room_state": "Переглянути стан кімнати",
+        "explore_sticky_state": "Дізнайтеся про прикріплений стан",
         "failed_to_find_widget": "Сталася помилка під час пошуку віджету.",
         "failed_to_load": "Не вдалося завантажити.",
         "failed_to_save": "Не вдалося зберегти налаштування.",
@@ -835,10 +830,11 @@
         "invalid_json": "Не схоже на чинний JSON.",
         "level": "Рівень",
         "low_bandwidth_mode": "Режим низької пропускної спроможності",
-        "low_bandwidth_mode_description": "Потрібен сумісний домашній сервер.",
+        "low_bandwidth_mode_description": "Вимикає шифрування, відомості про присутність, аватари, сповіщення про прочитання та введення тексту",
         "main_timeline": "Основна стрічка",
         "manual_device_verification": "Ручна верифікація пристрою",
         "no_receipt_found": "Підтвердження не знайдено",
+        "no_sticky_events": "У цій кімнаті немає закріплених подій.",
         "notification_state": "Стан сповіщень <strong>%(notificationState)s</strong>",
         "notifications_debug": "Сповіщення зневадження",
         "number_of_users": "Кількість користувачів",
@@ -866,6 +862,7 @@
         "send_custom_account_data_event": "Надіслати нетипову подію даних облікового запису",
         "send_custom_room_account_data_event": "Надіслати нетипову подію даних кімнати",
         "send_custom_state_event": "Надіслати нетипову подію стану",
+        "send_custom_sticky_event": "Надіслати власну закріплену подію",
         "send_custom_timeline_event": "Надіслати спеціальну подію стрічки",
         "server_info": "Інформація сервера",
         "server_versions": "Версії сервера",
@@ -885,6 +882,8 @@
             "other": "<%(count)s просторів>"
         },
         "state_key": "Ключ стану",
+        "sticky_duration": "Тривалість закріплення (мс)",
+        "sticky_events_not_supported": "Ваш домашній сервер ще не підтримує закріплені події.",
         "thread_root_id": "ID кореневої гілки: %(threadRootId)s",
         "threads_timeline": "Стрічка гілок",
         "title": "Інструменти розробника",
@@ -1531,7 +1530,6 @@
             "required_msc_support": "Потрібно MSC4429 (Оновлення профілів для Legacy Sync)"
         },
         "feature_wysiwyg_composer_description": "Використовувати розширений текст замість розмітки в редакторі повідомлень.",
-        "group_calls": "Нові можливості групових викликів",
         "group_developer": "Розробка",
         "group_encryption": "Шифрування",
         "group_experimental": "Експериментально",
@@ -1546,7 +1544,6 @@
         "group_voip": "Голос і відео",
         "group_widgets": "Віджети",
         "hidebold": "Сховати крапку сповіщення ( показувати тільки значки лічильників)",
-        "html_topic": "Показати HTML-подання тем кімнати",
         "join_beta": "Долучитися до бета-тестування",
         "join_beta_reload": "Перехід до бета-тестування перезавантажить %(brand)s.",
         "jump_to_date": "Перейти до дати (додає /jumptodate і переходить до заголовків дати)",
@@ -1559,7 +1556,6 @@
         "login_with_qr": "Увійти за допомогою QR-коду",
         "mjolnir": "Нові способи нехтувати людей",
         "msc3531_hide_messages_pending_moderation": "Дозволити модераторам ховати повідомлення у черзі модерування.",
-        "new_room_list": "Увімкнути новий список кімнат",
         "notification_settings": "Нові налаштування сповіщень",
         "notification_settings_beta_caption": "Представляємо простіший спосіб змінювати налаштування сповіщень. Налаштуйте %(brand)s, саме так, як вам подобається.",
         "notification_settings_beta_title": "Налаштування сповіщень",
@@ -1570,7 +1566,6 @@
         "sliding_sync_description": "На стадії активної розробки, вимкнути не можна.",
         "sliding_sync_disabled_notice": "Увійдіть повторно, щоб вимкнути",
         "sliding_sync_server_no_support": "На вашому сервері відсутня підтримка",
-        "under_active_development": "У стадії активної розробки.",
         "unrealiable_e2e": "Ненадійно в зашифрованих кімнатах",
         "video_rooms": "Відеокімнати",
         "video_rooms_a_new_way_to_chat": "Новий спосіб спілкування за допомогою голосового та відеозв’язку в %(brand)s.",
@@ -1625,9 +1620,6 @@
         "room_leave_mod_warning": "Ви єдиний модератор у цій кімнаті. Якщо ви вийдете, ніхто не зможе змінити налаштування кімнати або зробити інші важливі дії.",
         "room_rejoin_warning": "Ця кімната не загальнодоступна. Ви не зможете повторно приєднатися без запрошення.",
         "space_rejoin_warning": "Цей простір не загальнодоступний. Ви не зможете приєднатися знову без запрошення."
-    },
-    "left_panel": {
-        "open_dial_pad": "Відкрити номеронабирач"
     },
     "lightbox": {
         "rotate_left": "Обернути ліворуч",
@@ -1823,7 +1815,6 @@
     },
     "quick_settings": {
         "all_settings": "Усі налаштування",
-        "metaspace_section": "Закріплення на бічній панелі",
         "sidebar_settings": "Інші опції",
         "title": "Швидкі налаштування"
     },
@@ -1841,6 +1832,7 @@
     },
     "remove_section_dialog": {
         "confirmation": "Ви впевнені, що хочете вилучити цей розділ?",
+        "description": "Бесіди з цього розділу й надалі будуть доступні у вашому списку бесід.",
         "remove_section": "Вилучити розділ",
         "title": "Вилучити розділ?"
     },
@@ -2127,45 +2119,20 @@
         "waiting_for_join_title": "Очікування приєднання користувача до %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Додати кімнату",
         "add_space_label": "Додати простір",
-        "breadcrumbs_empty": "Немає недавно відвіданих кімнат",
-        "breadcrumbs_label": "Недавно відвідані кімнати",
         "failed_add_tag": "Не вдалось додати до кімнати мітку %(tagName)s",
         "failed_remove_tag": "Не вдалося прибрати з кімнати мітку %(tagName)s",
         "failed_set_dm_tag": "Не вдалося встановити мітку особистого повідомлення",
-        "home_menu_label": "Параметри домівки",
-        "join_public_room_label": "Приєднатись до загальнодоступної кімнати",
-        "joining_rooms_status": {
-            "one": "Приєднання до %(count)s кімнати",
-            "other": "Приєднання до %(count)s кімнат"
-        },
         "list_title": "Список кімнат",
         "more_options": {
             "leave_room": "Вийти з кімнати"
         },
         "notification_options": "Параметри сповіщень",
-        "redacting_messages_status": {
-            "one": "Триває видалення повідомлень в %(count)s кімнаті",
-            "other": "Триває видалення повідомлень у %(count)s кімнатах"
-        },
         "section": {
             "chats": "Бесіди",
             "low_priority": "Неважливі"
         },
-        "show_less": "Згорнути",
-        "show_n_more": {
-            "other": "Показати ще %(count)s",
-            "one": "Показати ще %(count)s"
-        },
-        "show_previews": "Показувати попередній перегляд повідомлень",
-        "sort_by": "Упорядкувати за",
-        "sort_by_activity": "Активністю",
-        "sort_by_alphabet": "А-Я",
-        "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
-        "space_menu_label": "%(spaceName)s — меню",
-        "sublist_options": "Параметри переліку",
-        "suggested_rooms_heading": "Пропоновані кімнати"
+        "show_less": "Згорнути"
     },
     "room_settings": {
         "access": {
@@ -2360,9 +2327,9 @@
             "join_rule_restricted_dialog_description": "Оберіть, які простори матимуть доступ до цієї кімнати. Якщо обрати простір, його учасники зможуть знаходити <RoomName/> і приєднуватися.",
             "join_rule_restricted_dialog_empty_warning": "Ви вилучаєте всі простори. Усталеним стане доступ за запрошенням",
             "join_rule_restricted_dialog_filter_placeholder": "Пошук просторів",
-            "join_rule_restricted_dialog_heading_known": "Інші відомі вам простори",
-            "join_rule_restricted_dialog_heading_other": "Інші простори чи кімнати, яких ви можете не знати",
-            "join_rule_restricted_dialog_heading_room": "Відомі вам простори, до яких входить кімната",
+            "join_rule_restricted_dialog_heading_known": "Ваші простори, які не містять цієї кімнати",
+            "join_rule_restricted_dialog_heading_other": "Інші простори, учасником яких ви не є",
+            "join_rule_restricted_dialog_heading_room": "Ваші простори, що містять цю кімнату",
             "join_rule_restricted_dialog_heading_space": "Відомі вам простори, до яких входить цей",
             "join_rule_restricted_dialog_heading_unknown": "Ймовірно, інші адміністратори кімнати є їхніми учасниками.",
             "join_rule_restricted_dialog_title": "Керувати просторами",
@@ -2398,7 +2365,7 @@
         "upload_avatar_label": "Вивантажити аватар",
         "visibility": {
             "alias_section": "Адреса",
-            "error_failed_save": "Не вдалось оновити видимість цього простору",
+            "error_failed_save": "Не вдалося оновити налаштування цього простору",
             "error_update_guest_access": "Не вдалося оновити гостьовий доступ до цього простору",
             "error_update_history_visibility": "Не вдалося оновити видимість історії цього простору",
             "guest_access_disabled": "Ви не маєте дозволу змінювати доступ гостей.",
@@ -2545,13 +2512,13 @@
                 "title": "Додатково"
             },
             "confirm_key_storage_off": "Ви впевнені, що хочете вимкнути сховище ключів?",
-            "confirm_key_storage_off_description": "Якщо ви вийдете з усіх своїх пристроїв, ви втратите історію повідомлень і вам потрібно буде знову підтвердити всі наявні контакти. <a>Докладніше</a>",
+            "confirm_key_storage_off_description": "Якщо ви вийдете з усіх своїх пристроїв, ви втратите історію повідомлень і вам потрібно буде знову звірити всі наявні контакти. <a>Докладніше</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Видалити сховище ключів",
                 "confirm": "Видалити сховище ключів",
                 "description": "Видалення сховища ключів вилучить вашу криптографічну ідентичність і ключі повідомлень з сервера, а також вимкне такі функції безпеки:",
                 "list_first": "Ви не матимете історії зашифрованих повідомлень на нових пристроях",
-                "list_second": "Ви втратите доступ до своїх зашифрованих повідомлень, якщо ви вийдете з %(brand)s на всіх пристроях",
+                "list_second": "Ви втратите доступ до своїх зашифрованих повідомлень, якщо ви вийдете на всіх пристроях",
                 "title": "Ви впевнені, що хочете вимкнути зберігання ключів і видалити їх?"
             },
             "device_not_verified_button": "Верифікувати цей пристрій",
@@ -2964,7 +2931,7 @@
             "unverified_session_explainer_2": "Під час користування цим сеансом ви не зможете брати участь у кімнатах, де ввімкнено шифрування.",
             "unverified_session_explainer_3": "Для найкращої безпеки та приватності радимо користуватися клієнтами Matrix, які підтримують шифрування.",
             "unverified_sessions": "Не звірені сеанси",
-            "unverified_sessions_explainer_1": "Не звірені сеанси — це сеанси, які увійшли в систему з вашими обліковими даними, але не пройшли перехресну перевірку.",
+            "unverified_sessions_explainer_1": "Незвірені сеанси — це сеанси, які розпочаті з вашими обліковими даними, у яких не підтверджено вашу цифрову ідентичність.",
             "unverified_sessions_explainer_2": "Ви повинні бути впевнені, що розпізнаєте ці сеанси, оскільки вони можуть бути несанкціонованим використанням вашого облікового запису.",
             "unverified_sessions_list_description": "Звірте свої сеанси для покращеного безпечного обміну повідомленнями або вийдіть із тих, які ви не розпізнаєте або не використовуєте.",
             "url": "URL-адреса",
@@ -2990,13 +2957,11 @@
         "showbold": "Показати всю діяльність у списку кімнат (крапки або кількість непрочитаних повідомлень)",
         "sidebar": {
             "dialog_title": "<strong>Налаштування:</strong> Бічна панель",
-            "metaspaces_favourites_description": "Групуйте всі свої улюблені кімнати та людей в одному місці.",
             "metaspaces_home_all_rooms": "Показати всі кімнати",
             "metaspaces_home_all_rooms_description": "Показати всі кімнати в домівці, навіть ті, що належать до просторів.",
             "metaspaces_home_description": "Домівка надає загальний огляд усього.",
             "metaspaces_orphans": "Кімнати без просторів",
             "metaspaces_orphans_description": "Групуйте всі свої кімнати, не приєднані до простору, в одному місці.",
-            "metaspaces_people_description": "Групуйте всіх своїх людей в одному місці.",
             "metaspaces_subsection": "Показувати такі простори",
             "metaspaces_video_rooms": "Відеокімнати та конференції",
             "metaspaces_video_rooms_description": "Згрупувати всі приватні відеокімнати та конференції.",
@@ -3023,14 +2988,15 @@
             "audio_output": "Звуковий вивід",
             "audio_output_empty": "Звуковий вивід не виявлено",
             "auto_gain_control": "Авторегулювання підсилення",
-            "connection_section": "З'єднання",
             "dialog_title": "<strong>Налаштування:</strong> Голос і відео",
             "echo_cancellation": "Пригнічення відлуння",
+            "echo_cancellation_description": "Прибирає відлуння з мікрофонного вводу під час викликів. Це налаштування також застосовується до Element Call.",
             "enable_fallback_ice_server": "Дозволити резервний сервер підтримки викликів (%(server)s)",
             "enable_fallback_ice_server_description": "Застосовується лише в тому випадку, якщо ваш домашній сервер не пропонує його. Ваша IP-адреса передаватиметься під час виклику.",
             "mirror_local_feed": "Показувати локальне відео віддзеркалено",
             "missing_permissions_prompt": "Бракує медіадозволів, натисніть кнопку нижче, щоб їх надати.",
             "noise_suppression": "Шумопригнічення",
+            "noise_suppression_description": "Знижує фоновий шум на вводі мікрофона під час викликів. Це налаштування також застосовується до Element Call.",
             "request_permissions": "Запитати медіадозволи",
             "title": "Голос і відео",
             "video_input_empty": "Вебкамеру не виявлено",
@@ -3205,12 +3171,6 @@
     },
     "space_settings": {
         "title": "Налаштування — %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "У вас немає дозволу додавати кімнати до цього простору",
-        "error_no_permission_add_space": "У вас немає дозволу додавати простори до цього простору",
-        "error_no_permission_create_room": "У вас немає дозволу створювати кімнати в цьому просторі",
-        "error_no_permission_invite": "Ви не маєте дозволу запрошувати людей до цього простору"
     },
     "spotlight": {
         "public_rooms": {

@@ -629,7 +629,7 @@ export class StartedSynapseWithMasContainer extends StartedSynapseContainer {
      */
     public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
         const registered = await this.mas.registerUser(username, password, displayName);
-        return { ...registered, homeserverBaseUrl: this.baseUrl };
+        return { ...registered, homeserverBaseUrl: this.baseUrl, oauthClientId: this.mas.staticClientId };
     }
 
     /**

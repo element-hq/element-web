@@ -27,13 +27,19 @@ import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEven
 import { sleep } from "matrix-js-sdk/src/utils";
 import userEvent from "@testing-library/user-event";
 
-import { stubClient, mkEvent, mkMessage, flushPromises } from "../../../../test-utils";
+import {
+    stubClient,
+    mkEvent,
+    mkMessage,
+    flushPromises,
+    clientAndSDKContextRenderOptions,
+} from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { PinnedMessagesCard } from "../../../../../src/components/views/right_panel/PinnedMessagesCard";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import Modal from "../../../../../src/Modal";
 import { UnpinAllDialog } from "../../../../../src/components/views/dialogs/UnpinAllDialog";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
 
 describe("<PinnedMessagesCard />", () => {
     let cli: MockedObject<MatrixClient>;
@@ -86,13 +92,12 @@ describe("<PinnedMessagesCard />", () => {
 
     async function renderMessagePinList(room: Room): Promise<RenderResult> {
         const renderResult = render(
-            <MatrixClientContext.Provider value={cli}>
-                <PinnedMessagesCard
-                    room={room}
-                    onClose={jest.fn()}
-                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
-                />
-            </MatrixClientContext.Provider>,
+            <PinnedMessagesCard
+                room={room}
+                onClose={jest.fn()}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
         );
         // Wait a tick for state updates
         await act(() => sleep(0));
@@ -170,13 +175,12 @@ describe("<PinnedMessagesCard />", () => {
     it("should show spinner whilst loading", async () => {
         const room = mkRoom([], [pin1]);
         render(
-            <MatrixClientContext.Provider value={cli}>
-                <PinnedMessagesCard
-                    room={room}
-                    onClose={jest.fn()}
-                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
-                />
-            </MatrixClientContext.Provider>,
+            <PinnedMessagesCard
+                room={room}
+                onClose={jest.fn()}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />,
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
         );
 
         await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
@@ -322,13 +326,12 @@ describe("<PinnedMessagesCard />", () => {
             ).mockReturnValue(false);
 
             const { asFragment } = render(
-                <MatrixClientContext.Provider value={cli}>
-                    <PinnedMessagesCard
-                        room={room}
-                        onClose={jest.fn()}
-                        permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
-                    />
-                </MatrixClientContext.Provider>,
+                <PinnedMessagesCard
+                    room={room}
+                    onClose={jest.fn()}
+                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+                />,
+                clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
             );
 
             // Wait a tick for state updates

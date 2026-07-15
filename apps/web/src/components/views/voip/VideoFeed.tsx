@@ -16,9 +16,8 @@ import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventType
 import { MicOffSolidIcon, MicOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import LegacyCallHandler from "../../../LegacyCallHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomAvatar from "../avatars/RoomAvatar";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     call: MatrixCall;
@@ -45,6 +44,9 @@ interface IState {
 }
 
 export default class VideoFeed extends React.PureComponent<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private element?: HTMLVideoElement;
 
     public constructor(props: IProps) {
@@ -192,8 +194,8 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
 
         let content;
         if (this.state.videoMuted) {
-            const callRoomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
-            const callRoom = (callRoomId ? MatrixClientPeg.safeGet().getRoom(callRoomId) : undefined) ?? undefined;
+            const callRoomId = this.context.legacyCallHandler.roomIdForCall(this.props.call);
+            const callRoom = (callRoomId ? this.context.client?.getRoom(callRoomId) : undefined) ?? undefined;
 
             let avatarSize;
             if (pipMode && primary) avatarSize = "76px";

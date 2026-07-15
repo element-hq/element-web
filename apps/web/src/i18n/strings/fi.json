@@ -11,8 +11,6 @@
             "other": "%(count)s lukematonta viestiä, sisältäen maininnat.",
             "one": "Yksi lukematon maininta."
         },
-        "recent_rooms": "Viimeisimmät huoneet",
-        "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
         "unread_messages": "Lukemattomat viestit."
@@ -22,7 +20,6 @@
         "accept": "Hyväksy",
         "add": "Lisää",
         "add_existing_room": "Lisää olemassa oleva huone",
-        "add_people": "Lisää ihmisiä",
         "apply": "Toteuta",
         "approve": "Hyväksy",
         "ask_to_join": "Pyydä liittyä",
@@ -55,7 +52,6 @@
         "enter_fullscreen": "Siirry koko näytön tilaan",
         "exit_fullscreeen": "Poistu koko näytön tilasta",
         "expand": "Laajenna",
-        "explore_public_rooms": "Selaa julkisia huoneita",
         "explore_rooms": "Selaa huoneita",
         "export": "Vie",
         "forward": "Välitä",
@@ -67,8 +63,6 @@
         "ignore": "Sivuuta",
         "import": "Tuo",
         "invite": "Kutsu",
-        "invite_to_space": "Kutsu tilaan",
-        "invites_list": "Kutsut",
         "join": "Liity",
         "learn_more": "Lue lisää",
         "leave": "Poistu",
@@ -114,8 +108,6 @@
         "sign_out": "Poista tämä laite",
         "skip": "Ohita",
         "start": "Aloita",
-        "start_chat": "Aloita keskustelu",
-        "start_new_chat": "Aloita uusi keskustelu",
         "stop": "Pysäytä",
         "submit": "Lähetä",
         "subscribe": "Tilaa",
@@ -461,7 +453,6 @@
         "encrypted": "Salattu",
         "error": "Virhe",
         "faq": "Usein kysytyt kysymykset",
-        "favourites": "Suosikit",
         "feedback": "Palaute",
         "filter_results": "Suodata tuloksia",
         "forward_message": "Välitä viesti",
@@ -469,7 +460,6 @@
         "go_to_settings": "Siirry asetuksiin",
         "guest": "Vieras",
         "help": "Ohje",
-        "historical": "Vanhat",
         "home": "Etusivu",
         "homeserver": "Kotipalvelin",
         "identity_server": "Identiteettipalvelin",
@@ -481,7 +471,6 @@
         "light": "Vaalea",
         "loading": "Ladataan…",
         "location": "Sijainti",
-        "low_priority": "Matala prioriteetti",
         "matrix": "Matrix",
         "message": "Viesti",
         "message_layout": "Viestien asettelu",
@@ -545,7 +534,6 @@
         "success": "Onnistui",
         "suggestions": "Ehdotukset",
         "support": "Tuki",
-        "system_alerts": "Järjestelmähälytykset",
         "theme": "Teema",
         "thread": "Ketju",
         "threads": "Ketjut",
@@ -562,7 +550,6 @@
         "username": "Käyttäjätunnus",
         "verified": "Vahvistettu",
         "version": "Versio",
-        "video": "Video",
         "video_room": "Videohuone",
         "view_message": "Näytä viesti",
         "warning": "Varoitus"
@@ -1243,7 +1230,6 @@
         "element_call_video_rooms": "Element Call -videohuoneet",
         "experimental_section": "Ennakot",
         "extended_profiles_msc_support": "Edellyttää, että palvelimesi tukee MSC4133:a",
-        "group_calls": "Uusi ryhmäpuhelukokemus",
         "group_developer": "Kehittäjä",
         "group_encryption": "Salaus",
         "group_experimental": "Kokeellinen",
@@ -1257,7 +1243,6 @@
         "group_ui": "Käyttöliittymä",
         "group_voip": "Ääni ja video",
         "group_widgets": "Sovelmat",
-        "html_topic": "Näytä huoneiden aiheiden HTML-esitys",
         "join_beta": "Liity beetaan",
         "join_beta_reload": "Beetaan liittyminen lataa %(brand)sin uudelleen.",
         "jump_to_date_msc_support": "Vaatii, että palvelimesi tukee MSC3030:a",
@@ -1274,7 +1259,6 @@
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
         "sliding_sync_disabled_notice": "Kirjaudu uudelleen sisään poistaaksesi käytöstä",
         "sliding_sync_server_no_support": "Palvelimellasi ei ole tukea",
-        "under_active_development": "Aktiivisen kehityksen kohteena.",
         "video_rooms": "Videohuoneet",
         "video_rooms_a_new_way_to_chat": "Uusi tapa keskustella äänen ja videon välityksellä %(brand)sissä.",
         "video_rooms_always_on_voip_channels": "Videohuoneet ovat huoneisiin upotettuja, aina päällä olevia VoIP-kanavia %(brand)sissä.",
@@ -1323,9 +1307,6 @@
         "leave_space_question": "Haluatko varmasti poistua tilasta '%(spaceName)s'?",
         "room_rejoin_warning": "Tämä huone ei ole julkinen. Et voi liittyä uudelleen ilman kutsua.",
         "space_rejoin_warning": "Tämä tila ei ole julkinen. Et voi liittyä uudelleen ilman kutsua."
-    },
-    "left_panel": {
-        "open_dial_pad": "Avaa näppäimistö"
     },
     "lightbox": {
         "rotate_left": "Kierrä vasempaan",
@@ -1397,8 +1378,8 @@
         "level_none": "Ei mitään",
         "level_notification": "Ilmoitus",
         "mark_all_read": "Merkitse kaikki luetuiksi",
-        "mentions_and_keywords": "@maininnat & asiasanat",
-        "mentions_and_keywords_description": "Vastaanota ilmoitukset maininnoista ja asiasanoista <a>asetuksissa</a> määrittämälläsi tavalla",
+        "mentions_and_keywords": "Vain @maininnat ja vastaukset",
+        "mentions_and_keywords_description": "Saat ilmoituksia vain maininnoista, vastauksista ja avainsanoista <a>asetuksissa</a> määrittämälläsi tavalla",
         "mentions_keywords": "Maininnat ja avainsanat",
         "message_didnt_send": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
         "mute_description": "Et saa ilmoituksia"
@@ -1484,7 +1465,6 @@
     },
     "quick_settings": {
         "all_settings": "Kaikki asetukset",
-        "metaspace_section": "Kiinnitä sivupalkkiin",
         "sidebar_settings": "Lisää asetuksia",
         "title": "Pika-asetukset"
     },
@@ -1734,40 +1714,15 @@
         "video_room": "Tämä huone on videohuone"
     },
     "room_list": {
-        "add_room_label": "Lisää huone",
         "add_space_label": "Lisää tila",
-        "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
-        "breadcrumbs_label": "Hiljattain vieraillut huoneet",
         "failed_add_tag": "Tagin %(tagName)s lisääminen huoneeseen epäonnistui",
         "failed_remove_tag": "Tagin %(tagName)s poistaminen huoneesta epäonnistui",
-        "home_menu_label": "Etusivun valinnat",
-        "join_public_room_label": "Liity julkiseen huoneeseen",
-        "joining_rooms_status": {
-            "one": "Liitytään parhaillaan %(count)s huoneeseen",
-            "other": "Liitytään parhaillaan %(count)s huoneeseen"
-        },
         "list_title": "Huoneluettelo",
         "more_options": {
             "leave_room": "Poistu huoneesta"
         },
         "notification_options": "Ilmoitusasetukset",
-        "redacting_messages_status": {
-            "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
-            "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
-        },
-        "show_less": "Näytä vähemmän",
-        "show_n_more": {
-            "one": "Näytä %(count)s lisää",
-            "other": "Näytä %(count)s lisää"
-        },
-        "show_previews": "Näytä viestien esikatselut",
-        "sort_by": "Lajittelutapa",
-        "sort_by_activity": "Aktiivisuus",
-        "sort_by_alphabet": "A-Ö",
-        "sort_unread_first": "Näytä ensimmäisenä huoneet, joissa on lukemattomia viestejä",
-        "space_menu_label": "%(spaceName)s-valikko",
-        "sublist_options": "Lajittele",
-        "suggested_rooms_heading": "Ehdotetut huoneet"
+        "show_less": "Näytä vähemmän"
     },
     "room_settings": {
         "access": {
@@ -2283,13 +2238,13 @@
             "quick_actions_section": "Pikatoiminnot",
             "rule_call": "Puhelukutsu",
             "rule_contains_display_name": "Viestit, jotka sisältävät näyttönimeni",
-            "rule_contains_user_name": "Viestit, jotka sisältävät käyttäjätunnukseni",
+            "rule_contains_user_name": "@maininnat ja vastaukset",
             "rule_encrypted": "Salatut viestit ryhmissä",
             "rule_encrypted_room_one_to_one": "Salatut viestit kahdenkeskisissä keskusteluissa",
             "rule_invite_for_me": "Kun minut kutsutaan huoneeseen",
             "rule_message": "Viestit ryhmissä",
             "rule_room_one_to_one": "Viestit kahdenkeskisissä keskusteluissa",
-            "rule_roomnotif": "Viestit, jotka sisältävät sanan ”@room”",
+            "rule_roomnotif": "@room-maininnat",
             "rule_suppress_notices": "Bottien lähettämät viestit",
             "rule_tombstone": "Kun huoneet päivitetään",
             "show_message_desktop_notification": "Näytä viestit ilmoituskeskuksessa",
@@ -2460,13 +2415,11 @@
         "show_typing_notifications": "Näytä kirjoitusilmoitukset",
         "sidebar": {
             "dialog_title": "<strong>Asetukset:</strong> Sivupalkki",
-            "metaspaces_favourites_description": "Ryhmitä kaikki suosimasi huoneet ja henkilöt yhteen paikkaan.",
             "metaspaces_home_all_rooms": "Näytä kaikki huoneet",
             "metaspaces_home_all_rooms_description": "Näytä kaikki huoneesi etusivulla, vaikka ne olisivat jossain muussa tilassa.",
             "metaspaces_home_description": "Koti on hyödyllinen, sillä sieltä näet yleisnäkymän kaikkeen.",
             "metaspaces_orphans": "Huoneet, jotka eivät kuulu mihinkään tilaan",
             "metaspaces_orphans_description": "Ryhmitä kaikki huoneesi, jotka eivät ole osa tilaa, yhteen paikkaan.",
-            "metaspaces_people_description": "Ryhmitä kaikki ihmiset yhteen paikkaan.",
             "metaspaces_subsection": "Näytettävät tilat",
             "metaspaces_video_rooms": "Videohuoneet ja konferenssit",
             "metaspaces_video_rooms_description": "Ryhmitä kaikki yksityiset videohuoneet ja konferenssit.",
@@ -2485,13 +2438,12 @@
             "audio_output": "Äänen ulostulo",
             "audio_output_empty": "Äänen ulostuloja ei havaittu",
             "auto_gain_control": "Automaattinen vahvistuksen säätö",
-            "connection_section": "Yhteys",
             "dialog_title": "<strong>Asetukset:</strong> Ääni ja video",
             "echo_cancellation": "Kaiunpoisto",
             "mirror_local_feed": "Peilaa paikallinen videosyöte",
-            "missing_permissions_prompt": "Mediaoikeuksia puuttuu. Napsauta painikkeesta pyytääksesi oikeuksia.",
+            "missing_permissions_prompt": "Jotta voit osallistua puheluihin, anna %(brand)s -sovellukselle lupa käyttää ääni- ja videolaitettasi.",
             "noise_suppression": "Kohinanvaimennus",
-            "request_permissions": "Pyydä mediaoikeuksia",
+            "request_permissions": "Pyydä",
             "title": "Ääni ja video",
             "video_input_empty": "Kameroita ei löytynyt",
             "video_section": "Videoasetukset",
@@ -2658,12 +2610,6 @@
     },
     "space_settings": {
         "title": "Asetukset - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Sinulla ei ole oikeuksia lisätä huoneita tähän tilaan",
-        "error_no_permission_add_space": "Sinulla ei ole oikeuksia lisätä tiloja tähän tilaan",
-        "error_no_permission_create_room": "Sinulla ei ole oikeuksia luoda uusia huoneita tässä tilassa",
-        "error_no_permission_invite": "Sinulla ei ole oikeuksia kutsua ihmisiä tähän tilaan"
     },
     "spotlight": {
         "public_rooms": {

@@ -177,7 +177,7 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                     }
                 });
         },
-        [fn, ...deps], // eslint-disable-line react-compiler/react-compiler
+        [fn, ...deps], // eslint-disable-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     );
 
     // re-run when the emitter changes

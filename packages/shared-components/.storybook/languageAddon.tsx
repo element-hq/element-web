@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Addon, types, useGlobals } from "storybook/manager-api";
+import { type Addon, types, useGlobals } from "storybook/manager-api";
 import { WithTooltip, IconButton, TooltipLinkList } from "storybook/internal/components";
 import React from "react";
 import { GlobeIcon } from "@storybook/icons";
