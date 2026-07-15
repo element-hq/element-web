@@ -108,7 +108,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -417,7 +417,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div

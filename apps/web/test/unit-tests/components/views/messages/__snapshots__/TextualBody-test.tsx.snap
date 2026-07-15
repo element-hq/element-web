@@ -64,7 +64,7 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
       class="_icon-button_1215g_8 mx_EventTile_button mx_EventTile_copyButton"
       data-kind="primary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px; padding: 4px;"
       tabindex="0"
     >
       <div
@@ -290,7 +290,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
       class="_icon-button_1215g_8 mx_EventTile_button mx_EventTile_copyButton"
       data-kind="primary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px; padding: 4px;"
       tabindex="0"
     >
       <div
@@ -501,7 +501,7 @@ num_sqrt = num **
       class="_icon-button_1215g_8 mx_EventTile_button mx_EventTile_copyButton mx_EventTile_buttonBottom"
       data-kind="primary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px; padding: 4px;"
       tabindex="0"
     >
       <div

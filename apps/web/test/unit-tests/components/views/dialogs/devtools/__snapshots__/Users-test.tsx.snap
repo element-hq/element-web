@@ -16,7 +16,7 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
@@ -51,7 +51,7 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
@@ -118,7 +118,7 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -153,7 +153,7 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -208,7 +208,7 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
@@ -243,7 +243,7 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
@@ -310,7 +310,7 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -345,7 +345,7 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -400,7 +400,7 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
@@ -435,7 +435,7 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
@@ -504,7 +504,7 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -539,7 +539,7 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
                 class="_icon-button_1215g_8 mx_CopyableText_copyButton"
                 data-kind="primary"
                 role="button"
-                style="--cpd-icon-button-size: 20px;"
+                style="--cpd-icon-button-size: 28px; padding: 4px;"
                 tabindex="0"
               >
                 <div
@@ -594,7 +594,7 @@ exports[`<Users /> should render a single user 1`] = `
             class="_icon-button_1215g_8 mx_CopyableText_copyButton"
             data-kind="primary"
             role="button"
-            style="--cpd-icon-button-size: 20px;"
+            style="--cpd-icon-button-size: 28px; padding: 4px;"
             tabindex="0"
           >
             <div
