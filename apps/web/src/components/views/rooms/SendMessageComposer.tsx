@@ -336,6 +336,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
+    /*
+     * The URL preview VM snapshot before the composer is cleared
+     */
     public async sendMessage({ urlPreviewSnapshot }: ISendMessageActionProps): Promise<void> {
         const model = this.model;
 
