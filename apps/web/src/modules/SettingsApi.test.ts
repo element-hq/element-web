@@ -19,7 +19,7 @@ describe("SettingsApi", () => {
     });
 
     it("should pass roomId and excludeDefault through to SettingsStore.getValue", () => {
-        const spy = vi.spyOn(SettingsStore, "getValue").mockReturnValue(undefined);
+        const spy = vi.spyOn(SettingsStore, "getValue").mockReturnValue(null);
         const api = new SettingsApi();
         api.getValue("m.setting", "!room:example.org", true);
         expect(spy).toHaveBeenCalledWith("m.setting", "!room:example.org", true);
