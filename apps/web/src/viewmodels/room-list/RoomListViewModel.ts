@@ -928,7 +928,7 @@ export class RoomListViewModel
         this.updateRoomListData(false, null, sourceTag);
     };
 
-    public onSectionDragStart = (): void => {
+    public onSectionOrRoomDragStart = (): void => {
         this.savedExpansionStates.clear();
         for (const [tag, sectionVM] of this.roomSectionHeaderViewModels) {
             this.savedExpansionStates.set(tag, sectionVM.isExpanded);
@@ -937,7 +937,7 @@ export class RoomListViewModel
         this.updateRoomListData();
     };
 
-    public onSectionDragEnd = (): void => {
+    public onSectionOrRoomDragEnd = (): void => {
         for (const [tag, expanded] of this.savedExpansionStates) {
             const sectionVM = this.roomSectionHeaderViewModels.get(tag);
             if (sectionVM) sectionVM.isExpanded = expanded;
