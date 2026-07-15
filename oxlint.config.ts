@@ -174,7 +174,6 @@ export default defineConfig({
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
-        "jsx-a11y/role-has-required-aria-props": "off",
     },
     overrides: [
         {
@@ -417,13 +416,16 @@ export default defineConfig({
                 ],
                 "jsdoc/check-tag-names": "off",
 
-                "react/jsx-no-constructed-context-values": "off",
+                // Disable a11y rules for components in tests
+                "jsx-a11y/role-has-required-aria-props": "off",
                 "jsx-a11y/interactive-supports-focus": "off",
                 "jsx-a11y/no-static-element-interactions": "off",
-                "react/no-array-index-key": "off",
                 "jsx-a11y/click-events-have-key-events": "off",
                 "jsx-a11y/media-has-caption": "off",
                 "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
+
+                "react/jsx-no-constructed-context-values": "off",
+                "react/no-array-index-key": "off",
                 "react/forbid-elements": "off",
                 // This would be good to enable in the future
                 "typescript/await-thenable": "off",
