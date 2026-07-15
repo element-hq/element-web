@@ -47,7 +47,8 @@ export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className"
             tooltip={tooltip ?? _t("action|copy")}
             onClick={onCopyClickInternal}
             className={className}
-            size="20px"
+            size="28px"
+            style={{ padding: "4px" }} // Work around miscalculated padding on 28px button: https://github.com/element-hq/compound/issues/409
             onTooltipOpenChange={(open: boolean) => {
                 if (!open) onHideTooltip();
             }}
