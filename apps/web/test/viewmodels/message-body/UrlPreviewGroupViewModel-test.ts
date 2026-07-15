@@ -26,7 +26,12 @@ const BASIC_PREVIEW_OGDATA = {
 };
 
 function getViewModel(
-    { mediaVisible, visible, showPreview } = { mediaVisible: true, visible: true, showPreview: true },
+    { mediaVisible, visible, showPreview, urlPreviewBundleEnabled } = {
+        mediaVisible: true,
+        visible: true,
+        showPreview: true,
+        urlPreviewBundleEnabled: true,
+    },
 ): {
     vm: UrlPreviewGroupViewModel;
     client: MockedObject<MatrixClient>;
@@ -52,6 +57,7 @@ function getViewModel(
             },
             id: "$id",
         }),
+        urlPreviewBundleEnabled,
     });
     return { vm, client, onImageClicked };
 }
@@ -96,7 +102,12 @@ describe("UrlPreviewGroupViewModel", () => {
         ]);
     });
     it("should hide preview when invisible", async () => {
-        const { vm, client } = getViewModel({ visible: false, mediaVisible: true, showPreview: true });
+        const { vm, client } = getViewModel({
+            visible: false,
+            mediaVisible: true,
+            showPreview: true,
+            urlPreviewBundleEnabled: false,
+        });
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
@@ -104,7 +115,12 @@ describe("UrlPreviewGroupViewModel", () => {
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
     it("should ignore media when mediaVisible is false", async () => {
-        const { vm, client } = getViewModel({ mediaVisible: false, visible: true, showPreview: true });
+        const { vm, client } = getViewModel({
+            mediaVisible: false,
+            visible: true,
+            showPreview: true,
+            urlPreviewBundleEnabled: false,
+        });
         client.getUrlPreview.mockResolvedValueOnce({
             "og:title": "This is an example!",
             "og:type": "document",
@@ -178,7 +194,12 @@ describe("UrlPreviewGroupViewModel", () => {
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should hide a preview if the message requests it", async () => {
-        const { vm, client } = getViewModel({ showPreview: false, mediaVisible: true, visible: true });
+        const { vm, client } = getViewModel({
+            showPreview: false,
+            mediaVisible: true,
+            visible: true,
+            urlPreviewBundleEnabled: false,
+        });
         client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';

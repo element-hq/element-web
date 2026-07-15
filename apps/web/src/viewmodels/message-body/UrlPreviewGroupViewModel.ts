@@ -18,7 +18,6 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
 import { type RoomMessageEventContent } from "../../../@types/url-preview";
-import SettingsStore from "../../settings/SettingsStore";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -43,6 +42,7 @@ export interface UrlPreviewGroupViewModelProps {
     mediaVisible: boolean;
     showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
+    urlPreviewBundleEnabled: boolean;
 }
 
 export class UrlPreviewGroupViewModel
@@ -176,7 +176,7 @@ export class UrlPreviewGroupViewModel
         }
 
         const content = this.props.mxEvent.getContent();
-        if (content.msgtype === MsgType.Text && SettingsStore.getValue("feature_msc4095_url_preview_bundle")) {
+        if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
             const messageContent = content as RoomMessageEventContent;
 
             if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
