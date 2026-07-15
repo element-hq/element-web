@@ -87,7 +87,9 @@
         },
         "expand_filters": "Utvid filterlisten",
         "filters": {
+            "favourite": "Favoritter",
             "invites": "Invitasjoner",
+            "low_priority": "Lav prioritet",
             "mentions": "Omtaler",
             "people": "Personer",
             "rooms": "Rom",

@@ -117,6 +117,7 @@
         "expand_filters": "Розгорнути список фільтрів",
         "filters": {
             "invites": "Запрошення",
+            "low_priority": "Неважливі",
             "mentions": "Згадки",
             "people": "Люди",
             "rooms": "Кімнати",
