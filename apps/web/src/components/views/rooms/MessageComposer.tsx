@@ -758,7 +758,7 @@ export default function MessageComposerWrapper(props: Omit<IProps, "mxClient" | 
     );
 
     useEffect(() => {
-        void urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
+        urlPreviewVm.updateUrlPreviewVisible(showUrlPreview);
     }, [urlPreviewVm, showUrlPreview]);
 
     return <MessageComposerWithMatrixClient {...props} urlPreviewVm={urlPreviewVm} />;
