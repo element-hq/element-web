@@ -202,11 +202,12 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const replyingToThread = this.props.relation?.key === THREAD_RELATION_TYPE.name;
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case KeyBindingAction.SendMessage:
+            case KeyBindingAction.SendMessage: {
                 const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
                 this.sendMessage({ urlPreviewSnapshot });
                 event.preventDefault();
                 break;
+            }
             case KeyBindingAction.SelectPrevSendHistory:
             case KeyBindingAction.SelectNextSendHistory: {
                 // Try select composer history
