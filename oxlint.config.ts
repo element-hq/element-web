@@ -170,7 +170,6 @@ export default defineConfig({
         "jsx-a11y/no-noninteractive-element-interactions": "off",
         "react/no-array-index-key": "off",
         "jsx-a11y/control-has-associated-label": "off",
-        "jsx-a11y/role-supports-aria-props": "off",
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
@@ -423,6 +422,7 @@ export default defineConfig({
                 "jsx-a11y/click-events-have-key-events": "off",
                 "jsx-a11y/media-has-caption": "off",
                 "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
+                "jsx-a11y/role-supports-aria-props": "off",
 
                 "react/jsx-no-constructed-context-values": "off",
                 "react/no-array-index-key": "off",
