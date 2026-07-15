@@ -6,17 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import PosthogTrackers from "../../../../src/PosthogTrackers";
-import AnalyticsController from "../../../../src/settings/controllers/AnalyticsController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import PosthogTrackers from "../../PosthogTrackers";
+import AnalyticsController from "../controllers/AnalyticsController";
+import { SettingLevel } from "../SettingLevel";
 
 describe("AnalyticsController", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("Tracks a Posthog interaction on change", () => {
-        const trackInteractionSpy = jest.spyOn(PosthogTrackers, "trackInteraction");
+        const trackInteractionSpy = vi.spyOn(PosthogTrackers, "trackInteraction");
 
         const controller = new AnalyticsController("WebSettingsNotificationsTACOnlyNotificationsToggle");
 

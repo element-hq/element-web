@@ -105,7 +105,7 @@ test.describe("Room list unread activity toast", () => {
 
             await app.viewRoomById(targetId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("@mentions & keywords").click();
+            await page.getByText("@mentions and replies only").click();
             await app.settings.closeDialog();
 
             // Enable showing activity (dots) in the room list, so the activity dot is actually rendered.

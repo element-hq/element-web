@@ -6,7 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, type Mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     ClientEvent,
@@ -16,9 +19,10 @@ import {
     type MatrixEvent,
     type Room,
 } from "matrix-js-sdk/src/matrix";
+import { mkEvent, stubClient } from "test-utils";
 
-import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { mkEvent, stubClient } from "../../test-utils";
+import DMRoomMap from "./DMRoomMap";
+
 describe("DMRoomMap", () => {
     const roomId1 = "!room1:example.com";
     const roomId2 = "!room2:example.com";
@@ -44,8 +48,8 @@ describe("DMRoomMap", () => {
     };
 
     beforeEach(() => {
-        client = mocked(stubClient());
-        jest.spyOn(logger, "warn");
+        client = vi.mocked(stubClient());
+        vi.spyOn(logger, "warn");
     });
 
     describe("when m.direct has valid content", () => {
@@ -140,19 +144,19 @@ describe("DMRoomMap", () => {
     describe("getUniqueRoomsWithIndividuals()", () => {
         const bigRoom = {
             roomId: "!bigRoom:server.org",
-            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(5000),
+            getInvitedAndJoinedMemberCount: vi.fn().mockReturnValue(5000),
         } as unknown as Room;
         const dmWithBob = {
             roomId: "!dmWithBob:server.org",
-            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(2),
+            getInvitedAndJoinedMemberCount: vi.fn().mockReturnValue(2),
         } as unknown as Room;
         const dmWithCharlie = {
             roomId: "!dmWithCharlie:server.org",
-            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(2),
+            getInvitedAndJoinedMemberCount: vi.fn().mockReturnValue(2),
         } as unknown as Room;
         const smallRoom = {
             roomId: "!smallRoom:server.org",
-            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(3),
+            getInvitedAndJoinedMemberCount: vi.fn().mockReturnValue(3),
         } as unknown as Room;
 
         const mDirectContent = {
@@ -163,7 +167,7 @@ describe("DMRoomMap", () => {
         beforeEach(() => {
             client.getAccountData.mockReturnValue(mkMDirectEvent(mDirectContent));
             client.getRoom.mockImplementation(
-                (roomId: string) =>
+                (roomId?: string) =>
                     [bigRoom, smallRoom, dmWithCharlie, dmWithBob].find((room) => room.roomId === roomId) ?? null,
             );
         });

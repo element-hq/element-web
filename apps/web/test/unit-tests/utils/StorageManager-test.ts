@@ -10,6 +10,7 @@ import "fake-indexeddb/auto";
 
 import { IDBFactory } from "fake-indexeddb";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import * as StorageManager from "../../../src/utils/StorageManager";
 
@@ -117,6 +118,94 @@ describe("StorageManager", () => {
                 // eslint-disable-next-line no-global-assign
                 indexedDB = new IDBFactory();
             });
+        });
+    });
+
+    describe("tryPersistStorage", () => {
+        // jsdom does not implement navigator.storage, so stub it per-test; jest.replaceProperty
+        // cannot be used as it refuses to replace a property that does not exist.
+        function setStorage(value: unknown): void {
+            Object.defineProperty(navigator, "storage", { value, configurable: true });
+        }
+
+        beforeEach(() => {
+            jest.spyOn(logger, "log").mockImplementation(() => {});
+            jest.spyOn(logger, "warn").mockImplementation(() => {});
+            jest.spyOn(logger, "error").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            delete (navigator as unknown as { storage?: unknown }).storage;
+            jest.restoreAllMocks();
+        });
+
+        it("returns true and does not re-request when storage is already persisted", async () => {
+            const persist = jest.fn().mockResolvedValue(true);
+            const persisted = jest.fn().mockResolvedValue(true);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persisted).toHaveBeenCalled();
+            expect(persist).not.toHaveBeenCalled();
+            expect(logger.warn).not.toHaveBeenCalled();
+        });
+
+        it("requests persistence and returns true when granted", async () => {
+            const persist = jest.fn().mockResolvedValue(true);
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persist).toHaveBeenCalled();
+            expect(logger.warn).not.toHaveBeenCalled();
+        });
+
+        it("requests persistence directly when persisted() is unavailable", async () => {
+            const persist = jest.fn().mockResolvedValue(true);
+            setStorage({ persist });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persist).toHaveBeenCalledTimes(1);
+        });
+
+        it("still requests persistence and logs the failure when querying the persisted state fails", async () => {
+            const queryError = new Error("query failed");
+            const persisted = jest.fn().mockRejectedValue(queryError);
+            const persist = jest.fn().mockResolvedValue(true);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(true);
+            expect(persist).toHaveBeenCalled();
+            expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining("Could not query"), queryError);
+        });
+
+        it("returns false and warns when persistence is denied", async () => {
+            const persist = jest.fn().mockResolvedValue(false);
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining("Persistent storage"));
+        });
+
+        it("returns false when navigator.storage lacks persist()", async () => {
+            setStorage({ persisted: jest.fn().mockResolvedValue(false) });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.log).toHaveBeenCalledWith(expect.stringContaining("unsupported"));
+        });
+
+        it("returns false without throwing when persistence is unsupported", async () => {
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+        });
+
+        it("does not reject but logs an error if requesting persistence throws", async () => {
+            const persist = jest.fn().mockRejectedValue(new Error("boom"));
+            const persisted = jest.fn().mockResolvedValue(false);
+            setStorage({ persist, persisted });
+
+            await expect(StorageManager.tryPersistStorage()).resolves.toBe(false);
+            expect(logger.error).toHaveBeenCalled();
         });
     });
 });

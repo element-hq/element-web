@@ -38,7 +38,7 @@ catalog:
     "@vitest/spy": 4.1.10
     "@vitest/coverage-v8": 4.1.10
     "@vitest/browser-playwright": 4.1.10
-    "@vitejs/plugin-react": 6.0.2
+    "@vitejs/plugin-react": 6.0.3
     unplugin-dts: 1.0.1
 
 catalogs:
@@ -118,7 +118,7 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.6
+    pretty-format@30>react-is: 19.2.7
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
     caniuse-lite: 1.0.30001799

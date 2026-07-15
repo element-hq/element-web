@@ -56,7 +56,7 @@
             "description": "Update pnpm in devEngines",
             "customType": "jsonata",
             "fileFormat": "json",
-            "fileMatch": ["(^|/)package\\.json$"],
+            "managerFilePatterns": ["/(^|/)package\\.json$/"],
             "matchStrings": [
                 "devEngines.packageManager.name = 'pnpm' ? { 'currentValue': devEngines.packageManager.version } : null"
             ],
