@@ -34,6 +34,7 @@ const config: Config = {
         "\\.(css|scss|pcss)(\\?raw)?$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
         "\\.svg$": "<rootDir>/__mocks__/svg.js",
+        "\\.svg\\?react$": "<rootDir>/__mocks__/svg-react.js",
         "^matrix-js-sdk(.*)$": "<rootDir>/node_modules/matrix-js-sdk$1",
         "^react$": "<rootDir>/node_modules/react",
         "^react-dom$": "<rootDir>/node_modules/react-dom",
