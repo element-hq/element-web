@@ -24,6 +24,12 @@ export type RoomListSection = {
     id: string;
     /** Array of room IDs that belong to this section */
     roomIds: string[];
+    /**
+     * The total number of rooms in the section, ignoring any visible-limit truncation
+     * (see {@link RoomListViewActions.setSectionVisibleLimit}). Equal to `roomIds.length`
+     * unless the section has been resized to show fewer rooms.
+     */
+    totalRoomCount: number;
 };
 
 /**
@@ -104,6 +110,12 @@ export interface RoomListViewActions {
     onSectionDragStart: () => void;
     /** Called when a section drag ends (drop or cancel) — restores expansion states */
     onSectionDragEnd: () => void;
+    /**
+     * Called to limit how many rooms a section shows (resizing the section by dragging the
+     * divider below it, or via its minimise/maximise button). `visibleCount` is clamped by
+     * the view model; `undefined` (or a count of at least the section's total) shows all rooms.
+     */
+    setSectionVisibleLimit: (sectionId: string, visibleCount: number | undefined) => void;
 }
 
 /**

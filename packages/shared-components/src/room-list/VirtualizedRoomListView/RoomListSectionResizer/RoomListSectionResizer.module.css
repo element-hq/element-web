@@ -1,0 +1,58 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/*
+The hit area straddles the gap between the last room of the section above and this header:
+rooms leave 8px of padding below themselves and the header has 4px above, so a 16px band
+centred on the boundary covers the visual gap without eating into the header pill.
+*/
+.resizer {
+    position: absolute;
+    top: calc(-1 * var(--cpd-space-2x));
+    left: 0;
+    right: 0;
+    height: var(--cpd-space-4x);
+    z-index: 2;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hairline shown while hovering or dragging, marking the divider being resized. */
+.resizer::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    inset-inline: var(--cpd-space-3x);
+    height: 1px;
+    background: transparent;
+}
+
+.resizer:hover::before,
+.resizer.dragging::before {
+    background: var(--cpd-color-border-interactive-hovered);
+}
+
+/*
+The minimise/maximise button, revealed on hover. visibility (not display) so the flex layout
+is stable, and because the hidden button must not catch pointer events meant for the divider.
+*/
+.button {
+    visibility: hidden;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+}
+
+.resizer:hover .button {
+    visibility: visible;
+}
+
+/* While dragging, the button would flicker under the pointer — keep it hidden. */
+.resizer.dragging .button {
+    visibility: hidden;
+}

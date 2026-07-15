@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX, type FocusEvent, useEffect, useRef, useState } from "react";
+import React, { memo, type JSX, type FocusEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { useDraggable, useDragOperation, useDroppable } from "@dnd-kit/react";
 import { useMergeRefs } from "react-merge-refs";
@@ -75,6 +75,11 @@ export interface RoomListSectionHeaderViewProps {
     sectionCount: number;
     /** Number of rooms in this section */
     roomCountInSection: number;
+    /**
+     * Optional resize divider rendered along this header's top edge (it resizes the section
+     * ABOVE this one). A pointer-only affordance, hidden from the accessibility tree.
+     */
+    resizer?: ReactNode;
 }
 
 /**
@@ -104,6 +109,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     sectionIndex,
     sectionCount,
     roomCountInSection,
+    resizer,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
     const { id, title, isExpanded, isUnread, canBeReordered } = useViewModel(vm);
@@ -194,8 +200,10 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     return (
         <div
             aria-expanded={ariaExpanded}
+            className={styles.headerRow}
             {...getGroupHeaderAccessibleProps(indexInList, sectionIndex, roomCountInSection)}
         >
+            {resizer}
             <div role="gridcell" aria-expanded={ariaExpanded}>
                 <button
                     ref={buttonRef}

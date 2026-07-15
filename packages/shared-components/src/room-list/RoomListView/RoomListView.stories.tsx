@@ -47,6 +47,7 @@ const RoomListViewWrapperImpl = ({
     changeSectionOrder,
     onSectionDragStart,
     onSectionDragEnd,
+    setSectionVisibleLimit,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -64,6 +65,7 @@ const RoomListViewWrapperImpl = ({
         changeSectionOrder,
         onSectionDragStart,
         onSectionDragEnd,
+        setSectionVisibleLimit,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -123,6 +125,7 @@ const meta = {
         changeSectionOrder: fn(),
         onSectionDragStart: fn(),
         onSectionDragEnd: fn(),
+        setSectionVisibleLimit: fn(),
     },
     parameters: {
         design: {

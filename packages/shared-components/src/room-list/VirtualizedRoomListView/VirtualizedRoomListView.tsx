@@ -24,6 +24,7 @@ import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { RoomListSectionHeaderView, RoomListStickySectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
+import { RoomListSectionResizer } from "./RoomListSectionResizer";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
 import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
 import { useRoomListAccessibilityPlugin } from "./RoomListAccessibilityPlugin";
@@ -71,7 +72,7 @@ export interface VirtualizedRoomListViewProps {
 }
 
 /** Height of a single room list item in pixels (44px item + 8px padding bottom) */
-const ROOM_LIST_ITEM_HEIGHT = 52;
+export const ROOM_LIST_ITEM_HEIGHT = 52;
 
 /**
  * Number of pixels the keyboard sensor moves the dragged element per arrow keypress.
@@ -420,6 +421,21 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             // This matches the old RoomList implementation's roving tabindex pattern
             const isFocused = context.focused && context.tabIndexKey === headerId;
 
+            // The divider along this header's top edge resizes the section ABOVE it, so it only
+            // exists from the second header on, and only while that section shows any rooms
+            // (a collapsed or empty section has no room rows to resize).
+            const sectionAbove = groupIndex > 0 ? sections[groupIndex - 1] : undefined;
+            const resizer =
+                sectionAbove && sectionAbove.roomIds.length > 0 ? (
+                    <RoomListSectionResizer
+                        sectionId={sectionAbove.id}
+                        visibleCount={sectionAbove.roomIds.length}
+                        totalCount={sectionAbove.totalRoomCount}
+                        itemHeight={ROOM_LIST_ITEM_HEIGHT}
+                        onResize={vm.setSectionVisibleLimit}
+                    />
+                ) : undefined;
+
             return (
                 <RoomListSectionHeaderView
                     // Stable key per section avoids a @dnd-kit registration race when a new section is inserted.
@@ -431,6 +447,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     sectionIndex={groupIndex}
                     sectionCount={sectionCount}
                     roomCountInSection={roomCountInSection}
+                    resizer={resizer}
                 />
             );
         },

@@ -18,6 +18,7 @@ import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotif
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import {
     CHATS_TAG,
@@ -55,6 +56,13 @@ export class RoomListSectionHeaderViewModel
     private readonly expandedBySpace = new Map<string, boolean>();
 
     /**
+     * Tracks how many rooms of this section to show, per space (the user can shrink a section
+     * by dragging the divider below it). Key is spaceId; absent means show all rooms.
+     * Hydrated from and persisted to the {@link RoomList.sectionVisibleLimits} device setting.
+     */
+    private readonly visibleLimitBySpace = new Map<string, number>();
+
+    /**
      * The calls of the rooms currently in this section that we are listening to, used to aggregate the call decoration.
      */
     private currentCalls = new Set<Call>();
@@ -69,6 +77,11 @@ export class RoomListSectionHeaderViewModel
             displaySectionMenu: !isDefaultSection,
             canBeReordered: !isDefaultSection || props.tag === CHATS_TAG,
         });
+        for (const [spaceId, limits] of Object.entries(SettingsStore.getValue("RoomList.sectionVisibleLimits") ?? {})) {
+            const limit = limits[props.tag];
+            if (typeof limit === "number") this.visibleLimitBySpace.set(spaceId, limit);
+        }
+
         const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),
         );
@@ -102,6 +115,28 @@ export class RoomListSectionHeaderViewModel
 
         const kind = value ? "Expand" : "Collapse";
         PosthogTrackers.trackCollapseOrExpandSection(kind, "SectionHeader");
+    }
+
+    /**
+     * How many rooms of this section to show for the current space, or undefined to show all.
+     * Set when the user resizes the section by dragging the divider below it; persisted per
+     * device. Setting `undefined` clears the limit (shows all rooms).
+     */
+    public get visibleLimit(): number | undefined {
+        return this.visibleLimitBySpace.get(this.props.spaceId);
+    }
+
+    public set visibleLimit(value: number | undefined) {
+        if (value === undefined) this.visibleLimitBySpace.delete(this.props.spaceId);
+        else this.visibleLimitBySpace.set(this.props.spaceId, value);
+
+        const allLimits = { ...SettingsStore.getValue("RoomList.sectionVisibleLimits") };
+        const spaceLimits = { ...allLimits[this.props.spaceId] };
+        if (value === undefined) delete spaceLimits[this.props.tag];
+        else spaceLimits[this.props.tag] = value;
+        if (Object.keys(spaceLimits).length === 0) delete allLimits[this.props.spaceId];
+        else allLimits[this.props.spaceId] = spaceLimits;
+        void SettingsStore.setValue("RoomList.sectionVisibleLimits", null, SettingLevel.DEVICE, allLimits);
     }
 
     /**

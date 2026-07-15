@@ -100,6 +100,55 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.isExpanded).toBe(false);
     });
 
+    describe("visibleLimit", () => {
+        it("should track the visible limit per space and persist it", () => {
+            const setValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: "m.favourite",
+                title: "Favourites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            expect(vm.visibleLimit).toBeUndefined();
+
+            vm.visibleLimit = 5;
+            expect(vm.visibleLimit).toBe(5);
+            expect(setValue).toHaveBeenCalledWith("RoomList.sectionVisibleLimits", null, expect.anything(), {
+                "!space:server": { "m.favourite": 5 },
+            });
+
+            // A different space has its own limit
+            vm.setSpace("!space2:server");
+            expect(vm.visibleLimit).toBeUndefined();
+            vm.setSpace("!space:server");
+            expect(vm.visibleLimit).toBe(5);
+
+            // Clearing the limit removes the persisted entry
+            vm.visibleLimit = undefined;
+            expect(vm.visibleLimit).toBeUndefined();
+            expect(setValue).toHaveBeenLastCalledWith("RoomList.sectionVisibleLimits", null, expect.anything(), {});
+        });
+
+        it("should hydrate the visible limit from the setting", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "RoomList.sectionVisibleLimits") return { "!space:server": { "m.favourite": 3 } };
+                if (setting === "RoomList.OrderedCustomSections") return [];
+                return null;
+            });
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: "m.favourite",
+                title: "Favourites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            expect(vm.visibleLimit).toBe(3);
+            vm.setSpace("!space2:server");
+            expect(vm.visibleLimit).toBeUndefined();
+        });
+    });
+
     describe("displaySectionMenu", () => {
         it.each([
             [DefaultTagID.Favourite, false],

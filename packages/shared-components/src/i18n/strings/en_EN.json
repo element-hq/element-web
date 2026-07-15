@@ -182,6 +182,10 @@
             "toggle": "Toggle %(section)s section",
             "toggle_unread": "Toggle %(section)s section with unread rooms"
         },
+        "section_resizer": {
+            "show_all": "Show all",
+            "show_fewer": "Show fewer"
+        },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {

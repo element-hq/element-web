@@ -12,6 +12,7 @@ exports[`<RoomListSectionHeaderView /> stories > renders Default story 1`] = `
       aria-posinset="2"
       aria-rowindex="4"
       aria-setsize="5"
+      class="RoomListSectionHeaderView-module_headerRow"
       role="row"
     >
       <div

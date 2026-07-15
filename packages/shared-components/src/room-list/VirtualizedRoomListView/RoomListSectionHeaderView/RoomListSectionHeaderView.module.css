@@ -5,6 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+/* Anchor for the absolutely-positioned resize divider along the row's top edge. */
+.headerRow {
+    position: relative;
+}
+
 .header {
     /* Remove button default style */
     background: unset;
