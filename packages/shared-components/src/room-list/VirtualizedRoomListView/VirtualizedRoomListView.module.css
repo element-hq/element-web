@@ -11,3 +11,11 @@
 .roomList {
     width: 100%;
 }
+
+/**
+ * The partially visible boundary row of a fractionally resized section: the wrapper's inline
+ * height is set to the visible fraction of the row and the rest is clipped.
+ */
+.clippedRoom {
+    overflow: hidden;
+}

@@ -48,7 +48,7 @@ describe("<RoomListSectionResizer />", () => {
         document.body.style.userSelect = "";
     });
 
-    it("shrinks the section one room per item height when dragging up", () => {
+    it("resizes the section smoothly as the pointer moves", () => {
         const { onResize, handle } = renderResizer();
 
         fireEvent.pointerDown(handle, { button: 0, clientY: 400 });
@@ -56,6 +56,10 @@ describe("<RoomListSectionResizer />", () => {
 
         pointerMove(400 - 2 * ITEM_HEIGHT);
         expect(onResize).toHaveBeenLastCalledWith("favourites", 8);
+
+        // The count is continuous, not snapped to whole rows.
+        pointerMove(400 - 2.5 * ITEM_HEIGHT);
+        expect(onResize).toHaveBeenLastCalledWith("favourites", 7.5);
 
         pointerMove(400 - 5 * ITEM_HEIGHT);
         expect(onResize).toHaveBeenLastCalledWith("favourites", 5);

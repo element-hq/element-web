@@ -23,11 +23,11 @@ export const MINIMISED_SECTION_VISIBLE_COUNT = 5;
 export interface RoomListSectionResizerProps {
     /** The ID of the section ABOVE this divider — the one the divider resizes. */
     sectionId: string;
-    /** How many rooms of that section are currently shown. */
+    /** How many rooms of that section are currently shown; fractional when the boundary row is clipped. */
     visibleCount: number;
     /** How many rooms that section has in total (ignoring truncation). */
     totalCount: number;
-    /** Height in pixels of one room list item, used to quantise the drag into whole rooms. */
+    /** Height in pixels of one room list item, used to convert the drag distance into rooms. */
     itemHeight: number;
     /** Called with the new visible count while resizing; `undefined` shows all rooms. */
     onResize: (sectionId: string, visibleCount: number | undefined) => void;
@@ -61,7 +61,8 @@ interface DragState {
  * The draggable divider between two room list sections.
  *
  * Rendered along the top edge of a section header, it resizes the section ABOVE it: dragging
- * the divider changes how many of that section's rooms are shown, one whole room at a time.
+ * the divider changes how many of that section's rooms are shown, tracking the pointer
+ * smoothly (the row at the boundary is partially clipped between whole rows).
  * When the pointer leaves the viewport mid-drag, the resize keeps going at the pointer's last
  * speed until the pointer returns or is released. Hovering the divider also reveals a button
  * that maximises a shrunken section, or shrinks a full one down to
@@ -92,9 +93,12 @@ export const RoomListSectionResizer = memo(function RoomListSectionResizer({
         const drag = dragRef.current;
         if (!drag) return;
         const { sectionId, totalCount, itemHeight, onResize } = propsRef.current;
-        const target = drag.startCount + Math.round(drag.virtualDelta / itemHeight);
+        // Continuous (fractional) count, so the boundary follows the pointer smoothly rather
+        // than snapping to whole rows; the view model clips the boundary row to the fraction.
+        const target = drag.startCount + drag.virtualDelta / itemHeight;
         const clamped = Math.min(Math.max(target, 1), totalCount);
-        if (clamped === drag.lastSent) return;
+        // Skip sub-pixel changes to avoid churning the room list for nothing.
+        if (Math.abs(clamped - drag.lastSent) * itemHeight < 1) return;
         drag.lastSent = clamped;
         onResize(sectionId, clamped >= totalCount ? undefined : clamped);
     }, []);

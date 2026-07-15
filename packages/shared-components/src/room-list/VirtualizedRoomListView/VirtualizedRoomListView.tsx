@@ -376,9 +376,26 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             groupIndex: number,
         ): JSX.Element => {
             const { sections } = context.context;
-            const roomIndexInSection = sections[groupIndex].roomIds.findIndex((id) => id === roomId);
+            const section = sections[groupIndex];
+            const roomIndexInSection = section.roomIds.findIndex((id) => id === roomId);
             const isInLastSection = groupIndex === sections.length - 1;
-            return getItemComponent(index, roomId, context, onFocus, isInLastSection, roomIndexInSection);
+            const item = getItemComponent(index, roomId, context, onFocus, isInLastSection, roomIndexInSection);
+
+            // A fractionally resized section shows only part of its boundary row: clip that row
+            // to the visible fraction of its height so the divider tracks the pointer smoothly.
+            const fraction = section.lastRoomVisibleFraction;
+            if (fraction !== undefined && roomIndexInSection === section.roomIds.length - 1) {
+                return (
+                    <div
+                        key={roomId}
+                        className={styles.clippedRoom}
+                        style={{ height: Math.round(fraction * ROOM_LIST_ITEM_HEIGHT) }}
+                    >
+                        {item}
+                    </div>
+                );
+            }
+            return item;
         },
         [getItemComponent],
     );
@@ -425,11 +442,16 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             // exists from the second header on, and only while that section shows any rooms
             // (a collapsed or empty section has no room rows to resize).
             const sectionAbove = groupIndex > 0 ? sections[groupIndex - 1] : undefined;
+            // A clipped boundary row counts for its visible fraction, so a drag starts from
+            // exactly where the divider currently sits.
+            const visibleCountAbove = sectionAbove
+                ? sectionAbove.roomIds.length - 1 + (sectionAbove.lastRoomVisibleFraction ?? 1)
+                : 0;
             const resizer =
                 sectionAbove && sectionAbove.roomIds.length > 0 ? (
                     <RoomListSectionResizer
                         sectionId={sectionAbove.id}
-                        visibleCount={sectionAbove.roomIds.length}
+                        visibleCount={visibleCountAbove}
                         totalCount={sectionAbove.totalRoomCount}
                         itemHeight={ROOM_LIST_ITEM_HEIGHT}
                         onResize={vm.setSectionVisibleLimit}

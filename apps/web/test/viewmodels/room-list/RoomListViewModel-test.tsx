@@ -174,6 +174,26 @@ describe("RoomListViewModel", () => {
             expect(viewModel.getSnapshot().sections[0].roomIds).toHaveLength(8);
         });
 
+        it("should keep the boundary row partially visible for a fractional limit", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5.5);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            // The partially visible boundary row is included, with its visible fraction
+            expect(snapshot.sections[0].roomIds).toHaveLength(6);
+            expect(snapshot.sections[0].lastRoomVisibleFraction).toBeCloseTo(0.5);
+            expect(snapshot.sections[0].totalRoomCount).toBe(8);
+        });
+
+        it("should snap a near-whole limit to the row boundary", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5.995);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].roomIds).toHaveLength(6);
+            expect(snapshot.sections[0].lastRoomVisibleFraction).toBeUndefined();
+        });
+
         it("should clamp the visible limit", async () => {
             // Below one room clamps to one
             viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, -3);
