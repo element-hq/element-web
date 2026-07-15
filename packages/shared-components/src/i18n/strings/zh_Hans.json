@@ -133,7 +133,9 @@
         "expand_all_sections": "展开所有区域",
         "expand_filters": "展开过滤器列表",
         "filters": {
+            "favourite": "收藏",
             "invites": "邀请",
+            "low_priority": "低优先级",
             "mentions": "提及",
             "people": "人员",
             "rooms": "房间",

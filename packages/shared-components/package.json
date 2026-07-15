@@ -108,7 +108,7 @@
         "@vector-im/compound-web": "catalog:",
         "@vitejs/plugin-react": "catalog:",
         "@vitest/browser-playwright": "catalog:",
-        "oxfmt": "0.56.0",
+        "oxfmt": "0.58.0",
         "storybook": "^10.0.7",
         "storybook-addon-vis": "^4.0.0",
         "typedoc": "^0.28.16",

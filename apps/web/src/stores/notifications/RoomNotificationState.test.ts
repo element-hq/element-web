@@ -6,6 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
     Room,
     MatrixEventEvent,
@@ -17,15 +20,15 @@ import {
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { mkEvent, muteRoom, stubClient } from "test-utils";
+import { createMessageEventContent } from "test-utils/events";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { mkEvent, muteRoom, stubClient } from "../../../test-utils";
-import { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
-import { NotificationStateEvents } from "../../../../src/stores/notifications/NotificationState";
-import { NotificationLevel } from "../../../../src/stores/notifications/NotificationLevel";
-import { createMessageEventContent } from "../../../test-utils/events";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import * as UnreadModule from "../../../../src/Unread";
+import { RoomNotificationState } from "./RoomNotificationState";
+import { NotificationStateEvents } from "./NotificationState";
+import { NotificationLevel } from "./NotificationLevel";
+import SettingsStore from "../../settings/SettingsStore";
+import * as UnreadModule from "../../Unread";
 
 describe("RoomNotificationState", () => {
     let room: Room;
@@ -39,12 +42,12 @@ describe("RoomNotificationState", () => {
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     function addThread(room: Room): void {
         const threadId = "thread_id";
-        jest.spyOn(room, "eventShouldLiveIn").mockReturnValue({
+        vi.spyOn(room, "eventShouldLiveIn").mockReturnValue({
             shouldLiveInRoom: true,
             shouldLiveInThread: true,
             threadId,
@@ -82,19 +85,19 @@ describe("RoomNotificationState", () => {
 
     it("updates on event decryption", () => {
         const roomNotifState = new RoomNotificationState(room, true);
-        const listener = jest.fn();
+        const listener = vi.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const testEvent = {
             getRoomId: () => room.roomId,
         } as unknown as MatrixEvent;
-        room.getUnreadNotificationCount = jest.fn().mockReturnValue(1);
+        room.getUnreadNotificationCount = vi.fn().mockReturnValue(1);
         client.emit(MatrixEventEvent.Decrypted, testEvent);
         expect(listener).toHaveBeenCalled();
     });
 
     it("emits an Update event on marked unread room account data", () => {
         const roomNotifState = new RoomNotificationState(room, true);
-        const listener = jest.fn();
+        const listener = vi.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const accountDataEvent = {
             getType: () => "m.marked_unread",
@@ -102,14 +105,14 @@ describe("RoomNotificationState", () => {
                 return { unread: true };
             },
         } as unknown as MatrixEvent;
-        room.getAccountData = jest.fn().mockReturnValue(accountDataEvent);
+        room.getAccountData = vi.fn().mockReturnValue(accountDataEvent);
         room.emit(RoomEvent.AccountData, accountDataEvent, room);
         expect(listener).toHaveBeenCalled();
     });
 
     it("does not update on other account data", () => {
         const roomNotifState = new RoomNotificationState(room, true);
-        const listener = jest.fn();
+        const listener = vi.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const accountDataEvent = {
             getType: () => "else.something",
@@ -117,7 +120,7 @@ describe("RoomNotificationState", () => {
                 return {};
             },
         } as unknown as MatrixEvent;
-        room.getAccountData = jest.fn().mockReturnValue(accountDataEvent);
+        room.getAccountData = vi.fn().mockReturnValue(accountDataEvent);
         room.emit(RoomEvent.AccountData, accountDataEvent, room);
         expect(listener).not.toHaveBeenCalled();
     });
@@ -209,8 +212,8 @@ describe("RoomNotificationState", () => {
 
     describe("computed attributes", () => {
         beforeEach(() => {
-            jest.spyOn(room, "getPendingEvents").mockReturnValue([]);
-            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
+            vi.spyOn(room, "getPendingEvents").mockReturnValue([]);
+            vi.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
         });
 
         it("should has invited at true", () => {
@@ -220,7 +223,7 @@ describe("RoomNotificationState", () => {
         });
 
         it("should has isUnsetMessage at true", () => {
-            jest.spyOn(room, "getPendingEvents").mockReturnValue([
+            vi.spyOn(room, "getPendingEvents").mockReturnValue([
                 mkEvent({ status: EventStatus.NOT_SENT, user: "@foobar:example.org", type: "any.event", content: {} }),
             ]);
             const roomNotifState = new RoomNotificationState(room, false);
@@ -236,11 +239,11 @@ describe("RoomNotificationState", () => {
             room.updateMyMembership(KnownMembership.Invite);
             expect(roomNotifState.isMention).toBe(false);
 
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             room.updateMyMembership(KnownMembership.Knock);
             expect(roomNotifState.isMention).toBe(false);
 
-            jest.spyOn(room, "getPendingEvents").mockReturnValue([
+            vi.spyOn(room, "getPendingEvents").mockReturnValue([
                 mkEvent({ status: EventStatus.NOT_SENT, user: "@foobar:example.org", type: "any.event", content: {} }),
             ]);
             room.updateMyMembership(KnownMembership.Join);
@@ -255,7 +258,7 @@ describe("RoomNotificationState", () => {
         });
 
         it("should has isActivityNotification at true", () => {
-            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
+            vi.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
 
             const roomNotifState = new RoomNotificationState(room, false);
             expect(roomNotifState.isActivityNotification).toBe(true);
@@ -263,9 +266,9 @@ describe("RoomNotificationState", () => {
 
         it("should has hasAnyNotificationOrActivity at true", () => {
             // Hidebold is disabled
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(false);
             // Unread message, generate activity notification
-            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
+            vi.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
             // Highlight notification
             setUnreads(room, 0, 1);
 
@@ -281,12 +284,12 @@ describe("RoomNotificationState", () => {
             expect(roomNotifState.hasAnyNotificationOrActivity).toBe(true);
 
             // hidebold is enabled and we have an activity notification
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            vi.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             room.updateMyMembership(KnownMembership.Join);
             expect(roomNotifState.hasAnyNotificationOrActivity).toBe(false);
 
             // No unread
-            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
+            vi.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
             room.updateMyMembership(KnownMembership.Join);
             expect(roomNotifState.hasAnyNotificationOrActivity).toBe(false);
         });
