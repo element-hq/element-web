@@ -19,6 +19,7 @@ import {
     type LatestRtcNotificationEventStore,
 } from "../../../../../stores/LatestRtcNotificationEventStore";
 import { JitsiCall } from "../../../../../models/Call";
+import type LegacyCallHandler from "../../../../../LegacyCallHandler.tsx";
 
 interface Props {
     /**
@@ -40,6 +41,11 @@ interface Props {
      * {@link CallStore} to access calls in a room.
      */
     callStore: CallStore;
+
+    /**
+     * {@link LegacyCallHandler} to handle calls in a room.
+     */
+    legacyCallHandler: LegacyCallHandler;
 
     /**
      * {@link LatestRtcNotificationEventStore} to track the latest notification event id.
@@ -83,6 +89,7 @@ function computeSnapshot(props: Props): RootCallTileViewSnapshot {
                     getRelationsForEvent: props.getRelationsForEvent,
                     callStore: props.callStore,
                     cli: props.cli,
+                    legacyCallHandler: props.legacyCallHandler,
                 }),
             };
         }
@@ -94,6 +101,7 @@ function computeSnapshot(props: Props): RootCallTileViewSnapshot {
                 getRelationsForEvent: props.getRelationsForEvent,
                 callStore: props.callStore,
                 cli: props.cli,
+                legacyCallHandler: props.legacyCallHandler,
             }),
         };
     }

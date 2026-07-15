@@ -11,7 +11,7 @@ import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "./stores/right-panel/RightPanelStore";
+import type RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { type IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 
@@ -20,20 +20,20 @@ import { findDMForUser } from "./utils/dm/findDMForUser";
  *
  * Note: cross-signing must be set up before calling this function.
  */
-export async function verifyUser(matrixClient: MatrixClient, user: User): Promise<void> {
+export function verifyUser(rightPanelStore: RightPanelStore, matrixClient: MatrixClient, user: User): void {
     if (matrixClient.isGuest()) {
         dis.dispatch({ action: "require_registration" });
         return;
     }
     const existingRequest = pendingVerificationRequestForUser(matrixClient, user);
-    setRightPanel({ member: user, verificationRequest: existingRequest });
+    setRightPanel(rightPanelStore, { member: user, verificationRequest: existingRequest });
 }
 
-function setRightPanel(state: IRightPanelCardState): void {
-    if (RightPanelStore.instance.roomPhaseHistory.some((card) => card.phase == RightPanelPhases.RoomSummary)) {
-        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.EncryptionPanel, state });
+function setRightPanel(rightPanelStore: RightPanelStore, state: IRightPanelCardState): void {
+    if (rightPanelStore.roomPhaseHistory.some((card) => card.phase == RightPanelPhases.RoomSummary)) {
+        rightPanelStore.pushCard({ phase: RightPanelPhases.EncryptionPanel, state });
     } else {
-        RightPanelStore.instance.setCards([
+        rightPanelStore.setCards([
             { phase: RightPanelPhases.RoomSummary },
             { phase: RightPanelPhases.MemberInfo, state: { member: state.member } },
             { phase: RightPanelPhases.EncryptionPanel, state },

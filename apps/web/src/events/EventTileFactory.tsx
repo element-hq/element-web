@@ -199,6 +199,7 @@ function CallStartedTileViewWrapped({ mxEvent, getRelationsForEvent }: IBodyProp
                 cli,
                 callStore: sdkContext.callStore,
                 latestRtcNotificationEventStore: sdkContext.latestRtcNotificationEventStore,
+                legacyCallHandler: sdkContext.legacyCallHandler,
             }),
     );
     return <RootCallTileView vm={vm} />;

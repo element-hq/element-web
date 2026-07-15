@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useState } from "react";
+import React, { type JSX, useCallback, useContext, useState } from "react";
 import { Text, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
@@ -26,7 +26,6 @@ import { HistoryIcon, UserProfileSolidIcon } from "@vector-im/compound-design-to
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
-import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { useRoomMemberCount, useRoomMembers } from "../../../../hooks/useRoomMembers.ts";
 import { _t } from "../../../../languageHandler.tsx";
 import { getPlatformCallTypeProps, useRoomCall } from "../../../../hooks/room/useRoomCall.tsx";
@@ -39,7 +38,6 @@ import FacePile from "../../elements/FacePile.tsx";
 import { useRoomState } from "../../../../hooks/useRoomState.ts";
 import RoomAvatar from "../../avatars/RoomAvatar.tsx";
 import { formatCount } from "../../../../utils/FormattingUtils.ts";
-import RightPanelStore from "../../../../stores/right-panel/RightPanelStore.ts";
 import PosthogTrackers from "../../../../PosthogTrackers.ts";
 import { VideoRoomChatButton } from "./VideoRoomChatButton.tsx";
 import { RoomKnocksBar } from "../RoomKnocksBar.tsx";
@@ -58,6 +56,7 @@ import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/Curr
 import { LocalRoom } from "../../../../models/LocalRoom.ts";
 import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 import { useUserStatus } from "../../../../hooks/useUserStatus.ts";
+import { SDKContext } from "../../../../contexts/SDKContext.ts";
 
 function RoomHeaderButtons({
     room,
@@ -68,6 +67,7 @@ function RoomHeaderButtons({
     legacyAdditionalButtons?: ViewRoomOpts["buttons"];
     extraButtons?: JSX.Element;
 }): JSX.Element {
+    const sdkContext = useContext(SDKContext);
     const members = useRoomMembers(room, 2500);
     const memberCount = useRoomMemberCount(room, { throttleWait: 2500, includeInvited: true });
 
@@ -338,7 +338,7 @@ function RoomHeaderButtons({
                     indicator={notificationLevelToIndicator(threadNotifications)}
                     onClick={(evt) => {
                         evt.stopPropagation();
-                        RightPanelStore.instance.showOrHidePhase(RightPanelPhases.ThreadPanel);
+                        sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.ThreadPanel);
                         PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
                     }}
                     aria-label={_t("common|threads")}
@@ -352,7 +352,7 @@ function RoomHeaderButtons({
                         indicator={notificationLevelToIndicator(globalNotificationState.level)}
                         onClick={(evt) => {
                             evt.stopPropagation();
-                            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
+                            sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.NotificationPanel);
                         }}
                         aria-label={_t("notifications|enable_prompt_toast_title")}
                     >
@@ -365,7 +365,7 @@ function RoomHeaderButtons({
                 <IconButton
                     onClick={(evt) => {
                         evt.stopPropagation();
-                        RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
+                        sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.RoomSummary);
                     }}
                     aria-label={_t("right_panel|room_summary_card|title")}
                 >
@@ -383,7 +383,7 @@ function RoomHeaderButtons({
                         viewUserOnClick={false}
                         tooltipLabel={_t("room|header_face_pile_tooltip")}
                         onClick={(e: ButtonEvent) => {
-                            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
+                            sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.MemberList);
                             e.stopPropagation();
                         }}
                         aria-label={_t("common|n_members", { count: memberCount })}
@@ -443,15 +443,15 @@ export default function RoomHeader({
     legacyAdditionalButtons?: ViewRoomOpts["buttons"];
     oobData?: IOOBData;
 }): JSX.Element {
-    const client = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
     const roomName = useRoomName(room);
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const historyVisibility = useRoomState(room, (state) => state.getHistoryVisibility());
     const dmMember = useDmMember(room);
     const isDirectMessage = !!dmMember;
     const dmUserStatus = useUserStatus(dmMember?.userId);
-    const isRoomEncrypted = useIsEncrypted(client, room);
-    const e2eStatus = useEncryptionStatus(client, room);
+    const isRoomEncrypted = useIsEncrypted(sdkContext.client!, room);
+    const e2eStatus = useEncryptionStatus(sdkContext.client!, room);
     const askToJoinEnabled = useFeatureEnabled("feature_ask_to_join");
     const onAvatarClick = (): void => {
         defaultDispatcher.dispatch({
@@ -482,7 +482,7 @@ export default function RoomHeader({
                     onClick={
                         room instanceof LocalRoom
                             ? undefined
-                            : () => RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary)
+                            : () => sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.RoomSummary)
                     }
                     className="mx_RoomHeader_infoWrapper"
                 >
