@@ -16,7 +16,6 @@
 }
 
 :global(.cpd-theme-light) {
-
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 40%;
@@ -24,7 +23,6 @@
 }
 
 :global(.cpd-theme-dark) .summaryIcon {
-
     .summaryIcon,
     .entryIcon {
         --icon-lightness: 60%;
@@ -35,11 +33,22 @@
     flex-grow: 1;
 }
 
+.spanLike {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    text-align: inherit;
+    line-height: 100%;
+}
 
 .summary {
     justify-content: space-between;
     display: flex;
     padding: 7px 4px 4px 4px;
+    cursor: pointer;
+    width: 100%;
 
     * {
         vertical-align: center;
@@ -61,6 +70,7 @@
         border-radius: 4px;
 
         box-shadow: 0px 0px 0px 2px var(--cpd-color-bg-subtle-secondary);
+        background-color: var(--cpd-color-bg-subtle-secondary);
 
         text-align: center;
         line-height: 18px;
@@ -99,17 +109,20 @@
     }
 
     .collapse {
-        width: 18px;
-
         display: inline-block;
+        width: 18px;
         height: 18px;
         text-align: center;
         line-height: 18px;
-        width: 18px;
         transition: rotate 300ms ease;
         color: var(--cpd-color-gray-900);
 
         cursor: pointer;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
     }
 }
 
@@ -127,7 +140,7 @@
     padding: var(--cpd-space-2x) var(--cpd-space-4x);
     border-top: 1px solid var(--cpd-color-gray-400);
 
-    >div {
+    > div {
         display: flex;
         gap: var(--cpd-space-4x);
         align-items: center;
@@ -137,11 +150,20 @@
         display: flex;
         flex-direction: column;
 
-        >a {
+        > a {
             color: var(--cpd-color-text-action-accent);
             font-weight: 400;
             font-size: 13px;
         }
+    }
+
+    .linkSiteName {
+        margin-top: 0;
+    }
+
+    .linkTitle {
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
     }
 }
 
@@ -152,6 +174,13 @@
 .removePreview {
     color: var(--cpd-color-gray-900);
     cursor: pointer;
+    width: 15px;
+    height: 15px;
+
+    svg {
+        width: 15px;
+        height: 15px;
+    }
 }
 
 .entryIcon,

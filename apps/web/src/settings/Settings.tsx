@@ -129,10 +129,10 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // Display names are strongly recommended for clarity.
     // Display name can also be an object for different levels.
     displayName?:
-    | TranslationKey
-    | Partial<{
-        [level in SettingLevel]: TranslationKey;
-    }>;
+        | TranslationKey
+        | Partial<{
+              [level in SettingLevel]: TranslationKey;
+          }>;
 
     // Optional description which will be shown as microCopy under SettingsFlags
     description?: TranslationKey | (() => ReactNode);

@@ -165,7 +165,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     };
 
     public readonly removePreview = (url: string): void => {
-        let entry = this.previewCache.get(url);
+        const entry = this.previewCache.get(url);
         if (entry === undefined) return;
         entry.include = false;
 
@@ -173,7 +173,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
 
         this.snapshot.set({
             content: snapshot.content,
-            entries: snapshot.entries.filter(entry => entry.include)
+            entries: snapshot.entries.filter((entry) => entry.include),
         });
-    }
+    };
 }
