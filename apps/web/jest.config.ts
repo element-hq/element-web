@@ -70,6 +70,7 @@ const config: Config = {
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
     workerIdleMemoryLimit: "512MB",
+    snapshotSerializers: ["<rootDir>/src/test/react-use-id-serializer.ts"],
 };
 
 // if we're running under GHA, enable relevant reporters

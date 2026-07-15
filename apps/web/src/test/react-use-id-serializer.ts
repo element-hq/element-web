@@ -31,7 +31,7 @@ function normaliseReactUseIds(snapshot: string): string {
 // Prevent this serializer from recursively matching the same DOM node when it calls serialize().
 let isSerializingDomSnapshot = false;
 
-export default {
+const plugin = {
     test: (value: unknown): value is Element | DocumentFragment =>
         !isSerializingDomSnapshot &&
         globalThis.Element &&
@@ -45,3 +45,8 @@ export default {
         }
     },
 } satisfies SnapshotSerializer;
+
+export default plugin;
+// Jest compatibility exports
+export const test = plugin.test;
+export const print = plugin.print;
