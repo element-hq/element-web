@@ -5,17 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import MediaPreviewConfigController from "../../../../src/settings/controllers/MediaPreviewConfigController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../../test-utils";
-import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewValue } from "../../../../src/@types/media_preview";
+import { vi, describe, it, expect, afterEach } from "vitest";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { getMockClientWithEventEmitter, mockClientMethodsServer } from "test-utils";
+
+import MatrixClientBackedController from "./MatrixClientBackedController";
+import MediaPreviewConfigController from "./MediaPreviewConfigController";
+import { SettingLevel } from "../SettingLevel";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewValue } from "../../@types/media_preview";
 
 describe("MediaPreviewConfigController", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const ROOM_ID = "!room:example.org";
@@ -25,7 +28,7 @@ describe("MediaPreviewConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(null),
+            getAccountData: vi.fn().mockReturnValue(null),
         });
 
         const value = controller.getValueOverride(SettingLevel.ACCOUNT, null);
@@ -37,7 +40,7 @@ describe("MediaPreviewConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest
+            getAccountData: vi
                 .fn()
                 .mockReturnValue(new MatrixEvent({ type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, content: {} })),
         });
@@ -51,7 +54,7 @@ describe("MediaPreviewConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(
+            getAccountData: vi.fn().mockReturnValue(
                 new MatrixEvent({
                     type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                     content: {
@@ -59,8 +62,8 @@ describe("MediaPreviewConfigController", () => {
                     },
                 }),
             ),
-            getRoom: jest.fn().mockReturnValue({
-                getAccountData: jest.fn().mockReturnValue(null),
+            getRoom: vi.fn().mockReturnValue({
+                getAccountData: vi.fn().mockReturnValue(null),
             }),
         });
 
@@ -77,9 +80,9 @@ describe("MediaPreviewConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(null),
-            getRoom: jest.fn().mockReturnValue({
-                getAccountData: jest.fn().mockReturnValue(
+            getAccountData: vi.fn().mockReturnValue(null),
+            getRoom: vi.fn().mockReturnValue({
+                getAccountData: vi.fn().mockReturnValue(
                     new MatrixEvent({
                         type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                         content: {
@@ -105,7 +108,7 @@ describe("MediaPreviewConfigController", () => {
 
             MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
                 ...mockClientMethodsServer(),
-                getAccountData: jest.fn().mockReturnValue(
+                getAccountData: vi.fn().mockReturnValue(
                     new MatrixEvent({
                         type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                         content: {
@@ -113,8 +116,8 @@ describe("MediaPreviewConfigController", () => {
                         },
                     }),
                 ),
-                getRoom: jest.fn().mockReturnValue({
-                    getAccountData: jest.fn().mockReturnValue(null),
+                getRoom: vi.fn().mockReturnValue({
+                    getAccountData: vi.fn().mockReturnValue(null),
                 }),
             });
 
@@ -133,7 +136,7 @@ describe("MediaPreviewConfigController", () => {
 
             MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
                 ...mockClientMethodsServer(),
-                getAccountData: jest.fn().mockReturnValue(
+                getAccountData: vi.fn().mockReturnValue(
                     new MatrixEvent({
                         type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                         content: {
@@ -141,8 +144,8 @@ describe("MediaPreviewConfigController", () => {
                         },
                     }),
                 ),
-                getRoom: jest.fn().mockReturnValue({
-                    getAccountData: jest.fn().mockReturnValue(
+                getRoom: vi.fn().mockReturnValue({
+                    getAccountData: vi.fn().mockReturnValue(
                         new MatrixEvent({
                             type: MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
                             content: {

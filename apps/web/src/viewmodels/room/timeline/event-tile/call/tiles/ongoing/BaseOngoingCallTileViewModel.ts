@@ -29,6 +29,7 @@ import { PlatformCallType } from "../../../../../../../hooks/room/useRoomCall";
 import { type GetRelationsForEvent } from "../../../../../../../components/views/rooms/EventTile";
 import { getIntentFromEvent } from "../../common";
 import { DurationViewModel } from "./components/DurationViewModel";
+import type LegacyCallHandler from "../../../../../../../LegacyCallHandler.tsx";
 
 export interface Props {
     /**
@@ -51,6 +52,10 @@ export interface Props {
      * {@link CallStore} to access calls in a room.
      */
     callStore: CallStore;
+    /**
+     * {@link LegacyCallHandler} to handle calls in a room.
+     */
+    legacyCallHandler: LegacyCallHandler;
 }
 
 function getCallOrThrow(store: CallStore, roomId: string): ElementCall {
@@ -167,7 +172,14 @@ export class BaseOngoingCallViewModel<
         }
         const callType = getIntentFromEvent(this.props.mxEvent);
         const type = callType === SharedComponentsCallType.Voice ? CallType.Voice : CallType.Video;
-        placeCall(room, type, PlatformCallType.ElementCall, event?.shiftKey || undefined, type === CallType.Voice);
+        placeCall(
+            this.props.legacyCallHandler,
+            room,
+            type,
+            PlatformCallType.ElementCall,
+            event?.shiftKey || undefined,
+            type === CallType.Voice,
+        );
     }
 
     /**

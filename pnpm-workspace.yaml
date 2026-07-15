@@ -12,8 +12,9 @@ packages:
 
 catalog:
     # typescript
-    typescript: 6.0.3
-    "@types/node": ts6.0
+    "typescript": 7.0.2
+    "@typescript/native": npm:typescript@7.0.2
+    "@types/node": ts7.0
     # react
     react: ^19.0.0
     react-dom: ^19.0.0
@@ -39,6 +40,11 @@ catalog:
     "@vitest/browser-playwright": 4.1.10
     "@vitejs/plugin-react": 6.0.2
     unplugin-dts: 1.0.1
+
+catalogs:
+    ts6:
+        typescript: npm:@typescript/typescript6@6.0.2
+        "@types/node": ts6.0
 
 packageExtensions:
     fdir:
@@ -147,11 +153,18 @@ overrides:
     vite@6 <6.4.3: ^6.4.3
     # Workaround for https://github.com/electron/electron/issues/51619
     yauzl: "^3.3.1"
-    # Convince api-extractor to use an up to date Typescript version
-    typescript: "catalog:"
+    # Convince api-extractor to use a newer Typescript version
+    "unplugin-dts>typescript": "catalog:ts6"
+    "@microsoft/api-extractor>typescript": "catalog:ts6"
+    # Hold some things back from ts7
+    "@arcmantle/vite-plugin-import-css-sheet>typescript": "catalog:ts6"
+    "react-docgen-typescript>typescript": "catalog:ts6"
 
 minimumReleaseAgeExclude:
     - "matrix-js-sdk"
     - "@matrix-org/*"
     - "@vector-im/*"
     - "@element-hq/*"
+    # Temporary for testing purposes
+    - "@typescript/*"
+    - typescript@7.0.2

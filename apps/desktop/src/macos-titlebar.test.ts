@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Spencer Poisseroux
 Copyright 2026 hayaksi1
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -71,6 +72,12 @@ describe("buildTitleBarCss", () => {
         );
     });
 
+    // Regression guard for #34243: against the default 68px rail the collapsed space panel's right-hand
+    // separator crowds the green traffic light, so the panel is widened to clear it.
+    it("widens the collapsed space panel so the separator clears the traffic lights", () => {
+        expect(css).toMatch(/\.mx_SpacePanel\.collapsed\s*\{[^}]*width:\s*76px\s*!important/);
+    });
+
     it("keeps interactive elements excluded from the drag region (no-drag)", () => {
         // The UserMenu buttons must remain clickable, not act as a drag handle.
         expect(css).toMatch(/\.mx_UserMenu\s*>\s*\*\s*\{[^}]*-webkit-app-region:\s*no-drag/);
@@ -135,12 +142,13 @@ describe("setupMacosTitleBar", () => {
 
     it("does nothing on non-darwin platforms", () => {
         vi.spyOn(process, "platform", "get").mockReturnValue("win32");
-        const { window } = mockWindow();
+        const { window, insertCSS } = mockWindow();
 
         setupMacosTitleBar(window);
 
         expect(window.on).not.toHaveBeenCalled();
         expect(window.webContents.on).not.toHaveBeenCalled();
+        expect(insertCSS).not.toHaveBeenCalled();
     });
 
     it("registers the full-screen and load listeners on darwin", () => {

@@ -6,15 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { makeDelegatedAuthMetadata } from "test-utils/auth";
 import { AutoDiscovery, AutoDiscoveryAction, type ClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
 
-import AutoDiscoveryUtils from "../../../src/utils/AutoDiscoveryUtils";
-import { makeDelegatedAuthMetadata } from "../../test-utils/auth";
+import AutoDiscoveryUtils from "./AutoDiscoveryUtils";
 
 describe("AutoDiscoveryUtils", () => {
     beforeEach(() => {
+        fetchMock.mockReset();
         fetchMock.catch({
             status: 404,
             body: '{"errcode": "M_UNRECOGNIZED", "error": "Unrecognized request"}',
@@ -27,13 +29,13 @@ describe("AutoDiscoveryUtils", () => {
 
         beforeEach(() => {
             // don't litter console with expected errors
-            jest.spyOn(logger, "error")
+            vi.spyOn(logger, "error")
                 .mockClear()
                 .mockImplementation(() => {});
         });
 
         afterAll(() => {
-            jest.spyOn(logger, "error").mockRestore();
+            vi.spyOn(logger, "error").mockRestore();
         });
 
         const validIsConfig = {

@@ -42,6 +42,7 @@ import { _t, AppLocalization } from "./language-helper.js";
 import { setDisplayMediaCallback } from "./displayMediaCallback.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { setupMediaAuth } from "./media-auth.js";
+import { type RendererRecovery, setupRendererRecovery } from "./renderer-recovery.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
@@ -55,6 +56,11 @@ const protocolHandler = new ProtocolHandler(buildConfig.protocol);
 const args = getArgs(protocolHandler);
 
 app.setPath("userData", args.userDataPath);
+
+// Renderer crash auto-recovery for the main window (element-web#32222). Held at module scope so the
+// dock `activate` / `second-instance` relaunch handlers can route a crashed renderer through the same
+// capped recovery rather than reloading inline (which would re-arm an already-given-up crash loop).
+let rendererRecovery: RendererRecovery | undefined;
 
 // Configure Electron Sentry and crashReporter using sentry.dsn in config.json if one is present.
 async function configureSentry(): Promise<void> {
@@ -377,6 +383,11 @@ app.on("ready", async () => {
 
     webContentsHandler(global.mainWindow.webContents);
 
+    // Auto-recover from an upstream renderer/GPU-process crash (white screen, element-web#32222). This
+    // is a MITIGATION of an upstream Electron/Chromium defect, not a root-cause fix — without it a dead
+    // renderer stays a permanent blank window the user can only escape by killing the whole app.
+    rendererRecovery = setupRendererRecovery(global.mainWindow);
+
     session.defaultSession.setDisplayMediaRequestHandler(
         (_, callback) => {
             if (process.env.XDG_SESSION_TYPE === "wayland") {
@@ -410,6 +421,11 @@ app.on("window-all-closed", () => {
 });
 
 app.on("activate", () => {
+    // If the renderer crashed while the window was hidden (element-web#32222), reload it before showing
+    // so the user sees the UI rather than the white screen. Routed through the capped recovery (rather
+    // than an inline reload) so a relaunch can't re-arm a crash loop we've already given up on; it is a
+    // no-op when the renderer is healthy.
+    rendererRecovery?.recoverIfCrashed();
     global.mainWindow?.show();
 });
 
@@ -427,6 +443,10 @@ app.on("second-instance", (ev, commandLine, workingDirectory) => {
 
     // Someone tried to run a second instance, we should focus our window.
     if (global.mainWindow) {
+        // If the renderer crashed (element-web#32222), reload before surfacing the window so the user is
+        // brought to a working UI rather than a white screen. Routed through the capped recovery so a
+        // relaunch can't re-arm a crash loop we've already given up on; a no-op for a healthy window.
+        rendererRecovery?.recoverIfCrashed();
         if (!global.mainWindow.isVisible()) global.mainWindow.show();
         if (global.mainWindow.isMinimized()) global.mainWindow.restore();
         global.mainWindow.focus();

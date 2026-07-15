@@ -78,6 +78,7 @@
         "@types/minimist": "^1.2.1",
         "@types/node": "catalog:",
         "@types/pacote": "^11.1.1",
+        "@typescript/native": "catalog:",
         "app-builder-lib": "26.15.3",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
@@ -93,7 +94,7 @@
         "rimraf": "^6.0.0",
         "shared-types": "workspace:*",
         "tar": "^7.5.8",
-        "typescript": "catalog:",
+        "typescript": "catalog:ts6",
         "vitest": "catalog:"
     },
     "hakDependencies": {

@@ -10,7 +10,7 @@ import { mocked, type MockedObject } from "jest-mock";
 import { type MatrixClient, MatrixEvent, Preset, Room } from "matrix-js-sdk/src/matrix";
 import { render, cleanup, screen, fireEvent, waitFor, act } from "jest-matrix-react";
 
-import { stubClient, mockPlatformPeg, unmockPlatformPeg, withClientContextRenderOptions } from "../../../test-utils";
+import { stubClient, mockPlatformPeg, unmockPlatformPeg, clientAndSDKContextRenderOptions } from "../../../test-utils";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import SpaceRoomView from "../../../../src/components/structures/SpaceRoomView.tsx";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier.ts";
@@ -101,7 +101,7 @@ describe("SpaceRoomView", () => {
                 onRejectButtonClicked={jest.fn()}
                 justCreatedOpts={justCreatedOpts}
             />,
-            withClientContextRenderOptions(cli),
+            clientAndSDKContextRenderOptions(cli, SDKContextClass.instance),
         );
         return spaceRoomView;
     };
