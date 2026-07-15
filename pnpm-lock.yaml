@@ -5464,10 +5464,6 @@ packages:
     resolution: {integrity: sha512-3aqtmM5NgNGo45BNaaBzi0LPQZAw//NEL4HKS5fXm12pJMa4KEkze8DEKnkTEIrGnWaOJKamecHKlnNg/Mqf/Q==}
     engines: {node: '>=18'}
 
-  '@sentry/core@10.65.0':
-    resolution: {integrity: sha512-3aqtmM5NgNGo45BNaaBzi0LPQZAw//NEL4HKS5fXm12pJMa4KEkze8DEKnkTEIrGnWaOJKamecHKlnNg/Mqf/Q==}
-    engines: {node: '>=18'}
-
   '@sentry/electron@7.15.0':
     resolution: {integrity: sha512-hx3HoTb9mbAlbr+NQG3yrG9Nrk579sYBXM5K32LumQ+PmgHdvaiw8cHu/gi0dDT75jECCdqPZyZ2KXFbRwErtw==}
     peerDependencies:
@@ -17581,10 +17577,6 @@ snapshots:
   '@sentry/conventions@0.15.1': {}
 
   '@sentry/core@10.62.0': {}
-
-  '@sentry/core@10.65.0':
-    dependencies:
-      '@sentry/conventions': 0.15.1
 
   '@sentry/core@10.65.0':
     dependencies:
