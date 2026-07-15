@@ -37,6 +37,7 @@ import { type IConfigOptions } from "../../../IConfigOptions";
 import { SDKContextClass } from "../../../contexts/SDKContextClass";
 import { type IProfileInfo } from "../../../hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
+import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
 
 const mockGetAccessToken = vi.fn().mockResolvedValue("getAccessToken");
 vi.mock("../../../IdentityAuthClient", () => ({
@@ -153,6 +154,7 @@ describe("InviteDialog", () => {
         SdkConfig.put({ validated_server_config: {} as ValidatedServerConfig } as IConfigOptions);
         DMRoomMap.makeShared(mockClient);
         vi.clearAllMocks();
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
         room.addLiveEvents(
