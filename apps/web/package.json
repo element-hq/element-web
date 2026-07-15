@@ -209,6 +209,7 @@
         "testcontainers": "^12.0.0",
         "typescript": "catalog:ts6",
         "util": "^0.12.5",
+        "vite-plugin-svgr": "catalog:",
         "vitest": "catalog:",
         "vitest-canvas-mock": "^1.1.4",
         "web-streams-polyfill": "^4.0.0",

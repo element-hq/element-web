@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { defineProject } from "vitest/config";
+import svgr from "vite-plugin-svgr";
 import { resolve } from "node:path";
 
 export default defineProject({
@@ -54,4 +55,5 @@ export default defineProject({
             },
         },
     },
+    plugins: [svgr()],
 });

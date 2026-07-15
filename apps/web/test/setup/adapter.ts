@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { vi, expect as viExpect } from "vitest";
+import { vi, expect as viExpect, beforeAll as viBeforeAll, afterAll as viAfterAll } from "vitest";
 import { mocked as jestMocked } from "jest-mock";
 
 export const isJest = typeof jest !== "undefined";
@@ -26,6 +26,8 @@ const mocked = adapter.mocked;
 export { adapter as vi, mocked };
 
 const _expect = isJest ? (expect as unknown as typeof viExpect) : viExpect;
-export { _expect as expect };
+const _beforeAll = isJest ? (beforeAll as unknown as typeof viBeforeAll) : viBeforeAll;
+const _afterAll = isJest ? (afterAll as unknown as typeof viAfterAll) : viAfterAll;
+export { _expect as expect, _beforeAll as beforeAll, _afterAll as afterAll };
 
 export { type Mocked, type MockedObject } from "vitest";
