@@ -45,18 +45,20 @@ export interface RoomListItemMoreOptionsMenuProps {
  */
 export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
+    const snapshot = useViewModel(vm);
+    const accessibleLabel = _t("room_list|room|more_options_for_room", { roomName: snapshot.name });
 
     return (
         <Menu
             open={open}
             onOpenChange={setOpen}
-            title={_t("room_list|room|more_options")}
+            title={accessibleLabel}
             showTitle={false}
             align="start"
             trigger={
                 <IconButton
                     tooltip={_t("room_list|room|more_options")}
-                    aria-label={_t("room_list|room|more_options")}
+                    aria-label={accessibleLabel}
                     size="24px"
                     style={{ padding: "2px" }}
                 >

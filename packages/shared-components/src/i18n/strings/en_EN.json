@@ -171,7 +171,8 @@
         "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
         "room": {
-            "more_options": "More Options"
+            "more_options": "More Options",
+            "more_options_for_room": "More options for %(roomName)s"
         },
         "room_options": "Room Options",
         "section_created": "Section created",

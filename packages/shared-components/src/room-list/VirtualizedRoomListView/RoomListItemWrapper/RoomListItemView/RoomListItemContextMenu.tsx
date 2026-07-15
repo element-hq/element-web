@@ -9,6 +9,7 @@ import React, { type JSX, type PropsWithChildren } from "react";
 import { ContextMenu } from "@vector-im/compound-web";
 
 import { _t } from "../../../../core/i18n/i18n";
+import { useViewModel } from "../../../../core/viewmodel";
 import { MoreOptionContent, type RoomListItemViewModel } from "./RoomListItemMoreOptionsMenu";
 
 /**
@@ -27,9 +28,10 @@ export const RoomListItemContextMenu: React.FC<PropsWithChildren<RoomListItemCon
     vm,
     children,
 }): JSX.Element => {
+    const snapshot = useViewModel(vm);
     return (
         <ContextMenu
-            title={_t("room_list|room|more_options")}
+            title={_t("room_list|room|more_options_for_room", { roomName: snapshot.name })}
             showTitle={false}
             hasAccessibleAlternative={true}
             trigger={children}
