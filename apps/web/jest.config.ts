@@ -24,7 +24,7 @@ const config: Config = {
     transform: {
         "\\.[jt]sx?$": "babel-jest",
     },
-    testMatch: ["<rootDir>/test/**/*-teFst.[tj]s?(x)"],
+    testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
     setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
