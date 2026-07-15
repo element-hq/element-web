@@ -25,11 +25,9 @@ import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } fr
 import classNames from "classnames";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
-    FavouriteSolidIcon,
     HomeSolidIcon,
     RoomIcon,
     VideoCallSolidIcon,
-    UserProfileSolidIcon,
     PlusIcon,
     ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -40,7 +38,6 @@ import { useContextMenu } from "../../structures/ContextMenu";
 import SpaceCreateMenu from "./SpaceCreateMenu";
 import { SpaceButton, SpaceItem } from "./SpaceTreeLevel";
 import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
     getMetaSpaceName,
     MetaSpace,
@@ -51,10 +48,7 @@ import {
     UPDATE_TOP_LEVEL_SPACES,
 } from "../../../stores/spaces";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import {
-    RoomNotificationStateStore,
-    UPDATE_STATUS_INDICATOR,
-} from "../../../stores/notifications/RoomNotificationStateStore";
+import { UPDATE_STATUS_INDICATOR } from "../../../stores/notifications/RoomNotificationStateStore";
 import type SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
@@ -82,21 +76,22 @@ import { KeyboardShortcut } from "../settings/KeyboardShortcut";
 import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
 import { UserMenuViewModel } from "../../../viewmodels/menus/UserMenuViewModel.ts";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 import { SDKContext } from "../../../contexts/SDKContext.ts";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore.ts";
+import { type SDKContextClass } from "../../../contexts/SDKContextClass.ts";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
-    const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
-        return SpaceStore.instance.invitedSpaces;
+    const sdkContext = useContext(SDKContext);
+    const invites = useEventEmitterState<Room[]>(sdkContext.spaceStore, UPDATE_INVITED_SPACES, () => {
+        return sdkContext.spaceStore.invitedSpaces;
     });
     const [metaSpaces, actualSpaces] = useEventEmitterState<[MetaSpace[], Room[]]>(
-        SpaceStore.instance,
+        sdkContext.spaceStore,
         UPDATE_TOP_LEVEL_SPACES,
-        () => [SpaceStore.instance.enabledMetaSpaces, SpaceStore.instance.spacePanelSpaces],
+        () => [sdkContext.spaceStore.enabledMetaSpaces, sdkContext.spaceStore.spacePanelSpaces],
     );
-    const activeSpace = useEventEmitterState<SpaceKey>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
-        return SpaceStore.instance.activeSpace;
+    const activeSpace = useEventEmitterState<SpaceKey>(sdkContext.spaceStore, UPDATE_SELECTED_SPACE, () => {
+        return sdkContext.spaceStore.activeSpace;
     });
     return [invites, metaSpaces, actualSpaces, activeSpace];
 };
@@ -147,22 +142,23 @@ const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({ selected, isPanelCol
     );
 };
 
-const getHomeNotificationState = (): NotificationState => {
-    return SpaceStore.instance.allRoomsInHome
-        ? RoomNotificationStateStore.instance.globalState
-        : SpaceStore.instance.getNotificationState(MetaSpace.Home);
+const getHomeNotificationState = (sdkContext: SDKContextClass): NotificationState => {
+    return sdkContext.spaceStore.allRoomsInHome
+        ? sdkContext.roomNotificationStateStore.globalState
+        : sdkContext.spaceStore.getNotificationState(MetaSpace.Home);
 };
 
 const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
-    const allRoomsInHome = useEventEmitterState(SpaceStore.instance, UPDATE_HOME_BEHAVIOUR, () => {
-        return SpaceStore.instance.allRoomsInHome;
+    const sdkContext = useContext(SDKContext);
+    const allRoomsInHome = useEventEmitterState(sdkContext.spaceStore, UPDATE_HOME_BEHAVIOUR, () => {
+        return sdkContext.spaceStore.allRoomsInHome;
     });
-    const [notificationState, setNotificationState] = useState(getHomeNotificationState());
+    const [notificationState, setNotificationState] = useState(getHomeNotificationState(sdkContext));
     const updateNotificationState = useCallback(() => {
-        setNotificationState(getHomeNotificationState());
-    }, []);
+        setNotificationState(getHomeNotificationState(sdkContext));
+    }, [sdkContext]);
     useEffect(updateNotificationState, [updateNotificationState, allRoomsInHome]);
-    useEventEmitter(RoomNotificationStateStore.instance, UPDATE_STATUS_INDICATOR, updateNotificationState);
+    useEventEmitter(sdkContext.roomNotificationStateStore, UPDATE_STATUS_INDICATOR, updateNotificationState);
 
     return (
         <MetaSpaceButton
@@ -179,42 +175,15 @@ const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed
     );
 };
 
-const FavouritesButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
-    return (
-        <MetaSpaceButton
-            spaceKey={MetaSpace.Favourites}
-            selected={selected}
-            isPanelCollapsed={isPanelCollapsed}
-            label={getMetaSpaceName(MetaSpace.Favourites)}
-            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Favourites)}
-            size="32px"
-            icon={<FavouriteSolidIcon />}
-        />
-    );
-};
-
-const PeopleButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
-    return (
-        <MetaSpaceButton
-            spaceKey={MetaSpace.People}
-            selected={selected}
-            isPanelCollapsed={isPanelCollapsed}
-            label={getMetaSpaceName(MetaSpace.People)}
-            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.People)}
-            size="32px"
-            icon={<UserProfileSolidIcon />}
-        />
-    );
-};
-
 const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+    const sdkContext = useContext(SDKContext);
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.Orphans}
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Orphans)}
-            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Orphans)}
+            notificationState={sdkContext.spaceStore.getNotificationState(MetaSpace.Orphans)}
             size="32px"
             icon={<RoomIcon />}
         />
@@ -222,13 +191,14 @@ const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollap
 };
 
 const VideoRoomsButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed }) => {
+    const sdkContext = useContext(SDKContext);
     return (
         <MetaSpaceButton
             spaceKey={MetaSpace.VideoRooms}
             selected={selected}
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.VideoRooms)}
-            notificationState={SpaceStore.instance.getNotificationState(MetaSpace.VideoRooms)}
+            notificationState={sdkContext.spaceStore.getNotificationState(MetaSpace.VideoRooms)}
             size="32px"
             icon={<VideoCallSolidIcon />}
         />
@@ -287,8 +257,6 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
 
 const metaSpaceComponentMap: Record<MetaSpace, typeof HomeButton> = {
     [MetaSpace.Home]: HomeButton,
-    [MetaSpace.Favourites]: FavouritesButton,
-    [MetaSpace.People]: PeopleButton,
     [MetaSpace.Orphans]: OrphansButton,
     [MetaSpace.VideoRooms]: VideoRoomsButton,
 };
@@ -304,6 +272,7 @@ interface IInnerSpacePanelProps extends DroppableProvidedProps {
 // Optimisation based on https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/api/droppable.md#recommended-droppable--performance-optimisation
 const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
     ({ children, isPanelCollapsed, setPanelCollapsed, isDraggingOver, innerRef, ...props }) => {
+        const sdkContext = useContext(SDKContext);
         const [invites, metaSpaces, actualSpaces, activeSpace] = useSpaces();
         const activeSpaces = activeSpace ? [activeSpace] : [];
 
@@ -375,7 +344,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
                             size="32px"
                             selected={activeSpace === item.spaceKey}
                             onClick={() => {
-                                SpaceStore.instance.setActiveSpace(item.spaceKey);
+                                sdkContext.spaceStore.setActiveSpace(item.spaceKey);
                                 item.onSelected?.();
                             }}
                         />
@@ -390,7 +359,8 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
 );
 
 const SpacePanel: React.FC = () => {
-    const client = useMatrixClientContext();
+    const sdkContext = useContext(SDKContext);
+    const client = sdkContext.client!;
     const [dragging, setDragging] = useState(false);
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLDivElement>(null);
@@ -398,7 +368,6 @@ const SpacePanel: React.FC = () => {
         if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
         return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
-    const sdkContext = useContext(SDKContext);
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
         if (payload.action === Action.ToggleSpacePanel) {
@@ -413,7 +382,6 @@ const SpacePanel: React.FC = () => {
                 defaultDispatcher,
                 client,
                 isPanelCollapsed,
-                sdkContext.oidcClientStore.accountManagementEndpoint,
             ),
     );
 
@@ -437,7 +405,7 @@ const SpacePanel: React.FC = () => {
                     onDragEnd={(result) => {
                         setDragging(false);
                         if (!result.destination) return; // dropped outside the list
-                        SpaceStore.instance.moveRootSpace(result.source.index, result.destination.index);
+                        sdkContext.spaceStore.moveRootSpace(result.source.index, result.destination.index);
                         onDragEndHandler();
                     }}
                 >

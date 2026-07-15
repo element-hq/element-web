@@ -45,7 +45,7 @@ jobs:
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - name: pnpm cache
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
@@ -114,13 +114,20 @@ jobs:
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
             - name: pnpm cache
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               with:
                   node-version: "lts/*"
                   cache: "pnpm"
 
-            - name: Install Deps
+            - name: Install Deps (layered)
+              run: "./scripts/layered.sh"
+              if: matrix.path != 'packages/shared-components'
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+
+            - name: Install Deps (normal)
               run: "pnpm install"
+              if: matrix.path == 'packages/shared-components'
 
             - name: Cache storybook & vitest
               uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6

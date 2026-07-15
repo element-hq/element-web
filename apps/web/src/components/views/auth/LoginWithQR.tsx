@@ -18,17 +18,24 @@ import {
     signInByGeneratingQR,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AutoDiscovery, MatrixClient, OAuthGrantType, type OidcClientConfig, type XOR } from "matrix-js-sdk/src/matrix";
+import {
+    AutoDiscovery,
+    MatrixClient,
+    OAuthGrantType,
+    type ValidatedAuthMetadata,
+    type XOR,
+} from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
-import { type CompleteOidcLoginResponse } from "../../../utils/oidc/authorize";
-import { getOidcClientId } from "../../../utils/oidc/registerClient.ts";
+import { type CompleteOAuthLoginResponse } from "../../../utils/oauth/authorize";
+import { getOAuthClientId } from "../../../utils/oauth/registerClient.ts";
 import SdkConfig from "../../../SdkConfig.ts";
+import { type Context } from "../../../utils/oauth/persistOAuthSettings.ts";
 
-export type QrLoginCredentials = Omit<CompleteOidcLoginResponse, "idTokenClaims"> &
+export type QrLoginCredentials = CompleteOAuthLoginResponse &
     Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>> & {
         deviceId: string;
     };
@@ -101,26 +108,10 @@ interface IState {
      */
     failureReason?: FailureReason;
     /**
-     * TODO
+     * Details of the server we are logging into, set after initial protocol negotiation.
      */
-    loginServerDetails?: {
-        /**
-         * TODO
-         */
-        homeserverUrl: string;
-        /**
-         * TODO
-         */
-        identityServerUrl?: string;
-        /**
-         * TODO
-         */
-        metadata: OidcClientConfig;
-        /**
-         * TODO
-         */
-        clientId: string;
-    };
+    loginServerDetails?: Pick<Context, "homeserverUrl" | "identityServerUrl" | "metadata"> &
+        Pick<Context["authContext"], "clientId">;
 }
 
 export enum LoginWithQRFailureReason {
@@ -141,7 +132,7 @@ export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
  */
 async function resolveServerURLs(
     serverNameOrBaseUrl: string,
-): Promise<Pick<Partial<NonNullable<IState["loginServerDetails"]>>, "homeserverUrl" | "identityServerUrl">> {
+): Promise<Pick<Partial<Context>, "homeserverUrl" | "identityServerUrl">> {
     if (serverNameOrBaseUrl.startsWith("http://") || serverNameOrBaseUrl.startsWith("https://")) {
         // treat as base URL and skip discovery
         return {
@@ -262,7 +253,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     throw new Error("Failed to discover homeserver URL");
                 }
 
-                let metadata: OidcClientConfig;
+                let metadata: ValidatedAuthMetadata;
                 let clientId: string;
                 try {
                     // Create a new client as the homeserver URL may not be the same as we used for the secure channel
@@ -270,7 +261,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                     if (!metadata.grant_types_supported.includes(OAuthGrantType.DeviceAuthorization)) {
                         throw new Error("Server does not support Device Authorization Grant");
                     }
-                    clientId = await getOidcClientId(metadata, SdkConfig.get().oidc_static_clients);
+                    clientId = await getOAuthClientId(metadata, SdkConfig.get().oidc_static_clients);
                 } catch (e) {
                     this.setState({
                         phase: Phase.Error,
@@ -355,8 +346,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
                         clientId,
-                        idToken: tokenResponse.id_token,
-                        issuer: metadata!.issuer,
                         identityServerUrl,
                         secrets,
                         deviceId,

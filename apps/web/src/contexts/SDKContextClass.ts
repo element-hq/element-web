@@ -17,12 +17,11 @@ import { MemberListStore } from "../stores/MemberListStore";
 import { RoomNotificationStateStore } from "../stores/notifications/RoomNotificationStateStore";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
-import SpaceStore, { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import SpaceStore from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
-import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
 import ResizeNotifier from "../utils/ResizeNotifier";
 import { MultiRoomViewStore } from "../stores/MultiRoomViewStore";
@@ -31,6 +30,8 @@ import { Action } from "../dispatcher/actions.ts";
 import { type OnLoggedInPayload } from "../dispatcher/payloads/OnLoggedInPayload.ts";
 import Notifier from "../Notifier.ts";
 import SettingController from "../settings/controllers/SettingController.ts";
+import { CallStore } from "../stores/CallStore";
+import { LatestRtcNotificationEventStore } from "../stores/LatestRtcNotificationEventStore";
 
 /**
  * A class which (mostly) lazily initialises stores as and when they are requested, ensuring they remain
@@ -66,14 +67,15 @@ export class SDKContextClass {
     protected _WidgetStore?: WidgetStore;
     protected _PosthogAnalytics?: PosthogAnalytics;
     protected _SlidingSyncManager?: SlidingSyncManager;
-    protected _SpaceStore?: SpaceStoreClass;
+    protected _SpaceStore?: SpaceStore;
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
     protected _UserProfilesStore?: UserProfilesStore;
-    protected _OidcClientStore?: OidcClientStore;
     protected _ResizeNotifier?: ResizeNotifier;
     protected _MultiRoomViewStore?: MultiRoomViewStore;
     protected _Notifier?: Notifier;
+    protected _CallStore?: CallStore;
+    protected _LatestRtcNotificationEventStore?: LatestRtcNotificationEventStore;
 
     public constructor() {
         SettingController.sdkContext = this;
@@ -97,7 +99,7 @@ export class SDKContextClass {
 
     public get legacyCallHandler(): LegacyCallHandler {
         if (!this._LegacyCallHandler) {
-            this._LegacyCallHandler = LegacyCallHandler.instance;
+            this._LegacyCallHandler = new LegacyCallHandler(this);
         }
         return this._LegacyCallHandler;
     }
@@ -155,16 +157,16 @@ export class SDKContextClass {
         }
         return this._SlidingSyncManager;
     }
-    public get spaceStore(): SpaceStoreClass {
+    public get spaceStore(): SpaceStore {
         if (!this._SpaceStore) {
-            this._SpaceStore = SpaceStore.instance;
+            this._SpaceStore = new SpaceStore(defaultDispatcher, this);
+            this._SpaceStore.start();
         }
         return this._SpaceStore;
     }
     public get typingStore(): TypingStore {
         if (!this._TypingStore) {
             this._TypingStore = new TypingStore(this);
-            window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
     }
@@ -179,18 +181,6 @@ export class SDKContextClass {
         }
 
         return this._UserProfilesStore;
-    }
-
-    public get oidcClientStore(): OidcClientStore {
-        if (!this.client) {
-            throw new Error("Unable to create OidcClientStore without a client");
-        }
-
-        if (!this._OidcClientStore) {
-            this._OidcClientStore = new OidcClientStore(this.client);
-        }
-
-        return this._OidcClientStore;
     }
 
     // This is getting increasingly tenuous to have here but we still have class components so it's
@@ -217,9 +207,21 @@ export class SDKContextClass {
         return this._Notifier;
     }
 
+    public get callStore(): CallStore {
+        this._CallStore ??= CallStore.instance;
+        return this._CallStore;
+    }
+
+    public get latestRtcNotificationEventStore(): LatestRtcNotificationEventStore {
+        if (!this._LatestRtcNotificationEventStore) {
+            this._LatestRtcNotificationEventStore = new LatestRtcNotificationEventStore(this.callStore);
+            this._LatestRtcNotificationEventStore.start();
+        }
+        return this._LatestRtcNotificationEventStore;
+    }
+
     public onLoggedOut(): void {
         this._UserProfilesStore = undefined;
-        this._OidcClientStore = undefined;
         this._client = undefined;
     }
 }

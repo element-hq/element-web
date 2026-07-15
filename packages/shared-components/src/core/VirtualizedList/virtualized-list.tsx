@@ -68,7 +68,7 @@ export interface VirtualizedListProps<Item, Context> extends Omit<
     /**
      * Function to get the key to use for focusing an item.
      * @param item - The item to get the key for
-     * @return The key to use for focusing the item
+     * @returns The key to use for focusing the item
      */
     getItemKey: (item: Item) => string;
 

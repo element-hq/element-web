@@ -262,6 +262,7 @@ export default class HTMLExporter extends Exporter {
             roomId: event.getRoomId()!,
             ts,
             forExport: true,
+            roomViewStore: SDKContextClass.instance.roomViewStore,
         });
         try {
             const dateSeparator = (

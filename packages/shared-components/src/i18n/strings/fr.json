@@ -148,7 +148,9 @@
         "expand_all_sections": "Développer toutes les sections",
         "expand_filters": "Développer la liste des filtres",
         "filters": {
+            "favourite": "Favoris",
             "invites": "Invitations",
+            "low_priority": "Priorité basse",
             "mentions": "Mentions",
             "people": "Personnes",
             "rooms": "Salons",
@@ -193,6 +195,16 @@
         },
         "unread_messages": "Messages non lus"
     },
+    "status": {
+        "set_status": {
+            "away": "Absent",
+            "be_right_back": "Je reviens tout de suite",
+            "focus_time": "Temps de Concentration",
+            "in_a_meeting": "En réunion",
+            "on_the_road": "Sur la route",
+            "set_status_prompt": "Quel est votre statut ?"
+        }
+    },
     "terms": {
         "tac_button": "Voir les conditions générales"
     },
@@ -220,6 +232,11 @@
             "declined": {
                 "call_declined": "Appel refusé",
                 "call_declined_by_us": "Vous avez rejeté un appel"
+            },
+            "tombstone": {
+                "room": {
+                    "title": "L'appel de groupe est terminé"
+                }
             },
             "video_call_title": "Appel vidéo",
             "voice_call_title": "Appel audio"

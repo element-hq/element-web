@@ -36,7 +36,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -221,7 +221,7 @@ exports[`<ResetIdentityPanel /> should display the 'sync failed' variant correct
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -406,7 +406,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -594,7 +594,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"

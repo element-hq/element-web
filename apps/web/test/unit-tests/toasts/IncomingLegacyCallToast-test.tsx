@@ -10,10 +10,15 @@ import { LOCAL_NOTIFICATION_SETTINGS_PREFIX, MatrixEvent, Room } from "matrix-js
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import React from "react";
 
-import LegacyCallHandler from "../../../src/LegacyCallHandler";
 import IncomingLegacyCallToast from "../../../src/toasts/IncomingLegacyCallToast";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
+import {
+    clientAndSDKContextRenderOptions,
+    getMockClientWithEventEmitter,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+} from "../../test-utils";
+import { TestSDKContext } from "../TestSDKContext.ts";
 
 describe("<IncomingLegacyCallToast />", () => {
     const userId = "@alice:server.org";
@@ -28,6 +33,8 @@ describe("<IncomingLegacyCallToast />", () => {
         ...mockClientMethodsServer(),
         getRoom: jest.fn(),
     });
+    const sdkContext = new TestSDKContext();
+    sdkContext._client = mockClient;
     const mockRoom = new Room("!room:server.org", mockClient, userId);
     mockClient.deviceId = deviceId;
 
@@ -44,13 +51,13 @@ describe("<IncomingLegacyCallToast />", () => {
     });
 
     it("renders when silence button when call is not silenced", () => {
-        const { getByLabelText } = render(getComponent());
+        const { getByLabelText } = render(getComponent(), clientAndSDKContextRenderOptions(mockClient, sdkContext));
         expect(getByLabelText("Silence call")).toMatchSnapshot();
     });
 
     it("renders sound on button when call is silenced", () => {
-        LegacyCallHandler.instance.silenceCall(call.callId);
-        const { getByLabelText } = render(getComponent());
+        sdkContext.legacyCallHandler.silenceCall(call.callId);
+        const { getByLabelText } = render(getComponent(), clientAndSDKContextRenderOptions(mockClient, sdkContext));
         expect(getByLabelText("Sound on")).toMatchSnapshot();
     });
 
@@ -66,7 +73,7 @@ describe("<IncomingLegacyCallToast />", () => {
                 });
             }
         });
-        const { getByLabelText } = render(getComponent());
+        const { getByLabelText } = render(getComponent(), clientAndSDKContextRenderOptions(mockClient, sdkContext));
         expect(getByLabelText("Notifications silenced")).toMatchSnapshot();
     });
 });

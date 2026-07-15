@@ -44,7 +44,6 @@ import SdkConfig from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import { UIComponent, UIFeature } from "../settings/UIFeature";
 import { CHAT_EFFECTS } from "../effects";
-import LegacyCallHandler from "../LegacyCallHandler";
 import { guessAndSetDMRoom } from "../Rooms";
 import DevtoolsDialog from "../components/views/dialogs/DevtoolsDialog";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
@@ -64,6 +63,7 @@ import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKe
 import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
 import { statusCommand } from "./status";
+import { SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 export { CommandCategories, Command };
 
@@ -712,7 +712,7 @@ export const Commands = [
             return success(
                 (async (): Promise<void> => {
                     if (isPhoneNumber) {
-                        const results = await LegacyCallHandler.instance.pstnLookup(userId);
+                        const results = await SDKContextClass.instance.legacyCallHandler.pstnLookup(userId);
                         if (!results || results.length === 0 || !results[0].userid) {
                             throw new UserFriendlyError("slash_command|query_not_found_phone_number");
                         }
@@ -773,7 +773,7 @@ export const Commands = [
         category: CommandCategories.other,
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
-            const call = LegacyCallHandler.instance.getCallForRoom(roomId);
+            const call = SDKContextClass.instance.legacyCallHandler.getCallForRoom(roomId);
             if (!call) {
                 return reject(new UserFriendlyError("slash_command|no_active_call"));
             }
@@ -788,7 +788,7 @@ export const Commands = [
         category: CommandCategories.other,
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
-            const call = LegacyCallHandler.instance.getCallForRoom(roomId);
+            const call = SDKContextClass.instance.legacyCallHandler.getCallForRoom(roomId);
             if (!call) {
                 return reject(new UserFriendlyError("slash_command|no_active_call"));
             }
@@ -896,7 +896,7 @@ interface ICmd {
  * Process the given text for /commands and returns a parsed command that can be used for running the operation.
  * @param {string} roomId The room ID where the command was issued.
  * @param {string} input The raw text input by the user.
- * @return {ICmd} The parsed command object.
+ * @returns {ICmd} The parsed command object.
  * Returns an empty object if the input didn't match a command.
  */
 export function getCommand(roomId: string, input: string): ICmd {

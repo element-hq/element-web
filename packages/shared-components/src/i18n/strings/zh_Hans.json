@@ -133,7 +133,9 @@
         "expand_all_sections": "展开所有区域",
         "expand_filters": "展开过滤器列表",
         "filters": {
+            "favourite": "收藏",
             "invites": "邀请",
+            "low_priority": "低优先级",
             "mentions": "提及",
             "people": "人员",
             "rooms": "房间",
@@ -178,6 +180,16 @@
         },
         "unread_messages": "未读消息"
     },
+    "status": {
+        "set_status": {
+            "away": "离开",
+            "be_right_back": "马上回来",
+            "focus_time": "专注时间",
+            "in_a_meeting": "正在开会",
+            "on_the_road": "在路上",
+            "set_status_prompt": "你的当前状态？"
+        }
+    },
     "terms": {
         "tac_button": "阅读条款与条件"
     },
@@ -205,6 +217,11 @@
             "declined": {
                 "call_declined": "来电被拒接",
                 "call_declined_by_us": "你已拒接来电"
+            },
+            "tombstone": {
+                "room": {
+                    "title": "群组通话已结束"
+                }
             },
             "video_call_title": "视频通话",
             "voice_call_title": "语音通话"

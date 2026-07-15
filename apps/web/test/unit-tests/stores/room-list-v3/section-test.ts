@@ -25,7 +25,7 @@ import { CreateSectionDialog } from "../../../../src/components/views/dialogs/Cr
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 import { MetaSpace } from "../../../../src/stores/spaces";
-import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass.ts";
 
 describe("section", () => {
     afterEach(() => {
@@ -39,8 +39,8 @@ describe("section", () => {
 
         beforeEach(() => {
             // Default: no known spaces
-            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([]);
-            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it.each([null, false, 42, "string", []] as const)("returns an empty object when the raw value is %p", (raw) => {
@@ -80,7 +80,9 @@ describe("section", () => {
         });
 
         it("keeps spaceId when the meta-space is enabled", () => {
-            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([MetaSpace.Home]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([
+                MetaSpace.Home,
+            ]);
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({
                 [validTag]: { ...validEntry, spaceId: MetaSpace.Home },
             });
@@ -89,7 +91,9 @@ describe("section", () => {
 
         it("keeps spaceId when the real space room exists", () => {
             const spaceId = "!space:server";
-            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([{ roomId: spaceId } as Room]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([
+                { roomId: spaceId } as Room,
+            ]);
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({
                 [validTag]: { ...validEntry, spaceId },
             });
@@ -101,8 +105,8 @@ describe("section", () => {
         const tag = "element.io.section.abc";
 
         beforeEach(() => {
-            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([]);
-            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it("returns an empty array when the raw value is not an array", () => {
@@ -131,8 +135,8 @@ describe("section", () => {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(null);
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-            jest.spyOn(SpaceStore.instance, "enabledMetaSpaces", "get").mockReturnValue([]);
-            jest.spyOn(SpaceStore.instance, "spacePanelSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "enabledMetaSpaces", "get").mockReturnValue([]);
+            jest.spyOn(SDKContextClass.instance.spaceStore, "spacePanelSpaces", "get").mockReturnValue([]);
         });
 
         it.each([

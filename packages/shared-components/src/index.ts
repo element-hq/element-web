@@ -11,6 +11,8 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./core/AvatarWithDetails";
+export * from "./core/MemberAvatar/MemberAvatarView.tsx";
+export * from "./core/FacePile/FacePileView.tsx";
 export * from "./core/roving";
 export * from "./room/composer/Banner";
 export * from "./room/composer/UploadButton";
@@ -92,5 +94,7 @@ export * from "./core/i18n/I18nApi";
 export * from "./core/utils/linkify";
 export type * from "./core/userStatus.ts";
 export * from "./status/SetStatusView";
+export * from "./status/StatusTextView";
+export * from "./status/UserStatusIconView";
 // MVVM
 export * from "./core/viewmodel";

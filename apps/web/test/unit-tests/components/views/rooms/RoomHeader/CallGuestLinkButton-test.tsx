@@ -77,6 +77,7 @@ describe("<CallGuestLinkButton />", () => {
         const client = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             sendStateEvent: jest.fn(),
+            getVisibleRooms: jest.fn().mockReturnValue([]),
         });
         sdkContext = new TestSDKContext();
         sdkContext._client = client;

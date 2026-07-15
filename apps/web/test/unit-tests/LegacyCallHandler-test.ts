@@ -40,6 +40,7 @@ import SettingsStore from "../../src/settings/SettingsStore";
 import { UIFeature } from "../../src/settings/UIFeature";
 import { createAudioContext } from "../../src/audio/compat";
 import * as ManagedHybrid from "../../src/widgets/ManagedHybrid";
+import { TestSDKContext } from "./TestSDKContext.ts";
 
 jest.mock("../../src/Modal");
 
@@ -165,7 +166,7 @@ describe("LegacyCallHandler", () => {
             });
         };
 
-        callHandler = new LegacyCallHandler();
+        callHandler = new LegacyCallHandler(new TestSDKContext());
         callHandler.start();
 
         mocked(getFunctionalMembers).mockReturnValue([FUNCTIONAL_USER]);
@@ -238,8 +239,6 @@ describe("LegacyCallHandler", () => {
         callHandler.stop();
         // @ts-ignore
         DMRoomMap.setShared(null);
-        // @ts-ignore
-        window.mxLegacyCallHandler = null;
         MatrixClientPeg.unset();
 
         document.body.removeChild(audioElement);
@@ -373,7 +372,7 @@ describe("LegacyCallHandler without third party protocols", () => {
         };
 
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
-        callHandler = new LegacyCallHandler();
+        callHandler = new LegacyCallHandler(new TestSDKContext());
         callHandler.start();
 
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
@@ -423,8 +422,6 @@ describe("LegacyCallHandler without third party protocols", () => {
         callHandler.stop();
         // @ts-ignore
         DMRoomMap.setShared(null);
-        // @ts-ignore
-        window.mxLegacyCallHandler = null;
         MatrixClientPeg.unset();
 
         document.body.removeChild(audioElement);
