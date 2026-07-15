@@ -54,6 +54,7 @@ export default defineProject({
                 url: "http://localhost/",
             },
         },
+        snapshotSerializers: ["src/test/react-use-id-serializer.ts"],
     },
     plugins: [svgr()],
 });
