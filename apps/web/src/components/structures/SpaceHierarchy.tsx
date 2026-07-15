@@ -281,8 +281,9 @@ const Tile: React.FC<ITileProps> = ({
     let childSection: JSX.Element | undefined;
     let onKeyDown: KeyboardEventHandler | undefined;
     if (children) {
-        // the chevron is purposefully a div rather than a button as it should be ignored for a11y
         childToggle = (
+            // the chevron is purposefully a div rather than a button as it should be ignored for a11y
+            // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
             <div
                 className={classNames("mx_SpaceHierarchy_subspace_toggle", {
                     mx_SpaceHierarchy_subspace_toggle_shown: showChildren,

@@ -164,7 +164,6 @@ export default defineConfig({
         "react/no-did-update-set-state": "off",
         "react/no-did-mount-set-state": "off",
         "jsx-a11y/no-static-element-interactions": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
         "vitest/no-conditional-tests": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
         "react/no-array-index-key": "off",
