@@ -47,7 +47,8 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions {
+    implements UrlPreviewGroupViewActions
+{
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -185,13 +186,11 @@ export class UrlPreviewGroupViewModel
             }
         }
 
-        if (previews === undefined) {
-            previews = await Promise.all(
-                this.links
-                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                    .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
-            );
-        }
+        previews ??= await Promise.all(
+            this.links
+                .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+        );
 
         this.snapshot.merge({
             previews: previews.filter((p) => !!p),
