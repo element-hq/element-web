@@ -65,6 +65,11 @@ import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNaviga
 import { ModuleApi } from "../../modules/Api.ts";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import { ResizerViewModel } from "../../viewmodels/structures/ResizerViewModel.ts";
+import {
+    clampChatBackgroundOpacity,
+    resolveChatBackground,
+    type ResolvedChatBackground,
+} from "../../settings/ChatBackgrounds.ts";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -103,6 +108,10 @@ interface IState {
     useCompactLayout: boolean;
     activeCalls: Array<MatrixCall>;
     backgroundImage?: string;
+    /** The resolved custom chat wallpaper shown behind the message timeline, if any. */
+    chatBackground?: ResolvedChatBackground;
+    /** Opacity (0-1) of the chat wallpaper. */
+    chatBackgroundOpacity: number;
 }
 
 /**
@@ -122,6 +131,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected layoutWatcherRef?: string;
     protected compactLayoutWatcherRef?: string;
     protected backgroundImageWatcherRef?: string;
+    protected chatBackgroundWatcherRef?: string;
+    protected chatBackgroundOpacityWatcherRef?: string;
     protected timezoneProfileUpdateRef?: string[];
 
     private resizerViewModel?: ResizerViewModel;
@@ -138,6 +149,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             useCompactLayout: SettingsStore.getValue("useCompactLayout"),
             usageLimitDismissed: false,
             activeCalls: context.legacyCallHandler.getAllActiveCalls(),
+            ...LoggedInView.computeChatBackgroundState(props.matrixClient),
         };
 
         // stash the MatrixClient in case we log out before we are unmounted
@@ -172,6 +184,16 @@ class LoggedInView extends React.Component<IProps, IState> {
             "RoomList.backgroundImage",
             null,
             this.refreshBackgroundImage,
+        );
+        this.chatBackgroundWatcherRef = SettingsStore.watchSetting(
+            "RoomView.backgroundImage",
+            null,
+            this.refreshChatBackground,
+        );
+        this.chatBackgroundOpacityWatcherRef = SettingsStore.watchSetting(
+            "RoomView.backgroundOpacity",
+            null,
+            this.refreshChatBackground,
         );
 
         this.timezoneProfileUpdateRef = [
@@ -236,6 +258,8 @@ class LoggedInView extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
+        SettingsStore.unwatchSetting(this.chatBackgroundWatcherRef);
+        SettingsStore.unwatchSetting(this.chatBackgroundOpacityWatcherRef);
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
         this.resizerViewModel?.dispose();
     }
@@ -256,6 +280,45 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
         this.setState({ backgroundImage: backgroundImage ?? undefined });
     };
+
+    /**
+     * Read the chat wallpaper settings and resolve them into the state fields that drive the
+     * timeline background. Shared by the constructor and the settings watcher.
+     */
+    private static computeChatBackgroundState(
+        client: MatrixClient,
+    ): Pick<IState, "chatBackground" | "chatBackgroundOpacity"> {
+        return {
+            chatBackground:
+                resolveChatBackground(SettingsStore.getValue("RoomView.backgroundImage"), client) ?? undefined,
+            chatBackgroundOpacity: clampChatBackgroundOpacity(SettingsStore.getValue("RoomView.backgroundOpacity")),
+        };
+    }
+
+    private refreshChatBackground = (): void => {
+        this.setState(LoggedInView.computeChatBackgroundState(this._matrixClient));
+    };
+
+    /**
+     * Build the inline style that exposes the chat wallpaper to the timeline. The CSS custom
+     * properties inherit down the DOM to `.mx_RoomView_timeline::before`, which paints the layer.
+     * Both theme variants are exposed; the stylesheet picks the dark set via the `cpd-theme-*`
+     * class on the body, so a theme switch repaints without any JS involvement.
+     * Returns `undefined` when no wallpaper is configured so the timeline stays fully transparent.
+     */
+    private getChatBackgroundStyle(): React.CSSProperties | undefined {
+        const bg = this.state.chatBackground;
+        if (!bg) return undefined;
+        return {
+            "--mx-chat-background-image": bg.light.image,
+            "--mx-chat-background-repeat": bg.light.repeat,
+            "--mx-chat-background-size": bg.light.size,
+            "--mx-chat-background-image-dark": bg.dark.image,
+            "--mx-chat-background-repeat-dark": bg.dark.repeat,
+            "--mx-chat-background-size-dark": bg.dark.size,
+            "--mx-chat-background-opacity": String(this.state.chatBackgroundOpacity),
+        } as React.CSSProperties;
+    }
 
     public canResetTimelineInRoom = (roomId: string): boolean => {
         if (!this._roomView.current) {
@@ -734,7 +797,9 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
-                    <div className={bodyClasses}>{content}</div>
+                    <div className={bodyClasses} style={this.getChatBackgroundStyle()}>
+                        {content}
+                    </div>
                 </div>
                 <PipContainer />
                 <NonUrgentToastContainer />

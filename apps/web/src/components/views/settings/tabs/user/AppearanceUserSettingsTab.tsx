@@ -19,6 +19,7 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { LayoutSwitcher } from "../../LayoutSwitcher";
+import { ChatBackgroundPanel } from "../../ChatBackgroundPanel";
 import FontScalingPanel from "../../FontScalingPanel";
 import { ThemeChoicePanel } from "../../ThemeChoicePanel";
 import ImageSizePanel from "../../ImageSizePanel";
@@ -108,6 +109,7 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
                 <SettingsSection>
                     <ThemeChoicePanel />
                     <LayoutSwitcher />
+                    <ChatBackgroundPanel />
                     <FontScalingPanel />
                     {this.renderAdvancedSection()}
                     <ImageSizePanel />

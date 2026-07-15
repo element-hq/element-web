@@ -1,0 +1,220 @@
+/*
+Copyright 2026 hayaksi1
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * The options are a plain fieldset rather than Compound's form `Root`. `Root` is `display: flex;
+ * flex-direction: column` and its class lands on the same element as ours, so a row layout set here
+ * would lose to it and stretch every swatch into its own full-width row. Owning the container
+ * outright means the row needs no `!important` to win, unlike .mx_ThemeChoicePanel_ThemeSelectors,
+ * and nothing here depends on a Compound internal staying put.
+ */
+.mx_ChatBackgroundPanel_rail {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* Tiles size to their own content instead of stretching to the tallest in the row. */
+    align-items: flex-start;
+    /* 2x, not 3x: with six presets the rail is eight tiles (None + presets + upload), and it must
+       still fit the ~648px settings-tab content width on one row -- see the tile size below. */
+    gap: var(--cpd-space-2x);
+
+    /* Reset the UA fieldset chrome; `min-inline-size` stops it refusing to shrink below its content. */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+}
+
+/* The subsection heading already names this group on screen; the legend is for assistive tech only. */
+.mx_ChatBackgroundPanel_legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.mx_ChatBackgroundPanel_tile,
+.mx_ChatBackgroundPanel_uploadTile {
+    /* Anchors the absolutely-positioned radio inside its own tile. */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--cpd-space-1x);
+    cursor: pointer;
+}
+
+/* The upload tile is a button, so it needs the UA button chrome removed to match the radio tiles. */
+.mx_ChatBackgroundPanel_uploadTile {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+}
+
+.mx_ChatBackgroundPanel_tile_preview {
+    position: relative;
+    box-sizing: border-box;
+    /* 60x41 keeps all eight tiles + gaps (~544px with the current captions) inside even the most
+       conservative reading of the settings-tab content width (~568px), so the rail stays a single
+       row. Adding the Custom tile may wrap it -- that degradation is deliberate. */
+    width: 60px;
+    height: 41px;
+    border-radius: 8px;
+    /* Judge the pattern against the colour it will actually sit on. */
+    background-color: var(--cpd-color-bg-canvas-default);
+    background-position: center;
+    /* The tile sets both theme variants as custom properties; paint the one matching the active
+       theme so the preview shows exactly what the timeline would. */
+    background-image: var(--mx-chat-tile-image, none);
+    background-repeat: var(--mx-chat-tile-repeat, no-repeat);
+    background-size: var(--mx-chat-tile-size, cover);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    transition:
+        border-color 0.1s ease-out,
+        box-shadow 0.1s ease-out;
+}
+
+/* :not(_none) keeps the empty swatch's diagonal, which this higher-specificity rule would
+   otherwise blank out in dark theme. */
+.cpd-theme-dark .mx_ChatBackgroundPanel_tile_preview:not(.mx_ChatBackgroundPanel_tile_preview_none),
+.cpd-theme-dark-hc .mx_ChatBackgroundPanel_tile_preview:not(.mx_ChatBackgroundPanel_tile_preview_none) {
+    background-image: var(--mx-chat-tile-image-dark, none);
+    background-repeat: var(--mx-chat-tile-repeat-dark, no-repeat);
+    background-size: var(--mx-chat-tile-size-dark, cover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mx_ChatBackgroundPanel_tile_preview {
+        transition: none;
+    }
+}
+
+/* The "no wallpaper" swatch: the usual empty-swatch idiom, so it reads as chosen-empty rather than blank. */
+.mx_ChatBackgroundPanel_tile_preview_none {
+    background-image: linear-gradient(
+        to top right,
+        transparent calc(50% - 1px),
+        var(--cpd-color-border-interactive-secondary) calc(50% - 1px),
+        var(--cpd-color-border-interactive-secondary) calc(50% + 1px),
+        transparent calc(50% + 1px)
+    );
+}
+
+.mx_ChatBackgroundPanel_tile_caption {
+    font: var(--cpd-font-body-sm-medium);
+    color: var(--cpd-color-text-secondary);
+    /* Keep a label whole; the row wraps sooner rather than breaking a word. */
+    white-space: nowrap;
+}
+
+/*
+ * The radio is the control but not the picture: the tile is. Kept in the layout (not `display: none`)
+ * so it stays focusable and keeps native radio-group behaviour -- one tab stop, arrow keys, Space.
+ */
+.mx_ChatBackgroundPanel_tile_input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    pointer-events: none;
+}
+
+.mx_ChatBackgroundPanel_tile:hover .mx_ChatBackgroundPanel_tile_preview,
+.mx_ChatBackgroundPanel_uploadTile:hover .mx_ChatBackgroundPanel_tile_preview {
+    border-color: var(--cpd-color-border-interactive-primary);
+}
+
+.mx_ChatBackgroundPanel_tile_input:checked + .mx_ChatBackgroundPanel_tile_preview {
+    border-color: var(--cpd-color-bg-accent-rest);
+    box-shadow: 0 0 0 1px var(--cpd-color-bg-accent-rest);
+}
+
+.mx_ChatBackgroundPanel_tile_input:checked ~ .mx_ChatBackgroundPanel_tile_caption {
+    color: var(--cpd-color-text-primary);
+}
+
+/* The radio is invisible, so the ring has to stand in for its focus state. */
+.mx_ChatBackgroundPanel_tile_input:focus-visible + .mx_ChatBackgroundPanel_tile_preview,
+.mx_ChatBackgroundPanel_uploadTile:focus-visible .mx_ChatBackgroundPanel_tile_preview {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
+}
+
+/* Selection is never colour-only: the badge carries it too. */
+.mx_ChatBackgroundPanel_tile_check {
+    position: absolute;
+    top: var(--cpd-space-1x);
+    right: var(--cpd-space-1x);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--cpd-color-bg-accent-rest);
+    color: var(--cpd-color-icon-on-solid-primary);
+}
+
+.mx_ChatBackgroundPanel_tile_input:checked + .mx_ChatBackgroundPanel_tile_preview .mx_ChatBackgroundPanel_tile_check {
+    display: flex;
+}
+
+.mx_ChatBackgroundPanel_uploadTile .mx_ChatBackgroundPanel_tile_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: dashed;
+    color: var(--cpd-color-icon-secondary);
+}
+
+.mx_ChatBackgroundPanel_uploadTile:hover .mx_ChatBackgroundPanel_tile_preview {
+    color: var(--cpd-color-icon-primary);
+}
+
+/* Anchors the remove button to the custom tile without putting it inside the label. */
+.mx_ChatBackgroundPanel_slot {
+    position: relative;
+    display: flex;
+}
+
+/* Top left, so it never lands on the check badge in the opposite corner. */
+.mx_ChatBackgroundPanel_removeCustom {
+    position: absolute;
+    top: calc(var(--cpd-space-1x) * -1);
+    left: calc(var(--cpd-space-1x) * -1);
+    background-color: var(--cpd-color-bg-canvas-default);
+    border-radius: 50%;
+}
+
+.mx_ChatBackgroundPanel_error {
+    color: var(--cpd-color-text-critical-primary);
+}
+
+.mx_ChatBackgroundPanel_opacity {
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-3x);
+
+    /* Keep the label on one line; the slider gives up the width instead. */
+    > span {
+        flex: none;
+    }
+
+    input[type="range"] {
+        flex: 0 1 200px;
+        accent-color: var(--cpd-color-bg-accent-rest);
+    }
+
+    &:has(input:disabled) {
+        color: var(--cpd-color-text-disabled);
+    }
+}

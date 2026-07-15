@@ -237,6 +237,8 @@ export interface Settings {
     "mjolnirRooms": IBaseSetting<string[]>;
     "mjolnirPersonalRoom": IBaseSetting<string | null>;
     "RoomList.backgroundImage": IBaseSetting<string | null>;
+    "RoomView.backgroundImage": IBaseSetting<string | null>;
+    "RoomView.backgroundOpacity": IBaseSetting<number>;
     "sendReadReceipts": IBaseSetting<boolean>;
     "baseFontSize": IBaseSetting<"" | number>;
     "baseFontSizeV2": IBaseSetting<"" | number>;
@@ -554,6 +556,20 @@ export const SETTINGS: Settings = {
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
+    },
+    // A custom wallpaper shown behind the message timeline. The value is either an `mxc://` URI
+    // (a user-uploaded image) or the id of one of the bundled presets in ChatBackgrounds.ts.
+    // Account-level like `RoomList.backgroundImage` above: the wallpaper is the same in every room and
+    // follows the user across devices.
+    "RoomView.backgroundImage": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        shouldExportToRageshake: false,
+        default: null,
+    },
+    // Opacity (0-1) of the timeline wallpaper's ::before layer, letting photos sit softly behind text.
+    "RoomView.backgroundOpacity": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 1,
     },
     "sendReadReceipts": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

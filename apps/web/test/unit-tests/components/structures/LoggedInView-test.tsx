@@ -565,4 +565,61 @@ describe("<LoggedInView />", () => {
         fireEvent.keyDown(document.body, { key: ".", code: "Period", ctrlKey: true, keyCode: 190 });
         expect(mockSdkContext.rightPanelStore.togglePanel).toHaveBeenCalledWith(null);
     });
+
+    describe("chat background", () => {
+        // Captured before any spy is installed, so the fallback never recurses into the mock itself.
+        const realGetValue = SettingsStore.getValue.bind(SettingsStore);
+        let getValueSpy: jest.SpyInstance | undefined;
+
+        afterEach(() => {
+            getValueSpy?.mockRestore();
+            getValueSpy = undefined;
+        });
+
+        const mockChatBackgroundSettings = (values: Record<string, unknown>): void => {
+            getValueSpy = jest
+                .spyOn(SettingsStore, "getValue")
+                .mockImplementation(((name: string, ...rest: unknown[]) =>
+                    name in values
+                        ? values[name]
+                        : (realGetValue as (...args: unknown[]) => unknown)(
+                              name,
+                              ...rest,
+                          )) as typeof SettingsStore.getValue);
+        };
+
+        const getChatBody = (container: HTMLElement): HTMLElement =>
+            container.querySelector(".mx_MatrixChat") as HTMLElement;
+
+        it("exposes the configured wallpaper to the timeline as CSS custom properties", () => {
+            mockChatBackgroundSettings({
+                "RoomView.backgroundImage": "doodle",
+                "RoomView.backgroundOpacity": 0.5,
+            });
+
+            const { container } = getComponent();
+            const style = getChatBody(container).style;
+
+            expect(style.getPropertyValue("--mx-chat-background-image")).toContain("data:image/svg+xml,");
+            expect(style.getPropertyValue("--mx-chat-background-repeat")).toBe("repeat");
+            expect(style.getPropertyValue("--mx-chat-background-size")).toBe("480px 480px");
+            // The dark variant rides along so the stylesheet can swap artwork on theme change.
+            expect(style.getPropertyValue("--mx-chat-background-image-dark")).toContain("data:image/svg+xml,");
+            expect(style.getPropertyValue("--mx-chat-background-image-dark")).not.toBe(
+                style.getPropertyValue("--mx-chat-background-image"),
+            );
+            expect(style.getPropertyValue("--mx-chat-background-opacity")).toBe("0.5");
+        });
+
+        it("paints nothing when no wallpaper is configured", () => {
+            mockChatBackgroundSettings({
+                "RoomView.backgroundImage": null,
+                "RoomView.backgroundOpacity": 1,
+            });
+
+            const { container } = getComponent();
+
+            expect(getChatBody(container).getAttribute("style")).toBeNull();
+        });
+    });
 });

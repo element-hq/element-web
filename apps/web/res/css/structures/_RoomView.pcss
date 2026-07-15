@@ -98,7 +98,36 @@ Please see LICENSE files in the repository root for full details.
         display: flex;
         flex-direction: column;
         margin-right: calc(var(--container-gap-width) / 2);
+
+        /* isolate so the wallpaper layer below stays behind this column's own content and cannot
+           escape behind the surrounding (white) chat panel. */
+        isolation: isolate;
+
+        /* Custom chat background ("wallpaper"). The CSS variables are set by LoggedInView on an
+           ancestor and inherit down to here; when unset the layer paints nothing. */
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image: var(--mx-chat-background-image, none);
+            background-repeat: var(--mx-chat-background-repeat, no-repeat);
+            background-size: var(--mx-chat-background-size, cover);
+            background-position: center;
+            opacity: var(--mx-chat-background-opacity, 1);
+        }
     }
+}
+
+/* The wallpaper presets are authored per theme. The body carries the active Compound theme class
+   (set by setTheme), so the dark variant is selected in pure CSS and a theme switch repaints the
+   wallpaper instantly with no JS re-render. */
+.cpd-theme-dark .mx_RoomView_timeline::before,
+.cpd-theme-dark-hc .mx_RoomView_timeline::before {
+    background-image: var(--mx-chat-background-image-dark, none);
+    background-repeat: var(--mx-chat-background-repeat-dark, no-repeat);
+    background-size: var(--mx-chat-background-size-dark, cover);
 }
 
 .mx_RoomView_statusArea {
