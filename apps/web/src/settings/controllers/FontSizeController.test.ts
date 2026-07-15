@@ -6,12 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Action } from "../../../../src/dispatcher/actions";
-import dis from "../../../../src/dispatcher/dispatcher";
-import FontSizeController from "../../../../src/settings/controllers/FontSizeController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { vi, describe, it, expect } from "vitest";
 
-const dispatchSpy = jest.spyOn(dis, "fire");
+import { Action } from "../../dispatcher/actions";
+import dis from "../../dispatcher/dispatcher";
+import FontSizeController from "./FontSizeController";
+import { SettingLevel } from "../SettingLevel";
+
+const dispatchSpy = vi.spyOn(dis, "fire");
 
 describe("FontSizeController", () => {
     it("dispatches a font size action on change", () => {

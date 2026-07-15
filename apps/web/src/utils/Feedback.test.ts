@@ -6,18 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import SdkConfig from "../../../src/SdkConfig";
-import { shouldShowFeedback } from "../../../src/utils/Feedback";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { UIFeature } from "../../../src/settings/UIFeature";
-import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions";
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import SdkConfig from "../SdkConfig";
+import { shouldShowFeedback } from "./Feedback";
+import SettingsStore from "../settings/SettingsStore";
+import { UIFeature } from "../settings/UIFeature";
+import { BugReportEndpointURLLocal } from "../IConfigOptions";
 
 const realGetValue = SettingsStore.getValue;
 
 describe("shouldShowFeedback", () => {
     afterEach(() => {
         SdkConfig.reset();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should return false if bug_report_endpoint_url is falsey", () => {
@@ -35,7 +37,7 @@ describe("shouldShowFeedback", () => {
     });
 
     it("should return false if UIFeature.Feedback is disabled", () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
             if (key === UIFeature.Feedback) {
                 return false;
             }
@@ -48,7 +50,7 @@ describe("shouldShowFeedback", () => {
         SdkConfig.put({
             bug_report_endpoint_url: "https://rageshake.server",
         });
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
+        vi.spyOn(SettingsStore, "getValue").mockImplementation((key, ...params) => {
             if (key === UIFeature.Feedback) {
                 return true;
             }
