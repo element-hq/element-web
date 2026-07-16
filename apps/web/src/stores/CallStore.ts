@@ -18,6 +18,7 @@ import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import SdkConfig from "../SdkConfig";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
+import { setUserOnCall } from "../utils/userStatus";
 
 export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
@@ -136,8 +137,17 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return this._connectedCalls;
     }
     private set connectedCalls(value: Set<Call>) {
+        const wasInCall = this._connectedCalls.size > 0;
+        const nowInCall = value.size > 0;
+
         this._connectedCalls = value;
         this.emit(CallStoreEvent.ConnectedCalls, value);
+
+        if (wasInCall !== nowInCall && SettingsStore.getValue("feature_user_status") && this.matrixClient) {
+            setUserOnCall(this.matrixClient, nowInCall).catch((err) =>
+                logger.warn("Failed to update m.call profile field", err),
+            );
+        }
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
         SettingsStore.setValue(
