@@ -134,7 +134,6 @@ export default defineConfig({
         "unicorn/prefer-module": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
         "unicorn/no-document-cookie": "off", // TODO
-        "unicorn/no-length-as-slice-end": "off", // TODO
         "import/no-relative-parent-imports": "off",
         "import/unambiguous": "off",
         "import/no-cycle": "off", // TODO
