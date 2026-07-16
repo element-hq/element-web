@@ -77,7 +77,6 @@ export class AppLocalization {
 
         if (store.has(AppLocalization.STORE_KEY)) {
             const locales = store.get(AppLocalization.STORE_KEY);
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             this.setAppLocale(locales!);
         }
 

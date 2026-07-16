@@ -53,7 +53,6 @@ const createTransitionEndEvent = (): Event => {
     // TransitionEvent constructor does not exist.
     // This is needed because of the following check
     //   https://github.com/atlassian/react-beautiful-dnd/blob/master/src/view/draggable/draggable.jsx#L130
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event as any).propertyName = "transform";
 
     return event;

@@ -573,7 +573,6 @@ type ContextMenuTuple<T> = [
     (ev?: SyntheticEvent) => void,
     (val: boolean) => void,
 ];
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const useContextMenu = <T extends HTMLElement = HTMLElement>(
     inputRef?: RefObject<T | null>,
 ): ContextMenuTuple<T> => {
