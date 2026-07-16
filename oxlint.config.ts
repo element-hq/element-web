@@ -38,6 +38,7 @@ export default defineConfig({
     categories: {
         correctness: "error",
         perf: "error",
+        restriction: "warn",
     },
     options: {
         typeAware: true,
@@ -94,16 +95,69 @@ export default defineConfig({
         ],
         "prefer-const": ["error", { destructuring: "all" }],
         "import/first": "error",
-        "typescript/no-require-imports": "error",
         "new-cap": "error",
-        "no-empty-pattern": "error",
         "typescript/no-unsafe-function-type": "error",
         "react/rules-of-hooks": "error",
         "no-extend-native": "error",
         "no-inner-declarations": "error",
-        "no-var": "error",
         "typescript/no-unnecessary-type-constraint": "error",
         "jsx-filename-extension": ["error", { allow: "as-needed", extensions: ["tsx"] }],
+
+        // Tune restriction ruleset
+        "no-undefined": "off",
+        "typescript/use-unknown-in-catch-callback-variable": "off",
+        "typescript/promise-function-async": "off",
+        "typescript/no-non-null-assertion": "off",
+        "typescript/no-invalid-void-type": "off",
+        "typescript/no-explicit-any": "off",
+        "typescript/no-import-type-side-effects": "off",
+        "typescript/non-nullable-type-assertion-style": "off", // TODO
+        "typescript/no-dynamic-delete": "off",
+        "typescript/prefer-literal-enum-member": "off", // TODO
+        "typescript/explicit-module-boundary-types": "off",
+        "no-param-reassign": "off", // TODO
+        "no-use-before-define": "off", // TODO
+        "class-methods-use-this": "off",
+        "no-plusplus": "off",
+        "no-default-export": "off",
+        "no-console": "off",
+        "complexity": "off",
+        "no-void": "off",
+        "no-empty-function": "off",
+        "default-case": "off", // TODO
+        "no-implicit-globals": "off",
+        "no-bitwise": "off",
+        "no-empty": "off",
+        "no-eq-null": "off",
+        "no-proto": "off", // TODO
+        "promise/catch-or-return": "off",
+        "node/no-process-env": "off", // TODO
+        "node/no-path-concat": "off", // TODO
+        "node/handle-callback-err": "off", // TODO
+        "unicorn/no-array-reduce": "off",
+        "unicorn/prefer-module": "off", // TODO
+        "unicorn/import-style": "off", // TODO
+        "unicorn/no-anonymous-default-export": "off", // TODO
+        "unicorn/prefer-node-protocol": "off", // TODO
+        "unicorn/no-process-exit": "off", // TODO
+        "unicorn/no-document-cookie": "off", // TODO
+        "unicorn/no-length-as-slice-end": "off", // TODO
+        "import/no-relative-parent-imports": "off",
+        "import/unambiguous": "off",
+        "import/no-commonjs": "off", // TODO
+        "import/no-cycle": "off", // TODO
+        "jsdoc/empty-tags": "off", // TODO
+        "vitest/require-test-timeout": "off",
+        "react/jsx-no-literals": "off",
+        "react/prefer-function-component": "off",
+        "react/forbid-component-props": "off",
+        "react/no-multi-comp": "off",
+        "react/no-danger": "off",
+        "react/only-export-components": "off",
+        "react/no-react-children": "off",
+        "react/button-has-type": "off", // TODO
+        "react/no-clone-element": "off",
+        "jsx-a11y/anchor-ambiguous-text": "off", // TODO
 
         "unicorn/no-instanceof-array": "error",
         "no-restricted-globals": ["error", ...defaultRestrictedGlobals],
@@ -127,10 +181,6 @@ export default defineConfig({
                 allowExpressions: true,
             },
         ],
-        "typescript/explicit-member-accessibility": "error",
-
-        // Require us to be more explicit about type conversions to help prevent bugs
-        "typescript/no-base-to-string": ["error"],
 
         // Prevent invalid non-type re-exports of types, these can cause downstream build failures
         "typescript/consistent-type-exports": ["error"],
@@ -439,9 +489,11 @@ export default defineConfig({
                 ],
                 "jsdoc/check-tag-names": "off",
                 "typescript/explicit-function-return-type": "off",
+                "typescript/explicit-module-boundary-types": "off",
                 "typescript/explicit-member-accessibility": "off",
 
                 "react/jsx-no-constructed-context-values": "off",
+                "react/button-has-type": "off",
                 "jsx-a11y/interactive-supports-focus": "off",
                 "jsx-a11y/no-static-element-interactions": "off",
                 "react/no-array-index-key": "off",
