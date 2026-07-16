@@ -12,7 +12,7 @@ import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
-import { I18nContext } from "@element-hq/web-shared-components";
+import { I18nContext, LinkedTextContext } from "@element-hq/web-shared-components";
 
 import defaultDispatcher from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
@@ -20,6 +20,7 @@ import { type Defaultize } from "./@types/common";
 import { type ActionPayload } from "./dispatcher/payloads";
 import { filterBoolean } from "./utils/arrays.ts";
 import { SDKContext } from "./contexts/SDKContext.ts";
+import { LinkedTextConfiguration } from "./Linkify";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
@@ -439,20 +440,22 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             const staticDialog = (
                 <StrictMode>
                     <SDKContext.Provider value={window.mxSdkContext}>
-                        {/* Provide I18nContext for shared-components used inside dialogs rendered in a separate root. */}
+                        {/* Provide I18nContext and LinkedTextContext for shared-components used inside dialogs rendered in a separate root. */}
                         <I18nContext.Provider value={window.mxModuleApi.i18n}>
-                            <TooltipProvider>
-                                <div className={classes}>
-                                    <Glass className="mx_Dialog_border">
-                                        <div className="mx_Dialog">{this.staticModal.elem}</div>
-                                    </Glass>
-                                    <div
-                                        data-testid="dialog-background"
-                                        className="mx_Dialog_background mx_Dialog_staticBackground"
-                                        onClick={this.onBackgroundClick}
-                                    />
-                                </div>
-                            </TooltipProvider>
+                            <LinkedTextContext.Provider value={LinkedTextConfiguration}>
+                                <TooltipProvider>
+                                    <div className={classes}>
+                                        <Glass className="mx_Dialog_border">
+                                            <div className="mx_Dialog">{this.staticModal.elem}</div>
+                                        </Glass>
+                                        <div
+                                            data-testid="dialog-background"
+                                            className="mx_Dialog_background mx_Dialog_staticBackground"
+                                            onClick={this.onBackgroundClick}
+                                        />
+                                    </div>
+                                </TooltipProvider>
+                            </LinkedTextContext.Provider>
                         </I18nContext.Provider>
                     </SDKContext.Provider>
                 </StrictMode>
@@ -473,20 +476,22 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             const dialog = (
                 <StrictMode>
                     <SDKContext.Provider value={window.mxSdkContext}>
-                        {/* Provide I18nContext for shared-components used inside dialogs rendered in a separate root. */}
+                        {/* Provide I18nContext and LinkedTextContext for shared-components used inside dialogs rendered in a separate root. */}
                         <I18nContext.Provider value={window.mxModuleApi.i18n}>
-                            <TooltipProvider>
-                                <div className={classes}>
-                                    <Glass className="mx_Dialog_border">
-                                        <div className="mx_Dialog">{modal.elem}</div>
-                                    </Glass>
-                                    <div
-                                        data-testid="dialog-background"
-                                        className="mx_Dialog_background"
-                                        onClick={this.onBackgroundClick}
-                                    />
-                                </div>
-                            </TooltipProvider>
+                            <LinkedTextContext.Provider value={LinkedTextConfiguration}>
+                                <TooltipProvider>
+                                    <div className={classes}>
+                                        <Glass className="mx_Dialog_border">
+                                            <div className="mx_Dialog">{modal.elem}</div>
+                                        </Glass>
+                                        <div
+                                            data-testid="dialog-background"
+                                            className="mx_Dialog_background"
+                                            onClick={this.onBackgroundClick}
+                                        />
+                                    </div>
+                                </TooltipProvider>
+                            </LinkedTextContext.Provider>
                         </I18nContext.Provider>
                     </SDKContext.Provider>
                 </StrictMode>
