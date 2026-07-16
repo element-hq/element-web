@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
@@ -111,13 +111,22 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({ devic
 
 export const DeviceDetailHeading: React.FC<Props> = ({ device, saveDeviceName }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const renameButtonRef = useRef<HTMLDivElement | null>(null);
+
+    const stopEditing = (): void => {
+        setIsEditing(false);
+        renameButtonRef.current?.focus();
+    };
 
     return isEditing ? (
-        <DeviceNameEditor device={device} saveDeviceName={saveDeviceName} stopEditing={() => setIsEditing(false)} />
+        <DeviceNameEditor device={device} saveDeviceName={saveDeviceName} stopEditing={stopEditing} />
     ) : (
         <div className="mx_DeviceDetailHeading" data-testid="device-detail-heading">
-            <Heading size="4">{device.display_name || device.device_id}</Heading>
+            <Heading size="4">
+                <span aria-live="polite">{device.display_name || device.device_id}</span>
+            </Heading>
             <AccessibleButton
+                ref={renameButtonRef}
                 kind="link_inline"
                 onClick={() => setIsEditing(true)}
                 className="mx_DeviceDetailHeading_renameCta"
