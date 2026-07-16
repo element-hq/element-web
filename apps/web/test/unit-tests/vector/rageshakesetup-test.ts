@@ -46,7 +46,7 @@ describe("mxSendRageshake", () => {
     });
 
     it.each(["", "  ", undefined, null])("Does not send a rageshake if text is '%s'", async (text) => {
-        await window.mxSendRageshake(text as string);
+        await window.mxSendRageshake(text!);
         expect(fetchMock).not.toHaveFetched();
     });
 

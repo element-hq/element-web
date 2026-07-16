@@ -92,10 +92,10 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         this.context.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this.onAction);
         this.readReceiptsSettingWatcher = SettingsStore.watchSetting("showReadReceipts", null, (...[, , , value]) =>
-            this.setState({ showReadReceipts: value as boolean }),
+            this.setState({ showReadReceipts: value! }),
         );
         this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
-            this.setState({ layout: value as Layout }),
+            this.setState({ layout: value! }),
         );
     }
 

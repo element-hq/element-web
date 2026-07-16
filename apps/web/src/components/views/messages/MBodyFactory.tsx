@@ -292,7 +292,7 @@ const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
 // Render a body using the picked factory.
 // Falls back to the provided factory when msgtype has no specific handler.
 export function renderMBody(props: IBodyProps, fallbackFactory?: MBodyComponent): JSX.Element | null {
-    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype as string) ?? fallbackFactory;
+    const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype!) ?? fallbackFactory;
     if (!BodyType) {
         return null;
     }

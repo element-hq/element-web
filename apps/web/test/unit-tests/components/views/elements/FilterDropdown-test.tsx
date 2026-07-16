@@ -33,7 +33,7 @@ describe("<FilterDropdown />", () => {
         await act(async () => {
             const button = container.querySelector('[role="button"]');
             expect(button).toBeTruthy();
-            fireEvent.click(button as Element);
+            fireEvent.click(button!);
             await flushPromises();
         });
 

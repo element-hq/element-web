@@ -712,19 +712,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // Add watchers for each of the settings we just looked up
         this.settingWatchers = this.settingWatchers.concat([
             SettingsStore.watchSetting("showReadReceipts", roomId, (...[, , , value]) =>
-                this.setState({ showReadReceipts: value as boolean }),
+                this.setState({ showReadReceipts: value! }),
             ),
             SettingsStore.watchSetting("showRedactions", roomId, (...[, , , value]) =>
-                this.setState({ showRedactions: value as boolean }),
+                this.setState({ showRedactions: value! }),
             ),
             SettingsStore.watchSetting("showJoinLeaves", roomId, (...[, , , value]) =>
-                this.setState({ showJoinLeaves: value as boolean }),
+                this.setState({ showJoinLeaves: value! }),
             ),
             SettingsStore.watchSetting("showAvatarChanges", roomId, (...[, , , value]) =>
-                this.setState({ showAvatarChanges: value as boolean }),
+                this.setState({ showAvatarChanges: value! }),
             ),
             SettingsStore.watchSetting("showDisplaynameChanges", roomId, (...[, , , value]) =>
-                this.setState({ showDisplaynameChanges: value as boolean }),
+                this.setState({ showDisplaynameChanges: value! }),
             ),
         ]);
 
@@ -985,34 +985,32 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.context.resizeNotifier.on("isResizing", this.onIsResizing);
 
         this.settingWatchers = [
-            SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
-                this.setState({ layout: value as Layout }),
-            ),
+            SettingsStore.watchSetting("layout", null, (...[, , , value]) => this.setState({ layout: value! })),
             SettingsStore.watchSetting("lowBandwidth", null, (...[, , , value]) =>
-                this.setState({ lowBandwidth: value as boolean }),
+                this.setState({ lowBandwidth: value! }),
             ),
             SettingsStore.watchSetting("alwaysShowTimestamps", null, (...[, , , value]) =>
-                this.setState({ alwaysShowTimestamps: value as boolean }),
+                this.setState({ alwaysShowTimestamps: value! }),
             ),
             SettingsStore.watchSetting("showTwelveHourTimestamps", null, (...[, , , value]) =>
-                this.setState({ showTwelveHourTimestamps: value as boolean }),
+                this.setState({ showTwelveHourTimestamps: value! }),
             ),
             SettingsStore.watchSetting(TimezoneHandler.USER_TIMEZONE_KEY, null, (...[, , , value]) =>
-                this.setState({ userTimezone: value as string }),
+                this.setState({ userTimezone: value! }),
             ),
             SettingsStore.watchSetting("readMarkerInViewThresholdMs", null, (...[, , , value]) =>
-                this.setState({ readMarkerInViewThresholdMs: value as number }),
+                this.setState({ readMarkerInViewThresholdMs: value! }),
             ),
             SettingsStore.watchSetting("readMarkerOutOfViewThresholdMs", null, (...[, , , value]) =>
-                this.setState({ readMarkerOutOfViewThresholdMs: value as number }),
+                this.setState({ readMarkerOutOfViewThresholdMs: value! }),
             ),
             SettingsStore.watchSetting("showHiddenEventsInTimeline", null, (...[, , , value]) =>
-                this.setState({ showHiddenEvents: value as boolean }),
+                this.setState({ showHiddenEvents: value! }),
             ),
             SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
-                this.setState({ msc3946ProcessDynamicPredecessor: value as boolean }),
+                this.setState({ msc3946ProcessDynamicPredecessor: value! }),
             ),
         ];
 

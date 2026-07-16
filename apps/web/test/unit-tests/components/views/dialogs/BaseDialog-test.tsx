@@ -18,7 +18,7 @@ describe("BaseDialog", () => {
         // Autolock's autofocus in the empty dialog is focusing on the close button and bringing up the tooltip
         // So we either need to call escape twice(one for the tooltip and one for the dialog) or focus
         // on the dialog first.
-        const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
+        const dialog = container.querySelector('[role="dialog"]')!;
         dialog?.focus();
         await userEvent.keyboard("{Escape}");
         expect(onFinished).toHaveBeenCalled();

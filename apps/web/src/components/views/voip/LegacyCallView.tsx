@@ -501,38 +501,20 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
             // We've already checked that we have feeds so we cast away the optional when passing the feed
             return (
                 <div className="mx_LegacyCallView_content" onMouseMove={this.onMouseMove}>
-                    <VideoFeed
-                        feed={primaryFeed as CallFeed}
-                        call={call}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                        primary={true}
-                    />
+                    <VideoFeed feed={primaryFeed!} call={call} pipMode={pipMode} onResize={onResize} primary={true} />
                 </div>
             );
         } else if (secondaryFeed) {
             return (
                 <div className="mx_LegacyCallView_content" onMouseMove={this.onMouseMove}>
-                    <VideoFeed
-                        feed={primaryFeed as CallFeed}
-                        call={call}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                        primary={true}
-                    />
+                    <VideoFeed feed={primaryFeed!} call={call} pipMode={pipMode} onResize={onResize} primary={true} />
                     {secondaryFeedElement}
                 </div>
             );
         } else {
             return (
                 <div className="mx_LegacyCallView_content" onMouseMove={this.onMouseMove}>
-                    <VideoFeed
-                        feed={primaryFeed as CallFeed}
-                        call={call}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                        primary={true}
-                    />
+                    <VideoFeed feed={primaryFeed!} call={call} pipMode={pipMode} onResize={onResize} primary={true} />
                     {sidebarShown && (
                         <LegacyCallViewSidebar feeds={sidebarFeeds} call={call} pipMode={Boolean(pipMode)} />
                     )}

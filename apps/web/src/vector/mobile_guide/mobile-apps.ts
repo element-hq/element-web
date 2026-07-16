@@ -59,7 +59,7 @@ export const mobileApps: Record<MobileAppVariant, MobileAppMetadata> = {
 };
 
 export function updateMobilePage(metadata: MobileAppMetadata, deepLinkUrl: string, server: string | undefined): void {
-    const appleMeta = document.querySelector('meta[name="apple-itunes-app"]') as Element;
+    const appleMeta = document.querySelector('meta[name="apple-itunes-app"]')!;
     appleMeta.setAttribute("content", `app-id=${metadata.appleAppId}`);
 
     if (server) {

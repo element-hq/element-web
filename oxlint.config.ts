@@ -111,7 +111,6 @@ export default defineConfig({
         "typescript/no-invalid-void-type": "off",
         "typescript/no-explicit-any": "off",
         "typescript/no-import-type-side-effects": "off",
-        "typescript/non-nullable-type-assertion-style": "off", // TODO
         "typescript/no-dynamic-delete": "off",
         "typescript/prefer-literal-enum-member": "off", // TODO
         "typescript/explicit-module-boundary-types": "off",

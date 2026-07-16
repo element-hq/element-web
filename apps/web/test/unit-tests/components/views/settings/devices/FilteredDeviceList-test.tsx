@@ -115,11 +115,11 @@ describe("<FilteredDeviceList />", () => {
         const setFilter = async (container: HTMLElement, option: DeviceSecurityVariation | string) => {
             const dropdown = container.querySelector('[aria-label="Filter devices"]');
 
-            fireEvent.click(dropdown as Element);
+            fireEvent.click(dropdown!);
             // tick to let dropdown render
             await flushPromises();
 
-            fireEvent.click(container.querySelector(`#device-list-filter__${option}`) as Element);
+            fireEvent.click(container.querySelector(`#device-list-filter__${option}`)!);
         };
 
         it("does not display filter description when filter is falsy", () => {
@@ -222,7 +222,7 @@ describe("<FilteredDeviceList />", () => {
             act(() => {
                 const tile = getByTestId(`device-tile-${hundredDaysOld.device_id}`);
                 const toggle = tile.querySelector('[aria-label="Show details"]');
-                fireEvent.click(toggle as Element);
+                fireEvent.click(toggle!);
             });
 
             expect(onDeviceExpandToggle).toHaveBeenCalledWith(hundredDaysOld.device_id);

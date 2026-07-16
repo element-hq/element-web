@@ -827,7 +827,7 @@ async function readEvents(
         const effectiveStateKey = stateKey === true ? undefined : stateKey;
 
         let events: MatrixEvent[] = [];
-        events = events.concat(room.currentState.getStateEvents(eventType, effectiveStateKey as string) || []);
+        events = events.concat(room.currentState.getStateEvents(eventType, effectiveStateKey!) || []);
         events = events.slice(0, effectiveLimit);
 
         sendResponse(event, {
