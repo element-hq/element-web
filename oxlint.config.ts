@@ -128,7 +128,6 @@ export default defineConfig({
         "no-bitwise": "off",
         "no-empty": "off",
         "no-eq-null": "off",
-        "no-proto": "off", // TODO
         "promise/catch-or-return": "off",
         "node/no-process-env": "off", // We enable this for src in overrides
         "node/no-path-concat": "off", // TODO
@@ -503,6 +502,7 @@ export default defineConfig({
                 "typescript/explicit-function-return-type": "off",
                 "typescript/explicit-module-boundary-types": "off",
                 "typescript/explicit-member-accessibility": "off",
+                "no-proto": "off",
 
                 "react/jsx-no-constructed-context-values": "off",
                 "react/button-has-type": "off",
