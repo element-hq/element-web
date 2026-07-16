@@ -100,10 +100,13 @@ describe("RoomSkipList", () => {
         }
     });
 
-    it("Throws error when same room is added via addNewRoom", () => {
+    it("Room is not duplicated when same room is added via addNewRoom", () => {
         const { skipList, rooms } = generateSkipList();
         const room = rooms[5];
-        expect(() => skipList.addNewRoom(room)).toThrow("Can't add room to skiplist");
+        const sizeBefore = skipList.size;
+        skipList.addNewRoom(room);
+
+        expect(skipList.size).toEqual(sizeBefore);
     });
 
     it("Filters are applied to existing nodes when useNewFilters is called", () => {

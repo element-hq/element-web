@@ -116,7 +116,9 @@
         },
         "expand_filters": "Раскрыть список фильтров",
         "filters": {
+            "favourite": "Избранное",
             "invites": "Приглашения",
+            "low_priority": "Низкий приоритет",
             "mentions": "Упоминания",
             "people": "Люди",
             "rooms": "Комнаты",

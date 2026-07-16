@@ -133,7 +133,9 @@
         "expand_all_sections": "Rozbalit všechny sekce",
         "expand_filters": "Rozbalit seznam filtrů",
         "filters": {
+            "favourite": "Oblíbené",
             "invites": "Pozvánky",
+            "low_priority": "Nízká priorita",
             "mentions": "Zmínky",
             "people": "Lidé",
             "rooms": "Místnosti",

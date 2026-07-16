@@ -243,7 +243,10 @@
                     "title": "Call in progress"
                 },
                 "room": {
-                    "join_count": "%(joinedCount)s joined",
+                    "join_count": {
+                        "one": "%(count)s joined",
+                        "other": "%(count)s joined"
+                    },
                     "title": "Group call in progress"
                 }
             },

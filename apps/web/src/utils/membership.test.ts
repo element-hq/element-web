@@ -6,6 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import {
     type MatrixClient,
     type MatrixEvent,
@@ -15,18 +18,17 @@ import {
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { mocked } from "jest-mock";
+import { createTestClient, mkRoomMember, stubClient } from "test-utils";
 
-import { isKnockDenied, waitForMember } from "../../../src/utils/membership";
-import { createTestClient, mkRoomMember, stubClient } from "../../test-utils";
+import { isKnockDenied, waitForMember } from "./membership";
 
 describe("isKnockDenied", () => {
     const userId = "alice";
-    let client: jest.Mocked<MatrixClient>;
+    let client: Mocked<MatrixClient>;
     let room: Room;
 
     beforeEach(() => {
-        client = stubClient() as jest.Mocked<MatrixClient>;
+        client = vi.mocked(stubClient());
         room = new Room("!room-id:example.com", client, "@user:example.com");
     });
 
@@ -34,7 +36,7 @@ describe("isKnockDenied", () => {
         const roomMember = mkRoomMember(room.roomId, userId, KnownMembership.Leave, true, {
             membership: KnownMembership.Knock,
         });
-        jest.spyOn(room, "getMember").mockReturnValue(roomMember);
+        vi.spyOn(room, "getMember").mockReturnValue(roomMember);
         expect(isKnockDenied(room)).toBe(true);
     });
 
@@ -45,7 +47,7 @@ describe("isKnockDenied", () => {
         { membership: KnownMembership.Leave, isKicked: true, prevMembership: KnownMembership.Join },
     ])("checks that the user knock has been not denied", ({ membership, isKicked, prevMembership }) => {
         const roomMember = mkRoomMember(room.roomId, userId, membership, isKicked, { membership: prevMembership });
-        jest.spyOn(room, "getMember").mockReturnValue(roomMember);
+        vi.spyOn(room, "getMember").mockReturnValue(roomMember);
         expect(isKnockDenied(room)).toBe(false);
     });
 });
@@ -64,17 +66,17 @@ describe("waitForMember", () => {
 
         // getRoom() only knows about !stub_room, which has only one member
         const stubRoom = {
-            getMember: jest.fn().mockImplementation((userId) => {
+            getMember: vi.fn().mockImplementation((userId) => {
                 return userId === STUB_MEMBER_ID ? ({} as RoomMember) : null;
             }),
         };
-        mocked(client.getRoom).mockImplementation((roomId) => {
+        vi.mocked(client.getRoom).mockImplementation((roomId) => {
             return roomId === STUB_ROOM_ID ? (stubRoom as unknown as Room) : null;
         });
     });
 
     afterEach(() => {
-        jest.useRealTimers();
+        vi.useRealTimers();
     });
 
     it("resolves with false if the timeout is reached", async () => {
@@ -83,11 +85,11 @@ describe("waitForMember", () => {
     });
 
     it("resolves with false if the timeout is reached, even if other RoomState.newMember events fire", async () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
         const resultProm = waitForMember(client, roomId, userId, { timeout });
-        jest.advanceTimersByTime(50);
+        vi.advanceTimersByTime(50);
         expect(await resultProm).toBe(false);
         client.emit(
             RoomStateEvent.NewMember,
@@ -98,7 +100,7 @@ describe("waitForMember", () => {
                 userId: "@anotherClient:domain",
             } as RoomMember,
         );
-        jest.useRealTimers();
+        vi.useRealTimers();
     });
 
     it("resolves with true if RoomState.newMember fires", async () => {
@@ -115,7 +117,7 @@ describe("waitForMember", () => {
     });
 
     it("resolves immediately if the user is already a member", async () => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
         const resultProm = waitForMember(client, STUB_ROOM_ID, STUB_MEMBER_ID, { timeout });
         expect(await resultProm).toBe(true);
     });
