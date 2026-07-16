@@ -179,6 +179,9 @@ interface IInviteDialogState {
 
     /** Error from the last attempt to send invites. */
     errorText?: string;
+
+    /** Message announced to screen readers once the DM/invite completes successfully. */
+    completionAnnouncement: string | null;
 }
 
 export default class InviteDialog extends React.PureComponent<Props, IInviteDialogState> {
@@ -242,6 +245,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             unknownIdentityUsers: null,
 
             busy: false,
+            completionAnnouncement: null,
         };
     }
 
@@ -401,7 +405,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             const cli = MatrixClientPeg.safeGet();
             const targets = this.convertFilter();
             await startDmOnFirstMessage(cli, targets);
-            this.props.onFinished(true);
+            this.announceCompletionAndFinish(
+                _t("invite|dm_started_announcement", { names: targets.map((t) => t.name).join(", ") }),
+            );
         } catch (err) {
             logger.error(err);
             this.setState({
@@ -410,6 +416,11 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             });
         }
     };
+
+    private announceCompletionAndFinish(announcement: string): void {
+        this.setState({ completionAnnouncement: announcement });
+        window.setTimeout(() => this.props.onFinished(true), 250);
+    }
 
     private setBusy(busy: boolean): void {
         this.setState({
@@ -443,7 +454,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             const states = await inviter.invite(targetIds);
             if (!this.shouldAbortAfterInviteError(states, inviter, room)) {
                 // handles setting error message too
-                this.props.onFinished(true);
+                const invitedCount = Object.values(states).filter((state) => state === "invited").length;
+                this.announceCompletionAndFinish(
+                    _t("invite|invited_announcement", {
+                        count: invitedCount,
+                        roomName: room.name || _t("common|unnamed_room"),
+                    }),
+                );
             }
         } catch (err) {
             logger.error(err);
@@ -1368,7 +1385,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 title={title}
                 screenName={this.screenName}
             >
-                <div className="mx_InviteDialog_content">{this.renderMainTab()}</div>
+                <div className="mx_InviteDialog_content">
+                    <div role="status" aria-live="polite" className="mx_InviteDialog_completionAnnouncement">
+                        {this.state.completionAnnouncement}
+                    </div>
+                    {this.renderMainTab()}
+                </div>
             </BaseDialog>
         );
     }
