@@ -168,8 +168,14 @@ export class RoomListViewModel
 
         const filterIds = getVisibleFilterIds();
 
-        // By default, all sections are expanded
-        const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
+        // By default, all sections are expanded. Section header view models don't exist yet,
+        // so hydrate any persisted visible limits straight from the setting.
+        const initialLimits = SettingsStore.getValue("RoomList.sectionVisibleLimits")?.[roomsResult.spaceId] ?? {};
+        const { sections, isFlatList, lastRoomVisibleFractions } = computeSections(
+            roomsResult,
+            (tag) => true,
+            (tag) => initialLimits[tag],
+        );
         const isRoomListEmpty = roomsResult.sections.every((section) => section.rooms.length === 0);
 
         super(props, {
@@ -184,7 +190,7 @@ export class RoomListViewModel
                 filterKeys: undefined,
             },
             isFlatList,
-            sections: toRoomListSection(sections),
+            sections: toRoomListSection(sections, roomsResult.sections, lastRoomVisibleFractions),
             canCreateRoom,
         });
 
@@ -512,11 +518,19 @@ export class RoomListViewModel
         if (!section) return;
 
         const headerViewModel = this.roomSectionHeaderViewModels.get(section.tag);
-        // Expand and rebuild the section
+        // Expand the section, and clear any resize limit hiding the room, then rebuild
+        let needsRebuild = false;
         if (headerViewModel && !headerViewModel.isExpanded) {
             headerViewModel.isExpanded = true;
-            await this.updateRoomListData();
+            needsRebuild = true;
         }
+        // A room is only fully shown if the (possibly fractional) limit covers its whole row.
+        const indexInSection = section.rooms.findIndex((room) => room.roomId === roomId);
+        if (headerViewModel?.visibleLimit !== undefined && indexInSection + 1 > headerViewModel.visibleLimit) {
+            headerViewModel.visibleLimit = undefined;
+            needsRebuild = true;
+        }
+        if (needsRebuild) await this.updateRoomListData();
 
         // Scroll to the room
         const index = this.getRoomEntryIndex(roomId);
@@ -778,9 +792,10 @@ export class RoomListViewModel
         }
 
         // Build the complete state atomically to ensure consistency
-        const { sections, isFlatList } = computeSections(
+        const { sections, isFlatList, lastRoomVisibleFractions } = computeSections(
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
+            (tag) => this.roomSectionHeaderViewModels.get(tag)?.visibleLimit,
         );
         // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
         if (isFlatList) {
@@ -796,7 +811,7 @@ export class RoomListViewModel
         // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
         const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
         const newFilterKeys = this.roomsResult.filterKeys?.map((k) => String(k));
-        const viewSections = toRoomListSection(this.sections);
+        const viewSections = toRoomListSection(this.sections, this.roomsResult.sections, lastRoomVisibleFractions);
 
         const resolvedScrollToSectionTag =
             scrollToSectionTag && viewSections.some((s) => s.id === scrollToSectionTag)
@@ -946,6 +961,29 @@ export class RoomListViewModel
         this.updateRoomListData();
     };
 
+    /**
+     * Limit how many rooms a section shows (the user resizing the section by dragging the
+     * divider below it, or via its minimise/maximise button). Counts of at least the section's
+     * total (or `undefined`) clear the limit; anything else is clamped to at least one room.
+     */
+    public setSectionVisibleLimit = (tag: string, visibleCount: number | undefined): void => {
+        const headerViewModel = this.roomSectionHeaderViewModels.get(tag);
+        if (!headerViewModel) return;
+
+        const totalCount = this.roomsResult.sections.find((section) => section.tag === tag)?.rooms.length ?? 0;
+        let limit = visibleCount === undefined || visibleCount >= totalCount ? undefined : Math.max(1, visibleCount);
+        // Snap within a couple of hundredths of a room (about a pixel) to the whole row, so a
+        // drag released on a row boundary doesn't leave a sliver of the next room behind.
+        if (limit !== undefined && Math.abs(limit - Math.round(limit)) < 0.02) {
+            const snapped = Math.round(limit);
+            limit = snapped >= totalCount ? undefined : snapped;
+        }
+        if (headerViewModel.visibleLimit === limit) return;
+
+        headerViewModel.visibleLimit = limit;
+        this.updateRoomListData();
+    };
+
     public changeRoomSection = (roomId: string, tag: string): void => {
         const room = this.props.client.getRoom(roomId);
         if (!room) return;
@@ -959,40 +997,63 @@ export class RoomListViewModel
 }
 
 /**
- * Compute the sections to display in the room list based on the rooms result and section expansion state.
+ * Compute the sections to display in the room list based on the rooms result, section expansion state and section visible limits.
  * @param roomsResult - The current rooms result containing sections and rooms
  * @param isSectionExpanded - A function that takes a section tag and returns whether that section is currently expanded
- * @returns An object containing the computed sections (with rooms removed for collapsed sections) and a boolean indicating if this is a flat list (only one section with all rooms)
+ * @param visibleLimitFor - A function that takes a section tag and returns how many of its rooms to show (undefined = all; may be fractional, the boundary row is then partially visible)
+ * @returns The computed sections (with rooms removed for collapsed sections and truncated for resized sections), a boolean indicating if this is a flat list (only one section with all rooms), and per-tag visible fractions for boundary rows of fractionally resized sections
  */
 function computeSections(
     roomsResult: RoomsResult,
     isSectionExpanded: (tag: string) => boolean,
-): { sections: Section[]; isFlatList: boolean } {
+    visibleLimitFor: (tag: string) => number | undefined,
+): { sections: Section[]; isFlatList: boolean; lastRoomVisibleFractions: Map<string, number> } {
     const customSections = getCustomSectionData();
 
-    const sections = roomsResult.sections
-        // Only include sections that have rooms, or custom sections that were created in the current space.
-        .filter(
-            (section) =>
-                section.rooms.length > 0 ||
-                (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
-        )
-        // Remove roomIds for sections that are currently collapsed according to their section header view model
-        .map((section) => ({
-            ...section,
-            rooms: isSectionExpanded(section.tag) ? section.rooms : [],
-        }));
-    const isFlatList = sections.length === 0 || (sections.length === 1 && sections[0].tag === CHATS_TAG);
+    // Only include sections that have rooms, or custom sections that were created in the current space.
+    const filteredSections = roomsResult.sections.filter(
+        (section) =>
+            section.rooms.length > 0 ||
+            (isCustomSectionTag(section.tag) && customSections[section.tag]?.spaceId === roomsResult.spaceId),
+    );
+    // A flat list has no section headers, hence no dividers to undo a resize with, so visible
+    // limits are only applied in section mode.
+    const isFlatList =
+        filteredSections.length === 0 || (filteredSections.length === 1 && filteredSections[0].tag === CHATS_TAG);
 
-    return { sections, isFlatList };
+    // Remove rooms for sections that are currently collapsed according to their section header
+    // view model, and truncate sections resized to show fewer rooms. A fractional limit keeps
+    // the boundary row and records the fraction of it to show.
+    const lastRoomVisibleFractions = new Map<string, number>();
+    const sections = filteredSections.map((section) => {
+        if (!isSectionExpanded(section.tag)) return { ...section, rooms: [] };
+        const limit = isFlatList ? undefined : visibleLimitFor(section.tag);
+        if (limit === undefined || limit >= section.rooms.length) return section;
+        const wholeRooms = Math.floor(limit);
+        const fraction = limit - wholeRooms;
+        if (fraction > 0) lastRoomVisibleFractions.set(section.tag, fraction);
+        return { ...section, rooms: section.rooms.slice(0, fraction > 0 ? wholeRooms + 1 : wholeRooms) };
+    });
+
+    return { sections, isFlatList, lastRoomVisibleFractions };
 }
 
 /**
  * Convert from the internal Section type used in the view model to the RoomListSection type used in the snapshot.
+ * @param sections - The displayed sections (possibly collapsed/truncated)
+ * @param fullSections - The full sections from the rooms result, used to compute each section's total room count
+ * @param lastRoomVisibleFractions - Per-tag visible fraction of the boundary row for fractionally resized sections
  */
-function toRoomListSection(sections: Section[]): RoomListSection[] {
+function toRoomListSection(
+    sections: Section[],
+    fullSections: Section[],
+    lastRoomVisibleFractions: Map<string, number>,
+): RoomListSection[] {
+    const totalRoomCounts = new Map(fullSections.map((section) => [section.tag, section.rooms.length]));
     return sections.map(({ tag, rooms }) => ({
         id: tag,
         roomIds: rooms.map((room) => room.roomId),
+        totalRoomCount: totalRoomCounts.get(tag) ?? rooms.length,
+        lastRoomVisibleFraction: lastRoomVisibleFractions.get(tag),
     }));
 }

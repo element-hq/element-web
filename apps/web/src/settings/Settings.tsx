@@ -365,6 +365,7 @@ export interface Settings {
     "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
     "RoomList.OrderedCustomSections": IBaseSetting<ReorderableSection[]>;
     "RoomList.showSections": IBaseSetting<boolean>;
+    "RoomList.sectionVisibleLimits": IBaseSetting<Record<string, Record<string, number>>>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1348,6 +1349,14 @@ export const SETTINGS: Settings = {
     "RoomList.OrderedCustomSections": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: [],
+    },
+    /**
+     * Managed by the room list section header view models: how many rooms each section shows,
+     * keyed by space ID then section tag. Sections without an entry show all their rooms.
+     */
+    "RoomList.sectionVisibleLimits": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {},
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

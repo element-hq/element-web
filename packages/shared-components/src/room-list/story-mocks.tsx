@@ -15,6 +15,7 @@ import {
     RoomNotifState,
 } from "./VirtualizedRoomListView/RoomListItemWrapper/RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "./VirtualizedRoomListView/RoomListSectionHeaderView";
+import { type RoomListSection } from "./RoomListView";
 import { MockViewModel } from "../core/viewmodel";
 
 /**
@@ -168,31 +169,40 @@ export const createGetSectionHeaderViewModel = (
 };
 
 /**
+ * Create a mock section showing all of its rooms
+ */
+const mockSection = (id: string, roomIds: string[]): RoomListSection => ({
+    id,
+    roomIds,
+    totalRoomCount: roomIds.length,
+});
+
+/**
  * Mock room IDs for different list sizes
  */
 export const mock10RoomsIds = Array.from({ length: 10 }, (_, i) => `!room${i}:server`);
 export const mock10RoomsSections = [
-    { id: "favourites", roomIds: mock10RoomsIds.slice(0, 3) },
-    { id: "chats", roomIds: mock10RoomsIds.slice(3, 4) },
-    { id: "low-priority", roomIds: mock10RoomsIds.slice(4) },
+    mockSection("favourites", mock10RoomsIds.slice(0, 3)),
+    mockSection("chats", mock10RoomsIds.slice(3, 4)),
+    mockSection("low-priority", mock10RoomsIds.slice(4)),
 ];
 
 export const mockRoomIds = Array.from({ length: 20 }, (_, i) => `!room${i}:server`);
 export const mockSections = [
-    { id: "favourites", roomIds: mockRoomIds.slice(0, 5) },
-    { id: "chats", roomIds: mockRoomIds.slice(5, 15) },
-    { id: "low-priority", roomIds: mockRoomIds.slice(15) },
+    mockSection("favourites", mockRoomIds.slice(0, 5)),
+    mockSection("chats", mockRoomIds.slice(5, 15)),
+    mockSection("low-priority", mockRoomIds.slice(15)),
 ];
 
 export const mockSmallListRoomIds = mockRoomIds.slice(0, 5);
 export const mockSmallListSections = [
-    { id: "favourites", roomIds: mockSmallListRoomIds.slice(0, 2) },
-    { id: "chats", roomIds: mockSmallListRoomIds.slice(2, 0) },
+    mockSection("favourites", mockSmallListRoomIds.slice(0, 2)),
+    mockSection("chats", mockSmallListRoomIds.slice(2, 0)),
 ];
 
 export const mockLargeListRoomIds = Array.from({ length: 100 }, (_, i) => `!room${i}:server`);
 export const mockLargeListSections = [
-    { id: "favourites", roomIds: mockLargeListRoomIds.slice(0, 23) },
-    { id: "chats", roomIds: mockLargeListRoomIds.slice(23, 52) },
-    { id: "low-priority", roomIds: mockLargeListRoomIds.slice(52) },
+    mockSection("favourites", mockLargeListRoomIds.slice(0, 23)),
+    mockSection("chats", mockLargeListRoomIds.slice(23, 52)),
+    mockSection("low-priority", mockLargeListRoomIds.slice(52)),
 ];

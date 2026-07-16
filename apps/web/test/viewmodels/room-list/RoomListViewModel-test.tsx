@@ -133,6 +133,86 @@ describe("RoomListViewModel", () => {
         });
     });
 
+    describe("Section resizing", () => {
+        let favouriteRooms: Room[];
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            favouriteRooms = Array.from({ length: 8 }, (_, i) =>
+                mkStubRoom(`!fav${i}:server`, `Favourite ${i}`, matrixClient),
+            );
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [
+                    { tag: DefaultTagID.Favourite, rooms: favouriteRooms },
+                    { tag: CHATS_TAG, rooms: [room1, room2, room3] },
+                ],
+            });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+            // Section header view models are created lazily by the view
+            viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+        });
+
+        it("should truncate a section to the visible limit and expose the total count", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].roomIds).toEqual(favouriteRooms.slice(0, 5).map((room) => room.roomId));
+            expect(snapshot.sections[0].totalRoomCount).toBe(8);
+            // Other sections are unaffected
+            expect(snapshot.sections[1].roomIds).toHaveLength(3);
+            expect(snapshot.sections[1].totalRoomCount).toBe(3);
+
+            // Clearing the limit shows all rooms again
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, undefined);
+            await flushPromises();
+            expect(viewModel.getSnapshot().sections[0].roomIds).toHaveLength(8);
+        });
+
+        it("should keep the boundary row partially visible for a fractional limit", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5.5);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            // The partially visible boundary row is included, with its visible fraction
+            expect(snapshot.sections[0].roomIds).toHaveLength(6);
+            expect(snapshot.sections[0].lastRoomVisibleFraction).toBeCloseTo(0.5);
+            expect(snapshot.sections[0].totalRoomCount).toBe(8);
+        });
+
+        it("should snap a near-whole limit to the row boundary", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5.995);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].roomIds).toHaveLength(6);
+            expect(snapshot.sections[0].lastRoomVisibleFraction).toBeUndefined();
+        });
+
+        it("should clamp the visible limit", async () => {
+            // Below one room clamps to one
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, -3);
+            await flushPromises();
+            expect(viewModel.getSnapshot().sections[0].roomIds).toHaveLength(1);
+
+            // At least the section's total clears the limit
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 100);
+            await flushPromises();
+            expect(viewModel.getSnapshot().sections[0].roomIds).toHaveLength(8);
+        });
+
+        it("should ignore sections without a header view model", async () => {
+            viewModel.setSectionVisibleLimit("no-such-section", 5);
+            await flushPromises();
+            expect(viewModel.getSnapshot().sections[0].roomIds).toHaveLength(8);
+        });
+    });
+
     describe("Room list updates", () => {
         it("should update room list when ListsUpdate event fires", () => {
             viewModel = new RoomListViewModel({
