@@ -950,6 +950,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                     <ol
                         ref={this.itemlist}
                         className="mx_RoomView_MessageList"
+                        role="log"
                         aria-live="polite"
                         aria-label={this.props.ariaLabel}
                     >
