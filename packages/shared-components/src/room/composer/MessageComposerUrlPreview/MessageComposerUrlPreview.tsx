@@ -270,8 +270,12 @@ export function MessageComposerUrlPreviewView({
                         Clear all
                     </button>
                 )}
-                <button className={classNames(styles.collapse, styles.spanLike)} onClick={toggleCollapsed}>
-                    <ChevronDownIcon />
+                <button
+                    className={classNames(styles.collapse, styles.spanLike)}
+                    onClick={toggleCollapsed}
+                    aria-label="Collapse URL previews"
+                >
+                    <ChevronDownIcon aria-hidden={true} />
                 </button>
             </span>
         </div>
