@@ -41,7 +41,7 @@ export function userStatusTextWithinMaxLength(text: string): boolean {
  * @param rawUserStatus The raw user status object to validate.
  * @returns A UserStatus object if valid, otherwise undefined.
  */
-export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefined {
+function validateUserStatus(rawUserStatus: unknown): UserStatus | undefined {
     if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
         return undefined;
     }
@@ -61,15 +61,31 @@ export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefin
 
 /**
  * Takes the raw result from getExtendedProfileProperty for m.call, validates it and
- * returns true if the user is currently on a call, false otherwise.
+ * returns true a UserStatus object reflect it, undefined if there is no status or it
+ * does not say that the user is on a call.
+ * Designed to be the same API as validateUserStatus for simplicty.
  * @param rawCallStatus
  */
-function isOnCall(rawCallStatus: unknown): boolean {
-    if (!rawCallStatus || typeof rawCallStatus !== "object") return false;
-    if (!("call_joined_ts" in rawCallStatus) || typeof rawCallStatus.call_joined_ts !== "number") return false;
-    if (rawCallStatus.call_joined_ts > 0) return true;
+function validateMCallStatus(rawCallStatus: unknown): UserStatus | undefined {
+    if (!rawCallStatus || typeof rawCallStatus !== "object") return undefined;
+    if (!("call_joined_ts" in rawCallStatus) || typeof rawCallStatus.call_joined_ts !== "number") return undefined;
+    if (rawCallStatus.call_joined_ts > 0) return { emoji: ON_A_CALL_STATUS.emoji, text: _t(ON_A_CALL_STATUS.textKey) };
 
-    return false;
+    return undefined;
+}
+
+/**
+ * Takes both MSC4426 user status fields (m.status and m.call) and returns a UserStatus
+ * object that reflects the information they represent.
+ */
+export function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
+    const validatedUserStatus = validateUserStatus(userStatus);
+    if (validatedUserStatus) return validatedUserStatus;
+
+    const validatedCallStatus = validateMCallStatus(callStatus);
+    if (validatedCallStatus) return validatedCallStatus;
+
+    return undefined;
 }
 
 /**
@@ -85,30 +101,28 @@ export async function fetchUserStatus(client: MatrixClient, userId: string): Pro
         return undefined;
     }
 
-    let status: UserStatus | undefined;
+    let rawUserStatus: unknown;
+    let rawCallStatus: unknown;
 
     try {
-        status = validateUserStatus(await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.status"));
+        // nb. one of these may be redundant since one takes precedence over the other, but the two
+        // are fetched in the same call by the js-sdk anyway so it will only be one API call and this
+        // is simpler and duplicates less logic.
+        rawUserStatus = await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.status");
     } catch (ex) {
         if (!(ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND")) {
-            logger.warn(`Failed to get userStatus for ${userId}`, ex);
+            logger.warn(`Failed to get user status for ${userId}`, ex);
         }
-        return undefined;
     }
 
-    if (status) return status;
-
     try {
-        const result = await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.call");
-        if (isOnCall(result)) return { emoji: ON_A_CALL_STATUS.emoji, text: _t(ON_A_CALL_STATUS.textKey) };
+        rawCallStatus = await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.call");
     } catch (ex) {
-        if (ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND") {
-        } else {
+        if (!(ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND")) {
             logger.warn(`Failed to get call status for ${userId}`, ex);
         }
     }
-
-    return undefined;
+    return userStatusFromProfile(rawUserStatus, rawCallStatus);
 }
 
 /**
@@ -131,4 +145,22 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
  */
 export function clearUserStatus(client: MatrixClient): Promise<void> {
     return client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
+}
+
+/**
+ * Sets or clears the user's m.call status to represent that they are currently on a call or not.
+ * If onCall is true, the status will be set to show that they joined the call at the time when this
+ * function is called.
+ * @param client The matrix client to use
+ * @param onCall Whether the user is currently on a call.
+ */
+export function setUserOnCall(client: MatrixClient, onCall: boolean): Promise<void> {
+    return client.setExtendedProfileProperty(
+        "org.matrix.msc4426.call",
+        onCall
+            ? {
+                  call_joined_ts: Date.now(),
+              }
+            : null,
+    );
 }
