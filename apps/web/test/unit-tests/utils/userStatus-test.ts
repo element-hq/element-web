@@ -31,9 +31,7 @@ describe("userStatus utils", () => {
         });
 
         it("returns the call status if the user status is invalid but the call status is valid", () => {
-            expect(
-                userStatusFromProfile({ text: "Feeling a little blue" }, { call_joined_ts: 12345 }),
-            ).toEqual({
+            expect(userStatusFromProfile({ text: "Feeling a little blue" }, { call_joined_ts: 12345 })).toEqual({
                 emoji: "📞",
                 text: "On a call",
             });
