@@ -86,8 +86,7 @@ const drop = async (element: HTMLElement) => {
 };
 
 jest.mock("../../../../../src/stores/spaces/SpaceStore", () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const EventEmitter = require("events");
+    const EventEmitter = jest.requireActual("events");
     class MockSpaceStore extends EventEmitter {
         invitedSpaces: SpaceKey[] = [];
         enabledMetaSpaces: MetaSpace[] = [];

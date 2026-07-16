@@ -538,7 +538,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         });
         // we intentionally ignore changes to the rovingContext for the purpose of this hook
         // we only want to reset the focus whenever the results or filters change
-        // eslint-disable-next-line
+        // oxlint-disable-next-line react-hooks/exhaustive-deps
     }, [results, filter]);
 
     const viewRoom = (

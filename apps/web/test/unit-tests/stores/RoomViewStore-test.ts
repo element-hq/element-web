@@ -97,9 +97,7 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
 });
 
 jest.mock("../../../src/stores/WidgetStore", () => {
-    // This mock needs to use a real EventEmitter; require is the only way to import that in a hoisted block
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const EventEmitter = require("events");
+    const EventEmitter = jest.requireActual("events");
     const apps: IApp[] = [];
     const instance = new (class extends EventEmitter {
         getApps() {

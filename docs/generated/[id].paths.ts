@@ -8,11 +8,12 @@ Please see LICENSE in the repository root for full details.
 import genWorkflowMermaid from "../../scripts/gen-workflow-mermaid";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { type ResolvedRouteConfig } from "vitepress";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default {
-    async paths() {
+    async paths(): Promise<Partial<ResolvedRouteConfig>[]> {
         const root = join(__dirname, "..", "..");
 
         return [
