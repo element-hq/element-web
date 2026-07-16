@@ -308,6 +308,7 @@ export interface Settings {
     "blacklistUnverifiedDevices": IBaseSetting<boolean>;
     "urlPreviewsEnabled": IBaseSetting<boolean>;
     "urlPreviewsEnabled_e2ee": IBaseSetting<boolean>;
+    "urlPreviewsEnabled_e2ee_bundled_only": IBaseSetting<boolean>;
     "notificationsEnabled": IBaseSetting<boolean>;
     "deviceNotificationsEnabled": IBaseSetting<boolean>;
     "notificationSound": IBaseSetting<NotificationSound | false>;
@@ -1149,6 +1150,19 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|inline_url_previews_encrypted"),
         default: false,
         controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
+    },
+    "urlPreviewsEnabled_e2ee_bundled_only": {
+        // Can only be enabled per-device to ensure neither the homeserver nor client config
+        // can impact the user's choices.
+        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_encrypted_bundled_only"),
+        default: true,
+        controller: new RequiresSettingsController([
+            UIFeature.URLPreviews,
+            "feature_msc4095_url_preview_bundle",
+            "urlPreviewsEnabled_e2ee",
+        ]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
