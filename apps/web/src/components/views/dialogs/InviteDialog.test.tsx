@@ -53,6 +53,14 @@ vi.mock("../../../utils/direct-messages", async () => ({
     startDmOnFirstMessage: vi.fn(),
 }));
 
+vi.mock("../../../dispatcher/dispatcher");
+
+vi.mock("lodash", async () => ({
+    ...(await vi.importActual("lodash")),
+    // Stub out the throttling to prevent async leaks
+    throttle: vi.fn((fn) => fn),
+}));
+
 const getSearchField = () => screen.getByTestId("invite-dialog-input");
 
 const enterIntoSearchField = async (value: string) => {

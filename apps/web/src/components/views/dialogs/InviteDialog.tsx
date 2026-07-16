@@ -11,7 +11,7 @@ import { EventType, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { uniqBy } from "lodash";
+import { throttle, uniqBy } from "lodash";
 import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -187,7 +187,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         initialText: "",
     };
 
-    private debounceTimer: number | null = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
     private numberEntryFieldRef = createRef<Field>();
     private unmounted = false;
@@ -636,20 +635,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private updateFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const term = e.target.value;
-        this.setState({ filterText: term });
-
-        // Debounce server lookups to reduce spam. We don't clear the existing server
-        // results because they might still be vaguely accurate, likewise for races which
-        // could happen here.
-        if (this.debounceTimer) {
-            clearTimeout(this.debounceTimer);
-        }
-        this.debounceTimer = window.setTimeout(() => {
+    private updateFilter = throttle(
+        (e: React.ChangeEvent<HTMLInputElement>): void => {
+            const term = e.target.value;
+            this.setState({ filterText: term });
             this.updateSuggestions(term);
-        }, 150); // 150ms debounce (human reaction time + some)
-    };
+        },
+        150, // 150ms throttle (human reaction time + some)
+        { leading: true, trailing: true },
+    );
 
     private showMoreRecents = (): void => {
         this.setState({ numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN });
