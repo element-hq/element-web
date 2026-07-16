@@ -101,7 +101,9 @@ export default class UserActivity {
                     // as we fork the promise here,
                     // avoid unhandled rejection warnings
                 })
-                .catch((err) => {});
+                .catch(() => {
+                    // Do nothing
+                });
         }
     }
 

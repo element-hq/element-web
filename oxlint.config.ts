@@ -131,7 +131,6 @@ export default defineConfig({
         "promise/catch-or-return": "off",
         "node/no-process-env": "off", // We enable this for src in overrides
         "node/no-path-concat": "off", // TODO
-        "node/handle-callback-err": "off", // TODO
         "unicorn/no-array-reduce": "off",
         "unicorn/prefer-module": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
