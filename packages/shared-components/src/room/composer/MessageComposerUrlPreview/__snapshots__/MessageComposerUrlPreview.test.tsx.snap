@@ -3,36 +3,47 @@
 exports[`MessageComposerUrlPreview > renders a preview 1`] = `
 <div>
   <div
-    class="MessageComposerUrlPreview-module_container"
+    class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
   >
-    <div>
-      <div
-        class="MessageComposerUrlPreview-module_text"
+    <button
+      class="MessageComposerUrlPreview-module_summary MessageComposerUrlPreview-module_spanLike"
+    >
+      <span
+        class="MessageComposerUrlPreview-module_left"
       >
-        <div
-          class="LinkPreview-module_siteName"
-        >
-          <span
-            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        <span>
+          <div
+            class="MessageComposerUrlPreview-module_summaryIcon"
+            style="background-color: hsl(-1952422089, 100%, var(--icon-lightness));"
           >
-            matrix.org
-          </span>
-        </div>
-        <a
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-          href="https://matrix.org"
-          rel="noreferrer noopener"
-          target="_blank"
+            M
+          </div>
+        </span>
+        <span
+          class="MessageComposerUrlPreview-module_linkCount"
         >
-          A simple title
-        </a>
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 MessageComposerUrlPreview-module_description"
+          1
+           link
+        </span>
+      </span>
+      <span>
+        <button
+          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
         >
-          A simple description
-        </p>
-      </div>
-    </div>
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </button>
+      </span>
+    </button>
   </div>
 </div>
 `;
@@ -40,41 +51,49 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
 exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
 <div>
   <div
-    class="MessageComposerUrlPreview-module_container"
+    class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
   >
-    <div>
-      <img
-        alt="The element logo"
-        class="MessageComposerUrlPreview-module_image"
-        src="/static/wideImage.png"
-      />
-      <div
-        class="MessageComposerUrlPreview-module_text"
+    <button
+      class="MessageComposerUrlPreview-module_summary MessageComposerUrlPreview-module_spanLike"
+    >
+      <span
+        class="MessageComposerUrlPreview-module_left"
       >
-        <div
-          class="LinkPreview-module_siteName"
-        >
-          <span
-            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        <span>
+          <div
+            class="MessageComposerUrlPreview-module_summaryIcon"
           >
-            matrix.org
-          </span>
-        </div>
-        <a
-          class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-          href="https://matrix.org"
-          rel="noreferrer noopener"
-          target="_blank"
+            <img
+              alt="The element logo"
+              src="/static/wideImage.png"
+            />
+          </div>
+        </span>
+        <span
+          class="MessageComposerUrlPreview-module_linkCount"
         >
-          A simple title
-        </a>
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 MessageComposerUrlPreview-module_description"
+          1
+           link
+        </span>
+      </span>
+      <span>
+        <button
+          class="MessageComposerUrlPreview-module_collapse MessageComposerUrlPreview-module_spanLike"
         >
-          A simple description
-        </p>
-      </div>
-    </div>
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </button>
+      </span>
+    </button>
   </div>
 </div>
 `;
