@@ -148,7 +148,9 @@
         "expand_all_sections": "Az összes szakasz kibontása",
         "expand_filters": "Szűrőlista kibontása",
         "filters": {
+            "favourite": "Kedvencek",
             "invites": "Meghívók",
+            "low_priority": "Alacsony prioritás",
             "mentions": "Említések",
             "people": "Emberek",
             "rooms": "Szobák",

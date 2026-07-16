@@ -81,13 +81,12 @@ export function RoomOngoingCallTileView(props: Props): React.ReactNode {
  * the call was ignored (by clicking decline button on the toast).
  */
 function CallJoinedOrIgnoredContent({ snapshot }: { snapshot: RoomOngoingCallTileViewSnapshot }): React.ReactNode {
-    const { facePileViewModel, totalParticipants } = snapshot;
+    const { facePileViewModel, totalParticipants: count } = snapshot;
     const { translate: _t } = useI18n();
-    const joinedCount = totalParticipants;
     return (
         <Flex className={styles.subContainer} gap="6px" align="center">
             <FacePileView classNames={commonStyles.facepile} vm={facePileViewModel} />
-            {_t("timeline|call_tile|ongoing|room|join_count", { joinedCount })}
+            {_t("timeline|call_tile|ongoing|room|join_count", { count })}
         </Flex>
     );
 }

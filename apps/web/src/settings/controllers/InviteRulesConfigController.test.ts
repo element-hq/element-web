@@ -5,17 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import InviteRulesConfigController from "../../../../src/settings/controllers/InviteRulesConfigController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../../test-utils";
-import { INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "../../../../src/@types/invite-rules";
+import { vi, describe, it, expect, afterEach } from "vitest";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { getMockClientWithEventEmitter, mockClientMethodsServer } from "test-utils";
+
+import MatrixClientBackedController from "./MatrixClientBackedController";
+import InviteRulesConfigController from "./InviteRulesConfigController";
+import { SettingLevel } from "../SettingLevel";
+import { INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "../../@types/invite-rules";
 
 describe("InviteRulesConfigController", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("gets the default settings when none are specified.", () => {
@@ -23,7 +26,7 @@ describe("InviteRulesConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(null),
+            getAccountData: vi.fn().mockReturnValue(null),
         });
 
         const value = controller.getValueOverride(SettingLevel.ACCOUNT);
@@ -35,7 +38,7 @@ describe("InviteRulesConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest
+            getAccountData: vi
                 .fn()
                 .mockReturnValue(new MatrixEvent({ type: INVITE_RULES_ACCOUNT_DATA_TYPE, content: {} })),
         });
@@ -51,7 +54,7 @@ describe("InviteRulesConfigController", () => {
 
             MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
                 ...mockClientMethodsServer(),
-                getAccountData: jest.fn().mockReturnValue(
+                getAccountData: vi.fn().mockReturnValue(
                     new MatrixEvent({
                         type: INVITE_RULES_ACCOUNT_DATA_TYPE,
                         content,
@@ -73,7 +76,7 @@ describe("InviteRulesConfigController", () => {
 
         MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(
+            getAccountData: vi.fn().mockReturnValue(
                 new MatrixEvent({
                     type: INVITE_RULES_ACCOUNT_DATA_TYPE,
                     content,
@@ -89,7 +92,7 @@ describe("InviteRulesConfigController", () => {
         const controller = new InviteRulesConfigController();
         const client = (MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(
+            getAccountData: vi.fn().mockReturnValue(
                 new MatrixEvent({
                     type: INVITE_RULES_ACCOUNT_DATA_TYPE,
                     content: {
@@ -98,7 +101,7 @@ describe("InviteRulesConfigController", () => {
                     },
                 }),
             ),
-            setAccountData: jest.fn(),
+            setAccountData: vi.fn(),
         }));
 
         expect(await controller.beforeChange(SettingLevel.ACCOUNT, null, { allBlocked: true })).toBe(true);
@@ -113,7 +116,7 @@ describe("InviteRulesConfigController", () => {
         const controller = new InviteRulesConfigController();
         const client = (MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(
+            getAccountData: vi.fn().mockReturnValue(
                 new MatrixEvent({
                     type: INVITE_RULES_ACCOUNT_DATA_TYPE,
                     content: {
@@ -123,7 +126,7 @@ describe("InviteRulesConfigController", () => {
                     },
                 }),
             ),
-            setAccountData: jest.fn(),
+            setAccountData: vi.fn(),
         }));
 
         expect(await controller.beforeChange(SettingLevel.ACCOUNT, null, { allBlocked: false })).toBe(true);
@@ -137,7 +140,7 @@ describe("InviteRulesConfigController", () => {
         const controller = new InviteRulesConfigController();
         const client = (MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
             ...mockClientMethodsServer(),
-            getAccountData: jest.fn().mockReturnValue(
+            getAccountData: vi.fn().mockReturnValue(
                 new MatrixEvent({
                     type: INVITE_RULES_ACCOUNT_DATA_TYPE,
                     content: {
@@ -147,7 +150,7 @@ describe("InviteRulesConfigController", () => {
                     },
                 }),
             ),
-            setAccountData: jest.fn(),
+            setAccountData: vi.fn(),
         }));
 
         expect(await controller.beforeChange(SettingLevel.ACCOUNT, null, { allBlocked })).toBe(false);

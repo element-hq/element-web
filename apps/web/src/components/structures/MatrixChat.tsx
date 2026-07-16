@@ -643,11 +643,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        // Exclude some rather spammy actions from being logged.
-        if (payload.action != Action.UserActivity) {
-            logger.debug(`MatrixChat: handling action ${payload.action}`);
-        }
-
         // Start the onboarding process for certain actions
         if (
             MatrixClientPeg.get()?.isGuest() &&
