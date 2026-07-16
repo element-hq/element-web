@@ -130,7 +130,6 @@ export default defineConfig({
         "no-eq-null": "off",
         "promise/catch-or-return": "off",
         "node/no-process-env": "off", // We enable this for src in overrides
-        "node/no-path-concat": "off", // TODO
         "unicorn/no-array-reduce": "off",
         "unicorn/prefer-module": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
