@@ -33,6 +33,7 @@ describe("Modal", () => {
 
     afterEach(() => {
         Modal.forceCloseAllModals();
+        window.mxModuleApi = originalMxModuleApi
     });
 
     it("provides LinkedTextContext to dialogs rendered in the separate dialog root", async () => {
