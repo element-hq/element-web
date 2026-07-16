@@ -5,8 +5,8 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
   <div
     class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
   >
-    <button
-      class="MessageComposerUrlPreview-module_summary MessageComposerUrlPreview-module_spanLike"
+    <div
+      class="MessageComposerUrlPreview-module_summary"
     >
       <span
         class="MessageComposerUrlPreview-module_left"
@@ -43,7 +43,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
           </svg>
         </button>
       </span>
-    </button>
+    </div>
   </div>
 </div>
 `;
@@ -53,8 +53,8 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
   <div
     class="MessageComposerUrlPreview-module_wrapper MessageComposerUrlPreview-module_collapsed"
   >
-    <button
-      class="MessageComposerUrlPreview-module_summary MessageComposerUrlPreview-module_spanLike"
+    <div
+      class="MessageComposerUrlPreview-module_summary"
     >
       <span
         class="MessageComposerUrlPreview-module_left"
@@ -93,7 +93,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
           </svg>
         </button>
       </span>
-    </button>
+    </div>
   </div>
 </div>
 `;
