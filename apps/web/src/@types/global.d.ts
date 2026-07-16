@@ -175,7 +175,6 @@ declare global {
         },
     ): void;
 
-    // eslint-disable-next-line no-var
     var grecaptcha:
         | undefined
         | {
@@ -190,12 +189,8 @@ declare global {
               isReady: () => boolean;
           };
 
-    // eslint-disable-next-line no-var
     var mx_rage_logger: ConsoleLogger;
-    // eslint-disable-next-line no-var
     var mx_rage_initPromise: Promise<void>;
-    // eslint-disable-next-line no-var
     var mx_rage_initStoragePromise: Promise<void>;
-    // eslint-disable-next-line no-var
     var mx_rage_store: IndexedDBLogStore;
 }
