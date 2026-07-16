@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Locator, type Page, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { basename } from "node:path";
 import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { Settings } from "./settings";
@@ -198,7 +197,7 @@ export class ElementAppPage {
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
         const buffer = await readFile(path);
-        const name = basename(path);
+        const name = path.basename(path);
 
         const dataTransfer = await this.page.evaluateHandle(
             async ([buffer, name, type]) => {
@@ -228,7 +227,7 @@ export class ElementAppPage {
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
         const buffer = await readFile(path);
-        const name = basename(path);
+        const name = path.basename(path);
         const composer = this.getComposerField(location === "thread");
 
         await composer.evaluate(

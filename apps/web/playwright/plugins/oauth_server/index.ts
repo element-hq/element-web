@@ -11,10 +11,10 @@ import express from "express";
 import { type AddressInfo } from "node:net";
 import { type TestInfo } from "@playwright/test";
 import { randB64Bytes } from "@element-hq/element-web-playwright-common/lib/utils/rand.js";
-import { dirname } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export class OAuthServer {
     private server?: http.Server;

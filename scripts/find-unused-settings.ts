@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 // type-aware usage analysis, but setting names are unique enough in practice.
 
 import * as fs from "node:fs";
-import * as path from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import ts from "typescript";

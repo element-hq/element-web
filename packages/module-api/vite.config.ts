@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { dirname, resolve } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 import dts from "unplugin-dts/vite";
@@ -13,12 +13,12 @@ import externalGlobals from "rollup-plugin-external-globals";
 
 import packageJson from "./package.json" with { type: "json" };
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
     build: {
         lib: {
-            entry: resolve(__dirname, "src/index.ts"),
+            entry: path.resolve(__dirname, "src/index.ts"),
             name: "element-web-plugin-engine",
             fileName: "element-web-plugin-engine",
         },
@@ -32,7 +32,7 @@ export default defineConfig({
                 configPath: "./api-extractor.json",
                 invokeOptions: {
                     localBuild: !!process.env.CI,
-                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
                 },
             },
         }),

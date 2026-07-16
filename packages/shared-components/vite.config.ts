@@ -7,13 +7,12 @@
  */
 
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin, type Plugin } from "vite";
 import dts from "unplugin-dts/vite";
 import react from "@vitejs/plugin-react";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const cssLayerOrder = "@layer compound-tokens, compound-web, shared-components, app-web;";
 const sharedComponentsLayer = "shared-components";
 
@@ -27,9 +26,9 @@ function layerCssAssets(): Plugin {
         // the `element-` prefix), so we rename on disk to keep the path stable for
         // consumers importing `@element-hq/web-shared-components/.../*.css`.
         writeBundle(options): void {
-            const outDir = options.dir ?? resolve(__dirname, "dist");
-            const expectedPath = resolve(outDir, cssAssetFileName);
-            const renamedFromPath = resolve(outDir, "web-shared-components.css");
+            const outDir = options.dir ?? path.resolve(__dirname, "dist");
+            const expectedPath = path.resolve(outDir, cssAssetFileName);
+            const renamedFromPath = path.resolve(outDir, "web-shared-components.css");
 
             if (existsSync(renamedFromPath)) {
                 renameSync(renamedFromPath, expectedPath);
@@ -54,8 +53,8 @@ export default defineConfig({
             // pulling in the rest of the package — which transitively loads dnd-kit and
             // other window/document-dependent code.
             entry: {
-                "element-web-shared-components": resolve(__dirname, "src/index.ts"),
-                "numbers": resolve(__dirname, "src/core/utils/numbers.ts"),
+                "element-web-shared-components": path.resolve(__dirname, "src/index.ts"),
+                "numbers": path.resolve(__dirname, "src/core/utils/numbers.ts"),
             },
             name: "Element Web Shared Components",
             // Multi-entry mode needs both formats explicit; UMD doesn't support multi-entry
@@ -99,7 +98,7 @@ export default defineConfig({
             bundleTypes: {
                 invokeOptions: {
                     localBuild: !!process.env.CI,
-                    typescriptCompilerFolder: resolve(require.resolve("@typescript/old"), "../.."),
+                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
                 },
             },
             include: ["src/**/*.{ts,tsx}"],

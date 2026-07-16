@@ -11,7 +11,7 @@ Please see LICENSE in the repository root for full details.
 
 import parseArgs from "minimist";
 import * as chokidar from "chokidar";
-import * as path from "node:path";
+import path from "node:path";
 import * as fs from "node:fs";
 
 const argv = parseArgs(process.argv.slice(2), {});

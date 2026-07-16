@@ -9,15 +9,15 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import fs from "node:fs";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { mergeConfig, normalizePath, type Plugin } from "vite";
-import { dirname, join } from "node:path";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const srcRoot = normalizePath(join(__dirname, "..", "src"));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const srcRoot = normalizePath(path.join(__dirname, "..", "src"));
 const sharedComponentsLayer = "shared-components";
 
 // Get a list of available languages so the language selector can display them at runtime
-const languageFiles = fs.readdirSync(join(__dirname, "..", "src", "i18n", "strings")).map((f) => f.slice(0, -5));
+const languageFiles = fs.readdirSync(path.join(__dirname, "..", "src", "i18n", "strings")).map((f) => f.slice(0, -5));
 
 const languages: Record<string, string> = {};
 for (const lang of languageFiles) {
@@ -35,7 +35,7 @@ for (const lang of languageFiles) {
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
  */
 function getAbsolutePath(value: string): any {
-    return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+    return path.dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
 }
 
 function layerSharedComponentCssModules(): Plugin {

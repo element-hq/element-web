@@ -135,7 +135,6 @@ export default defineConfig({
         "node/handle-callback-err": "off", // TODO
         "unicorn/no-array-reduce": "off",
         "unicorn/prefer-module": "off", // TODO
-        "unicorn/import-style": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
         "unicorn/no-process-exit": "off", // TODO
         "unicorn/no-document-cookie": "off", // TODO
