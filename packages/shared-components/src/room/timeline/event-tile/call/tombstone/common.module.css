@@ -13,6 +13,7 @@
     border-radius: var(--cpd-space-2x);
     padding: var(--cpd-space-2x) var(--cpd-space-3x);
     box-sizing: border-box;
+    /* All call tiles have a 10px margin at the top and bottom */
     margin: 10px 0;
 }
 

@@ -19,13 +19,8 @@ import { type PlatformPeg } from "../PlatformPeg";
 import { type IntegrationManagers } from "../integrations/IntegrationManagers";
 import { type ModalManager } from "../Modal";
 import type SettingsStore from "../settings/SettingsStore";
-import type RightPanelStore from "../stores/right-panel/RightPanelStore";
-import type WidgetStore from "../stores/WidgetStore";
 import type UserActivity from "../UserActivity";
 import { type ModalWidgetStore } from "../stores/ModalWidgetStore";
-import { type WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
-import type TypingStore from "../stores/TypingStore";
 import { type EventIndexPeg } from "../indexing/EventIndexPeg";
 import { type VoiceRecordingStore } from "../stores/VoiceRecordingStore";
 import type PerformanceMonitor from "../performance";
@@ -41,6 +36,7 @@ import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
 import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
+import { type SDKContextClass } from "../contexts/SDKContextClass.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -95,14 +91,9 @@ declare global {
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
-        mxRightPanelStore: RightPanelStore;
-        mxWidgetStore: WidgetStore;
-        mxWidgetLayoutStore: WidgetLayoutStore;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
-        mxSpaceStore: SpaceStoreClass;
         mxVoiceRecordingStore: VoiceRecordingStore;
-        mxTypingStore: TypingStore;
         mxEventIndexPeg: EventIndexPeg;
         mxPerformanceMonitor: PerformanceMonitor;
         mxPerformanceEntryNames: any;
@@ -114,6 +105,7 @@ declare global {
         mxOnRecaptchaLoaded?: () => void;
         mxModuleLoader: ModuleLoader;
         mxModuleApi: ModuleApiType;
+        mxSdkContext: SDKContextClass;
 
         // electron-only
         electron?: Electron;

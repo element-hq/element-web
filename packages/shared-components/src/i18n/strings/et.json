@@ -148,7 +148,9 @@
         "expand_all_sections": "Laienda kõiki jaotisi",
         "expand_filters": "Laienda filtriloendit",
         "filters": {
+            "favourite": "Lemmikud",
             "invites": "Kutsed",
+            "low_priority": "Vähetähtis",
             "mentions": "Mainimised",
             "people": "Osalejad",
             "rooms": "Jututoad",
@@ -193,6 +195,16 @@
         },
         "unread_messages": "Lugemata sõnumid"
     },
+    "status": {
+        "set_status": {
+            "away": "Eemal",
+            "be_right_back": "Tulen kohe tagasi",
+            "focus_time": "Keskendumisaeg",
+            "in_a_meeting": "Koosolekul",
+            "on_the_road": "Olen liikumises",
+            "set_status_prompt": "Mis on sinu olek võrgus?"
+        }
+    },
     "terms": {
         "tac_button": "Vaata üle kasutustingimused"
     },
@@ -220,6 +232,11 @@
             "declined": {
                 "call_declined": "Osapool jättis kõnele vastamata",
                 "call_declined_by_us": "Sa jätsid kõne vastamata"
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Grupikõne on lõppenud"
+                }
             },
             "video_call_title": "Videokõne",
             "voice_call_title": "Häälkõne"

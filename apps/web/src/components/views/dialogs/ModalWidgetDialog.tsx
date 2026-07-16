@@ -116,7 +116,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
             return this.state.messaging?.transport.reply(ev.detail, {
                 error: { message: "Invalid button" },
-            } as IWidgetApiErrorResponseData);
+            } satisfies IWidgetApiErrorResponseData);
         }
 
         let buttonIds: ModalButtonID[];
@@ -129,7 +129,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             buttonIds = Array.from(tempSet);
         }
         this.setState({ disabledButtonIds: buttonIds });
-        this.state.messaging?.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
+        this.state.messaging?.transport.reply(ev.detail, {} satisfies IWidgetApiAcknowledgeResponseData);
     };
 
     public render(): React.ReactNode {

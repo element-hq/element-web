@@ -661,7 +661,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
         // Show the action toolbar for keyboard-visible focus, with what-input as a fallback signal.
-        const target = event.target as HTMLElement;
+        const target = event.target;
         const showActionBarFromFocus =
             target.matches(":focus-visible") || document.body.dataset["data-whatinput"] === "keyboard";
         this.setState((prevState) => ({

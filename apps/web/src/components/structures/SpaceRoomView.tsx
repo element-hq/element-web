@@ -20,7 +20,6 @@ import {
     VideoCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import MatrixClientContext from "../../contexts/MatrixClientContext";
 import createRoom, { type IOpts } from "../../createRoom";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { Action } from "../../dispatcher/actions";
@@ -37,7 +36,6 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { showRoomInviteDialog } from "../../RoomInvite";
 import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import type ResizeNotifier from "../../utils/ResizeNotifier";
 import {
@@ -77,6 +75,7 @@ import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import SpacePillButton from "./SpacePillButton.tsx";
 import { useRoomName } from "../../hooks/useRoomName.ts";
 import MultiInviter from "../../utils/MultiInviter.ts";
+import { SDKContext } from "../../contexts/SDKContext.ts";
 
 interface IProps {
     space: Room;
@@ -212,18 +211,18 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
 };
 
 const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
-    const cli = useContext(MatrixClientContext);
+    const sdkContext = useContext(SDKContext);
     const myMembership = useMyRoomMembership(space);
-    const userId = cli.getSafeUserId();
+    const userId = sdkContext.client!.getSafeUserId();
     const name = useRoomName(space);
 
     const storeIsShowingSpaceMembers = useCallback(
         () =>
-            RightPanelStore.instance.isOpenForRoom(space.roomId) &&
-            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.MemberList,
-        [space.roomId],
+            sdkContext.rightPanelStore.isOpenForRoom(space.roomId) &&
+            sdkContext.rightPanelStore.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.MemberList,
+        [space.roomId, sdkContext.rightPanelStore],
     );
-    const isShowingMembers = useEventEmitterState(RightPanelStore.instance, UPDATE_EVENT, storeIsShowingSpaceMembers);
+    const isShowingMembers = useEventEmitterState(sdkContext.rightPanelStore, UPDATE_EVENT, storeIsShowingSpaceMembers);
 
     let inviteButton;
     if (shouldShowSpaceInvite(space) && shouldShowComponent(UIComponent.InviteUsers)) {
@@ -266,7 +265,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     }
 
     const onMembersClick = (): void => {
-        RightPanelStore.instance.setCard({ phase: RightPanelPhases.MemberList });
+        sdkContext.rightPanelStore.setCard({ phase: RightPanelPhases.MemberList });
     };
 
     return (
@@ -603,18 +602,18 @@ const SpaceSetupPrivateInvite: React.FC<{
 };
 
 export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
-    public static contextType = MatrixClientContext;
-    declare public context: React.ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     private dispatcherRef?: string;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
         let phase = Phase.Landing;
 
         const creator = this.props.space.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
-        const showSetup = this.props.justCreatedOpts && context.getSafeUserId() === creator;
+        const showSetup = this.props.justCreatedOpts && this.context.client?.getSafeUserId() === creator;
 
         if (showSetup) {
             phase =
@@ -625,21 +624,21 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
         this.state = {
             phase,
-            showRightPanel: RightPanelStore.instance.isOpenForRoom(this.props.space.roomId),
+            showRightPanel: this.context.rightPanelStore.isOpenForRoom(this.props.space.roomId),
             myMembership: this.props.space.getMyMembership(),
         };
     }
 
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
-        this.context.on(RoomEvent.MyMembership, this.onMyMembership);
+        this.context.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.context.client?.on(RoomEvent.MyMembership, this.onMyMembership);
     }
 
     public componentWillUnmount(): void {
         defaultDispatcher.unregister(this.dispatcherRef);
-        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
-        this.context.off(RoomEvent.MyMembership, this.onMyMembership);
+        this.context.rightPanelStore.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.context.client?.off(RoomEvent.MyMembership, this.onMyMembership);
     }
 
     private onMyMembership = (room: Room, myMembership: string): void => {
@@ -650,7 +649,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
     private onRightPanelStoreUpdate = (): void => {
         this.setState({
-            showRightPanel: RightPanelStore.instance.isOpenForRoom(this.props.space.roomId),
+            showRightPanel: this.context.rightPanelStore.isOpenForRoom(this.props.space.roomId),
         });
     };
 

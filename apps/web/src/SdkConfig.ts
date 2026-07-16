@@ -30,6 +30,7 @@ export const DEFAULTS = {
     integrations_rest_url: "https://scalar.vector.im/api",
     show_labs_settings: false,
     force_verification: false,
+    enable_client_well_known_lookups: true,
 
     jitsi: {
         preferred_domain: "meet.element.io",

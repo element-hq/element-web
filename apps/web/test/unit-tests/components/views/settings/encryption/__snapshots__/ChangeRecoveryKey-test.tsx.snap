@@ -36,7 +36,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -200,7 +200,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -361,7 +361,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -544,7 +544,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"
@@ -663,7 +663,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
     >
       <li>
         <a
-          class="_link_k9ljz_8"
+          class="_link_13esb_8"
           data-kind="primary"
           data-size="sm"
           rel="noreferrer noopener"

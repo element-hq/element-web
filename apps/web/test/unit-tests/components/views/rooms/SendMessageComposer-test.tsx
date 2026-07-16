@@ -35,6 +35,8 @@ import { addTextToComposer } from "../../../../test-utils/composer";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import { MessageComposerUrlPreviewViewModel } from "../../../../../src/viewmodels/composer/MessageComposerUrlPreviewViewModel.ts";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -185,6 +187,12 @@ describe("<SendMessageComposer/>", () => {
             spyDispatcher.mockReset();
         });
 
+        const urlPreviewVm = new MessageComposerUrlPreviewViewModel({
+            client: mockClient,
+            visible: false,
+            showTooltips: false,
+            urlPreviewBundle: false,
+        });
         const defaultProps = {
             room: mockRoom,
             toggleStickerPickerOpen: jest.fn(),
@@ -193,13 +201,17 @@ describe("<SendMessageComposer/>", () => {
             <MatrixClientContext.Provider value={client}>
                 <ScopedRoomContextProvider room={mockRoom} {...roomContext}>
                     <RoomUploadContextProvider>
-                        <SendMessageComposer {...defaultProps} {...props} />
+                        <SendMessageComposer {...defaultProps} {...props} urlPreviewVm={urlPreviewVm} />
                     </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
         const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {
-            return render(getRawComponent(props, roomContext, client));
+            return render(getRawComponent(props, roomContext, client), {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            });
         };
 
         it("renders text and placeholder correctly", () => {
@@ -434,6 +446,13 @@ describe("<SendMessageComposer/>", () => {
 
     it("should call prepareToEncrypt when the user is typing", async () => {
         const cli = stubClient();
+        const urlPreviewVm = new MessageComposerUrlPreviewViewModel({
+            client: cli,
+            visible: false,
+            showTooltips: false,
+            urlPreviewBundle: false,
+        });
+
         cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
         const room = mkStubRoom("!roomId:server", "Room", cli);
 
@@ -443,10 +462,19 @@ describe("<SendMessageComposer/>", () => {
             <MatrixClientContext.Provider value={cli}>
                 <ScopedRoomContextProvider {...({ room } as unknown as RoomContextType)}>
                     <RoomUploadContextProvider>
-                        <SendMessageComposer room={room} toggleStickerPickerOpen={jest.fn()} />
+                        <SendMessageComposer
+                            room={room}
+                            toggleStickerPickerOpen={jest.fn()}
+                            urlPreviewVm={urlPreviewVm}
+                        />
                     </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
+            {
+                wrapper: ({ children }) => (
+                    <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+                ),
+            },
         );
 
         const composer = container.querySelector<HTMLDivElement>(".mx_BasicMessageComposer_input")!;

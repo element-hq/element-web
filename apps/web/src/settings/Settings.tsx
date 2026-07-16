@@ -229,6 +229,7 @@ export interface Settings {
     "feature_msc4362_encrypted_state_events": IFeature;
     "feature_user_status": IFeature;
     "feature_login_with_qr": IFeature;
+    "feature_msc4095_url_preview_bundle": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -237,8 +238,6 @@ export interface Settings {
     "mjolnirPersonalRoom": IBaseSetting<string | null>;
     "RoomList.backgroundImage": IBaseSetting<string | null>;
     "sendReadReceipts": IBaseSetting<boolean>;
-    "baseFontSize": IBaseSetting<"" | number>;
-    "baseFontSizeV2": IBaseSetting<"" | number>;
     "fontSizeDelta": IBaseSetting<number>;
     "useCustomFontSize": IBaseSetting<boolean>;
     "MessageComposerInput.suggestEmoji": IBaseSetting<boolean>;
@@ -371,9 +370,16 @@ export interface Settings {
 export type SettingKey = keyof Settings;
 export type FeatureSettingKey = Assignable<Settings, IFeature>;
 export type BooleanSettingKey = Assignable<Settings, IBaseSetting<boolean>> | FeatureSettingKey;
+export type NullableBooleanSettingKey = Assignable<Settings, IBaseSetting<boolean | null>> | FeatureSettingKey;
 export type StringSettingKey = Assignable<Settings, IBaseSetting<string>>;
 
 export const SETTINGS: Settings = {
+    // Used in tests only
+    "test_setting": {
+        supportedLevels: [],
+        default: "",
+    },
+
     "feature_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -615,15 +621,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
     },
-    /**
-     * @deprecated in favor of {@link fontSizeDelta}
-     */
-    "baseFontSize": {
-        displayName: _td("settings|appearance|font_size"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: "",
-        controller: new FontSizeController(),
-    },
     "feature_render_reaction_images": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -641,21 +638,17 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
     },
-    /**
-     * With the transition to Compound we are moving to a base font size
-     * of 16px. We're taking the opportunity to move away from the `baseFontSize`
-     * setting that had a 5px offset.
-     * @deprecated in favor {@link fontSizeDelta}
-     */
-    "baseFontSizeV2": {
-        displayName: _td("settings|appearance|font_size"),
-        supportedLevels: [SettingLevel.DEVICE],
-        default: "",
-        controller: new FontSizeController(),
+    "feature_msc4095_url_preview_bundle": {
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|url_preview_bundle"),
+        description: _td("labs|url_preview_bundle_description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        isFeature: true,
+        default: false,
     },
     /**
      * This delta is added to the browser default font size
-     * Moving from `baseFontSizeV2` to `fontSizeDelta` to replace the default 16px to --cpd-font-size-root (browser default font size) + fontSizeDelta
      */
     "fontSizeDelta": {
         displayName: _td("settings|appearance|font_size"),

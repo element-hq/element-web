@@ -148,7 +148,9 @@
         "expand_all_sections": "Développer toutes les sections",
         "expand_filters": "Développer la liste des filtres",
         "filters": {
+            "favourite": "Favoris",
             "invites": "Invitations",
+            "low_priority": "Priorité basse",
             "mentions": "Mentions",
             "people": "Personnes",
             "rooms": "Salons",
@@ -230,6 +232,11 @@
             "declined": {
                 "call_declined": "Appel refusé",
                 "call_declined_by_us": "Vous avez rejeté un appel"
+            },
+            "tombstone": {
+                "room": {
+                    "title": "L'appel de groupe est terminé"
+                }
             },
             "video_call_title": "Appel vidéo",
             "voice_call_title": "Appel audio"

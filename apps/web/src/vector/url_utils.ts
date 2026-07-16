@@ -127,5 +127,5 @@ export function parseAppUrl(url: Location | URL): {
         }
     }
 
-    return { params: urlParams as URLParams, location: parsedFragment.location };
+    return { params: urlParams, location: parsedFragment.location };
 }

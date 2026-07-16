@@ -137,7 +137,7 @@ export class VideoBodyViewModel
      * Derive the aspect ratio for the video frame from the event metadata, when available.
      */
     private static getAspectRatio(mxEvent: MatrixEvent): string | undefined {
-        const { w, h } = (mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined) ?? {};
+        const { w, h } = mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info ?? {};
         if (!w || !h) {
             return undefined;
         }
@@ -149,7 +149,7 @@ export class VideoBodyViewModel
      * Compute the rendered video dimensions from the event metadata and current image-size setting.
      */
     private static getDimensions(mxEvent: MatrixEvent, imageSize: ImageSize): Required<{ w?: number; h?: number }> {
-        const { w, h } = (mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined) ?? {};
+        const { w, h } = mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info ?? {};
         return suggestedVideoSize(imageSize, { w, h });
     }
 
@@ -288,7 +288,7 @@ export class VideoBodyViewModel
     }
 
     private loadBlurhash(): void {
-        const info = this.props.mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined;
+        const info = this.props.mxEvent.getContent<MediaEventContent & { info: VideoInfoWithBlurhash }>().info;
         const blurhash = info?.[BLURHASH_FIELD];
         if (!blurhash) {
             return;

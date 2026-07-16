@@ -129,7 +129,6 @@ import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 import { isNotUndefined } from "../../Typeguards";
 import { type CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
-import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
@@ -1332,23 +1331,23 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.ViewUser:
                 if (payload.member) {
                     if (payload.push) {
-                        RightPanelStore.instance.pushCard({
+                        this.context.rightPanelStore.pushCard({
                             phase: RightPanelPhases.MemberInfo,
                             state: { member: payload.member },
                         });
                     } else {
-                        RightPanelStore.instance.setCards([
+                        this.context.rightPanelStore.setCards([
                             { phase: RightPanelPhases.RoomSummary },
                             { phase: RightPanelPhases.MemberList },
                             { phase: RightPanelPhases.MemberInfo, state: { member: payload.member } },
                         ]);
                     }
                 } else {
-                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
+                    this.context.rightPanelStore.showOrHidePhase(RightPanelPhases.MemberList);
                 }
                 break;
             case Action.View3pidInvite:
-                onView3pidInvite(payload, RightPanelStore.instance);
+                onView3pidInvite(payload, this.context.rightPanelStore);
                 break;
             case Action.FocusMessageSearch:
                 if ((payload as FocusMessageSearchPayload).initialText) {

@@ -318,3 +318,12 @@ export const SectionDisabled: Story = {
         areSectionsEnabled: false,
     },
 };
+
+export const WithUserStatus: Story = {
+    args: {
+        userStatus: {
+            emoji: "🌭",
+            text: "Hot",
+        },
+    },
+};

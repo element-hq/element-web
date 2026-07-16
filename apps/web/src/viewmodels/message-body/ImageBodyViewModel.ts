@@ -91,10 +91,6 @@ interface InternalState {
     generatedThumbnailUrl: string | null;
 }
 
-type ImageInfoWithAnimationFlag = NonNullable<ImageContent["info"]> & {
-    "org.matrix.msc4230.is_animated"?: boolean;
-};
-
 /**
  * View model for the image message body, encapsulating media loading, sizing,
  * visibility, animated-image previews, and lightbox interactions.
@@ -368,7 +364,7 @@ export class ImageBodyViewModel
 
                 this.state = {
                     ...this.state,
-                    error: error as Error,
+                    error,
                 };
                 this.updateSnapshotFromState();
                 return;
@@ -380,7 +376,7 @@ export class ImageBodyViewModel
 
         const content = this.props.mxEvent.getContent<ImageContent>();
         let generatedThumbnailUrl: string | null = null;
-        let isAnimated = (content.info as ImageInfoWithAnimationFlag | undefined)?.["org.matrix.msc4230.is_animated"];
+        let isAnimated = content.info?.["org.matrix.msc4230.is_animated"];
         if (isAnimated === undefined) {
             isAnimated = mayBeAnimated(content.info?.mimetype);
         }
@@ -403,7 +399,7 @@ export class ImageBodyViewModel
                     logger.error("Unable to download attachment: ", error);
                     this.state = {
                         ...this.state,
-                        error: error as Error,
+                        error,
                     };
                     this.updateSnapshotFromState();
                     return;
@@ -411,8 +407,7 @@ export class ImageBodyViewModel
 
                 try {
                     if (
-                        (content.info as ImageInfoWithAnimationFlag | undefined)?.["org.matrix.msc4230.is_animated"] ===
-                            false ||
+                        content.info?.["org.matrix.msc4230.is_animated"] === false ||
                         (this.props.mediaEventHelper &&
                             (await blobIsAnimated(await this.props.mediaEventHelper.sourceBlob.value)) === false)
                     ) {

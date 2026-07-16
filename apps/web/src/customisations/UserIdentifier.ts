@@ -25,4 +25,4 @@ function getDisplayUserIdentifier(
 // customisation points that make up `IUserIdentifierCustomisations`.
 export default {
     getDisplayUserIdentifier,
-} as UserIdentifierCustomisations;
+} satisfies UserIdentifierCustomisations;

@@ -62,7 +62,6 @@ import { Action } from "../../dispatcher/actions";
 import { type IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
-import { type IOOBData } from "../../stores/ThreepidInviteStore";
 import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { type JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
@@ -405,7 +404,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
             name: room?.name || roomAlias || _t("common|unnamed_room"),
             roomType,
-        } as IOOBData,
+        },
         metricsTrigger: "RoomDirectory",
     });
 };
