@@ -144,7 +144,6 @@ export default defineConfig({
         "react/only-export-components": "off",
         "react/no-react-children": "off",
         "react/no-clone-element": "off",
-        "jsx-a11y/anchor-ambiguous-text": "off", // TODO
 
         "unicorn/no-instanceof-array": "error",
         "no-restricted-globals": ["error", ...defaultRestrictedGlobals],
@@ -499,9 +498,10 @@ export default defineConfig({
 
                 "react/jsx-no-constructed-context-values": "off",
                 "react/button-has-type": "off",
+                "react/no-array-index-key": "off",
                 "jsx-a11y/interactive-supports-focus": "off",
                 "jsx-a11y/no-static-element-interactions": "off",
-                "react/no-array-index-key": "off",
+                "jsx-a11y/anchor-ambiguous-text": "off",
                 "jsx-a11y/click-events-have-key-events": "off",
                 "jsx-a11y/media-has-caption": "off",
                 "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
