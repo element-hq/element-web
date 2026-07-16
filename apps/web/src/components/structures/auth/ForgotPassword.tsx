@@ -80,6 +80,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
     private reset: PasswordReset;
     private fieldPassword: Field | null = null;
     private fieldPasswordConfirm: Field | null = null;
+    private phaseContainerRef = React.createRef<HTMLDivElement>();
 
     public constructor(props: Props) {
         super(props);
@@ -100,13 +101,17 @@ export default class ForgotPassword extends React.Component<Props, State> {
         this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
     }
 
-    public componentDidUpdate(prevProps: Readonly<Props>): void {
+    public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>): void {
         if (
             prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
             prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
         ) {
             // Do a liveliness check on the new URLs
             this.checkServerLiveliness(this.props.serverConfig);
+        }
+
+        if (prevState.phase !== this.state.phase) {
+            this.phaseContainerRef.current?.focus();
         }
     }
 
@@ -471,7 +476,11 @@ export default class ForgotPassword extends React.Component<Props, State> {
         return (
             <AuthPage>
                 <AuthHeader />
-                <AuthBody className="mx_AuthBody_forgot-password">{resetPasswordJsx}</AuthBody>
+                <AuthBody className="mx_AuthBody_forgot-password">
+                    <div ref={this.phaseContainerRef} tabIndex={-1}>
+                        {resetPasswordJsx}
+                    </div>
+                </AuthBody>
             </AuthPage>
         );
     }
