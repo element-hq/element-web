@@ -228,7 +228,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         }
 
         // When an <input> is focused, only handle the Escape key
-        if (checkInputableElement(ev.target as HTMLElement) && action !== KeyBindingAction.Escape) {
+        if (checkInputableElement(ev.target) && action !== KeyBindingAction.Escape) {
             return;
         }
 
@@ -577,7 +577,6 @@ type ContextMenuTuple<T> = [
     (ev?: SyntheticEvent) => void,
     (val: boolean) => void,
 ];
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const useContextMenu = <T extends HTMLElement = HTMLElement>(
     inputRef?: RefObject<T | null>,
 ): ContextMenuTuple<T> => {
