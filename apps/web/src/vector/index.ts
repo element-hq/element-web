@@ -24,10 +24,10 @@ import "@element-hq/web-shared-components/dist/element-web-shared-components.css
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs
+// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module
 require("katex/dist/katex.css");
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs
+// eslint-disable-next-line @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module
 require("./localstorage-fix");
 
 // Patch a fake window.TouchEvent for re-resizable's unguarded `instanceof TouchEvent`.

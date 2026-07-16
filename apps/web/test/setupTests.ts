@@ -98,7 +98,7 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
 //
 // These are also require() calls to make sure they get called
 // synchronously.
-/* eslint-disable @typescript-eslint/no-require-imports,import/no-commonjs */
+/* eslint-disable @typescript-eslint/no-require-imports,import/no-commonjs,unicorn/prefer-module */
 require("./setup/setupManualMocks"); // must be first
 require("./setup/setupLanguage");
 require("./setup/setupConfig");

@@ -131,7 +131,6 @@ export default defineConfig({
         "promise/catch-or-return": "off",
         "node/no-process-env": "off", // We enable this for src in overrides
         "unicorn/no-array-reduce": "off",
-        "unicorn/prefer-module": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
         "import/no-relative-parent-imports": "off",
         "import/unambiguous": "off",
@@ -535,6 +534,7 @@ export default defineConfig({
             rules: {
                 "typescript/no-require-imports": "off",
                 "import/no-commonjs": "off",
+                "unicorn/prefer-module": "off",
             },
         },
     ],

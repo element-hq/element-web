@@ -252,7 +252,7 @@ describe("SessionLock", () => {
         const window2 = createWindow();
 
         // import the dependencies of getSessionLock into the new context
-        // eslint-disable-next-line typescript/no-require-imports,typescript/no-var-requires
+        // eslint-disable-next-line typescript/no-require-imports,typescript/no-var-requires,unicorn/prefer-module
         window2._logger = require("matrix-js-sdk/src/logger");
         window2.SESSION_LOCK_CONSTANTS = SESSION_LOCK_CONSTANTS;
 

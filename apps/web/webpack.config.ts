@@ -102,8 +102,8 @@ function parseOverridesToReplacements(overrides: Record<string, string>): webpac
             // need to do anything special to protect against regex overrunning, etc.
             new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
             function (resource) {
-                resource.request = path.resolve(__dirname, newPath);
-                resource.createData.resource = path.resolve(__dirname, newPath);
+                resource.request = import.meta.resolve(newPath);
+                resource.createData.resource = import.meta.resolve(newPath);
                 // Starting with Webpack 5 we also need to set the context as otherwise replacing
                 // files in e.g. matrix-js-sdk with files from element-web will try to resolve
                 // them within matrix-js-sdk (https://github.com/webpack/webpack/issues/17716)
@@ -311,7 +311,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     test: /\.(ts|js)x?$/,
                     include: (f: string) => {
                         // our own source needs babel-ing
-                        if (f.startsWith(path.resolve(__dirname, "src"))) return true;
+                        if (f.startsWith(import.meta.resolve("src"))) return true;
 
                         // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute
@@ -717,14 +717,14 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
-                    { from: ".well-known/**", context: path.resolve(__dirname, "res") },
+                    { from: ".well-known/**", context: import.meta.resolve("res") },
                     "res/jitsi_external_api.min.js",
                     "res/jitsi_external_api.min.js.LICENSE.txt",
                     "res/manifest.json",
-                    { from: "themes/**", context: path.resolve(__dirname, "res") },
-                    { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
-                    { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },
-                    { from: "media/**", context: path.resolve(__dirname, "res/") },
+                    { from: "themes/**", context: import.meta.resolve("res") },
+                    { from: "vector-icons/**", context: import.meta.resolve("res") },
+                    { from: "decoder-ring/**", context: import.meta.resolve("res") },
+                    { from: "media/**", context: import.meta.resolve("res/") },
                     { from: "config.json", noErrorOnMissing: true },
                     // Element Call embedded widget
                     {
@@ -735,7 +735,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     // Mobile guide assets
                     {
                         from: "assets/**",
-                        context: path.resolve(__dirname, "src/vector/mobile_guide"),
+                        context: import.meta.resolve("src/vector/mobile_guide"),
                         to: "mobile_guide",
                     },
                 ],

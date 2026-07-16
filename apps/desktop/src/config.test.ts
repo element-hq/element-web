@@ -52,7 +52,7 @@ describe("loadConfig", () => {
     });
 
     it("should ignore localConfigPath if does not exist", async () => {
-        const config = await loadConfig(path.resolve(__dirname, "../custom-config.json"));
+        const config = await loadConfig(import.meta.resolve("../custom-config.json"));
         expect(config.brand).toBe("Element");
         expect(config.web_base_url).toBe("https://chat.org.com");
         expect(config.default_hs_url).toBe("https://matrix.org.com");

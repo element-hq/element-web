@@ -5,19 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
 import { test, expect } from "../../element-desktop-test.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test.describe("App config options", () => {
     test.describe("Should load custom config via env", () => {
         test.slow();
         test.use({
             extraEnv: {
-                ELEMENT_DESKTOP_CONFIG_JSON: path.resolve(__dirname, "../..", "fixtures/custom-config.json"),
+                ELEMENT_DESKTOP_CONFIG_JSON: import.meta.resolve("../..", "fixtures/custom-config.json"),
             },
         });
         test("should launch and use configured homeserver", async ({ page }) => {
@@ -31,7 +26,7 @@ test.describe("App config options", () => {
     test.describe("Should load custom config via argument", () => {
         test.slow();
         test.use({
-            extraArgs: ["--config", path.resolve(__dirname, "../..", "fixtures/custom-config.json")],
+            extraArgs: ["--config", import.meta.resolve("../..", "fixtures/custom-config.json")],
         });
         test("should launch and use configured homeserver", async ({ page }) => {
             await page.locator("#matrixchat").waitFor();

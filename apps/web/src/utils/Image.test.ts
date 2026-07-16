@@ -12,7 +12,7 @@ import path from "node:path";
 
 import { blobIsAnimated, mayBeAnimated } from "./Image";
 
-const imagesDir = path.resolve(__dirname, "../../test/unit-tests/images");
+const imagesDir = import.meta.resolve("../../test/unit-tests/images");
 
 describe("Image", () => {
     describe("mayBeAnimated", () => {

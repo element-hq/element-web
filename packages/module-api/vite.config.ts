@@ -6,19 +6,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 import dts from "unplugin-dts/vite";
 import externalGlobals from "rollup-plugin-external-globals";
 
 import packageJson from "./package.json" with { type: "json" };
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 export default defineConfig({
     build: {
         lib: {
-            entry: path.resolve(__dirname, "src/index.ts"),
+            entry: import.meta.resolve("src/index.ts"),
             name: "element-web-plugin-engine",
             fileName: "element-web-plugin-engine",
         },
@@ -32,7 +29,7 @@ export default defineConfig({
                 configPath: "./api-extractor.json",
                 invokeOptions: {
                     localBuild: !!process.env.CI,
-                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
+                    typescriptCompilerFolder: path.resolve(import.meta.resolve("@typescript/old"), "../.."),
                 },
             },
         }),

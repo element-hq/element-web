@@ -11,7 +11,6 @@ import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/jest";
 import fs from "node:fs";
-import path from "node:path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
@@ -190,7 +189,7 @@ describe("MessageEvent", () => {
 
         function mockMedia() {
             fetchMock.getOnce("https://server/_matrix/media/v3/download/server/image", {
-                body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
+                body: fs.readFileSync(import.meta.resolve("..", "..", "..", "images", "animated-logo.webp")),
             });
         }
 
