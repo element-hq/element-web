@@ -17,6 +17,7 @@ import RoomContext from "../../../../contexts/RoomContext";
 import { CardContext } from "../../right_panel/context";
 import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { type EventTileViewModel } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { useSettingValue } from "../../../../hooks/useSettings";
 import { type GetRelationsForEvent } from "../../../../viewmodels/room/timeline/event-tile/reactions/EventTileReactionState";
 
 /**
@@ -80,6 +81,9 @@ export function ActionBarAdapter({
 }: Readonly<ActionBarAdapterProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
     const { isCard } = useContext(CardContext);
+    // The menu only takes over the quick actions when the bar has given them up. With the setting off the bar
+    // still shows them, so listing them here as well would duplicate every action.
+    const compactMessageActions = useSettingValue("compactMessageActions");
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const isSearch = Boolean(roomContext.search);
@@ -171,6 +175,10 @@ export function ActionBarAdapter({
                     collapseReplyChain={collapseReplyChain}
                     onFinished={closeOptionsMenu}
                     getRelationsForEvent={getRelationsForEvent}
+                    showQuickActions={compactMessageActions}
+                    // `reactions` must accompany the quick actions: without it ReactionPicker cannot see the
+                    // user's existing reactions, so un-reacting sends a duplicate instead of redacting.
+                    reactions={reactions}
                 />
             ) : null}
             {reactionsMenuAnchorRect ? (

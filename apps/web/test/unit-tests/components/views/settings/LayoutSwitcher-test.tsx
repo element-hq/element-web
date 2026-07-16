@@ -86,4 +86,39 @@ describe("<LayoutSwitcher />", () => {
             expect(screen.getByRole("switch", { name: "Show compact text and messages" })).toBeDisabled();
         });
     });
+
+    describe("hover highlight", () => {
+        // The toggle is the positive inverse of `compactMessageActions`: on = highlight + full toolbar on
+        // hover (compact off), off = single options button (compact on).
+        beforeEach(async () => {
+            await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, false);
+        });
+
+        it("should be on when the compact behaviour is off", async () => {
+            await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, false);
+            await renderLayoutSwitcher();
+
+            expect(screen.getByRole("switch", { name: "Highlight messages on hover" })).toBeChecked();
+        });
+
+        it("should be off when the compact behaviour is on", async () => {
+            await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, true);
+            await renderLayoutSwitcher();
+
+            expect(screen.getByRole("switch", { name: "Highlight messages on hover" })).not.toBeChecked();
+        });
+
+        it("should enable the compact behaviour when toggled off", async () => {
+            await renderLayoutSwitcher();
+            act(() => screen.getByRole("switch", { name: "Highlight messages on hover" }).click());
+
+            await waitFor(() => expect(SettingsStore.getValue("compactMessageActions")).toBe(true));
+        });
+
+        it("should stay enabled regardless of the selected layout", async () => {
+            await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            await renderLayoutSwitcher();
+            expect(screen.getByRole("switch", { name: "Highlight messages on hover" })).not.toBeDisabled();
+        });
+    });
 });

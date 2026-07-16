@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, type RenderResult } from "jest-matrix-react";
+import { act, render, waitFor, type RenderResult } from "jest-matrix-react";
 import {
     ConditionKind,
     EventType,
@@ -499,6 +499,28 @@ describe("<LoggedInView />", () => {
             await SettingsStore.setValue("userTimezonePublish", null, SettingLevel.DEVICE, false);
             expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyTimezone);
             expect(mockClient.deleteExtendedProfileProperty).toHaveBeenCalledWith(ProfileKeyMSC4175Timezone);
+        });
+    });
+
+    describe("compact message actions", () => {
+        afterEach(async () => {
+            await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, false);
+        });
+
+        it("toggles the wrapper class when the compactMessageActions setting changes", async () => {
+            await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, false);
+            const { container } = getComponent();
+            const wrapper = (): Element | null => container.querySelector(".mx_MatrixChat_wrapper");
+
+            expect(wrapper()?.classList.contains("mx_MatrixChat_compactMessageActions")).toBe(false);
+
+            await act(async () => {
+                await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, true);
+            });
+
+            await waitFor(() =>
+                expect(wrapper()?.classList.contains("mx_MatrixChat_compactMessageActions")).toBe(true),
+            );
         });
     });
 

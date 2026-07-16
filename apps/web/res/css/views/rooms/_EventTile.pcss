@@ -222,7 +222,10 @@ $left-gutter: 64px;
             clear: both;
         }
 
-        &:hover {
+        /* Suppressed under `compactMessageActions` (see LoggedInView) so that hovering reveals the options
+           button without highlighting the row. The selected/focused band at the top of this block is a
+           separate rule and stays: it is the keyboard affordance and the permalink cue. */
+        .mx_MatrixChat_wrapper:not(.mx_MatrixChat_compactMessageActions) &:hover {
             .mx_EventTile_line {
                 background-color: $event-selected-color;
             }

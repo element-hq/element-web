@@ -101,6 +101,8 @@ interface IState {
     usageLimitEventContent?: IUsageLimit;
     usageLimitEventTs?: number;
     useCompactLayout: boolean;
+    /** Whether message actions collapse into a single options button, with no hover highlight on the row. */
+    compactMessageActions: boolean;
     activeCalls: Array<MatrixCall>;
     backgroundImage?: string;
 }
@@ -121,6 +123,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _roomView: React.RefObject<RoomView | null>;
     protected layoutWatcherRef?: string;
     protected compactLayoutWatcherRef?: string;
+    protected compactMessageActionsWatcherRef?: string;
     protected backgroundImageWatcherRef?: string;
     protected timezoneProfileUpdateRef?: string[];
 
@@ -136,6 +139,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             syncErrorData: undefined,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue("useCompactLayout"),
+            compactMessageActions: SettingsStore.getValue("compactMessageActions"),
             usageLimitDismissed: false,
             activeCalls: context.legacyCallHandler.getAllActiveCalls(),
         };
@@ -167,6 +171,11 @@ class LoggedInView extends React.Component<IProps, IState> {
             "useCompactLayout",
             null,
             this.onCompactLayoutChanged,
+        );
+        this.compactMessageActionsWatcherRef = SettingsStore.watchSetting(
+            "compactMessageActions",
+            null,
+            this.onCompactMessageActionsChanged,
         );
         this.backgroundImageWatcherRef = SettingsStore.watchSetting(
             "RoomList.backgroundImage",
@@ -235,6 +244,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         OwnProfileStore.instance.off(UPDATE_EVENT, this.refreshBackgroundImage);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
+        SettingsStore.unwatchSetting(this.compactMessageActionsWatcherRef);
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
         this.resizerViewModel?.dispose();
@@ -274,6 +284,12 @@ class LoggedInView extends React.Component<IProps, IState> {
     private onCompactLayoutChanged = (): void => {
         this.setState({
             useCompactLayout: SettingsStore.getValue("useCompactLayout"),
+        });
+    };
+
+    private onCompactMessageActionsChanged = (): void => {
+        this.setState({
+            compactMessageActions: SettingsStore.getValue("compactMessageActions"),
         });
     };
 
@@ -664,6 +680,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const wrapperClasses = classNames({
             mx_MatrixChat_wrapper: true,
             mx_MatrixChat_useCompactLayout: this.state.useCompactLayout,
+            mx_MatrixChat_compactMessageActions: this.state.compactMessageActions,
         });
         const bodyClasses = classNames({
             "mx_MatrixChat": true,

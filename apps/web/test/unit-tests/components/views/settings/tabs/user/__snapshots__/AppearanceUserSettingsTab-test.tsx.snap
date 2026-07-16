@@ -495,6 +495,51 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
               </form>
+              <form
+                class="_root_1o4d9_17"
+              >
+                <div
+                  class="_inline-field_1o4d9_33"
+                >
+                  <div
+                    class="_inline-field-control_1o4d9_45"
+                  >
+                    <div
+                      class="_container_udcm8_10"
+                    >
+                      <input
+                        aria-describedby="radix-react-use-id-9"
+                        checked=""
+                        class="_input_udcm8_24"
+                        id="radix-react-use-id-10"
+                        name="hoverHighlight"
+                        role="switch"
+                        title=""
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_udcm8_34"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_1o4d9_39"
+                  >
+                    <label
+                      class="_label_1o4d9_60"
+                      for="radix-react-use-id-10"
+                    >
+                      Highlight messages on hover
+                    </label>
+                    <span
+                      class="_message_1o4d9_86 _help-message_1o4d9_92"
+                      id="radix-react-use-id-9"
+                    >
+                      Highlight the message and show its toolbar when you hover it. Turn this off to reveal a single options button instead.
+                    </span>
+                  </div>
+                </div>
+              </form>
             </div>
             <div
               class="_separator_13qwf_8"

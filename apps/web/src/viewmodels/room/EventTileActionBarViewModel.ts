@@ -129,9 +129,10 @@ export class EventTileActionBarViewModel
         const client = MatrixClientPeg.safeGet();
         const eventState = EventTileActionBarViewModel.getDerivedEventState(props, client);
         const mediaState = EventTileActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
+        const compactMessageActions = SettingsStore.getValue("compactMessageActions");
 
         return {
-            actions: EventTileActionBarViewModel.resolveActions(eventState, mediaState),
+            actions: EventTileActionBarViewModel.resolveActions(eventState, mediaState, compactMessageActions),
             presentation: "icon",
             isDownloadEncrypted: mediaState.isDownloadEncrypted,
             isDownloadLoading: mediaState.isDownloadLoading,
@@ -141,7 +142,21 @@ export class EventTileActionBarViewModel
         };
     }
 
-    private static resolveActions(eventState: DerivedEventState, mediaState: DerivedMediaState): ActionBarAction[] {
+    /**
+     * Resolve the buttons the action bar shows for an event.
+     *
+     * When `compactMessageActions` is set, the quick actions (react, reply, reply in thread, edit, pin)
+     * are left out and reached through the options menu instead, which renders them via
+     * `showQuickActions`. Hide, download and expand stay on the bar: the options menu has no equivalent
+     * for them, so collapsing them would remove them altogether. Reply in thread on a deleted message
+     * stays for the same reason (the menu gates it on the event being content-actionable, which a redacted
+     * event is not). Failed events return early below and keep their resend/cancel buttons too.
+     */
+    private static resolveActions(
+        eventState: DerivedEventState,
+        mediaState: DerivedMediaState,
+        compactMessageActions: boolean,
+    ): ActionBarAction[] {
         const actions: ActionBarAction[] = [];
 
         if (eventState.showCancel && eventState.isFailed) {
@@ -154,23 +169,28 @@ export class EventTileActionBarViewModel
         if (mediaState.showDownload) {
             actions.push(ActionBarAction.Download);
         }
-        if (eventState.showReact) {
-            actions.push(ActionBarAction.React);
-        }
+        // Reply in thread on a deleted message keeps its bar button even when the quick actions collapse:
+        // the options menu gates reply in thread on the event being content-actionable, which a redacted
+        // event is not, so this action has no menu equivalent to fall back on.
         if (!eventState.showReply && eventState.showThreadForDeletedMessage) {
             actions.push(ActionBarAction.ReplyInThread);
         }
-        if (eventState.showReply) {
-            actions.push(ActionBarAction.Reply);
-        }
-        if (eventState.showReply && eventState.showReplyInThread) {
-            actions.push(ActionBarAction.ReplyInThread);
-        }
-        if (eventState.showEdit) {
-            actions.push(ActionBarAction.Edit);
-        }
-        if (eventState.showPinOrUnpin) {
-            actions.push(ActionBarAction.Pin);
+        if (!compactMessageActions) {
+            if (eventState.showReact) {
+                actions.push(ActionBarAction.React);
+            }
+            if (eventState.showReply) {
+                actions.push(ActionBarAction.Reply);
+            }
+            if (eventState.showReply && eventState.showReplyInThread) {
+                actions.push(ActionBarAction.ReplyInThread);
+            }
+            if (eventState.showEdit) {
+                actions.push(ActionBarAction.Edit);
+            }
+            if (eventState.showPinOrUnpin) {
+                actions.push(ActionBarAction.Pin);
+            }
         }
         if (eventState.showCancel) {
             actions.push(ActionBarAction.Cancel);
@@ -256,6 +276,7 @@ export class EventTileActionBarViewModel
         this.trackEvent(mxEvent, MatrixEventEvent.BeforeRedaction, this.refreshSnapshot);
         this.watchSetting("mediaPreviewConfig", roomId ?? null);
         this.watchSetting("showMediaEventIds", null);
+        this.watchSetting("compactMessageActions", null);
 
         const roomState = roomId
             ? MatrixClientPeg.safeGet().getRoom(roomId)?.getLiveTimeline().getState(EventTimeline.FORWARDS)

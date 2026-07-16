@@ -26,6 +26,7 @@ export function LayoutSwitcher(): JSX.Element {
         <SettingsSubsection heading={_t("common|message_layout")} legacy={false} data-testid="layoutPanel">
             <LayoutSelector />
             <ToggleCompactLayout />
+            <ToggleHoverHighlight />
         </SettingsSubsection>
     );
 }
@@ -156,6 +157,33 @@ function ToggleCompactLayout(): JSX.Element {
             >
                 <Label>{_t("settings|appearance|compact_layout")}</Label>
                 <HelpMessage>{_t("settings|appearance|compact_layout_description")}</HelpMessage>
+            </InlineField>
+        </Root>
+    );
+}
+
+/**
+ * A toggleable setting for whether hovering a message highlights it and reveals the full toolbar (on) or
+ * collapses it into a single options button (off). It is the positive inverse of the `compactMessageActions`
+ * setting: enabled here means the compact behaviour is off. Applies to every layout, so unlike the compact
+ * layout toggle it is never layout-gated.
+ */
+function ToggleHoverHighlight(): JSX.Element {
+    const hoverHighlightEnabled = !useSettingValue("compactMessageActions");
+
+    return (
+        <Root
+            onChange={async (evt) => {
+                const checked = new FormData(evt.currentTarget).get("hoverHighlight") === "on";
+                await SettingsStore.setValue("compactMessageActions", null, SettingLevel.DEVICE, !checked);
+            }}
+        >
+            <InlineField
+                name="hoverHighlight"
+                control={<ToggleControl name="hoverHighlight" defaultChecked={hoverHighlightEnabled} />}
+            >
+                <Label>{_t("settings|appearance|hover_highlight")}</Label>
+                <HelpMessage>{_t("settings|appearance|hover_highlight_description")}</HelpMessage>
             </InlineField>
         </Root>
     );

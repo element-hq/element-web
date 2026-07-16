@@ -33,6 +33,9 @@ export const CONFIG_JSON: Partial<Config> = {
     // The default language is set here for test consistency
     setting_defaults: {
         language: "en-GB",
+        // The suite reaches message actions through the action bar buttons, so it runs against the full bar.
+        // This matches the product default (compact off); the collapsed bar has its own dedicated spec.
+        compactMessageActions: false,
     },
 
     // the location tests want a map style url.

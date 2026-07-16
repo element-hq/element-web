@@ -126,6 +126,13 @@ interface IProps extends MenuProps {
     onCloseDialog?(): void;
     // True if the menu is being used as a right click menu
     rightClick?: boolean;
+    /*
+     * True to include the quick actions (react, reply, reply in thread, edit, pin) that otherwise only
+     * appear in the right click menu. Set when the action bar has collapsed them into this menu.
+     * Deliberately separate from `rightClick`, which also gates copy and quote — those act on a text
+     * selection the user made before right clicking, so they have no meaning here.
+     */
+    showQuickActions?: boolean;
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null;
     // A permalink to this event or an href of an anchor element the user has clicked
@@ -408,9 +415,14 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     public render(): React.ReactNode {
         const cli = MatrixClientPeg.safeGet();
         const me = cli.getUserId();
-        const { mxEvent, rightClick, link, eventTileOps, reactions, collapseReplyChain, ...other } = this.props;
+        const { mxEvent, rightClick, showQuickActions, link, eventTileOps, reactions, collapseReplyChain, ...other } =
+            this.props;
         delete other.getRelationsForEvent;
         delete other.permalinkCreator;
+
+        // The quick actions are shown either because the user right clicked the event, or because the action
+        // bar collapsed them into this menu.
+        const showQuickAction = rightClick || showQuickActions;
 
         const eventStatus = mxEvent.status;
         const unsentReactionsCount = this.getUnsentReactions().length;
@@ -633,14 +645,14 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let editButton: JSX.Element | undefined;
-        if (rightClick && canEditContent(cli, mxEvent)) {
+        if (showQuickAction && canEditContent(cli, mxEvent)) {
             editButton = (
                 <IconizedContextMenuOption icon={<EditIcon />} label={_t("action|edit")} onClick={this.onEditClick} />
             );
         }
 
         let replyButton: JSX.Element | undefined;
-        if (rightClick && contentActionable && canSendMessages) {
+        if (showQuickAction && contentActionable && canSendMessages) {
             replyButton = (
                 <IconizedContextMenuOption
                     icon={<ReplyIcon />}
@@ -652,7 +664,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
         let replyInThreadButton: JSX.Element | undefined;
         if (
-            rightClick &&
+            showQuickAction &&
             contentActionable &&
             canSendMessages &&
             Thread.hasServerSideSupport &&
@@ -662,7 +674,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let reactButton: JSX.Element | undefined;
-        if (rightClick && contentActionable && canReact) {
+        if (showQuickAction && contentActionable && canReact) {
             reactButton = (
                 <IconizedContextMenuOption
                     icon={<ReactionAddIcon />}
@@ -674,7 +686,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let pinButton: JSX.Element | undefined;
-        if (rightClick && this.state.canPin) {
+        if (showQuickAction && this.state.canPin) {
             const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
             pinButton = (
                 <IconizedContextMenuOption
@@ -708,7 +720,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let quickItemsList: JSX.Element | undefined;
-        if (editButton || replyButton || reactButton || pinButton) {
+        if (editButton || replyButton || replyInThreadButton || reactButton || pinButton) {
             quickItemsList = (
                 <IconizedContextMenuOptionList>
                     {reactButton}

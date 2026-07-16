@@ -713,6 +713,50 @@ describe("MessageContextMenu", () => {
     });
 });
 
+describe("MessageContextMenu quick actions", () => {
+    beforeEach(() => {
+        stubClient();
+    });
+
+    // The action bar collapses these five into this menu when `compactMessageActions` is on, so they must
+    // appear without a right click.
+    it.each([
+        ["Reply", "Reply"],
+        ["React", "React"],
+        ["Edit", "Edit"],
+    ])("shows the %s option when showQuickActions is set", (_name, label) => {
+        mocked(canEditContent).mockReturnValue(true);
+        const eventContent = createMessageEventContent("hello");
+
+        createMenuWithContent(eventContent, { showQuickActions: true }, { canSendMessages: true, canReact: true });
+
+        expect(document.querySelector(`li[aria-label="${label}"]`)).toBeTruthy();
+    });
+
+    it("does not show the quick actions without showQuickActions or a right click", () => {
+        mocked(canEditContent).mockReturnValue(true);
+        const eventContent = createMessageEventContent("hello");
+
+        createMenuWithContent(eventContent, {}, { canSendMessages: true, canReact: true });
+
+        expect(document.querySelector('li[aria-label="Reply"]')).toBeFalsy();
+        expect(document.querySelector('li[aria-label="React"]')).toBeFalsy();
+        expect(document.querySelector('li[aria-label="Edit"]')).toBeFalsy();
+    });
+
+    // Copy and quote act on a text selection the user made before right clicking, so they must stay behind
+    // `rightClick` rather than riding along with the collapsed quick actions.
+    it("does not show copy or quote when only showQuickActions is set", () => {
+        mocked(getSelectedText).mockReturnValue("hello");
+        const eventContent = createMessageEventContent("hello");
+
+        createMenuWithContent(eventContent, { showQuickActions: true }, { canSendMessages: true });
+
+        expect(document.querySelector('li[aria-label="Copy"]')).toBeFalsy();
+        expect(document.querySelector('li[aria-label="Quote"]')).toBeFalsy();
+    });
+});
+
 function createRightClickMenuWithContent(eventContent: object, context?: Partial<RoomContextType>): RenderResult {
     return createMenuWithContent(eventContent, { rightClick: true }, context);
 }

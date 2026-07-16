@@ -35,6 +35,7 @@ import PosthogTrackers from "../../../src/PosthogTrackers";
 import Modal from "../../../src/Modal";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { ModuleApi } from "../../../src/modules/Api";
 import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../src/utils/EventUtils";
 import { shouldDisplayReply } from "../../../src/utils/Reply";
@@ -139,6 +140,9 @@ describe("EventTileActionBarViewModel", () => {
         getLiveTimeline: jest.Mock;
     };
     let getHintsForMessageSpy: jest.SpyInstance;
+    // Most of this suite pins the full action bar, i.e. the behaviour with `compactMessageActions` off.
+    // The dedicated describe block at the end flips it on.
+    let compactMessageActions: boolean;
 
     const createMessageEvent = (overrides: Partial<ConstructorParameters<typeof MatrixEvent>[0]> = {}): MatrixEvent =>
         new MatrixEvent({
@@ -193,6 +197,13 @@ describe("EventTileActionBarViewModel", () => {
 
         jest.spyOn(SettingsStore, "watchSetting").mockImplementation((name, scope) => `${name}:${scope ?? "global"}`);
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(() => {});
+
+        compactMessageActions = false;
+        const realGetValue = SettingsStore.getValue.bind(SettingsStore);
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(((name: string, ...rest: unknown[]) =>
+            name === "compactMessageActions"
+                ? compactMessageActions
+                : (realGetValue as (...args: unknown[]) => unknown)(name, ...rest)) as never);
 
         mocked(canCancel).mockImplementation((status) => status === EventStatus.QUEUED);
         mocked(canEditContent).mockReturnValue(true);
@@ -350,6 +361,7 @@ describe("EventTileActionBarViewModel", () => {
         expect(roomStateOffSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
         expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("mediaPreviewConfig:!room:example.org");
         expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("showMediaEventIds:global");
+        expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("compactMessageActions:global");
     });
 
     it("routes resend and cancel actions to the actionable failed event variant", () => {
@@ -711,6 +723,96 @@ describe("EventTileActionBarViewModel", () => {
             expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Reply);
             expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.React);
             expect(vm.getSnapshot().isDownloadLoading).toBe(false);
+        });
+    });
+
+    describe("compactMessageActions", () => {
+        beforeEach(() => {
+            compactMessageActions = true;
+        });
+
+        it("collapses the quick actions into the options button", () => {
+            const vm = createVm({ isQuoteExpanded: true });
+
+            // The whole point of the setting: hovering a plain message reveals one button, not six.
+            expect(vm.getSnapshot().actions).toEqual([ActionBarAction.Expand, ActionBarAction.Options]);
+        });
+
+        it("collapses to the options button alone for a message with no reply chain", () => {
+            const vm = createVm();
+
+            expect(vm.getSnapshot().actions).toEqual([ActionBarAction.Options]);
+        });
+
+        it.each([ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.ReplyInThread, ActionBarAction.Edit])(
+            "drops %s from the bar",
+            (action) => {
+                const vm = createVm();
+
+                expect(vm.getSnapshot().actions).not.toContain(action);
+            },
+        );
+
+        it("drops the pin action from the bar", () => {
+            mocked(PinningUtils.canPin).mockReturnValue(true);
+
+            const vm = createVm();
+
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Pin);
+        });
+
+        it("keeps reply in thread on the bar for a deleted message with a thread", () => {
+            const mxEvent = createMessageEvent();
+            mocked(isContentActionable).mockReturnValue(false);
+            jest.spyOn(mxEvent, "getThread").mockReturnValue({ rootEvent } as never);
+
+            const vm = createVm({ mxEvent, timelineRenderingType: TimelineRenderingType.Room });
+
+            // A redacted event is not content-actionable, so the options menu cannot offer reply in thread;
+            // dropping it from the bar as well would lose the action entirely.
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.ReplyInThread);
+        });
+
+        it("keeps download and hide on the bar, as the options menu has no equivalent", async () => {
+            jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
+            jest.spyOn(MediaEventHelper, "canHide").mockReturnValue(true);
+            getHintsForMessageSpy.mockReturnValue({
+                allowDownloadingMedia: jest.fn().mockResolvedValue(true),
+            } as never);
+
+            const vm = createVm({
+                mxEvent: createMessageEvent({
+                    content: { msgtype: MsgType.Image, body: "Image", url: "mxc://example.org/file" },
+                }),
+            });
+
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Hide);
+            // Download resolves behind an async permission check, exactly as in the non-compact case.
+            await waitFor(() => expect(vm.getSnapshot().actions).toContain(ActionBarAction.Download));
+        });
+
+        it("keeps resend and cancel on a failed event, which the options menu cannot offer", () => {
+            mocked(canCancel).mockReturnValue(true);
+            const mxEvent = createMessageEvent();
+            mxEvent.setStatus(EventStatus.NOT_SENT);
+
+            const vm = createVm({ mxEvent });
+
+            expect(vm.getSnapshot().actions).toEqual([ActionBarAction.Resend, ActionBarAction.Cancel]);
+        });
+
+        it("re-resolves the actions when the setting is turned off", () => {
+            const vm = createVm();
+            expect(vm.getSnapshot().actions).toEqual([ActionBarAction.Options]);
+
+            // The view model watches the setting, so flipping it must repopulate the bar without a remount.
+            compactMessageActions = false;
+            const [, , onChange] = mocked(SettingsStore.watchSetting).mock.calls.find(
+                ([name]) => name === "compactMessageActions",
+            )!;
+            onChange("compactMessageActions", null, SettingLevel.ACCOUNT, false, false);
+
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Reply);
         });
     });
 });
