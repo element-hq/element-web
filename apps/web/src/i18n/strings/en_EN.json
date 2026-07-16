@@ -3554,7 +3554,7 @@
         },
         "redaction": "Message deleted by %(name)s",
         "reply": {
-            "error_loading": "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
+            "error_loading": "Unable to load event that was replied to; either it does not exist or you do not have permission to view it.",
             "in_reply_to": "<a>In reply to</a> <pill>",
             "in_reply_to_for_export": "In reply to <a>this message</a>"
         },
