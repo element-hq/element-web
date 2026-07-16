@@ -6,14 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import path from "path";
+import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { expect, test } from "../../element-web-test";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 test.describe("migration", { tag: "@no-webkit" }, function () {
     test.use({

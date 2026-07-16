@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 
 import { type EchoContext } from "./EchoContext";
 import { type EchoTransaction, type RunFn, TransactionStatus } from "./EchoTransaction";

@@ -13,7 +13,7 @@ import {
     RoomViewLifecycle,
     type ViewRoomOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";

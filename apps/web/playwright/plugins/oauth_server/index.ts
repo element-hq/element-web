@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import http from "http";
+import http from "node:http";
 import express from "express";
-import { type AddressInfo } from "net";
+import { type AddressInfo } from "node:net";
 import { type TestInfo } from "@playwright/test";
 import { randB64Bytes } from "@element-hq/element-web-playwright-common/lib/utils/rand.js";
 import { dirname } from "node:path";

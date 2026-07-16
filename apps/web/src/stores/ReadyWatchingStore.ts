@@ -7,7 +7,7 @@
  */
 
 import { type MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { type ActionPayload } from "../dispatcher/payloads";

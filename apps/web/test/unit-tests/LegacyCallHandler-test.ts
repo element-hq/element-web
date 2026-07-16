@@ -17,7 +17,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import { mocked } from "jest-mock";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 import fetchMock from "@fetch-mock/jest";

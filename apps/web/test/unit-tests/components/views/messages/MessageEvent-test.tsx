@@ -10,8 +10,8 @@ import React from "react";
 import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/jest";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";

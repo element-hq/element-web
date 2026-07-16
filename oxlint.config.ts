@@ -137,7 +137,6 @@ export default defineConfig({
         "unicorn/prefer-module": "off", // TODO
         "unicorn/import-style": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
-        "unicorn/prefer-node-protocol": "off", // TODO
         "unicorn/no-process-exit": "off", // TODO
         "unicorn/no-document-cookie": "off", // TODO
         "unicorn/no-length-as-slice-end": "off", // TODO
@@ -257,7 +256,7 @@ export default defineConfig({
                 "no-restricted-imports": [
                     "error",
                     {
-                        name: "events",
+                        name: "node:events",
                         message: "Please use TypedEventEmitter instead",
                     },
                 ],
@@ -308,6 +307,8 @@ export default defineConfig({
             rules: {
                 // Electron app & Playwright common can use envvars
                 "node/no-process-env": "off",
+                // They do not depend on js-sdk for access to TypedEventEmitter so disable this rule
+                "no-restricted-imports": "off",
             },
         },
         {

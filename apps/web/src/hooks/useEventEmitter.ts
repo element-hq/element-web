@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { useRef, useEffect, useState, useCallback, type DependencyList } from "react";
 import { type ListenerMap, type TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
-import type { EventEmitter } from "events";
+import type { EventEmitter } from "node:events";
 
 type Handler = (...args: any[]) => void;
 

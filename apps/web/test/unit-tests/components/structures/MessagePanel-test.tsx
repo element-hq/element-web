@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventEmitter } from "events";
+import { EventEmitter } from "node:events";
 import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render, within } from "jest-matrix-react";
