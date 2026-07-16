@@ -599,7 +599,6 @@ export const useContextMenu = <T extends HTMLElement = HTMLElement>(
         setIsOpen(false);
     };
 
-    // eslint-disable-next-line react-compiler/react-compiler
     return [button.current ? isOpen : false, button, open, close, setIsOpen];
 };
 
