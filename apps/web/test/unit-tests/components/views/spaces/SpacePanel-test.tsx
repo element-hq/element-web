@@ -35,12 +35,14 @@ enum Keys {
     ARROW_DOWN = 40,
 }
 
+/* oxlint-disable typescript/prefer-literal-enum-member */
 enum DragDirection {
     LEFT = Keys.ARROW_LEFT,
     UP = Keys.ARROW_UP,
     RIGHT = Keys.ARROW_RIGHT,
     DOWN = Keys.ARROW_DOWN,
 }
+/* oxlint-enable typescript/prefer-literal-enum-member */
 
 // taken from https://github.com/hello-pangea/dnd/blob/main/test/unit/integration/util/controls.ts#L20
 const createTransitionEndEvent = (): Event => {

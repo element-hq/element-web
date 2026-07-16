@@ -112,10 +112,9 @@ export default defineConfig({
         "typescript/no-explicit-any": "off",
         "typescript/no-import-type-side-effects": "off",
         "typescript/no-dynamic-delete": "off",
-        "typescript/prefer-literal-enum-member": "off", // TODO
         "typescript/explicit-module-boundary-types": "off",
-        "no-param-reassign": "off", // TODO
-        "no-use-before-define": "off", // TODO
+        "no-param-reassign": "off",
+        "no-use-before-define": "off",
         "class-methods-use-this": "off",
         "no-plusplus": "off",
         "no-default-export": "off",
@@ -123,7 +122,7 @@ export default defineConfig({
         "complexity": "off",
         "no-void": "off",
         "no-empty-function": "off",
-        "default-case": "off", // TODO
+        "default-case": "off",
         "no-implicit-globals": "off",
         "no-bitwise": "off",
         "no-empty": "off",
@@ -134,7 +133,7 @@ export default defineConfig({
         "unicorn/no-anonymous-default-export": "off", // TODO
         "import/no-relative-parent-imports": "off",
         "import/unambiguous": "off",
-        "import/no-cycle": "off", // TODO
+        "import/no-cycle": "off",
         "jsdoc/empty-tags": "off", // TODO
         "vitest/require-test-timeout": "off",
         "react/jsx-no-literals": "off",
