@@ -92,8 +92,22 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => 
     }
     const formattedDate = formatLocalDateShort(event.getTs());
 
+    const onKeyDown = (ev: React.KeyboardEvent<HTMLLIElement>): void => {
+        if (ev.key === "Enter" || ev.key === " ") {
+            ev.preventDefault();
+            onClick();
+        }
+    };
+
     return (
-        <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded" onClick={onClick}>
+        <li
+            data-testid={`pollListItem-${event.getId()!}`}
+            className="mx_PollListItemEnded"
+            onClick={onClick}
+            onKeyDown={onKeyDown}
+            role="button"
+            tabIndex={0}
+        >
             <Tooltip label={_t("right_panel|poll|view_poll")} placement="top" isTriggerInteractive={false}>
                 <div className="mx_PollListItemEnded_content">
                     <div className="mx_PollListItemEnded_title">
