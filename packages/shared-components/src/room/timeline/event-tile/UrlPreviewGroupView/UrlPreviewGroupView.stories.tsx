@@ -19,6 +19,7 @@ import {
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { LinkedTextContext } from "../../../../core/utils/LinkedText";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
+import { waitForBackgroundImages } from "../../../../../.storybook/waitForImages";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
@@ -71,6 +72,9 @@ export default {
         onHideClick: fn(),
         onImageClick: fn(),
         onTogglePreviewLimit: fn(),
+    },
+    play: async ({ canvasElement }) => {
+        await waitForBackgroundImages(canvasElement);
     },
     parameters: {
         design: {
