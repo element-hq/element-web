@@ -133,7 +133,6 @@ export default defineConfig({
         "unicorn/no-array-reduce": "off",
         "unicorn/prefer-module": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
-        "unicorn/no-document-cookie": "off", // TODO
         "import/no-relative-parent-imports": "off",
         "import/unambiguous": "off",
         "import/no-cycle": "off", // TODO

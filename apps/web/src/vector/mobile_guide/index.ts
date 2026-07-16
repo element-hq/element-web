@@ -16,6 +16,7 @@ import { MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts
 
 function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
+    // oxlint-disable-next-line unicorn/no-document-cookie
     document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
     window.location.href = "../";
 }

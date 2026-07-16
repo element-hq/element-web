@@ -16,6 +16,7 @@ const onAccept = (): void => {
 };
 
 const onReject = (): void => {
+    // oxlint-disable-next-line unicorn/no-document-cookie
     document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
     hideToast();
 };
