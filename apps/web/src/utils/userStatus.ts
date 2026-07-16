@@ -146,21 +146,3 @@ export function setUserStatus(client: MatrixClient, userStatus: UserStatus): Pro
 export function clearUserStatus(client: MatrixClient): Promise<void> {
     return client.setExtendedProfileProperty("org.matrix.msc4426.status", null);
 }
-
-/**
- * Sets or clears the user's m.call status to represent that they are currently on a call or not.
- * If onCall is true, the status will be set to show that they joined the call at the time when this
- * function is called.
- * @param client The matrix client to use
- * @param onCall Whether the user is currently on a call.
- */
-export function setUserOnCall(client: MatrixClient, onCall: boolean): Promise<void> {
-    return client.setExtendedProfileProperty(
-        "org.matrix.msc4426.call",
-        onCall
-            ? {
-                  call_joined_ts: Date.now(),
-              }
-            : null,
-    );
-}
