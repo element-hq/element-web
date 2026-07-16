@@ -532,7 +532,7 @@ test.describe("Room list", () => {
 
             await app.viewRoomById(roomId);
             await app.settings.openRoomSettings("Notifications");
-            await page.getByText("Off").click();
+            await page.getByText("Mute").click();
             await app.settings.closeDialog();
 
             const room = roomListView.getByRole("option", { name: "silent" });

@@ -5,10 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { MediaEventHelper } from "../../../src/utils/MediaEventHelper.ts";
-import { stubClient } from "../../test-utils";
+import { describe, it, expect } from "vitest";
+
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { MediaEventHelper } from "./MediaEventHelper.ts";
 
 describe("MediaEventHelper", () => {
     it("should set the mime type on the blob based on the event metadata", async () => {

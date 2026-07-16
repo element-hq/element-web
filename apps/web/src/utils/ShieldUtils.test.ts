@@ -6,11 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, describe, it, expect, beforeAll, afterAll } from "vitest";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
-import { shieldStatusForRoom } from "../../../src/utils/ShieldUtils";
-import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { shieldStatusForRoom } from "./ShieldUtils";
+import DMRoomMap from "./DMRoomMap";
 
 function mkClient(selfTrust = false) {
     return {
@@ -30,13 +31,13 @@ function mkClient(selfTrust = false) {
 }
 
 describe("mkClient self-test", function () {
-    test.each([true, false])("behaves well for self-trust=%s", async (v) => {
+    it.each([true, false])("behaves well for self-trust=%s", async (v) => {
         const client = mkClient(v);
         const status = await client.getCrypto()!.getDeviceVerificationStatus("@self:localhost", "DEVICE");
         expect(status?.isVerified()).toBe(v);
     });
 
-    test.each([
+    it.each([
         ["@TT:h", true],
         ["@TF:h", true],
         ["@FT:h", false],
@@ -46,7 +47,7 @@ describe("mkClient self-test", function () {
         expect(status!.isCrossSigningVerified()).toBe(trust);
     });
 
-    test.each([
+    it.each([
         ["@TT:h", true],
         ["@TF:h", false],
         ["@FT:h", true],
@@ -62,11 +63,11 @@ describe("shieldStatusForMembership self-trust behaviour", function () {
         const mockInstance = {
             getUserIdForRoomId: (roomId: string) => (roomId === "DM" ? "@any:h" : null),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
     });
 
     afterAll(() => {
-        jest.spyOn(DMRoomMap, "shared").mockRestore();
+        vi.spyOn(DMRoomMap, "shared").mockRestore();
     });
 
     it.each([
@@ -165,7 +166,7 @@ describe("shieldStatusForMembership other-trust behaviour", function () {
         const mockInstance = {
             getUserIdForRoomId: (roomId: string) => (roomId === "DM" ? "@any:h" : null),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
+        vi.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
     });
 
     it.each([

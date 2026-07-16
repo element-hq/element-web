@@ -5,15 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/src/crypto-api";
+// @vitest-environment happy-dom
 
-import { stubClient } from "../../../test-utils";
-import DeviceIsolationModeController from "../../../../src/settings/controllers/DeviceIsolationModeController.ts";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { vi, describe, it, expect, afterEach } from "vitest";
+import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/src/crypto-api";
+import { stubClient } from "test-utils";
+
+import DeviceIsolationModeController from "./DeviceIsolationModeController.ts";
+import { SettingLevel } from "../SettingLevel";
 
 describe("DeviceIsolationModeController", () => {
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     describe("tracks enabling and disabling", () => {

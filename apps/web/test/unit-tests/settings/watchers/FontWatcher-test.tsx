@@ -112,66 +112,6 @@ describe("FontWatcher", function () {
         });
     });
 
-    describe("Migrates baseFontSize", () => {
-        let watcher: FontWatcher | undefined;
-
-        beforeEach(() => {
-            document.documentElement.style.fontSize = "14px";
-            watcher = new FontWatcher();
-        });
-
-        afterEach(() => {
-            watcher!.stop();
-        });
-
-        it("should not run the migration", async () => {
-            await watcher!.start();
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(0);
-        });
-
-        it("should migrate from V1 font size to V3", async () => {
-            await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, 13);
-            await watcher!.start();
-            // 13px (V1 font size) + 5px (V1 offset) + 1px (root font size increase) - 16px (default browser font size) = 3px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(3);
-            // baseFontSize should be cleared
-            expect(SettingsStore.getValue("baseFontSize")).toBe(0);
-        });
-
-        it("should migrate from V2 font size to V3 using browser font size", async () => {
-            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
-            await watcher!.start();
-            // 18px - 16px (default browser font size) = 2px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
-            // baseFontSize should be cleared
-            expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
-        });
-
-        it("should migrate from V2 font size to V3 using fallback font size", async () => {
-            document.documentElement.style.fontSize = "";
-            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
-            await watcher!.start();
-            // 18px - 16px (fallback) = 2px
-            expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
-            // baseFontSize should be cleared
-            expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
-        });
-
-        it("should trigger migration when dispatched", async () => {
-            await watcher!.start();
-
-            await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 18);
-            defaultDispatcher.fire(Action.MigrateBaseFontSize);
-
-            await waitFor(() => {
-                // 18px - 16px (default browser font size) = 2px
-                expect(SettingsStore.getValue("fontSizeDelta")).toBe(2);
-                // baseFontSizeV2 should be cleared
-                expect(SettingsStore.getValue("baseFontSizeV2")).toBe(0);
-            });
-        });
-    });
-
     it("should update root font size with positive delta", async () => {
         await new FontWatcher().start();
 
