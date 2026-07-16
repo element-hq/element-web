@@ -664,6 +664,7 @@ legend {
     button:not(
         .mx_Dialog_nonDialogButton,
         .mx_AccessibleButton,
+        .cancel,
         .mx_UserProfileSettings button,
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
@@ -723,6 +724,13 @@ legend {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
+}
+
+.mx_Dialog_buttons button.cancel {
+    color: var(--cpd-color-text-primary);
+    background-color: var(--cpd-color-bg-action-secondary-rest);
+    border-color: var(--cpd-color-border-interactive-secondary);
+    min-width: 156px;
 }
 
 /* Spinner Dialog overide */
