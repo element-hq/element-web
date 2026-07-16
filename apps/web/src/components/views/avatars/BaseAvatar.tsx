@@ -35,6 +35,7 @@ interface IProps {
     altText?: string;
     role?: AriaRole;
     ref?: Ref<HTMLElement>;
+    hidden?: boolean;
 }
 
 const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = false): string[] => {
@@ -101,6 +102,7 @@ const BaseAvatar = (props: IProps): JSX.Element => {
         type = "round",
         altText = _t("common|avatar"),
         ref,
+        hidden,
         ...otherProps
     } = props;
 
@@ -108,7 +110,11 @@ const BaseAvatar = (props: IProps): JSX.Element => {
 
     const extraProps: Partial<React.ComponentProps<typeof Avatar>> = {};
 
-    if (onClick) {
+    if (hidden) {
+        extraProps["role"] = "presentation";
+        extraProps["aria-hidden"] = true;
+        extraProps["aria-label"] = undefined;
+    } else if (onClick) {
         extraProps["aria-live"] = "off";
         extraProps["role"] = "button";
     } else if (!imageUrl) {

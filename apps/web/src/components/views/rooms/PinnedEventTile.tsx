@@ -77,6 +77,7 @@ export function PinnedEventTile({ event, room, permalinkCreator }: PinnedEventTi
                     member={event.sender}
                     size={AVATAR_SIZE}
                     fallbackUserId={sender}
+                    hidden
                 />
             </div>
             <div className="mx_PinnedEventTile_wrapper">

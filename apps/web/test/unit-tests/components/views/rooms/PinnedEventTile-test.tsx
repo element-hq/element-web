@@ -90,6 +90,13 @@ describe("<PinnedEventTile />", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("should hide the sender avatar from assistive technology", () => {
+        const { container } = renderComponent(makePinEvent());
+        const avatar = container.querySelector('[data-testid="avatar-img"]');
+        expect(avatar).toHaveAttribute("aria-hidden", "true");
+        expect(avatar).not.toHaveAttribute("aria-label");
+    });
+
     it("should render pinned event with thread info", async () => {
         const event = makePinEvent({
             content: {
