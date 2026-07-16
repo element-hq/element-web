@@ -12,11 +12,9 @@ import classNames from "classnames";
 import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
-import dis from "../../../dispatcher/dispatcher";
 import { makeUserPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
-import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
 import ReplyTile from "../rooms/ReplyTile";
 import { Pill } from "./Pill";
@@ -66,6 +64,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     private unmounted = false;
     private room: Room;
     private blockquoteRef = React.createRef<HTMLQuoteElement>();
+    private quoteElements = new Map<string, HTMLQuoteElement>();
 
     public constructor(props: IProps) {
         super(props);
@@ -174,19 +173,17 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     private onQuoteClick = async (): Promise<void> => {
         if (!this.state.loadedEv) return;
-        const events = [this.state.loadedEv, ...this.state.events];
+        const clickedEv = this.state.loadedEv;
+        const events = [clickedEv, ...this.state.events];
 
         let loadedEv: MatrixEvent | null = null;
         if (events.length > 0) {
             loadedEv = await this.getNextEvent(events[0]);
         }
 
-        this.setState({
-            loadedEv,
-            events,
+        this.setState({ loadedEv, events }, () => {
+            this.quoteElements.get(clickedEv.getId()!)?.focus();
         });
-
-        dis.fire(Action.FocusSendMessageComposer);
     };
 
     private getReplyChainColorClass(ev: MatrixEvent): string {
@@ -264,7 +261,19 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 "mx_ReplyChain--collapsed": isQuoteExpanded === false,
             });
             return (
-                <blockquote ref={this.blockquoteRef} className={classname} key={ev.getId()}>
+                <blockquote
+                    ref={(el) => {
+                        this.blockquoteRef.current = el;
+                        if (el) {
+                            this.quoteElements.set(ev.getId()!, el);
+                        } else {
+                            this.quoteElements.delete(ev.getId()!);
+                        }
+                    }}
+                    tabIndex={-1}
+                    className={classname}
+                    key={ev.getId()}
+                >
                     <ReplyTile
                         mxEvent={ev}
                         permalinkCreator={this.props.permalinkCreator}
