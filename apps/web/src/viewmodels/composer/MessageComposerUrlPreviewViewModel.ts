@@ -59,6 +59,11 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
     }
 
     private computeSnapshot(content: string): void {
+        if (!this.urlPreviewVisible) {
+            this.snapshot.set({ entries: [], content });
+            return;
+        }
+
         const newLinksOrdered = content
             .split(" ")
             .map((w) => w.trim())
@@ -66,11 +71,6 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
         const newLinks = new Set(newLinksOrdered);
         if (this.links.symmetricDifference(newLinks).size === 0) {
             // Skip if the URL set hasn't changed
-            return;
-        }
-
-        if (!this.urlPreviewVisible) {
-            this.snapshot.set({ entries: [], content });
             return;
         }
 
@@ -130,7 +130,7 @@ export class MessageComposerUrlPreviewViewModel extends BaseViewModel<
      * Trigger a recalculation of the links in the provided text.
      * @param content Plaintext from the message composer.
      */
-    public async updateWithText({ content, debounced }: { content?: string; debounced: boolean }): Promise<void> {
+    public updateWithText({ content, debounced }: { content?: string; debounced: boolean }): void {
         if (content !== undefined) {
             this.content = content;
         }

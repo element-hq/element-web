@@ -7,6 +7,7 @@ exports[`MessageComposerUrlPreview > renders a preview 1`] = `
   >
     <div
       class="MessageComposerUrlPreview-module_summary"
+      role="button"
     >
       <span
         class="MessageComposerUrlPreview-module_left"
@@ -57,6 +58,7 @@ exports[`MessageComposerUrlPreview > renders a preview with an image 1`] = `
   >
     <div
       class="MessageComposerUrlPreview-module_summary"
+      role="button"
     >
       <span
         class="MessageComposerUrlPreview-module_left"
