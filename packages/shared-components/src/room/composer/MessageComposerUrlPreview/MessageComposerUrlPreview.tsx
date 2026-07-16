@@ -204,7 +204,7 @@ export function MessageComposerUrlPreviewView({
           });
 
     const summary = (
-        <button className={classNames(styles.summary, styles.spanLike)} onClick={toggleCollapsed}>
+        <div className={styles.summary} onClick={toggleCollapsed}>
             <span className={styles.left}>
                 <span className={styles.icons}>
                     {links.map((entry) => {
@@ -274,7 +274,7 @@ export function MessageComposerUrlPreviewView({
                     <ChevronDownIcon />
                 </button>
             </span>
-        </button>
+        </div>
     );
 
     return (
