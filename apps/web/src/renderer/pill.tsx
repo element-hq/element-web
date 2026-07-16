@@ -17,7 +17,7 @@ import { Pill } from "../components/views/elements/Pill";
 import { PillType } from "../components/views/elements/PillType";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
-import { hasParentMatching, type RendererMap, type ParentNode } from "./utils.tsx";
+import { hasParentMatching, type RendererMap, type ParentNode } from "./utils.ts";
 
 const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
 

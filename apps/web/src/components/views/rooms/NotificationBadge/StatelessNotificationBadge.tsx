@@ -15,7 +15,7 @@ import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleBut
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { useSettingValue } from "../../../../hooks/useSettings";
 import { type XOR } from "../../../../@types/common";
-import { _t } from "../../../../languageHandler.tsx";
+import { _t } from "../../../../languageHandler";
 
 interface Props {
     symbol: string | null;
