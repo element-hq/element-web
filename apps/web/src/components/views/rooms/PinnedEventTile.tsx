@@ -35,6 +35,7 @@ import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import PinningUtils from "../../../utils/PinningUtils.ts";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import { focusEventTileAfterScroll } from "../../../utils/FocusUtils";
 
 const AVATAR_SIZE = "32px";
 
@@ -160,6 +161,11 @@ function PinMenu({ event, room, permalinkCreator, contentId }: PinMenuProps): JS
             room_id: event.getRoomId(),
             metricsTrigger: undefined, // room doesn't change
         });
+
+        const eventId = event.getId();
+        if (eventId) {
+            focusEventTileAfterScroll(eventId);
+        }
     }, [event]);
 
     /**
