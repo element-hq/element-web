@@ -11,7 +11,7 @@ import { closeReleaseAnnouncement, rejectToast } from "@element-hq/element-web-p
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
-import { getRoomList } from "./utils";
+import { assertRoomListOrder, getRoomList } from "./utils";
 
 test.describe("Room list", () => {
     test.use({
@@ -310,6 +310,44 @@ test.describe("Room list", () => {
                 const topRoomAgain = roomListView.getByRole("option", { name: "Open room room29" });
                 await expect(topRoomAgain).toBeFocused();
             });
+        });
+    });
+
+    test.describe("Room navigation with the keyboard", () => {
+        // Alt+ArrowUp/Down steps through rooms in their displayed order. Selecting a room sends a read
+        // receipt that re-emits the (unchanged) list, which used to reshuffle it under the cursor so
+        // the next press opened the wrong room.
+        test("should step through the rooms in their displayed order", async ({ page, app, user, bot }) => {
+            const roomListView = getRoomList(page);
+
+            // Creation order sets recency (newest on top): roomC, roomB, roomA.
+            const roomAId = await app.client.createRoom({ name: "roomA", invite: [bot.credentials.userId] });
+            await bot.joinRoom(roomAId);
+            await app.client.createRoom({ name: "roomB" });
+            await app.client.createRoom({ name: "roomC" });
+
+            const roomA = roomListView.getByRole("option", { name: "Open room roomA" });
+            const roomB = roomListView.getByRole("option", { name: "Open room roomB" });
+            const roomC = roomListView.getByRole("option", { name: "Open room roomC" });
+
+            // Open roomB, then bump roomA to the top. roomB is active so it stays put (sticky), giving
+            // a displayed order of roomA, roomB, roomC that differs from the recency order.
+            await roomB.click();
+            await expect(roomB).toHaveAttribute("aria-selected", "true");
+            await bot.sendMessage(roomAId, "bump");
+            await assertRoomListOrder(page, ["roomA", "roomB", "roomC"]);
+
+            // Up from roomB selects roomA (shown above it) in the room list.
+            await page.keyboard.press("Alt+ArrowUp");
+            await expect(roomA).toHaveAttribute("aria-selected", "true");
+
+            // Down must select the next visible room (roomB), not roomC as it did when the list reshuffled.
+            await page.keyboard.press("Alt+ArrowDown");
+            await expect(roomB).toHaveAttribute("aria-selected", "true");
+
+            // Once more selects roomC.
+            await page.keyboard.press("Alt+ArrowDown");
+            await expect(roomC).toHaveAttribute("aria-selected", "true");
         });
     });
 

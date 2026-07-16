@@ -159,6 +159,13 @@ export class RoomListViewModel
      */
     private scrollToIndex?: (index: number) => void;
 
+    /**
+     * Signature of the store's room list ({@link roomListSignature}) as of the last update, used to
+     * detect no-op list updates: selecting a room sends a read receipt that re-emits the same list,
+     * and we must not re-sort then or rooms shuffle around just from being selected.
+     */
+    private lastRoomListSignature: number = 0;
+
     public constructor(props: RoomListViewModelProps) {
         const activeSpace = props.spaceStore.activeSpaceRoom;
 
@@ -189,6 +196,7 @@ export class RoomListViewModel
         });
 
         this.roomsResult = roomsResult;
+        this.lastRoomListSignature = roomListSignature(roomsResult);
         this.sections = sections;
 
         // Build initial roomsMap from roomsResult
@@ -268,6 +276,7 @@ export class RoomListViewModel
         // Update rooms result with new filter
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.lastRoomListSignature = roomListSignature(this.roomsResult);
 
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
@@ -312,10 +321,11 @@ export class RoomListViewModel
     }
 
     /**
-     * Get the ordered list of room IDs.
+     * The room IDs in displayed order (sticky-adjusted, collapse-filtered), matching the indices the
+     * view reports to {@link updateVisibleRooms}.
      */
     public get roomIds(): string[] {
-        return this.roomsResult.sections.flatMap((section) => section.rooms).map((room) => room.roomId);
+        return this.sections.flatMap((section) => section.rooms).map((room) => room.roomId);
     }
 
     /**
@@ -524,6 +534,25 @@ export class RoomListViewModel
     }
 
     /**
+     * Settle the list to the store's real order after a room is clicked, keeping the clicked room at
+     * its current displayed position (making it the new sticky room) so the previously sticky room
+     * falls back into place. No-op if the room is not in the list.
+     */
+    private async settleRoomOrder(roomId: string): Promise<void> {
+        const position = this.findRoomPosition(this.roomsResult.sections, roomId);
+        if (!position) return;
+
+        // Anchor the sticky room to the clicked room at its current position, then re-sort from the
+        // store's real order around it.
+        this.lastActiveRoomPosition = position;
+        const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
+        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.lastRoomListSignature = roomListSignature(this.roomsResult);
+        this.updateRoomsMap(this.roomsResult);
+        await this.updateRoomListData(false, roomId);
+    }
+
+    /**
      * Compute a room's index in the list's entry space, or undefined if it is not in the displayed
      * sections (e.g. collapsed or filtered out). Flat list: the room index; grouped list: includes
      * one slot per section header (matching {@link firstUnreadRoomBelowFold}).
@@ -551,8 +580,12 @@ export class RoomListViewModel
             // Handle keyboard navigation shortcuts (Alt+ArrowUp/Down)
             // This was previously handled by useRoomListNavigation hook
             this.handleViewRoomDelta(payload as ViewRoomDeltaPayload);
-        } else if (payload.action === Action.ViewRoom && payload.show_room_tile && payload.room_id) {
-            await this.scrollRoomIntoView(payload.room_id);
+        } else if (payload.action === Action.ViewRoom && payload.room_id) {
+            if (payload.show_room_tile) {
+                await this.scrollRoomIntoView(payload.room_id);
+            } else {
+                await this.settleRoomOrder(payload.room_id);
+            }
         } else if (payload.action === Action.RoomListCollapseAllSections) {
             this.onCollapseAllSections(false);
         } else if (payload.action === Action.RoomListExpandAllSections) {
@@ -628,11 +661,14 @@ export class RoomListViewModel
         const oldSpaceId = this.roomsResult.spaceId;
 
         // Refresh room data from store
-        this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
-        const newSpaceId = this.roomsResult.spaceId;
+        const freshResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        const newSpaceId = freshResult.spaceId;
 
         // Detect space change
         if (oldSpaceId !== newSpaceId) {
+            this.roomsResult = freshResult;
+            this.lastRoomListSignature = roomListSignature(freshResult);
+
             // Clear view models when the space changes
             // We only want to do this on space changes, not on regular list updates, to preserve view models when possible
             // The view models are disposed when scrolling out of view (handled by updateVisibleRooms)
@@ -654,6 +690,17 @@ export class RoomListViewModel
             return;
         }
 
+        // No-op update: the store returned the same list as last time (e.g. selecting a room sent a
+        // read receipt, which the recency sort re-inserts in place). Pass isRoomChange to keep the
+        // displayed order so rooms don't shuffle around, while still recomputing derived state.
+        const newSignature = roomListSignature(freshResult);
+        if (newSignature === this.lastRoomListSignature) {
+            this.updateRoomListData(true);
+            return;
+        }
+
+        this.roomsResult = freshResult;
+        this.lastRoomListSignature = newSignature;
         this.updateRoomsMap(this.roomsResult);
 
         // Normal room list update (not a space change)
@@ -698,7 +745,7 @@ export class RoomListViewModel
      * Apply sticky room logic to keep the active room at the same position within its section.
      * When the room list updates, this prevents the selected room from jumping around in the UI.
      *
-     * @param isRoomChange - Whether this update is due to a room change (not a list update)
+     * @param isRoomChange - When true, keep the current order (skip sticky re-sorting)
      * @param roomId - The room ID to apply sticky logic for (can be null/undefined)
      * @returns The modified sections array with sticky positioning applied
      */
@@ -748,6 +795,13 @@ export class RoomListViewModel
         });
     }
 
+    /**
+     * Updates the room list data.
+     * @param isRoomChange - Keep the current displayed order instead of re-sorting. Set for a room
+     *     change (selecting a room must not reshuffle the list) or a no-op list update.
+     * @param roomIdOverride - Optional room ID to use for calculations.
+     * @param scrollToSectionTag - Optional section tag to scroll to.
+     */
     private async updateRoomListData(
         isRoomChange: boolean = false,
         roomIdOverride: string | null = null,
@@ -877,6 +931,7 @@ export class RoomListViewModel
         // Refresh roomsResult so the new section lands in the same snapshot as the scroll-to.
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.lastRoomListSignature = roomListSignature(this.roomsResult);
         this.updateRoomsMap(this.roomsResult);
         this.updateRoomListData(false, null, tag);
         this.showToast("section_created");
@@ -924,6 +979,7 @@ export class RoomListViewModel
         // Scroll to the section after it moved
         const filterKeys = this.activeFilter !== undefined ? [this.activeFilter] : undefined;
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
+        this.lastRoomListSignature = roomListSignature(this.roomsResult);
         this.updateRoomsMap(this.roomsResult);
         this.updateRoomListData(false, null, sourceTag);
     };
@@ -956,6 +1012,22 @@ export class RoomListViewModel
 
         tagRoom(room, tag);
     };
+}
+
+/**
+ * A signature of the store's room list capturing section order, section membership and room order,
+ * hashed to a fixed-size number so it doesn't grow with the number of rooms. Two results with the
+ * same signature render to the same list, so an update between them is a no-op that we can skip
+ * re-sorting for (see {@link RoomListViewModel.lastRoomListSignature}).
+ */
+function roomListSignature(roomsResult: RoomsResult): number {
+    const signature = roomsResult.sections.map((s) => `${s.tag}:${s.rooms.map((r) => r.roomId).join(",")}`).join("|");
+    // FNV-1a 32-bit hash.
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < signature.length; i++) {
+        hash = Math.imul(hash ^ (signature.codePointAt(i) || 0), 0x01000193);
+    }
+    return hash >>> 0;
 }
 
 /**
