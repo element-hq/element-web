@@ -138,7 +138,6 @@ export default defineConfig({
         "unicorn/no-length-as-slice-end": "off", // TODO
         "import/no-relative-parent-imports": "off",
         "import/unambiguous": "off",
-        "import/no-commonjs": "off", // TODO
         "import/no-cycle": "off", // TODO
         "jsdoc/empty-tags": "off", // TODO
         "vitest/require-test-timeout": "off",
@@ -538,6 +537,7 @@ export default defineConfig({
             files: ["**/*.{cjs,js}"],
             rules: {
                 "typescript/no-require-imports": "off",
+                "import/no-commonjs": "off",
             },
         },
     ],
