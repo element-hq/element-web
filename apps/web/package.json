@@ -187,7 +187,7 @@
         "modernizr": "^3.12.0",
         "oxfmt": "0.58.0",
         "playwright-core": "catalog:",
-        "postcss": "8.5.16",
+        "postcss": "8.5.17",
         "postcss-easings": "4.0.0",
         "postcss-hexrgba": "2.1.0",
         "postcss-import": "16.1.1",

@@ -112,7 +112,7 @@ function RoomHeaderButtons({
 
     const joinCallButton = (
         <Tooltip
-            label={
+            description={
                 videoCallDisabledReason ??
                 (activeCallSessionType === CallType.Voice ? _t("voip|voice_call") : _t("voip|video_call"))
             }
