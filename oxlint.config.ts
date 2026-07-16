@@ -69,7 +69,7 @@ export default defineConfig({
         "/packages/shared-components/typedoc/",
     ],
     settings: {
-        jsdoc: {
+        "jsdoc": {
             tagNamePreference: {
                 remark: "remarks",
                 privateRemarks: "privateRemarks",
@@ -82,6 +82,23 @@ export default defineConfig({
                 knipignore: "knipignore",
                 resolves: "resolves",
             },
+        },
+        "vitest": {
+            typecheck: true,
+        },
+        "jsx-a11y": {
+            components: {
+                Button: "button",
+                IconButton: "button",
+                AccessibleButton: "button",
+                RovingAccessibleButton: "button",
+                ContextMenuButton: "button",
+                ContextMenuTooltipButton: "button",
+            },
+            // polymorphicPropName: "as", // Would be good to enable in the future
+        },
+        "react": {
+            componentWrapperFunctions: ["withMatrixClientHOC"],
         },
     },
     rules: {
@@ -130,11 +147,11 @@ export default defineConfig({
         "promise/catch-or-return": "off",
         "node/no-process-env": "off", // We enable this for src in overrides
         "unicorn/no-array-reduce": "off",
-        "unicorn/no-anonymous-default-export": "off", // TODO
+        "unicorn/no-anonymous-default-export": "off",
         "import/no-relative-parent-imports": "off",
         "import/unambiguous": "off",
         "import/no-cycle": "off",
-        "jsdoc/empty-tags": "off", // TODO
+        "jsdoc/empty-tags": "off",
         "vitest/require-test-timeout": "off",
         "react/jsx-no-literals": "off",
         "react/prefer-function-component": "off",
