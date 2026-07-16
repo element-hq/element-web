@@ -13,7 +13,6 @@ import { type Fixtures } from "../../../element-web-test.ts";
 
 export const legacyOAuthHomeserver: Fixtures = {
     oAuthServer: [
-        // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
             const server = new OAuthServer();
             await use(server);
