@@ -50,7 +50,7 @@ const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
         };
 
         return (
-            <button className="mx_DevTools_button" onClick={showMore}>
+            <button className="mx_DevTools_button" onClick={showMore} type="button">
                 {_t("common|and_n_others", { count: overflowCount })}
             </button>
         );

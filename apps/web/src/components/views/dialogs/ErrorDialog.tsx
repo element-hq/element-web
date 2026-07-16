@@ -74,7 +74,12 @@ export default class ErrorDialog extends React.Component<IProps, IState> {
                     {this.props.description || _t("error|dialog_description_default")}
                 </div>
                 <div className="mx_Dialog_buttons">
-                    <button className="mx_Dialog_primary" onClick={this.onClick} autoFocus={this.props.focus}>
+                    <button
+                        className="mx_Dialog_primary"
+                        onClick={this.onClick}
+                        autoFocus={this.props.focus}
+                        type="button"
+                    >
                         {this.props.button || _t("action|ok")}
                     </button>
                 </div>

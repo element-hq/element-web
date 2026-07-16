@@ -155,7 +155,6 @@ export default defineConfig({
         "react/no-danger": "off",
         "react/only-export-components": "off",
         "react/no-react-children": "off",
-        "react/button-has-type": "off", // TODO
         "react/no-clone-element": "off",
         "jsx-a11y/anchor-ambiguous-text": "off", // TODO
 

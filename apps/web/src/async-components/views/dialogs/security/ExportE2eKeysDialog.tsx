@@ -211,7 +211,7 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                             value={_t("action|export")}
                             disabled={disableForm}
                         />
-                        <button onClick={this.onCancelClick} disabled={disableForm}>
+                        <button onClick={this.onCancelClick} disabled={disableForm} type="button">
                             {_t("action|cancel")}
                         </button>
                     </div>

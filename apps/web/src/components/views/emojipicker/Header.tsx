@@ -100,6 +100,7 @@ class Header extends React.PureComponent<IProps> {
                             tabIndex={category.firstVisible ? 0 : -1} // roving
                             aria-selected={category.visible}
                             aria-controls={`mx_EmojiPicker_category_${category.id}`}
+                            type="button"
                         >
                             {category.emoji}
                         </button>

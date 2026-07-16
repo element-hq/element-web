@@ -55,6 +55,7 @@ class Search extends React.PureComponent<IProps> {
                     onClick={() => this.props.onChange("")}
                     className="mx_EmojiPicker_search_clear"
                     title={_t("emoji_picker|cancel_search_label")}
+                    type="button"
                 >
                     <CloseIcon />
                 </button>

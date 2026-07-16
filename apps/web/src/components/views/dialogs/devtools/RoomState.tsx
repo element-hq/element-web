@@ -100,6 +100,7 @@ const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) =
                 mx_DevTools_RoomStateExplorer_button_emptyString: !trimmed,
             })}
             onClick={onClick}
+            type="button"
         >
             {content}
         </button>
@@ -148,7 +149,11 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
         const onHistoryClick = (): void => {
             setHistory(true);
         };
-        const extraButton = <button onClick={onHistoryClick}>{_t("devtools|see_history")}</button>;
+        const extraButton = (
+            <button onClick={onHistoryClick} type="button">
+                {_t("devtools|see_history")}
+            </button>
+        );
         return <EventViewer mxEvent={event} onBack={_onBack} Editor={StateEventEditor} extraButton={extraButton} />;
     }
 

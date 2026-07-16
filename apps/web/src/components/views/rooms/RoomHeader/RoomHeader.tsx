@@ -485,6 +485,7 @@ export default function RoomHeader({
                             : () => sdkContext.rightPanelStore.showOrHidePhase(RightPanelPhases.RoomSummary)
                     }
                     className="mx_RoomHeader_infoWrapper"
+                    type="button"
                 >
                     <Box flex="1" className="mx_RoomHeader_info">
                         <Text

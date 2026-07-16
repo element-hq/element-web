@@ -78,7 +78,7 @@ const BaseAccountDataExplorer: React.FC<IProps> = ({ events, Editor, actionLabel
                     };
 
                     return (
-                        <button className="mx_DevTools_button" key={eventType} onClick={onClick}>
+                        <button className="mx_DevTools_button" key={eventType} onClick={onClick} type="button">
                             {eventType}
                         </button>
                     );

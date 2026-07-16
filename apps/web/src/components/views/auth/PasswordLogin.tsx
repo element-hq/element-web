@@ -64,10 +64,10 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     private [LoginField.Password]: Field | null = null;
 
     public static defaultProps = {
-        onUsernameChanged: function () {},
-        onUsernameBlur: function () {},
-        onPhoneCountryChanged: function () {},
-        onPhoneNumberChanged: function () {},
+        onUsernameChanged: function (): void {},
+        onUsernameBlur: function (): void {},
+        onPhoneCountryChanged: function (): void {},
+        onPhoneNumberChanged: function (): void {},
         loginIncorrect: false,
         disableSubmit: false,
     };

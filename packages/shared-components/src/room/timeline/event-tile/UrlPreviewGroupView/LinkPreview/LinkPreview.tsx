@@ -141,6 +141,7 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
                     className={styles.preview}
                     onClick={onImageClickHandler}
                     aria-label={_t("timeline|url_preview|view_image")}
+                    type="button"
                 />
             );
         }
