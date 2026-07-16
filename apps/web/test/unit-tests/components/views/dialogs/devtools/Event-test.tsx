@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { Room, PendingEventOrdering, EventType, MsgType, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Room, PendingEventOrdering, EventType, MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { createTestClient, mkEvent, stubClient } from "../../../../../test-utils";
