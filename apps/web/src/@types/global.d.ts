@@ -38,8 +38,6 @@ import { type ModuleApiType } from "../modules/Api.ts";
 import type { RoomListStoreV3Class } from "../stores/room-list-v3/RoomListStoreV3.ts";
 import { type SDKContextClass } from "../contexts/SDKContextClass.ts";
 
-/* eslint-disable @typescript-eslint/naming-convention */
-
 type ElectronChannel =
     | "app_onAction"
     | "before-quit"
@@ -192,14 +190,12 @@ declare global {
               isReady: () => boolean;
           };
 
-    // eslint-disable-next-line no-var, camelcase
+    // eslint-disable-next-line no-var
     var mx_rage_logger: ConsoleLogger;
-    // eslint-disable-next-line no-var, camelcase
+    // eslint-disable-next-line no-var
     var mx_rage_initPromise: Promise<void>;
-    // eslint-disable-next-line no-var, camelcase
+    // eslint-disable-next-line no-var
     var mx_rage_initStoragePromise: Promise<void>;
-    // eslint-disable-next-line no-var, camelcase
+    // eslint-disable-next-line no-var
     var mx_rage_store: IndexedDBLogStore;
 }
-
-/* eslint-enable @typescript-eslint/naming-convention */

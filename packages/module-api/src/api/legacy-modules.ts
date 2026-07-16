@@ -19,7 +19,6 @@ export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
  * @alpha
  * @deprecated in favour of the new module API
  */
-/* eslint-disable @typescript-eslint/naming-convention */
 export interface LegacyModuleApiExtension {
     /**
      * Register a legacy module based on \@matrix-org/react-sdk-module-api

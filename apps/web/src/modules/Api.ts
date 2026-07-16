@@ -60,7 +60,6 @@ export class ModuleApi implements Api {
         return ModuleApi._instance;
     }
 
-    /* eslint-disable @typescript-eslint/naming-convention */
     public async _registerLegacyModule(LegacyModule: RuntimeModuleConstructor): Promise<void> {
         ModuleRunner.instance.registerModule((api) => new LegacyModule(api));
     }
@@ -80,7 +79,6 @@ export class ModuleApi implements Api {
     ) => void = legacyCustomisationsFactory(WidgetPermissionCustomisations);
     public readonly _registerLegacyWidgetVariablesCustomisations =
         legacyCustomisationsFactory(WidgetVariableCustomisations);
-    /* eslint-enable @typescript-eslint/naming-convention */
 
     public readonly navigation = new NavigationApi();
     public readonly openDialog = openDialog;
