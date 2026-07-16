@@ -136,7 +136,6 @@ export default defineConfig({
         "unicorn/no-array-reduce": "off",
         "unicorn/prefer-module": "off", // TODO
         "unicorn/no-anonymous-default-export": "off", // TODO
-        "unicorn/no-process-exit": "off", // TODO
         "unicorn/no-document-cookie": "off", // TODO
         "unicorn/no-length-as-slice-end": "off", // TODO
         "import/no-relative-parent-imports": "off",
@@ -302,12 +301,19 @@ export default defineConfig({
             },
         },
         {
-            files: ["apps/desktop/src/**/*", "packages/playwright-common/src/**/*"],
+            files: [
+                "apps/desktop/src/**/*",
+                "packages/playwright-common/src/**/*",
+                "**/scripts/**/*",
+                "apps/web/module_system/**/*",
+            ],
             rules: {
-                // Electron app & Playwright common can use envvars
+                // These files can use envvars
                 "node/no-process-env": "off",
                 // They do not depend on js-sdk for access to TypedEventEmitter so disable this rule
                 "no-restricted-imports": "off",
+                // They can use process.exit
+                "unicorn/no-process-exit": "off",
             },
         },
         {
