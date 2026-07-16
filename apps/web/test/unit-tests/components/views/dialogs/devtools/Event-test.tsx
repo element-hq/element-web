@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { createTestClient, mkEvent, stubClient } from "../../../../../test-utils";
+import { createTestClient, mkEvent } from "../../../../../test-utils";
 import { DevtoolsContext } from "../../../../../../src/components/views/dialogs/devtools/BaseTool";
 import { TimelineEventEditor } from "../../../../../../src/components/views/dialogs/devtools/Event";
 
@@ -47,10 +47,6 @@ function renderTimelineEventEditor(
 }
 
 describe("<EventEditor />", () => {
-    beforeEach(() => {
-        stubClient();
-    });
-
     it("should render", () => {
         const cli = createTestClient();
         const { asFragment } = renderTimelineEventEditor(cli);
