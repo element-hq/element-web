@@ -3765,6 +3765,7 @@
         "ban_room_confirm_title": "Ban from %(roomName)s",
         "ban_space_everything": "Ban them from everything I'm able to",
         "ban_space_specific": "Ban them from specific things I'm able to",
+        "ban_success": "%(user)s was banned",
         "deactivate_confirm_action": "Deactivate user",
         "deactivate_confirm_description": "Deactivating this user will remove their devices and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
         "deactivate_confirm_title": "Deactivate user?",
@@ -3792,6 +3793,7 @@
         "kick_button_space_everything": "Remove them from everything I'm able to",
         "kick_space_specific": "Remove them from specific things I'm able to",
         "kick_space_warning": "They'll still be able to access whatever you're not an admin of.",
+        "kick_success": "%(user)s was removed",
         "promote_warning": "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.",
         "redact": {
             "confirm_button": {
@@ -3823,6 +3825,7 @@
         "unban_space_everything": "Unban them from everything I'm able to",
         "unban_space_specific": "Unban them from specific things I'm able to",
         "unban_space_warning": "They won't be able to access whatever you're not an admin of.",
+        "unban_success": "%(user)s was unbanned",
         "unignore_button": "Unignore",
         "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",

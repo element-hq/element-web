@@ -15,6 +15,8 @@ import { bulkSpaceBehaviour } from "../../../../../utils/space";
 import ConfirmSpaceUserActionDialog from "../../../../views/dialogs/ConfirmSpaceUserActionDialog";
 import ConfirmUserActionDialog from "../../../../views/dialogs/ConfirmUserActionDialog";
 import ErrorDialog from "../../../../views/dialogs/ErrorDialog";
+import GenericToast from "../../../../views/toasts/GenericToast";
+import ToastStore from "../../../../../stores/ToastStore";
 import { type RoomAdminToolsProps } from "./UserInfoAdminToolsContainerViewModel";
 
 export interface BanButtonState {
@@ -129,9 +131,21 @@ export const useBanButtonViewModel = (props: RoomAdminToolsProps): BanButtonStat
         bulkSpaceBehaviour(room, rooms, (room) => fn(room.roomId))
             .then(
                 () => {
-                    // NO-OP; rely on the m.room.member event coming down else we could
-                    // get out of sync if we force setState here!
                     logger.info("Ban success");
+                    const toastKey = `ban-success-${member.userId}`;
+                    ToastStore.sharedInstance().addOrReplaceToast({
+                        key: toastKey,
+                        title: _t("common|success"),
+                        props: {
+                            description: isBanned
+                                ? _t("user_info|unban_success", { user: member.name })
+                                : _t("user_info|ban_success", { user: member.name }),
+                            primaryLabel: _t("action|ok"),
+                            onPrimaryClick: () => ToastStore.sharedInstance().dismissToast(toastKey),
+                        },
+                        component: GenericToast,
+                        priority: 40,
+                    });
                 },
                 function (err) {
                     logger.error("Ban error: " + err);
