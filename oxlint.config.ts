@@ -130,7 +130,7 @@ export default defineConfig({
         "no-eq-null": "off",
         "no-proto": "off", // TODO
         "promise/catch-or-return": "off",
-        "node/no-process-env": "off", // TODO
+        "node/no-process-env": "off", // We enable this for src in overrides
         "node/no-path-concat": "off", // TODO
         "node/handle-callback-err": "off", // TODO
         "unicorn/no-array-reduce": "off",
@@ -261,6 +261,7 @@ export default defineConfig({
                         message: "Please use TypedEventEmitter instead",
                     },
                 ],
+                "node/no-process-env": "error",
 
                 // Enable this in the future, it has a lot of false positives right now
                 // "react/react-compiler": "error",
@@ -300,6 +301,13 @@ export default defineConfig({
                         ],
                     },
                 ],
+            },
+        },
+        {
+            files: ["apps/desktop/src/**/*", "packages/playwright-common/src/**/*"],
+            rules: {
+                // Electron app & Playwright common can use envvars
+                "node/no-process-env": "off",
             },
         },
         {
