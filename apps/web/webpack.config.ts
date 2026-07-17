@@ -48,8 +48,6 @@ if (process.env.SENTRY_DSN) {
     }
 }
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = "https://app.element.io/themes/element/img/logos/opengraph.png";
@@ -89,10 +87,13 @@ try {
     // ignore - not important
 }
 
+function resolve(specifier: string): string {
+    return fileURLToPath(import.meta.resolve(specifier));
+}
+
 // Get the root of a node_modules dependency the name of its import
 function getPackageRoot(dep: string, target = "package.json"): string {
-    const targetPath = import.meta.resolve(`${dep}${target ? "/" + target : ""}`);
-    return path.dirname(fileURLToPath(targetPath));
+    return path.dirname(resolve(`${dep}${target ? "/" + target : ""}`));
 }
 
 function parseOverridesToReplacements(overrides: Record<string, string>): webpack.NormalModuleReplacementPlugin[] {
@@ -102,8 +103,8 @@ function parseOverridesToReplacements(overrides: Record<string, string>): webpac
             // need to do anything special to protect against regex overrunning, etc.
             new RegExp(oldPath.replace(/\//g, "[\\/\\\\]").replace(/\./g, "\\.")),
             function (resource) {
-                resource.request = import.meta.resolve(newPath);
-                resource.createData.resource = import.meta.resolve(newPath);
+                resource.request = resolve(newPath);
+                resource.createData.resource = resolve(newPath);
                 // Starting with Webpack 5 we also need to set the context as otherwise replacing
                 // files in e.g. matrix-js-sdk with files from element-web will try to resolve
                 // them within matrix-js-sdk (https://github.com/webpack/webpack/issues/17716)
@@ -311,7 +312,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     test: /\.(ts|js)x?$/,
                     include: (f: string) => {
                         // our own source needs babel-ing
-                        if (f.startsWith(import.meta.resolve("src"))) return true;
+                        if (f.startsWith(resolve("./src"))) return true;
 
                         // we use the original source files of js-sdk, so we need to
                         // run them through babel. Because the path tested is the resolved, absolute
@@ -448,7 +449,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     type: "javascript/auto",
                     use: [
                         {
-                            loader: path.join(__dirname, "recorder-worklet-loader.cjs"),
+                            loader: resolve("./recorder-worklet-loader.cjs"),
                         },
                         {
                             loader: "babel-loader",
@@ -717,25 +718,25 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
-                    { from: ".well-known/**", context: import.meta.resolve("res") },
+                    { from: ".well-known/**", context: resolve("./res") },
                     "res/jitsi_external_api.min.js",
                     "res/jitsi_external_api.min.js.LICENSE.txt",
                     "res/manifest.json",
-                    { from: "themes/**", context: import.meta.resolve("res") },
-                    { from: "vector-icons/**", context: import.meta.resolve("res") },
-                    { from: "decoder-ring/**", context: import.meta.resolve("res") },
-                    { from: "media/**", context: import.meta.resolve("res/") },
+                    { from: "themes/**", context: resolve("./res") },
+                    { from: "vector-icons/**", context: resolve("./res") },
+                    { from: "decoder-ring/**", context: resolve("./res") },
+                    { from: "media/**", context: resolve("./res/") },
                     { from: "config.json", noErrorOnMissing: true },
                     // Element Call embedded widget
                     {
                         from: "**",
                         context: path.join(getPackageRoot("@element-hq/element-call-embedded"), "dist"),
-                        to: path.join(__dirname, "webapp", "widgets", "element-call"),
+                        to: resolve("./webapp/widgets/element-call"),
                     },
                     // Mobile guide assets
                     {
                         from: "assets/**",
-                        context: import.meta.resolve("src/vector/mobile_guide"),
+                        context: resolve("./src/vector/mobile_guide"),
                         to: "mobile_guide",
                     },
                 ],
@@ -765,7 +766,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         ],
 
         output: {
-            path: path.join(__dirname, "webapp"),
+            path: resolve("./webapp"),
 
             // There are a lot of assets that need to be kept in sync with each other
             // (once a user loads one version of the app, they need to keep being served

@@ -13,10 +13,11 @@ Please see LICENSE files in the repository root for full details.
 
 import * as fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import ts from "typescript";
 
-const ROOT = import.meta.resolve("..");
+const ROOT = fileURLToPath(import.meta.resolve(".."));
 const SETTINGS_DIR = path.join(ROOT, "apps/web/src/settings");
 const SETTINGS_FILE = path.join(SETTINGS_DIR, "Settings.tsx");
 

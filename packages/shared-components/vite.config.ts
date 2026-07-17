@@ -7,6 +7,7 @@
  */
 
 import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin, type Plugin } from "vite";
 import dts from "unplugin-dts/vite";
 import react from "@vitejs/plugin-react";
@@ -25,7 +26,7 @@ function layerCssAssets(): Plugin {
         // the `element-` prefix), so we rename on disk to keep the path stable for
         // consumers importing `@element-hq/web-shared-components/.../*.css`.
         writeBundle(options): void {
-            const outDir = options.dir ?? import.meta.resolve("dist");
+            const outDir = options.dir ?? fileURLToPath(import.meta.resolve("dist"));
             const expectedPath = path.resolve(outDir, cssAssetFileName);
             const renamedFromPath = path.resolve(outDir, "web-shared-components.css");
 
@@ -52,8 +53,8 @@ export default defineConfig({
             // pulling in the rest of the package — which transitively loads dnd-kit and
             // other window/document-dependent code.
             entry: {
-                "element-web-shared-components": import.meta.resolve("src/index.ts"),
-                "numbers": import.meta.resolve("src/core/utils/numbers.ts"),
+                "element-web-shared-components": fileURLToPath(import.meta.resolve("./src/index.ts")),
+                "numbers": fileURLToPath(import.meta.resolve("./src/core/utils/numbers.ts")),
             },
             name: "Element Web Shared Components",
             // Multi-entry mode needs both formats explicit; UMD doesn't support multi-entry
@@ -97,7 +98,8 @@ export default defineConfig({
             bundleTypes: {
                 invokeOptions: {
                     localBuild: !!process.env.CI,
-                    typescriptCompilerFolder: path.resolve(import.meta.resolve("@typescript/old"), "../.."),
+                    // oxlint-disable-next-line unicorn/prefer-module
+                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
                 },
             },
             include: ["src/**/*.{ts,tsx}"],

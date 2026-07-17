@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 import dts from "unplugin-dts/vite";
 import externalGlobals from "rollup-plugin-external-globals";
@@ -15,7 +16,7 @@ import packageJson from "./package.json" with { type: "json" };
 export default defineConfig({
     build: {
         lib: {
-            entry: import.meta.resolve("src/index.ts"),
+            entry: fileURLToPath(import.meta.resolve("./src/index.ts")),
             name: "element-web-plugin-engine",
             fileName: "element-web-plugin-engine",
         },
@@ -29,7 +30,8 @@ export default defineConfig({
                 configPath: "./api-extractor.json",
                 invokeOptions: {
                     localBuild: !!process.env.CI,
-                    typescriptCompilerFolder: path.resolve(import.meta.resolve("@typescript/old"), "../.."),
+                    // oxlint-disable-next-line unicorn/prefer-module
+                    typescriptCompilerFolder: path.resolve(require.resolve("@typescript/old"), "../.."),
                 },
             },
         }),

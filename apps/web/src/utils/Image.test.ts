@@ -9,10 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { blobIsAnimated, mayBeAnimated } from "./Image";
 
-const imagesDir = import.meta.resolve("../../test/unit-tests/images");
+const imagesDir = fileURLToPath(import.meta.resolve("../../test/unit-tests/images"));
 
 describe("Image", () => {
     describe("mayBeAnimated", () => {
