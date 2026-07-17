@@ -552,6 +552,13 @@ export default defineConfig({
                 "unicorn/prefer-module": "off",
             },
         },
+        {
+            files: ["apps/web/test/**/*-test.*"],
+            rules: {
+                // Jest is still CommonJS
+                "unicorn/prefer-module": "off",
+            },
+        },
     ],
 });
 

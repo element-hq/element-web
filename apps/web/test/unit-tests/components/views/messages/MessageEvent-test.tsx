@@ -11,6 +11,7 @@ import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import fetchMock from "@fetch-mock/jest";
 import fs from "node:fs";
+import path from "node:path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
@@ -18,7 +19,6 @@ import MessageEvent from "../../../../../src/components/views/messages/MessageEv
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { Mjolnir } from "../../../../../src/mjolnir/Mjolnir";
-import { fileURLToPath } from "node:url";
 
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
@@ -190,7 +190,7 @@ describe("MessageEvent", () => {
 
         function mockMedia() {
             fetchMock.getOnce("https://server/_matrix/media/v3/download/server/image", {
-                body: fs.readFileSync(fileURLToPath(import.meta.resolve("../../../images/animated-logo.webp"))),
+                body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
             });
         }
 
