@@ -79,6 +79,8 @@ describe("KeyStoragePanelViewModel", () => {
                 auth_data: {
                     public_key: "foobar",
                 },
+                count: 0,
+                etag: "",
             },
             trustInfo,
         });
@@ -100,6 +102,8 @@ describe("KeyStoragePanelViewModel", () => {
                 auth_data: {
                     public_key: "foobar",
                 },
+                count: 0,
+                etag: "",
             },
             trustInfo: {
                 trusted: false,

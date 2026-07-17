@@ -33,25 +33,19 @@ interface IBridgeStateEvent {
     protocol: {
         id: string;
         displayname?: string;
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
-        // eslint-disable-next-line camelcase
         external_url?: string;
     };
     network?: {
         id: string;
         displayname?: string;
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
-        // eslint-disable-next-line camelcase
         external_url?: string;
     };
     channel: {
         id: string;
         displayname?: string;
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
-        // eslint-disable-next-line camelcase
         external_url?: string;
     };
 }

@@ -32,6 +32,15 @@ export function setupMacosTitleBar(window: BrowserWindow): void {
                 /* 19px original top value, 32px margin-top above, 12px original margin-top value */
                 top: calc(19px + 32px - 12px) !important;
             }
+            /* Widen the collapsed space panel so its right-hand separator clears the
+               traffic light buttons. The buttons are inset 9px (see trafficLightPosition
+               in electron-main) and the three-button cluster is ~52px wide, ending ~61px
+               from the window edge; against the default 68px rail the separator crowds the
+               green button. 76px restores ~15px of clearance, matching the compound 4x
+               spacing step. */
+            .mx_SpacePanel.collapsed {
+                width: 76px !important;
+            }
             /* Prevent the media lightbox sender info from clipping into the traffic light buttons */
             .mx_ImageView_info_wrapper {
                 margin-top: 32px;

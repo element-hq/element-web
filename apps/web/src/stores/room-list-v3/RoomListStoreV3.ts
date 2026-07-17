@@ -272,8 +272,16 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             }
 
             case "MatrixActions.Room.tags": {
+                // Re-sort on any tag change, but don't emit ROOM_TAGGED_EVENT here: the js-sdk
+                // re-emits RoomEvent.Tags for every m.tag on every sync, which would show a spurious
+                // "chat moved" toast on load. It is emitted from tagRoom.success below instead.
                 const room = payload.room;
                 this.addRoomAndEmit(room);
+                break;
+            }
+
+            case "RoomListActions.tagRoom.success": {
+                // Tag change initiated by the local user, so surface the "chat moved" toast.
                 this.emit(ROOM_TAGGED_EVENT);
                 break;
             }

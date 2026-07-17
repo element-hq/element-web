@@ -857,6 +857,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     aria-multiline="true"
                     aria-autocomplete="list"
                     aria-haspopup="listbox"
+                    // This is not strictly speaking a supported role, we should investigate the impact of this in the future
+                    // oxlint-disable-next-line jsx-a11y/role-supports-aria-props
                     aria-expanded={hasAutocomplete ? !this.autocompleteRef.current?.state.hide : undefined}
                     aria-owns={hasAutocomplete ? "mx_Autocomplete" : undefined}
                     aria-activedescendant={activeDescendant}

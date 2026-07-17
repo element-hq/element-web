@@ -14,7 +14,6 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 const email = "user@nowhere.dummy";
 
 const test = base.extend({
-    // eslint-disable-next-line no-empty-pattern
     credentials: async ({}, use, testInfo) => {
         await use({
             username: `user_${testInfo.testId}`,

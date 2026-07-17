@@ -23,7 +23,6 @@ const makeDeviceExtendedInfo = (
     client: clientName && [clientName, clientVersion].filter(Boolean).join(" "),
 });
 
-/* eslint-disable max-len */
 const ANDROID_UA = [
     // New User Agent Implementation
     "Element dbg/1.5.0-dev (Xiaomi Mi 9T; Android 11; RKQ1.200826.002 test-keys; Flavour GooglePlay; MatrixAndroidSdk2 1.5.2)",
@@ -108,7 +107,6 @@ const MISC_EXPECTED_RESULT = [
     makeDeviceExtendedInfo(DeviceType.Unknown, undefined, undefined, undefined, undefined),
     makeDeviceExtendedInfo(DeviceType.Unknown, undefined, undefined, undefined, undefined),
 ];
-/* eslint-disable max-len */
 
 describe("parseUserAgent()", () => {
     it("returns deviceType unknown when user agent is falsy", () => {

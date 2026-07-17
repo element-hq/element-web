@@ -128,6 +128,7 @@ const BaseCard: React.FC<IProps> = ({
                                     weight="medium"
                                     className="mx_BaseCard_header_title_heading"
                                     role="heading"
+                                    aria-level={1}
                                 >
                                     {header}
                                 </Text>

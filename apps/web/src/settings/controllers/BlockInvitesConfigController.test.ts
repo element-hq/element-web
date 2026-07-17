@@ -6,24 +6,26 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
 
-import { SETTINGS } from "../../../../src/settings/Settings";
-import { stubClient } from "../../../test-utils";
-import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { SETTINGS } from "../Settings";
+import MatrixClientBackedController from "./MatrixClientBackedController";
+import { SettingLevel } from "../SettingLevel.ts";
 
 describe("BlockInvitesConfigController", () => {
     describe("When server does not support MSC4380", () => {
         let cli: MatrixClient;
         beforeEach(() => {
             cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async () => false);
+            cli.doesServerSupportUnstableFeature = vi.fn(async () => false);
             MatrixClientBackedController.matrixClient = cli;
         });
 
-        test("settingDisabled() should give a message", () => {
+        it("settingDisabled() should give a message", () => {
             const controller = SETTINGS.blockInvites.controller!;
             expect(controller.settingDisabled).toEqual("Your server does not implement this feature.");
         });
@@ -33,13 +35,13 @@ describe("BlockInvitesConfigController", () => {
         let cli: MatrixClient;
         beforeEach(async () => {
             cli = stubClient();
-            cli.doesServerSupportUnstableFeature = jest.fn(async (feature) => {
+            cli.doesServerSupportUnstableFeature = vi.fn(async (feature) => {
                 return feature == "org.matrix.msc4380.stable";
             });
             MatrixClientBackedController.matrixClient = cli;
         });
 
-        test("settingDisabled() should be false", () => {
+        it("settingDisabled() should be false", () => {
             const controller = SETTINGS.blockInvites.controller!;
             expect(controller.settingDisabled).toEqual(false);
         });
@@ -85,7 +87,7 @@ describe("BlockInvitesConfigController", () => {
  * in response to any request for `m.invite_permission_config`.
  */
 function mockAccountData(cli: MatrixClient, mockAccountData: object) {
-    mocked(cli.getAccountData).mockImplementation((eventType) => {
+    vi.mocked(cli.getAccountData).mockImplementation((eventType) => {
         if (eventType == "m.invite_permission_config") {
             return new MatrixEvent({
                 type: "m.invite_permission_config",

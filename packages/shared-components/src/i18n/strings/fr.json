@@ -233,6 +233,23 @@
                 "call_declined": "Appel refusé",
                 "call_declined_by_us": "Vous avez rejeté un appel"
             },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s a démarré un appel",
+                    "join_button": "Rejoindre"
+                },
+                "dm": {
+                    "call_started": "Appel démarré",
+                    "title": "Appel en cours"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s participant",
+                        "other": "%(count)s participants"
+                    },
+                    "title": "Appel de groupe en cours"
+                }
+            },
             "tombstone": {
                 "room": {
                     "title": "L'appel de groupe est terminé"
