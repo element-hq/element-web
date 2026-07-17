@@ -160,6 +160,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/tallImage.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -190,6 +191,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/element.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -396,6 +398,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/tallImage.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
@@ -426,6 +429,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
           aria-label="View image"
           class="LinkPreview-module_preview"
           style="background-image: url("/static/element.png");"
+          type="button"
         />
         <div
           class="LinkPreview-module_textContent"
