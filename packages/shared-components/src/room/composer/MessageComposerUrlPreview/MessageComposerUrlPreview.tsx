@@ -83,8 +83,8 @@ function hashCode(str: string): number {
     return hash;
 }
 
-function urlFirstChar(url: string): string {
-    return (url.split("://")[1] ?? "?").slice(0, 1).toUpperCase();
+function hostNameFirstChar(hostName: string): string {
+    return hostName.slice(0, 1).toUpperCase();
 }
 
 /**
@@ -109,98 +109,79 @@ export function MessageComposerUrlPreviewView({
     const previewViews = collapsed
         ? null
         : links.map((entry) => {
-              const hostName = new URL(entry.matched_url).hostname;
+              const hostname = new URL(entry.matched_url).hostname;
+              let entryIcon: JSX.Element;
+              let entryTitle: string;
+              let showTooltipOnLink: boolean;
+
               switch (entry.status) {
-                  case "loaded": {
+                  case "loaded":
                       const thumbnail = entry.preview?.image?.imageThumb !== undefined && (
                           <img src={entry.preview.image?.imageThumb} alt={entry.preview.image.alt} />
                       );
-                      return (
-                          <div key={entry.matched_url} className={classNames(className, styles.container)}>
-                              <div className={styles.left}>
-                                  <div
-                                      className={styles.entryIcon}
-                                      style={
-                                          thumbnail
-                                              ? {}
-                                              : {
-                                                    backgroundColor: `hsl(${hashCode(hostName)}, 100%, var(--icon-lightness))`,
-                                                }
-                                      }
-                                  >
-                                      {thumbnail || urlFirstChar(entry.matched_url)}
-                                  </div>
-                                  <div className={styles.text}>
-                                      <LinkTitle {...entry.preview} classes={[styles.linkTitle]} />
-                                      <LinkSiteName siteName={hostName} classes={[styles.linkSiteName]} />
-                                  </div>
-                              </div>
-                              {removePreview ? (
-                                  <button
-                                      onClick={() => removePreview(entry.matched_url)}
-                                      className={classNames(styles.removePreview, styles.spanLike)}
-                                  >
-                                      <CloseIcon />
-                                  </button>
-                              ) : null}
+                      entryIcon = (
+                          <div
+                              className={styles.entryIcon}
+                              style={
+                                  thumbnail
+                                      ? {}
+                                      : {
+                                            backgroundColor: `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`,
+                                        }
+                              }
+                          >
+                              {thumbnail || hostNameFirstChar(hostname)}
                           </div>
                       );
-                  }
+                      entryTitle = entry.preview.title;
+                      showTooltipOnLink = entry.preview.showTooltipOnLink;
+                      break;
+
                   case "loading":
-                      return (
-                          <div key={entry.matched_url} className={classNames(className, styles.container)}>
-                              <div className={styles.left}>
-                                  <div className={styles.loadingSpinner}>
-                                      <InlineSpinner />
-                                  </div>
-                                  <div className={styles.text}>
-                                      <LinkTitle
-                                          title="Fetching preview..."
-                                          showTooltipOnLink={false}
-                                          link={entry.matched_url}
-                                          classes={[styles.linkTitle]}
-                                      />
-                                      <LinkSiteName siteName={hostName} classes={[styles.linkSiteName]} />
-                                  </div>
-                              </div>
-                              {removePreview ? (
-                                  <button
-                                      onClick={() => removePreview(entry.matched_url)}
-                                      className={classNames(styles.removePreview, styles.spanLike)}
-                                  >
-                                      <CloseIcon />
-                                  </button>
-                              ) : null}
+                      entryIcon = (
+                          <div className={styles.loadingSpinner}>
+                              <InlineSpinner />
                           </div>
                       );
+                      entryTitle = "Fetching preview...";
+                      showTooltipOnLink = false;
+                      break;
+
                   case "failed":
-                      return (
-                          <div key={entry.matched_url} className={classNames(className, styles.container)}>
-                              <div className={styles.left}>
-                                  <div className={styles.failedIcon}>
-                                      <ErrorIcon />
-                                  </div>
-                                  <div className={styles.text}>
-                                      <LinkTitle
-                                          title="Failed to fetch preview"
-                                          showTooltipOnLink={false}
-                                          link={entry.matched_url}
-                                          classes={[styles.linkTitle]}
-                                      />
-                                      <LinkSiteName siteName={hostName} classes={[styles.linkSiteName]} />
-                                  </div>
-                              </div>
-                              {removePreview ? (
-                                  <button
-                                      onClick={() => removePreview(entry.matched_url)}
-                                      className={classNames(styles.removePreview, styles.spanLike)}
-                                  >
-                                      <CloseIcon />
-                                  </button>
-                              ) : null}
+                      entryIcon = (
+                          <div className={styles.failedIcon}>
+                              <ErrorIcon />
                           </div>
                       );
+                      entryTitle = "Failed to fetch preview";
+                      showTooltipOnLink = false;
+                      break;
               }
+
+              return (
+                  <div key={entry.matched_url} className={classNames(className, styles.container)}>
+                      <div className={styles.left}>
+                          {entryIcon}
+                          <div className={styles.text}>
+                              <LinkTitle
+                                  title={entryTitle}
+                                  showTooltipOnLink={showTooltipOnLink}
+                                  link={entry.matched_url}
+                                  classes={[styles.linkTitle]}
+                              />
+                              <LinkSiteName siteName={hostname} classes={[styles.linkSiteName]} />
+                          </div>
+                      </div>
+                      {removePreview ? (
+                          <button
+                              onClick={() => removePreview(entry.matched_url)}
+                              className={classNames(styles.removePreview, styles.spanLike)}
+                          >
+                              <CloseIcon />
+                          </button>
+                      ) : null}
+                  </div>
+              );
           });
 
     const summary = (
@@ -208,53 +189,44 @@ export function MessageComposerUrlPreviewView({
             <span className={styles.left}>
                 <span className={styles.icons}>
                     {links.map((entry) => {
+                        let backgroundColor: string | undefined = undefined;
+                        let icon: JSX.Element;
                         switch (entry.status) {
                             case "failed":
-                                return (
-                                    <div
-                                        key={entry.matched_url}
-                                        className={styles.summaryIcon}
-                                        style={{ backgroundColor: "var(--cpd-color-bg-critical-primary)" }}
-                                    >
-                                        <ErrorIcon />
-                                    </div>
-                                );
+                                backgroundColor = "var(--cpd-color-bg-critical-primary)";
+                                icon = <ErrorIcon />;
+                                break;
                             case "loading":
-                                return (
-                                    <div
-                                        key={entry.matched_url}
-                                        className={styles.summaryIcon}
-                                        style={{ backgroundColor: "var(--cpd-color-bg-subtle-primary)" }}
-                                    >
-                                        <InlineSpinner />
-                                    </div>
-                                );
+                                backgroundColor = "var(--cpd-color-bg-subtle-primary)";
+                                icon = <InlineSpinner />;
+                                break;
                             case "loaded": {
-                                const siteName = new URL(entry.matched_url).hostname;
+                                const hostname = new URL(entry.matched_url).hostname;
                                 if (entry.preview.image !== undefined) {
-                                    return (
-                                        <div key={entry.matched_url} className={styles.summaryIcon}>
-                                            <img
-                                                src={entry.preview.siteIcon || entry.preview.image.imageThumb}
-                                                alt={entry.preview.image.alt}
-                                            />
-                                        </div>
+                                    icon = (
+                                        <img
+                                            src={entry.preview.siteIcon || entry.preview.image.imageThumb}
+                                            alt={entry.preview.image.alt}
+                                        />
                                     );
                                 } else {
-                                    return (
-                                        <div
-                                            key={entry.matched_url}
-                                            className={styles.summaryIcon}
-                                            style={{
-                                                backgroundColor: `hsl(${hashCode(siteName)}, 100%, var(--icon-lightness))`,
-                                            }}
-                                        >
-                                            {urlFirstChar(entry.matched_url)}
-                                        </div>
-                                    );
+                                    icon = <>{hostNameFirstChar(hostname)}</>;
+                                    backgroundColor = `hsl(${hashCode(hostname)}, 100%, var(--icon-lightness))`;
                                 }
                             }
                         }
+
+                        return (
+                            <div
+                                key={entry.matched_url}
+                                className={styles.summaryIcon}
+                                style={{
+                                    backgroundColor,
+                                }}
+                            >
+                                {icon}
+                            </div>
+                        );
                     })}
                 </span>
                 <span className={styles.linkCount}>
