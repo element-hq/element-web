@@ -1171,14 +1171,14 @@
             "you": "你已加入通话"
         },
         "m.call.hangup": {
-            "user": "%(senderName)s 结束了通话",
-            "you": "你结束了通话"
+            "user": "%(senderName)s 已结束通话",
+            "you": "你已结束通话"
         },
         "m.call.invite": {
             "dm_receive": "%(senderName)s 正在通话",
             "dm_send": "等待接听",
-            "user": "%(senderName)s 开始了通话",
-            "you": "你开始了通话"
+            "user": "%(senderName)s 已开始通话",
+            "you": "你已开始通话"
         },
         "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
@@ -1571,6 +1571,8 @@
         "sliding_sync_disabled_notice": "重新登录以禁用",
         "sliding_sync_server_no_support": "服务器缺少支持",
         "unrealiable_e2e": "在加密房间中不可靠",
+        "url_preview_bundle": "URL 预览组件（MSC4095）",
+        "url_preview_bundle_description": "在消息的一侧随消息内容一并发送 URL 预览",
         "video_rooms": "视频房间",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中语音与视频聊天的新方式。",
         "video_rooms_always_on_voip_channels": "视频房间是嵌入到 %(brand)s 并始终在线的 VoIP 渠道。",
@@ -3351,7 +3353,7 @@
         "m.call.invite": {
             "answered_elsewhere": "已在别处接听",
             "call_back_prompt": "回拨",
-            "declined": "来电被拒接",
+            "declined": "通话已被拒接",
             "failed_connect_media": "无法连接媒体",
             "failed_connection": "连接失败",
             "failed_opponent_media": "其设备无法开启摄像头或麦克风",
@@ -3391,7 +3393,7 @@
             }
         },
         "m.poll.end": {
-            "sender_ended": "%(senderName)s 结束了投票"
+            "sender_ended": "%(senderName)s 已结束投票"
         },
         "m.poll.start": "%(senderName)s 发起投票： %(pollQuestion)s",
         "m.room.avatar": {
@@ -3499,7 +3501,7 @@
         },
         "m.widget": {
             "added": "%(senderName)s 添加了小部件：%(widgetName)s",
-            "jitsi_ended": "%(senderName)s 结束了视频会议",
+            "jitsi_ended": "%(senderName)s 已结束视频会议",
             "jitsi_join_right_prompt": "从右侧的房间信息卡片加入会议",
             "jitsi_join_top_prompt": "在此房间加入会议的前排",
             "jitsi_started": "%(senderName)s 已开始视频会议",
@@ -3550,7 +3552,7 @@
         },
         "redaction": "消息已被 %(name)s 删除",
         "reply": {
-            "error_loading": "无法加载已回复的事件，该事件可能不存在或你无权查看。",
+            "error_loading": "无法加载曾回复过的事件；该事件可能不存在或你无权查看。",
             "in_reply_to": "<a>回复给</a> <pill>",
             "in_reply_to_for_export": "回复<a>此消息</a>"
         },

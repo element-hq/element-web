@@ -179,7 +179,6 @@ interface IState {
     // What the LoggedInView would be showing if visible.
     // A member of the enum for standard pages or a string for those provided by
     // a module.
-    // eslint-disable-next-line camelcase
     page_type?: PageType | string;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
@@ -188,11 +187,8 @@ interface IState {
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId: string | null;
     // Parameters used in the registration dance with the IS
-    // eslint-disable-next-line camelcase
     register_client_secret?: string;
-    // eslint-disable-next-line camelcase
     register_session_id?: string;
-    // eslint-disable-next-line camelcase
     register_id_sid?: string;
     isMobileRegistration?: boolean;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
@@ -641,11 +637,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (this.state.view === Views.LOCK_STOLEN) {
             logger.warn(`MatrixChat: ignoring action ${payload.action} as session lock has been stolen`);
             return;
-        }
-
-        // Exclude some rather spammy actions from being logged.
-        if (payload.action != Action.UserActivity) {
-            logger.debug(`MatrixChat: handling action ${payload.action}`);
         }
 
         // Start the onboarding process for certain actions

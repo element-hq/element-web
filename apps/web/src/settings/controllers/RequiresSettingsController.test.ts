@@ -5,12 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Capabilities } from "matrix-js-sdk/src/matrix";
-import RequiresSettingsController from "../../../../src/settings/controllers/RequiresSettingsController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../../test-utils";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { type Capabilities } from "matrix-js-sdk/src/matrix";
+import { getMockClientWithEventEmitter, mockClientMethodsServer } from "test-utils";
+
+import RequiresSettingsController from "./RequiresSettingsController";
+import { SettingLevel } from "../SettingLevel";
+import SettingsStore from "../SettingsStore";
+import MatrixClientBackedController from "./MatrixClientBackedController";
 
 describe("RequiresSettingsController", () => {
     afterEach(() => {
@@ -39,14 +43,14 @@ describe("RequiresSettingsController", () => {
         beforeEach(() => {
             client = getMockClientWithEventEmitter({
                 ...mockClientMethodsServer(),
-                getCachedCapabilities: jest.fn().mockImplementation(() => {}),
-                getCapabilities: jest.fn().mockRejectedValue({}),
+                getCachedCapabilities: vi.fn().mockImplementation(() => {}),
+                getCapabilities: vi.fn().mockRejectedValue({}),
             });
             MatrixClientBackedController["_matrixClient"] = client;
         });
 
         afterEach(() => {
-            jest.restoreAllMocks();
+            vi.restoreAllMocks();
         });
 
         it("will disable setting if capability check is true", async () => {

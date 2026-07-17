@@ -197,7 +197,6 @@ const Entry: React.FC<IEntryProps<any>> = ({ room, type, content, matrixClient: 
  */
 const transformEvent = (event: MatrixEvent, cli: MatrixClient): { type: string; content: IContent } => {
     const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
         // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
         ...content

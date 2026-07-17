@@ -5,13 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type UserStatus } from "@element-hq/web-shared-components";
+import { _td, type UserStatus } from "@element-hq/web-shared-components";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+
+import { _t } from "../languageHandler";
 
 // MSC4426 defines the maximum length of a status to be 256 bytes of UTF-8,
 // so we truncate anything longer than that.
 const MAX_STATUS_TEXT_BYTES = 256;
+
+// We don't use the actual UserStatus type here as we want to translate the string at runtime,
+// so we can make the types reflect the fact it's not ready for human consumption.
+const ON_A_CALL_STATUS = {
+    emoji: "📞",
+    textKey: _td("user_status|on_a_call"),
+};
 
 // Static Intl.Segmenter for grabbing the first grapheme of a user status emoji.
 // We make one and keep it for performance.
@@ -32,7 +41,7 @@ export function userStatusTextWithinMaxLength(text: string): boolean {
  * @param rawUserStatus The raw user status object to validate.
  * @returns A UserStatus object if valid, otherwise undefined.
  */
-export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefined {
+function validateUserStatus(rawUserStatus: unknown): UserStatus | undefined {
     if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
         return undefined;
     }
@@ -51,8 +60,38 @@ export function validateUserStatus(rawUserStatus: unknown): UserStatus | undefin
 }
 
 /**
- * Fetch the MSC4426 user status of the given user. Returns undefined if the server does not
- * support extended profiles, the user has no (valid) status, or the status could not be fetched.
+ * Takes the raw result from getExtendedProfileProperty for m.call, validates it and
+ * returns true a UserStatus object reflect it, undefined if there is no status or it
+ * does not say that the user is on a call.
+ * Designed to be the same API as validateUserStatus for simplicty.
+ * @param rawCallStatus
+ */
+function validateMCallStatus(rawCallStatus: unknown): UserStatus | undefined {
+    if (!rawCallStatus || typeof rawCallStatus !== "object") return undefined;
+    if (!("call_joined_ts" in rawCallStatus) || typeof rawCallStatus.call_joined_ts !== "number") return undefined;
+    if (rawCallStatus.call_joined_ts > 0) return { emoji: ON_A_CALL_STATUS.emoji, text: _t(ON_A_CALL_STATUS.textKey) };
+
+    return undefined;
+}
+
+/**
+ * Takes both MSC4426 user status fields (m.status and m.call) and returns a UserStatus
+ * object that reflects the information they represent.
+ */
+export function userStatusFromProfile(userStatus: unknown, callStatus: unknown): UserStatus | undefined {
+    const validatedUserStatus = validateUserStatus(userStatus);
+    if (validatedUserStatus) return validatedUserStatus;
+
+    const validatedCallStatus = validateMCallStatus(callStatus);
+    if (validatedCallStatus) return validatedCallStatus;
+
+    return undefined;
+}
+
+/**
+ * Fetch the MSC4426 user status of the given user, taking into account m.call if present.
+ * Returns undefined if the server does not support extended profiles, the user has no
+ * (valid) status, or the status could not be fetched.
  *
  * @param client The Matrix client to fetch the status with.
  * @param userId The ID of the user whose status is being fetched.
@@ -61,14 +100,29 @@ export async function fetchUserStatus(client: MatrixClient, userId: string): Pro
     if ((await client.doesServerSupportExtendedProfiles()) === false) {
         return undefined;
     }
+
+    let rawUserStatus: unknown;
+    let rawCallStatus: unknown;
+
     try {
-        return validateUserStatus(await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.status"));
+        // nb. one of these may be redundant since one takes precedence over the other, but the two
+        // are fetched in the same call by the js-sdk anyway so it will only be one API call and this
+        // is simpler and duplicates less logic.
+        rawUserStatus = await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.status");
     } catch (ex) {
         if (!(ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND")) {
-            logger.warn(`Failed to get userStatus for ${userId}`, ex);
+            logger.warn(`Failed to get user status for ${userId}`, ex);
         }
-        return undefined;
     }
+
+    try {
+        rawCallStatus = await client.getExtendedProfileProperty(userId, "org.matrix.msc4426.call");
+    } catch (ex) {
+        if (!(ex instanceof MatrixError && ex.errcode === "M_NOT_FOUND")) {
+            logger.warn(`Failed to get call status for ${userId}`, ex);
+        }
+    }
+    return userStatusFromProfile(rawUserStatus, rawCallStatus);
 }
 
 /**

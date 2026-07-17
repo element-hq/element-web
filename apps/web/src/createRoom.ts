@@ -51,8 +51,6 @@ import { SDKContextClass } from "./contexts/SDKContextClass.ts";
 import SdkConfig from "./SdkConfig";
 
 // we define a number of interfaces which take their names from the js-sdk
-/* eslint-disable camelcase */
-
 export interface IOpts {
     dmUserId?: string;
     /**

@@ -6,17 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
 import { EventType, type MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import * as TestUtilsMatrix from "test-utils";
 
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import Modal, { type ComponentType, type ComponentProps } from "../../../src/Modal";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import MultiInviter, { type CompletionStates } from "../../../src/utils/MultiInviter";
-import * as TestUtilsMatrix from "../../test-utils";
-import AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
-import ConfirmUserActionDialog from "../../../src/components/views/dialogs/ConfirmUserActionDialog";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import Modal, { type ComponentType, type ComponentProps } from "../Modal";
+import SettingsStore from "../settings/SettingsStore";
+import MultiInviter, { type CompletionStates } from "./MultiInviter";
+import AskInviteAnywayDialog from "../components/views/dialogs/AskInviteAnywayDialog";
+import ConfirmUserActionDialog from "../components/views/dialogs/ConfirmUserActionDialog";
 
 const ROOMID = "!room:server";
 
@@ -34,19 +36,23 @@ const MXID_PROFILE_STATES: Record<string, () => {}> = {
     },
 };
 
-jest.mock("../../../src/Modal", () => ({
-    createDialog: jest.fn(),
+vi.mock("../Modal", () => ({
+    default: {
+        createDialog: vi.fn(),
+    },
 }));
 
-jest.mock("../../../src/settings/SettingsStore", () => ({
-    getValue: jest.fn(),
-    monitorSetting: jest.fn(),
-    watchSetting: jest.fn(),
+vi.mock("../settings/SettingsStore", () => ({
+    default: {
+        getValue: vi.fn(),
+        monitorSetting: vi.fn(),
+        watchSetting: vi.fn(),
+    },
 }));
 
 const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
-    mocked(SettingsStore.getValue).mockImplementation(
-        (settingName: string, roomId: string, _excludeDefault = false): any => {
+    vi.mocked(SettingsStore.getValue).mockImplementation(
+        (settingName: string, roomId?: string | null, _excludeDefault = false): any => {
             if (settingName === "promptBeforeInviteUnknownUsers" && roomId === ROOMID) {
                 return value;
             }
@@ -55,12 +61,14 @@ const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
 };
 
 const mockCreateTrackedDialog = (callbackName: "onInviteAnyways" | "onGiveUp") => {
-    mocked(Modal.createDialog).mockImplementation((Element: ComponentType, props?: ComponentProps<ComponentType>) => {
-        if (Element === AskInviteAnywayDialog) {
-            (props as ComponentProps<typeof AskInviteAnywayDialog>)[callbackName]();
-        }
-        return { close: jest.fn(), finished: new Promise(() => {}) };
-    });
+    vi.mocked(Modal.createDialog).mockImplementation(
+        (Element: ComponentType, props?: ComponentProps<ComponentType>) => {
+            if (Element === AskInviteAnywayDialog) {
+                (props as ComponentProps<typeof AskInviteAnywayDialog>)[callbackName]();
+            }
+            return { close: vi.fn(), finished: new Promise(() => {}) };
+        },
+    );
 };
 
 const expectAllInvitedResult = (result: CompletionStates) => {
@@ -72,34 +80,34 @@ const expectAllInvitedResult = (result: CompletionStates) => {
 };
 
 describe("MultiInviter", () => {
-    let client: jest.Mocked<MatrixClient>;
+    let client: Mocked<MatrixClient>;
     let inviter: MultiInviter;
 
     beforeEach(() => {
-        jest.resetAllMocks();
-        mocked(Modal.createDialog).mockReturnValue({ close: jest.fn(), finished: new Promise(() => {}) });
+        vi.resetAllMocks();
+        vi.mocked(Modal.createDialog).mockReturnValue({ close: vi.fn(), finished: new Promise(() => {}) });
 
         TestUtilsMatrix.stubClient();
-        client = MatrixClientPeg.safeGet() as jest.Mocked<MatrixClient>;
+        client = vi.mocked(MatrixClientPeg.safeGet());
 
-        client.invite = jest.fn();
+        client.invite = vi.fn();
         client.invite.mockResolvedValue({});
 
-        client.getProfileInfo = jest.fn();
+        client.getProfileInfo = vi.fn();
         client.getProfileInfo.mockImplementation(async (userId: string) => {
             const m = MXID_PROFILE_STATES[userId];
             if (m) return m();
             throw new Error();
         });
-        client.unban = jest.fn();
+        client.unban = vi.fn();
 
         inviter = new MultiInviter(client, ROOMID);
     });
 
     describe("invite", () => {
         it("should show a progress dialog while the invite happens", async () => {
-            const mockModalHandle = { close: jest.fn(), finished: new Promise<[]>(() => {}) };
-            mocked(Modal.createDialog).mockReturnValue(mockModalHandle);
+            const mockModalHandle = { close: vi.fn(), finished: new Promise<[]>(() => {}) };
+            vi.mocked(Modal.createDialog).mockReturnValue(mockModalHandle);
 
             const invitePromise = Promise.withResolvers<{}>();
             client.invite.mockReturnValue(invitePromise.promise);
@@ -163,7 +171,7 @@ describe("MultiInviter", () => {
         });
 
         it("should show sensible error when attempting 3pid invite with no identity server", async () => {
-            client.inviteByEmail = jest.fn().mockRejectedValueOnce(
+            client.inviteByEmail = vi.fn().mockRejectedValueOnce(
                 new MatrixError({
                     errcode: "ORG.MATRIX.JSSDK_MISSING_PARAM",
                 }),
@@ -175,7 +183,7 @@ describe("MultiInviter", () => {
         });
 
         it("should ask if user wants to unban user if they have permission", async () => {
-            mocked(Modal.createDialog).mockImplementation(
+            vi.mocked(Modal.createDialog).mockImplementation(
                 (Element: ComponentType, props?: ComponentProps<ComponentType>): any => {
                     // We stub out the modal with an immediate affirmative (proceed) return
                     return { finished: Promise.resolve([true]) };
@@ -183,7 +191,7 @@ describe("MultiInviter", () => {
             );
 
             const room = new Room(ROOMID, client, client.getSafeUserId());
-            mocked(client.getRoom).mockReturnValue(room);
+            vi.mocked(client.getRoom).mockReturnValue(room);
             const ourMember = new RoomMember(ROOMID, client.getSafeUserId());
             ourMember.membership = KnownMembership.Join;
             ourMember.powerLevel = 100;
@@ -206,7 +214,7 @@ describe("MultiInviter", () => {
         });
 
         it("should show sensible error when attempting to invite over federation with m.federate=false", async () => {
-            mocked(client.invite).mockRejectedValueOnce(
+            vi.mocked(client.invite).mockRejectedValueOnce(
                 new MatrixError({
                     errcode: "M_FORBIDDEN",
                 }),
@@ -222,7 +230,7 @@ describe("MultiInviter", () => {
                     room_id: ROOMID,
                 }),
             ]);
-            mocked(client.getRoom).mockReturnValue(room);
+            vi.mocked(client.getRoom).mockReturnValue(room);
 
             await inviter.invite(["@user:other_server"]);
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
@@ -231,7 +239,7 @@ describe("MultiInviter", () => {
         });
 
         it("should show sensible error when attempting to invite over federation with m.federate=false to space", async () => {
-            mocked(client.invite).mockRejectedValueOnce(
+            vi.mocked(client.invite).mockRejectedValueOnce(
                 new MatrixError({
                     errcode: "M_FORBIDDEN",
                 }),
@@ -248,7 +256,7 @@ describe("MultiInviter", () => {
                     room_id: ROOMID,
                 }),
             ]);
-            mocked(client.getRoom).mockReturnValue(room);
+            vi.mocked(client.getRoom).mockReturnValue(room);
 
             await inviter.invite(["@user:other_server"]);
             expect(inviter.getErrorText("@user:other_server")).toMatchInlineSnapshot(
