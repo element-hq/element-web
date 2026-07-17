@@ -29,18 +29,17 @@ button.preview {
     }
 
     .preview {
-        width: 40px;
-        height: 40px;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         border-radius: 8px;
         border: none;
         flex-shrink: 0;
+        aspect-ratio: 1;
     }
 
-    .siteName {
-        line-height: 17.5px;
+    .siteName span {
+        line-height: 135%;
     }
 
     .title,
