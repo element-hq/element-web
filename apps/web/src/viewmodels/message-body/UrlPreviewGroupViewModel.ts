@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MsgType, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     type UrlPreview,
@@ -17,6 +17,7 @@ import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/t
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { UrlPreviewFetcher } from "../../utils/UrlPreviewFetcher";
+import { type RoomMessageEventContent } from "../../../@types/url-preview";
 
 // From https://github.com/matrix-org/matrix-spec-proposals/pull/4095
 export const BUNDLED_LINK_PREVIEWS = "com.beeper.linkpreviews";
@@ -41,6 +42,7 @@ export interface UrlPreviewGroupViewModelProps {
     mediaVisible: boolean;
     showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
+    urlPreviewBundleEnabled: boolean;
 }
 
 export class UrlPreviewGroupViewModel
@@ -167,14 +169,29 @@ export class UrlPreviewGroupViewModel
         }
 
         const loadMedia = this.visibility === PreviewVisibility.Visible;
-        const previews =
-            this.visibility <= PreviewVisibility.UserHidden
-                ? []
-                : await Promise.all(
-                      this.links
-                          .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                          .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
-                  );
+        let previews: (UrlPreview | null)[] | undefined;
+
+        if (this.visibility <= PreviewVisibility.UserHidden) {
+            previews = [];
+        }
+
+        const content = this.props.mxEvent.getContent();
+        if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
+            const messageContent = content as RoomMessageEventContent;
+
+            if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
+                previews = messageContent[BUNDLED_LINK_PREVIEWS]
+                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                    .map((preview) => this.fetcher.previewFromBundle(preview));
+            }
+        }
+
+        previews ??= await Promise.all(
+            this.links
+                .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+        );
+
         this.snapshot.merge({
             previews: previews.filter((p) => !!p),
             totalPreviewCount: this.links.length,

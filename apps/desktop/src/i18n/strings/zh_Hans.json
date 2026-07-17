@@ -52,6 +52,11 @@
         "services": "服务",
         "unhide": "显示"
     },
+    "renderer_crash": {
+        "detail": "退出并重新打开 app 以继续。如果问题仍然存在，重启电脑或清除缓存或许有用。",
+        "message": "%(brand)s 已经多次从故障中恢复，但仍然反复发生，因此已停止尝试。",
+        "title": "%(brand)s 仍在持续崩溃"
+    },
     "right_click_menu": {
         "add_to_dictionary": "添加到字典",
         "copy_email": "复制邮箱地址",

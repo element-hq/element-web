@@ -402,6 +402,8 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         let background: JSX.Element;
         if (hasBackground) {
             background = (
+                // We break the rule here as this is a mouse-only interaction
+                // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
                 <div
                     className="mx_ContextualMenu_background"
                     style={wrapperStyle}
