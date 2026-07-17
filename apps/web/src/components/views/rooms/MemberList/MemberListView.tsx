@@ -10,6 +10,8 @@ import React, { type JSX, useCallback } from "react";
 import { Flex, type VirtualizedListContext, FlatVirtualizedList } from "@element-hq/web-shared-components";
 
 import {
+    CALL_PARTICIPANT_SEPARATOR,
+    isMemberListSeparator,
     type MemberWithSeparator,
     SEPARATOR,
     useMemberListViewModel,
@@ -39,8 +41,20 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
     const { callParticipantUserIds, isPresenceEnabled, memberCount } = vm;
 
+    const callParticipantSeparatorIndex = vm.members.indexOf(CALL_PARTICIPANT_SEPARATOR);
+    const inviteSeparatorIndex = vm.members.indexOf(SEPARATOR);
+    const getMemberIndex = useCallback(
+        (index: number): number =>
+            index -
+            Number(callParticipantSeparatorIndex >= 0 && callParticipantSeparatorIndex < index) -
+            Number(inviteSeparatorIndex >= 0 && inviteSeparatorIndex < index),
+        [callParticipantSeparatorIndex, inviteSeparatorIndex],
+    );
+
     const getItemKey = useCallback((item: MemberWithSeparator): string => {
-        if (item === SEPARATOR) {
+        if (item === CALL_PARTICIPANT_SEPARATOR) {
+            return "call-participant-separator";
+        } else if (item === SEPARATOR) {
             return "separator";
         } else if (item.member) {
             return `member-${item.member.userId}`;
@@ -59,8 +73,12 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             const itemKey = getItemKey(item);
             const isRovingItem = itemKey === context.tabIndexKey;
             const focused = isRovingItem && context.focused;
-            if (item === SEPARATOR) {
-                return <hr className="mx_MemberListView_separator" />;
+            if (isMemberListSeparator(item)) {
+                const className =
+                    item === CALL_PARTICIPANT_SEPARATOR
+                        ? "mx_MemberListView_separator mx_MemberListView_callParticipantSeparator"
+                        : "mx_MemberListView_separator";
+                return <hr className={className} />;
             } else if (item.member) {
                 return (
                     <RoomMemberTileView
@@ -70,7 +88,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         showPresence={isPresenceEnabled}
                         focused={focused}
                         tabIndex={isRovingItem ? 0 : -1}
-                        index={index}
+                        memberIndex={getMemberIndex(index)}
                         memberCount={memberCount}
                         onFocus={onFocus}
                     />
@@ -82,18 +100,18 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                         threePidInvite={item.threePidInvite}
                         focused={focused}
                         tabIndex={isRovingItem ? 0 : -1}
-                        memberIndex={index - 1} // Adjust as invites are below the separator
+                        memberIndex={getMemberIndex(index)}
                         memberCount={memberCount}
                         onFocus={onFocus}
                     />
                 );
             }
         },
-        [callParticipantUserIds, isPresenceEnabled, getItemKey, memberCount],
+        [callParticipantUserIds, getItemKey, getMemberIndex, isPresenceEnabled, memberCount],
     );
 
     const isItemFocusable = useCallback((item: MemberWithSeparator): boolean => {
-        return item !== SEPARATOR;
+        return !isMemberListSeparator(item);
     }, []);
 
     return (

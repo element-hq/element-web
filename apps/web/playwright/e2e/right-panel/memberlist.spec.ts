@@ -106,55 +106,109 @@ test.describe("Memberlist", () => {
     });
 
     test("shows which room members are participating in a call", async ({ page, app, homeserver }) => {
-        const caller = new Bot(page, homeserver, {
-            displayName: "Caller",
-            autoAcceptInvites: false,
-            startClient: true,
-        });
-        await caller.joinRoom(roomId);
-        await caller.awaitRoomMembership(roomId);
-        const callerUserId = await caller.evaluate((client) => client.getSafeUserId());
+        const callers = [
+            new Bot(page, homeserver, {
+                displayName: "Caller One",
+                autoAcceptInvites: false,
+                startClient: true,
+            }),
+            new Bot(page, homeserver, {
+                displayName: "Caller Two",
+                autoAcceptInvites: false,
+                startClient: true,
+            }),
+        ];
+        for (const caller of callers) {
+            await caller.joinRoom(roomId);
+            await caller.awaitRoomMembership(roomId);
+        }
+        const callerUserIds = await Promise.all(
+            callers.map((caller) => caller.evaluate((client) => client.getSafeUserId())),
+        );
         await app.viewRoomByName(ROOM_NAME);
         const memberlist = await app.toggleMemberlistPanel();
-        const callerTile = memberlist.locator(".mx_MemberTileView").filter({ hasText: "Caller" });
-        const callIcon = callerTile.locator(".mx_RoomMemberTileView_callIcon");
-        await expect(callIcon).toHaveCount(0);
+        const callerTiles = callers.map((_, index) =>
+            memberlist.locator(".mx_MemberTileView").filter({
+                has: page.getByText(`Caller ${index === 0 ? "One" : "Two"}`, { exact: true }),
+            }),
+        );
+        const callIcons = callerTiles.map((tile) => tile.locator(".mx_RoomMemberTileView_callIcon"));
+        await expect(callIcons[0]).toHaveCount(0);
+        await expect(callIcons[1]).toHaveCount(0);
 
-        await caller.evaluate((client, roomId) => {
-            const room = client.getRoom(roomId)!;
-            const userId = client.getSafeUserId();
-            const deviceId = client.getDeviceId()!;
-            client.matrixRTC
-                .getRoomSession(room)
-                .joinRTCSession({ userId, deviceId, memberId: `${userId}:${deviceId}` }, [], undefined, {
-                    callIntent: "video",
-                });
-        }, roomId);
+        for (const caller of callers) {
+            await caller.evaluate((client, roomId) => {
+                const room = client.getRoom(roomId)!;
+                const userId = client.getSafeUserId();
+                const deviceId = client.getDeviceId()!;
+                client.matrixRTC
+                    .getRoomSession(room)
+                    .joinRTCSession({ userId, deviceId, memberId: `${userId}:${deviceId}` }, [], undefined, {
+                        callIntent: "video",
+                    });
+            }, roomId);
+        }
 
         await expect
             .poll(
                 () =>
                     app.client.evaluate(
-                        (client, { roomId, callerUserId }) => {
+                        (client, { roomId, callerUserIds }) => {
                             const room = client.getRoom(roomId)!;
-                            return client.matrixRTC
-                                .getRoomSession(room)
-                                .memberships.some((membership) => membership.userId === callerUserId);
+                            const participantUserIds = new Set(
+                                client.matrixRTC
+                                    .getRoomSession(room)
+                                    .memberships.map((membership) => membership.userId),
+                            );
+                            return callerUserIds.every((userId) => participantUserIds.has(userId));
                         },
-                        { roomId, callerUserId },
+                        { roomId, callerUserIds },
                     ),
                 { timeout: 15_000 },
             )
             .toBe(true);
 
-        await expect(callIcon).toBeVisible();
-        await expect(callerTile).toHaveAccessibleName("Caller, in a call");
-        await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(1);
-
-        await caller.evaluate(async (client, roomId) => {
+        await expect(callIcons[0]).toBeVisible();
+        await expect(callIcons[1]).toBeVisible();
+        await expect(callerTiles[0]).toHaveAccessibleName("Caller One, in a call");
+        await expect(callerTiles[1]).toHaveAccessibleName("Caller Two, in a call");
+        await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(2);
+        await expect(memberlist.getByRole("option").nth(0)).toHaveAccessibleName("Caller One, in a call");
+        await expect(memberlist.getByRole("option").nth(1)).toHaveAccessibleName("Caller Two, in a call");
+        await expect(memberlist.locator(".mx_MemberListView_callParticipantSeparator")).toHaveCount(1);
+        await expect(memberlist.locator(".mx_MemberListView_separator")).toHaveCount(2);
+        expect(
+            await memberlist.getByRole("option").evaluateAll((options) =>
+                options.map((option) => ({
+                    position: Number(option.getAttribute("aria-posinset")),
+                    size: Number(option.getAttribute("aria-setsize")),
+                })),
+            ),
+        ).toEqual([
+            { position: 1, size: 6 },
+            { position: 2, size: 6 },
+            { position: 3, size: 6 },
+            { position: 4, size: 6 },
+            { position: 5, size: 6 },
+            { position: 6, size: 6 },
+        ]);
+        await callers[0].evaluate(async (client, roomId) => {
             const room = client.getRoom(roomId)!;
             await client.matrixRTC.getRoomSession(room).leaveRoomSession(5_000);
         }, roomId);
-        await expect(callIcon).toHaveCount(0, { timeout: 10_000 });
+        await expect(callIcons[0]).toHaveCount(0, { timeout: 10_000 });
+        await expect(callIcons[1]).toBeVisible();
+        await expect(memberlist.getByRole("option").first()).toHaveAccessibleName("Caller Two, in a call");
+        await expect(memberlist.locator(".mx_RoomMemberTileView_callIcon")).toHaveCount(1);
+        await expect(memberlist.locator(".mx_MemberListView_callParticipantSeparator")).toHaveCount(1);
+
+        await callers[1].evaluate(async (client, roomId) => {
+            const room = client.getRoom(roomId)!;
+            await client.matrixRTC.getRoomSession(room).leaveRoomSession(5_000);
+        }, roomId);
+        await expect(callIcons[1]).toHaveCount(0, { timeout: 10_000 });
+        await expect(memberlist.locator(".mx_MemberListView_callParticipantSeparator")).toHaveCount(0);
+        await expect(memberlist.locator(".mx_MemberListView_separator")).toHaveCount(1);
+        await expect(memberlist.getByRole("option").first()).not.toHaveAccessibleName(/Caller/);
     });
 });

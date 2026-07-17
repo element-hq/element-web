@@ -28,7 +28,7 @@ interface IProps {
     item: MemberWithSeparator;
     member: RoomMember;
     isCallParticipant?: boolean;
-    index: number;
+    memberIndex: number;
     memberCount: number;
     showPresence?: boolean;
     focused?: boolean;
@@ -105,7 +105,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             iconJsx={iconJsx}
             focused={props.focused}
             tabIndex={props.tabIndex}
-            memberIndex={props.index - (member.isInvite ? 1 : 0)} // Adjust as invites are below the seperator
+            memberIndex={props.memberIndex}
             memberCount={props.memberCount}
         />
     );

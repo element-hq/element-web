@@ -102,7 +102,16 @@ export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
 }
 
 export const SEPARATOR = "SEPARATOR";
-export type MemberWithSeparator = Member | typeof SEPARATOR;
+/** Separator placed between active call participants and other joined members. */
+export const CALL_PARTICIPANT_SEPARATOR = "CALL_PARTICIPANT_SEPARATOR";
+export type MemberWithSeparator = Member | typeof SEPARATOR | typeof CALL_PARTICIPANT_SEPARATOR;
+
+/** Returns whether a member-list item is a non-focusable separator. */
+export function isMemberListSeparator(
+    item: MemberWithSeparator,
+): item is typeof SEPARATOR | typeof CALL_PARTICIPANT_SEPARATOR {
+    return item === SEPARATOR || item === CALL_PARTICIPANT_SEPARATOR;
+}
 
 export interface MemberListViewState {
     members: MemberWithSeparator[];
@@ -276,8 +285,24 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         })();
     }, [loadMembers]);
 
+    const members = useMemo((): MemberWithSeparator[] => {
+        const items = Array.from(memberMap.values());
+        const joinedMembers = items.filter(
+            (item): item is Member => !isMemberListSeparator(item) && !!item.member && !item.member.isInvite,
+        );
+        const callParticipants = joinedMembers.filter((item) => callParticipantUserIds.has(item.member!.userId));
+        const otherJoinedMembers = joinedMembers.filter((item) => !callParticipantUserIds.has(item.member!.userId));
+
+        if (callParticipants.length === 0 || otherJoinedMembers.length === 0) return items;
+
+        const invitesAndSeparator = items.filter(
+            (item) => isMemberListSeparator(item) || !item.member || item.member.isInvite,
+        );
+        return [...callParticipants, CALL_PARTICIPANT_SEPARATOR, ...otherJoinedMembers, ...invitesAndSeparator];
+    }, [callParticipantUserIds, memberMap]);
+
     return {
-        members: Array.from(memberMap.values()),
+        members,
         memberCount,
         callParticipantUserIds,
         search: loadMembers,
