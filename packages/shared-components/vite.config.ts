@@ -26,7 +26,7 @@ function layerCssAssets(): Plugin {
         // the `element-` prefix), so we rename on disk to keep the path stable for
         // consumers importing `@element-hq/web-shared-components/.../*.css`.
         writeBundle(options): void {
-            const outDir = options.dir ?? fileURLToPath(import.meta.resolve("dist"));
+            const outDir = options.dir ?? fileURLToPath(import.meta.resolve("./dist"));
             const expectedPath = path.resolve(outDir, cssAssetFileName);
             const renamedFromPath = path.resolve(outDir, "web-shared-components.css");
 

@@ -26,7 +26,7 @@ import {
     MatrixRTCSessionManagerEvents,
 } from "matrix-js-sdk/src/matrixrtc";
 
-import type EventEmitter from "node:events";
+import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";
 import SettingsStore from "../settings/SettingsStore";
 import { timeout } from "../utils/promise";

@@ -52,7 +52,7 @@ export default defineConfig({
                     // The plugin will run tests for the stories defined in your Storybook config
                     // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
                     storybookTest({
-                        configDir: fileURLToPath(import.meta.resolve("./.storybook")),
+                        configDir: "./.storybook",
                         storybookScript: "storybook --ci",
                         tags: {
                             exclude: ["skip-test"],

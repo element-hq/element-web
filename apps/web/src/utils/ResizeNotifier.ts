@@ -15,7 +15,7 @@ Please see LICENSE files in the repository root for full details.
  * @event module:utils~ResizeNotifier#"middlePanelResizedNoisy"
  */
 
-import { EventEmitter } from "node:events";
+import { EventEmitter } from "events";
 import { throttle } from "lodash";
 
 export default class ResizeNotifier extends EventEmitter {

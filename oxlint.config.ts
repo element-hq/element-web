@@ -244,7 +244,7 @@ export default defineConfig({
     },
     overrides: [
         {
-            files: ["apps/web/src/**/*", "{packages,modules}/*/src/**/*"],
+            files: ["{packages,apps,modules}/*/src/**/*"],
             rules: {
                 "no-restricted-globals": [
                     "error",
@@ -254,19 +254,15 @@ export default defineConfig({
                         message: "Buffer is not available in the web.",
                     },
                 ],
-            },
-        },
-        {
-            files: ["{packages,apps,modules}/*/src/**/*"],
-            rules: {
                 "no-restricted-imports": [
                     "error",
                     {
-                        name: "node:events",
+                        name: "events",
                         message: "Please use TypedEventEmitter instead",
                     },
                 ],
                 "node/no-process-env": "error",
+                "unicorn/prefer-node-protocol": "off",
 
                 // Enable this in the future, it has a lot of false positives right now
                 // "react/react-compiler": "error",
@@ -316,6 +312,8 @@ export default defineConfig({
                 "apps/web/module_system/**/*",
             ],
             rules: {
+                "no-restricted-globals": "off",
+                "unicorn/prefer-node-protocol": "error",
                 // These files can use envvars
                 "node/no-process-env": "off",
                 // They do not depend on js-sdk for access to TypedEventEmitter so disable this rule
