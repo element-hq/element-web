@@ -11,6 +11,7 @@ import { mocked } from "jest-mock";
 import {
     clearUserStatus,
     fetchUserStatus,
+    setUserOnCall,
     setUserStatus,
     userStatusFromProfile,
     userStatusTextWithinMaxLength,
@@ -148,6 +149,32 @@ describe("userStatus utils", () => {
             clearUserStatus(client);
 
             expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.status", null);
+        });
+    });
+
+    describe("setUserOnCall", () => {
+        let client: MatrixClient;
+
+        beforeEach(() => {
+            client = stubClient();
+        });
+
+        it("sets the call status with the current time if onCall is true", () => {
+            jest.useFakeTimers().setSystemTime(12345);
+
+            setUserOnCall(client, true);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", {
+                call_joined_ts: 12345,
+            });
+
+            jest.useRealTimers();
+        });
+
+        it("clears the call status if onCall is false", () => {
+            setUserOnCall(client, false);
+
+            expect(client.setExtendedProfileProperty).toHaveBeenCalledWith("org.matrix.msc4426.call", null);
         });
     });
 });

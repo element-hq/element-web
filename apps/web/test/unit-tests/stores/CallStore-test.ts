@@ -9,9 +9,10 @@ import { type CallMembership, MatrixRTCSessionManagerEvents } from "matrix-js-sd
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { type MockedObject } from "jest-mock";
 
-import { ElementCall } from "../../../src/models/Call";
+import { type Call, CallEvent, ConnectionState, ElementCall } from "../../../src/models/Call";
 import { CallStore } from "../../../src/stores/CallStore";
 import SdkConfig from "../../../src/SdkConfig";
+import * as userStatus from "../../../src/utils/userStatus";
 import {
     setUpClientRoomAndStores,
     cleanUpClientRoomAndStores,
@@ -22,6 +23,7 @@ import {
 describe("CallStore", () => {
     let client: MockedObject<MatrixClient>;
     let room: Room;
+
     beforeEach(() => {
         enableCalls();
         const res = setUpClientRoomAndStores();
@@ -82,5 +84,32 @@ describe("CallStore", () => {
         expect(CallStore.instance.getConfiguredRTCTransports()).toEqual([{ type: "type-a", some_data: "value" }]);
         expect(client.waitForClientWellKnown).not.toHaveBeenCalled();
         expect(client.getClientWellKnown).not.toHaveBeenCalled();
+    });
+
+    describe("connectedCalls", () => {
+        let call: Call;
+
+        beforeEach(async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, client);
+            jest.spyOn(userStatus, "setUserOnCall").mockResolvedValue();
+
+            const session = client.matrixRTC.getRoomSession(room);
+            session.memberships.push({} as CallMembership);
+            client.matrixRTC.emit(MatrixRTCSessionManagerEvents.SessionStarted, room.roomId, session);
+            call = CallStore.instance.getCall(room.roomId)!;
+        });
+
+        it("calls setUserOnCall(true) when the user connects to their first call", () => {
+            call.emit(CallEvent.ConnectionState, ConnectionState.Connected, ConnectionState.Disconnected);
+            expect(userStatus.setUserOnCall).toHaveBeenCalledWith(client, true);
+        });
+
+        it("calls setUserOnCall(false) when the user disconnects from their last call", () => {
+            call.emit(CallEvent.ConnectionState, ConnectionState.Connected, ConnectionState.Disconnected);
+            jest.mocked(userStatus.setUserOnCall).mockClear();
+
+            call.emit(CallEvent.ConnectionState, ConnectionState.Disconnected, ConnectionState.Connected);
+            expect(userStatus.setUserOnCall).toHaveBeenCalledWith(client, false);
+        });
     });
 });
