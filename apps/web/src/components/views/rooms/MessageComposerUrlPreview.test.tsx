@@ -73,9 +73,10 @@ describe("MessageComposerUrlPreview", () => {
         });
 
         const realGetValue = SettingsStore.getValue;
-        vi.spyOn(SettingsStore, "getValue").mockImplementation(((settingsName, roomId, excludeDefault) =>
-            settingsName === "composerUrlPreviewCollapsed" || realGetValue(settingsName, roomId, excludeDefault)
-        ));
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(
+            (settingsName, roomId, excludeDefault) =>
+                settingsName === "composerUrlPreviewCollapsed" || realGetValue(settingsName, roomId, excludeDefault),
+        );
     });
     afterEach(() => {
         window.mxModuleApi = originalMxModuleApi;
