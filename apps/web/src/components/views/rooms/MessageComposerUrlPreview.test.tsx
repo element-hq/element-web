@@ -110,7 +110,7 @@ describe("MessageComposerUrlPreview", () => {
         );
         await waitFor(
             () => {
-                expect(getByText("Example.org")).toBeDefined();
+                expect(getByText("This is an example!")).toBeDefined();
             },
             { timeout: DEBOUNCE_REQUEST_TIMEOUT_MS },
         );
