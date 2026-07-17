@@ -42,8 +42,10 @@ type Result = {
 };
 
 /**
- * Return the greatest notification level of all thread, the list of rooms with unread threads, and their notification level.
- * The result is computed when the client syncs, or when forceComputation is true
+ * Return the unread threads split into "my threads" and "other threads", the rooms that
+ * contribute at least one displayed thread, and the greatest notification level across them.
+ * See {@link computeUnreadThreadRooms} for how threads are categorised.
+ * The result is computed when the client syncs, or when forceComputation is true.
  * @param forceComputation
  * @returns {Result}
  */
@@ -153,51 +155,20 @@ function computeUnreadThreadRooms(
         let roomContributedThread = false;
 
         for (const thread of room.getThreads()) {
-            // Primary signal: server-reported notification counts (authoritative).
-            const highlight = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Highlight);
-            const total = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Total);
-            const hasServerNotifs = highlight > 0 || total > 0;
+            const unread = evaluateThreadUnread(mxClient, room, thread);
+            if (!unread) continue;
 
-            // Fallback: local timeline inspection — surfaces threads the homeserver
-            // hasn't pushed notification counts for. Computed lazily (skip when the
-            // server already gave us a signal).
-            //
-            // doesTimelineHaveUnreadMessages can report a participated thread as
-            // unread when we replied but aren't the *literal* last sender (a later
-            // reaction/edit, or a message that doesn't trigger an unread count,
-            // landed after our reply). The js-sdk's read shortcut only fires for the
-            // very last event (see the "second-last event" TODO in room-receipts.ts),
-            // so the latest incoming message — older than our reply — looks unread.
-            // Guard against it: if our own latest reply is at/after the latest
-            // incoming message, we've read the thread.
-            const hasLocalActivity =
-                hasServerNotifs ||
-                (doesTimelineHaveUnreadMessages(room, thread.events) && hasUnreadAfterMyLatestReply(mxClient, thread));
-
-            if (!hasServerNotifs && !hasLocalActivity) continue;
-
-            const threadNotifLevel =
-                highlight > 0
-                    ? NotificationLevel.Highlight
-                    : total > 0
-                      ? NotificationLevel.Notification
-                      : NotificationLevel.Activity;
-
-            // "My threads" is relevant to the user: participated OR mentioned/keyword.
-            const isRelevantToMe = thread.hasCurrentUserParticipated || highlight > 0;
-
-            if (isRelevantToMe) {
-                // Always shown, even when the room is muted or settingTACOnlyNotifs is on.
-                participatingThreads.push({ thread, room, notificationLevel: threadNotifLevel });
-                roomContributedThread = true;
+            if (unread.isRelevantToMe) {
+                // "My threads": always shown, even when the room is muted or settingTACOnlyNotifs is on.
+                participatingThreads.push({ thread, room, notificationLevel: unread.notificationLevel });
             } else {
                 // Muted rooms shouldn't surface non-relevant threads in Other threads.
                 if (isRoomMuted) continue;
-                // Setting scopes to Other threads: when on, drop activity-only entries.
-                if (settingTACOnlyNotifs && !hasServerNotifs) continue;
-                otherThreads.push({ thread, room, notificationLevel: threadNotifLevel });
-                roomContributedThread = true;
+                // The setting scopes to Other threads: when on, drop activity-only entries.
+                if (settingTACOnlyNotifs && !unread.hasServerNotifs) continue;
+                otherThreads.push({ thread, room, notificationLevel: unread.notificationLevel });
             }
+            roomContributedThread = true;
         }
 
         // Only surface the room in the indicator if at least one of its threads is shown.
@@ -222,6 +193,58 @@ function computeUnreadThreadRooms(
     otherThreads.sort(sortThreads);
 
     return { greatestNotificationLevel, rooms: sortedRooms, participatingThreads, otherThreads };
+}
+
+/**
+ * The unread state of a single thread, or `null` when the thread has nothing unread to surface.
+ */
+type ThreadUnread = {
+    /** The notification level derived from the server counts (or {@link NotificationLevel.Activity} for local-only unreads). */
+    notificationLevel: NotificationLevel;
+    /** Whether the homeserver reported a notification count for the thread (as opposed to a local-only unread). */
+    hasServerNotifs: boolean;
+    /** Whether the thread belongs in "My threads": the user participated, or was mentioned/keyword-matched. */
+    isRelevantToMe: boolean;
+};
+
+/**
+ * Evaluate a single thread's unread state, preferring the homeserver's notification
+ * counts and falling back to local timeline inspection for threads the server hasn't
+ * pushed counts for.
+ *
+ * The local fallback is needed because {@link doesTimelineHaveUnreadMessages} can report a
+ * participated thread as unread when we replied but aren't the *literal* last sender (a later
+ * reaction/edit, or a message that doesn't trigger an unread count, landed after our reply).
+ * The js-sdk's read shortcut only fires for the very last event (see the "second-last event"
+ * TODO in room-receipts.ts), so the latest incoming message — older than our reply — looks
+ * unread. {@link hasUnreadAfterMyLatestReply} guards against that.
+ *
+ * @returns the thread's unread state, or `null` when there is nothing unread to surface.
+ */
+function evaluateThreadUnread(client: MatrixClient, room: Room, thread: Thread): ThreadUnread | null {
+    // Primary signal: server-reported notification counts (authoritative).
+    const highlight = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Highlight);
+    const total = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Total);
+    const hasServerNotifs = highlight > 0 || total > 0;
+
+    // Fallback: local timeline inspection, computed lazily (skip when the server already gave us a signal).
+    const hasUnread =
+        hasServerNotifs ||
+        (doesTimelineHaveUnreadMessages(room, thread.events) && hasUnreadAfterMyLatestReply(client, thread));
+    if (!hasUnread) return null;
+
+    const notificationLevel =
+        highlight > 0
+            ? NotificationLevel.Highlight
+            : total > 0
+              ? NotificationLevel.Notification
+              : NotificationLevel.Activity;
+
+    return {
+        notificationLevel,
+        hasServerNotifs,
+        isRelevantToMe: thread.hasCurrentUserParticipated || highlight > 0,
+    };
 }
 
 /**

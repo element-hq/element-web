@@ -107,11 +107,7 @@ describe("ThreadsActivityCentre", () => {
             authorId: "@other:bar",
             participantUserIds: ["@someone:bar"],
         });
-        roomWithOtherThread.setThreadUnreadNotificationCount(
-            otherThreadInfo.thread.id,
-            NotificationCountType.Total,
-            1,
-        );
+        roomWithOtherThread.setThreadUnreadNotificationCount(otherThreadInfo.thread.id, NotificationCountType.Total, 1);
         jest.spyOn(otherThreadInfo.thread, "hasCurrentUserParticipated", "get").mockReturnValue(false);
 
         // Thread by another user, but with a highlight for current user (keyword match)
