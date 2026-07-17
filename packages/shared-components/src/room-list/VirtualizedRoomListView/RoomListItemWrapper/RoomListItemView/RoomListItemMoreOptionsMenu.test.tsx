@@ -35,14 +35,14 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
 
     it("should render the more options button", () => {
         renderMenu();
-        expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "More options for General" })).toBeInTheDocument();
     });
 
     it("should open menu when clicked", async () => {
         const user = userEvent.setup();
         renderMenu();
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.getByRole("menu")).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canMarkAsRead: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.getByRole("menuitem", { name: "Mark as read" })).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canMarkAsRead: false });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.queryByRole("menuitem", { name: "Mark as read" })).not.toBeInTheDocument();
@@ -72,7 +72,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canMarkAsRead: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const markAsReadOption = screen.getByRole("menuitem", { name: "Mark as read" });
@@ -85,7 +85,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canMarkAsUnread: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.getByRole("menuitem", { name: "Mark as unread" })).toBeInTheDocument();
@@ -95,7 +95,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canMarkAsUnread: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const markAsUnreadOption = screen.getByRole("menuitem", { name: "Mark as unread" });
@@ -108,7 +108,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ isFavourite: false });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const favoriteOption = screen.getByRole("menuitemcheckbox", { name: "Favourited" });
@@ -123,7 +123,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ isFavourite: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const favoriteOption = screen.getByRole("menuitemcheckbox", { name: "Favourited" });
@@ -134,7 +134,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ isLowPriority: false });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const lowPriorityOption = screen.getByRole("menuitemcheckbox", { name: "Low priority" });
@@ -149,7 +149,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canInvite: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.getByRole("menuitem", { name: "Invite" })).toBeInTheDocument();
@@ -159,7 +159,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canInvite: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const inviteOption = screen.getByRole("menuitem", { name: "Invite" });
@@ -172,7 +172,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canCopyRoomLink: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.getByRole("menuitem", { name: "Copy room link" })).toBeInTheDocument();
@@ -182,7 +182,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu({ canCopyRoomLink: true });
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const copyLinkOption = screen.getByRole("menuitem", { name: "Copy room link" });
@@ -195,7 +195,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu();
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         expect(screen.getByRole("menuitem", { name: "Leave room" })).toBeInTheDocument();
@@ -205,7 +205,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         const user = userEvent.setup();
         renderMenu();
 
-        const button = screen.getByRole("button", { name: "More Options" });
+        const button = screen.getByRole("button", { name: "More options for General" });
         await user.click(button);
 
         const leaveRoomOption = screen.getByRole("menuitem", { name: "Leave room" });

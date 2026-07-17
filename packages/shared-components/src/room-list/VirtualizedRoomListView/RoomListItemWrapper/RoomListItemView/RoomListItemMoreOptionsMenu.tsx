@@ -57,7 +57,7 @@ export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuP
             align="start"
             trigger={
                 <IconButton
-                    tooltip={_t("room_list|room|more_options")}
+                    tooltip={accessibleLabel}
                     aria-label={accessibleLabel}
                     size="24px"
                     style={{ padding: "2px" }}
