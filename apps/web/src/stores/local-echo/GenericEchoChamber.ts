@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 
 import { type EchoContext } from "./EchoContext";

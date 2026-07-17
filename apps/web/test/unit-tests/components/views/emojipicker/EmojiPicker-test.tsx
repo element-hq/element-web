@@ -444,7 +444,7 @@ describe("EmojiPicker", function () {
             });
 
             // Focus on the category header
-            const peopleTab = container.querySelector('[title*="Smileys"]')!;
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
             peopleTab.focus();
             expect(peopleTab).toHaveFocus();
 
@@ -471,7 +471,7 @@ describe("EmojiPicker", function () {
             });
 
             // Focus on the category header
-            const peopleTab = container.querySelector('[title*="Smileys"]')!;
+            const peopleTab = container.querySelector<HTMLButtonElement>('[title*="Smileys"]')!;
             peopleTab.focus();
 
             // Press End to jump to last category

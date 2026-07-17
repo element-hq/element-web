@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallEvent, CallState, CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+// oxlint-disable-next-line no-restricted-imports
 import { EventEmitter } from "events";
 
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";

@@ -85,7 +85,7 @@ describe("<ImageView />", () => {
             <ImageView src="https://example.com/image.png" name="filename.png" onFinished={jest.fn()} />,
         );
 
-        const dialog = container.querySelector('[role="dialog"]')!;
+        const dialog = container.querySelector<HTMLElement>('[role="dialog"]')!;
         dialog?.focus();
 
         fireEvent.keyDown(dialog!, { key: "s", code: "KeyS", ctrlKey: true });

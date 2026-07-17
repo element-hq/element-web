@@ -257,14 +257,6 @@ export default defineConfig({
         {
             files: ["{packages,apps,modules}/*/src/**/*"],
             rules: {
-                "no-restricted-imports": [
-                    "error",
-                    {
-                        name: "events",
-                        message: "Please use TypedEventEmitter instead",
-                    },
-                ],
-
                 // Enable this in the future, it has a lot of false positives right now
                 // "react/react-compiler": "error",
             },
@@ -345,6 +337,10 @@ export default defineConfig({
                     "error",
                     {
                         paths: [
+                            {
+                                name: "events",
+                                message: "Please use TypedEventEmitter instead",
+                            },
                             {
                                 name: "react",
                                 importNames: ["forwardRef"],

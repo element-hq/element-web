@@ -238,7 +238,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                         highlightedOption: nextKey,
                     });
 
-                    this.dropdownRootElement?.querySelector(`#${this.props.id}__${nextKey}`)?.focus();
+                    this.dropdownRootElement?.querySelector<HTMLLIElement>(`#${this.props.id}__${nextKey}`)?.focus();
                 } else {
                     this.setState({ expanded: true });
                 }
@@ -249,7 +249,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                     this.setState({
                         highlightedOption: prevKey,
                     });
-                    this.dropdownRootElement?.querySelector(`#${this.props.id}__${prevKey}`)?.focus();
+                    this.dropdownRootElement?.querySelector<HTMLLIElement>(`#${this.props.id}__${prevKey}`)?.focus();
                 } else {
                     this.setState({ expanded: true });
                 }
