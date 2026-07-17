@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 
 const PREVIEW_URL_PATTERN = /.*\/_matrix\/(client\/v1\/media|media\/v3)\/preview_url.*/;
@@ -16,6 +17,11 @@ test.describe("Composer URL preview", () => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
         },
+    });
+
+    test.beforeEach(async ({ app }) => {
+        // Composer URL previews are collapsed by default; expand so the preview links render
+        await app.settings.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, false);
     });
 
     for (const editor of ["cider", "rich text"]) {
