@@ -7,7 +7,8 @@
  */
 
 import React, { type JSX, useState } from "react";
-import { Menu, MenuItem, NavBar, NavItem } from "@vector-im/compound-web";
+import { Menu, MenuItem, NavBar, NavItem, Text } from "@vector-im/compound-web";
+
 import { ThreadsActivityCentreButton } from "./ThreadsActivityCentreButton";
 import { _t } from "../../../../languageHandler";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
@@ -18,6 +19,8 @@ import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { type ThreadData, useUnreadThreadRooms } from "./useUnreadThreadRooms";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
+import { MessagePreviewStore } from "../../../../stores/message-preview/MessagePreviewStore";
+import { getSenderName } from "../../../../stores/message-preview/previews/utils";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -46,8 +49,14 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
     const [view, setView] = useState<TACView>(TACView.MyThreads);
     const roomsAndNotifications = useUnreadThreadRooms(open);
 
-    const myThreadsEmptyCaption = _t("threads_activity_centre|no_participating_threads_unread");
-    const otherThreadsEmptyCaption = _t("threads_activity_centre|no_other_unread_threads");
+    // The active tab selects which thread list and empty-state caption to render.
+    const [activeThreads, activeEmptyCaption] =
+        view === TACView.MyThreads
+            ? [
+                  roomsAndNotifications.participatingThreads,
+                  _t("threads_activity_centre|no_participating_threads_unread"),
+              ]
+            : [roomsAndNotifications.otherThreads, _t("threads_activity_centre|no_other_unread_threads")];
 
     return (
         <div
@@ -85,43 +94,37 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                 }
             >
                 {/* Tab toggle: My threads | Other threads */}
-                <NavBar className="mx_ThreadsActivityCentre_tabs" role="tablist" aria-label={_t("threads_activity_centre|header")}>
-                    <NavItem aria-controls="mx_ThreadsActivityCentre_panel" active={view === TACView.MyThreads} onClick={() => setView(TACView.MyThreads)}>
+                <NavBar
+                    className="mx_ThreadsActivityCentre_tabs"
+                    role="tablist"
+                    aria-label={_t("threads_activity_centre|header")}
+                >
+                    <NavItem
+                        aria-controls="mx_ThreadsActivityCentre_panel"
+                        active={view === TACView.MyThreads}
+                        onClick={() => setView(TACView.MyThreads)}
+                    >
                         {_t("threads_activity_centre|my_threads_tab")}
                     </NavItem>
-                    <NavItem aria-controls="mx_ThreadsActivityCentre_panel" active={view === TACView.OtherThreads} onClick={() => setView(TACView.OtherThreads)}>
+                    <NavItem
+                        aria-controls="mx_ThreadsActivityCentre_panel"
+                        active={view === TACView.OtherThreads}
+                        onClick={() => setView(TACView.OtherThreads)}
+                    >
                         {_t("threads_activity_centre|other_threads_tab")}
                     </NavItem>
                 </NavBar>
                 {/* Make the content of the pop-up scrollable */}
                 <div id="mx_ThreadsActivityCentre_panel" role="tabpanel" className="mx_ThreadsActivityCentre_rows">
-                    {view === TACView.MyThreads && (
-                        <>
-                            {roomsAndNotifications.participatingThreads.map((threadData) => (
-                                <ThreadsActivityCentreThreadRow
-                                    key={`${threadData.room.roomId}:${threadData.thread.id}`}
-                                    threadData={threadData}
-                                    onClick={() => setOpen(false)}
-                                />
-                            ))}
-                            {roomsAndNotifications.participatingThreads.length === 0 && (
-                                <div className="mx_ThreadsActivityCentre_emptyCaption">{myThreadsEmptyCaption}</div>
-                            )}
-                        </>
-                    )}
-                    {view === TACView.OtherThreads && (
-                        <>
-                            {roomsAndNotifications.otherThreads.map((threadData) => (
-                                <ThreadsActivityCentreThreadRow
-                                    key={`${threadData.room.roomId}:${threadData.thread.id}`}
-                                    threadData={threadData}
-                                    onClick={() => setOpen(false)}
-                                />
-                            ))}
-                            {roomsAndNotifications.otherThreads.length === 0 && (
-                                <div className="mx_ThreadsActivityCentre_emptyCaption">{otherThreadsEmptyCaption}</div>
-                            )}
-                        </>
+                    {activeThreads.map((threadData) => (
+                        <ThreadsActivityCentreThreadRow
+                            key={`${threadData.room.roomId}:${threadData.thread.id}`}
+                            threadData={threadData}
+                            onClick={() => setOpen(false)}
+                        />
+                    ))}
+                    {activeThreads.length === 0 && (
+                        <div className="mx_ThreadsActivityCentre_emptyCaption">{activeEmptyCaption}</div>
                     )}
                 </div>
             </Menu>
@@ -147,9 +150,11 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
     const { thread, room, notificationLevel } = threadData;
 
     const rootEvent = thread.rootEvent;
-    const senderId = rootEvent?.getSender() ?? "";
-    const senderName = senderId ? (room.getMember(senderId)?.rawDisplayName ?? senderId) : "";
-    const previewText = rootEvent?.getContent()?.body ?? "";
+    // getSenderName resolves the disambiguated member name, falling back to the raw user ID.
+    const senderName = rootEvent ? getSenderName(rootEvent) : "";
+    // Let the shared preview store render the message text — it handles edits, replies,
+    // emotes, HTML and non-message event types consistently with the room list.
+    const previewText = rootEvent ? MessagePreviewStore.instance.generatePreviewForEvent(rootEvent) : "";
 
     return (
         <MenuItem
@@ -161,10 +166,18 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
             onSelect={(event: Event) => {
                 onClick();
 
-                // Open the specific thread in that room's right panel
+                // Open the specific thread in that room's right panel. Set a two-card
+                // stack (thread list beneath the thread view) so the thread view gets a
+                // working back button, mirroring the canonical Action.ShowThread path.
                 if (thread.rootEvent) {
-                    RightPanelStore.instance.setCard(
-                        { phase: RightPanelPhases.ThreadView, state: { threadHeadEvent: thread.rootEvent } },
+                    RightPanelStore.instance.setCards(
+                        [
+                            { phase: RightPanelPhases.ThreadPanel },
+                            {
+                                phase: RightPanelPhases.ThreadView,
+                                state: { threadHeadEvent: thread.rootEvent },
+                            },
+                        ],
                         true,
                         room.roomId,
                     );
@@ -184,15 +197,24 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
         >
             <div className="mx_ThreadsActivityCentreThreadRow_content">
                 <div className="mx_ThreadsActivityCentreThreadRow_header">
-                    <span className="mx_ThreadsActivityCentreThreadRow_roomName">{room.name}</span>
+                    <Text as="span" size="md" weight="semibold" className="mx_ThreadsActivityCentreThreadRow_roomName">
+                        {room.name}
+                    </Text>
                 </div>
                 {(senderName || previewText) && (
-                    <span className="mx_ThreadsActivityCentreThreadRow_preview">
+                    <Text as="span" size="sm" weight="regular" className="mx_ThreadsActivityCentreThreadRow_preview">
                         {senderName && (
-                            <span className="mx_ThreadsActivityCentreThreadRow_sender">{senderName}: </span>
+                            <Text
+                                as="span"
+                                size="sm"
+                                weight="medium"
+                                className="mx_ThreadsActivityCentreThreadRow_sender"
+                            >
+                                {`${senderName}: `}
+                            </Text>
                         )}
                         {previewText}
-                    </span>
+                    </Text>
                 )}
             </div>
             <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />

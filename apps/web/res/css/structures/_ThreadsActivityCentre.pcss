@@ -142,10 +142,10 @@
             gap: 8px;
         }
 
+        /* Font/letter-spacing come from the Compound Text components; only layout + colour here. */
         .mx_ThreadsActivityCentreThreadRow_roomName {
             flex: 1;
             min-width: 0;
-            font: var(--cpd-font-body-md-semibold);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -156,12 +156,10 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            font: var(--cpd-font-body-sm-regular);
             color: $secondary-content;
         }
 
         .mx_ThreadsActivityCentreThreadRow_sender {
-            font: var(--cpd-font-body-sm-medium);
             color: $primary-content;
         }
     }
