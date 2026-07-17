@@ -33,6 +33,12 @@ on:
                 required: false
                 description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
 
+            desktop:
+                type: boolean
+                required: false
+                default: true
+                description: "Set to false to skip building & testing Element Desktop"
+
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
     cancel-in-progress: true
@@ -237,7 +243,7 @@ jobs:
         name: "Prepare Element Desktop"
         uses: ./.github/workflows/build_desktop_prepare.yaml
         needs: prepare
-        if: needs.prepare.outputs.skip == 'false'
+        if: needs.prepare.outputs.skip == 'false' && inputs.desktop != false
         permissions:
             contents: read
         with:
