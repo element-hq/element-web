@@ -1032,10 +1032,10 @@ importers:
         version: 5.108.4(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.19)(webpack-cli@7.2.1)
       webpack-bundle-analyzer:
         specifier: ^5.0.0
-        version: 5.3.0
+        version: 5.3.1
       webpack-cli:
         specifier: ^7.0.0
-        version: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@6.0.0)(webpack@5.108.4)
+        version: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.1)(webpack-dev-server@6.0.0)(webpack@5.108.4)
       webpack-dev-server:
         specifier: ^6.0.0
         version: 6.0.0(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4)
@@ -8730,7 +8730,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c}
+    resolution: {gitHosted: true, integrity: sha512-R032J6OYm6EwUIORcLA3uf82+ijMPRac2pLXgohvp3dCIJUUsMH9Wak82rdUger6edvv7IFOU3w9pf2N3vqLFw==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.0:
@@ -10318,7 +10318,7 @@ packages:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
   matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/82c488d155eb3cef97a116b4007c772a2d3421b6:
-    resolution: {gitHosted: true, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/82c488d155eb3cef97a116b4007c772a2d3421b6}
+    resolution: {gitHosted: true, integrity: sha512-jrVm7YKFLlh9v8nqnxlkast04bQWQPq0V/RAtiTYpP1eSQcG9thrHYqatsXv8MJqzY0bk+kCck20Ytr34BNeGw==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/82c488d155eb3cef97a116b4007c772a2d3421b6}
     version: 41.9.0
     engines: {node: '>=22.0.0'}
 
@@ -13448,8 +13448,8 @@ packages:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
 
-  webpack-bundle-analyzer@5.3.0:
-    resolution: {integrity: sha512-PEhAoqiJ+47d0uLMx/+zo5XOvaU+Vk6N2ZLht7H3n09QLy/fhyvqGNwjdRUHJDgMN8crBR2ZwVHkIswT3Xuawg==}
+  webpack-bundle-analyzer@5.3.1:
+    resolution: {integrity: sha512-wP2EusncRGL1tZyMHC/umLkjPdYMkTL9nPEKh8G8dkYCJ9TyF6xnXFqjhdqmv5J900irN/g0P5jMvLT22krEXQ==}
     engines: {node: '>= 20.9.0'}
     hasBin: true
 
@@ -13640,8 +13640,8 @@ packages:
     resolution: {integrity: sha512-OTIk8iR8/aCRWBqvxrzxR0hgxWpnYBblY1S5hDWBQfk/VFmJwzmJgQFN3WsoUKHISv2eAwe+PpbUzyL1CKTLXg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  ws@8.21.0:
-    resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
+  ws@8.21.1:
+    resolution: {integrity: sha512-+0NTnW77fFN/DjQi6k/Sq/Yvk4Sgajw7urW8V+asjXnRgDs9gyGkdb7EzgfhA4goXsRIZKE28fzIXBHEzhuiWw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -19058,7 +19058,7 @@ snapshots:
       sirv: 3.0.2
       tinyrainbow: 3.1.0
       vitest: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(happy-dom@20.10.6)(jsdom@26.1.0(patch_hash=040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f))(vite@8.1.4(@types/node@25.9.3)(esbuild@0.27.4)(jiti@2.7.0)(sugarss@5.0.1(postcss@8.5.19))(terser@5.48.0)(yaml@2.9.0))
-      ws: 8.21.0
+      ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -21900,7 +21900,7 @@ snapshots:
       buffer-image-size: 0.6.4
       entities: 7.0.1
       whatwg-mimetype: 3.0.0
-      ws: 8.21.0
+      ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -22787,7 +22787,7 @@ snapshots:
       whatwg-encoding: 3.1.1
       whatwg-mimetype: 4.0.0
       whatwg-url: 14.2.0
-      ws: 8.21.0
+      ws: 8.21.1
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -25843,7 +25843,7 @@ snapshots:
       recast: 0.23.12
       semver: 7.8.5
       use-sync-external-store: 1.6.0(react@19.2.7)
-      ws: 8.21.0
+      ws: 8.21.1
     optionalDependencies:
       '@types/react': 19.2.17
       prettier: 2.8.8
@@ -26923,7 +26923,7 @@ snapshots:
 
   webidl-conversions@7.0.0: {}
 
-  webpack-bundle-analyzer@5.3.0:
+  webpack-bundle-analyzer@5.3.1:
     dependencies:
       '@discoveryjs/json-ext': 0.6.3
       acorn: 8.17.0
@@ -26934,12 +26934,12 @@ snapshots:
       opener: 1.5.2
       picocolors: 1.1.1
       sirv: 3.0.2
-      ws: 8.21.0
+      ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  webpack-cli@7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@6.0.0)(webpack@5.108.4):
+  webpack-cli@7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.1)(webpack-dev-server@6.0.0)(webpack@5.108.4):
     dependencies:
       '@discoveryjs/json-ext': 1.1.0
       commander: 14.0.3
@@ -26953,7 +26953,7 @@ snapshots:
     optionalDependencies:
       js-yaml: 4.3.0
       json5: 2.2.3
-      webpack-bundle-analyzer: 5.3.0
+      webpack-bundle-analyzer: 5.3.1
       webpack-dev-server: 6.0.0(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4)
 
   webpack-dev-middleware@8.0.3(tslib@2.8.1)(webpack@5.108.4):
@@ -26994,10 +26994,10 @@ snapshots:
       serve-index: 1.9.2
       tinyglobby: 0.2.17
       webpack-dev-middleware: 8.0.3(tslib@2.8.1)(webpack@5.108.4)
-      ws: 8.21.0
+      ws: 8.21.1
     optionalDependencies:
       webpack: 5.108.4(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.19)(webpack-cli@7.2.1)
-      webpack-cli: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@6.0.0)(webpack@5.108.4)
+      webpack-cli: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.1)(webpack-dev-server@6.0.0)(webpack@5.108.4)
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -27090,7 +27090,7 @@ snapshots:
       watchpack: 2.5.2
       webpack-sources: 3.5.1
     optionalDependencies:
-      webpack-cli: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.0)(webpack-dev-server@6.0.0)(webpack@5.108.4)
+      webpack-cli: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.1)(webpack-dev-server@6.0.0)(webpack@5.108.4)
     transitivePeerDependencies:
       - '@minify-html/node'
       - '@swc/core'
@@ -27217,7 +27217,7 @@ snapshots:
     dependencies:
       signal-exit: 4.1.0
 
-  ws@8.21.0: {}
+  ws@8.21.1: {}
 
   wsl-utils@0.1.0:
     dependencies:
