@@ -58,6 +58,7 @@ const BeaconListItem: React.FC<Props & HTMLProps<HTMLLIElement>> = ({ beacon, ..
                 >
                     {/* eat events from interactive share buttons
                 so parent click handlers are not triggered */}
+                    {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <div className="mx_BeaconListItem_interactions" onClick={preventDefaultWrapper(() => {})}>
                         <ShareLatestLocation latestLocationState={latestLocationState} />
                     </div>

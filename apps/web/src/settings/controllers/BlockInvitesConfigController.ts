@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventType } from "matrix-js-sdk/src/matrix";
 
 import { type SettingLevel } from "../SettingLevel.ts";
-import { _td } from "../../languageHandler.tsx";
+import { _td } from "../../languageHandler";
 import ServerSupportUnstableFeatureController from "./ServerSupportUnstableFeatureController.ts";
 import { type SettingKey } from "../Settings.tsx";
 import type { WatchManager } from "../WatchManager.ts";

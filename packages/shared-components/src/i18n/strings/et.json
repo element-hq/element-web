@@ -233,6 +233,23 @@
                 "call_declined": "Osapool jättis kõnele vastamata",
                 "call_declined_by_us": "Sa jätsid kõne vastamata"
             },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s helistas",
+                    "join_button": "Liitu"
+                },
+                "dm": {
+                    "call_started": "Kõne algas",
+                    "title": "Kõne on pooleli"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s liituja",
+                        "other": "%(count)s liitujat"
+                    },
+                    "title": "Rühmakõne on pooleli"
+                }
+            },
             "tombstone": {
                 "room": {
                     "title": "Grupikõne on lõppenud"

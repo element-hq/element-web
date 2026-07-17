@@ -90,13 +90,11 @@ function parseOpaqueIdsToMatrixIds({
     const additionalDomainpartTokens = [HYPHEN];
 
     const matrixToken = linkifyjs.createTokenClass(name, { isLink: true });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const matrixTokenState = new linkifyjs.State(matrixToken) as any as linkifyjs.State<linkifyjs.MultiToken>; // linkify doesn't appear to type this correctly
 
     const matrixTokenWithPort = linkifyjs.createTokenClass(name, { isLink: true });
     const matrixTokenWithPortState = new linkifyjs.State(
         matrixTokenWithPort,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ) as any as linkifyjs.State<linkifyjs.MultiToken>; // linkify doesn't appear to type this correctly
 
     const initialState = parser.start.tt(token);

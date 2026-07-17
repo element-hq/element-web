@@ -7,7 +7,7 @@ Please see LICENSE in the repository root for full details.
 
 import { withMermaid } from "vitepress-plugin-mermaid";
 
-function customPathResolver(href: string, currentPath: string) {
+function customPathResolver(href: string, currentPath: string): string {
     const [link, fragment] = href.split("#", 2);
     if (currentPath === "index.md") {
         if (link.startsWith("./docs/")) {

@@ -801,7 +801,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         setToDefaultIdentityServer(MatrixClientPeg.safeGet());
         this.setState({ canUseIdentityServer: true, tryingIdentityServer: false });
     };

@@ -536,7 +536,6 @@ describe("WysiwygComposer", () => {
             await waitFor(() => {
                 const selection = document.getSelection();
                 if (selection) {
-                    // eslint-disable-next-line jest/no-conditional-expect
                     expect(selection.focusNode?.textContent).toEqual("other");
                 }
             });

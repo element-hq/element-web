@@ -33,14 +33,12 @@ describe("snakeToCamel", () => {
 });
 
 describe("SnakedObject", () => {
-    /* eslint-disable camelcase*/
     const input = {
         snake_case: "woot",
         snakeCase: "oh no", // ensure different value from snake_case for tests
         camelCase: "fallback",
     };
     const snake = new SnakedObject(input);
-    /* eslint-enable camelcase*/
 
     it("should prefer snake_case keys", () => {
         expect(snake.get("snake_case")).toBe(input.snake_case);
