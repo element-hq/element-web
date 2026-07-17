@@ -14,7 +14,7 @@ test.describe("App config options", () => {
         test.slow();
         test.use({
             extraEnv: {
-                ELEMENT_DESKTOP_CONFIG_JSON: fileURLToPath(import.meta.resolve("../..", "fixtures/custom-config.json")),
+                ELEMENT_DESKTOP_CONFIG_JSON: fileURLToPath(import.meta.resolve("../../fixtures/custom-config.json")),
             },
         });
         test("should launch and use configured homeserver", async ({ page }) => {
@@ -28,7 +28,7 @@ test.describe("App config options", () => {
     test.describe("Should load custom config via argument", () => {
         test.slow();
         test.use({
-            extraArgs: ["--config", fileURLToPath(import.meta.resolve("../..", "fixtures/custom-config.json"))],
+            extraArgs: ["--config", fileURLToPath(import.meta.resolve("../../fixtures/custom-config.json"))],
         });
         test("should launch and use configured homeserver", async ({ page }) => {
             await page.locator("#matrixchat").waitFor();
