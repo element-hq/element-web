@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type IRedactOpts, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import React from "react";
+import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -38,7 +39,13 @@ export default class ConfirmRedactDialog extends React.Component<IProps> {
                 description={description}
                 placeholder={_t("redact|reason_label")}
                 focus
-                button={_t("action|remove")}
+                button={
+                    <span className="mx_ConfirmRedactDialog_buttonContent">
+                        <DeleteIcon /> {_t("action|remove")}
+                    </span>
+                }
+                primaryButtonClass="danger"
+                cancelButtonClass="secondary"
             />
         );
     }
