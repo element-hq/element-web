@@ -45,25 +45,21 @@ import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
 import WidgetAvatar from "../avatars/WidgetAvatar";
-import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ModuleApi } from "../../../modules/Api";
 import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
 import { parseUrl } from "../../../utils/UrlUtils";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
 import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
 // because that would allow the iframe to programmatically remove the sandbox attribute, but
@@ -138,8 +134,8 @@ interface IState {
 }
 
 export default class AppTile extends React.Component<IProps, IState> {
-    public static contextType = MatrixClientContext;
-    declare public context: ContextType<typeof MatrixClientContext>;
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
@@ -162,7 +158,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private unmounted = false;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: ContextType<typeof SDKContext>) {
         super(props, context);
 
         // The key used for PersistedElement
@@ -257,7 +253,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         );
         if (isActiveWidget) {
             // We just left the room that the active widget was from.
-            if (this.props.room && SdkContextClass.instance.roomViewStore.getRoomId() !== this.props.room.roomId) {
+            if (this.props.room && this.context.roomViewStore.getRoomId() !== this.props.room.roomId) {
                 // If we are not actively looking at the room then destroy this widget entirely.
                 this.endWidgetActions();
             } else if (WidgetType.JITSI.matches(this.props.app.type)) {
@@ -304,7 +300,7 @@ export default class AppTile extends React.Component<IProps, IState> {
      * Set initial component state when the App wUrl (widget URL) is being updated.
      * Component props *must* be passed (rather than relying on this.props).
      * @param  {Object} newProps The new properties of the component
-     * @return {Object} Updated component state to be set with setState
+     * @returns {Object} Updated component state to be set with setState
      */
     private getNewState(newProps: IProps): IState {
         return {
@@ -393,7 +389,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.watchUserReady();
 
         if (this.props.room) {
-            this.context.on(RoomEvent.MyMembership, this.onMyMembership);
+            this.context.client?.on(RoomEvent.MyMembership, this.onMyMembership);
         }
         this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
         // Widget action listeners
@@ -426,7 +422,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
 
         if (this.props.room) {
-            this.context.off(RoomEvent.MyMembership, this.onMyMembership);
+            this.context.client?.off(RoomEvent.MyMembership, this.onMyMembership);
         }
 
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
@@ -545,7 +541,7 @@ export default class AppTile extends React.Component<IProps, IState> {
      */
     private endWidgetActions(): void {
         if (WidgetType.JITSI.matches(this.props.app.type) && this.props.room) {
-            LegacyCallHandler.instance.hangupCallApp(this.props.room.roomId);
+            this.context.legacyCallHandler.hangupCallApp(this.props.room.roomId);
         }
 
         // Delete the widget from the persisted store for good measure.
@@ -682,25 +678,27 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onToggleMaximisedClick = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
-        const targetContainer = WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, "center")
+        const targetContainer = this.context.widgetLayoutStore.isInContainer(this.props.room, this.props.app, "center")
             ? "top"
             : "center";
-        WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
+        this.context.widgetLayoutStore.moveToContainer(this.props.room, this.props.app, targetContainer);
 
         if (targetContainer === "top") this.closeChatCardIfNeeded();
     };
 
     private onMinimiseClicked = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
-        WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, "right");
+        this.context.widgetLayoutStore.moveToContainer(this.props.room, this.props.app, "right");
         this.closeChatCardIfNeeded();
     };
 
     private closeChatCardIfNeeded = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
         // If the right panel has a timeline, but we're about to show the timeline in the main view, pop the right panel
-        if (RightPanelStore.instance.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline) {
-            RightPanelStore.instance.popCard(this.props.room.roomId);
+        if (
+            this.context.rightPanelStore.currentCardForRoom(this.props.room.roomId).phase === RightPanelPhases.Timeline
+        ) {
+            this.context.rightPanelStore.popCard(this.props.room.roomId);
         }
     };
 
@@ -742,7 +740,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         } else if (!this.state.hasPermissionToLoad && this.props.room && this.messaging) {
             // only possible for room widgets, can assert this.props.room here
-            const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
+            const isEncrypted = this.context.client?.isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
                 <div className={appTileBodyClass} style={appTileBodyStyles}>
                     <AppPermission
@@ -818,7 +816,8 @@ export default class AppTile extends React.Component<IProps, IState> {
         const layoutButtons: ReactNode[] = [];
         if (this.props.showLayoutButtons) {
             const isMaximised =
-                this.props.room && WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, "center");
+                this.props.room &&
+                this.context.widgetLayoutStore.isInContainer(this.props.room, this.props.app, "center");
 
             layoutButtons.push(
                 <AccessibleButton

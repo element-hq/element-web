@@ -12,9 +12,9 @@ import { Widget, WidgetKind } from "matrix-widget-api";
 
 import { OIDCState, WidgetPermissionStore } from "../../../../src/stores/widgets/WidgetPermissionStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { TestSdkContext } from "../../TestSdkContext";
+import { TestSDKContext } from "../../TestSDKContext";
 import { type SettingLevel } from "../../../../src/settings/SettingLevel";
-import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
 import { stubClient } from "../../../test-utils";
 import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";
 import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
@@ -53,8 +53,8 @@ describe("WidgetPermissionStore", () => {
             },
         );
         mockClient = stubClient();
-        const context = new TestSdkContext();
-        context.client = mockClient;
+        const context = new TestSDKContext();
+        context._client = mockClient;
         widgetPermissionStore = new WidgetPermissionStore(context);
     });
 
@@ -85,8 +85,8 @@ describe("WidgetPermissionStore", () => {
         // check this is not the case for the entire account
         expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Account, roomId)).toEqual(OIDCState.Unknown);
     });
-    it("is created once in SdkContextClass", () => {
-        const context = new SdkContextClass();
+    it("is created once in SDKContextClass", () => {
+        const context = new SDKContextClass();
         const store = context.widgetPermissionStore;
         expect(store).toBeDefined();
         const store2 = context.widgetPermissionStore;

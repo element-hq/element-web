@@ -62,7 +62,7 @@ import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import { ModuleApi } from "../../modules/Api";
 import { toWidgetDescriptor } from "../../modules/WidgetLifecycleApi";
@@ -232,7 +232,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             }
 
             // To always allow OIDC requests for element call, the widgetPermissionStore is used:
-            SdkContextClass.instance.widgetPermissionStore.setOIDCState(
+            SDKContextClass.instance.widgetPermissionStore.setOIDCState(
                 forWidget,
                 forWidgetKind,
                 inRoomId,
@@ -303,7 +303,7 @@ export class ElementWidgetDriver extends WidgetDriver {
 
     private getSendEventTarget(roomId: string | null = null): { client: MatrixClient; roomId: string } {
         const client = MatrixClientPeg.safeGet();
-        roomId = roomId || SdkContextClass.instance.roomViewStore.getRoomId() || null;
+        roomId = roomId || SDKContextClass.instance.roomViewStore.getRoomId() || null;
         if (!roomId) throw new Error("No room specified and no room in RoomViewStore focus.");
         return { client, roomId };
     }
@@ -600,6 +600,7 @@ export class ElementWidgetDriver extends WidgetDriver {
      * Otherwise, the event ID at which only subsequent events will be returned, as many as specified
      * in "limit".
      * @returns A generator that emits events.
+     * @yields IRoomEvents from the room timeline
      */
     private *readRoomTimelineIterator(
         room: Room,
@@ -691,7 +692,7 @@ export class ElementWidgetDriver extends WidgetDriver {
             });
         }
 
-        const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
+        const oidcState = SDKContextClass.instance.widgetPermissionStore.getOIDCState(
             this.forWidget,
             this.forWidgetKind,
             this.inRoomId,
@@ -773,7 +774,7 @@ export class ElementWidgetDriver extends WidgetDriver {
     ): Promise<IReadEventRelationsResult> {
         const client = MatrixClientPeg.safeGet();
         const dir = direction as Direction;
-        roomId = roomId ?? SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined;
+        roomId = roomId ?? SDKContextClass.instance.roomViewStore.getRoomId() ?? undefined;
 
         if (typeof roomId !== "string") {
             throw new Error("Error while reading the current room");

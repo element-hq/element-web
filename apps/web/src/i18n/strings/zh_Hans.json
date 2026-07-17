@@ -11,8 +11,6 @@
             "one": "1 个未读提及",
             "other": "%(count)s 个包含提及在内的未读消息"
         },
-        "recent_rooms": "最近的房间",
-        "room_name": "房间 %(name)s",
         "room_status_bar": "房间状态栏",
         "seek_bar_label": "音频搜索栏",
         "unread_messages": "未读消息。"
@@ -22,7 +20,6 @@
         "accept": "接受",
         "add": "添加",
         "add_existing_room": "添加现有房间",
-        "add_people": "添加人员",
         "apply": "应用",
         "approve": "批准",
         "ask_to_join": "申请加入",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "进入全屏",
         "exit_fullscreeen": "退出全屏",
         "expand": "展开",
-        "explore_public_rooms": "浏览公共房间",
         "explore_rooms": "查找房间",
         "export": "导出",
         "forward": "转发",
@@ -69,8 +65,6 @@
         "ignore": "忽略",
         "import": "导入",
         "invite": "邀请",
-        "invite_to_space": "邀请到空间",
-        "invites_list": "邀请",
         "join": "加入",
         "learn_more": "了解更多",
         "leave": "离开",
@@ -116,8 +110,6 @@
         "sign_out": "移除此设备",
         "skip": "跳过",
         "start": "开始",
-        "start_chat": "开始聊天",
-        "start_new_chat": "开始新聊天",
         "stop": "停止",
         "submit": "提交",
         "subscribe": "订阅",
@@ -488,7 +480,6 @@
         "encrypted": "已加密",
         "error": "错误",
         "faq": "常见问答集",
-        "favourites": "收藏",
         "feedback": "反馈",
         "filter_results": "筛选结果",
         "forward_message": "转发消息",
@@ -496,7 +487,6 @@
         "go_to_settings": "转到设置",
         "guest": "访客",
         "help": "帮助",
-        "historical": "历史",
         "home": "主页",
         "homeserver": "主服务器",
         "identity_server": "身份服务器",
@@ -504,11 +494,11 @@
         "integration_manager": "集成管理器",
         "joined": "已加入",
         "labs": "实验室",
+        "legacy_voice_and_video_settings": "Matrix 一对一通话（旧版）",
         "legal": "法律",
         "light": "浅色",
         "loading": "正在载入…",
         "location": "位置",
-        "low_priority": "低优先级",
         "matrix": "Matrix",
         "message": "消息",
         "message_layout": "消息布局",
@@ -574,7 +564,6 @@
         "success": "成功",
         "suggestions": "建议",
         "support": "支持",
-        "system_alerts": "系统警报",
         "theme": "主题",
         "thread": "消息列",
         "threads": "消息列",
@@ -591,7 +580,6 @@
         "username": "用户名",
         "verified": "已验证",
         "version": "版本",
-        "video": "视频",
         "video_room": "视频房间",
         "view_message": "查看消息",
         "warning": "警告"
@@ -903,6 +891,8 @@
         "user_avatar": "头像：%(avatar)s",
         "user_displayname": "显示名称：%(displayname)s",
         "user_id": "用户 ID：%(userId)s",
+        "user_identity": "密码学身份",
+        "user_identity_unknown": "未知",
         "user_no_avatar": "头像：<i>无</i>",
         "user_no_displayname": "显示名称：<i>无</i>",
         "user_read_up_to": "用户阅读到：",
@@ -1181,14 +1171,14 @@
             "you": "你已加入通话"
         },
         "m.call.hangup": {
-            "user": "%(senderName)s 结束了通话",
-            "you": "你结束了通话"
+            "user": "%(senderName)s 已结束通话",
+            "you": "你已结束通话"
         },
         "m.call.invite": {
             "dm_receive": "%(senderName)s 正在通话",
             "dm_send": "等待接听",
-            "user": "%(senderName)s 开始了通话",
-            "you": "你开始了通话"
+            "user": "%(senderName)s 已开始通话",
+            "you": "你已开始通话"
         },
         "m.emote": "* %(senderName)s %(emote)s",
         "m.reaction": {
@@ -1544,7 +1534,6 @@
             "required_msc_support": "需要 MSC4429（面向旧版同步模式的配置文件更新）"
         },
         "feature_wysiwyg_composer_description": "在消息编辑器中使用富文本取代 Markdown。",
-        "group_calls": "新的群呼体验",
         "group_developer": "开发者",
         "group_encryption": "加密",
         "group_experimental": "实验性",
@@ -1559,7 +1548,6 @@
         "group_voip": "语音与视频",
         "group_widgets": "小部件",
         "hidebold": "隐藏通知圆点（仅显示计数器徽章）",
-        "html_topic": "以 HTML 格式显示房间主题",
         "join_beta": "参与 Beta 测试",
         "join_beta_reload": "参与 Beta 测试将重载 %(brand)s。",
         "jump_to_date": "跳转到日期（在编辑器中输入指令“/jumptodate”可以跳转到当天的消息开头）",
@@ -1572,20 +1560,19 @@
         "login_with_qr": "使用二维码登录",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
-        "new_room_list": "启用新的房间列表",
         "notification_settings": "新的通知设置",
         "notification_settings_beta_caption": "介绍一种更简单的方法来更改通知设置。就像你喜欢的那样定制 %(brand)s。",
         "notification_settings_beta_title": "通知设置",
         "notifications": "在房间标题处启用通知面板",
         "render_reaction_images": "在反应中渲染自定义图像",
         "render_reaction_images_description": "有时被称为“自定义 Emoji”。",
-        "room_list_sections": "房间列表区域",
         "sliding_sync": "滑动同步模式",
         "sliding_sync_description": "正在处于开发中，并且一旦启用就无法禁用。当前与 Element Call 不兼容。",
         "sliding_sync_disabled_notice": "重新登录以禁用",
         "sliding_sync_server_no_support": "服务器缺少支持",
-        "under_active_development": "正在处于开发中。",
         "unrealiable_e2e": "在加密房间中不可靠",
+        "url_preview_bundle": "URL 预览组件（MSC4095）",
+        "url_preview_bundle_description": "在消息的一侧随消息内容一并发送 URL 预览",
         "video_rooms": "视频房间",
         "video_rooms_a_new_way_to_chat": "在 %(brand)s 中语音与视频聊天的新方式。",
         "video_rooms_always_on_voip_channels": "视频房间是嵌入到 %(brand)s 并始终在线的 VoIP 渠道。",
@@ -1639,9 +1626,6 @@
         "room_leave_mod_warning": "你是此房间的唯一管理员。如果你离开，任何人都将无法更改房间设置或执行其它重要操作。",
         "room_rejoin_warning": "此房间非公共房间。你无法在未被邀请的情况下重新加入。",
         "space_rejoin_warning": "此空间非公开。未经邀请，你将无法重新加入。"
-    },
-    "left_panel": {
-        "open_dial_pad": "打开拨号键盘"
     },
     "lightbox": {
         "rotate_left": "向左旋转",
@@ -1738,8 +1722,8 @@
         "level_notification": "通知",
         "level_unsent": "未发送",
         "mark_all_read": "全部设为已读",
-        "mentions_and_keywords": "提及与关键词",
-        "mentions_and_keywords_description": "仅按<a>设置</a>中的配置获取提及与关键词",
+        "mentions_and_keywords": "仅限提及（@）与回复",
+        "mentions_and_keywords_description": "仅为在<a>设置</a>中针对提及与关键词的配置获取通知",
         "mentions_keywords": "提及与关键词",
         "message_didnt_send": "消息未发送。点击以获取信息。",
         "mute_description": "你不会收到任何通知"
@@ -1839,7 +1823,6 @@
     },
     "quick_settings": {
         "all_settings": "所有设置",
-        "metaspace_section": "钉在边栏",
         "sidebar_settings": "更多选项",
         "title": "快速设置"
     },
@@ -2142,46 +2125,21 @@
         "waiting_for_join_title": "等待用户加入 %(brand)s"
     },
     "room_list": {
-        "add_room_label": "添加房间",
         "add_space_label": "添加空间",
-        "breadcrumbs_empty": "暂无最近访问的房间",
-        "breadcrumbs_label": "最近访问的房间",
         "failed_add_tag": "为房间添加标签 %(tagName)s 失败",
         "failed_remove_tag": "从房间移除标签 %(tagName)s 失败",
         "failed_set_dm_tag": "私聊标签设置失败",
-        "home_menu_label": "主页选项",
-        "join_public_room_label": "加入公共房间",
-        "joining_rooms_status": {
-            "one": "当前正在加入 %(count)s 个房间",
-            "other": "当前加入了 %(count)s 个房间"
-        },
         "list_title": "房间列表",
         "more_options": {
             "leave_room": "离开房间"
         },
         "notification_options": "通知选项",
-        "redacting_messages_status": {
-            "one": "正在移除房间中的 %(count)s 个消息",
-            "other": "正在移除房间中的 %(count)s 个消息"
-        },
         "section": {
             "chats": "聊天",
             "favourites": "收藏",
             "low_priority": "低优先级"
         },
-        "show_less": "显示更少",
-        "show_n_more": {
-            "one": "显示剩余 %(count)s 个",
-            "other": "显示剩余 %(count)s 个"
-        },
-        "show_previews": "显示消息预览",
-        "sort_by": "排序",
-        "sort_by_activity": "活动",
-        "sort_by_alphabet": "字典顺序",
-        "sort_unread_first": "优先显示包含未读消息的房间",
-        "space_menu_label": "%(spaceName)s 菜单",
-        "sublist_options": "列表选项",
-        "suggested_rooms_heading": "建议的房间"
+        "show_less": "显示更少"
     },
     "room_settings": {
         "access": {
@@ -2806,13 +2764,13 @@
             "room_activity": "新产生的房间活动、升级与状态消息",
             "rule_call": "通话邀请",
             "rule_contains_display_name": "包含我的显示名称的消息",
-            "rule_contains_user_name": "包含我的用户名的消息",
+            "rule_contains_user_name": "提及（@）与回复",
             "rule_encrypted": "群聊中的加密消息",
             "rule_encrypted_room_one_to_one": "一对一聊天中的加密消息",
             "rule_invite_for_me": "当我受邀到房间",
             "rule_message": "群聊中的消息",
             "rule_room_one_to_one": "一对一聊天中的消息",
-            "rule_roomnotif": "包含 @room 的消息",
+            "rule_roomnotif": "包含 @room 的提及",
             "rule_suppress_notices": "由机器人发送的消息",
             "rule_tombstone": "当房间升级时。",
             "show_message_desktop_notification": "在桌面通知中显示消息内容",
@@ -2999,18 +2957,17 @@
         "show_nsfw_content": "显示 NSFW 内容",
         "show_read_receipts": "显示其他用户的已读回执",
         "show_redaction_placeholder": "为已被移除的消息显示占位符",
+        "show_sections": "显示区域",
         "show_stickers_button": "显示贴纸按钮",
         "show_typing_notifications": "显示用户的键入通知",
         "showbold": "在房间列表上显示所有活动（用于未读消息的圆点与数字）",
         "sidebar": {
             "dialog_title": "<strong>设置：</strong>边栏",
-            "metaspaces_favourites_description": "集中所有设为收藏的房间与人员分组在一处。",
             "metaspaces_home_all_rooms": "显示所有房间",
             "metaspaces_home_all_rooms_description": "在主页显示所有房间，即使它们位于不同的空间。",
             "metaspaces_home_description": "主页有助于概览所有对话。",
             "metaspaces_orphans": "空间外的房间",
             "metaspaces_orphans_description": "集中所有不属于任何空间的房间在一处。",
-            "metaspaces_people_description": "集中所有人员在一处。",
             "metaspaces_subsection": "要显示的空间",
             "metaspaces_video_rooms": "视频房间与会议",
             "metaspaces_video_rooms_description": "集中所有私有视频房间与会议在一处。",
@@ -3037,21 +2994,25 @@
             "audio_output": "音频输出",
             "audio_output_empty": "未检测到音频输出",
             "auto_gain_control": "自动增益控制",
-            "connection_section": "连接",
             "dialog_title": "<strong>设置：</strong>语音与视频",
             "echo_cancellation": "回声消除",
             "echo_cancellation_description": "在通话期间移除回声。此设置亦将应用于 Element Call。",
             "enable_fallback_ice_server": "允许备选的通话辅助服务器",
             "enable_fallback_ice_server_description": "仅用于你所在的主服务器不提供时。你的 IP 地址会在通话期间被分享。",
+            "enable_legacy_calls": "启用旧版语音视频通话",
+            "enable_legacy_calls_description": "适用于 Jitsi 与一对一 WebRTC 通话",
             "mirror_local_feed": "镜像本地视频源",
-            "missing_permissions_prompt": "缺少媒体权限，点击按钮以请求。",
+            "missing_permissions_prompt": "要参与通话，请为 %(brand)s 授予音视频设备的访问权。",
             "noise_suppression": "降噪",
             "noise_suppression_description": "在通话期间降低背景噪音。此设置亦将应用于 Element Call。",
-            "request_permissions": "请求媒体权限",
+            "permissions": "允许访问麦克风和摄像头",
+            "request_permissions": "请求",
             "title": "语音与视频",
             "video_input_empty": "未检测到摄像头",
             "video_section": "视频设置",
             "voice_agc": "自动调整麦克风音量",
+            "voice_input_description": "此处的音频输入配置用于语音消息与通话（旧版与一对一）。",
+            "voice_input_section": "音频输入",
             "voice_processing": "语音处理",
             "voice_section": "语音设置"
         },
@@ -3230,12 +3191,6 @@
     "space_settings": {
         "title": "设置：%(spaceName)s"
     },
-    "spaces": {
-        "error_no_permission_add_room": "你无权在此空间添加房间",
-        "error_no_permission_add_space": "你无权在此空间中添加空间",
-        "error_no_permission_create_room": "你无权在此空间创建新房间",
-        "error_no_permission_invite": "你无权邀请人员访问此空间"
-    },
     "spotlight": {
         "public_rooms": {
             "network_dropdown_add_dialog_description": "输入要浏览的新服务器名称。",
@@ -3398,7 +3353,7 @@
         "m.call.invite": {
             "answered_elsewhere": "已在别处接听",
             "call_back_prompt": "回拨",
-            "declined": "来电被拒接",
+            "declined": "通话已被拒接",
             "failed_connect_media": "无法连接媒体",
             "failed_connection": "连接失败",
             "failed_opponent_media": "其设备无法开启摄像头或麦克风",
@@ -3438,7 +3393,7 @@
             }
         },
         "m.poll.end": {
-            "sender_ended": "%(senderName)s 结束了投票"
+            "sender_ended": "%(senderName)s 已结束投票"
         },
         "m.poll.start": "%(senderName)s 发起投票： %(pollQuestion)s",
         "m.room.avatar": {
@@ -3546,7 +3501,7 @@
         },
         "m.widget": {
             "added": "%(senderName)s 添加了小部件：%(widgetName)s",
-            "jitsi_ended": "%(senderName)s 结束了视频会议",
+            "jitsi_ended": "%(senderName)s 已结束视频会议",
             "jitsi_join_right_prompt": "从右侧的房间信息卡片加入会议",
             "jitsi_join_top_prompt": "在此房间加入会议的前排",
             "jitsi_started": "%(senderName)s 已开始视频会议",
@@ -3597,7 +3552,7 @@
         },
         "redaction": "消息已被 %(name)s 删除",
         "reply": {
-            "error_loading": "无法加载已回复的事件，该事件可能不存在或你无权查看。",
+            "error_loading": "无法加载曾回复过的事件；该事件可能不存在或你无权查看。",
             "in_reply_to": "<a>回复给</a> <pill>",
             "in_reply_to_for_export": "回复<a>此消息</a>"
         },
@@ -3786,7 +3741,7 @@
     "upload_file": {
         "cancel_all_button": "全部取消",
         "error_file_too_large": "此文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
-        "error_files_too_large": "这些文件<b>过大大</b>而无法上传。文件大小限制为 %(limit)s。",
+        "error_files_too_large": "这些文件<b>过大</b>而无法上传。文件大小限制为 %(limit)s。",
         "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
         "not_image": "你选择的文件不是有效的图像文件。",

@@ -11,8 +11,6 @@
             "other": "%(count)s непрочитанных сообщения(-й), включая упоминания.",
             "one": "1 непрочитанное упоминание."
         },
-        "recent_rooms": "Недавние чаты",
-        "room_name": "Чат %(name)s",
         "room_status_bar": "Строка состояния чата",
         "seek_bar_label": "Панель поиска аудио",
         "unread_messages": "Непрочитанные сообщения."
@@ -22,7 +20,6 @@
         "accept": "Принять",
         "add": "Добавить",
         "add_existing_room": "Добавить существующий чат",
-        "add_people": "Добавить людей",
         "apply": "Применить",
         "approve": "Согласиться",
         "ask_to_join": "Присоединиться",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Перейти в полноэкранный режим",
         "exit_fullscreeen": "Выйти из полноэкранного режима",
         "expand": "Развернуть",
-        "explore_public_rooms": "Просмотреть публичные групповые чаты",
         "explore_rooms": "Обзор комнат",
         "export": "Экспорт",
         "forward": "Переслать",
@@ -69,8 +65,6 @@
         "ignore": "Игнорировать",
         "import": "Импорт",
         "invite": "Пригласить",
-        "invite_to_space": "Пригласить в пространство",
-        "invites_list": "Приглашения",
         "join": "Войти",
         "learn_more": "Узнать больше",
         "leave": "Покинуть",
@@ -116,8 +110,6 @@
         "sign_out": "Удалить это устройство",
         "skip": "Пропустить",
         "start": "Начать",
-        "start_chat": "Отправить личное сообщение",
-        "start_new_chat": "Начать новый чат",
         "stop": "Стоп",
         "submit": "Отправить",
         "subscribe": "Подписаться",
@@ -476,7 +468,6 @@
         "encrypted": "Зашифровано",
         "error": "Ошибка",
         "faq": "Часто задаваемые вопросы",
-        "favourites": "Избранные",
         "feedback": "Отзыв",
         "filter_results": "Фильтрация результатов",
         "forward_message": "Переслать сообщение",
@@ -484,7 +475,6 @@
         "go_to_settings": "Перейти в настройки",
         "guest": "Гость",
         "help": "Помощь",
-        "historical": "Архив",
         "home": "Главная",
         "homeserver": "Домашний сервер",
         "identity_server": "Идентификационный сервер",
@@ -496,7 +486,6 @@
         "light": "Светлая",
         "loading": "Загрузка…",
         "location": "Местоположение",
-        "low_priority": "Маловажные",
         "matrix": "Matrix",
         "message": "Отправить личное сообщение",
         "message_layout": "Макет сообщения",
@@ -563,7 +552,6 @@
         "success": "Успех",
         "suggestions": "Предложения",
         "support": "Поддержка",
-        "system_alerts": "Системные оповещения",
         "theme": "Тема",
         "thread": "Обсуждение",
         "threads": "Обсуждения",
@@ -580,7 +568,6 @@
         "username": "Имя пользователя",
         "verified": "Заверено",
         "version": "Версия",
-        "video": "Видео",
         "video_room": "Видеочат",
         "view_message": "Посмотреть сообщение",
         "warning": "Внимание"
@@ -1503,7 +1490,6 @@
         "extended_profiles_msc_support": "Требуется, чтобы ваш сервер поддерживал MSC4133",
         "feature_disable_call_per_sender_encryption": "Отключить шифрование для каждого отправителя Element Call",
         "feature_wysiwyg_composer_description": "Используйте форматированный текст вместо Markdown в редакторе сообщений.",
-        "group_calls": "Новый опыт группового вызова",
         "group_developer": "Разработка",
         "group_encryption": "Шифрование",
         "group_experimental": "Экспериментально",
@@ -1518,7 +1504,6 @@
         "group_voip": "Голос и видео",
         "group_widgets": "Виджеты",
         "hidebold": "Скрыть точку уведомления (отображать только значки счетчиков)",
-        "html_topic": "Показать HTML-представление тем комнаты",
         "join_beta": "Присоединиться к бета-версии",
         "join_beta_reload": "Присоединение к бета-тестированию перезагрузит %(brand)s.",
         "jump_to_date": "Перейти к дате (добавляет /jumptodate и переход к заголовкам дат)",
@@ -1530,19 +1515,16 @@
         "location_share_live_description": "Временная реализация. Местоположения сохраняются в истории комнаты.",
         "mjolnir": "Новые способы игнорировать людей",
         "msc3531_hide_messages_pending_moderation": "Позволяет модераторам скрывать сообщения, ожидающие модерации.",
-        "new_room_list": "Включить новый список комнат",
         "notification_settings": "Новые настройки уведомлений",
         "notification_settings_beta_caption": "Представляем вам более простой способ изменения настроек уведомлений. Настройте свои настройки так %(brand)s, как вам удобно.",
         "notification_settings_beta_title": "Настройки уведомлений",
         "notifications": "Включить панель уведомлений в заголовке комнаты",
         "render_reaction_images": "Обработка пользовательских изображений в реакциях",
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
-        "room_list_sections": "Разделы списка чатов",
         "sliding_sync": "Режим Sliding Sync",
         "sliding_sync_description": "В активной разработке, нельзя отключить.",
         "sliding_sync_disabled_notice": "Выйдите из системы и снова войдите, чтобы отключить",
         "sliding_sync_server_no_support": "На вашем сервере отсутствует поддержка",
-        "under_active_development": "В активной разработке.",
         "unrealiable_e2e": "Ненадежно в зашифрованных комнатах",
         "video_rooms": "Видеокомнаты",
         "video_rooms_a_new_way_to_chat": "Новый способ голосового и видеообщения в %(brand)s.",
@@ -1597,9 +1579,6 @@
         "room_leave_mod_warning": "Вы единственный модератор в этой комнате. Если вы уйдете, никто не сможет изменить настройки комнаты или выполнить другие важные действия.",
         "room_rejoin_warning": "Эта комната не является публичной. Вы не сможете войти без приглашения.",
         "space_rejoin_warning": "Это пространство не публично. Вы не сможете вновь войти без приглашения."
-    },
-    "left_panel": {
-        "open_dial_pad": "Открыть панель набора номера"
     },
     "lightbox": {
         "rotate_left": "Повернуть влево",
@@ -1795,7 +1774,6 @@
     },
     "quick_settings": {
         "all_settings": "Все настройки",
-        "metaspace_section": "Закрепить на боковой панели",
         "sidebar_settings": "Дополнительные параметры",
         "title": "Быстрые настройки"
     },
@@ -2097,47 +2075,21 @@
         "waiting_for_join_title": "Ожидание присоединения пользователей %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Добавить комнату",
         "add_space_label": "Добавить пространство",
-        "breadcrumbs_empty": "Нет недавно посещенных комнат",
-        "breadcrumbs_label": "Недавно посещённые комнаты",
         "failed_add_tag": "Не удалось добавить тег %(tagName)s в комнату",
         "failed_remove_tag": "Не удалось удалить тег %(tagName)s из комнаты",
         "failed_set_dm_tag": "Не удалось установить метку личного сообщения",
-        "home_menu_label": "Параметры раздела \"Главная\"",
-        "join_public_room_label": "Присоединиться к публичной комнате",
-        "joining_rooms_status": {
-            "one": "Сейчас вы состоите в %(count)s чате",
-            "few": "Сейчас вы состоите в %(count)s чатах",
-            "many": "Сейчас вы состоите в %(count)s чатах"
-        },
         "list_title": "Список комнат",
         "more_options": {
             "leave_room": "Покинуть комнату"
         },
         "notification_options": "Настройки уведомлений",
-        "redacting_messages_status": {
-            "one": "Удаляются сообщения в %(count)s комнате",
-            "other": "Удаляются сообщения в %(count)s комнатах"
-        },
         "section": {
             "chats": "Чаты",
             "favourites": "Избранное",
             "low_priority": "Низкий приоритет"
         },
-        "show_less": "Показать меньше",
-        "show_n_more": {
-            "other": "Показать ещё %(count)s",
-            "one": "Показать ещё %(count)s"
-        },
-        "show_previews": "Показывать последнее сообщение",
-        "sort_by": "Сортировать",
-        "sort_by_activity": "По активности",
-        "sort_by_alphabet": "А-Я",
-        "sort_unread_first": "Комнаты с непрочитанными сообщениями в начале",
-        "space_menu_label": "Меню %(spaceName)s",
-        "sublist_options": "Настройки списка",
-        "suggested_rooms_heading": "Предлагаемые комнаты"
+        "show_less": "Показать меньше"
     },
     "room_settings": {
         "access": {
@@ -2970,13 +2922,11 @@
         "showbold": "Показывать всю активность в списке комнат (точки или количество непрочитанных сообщений)",
         "sidebar": {
             "dialog_title": "<strong>Настройки:</strong> Боковая панель",
-            "metaspaces_favourites_description": "Сгруппируйте все свои любимые комнаты и людей в одном месте.",
             "metaspaces_home_all_rooms": "Показать все комнаты",
             "metaspaces_home_all_rooms_description": "Показать все комнаты на Главной, даже если они находятся в пространстве.",
             "metaspaces_home_description": "Раздел \"Главная\" полезен для получения общего вида.",
             "metaspaces_orphans": "Комнаты без пространства",
             "metaspaces_orphans_description": "Сгруппируйте все комнаты, которые не являются частью пространства, в одном месте.",
-            "metaspaces_people_description": "Сгруппируйте всех своих людей в одном месте.",
             "metaspaces_subsection": "Пространства для показа",
             "metaspaces_video_rooms": "Видеокомнаты и конференции",
             "metaspaces_video_rooms_description": "Сгруппировать все частные видеокомнаты и конференции.",
@@ -3003,7 +2953,6 @@
             "audio_output": "Аудиовыход",
             "audio_output_empty": "Аудиовыход не обнаружен",
             "auto_gain_control": "Авторегулировка усиления",
-            "connection_section": "Соединение",
             "dialog_title": "<strong>Настройки:</strong> Голос и видео",
             "echo_cancellation": "Эхоподавление",
             "echo_cancellation_description": "Устраняет эхо микрофона во время звонков. Эта настройка также влияет на Element Call.",
@@ -3188,12 +3137,6 @@
     },
     "space_settings": {
         "title": "Настройки — %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "У вас нет разрешений, чтобы добавить комнаты в это пространство",
-        "error_no_permission_add_space": "У вас нет разрешения добавлять пространства в это пространство",
-        "error_no_permission_create_room": "У вас нет разрешений для создания новых комнат в этом пространстве",
-        "error_no_permission_invite": "У вас нет разрешения приглашать людей в это пространство"
     },
     "spotlight": {
         "public_rooms": {

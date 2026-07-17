@@ -22,7 +22,6 @@ import {
 test.describe("Room list custom sections", () => {
     test.use({
         displayName: "Alice",
-        labsFlags: ["feature_new_room_list", "feature_room_list_sections"],
         botCreateOpts: {
             displayName: "BotBob",
             autoAcceptInvites: true,

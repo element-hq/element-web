@@ -31,6 +31,8 @@ const DeviceTileName: React.FC<{ device: ExtendedDevice }> = ({ device }) => {
 
 const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, isSelected, onClick }) => {
     return (
+        // We break the rule here as this is a mouse-only shortcut
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <div
             className={classNames("mx_DeviceTile", { mx_DeviceTile_interactive: !!onClick })}
             data-testid={`device-tile-${device.device_id}`}
@@ -43,6 +45,8 @@ const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, isSelected, o
                     <DeviceMetaData device={device} />
                 </div>
             </div>
+            {/* We break the rule here as this is a mouse-only interaction */}
+            {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
             <div className="mx_DeviceTile_actions" onClick={preventDefaultWrapper(() => {})}>
                 {children}
             </div>

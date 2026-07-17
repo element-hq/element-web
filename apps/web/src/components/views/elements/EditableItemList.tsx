@@ -79,7 +79,6 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
                     onClick={this.onRemove}
                     className="mx_EditableItem_delete"
                     title={_t("action|remove")}
-                    role="button"
                 >
                     <CloseIcon />
                 </AccessibleButton>

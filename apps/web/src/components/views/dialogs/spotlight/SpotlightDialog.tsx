@@ -35,7 +35,6 @@ import {
     RoomIcon,
     SpaceIcon,
     UserProfileIcon,
-    FavouriteIcon,
     HomeIcon,
     GroupIcon,
     CloseIcon,
@@ -70,10 +69,9 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
-import { RecentAlgorithm } from "../../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
-import { SdkContextClass } from "../../../../contexts/SDKContext";
+import { compareRoomsByRecency } from "../../../../utils/room/sortRoomsByRecency";
+import { SDKContextClass } from "../../../../contexts/SDKContextClass";
 import { getMetaSpaceName, MetaSpace } from "../../../../stores/spaces";
-import SpaceStore from "../../../../stores/spaces/SpaceStore";
 import { DirectoryMember, type Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { makeUserPermalink } from "../../../../utils/permalinks/Permalinks";
@@ -156,10 +154,6 @@ function metaspaceToIcon(key: MetaSpace): JSX.Element | undefined {
     switch (key) {
         case MetaSpace.Home:
             return <HomeIcon />;
-        case MetaSpace.Favourites:
-            return <FavouriteIcon />;
-        case MetaSpace.People:
-            return <UserProfileIcon />;
         case MetaSpace.Orphans:
             return <RoomIcon />;
     }
@@ -251,8 +245,6 @@ const toMemberResult = (member: Member | RoomMember, alreadyFiltered: boolean): 
     filter: [Filter.People],
     query: [member.userId.toLowerCase(), member.name.toLowerCase()].filter(Boolean),
 });
-
-const recentAlgorithm = new RecentAlgorithm();
 
 export const useWebSearchMetrics = (numResults: number, queryLength: number, viaSpotlight: boolean): void => {
     useEffect(() => {
@@ -427,13 +419,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return [
-            ...SpaceStore.instance.enabledMetaSpaces.map((spaceKey) => ({
+            ...SDKContextClass.instance.spaceStore.enabledMetaSpaces.map((spaceKey) => ({
                 section: Section.Spaces,
                 filter: [] as Filter[],
                 avatar: <div className="mx_SpotlightDialog_metaspaceResult">{metaspaceToIcon(spaceKey)}</div>,
-                name: getMetaSpaceName(spaceKey, SpaceStore.instance.allRoomsInHome),
+                name: getMetaSpaceName(spaceKey, SDKContextClass.instance.spaceStore.allRoomsInHome),
                 onClick() {
-                    SpaceStore.instance.setActiveSpace(spaceKey);
+                    SDKContextClass.instance.spaceStore.setActiveSpace(spaceKey);
                 },
             })),
             ...roomResults,
@@ -498,7 +490,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         // Sort results by most recent activity
-
         const myUserId = cli.getSafeUserId();
         for (const resultArray of Object.values(results)) {
             resultArray.sort((a: Result, b: Result) => {
@@ -507,7 +498,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     if (!isRoomResult(b)) return -1;
                     if (!isRoomResult(a)) return -1;
 
-                    return recentAlgorithm.getLastTs(b.room, myUserId) - recentAlgorithm.getLastTs(a.room, myUserId);
+                    return compareRoomsByRecency(a.room, b.room, myUserId);
                 } else if (isMemberResult(a) || isMemberResult(b)) {
                     // Member results should appear just after room results
                     if (!isMemberResult(b)) return -1;
@@ -520,12 +511,12 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return results;
-    }, [trimmedQuery, filter, cli, possibleResults, userDirectorySearchResults, memberComparator]);
+    }, [cli, trimmedQuery, filter, possibleResults, userDirectorySearchResults, memberComparator]);
 
     const numResults = sum(Object.values(results).map((it) => it.length));
     useWebSearchMetrics(numResults, query.length, true);
 
-    const activeSpace = SpaceStore.instance.activeSpaceRoom;
+    const activeSpace = SDKContextClass.instance.spaceStore.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace ?? undefined, query);
 
     const setQuery = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -1122,7 +1113,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     </h4>
                     <div>
                         {BreadcrumbsStore.instance.rooms
-                            .filter((r) => r.roomId !== SdkContextClass.instance.roomViewStore.getRoomId())
+                            .filter((r) => r.roomId !== SDKContextClass.instance.roomViewStore.getRoomId())
                             .map((room) => (
                                 <TooltipOption
                                     id={`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`}

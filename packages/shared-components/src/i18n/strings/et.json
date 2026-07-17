@@ -103,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "Ava jututuba: %(roomName)s",
+            "drag_cancelled": "Lohistamine on katkestatud",
+            "drag_end": "„%(source)s“ lohistati asukohta „%(target)s“",
+            "drag_end_after": "„%(source)s“ lohistati „%(target)s“ asukoha taha",
+            "drag_end_before": "„%(source)s“ lohistati „%(target)s“ asukoha ette",
+            "drag_end_original": "„%(source)s“ lohistati algsesse asukohta",
+            "drag_instructions": "Tühikuklahviga saad alustada lohistamist ja lõpetada seda. Nooleklahvid liigutavad kirjet ja Escape-nupp tühistab kogu tegevuse.",
+            "drag_over": "„%(source)s“ asub „%(target)s“ asukoha kohal",
+            "drag_over_after": "„%(source)s“ lohistatakse „%(target)s“ asukoha taha",
+            "drag_over_before": "„%(source)s“ lohistatakse „%(target)s“ asukoha ette",
+            "drag_over_original": "„%(source)s“ lohistatakse algsesse asukohta",
+            "drag_start": "Lohistan: %(source)s",
             "invitation": "Ava %(roomName)s jututoa kutse.",
             "mention": {
                 "one": "Ava %(roomName)s jututuba ühe lugemata mainimisega.",
@@ -124,10 +135,7 @@
             "no_chats": "Vestlusi veel ei leidu",
             "no_chats_description": "Alusta sellest, et leia mõni vestluspartner või loo oma jututuba",
             "no_chats_description_no_room_rights": "Alusta sellest, et leia mõni vestluspartner",
-            "no_favourites": "Sa pole veel ühtegi vestlust märkinud lemmikuks",
-            "no_favourites_description": "Vestluse saad märkida lemmikuks tema seadistustest",
             "no_invites": "Sul pole lugemata kutseid",
-            "no_lowpriority": "Sul pole ühtegi vähetähtsat jututuba",
             "no_mentions": "Sul pole lugemata mainimisi",
             "no_people": "Sul pole veel ühtegi otsevestlust kellegagi",
             "no_people_description": "Kõikide oma muude vestluste nägemiseks eemalda otsingufiltrid",
@@ -184,6 +192,17 @@
         "space_menu": {
             "home": "Kogukonna avaleht",
             "space_settings": "Kogukonna seadistused"
+        },
+        "unread_messages": "Lugemata sõnumid"
+    },
+    "status": {
+        "set_status": {
+            "away": "Eemal",
+            "be_right_back": "Tulen kohe tagasi",
+            "focus_time": "Keskendumisaeg",
+            "in_a_meeting": "Koosolekul",
+            "on_the_road": "Olen liikumises",
+            "set_status_prompt": "Mis on sinu olek võrgus?"
         }
     },
     "terms": {
@@ -213,6 +232,28 @@
             "declined": {
                 "call_declined": "Osapool jättis kõnele vastamata",
                 "call_declined_by_us": "Sa jätsid kõne vastamata"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s helistas",
+                    "join_button": "Liitu"
+                },
+                "dm": {
+                    "call_started": "Kõne algas",
+                    "title": "Kõne on pooleli"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s liituja",
+                        "other": "%(count)s liitujat"
+                    },
+                    "title": "Rühmakõne on pooleli"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Grupikõne on lõppenud"
+                }
             },
             "video_call_title": "Videokõne",
             "voice_call_title": "Häälkõne"

@@ -11,7 +11,6 @@ import SettingsStore from "../SettingsStore";
 import type IWatcher from "./Watcher";
 import { toPx } from "../../utils/units";
 import { Action } from "../../dispatcher/actions";
-import { SettingLevel } from "../SettingLevel";
 import { type UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
 import { type ActionPayload } from "../../dispatcher/payloads";
 
@@ -33,97 +32,6 @@ export class FontWatcher implements IWatcher {
     public async start(): Promise<void> {
         this.updateFont();
         this.dispatcherRef = dis.register(this.onAction);
-        /**
-         * baseFontSize is an account level setting which is loaded after the initial
-         * sync. Hence why we can't do that in the `constructor`
-         */
-        await this.migrateBaseFontSize();
-    }
-
-    /**
-     * Migrate the base font size from the V1 and V2 version to the V3 version
-     * @private
-     */
-    private async migrateBaseFontSize(): Promise<void> {
-        await this.migrateBaseFontV1toFontSizeDelta();
-        await this.migrateBaseFontV2toFontSizeDelta();
-    }
-
-    /**
-     * Migrating from the V1 version of the base font size to the new delta system.
-     * The delta system is using the default browser font size as a base
-     * Everything will become slightly larger, and getting rid of the `SIZE_DIFF`
-     * weirdness for locally persisted values
-     * @private
-     */
-    private async migrateBaseFontV1toFontSizeDelta(): Promise<void> {
-        const legacyBaseFontSize = SettingsStore.getValue("baseFontSize");
-        // No baseFontV1 found, nothing to migrate
-        if (!legacyBaseFontSize) return;
-
-        console.log(
-            "Migrating base font size -> base font size V2 -> font size delta for Compound, current value",
-            legacyBaseFontSize,
-        );
-
-        // Compute the V1 to V2 version before migrating to fontSizeDelta
-        const baseFontSizeV2 = this.computeBaseFontSizeV1toV2(legacyBaseFontSize);
-
-        // Compute the difference between the V2 and the fontSizeDelta
-        const delta = this.computeFontSizeDeltaFromV2BaseFontSize(baseFontSizeV2);
-
-        await SettingsStore.setValue("fontSizeDelta", null, SettingLevel.DEVICE, delta);
-        await SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, 0);
-        console.log("Migration complete, deleting legacy `baseFontSize`");
-    }
-
-    /**
-     * Migrating from the V2 version of the base font size to the new delta system
-     * @private
-     */
-    private async migrateBaseFontV2toFontSizeDelta(): Promise<void> {
-        const legacyBaseFontV2Size = SettingsStore.getValue("baseFontSizeV2");
-        // No baseFontV2 found, nothing to migrate
-        if (!legacyBaseFontV2Size) return;
-
-        console.log("Migrating base font size V2 for Compound, current value", legacyBaseFontV2Size);
-
-        // Compute the difference between the V2 and the fontSizeDelta
-        const delta = this.computeFontSizeDeltaFromV2BaseFontSize(legacyBaseFontV2Size);
-
-        await SettingsStore.setValue("fontSizeDelta", null, SettingLevel.DEVICE, delta);
-        await SettingsStore.setValue("baseFontSizeV2", null, SettingLevel.DEVICE, 0);
-        console.log("Migration complete, deleting legacy `baseFontSizeV2`");
-    }
-
-    /**
-     * Compute the V2 font size from the V1 font size
-     * @param legacyBaseFontSize
-     * @private
-     */
-    private computeBaseFontSizeV1toV2(legacyBaseFontSize: number): number {
-        // For some odd reason, the persisted value in user storage has an offset
-        // of 5 pixels for all values stored under `baseFontSize`
-        const LEGACY_SIZE_DIFF = 5;
-
-        // Compound uses a base font size of `16px`, whereas the old Element
-        // styles based their calculations off a `15px` root font size.
-        const ROOT_FONT_SIZE_INCREASE = 1;
-
-        // Compute the font size of the V2 version before migrating to V3
-        return legacyBaseFontSize + ROOT_FONT_SIZE_INCREASE + LEGACY_SIZE_DIFF;
-    }
-
-    /**
-     * Compute the difference between the V2 font size and the default browser font size
-     * @param legacyBaseFontV2Size
-     * @private
-     */
-    private computeFontSizeDeltaFromV2BaseFontSize(legacyBaseFontV2Size: number): number {
-        const browserDefaultFontSize = FontWatcher.getRootFontSize();
-
-        // Compute the difference between the V2 font size and the default browser font size
-        return legacyBaseFontV2Size - browserDefaultFontSize;
     }
 
     /**
@@ -157,9 +65,7 @@ export class FontWatcher implements IWatcher {
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (payload.action === Action.MigrateBaseFontSize) {
-            this.migrateBaseFontSize();
-        } else if (payload.action === Action.UpdateFontSizeDelta) {
+        if (payload.action === Action.UpdateFontSizeDelta) {
             this.setRootFontSize(payload.delta);
         } else if (payload.action === Action.UpdateSystemFont) {
             this.setSystemFont(payload as UpdateSystemFontPayload);

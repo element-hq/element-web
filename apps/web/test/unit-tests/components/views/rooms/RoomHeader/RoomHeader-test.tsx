@@ -18,6 +18,7 @@ import {
     RoomStateEvent,
     RoomMember,
     type MatrixClient,
+    ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
@@ -46,7 +47,6 @@ import { ScopedRoomContextProvider } from "../../../../../../src/contexts/Scoped
 import RoomContext, { type RoomContextType } from "../../../../../../src/contexts/RoomContext";
 import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
-import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import dispatcher from "../../../../../../src/dispatcher/dispatcher";
@@ -60,6 +60,8 @@ import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
+import { SDKContext } from "../../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../../src/contexts/SDKContextClass.ts";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -93,9 +95,11 @@ describe("RoomHeader", () => {
     function getWrapper(): RenderOptions {
         return {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={client}>
-                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
-                </MatrixClientContext.Provider>
+                <SDKContext.Provider value={SDKContextClass.instance}>
+                    <MatrixClientContext.Provider value={client}>
+                        <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
+                    </MatrixClientContext.Provider>
+                </SDKContext.Provider>
             ),
         };
     }
@@ -365,7 +369,7 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
 
             await user.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
@@ -376,7 +380,7 @@ describe("RoomHeader", () => {
 
         it("you can't call if there's already a call", () => {
             mockRoomMembers(room, 2);
-            jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue(
+            jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
@@ -409,11 +413,7 @@ describe("RoomHeader", () => {
 
     describe("group call enabled", () => {
         beforeEach(async () => {
-            SdkConfig.put({
-                features: {
-                    feature_group_calls: true,
-                },
-            });
+            SdkConfig.put({});
             // Enable Element Call
             client._unstable_getRTCTransports = jest
                 .fn()
@@ -478,11 +478,9 @@ describe("RoomHeader", () => {
             const user = userEvent.setup();
             mockRoomMembers(room, 3);
             SdkConfig.add({
+                element_call: { disable: true }, // This test is about Jitsi widget re-pinning, not Element Call
                 setting_defaults: {
                     [UIFeature.Widgets]: true,
-                },
-                features: {
-                    feature_group_calls: false,
                 },
             });
             // allow calls
@@ -508,7 +506,7 @@ describe("RoomHeader", () => {
 
         it("disables calling if there's a jitsi call", () => {
             mockRoomMembers(room, 2);
-            jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue(
+            jest.spyOn(SDKContextClass.instance.legacyCallHandler, "getCallForRoom").mockReturnValue(
                 // The JS-SDK does not export the class `MatrixCall` only the type
                 {} as MatrixCall,
             );
@@ -532,7 +530,7 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toHaveAttribute("aria-disabled", "true");
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
             await user.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
 
@@ -554,7 +552,7 @@ describe("RoomHeader", () => {
             const videoButton = screen.getByRole("button", { name: "Video call" });
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
+            const placeCallSpy = jest.spyOn(SDKContextClass.instance.legacyCallHandler, "placeCall");
             await user.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
@@ -607,6 +605,30 @@ describe("RoomHeader", () => {
             render(<RoomHeader room={room} />, getWrapper());
             const joinButton = getByLabelText(document.body, "Join voice call");
             expect(joinButton).not.toHaveAttribute("aria-disabled", "true");
+        });
+
+        it("clicking the join button of an ongoing video call joins as a video call", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 3);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Video, true));
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const dispatcherSpy = jest.spyOn(dispatcher, "dispatch").mockImplementation();
+            await user.click(getByLabelText(document.body, "Join video call"));
+
+            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: false }));
+        });
+
+        it("clicking the join button of an ongoing voice call joins as a voice call", async () => {
+            const user = userEvent.setup();
+            mockRoomMembers(room, 3);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(createMockCall(ROOM_ID, 3, CallType.Voice, true));
+            render(<RoomHeader room={room} />, getWrapper());
+
+            const dispatcherSpy = jest.spyOn(dispatcher, "dispatch").mockImplementation();
+            await user.click(getByLabelText(document.body, "Join voice call"));
+
+            expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true, voiceOnly: true }));
         });
 
         it("join button is disabled if there is an other ongoing call", async () => {
@@ -708,6 +730,17 @@ describe("RoomHeader", () => {
         });
     });
 
+    it("does not show a user status for non-DM rooms", async () => {
+        SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, true);
+        client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+        mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+        render(<RoomHeader room={room} />, getWrapper());
+
+        expect(screen.queryByText("on a horse")).not.toBeInTheDocument();
+        expect(client.doesServerSupportExtendedProfiles).not.toHaveBeenCalled();
+    });
+
     it("shows a history icon if the room is encrypted and has shared history", async () => {
         mocked(client.getCrypto()!).isEncryptionEnabledInRoom.mockResolvedValue(true);
         await room.addLiveEvents(
@@ -788,6 +821,42 @@ describe("RoomHeader", () => {
             render(<RoomHeader room={room} />, getWrapper());
 
             await waitFor(() => expect(getByLabelText(document.body, expectedLabel)).toBeInTheDocument());
+        });
+
+        it("shows the user status", async () => {
+            SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, true);
+            client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+            render(<RoomHeader room={room} />, getWrapper());
+
+            await waitFor(() => expect(screen.getByText("on a horse")).toBeInTheDocument());
+            expect(screen.getByText("🐎")).toBeInTheDocument();
+        });
+
+        it("updates user status when it changes", async () => {
+            SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, true);
+            client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+            render(<RoomHeader room={room} />, getWrapper());
+
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐴", text: "is a horse" });
+            client.emit(ClientEvent.UserProfileUpdate, "@bob:example.org", { emoji: "🐴", text: "is a horse" });
+
+            await waitFor(() => expect(screen.getByText("is a horse")).toBeInTheDocument());
+            expect(screen.getByText("🐴")).toBeInTheDocument();
+        });
+
+        it("does not show the user status when the feature is disabled", async () => {
+            SettingsStore.setValue("feature_user_status", null, SettingLevel.DEVICE, false);
+            client.doesServerSupportExtendedProfiles = jest.fn().mockResolvedValue(true);
+            mocked(client.getExtendedProfileProperty).mockResolvedValue({ emoji: "🐎", text: "on a horse" });
+
+            render(<RoomHeader room={room} />, getWrapper());
+
+            expect(screen.queryByText("on a horse")).not.toBeInTheDocument();
+            expect(client.doesServerSupportExtendedProfiles).not.toHaveBeenCalled();
         });
 
         it("does not show the face pile for DMs", () => {
@@ -919,6 +988,7 @@ function createMockCall(
     roomId: string = "!1:example.org",
     participantCount: number = 0,
     callType: CallType = CallType.Video,
+    isElementCall: boolean = false,
 ): Call {
     const participants = new Map();
 
@@ -936,7 +1006,7 @@ function createMockCall(
     return {
         roomId,
         participants,
-        widget: { id: "test-widget" },
+        widget: { id: "test-widget", type: isElementCall ? "m.call" : undefined },
         connectionState: "disconnected",
         callType,
         on: jest.fn(),

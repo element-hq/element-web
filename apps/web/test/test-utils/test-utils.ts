@@ -27,7 +27,7 @@ import {
     type IPushRules,
     RelationType,
     JoinRule,
-    type OidcClientConfig,
+    type ValidatedAuthMetadata,
     type GroupCall,
     type EventStatus,
     type ICreateRoomOpts,
@@ -49,6 +49,7 @@ import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 import { vi } from "../setup/adapter.ts";
+import { SDKContextClass } from "../../src/contexts/SDKContextClass.ts";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -70,12 +71,14 @@ export function stubClient(): MatrixClient {
     vi.spyOn(peg, "get");
     vi.spyOn(peg, "safeGet");
     vi.spyOn(peg, "unset");
-    vi.spyOn(peg, "replaceUsingCreds");
+    vi.spyOn(peg, "set");
     // MatrixClientPeg.safeGet() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
     peg.get = () => client;
     peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
+    // @ts-ignore
+    SDKContextClass.instance._client = client;
     return client;
 }
 
@@ -125,6 +128,7 @@ export function createTestClient(): MatrixClient {
             getOwnDeviceKeys: vi.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
             getUserDeviceInfo: vi.fn().mockResolvedValue(new Map()),
             getUserVerificationStatus: vi.fn(),
+            getUserCrossSigningKeys: vi.fn().mockResolvedValue(null),
             getDeviceVerificationStatus: vi.fn(),
             resetKeyBackup: vi.fn(),
             isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
@@ -413,7 +417,6 @@ type MakeEventProps = MakeEventPassThruProps & {
     redacts?: string;
     content: IContent;
     room?: Room["roomId"]; // to-device messages are roomless
-    // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
     status?: EventStatus;
@@ -777,7 +780,7 @@ export function mkRoomState(
 export function mkServerConfig(
     hsUrl: string,
     isUrl: string,
-    delegatedAuthentication?: OidcClientConfig,
+    delegatedAuthentication?: ValidatedAuthMetadata,
 ): ValidatedServerConfig {
     return {
         hsUrl,

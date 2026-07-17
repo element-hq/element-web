@@ -15,7 +15,9 @@ import { sample, uniqueId } from "lodash-es";
 import { test as base } from "./panel.js";
 import { type Credentials } from "../utils/api.js";
 
-/** Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials. */
+/**
+ * Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials.
+ */
 export async function populateLocalStorageWithCredentials(page: Page, credentials: Credentials) {
     await page.addInitScript(
         ({ credentials }) => {
@@ -26,6 +28,10 @@ export async function populateLocalStorageWithCredentials(page: Page, credential
             window.localStorage.setItem("mx_is_guest", "false");
             window.localStorage.setItem("mx_has_pickle_key", "false");
             window.localStorage.setItem("mx_has_access_token", "true");
+
+            if (credentials.oauthClientId) {
+                window.localStorage.setItem("mx_oidc_client_id", credentials.oauthClientId);
+            }
 
             window.localStorage.setItem(
                 "mx_local_settings",
@@ -41,7 +47,7 @@ export async function populateLocalStorageWithCredentials(page: Page, credential
     );
 }
 
-export const test = base.extend<{
+export interface TestFixtures {
     /**
      * The displayname to use for the user registered in {@link #credentials}.
      *
@@ -71,7 +77,9 @@ export const test = base.extend<{
      * app.
      */
     user: Credentials;
-}>({
+}
+
+export const test = base.extend<TestFixtures>({
     displayName: undefined,
 
     // We don't directly depend upon the `context` fixture, but we do need to make sure that it has been run

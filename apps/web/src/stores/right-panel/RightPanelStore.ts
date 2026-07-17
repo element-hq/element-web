@@ -26,7 +26,7 @@ import {
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 /**
@@ -74,7 +74,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected async onReady(): Promise<any> {
-        this.viewedRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+        this.viewedRoomId = SDKContextClass.instance.roomViewStore.getRoomId();
         this.matrixClient?.on(CryptoEvent.VerificationRequestReceived, this.onVerificationRequestUpdate);
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
@@ -454,5 +454,3 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return this.internalInstance;
     }
 }
-
-window.mxRightPanelStore = RightPanelStore.instance;

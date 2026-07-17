@@ -11,8 +11,6 @@
             "other": "%(count)s ongelezen berichten, inclusief vermeldingen.",
             "one": "1 ongelezen vermelding."
         },
-        "recent_rooms": "Recente kamers",
-        "room_name": "Kamer %(name)s",
         "room_status_bar": "Kamerstatus balk",
         "seek_bar_label": "Audio zoekbalk",
         "unread_messages": "Ongelezen berichten."
@@ -22,7 +20,6 @@
         "accept": "Accepteren",
         "add": "Toevoegen",
         "add_existing_room": "Voeg bestaande kamer toeroom",
-        "add_people": "Personen toevoegen",
         "apply": "Toepassen",
         "approve": "Keur goed",
         "ask_to_join": "Vraag om toe te treden",
@@ -55,7 +52,6 @@
         "enter_fullscreen": "Volledig scherm openen",
         "exit_fullscreeen": "Volledig scherm verlaten",
         "expand": "Uitvouwen",
-        "explore_public_rooms": "Publieke kamers ontdekken",
         "explore_rooms": "Kamers ontdekken",
         "export": "Wegschrijven",
         "forward": "Doorsturen",
@@ -67,8 +63,6 @@
         "ignore": "Negeren",
         "import": "Inlezen",
         "invite": "Uitnodigen",
-        "invite_to_space": "Voor Space uitnodigen",
-        "invites_list": "Uitnodigingen",
         "join": "Deelnemen",
         "learn_more": "Lees verder",
         "leave": "Verlaten",
@@ -112,8 +106,6 @@
         "sign_out": "Uitloggen",
         "skip": "Overslaan",
         "start": "Starten",
-        "start_chat": "Gesprek beginnen",
-        "start_new_chat": "Nieuwe chat beginnen",
         "stop": "Stop",
         "submit": "Bevestigen",
         "subscribe": "Abonneren",
@@ -390,14 +382,12 @@
         "encrypted": "Versleuteld",
         "error": "Fout",
         "faq": "FAQ",
-        "favourites": "Favorieten",
         "filter_results": "Resultaten filteren",
         "forward_message": "Bericht doorsturen",
         "general": "Algemeen",
         "go_to_settings": "Ga naar instellingen",
         "guest": "Gast",
         "help": "Hulp",
-        "historical": "Historisch",
         "home": "Thuis",
         "homeserver": "Homeserver",
         "identity_server": "Identiteitsserver",
@@ -409,7 +399,6 @@
         "light": "Helder",
         "loading": "Laden...",
         "location": "Locatie",
-        "low_priority": "Lage prioriteit",
         "matrix": "Matrix",
         "message": "Bericht",
         "message_layout": "Berichtlayout",
@@ -467,7 +456,6 @@
         "success": "Klaar",
         "suggestions": "Suggesties",
         "support": "Ondersteuning",
-        "system_alerts": "Systeemmeldingen",
         "theme": "Thema",
         "thread": "Draad",
         "threads": "Onderwerpen",
@@ -482,7 +470,6 @@
         "username": "Inlognaam",
         "verified": "Geverifieerd",
         "version": "Versie",
-        "video": "Video",
         "video_room": "Video kamer",
         "view_message": "Bericht bekijken",
         "warning": "Let op"
@@ -1093,7 +1080,6 @@
         "click_for_info": "Klik voor meer info",
         "custom_themes": "Maatwerkthema's ondersteuning",
         "element_call_video_rooms": "Element Call videokamers",
-        "group_calls": "Nieuwe ervaring voor groepsgesprekken",
         "group_developer": "Ontwikkelaar",
         "group_encryption": "Versleuteling",
         "group_experimental": "Experimenteel",
@@ -1102,7 +1088,6 @@
         "group_rooms": "Kamers",
         "group_themes": "Thema's",
         "group_voip": "Spraak & video",
-        "html_topic": "HTML-weergave van kamer onderwerpen weergeven",
         "join_beta": "Beta inschakelen",
         "join_beta_reload": "Door deel te nemen aan de bèta wordt %(brand)s opnieuw geladen.",
         "jump_to_date": "Ga naar datum (voegt /jumptodate en spring naar datum headers toe)",
@@ -1159,9 +1144,6 @@
         "leave_space_question": "Weet je zeker dat je de Space '%(spaceName)s' wilt verlaten?",
         "room_rejoin_warning": "Dit is geen publieke kamer. Slechts op uitnodiging zal je opnieuw kunnen toetreden.",
         "space_rejoin_warning": "Deze Space is niet publiek. Zonder uitnodiging zal je niet opnieuw kunnen toetreden."
-    },
-    "left_panel": {
-        "open_dial_pad": "Kiestoetsen openen"
     },
     "lightbox": {
         "rotate_left": "Links draaien",
@@ -1318,7 +1300,6 @@
     },
     "quick_settings": {
         "all_settings": "Instellingen",
-        "metaspace_section": "Vastprikken aan zijbalk",
         "sidebar_settings": "Meer opties",
         "title": "Snelle instellingen"
     },
@@ -1501,36 +1482,12 @@
         }
     },
     "room_list": {
-        "add_room_label": "Kamer toevoegen",
         "add_space_label": "Space toevoegen",
-        "breadcrumbs_empty": "Geen onlangs bezochte kamers",
-        "breadcrumbs_label": "Onlangs geopende kamers",
         "failed_add_tag": "Toevoegen van %(tagName)s-label aan kamer is mislukt",
         "failed_remove_tag": "Verwijderen van %(tagName)s-label van kamer is mislukt",
         "failed_set_dm_tag": "Kan tag voor direct bericht niet instellen",
-        "home_menu_label": "Home-opties",
-        "join_public_room_label": "Publieke kamer toetreden",
-        "joining_rooms_status": {
-            "one": "Momenteel aan het toetreden tot %(count)s kamer",
-            "other": "Momenteel aan het toetreden tot %(count)s kamers"
-        },
         "notification_options": "Meldingsinstellingen",
-        "redacting_messages_status": {
-            "one": "Momenteel berichten in %(count)s kamer aan het verwijderen",
-            "other": "Momenteel berichten in %(count)s kamers aan het verwijderen"
-        },
-        "show_less": "Minder tonen",
-        "show_n_more": {
-            "one": "Toon %(count)s meer",
-            "other": "Toon %(count)s meer"
-        },
-        "show_previews": "Voorvertoning van berichten inschakelen",
-        "sort_by": "Sorteer op",
-        "sort_by_activity": "Activiteit",
-        "sort_unread_first": "Kamers met ongelezen berichten als eerste tonen",
-        "space_menu_label": "%(spaceName)s-menu",
-        "sublist_options": "Lijstopties",
-        "suggested_rooms_heading": "Kamersuggesties"
+        "show_less": "Minder tonen"
     },
     "room_settings": {
         "access": {
@@ -2097,13 +2054,11 @@
         "show_stickers_button": "Stickers-knop tonen",
         "show_typing_notifications": "Typmeldingen weergeven",
         "sidebar": {
-            "metaspaces_favourites_description": "Groepeer al je favoriete kamers en mensen op één plek.",
             "metaspaces_home_all_rooms": "Alle kamers tonen",
             "metaspaces_home_all_rooms_description": "Toon al je kamers in Home, zelfs als ze al in een space zitten.",
             "metaspaces_home_description": "Home is handig om een overzicht van alles te krijgen.",
             "metaspaces_orphans": "Kamers buiten een space",
             "metaspaces_orphans_description": "Groepeer al je kamers die geen deel uitmaken van een space op één plaats.",
-            "metaspaces_people_description": "Groepeer al je mensen op één plek.",
             "metaspaces_subsection": "Spaces om te tonen",
             "title": "Zijbalk"
         },
@@ -2271,12 +2226,6 @@
     },
     "space_settings": {
         "title": "Instellingen - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Je hebt geen toestemming om kamers toe te voegen in deze Space",
-        "error_no_permission_add_space": "Je bent niet gemachtigd om spaces aan deze space toe te voegen",
-        "error_no_permission_create_room": "Je hebt geen toestemming om kamers te maken in deze Space",
-        "error_no_permission_invite": "Je hebt geen toestemming om personen in deze Space uit te nodigen"
     },
     "spotlight": {
         "public_rooms": {

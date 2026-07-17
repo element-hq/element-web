@@ -41,7 +41,7 @@ import { type ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoom
 import SettingsStore from "../settings/SettingsStore";
 import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { UPDATE_EVENT } from "./AsyncStore";
-import { type SdkContextClass } from "../contexts/SDKContext";
+import { type SDKContextClass } from "../contexts/SDKContextClass";
 import { CallStore } from "./CallStore";
 import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 import { type ActionPayload } from "../dispatcher/payloads";
@@ -52,6 +52,7 @@ import { setMarkedUnreadState } from "../utils/notifications";
 import { ConnectionState, ElementCall } from "../models/Call";
 import { isVideoRoom } from "../utils/video-rooms";
 import { ModuleApi } from "../modules/Api";
+import ActiveWidgetStore from "./ActiveWidgetStore";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -152,7 +153,7 @@ export class RoomViewStore extends EventEmitter {
 
     public constructor(
         dis: MatrixDispatcher,
-        private readonly stores: SdkContextClass,
+        private readonly stores: SDKContextClass,
         private readonly lockedToRoomId?: string,
     ) {
         super();
@@ -208,7 +209,7 @@ export class RoomViewStore extends EventEmitter {
         if (this.lockedToRoomId && payload.room_id && this.lockedToRoomId !== payload.room_id) {
             return;
         }
-        // eslint-disable-line @typescript-eslint/naming-convention
+
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -377,6 +378,12 @@ export class RoomViewStore extends EventEmitter {
                     ElementCall.create(room);
                     call = CallStore.instance.getCall(payload.room_id)!;
                 }
+
+                // Custom case where we start voice calls in pip
+                if (payload.voiceOnly ?? false) {
+                    viewingCall = false;
+                    ActiveWidgetStore.instance.setWidgetPersistence(call.widget.id, room.roomId, true);
+                }
                 call.presented = true;
                 // Immediately start the call. This will connect to all required widget events
                 // and allow the widget to show the lobby.
@@ -401,7 +408,7 @@ export class RoomViewStore extends EventEmitter {
                     roomLoadError: null,
                     viaServers: payload.via_servers,
                     wasContextSwitch: payload.context_switch,
-                    viewingCall: payload.view_call ?? false,
+                    viewingCall,
                 });
                 // set this room as the room subscription. We need to await for it as this will fetch
                 // all room state for this room, which is required before we get the state below.
@@ -545,7 +552,7 @@ export class RoomViewStore extends EventEmitter {
         const joinOpts: IJoinRoomOpts = {
             viaServers,
             acceptSharedHistory: true,
-            ...(payload.opts ?? {}),
+            ...payload.opts,
         };
         try {
             const cli = MatrixClientPeg.safeGet();

@@ -15,8 +15,6 @@ import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import dis from "../../../dispatcher/dispatcher";
-import LegacyCallHandler from "../../../LegacyCallHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t, _td } from "../../../languageHandler";
 import VideoFeed from "./VideoFeed";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -28,6 +26,7 @@ import LegacyCallViewButtons from "./LegacyCallView/LegacyCallViewButtons";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface IProps {
     // The call for us to display
@@ -81,6 +80,9 @@ function exitFullscreen(): void {
 }
 
 export default class LegacyCallView extends React.Component<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     private dispatcherRef?: string;
     private contentWrapperRef = createRef<HTMLDivElement>();
     private buttonsRef = createRef<LegacyCallViewButtons>();
@@ -308,18 +310,18 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
     };
 
     private onCallResumeClick = (): void => {
-        const userFacingRoomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
-        if (userFacingRoomId) LegacyCallHandler.instance.setActiveCallRoomId(userFacingRoomId);
+        const userFacingRoomId = this.context.legacyCallHandler.roomIdForCall(this.props.call);
+        if (userFacingRoomId) this.context.legacyCallHandler.setActiveCallRoomId(userFacingRoomId);
     };
 
     private onTransferClick = (): void => {
-        const transfereeCall = LegacyCallHandler.instance.getTransfereeForCallId(this.props.call.callId);
+        const transfereeCall = this.context.legacyCallHandler.getTransfereeForCallId(this.props.call.callId);
         if (transfereeCall) this.props.call.transferToCall(transfereeCall);
     };
 
     private onHangupClick = (): void => {
-        const roomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
-        if (roomId) LegacyCallHandler.instance.hangupOrReject(roomId);
+        const roomId = this.context.legacyCallHandler.roomIdForCall(this.props.call);
+        if (roomId) this.context.legacyCallHandler.hangupOrReject(roomId);
     };
 
     private onToggleSidebar = (): void => {
@@ -400,10 +402,10 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const { pipMode, call, onResize, sidebarShown } = this.props;
         const { isLocalOnHold, isRemoteOnHold, primaryFeed, secondaryFeed, sidebarFeeds } = this.state;
 
-        const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
-        const callRoom = (callRoomId ? MatrixClientPeg.safeGet().getRoom(callRoomId) : undefined) ?? undefined;
+        const callRoomId = this.context.legacyCallHandler.roomIdForCall(call);
+        const callRoom = (callRoomId ? this.context.client?.getRoom(callRoomId) : undefined) ?? undefined;
         const avatarSize = pipMode ? "76px" : "160px";
-        const transfereeCall = LegacyCallHandler.instance.getTransfereeForCallId(call.callId);
+        const transfereeCall = this.context.legacyCallHandler.getTransfereeForCallId(call.callId);
         const isOnHold = isLocalOnHold || isRemoteOnHold;
 
         let secondaryFeedElement: React.ReactNode;
@@ -421,12 +423,11 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
             let holdTransferContent: React.ReactNode;
             if (transfereeCall) {
-                const cli = MatrixClientPeg.safeGet();
-                const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
-                const transferTargetRoom = callRoomId ? cli.getRoom(callRoomId) : null;
+                const callRoomId = this.context.legacyCallHandler.roomIdForCall(call);
+                const transferTargetRoom = callRoomId ? this.context.client?.getRoom(callRoomId) : null;
                 const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("voip|unknown_person");
-                const transfereeCallRoomId = LegacyCallHandler.instance.roomIdForCall(transfereeCall);
-                const transfereeRoom = transfereeCallRoomId ? cli.getRoom(transfereeCallRoomId) : null;
+                const transfereeCallRoomId = this.context.legacyCallHandler.roomIdForCall(transfereeCall);
+                const transfereeRoom = transfereeCallRoomId ? this.context.client?.getRoom(transfereeCallRoomId) : null;
                 const transfereeName = transfereeRoom ? transfereeRoom.name : _t("voip|unknown_person");
 
                 holdTransferContent = (
@@ -451,7 +452,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                 let onHoldText: React.ReactNode;
                 if (isRemoteOnHold) {
                     onHoldText = _t(
-                        LegacyCallHandler.instance.hasAnyUnheldCall()
+                        this.context.legacyCallHandler.hasAnyUnheldCall()
                             ? _td("voip|call_held_switch")
                             : _td("voip|call_held_resume"),
                         {},
@@ -544,13 +545,12 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const { call, secondaryCall, pipMode, showApps, onMouseDownOnHeader, sidebarShown } = this.props;
         const { sidebarFeeds } = this.state;
 
-        const client = MatrixClientPeg.safeGet();
-        const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
-        const secondaryCallRoomId = LegacyCallHandler.instance.roomIdForCall(secondaryCall);
-        const callRoom = callRoomId ? client.getRoom(callRoomId) : null;
+        const callRoomId = this.context.legacyCallHandler.roomIdForCall(call);
+        const secondaryCallRoomId = this.context.legacyCallHandler.roomIdForCall(secondaryCall);
+        const callRoom = callRoomId ? this.context.client?.getRoom(callRoomId) : null;
         if (!callRoom) return null;
 
-        const secCallRoom = secondaryCallRoomId ? client.getRoom(secondaryCallRoomId) : null;
+        const secCallRoom = secondaryCallRoomId ? this.context.client?.getRoom(secondaryCallRoomId) : null;
 
         const callViewClasses = classNames({
             mx_LegacyCallView: true,
@@ -565,7 +565,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                 <LegacyCallViewHeader
                     onPipMouseDown={onMouseDownOnHeader}
                     pipMode={pipMode}
-                    callRooms={[callRoom, secCallRoom]}
+                    callRooms={[callRoom, secCallRoom ?? null]}
                     onMaximize={this.onMaximizeClick}
                 />
                 <div className="mx_LegacyCallView_content_wrapper" ref={this.contentWrapperRef}>

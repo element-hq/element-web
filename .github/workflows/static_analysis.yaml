@@ -28,7 +28,7 @@ jobs:
                     - name: Oxfmt
                       install: normal
                       command: "lint:fmt"
-                    - name: ESLint
+                    - name: Oxlint
                       install: normal
                       command: "lint:js"
                     - name: Style Lint
@@ -46,6 +46,9 @@ jobs:
                     - name: Docs
                       install: layered
                       command: "docs:build"
+                    - name: Unused settings
+                      install: normal
+                      command: "lint:unused-settings"
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
@@ -54,7 +57,7 @@ jobs:
                   persist-credentials: false
 
             - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+            - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
               if: matrix.install != ''
               with:
                   cache: "pnpm"
@@ -87,7 +90,7 @@ jobs:
                   persist-credentials: false
 
             - name: Run zizmor
-              uses: zizmorcore/zizmor-action@192e21d79ab29983730a13d1382995c2307fbcaa # v0.5.7
+              uses: zizmorcore/zizmor-action@6599ee8b7a49aef6a770f63d261d214911a7ce02 # v0.6.0
 
     i18n:
         strategy:

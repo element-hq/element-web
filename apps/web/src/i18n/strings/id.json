@@ -11,8 +11,6 @@
             "one": "1 sebutan yang belum dibaca.",
             "other": "%(count)s pesan yang belum dibaca termasuk sebutan."
         },
-        "recent_rooms": "Ruangan terkini",
-        "room_name": "Ruangan %(name)s",
         "room_status_bar": "Bilah status ruangan",
         "seek_bar_label": "Bilah pencarian audio",
         "unread_messages": "Pesan yang belum dibaca."
@@ -22,7 +20,6 @@
         "accept": "Terima",
         "add": "Tambahkan",
         "add_existing_room": "Tambahkan ruangan yang sudah ada",
-        "add_people": "Tambahkan orang",
         "apply": "Terapkan",
         "approve": "Setujui",
         "ask_to_join": "Bertanya untuk bergabung",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Masuki layar penuh",
         "exit_fullscreeen": "Keluar dari layar penuh",
         "expand": "Buka",
-        "explore_public_rooms": "Jelajahi ruangan publik",
         "explore_rooms": "Jelajahi ruangan",
         "export": "Ekspor",
         "forward": "Teruskan",
@@ -69,8 +65,6 @@
         "ignore": "Abaikan",
         "import": "Impor",
         "invite": "Undang",
-        "invite_to_space": "Undang ke space",
-        "invites_list": "Undangan",
         "join": "Bergabung",
         "learn_more": "Pelajari lebih lanjut",
         "leave": "Tinggalkan",
@@ -116,8 +110,6 @@
         "sign_out": "Hapus perangkat ini",
         "skip": "Lewat",
         "start": "Mulai",
-        "start_chat": "Mulai obrolan",
-        "start_new_chat": "Mulai obrolan baru",
         "stop": "Berhenti",
         "submit": "Kirim",
         "subscribe": "Berlangganan",
@@ -475,7 +467,6 @@
         "encrypted": "Terenkripsi",
         "error": "Kesalahan",
         "faq": "Pertanyaan Umum",
-        "favourites": "Favorit",
         "feedback": "Masukan",
         "filter_results": "Saring hasil",
         "forward_message": "Teruskan pesan",
@@ -483,7 +474,6 @@
         "go_to_settings": "Pergi ke Pengaturan",
         "guest": "Tamu",
         "help": "Bantuan",
-        "historical": "Riwayat",
         "home": "Beranda",
         "homeserver": "Homeserver",
         "identity_server": "Server identitas",
@@ -495,7 +485,6 @@
         "light": "Terang",
         "loading": "Memuat…",
         "location": "Lokasi",
-        "low_priority": "Prioritas rendah",
         "matrix": "Matrix",
         "message": "Pesan",
         "message_layout": "Tata letak pesan",
@@ -561,7 +550,6 @@
         "success": "Berhasil",
         "suggestions": "Saran",
         "support": "Dukungan",
-        "system_alerts": "Pemberitahuan Sistem",
         "theme": "Tema",
         "thread": "Utasan",
         "threads": "Utasan",
@@ -578,7 +566,6 @@
         "username": "Nama Pengguna",
         "verified": "Terverifikasi",
         "version": "Versi",
-        "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
         "warning": "Peringatan"
@@ -1493,7 +1480,6 @@
         "extended_profiles_msc_support": "Memerlukan server Anda untuk mendukung MSC4133",
         "feature_disable_call_per_sender_encryption": "Nonaktifkan enkripsi per pengirim untuk Element Call",
         "feature_wysiwyg_composer_description": "Menggunakan teks kaya daripada Markdown dalam komposer pesan.",
-        "group_calls": "Pengalaman panggilan grup baru",
         "group_developer": "Pengembang",
         "group_encryption": "Enkripsi",
         "group_experimental": "Eksperimental",
@@ -1508,7 +1494,6 @@
         "group_voip": "Suara & Video",
         "group_widgets": "Widget",
         "hidebold": "Sembunyikan titik notifikasi (hanya tampilkan lencana penghitung)",
-        "html_topic": "Tampilkan versi HTML dari topik ruangan",
         "join_beta": "Bergabung dengan beta",
         "join_beta_reload": "Bergabung dengan beta akan memuat ulang %(brand)s.",
         "jump_to_date": "Pergi ke tanggal (menambahkan /jumptodate dan pergi ke tajukan tanggal)",
@@ -1520,7 +1505,6 @@
         "location_share_live_description": "Penerapan sementara. Lokasi tetap berada di riwayat ruangan.",
         "mjolnir": "Cara baru mengabaikan orang",
         "msc3531_hide_messages_pending_moderation": "Memperbolehkan moderator untuk menyembunyikan pesan yang akan dimoderasikan.",
-        "new_room_list": "Aktifkan daftar ruangan baru",
         "notification_settings": "Pengaturan Notifikasi Baru",
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
@@ -1531,7 +1515,6 @@
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
         "sliding_sync_server_no_support": "Server Anda tidak memiliki dukungan",
-        "under_active_development": "Dalam pengembangan aktif.",
         "unrealiable_e2e": "Tidak dapat diandalkan di ruangan terenkripsi",
         "video_rooms": "Ruangan video",
         "video_rooms_a_new_way_to_chat": "Sebuah cara baru untuk mengobrol melalui suara dan video di %(brand)s.",
@@ -1586,9 +1569,6 @@
         "room_leave_mod_warning": "Anda adalah moderator satu-satunya di ruangan ini. Jika Anda keluar, tidak ada siapa pun yang dapat mengubah pengaturan ruangan atau melakukan tindakan penting lainnya.",
         "room_rejoin_warning": "Ruangan ini tidak publik. Anda tidak dapat bergabung lagi tanpa sebuah undangan.",
         "space_rejoin_warning": "Space ini tidak publik. Anda tidak dapat bergabung lagi tanpa sebuah undangan."
-    },
-    "left_panel": {
-        "open_dial_pad": "Buka tombol penyetel"
     },
     "lightbox": {
         "rotate_left": "Putar ke Kiri",
@@ -1783,7 +1763,6 @@
     },
     "quick_settings": {
         "all_settings": "Semua pengaturan",
-        "metaspace_section": "Pasang pin ke bilah samping",
         "sidebar_settings": "Opsi lebih banyak",
         "title": "Pengaturan cepat"
     },
@@ -2071,41 +2050,16 @@
         "waiting_for_join_title": "Menunggu pengguna untuk bergabung ke %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Tambahkan ruangan",
         "add_space_label": "Tambahkan space",
-        "breadcrumbs_empty": "Tidak ada ruangan yang baru saja dilihat",
-        "breadcrumbs_label": "Ruangan yang baru saja dilihat",
         "failed_add_tag": "Gagal menambahkan tag %(tagName)s ke ruangan",
         "failed_remove_tag": "Gagal menghapus tanda %(tagName)s dari ruangan",
         "failed_set_dm_tag": "Gagal menetapkan tanda pesan langsung",
-        "home_menu_label": "Opsi Beranda",
-        "join_public_room_label": "Bergabung dengan ruangan publik",
-        "joining_rooms_status": {
-            "one": "Saat ini bergabung dengan %(count)s ruangan",
-            "other": "Saat ini bergabung dengan %(count)s ruangan"
-        },
         "list_title": "Daftar ruangan",
         "more_options": {
             "leave_room": "Tinggalkan ruangan"
         },
         "notification_options": "Opsi notifikasi",
-        "redacting_messages_status": {
-            "one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
-            "other": "Saat ini menghapus pesan-pesan di %(count)s ruangan"
-        },
-        "show_less": "Tampilkan lebih sedikit",
-        "show_n_more": {
-            "one": "Tampilkan %(count)s lagi",
-            "other": "Tampilkan %(count)s lagi"
-        },
-        "show_previews": "Tampilkan tampilan pesan",
-        "sort_by": "Sortir berdasarkan",
-        "sort_by_activity": "Aktivitas",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Tampilkan ruangan dengan pesan yang belum dibaca dahulu",
-        "space_menu_label": "Menu %(spaceName)s",
-        "sublist_options": "Tampilkan daftar opsi",
-        "suggested_rooms_heading": "Ruangan yang Disarankan"
+        "show_less": "Tampilkan lebih sedikit"
     },
     "room_settings": {
         "access": {
@@ -2925,13 +2879,11 @@
         "showbold": "Tampilkan semua aktivitas dalam daftar ruangan (titik atau jumlah pesan belum dibaca)",
         "sidebar": {
             "dialog_title": "<strong>Pengaturan:</strong> Bilah Samping",
-            "metaspaces_favourites_description": "Kelompokkan semua ruangan dan orang favorit Anda di satu tempat.",
             "metaspaces_home_all_rooms": "Tampilkan semua ruangan",
             "metaspaces_home_all_rooms_description": "Tampilkan semua ruangan di Beranda, walaupun mereka berada di sebuah space.",
             "metaspaces_home_description": "Beranda berguna untuk mendapatkan ikhtisar tentang semuanya.",
             "metaspaces_orphans": "Ruangan yang tidak berada di sebuah space",
             "metaspaces_orphans_description": "Kelompokkan semua ruangan yang tidak ada di sebuah space di satu tempat.",
-            "metaspaces_people_description": "Kelompokkan semua orang di satu tempat.",
             "metaspaces_subsection": "Space yang ditampilkan",
             "metaspaces_video_rooms": "Ruangan dan konferensi video",
             "metaspaces_video_rooms_description": "Kelompokkan semua ruangan dan konferensi video privat.",
@@ -2958,7 +2910,6 @@
             "audio_output": "Output Audio",
             "audio_output_empty": "Tidak ada output audio yang terdeteksi",
             "auto_gain_control": "Kendali suara otomatis",
-            "connection_section": "Koneksi",
             "dialog_title": "<strong>Pengaturan:</strong> Suara & Video",
             "echo_cancellation": "Pembatalan gema",
             "enable_fallback_ice_server": "Perbolehkan server bantuan panggilan cadangan (%(server)s)",
@@ -3140,12 +3091,6 @@
     },
     "space_settings": {
         "title": "Pengaturan — %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Anda tidak memiliki izin untuk menambahkan ruangan di space ini",
-        "error_no_permission_add_space": "Anda tidak memiliki izin untuk menambahkan space ke space ini",
-        "error_no_permission_create_room": "Anda tidak memiliki izin untuk membuat ruangan baru di space ini",
-        "error_no_permission_invite": "Anda tidak diizinkan untuk mengundang orang-orang ke space ini"
     },
     "spotlight": {
         "public_rooms": {

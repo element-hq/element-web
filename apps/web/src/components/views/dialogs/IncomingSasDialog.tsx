@@ -35,7 +35,6 @@ interface IState {
     phase: number;
     sasVerified: boolean;
     opponentProfile: {
-        // eslint-disable-next-line camelcase
         avatar_url?: string;
         displayname?: string;
     } | null;

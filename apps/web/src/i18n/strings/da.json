@@ -11,8 +11,6 @@
             "one": "1 ulæst omtale.",
             "other": "%(count)s ulæste beskeder, herunder omtaler."
         },
-        "recent_rooms": "Nylige rum",
-        "room_name": "Rum %(name)s",
         "room_status_bar": "Statusbjælke for rum",
         "seek_bar_label": "Progressionsmarkør for lydafspiller",
         "unread_messages": "Ulæste beskeder."
@@ -22,7 +20,6 @@
         "accept": "Accepter",
         "add": "Tilføj",
         "add_existing_room": "Tilføj eksisterende rum",
-        "add_people": "Tilføj personer",
         "apply": "Anvend",
         "approve": "Godkend",
         "ask_to_join": "Bed om at blive medlem",
@@ -57,7 +54,6 @@
         "enter_fullscreen": "Fuldskærmsvisning",
         "exit_fullscreeen": "Afslut fuldskærmsvisning",
         "expand": "Udvid",
-        "explore_public_rooms": "Udforsk offentlige rum",
         "explore_rooms": "Udforsk rum",
         "export": "Eksporter",
         "forward": "Videresend",
@@ -69,8 +65,6 @@
         "ignore": "Ignorere",
         "import": "Importér",
         "invite": "Invitere",
-        "invite_to_space": "Invitér til klynge",
-        "invites_list": "Invitationer",
         "join": "Deltag",
         "learn_more": "Få mere at vide",
         "leave": "Forlad",
@@ -115,8 +109,6 @@
         "sign_out": "Fjern denne enhed",
         "skip": "Spring over",
         "start": "Start",
-        "start_chat": "Start samtale",
-        "start_new_chat": "Start ny samtale",
         "stop": "Stop",
         "submit": "Indsend",
         "subscribe": "Abonnér",
@@ -449,7 +441,6 @@
         "encrypted": "Krypteret",
         "error": "Fejl",
         "faq": "Ofte stillede spørgsmål",
-        "favourites": "Favoritter",
         "feedback": "Feedback",
         "filter_results": "Filtrér resultater",
         "forward_message": "Videresend besked",
@@ -457,7 +448,6 @@
         "go_to_settings": "Gå til Indstillinger",
         "guest": "Gæst",
         "help": "Hjælp",
-        "historical": "Historisk",
         "home": "Hjem",
         "homeserver": "Hjemmeserver",
         "identity_server": "Identitetsserver",
@@ -469,7 +459,6 @@
         "light": "Lyst tema",
         "loading": "Indlæser...",
         "location": "Lokation",
-        "low_priority": "Lav prioritet",
         "matrix": "Matrix",
         "message": "Besked",
         "message_layout": "Besked-layout",
@@ -531,7 +520,6 @@
         "success": "Succes",
         "suggestions": "Forslag",
         "support": "Support",
-        "system_alerts": "Systemadvarsler",
         "theme": "Tema",
         "thread": "Tråd",
         "threads": "Tråde",
@@ -548,7 +536,6 @@
         "username": "Brugernavn",
         "verified": "Bekræftet",
         "version": "Version",
-        "video": "Video",
         "video_room": "Videorum",
         "view_message": "Se besked",
         "warning": "Advarsel"
@@ -1302,7 +1289,6 @@
         "experimental_description": "Er du i humør til at eksperimentere? Afprøv vores nyeste ideer, som stadig er under udvikling. Disse funktioner er ikke færdigukviklende; de kan være ustabile, kan ændres eller kan blive droppet helt. <a>Få mere at vide</a>.",
         "experimental_section": "Tidlige forhåndsvisninger",
         "feature_wysiwyg_composer_description": "Brug RTF-tekst i stedet for Markdown i meddelelseskomponisten.",
-        "group_calls": "Ny fællesopkaldsoplevelse",
         "group_developer": "Udvikler",
         "group_encryption": "Kryptering",
         "group_experimental": "Eksperimentel",
@@ -1317,7 +1303,6 @@
         "group_voip": "Stemme & Video",
         "group_widgets": "Widgets",
         "hidebold": "Skjul notifikationsprik (vis kun tællerbadges)",
-        "html_topic": "Vis HTML-repræsentation af rumemner",
         "join_beta": "Deltag i beta-versionen",
         "join_beta_reload": "Tilmelding til betaversionen vil genindlæse %(brand)s.",
         "jump_to_date": "Gå til dato (tilføjer /jumptodate og springer til datooverskrifter)",
@@ -1339,7 +1324,6 @@
         "sliding_sync_description": "Under aktiv udvikling, kan ikke deaktiveres.",
         "sliding_sync_disabled_notice": "Log ud og ind igen for at deaktivere",
         "sliding_sync_server_no_support": "Din server er ikke understøttet",
-        "under_active_development": "Under aktiv udvikling.",
         "unrealiable_e2e": "Ustabil i krypterede rum",
         "video_rooms": "Videorum",
         "video_rooms_a_new_way_to_chat": "En ny måde at chatte over stemme og video på%(brand)s.",
@@ -1394,9 +1378,6 @@
         "room_leave_mod_warning": "Du er den eneste moderator i dette rum. Hvis du forlader det, vil ingen kunne ændre rummets indstillinger eller foretage andre vigtige handlinger.",
         "room_rejoin_warning": "Dette rum er ikke offentligt. Du kan ikke deltage igen uden en invitation.",
         "space_rejoin_warning": "Denne klynge er ikke offentlig. Du har ikke mulighed for at tilslutte dig uden en invitation."
-    },
-    "left_panel": {
-        "open_dial_pad": "Åbn opkaldstastaturet"
     },
     "lightbox": {
         "rotate_left": "Roter mod venstre",
@@ -1565,7 +1546,6 @@
     },
     "quick_settings": {
         "all_settings": "Alle indstillinger",
-        "metaspace_section": "Fastgør til sidebar",
         "sidebar_settings": "Flere muligheder",
         "title": "Hurtige indstillinger"
     },
@@ -1816,37 +1796,12 @@
         "waiting_for_join_title": "Venter på, at brugere deltager via %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Tilføj rum",
         "add_space_label": "Tilføj klynge",
-        "breadcrumbs_empty": "Ingen nyligt besøgte rum",
-        "breadcrumbs_label": "Nyligt besøgte rum",
         "failed_add_tag": "Kunne ikke tilføje tag(s): %(tagName)s til rummet",
         "failed_remove_tag": "Kunne ikke fjerne tag(s): %(tagName)s fra rummet",
         "failed_set_dm_tag": "Kunne ikke indstille tagget til direkte beskeder",
-        "home_menu_label": "Hjemmeindstillinger",
-        "join_public_room_label": "Deltag i offentligt rum",
-        "joining_rooms_status": {
-            "one": "Tilslutter sig i øjeblikket %(count)s rum",
-            "other": "Tilslutter sig i øjeblikket %(count)s rum"
-        },
         "notification_options": "Notifikationsindstillinger",
-        "redacting_messages_status": {
-            "one": "Fjerner i øjeblikket beskeder i %(count)s rum",
-            "other": "Fjerner i øjeblikket beskeder i %(count)s rum"
-        },
-        "show_less": "Vis mindre",
-        "show_n_more": {
-            "one": "Vis %(count)s mere",
-            "other": "Vis %(count)s mere"
-        },
-        "show_previews": "Vis forhåndsvisninger af beskeder",
-        "sort_by": "Sortér efter",
-        "sort_by_activity": "Aktivitet",
-        "sort_by_alphabet": "A-Å",
-        "sort_unread_first": "Vis rum med ulæste beskeder først",
-        "space_menu_label": "%(spaceName)s menu",
-        "sublist_options": "Liste over muligheder",
-        "suggested_rooms_heading": "Foreslåede rum"
+        "show_less": "Vis mindre"
     },
     "room_settings": {
         "access": {
@@ -2526,13 +2481,11 @@
         "show_stickers_button": "Vis klistermærkeknappen",
         "show_typing_notifications": "Vis indtastningsmeddelelser",
         "sidebar": {
-            "metaspaces_favourites_description": "Saml alle dine yndlingsrum og -personer på ét sted.",
             "metaspaces_home_all_rooms": "Vis alle rum",
             "metaspaces_home_all_rooms_description": "Vi alle dine rum i Hjem, selv hvis de er i en klynge",
             "metaspaces_home_description": "Hjem er godt til at få et overblik over det hele.",
             "metaspaces_orphans": "Rum udenfor en klynge",
             "metaspaces_orphans_description": "Saml alle dine rum, der ikke er en del af en klynge, på ét sted.",
-            "metaspaces_people_description": "Saml alle dine forbindelser på ét sted.",
             "metaspaces_subsection": "Klynger at vise",
             "metaspaces_video_rooms": "Video-rum og konferencer",
             "metaspaces_video_rooms_description": "Saml alle private video-rum og konferencer.",
@@ -2558,7 +2511,6 @@
             "audio_output": "Lydudgang",
             "audio_output_empty": "Ingen lydudgange registreret",
             "auto_gain_control": "Automatisk gain-kontrol",
-            "connection_section": "Forbindelse",
             "echo_cancellation": "Fjernelse af ekko",
             "enable_fallback_ice_server": "Tillad hjælpeserver som fallback til opkald (%(server)s)",
             "enable_fallback_ice_server_description": "Gælder kun, hvis din hjemmeserver ikke tilbyder en. Din IP-adresse vil blive delt under et opkald.",
@@ -2733,12 +2685,6 @@
     },
     "space_settings": {
         "title": "Indstillinger - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Du har ikke tilladelse til at tilføje rum til denne klynge",
-        "error_no_permission_add_space": "Du har ikke tilladelse til at tilføje andre klynger til denne klynge",
-        "error_no_permission_create_room": "Du har ikke tilladelse til at oprette nye rum i denne klynge",
-        "error_no_permission_invite": "Du har ikke tilladelse til at invitere brugere til denne klynge"
     },
     "spotlight": {
         "public_rooms": {

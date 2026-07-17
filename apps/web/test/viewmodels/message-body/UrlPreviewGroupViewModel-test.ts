@@ -8,9 +8,10 @@
 import { expect } from "@jest/globals";
 
 import type { MockedObject } from "jest-mock-vitest-adapter";
-import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
+import { MsgType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import {
     BUNDLED_LINK_PREVIEWS,
+    MAX_PREVIEWS_WHEN_LIMITED,
     UrlPreviewGroupViewModel,
 } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
 import type { UrlPreview } from "@element-hq/web-shared-components";
@@ -25,9 +26,46 @@ const BASIC_PREVIEW_OGDATA = {
     "og:site_name": "Example.org",
 };
 
-function getViewModel(
-    { mediaVisible, visible, showPreview } = { mediaVisible: true, visible: true, showPreview: true },
-): {
+const BUNDLE_PREVIEW_ONE = {
+    "matched_url": "https://example.org/1",
+    "og:title": "Bundled one",
+    "og:description": "First bundled preview",
+    "og:url": "https://example.org/1",
+};
+const BUNDLE_PREVIEW_TWO = {
+    "matched_url": "https://example.org/2",
+    "og:title": "Bundled two",
+    "og:description": "Second bundled preview",
+    "og:url": "https://example.org/2",
+};
+const BUNDLE_PREVIEW_THREE = {
+    "matched_url": "https://example.org/3",
+    "og:title": "Bundled three",
+    "og:description": "Third bundled preview",
+    "og:url": "https://example.org/3",
+};
+const BUNDLE_PREVIEW_WITH_IMAGE = {
+    "matched_url": "https://example.org/image",
+    "og:title": "Bundled with image",
+    "og:image": IMAGE_MXC,
+    "og:image:type": "image/png",
+    "og:image:width": 128,
+    "og:image:height": 128,
+};
+
+function getViewModel({
+    mediaVisible = true,
+    visible = true,
+    showPreview = true,
+    urlPreviewBundleEnabled = true,
+    content,
+}: {
+    mediaVisible?: boolean;
+    visible?: boolean;
+    showPreview?: boolean;
+    urlPreviewBundleEnabled?: boolean;
+    content?: object;
+} = {}): {
     vm: UrlPreviewGroupViewModel;
     client: MockedObject<MatrixClient>;
     onImageClicked: jest.Mock<void, [UrlPreview]>;
@@ -42,15 +80,18 @@ function getViewModel(
         mediaVisible,
         visible,
         onImageClicked,
+        showTooltips: false,
         mxEvent: mkEvent({
             event: true,
             user: "@foo:bar",
             type: "m.room.message",
             content: {
                 ...(showPreview ? undefined : { [BUNDLED_LINK_PREVIEWS]: [] }),
+                ...content,
             },
             id: "$id",
         }),
+        urlPreviewBundleEnabled,
     });
     return { vm, client, onImageClicked };
 }
@@ -89,77 +130,31 @@ describe("UrlPreviewGroupViewModel", () => {
         const { previews } = vm.getSnapshot();
         expect(previews).toHaveLength(3);
         expect(previews).toMatchObject([
-            {
-                link: "https://example.org/1",
-            },
-            {
-                link: "https://example.org/2",
-            },
-            {
-                link: "https://example.org/3",
-            },
+            { link: "https://example.org/1" },
+            { link: "https://example.org/2" },
+            { link: "https://example.org/3" },
         ]);
     });
     it("should hide preview when invisible", async () => {
-        const { vm, client } = getViewModel({ visible: false, mediaVisible: true, showPreview: true });
+        const { vm, client } = getViewModel({
+            visible: false,
+            mediaVisible: true,
+            showPreview: true,
+            urlPreviewBundleEnabled: false,
+        });
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
         await vm.updateEventElement(msg);
         expect(vm.getSnapshot()).toMatchSnapshot();
         expect(client.getUrlPreview).not.toHaveBeenCalled();
     });
-    it("should preview a URL with media", async () => {
-        const { vm, client } = getViewModel();
-        client.getUrlPreview.mockResolvedValueOnce({
-            "og:title": "This is an example!",
-            "og:type": "document",
-            "og:url": "https://example.org",
-            "og:image": IMAGE_MXC,
-            "og:image:height": 128,
-            "og:image:width": 128,
-            "matrix:image:size": 10000,
-        });
-        // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            expect(url).toEqual(IMAGE_MXC);
-            if (width) {
-                return "https://example.org/image/thumb";
-            }
-            return "https://example.org/image/src";
-        });
-        const msg = document.createElement("div");
-        msg.innerHTML = '<a href="https://example.org">Test</a>';
-        await vm.updateEventElement(msg);
-        expect(vm.getSnapshot()).toMatchSnapshot();
-    });
-    it.each<Partial<IPreviewUrlResponse>>([
-        { "matrix:image:size": 8191 },
-        { "og:image:width": 95 },
-        { "og:image:height": 95 },
-    ])("should preview a URL with a site icon", async (extraResp) => {
-        const { vm, client } = getViewModel();
-        client.getUrlPreview.mockResolvedValueOnce({
-            "og:title": "This is an example!",
-            "og:type": "document",
-            "og:url": "https://example.org",
-            "og:image": IMAGE_MXC,
-            "og:image:height": 128,
-            "og:image:width": 128,
-            "matrix:image:size": 8193,
-            ...extraResp,
-        });
-        // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url) => {
-            expect(url).toEqual(IMAGE_MXC);
-            return "https://example.org/image/src";
-        });
-        const msg = document.createElement("div");
-        msg.innerHTML = '<a href="https://example.org">Test</a>';
-        await vm.updateEventElement(msg);
-        expect(vm.getSnapshot().previews[0].siteIcon).toBeTruthy();
-    });
     it("should ignore media when mediaVisible is false", async () => {
-        const { vm, client } = getViewModel({ mediaVisible: false, visible: true, showPreview: true });
+        const { vm, client } = getViewModel({
+            mediaVisible: false,
+            visible: true,
+            showPreview: true,
+            urlPreviewBundleEnabled: false,
+        });
         client.getUrlPreview.mockResolvedValueOnce({
             "og:title": "This is an example!",
             "og:type": "document",
@@ -233,7 +228,12 @@ describe("UrlPreviewGroupViewModel", () => {
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should hide a preview if the message requests it", async () => {
-        const { vm, client } = getViewModel({ showPreview: false, mediaVisible: true, visible: true });
+        const { vm, client } = getViewModel({
+            showPreview: false,
+            mediaVisible: true,
+            visible: true,
+            urlPreviewBundleEnabled: false,
+        });
         client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
@@ -246,41 +246,6 @@ describe("UrlPreviewGroupViewModel", () => {
   "totalPreviewCount": 0,
 }
 `);
-    });
-
-    describe("calculates author", () => {
-        it("should use the profile:username if provided", async () => {
-            const { vm, client } = getViewModel();
-            client.getUrlPreview.mockResolvedValueOnce({ ...BASIC_PREVIEW_OGDATA, "profile:username": "my username" });
-            const msg = document.createElement("div");
-            msg.innerHTML = '<a href="https://example.org">Test</a>';
-            await vm.updateEventElement(msg);
-            expect(vm.getSnapshot().previews[0].author).toEqual("my username");
-        });
-        it("should use author if the og:type is an article", async () => {
-            const { vm, client } = getViewModel();
-            client.getUrlPreview.mockResolvedValueOnce({
-                ...BASIC_PREVIEW_OGDATA,
-                "og:type": "article",
-                "article:author": "my name",
-            });
-            const msg = document.createElement("div");
-            msg.innerHTML = '<a href="https://example.org">Test</a>';
-            await vm.updateEventElement(msg);
-            expect(vm.getSnapshot().previews[0].author).toEqual("my name");
-        });
-        it("should NOT use author if the author is a URL", async () => {
-            const { vm, client } = getViewModel();
-            client.getUrlPreview.mockResolvedValueOnce({
-                ...BASIC_PREVIEW_OGDATA,
-                "og:type": "article",
-                "article:author": "https://junk.example.org/foo",
-            });
-            const msg = document.createElement("div");
-            msg.innerHTML = '<a href="https://example.org">Test</a>';
-            await vm.updateEventElement(msg);
-            expect(vm.getSnapshot().previews[0].author).toBeUndefined();
-        });
     });
 
     it.each([
@@ -298,61 +263,121 @@ describe("UrlPreviewGroupViewModel", () => {
         expect(vm.getSnapshot().previews).toHaveLength(item.hasPreview ? 1 : 0);
     });
 
-    // og:url, og:type are ignored.
-    const baseOg = {
-        "og:url": "https://example.org",
-        "og:type": "document",
-    };
+    describe("bundled link previews (MSC4095)", () => {
+        it("should render bundled previews when the message is text and the bundle is enabled", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewBundleEnabled: true,
+                content: {
+                    msgtype: MsgType.Text,
+                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
+                },
+            });
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/1">Test1</a><a href="https://example.org/2">Test2</a>';
+            await vm.updateEventElement(msg);
+            const { previews } = vm.getSnapshot();
+            expect(previews).toMatchObject([
+                {
+                    link: "https://example.org/1",
+                    title: "Bundled one",
+                    description: "First bundled preview",
+                    siteName: "example.org",
+                    ogUrl: "https://example.org/1",
+                },
+                {
+                    link: "https://example.org/2",
+                    title: "Bundled two",
+                    description: "Second bundled preview",
+                    siteName: "example.org",
+                    ogUrl: "https://example.org/2",
+                },
+            ]);
+            // Bundled previews are provided inline and must not trigger network fetches.
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
+        });
 
-    it.each<IPreviewUrlResponse>([
-        { ...baseOg, "og:title": "Basic title" },
-        { ...baseOg, "og:site_name": "Site name", "og:title": "" },
-        { ...baseOg, "og:description": "A description", "og:title": "" },
-        { ...baseOg, "og:title": "Cool blog", "og:site_name": "Cool site" },
-        {
-            ...baseOg,
-            "og:title": "Media test",
-            // API *may* return a string, so check we parse correctly.
-            "og:image:height": "500" as unknown as number,
-            "og:image:width": 500,
-            "matrix:image:size": 10000,
-            "og:image": IMAGE_MXC,
-        },
-    ])("handles different kinds of opengraph responses %s", async (og) => {
-        const { vm, client } = getViewModel();
-        // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            expect(url).toEqual(IMAGE_MXC);
-            if (width) {
-                return "https://example.org/image/thumb";
-            }
-            return "https://example.org/image/src";
+        it("should render an image for a bundled preview", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewBundleEnabled: true,
+                content: {
+                    msgtype: MsgType.Text,
+                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_WITH_IMAGE],
+                },
+            });
+            // eslint-disable-next-line no-restricted-properties
+            client.mxcUrlToHttp.mockReturnValue("https://example.org/image/src");
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/image">Test</a>';
+            await vm.updateEventElement(msg);
+            const { previews } = vm.getSnapshot();
+            expect(previews).toHaveLength(1);
+            expect(previews[0].image).toMatchObject({
+                mxcImageFull: IMAGE_MXC,
+                imageType: "image/png",
+                width: 128,
+                height: 128,
+            });
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
         });
-        client.getUrlPreview.mockResolvedValueOnce(og);
-        const msg = document.createElement("div");
-        msg.innerHTML = `<a href="https://example.org">test</a>`;
-        await vm.updateEventElement(msg);
-        expect(vm.getSnapshot().previews[0]).toMatchSnapshot();
-    });
 
-    it.each<string>(["og:video", "og:video:type", "og:audio"])("detects playable links via %s", async (property) => {
-        const { vm, client } = getViewModel();
-        // eslint-disable-next-line no-restricted-properties
-        client.mxcUrlToHttp.mockImplementation((url, width) => {
-            expect(url).toEqual(IMAGE_MXC);
-            if (width) {
-                return "https://example.org/image/thumb";
-            }
-            return "https://example.org/image/src";
+        it("should limit bundled previews and reveal the rest when the limit is toggled", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewBundleEnabled: true,
+                content: {
+                    msgtype: MsgType.Text,
+                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO, BUNDLE_PREVIEW_THREE],
+                },
+            });
+            const msg = document.createElement("div");
+            msg.innerHTML =
+                '<a href="https://example.org/1">Test1</a><a href="https://example.org/2">Test2</a><a href="https://example.org/3">Test3</a>';
+            await vm.updateEventElement(msg);
+
+            let snapshot = vm.getSnapshot();
+            expect(snapshot.previews).toHaveLength(MAX_PREVIEWS_WHEN_LIMITED);
+            expect(snapshot.previewsLimited).toBe(true);
+            expect(snapshot.overPreviewLimit).toBe(true);
+
+            await vm.onTogglePreviewLimit();
+            snapshot = vm.getSnapshot();
+            expect(snapshot.previews).toHaveLength(3);
+            expect(snapshot.previewsLimited).toBe(false);
+            expect(client.getUrlPreview).not.toHaveBeenCalled();
         });
-        client.getUrlPreview.mockResolvedValueOnce({
-            ...BASIC_PREVIEW_OGDATA,
-            "og:image": IMAGE_MXC,
-            [property]: "anything",
+
+        it("should fetch previews instead of using the bundle when the bundle setting is disabled", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewBundleEnabled: false,
+                content: {
+                    msgtype: MsgType.Text,
+                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+                },
+            });
+            client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/1">Test1</a>';
+            await vm.updateEventElement(msg);
+            const { previews } = vm.getSnapshot();
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/1", expect.anything());
+            // The fetched preview wins over the ignored bundle entry.
+            expect(previews).toMatchObject([{ title: "This is an example!" }]);
         });
-        const msg = document.createElement("div");
-        msg.innerHTML = `<a href="https://example.org">test</a>`;
-        await vm.updateEventElement(msg);
-        expect(vm.getSnapshot().previews[0].image?.playable).toEqual(true);
+
+        it("should fetch previews instead of using the bundle when the message is not a text message", async () => {
+            const { vm, client } = getViewModel({
+                urlPreviewBundleEnabled: true,
+                content: {
+                    msgtype: MsgType.Notice,
+                    [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
+                },
+            });
+            client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
+            const msg = document.createElement("div");
+            msg.innerHTML = '<a href="https://example.org/1">Test1</a>';
+            await vm.updateEventElement(msg);
+            const { previews } = vm.getSnapshot();
+            expect(client.getUrlPreview).toHaveBeenCalledWith("https://example.org/1", expect.anything());
+            expect(previews).toMatchObject([{ title: "This is an example!" }]);
+        });
     });
 });

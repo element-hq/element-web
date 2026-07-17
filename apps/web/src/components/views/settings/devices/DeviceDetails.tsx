@@ -18,7 +18,7 @@ import ToggleSwitch from "../../elements/ToggleSwitch";
 import { DeviceDetailHeading } from "./DeviceDetailHeading";
 import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
 import { type ExtendedDevice } from "./types";
-import { getManageDeviceUrl } from "../../../../utils/oidc/urls.ts";
+import { getManageDeviceUrl } from "../../../../utils/oauth/urls.ts";
 
 interface Props {
     device: ExtendedDevice;
@@ -104,8 +104,10 @@ const DeviceDetails: React.FC<Props> = ({
             ],
         },
     ]
-        .map((section) => // filter out falsy values
-        ({ ...section, values: section.values.filter((row) => !!row.value) }))
+        .map((section) =>
+            // filter out falsy values
+            ({ ...section, values: section.values.filter((row) => !!row.value) }),
+        )
         .filter(
             (section) =>
                 // then filter out sections with no values

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { type ButtonEvent } from "../components/views/elements/AccessibleButton";
-import { PillType } from "../components/views/elements/Pill";
+import { PillType } from "../components/views/elements/PillType";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import dis from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";

@@ -43,7 +43,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     threshold = 3,
     onToggle,
     startExpanded = false,
-    summaryMembers = [],
+    summaryMembers,
     summaryText,
     layout = Layout.Group,
     "data-testid": testId,
@@ -83,7 +83,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
         );
     } else {
         const uniqueMembers = uniqBy(
-            summaryMembers.filter((member) => {
+            summaryMembers?.filter((member) => {
                 if (!member?.getMxcAvatarUrl) {
                     logger.error(
                         "EventListSummary given null summaryMember, termites may be afoot eating event senders",
@@ -99,6 +99,9 @@ const GenericEventListSummary: React.FC<IProps> = ({
         body = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">
+                    {/* We break the rule here as this is a mouse-only interaction */}
+                    {/* mx_GenericEventListSummary_toggle is the keyboard friendly outer one */}
+                    {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <span className="mx_GenericEventListSummary_avatars" onClick={toggleExpanded}>
                         {avatars}
                     </span>

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useEffect, useMemo, useState } from "react";
+import React, { type JSX, useContext, useEffect, useMemo, useState } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
@@ -21,10 +21,9 @@ import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IApp } from "../../../stores/WidgetStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { MAX_PINNED } from "../../../stores/widgets/WidgetLayoutStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
@@ -32,6 +31,7 @@ import EmptyState from "./EmptyState";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
 import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 interface Props {
     room: Room;
@@ -44,6 +44,7 @@ interface IAppRowProps {
 }
 
 const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
+    const sdkContext = useContext(SDKContext);
     const name = WidgetUtils.getWidgetName(app);
     const [canModifyWidget, setCanModifyWidget] = useState<boolean>();
 
@@ -52,24 +53,24 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     }, [room.client, room.roomId]);
 
     const onOpenWidgetClick = (): void => {
-        RightPanelStore.instance.pushCard({
+        sdkContext.rightPanelStore.pushCard({
             phase: RightPanelPhases.Widget,
             state: { widgetId: app.id },
         });
     };
 
-    const isPinned = WidgetLayoutStore.instance.isInContainer(room, app, "top");
+    const isPinned = sdkContext.widgetLayoutStore.isInContainer(room, app, "top");
     const togglePin = isPinned
         ? () => {
-              WidgetLayoutStore.instance.moveToContainer(room, app, "right");
+              sdkContext.widgetLayoutStore.moveToContainer(room, app, "right");
           }
         : () => {
-              WidgetLayoutStore.instance.moveToContainer(room, app, "top");
+              sdkContext.widgetLayoutStore.moveToContainer(room, app, "top");
           };
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
-    const cannotPin = !isPinned && !WidgetLayoutStore.instance.canAddToContainer(room, "top");
+    const cannotPin = !isPinned && !sdkContext.widgetLayoutStore.canAddToContainer(room, "top");
 
     let pinTitle: string;
     if (cannotPin) {
@@ -78,7 +79,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         pinTitle = isPinned ? _t("action|unpin") : _t("action|pin");
     }
 
-    const isMaximised = WidgetLayoutStore.instance.isInContainer(room, app, "center");
+    const isMaximised = sdkContext.widgetLayoutStore.isInContainer(room, app, "center");
 
     let openTitle = "";
     if (isPinned) {
@@ -142,6 +143,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
  * @param onClose callback when the card is closed
  */
 const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
+    const sdkContext = useContext(SDKContext);
     const apps = useWidgets(room);
     // Filter out virtual widgets
     const realApps = useMemo(() => apps.filter((app) => app.eventId !== undefined), [apps]);
@@ -169,9 +171,9 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
         );
     } else {
         let copyLayoutBtn: JSX.Element | null = null;
-        if (WidgetLayoutStore.instance.canCopyLayoutToRoom(room)) {
+        if (sdkContext.widgetLayoutStore.canCopyLayoutToRoom(room)) {
             copyLayoutBtn = (
-                <Link onClick={() => WidgetLayoutStore.instance.copyLayoutToRoom(room)}>
+                <Link onClick={() => sdkContext.widgetLayoutStore.copyLayoutToRoom(room)}>
                     {_t("widget|set_room_layout")}
                 </Link>
             );

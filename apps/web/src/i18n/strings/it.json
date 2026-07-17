@@ -11,8 +11,6 @@
             "other": "%(count)s messaggi non letti incluse le citazioni.",
             "one": "1 citazione non letta."
         },
-        "recent_rooms": "Stanze recenti",
-        "room_name": "Stanza %(name)s",
         "room_status_bar": "Barra di stato della stanza",
         "seek_bar_label": "Barra di ricerca audio",
         "unread_messages": "Messaggi non letti."
@@ -22,7 +20,6 @@
         "accept": "Accetta",
         "add": "Aggiungi",
         "add_existing_room": "Aggiungi stanza esistente",
-        "add_people": "Aggiungi persone",
         "apply": "Applica",
         "approve": "Approva",
         "ask_to_join": "Chiedi di entrare",
@@ -55,7 +52,6 @@
         "enter_fullscreen": "Attiva schermo intero",
         "exit_fullscreeen": "Esci da schermo intero",
         "expand": "Espandi",
-        "explore_public_rooms": "Esplora stanze pubbliche",
         "explore_rooms": "Esplora stanze",
         "export": "Esporta",
         "forward": "Inoltra",
@@ -67,8 +63,6 @@
         "ignore": "Ignora",
         "import": "Importa",
         "invite": "Invita",
-        "invite_to_space": "Invita nello spazio",
-        "invites_list": "Inviti",
         "join": "Entra",
         "learn_more": "Maggiori informazioni",
         "leave": "Esci",
@@ -112,8 +106,6 @@
         "sign_out": "Disconnetti",
         "skip": "Salta",
         "start": "Inizia",
-        "start_chat": "Inizia una chat",
-        "start_new_chat": "Inizia nuova chat",
         "stop": "Ferma",
         "submit": "Invia",
         "subscribe": "Iscriviti",
@@ -427,7 +419,6 @@
         "encrypted": "Crittografato",
         "error": "Errore",
         "faq": "Domande frequenti",
-        "favourites": "Preferiti",
         "feedback": "Commenti",
         "filter_results": "Filtra risultati",
         "forward_message": "Inoltra messaggio",
@@ -435,7 +426,6 @@
         "go_to_settings": "Vai alle impostazioni",
         "guest": "Ospite",
         "help": "Aiuto",
-        "historical": "Cronologia",
         "home": "Pagina iniziale",
         "homeserver": "Homeserver",
         "identity_server": "Server di identità",
@@ -447,7 +437,6 @@
         "light": "Chiaro",
         "loading": "Caricamento…",
         "location": "Posizione",
-        "low_priority": "Bassa priorità",
         "matrix": "Matrix",
         "message": "Messaggio",
         "message_layout": "Disposizione del messaggio",
@@ -507,7 +496,6 @@
         "success": "Successo",
         "suggestions": "Suggerimenti",
         "support": "Supporto",
-        "system_alerts": "Avvisi di sistema",
         "theme": "Tema",
         "thread": "Conversazione",
         "threads": "Conversazioni",
@@ -523,7 +511,6 @@
         "username": "Nome utente",
         "verified": "Verificato",
         "version": "Versione",
-        "video": "Video",
         "video_room": "Stanza video",
         "view_message": "Vedi messaggio",
         "warning": "Attenzione"
@@ -1263,7 +1250,6 @@
         "experimental_section": "Anteprime",
         "feature_disable_call_per_sender_encryption": "Disattiva la crittografia per mittente in Element Call",
         "feature_wysiwyg_composer_description": "Usa il rich text invece del Markdown nel compositore di messaggi.",
-        "group_calls": "Nuova esperienza per chiamate di gruppo",
         "group_developer": "Sviluppatore",
         "group_encryption": "Crittografia",
         "group_experimental": "Sperimentale",
@@ -1277,7 +1263,6 @@
         "group_voip": "Voce e video",
         "group_widgets": "Widget",
         "hidebold": "Nascondi il punto di notifica (mostra solo i contatori)",
-        "html_topic": "Mostra la rappresentazione HTML degli argomenti della stanza",
         "join_beta": "Unisciti alla beta",
         "join_beta_reload": "Unirsi alla beta ricaricherà %(brand)s.",
         "jump_to_date": "Salta alla data (aggiunge /jumptodate e le intestazioni di salto data)",
@@ -1299,7 +1284,6 @@
         "sliding_sync_description": "In sviluppo attivo, non può essere disattivato.",
         "sliding_sync_disabled_notice": "Disconnettiti e riconnettiti per disattivare",
         "sliding_sync_server_no_support": "Il tuo server non ha il supporto nativo",
-        "under_active_development": "In sviluppo attivo.",
         "unrealiable_e2e": "Inaffidabile nelle stanze cifrate",
         "video_rooms": "Stanze video",
         "video_rooms_a_new_way_to_chat": "Un nuovo modo di fare chiamate audio e video in %(brand)s.",
@@ -1352,9 +1336,6 @@
         "leave_space_question": "Vuoi veramente uscire dallo spazio '%(spaceName)s'?",
         "room_rejoin_warning": "Questa stanza non è pubblica. Non potrai rientrare senza un invito.",
         "space_rejoin_warning": "Questo spazio non è pubblico. Non potrai rientrare senza un invito."
-    },
-    "left_panel": {
-        "open_dial_pad": "Apri tastierino"
     },
     "lightbox": {
         "rotate_left": "Ruota a sinistra",
@@ -1533,7 +1514,6 @@
     },
     "quick_settings": {
         "all_settings": "Tutte le impostazioni",
-        "metaspace_section": "Fissa nella barra laterale",
         "sidebar_settings": "Altre opzioni",
         "title": "Impostazioni rapide"
     },
@@ -1781,37 +1761,12 @@
         "waiting_for_join_title": "In attesa che gli utenti si uniscano a %(brand)s"
     },
     "room_list": {
-        "add_room_label": "Aggiungi stanza",
         "add_space_label": "Aggiungi spazio",
-        "breadcrumbs_empty": "Nessuna stanza visitata di recente",
-        "breadcrumbs_label": "Stanze visitate di recente",
         "failed_add_tag": "Aggiunta etichetta %(tagName)s alla stanza fallita",
         "failed_remove_tag": "Rimozione etichetta %(tagName)s dalla stanza fallita",
         "failed_set_dm_tag": "Impostazione etichetta chat diretta fallita",
-        "home_menu_label": "Opzioni pagina iniziale",
-        "join_public_room_label": "Entra nella stanza pubblica",
-        "joining_rooms_status": {
-            "one": "Stai entrando in %(count)s stanza",
-            "other": "Stai entrando in %(count)s stanze"
-        },
         "notification_options": "Opzioni di notifica",
-        "redacting_messages_status": {
-            "one": "Rimozione di messaggi in corso in %(count)s stanza",
-            "other": "Rimozione di messaggi in corso in %(count)s stanze"
-        },
-        "show_less": "Mostra meno",
-        "show_n_more": {
-            "other": "Mostra altri %(count)s",
-            "one": "Mostra %(count)s altro"
-        },
-        "show_previews": "Mostra anteprime dei messaggi",
-        "sort_by": "Ordina per",
-        "sort_by_activity": "Attività",
-        "sort_by_alphabet": "A-Z",
-        "sort_unread_first": "Mostra prima le stanze con messaggi non letti",
-        "space_menu_label": "Menu di %(spaceName)s",
-        "sublist_options": "Opzioni lista",
-        "suggested_rooms_heading": "Stanze suggerite"
+        "show_less": "Mostra meno"
     },
     "room_settings": {
         "access": {
@@ -2474,13 +2429,11 @@
         "show_stickers_button": "Mostra pulsante adesivi",
         "show_typing_notifications": "Mostra notifiche di scrittura",
         "sidebar": {
-            "metaspaces_favourites_description": "Raggruppa tutte le tue stanze e persone preferite in un unico posto.",
             "metaspaces_home_all_rooms": "Mostra tutte le stanze",
             "metaspaces_home_all_rooms_description": "Mostra tutte le tue stanze nella pagina principale, anche se sono in uno spazio.",
             "metaspaces_home_description": "La pagina principale è utile per avere una panoramica generale.",
             "metaspaces_orphans": "Stanze fuori da uno spazio",
             "metaspaces_orphans_description": "Raggruppa tutte le tue stanze che non fanno parte di uno spazio in un unico posto.",
-            "metaspaces_people_description": "Raggruppa tutte le tue persone in un unico posto.",
             "metaspaces_subsection": "Spazi da mostrare",
             "spaces_explainer": "Gli spazi sono modi per raggruppare stanze e persone. Oltre agli spazi in cui ti trovi, puoi usarne anche altri già integrati.",
             "title": "Barra laterale"
@@ -2497,7 +2450,6 @@
             "audio_output": "Uscita audio",
             "audio_output_empty": "Nessuna uscita audio rilevata",
             "auto_gain_control": "Controllo automatico del guadagno",
-            "connection_section": "Connessione",
             "echo_cancellation": "Cancellazione dell'eco",
             "enable_fallback_ice_server": "Permetti server di chiamata di ripiego (%(server)s)",
             "enable_fallback_ice_server_description": "Si applica solo se il tuo homeserver non ne offre uno. Il tuo indirizzo IP verrebbe condiviso durante una chiamata.",
@@ -2671,12 +2623,6 @@
     },
     "space_settings": {
         "title": "Impostazioni - %(spaceName)s"
-    },
-    "spaces": {
-        "error_no_permission_add_room": "Non hai i permessi per aggiungere stanze a questo spazio",
-        "error_no_permission_add_space": "Non hai i permessi per aggiungere spazi in questo spazio",
-        "error_no_permission_create_room": "Non hai i permessi per creare stanze in questo spazio",
-        "error_no_permission_invite": "Non hai l'autorizzazione di invitare persone in questo spazio"
     },
     "spotlight": {
         "public_rooms": {

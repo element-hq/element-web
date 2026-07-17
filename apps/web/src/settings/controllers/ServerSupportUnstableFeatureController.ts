@@ -10,9 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import { type SettingLevel } from "../SettingLevel";
 import MatrixClientBackedController from "./MatrixClientBackedController";
 import { type WatchManager } from "../WatchManager";
-import SettingsStore from "../SettingsStore";
 import { type SettingKey } from "../Settings.tsx";
-import { _t } from "../../languageHandler.tsx";
+import { _t } from "../../languageHandler";
 import PlatformPeg from "../../PlatformPeg.ts";
 
 /**
@@ -63,9 +62,9 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
     public set disabled(newDisabledValue: boolean) {
         if (!newDisabledValue === this.enabled) return;
         this.enabled = !newDisabledValue;
-        const level = SettingsStore.firstSupportedLevel(this.settingName);
+        const level = this.settingsStore.firstSupportedLevel(this.settingName);
         if (!level) return;
-        const settingValue = SettingsStore.getValue(this.settingName, null);
+        const settingValue = this.settingsStore.getValue(this.settingName, null);
         this.watchers.notifyUpdate(this.settingName, null, level, settingValue);
     }
 

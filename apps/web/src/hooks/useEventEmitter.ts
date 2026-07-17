@@ -160,7 +160,7 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                 rerunArgs.push(args);
                 return;
             }
-            running = true; // eslint-disable-line react-hooks/exhaustive-deps
+            running = true;
             // Note: We need to use .then notation instead of async/await,
             // because async/await would cause this function to return a
             // promise, which `useEffect` doesn't like.
@@ -177,7 +177,7 @@ export function useEventEmitterAsyncState<T, Events extends string, Arguments ex
                     }
                 });
         },
-        [fn, ...deps], // eslint-disable-line react-compiler/react-compiler
+        [fn, ...deps], // eslint-disable-line react-hooks/exhaustive-deps
     );
 
     // re-run when the emitter changes

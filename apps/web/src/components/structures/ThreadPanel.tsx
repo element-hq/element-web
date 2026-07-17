@@ -39,8 +39,8 @@ interface IProps {
 }
 
 export enum ThreadFilterType {
-    "My",
-    "All",
+    My,
+    All,
 }
 
 type ThreadPanelHeaderOption = {

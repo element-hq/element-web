@@ -67,6 +67,11 @@
         "mentions_keywords": "Említések és kulcsszavak",
         "mute_room": "Szoba némítása"
     },
+    "release_announcement": {
+        "room_list_section_close": "Rendben",
+        "room_list_section_description": " Csoportosítsa szakaszokba a csevegéseit, hogy a beszélgetések rendezettek és könnyen áttekinthetők legyenek.",
+        "room_list_section_title": "Szakaszok bemutatása"
+    },
     "room": {
         "context_menu": {
             "title": "Szobabeállítások"
@@ -98,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "%(roomName)s szoba megnyitása",
+            "drag_cancelled": "Húzás megszakítva",
+            "drag_end": "A(z) %(source)s ide lett dobva: %(target)s",
+            "drag_end_after": "A(z) %(source)s a(z) %(target)s után lett dobva",
+            "drag_end_before": "A(z) %(source)s a(z) %(target)s elé lett dobva",
+            "drag_end_original": "A(z) %(source)s visszakerült az eredeti helyére",
+            "drag_instructions": "A húzás megkezdéséhez vagy leállításához nyomja meg a Szóköz billentyűt, a mozgatáshoz használja a nyílgombokat, a megszakításhoz pedig az Escape billentyűt.",
+            "drag_over": "A(z) %(source)s efölött van: %(target)s",
+            "drag_over_after": "A(z) %(source)s a(z) %(target)s mögé lesz dobva",
+            "drag_over_before": "A(z) %(source)s a(z) %(target)s elé lesz dobva",
+            "drag_over_original": "A(z) %(source)s visszakerül az eredeti helyére",
+            "drag_start": "A(z) %(source)s húzása",
             "invitation": "%(roomName)s szoba meghívásának megnyitása.",
             "mention": {
                 "one": "%(roomName)s szoba megnyitása 1 megemlítéssel.",
@@ -119,10 +135,7 @@
             "no_chats": "Még nincsenek csevegések",
             "no_chats_description": "Kezdje azzal, hogy üzenetet küld valakinek, vagy létrehoz egy szobát",
             "no_chats_description_no_room_rights": "Kezdje azzal, hogy üzenetet küld valakinek",
-            "no_favourites": "Még nincs kedvenc csevegése",
-            "no_favourites_description": "A csevegési beállításokban adhat hozzá csevegést a kedvencekhez",
             "no_invites": "Nincs olvasatlan meghívója",
-            "no_lowpriority": "Nincs alacsony prioritású szobája",
             "no_mentions": "Nincs olvasatlan említése",
             "no_people": "Még nincs közvetlen csevegése senkivel",
             "no_people_description": "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez",
@@ -179,7 +192,8 @@
         "space_menu": {
             "home": "Kezdő tér",
             "space_settings": "Térbeállítások"
-        }
+        },
+        "unread_messages": "Olvasatlan üzenetek"
     },
     "terms": {
         "tac_button": "Általános Szerződési Feltételek elolvasása"

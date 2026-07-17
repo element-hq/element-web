@@ -21,6 +21,8 @@ import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import CopyableText from "../../elements/CopyableText";
 import E2EIcon from "../../rooms/E2EIcon";
 import { E2EStatus } from "../../../../utils/ShieldUtils";
+import SyntaxHighlight from "../../elements/SyntaxHighlight.tsx";
+import { stringify } from "./Event.tsx";
 
 /**
  * Replacement function for `<i>` tags in translation strings.
@@ -164,6 +166,17 @@ const UserView: React.FC<UserProps> = ({ member, onBack }) => {
         [context, member],
         new Map(),
     );
+
+    const userIdentity = useAsyncMemo(
+        async () => {
+            const identity = await crypto?.getUserCrossSigningKeys(member.userId);
+            if (!identity) return null;
+            return <SyntaxHighlight language="json">{stringify(identity)}</SyntaxHighlight>;
+        },
+        [context, member],
+        null,
+    );
+
     // The device to show, if any.
     const [device, setDevice] = useState<Device | null>(null);
 
@@ -208,6 +221,10 @@ const UserView: React.FC<UserProps> = ({ member, onBack }) => {
                         </li>
                     ))}
                 </ul>
+            </section>
+            <section>
+                <h2>{_t("devtools|user_identity")}</h2>
+                {userIdentity ?? <i>{_t("devtools|user_identity_unknown")}</i>}
             </section>
         </BaseTool>
     );
