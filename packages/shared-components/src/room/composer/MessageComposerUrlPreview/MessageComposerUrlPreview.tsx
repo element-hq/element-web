@@ -204,14 +204,7 @@ export function MessageComposerUrlPreviewView({
           });
 
     const summary = (
-        <div
-            className={styles.summary}
-            onClick={toggleCollapsed}
-            onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") toggleCollapsed();
-            }}
-            role="button"
-        >
+        <div className={styles.summary}>
             <span className={styles.left}>
                 <span className={styles.icons}>
                     {links.map((entry) => {
