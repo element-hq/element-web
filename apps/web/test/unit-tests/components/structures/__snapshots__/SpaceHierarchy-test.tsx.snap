@@ -137,7 +137,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                     aria-labelledby="react-use-id-1"
                     class="_input_153f2_18"
                     id="checkbox_MwbPDmfGtm"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
@@ -235,7 +234,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                     aria-labelledby="react-use-id-2"
                     class="_input_153f2_18"
                     id="checkbox_GQvdMWe954"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
@@ -334,7 +332,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                     aria-labelledby="react-use-id-3"
                     class="_input_153f2_18"
                     id="checkbox_DVIAu5CsiH"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
@@ -455,7 +452,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                           class="_input_153f2_18"
                           disabled=""
                           id="checkbox_RD7nyrA2oh"
-                          role="presentation"
                           tabindex="-1"
                           type="checkbox"
                         />
@@ -556,7 +552,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
                     aria-labelledby="react-use-id-6"
                     class="_input_153f2_18"
                     id="checkbox_jWVJIPauy1"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
@@ -727,7 +722,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                     aria-labelledby="react-use-id-1"
                     class="_input_153f2_18"
                     id="checkbox_EetmBG4yVC"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
@@ -825,7 +819,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                     aria-labelledby="react-use-id-2"
                     class="_input_153f2_18"
                     id="checkbox_eEefiPqpMR"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />
@@ -924,7 +917,6 @@ exports[`SpaceHierarchy <SpaceHierarchy /> should not render cycles 1`] = `
                     aria-labelledby="react-use-id-3"
                     class="_input_153f2_18"
                     id="checkbox_MwbPDmfGtm"
-                    role="presentation"
                     tabindex="-1"
                     type="checkbox"
                   />

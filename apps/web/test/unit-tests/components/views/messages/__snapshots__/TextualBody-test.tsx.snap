@@ -467,8 +467,11 @@ num_sqrt = num **
         </code>
       </div>
     </pre>
-    <span
-      class="mx_EventTile_button"
+    <button
+      aria-label="Expand"
+      class="mx_AccessibleButton mx_EventTile_button"
+      role="button"
+      tabindex="0"
     >
       <svg
         fill="currentColor"
@@ -481,7 +484,7 @@ num_sqrt = num **
           d="M21 3.997a1 1 0 0 0-.29-.702l-.005-.004A1 1 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a1 1 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0z"
         />
       </svg>
-    </span>
+    </button>
     <button
       aria-label="Copy"
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton mx_EventTile_buttonBottom"

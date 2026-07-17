@@ -13,6 +13,5 @@ import { type Action } from "../actions";
 
 export interface ViewStartChatOrReusePayload extends Pick<ActionPayload, "action"> {
     action: Action.ViewStartChatOrReuse;
-    // eslint-disable-next-line camelcase
     user_id: User["userId"];
 }

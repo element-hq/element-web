@@ -22,7 +22,6 @@ import {
     protocol,
     desktopCapturer,
 } from "electron";
-// eslint-disable-next-line n/file-extension-in-import
 import * as Sentry from "@sentry/electron/main";
 import path, { dirname } from "node:path";
 import windowStateKeeper from "electron-window-state";
