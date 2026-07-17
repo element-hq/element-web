@@ -111,6 +111,7 @@ export function LinkPreviewCollapsed(preview: LinkPreviewProps): JSX.Element {
     if (preview.image && !preview.image.playable) {
         img = (
             <button
+                type="button"
                 style={{
                     backgroundImage: `url('${preview.image.imageThumb}')`,
                 }}
