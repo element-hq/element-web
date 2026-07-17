@@ -121,7 +121,7 @@ overrides:
     pretty-format@30>react-is: 19.2.7
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    caniuse-lite: 1.0.30001799
+    caniuse-lite: 1.0.30001803
     matrix-widget-api: "^1.17.0"
     "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1

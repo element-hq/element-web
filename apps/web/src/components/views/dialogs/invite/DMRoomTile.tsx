@@ -13,7 +13,7 @@ import type { ButtonEvent } from "../../elements/AccessibleButton.tsx";
 import BaseAvatar from "../../avatars/BaseAvatar.tsx";
 import { mediaFromMxc } from "../../../../customisations/Media.ts";
 import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier.ts";
-import { _t } from "../../../../languageHandler.tsx";
+import { _t } from "../../../../languageHandler";
 import { Icon as EmailPillAvatarIcon } from "../../../../../res/img/icon-email-pill-avatar.svg";
 
 interface IDMRoomTileProps {
