@@ -178,17 +178,14 @@ export default defineConfig({
         "react-perf/jsx-no-new-array-as-prop": "off",
         "react/no-did-update-set-state": "off",
         "react/no-did-mount-set-state": "off",
-        "jsx-a11y/interactive-supports-focus": "off",
         "jsx-a11y/no-static-element-interactions": "off",
-        "jsx-a11y/click-events-have-key-events": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off",
         "react/no-array-index-key": "off",
         "jsx-a11y/control-has-associated-label": "off",
-        "jsx-a11y/role-supports-aria-props": "off",
         "jsx-a11y/media-has-caption": "off",
         "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
         "jsx-a11y/aria-activedescendant-has-tabindex": "off",
-        "jsx-a11y/role-has-required-aria-props": "off",
+
         // Rules within `suspicious` we do not yet comply with but probably should
         "typescript/no-unsafe-type-assertion": "off",
         "no-shadow": "off",
@@ -453,13 +450,17 @@ export default defineConfig({
                 ],
                 "jsdoc/check-tag-names": "off",
 
-                "react/jsx-no-constructed-context-values": "off",
+                // Disable a11y rules for components in tests
+                "jsx-a11y/role-has-required-aria-props": "off",
                 "jsx-a11y/interactive-supports-focus": "off",
                 "jsx-a11y/no-static-element-interactions": "off",
-                "react/no-array-index-key": "off",
                 "jsx-a11y/click-events-have-key-events": "off",
                 "jsx-a11y/media-has-caption": "off",
                 "jsx-a11y/no-noninteractive-element-to-interactive-role": "off",
+                "jsx-a11y/role-supports-aria-props": "off",
+
+                "react/jsx-no-constructed-context-values": "off",
+                "react/no-array-index-key": "off",
                 "react/forbid-elements": "off",
                 "typescript/no-extraneous-class": "off",
                 "no-new": "off",

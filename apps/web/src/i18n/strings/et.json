@@ -1572,6 +1572,8 @@
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
         "unrealiable_e2e": "Krüptitud jututubades pole see töökindel",
+        "url_preview_bundle": "Võrguaadresside lõimitud eelvaated (MSC4095)",
+        "url_preview_bundle_description": "Võid saata võrguaadresside eelvaateid osana sõnumist",
         "video_rooms": "Videotoad",
         "video_rooms_a_new_way_to_chat": "Uus võimalus videovestlusteks rakenduses %(brand)s.",
         "video_rooms_always_on_voip_channels": "Videotoad on kogu aeg saadaval VoIP kanalid, mis on lõimitud jututubadega ja kasutatavad rakenduses %(brand)s.",

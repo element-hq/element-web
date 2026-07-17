@@ -46,6 +46,8 @@ const OptionalTooltip: React.FC<{
     };
 
     return (
+        // We break the rule here as this is a mouse-only interaction
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <div onMouseEnter={show} onClick={toggleVisibility} onMouseLeave={hide}>
             {children}
             {isVisible && tooltip}
