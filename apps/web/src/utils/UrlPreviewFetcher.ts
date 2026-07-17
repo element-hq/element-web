@@ -208,13 +208,15 @@ export class UrlPreviewFetcher {
         return result;
     }
 
-    // Convert an MSC4095 URL preview bundle item to a UrlPreview
+    /*
+     * Convert an MSC4095 URL preview bundle item to a UrlPreview
+     */
     public previewFromBundle(single: UnstableBundledUrlPreviewSingle): UrlPreview {
-        // TODO: missing fields from the bundle are:
+        // missing fields from the bundle because backend does provide it:
         // - siteName (can be computed)
-        // - siteIcon
+        // - favicon
         // - media is a video or audio?
-        // TODO: URL previews in encrypted chat?
+        // TODO in next PR: URL previews in encrypted chat?
         const hasImage =
             typeof single["og:image"] === "string" &&
             typeof single["og:image:type"] === "string" &&
