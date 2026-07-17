@@ -131,6 +131,12 @@ export default defineConfig({
             "@dnd-kit/dom",
             "@dnd-kit/react",
             "react-virtuoso",
+            // error-solid is a new deep icon import introduced by the composer URL-preview
+            // component; it isn't referenced anywhere else, so the optimizer only discovers it
+            // mid-run and re-bundles + reloads, failing the in-flight setupTests.ts import for
+            // the room-list suites. Pre-bundle it up front. (The other icons/compound-web this
+            // component uses are already exercised elsewhere and picked up by the startup scan.)
+            "@vector-im/compound-design-tokens/assets/web/icons/error-solid",
         ],
     },
     resolve: {
