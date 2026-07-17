@@ -16,10 +16,10 @@ button.preview {
     border-radius: 12px;
     /* Get radius from cpd */
     flex-direction: row;
-    color: var(--cpd-color-gray-900);
+    color: var(--cpd-color-text-secondary);
     overflow: clip;
     gap: 8px;
-    padding: 12px 16px;
+    padding: var(--cpd-space-3x) var(--cpd-space-4x);
 
     background: var(--cpd-color-bg-subtle-secondary);
 
@@ -63,7 +63,7 @@ button.preview {
     border-radius: 12px;
     /* Get radius from cpd */
     flex-direction: column;
-    color: var(--cpd-color-gray-900);
+    color: var(--cpd-color-text-secondary);
     overflow: clip;
 
     background: var(--cpd-color-bg-subtle-secondary);
