@@ -240,7 +240,7 @@ export const RoomListItemView = memo(function RoomListItemView({
                 onFocus={onItemFocus}
                 onBlur={onItemBlur}
                 tabIndex={isFocused ? 0 : -1}
-                aria-selected={props.role === "option" ? isSelected : undefined}
+                aria-current={props.role === "option" ? isSelected : undefined}
                 {...props}
             >
                 <RoomListItemContent vm={vm} renderAvatar={renderAvatar} />

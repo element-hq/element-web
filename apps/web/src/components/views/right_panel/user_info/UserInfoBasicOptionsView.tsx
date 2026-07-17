@@ -28,7 +28,6 @@ const MessageButton = ({
 
     return (
         <MenuItem
-            role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
                 if (busy) return;
@@ -57,7 +56,6 @@ export const UserInfoBasicOptionsView: React.FC<{
     if (!vm.isMe) {
         readReceiptButton = (
             <MenuItem
-                role="button"
                 onSelect={async (ev) => {
                     ev.preventDefault();
                     vm.onReadReceiptButton();
@@ -71,7 +69,6 @@ export const UserInfoBasicOptionsView: React.FC<{
         if (vm.showInsertPillButton) {
             insertPillButton = (
                 <MenuItem
-                    role="button"
                     onSelect={async (ev) => {
                         ev.preventDefault();
                         vm.onInsertPillButton();
@@ -85,7 +82,6 @@ export const UserInfoBasicOptionsView: React.FC<{
         if (vm.showInviteButton && shouldShowComponent(UIComponent.InviteUsers)) {
             inviteUserButton = (
                 <MenuItem
-                    role="button"
                     onSelect={async (ev) => {
                         ev.preventDefault();
                         vm.onInviteUserButton(room.roomId, ev);
@@ -99,7 +95,6 @@ export const UserInfoBasicOptionsView: React.FC<{
 
     const shareUserButton = (
         <MenuItem
-            role="button"
             onSelect={async (ev) => {
                 ev.preventDefault();
                 vm.onShareUserClick();
