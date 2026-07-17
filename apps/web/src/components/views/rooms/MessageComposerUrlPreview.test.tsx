@@ -27,6 +27,7 @@ import {
     MessageComposerUrlPreviewViewModel,
     type MessageComposerUrlPreviewViewModelProps,
 } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // @vitest-environment happy-dom
 
@@ -70,6 +71,11 @@ describe("MessageComposerUrlPreview", () => {
             ...mockClientMethodsUser(),
             getUrlPreview: vi.fn().mockResolvedValue(BASIC_PREVIEW_OGDATA),
         });
+
+        const realGetValue = SettingsStore.getValue;
+        vi.spyOn(SettingsStore, "getValue").mockImplementation(((settingsName, roomId, excludeDefault) =>
+            settingsName === "composerUrlPreviewCollapsed" || realGetValue(settingsName, roomId, excludeDefault)
+        ));
     });
     afterEach(() => {
         window.mxModuleApi = originalMxModuleApi;
