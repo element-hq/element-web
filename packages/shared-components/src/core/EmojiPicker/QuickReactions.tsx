@@ -16,6 +16,7 @@ import { Toolbar, type RovingTabIndexProviderProps } from "../roving";
 import Emoji from "./Emoji";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
+import { Heading } from "@vector-im/compound-web";
 
 // We use the variation-selector Heart in Quick Reactions for some reason
 const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"].map((emoji) => {
@@ -57,7 +58,7 @@ class QuickReactions extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         return (
             <section className={classNames(styles.footer, styles.quick, styles.category)}>
-                <h2 className={classNames(styles.quickHeader, styles.categoryLabel)}>
+                <Heading as="h2" className={classNames(styles.quickHeader, styles.categoryLabel)}>
                     {!this.state.hover ? (
                         _t("emoji|quick_reactions")
                     ) : (
@@ -66,7 +67,7 @@ class QuickReactions extends React.Component<IProps, IState> {
                             <span className={styles.shortcode}>{this.state.hover.shortcodes[0]}</span>
                         </React.Fragment>
                     )}
-                </h2>
+                </Heading>
                 <Toolbar
                     className={styles.list}
                     aria-label={_t("emoji|quick_reactions")}

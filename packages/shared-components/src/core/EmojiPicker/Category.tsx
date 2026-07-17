@@ -15,6 +15,7 @@ import { EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./config";
 import Emoji from "./Emoji";
 import { type ButtonEvent } from "./RovingButton";
 import styles from "./EmojiPicker.module.css";
+import { Heading } from "@storybook/addon-docs/blocks";
 
 // Number of rows rendered beyond the visible viewport so that keyboard
 // navigation always has adjacent rows mounted to move focus into.
@@ -118,7 +119,9 @@ class Category extends React.PureComponent<IProps> {
                 role="tabpanel"
                 aria-label={name}
             >
-                <h2 className={styles.categoryLabel}>{name}</h2>
+                <Heading as="h2" className={styles.categoryLabel}>
+                    {name}
+                </Heading>
                 {/* An out-of-view Virtuoso windowing against a shared scroll parent renders
                     nothing and reserves no space, so fix the height of the rows block
                     ourselves — it is deterministic thanks to fixedItemHeight. */}

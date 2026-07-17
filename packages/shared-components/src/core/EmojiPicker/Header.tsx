@@ -99,7 +99,12 @@ class Header extends React.PureComponent<IProps> {
 
     public render(): React.ReactNode {
         return (
-            <nav className={styles.header} role="tablist" aria-label={_t("emoji|categories")} onKeyDown={this.onKeyDown}>
+            <nav
+                className={styles.header}
+                role="tablist"
+                aria-label={_t("emoji|categories")}
+                onKeyDown={this.onKeyDown}
+            >
                 {this.props.categories.map((category) => {
                     const classes = classNames(styles.anchor, {
                         [styles.anchorVisible]: category.visible,

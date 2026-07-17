@@ -149,9 +149,7 @@ describe("EmojiPicker", function () {
 
     it("should not mangle default order after filtering", async () => {
         const ref = createRef<EmojiPicker>();
-        const { container } = render(
-            <EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={vi.fn()} />,
-        );
+        const { container } = render(<EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={vi.fn()} />);
 
         await waitFor(() => {
             expect(container.querySelector('[role="gridcell"]')).toBeInTheDocument();

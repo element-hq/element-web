@@ -45,9 +45,7 @@ class Emoji extends React.PureComponent<IProps> {
                 aria-checked={this.props.disabled ? undefined : isSelected}
                 focusOnMouseOver
             >
-                <div
-                    className={classNames("mx_EmojiPicker_item", styles.item, { [styles.itemSelected]: isSelected })}
-                >
+                <div className={classNames("mx_EmojiPicker_item", styles.item, { [styles.itemSelected]: isSelected })}>
                     {emoji.unicode}
                 </div>
             </RovingButton>
