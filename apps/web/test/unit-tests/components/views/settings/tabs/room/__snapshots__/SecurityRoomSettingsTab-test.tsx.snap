@@ -123,6 +123,7 @@ exports[`<SecurityRoomSettingsTab /> join rule handles error when updating join 
   >
     <button
       class="mx_Dialog_primary"
+      type="button"
     >
       OK
     </button>

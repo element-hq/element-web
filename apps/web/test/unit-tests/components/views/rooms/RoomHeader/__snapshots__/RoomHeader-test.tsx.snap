@@ -23,6 +23,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       aria-label="Room info"
       class="mx_RoomHeader_infoWrapper"
       tabindex="0"
+      type="button"
     >
       <div
         class="mx_RoomHeader_info _box-flex_1odfs_9"

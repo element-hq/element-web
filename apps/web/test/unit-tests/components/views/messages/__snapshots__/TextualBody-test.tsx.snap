@@ -520,6 +520,7 @@ exports[`<TextualBody /> renders formatted m.text correctly spoilers get injecte
   Hey 
   <button
     class="mx_EventTile_spoiler"
+    type="button"
   >
     <span
       class="mx_EventTile_spoiler_reason"

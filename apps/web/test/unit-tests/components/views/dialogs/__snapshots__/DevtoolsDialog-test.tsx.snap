@@ -70,41 +70,49 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         </h2>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Send custom timeline event
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Explore room state
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Explore room account data
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           View servers in room
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Notifications debug
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Active Widgets
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Users
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Explore sticky state
         </button>
@@ -117,21 +125,25 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         </h2>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Explore account data
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Settings explorer
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           Server info
         </button>
         <button
           class="mx_DevTools_button"
+          type="button"
         >
           End-to-end encryption
         </button>
@@ -311,7 +323,9 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     <div
       class="mx_Dialog_buttons"
     >
-      <button>
+      <button
+        type="button"
+      >
         Back
       </button>
     </div>

@@ -7,6 +7,7 @@ exports[`EventListSummary correctly identifies transitions 1`] = `
   <span>
     <button
       class="mx_EventTile_spoiler"
+      type="button"
     >
        
       <span
@@ -34,6 +35,7 @@ exports[`EventListSummary correctly orders sequences of transitions by the order
   <span>
     <button
       class="mx_EventTile_spoiler"
+      type="button"
     >
        
       <span
@@ -131,6 +133,7 @@ exports[`EventListSummary handles many users following the same sequence of memb
     <span>
       <button
         class="mx_EventTile_spoiler"
+        type="button"
       >
          
         <span
@@ -155,6 +158,7 @@ exports[`EventListSummary handles multiple users following the same sequence of 
     <span>
       <button
         class="mx_EventTile_spoiler"
+        type="button"
       >
          
         <span
@@ -257,6 +261,7 @@ exports[`EventListSummary truncates multiple sequences of repetitions with other
   <span>
     <button
       class="mx_EventTile_spoiler"
+      type="button"
     >
        
       <span
