@@ -80,6 +80,7 @@ describe("MessageComposerUrlPreview", () => {
     });
     afterEach(() => {
         window.mxModuleApi = originalMxModuleApi;
+        vi.restoreAllMocks();
     });
 
     function wrapComponent(component: Parameters<typeof render>[0]): ReturnType<typeof render> {
