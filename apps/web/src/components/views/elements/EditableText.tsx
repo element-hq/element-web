@@ -201,6 +201,8 @@ export default class EditableText extends React.Component<IProps, IState> {
         if (!editable || (this.state.phase === Phases.Display && (label || labelClassName) && !this.value)) {
             // show the label
             editableEl = (
+                // We break the rule here as this is a mouse-only shortcut
+                // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
                 <div className={className + " " + labelClassName} onClick={this.onClickDiv}>
                     {label || initialValue}
                 </div>

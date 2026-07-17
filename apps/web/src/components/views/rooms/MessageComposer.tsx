@@ -401,6 +401,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private sendMessage = async (): Promise<void> => {
+        // snapshot need to be captured before the composer is cleared
+        // otherwise the send message function will think there are no URLs in
+        // message and will not attach URL bundles
+        const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
         this.props.urlPreviewVm.updateWithText({ content: "", debounced: false });
         if (this.state.haveRecording && this.voiceRecordingButton.current) {
             // There shouldn't be any text message to send when a voice recording is active, so
@@ -409,7 +413,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             return;
         }
 
-        this.messageComposerInput.current?.sendMessage();
+        this.messageComposerInput.current?.sendMessage({ urlPreviewSnapshot });
 
         if (this.state.isWysiwygLabEnabled) {
             const { relation, replyToEvent } = this.props;
@@ -424,7 +428,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 roomContext: this.context,
                 relation,
                 replyToEvent,
-                urlPreviewSnapshot: this.props.urlPreviewVm.getSnapshot(),
+                urlPreviewSnapshot,
             });
         }
     };

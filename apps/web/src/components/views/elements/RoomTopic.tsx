@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, useCallback, useContext, useState } from "react";
 import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { Tooltip } from "@vector-im/compound-web";
 import { LinkedText } from "@element-hq/web-shared-components";
 
 import { useTopic } from "../../../hooks/room/useTopic";
@@ -20,15 +19,16 @@ import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import AccessibleButton from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 import { topicToHtml } from "../../../HtmlUtils";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 
-interface IProps extends React.HTMLProps<HTMLDivElement> {
+interface IProps {
     room: Room;
+    className?: string;
 }
 
-export function onRoomTopicLinkClick(e: React.MouseEvent): void {
+export function onRoomTopicLinkClick(e: ButtonEvent): void {
     const anchor = e.target as HTMLLinkElement;
     const localHref = tryTransformPermalinkToLocalHref(anchor.href);
 
@@ -39,28 +39,23 @@ export function onRoomTopicLinkClick(e: React.MouseEvent): void {
     }
 }
 
-export default function RoomTopic({ room, className, ...props }: IProps): JSX.Element {
+export default function RoomTopic({ room, className }: IProps): JSX.Element {
     const client = useContext(MatrixClientContext);
     const [disableTooltip, setDisableTooltip] = useState(false);
 
     const topic = useTopic(room);
     const body = topicToHtml(topic?.text, topic?.html);
 
-    const onClick = useCallback(
-        (e: React.MouseEvent<HTMLDivElement>) => {
-            props.onClick?.(e);
+    const onClick = useCallback((e: ButtonEvent) => {
+        const target = e.target as HTMLElement;
 
-            const target = e.target as HTMLElement;
+        if (target.tagName.toUpperCase() !== "A") {
+            dis.fire(Action.ShowRoomTopic);
+            return;
+        }
 
-            if (target.tagName.toUpperCase() !== "A") {
-                dis.fire(Action.ShowRoomTopic);
-                return;
-            }
-
-            onRoomTopicLinkClick(e);
-        },
-        [props],
-    );
+        onRoomTopicLinkClick(e);
+    }, []);
 
     const onHover = (ev: React.MouseEvent | React.FocusEvent): void => {
         setDisableTooltip((ev.target as HTMLElement).tagName.toUpperCase() === "A");
@@ -100,19 +95,15 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
     if (!body) return <div className={classNames(className, "mx_RoomTopic")} />;
 
     return (
-        <Tooltip description={_t("room|read_topic")} disabled={disableTooltip}>
-            <div
-                {...props}
-                tabIndex={0}
-                role="button"
-                onClick={onClick}
-                className={classNames(className, "mx_RoomTopic")}
-                onMouseOver={onHover}
-                onFocus={onHover}
-                aria-label={_t("room|read_topic")}
-            >
-                <LinkedText>{body}</LinkedText>
-            </div>
-        </Tooltip>
+        <AccessibleButton
+            onClick={onClick}
+            className={classNames(className, "mx_RoomTopic")}
+            onMouseOver={onHover}
+            onFocus={onHover}
+            title={_t("room|read_topic")}
+            disableTooltip={disableTooltip}
+        >
+            <LinkedText>{body}</LinkedText>
+        </AccessibleButton>
     );
 }
