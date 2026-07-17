@@ -1,0 +1,217 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ * Copyright 2019 Tulir Asokan <tulir@maunium.net>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.picker {
+    width: 340px;
+    height: min(450px, 80vh);
+    max-height: 80vh;
+
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.body {
+    flex: 1;
+    overflow-y: scroll;
+}
+
+.header {
+    padding: 4px 8px 0;
+    border-bottom: 1px solid var(--cpd-color-gray-400);
+}
+
+.anchor {
+    border: none;
+    padding: var(--cpd-space-1x) 0;
+    /* We have to explicitly inherit the font as button browser styles are implicitly ignorant */
+    font: inherit;
+    font-size: var(--cpd-font-size-heading-sm);
+    line-height: 1;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    border-radius: 4px 4px 0 0;
+
+    width: 36px;
+    height: 36px;
+
+    color: var(--cpd-color-text-primary);
+    display: inline-block;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:disabled {
+        filter: opacity(0.3);
+    }
+
+    &:not(:disabled):hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+        border-bottom: 2px solid var(--cpd-color-text-action-accent);
+    }
+}
+
+.anchorVisible {
+    border-bottom: 2px solid var(--cpd-color-text-action-accent);
+}
+
+.search {
+    margin: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    background-color: var(--cpd-color-bg-canvas-default);
+    display: flex;
+
+    input {
+        flex: 1;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px 0;
+
+        &::placeholder {
+            color: var(--cpd-color-text-secondary);
+        }
+    }
+
+    button {
+        border: none;
+        background-color: inherit;
+        margin: 0;
+        padding: 8px;
+        align-self: center;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+.searchIcon {
+    width: 18px;
+    margin: 8px;
+
+    svg {
+        width: 100%;
+        height: 100%;
+        color: var(--cpd-color-text-primary);
+    }
+}
+
+.category {
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.categoryLabel {
+    width: 304px;
+    font: var(--cpd-font-heading-sm-semibold);
+}
+
+.list {
+    width: 304px;
+    padding: 0;
+    margin: 0;
+}
+
+.itemWrapper {
+    display: inline-block;
+    list-style: none;
+    width: 38px;
+    cursor: pointer;
+
+    &:focus-within {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+}
+
+.bodyShowHighlight .itemWrapper [tabindex="0"] .item {
+    background-color: var(--cpd-color-bg-subtle-primary);
+}
+
+.item {
+    display: inline-block;
+    font-size: var(--cpd-font-size-heading-sm);
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+
+    &:hover {
+        background-color: var(--cpd-color-bg-subtle-primary);
+    }
+}
+
+.itemSelected {
+    color: rgb(0, 0, 0, 0.5);
+    border: 1px solid var(--cpd-color-text-action-accent);
+    padding: 4px;
+}
+
+.categoryLabel,
+.previewName {
+    font-size: 1rem;
+    font-weight: var(--cpd-font-weight-semibold);
+    margin: 0;
+}
+
+.footer {
+    border-top: 1px solid var(--cpd-color-gray-400);
+    min-height: 72px;
+    max-height: 72px;
+
+    display: flex;
+    align-items: center;
+}
+
+.previewEmoji {
+    font-size: var(--cpd-font-size-heading-xl);
+    padding: 8px 16px;
+}
+
+.previewText {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    flex-direction: column;
+}
+
+.name {
+    text-transform: capitalize;
+}
+
+.shortcode {
+    color: var(--cpd-color-text-secondary);
+    overflow-wrap: break-word;
+    font: var(--cpd-font-body-md-regular);
+
+    &::before,
+    &::after {
+        content: ":";
+    }
+}
+
+.quick {
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.quickHeader .name {
+    margin-right: 4px;
+}

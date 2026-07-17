@@ -69,6 +69,7 @@ export default defineConfig({
             // make sure to externalize deps that shouldn't be bundled
             // into your library
             external: [
+                "@matrix-org/emojibase-bindings",
                 "@vector-im/compound-design-tokens",
                 "@vector-im/compound-web",
                 "react-virtuoso",
@@ -84,6 +85,7 @@ export default defineConfig({
                 // for externalized deps
                 globals: {
                     "react": "react",
+                    "@matrix-org/emojibase-bindings": "matrixEmojibaseBindings",
                     "@vector-im/compound-design-tokens": "compoundDesignTokens",
                     "@vector-im/compound-web": "compoundWeb",
                     "react-virtuoso": "reactVirtuoso",

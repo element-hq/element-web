@@ -1,5 +1,6 @@
 {
     "a11y": {
+        "emoji_picker": "Emoji picker",
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
@@ -43,6 +44,22 @@
     },
     "devtools": {
         "toggle_event": "toggle event"
+    },
+    "emoji": {
+        "categories": "Categories",
+        "category_activities": "Activities",
+        "category_animals_nature": "Animals & Nature",
+        "category_flags": "Flags",
+        "category_food_drink": "Food & Drink",
+        "category_frequently_used": "Frequently Used",
+        "category_objects": "Objects",
+        "category_smileys_people": "Smileys & People",
+        "category_symbols": "Symbols",
+        "category_travel_places": "Travel & Places",
+        "quick_reactions": "Quick Reactions"
+    },
+    "emoji_picker": {
+        "cancel_search_label": "Cancel search"
     },
     "keyboard": {
         "shift": "Shift"
