@@ -109,6 +109,13 @@
             "drag_over_original": "%(source)s 将恢复到其原始位置",
             "drag_start": "正在拖动 %(source)s",
             "invitation": "打开房间 %(roomName)s 的邀请。",
+            "mention": {
+                "other": "打开包含 %(count)s 个未读提及的房间：%(roomName)s。"
+            },
+            "unread": {
+                "other": "打开包含 %(count)s 个未读消息的房间：%(roomName)s。"
+            },
+            "unsent_message": "打开包含尚未发送的消息的房间：%(roomName)s",
             "video_call": "以视频通话方式打开房间 %(roomName)s。",
             "voice_call": "以语音通话方式打开房间 %(roomName)s。"
         },
@@ -215,8 +222,24 @@
     "timeline": {
         "call_tile": {
             "declined": {
-                "call_declined": "来电被拒接",
+                "call_declined": "通话已被拒接",
                 "call_declined_by_us": "你已拒接来电"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s 已开始通话",
+                    "join_button": "加入"
+                },
+                "dm": {
+                    "call_started": "通话已开始",
+                    "title": "通话进行中"
+                },
+                "room": {
+                    "join_count": {
+                        "other": "%(count)s 人已加入"
+                    },
+                    "title": "群组通话进行中"
+                }
             },
             "tombstone": {
                 "room": {

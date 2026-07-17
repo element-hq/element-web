@@ -38,7 +38,6 @@ async function main(): Promise<void> {
     // Can be specified multiple times for the copy command to bundle
     // multiple arches into a single universal output module)
     for (;;) {
-        // eslint-disable-line no-constant-condition
         const targetIndex = process.argv.indexOf("--target");
         if (targetIndex === -1) break;
 

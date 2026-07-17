@@ -43,7 +43,7 @@ import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
-import { fetchUserStatus, validateUserStatus } from "../../utils/userStatus";
+import { fetchUserStatus, userStatusFromProfile } from "../../utils/userStatus";
 
 /**
  * View section type without `isSelected` field
@@ -292,7 +292,12 @@ export class RoomListItemViewModel
      */
     private onUserProfileUpdate: ClientEventHandlerMap[ClientEvent.UserProfileUpdate] = (userId, profile) => {
         if (userId !== this.dmUserId || !SettingsStore.getValue("feature_user_status")) return;
-        this.snapshot.merge({ userStatus: validateUserStatus(profile?.["org.matrix.msc4426.status"]) });
+        this.snapshot.merge({
+            userStatus: userStatusFromProfile(
+                profile?.["org.matrix.msc4426.status"],
+                profile?.["org.matrix.msc4426.call"],
+            ),
+        });
     };
 
     /**

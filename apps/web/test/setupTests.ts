@@ -16,7 +16,6 @@ import { PredictableRandom } from "./test-utils/predictableRandom";
 import * as rageshake from "../src/rageshake/rageshake";
 
 declare global {
-    // eslint-disable-next-line no-var
     var IS_REACT_ACT_ENVIRONMENT: boolean;
 }
 

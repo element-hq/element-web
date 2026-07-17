@@ -181,15 +181,6 @@ test.describe("Room list unread activity toast", () => {
             // Wait until the collapsed Chats header has been pushed offscreen (all favourites synced).
             await expect(chatsHeader).not.toBeInViewport();
 
-            // Tagging rooms into the Favourites section raises a transient "Chat moved" toast, which
-            // shares the single toast slot with — and takes precedence over — the unread-activity toast
-            // (see RoomListView). Dismiss it via its close button so the unread toast can surface; by now
-            // all favourites have synced, so it will not re-appear.
-            const chatMovedToast = page.getByText("Chat moved");
-            await expect(chatMovedToast).toBeVisible();
-            await page.getByRole("button", { name: "Close" }).click();
-            await expect(chatMovedToast).not.toBeVisible();
-
             // The collapsed Chats header is offscreen, but its hidden notification raises the toast.
             await expect(getToast(page)).toBeVisible();
 

@@ -313,7 +313,6 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     };
 
     public render(): React.ReactNode {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {
             space,
             activeSpaces,
@@ -366,7 +365,6 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             </AccessibleButton>
         ) : null;
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { tabIndex, ...restDragHandleProps } = dragHandleProps || {};
         const selected = activeSpaces.includes(space.roomId);
 

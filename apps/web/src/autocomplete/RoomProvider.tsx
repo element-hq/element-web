@@ -136,7 +136,6 @@ export default class RoomProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
-                role="presentation"
                 aria-label={_t("composer|autocomplete|room_a11y")}
             >
                 {completions}
