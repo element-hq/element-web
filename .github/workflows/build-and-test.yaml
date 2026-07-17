@@ -26,18 +26,18 @@ on:
                 type: boolean
                 required: false
                 default: false
-                description: "A boolean to skip the playwright check itself while still creating the passing check. Useful when only running in Merge Queues."
+                description: "A boolean to skip everything while still creating the passing check. Useful when only running in Merge Queues."
+
+            skip-desktop:
+                type: boolean
+                required: false
+                default: false
+                description: "A boolean to skip building & testing Element Desktop."
 
             matrix-js-sdk-sha:
                 type: string
                 required: false
                 description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
-
-            desktop:
-                type: boolean
-                required: false
-                default: true
-                description: "Set to false to skip building & testing Element Desktop"
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
@@ -243,7 +243,7 @@ jobs:
         name: "Prepare Element Desktop"
         uses: ./.github/workflows/build_desktop_prepare.yaml
         needs: prepare
-        if: needs.prepare.outputs.skip == 'false' && inputs.desktop != false
+        if: needs.prepare.outputs.skip == 'false' && inputs.skip-desktop != true
         permissions:
             contents: read
         with:
