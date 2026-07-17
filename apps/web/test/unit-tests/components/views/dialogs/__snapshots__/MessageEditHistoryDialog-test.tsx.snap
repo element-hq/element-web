@@ -32,6 +32,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
         class="mx_RoomView_messageListWrapper"
       >
         <ol
+          aria-label="Message edits"
           aria-live="polite"
           class="mx_RoomView_MessageList"
         >
@@ -173,6 +174,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
         class="mx_RoomView_messageListWrapper"
       >
         <ol
+          aria-label="Message edits"
           aria-live="polite"
           class="mx_RoomView_MessageList"
         >

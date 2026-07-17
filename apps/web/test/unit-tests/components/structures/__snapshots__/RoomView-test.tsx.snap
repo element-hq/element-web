@@ -1324,6 +1324,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
               class="mx_RoomView_messageListWrapper"
             >
               <ol
+                aria-label="Messages"
                 aria-live="polite"
                 class="mx_RoomView_MessageList"
                 style="height: 400px;"
@@ -1394,6 +1395,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
               class="mx_RoomView_messageListWrapper"
             >
               <ol
+                aria-label="Messages"
                 aria-live="polite"
                 class="mx_RoomView_MessageList"
                 style="height: 400px;"
@@ -1878,6 +1880,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
               class="mx_RoomView_messageListWrapper"
             >
               <ol
+                aria-label="Messages"
                 aria-live="polite"
                 class="mx_RoomView_MessageList"
                 style="height: 400px;"
@@ -2362,6 +2365,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
               class="mx_RoomView_messageListWrapper"
             >
               <ol
+                aria-label="Messages"
                 aria-live="polite"
                 class="mx_RoomView_MessageList"
                 style="height: 400px;"
@@ -3084,6 +3088,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               class="mx_RoomView_messageListWrapper"
             >
               <ol
+                aria-label="Messages"
                 aria-live="polite"
                 class="mx_RoomView_MessageList"
                 style="height: 400px;"
@@ -3672,6 +3677,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                   class="mx_RoomView_messageListWrapper"
                 >
                   <ol
+                    aria-label="Messages"
                     aria-live="polite"
                     class="mx_RoomView_MessageList"
                     style="height: 400px;"

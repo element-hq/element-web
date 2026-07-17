@@ -10,6 +10,7 @@ exports[`MessagePanel should handle large numbers of hidden events quickly 1`] =
       class="mx_RoomView_messageListWrapper"
     >
       <ol
+        aria-label="Messages"
         aria-live="polite"
         class="mx_RoomView_MessageList"
         style="height: 400px;"
@@ -29,6 +30,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
       class="mx_RoomView_messageListWrapper"
     >
       <ol
+        aria-label="Messages"
         aria-live="polite"
         class="mx_RoomView_MessageList"
         style="height: 400px;"
@@ -144,6 +146,7 @@ exports[`MessagePanel should handle lots of room creation events quickly 1`] = `
       class="mx_RoomView_messageListWrapper"
     >
       <ol
+        aria-label="Messages"
         aria-live="polite"
         class="mx_RoomView_MessageList"
         style="height: 400px;"
