@@ -34,7 +34,4 @@ export async function waitForBackgroundImages(root: HTMLElement): Promise<void> 
             }
         }),
     );
-
-    // Ensure the decoded images have been painted before the snapshot is captured.
-    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 }
