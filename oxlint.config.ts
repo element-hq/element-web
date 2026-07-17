@@ -55,7 +55,7 @@ export default defineConfig({
     },
     options: {
         typeAware: true,
-        reportUnusedDisableDirectives: "off",
+        reportUnusedDisableDirectives: "warn",
         maxWarnings: 0,
         denyWarnings: true,
     },
@@ -108,12 +108,20 @@ export default defineConfig({
         ],
         "prefer-const": ["error", { destructuring: "all" }],
         "import/first": "error",
+        "typescript/no-require-imports": "error",
+        "new-cap": "error",
+        "no-empty-pattern": "error",
+        "typescript/no-unsafe-function-type": "error",
+        "react/rules-of-hooks": "error",
+        "no-extend-native": "error",
+        "no-inner-declarations": "error",
+        "no-var": "error",
+        "typescript/no-unnecessary-type-constraint": "error",
 
         "unicorn/no-instanceof-array": "error",
         "no-restricted-globals": ["error", ...defaultRestrictedGlobals],
         "no-restricted-properties": ["error", ...defaultRestrictedProperties],
         "import/no-duplicates": ["error"],
-        "typescript/no-require-imports": "error",
 
         "element-call/copyright-header": [
             "error",
@@ -123,11 +131,16 @@ export default defineConfig({
         // Allow the use of underscore to show args are not used.
         // This is helpful for seeing that a function implements
         // an interface but won't be using one of it's arguments.
-        "typescript/no-unused-vars": ["error", { args: "none", ignoreRestSiblings: true }],
+        "no-unused-vars": ["error", { args: "none", ignoreRestSiblings: true }],
 
-        // Disable some rules here, but they are enabled for src
-        "typescript/explicit-function-return-type": "off",
-        "typescript/explicit-member-accessibility": "off",
+        // Require method signatures to be explicit to help make signature changes more obvious in review
+        "typescript/explicit-function-return-type": [
+            "error",
+            {
+                allowExpressions: true,
+            },
+        ],
+        "typescript/explicit-member-accessibility": "error",
 
         // Require us to be more explicit about type conversions to help prevent bugs
         "typescript/no-base-to-string": ["error"],
@@ -161,8 +174,6 @@ export default defineConfig({
         "typescript/no-redundant-type-constituents": "off",
         "typescript/no-useless-default-assignment": "off",
         "typescript/no-duplicate-type-constituents": "off",
-        "no-unused-vars": "off",
-        "eslint/no-unused-vars": "off",
         "typescript/no-floating-promises": "off",
         "typescript/no-implied-eval": "off",
         "typescript/no-misused-spread": "off",
@@ -210,7 +221,71 @@ export default defineConfig({
     },
     overrides: [
         {
-            files: ["apps/web/src/**/*"],
+            files: ["apps/web/src/**/*", "{packages,modules}/*/src/**/*"],
+            rules: {
+                "no-restricted-globals": [
+                    "error",
+                    defaultRestrictedGlobals,
+                    {
+                        name: "Buffer",
+                        message: "Buffer is not available in the web.",
+                    },
+                ],
+            },
+        },
+        {
+            files: ["{packages,apps,modules}/*/src/**/*"],
+            rules: {
+                "no-restricted-imports": [
+                    "error",
+                    {
+                        name: "events",
+                        message: "Please use TypedEventEmitter instead",
+                    },
+                ],
+
+                // Enable this in the future, it has a lot of false positives right now
+                // "react/react-compiler": "error",
+            },
+        },
+        {
+            files: ["packages/shared-components/**/*"],
+            rules: {
+                "no-restricted-imports": [
+                    "error",
+                    {
+                        paths: [
+                            {
+                                name: "react",
+                                importNames: ["act"],
+                                message: "Please use @test-utils instead.",
+                            },
+                            {
+                                name: "@testing-library/react",
+                                message: "Please use @test-utils instead",
+                            },
+                        ],
+                    },
+                ],
+
+                // This would be good to apply globally in the future
+                "react/forbid-elements": [
+                    "error",
+                    {
+                        forbid: [
+                            { element: "h1", message: "Use Compound <Heading> instead" },
+                            { element: "h2", message: "Use Compound <Heading> instead" },
+                            { element: "h3", message: "Use Compound <Heading> instead" },
+                            { element: "h4", message: "Use Compound <Heading> instead" },
+                            { element: "h5", message: "Use Compound <Heading> instead" },
+                            { element: "h6", message: "Use Compound <Heading> instead" },
+                        ],
+                    },
+                ],
+            },
+        },
+        {
+            files: ["apps/web/**/*"],
             rules: {
                 "no-restricted-properties": [
                     "error",
@@ -342,78 +417,24 @@ export default defineConfig({
             },
         },
         {
-            files: ["apps/web/src/**/*", "{packages,modules}/*/src/**/*"],
+            files: [
+                "apps/*/playwright/**/*",
+                "packages/playwright-common/**/*",
+                "modules/*/e2e/**/*",
+                "modules/playwright/**/*",
+            ],
             rules: {
-                "no-restricted-globals": [
-                    "error",
-                    defaultRestrictedGlobals,
-                    {
-                        name: "Buffer",
-                        message: "Buffer is not available in the web.",
-                    },
-                ],
-            },
-        },
-        {
-            files: ["packages/shared-components/**/*"],
-            rules: {
-                "no-restricted-imports": [
-                    "error",
-                    {
-                        paths: [
-                            {
-                                name: "react",
-                                importNames: ["act"],
-                                message: "Please use @test-utils instead.",
-                            },
-                        ],
-                    },
-                ],
-
-                // This would be good to apply globally in the future
-                "react/forbid-elements": [
-                    "error",
-                    {
-                        forbid: [
-                            { element: "h1", message: "Use Compound <Heading> instead" },
-                            { element: "h2", message: "Use Compound <Heading> instead" },
-                            { element: "h3", message: "Use Compound <Heading> instead" },
-                            { element: "h4", message: "Use Compound <Heading> instead" },
-                            { element: "h5", message: "Use Compound <Heading> instead" },
-                            { element: "h6", message: "Use Compound <Heading> instead" },
-                        ],
-                    },
-                ],
-            },
-        },
-        {
-            files: ["{packages,apps,modules/*/src/**/*"],
-            rules: {
-                "no-console": "error",
-                // Require method signatures to be explicit to help make signature changes more obvious in review
-                "typescript/explicit-function-return-type": [
-                    "error",
-                    {
-                        allowExpressions: true,
-                    },
-                ],
-                "typescript/explicit-member-accessibility": "error",
-
-                "no-restricted-imports": [
-                    "error",
-                    {
-                        name: "events",
-                        message: "Please use TypedEventEmitter instead",
-                    },
-                ],
-
-                "react/react-compiler": "error",
+                // This is a common pattern for Playwright fixtures
+                "no-empty-pattern": "off",
+                // Playwright has a `use` method for fixtures which confuses this rule
+                "react-hooks/rules-of-hooks": "off",
             },
         },
         {
             files: [
                 "{packages,apps,modules}/*/src/**/*.{test,stories}.{ts,tsx}",
-                "{packages,apps,modules}/*/src/{tests,__mocks__}/*.{ts,tsx}",
+                "{packages,apps,modules}/*/src/{tests,test}/*.{ts,tsx}",
+                "{packages,apps,modules}/*/src/**/__mocks__/*.{ts,tsx}",
                 "{packages,apps,modules}/*/{test,playwright,e2e}/**/*",
                 "{packages,apps,modules}/*/playwright.config.ts",
                 "{packages,apps,modules}/*/.storybook/**/*",
@@ -423,7 +444,6 @@ export default defineConfig({
             rules: {
                 // Tests can be linted a little more flexibly
                 // We don't need super strict typing in test utilities
-                "no-empty-pattern": "off",
                 "no-import-assign": "off",
                 "no-unsafe-optional-chaining": "off",
                 "typescript/no-empty-object-type": "off",
@@ -449,6 +469,8 @@ export default defineConfig({
                     },
                 ],
                 "jsdoc/check-tag-names": "off",
+                "typescript/explicit-function-return-type": "off",
+                "typescript/explicit-member-accessibility": "off",
 
                 // Disable a11y rules for components in tests
                 "jsx-a11y/role-has-required-aria-props": "off",

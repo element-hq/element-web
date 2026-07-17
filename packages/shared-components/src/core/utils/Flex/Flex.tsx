@@ -11,7 +11,6 @@ import React, { type JSX, type ComponentProps, type JSXElementConstructor, useMe
 
 import styles from "./Flex.module.css";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> = {
     /**
      * The type of the HTML element
@@ -61,7 +60,6 @@ type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any
 /**
  * A flexbox container helper
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any> = "div">({
     as = "div",
     display = "flex",

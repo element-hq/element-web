@@ -47,7 +47,7 @@ interface CompoundTheme {
 
 export type CustomTheme = {
     name: string;
-    is_dark?: boolean; // eslint-disable-line camelcase
+    is_dark?: boolean;
     colors?: {
         [key: string]: string;
     };

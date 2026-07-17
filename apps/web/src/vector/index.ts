@@ -257,7 +257,6 @@ start().catch((err) => {
     // with some basic styling to make the iframe full page
     document.body.style.removeProperty("height");
     const iframe = document.createElement("iframe");
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
     iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";

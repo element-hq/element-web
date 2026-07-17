@@ -76,11 +76,8 @@ export const Container: React.FC<{
 
 export interface IPowerLevelsContent {
     events?: Record<string, number>;
-    // eslint-disable-next-line camelcase
     users_default?: number;
-    // eslint-disable-next-line camelcase
     events_default?: number;
-    // eslint-disable-next-line camelcase
     state_default?: number;
     ban?: number;
     kick?: number;

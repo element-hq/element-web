@@ -228,7 +228,7 @@ interface WorkflowYaml {
 type Trigger = Node;
 
 // TODO workflow_call reusables
-/* eslint-disable @typescript-eslint/naming-convention */
+
 const TRIGGERS: {
     [key in keyof WorkflowYaml["on"]]: (
         data: NonNullable<WorkflowYaml["on"][key]>,
@@ -273,7 +273,6 @@ const TRIGGERS: {
     // TODO should we be just dropping these?
     workflow_run: (data) => data.workflows.map((parent) => workflows.get(parent)).filter(Boolean) as Workflow[],
 };
-/* eslint-enable @typescript-eslint/naming-convention */
 
 const triggers = new Map<string, Trigger>(); // keyed by trigger id
 const projects = new Map<string, Project>(); // keyed by project name

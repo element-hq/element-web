@@ -425,11 +425,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         }
 
         // filter props that are invalid for DOM elements
-        const {
-            hasBackground: _hasBackground, // eslint-disable-line @typescript-eslint/no-unused-vars
-            onFinished: _onFinished, // eslint-disable-line @typescript-eslint/no-unused-vars
-            ...divProps
-        } = props;
+        const { hasBackground: _hasBackground, onFinished: _onFinished, ...divProps } = props;
 
         return (
             <RovingTabIndexProvider handleHomeEnd handleUpDown onKeyDown={this.onKeyDown}>
@@ -600,7 +596,6 @@ export const useContextMenu = <T extends HTMLElement = HTMLElement>(
         setIsOpen(false);
     };
 
-    // eslint-disable-next-line react-compiler/react-compiler
     return [button.current ? isOpen : false, button, open, close, setIsOpen];
 };
 
