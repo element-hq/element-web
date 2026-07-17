@@ -115,6 +115,8 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
 
     return (
         <div className="mx_AutocompleteInput">
+            {/* We break the rule here as this is a mouse-only interaction */}
+            {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
             <div
                 ref={editorContainerRef}
                 className={classNames({

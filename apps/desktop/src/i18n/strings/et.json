@@ -53,6 +53,11 @@
         "services": "Teenused",
         "unhide": "Näita uuesti"
     },
+    "renderer_crash": {
+        "detail": "Jätkamiseks sulge rakendus ja ava see uuesti. Kui probleem kordub, võib aidata arvuti uuesti käivitamine või rakenduse vahemälu tühjendamine.",
+        "message": "%(brand)s on mitu korda probleemist taastunud, kuid viga kordub ikka ja jälle ning rakendus on edasise proovimise lõpetanud.",
+        "title": "%(brand)s jookseb ühtevalu kokku"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Lisa sõnastikku",
         "copy_email": "Kopeeri e-posti aadress",

@@ -53,6 +53,11 @@
         "services": "Services",
         "unhide": "Dé-masquer"
     },
+    "renderer_crash": {
+        "detail": "Redémarrer l'application pour continuer. Si le problème persiste, redémarrer votre ordinateur ou vider le cache de l'application peut résoudre le problème.",
+        "message": "%(brand)s s'est remis d'un problème à plusieurs reprises, mais celui-ci continue de se produire, il a donc cessé d'essayer.",
+        "title": "%(brand)s s'arrête brutalement de façon répétée"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Ajouter au dictionnaire",
         "copy_email": "Copier l’adresse e-mail",

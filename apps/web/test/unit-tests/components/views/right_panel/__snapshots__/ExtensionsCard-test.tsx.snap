@@ -12,6 +12,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
@@ -113,6 +114,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >

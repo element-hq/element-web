@@ -12,6 +12,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
@@ -314,6 +315,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         class="mx_BaseCard_header_title"
       >
         <p
+          aria-level="1"
           class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
