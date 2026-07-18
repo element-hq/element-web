@@ -66,9 +66,7 @@ const cssThemes = {
 };
 
 // See docs/customisations.md
-let fileOverrides = {
-    /* {[file: string]: string} */
-};
+let fileOverrides = {/* {[file: string]: string} */};
 try {
     const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
     fileOverrides = JSON.parse(customisationsFile);
@@ -508,6 +506,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 {
                     test: /\.svg$/,
                     issuer: /\.(js|ts|jsx|tsx|html)$/,
+                    resourceQuery: { not: [/raw/] },
                     use: [
                         {
                             loader: "@svgr/webpack",
@@ -622,7 +621,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                     ],
                 },
-            ].filter(Boolean),
+            ],
         },
 
         plugins: [
@@ -761,7 +760,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 retryDelay: 500,
                 maxRetries: 3,
             }),
-        ].filter(Boolean),
+        ],
 
         output: {
             path: path.join(__dirname, "webapp"),

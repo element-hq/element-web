@@ -21,10 +21,12 @@ import {
     type IRoomTimelineData,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { UserStatusIconView } from "@element-hq/web-shared-components";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
+import { UserStatusIconViewModel } from "../viewmodels/status/UserStatusIconViewModel";
 import AutocompleteProvider from "./AutocompleteProvider";
 import { _t } from "../languageHandler";
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
@@ -43,6 +45,7 @@ export default class UserProvider extends AutocompleteProvider {
     public matcher: QueryMatcher<RoomMember>;
     public users?: RoomMember[];
     public room: Room;
+    private statusViewModels = new Map<string, UserStatusIconViewModel>();
 
     public constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({
@@ -64,6 +67,17 @@ export default class UserProvider extends AutocompleteProvider {
     public destroy(): void {
         MatrixClientPeg.get()?.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
         MatrixClientPeg.get()?.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
+        for (const vm of this.statusViewModels.values()) vm.dispose();
+        this.statusViewModels.clear();
+    }
+
+    private getStatusViewModel(userId: string): UserStatusIconViewModel {
+        let vm = this.statusViewModels.get(userId);
+        if (!vm) {
+            vm = new UserStatusIconViewModel({ userId, matrixClient: MatrixClientPeg.safeGet() });
+            this.statusViewModels.set(userId, vm);
+        }
+        return vm;
     }
 
     private onRoomTimeline = (
@@ -127,7 +141,11 @@ export default class UserProvider extends AutocompleteProvider {
                     suffix: selection.beginning && range!.start === 0 ? ": " : " ",
                     href: makeUserPermalink(user.userId),
                     component: (
-                        <PillCompletion title={displayName} description={description ?? undefined}>
+                        <PillCompletion
+                            title={displayName}
+                            titleIcon={<UserStatusIconView vm={this.getStatusViewModel(user.userId)} />}
+                            description={description ?? undefined}
+                        >
                             <MemberAvatar member={user} size="24px" />
                         </PillCompletion>
                     ),
@@ -178,7 +196,6 @@ export default class UserProvider extends AutocompleteProvider {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"
-                role="presentation"
                 aria-label={_t("composer|autocomplete|user_a11y")}
             >
                 {completions}

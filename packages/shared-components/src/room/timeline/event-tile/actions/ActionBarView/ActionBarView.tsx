@@ -376,6 +376,8 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     return (
         <RovingTabIndexProvider key={rovingProviderKey} handleLeftRight handleHomeEnd handleLoop>
             {({ onKeyDownHandler }) => (
+                // This may be wrong but seems to work, this is a roving-toolbar, so the focus follows one of the children
+                // oxlint-disable-next-line jsx-a11y/interactive-supports-focus
                 <Flex
                     display="inline-flex"
                     direction="row"

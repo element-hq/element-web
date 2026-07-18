@@ -12,7 +12,6 @@ import { type IWidget } from "matrix-widget-api";
 
 import { _t, _td } from "../../../languageHandler";
 import AppTile from "../elements/AppTile";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
 import WidgetUtils, { type UserWidget } from "../../../utils/WidgetUtils";
@@ -24,9 +23,9 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import type ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import StickerpackPlaceholder from "../../../../res/img/stickerpack-placeholder.png";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -50,6 +49,9 @@ interface IState {
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
+    public static contextType = SDKContext;
+    declare public context: React.ContextType<typeof SDKContext>;
+
     public static defaultProps: Partial<IProps> = {
         threadId: null,
     };
@@ -130,17 +132,16 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.dispatcherRef = dis.register(this.onAction);
 
         // Track updates to widget state in account data
-        MatrixClientPeg.safeGet().on(ClientEvent.AccountData, this.updateWidget);
+        this.context.client?.on(ClientEvent.AccountData, this.updateWidget);
 
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.context.rightPanelStore.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         // Initialise widget state from current account data
         this.updateWidget();
     }
 
     public componentWillUnmount(): void {
-        const client = MatrixClientPeg.get();
-        if (client) client.removeListener(ClientEvent.AccountData, this.updateWidget);
-        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.context.client?.removeListener(ClientEvent.AccountData, this.updateWidget);
+        this.context.rightPanelStore.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         window.removeEventListener("resize", this.onResize);
         dis.unregister(this.dispatcherRef);
     }
@@ -280,9 +281,9 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                                 room={this.props.room}
                                 threadId={this.props.threadId}
                                 fullWidth={true}
-                                userId={MatrixClientPeg.safeGet().credentials.userId!}
+                                userId={this.context.client?.credentials.userId ?? undefined}
                                 creatorUserId={
-                                    stickerpickerWidget.sender || MatrixClientPeg.safeGet().credentials.userId!
+                                    stickerpickerWidget.sender || this.context.client?.credentials.userId || undefined
                                 }
                                 waitForIframeLoad={true}
                                 showMenubar={true}

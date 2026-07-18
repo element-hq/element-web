@@ -115,6 +115,8 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
 
     return (
         <div className="mx_AutocompleteInput">
+            {/* We break the rule here as this is a mouse-only interaction */}
+            {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events */}
             <div
                 ref={editorContainerRef}
                 className={classNames({
@@ -149,7 +151,6 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
             {isFocused && suggestions.length ? (
                 <div
                     className="mx_AutocompleteInput_matches"
-                    // eslint-disable-next-line react-compiler/react-compiler
                     style={{ top: editorContainerRef.current?.clientHeight }}
                     data-testid="autocomplete-matches"
                 >

@@ -209,7 +209,7 @@ export class RoomViewStore extends EventEmitter {
         if (this.lockedToRoomId && payload.room_id && this.lockedToRoomId !== payload.room_id) {
             return;
         }
-        // eslint-disable-line @typescript-eslint/naming-convention
+
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'

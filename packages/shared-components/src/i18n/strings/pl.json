@@ -150,7 +150,9 @@
         "expand_all_sections": "Rozwiń wszystkie sekcje",
         "expand_filters": "Rozwiń listę filtrów",
         "filters": {
+            "favourite": "Ulubione",
             "invites": "Zaproszenia",
+            "low_priority": "Niski priorytet",
             "mentions": "Wzmianki",
             "people": "Osoby",
             "rooms": "Pokoje",
@@ -192,6 +194,17 @@
         "space_menu": {
             "home": "Strona główna przestrzeni",
             "space_settings": "Ustawienia przestrzeni"
+        },
+        "unread_messages": "Nieprzeczytane wiadomości"
+    },
+    "status": {
+        "set_status": {
+            "away": "Z dala od urządzenia",
+            "be_right_back": "Zaraz wracam",
+            "focus_time": "W trakcie skupienia",
+            "in_a_meeting": "Na spotkaniu",
+            "on_the_road": "W trasie",
+            "set_status_prompt": "Jaki jest twój status?"
         }
     },
     "terms": {
@@ -221,6 +234,11 @@
             "declined": {
                 "call_declined": "Połączenie odrzucone",
                 "call_declined_by_us": "Odrzuciłeś połączenie"
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Połączenie grupowe zakończone"
+                }
             },
             "video_call_title": "Połączenie wideo",
             "voice_call_title": "Połączenie głosowe"

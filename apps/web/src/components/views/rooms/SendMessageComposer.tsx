@@ -67,6 +67,7 @@ import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation, attachUrlPreviews } from "../../../utils/messages";
 import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel";
 import { type MessageComposerUrlPreviewViewModel } from "../../../viewmodels/composer/MessageComposerUrlPreviewViewModel";
+import { type MessageComposerUrlPreviewSnapshot } from "@element-hq/web-shared-components";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -141,6 +142,10 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     urlPreviewVm: MessageComposerUrlPreviewViewModel;
 }
 
+interface ISendMessageActionProps {
+    urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot;
+}
+
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
@@ -197,10 +202,12 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const replyingToThread = this.props.relation?.key === THREAD_RELATION_TYPE.name;
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case KeyBindingAction.SendMessage:
-                this.sendMessage();
+            case KeyBindingAction.SendMessage: {
+                const urlPreviewSnapshot = this.props.urlPreviewVm.getSnapshot();
+                this.sendMessage({ urlPreviewSnapshot });
                 event.preventDefault();
                 break;
+            }
             case KeyBindingAction.SelectPrevSendHistory:
             case KeyBindingAction.SelectNextSendHistory: {
                 // Try select composer history
@@ -330,7 +337,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
-    public async sendMessage(): Promise<void> {
+    /*
+     * The URL preview VM snapshot before the composer is cleared
+     */
+    public async sendMessage({ urlPreviewSnapshot }: ISendMessageActionProps): Promise<void> {
         const model = this.model;
 
         if (model.isEmpty) {
@@ -443,7 +453,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
-            attachUrlPreviews(this.props.urlPreviewVm.getSnapshot(), content);
+            attachUrlPreviews(urlPreviewSnapshot, content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

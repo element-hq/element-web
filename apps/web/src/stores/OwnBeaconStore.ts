@@ -426,7 +426,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         const existingLiveBeaconIdsForRoom = this.getLiveBeaconIds(roomId);
         await Promise.all(existingLiveBeaconIdsForRoom.map((beaconId) => this.stopBeacon(beaconId)));
 
-        // eslint-disable-next-line camelcase
         const { event_id } = await doMaybeLocalRoomAction(
             roomId,
             (actualRoomId: string) => this.matrixClient!.unstable_createLiveBeacon(actualRoomId, beaconInfoContent),
