@@ -5,9 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { AutoCollapse } from "../../../../src/viewmodels/structures/auto-collapse/AutoCollapse";
-import type { CollapseHandler } from "../../../../src/viewmodels/structures/auto-collapse/CollapseHandler";
-import { BaseCollapseBehaviour } from "../../../../src/viewmodels/structures/auto-collapse/behaviours/BaseCollapseBehaviour";
+import {describe, expect, beforeEach, it, vi } from "vitest";
+import { AutoCollapse } from "./AutoCollapse";
+import { BaseCollapseBehaviour } from "./behaviours/BaseCollapseBehaviour";
+import { CollapseHandler } from "./CollapseHandler";
 
 let instances: BaseCollapseBehaviour[] = [];
 
@@ -17,7 +18,7 @@ class MockBehaviour extends BaseCollapseBehaviour {
         instances.push(this);
     }
 
-    public onLeftPanelResized = jest.fn();
+    public onLeftPanelResized = vi.fn();
 }
 
 class MockBehaviourWithStartCollapsed extends MockBehaviour {
@@ -32,9 +33,8 @@ class MockBehaviourWithIgnoreResize extends MockBehaviour {
     }
 }
 
-jest.mock("../../../../src/viewmodels/structures/auto-collapse/behaviours/behaviours", () => {
+vi.mock("../../../../src/viewmodels/structures/auto-collapse/behaviours/behaviours", () => {
     return {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         get Behaviours() {
             return [MockBehaviour, MockBehaviour, MockBehaviourWithIgnoreResize, MockBehaviourWithStartCollapsed];
         },
@@ -47,14 +47,14 @@ describe("AutoCollapse", () => {
     });
 
     it("should calculate initial collapse count correctly", () => {
-        const autoCollapse = new AutoCollapse(jest.fn(), jest.fn());
+        const autoCollapse = new AutoCollapse(vi.fn(), vi.fn());
         // Since we have one behaviour that tells the app to start collapsed (MockBehaviourWithStartCollapsed),
         // isAutoCollapsed should be true from initialization.
         expect(autoCollapse.isAutoCollapsed).toBe(true);
     });
 
     it("should proxy onLeftPanelResized to collapseHandler", () => {
-        const autoCollapse = new AutoCollapse(jest.fn(), jest.fn());
+        const autoCollapse = new AutoCollapse(vi.fn(), vi.fn());
         expect(autoCollapse.isAutoCollapsed).toBe(true);
         autoCollapse.onLeftPanelResized();
         expect(autoCollapse.isAutoCollapsed).toBe(false);
@@ -65,7 +65,7 @@ describe("AutoCollapse", () => {
     });
 
     it("should calculate shouldIgnoreResize correctly", () => {
-        const autoCollapse = new AutoCollapse(jest.fn(), jest.fn());
+        const autoCollapse = new AutoCollapse(vi.fn(), vi.fn());
         // Because of MockBehaviourWithIgnoreResize, shouldIgnoreResize should be true.
         expect(autoCollapse.shouldIgnoreResize).toBe(true);
     });

@@ -5,11 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { CollapseHandler } from "../../../../src/viewmodels/structures/auto-collapse/CollapseHandler";
+import { describe, it, expect, vi } from "vitest";
+import { CollapseHandler } from "./CollapseHandler";
 
 function getCollapseHandler() {
-    const expandPanel = jest.fn();
-    const collapsePanel = jest.fn();
+    const expandPanel = vi.fn();
+    const collapsePanel = vi.fn();
     const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
     return { collapseHandler, expandPanel, collapsePanel };
 }

@@ -5,16 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
-import { CollapseOnWindowResizeBehaviour } from "../../../../../src/viewmodels/structures/auto-collapse/behaviours/CollapseOnWindowResizeBehaviour";
-import { CollapseHandler } from "../../../../../src/viewmodels/structures/auto-collapse/CollapseHandler";
+// @vitest-environment happy-dom
 
-jest.useFakeTimers();
+import { describe, expect, it, vi } from "vitest";
+import UIStore, { UI_EVENTS } from "../../../../stores/UIStore";
+import { CollapseHandler } from "../CollapseHandler";
+import { CollapseOnWindowResizeBehaviour } from "./CollapseOnWindowResizeBehaviour";
+
+vi.useFakeTimers();
 
 describe("CollapseOnWindowResizeBehaviour", () => {
     it("Should collapse/expand the panel when the window is resized", () => {
-        const expandPanel = jest.fn();
-        const collapsePanel = jest.fn();
+        const expandPanel = vi.fn();
+        const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
         // @ts-ignore
         // eslint-disable-next-line
@@ -24,12 +27,12 @@ describe("CollapseOnWindowResizeBehaviour", () => {
         expect(collapsePanel).toHaveBeenCalledTimes(1);
         // Making the window larger should expand the panel.
         UIStore.instance.emit(UI_EVENTS.WidthIncreased, 950);
-        jest.runAllTimers();
+        vi.runAllTimers();
         expect(expandPanel).toHaveBeenCalledTimes(1);
     });
 
     it("should set shouldIgnoreResize to true when window is being resized", () => {
-        const collapseHandler = new CollapseHandler(jest.fn(), jest.fn(), 0);
+        const collapseHandler = new CollapseHandler(vi.fn(), vi.fn(), 0);
         const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
         expect(behaviour.shouldIgnoreResize).toBe(false);
         // When the window is being resized, this behaviour should indicate that resize events
@@ -39,7 +42,7 @@ describe("CollapseOnWindowResizeBehaviour", () => {
     });
 
     it("should return correct shouldStartCollapsed", () => {
-        const collapseHandler = new CollapseHandler(jest.fn(), jest.fn(), 0);
+        const collapseHandler = new CollapseHandler(vi.fn(), vi.fn(), 0);
         // @ts-ignore
         // eslint-disable-next-line
         const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
