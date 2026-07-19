@@ -19,9 +19,7 @@ describe("CollapseOnWindowResizeBehaviour", () => {
         const expandPanel = vi.fn();
         const collapsePanel = vi.fn();
         const collapseHandler = new CollapseHandler(expandPanel, collapsePanel, 0);
-        // @ts-ignore
-        // eslint-disable-next-line
-        const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
+        new CollapseOnWindowResizeBehaviour(collapseHandler);
         // Making the window smaller should collapse the panel.
         UIStore.instance.emit(UI_EVENTS.WidthDecreased, 750);
         expect(collapsePanel).toHaveBeenCalledTimes(1);
@@ -43,9 +41,7 @@ describe("CollapseOnWindowResizeBehaviour", () => {
 
     it("should return correct shouldStartCollapsed", () => {
         const collapseHandler = new CollapseHandler(vi.fn(), vi.fn(), 0);
-        // @ts-ignore
-        // eslint-disable-next-line
-        const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
+        new CollapseOnWindowResizeBehaviour(collapseHandler);
         // When the window is smaller than 768px, start collapsed.
         UIStore.instance.windowWidth = 750;
         expect(CollapseOnWindowResizeBehaviour.shouldStartCollapsed()).toBe(true);
