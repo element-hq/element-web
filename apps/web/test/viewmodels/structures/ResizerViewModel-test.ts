@@ -12,9 +12,6 @@ import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerView
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
-// CallStore has a circular dependency, CallStore -> Call -> ... -> Algorithm -> CallStore
-jest.mock("../../../src/models/Call");
-
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
         SettingsStore.reset();
