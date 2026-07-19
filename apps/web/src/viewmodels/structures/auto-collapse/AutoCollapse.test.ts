@@ -5,10 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {describe, expect, beforeEach, it, vi } from "vitest";
+import { describe, expect, beforeEach, it, vi } from "vitest";
 import { AutoCollapse } from "./AutoCollapse";
 import { BaseCollapseBehaviour } from "./behaviours/BaseCollapseBehaviour";
-import { CollapseHandler } from "./CollapseHandler";
+import type { CollapseHandler } from "./CollapseHandler";
 
 let instances: BaseCollapseBehaviour[] = [];
 
