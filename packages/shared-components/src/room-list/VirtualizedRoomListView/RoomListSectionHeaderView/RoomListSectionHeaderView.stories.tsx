@@ -7,6 +7,8 @@
 
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
+import { DragDropProvider } from "@dnd-kit/react";
+import { PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -59,7 +61,19 @@ const meta = {
         isExpanded: true,
         isFocused: false,
         isUnread: false,
+        notification: {
+            hasAnyNotificationOrActivity: false,
+            isUnsentMessage: false,
+            invited: false,
+            isMention: false,
+            isActivityNotification: false,
+            isNotification: false,
+            hasUnreadCount: false,
+            count: 0,
+            muted: false,
+        },
         displaySectionMenu: true,
+        canBeReordered: true,
         onClick: fn(),
         onFocus: fn(),
         editSection: fn(),
@@ -71,9 +85,17 @@ const meta = {
     },
     decorators: [
         (Story) => (
-            <div role="treegrid" style={{ width: "320px" }}>
-                <Story />
-            </div>
+            <DragDropProvider
+                sensors={[
+                    PointerSensor.configure({
+                        activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
+                    }),
+                ]}
+            >
+                <div role="treegrid" style={{ width: "320px" }}>
+                    <Story />
+                </div>
+            </DragDropProvider>
         ),
     ],
     parameters: {
@@ -117,5 +139,24 @@ export const LastHeaderCollapsed: Story = {
 export const Unread: Story = {
     args: {
         isUnread: true,
+    },
+};
+
+export const WithNotificationDecoration: Story = {
+    args: {
+        isUnread: true,
+        notification: {
+            hasAnyNotificationOrActivity: true,
+            isUnsentMessage: true,
+            invited: true,
+            isMention: true,
+            isActivityNotification: false,
+            isNotification: true,
+            hasUnreadCount: true,
+            count: 12,
+            muted: false,
+            callType: "video",
+        },
+        isExpanded: false,
     },
 };

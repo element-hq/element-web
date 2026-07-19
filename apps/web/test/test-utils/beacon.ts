@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 import {
     type MatrixClient,
     MatrixEvent,
@@ -20,6 +20,7 @@ import {
 
 import { getMockGeolocationPositionError } from "./location";
 import { makeRoomWithStateEvents } from "./room";
+import { vi, isJest } from "../setup/adapter.ts";
 
 type InfoContentProps = {
     timeout: number;
@@ -132,14 +133,18 @@ export const makeGeolocationPosition = ({
  */
 export const mockGeolocation = (): MockedObject<Geolocation> => {
     const mockGeolocation = {
-        clearWatch: jest.fn(),
-        getCurrentPosition: jest.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
-        watchPosition: jest.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
+        clearWatch: vi.fn(),
+        getCurrentPosition: vi.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
+        watchPosition: vi.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
     } as unknown as MockedObject<Geolocation>;
 
     // jest jsdom does not provide geolocation
-    // @ts-ignore illegal assignment to readonly property
-    navigator.geolocation = mockGeolocation;
+    if (isJest) {
+        // @ts-ignore illegal assignment to readonly property
+        navigator.geolocation = mockGeolocation;
+    } else {
+        vi.spyOn(navigator, "geolocation", "get").mockReturnValue(mockGeolocation);
+    }
 
     return mockGeolocation;
 };
@@ -165,7 +170,7 @@ export const mockGeolocation = (): MockedObject<Geolocation> => {
  * See for error codes: https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
  */
 export const watchPositionMockImplementation = (delays: number[], errorCodes: number[] = []) => {
-    return (callback: PositionCallback, error: PositionErrorCallback): number => {
+    return (callback: PositionCallback, error?: PositionErrorCallback | null): number => {
         const position = makeGeolocationPosition({});
 
         let totalDelay = 0;
@@ -173,7 +178,7 @@ export const watchPositionMockImplementation = (delays: number[], errorCodes: nu
             totalDelay += delayMs;
             const timeout = window.setTimeout(() => {
                 if (errorCodes[index]) {
-                    error(getMockGeolocationPositionError(errorCodes[index], "error message"));
+                    error?.(getMockGeolocationPositionError(errorCodes[index], "error message"));
                 } else {
                     callback({ ...position, timestamp: position.timestamp + totalDelay });
                 }

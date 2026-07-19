@@ -59,8 +59,9 @@ try {
             console.log(`Linking ${dependency} to ${path}`);
             await fs.symlink(path, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
 
-            const pkgJson = await fs.readFile(join(path, "package.json"), "utf-8");
-            const pkgManager = JSON.parse(pkgJson)["packageManager"]?.split("@").at(0) ?? "yarn";
+            const pkgJson = JSON.parse(await fs.readFile(join(path, "package.json"), "utf-8"));
+            const pkgManager =
+                pkgJson.devEngines?.packageManager?.name ?? pkgJson.packageManager?.split("@").at(0) ?? "yarn";
             // pnpm install may have wiped out the `node_modules` dir so we have to restore it
             execSync(`${pkgManager} install --ignore-scripts --frozen-lockfile`, {
                 cwd: dependencyPath,

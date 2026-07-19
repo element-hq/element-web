@@ -18,7 +18,7 @@ import ToggleSwitch from "../../elements/ToggleSwitch";
 import { DeviceDetailHeading } from "./DeviceDetailHeading";
 import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
 import { type ExtendedDevice } from "./types";
-import { getManageDeviceUrl } from "../../../../utils/oidc/urls.ts";
+import { getManageDeviceUrl } from "../../../../utils/oauth/urls.ts";
 
 interface Props {
     device: ExtendedDevice;

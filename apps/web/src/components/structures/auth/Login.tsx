@@ -13,14 +13,14 @@ import { type SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
 import { Button } from "@vector-im/compound-web";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
-import Login, { type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
+import Login, { type ClientLoginFlow, type OAuthNativeFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { type IMatrixClientCreds } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../utils/createMatrixClient";
 import PasswordLogin from "../../views/auth/PasswordLogin";
 import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
@@ -31,7 +31,7 @@ import AuthHeader from "../../views/auth/AuthHeader";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
-import { startOidcLogin } from "../../../utils/oidc/authorize";
+import { startOAuthLogin } from "../../../utils/oauth/authorize";
 import { ModuleApi } from "../../../modules/Api.ts";
 
 interface IProps {
@@ -118,11 +118,9 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             "m.login.password": this.renderPasswordStep,
 
             // CAS and SSO are the same thing, modulo the url we link to
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             "m.login.cas": () => this.renderSsoStep("cas"),
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             "m.login.sso": () => this.renderSsoStep("sso"),
-            "oidcNativeFlow": () => this.renderOidcNativeStep(),
+            "oauthNativeFlow": () => this.renderOAuth2Step(),
         };
     }
 
@@ -402,7 +400,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
         if (!this.state.flows) return null;
 
         // this is the ideal order we want to show the flows in
-        const order = ["oidcNativeFlow", "m.login.password", "m.login.sso"];
+        const order = ["oauthNativeFlow", "m.login.password", "m.login.sso"];
 
         const flows = filterBoolean(order.map((type) => this.state.flows?.find((flow) => flow.type === type)));
         return (
@@ -428,22 +426,21 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                 onPhoneNumberChanged={this.onPhoneNumberChanged}
                 onForgotPasswordClick={this.props.onForgotPasswordClick}
                 loginIncorrect={this.state.loginIncorrect}
-                serverConfig={this.props.serverConfig}
                 disableSubmit={this.isBusy()}
                 busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
         );
     };
 
-    private renderOidcNativeStep = (): React.ReactNode => {
-        const flow = this.state.flows!.find((flow) => flow.type === "oidcNativeFlow")! as OidcNativeFlow;
+    private renderOAuth2Step = (): React.ReactNode => {
+        const flow = this.state.flows!.find((flow) => flow.type === "oauthNativeFlow")! as OAuthNativeFlow;
         return (
             <Button
                 className="mx_Login_fullWidthButton"
                 kind="primary"
                 size="md"
                 onClick={async () => {
-                    await startOidcLogin(
+                    await startOAuthLogin(
                         this.props.serverConfig.delegatedAuthentication!,
                         flow.clientId,
                         this.props.serverConfig.hsUrl,
@@ -502,7 +499,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             footer = (
                 <div className="mx_AuthBody_paddedFooter">
                     <div className="mx_AuthBody_paddedFooter_title">
-                        <InlineSpinner w={20} h={20} />
+                        <InlineSpinner size={20} />
                         {this.props.isSyncing ? _t("auth|syncing") : _t("auth|signing_in")}
                     </div>
                     {this.props.isSyncing && (

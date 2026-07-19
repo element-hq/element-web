@@ -59,7 +59,7 @@ test.describe("Device manager", () => {
         await filteredDeviceListItems.last().click({ force: true });
 
         // sign out from list selection action buttons
-        await tab.getByRole("button", { name: "Remove this device", exact: true }).click();
+        await tab.getByRole("button", { name: "Remove 2 sessions", exact: true }).click();
         await page.getByRole("dialog").getByTestId("dialog-primary-button").click();
 
         // list updated after sign out

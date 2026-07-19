@@ -2,32 +2,49 @@ linkWorkspacePackages: true
 cleanupUnusedCatalogs: true
 ignorePatchFailures: false
 ignoreWorkspaceRootCheck: true
+minimumReleaseAgeStrict: true
+
 packages:
     - "apps/*"
     - "packages/*"
+    - "modules"
+    - "modules/*"
 
 catalog:
     # typescript
-    typescript: 6.0.3
+    "typescript": 7.0.2
+    "@typescript/native": npm:typescript@7.0.2
+    "@types/node": ts7.0
     # react
     react: ^19.0.0
     react-dom: ^19.0.0
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@playwright/test": 1.60.0
-    "playwright-core": 1.60.0
+    "@playwright/test": 1.61.1
+    "playwright-core": 1.61.1
     # Compound
     "@vector-im/compound-design-tokens": 10.2.1
-    "@vector-im/compound-web": 9.4.1
+    "@vector-im/compound-web": 9.8.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
     "@fontsource/inter": 5.2.8
     # vite
-    vite: 8.0.14
-    vitest: 4.1.7
-    "@vitest/coverage-v8": 4.1.7
+    vite: 8.1.4
+    vite-plugin-node-polyfills: 0.28.0
+    vite-plugin-svgr: 5.2.0
+    vitest: 4.1.10
+    "@vitest/spy": 4.1.10
+    "@vitest/coverage-v8": 4.1.10
+    "@vitest/browser-playwright": 4.1.10
+    "@vitejs/plugin-react": 6.0.3
+    unplugin-dts: 1.0.1
+
+catalogs:
+    ts6:
+        typescript: npm:@typescript/typescript6@6.0.2
+        "@types/node": ts6.0
 
 packageExtensions:
     fdir:
@@ -40,6 +57,7 @@ packageExtensions:
             vite: "^8.0.0"
 
 allowBuilds:
+    # Needed to make the git dependency in layered.sh happy
     matrix-js-sdk: true
     # Installs the CLI, which we do not need
     "@sentry/cli": false
@@ -64,20 +82,30 @@ allowBuilds:
     workerd: true
 
 patchedDependencies:
+    # Workaround for missing types export
     "@vector-im/matrix-wysiwyg": patches/@vector-im__matrix-wysiwyg.patch
+    # Workaround for lack of React 19 support
     react-blurhash: patches/react-blurhash.patch
+    # Workaround for https://github.com/nfrasser/linkifyjs/issues/429
     linkify-html: patches/linkify-html.patch
+    # Workaround for typescript incompatibilities in an archived dependency - soon to be deleted
     "@matrix-org/react-sdk-module-api": patches/@matrix-org__react-sdk-module-api.patch
+    # Workaround to access a private API
     "@types/auto-launch": patches/@types__auto-launch.patch
-    "@types/mdx": patches/@types__mdx.patch
+    # Workaround for jest still using commonjs and not being able to use the ESM version of await-lock
     await-lock: patches/await-lock.patch
+    # Workaround for global type mismatches
     jest-fixed-jsdom: patches/jest-fixed-jsdom.patch
+    # Workaround for jsdom being super opinionated and making it hard to tweak global properties
     jsdom: patches/jsdom.patch
-    rollup: patches/rollup.patch
+    # Workaround for missing return types
     postcss-mixins: patches/postcss-mixins.patch
+    # Workaround for some babel rules being false positively flagged
     knip: patches/knip.patch
+    # Workaround for being stuck on an old version of plist due to electron-builder not supporting ESM yet
     plist: patches/plist.patch
-    "@dnd-kit/abstract": patches/@dnd-kit__abstract.patch
+    # Workaround for type fails
+    "@arcmantle/vite-plugin-import-css-sheet": patches/@arcmantle__vite-plugin-import-css-sheet.patch
 
 peerDependencyRules:
     allowedVersions:
@@ -90,33 +118,53 @@ allowedDeprecatedVersions:
     react-beautiful-dnd: "13"
 
 overrides:
-    pretty-format@30>react-is: 19.2.6
+    pretty-format@30>react-is: 19.2.7
     "@types/react": "catalog:"
     "@types/react-dom": "catalog:"
-    oidc-client-ts: 3.5.0
-    jwt-decode: 4.0.0
-    caniuse-lite: 1.0.30001793
-    markdown-it: 14.1.1
+    caniuse-lite: 1.0.30001803
     matrix-widget-api: "^1.17.0"
-    "@types/node": 18.19.130
+    "@types/node": 25.9.3
     config-file-ts: 0.2.8-rc1
-    node-abi: 4.31.0
+    node-abi: 4.33.0
     "@types/pg-pool": 2.0.7
-    axios@>1.0.0 <=1.15.0: 1.15.2
-    esbuild@<=0.24.2: 0.27.4
-    esbuild@~0.27.0: 0.27.4
-    follow-redirects@1.15.11: 1.16.0
-    brace-expansion@>=5 <=5.0.5: 5.0.6
-    ip-address@>=10 <10.1.1: 10.1.1
-    uuid@>=11 <11.1.1: 11.1.1
-    yaml@>=2 <2.8.3: 2.8.4
-    protobufjs@7 <7.5.8: 7.6.1
-    "@protobufjs/utf8@1 <1.1.1": 1.1.1
+    # https://github.com/advisories/GHSA-6v5v-wf23-fmfq
+    markdown-it: ^14.3.0
+    axios@>1.0.0 <=1.16.1: ^1.16.1
+    # https://github.com/advisories/GHSA-g7r4-m6w7-qqqr
+    esbuild@<=0.27.4: 0.27.4
+    brace-expansion@>=5 <=5.0.5: ^5.0.6
+    ip-address@>=10 <10.1.1: ^10.1.1
+    yaml@>=2 <2.8.3: ^2.8.4
+    # https://github.com/advisories/GHSA-f38q-mgvj-vph7
+    protobufjs@7 <7.5.8: ^7.6.3
+    "@protobufjs/utf8@1 <1.1.1": ^1.1.1
+    # https://github.com/advisories/GHSA-vmh5-mc38-953g
+    # https://github.com/advisories/GHSA-vxpw-j846-p89q
+    # https://github.com/advisories/GHSA-hm92-r4w5-c3mj
+    # https://github.com/advisories/GHSA-p88m-4jfj-68fv
+    # https://github.com/advisories/GHSA-pr7r-676h-xcf6
+    # https://github.com/advisories/GHSA-35p6-xmwp-9g52
+    # https://github.com/advisories/GHSA-g8m3-5g58-fq7m
+    undici@7 <7.28.0: ^7.28.0
+    # https://github.com/advisories/GHSA-fx2h-pf6j-xcff
+    # https://github.com/advisories/GHSA-4w7w-66w2-5vf9
+    # https://github.com/advisories/GHSA-v6wh-96g9-6wx3
+    vite@5: ^6.4.3
+    vite@6 <6.4.3: ^6.4.3
     # Workaround for https://github.com/electron/electron/issues/51619
     yauzl: "^3.3.1"
+    # Convince api-extractor to use a newer Typescript version
+    "unplugin-dts>typescript": "catalog:ts6"
+    "@microsoft/api-extractor>typescript": "catalog:ts6"
+    # Hold some things back from ts7
+    "@arcmantle/vite-plugin-import-css-sheet>typescript": "catalog:ts6"
+    "react-docgen-typescript>typescript": "catalog:ts6"
 
 minimumReleaseAgeExclude:
     - "matrix-js-sdk"
     - "@matrix-org/*"
     - "@vector-im/*"
     - "@element-hq/*"
+    # Temporary for testing purposes
+    - "@typescript/*"
+    - typescript@7.0.2

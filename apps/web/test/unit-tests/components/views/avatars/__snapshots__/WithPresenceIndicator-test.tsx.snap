@@ -7,11 +7,43 @@ exports[`WithPresenceIndicator renders presence indicator with tooltip for DM ro
   >
     <span />
     <div
-      aria-labelledby="react-use-id-1"
-      class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_online"
-      style="width: 32px; height: 32px;"
-      tabindex="0"
-    />
+      class="mx_WithPresenceIndicator_icon"
+    >
+      <span
+        tabindex="0"
+      >
+        <div
+          aria-labelledby="react-use-id-1"
+          class="mx_PresenceIconView"
+        >
+          <svg
+            class="mx_PresenceIconView_online"
+            fill="currentColor"
+            height="8px"
+            viewBox="0 0 8 8"
+            width="8px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
+            >
+              <path
+                d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
+              />
+            </g>
+            <defs>
+              <clippath
+                id="cpd_PresenceSolid8X8Icon_a"
+              >
+                <path
+                  d="M0 0h8v8H0z"
+                />
+              </clippath>
+            </defs>
+          </svg>
+        </div>
+      </span>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -23,11 +55,45 @@ exports[`WithPresenceIndicator renders presence indicator with tooltip for DM ro
   >
     <span />
     <div
-      aria-labelledby="react-use-id-1"
-      class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_offline"
-      style="width: 32px; height: 32px;"
-      tabindex="0"
-    />
+      class="mx_WithPresenceIndicator_icon"
+    >
+      <span
+        tabindex="0"
+      >
+        <div
+          aria-labelledby="react-use-id-1"
+          class="mx_PresenceIconView"
+        >
+          <svg
+            class="mx_PresenceIconView_offline"
+            fill="currentColor"
+            height="8px"
+            viewBox="0 0 8 8"
+            width="8px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              clip-path="url(#cpd_PresenceOutline8X8Icon_a)"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M4 6.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5M4 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8"
+                fill-rule="evenodd"
+              />
+            </g>
+            <defs>
+              <clippath
+                id="cpd_PresenceOutline8X8Icon_a"
+              >
+                <path
+                  d="M0 0h8v8H0z"
+                />
+              </clippath>
+            </defs>
+          </svg>
+        </div>
+      </span>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -39,11 +105,43 @@ exports[`WithPresenceIndicator renders presence indicator with tooltip for DM ro
   >
     <span />
     <div
-      aria-labelledby="react-use-id-1"
-      class="mx_WithPresenceIndicator_icon mx_WithPresenceIndicator_icon_away"
-      style="width: 32px; height: 32px;"
-      tabindex="0"
-    />
+      class="mx_WithPresenceIndicator_icon"
+    >
+      <span
+        tabindex="0"
+      >
+        <div
+          aria-labelledby="react-use-id-1"
+          class="mx_PresenceIconView"
+        >
+          <svg
+            class="mx_PresenceIconView_unavailable"
+            fill="currentColor"
+            height="8px"
+            viewBox="0 0 8 8"
+            width="8px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
+            >
+              <path
+                d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
+              />
+            </g>
+            <defs>
+              <clippath
+                id="cpd_PresenceSolid8X8Icon_a"
+              >
+                <path
+                  d="M0 0h8v8H0z"
+                />
+              </clippath>
+            </defs>
+          </svg>
+        </div>
+      </span>
+    </div>
   </div>
 </DocumentFragment>
 `;

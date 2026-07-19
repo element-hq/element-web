@@ -16,6 +16,7 @@ import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-se
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseAppUrl } from "./url_utils";
 import "./modernizr.cjs";
+import { polyfillTouchEvent } from "../@types/polyfill";
 
 // Import shared components CSS
 import "@element-hq/web-shared-components/dist/element-web-shared-components.css";
@@ -28,6 +29,9 @@ require("katex/dist/katex.css");
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 require("./localstorage-fix");
+
+// Patch a fake window.TouchEvent for re-resizable's unguarded `instanceof TouchEvent`.
+polyfillTouchEvent();
 
 async function settled(...promises: Array<Promise<any>>): Promise<void> {
     for (const prom of promises) {
@@ -253,7 +257,6 @@ start().catch((err) => {
     // with some basic styling to make the iframe full page
     document.body.style.removeProperty("height");
     const iframe = document.createElement("iframe");
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
     iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";

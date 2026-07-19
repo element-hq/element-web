@@ -66,9 +66,7 @@ const cssThemes = {
 };
 
 // See docs/customisations.md
-let fileOverrides = {
-    /* {[file: string]: string} */
-};
+let fileOverrides = {/* {[file: string]: string} */};
 try {
     const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
     fileOverrides = JSON.parse(customisationsFile);
@@ -252,10 +250,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
                 "matrix-widget-api": getPackageRoot("matrix-widget-api"),
-                "oidc-client-ts": getPackageRoot("oidc-client-ts"),
-
-                // Define a variable so the i18n stuff can load
-                "$webapp": path.resolve(__dirname, "webapp"),
 
                 // Make shared-components imports resolve to EW deps
                 "@vector-im/compound-web": getPackageRoot("@vector-im/compound-web", ""),
@@ -301,6 +295,12 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             ],
             rules: [
                 {
+                    // Match imports containing the ?raw query string
+                    resourceQuery: /raw/,
+                    // Instruct Webpack to emit the file source as a string
+                    type: "asset/source",
+                },
+                {
                     test: /\.js$/,
                     enforce: "pre" as const,
                     use: ["source-map-loader"],
@@ -337,6 +337,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 },
                 {
                     test: /\.css$/,
+                    resourceQuery: { not: [/raw/] },
                     use: [
                         MiniCssExtractPlugin.loader,
                         {
@@ -505,6 +506,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 {
                     test: /\.svg$/,
                     issuer: /\.(js|ts|jsx|tsx|html)$/,
+                    resourceQuery: { not: [/raw/] },
                     use: [
                         {
                             loader: "@svgr/webpack",
@@ -619,7 +621,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                         },
                     ],
                 },
-            ].filter(Boolean),
+            ],
         },
 
         plugins: [
@@ -758,7 +760,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 retryDelay: 500,
                 maxRetries: 3,
             }),
-        ].filter(Boolean),
+        ],
 
         output: {
             path: path.join(__dirname, "webapp"),
@@ -822,7 +824,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
  *
  * @param url The adjusted name of the file, such as `warning.1234567.svg`.
  * @param resourcePath The absolute path to the source file with unmodified name.
- * @return The returned paths will look like `img/warning.1234567.svg`.
+ * @returns The returned paths will look like `img/warning.1234567.svg`.
  */
 function getAssetOutputPath(url: string, resourcePath: string): string {
     const isKaTeX = resourcePath.includes("KaTeX");

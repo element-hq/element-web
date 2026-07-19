@@ -13,9 +13,7 @@ import { type Action } from "../actions";
 
 export interface ViewRoomErrorPayload extends Pick<ActionPayload, "action"> {
     action: Action.ViewRoomError;
-    // eslint-disable-next-line camelcase
     room_id: Room["roomId"] | null;
-    // eslint-disable-next-line camelcase
     room_alias?: string;
     err?: MatrixError;
 }

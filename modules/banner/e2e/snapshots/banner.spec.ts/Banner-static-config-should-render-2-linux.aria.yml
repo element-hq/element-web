@@ -1,0 +1,13 @@
+- dialog "Portal logo Close menu":
+      - heading "Portal logo Close menu" [level=2]:
+            - img "Portal logo"
+            - button "Close menu":
+                  - img
+      - heading "Applications" [level=2]
+      - link "E-Mail":
+            - /url: https://example.com/email
+      - link "Riot":
+            - /url: https://riot.im/app
+      - heading "Links" [level=2]
+      - link "Link":
+            - /url: https://example.com/link1

@@ -151,6 +151,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                         )}
                         <div className="mx_DevTools_label_bottom" />
                         {cli.getRoom(roomId) && (
+                            // oxlint-disable-next-line react/jsx-no-constructed-context-values
                             <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)!, threadRootId }}>
                                 {body}
                             </DevtoolsContext.Provider>

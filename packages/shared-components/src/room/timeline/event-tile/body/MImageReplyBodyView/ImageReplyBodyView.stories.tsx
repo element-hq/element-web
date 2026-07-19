@@ -75,6 +75,13 @@ export const LoadingWithBlurhash: Story = {
     args: {
         placeholder: ImageReplyBodyViewPlaceholder.BLURHASH,
     },
+    // The blurhash <canvas> rasterizes to one of two ~33px-apart variants per run;
+    // tolerate that benign jitter rather than flake against the strict 3px default.
+    parameters: {
+        snapshot: {
+            failureThreshold: 100,
+        },
+    },
 };
 
 export const AnimatedPreview: Story = {

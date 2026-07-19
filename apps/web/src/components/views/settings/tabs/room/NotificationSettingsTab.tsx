@@ -11,7 +11,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
-import Notifier from "../../../../../Notifier";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { type RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
@@ -26,6 +25,7 @@ import { chromeFileInputFix } from "../../../../../utils/BrowserWorkarounds";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
+import { SDKContextClass } from "../../../../../contexts/SDKContextClass.ts";
 
 interface IProps {
     roomId: string;
@@ -50,7 +50,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId)!);
 
         let currentSound = "default";
-        const soundData = Notifier.getSoundForRoom(this.props.roomId);
+        const soundData = SDKContextClass.instance.notifier.getSoundForRoom(this.props.roomId);
         if (soundData) {
             currentSound = soundData.name || soundData.url;
         }
@@ -231,7 +231,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     value: RoomNotifState.Mute,
                                     label: (
                                         <>
-                                            {_t("common|off")}
+                                            {_t("common|mute")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
                                                 {_t("notifications|mute_description")}
                                             </div>

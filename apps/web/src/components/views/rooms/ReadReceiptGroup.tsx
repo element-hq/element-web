@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type PropsWithChildren } from "react";
 import { type User } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
+import { AutoHideScrollbar } from "@element-hq/web-shared-components";
 
-import ReadReceiptMarker, { type IReadReceiptPosition } from "./ReadReceiptMarker";
+import ReadReceiptMarker, { type IReadReceiptPosition, READ_AVATAR_SIZE } from "./ReadReceiptMarker";
 import { type IReadReceiptProps } from "./EventTile";
 import AccessibleButton from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { formatDate } from "../../../DateUtils";
 import { Action } from "../../../dispatcher/actions";
 import dis from "../../../dispatcher/dispatcher";
@@ -29,7 +29,6 @@ const MAX_READ_AVATARS_PLUS_N = 3;
 const MAX_READ_AVATARS = MAX_READ_AVATARS_PLUS_N + 1;
 
 const READ_AVATAR_OFFSET = 10;
-export const READ_AVATAR_SIZE = 16;
 
 interface Props {
     readReceipts: IReadReceiptProps[];
@@ -109,7 +108,6 @@ export function ReadReceiptGroup({
                 readReceiptPosition = readReceiptMap[userId];
                 if (!readReceiptPosition) {
                     readReceiptPosition = {};
-                    // eslint-disable-next-line react-compiler/react-compiler
                     readReceiptMap[userId] = readReceiptPosition;
                 }
             }
@@ -124,8 +122,6 @@ export function ReadReceiptGroup({
                     readReceiptPosition={readReceiptPosition}
                     checkUnmounting={checkUnmounting}
                     suppressAnimation={suppressAnimation}
-                    timestamp={receipt.ts}
-                    showTwelveHour={isTwelveHour}
                 />
             );
         })
@@ -146,7 +142,7 @@ export function ReadReceiptGroup({
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
             <ContextMenu menuClassName="mx_ReadReceiptGroup_popup" onFinished={closeMenu} {...aboveLeftOf(buttonRect)}>
-                <AutoHideScrollbar>
+                <AutoHideScrollbar className="mx_AutoHideScrollbar">
                     <SectionHeader className="mx_ReadReceiptGroup_title">
                         {_t("timeline|read_receipt_title", { count: readReceipts.length })}
                     </SectionHeader>

@@ -20,6 +20,8 @@ import classNames from "classnames";
 import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
+import { type UserStatus } from "../../core/userStatus";
+import { SetStatusView, type SetStatusViewModel } from "../../status/SetStatusView";
 
 export interface UserMenuViewSnapshot {
     /**
@@ -50,6 +52,20 @@ export interface UserMenuViewSnapshot {
      * Account management URL if the user is using OIDC.
      */
     manageAccountHref?: string;
+    /**
+     * The user status to display, or undefined for no icon / status.
+     */
+    userStatus?: UserStatus;
+    /**
+     * Whether to show UI for user status.
+     * Temporary while user status is in labs.
+     * Default: true
+     */
+    showUserStatus?: boolean;
+    /**
+     * ViewModel for the set status view.
+     */
+    setStatusViewModel: SetStatusViewModel;
     /**
      * A set of actions that the user can perform from the menu.
      */
@@ -97,6 +113,10 @@ export declare interface UserMenuViewActions {
      * Called to open the settings dialog.
      */
     openSettings: () => void;
+    /**
+     * Called when the user clicks the button to clear their status.
+     */
+    clearStatus: () => void;
 }
 
 export type UserMenuViewProps = {
@@ -108,11 +128,30 @@ export type UserMenuViewProps = {
 };
 
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar } = useViewModel(vm);
+    const {
+        userId,
+        displayName,
+        avatarUrl,
+        expanded,
+        open,
+        manageAccountHref,
+        actions,
+        showAvatar,
+        userStatus,
+        setStatusViewModel,
+        showUserStatus = true,
+    } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={styles.triggerButton} aria-label={_t("menus|user_menu|title")}>
-            <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+            <div className={styles.avatarWrapper}>
+                <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+                {userStatus && (
+                    <Text as="div" className={styles.iconStatusEmoji}>
+                        {userStatus.emoji}
+                    </Text>
+                )}
+            </div>
         </button>
     );
 
@@ -130,12 +169,15 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                 side="right"
                 className={styles.container}
             >
-                <section className={styles.profile}>
+                <section className={classNames(styles.profile, styles.profilePrimary)}>
                     {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
                     <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                         {displayName}
                     </Text>
-                    <Text data-testid="userId" size="md" as="span" type="body">
+                    {showUserStatus && <SetStatusView vm={setStatusViewModel} />}
+                </section>
+                <section className={classNames(styles.profile, styles.profileSecondary)}>
+                    <Text data-testid="userId" size="md" as="span" type="body" className={styles.userId}>
                         {userId}
                     </Text>
                     {manageAccountHref && (
@@ -195,7 +237,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                 </section>
             </Menu>
             {expanded && (
-                <Text type="heading" size="sm" as="span" weight="semibold">
+                <Text type="heading" size="sm" as="span" weight="semibold" className={styles.displayName}>
                     {displayName}
                 </Text>
             )}

@@ -24,6 +24,7 @@ type PaginationLinks = {
     first?: string;
 };
 
+// oxlint-disable-next-line no-control-regex
 const ANSI_COLOUR_REGEX = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
 // We see quite a few test flakes which are caused by the app exploding
@@ -139,7 +140,8 @@ class FlakyReporter implements Reporter {
             console.log(flake);
         }
 
-        const { GITHUB_TOKEN, GITHUB_API_URL, GITHUB_SERVER_URL, GITHUB_REPOSITORY, GITHUB_RUN_ID } = process.env;
+        const { GITHUB_TOKEN, GITHUB_API_URL, GITHUB_SERVER_URL, GITHUB_REPOSITORY, GITHUB_RUN_ID, GITHUB_EVENT_NAME } =
+            process.env;
         if (!GITHUB_TOKEN) return;
 
         const issues = await this.getAllIssues();
@@ -147,13 +149,17 @@ class FlakyReporter implements Reporter {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
             const existingIssue = issues.find((issue) => issue.title === title);
             const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
-            const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
+            let body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
+
+            if (GITHUB_EVENT_NAME === "merge_group") {
+                body += " (merge queue run, may be a false positive)";
+            }
 
             const labels = [LABEL, ...results.map((test) => `${LABEL}-${test.parent.project()?.name}`)];
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);
-                // Ensure that the test is open
+                // Ensure that the issue is open
                 await fetch(existingIssue.url, {
                     method: "PATCH",
                     headers,

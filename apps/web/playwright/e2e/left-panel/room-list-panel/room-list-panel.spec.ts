@@ -12,7 +12,6 @@ import { getRoomListView } from "./utils";
 
 test.describe("Room list panel", () => {
     test.use({
-        labsFlags: ["feature_new_room_list"],
         displayName: "Eve",
     });
 

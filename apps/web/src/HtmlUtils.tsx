@@ -79,7 +79,7 @@ function mightContainEmoji(str?: string): boolean {
  * Returns the shortcode for an emoji character.
  *
  * @param {String} char The emoji character
- * @return {String} The shortcode (such as :thumbup:)
+ * @returns {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char: string): string {
     const shortcodes = getEmojiFromUnicode(char)?.shortcodes;
@@ -89,11 +89,18 @@ export function unicodeToShortcode(char: string): string {
 /*
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
+ * @param insaneHtml - the input to sanitize
+ * @param className - an optional class name to apply to the element
+ * @param sanitizeParams - the params to use for sanitization
  */
-export function sanitizedHtmlNode(insaneHtml: string): ReactNode {
-    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+export function sanitizedHtmlNode(
+    insaneHtml: string,
+    className?: string,
+    sanitizeParams = sanitizeHtmlParams,
+): ReactNode {
+    const saneHtml = sanitizeHtml(insaneHtml, sanitizeParams);
 
-    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
+    return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" className={className} />;
 }
 
 export function getHtmlText(insaneHtml: string): string {
@@ -112,7 +119,7 @@ export function getHtmlText(insaneHtml: string): string {
  * Note that the HTML sanitiser library has its own internal logic for
  * doing this, to which we pass the same list of schemes. This is used in
  * other places we need to sanitise URLs.
- * @return true if permitted, otherwise false
+ * @returns true if permitted, otherwise false
  */
 export function isUrlPermitted(inputUrl: string): boolean {
     try {
@@ -490,7 +497,7 @@ export function bodyToHtml(content: IContent, highlights?: string[], opts: Event
  * @param htmlTopic optional html topic
  * @param ref React ref to attach to any React components returned
  * @param allowExtendedHtml whether to allow extended HTML tags such as headings and lists
- * @return The HTML-ified node.
+ * @returns The HTML-ified node.
  */
 export function topicToHtml(
     topic?: string,

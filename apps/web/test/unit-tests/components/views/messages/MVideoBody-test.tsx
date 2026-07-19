@@ -10,7 +10,7 @@ import React from "react";
 import { EventType, getHttpUriForMxc, type IContent, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import fetchMock from "@fetch-mock/jest";
-import { type MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock-vitest-adapter";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";

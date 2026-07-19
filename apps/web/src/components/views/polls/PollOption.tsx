@@ -44,7 +44,7 @@ interface PollOptionProps extends PollOptionContentProps {
     children?: ReactNode;
 }
 
-const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount"> & { children: ReactNode }> = ({
+const ActivePollOption: React.FC<Omit<PollOptionProps, "totalVoteCount">> = ({
     pollId,
     isChecked,
     isEnded,
@@ -112,6 +112,8 @@ export const PollOption: React.FC<PollOptionProps> = ({
     const isWinner = isEnded && isChecked;
     const answerPercent = totalVoteCount === 0 ? 0 : Math.round((100.0 * voteCount) / totalVoteCount);
     return (
+        // We break the rule here as ActivePollOption is keyboard accessible, we are just making the click target larger
+        // oxlint-disable-next-line jsx-a11y/click-events-have-key-events
         <div data-testid={`pollOption-${answer.id}`} className={cls} onClick={() => onOptionSelected?.(answer.id)}>
             <ActivePollOption
                 pollId={pollId}

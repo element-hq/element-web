@@ -156,64 +156,7 @@ exports[`<RoomAvatarView /> should render a video room decoration 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the AWAY presence 1`] = `
-<DocumentFragment>
-  <div
-    class="_flex_4dswl_9 mx_RoomAvatarView"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
-  >
-    <span
-      aria-label="Avatar"
-      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
-      data-color="1"
-      data-testid="avatar-img"
-      data-type="round"
-      style="--cpd-avatar-size: 32px;"
-    >
-      <img
-        alt=""
-        class="_image_va14e_43"
-        data-type="round"
-        height="32px"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-        src="http://this.is.a.url/avatar.url/room.png"
-        width="32px"
-      />
-    </span>
-    <svg
-      aria-label="Away"
-      aria-labelledby="react-use-id-1"
-      class="mx_RoomAvatarView_PresenceDecoration"
-      color="var(--cpd-color-icon-quaternary)"
-      fill="currentColor"
-      height="8px"
-      viewBox="0 0 8 8"
-      width="8px"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g
-        clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
-      >
-        <path
-          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
-        />
-      </g>
-      <defs>
-        <clippath
-          id="cpd_PresenceSolid8X8Icon_a"
-        >
-          <path
-            d="M0 0h8v8H0z"
-          />
-        </clippath>
-      </defs>
-    </svg>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
+exports[`<RoomAvatarView /> should render the busy presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -272,7 +215,7 @@ exports[`<RoomAvatarView /> should render the BUSY presence 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
+exports[`<RoomAvatarView /> should render the offline presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -331,7 +274,7 @@ exports[`<RoomAvatarView /> should render the OFFLINE presence 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
+exports[`<RoomAvatarView /> should render the online presence 1`] = `
 <DocumentFragment>
   <div
     class="_flex_4dswl_9 mx_RoomAvatarView"
@@ -361,6 +304,63 @@ exports[`<RoomAvatarView /> should render the ONLINE presence 1`] = `
       aria-labelledby="react-use-id-1"
       class="mx_RoomAvatarView_PresenceDecoration"
       color="var(--cpd-color-icon-accent-primary)"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#cpd_PresenceSolid8X8Icon_a)"
+      >
+        <path
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="cpd_PresenceSolid8X8Icon_a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomAvatarView /> should render the unavailable presence 1`] = `
+<DocumentFragment>
+  <div
+    class="_flex_4dswl_9 mx_RoomAvatarView"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <span
+      aria-label="Avatar"
+      class="_avatar_va14e_8 mx_BaseAvatar mx_RoomAvatarView_RoomAvatar mx_RoomAvatarView_RoomAvatar_presence"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
+      style="--cpd-avatar-size: 32px;"
+    >
+      <img
+        alt=""
+        class="_image_va14e_43"
+        data-type="round"
+        height="32px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="http://this.is.a.url/avatar.url/room.png"
+        width="32px"
+      />
+    </span>
+    <svg
+      aria-label="Away"
+      aria-labelledby="react-use-id-1"
+      class="mx_RoomAvatarView_PresenceDecoration"
+      color="var(--cpd-color-icon-quaternary)"
       fill="currentColor"
       height="8px"
       viewBox="0 0 8 8"

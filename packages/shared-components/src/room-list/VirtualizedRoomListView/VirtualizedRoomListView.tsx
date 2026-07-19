@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
 import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
 import { DragDropProvider, DragOverlay, useDragOperation } from "@dnd-kit/react";
@@ -13,18 +13,22 @@ import { KeyboardSensor, PointerActivationConstraints, PointerSensor } from "@dn
 
 import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
-import { _t } from "../../core/i18n/i18n";
 import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
     type VirtualizedListContext,
+    GroupedVirtualizedList,
+    type GroupedVirtualizedListProps,
 } from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
-import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListSectionHeaderView, RoomListStickySectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListSectionHeaderDragOverlayView } from "./RoomListSectionHeaderDragOverlayView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
+import { isSectionDragData, type RoomListDragData } from "./dragAndDrop";
+import { useRoomListAccessibilityPlugin } from "./RoomListAccessibilityPlugin";
 import styles from "./VirtualizedRoomListView.module.css";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -70,6 +74,11 @@ export interface VirtualizedRoomListViewProps {
 const ROOM_LIST_ITEM_HEIGHT = 52;
 
 /**
+ * Number of pixels the keyboard sensor moves the dragged element per arrow keypress.
+ */
+export const KEYBOARD_DRAG_OFFSET = 17;
+
+/**
  * Type for context used in ListView
  */
 type Context = {
@@ -112,6 +121,7 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  * ```
  */
 export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: VirtualizedRoomListViewProps): JSX.Element {
+    const { translate: _t } = useI18n();
     const snapshot = useViewModel(vm);
     const { roomListState, sections, isFlatList } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;
@@ -122,6 +132,102 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     const setVirtuosoHandle = useCallback((handle: VirtuosoHandle | null) => {
         virtuosoHandleRef.current = handle;
     }, []);
+
+    // --- "Unread activity" toast fold tracking ---
+    // Virtuoso renders a large overscan buffer (EXTENDED_VIEWPORT_HEIGHT) below the
+    // visible area, so its reported range extends well past the actual fold. To show
+    // the toast as soon as an unread room scrolls just below the fold (rather than only
+    // once it leaves the overscan buffer), we measure the genuinely-visible last item
+    // from the scroller geometry and report it separately to the view model.
+    const foldScrollerRef = useRef<HTMLElement | null>(null);
+    const foldObserverRef = useRef<IntersectionObserver | null>(null);
+    // Observed item elements → whether each is currently on screen (intersecting). The keys
+    // are what we've asked the observer to watch; the values are their latest visibility.
+    const itemVisibilityRef = useRef<Map<Element, boolean>>(new Map());
+    const foldSyncRafRef = useRef<number | null>(null);
+    const lastReportedFoldIndex = useRef<number>(-1);
+
+    // Report the highest-index currently-visible item as the fold. Indices are read from
+    // each element's live data-item-index attribute (rather than a captured value) because
+    // Virtuoso recycles/reorders item DOM nodes as the list scrolls.
+    const reportFold = useCallback(() => {
+        let fold = -1;
+        for (const [el, isVisible] of itemVisibilityRef.current) {
+            if (!isVisible) continue;
+            const index = Number((el as HTMLElement).dataset.itemIndex);
+            if (Number.isFinite(index) && index > fold) fold = index;
+        }
+        if (fold !== lastReportedFoldIndex.current) {
+            lastReportedFoldIndex.current = fold;
+            vm.updateVisibleFold(fold);
+        }
+    }, [vm]);
+
+    // IntersectionObserver callback: track which item elements are genuinely on screen
+    // (excluding the overscan buffer). Fires as the user scrolls or the viewport resizes,
+    // with no per-frame layout reads.
+    const onItemIntersection = useCallback(
+        (entries: IntersectionObserverEntry[]) => {
+            for (const entry of entries) {
+                itemVisibilityRef.current.set(entry.target, entry.isIntersecting);
+            }
+            reportFold();
+        },
+        [reportFold],
+    );
+
+    // Observe newly-rendered item elements and release ones Virtuoso has recycled out of the
+    // DOM. The observer itself handles visibility as the user scrolls/resizes, so this only
+    // needs running when the rendered set changes (rangeChanged) or on first attach.
+    const syncObservedItems = useCallback(() => {
+        const scroller = foldScrollerRef.current;
+        const observer = foldObserverRef.current;
+        if (!scroller || !observer) return;
+        const current = new Set<Element>(scroller.querySelectorAll("[data-item-index]"));
+        for (const el of current) {
+            if (!itemVisibilityRef.current.has(el)) {
+                observer.observe(el);
+                itemVisibilityRef.current.set(el, false); // observed, not yet known visible
+            }
+        }
+        for (const el of itemVisibilityRef.current.keys()) {
+            if (!current.has(el)) {
+                observer.unobserve(el);
+                itemVisibilityRef.current.delete(el);
+            }
+        }
+        reportFold();
+    }, [reportFold]);
+
+    const scheduleSyncObservedItems = useCallback(() => {
+        if (foldSyncRafRef.current !== null) return;
+        foldSyncRafRef.current = requestAnimationFrame(() => {
+            foldSyncRafRef.current = null;
+            syncObservedItems();
+        });
+    }, [syncObservedItems]);
+
+    // Callback ref for Virtuoso's scroller element: (re)create an IntersectionObserver rooted
+    // at it. The initial sync is covered by the rangeChanged Virtuoso fires on mount.
+    const setScroller = useCallback(
+        (element: HTMLElement | Window | null) => {
+            foldObserverRef.current?.disconnect();
+            foldObserverRef.current = null;
+            itemVisibilityRef.current.clear();
+            lastReportedFoldIndex.current = -1;
+            if (foldSyncRafRef.current !== null) {
+                cancelAnimationFrame(foldSyncRafRef.current);
+                foldSyncRafRef.current = null;
+            }
+            const scroller = element instanceof HTMLElement ? element : null;
+            foldScrollerRef.current = scroller;
+            if (scroller) {
+                foldObserverRef.current = new IntersectionObserver(onItemIntersection, { root: scroller });
+                scheduleSyncObservedItems();
+            }
+        },
+        [onItemIntersection, scheduleSyncObservedItems],
+    );
     const roomIds = useMemo(() => sections.flatMap((section) => section.roomIds), [sections]);
     const roomCount = roomIds.length;
     const sectionCount = sections.length;
@@ -136,16 +242,68 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         [sections],
     );
 
+    // In a grouped list, Virtuoso's range counts section headers as entries, so entry indices
+    // don't match room indices. This maps an inclusive entry range to a [start, end) room-index
+    // range. A header entry maps to the section boundary: "from this section's first room" as a
+    // start, "up to the previous section's last room" as an end.
+    const mapEntryRangeToRoomRange = useCallback(
+        (startEntry: number, endEntry: number): [start: number, endExclusive: number] => {
+            let start: number | undefined;
+            let end: number | undefined;
+            let headerEntry = 0; // entry index of the current section's header
+            let roomsBefore = 0; // number of rooms in the sections above the current one
+            for (const section of sections) {
+                // Last entry of this section: the header entry followed by one entry per room
+                const lastEntry = headerEntry + section.roomIds.length;
+
+                // The range starts in this section: on the header (-1 clamped to the first room)
+                // or on one of its rooms
+                if (start === undefined && startEntry <= lastEntry) {
+                    start = roomsBefore + Math.max(0, startEntry - headerEntry - 1);
+                }
+
+                // The range ends in this section: on the header (0 rooms of this section
+                // included) or on one of its rooms (exclusive bound, hence no -1)
+                if (end === undefined && endEntry <= lastEntry) {
+                    end = roomsBefore + Math.max(0, endEntry - headerEntry);
+                }
+
+                // Both bounds found, no need to look at the remaining sections
+                if (start !== undefined && end !== undefined) break;
+
+                // Move to the next section
+                headerEntry = lastEntry + 1;
+                roomsBefore += section.roomIds.length;
+            }
+            // The range can transiently point past the sections when the list shrinks before
+            // Virtuoso reports the new range; fall back to the widest valid window.
+            return [start ?? 0, end ?? roomsBefore];
+        },
+        [sections],
+    );
+
     /**
      * Callback when the visible range changes
      * Notifies the view model which rooms are visible
      */
     const rangeChanged = useCallback(
         (range: { startIndex: number; endIndex: number }) => {
-            vm.updateVisibleRooms(range.startIndex, range.endIndex);
+            // Virtuoso's endIndex is inclusive; updateVisibleRooms takes an exclusive end.
+            if (isFlatList) {
+                vm.updateVisibleRooms(range.startIndex, range.endIndex + 1);
+            } else {
+                const [start, end] = mapEntryRangeToRoomRange(range.startIndex, range.endIndex);
+                vm.updateVisibleRooms(start, end);
+            }
+            // The rendered set changed; (un)observe items so the fold stays accurate.
+            scheduleSyncObservedItems();
         },
-        [vm],
+        [vm, scheduleSyncObservedItems, isFlatList, mapEntryRangeToRoomRange],
     );
+
+    // Builds the accessibility plugin (live-region announcements) for keyboard/pointer drags,
+    // replacing dnd-kit's built-in Accessibility plugin.
+    const a11yPlugins = useRoomListAccessibilityPlugin(vm);
 
     /**
      * Get the item component for a specific index
@@ -280,6 +438,19 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     );
 
     /**
+     * Render the pinned "current section" overlay header for the grouped list.
+     * Presentational only — the real header rows in the list stay the accessible, focusable
+     * controls. See {@link RoomListStickySectionHeaderView}.
+     */
+    const renderStickyHeader = useCallback(
+        (groupIndex: number, headerId: string, context: VirtualizedListContext<Context>): ReactNode => {
+            const sectionHeaderVM = context.context.vm.getSectionHeaderViewModel(headerId);
+            return <RoomListStickySectionHeaderView key={headerId} vm={sectionHeaderVM} isFirst={groupIndex === 0} />;
+        },
+        [],
+    );
+
+    /**
      * Get the key for a room item
      * Since we're using virtualization, items are always room ID strings
      */
@@ -320,7 +491,10 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
      */
     const scrollIntoViewOnChange = useCallback(
         (params: {
-            context: VirtualizedListContext<{ spaceId: string; filterKeys: FilterKey[] | undefined }>;
+            context: VirtualizedListContext<{
+                spaceId: string;
+                filterKeys: FilterKey[] | undefined;
+            }>;
         }): ScrollIntoViewLocation | null | undefined | false => {
             const { spaceId, filterKeys } = params.context.context;
             const shouldScrollIndexIntoView =
@@ -347,8 +521,23 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         const sectionIndex = sections.findIndex((s) => s.id === scrollToSectionTag);
         if (sectionIndex === -1) return;
         const flatIndex = sections.slice(0, sectionIndex).reduce((acc, s) => acc + s.roomIds.length + 1, 0);
-        virtuosoHandleRef.current?.scrollIntoView({ index: flatIndex, align: "start", behavior: "auto" });
+        virtuosoHandleRef.current?.scrollIntoView({
+            index: flatIndex,
+            align: "start",
+            behavior: "auto",
+        });
     }, [scrollToSectionTag, sections]);
+
+    // Give the view model an imperative handle to scroll an item index into view (e.g. when the
+    // user clicks the "unread activity" toast, which is rendered by a sibling component). The view
+    // owns the scroll handle, so it registers the function here rather than the model pushing
+    // scroll requests through its snapshot.
+    useEffect(() => {
+        vm.setScrollToIndex((index) =>
+            virtuosoHandleRef.current?.scrollIntoView({ index, align: "center", behavior: "auto" }),
+        );
+        return () => vm.setScrollToIndex(undefined);
+    }, [vm]);
 
     const isItemFocusable = useCallback(() => true, []);
     const isGroupHeaderFocusable = useCallback(() => true, []);
@@ -371,9 +560,10 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         getItemKey,
         isItemFocusable,
         rangeChanged,
+        "scrollerRef": setScroller,
         onKeyDown,
         increaseViewportBy,
-        className: styles.roomList,
+        "className": styles.roomList,
     };
 
     if (isFlatList) {
@@ -381,6 +571,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             <FlatVirtualizedList
                 {...commonProps}
                 {...getContainerAccessibleProps("listbox")}
+                scrollHandleRef={setVirtuosoHandle}
                 items={roomIds}
                 getItemComponent={getItemComponentForFlatList}
             />
@@ -388,13 +579,25 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     }
 
     return (
-        <DragDropProvider
+        <DragDropProvider<RoomListDragData>
+            onDragStart={(event) => {
+                const { source } = event.operation;
+                // Changing the state of sections (collapsed/expanded) while dragging a section header causes a double readback for the a11y announcement.
+                if (isSectionDragData(source?.data)) {
+                    vm.onSectionDragStart();
+                }
+            }}
             onDragEnd={(event) => {
-                if (event.canceled) return;
-                const { target, source } = event.operation;
-                if (!source || !target) return;
-
-                vm.changeRoomSection(source.id as string, target.id as string);
+                const { source, target } = event.operation;
+                if (isSectionDragData(source?.data)) {
+                    vm.onSectionDragEnd();
+                }
+                if (event.canceled || !source || !target) return;
+                if (isSectionDragData(source.data)) {
+                    vm.changeSectionOrder(String(source.id), String(target.id));
+                } else {
+                    vm.changeRoomSection(String(source.id), String(target.id));
+                }
             }}
             sensors={[
                 // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
@@ -404,6 +607,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 }),
                 // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
                 KeyboardSensor.configure({
+                    // The default 10px-per-keypress offset makes keyboard dragging feel sluggish.
+                    offset: KEYBOARD_DRAG_OFFSET,
                     keyboardCodes: {
                         start: ["Space"],
                         cancel: ["Escape"],
@@ -415,6 +620,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     },
                 }),
             ]}
+            plugins={a11yPlugins}
         >
             <DragOverlay dropAnimation={null}>
                 <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />
@@ -428,6 +634,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 getGroupHeaderComponent={getGroupHeaderComponent}
                 getItemComponent={getItemComponentForGroupedList}
                 isGroupHeaderFocusable={isGroupHeaderFocusable}
+                renderStickyHeader={renderStickyHeader}
             />
         </DragDropProvider>
     );
@@ -439,7 +646,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
  * navigation shortcuts while a drag is in progress, preventing unwanted list scrolling.
  */
 function GroupedRoomList(props: GroupedVirtualizedListProps<string, string, Context>): JSX.Element {
-    const { source } = useDragOperation();
+    const { source } = useDragOperation<RoomListDragData>();
 
     return <GroupedVirtualizedList<string, string, Context> {...props} disableKeyboardNavigation={source !== null} />;
 }
@@ -455,10 +662,15 @@ interface DragOverlayContentProps {
  * Component rendered in the drag overlay when dragging a room item. Renders a copy of the dragged item to avoid dragging the actual element out of virtualization.
  */
 function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
-    const { source } = useDragOperation();
+    const { source } = useDragOperation<RoomListDragData>();
     if (!source) return null;
 
-    const itemVm = vm.getRoomItemViewModel(source.id as string);
+    if (isSectionDragData(source.data)) {
+        const sectionHeaderVM = vm.getSectionHeaderViewModel(String(source.id));
+        return <RoomListSectionHeaderDragOverlayView vm={sectionHeaderVM} />;
+    }
+
+    const itemVm = vm.getRoomItemViewModel(String(source.id));
     if (!itemVm) return null;
 
     return <RoomListItemDragOverlayView vm={itemVm} renderAvatar={renderAvatar} />;

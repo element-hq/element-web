@@ -114,7 +114,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         if (this.state.canKick && this.state.invited) {
             adminTools = (
                 <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
-                    <Text as="span" role="heading" size="lg" weight="semibold">
+                    <Text as="span" role="heading" size="lg" weight="semibold" aria-level={3}>
                         {_t("user_info|admin_tools_section")}
                     </Text>
                     <Button size="md" kind="destructive" className="mx_MemberInfo_field" onClick={this.onKickClick}>
@@ -129,7 +129,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 <Flex className="mx_ThirdPartyMemberInfo" direction="column" gap="var(--cpd-space-4x)">
                     <Flex direction="column" as="section" justify="start" gap="var(--cpd-space-2x)">
                         {/* same as userinfo name style */}
-                        <Text as="span" role="heading" size="lg" weight="semibold">
+                        <Text as="span" role="heading" size="lg" weight="semibold" aria-level={2}>
                             {this.state.displayName}
                         </Text>
                         <Text as="span">{_t("user_info|invited_by", { sender: this.state.senderName })}</Text>

@@ -19,7 +19,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 
 import { EventPresentationProvider, type EventDensity, type EventLayout, I18nApi, I18nContext } from "../src";
 import { setLanguage } from "../src/core/i18n/i18n";
-import { StoryContext } from "storybook/internal/csf";
+import { type StoryContext } from "storybook/internal/csf";
 import { DragDropProvider } from "@dnd-kit/react";
 import { PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 

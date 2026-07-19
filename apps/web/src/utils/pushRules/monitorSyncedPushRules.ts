@@ -68,7 +68,6 @@ const monitorSyncedRule = async (
     if (outOfSyncRules.length) {
         await updateExistingPushRulesWithActions(
             matrixClient,
-            // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
             outOfSyncRules.map(({ rule_id }) => rule_id),
             primaryRule.enabled ? primaryRule.actions : undefined,
         );

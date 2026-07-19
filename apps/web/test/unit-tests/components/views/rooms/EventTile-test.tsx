@@ -51,6 +51,8 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass.ts";
+import { SDKContext } from "../../../../../src/contexts/SDKContext.ts";
 
 function getTile(container: HTMLElement): HTMLElement {
     const tile = container.querySelector(".mx_EventTile");
@@ -1007,21 +1009,25 @@ describe("EventTile", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
 
             // By default, the thread will assume it is read.
-            expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(0);
+            expect(container.querySelectorAll('[data-testid="notification-badge"]')).toHaveLength(0);
 
             act(() => {
                 room.setThreadUnreadNotificationCount(mxEvent.getId()!, NotificationCountType.Total, 3);
             });
 
-            expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(0);
+            let badges = container.querySelectorAll('[data-testid="notification-badge"]');
+            expect(badges).toHaveLength(1);
+            expect(badges[0]).toHaveAttribute("data-badge-type", "dot");
+            expect(badges[0]).toHaveAttribute("data-notification-level", "notification");
 
             act(() => {
                 room.setThreadUnreadNotificationCount(mxEvent.getId()!, NotificationCountType.Highlight, 1);
             });
 
-            expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(1);
+            badges = container.querySelectorAll('[data-testid="notification-badge"]');
+            expect(badges).toHaveLength(1);
+            expect(badges[0]).toHaveAttribute("data-badge-type", "dot");
+            expect(badges[0]).toHaveAttribute("data-notification-level", "highlight");
         });
     });
 
@@ -1648,7 +1654,11 @@ describe("EventTile", () => {
             return Element.prototype.matches.call(this, selector);
         });
 
-        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />);
+        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />, {
+            wrapper: ({ children }) => (
+                <SDKContext.Provider value={SDKContextClass.instance}>{children}</SDKContext.Provider>
+            ),
+        });
         const editingTile = container.querySelector(".mx_EventTile_isEditing");
 
         expect(editingTile).not.toBeNull();

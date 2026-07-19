@@ -1,0 +1,25 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "cache": true,
+            "command": "vite build",
+            "inputs": ["src"],
+            "outputs": ["{projectRoot}/lib"],
+            "options": { "cwd": "modules/widget-lifecycle" },
+            "dependsOn": ["^build"]
+        },
+        "test:unit": {
+            "command": "vitest run",
+            "options": { "cwd": "modules/widget-lifecycle" }
+        },
+        "lint:types": {
+            "command": "tsc --noEmit",
+            "options": {
+                "cwd": "modules/widget-lifecycle"
+            },
+            "dependsOn": ["^build"]
+        }
+    }
+}

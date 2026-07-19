@@ -14,7 +14,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 // The following interfaces take their names and member names from seshat and the spec
-/* eslint-disable camelcase */
 
 /** A record of a place to resume crawling events in a given room. */
 export interface ICrawlerCheckpoint {
@@ -76,7 +75,7 @@ export default abstract class BaseEventIndexManager {
      * optionally enable event indexing they may override this method to perform
      * the necessary runtime checks here.
      *
-     * @return {Promise} A promise that will resolve to true if event indexing
+     * @returns {Promise} A promise that will resolve to true if event indexing
      * is supported, false otherwise.
      */
     public async supportsEventIndexing(): Promise<boolean> {
@@ -88,7 +87,7 @@ export default abstract class BaseEventIndexManager {
      * @param {string} userId The event that should be added to the index.
      * @param {string} deviceId The profile of the event sender at the
      *
-     * @return {Promise} A promise that will resolve when the event index is
+     * @returns {Promise} A promise that will resolve when the event index is
      * initialized.
      */
     public async initEventIndex(userId: string, deviceId: string): Promise<void> {
@@ -102,7 +101,7 @@ export default abstract class BaseEventIndexManager {
      * @param {IMatrixProfile} profile The profile of the event sender at the
      * time the event was received.
      *
-     * @return {Promise} A promise that will resolve when the was queued up for
+     * @returns {Promise} A promise that will resolve when the was queued up for
      * addition.
      */
     public async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
@@ -123,7 +122,7 @@ export default abstract class BaseEventIndexManager {
      * @param {string} roomId The ID of the room which we want to check if it
      * has been already indexed.
      *
-     * @return {Promise<boolean>} Returns true if the index contains events for
+     * @returns {Promise<boolean>} Returns true if the index contains events for
      * the given room, false otherwise.
      */
     public isRoomIndexed(roomId: string): Promise<boolean> {
@@ -133,7 +132,7 @@ export default abstract class BaseEventIndexManager {
     /**
      * Get statistical information of the index.
      *
-     * @return {Promise<IIndexStats>} A promise that will resolve to the index
+     * @returns {Promise<IIndexStats>} A promise that will resolve to the index
      * statistics.
      */
     public async getStats(): Promise<IIndexStats> {
@@ -142,7 +141,7 @@ export default abstract class BaseEventIndexManager {
 
     /**
      * Get the user version of the database.
-     * @return {Promise<number>} A promise that will resolve to the user stored
+     * @returns {Promise<number>} A promise that will resolve to the user stored
      * version number.
      */
     public async getUserVersion(): Promise<number> {
@@ -155,7 +154,7 @@ export default abstract class BaseEventIndexManager {
      * @param {number} version The new version that should be stored in the
      * database.
      *
-     * @return {Promise<void>} A promise that will resolve once the new version
+     * @returns {Promise<void>} A promise that will resolve once the new version
      * is stored.
      */
     public async setUserVersion(version: number): Promise<void> {
@@ -165,7 +164,7 @@ export default abstract class BaseEventIndexManager {
     /**
      * Commit the previously queued up events to the index.
      *
-     * @return {Promise} A promise that will resolve once the queued up events
+     * @returns {Promise} A promise that will resolve once the queued up events
      * were added to the index.
      */
     public async commitLiveEvents(): Promise<void> {
@@ -178,7 +177,7 @@ export default abstract class BaseEventIndexManager {
      * @param {ISearchArgs} searchArgs The search configuration for the search,
      * sets the search term and determines the search result contents.
      *
-     * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
+     * @returns {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
     public async searchEventIndex(searchArgs: ISearchArgs): Promise<IResultRoomEvents> {
@@ -199,7 +198,7 @@ export default abstract class BaseEventIndexManager {
      * to fetch the current batch of events. This checkpoint will be removed
      * from the index.
      *
-     * @return {Promise} A promise that will resolve to true if all the events
+     * @returns {Promise} A promise that will resolve to true if all the events
      * were already added to the index, false otherwise.
      */
     public async addHistoricEvents(
@@ -216,7 +215,7 @@ export default abstract class BaseEventIndexManager {
      * @param {ICrawlerCheckpoint} checkpoint The checkpoint that should be added
      * to the index.
      *
-     * @return {Promise} A promise that will resolve once the checkpoint has
+     * @returns {Promise} A promise that will resolve once the checkpoint has
      * been stored.
      */
     public async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
@@ -229,7 +228,7 @@ export default abstract class BaseEventIndexManager {
      * @param {ICrawlerCheckpoint} checkpoint The checkpoint that should be
      * removed from the index.
      *
-     * @return {Promise} A promise that will resolve once the checkpoint has
+     * @returns {Promise} A promise that will resolve once the checkpoint has
      * been removed.
      */
     public async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
@@ -239,7 +238,7 @@ export default abstract class BaseEventIndexManager {
     /**
      * Load the stored checkpoints from the index.
      *
-     * @return {Promise<[ICrawlerCheckpoint]>} A promise that will resolve to an
+     * @returns {Promise<[ICrawlerCheckpoint]>} A promise that will resolve to an
      * array of crawler checkpoints once they have been loaded from the index.
      */
     public async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
@@ -258,7 +257,7 @@ export default abstract class BaseEventIndexManager {
      * @param  {string} args.direction The direction to which we should continue
      * loading events from. This is used only if fromEvent is used as well.
      *
-     * @return {Promise<[IEventAndProfile]>} A promise that will resolve to an
+     * @returns {Promise<[IEventAndProfile]>} A promise that will resolve to an
      * array of Matrix events that contain mxc URLs accompanied with the
      * historic profile of the sender.
      */
@@ -269,7 +268,7 @@ export default abstract class BaseEventIndexManager {
     /**
      * close our event index.
      *
-     * @return {Promise} A promise that will resolve once the event index has
+     * @returns {Promise} A promise that will resolve once the event index has
      * been closed.
      */
     public async closeEventIndex(): Promise<void> {
@@ -279,7 +278,7 @@ export default abstract class BaseEventIndexManager {
     /**
      * Delete our current event index.
      *
-     * @return {Promise} A promise that will resolve once the event index has
+     * @returns {Promise} A promise that will resolve once the event index has
      * been deleted.
      */
     public async deleteEventIndex(): Promise<void> {

@@ -12,7 +12,7 @@ import userEvent from "@testing-library/user-event";
 import { type MatrixClient, MatrixError, Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { mocked, type Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock-vitest-adapter";
 import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";
@@ -30,9 +30,10 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
 import { type IConfigOptions } from "../../../../../src/IConfigOptions";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { SDKContextClass } from "../../../../../src/contexts/SDKContextClass";
 import { type IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
+import { TestSDKContext } from "../../../TestSDKContext.ts";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
 jest.mock("../../../../../src/IdentityAuthClient", () =>
@@ -94,6 +95,7 @@ const bobProfileInfo: IProfileInfo = {
 describe("InviteDialog", () => {
     let mockClient: Mocked<MatrixClient>;
     let room: Room;
+    let sdkContext: TestSDKContext;
 
     filterConsole(
         "Error retrieving profile for userId @carol:example.com",
@@ -178,13 +180,15 @@ describe("InviteDialog", () => {
         mockClient.getRooms.mockReturnValue([room]);
         mockClient.getRoom.mockReturnValue(room);
 
-        SdkContextClass.instance.client = mockClient;
+        sdkContext = new TestSDKContext();
+        // @ts-ignore UserMenuViewModel uses SDKContext in the constructor
+        SDKContextClass.instance = sdkContext;
+        sdkContext._client = mockClient;
     });
 
     afterEach(async () => {
         await clearAllModals();
-        SdkContextClass.instance.onLoggedOut();
-        SdkContextClass.instance.client = undefined;
+        SDKContextClass.instance.onLoggedOut();
     });
 
     afterAll(() => {

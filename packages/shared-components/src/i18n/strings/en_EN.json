@@ -53,6 +53,7 @@
     },
     "menus": {
         "user_menu": {
+            "clear_status": "Clear",
             "create_an_account": "Create an account",
             "got_an_account": "Got an account?",
             "manage_account": "Manage account",
@@ -65,6 +66,11 @@
         "default_settings": "Match default settings",
         "mentions_keywords": "Mentions and keywords",
         "mute_room": "Mute room"
+    },
+    "release_announcement": {
+        "room_list_section_close": "Ok",
+        "room_list_section_description": " Group your chats into sections to keep conversations organised and easy to navigate.",
+        "room_list_section_title": "Introducing Sections"
     },
     "room": {
         "context_menu": {
@@ -97,6 +103,17 @@
     "room_list": {
         "a11y": {
             "default": "Open room %(roomName)s",
+            "drag_cancelled": "Dragging cancelled",
+            "drag_end": "%(source)s was dropped on %(target)s",
+            "drag_end_after": "%(source)s was dropped after %(target)s",
+            "drag_end_before": "%(source)s was dropped before %(target)s",
+            "drag_end_original": "%(source)s returned to its original position",
+            "drag_instructions": "Press space to start or to stop dragging, arrow keys to move, and escape to cancel.",
+            "drag_over": "%(source)s is over %(target)s",
+            "drag_over_after": "%(source)s will be dropped after %(target)s",
+            "drag_over_before": "%(source)s will be dropped before %(target)s",
+            "drag_over_original": "%(source)s will return to its original position",
+            "drag_start": "Dragging %(source)s",
             "invitation": "Open room %(roomName)s invitation.",
             "mention": {
                 "one": "Open room %(roomName)s with 1 unread mention.",
@@ -118,10 +135,7 @@
             "no_chats": "No chats yet",
             "no_chats_description": "Get started by messaging someone or by creating a room",
             "no_chats_description_no_room_rights": "Get started by messaging someone",
-            "no_favourites": "You don't have favourite chats yet",
-            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
             "no_invites": "You don't have any unread invites",
-            "no_lowpriority": "You don't have any low priority rooms",
             "no_mentions": "You don't have any unread mentions",
             "no_people": "You don’t have direct chats with anyone yet",
             "no_people_description": "You can deselect filters in order to see your other chats",
@@ -150,7 +164,8 @@
             "low_priority": "Low priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
-            "move_to_section": "Move to"
+            "move_to_section": "Move to",
+            "remove_from_section": "Remove from section"
         },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
@@ -165,7 +180,7 @@
             "more_options": "More options",
             "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
-            "toggle_unread": "Toggle %(section)s section with unread room(s)"
+            "toggle_unread": "Toggle %(section)s section with unread rooms"
         },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
@@ -177,6 +192,17 @@
         "space_menu": {
             "home": "Space home",
             "space_settings": "Space settings"
+        },
+        "unread_messages": "Unread messages"
+    },
+    "status": {
+        "set_status": {
+            "away": "Away",
+            "be_right_back": "Be right back",
+            "focus_time": "Focus Time",
+            "in_a_meeting": "In a meeting",
+            "on_the_road": "On the road",
+            "set_status_prompt": "What's your status?"
         }
     },
     "terms": {
@@ -206,6 +232,28 @@
             "declined": {
                 "call_declined": "Call declined",
                 "call_declined_by_us": "You declined a call"
+            },
+            "ongoing": {
+                "common": {
+                    "call_started_by": "%(startedByDisplayName)s started a call",
+                    "join_button": "Join"
+                },
+                "dm": {
+                    "call_started": "Call started",
+                    "title": "Call in progress"
+                },
+                "room": {
+                    "join_count": {
+                        "one": "%(count)s joined",
+                        "other": "%(count)s joined"
+                    },
+                    "title": "Group call in progress"
+                }
+            },
+            "tombstone": {
+                "room": {
+                    "title": "Group call ended"
+                }
             },
             "video_call_title": "Video call",
             "voice_call_title": "Voice call"

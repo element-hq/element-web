@@ -9,14 +9,14 @@ import { MultiRoomViewStore } from "../../../src/stores/MultiRoomViewStore";
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
 import type { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
-import { TestSdkContext } from "../TestSdkContext";
+import { TestSDKContext } from "../TestSDKContext";
 
 jest.mock("../../../src/stores/RoomViewStore");
 
 describe("MultiRoomViewStore", () => {
     let multiRoomViewStore: MultiRoomViewStore;
     let mockDispatcher: MatrixDispatcher;
-    let mockSdkContext: TestSdkContext;
+    let mockSdkContext: TestSDKContext;
     let mockRoomViewStore: jest.Mocked<RoomViewStore>;
 
     beforeEach(() => {
@@ -30,7 +30,7 @@ describe("MultiRoomViewStore", () => {
         } as unknown as MatrixDispatcher;
 
         // Create mock SDK context
-        mockSdkContext = new TestSdkContext();
+        mockSdkContext = new TestSDKContext();
 
         // Create mock RoomViewStore instance
         mockRoomViewStore = {

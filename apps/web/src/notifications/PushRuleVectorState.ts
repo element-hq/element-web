@@ -37,7 +37,7 @@ export class PushRuleVectorState {
     /**
      * Convert a PushRuleVectorState to a list of actions
      *
-     * @return [object] list of push-rule actions
+     * @returns [object] list of push-rule actions
      */
     public static actionsFor(pushRuleVectorState?: VectorState): PushRuleAction[] {
         if (pushRuleVectorState === VectorState.On) {

@@ -26,7 +26,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../../../test-utils";
 import { SDKContext } from "../../../../../../src/contexts/SDKContext";
-import { TestSdkContext } from "../../../../TestSdkContext";
+import { TestSDKContext } from "../../../../TestSDKContext";
 import MemberListView from "../../../../../../src/components/views/rooms/MemberList/MemberListView";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
@@ -121,8 +121,8 @@ export async function renderMemberList(
         memberListRoom.currentState.members[member.userId] = member;
     }
 
-    const context = new TestSdkContext();
-    context.client = client;
+    const context = new TestSDKContext();
+    context._client = client;
     context.memberListStore.isPresenceEnabled = jest.fn().mockReturnValue(enablePresence);
     const root = render(
         <MatrixClientContext.Provider value={client}>

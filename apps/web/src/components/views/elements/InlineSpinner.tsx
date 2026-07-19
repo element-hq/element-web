@@ -16,8 +16,7 @@ interface IProps {
 
 export default class InlineSpinner extends React.PureComponent<IProps> {
     public static defaultProps = {
-        w: 16,
-        h: 16,
+        size: 16,
     };
 
     public render(): React.ReactNode {
