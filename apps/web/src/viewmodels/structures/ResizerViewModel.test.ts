@@ -5,17 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { waitFor } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, afterEach } from "vitest";
+
+import { waitFor } from "test-utils-rtl";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
 
-import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { ResizerViewModel } from "./ResizerViewModel";
+import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 
-jest.mock("what-input");
+vi.mock("what-input");
 
 describe("LeftPanelResizerViewModel", () => {
     afterEach(() => {
+        localStorage.clear();
         SettingsStore.reset();
     });
 
@@ -72,8 +77,8 @@ describe("LeftPanelResizerViewModel", () => {
         const vm = new ResizerViewModel();
         SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
-            resize: jest.fn(),
-            isCollapsed: jest.fn().mockReturnValue(true),
+            resize: vi.fn(),
+            isCollapsed: vi.fn().mockReturnValue(true),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -90,8 +95,8 @@ describe("LeftPanelResizerViewModel", () => {
             const vm = new ResizerViewModel();
             SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
             const mockHandle = {
-                resize: jest.fn(),
-                isCollapsed: jest.fn().mockReturnValue(true),
+                resize: vi.fn(),
+                isCollapsed: vi.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -103,8 +108,8 @@ describe("LeftPanelResizerViewModel", () => {
         it("to maximum size of the panel", () => {
             const vm = new ResizerViewModel();
             const mockHandle = {
-                resize: jest.fn(),
-                isCollapsed: jest.fn().mockReturnValue(true),
+                resize: vi.fn(),
+                isCollapsed: vi.fn().mockReturnValue(true),
             } as unknown as PanelImperativeHandle;
             vm.setPanelHandle(mockHandle);
             // Simulate click
@@ -117,8 +122,8 @@ describe("LeftPanelResizerViewModel", () => {
     it("should collapse panel on click when panel is expanded", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
-            collapse: jest.fn(),
-            isCollapsed: jest.fn().mockReturnValue(false),
+            collapse: vi.fn(),
+            isCollapsed: vi.fn().mockReturnValue(false),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -129,7 +134,7 @@ describe("LeftPanelResizerViewModel", () => {
     it("should resize to nearest whole number", () => {
         const vm = new ResizerViewModel();
         const mockHandle = {
-            resize: jest.fn(),
+            resize: vi.fn(),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
