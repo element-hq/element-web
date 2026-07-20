@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { rejectToast } from "@element-hq/element-web-playwright-common";
+import { rejectToast, rejectToastIfExists } from "@element-hq/element-web-playwright-common";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -226,6 +226,52 @@ test.describe("Room list sections", () => {
             await expect(roomList.getByRole("row", { name: "Open room regular room" })).toBeVisible();
 
             await expect(roomList).toMatchScreenshot("room-list-sections-collapsed.png");
+        });
+    });
+
+    test.describe("Section collapse state persistence", () => {
+        test.beforeEach(async ({ app }) => {
+            // A favourite room (so we get a Favourites section) and a regular room in Chats,
+            // giving us two independent sections whose expansion state we can assert.
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+            await app.client.createRoom({ name: "regular room" });
+        });
+
+        test("persists the collapsed/expanded state across reloads", async ({ page }) => {
+            const roomList = getRoomList(page);
+            const favouritesHeader = getSectionHeader(page, "Favourites");
+            const favRoom = roomList.getByRole("row", { name: "Open room favourite room" });
+
+            // Collapse the Favourites section
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "true");
+            await favouritesHeader.click();
+            await expect(favouritesHeader).toHaveAttribute("aria-expanded", "false");
+            await expect(favRoom).not.toBeVisible();
+
+            // Reload the page: the collapsed state is persisted at the device level and should survive
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            // Favourites is still collapsed and its room stays hidden, while Chats remains expanded
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "false");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).not.toBeVisible();
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room regular room" })).toBeVisible();
+
+            // Expand it again and reload: the expanded state is likewise persisted
+            await getSectionHeader(page, "Favourites").click();
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+
+            await page.reload();
+            await rejectToastIfExists(page, "Verify this device");
+            await rejectToastIfExists(page, "Notifications");
+
+            await expect(getSectionHeader(page, "Favourites")).toHaveAttribute("aria-expanded", "true");
+            await expect(getRoomList(page).getByRole("row", { name: "Open room favourite room" })).toBeVisible();
         });
     });
 
