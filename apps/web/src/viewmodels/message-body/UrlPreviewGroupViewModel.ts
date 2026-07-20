@@ -35,6 +35,8 @@ export enum PreviewVisibility {
     Visible,
 }
 
+export type UrlPreviewKind = "fetchonly" | "bundledonly" | "preferbundled";
+
 export interface UrlPreviewGroupViewModelProps {
     client: MatrixClient;
     mxEvent: MatrixEvent;
@@ -42,7 +44,7 @@ export interface UrlPreviewGroupViewModelProps {
     mediaVisible: boolean;
     showTooltips: boolean;
     onImageClicked: (preview: UrlPreview) => void;
-    urlPreviewBundleEnabled: boolean;
+    urlPreviewKind: UrlPreviewKind;
 }
 
 export class UrlPreviewGroupViewModel
@@ -176,7 +178,12 @@ export class UrlPreviewGroupViewModel
         }
 
         const content = this.props.mxEvent.getContent();
-        if (content.msgtype === MsgType.Text && this.props.urlPreviewBundleEnabled) {
+        const urlPreviewKind = this.props.urlPreviewKind;
+        console.log("wowee2", urlPreviewKind);
+        if (
+            content.msgtype === MsgType.Text &&
+            (urlPreviewKind === "bundledonly" || urlPreviewKind === "preferbundled")
+        ) {
             const messageContent = content as RoomMessageEventContent;
 
             if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
@@ -186,14 +193,16 @@ export class UrlPreviewGroupViewModel
             }
         }
 
-        previews ??= await Promise.all(
-            this.links
-                .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
-        );
+        if (urlPreviewKind === "fetchonly" || urlPreviewKind === "preferbundled") {
+            previews ??= await Promise.all(
+                this.links
+                    .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
+                    .map((link) => this.fetcher.fetchPreview(link, loadMedia)),
+            );
+        }
 
         this.snapshot.merge({
-            previews: previews.filter((p) => !!p),
+            previews: (previews ?? []).filter((p) => !!p),
             totalPreviewCount: this.links.length,
             previewsLimited: this.limitPreviews,
             overPreviewLimit: this.links.length > MAX_PREVIEWS_WHEN_LIMITED,

@@ -13,6 +13,7 @@ import {
     BUNDLED_LINK_PREVIEWS,
     MAX_PREVIEWS_WHEN_LIMITED,
     UrlPreviewGroupViewModel,
+    UrlPreviewKind,
 } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
 import type { UrlPreview } from "@element-hq/web-shared-components";
 import { getMockClientWithEventEmitter, mkEvent } from "../../test-utils";
@@ -57,13 +58,13 @@ function getViewModel({
     mediaVisible = true,
     visible = true,
     showPreview = true,
-    urlPreviewBundleEnabled = true,
+    urlPreviewKind = "fetchonly",
     content,
 }: {
     mediaVisible?: boolean;
     visible?: boolean;
     showPreview?: boolean;
-    urlPreviewBundleEnabled?: boolean;
+    urlPreviewKind?: UrlPreviewKind;
     content?: object;
 } = {}): {
     vm: UrlPreviewGroupViewModel;
@@ -91,7 +92,7 @@ function getViewModel({
             },
             id: "$id",
         }),
-        urlPreviewBundleEnabled,
+        urlPreviewKind,
     });
     return { vm, client, onImageClicked };
 }
@@ -140,7 +141,7 @@ describe("UrlPreviewGroupViewModel", () => {
             visible: false,
             mediaVisible: true,
             showPreview: true,
-            urlPreviewBundleEnabled: false,
+            urlPreviewKind: "fetchonly",
         });
         const msg = document.createElement("div");
         msg.innerHTML = '<a href="https://example.org">Test</a>';
@@ -153,7 +154,7 @@ describe("UrlPreviewGroupViewModel", () => {
             mediaVisible: false,
             visible: true,
             showPreview: true,
-            urlPreviewBundleEnabled: false,
+            urlPreviewKind: "fetchonly",
         });
         client.getUrlPreview.mockResolvedValueOnce({
             "og:title": "This is an example!",
@@ -232,7 +233,7 @@ describe("UrlPreviewGroupViewModel", () => {
             showPreview: false,
             mediaVisible: true,
             visible: true,
-            urlPreviewBundleEnabled: false,
+            urlPreviewKind: "fetchonly",
         });
         client.getUrlPreview.mockResolvedValueOnce(BASIC_PREVIEW_OGDATA);
         const msg = document.createElement("div");
@@ -266,7 +267,7 @@ describe("UrlPreviewGroupViewModel", () => {
     describe("bundled link previews (MSC4095)", () => {
         it("should render bundled previews when the message is text and the bundle is enabled", async () => {
             const { vm, client } = getViewModel({
-                urlPreviewBundleEnabled: true,
+                urlPreviewKind: "fetchonly",
                 content: {
                     msgtype: MsgType.Text,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO],
@@ -298,7 +299,7 @@ describe("UrlPreviewGroupViewModel", () => {
 
         it("should render an image for a bundled preview", async () => {
             const { vm, client } = getViewModel({
-                urlPreviewBundleEnabled: true,
+                urlPreviewKind: "fetchonly",
                 content: {
                     msgtype: MsgType.Text,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_WITH_IMAGE],
@@ -322,7 +323,7 @@ describe("UrlPreviewGroupViewModel", () => {
 
         it("should limit bundled previews and reveal the rest when the limit is toggled", async () => {
             const { vm, client } = getViewModel({
-                urlPreviewBundleEnabled: true,
+                urlPreviewKind: "fetchonly",
                 content: {
                     msgtype: MsgType.Text,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE, BUNDLE_PREVIEW_TWO, BUNDLE_PREVIEW_THREE],
@@ -347,7 +348,7 @@ describe("UrlPreviewGroupViewModel", () => {
 
         it("should fetch previews instead of using the bundle when the bundle setting is disabled", async () => {
             const { vm, client } = getViewModel({
-                urlPreviewBundleEnabled: false,
+                urlPreviewKind: "fetchonly",
                 content: {
                     msgtype: MsgType.Text,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
@@ -365,7 +366,7 @@ describe("UrlPreviewGroupViewModel", () => {
 
         it("should fetch previews instead of using the bundle when the message is not a text message", async () => {
             const { vm, client } = getViewModel({
-                urlPreviewBundleEnabled: true,
+                urlPreviewKind: "fetchonly",
                 content: {
                     msgtype: MsgType.Notice,
                     [BUNDLED_LINK_PREVIEWS]: [BUNDLE_PREVIEW_ONE],
