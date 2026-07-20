@@ -208,10 +208,36 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         });
     }, [syncObservedItems]);
 
+    // Latest snapshot data for the native wheel handler, which is attached once per scroller
+    // element and so reads through refs.
+    const sectionsRef = useRef(sections);
+    sectionsRef.current = sections;
+    const vmRef = useRef(vm);
+    vmRef.current = vm;
+
+    // A section resized shorter than its content is a scrollable window over its rooms: wheel
+    // events over its rows scroll the window instead of the outer list, chaining back to the
+    // outer list once the window hits the end the wheel is heading for. Attached as a native
+    // non-passive listener because React's synthetic onWheel cannot preventDefault.
+    const onSectionWheel = useCallback((e: WheelEvent) => {
+        const row = (e.target as HTMLElement | null)?.closest?.<HTMLElement>("[data-scroll-section]");
+        if (!row) return;
+        const section = sectionsRef.current.find((s) => s.id === row.dataset.scrollSection);
+        if (!section || section.visibleLimit === undefined) return;
+        const deltaPixels = e.deltaY * (e.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : 1);
+        const offset = section.scrollOffset ?? 0;
+        const maxOffset = section.totalRoomCount - section.visibleLimit;
+        const canConsume = deltaPixels > 0 ? offset < maxOffset - 0.001 : deltaPixels < 0 && offset > 0.001;
+        if (!canConsume) return;
+        e.preventDefault();
+        vmRef.current.scrollSectionBy(section.id, deltaPixels / ROOM_LIST_ITEM_HEIGHT);
+    }, []);
+
     // Callback ref for Virtuoso's scroller element: (re)create an IntersectionObserver rooted
     // at it. The initial sync is covered by the rangeChanged Virtuoso fires on mount.
     const setScroller = useCallback(
         (element: HTMLElement | Window | null) => {
+            foldScrollerRef.current?.removeEventListener("wheel", onSectionWheel);
             foldObserverRef.current?.disconnect();
             foldObserverRef.current = null;
             itemVisibilityRef.current.clear();
@@ -223,11 +249,12 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             const scroller = element instanceof HTMLElement ? element : null;
             foldScrollerRef.current = scroller;
             if (scroller) {
+                scroller.addEventListener("wheel", onSectionWheel, { passive: false });
                 foldObserverRef.current = new IntersectionObserver(onItemIntersection, { root: scroller });
                 scheduleSyncObservedItems();
             }
         },
-        [onItemIntersection, scheduleSyncObservedItems],
+        [onItemIntersection, scheduleSyncObservedItems, onSectionWheel],
     );
     const roomIds = useMemo(() => sections.flatMap((section) => section.roomIds), [sections]);
     const roomCount = roomIds.length;
@@ -381,21 +408,31 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             const isInLastSection = groupIndex === sections.length - 1;
             const item = getItemComponent(index, roomId, context, onFocus, isInLastSection, roomIndexInSection);
 
-            // A fractionally resized section shows only part of its boundary row: clip that row
-            // to the visible fraction of its height so the divider tracks the pointer smoothly.
-            const fraction = section.lastRoomVisibleFraction;
-            if (fraction !== undefined && roomIndexInSection === section.roomIds.length - 1) {
-                return (
-                    <div
-                        key={roomId}
-                        className={styles.clippedRoom}
-                        style={{ height: Math.round(fraction * ROOM_LIST_ITEM_HEIGHT) }}
-                    >
-                        {item}
-                    </div>
-                );
+            // A resized section is a scrollable window over its rooms: tag its rows so wheel
+            // events can be routed to the section (see onSectionWheel), and clip a partially
+            // visible boundary row to the visible fraction of its height — the last row from
+            // the bottom, the first row from the top (bottom-aligned so its top edge is what
+            // gets cut off).
+            if (section.visibleLimit === undefined) return item;
+            let className: string | undefined;
+            let height: number | undefined;
+            if (section.lastRoomVisibleFraction !== undefined && roomIndexInSection === section.roomIds.length - 1) {
+                className = styles.clippedRoom;
+                height = Math.round(section.lastRoomVisibleFraction * ROOM_LIST_ITEM_HEIGHT);
+            } else if (section.firstRoomVisibleFraction !== undefined && roomIndexInSection === 0) {
+                className = styles.clippedRoomTop;
+                height = Math.round(section.firstRoomVisibleFraction * ROOM_LIST_ITEM_HEIGHT);
             }
-            return item;
+            return (
+                <div
+                    key={roomId}
+                    className={className}
+                    style={height !== undefined ? { height } : undefined}
+                    data-scroll-section={section.id}
+                >
+                    {item}
+                </div>
+            );
         },
         [getItemComponent],
     );
@@ -442,11 +479,9 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             // exists from the second header on, and only while that section shows any rooms
             // (a collapsed or empty section has no room rows to resize).
             const sectionAbove = groupIndex > 0 ? sections[groupIndex - 1] : undefined;
-            // A clipped boundary row counts for its visible fraction, so a drag starts from
-            // exactly where the divider currently sits.
-            const visibleCountAbove = sectionAbove
-                ? sectionAbove.roomIds.length - 1 + (sectionAbove.lastRoomVisibleFraction ?? 1)
-                : 0;
+            // The effective (possibly fractional) limit, so a drag starts from exactly where
+            // the divider currently sits; an unlimited section shows all its rooms.
+            const visibleCountAbove = sectionAbove ? (sectionAbove.visibleLimit ?? sectionAbove.roomIds.length) : 0;
             const resizer =
                 sectionAbove && sectionAbove.roomIds.length > 0 ? (
                     <RoomListSectionResizer

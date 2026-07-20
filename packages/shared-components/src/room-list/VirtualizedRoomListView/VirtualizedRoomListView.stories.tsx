@@ -44,6 +44,7 @@ const RoomListWrapperImpl = ({
     onSectionDragStart,
     onSectionDragEnd,
     setSectionVisibleLimit,
+    scrollSectionBy,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -62,6 +63,7 @@ const RoomListWrapperImpl = ({
         onSectionDragStart,
         onSectionDragEnd,
         setSectionVisibleLimit,
+        scrollSectionBy,
     });
 
     return (
@@ -109,6 +111,7 @@ const meta = {
         onSectionDragStart: fn(),
         onSectionDragEnd: fn(),
         setSectionVisibleLimit: fn(),
+        scrollSectionBy: fn(),
     },
     parameters: {
         design: {
