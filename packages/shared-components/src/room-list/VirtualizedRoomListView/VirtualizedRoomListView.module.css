@@ -19,3 +19,18 @@
 .clippedRoom {
     overflow: hidden;
 }
+
+/**
+ * The partially visible first row of a scrolled section window: the wrapper's inline height is
+ * the visible fraction of the row, bottom-aligned so the row's top edge is what gets clipped.
+ */
+.clippedRoomTop {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.clippedRoomTop > * {
+    flex-shrink: 0;
+}

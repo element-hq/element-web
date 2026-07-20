@@ -14,6 +14,8 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./VirtualizedRoomListView.stories";
 import { KEYBOARD_DRAG_OFFSET } from "./VirtualizedRoomListView";
+import { mock10RoomsIds } from "../story-mocks";
+import { type RoomListSection } from "../RoomListView";
 
 const { Default, Sections } = composeStories(stories);
 
@@ -194,6 +196,89 @@ describe("<VirtualizedRoomListView />", () => {
             });
             expect(Sections.args.onSectionDragStart).toHaveBeenCalled();
             expect(Sections.args.onSectionDragEnd).toHaveBeenCalled();
+        });
+    });
+
+    describe("section scrolling", () => {
+        /**
+         * Build the Sections story's sections with the favourites section resized to a
+         * scrollable window: `visibleLimit` rooms tall, scrolled `scrollOffset` rooms down its
+         * (pretend) 10-room list, with the given boundary-row visible fractions.
+         */
+        const windowedSections = (window: Partial<RoomListSection>): RoomListSection[] => [
+            {
+                id: "favourites",
+                roomIds: mock10RoomsIds.slice(0, 3),
+                totalRoomCount: 10,
+                visibleLimit: 3,
+                scrollOffset: 0,
+                ...window,
+            },
+            { id: "chats", roomIds: mock10RoomsIds.slice(4, 5), totalRoomCount: 1 },
+            { id: "low-priority", roomIds: mock10RoomsIds.slice(5), totalRoomCount: 5 },
+        ];
+
+        beforeEach(() => {
+            (Sections.args.scrollSectionBy as any).mockClear?.();
+        });
+
+        it("tags a resized section's rows and clips its boundary rows", () => {
+            const sections = windowedSections({
+                roomIds: mock10RoomsIds.slice(0, 4),
+                scrollOffset: 1.5,
+                firstRoomVisibleFraction: 0.5,
+                lastRoomVisibleFraction: 0.5,
+            });
+            const { container } = renderWithMockContext(<Sections sections={sections} />);
+
+            const wrappers = container.querySelectorAll<HTMLElement>('[data-scroll-section="favourites"]');
+            expect(wrappers).toHaveLength(4);
+            // Both boundary rows are clipped to half a row's height; the middle rows are untouched.
+            expect(wrappers[0].style.height).toBe("26px");
+            expect(wrappers[0].className).toContain("clippedRoomTop");
+            expect(wrappers[3].style.height).toBe("26px");
+            expect(wrappers[3].className).toContain("clippedRoom");
+            expect(wrappers[1].style.height).toBe("");
+            expect(wrappers[1].className).toBe("");
+            // Sections without a visible limit have unwrapped rows.
+            expect(container.querySelectorAll('[data-scroll-section="low-priority"]')).toHaveLength(0);
+        });
+
+        it("consumes wheel events over a resized section's rows and scrolls the window", () => {
+            const { container } = renderWithMockContext(<Sections sections={windowedSections({})} />);
+            const row = container.querySelector<HTMLElement>('[data-scroll-section="favourites"]')!;
+
+            // One row's height of wheel-down: consumed by the section (default prevented).
+            const notPrevented = fireEvent.wheel(row, { deltaY: 52, cancelable: true });
+            expect(notPrevented).toBe(false);
+            expect(Sections.args.scrollSectionBy).toHaveBeenCalledWith("favourites", 1);
+        });
+
+        it("chains wheel events to the outer list at the window's ends", () => {
+            // At the top of the section: wheel-up must fall through to the outer list...
+            const { container, unmount } = renderWithMockContext(<Sections sections={windowedSections({})} />);
+            const row = container.querySelector<HTMLElement>('[data-scroll-section="favourites"]')!;
+            expect(fireEvent.wheel(row, { deltaY: -52, cancelable: true })).toBe(true);
+            expect(Sections.args.scrollSectionBy).not.toHaveBeenCalled();
+            unmount();
+
+            // ...and at the bottom (offset 7 = total 10 - limit 3), wheel-down must too.
+            const { container: bottom } = renderWithMockContext(
+                <Sections sections={windowedSections({ scrollOffset: 7 })} />,
+            );
+            const bottomRow = bottom.querySelector<HTMLElement>('[data-scroll-section="favourites"]')!;
+            expect(fireEvent.wheel(bottomRow, { deltaY: 52, cancelable: true })).toBe(true);
+            expect(Sections.args.scrollSectionBy).not.toHaveBeenCalled();
+            // But wheel-up from the bottom scrolls the window back up.
+            expect(fireEvent.wheel(bottomRow, { deltaY: -52, cancelable: true })).toBe(false);
+            expect(Sections.args.scrollSectionBy).toHaveBeenCalledWith("favourites", -1);
+        });
+
+        it("ignores wheel events outside any resized section", () => {
+            renderWithMockContext(<Sections sections={windowedSections({})} />);
+            const listbox = screen.getByRole("treegrid", { name: "Room list" });
+            fireEvent.wheel(listbox, { deltaY: 52, cancelable: true });
+            expect(Sections.args.scrollSectionBy).not.toHaveBeenCalled();
         });
     });
 

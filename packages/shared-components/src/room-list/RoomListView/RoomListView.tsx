@@ -31,9 +31,29 @@ export type RoomListSection = {
      */
     totalRoomCount: number;
     /**
-     * When the section's visible limit is fractional (mid-resize, or left between two rows),
-     * the fraction (0..1 exclusive) of the LAST room in `roomIds` that is visible — the view
-     * clips that row to this fraction of its height. Absent when the last row is fully shown.
+     * The section's effective (clamped) visible limit in rooms — the height of the scrollable
+     * window the section shows when resized shorter than its content; may be fractional.
+     * Absent when the section shows all its rooms.
+     */
+    visibleLimit?: number;
+    /**
+     * How many rooms of the section are scrolled off the top of its visible window (see
+     * {@link RoomListViewActions.scrollSectionBy}); may be fractional. Only present when
+     * `visibleLimit` is set.
+     */
+    scrollOffset?: number;
+    /**
+     * When the section's window is scrolled to a fractional offset, the fraction
+     * (0..1 exclusive) of the FIRST room in `roomIds` that is visible — the view clips that
+     * row to this fraction of its height, cutting off its top edge. Absent when the first
+     * row is fully shown.
+     */
+    firstRoomVisibleFraction?: number;
+    /**
+     * When the bottom of the section's window falls between two rows (mid-resize, or left
+     * between two rows), the fraction (0..1 exclusive) of the LAST room in `roomIds` that is
+     * visible — the view clips that row to this fraction of its height. Absent when the last
+     * row is fully shown.
      */
     lastRoomVisibleFraction?: number;
 };
@@ -124,6 +144,12 @@ export interface RoomListViewActions {
      * `undefined` (or a count of at least the section's total) shows all rooms.
      */
     setSectionVisibleLimit: (sectionId: string, visibleCount: number | undefined) => void;
+    /**
+     * Called to scroll a resized section's visible window by a number of rooms (may be
+     * fractional; negative scrolls up). The window slides over the section's full room list,
+     * clamped to its ends; no-op for sections without a visible limit.
+     */
+    scrollSectionBy: (sectionId: string, deltaRooms: number) => void;
 }
 
 /**

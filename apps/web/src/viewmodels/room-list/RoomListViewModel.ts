@@ -118,6 +118,12 @@ export class RoomListViewModel
     // Don't clear section vm because we want to keep the expand/collapse state even during space changes.
     private readonly roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
     /**
+     * How far each resized section's visible window is scrolled down its full room list, in
+     * (possibly fractional) rooms, keyed by section tag. Transient UI state: not persisted,
+     * cleared on space changes and when a section's visible limit is cleared.
+     */
+    private readonly sectionScrollOffsets = new Map<string, number>();
+    /**
      * When dragging sections, we want to temporarily expand all sections to make it easier to move rooms between sections.
      * This map stores the original expansion state of each section before the drag starts, so we can restore it after the drag ends.
      */
@@ -169,12 +175,14 @@ export class RoomListViewModel
         const filterIds = getVisibleFilterIds();
 
         // By default, all sections are expanded. Section header view models don't exist yet,
-        // so hydrate any persisted visible limits straight from the setting.
+        // so hydrate any persisted visible limits straight from the setting. Scroll offsets
+        // are transient and start at the top of each section.
         const initialLimits = SettingsStore.getValue("RoomList.sectionVisibleLimits")?.[roomsResult.spaceId] ?? {};
-        const { sections, isFlatList, lastRoomVisibleFractions } = computeSections(
+        const { sections, isFlatList, sectionWindows } = computeSections(
             roomsResult,
             (tag) => true,
             (tag) => initialLimits[tag],
+            (tag) => undefined,
         );
         const isRoomListEmpty = roomsResult.sections.every((section) => section.rooms.length === 0);
 
@@ -190,7 +198,7 @@ export class RoomListViewModel
                 filterKeys: undefined,
             },
             isFlatList,
-            sections: toRoomListSection(sections, roomsResult.sections, lastRoomVisibleFractions),
+            sections: toRoomListSection(sections, roomsResult.sections, sectionWindows),
             canCreateRoom,
         });
 
@@ -509,7 +517,8 @@ export class RoomListViewModel
 
     /**
      * Scroll a room into view, expanding its section first if it is collapsed so the tile can
-     * actually be shown.
+     * actually be shown, and scrolling a resized section's visible window to the room if it is
+     * currently outside it.
      */
     private async scrollRoomIntoView(roomId: string): Promise<void> {
         // Look in the full (pre-collapse) sections so we can find rooms hidden in collapsed sections.
@@ -518,17 +527,27 @@ export class RoomListViewModel
         if (!section) return;
 
         const headerViewModel = this.roomSectionHeaderViewModels.get(section.tag);
-        // Expand the section, and clear any resize limit hiding the room, then rebuild
+        // Expand the section, and scroll its window to the room if a resize limit hides it, then rebuild
         let needsRebuild = false;
         if (headerViewModel && !headerViewModel.isExpanded) {
             headerViewModel.isExpanded = true;
             needsRebuild = true;
         }
-        // A room is only fully shown if the (possibly fractional) limit covers its whole row.
+        // A resized section shows a scrollable window of its rooms: slide the window just far
+        // enough that the room's whole row is inside it (the limit is at least one room, so
+        // the row always fits).
         const indexInSection = section.rooms.findIndex((room) => room.roomId === roomId);
-        if (headerViewModel?.visibleLimit !== undefined && indexInSection + 1 > headerViewModel.visibleLimit) {
-            headerViewModel.visibleLimit = undefined;
-            needsRebuild = true;
+        const limit = headerViewModel?.visibleLimit;
+        if (limit !== undefined) {
+            const maxOffset = Math.max(0, section.rooms.length - limit);
+            const current = Math.min(Math.max(this.sectionScrollOffsets.get(section.tag) ?? 0, 0), maxOffset);
+            let target = current;
+            if (indexInSection < current) target = indexInSection;
+            else if (indexInSection + 1 > current + limit) target = Math.min(indexInSection + 1 - limit, maxOffset);
+            if (target !== current) {
+                this.sectionScrollOffsets.set(section.tag, target);
+                needsRebuild = true;
+            }
         }
         if (needsRebuild) await this.updateRoomListData();
 
@@ -791,11 +810,17 @@ export class RoomListViewModel
             this.getSectionHeaderViewModel(section.tag).setRooms(section.rooms);
         }
 
+        // Section scroll offsets are transient per-space UI state: reset them when the space changes.
+        if (this.snapshot.current.roomListState.spaceId !== this.roomsResult.spaceId) {
+            this.sectionScrollOffsets.clear();
+        }
+
         // Build the complete state atomically to ensure consistency
-        const { sections, isFlatList, lastRoomVisibleFractions } = computeSections(
+        const { sections, isFlatList, sectionWindows } = computeSections(
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.visibleLimit,
+            (tag) => this.sectionScrollOffsets.get(tag),
         );
         // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
         if (isFlatList) {
@@ -811,7 +836,7 @@ export class RoomListViewModel
         // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
         const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
         const newFilterKeys = this.roomsResult.filterKeys?.map((k) => String(k));
-        const viewSections = toRoomListSection(this.sections, this.roomsResult.sections, lastRoomVisibleFractions);
+        const viewSections = toRoomListSection(this.sections, this.roomsResult.sections, sectionWindows);
 
         const resolvedScrollToSectionTag =
             scrollToSectionTag && viewSections.some((s) => s.id === scrollToSectionTag)
@@ -978,9 +1003,29 @@ export class RoomListViewModel
             const snapped = Math.round(limit);
             limit = snapped >= totalCount ? undefined : snapped;
         }
+        if (limit === undefined) this.sectionScrollOffsets.delete(tag);
         if (headerViewModel.visibleLimit === limit) return;
 
         headerViewModel.visibleLimit = limit;
+        this.updateRoomListData();
+    };
+
+    /**
+     * Scroll a resized section's visible window by a number of rooms (negative scrolls up).
+     * The window slides over the section's full room list, clamped to its ends; the visible
+     * limit itself is unchanged. No-op for sections without a visible limit.
+     */
+    public scrollSectionBy = (tag: string, deltaRooms: number): void => {
+        const limit = this.roomSectionHeaderViewModels.get(tag)?.visibleLimit;
+        if (limit === undefined || !deltaRooms) return;
+
+        const totalCount = this.roomsResult.sections.find((section) => section.tag === tag)?.rooms.length ?? 0;
+        const maxOffset = Math.max(0, totalCount - limit);
+        const current = Math.min(Math.max(this.sectionScrollOffsets.get(tag) ?? 0, 0), maxOffset);
+        const offset = Math.min(Math.max(current + deltaRooms, 0), maxOffset);
+        if (offset === current) return;
+
+        this.sectionScrollOffsets.set(tag, offset);
         this.updateRoomListData();
     };
 
@@ -997,17 +1042,41 @@ export class RoomListViewModel
 }
 
 /**
- * Compute the sections to display in the room list based on the rooms result, section expansion state and section visible limits.
+ * The visible window of a section resized shorter than its content: its (possibly fractional)
+ * height in rooms, how far it is scrolled down the section's full room list, and the visible
+ * fractions of the partially clipped rows at its boundaries.
+ */
+interface SectionWindow {
+    /** Effective (clamped) visible limit in rooms; may be fractional. */
+    visibleLimit: number;
+    /** Effective (clamped) scroll offset in rooms; may be fractional. */
+    scrollOffset: number;
+    /** Visible fraction (0..1 exclusive) of the window's first row, when clipped at the top. */
+    firstRoomVisibleFraction?: number;
+    /** Visible fraction (0..1 exclusive) of the window's last row, when clipped at the bottom. */
+    lastRoomVisibleFraction?: number;
+}
+
+/**
+ * Window bounds within half a percent of a row (about a pixel's worth of fraction) are treated
+ * as sitting exactly on the row edge, so float noise never leaves a sliver of a clipped row.
+ */
+const WINDOW_EDGE_EPSILON = 0.005;
+
+/**
+ * Compute the sections to display in the room list based on the rooms result, section expansion state, section visible limits and scroll offsets.
  * @param roomsResult - The current rooms result containing sections and rooms
  * @param isSectionExpanded - A function that takes a section tag and returns whether that section is currently expanded
  * @param visibleLimitFor - A function that takes a section tag and returns how many of its rooms to show (undefined = all; may be fractional, the boundary row is then partially visible)
- * @returns The computed sections (with rooms removed for collapsed sections and truncated for resized sections), a boolean indicating if this is a flat list (only one section with all rooms), and per-tag visible fractions for boundary rows of fractionally resized sections
+ * @param scrollOffsetFor - A function that takes a section tag and returns how far its visible window is scrolled down its room list, in rooms (undefined = 0; clamped so the window stays within the list)
+ * @returns The computed sections (with rooms removed for collapsed sections and reduced to the visible window for resized sections), a boolean indicating if this is a flat list (only one section with all rooms), and per-tag window data for resized sections
  */
 function computeSections(
     roomsResult: RoomsResult,
     isSectionExpanded: (tag: string) => boolean,
     visibleLimitFor: (tag: string) => number | undefined,
-): { sections: Section[]; isFlatList: boolean; lastRoomVisibleFractions: Map<string, number> } {
+    scrollOffsetFor: (tag: string) => number | undefined,
+): { sections: Section[]; isFlatList: boolean; sectionWindows: Map<string, SectionWindow> } {
     const customSections = getCustomSectionData();
 
     // Only include sections that have rooms, or custom sections that were created in the current space.
@@ -1022,38 +1091,56 @@ function computeSections(
         filteredSections.length === 0 || (filteredSections.length === 1 && filteredSections[0].tag === CHATS_TAG);
 
     // Remove rooms for sections that are currently collapsed according to their section header
-    // view model, and truncate sections resized to show fewer rooms. A fractional limit keeps
-    // the boundary row and records the fraction of it to show.
-    const lastRoomVisibleFractions = new Map<string, number>();
+    // view model, and reduce resized sections to their visible window: `limit` rooms starting
+    // `offset` rooms down the section. Fractional bounds keep the boundary row and record the
+    // fraction of it to show.
+    const sectionWindows = new Map<string, SectionWindow>();
     const sections = filteredSections.map((section) => {
         if (!isSectionExpanded(section.tag)) return { ...section, rooms: [] };
         const limit = isFlatList ? undefined : visibleLimitFor(section.tag);
         if (limit === undefined || limit >= section.rooms.length) return section;
-        const wholeRooms = Math.floor(limit);
-        const fraction = limit - wholeRooms;
-        if (fraction > 0) lastRoomVisibleFractions.set(section.tag, fraction);
-        return { ...section, rooms: section.rooms.slice(0, fraction > 0 ? wholeRooms + 1 : wholeRooms) };
+
+        const maxOffset = section.rooms.length - limit;
+        const offset = Math.min(Math.max(scrollOffsetFor(section.tag) ?? 0, 0), maxOffset);
+        const start = Math.floor(offset + WINDOW_EDGE_EPSILON);
+        const end = offset + limit;
+        const endIndex = Math.ceil(end - WINDOW_EDGE_EPSILON);
+
+        const window: SectionWindow = { visibleLimit: limit, scrollOffset: offset };
+        const firstFraction = 1 - (offset - start);
+        if (firstFraction < 1 - WINDOW_EDGE_EPSILON) window.firstRoomVisibleFraction = firstFraction;
+        const lastFraction = end - (endIndex - 1);
+        if (lastFraction < 1 - WINDOW_EDGE_EPSILON) window.lastRoomVisibleFraction = lastFraction;
+        sectionWindows.set(section.tag, window);
+
+        return { ...section, rooms: section.rooms.slice(start, endIndex) };
     });
 
-    return { sections, isFlatList, lastRoomVisibleFractions };
+    return { sections, isFlatList, sectionWindows };
 }
 
 /**
  * Convert from the internal Section type used in the view model to the RoomListSection type used in the snapshot.
- * @param sections - The displayed sections (possibly collapsed/truncated)
+ * @param sections - The displayed sections (possibly collapsed/reduced to their visible window)
  * @param fullSections - The full sections from the rooms result, used to compute each section's total room count
- * @param lastRoomVisibleFractions - Per-tag visible fraction of the boundary row for fractionally resized sections
+ * @param sectionWindows - Per-tag visible window data for resized sections
  */
 function toRoomListSection(
     sections: Section[],
     fullSections: Section[],
-    lastRoomVisibleFractions: Map<string, number>,
+    sectionWindows: Map<string, SectionWindow>,
 ): RoomListSection[] {
     const totalRoomCounts = new Map(fullSections.map((section) => [section.tag, section.rooms.length]));
-    return sections.map(({ tag, rooms }) => ({
-        id: tag,
-        roomIds: rooms.map((room) => room.roomId),
-        totalRoomCount: totalRoomCounts.get(tag) ?? rooms.length,
-        lastRoomVisibleFraction: lastRoomVisibleFractions.get(tag),
-    }));
+    return sections.map(({ tag, rooms }) => {
+        const window = sectionWindows.get(tag);
+        return {
+            id: tag,
+            roomIds: rooms.map((room) => room.roomId),
+            totalRoomCount: totalRoomCounts.get(tag) ?? rooms.length,
+            visibleLimit: window?.visibleLimit,
+            scrollOffset: window?.scrollOffset,
+            firstRoomVisibleFraction: window?.firstRoomVisibleFraction,
+            lastRoomVisibleFraction: window?.lastRoomVisibleFraction,
+        };
+    });
 }

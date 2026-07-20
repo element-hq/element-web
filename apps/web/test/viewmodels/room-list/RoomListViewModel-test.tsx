@@ -211,6 +211,109 @@ describe("RoomListViewModel", () => {
             await flushPromises();
             expect(viewModel.getSnapshot().sections[0].roomIds).toHaveLength(8);
         });
+
+        it("should expose the effective visible limit on the section", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].visibleLimit).toBe(5);
+            expect(snapshot.sections[0].scrollOffset).toBe(0);
+            // A section showing all its rooms has no window
+            expect(snapshot.sections[1].visibleLimit).toBeUndefined();
+            expect(snapshot.sections[1].scrollOffset).toBeUndefined();
+        });
+    });
+
+    describe("Section scrolling", () => {
+        let favouriteRooms: Room[];
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            favouriteRooms = Array.from({ length: 8 }, (_, i) =>
+                mkStubRoom(`!fav${i}:server`, `Favourite ${i}`, matrixClient),
+            );
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [
+                    { tag: DefaultTagID.Favourite, rooms: favouriteRooms },
+                    { tag: CHATS_TAG, rooms: [room1, room2, room3] },
+                ],
+            });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                spaceStore: SDKContextClass.instance.spaceStore,
+                roomViewStore: SDKContextClass.instance.roomViewStore,
+            });
+            // Section header view models are created lazily by the view
+            viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+        });
+
+        it("should slide the visible window down the section's rooms", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            viewModel.scrollSectionBy(DefaultTagID.Favourite, 2);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].roomIds).toEqual(favouriteRooms.slice(2, 7).map((room) => room.roomId));
+            expect(snapshot.sections[0].scrollOffset).toBe(2);
+            expect(snapshot.sections[0].visibleLimit).toBe(5);
+            expect(snapshot.sections[0].firstRoomVisibleFraction).toBeUndefined();
+            expect(snapshot.sections[0].lastRoomVisibleFraction).toBeUndefined();
+        });
+
+        it("should clip both boundary rows for a fractional scroll offset", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            viewModel.scrollSectionBy(DefaultTagID.Favourite, 1.5);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            // The window covers rooms 1.5..6.5: rows 1..6 rendered, half of row 1 and row 6 visible
+            expect(snapshot.sections[0].roomIds).toEqual(favouriteRooms.slice(1, 7).map((room) => room.roomId));
+            expect(snapshot.sections[0].firstRoomVisibleFraction).toBeCloseTo(0.5);
+            expect(snapshot.sections[0].lastRoomVisibleFraction).toBeCloseTo(0.5);
+        });
+
+        it("should clamp scrolling to the ends of the section", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            viewModel.scrollSectionBy(DefaultTagID.Favourite, 100);
+            await flushPromises();
+            // 8 rooms, 5 visible: the window bottoms out at offset 3
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual(
+                favouriteRooms.slice(3, 8).map((room) => room.roomId),
+            );
+            expect(viewModel.getSnapshot().sections[0].scrollOffset).toBe(3);
+
+            viewModel.scrollSectionBy(DefaultTagID.Favourite, -100);
+            await flushPromises();
+            expect(viewModel.getSnapshot().sections[0].scrollOffset).toBe(0);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual(
+                favouriteRooms.slice(0, 5).map((room) => room.roomId),
+            );
+        });
+
+        it("should ignore scrolling a section with no visible limit", async () => {
+            viewModel.scrollSectionBy(DefaultTagID.Favourite, 2);
+            await flushPromises();
+
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].roomIds).toHaveLength(8);
+            expect(snapshot.sections[0].scrollOffset).toBeUndefined();
+        });
+
+        it("should reset the scroll offset when the limit is cleared", async () => {
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            viewModel.scrollSectionBy(DefaultTagID.Favourite, 2);
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, undefined);
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 5);
+            await flushPromises();
+
+            // Re-limiting after a clear starts back at the top of the section
+            expect(viewModel.getSnapshot().sections[0].scrollOffset).toBe(0);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual(
+                favouriteRooms.slice(0, 5).map((room) => room.roomId),
+            );
+        });
     });
 
     describe("Room list updates", () => {
@@ -1814,6 +1917,45 @@ describe("RoomListViewModel", () => {
 
             // Entry space: [Fav header(0), fav1(1), fav2(2), Chats header(3), reg1(4)]
             await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(4));
+        });
+
+        it("should scroll a resized section's window to reveal the room instead of clearing the limit", async () => {
+            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+            const favRooms = Array.from({ length: 8 }, (_, i) =>
+                mkStubRoom(`!fav${i}:server`, `Fav ${i}`, matrixClient),
+            );
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                sections: [
+                    { tag: DefaultTagID.Favourite, rooms: favRooms },
+                    { tag: CHATS_TAG, rooms: [room1] },
+                ],
+            });
+            viewModel = new RoomListViewModel({
+                client: matrixClient,
+                roomViewStore: sdkContext.roomViewStore,
+                spaceStore: sdkContext.spaceStore,
+            });
+            viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+            viewModel.setSectionVisibleLimit(DefaultTagID.Favourite, 3);
+            await flushPromises();
+            const scrollSpy = jest.fn();
+            viewModel.setScrollToIndex(scrollSpy);
+
+            dispatcher.dispatch({
+                action: Action.ViewRoom,
+                room_id: "!fav5:server",
+                show_room_tile: true,
+                metricsTrigger: undefined,
+            });
+
+            // The window slides down to rooms 3..5, making fav5 its last row: entry space is
+            // [Fav header(0), fav3(1), fav4(2), fav5(3), ...]
+            await waitFor(() => expect(scrollSpy).toHaveBeenCalledWith(3));
+            const snapshot = viewModel.getSnapshot();
+            expect(snapshot.sections[0].roomIds).toEqual(favRooms.slice(3, 6).map((room) => room.roomId));
+            expect(snapshot.sections[0].visibleLimit).toBe(3);
+            expect(snapshot.sections[0].scrollOffset).toBe(3);
         });
 
         it("should not scroll when the room is not in the current list", async () => {
