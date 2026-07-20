@@ -109,11 +109,7 @@ describe("MessageComposerUrlPreview", () => {
     });
 
     it("renders a mix of loaded, loading and failed entries", () => {
-        const entries: MessageComposerUrlPreviewSnapshotEntry[] = [
-            Default.args.entries![0],
-            loadingEntry,
-            failedEntry,
-        ];
+        const entries: MessageComposerUrlPreviewSnapshotEntry[] = [Default.args.entries![0], loadingEntry, failedEntry];
         const { container } = renderView(entries, false);
         expect(screen.getByText("Fetching preview...")).toBeInTheDocument();
         expect(screen.getByText("Failed to fetch preview")).toBeInTheDocument();
