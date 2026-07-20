@@ -5,7 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { DisambiguatedProfileViewModel } from "../../../src/viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
+import { vi, describe, it, expect } from "vitest";
+
+import { DisambiguatedProfileViewModel } from "./DisambiguatedProfileViewModel";
 
 describe("DisambiguatedProfileViewModel", () => {
     const member = {
@@ -53,14 +55,14 @@ describe("DisambiguatedProfileViewModel", () => {
     });
 
     it("should delegate onClick without emitting a snapshot update", () => {
-        const onClick = jest.fn();
+        const onClick = vi.fn();
         const vm = new DisambiguatedProfileViewModel({
             member,
             fallbackName: "Fallback",
             onClick,
         });
         const prevSnapshot = vm.getSnapshot();
-        const subscriber = jest.fn();
+        const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
         vm.onClick?.({} as never);
@@ -71,7 +73,7 @@ describe("DisambiguatedProfileViewModel", () => {
     });
 
     it("should keep onClick bound when extracted as a callback", () => {
-        const onClick = jest.fn();
+        const onClick = vi.fn();
         const vm = new DisambiguatedProfileViewModel({
             member,
             fallbackName: "Fallback",
@@ -89,7 +91,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
-        const subscriber = jest.fn();
+        const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
         vm.setMember("Updated");
@@ -103,7 +105,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
-        const subscriber = jest.fn();
+        const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
         vm.setMember("Fallback");
@@ -136,7 +138,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member: null,
             fallbackName: "Fallback",
         });
-        const subscriber = jest.fn();
+        const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
         vm.setMember("Fallback", member);
@@ -150,7 +152,7 @@ describe("DisambiguatedProfileViewModel", () => {
             member,
             fallbackName: "Fallback",
         });
-        const subscriber = jest.fn();
+        const subscriber = vi.fn();
 
         vm.subscribe(subscriber);
         vm.setMember("Fallback", member);

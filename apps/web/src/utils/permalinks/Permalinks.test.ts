@@ -7,27 +7,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { vi, describe, it, expect, afterAll, beforeEach } from "vitest";
+import { getMockClientWithEventEmitter } from "test-utils/client";
+
 import { type EventEmitter } from "events";
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { PermalinkParts } from "../../../../src/utils/permalinks/PermalinkConstructor";
-import {
-    makeRoomPermalink,
-    makeUserPermalink,
-    parsePermalink,
-    RoomPermalinkCreator,
-} from "../../../../src/utils/permalinks/Permalinks";
-import { type IConfigOptions } from "../../../../src/IConfigOptions";
-import SdkConfig from "../../../../src/SdkConfig";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { PermalinkParts } from "./PermalinkConstructor";
+import { makeRoomPermalink, makeUserPermalink, parsePermalink, RoomPermalinkCreator } from "./Permalinks";
+import { type IConfigOptions } from "../../IConfigOptions";
+import SdkConfig from "../../SdkConfig";
 
 describe("Permalinks", function () {
     const userId = "@test:example.com";
     const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(userId),
-        getRoom: jest.fn(),
+        getUserId: vi.fn().mockReturnValue(userId),
+        getRoom: vi.fn(),
     });
     mockClient.credentials = { userId };
 
@@ -72,18 +69,18 @@ describe("Permalinks", function () {
         const stateEvents = serverACL ? [powerLevels, serverACL] : [powerLevels];
         room.currentState.setStateEvents(stateEvents);
 
-        jest.spyOn(room, "getCanonicalAlias").mockReturnValue(null);
-        jest.spyOn(room, "getJoinedMembers").mockReturnValue(members);
-        jest.spyOn(room, "getMember").mockImplementation((userId) => members.find((m) => m.userId === userId) || null);
+        vi.spyOn(room, "getCanonicalAlias").mockReturnValue(null);
+        vi.spyOn(room, "getJoinedMembers").mockReturnValue(members);
+        vi.spyOn(room, "getMember").mockImplementation((userId) => members.find((m) => m.userId === userId) || null);
 
         return room;
     }
     beforeEach(function () {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockRestore();
+        vi.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
     it("should not clean up listeners even if start was called multiple times", () => {
@@ -416,7 +413,7 @@ describe("Permalinks", function () {
 
     it("should use permalink_prefix for permalinks", function () {
         const sdkConfigGet = SdkConfig.get;
-        jest.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
+        vi.spyOn(SdkConfig, "get").mockImplementation((key: keyof IConfigOptions, altCaseName?: string) => {
             if (key === "permalink_prefix") {
                 return "https://element.fs.tld";
             } else return sdkConfigGet(key, altCaseName);
