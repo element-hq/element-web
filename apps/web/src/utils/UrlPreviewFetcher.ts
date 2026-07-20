@@ -14,6 +14,7 @@ import { mediaFromMxc } from "../customisations/Media";
 import { thumbHeight } from "../ImageUtils";
 import { type UnstableBundledUrlPreviewSingle } from "../../@types/url-preview";
 import { decryptFile } from "./DecryptFile";
+import { EncryptedFile } from "matrix-js-sdk/src/types";
 
 const logger = rootLogger.getChild("UrlPreviewFetcher");
 
@@ -29,7 +30,8 @@ export const MIN_IMAGE_SIZE_BYTES = 8192;
  */
 export class UrlPreviewFetcher {
     private readonly cache = new Map<string, UrlPreview>();
-    private readonly objectUrls = new Set<string>();
+    // Map<the mxc:// url, the object url>
+    private readonly decryptedObjectUrls = new Map<string, string>();
 
     public constructor(
         private readonly client: MatrixClient,
@@ -43,8 +45,8 @@ export class UrlPreviewFetcher {
     }
 
     public revokeObjectUrls(): void {
-        this.objectUrls.forEach(URL.revokeObjectURL);
-        this.objectUrls.clear();
+        this.decryptedObjectUrls.forEach(URL.revokeObjectURL);
+        this.decryptedObjectUrls.clear();
     }
 
     public dispose(): void {
@@ -241,15 +243,21 @@ export class UrlPreviewFetcher {
         };
 
         if (hasImage) {
-            let imageThumb: string | null = null, imageFull: string | null = null;
+            let imageThumb: string | null = null,
+                imageFull: string | null = null;
 
             if (hasEncryptedImage) {
-                try {
-                    const blob = await decryptFile(single["beeper:image:encryption"]);
-                    imageFull = URL.createObjectURL(blob);
-                    imageThumb = imageFull;
-                    this.objectUrls.add(imageFull);
-                } catch (e) { }
+                const encryptedFile = single["beeper:image:encryption"] as EncryptedFile;
+                const cachedObjectUrl = this.decryptedObjectUrls.get(encryptedFile.url);
+                if (cachedObjectUrl) {
+                    imageThumb = imageFull = cachedObjectUrl;
+                } else {
+                    try {
+                        const blob = await decryptFile(encryptedFile);
+                        imageThumb = imageFull = URL.createObjectURL(blob);
+                        this.decryptedObjectUrls.set(encryptedFile.url, imageFull);
+                    } catch (e) { }
+                }
             } else {
                 const media = mediaFromMxc(single["og:image"], this.client);
                 // cannot rule out the mxc:// url is malformed because
