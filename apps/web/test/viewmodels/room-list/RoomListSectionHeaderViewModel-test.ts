@@ -16,22 +16,33 @@ import { CallStore } from "../../../src/stores/CallStore";
 import { type Call } from "../../../src/models/Call";
 import { createTestClient, mkRoom } from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
-import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
+import { CHATS_TAG, type SectionExpansionState } from "../../../src/stores/room-list-v3/section";
 
 describe("RoomListSectionHeaderViewModel", () => {
     let onToggleExpanded: jest.Mock;
     let matrixClient: MatrixClient;
+    // In-memory backing store shared between the getValue/setValue mocks so that
+    // persisted expansion state round-trips within a test.
+    let sectionExpansionState: SectionExpansionState;
 
     beforeEach(() => {
         onToggleExpanded = jest.fn();
         matrixClient = createTestClient();
+        sectionExpansionState = {};
         jest.spyOn(SettingsStore, "watchSetting").mockReturnValue("watcher-id");
         jest.spyOn(SettingsStore, "unwatchSetting").mockReturnValue(undefined);
         jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             if (setting === "RoomList.OrderedCustomSections") return [];
+            if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
             return null;
+        });
+        jest.spyOn(SettingsStore, "setValue").mockImplementation(async (setting, _roomId, _level, value) => {
+            if (setting === "RoomList.SectionExpansionState") {
+                sectionExpansionState = value as SectionExpansionState;
+            }
         });
     });
 
@@ -98,6 +109,52 @@ describe("RoomListSectionHeaderViewModel", () => {
         // Switch to the other space: should still be collapsed
         vm.setSpace("!space:server");
         expect(vm.isExpanded).toBe(false);
+    });
+
+    it("should initialize expanded state from the persisted setting", () => {
+        sectionExpansionState = { "!space:server": { "m.favourite": false } };
+
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: "m.favourite",
+            title: "Favourites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        expect(vm.getSnapshot().isExpanded).toBe(false);
+    });
+
+    it("should persist the expanded state at the device level on click", () => {
+        const setValue = jest.spyOn(SettingsStore, "setValue");
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: "m.favourite",
+            title: "Favourites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        vm.onClick();
+
+        expect(setValue).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
+            "!space:server": { "m.favourite": false },
+        });
+        expect(sectionExpansionState).toEqual({ "!space:server": { "m.favourite": false } });
+    });
+
+    it("should persist the expanded state at the device level when set via the setter", () => {
+        const setValue = jest.spyOn(SettingsStore, "setValue");
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: "m.favourite",
+            title: "Favourites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        vm.isExpanded = false;
+
+        expect(setValue).toHaveBeenCalledWith("RoomList.SectionExpansionState", null, SettingLevel.DEVICE, {
+            "!space:server": { "m.favourite": false },
+        });
     });
 
     describe("displaySectionMenu", () => {
