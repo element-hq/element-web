@@ -3,7 +3,7 @@
 exports[`LinkPreview > renders a playable preview that can be opened with a click 1`] = `
 <div>
   <div
-    class="LinkPreview-module_container"
+    class="LinkPreview-module_containerExpanded"
   >
     <div
       class="LinkPreview-module_preview"
@@ -66,7 +66,7 @@ exports[`LinkPreview > renders a playable preview that can be opened with a clic
 exports[`LinkPreview > renders a preview 1`] = `
 <div>
   <div
-    class="LinkPreview-module_container"
+    class="LinkPreview-module_containerExpanded"
   >
     <button
       aria-label="View image"
@@ -106,7 +106,7 @@ exports[`LinkPreview > renders a preview 1`] = `
 exports[`LinkPreview > renders a preview with just a title 1`] = `
 <div>
   <div
-    class="LinkPreview-module_container LinkPreview-module_inline"
+    class="LinkPreview-module_containerExpanded LinkPreview-module_inline"
   >
     <div
       class="LinkPreview-module_textContent LinkPreview-module_inline"
@@ -136,7 +136,7 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
 exports[`LinkPreview > renders a preview with just a title and description 1`] = `
 <div>
   <div
-    class="LinkPreview-module_container"
+    class="LinkPreview-module_containerExpanded"
   >
     <div
       class="LinkPreview-module_textContent"
