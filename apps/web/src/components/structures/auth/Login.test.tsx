@@ -5,10 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type MockedObject } from "vitest";
 import React from "react";
-import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
-import { mocked, type MockedObject } from "jest-mock-vitest-adapter";
-import fetchMock from "@fetch-mock/jest";
+import { fireEvent, render, screen, waitForElementToBeRemoved } from "test-utils-rtl";
+import fetchMock from "@fetch-mock/vitest";
 import {
     OAUTH_AWARE_PREFERRED_FLOW_FIELD,
     IdentityProviderBrand,
@@ -17,16 +19,16 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
+import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "test-utils";
+import { makeDelegatedAuthMetadata } from "test-utils/auth";
 
-import SdkConfig from "../../../../../src/SdkConfig";
-import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
-import Login from "../../../../../src/components/structures/auth/Login";
-import type BasePlatform from "../../../../../src/BasePlatform";
-import * as registerClientUtils from "../../../../../src/utils/oauth/registerClient";
-import { makeDelegatedAuthMetadata } from "../../../../test-utils/auth";
-import { ModuleApi } from "../../../../../src/modules/Api.ts";
+import SdkConfig from "../../../SdkConfig";
+import Login from "./Login";
+import type BasePlatform from "../../../BasePlatform";
+import * as registerClientUtils from "../../../utils/oauth/registerClient";
+import { ModuleApi } from "../../../modules/Api.ts";
 
-jest.useRealTimers();
+vi.useRealTimers();
 
 const oauthStaticClientsConfig = {
     "https://staticallyregisteredissuer.org/": {
@@ -37,9 +39,9 @@ const oauthStaticClientsConfig = {
 describe("Login", function () {
     let platform: MockedObject<BasePlatform>;
 
-    const mockClient = mocked({
-        login: jest.fn().mockResolvedValue({}),
-        loginFlows: jest.fn(),
+    const mockClient = vi.mocked({
+        login: vi.fn().mockResolvedValue({}),
+        loginFlows: vi.fn(),
     } as unknown as Matrix.MatrixClient);
 
     beforeEach(function () {
@@ -54,7 +56,7 @@ describe("Login", function () {
             user_id: "@user:server",
         });
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
-        jest.spyOn(Matrix, "createClient").mockImplementation((opts) => {
+        vi.spyOn(Matrix, "createClient").mockImplementation((opts) => {
             mockClient.idBaseUrl = opts.idBaseUrl;
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
@@ -64,7 +66,7 @@ describe("Login", function () {
             versions: ["v1.1"],
         });
         platform = mockPlatformPeg({
-            startSingleSignOn: jest.fn(),
+            startSingleSignOn: vi.fn(),
         });
     });
 
@@ -106,7 +108,7 @@ describe("Login", function () {
     });
 
     it("should show register button", async () => {
-        const onRegisterClick = jest.fn();
+        const onRegisterClick = vi.fn();
         const { getByText } = render(
             <Login
                 serverConfig={mkServerConfig("https://matrix.org", "https://vector.im")}
@@ -399,16 +401,16 @@ describe("Login", function () {
         const issuer = "https://test.com/";
         const delegatedAuth = makeDelegatedAuthMetadata(issuer);
         beforeEach(() => {
-            jest.spyOn(logger, "error");
+            vi.spyOn(logger, "error");
         });
 
         afterEach(() => {
-            jest.spyOn(logger, "error").mockRestore();
+            vi.spyOn(logger, "error").mockRestore();
         });
 
         it("should attempt to register oauth client", async () => {
             // dont mock, spy so we can check config values were correctly passed
-            jest.spyOn(registerClientUtils, "getOAuthClientId");
+            vi.spyOn(registerClientUtils, "getOAuthClientId");
             fetchMock.post(delegatedAuth.registration_endpoint!, { status: 500 });
             getComponent(hsUrl, isUrl, delegatedAuth);
 

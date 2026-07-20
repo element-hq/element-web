@@ -12,6 +12,12 @@ import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import "./setupGlobals.ts";
 import { setupLanguageMock } from "./setupLanguage.ts";
 
+declare global {
+    var IS_REACT_ACT_ENVIRONMENT: boolean;
+}
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
 manageFetchMockGlobally();
 
 beforeEach(() => {

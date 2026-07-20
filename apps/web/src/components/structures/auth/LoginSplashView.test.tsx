@@ -6,13 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { act, render, type RenderResult } from "jest-matrix-react";
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { act, render, type RenderResult } from "test-utils-rtl";
 import React, { type ComponentProps } from "react";
 import EventEmitter from "events";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
 
-import { LoginSplashView } from "../../../../../src/components/structures/auth/LoginSplashView";
+import { LoginSplashView } from "./LoginSplashView";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 describe("<LoginSplashView />", () => {
@@ -42,7 +45,7 @@ describe("<LoginSplashView />", () => {
     });
 
     it("Calls onLogoutClick", () => {
-        const onLogoutClick = jest.fn();
+        const onLogoutClick = vi.fn();
         const rendered = getComponent({ onLogoutClick });
         expect(onLogoutClick).not.toHaveBeenCalled();
         rendered.getByRole("button", { name: "Logout" }).click();
