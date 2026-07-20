@@ -5,27 +5,28 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import React from "react";
-import { mocked } from "jest-mock";
 import { ConnectionError, Direction } from "matrix-js-sdk/src/matrix";
+import { flushPromisesWithFakeTimers } from "test-utils/utilities";
 
-import dispatcher from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
-import { formatFullDateNoTime } from "../../../src/DateUtils";
-import Modal from "../../../src/Modal";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { UIFeature } from "../../../src/settings/UIFeature";
-import { SDKContextClass } from "../../../src/contexts/SDKContextClass";
-import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
-import { flushPromisesWithFakeTimers } from "../../test-utils/utilities";
+import dispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { formatFullDateNoTime } from "../../../DateUtils";
+import Modal from "../../../Modal";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
+import { SDKContextClass } from "../../../contexts/SDKContextClass";
+import { DateSeparatorViewModel } from "./DateSeparatorViewModel";
 
-jest.mock("../../../src/settings/SettingsStore");
-jest.mock("../../../src/contexts/SDKContextClass", () => ({
+vi.mock("../../../Modal");
+vi.mock("../../../settings/SettingsStore");
+vi.mock("../../../contexts/SDKContextClass", () => ({
     SDKContextClass: {
         instance: {
             roomViewStore: {
-                getRoomId: jest.fn(),
+                getRoomId: vi.fn(),
             },
         },
     },
@@ -56,7 +57,7 @@ describe("DateSeparatorViewModel", () => {
     ];
 
     const watchCallbacks = new Map<string, (...args: any[]) => void>();
-    const mockTimestampToEvent = jest.fn();
+    const mockTimestampToEvent = vi.fn();
 
     const hasTestId = (node: React.ReactNode, testId: string): boolean => {
         if (!React.isValidElement<{ children?: React.ReactNode }>(node)) return false;
@@ -78,35 +79,36 @@ describe("DateSeparatorViewModel", () => {
     };
 
     beforeEach(() => {
-        jest.useFakeTimers();
-        jest.setSystemTime(nowDate.getTime());
+        vi.useFakeTimers();
+        vi.setSystemTime(nowDate.getTime());
         watchCallbacks.clear();
 
-        mocked(SettingsStore).getValue.mockImplementation((key): any => {
+        vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
             if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
             if (key === "feature_jump_to_date") return false;
             return undefined;
         });
-        mocked(SettingsStore).watchSetting.mockImplementation((settingName, _roomId, cb): any => {
+        vi.mocked(SettingsStore).watchSetting.mockImplementation((settingName, _roomId, cb): any => {
             watchCallbacks.set(String(settingName), cb);
             return `${String(settingName)}-watch-ref`;
         });
-        mocked(SettingsStore).unwatchSetting.mockImplementation(() => {});
+        vi.mocked(SettingsStore).unwatchSetting.mockImplementation(() => {});
 
         mockTimestampToEvent.mockReset();
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue({
+        vi.spyOn(MatrixClientPeg, "safeGet").mockReturnValue({
             timestampToEvent: mockTimestampToEvent,
         } as any);
 
-        jest.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
-        jest.spyOn(Modal, "createDialog").mockImplementation(() => ({ close: jest.fn() }) as any);
+        vi.spyOn(dispatcher, "dispatch").mockImplementation(() => {});
+        vi.spyOn(Modal, "createDialog").mockImplementation(() => ({ close: vi.fn() }) as any);
 
-        mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
+        vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
-        jest.useRealTimers();
+        vi.restoreAllMocks();
+        vi.clearAllMocks();
+        vi.useRealTimers();
     });
 
     it("computes relative label for today", () => {
@@ -133,7 +135,7 @@ describe("DateSeparatorViewModel", () => {
     });
 
     it("exposes jumpToDateMenu when feature is enabled", () => {
-        mocked(SettingsStore).getValue.mockImplementation((key): any => {
+        vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
             if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
             if (key === "feature_jump_to_date") return true;
             return undefined;
@@ -150,7 +152,7 @@ describe("DateSeparatorViewModel", () => {
     });
 
     it("does not expose jumpToDateMenu when exporting", () => {
-        mocked(SettingsStore).getValue.mockImplementation((key): any => {
+        vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
             if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
             if (key === "feature_jump_to_date") return true;
             return undefined;
@@ -197,7 +199,7 @@ describe("DateSeparatorViewModel", () => {
             event_id: "$event",
             origin_server_ts: nowDate.getTime(),
         });
-        mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!other:example.org");
+        vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!other:example.org");
         const vm = createViewModel();
 
         await vm.pickDate(nowDate.getTime() - HOUR_MS);
@@ -212,7 +214,7 @@ describe("DateSeparatorViewModel", () => {
         await vm.pickDate(nowDate.getTime() - HOUR_MS);
 
         expect(Modal.createDialog).toHaveBeenCalled();
-        const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
+        const [, params] = vi.mocked(Modal.createDialog).mock.calls.at(-1)!;
         expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(true);
     });
 
@@ -223,7 +225,7 @@ describe("DateSeparatorViewModel", () => {
         await vm.pickDate(nowDate.getTime() - HOUR_MS);
 
         expect(Modal.createDialog).toHaveBeenCalled();
-        const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
+        const [, params] = vi.mocked(Modal.createDialog).mock.calls.at(-1)!;
         expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(false);
     });
 
@@ -242,7 +244,7 @@ describe("DateSeparatorViewModel", () => {
 
         describe("when TimelineEnableRelativeDates is false", () => {
             beforeEach(() => {
-                mocked(SettingsStore).getValue.mockImplementation((key): any => {
+                vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
                     if (String(key) === UIFeature.TimelineEnableRelativeDates) return false;
                     if (key === "feature_jump_to_date") return false;
                     return undefined;
@@ -257,7 +259,7 @@ describe("DateSeparatorViewModel", () => {
 
     describe("jump actions", () => {
         beforeEach(() => {
-            mocked(SettingsStore).getValue.mockImplementation((key): any => {
+            vi.mocked(SettingsStore).getValue.mockImplementation((key): any => {
                 if (String(key) === UIFeature.TimelineEnableRelativeDates) return true;
                 if (key === "feature_jump_to_date") return true;
                 return undefined;
@@ -303,7 +305,7 @@ describe("DateSeparatorViewModel", () => {
         });
 
         it("does not jump when room changed before request resolves", async () => {
-            mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+            vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
             mockTimestampToEvent.mockResolvedValue({
                 event_id: "$abc",
                 origin_server_ts: 0,
@@ -317,7 +319,7 @@ describe("DateSeparatorViewModel", () => {
         });
 
         it("does not show jump to date error if user switched room", async () => {
-            mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
+            vi.mocked(SDKContextClass.instance.roomViewStore.getRoomId).mockReturnValue("!some-other-room");
             mockTimestampToEvent.mockRejectedValue(new Error("Fake error in test"));
             const vm = createViewModel();
 
@@ -335,7 +337,7 @@ describe("DateSeparatorViewModel", () => {
             await flushPromisesWithFakeTimers();
 
             expect(Modal.createDialog).toHaveBeenCalled();
-            const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
+            const [, params] = vi.mocked(Modal.createDialog).mock.calls.at(-1)!;
             expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(true);
         });
 
@@ -347,7 +349,7 @@ describe("DateSeparatorViewModel", () => {
             await flushPromisesWithFakeTimers();
 
             expect(Modal.createDialog).toHaveBeenCalled();
-            const [, params] = mocked(Modal.createDialog).mock.calls.at(-1)!;
+            const [, params] = vi.mocked(Modal.createDialog).mock.calls.at(-1)!;
             expect(hasTestId((params as any).description, "jump-to-date-error-submit-debug-logs-button")).toBe(false);
         });
     });

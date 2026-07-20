@@ -343,7 +343,7 @@ importers:
         version: https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c#path:/eslint
       eslint-plugin-storybook:
         specifier: ^10.4.6
-        version: 10.5.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.0(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7))(supports-color@7.2.0)
+        version: 10.5.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.0(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7))
       husky:
         specifier: ^9.0.0
         version: 9.1.7
@@ -394,7 +394,7 @@ importers:
     dependencies:
       '@sentry/electron':
         specifier: ^7.0.0
-        version: 7.15.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(supports-color@7.2.0)
+        version: 7.15.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))
       auto-launch:
         specifier: ^5.0.5
         version: 5.0.6
@@ -463,14 +463,14 @@ importers:
         specifier: ^2.0.0
         version: 2.1.2
       electron:
-        specifier: 43.1.0
-        version: 43.1.0(supports-color@7.2.0)
+        specifier: 43.1.1
+        version: 43.1.1
       electron-builder:
         specifier: 26.15.3
         version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
       electron-builder-squirrel-windows:
         specifier: 26.15.3
-        version: 26.15.3(dmg-builder@26.15.3)(supports-color@7.2.0)
+        version: 26.15.3(dmg-builder@26.15.3)
       electron-devtools-installer:
         specifier: ^4.0.0
         version: 4.0.0
@@ -488,7 +488,7 @@ importers:
         version: 3.0.1
       pacote:
         specifier: ^22.0.0
-        version: 22.0.0(supports-color@7.2.0)
+        version: 22.0.0
       rimraf:
         specifier: ^6.0.0
         version: 6.1.3
@@ -641,7 +641,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b48b48ee691efb7497638241f78c205dd53292fc
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be713375812f2eac7c78e2c21352f8df62546c3e
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -762,7 +762,7 @@ importers:
         version: link:../../packages/playwright-common
       '@fetch-mock/jest':
         specifier: ^0.2.20
-        version: 0.2.20(@jest/globals@30.4.1)(jest@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)(supports-color@7.2.0))
+        version: 0.2.20(@jest/globals@30.4.1)(jest@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0))
       '@fetch-mock/vitest':
         specifier: ^0.2.18
         version: 0.2.18(vitest@4.1.10)
@@ -918,7 +918,7 @@ importers:
         version: 3.0.0
       jest:
         specifier: ^30.0.0
-        version: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)(supports-color@7.2.0)
+        version: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)
       jest-canvas-mock:
         specifier: ^2.5.2
         version: 2.5.2
@@ -996,22 +996,22 @@ importers:
         version: 5.0.0(webpack@5.108.4)
       stylelint:
         specifier: ^17.0.0
-        version: 17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+        version: 17.14.0(@typescript/typescript6@6.0.2)
       stylelint-config-standard:
         specifier: ^40.0.0
-        version: 40.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0))
+        version: 40.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2))
       stylelint-scss:
         specifier: ^7.0.0
-        version: 7.2.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0))
+        version: 7.2.0(stylelint@17.14.0(@typescript/typescript6@6.0.2))
       stylelint-value-no-unknown-custom-properties:
         specifier: ^6.0.1
-        version: 6.1.1(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0))
+        version: 6.1.1(stylelint@17.14.0(@typescript/typescript6@6.0.2))
       terser-webpack-plugin:
         specifier: ^5.3.9
         version: 5.6.1(esbuild@0.27.4)(lightningcss@1.32.0)(postcss@8.5.19)(webpack@5.108.4)
       testcontainers:
         specifier: ^12.0.0
-        version: 12.0.4(supports-color@7.2.0)
+        version: 12.0.4
       typescript:
         specifier: catalog:ts6
         version: '@typescript/typescript6@6.0.2'
@@ -1038,7 +1038,7 @@ importers:
         version: 7.2.1(js-yaml@4.3.0)(json5@2.2.3)(webpack-bundle-analyzer@5.3.1)(webpack-dev-server@6.0.0)(webpack@5.108.4)
       webpack-dev-server:
         specifier: ^6.0.0
-        version: 6.0.0(supports-color@7.2.0)(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4)
+        version: 6.0.0(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4)
       webpack-retry-chunk-load-plugin:
         specifier: ^3.1.1
         version: 3.1.1(webpack@5.108.4)
@@ -1151,7 +1151,7 @@ importers:
         version: 19.2.7
       testcontainers:
         specifier: ^12.0.1
-        version: 12.0.4(supports-color@7.2.0)
+        version: 12.0.4
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -1331,7 +1331,7 @@ importers:
         version: 7.2.0
       testcontainers:
         specifier: ^12.0.0
-        version: 12.0.4(supports-color@7.2.0)
+        version: 12.0.4
       wait-on:
         specifier: ^9.0.4
         version: 9.0.10
@@ -8571,8 +8571,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@43.1.0:
-    resolution: {integrity: sha512-DPfxpQLd4NL3BJ8DBxYAfmLUKKesF5Rx9dQx5FyczAP8bhOPScjHE48GArVeXu68LlAainuwkmQTQvdZwpIIAQ==}
+  electron@43.1.1:
+    resolution: {integrity: sha512-I5c5vfuVvaXpWx3IZdwvXgxQW44+e7OP1wXGVQkogLeSFSkUZ6sLCcWV05AdEcs65AO5tAIJJwbp7ixw+LdarA==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -8730,7 +8730,7 @@ packages:
     engines: {node: '>=12'}
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c#path:/eslint:
-    resolution: {gitHosted: true, path: /eslint, integrity: sha512-R032J6OYm6EwUIORcLA3uf82+ijMPRac2pLXgohvp3dCIJUUsMH9Wak82rdUger6edvv7IFOU3w9pf2N3vqLFw==, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c}
+    resolution: {gitHosted: true, integrity: sha512-R032J6OYm6EwUIORcLA3uf82+ijMPRac2pLXgohvp3dCIJUUsMH9Wak82rdUger6edvv7IFOU3w9pf2N3vqLFw==, path: /eslint, tarball: https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c}
     version: 0.0.0
 
   eslint-plugin-storybook@10.5.0:
@@ -10317,8 +10317,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b48b48ee691efb7497638241f78c205dd53292fc:
-    resolution: {gitHosted: true, integrity: sha512-3SmjQ4emmx0jyXuRB5aEd+6GN+tALllM4z8+zyaNIcH27jBNIgjj4Ooj5q7uLnowja1boLffm985C3t3Hm5NPA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b48b48ee691efb7497638241f78c205dd53292fc}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be713375812f2eac7c78e2c21352f8df62546c3e:
+    resolution: {gitHosted: true, integrity: sha512-GNNOiQ9Z1tOGJTp+8Nx6+OmMz2atnynv8C/V1enfLKHHVMJXC7hyUD/xfeBPFDPo1seWNwqoSWseOt1e2hd9HA==, tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be713375812f2eac7c78e2c21352f8df62546c3e}
     version: 41.9.0
     engines: {node: '>=22.0.0'}
 
@@ -13907,7 +13907,7 @@ snapshots:
       semifies: 1.0.0
       source-map: 0.6.1
 
-  '@apm-js-collab/tracing-hooks@0.10.1(supports-color@7.2.0)':
+  '@apm-js-collab/tracing-hooks@0.10.1':
     dependencies:
       '@apm-js-collab/code-transformer': 0.15.0
       debug: 4.4.3(supports-color@7.2.0)
@@ -15272,7 +15272,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/get@5.0.0(supports-color@7.2.0)':
+  '@electron/get@5.0.0':
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       env-paths: 3.0.0
@@ -15327,7 +15327,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/windows-sign@1.2.2(supports-color@7.2.0)':
+  '@electron/windows-sign@1.2.2':
     dependencies:
       cross-dirname: 0.1.0
       debug: 4.4.3(supports-color@7.2.0)
@@ -15511,11 +15511,11 @@ snapshots:
 
   '@eslint/js@8.57.1': {}
 
-  '@fetch-mock/jest@0.2.20(@jest/globals@30.4.1)(jest@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)(supports-color@7.2.0))':
+  '@fetch-mock/jest@0.2.20(@jest/globals@30.4.1)(jest@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0))':
     dependencies:
       '@jest/globals': 30.4.1
       fetch-mock: 12.6.0
-      jest: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)(supports-color@7.2.0)
+      jest: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)
 
   '@fetch-mock/vitest@0.2.18(vitest@4.1.10)':
     dependencies:
@@ -15674,11 +15674,11 @@ snapshots:
       jest-util: 30.4.1
       slash: 3.0.0
 
-  '@jest/core@30.4.2(babel-plugin-macros@3.1.0)(supports-color@7.2.0)':
+  '@jest/core@30.4.2(babel-plugin-macros@3.1.0)':
     dependencies:
       '@jest/console': 30.4.1
       '@jest/pattern': 30.4.0
-      '@jest/reporters': 30.4.1(supports-color@7.2.0)
+      '@jest/reporters': 30.4.1
       '@jest/test-result': 30.4.1
       '@jest/transform': 30.4.1
       '@jest/types': 30.4.1
@@ -15768,7 +15768,7 @@ snapshots:
       '@types/node': 25.9.3
       jest-regex-util: 30.4.0
 
-  '@jest/reporters@30.4.1(supports-color@7.2.0)':
+  '@jest/reporters@30.4.1':
     dependencies:
       '@bcoe/v8-coverage': 0.2.3
       '@jest/console': 30.4.1
@@ -15785,7 +15785,7 @@ snapshots:
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-instrument: 6.0.3
       istanbul-lib-report: 3.0.1
-      istanbul-lib-source-maps: 5.0.6(supports-color@7.2.0)
+      istanbul-lib-source-maps: 5.0.6
       istanbul-reports: 3.2.0
       jest-message-util: 30.4.1
       jest-util: 30.4.1
@@ -16026,7 +16026,7 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@kwsites/file-exists@1.1.1(supports-color@7.2.0)':
+  '@kwsites/file-exists@1.1.1':
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
@@ -16544,12 +16544,12 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/semantic-conventions': 1.41.1
 
-  '@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
+  '@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/api-logs': 0.214.0
       import-in-the-middle: 3.3.0
-      require-in-the-middle: 8.0.1(supports-color@7.2.0)
+      require-in-the-middle: 8.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -17850,11 +17850,11 @@ snapshots:
     dependencies:
       '@sentry/conventions': 0.15.1
 
-  '@sentry/electron@7.15.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(supports-color@7.2.0)':
+  '@sentry/electron@7.15.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@sentry/browser': 10.62.0
       '@sentry/core': 10.62.0
-      '@sentry/node': 10.62.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(supports-color@7.2.0)
+      '@sentry/node': 10.62.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))
     transitivePeerDependencies:
       - '@opentelemetry/core'
       - '@opentelemetry/exporter-trace-otlp-http'
@@ -17868,7 +17868,7 @@ snapshots:
     dependencies:
       '@sentry/core': 10.65.0
 
-  '@sentry/node-core@10.62.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))':
+  '@sentry/node-core@10.62.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@sentry/conventions': 0.12.0
       '@sentry/core': 10.62.0
@@ -17877,19 +17877,19 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.9.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.214.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation': 0.214.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.9.0(@opentelemetry/api@1.9.1)
 
-  '@sentry/node@10.62.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(supports-color@7.2.0)':
+  '@sentry/node@10.62.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/instrumentation': 0.214.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation': 0.214.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.9.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.41.1
       '@sentry/core': 10.62.0
-      '@sentry/node-core': 10.62.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))
+      '@sentry/node-core': 10.62.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))
       '@sentry/opentelemetry': 10.62.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.9.0(@opentelemetry/api@1.9.1))
-      '@sentry/server-utils': 10.62.0(supports-color@7.2.0)
+      '@sentry/server-utils': 10.62.0
       import-in-the-middle: 3.3.0
     transitivePeerDependencies:
       - '@opentelemetry/core'
@@ -17924,11 +17924,11 @@ snapshots:
       '@sentry/browser-utils': 10.65.0
       '@sentry/core': 10.65.0
 
-  '@sentry/server-utils@10.62.0(supports-color@7.2.0)':
+  '@sentry/server-utils@10.62.0':
     dependencies:
       '@apm-js-collab/code-transformer': 0.15.0
       '@apm-js-collab/code-transformer-bundler-plugins': 0.5.0
-      '@apm-js-collab/tracing-hooks': 0.10.1(supports-color@7.2.0)
+      '@apm-js-collab/tracing-hooks': 0.10.1
       '@sentry/conventions': 0.12.0
       '@sentry/core': 10.62.0
       magic-string: 0.30.21
@@ -18022,10 +18022,10 @@ snapshots:
       - kerberos
       - supports-color
 
-  '@sigstore/tuf@5.0.0(supports-color@7.2.0)':
+  '@sigstore/tuf@5.0.0':
     dependencies:
       '@sigstore/protobuf-specs': 0.5.0
-      tuf-js: 6.0.0(supports-color@7.2.0)
+      tuf-js: 6.0.0
     transitivePeerDependencies:
       - supports-color
 
@@ -18297,7 +18297,7 @@ snapshots:
 
   '@testcontainers/postgresql@12.0.4':
     dependencies:
-      testcontainers: 12.0.4(supports-color@7.2.0)
+      testcontainers: 12.0.4
     transitivePeerDependencies:
       - bare-abort-controller
       - bare-buffer
@@ -18807,7 +18807,7 @@ snapshots:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
-  '@typescript-eslint/project-service@8.63.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
+  '@typescript-eslint/project-service@8.63.0(@typescript/typescript6@6.0.2)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.63.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/types': 8.63.0
@@ -18827,9 +18827,9 @@ snapshots:
 
   '@typescript-eslint/types@8.63.0': {}
 
-  '@typescript-eslint/typescript-estree@8.63.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
+  '@typescript-eslint/typescript-estree@8.63.0(@typescript/typescript6@6.0.2)':
     dependencies:
-      '@typescript-eslint/project-service': 8.63.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+      '@typescript-eslint/project-service': 8.63.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/tsconfig-utils': 8.63.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/types': 8.63.0
       '@typescript-eslint/visitor-keys': 8.63.0
@@ -18842,12 +18842,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.63.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)':
+  '@typescript-eslint/utils@8.63.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@8.57.1)
       '@typescript-eslint/scope-manager': 8.63.0
       '@typescript-eslint/types': 8.63.0
-      '@typescript-eslint/typescript-estree': 8.63.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+      '@typescript-eslint/typescript-estree': 8.63.0(@typescript/typescript6@6.0.2)
       eslint: 8.57.1
       typescript: '@typescript/typescript6@6.0.2'
     transitivePeerDependencies:
@@ -19534,7 +19534,7 @@ snapshots:
       dotenv: 16.6.1
       dotenv-expand: 11.0.7
       ejs: 3.1.10
-      electron-builder-squirrel-windows: 26.15.3(dmg-builder@26.15.3)(supports-color@7.2.0)
+      electron-builder-squirrel-windows: 26.15.3(dmg-builder@26.15.3)
       electron-publish: 26.15.3
       fs-extra: 10.1.0
       hosted-git-info: 4.1.0
@@ -20982,7 +20982,7 @@ snapshots:
     dependencies:
       yaml: 2.9.0
 
-  docker-modem@5.0.7(supports-color@7.2.0):
+  docker-modem@5.0.7:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       readable-stream: 3.6.2
@@ -20991,12 +20991,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  dockerode@5.0.1(supports-color@7.2.0):
+  dockerode@5.0.1:
     dependencies:
       '@balena/dockerignore': 1.0.2
       '@grpc/grpc-js': 1.14.4
       '@grpc/proto-loader': 0.7.15
-      docker-modem: 5.0.7(supports-color@7.2.0)
+      docker-modem: 5.0.7
       protobufjs: 7.6.3
       tar-fs: 2.1.5
     transitivePeerDependencies:
@@ -21122,11 +21122,11 @@ snapshots:
 
   ejs@5.0.1: {}
 
-  electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)(supports-color@7.2.0):
+  electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3):
     dependencies:
       app-builder-lib: 26.15.3(dmg-builder@26.15.3)(electron-builder-squirrel-windows@26.15.3)
       builder-util: 26.15.3
-      electron-winstaller: 5.4.0(supports-color@7.2.0)
+      electron-winstaller: 5.4.0
     transitivePeerDependencies:
       - dmg-builder
       - supports-color
@@ -21177,7 +21177,7 @@ snapshots:
       jsonfile: 4.0.0
       mkdirp: 0.5.6
 
-  electron-winstaller@5.4.0(supports-color@7.2.0):
+  electron-winstaller@5.4.0:
     dependencies:
       '@electron/asar': 3.4.1
       debug: 4.4.3(supports-color@7.2.0)
@@ -21185,14 +21185,14 @@ snapshots:
       lodash: 4.18.1
       temp: 0.9.4
     optionalDependencies:
-      '@electron/windows-sign': 1.2.2(supports-color@7.2.0)
+      '@electron/windows-sign': 1.2.2
     transitivePeerDependencies:
       - supports-color
 
-  electron@43.1.0(supports-color@7.2.0):
+  electron@43.1.1:
     dependencies:
       '@electron-internal/extract-zip': 1.0.3
-      '@electron/get': 5.0.0(supports-color@7.2.0)
+      '@electron/get': 5.0.0
       '@types/node': 25.9.3
     transitivePeerDependencies:
       - supports-color
@@ -21335,10 +21335,10 @@ snapshots:
 
   eslint-plugin-element-call@https://codeload.github.com/element-hq/element-call/tar.gz/ae7ede32015de04662d0724a4d65b93fc175f65c#path:/eslint: {}
 
-  eslint-plugin-storybook@10.5.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.0(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7))(supports-color@7.2.0):
+  eslint-plugin-storybook@10.5.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(storybook@10.5.0(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7)):
     dependencies:
       '@typescript-eslint/types': 8.63.0
-      '@typescript-eslint/utils': 8.63.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)(supports-color@7.2.0)
+      '@typescript-eslint/utils': 8.63.0(@typescript/typescript6@6.0.2)(eslint@8.57.1)
       eslint: 8.57.1
       storybook: 10.5.0(@types/react@19.2.17)(prettier@2.8.8)(react@19.2.7)
     transitivePeerDependencies:
@@ -22101,7 +22101,7 @@ snapshots:
       - kerberos
       - supports-color
 
-  http-proxy-middleware@4.2.0(supports-color@7.2.0):
+  http-proxy-middleware@4.2.0:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       httpxy: 0.5.4
@@ -22382,7 +22382,7 @@ snapshots:
       make-dir: 4.0.0
       supports-color: 7.2.0
 
-  istanbul-lib-source-maps@5.0.6(supports-color@7.2.0):
+  istanbul-lib-source-maps@5.0.6:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       debug: 4.4.3(supports-color@7.2.0)
@@ -22446,7 +22446,7 @@ snapshots:
 
   jest-cli@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0):
     dependencies:
-      '@jest/core': 30.4.2(babel-plugin-macros@3.1.0)(supports-color@7.2.0)
+      '@jest/core': 30.4.2(babel-plugin-macros@3.1.0)
       '@jest/test-result': 30.4.1
       '@jest/types': 30.4.1
       chalk: 4.1.2
@@ -22732,9 +22732,9 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)(supports-color@7.2.0):
+  jest@30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0):
     dependencies:
-      '@jest/core': 30.4.2(babel-plugin-macros@3.1.0)(supports-color@7.2.0)
+      '@jest/core': 30.4.2(babel-plugin-macros@3.1.0)
       '@jest/types': 30.4.1
       import-local: 3.2.0
       jest-cli: 30.4.2(@types/node@25.9.3)(babel-plugin-macros@3.1.0)
@@ -23200,7 +23200,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b48b48ee691efb7497638241f78c205dd53292fc:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/be713375812f2eac7c78e2c21352f8df62546c3e:
     dependencies:
       '@babel/runtime': 8.0.0
       '@matrix-org/matrix-sdk-crypto-wasm': 18.3.1
@@ -24176,7 +24176,7 @@ snapshots:
 
   package-manager-detector@1.6.0: {}
 
-  pacote@22.0.0(supports-color@7.2.0):
+  pacote@22.0.0:
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@npmcli/git': 8.0.0
@@ -24192,7 +24192,7 @@ snapshots:
       npm-pick-manifest: 12.0.0
       npm-registry-fetch: 20.0.1
       proc-log: 7.0.0
-      sigstore: 5.0.0(supports-color@7.2.0)
+      sigstore: 5.0.0
       ssri: 14.0.0
       tar: 7.5.20
     transitivePeerDependencies:
@@ -24913,9 +24913,9 @@ snapshots:
 
   properties-file@3.7.0: {}
 
-  properties-reader@3.0.1(supports-color@7.2.0):
+  properties-reader@3.0.1:
     dependencies:
-      '@kwsites/file-exists': 1.1.1(supports-color@7.2.0)
+      '@kwsites/file-exists': 1.1.1
       mkdirp: 3.0.1
     transitivePeerDependencies:
       - supports-color
@@ -25278,7 +25278,7 @@ snapshots:
 
   require-from-string@2.0.2: {}
 
-  require-in-the-middle@8.0.1(supports-color@7.2.0):
+  require-in-the-middle@8.0.1:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       module-details-from-path: 1.0.4
@@ -25656,13 +25656,13 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  sigstore@5.0.0(supports-color@7.2.0):
+  sigstore@5.0.0:
     dependencies:
       '@sigstore/bundle': 5.0.0
       '@sigstore/core': 4.0.0
       '@sigstore/protobuf-specs': 0.5.0
       '@sigstore/sign': 5.0.0
-      '@sigstore/tuf': 5.0.0(supports-color@7.2.0)
+      '@sigstore/tuf': 5.0.0
       '@sigstore/verify': 4.0.0
     transitivePeerDependencies:
       - kerberos
@@ -25976,16 +25976,16 @@ snapshots:
       postcss: 8.5.19
       postcss-selector-parser: 7.1.4
 
-  stylelint-config-recommended@18.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)):
+  stylelint-config-recommended@18.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)):
     dependencies:
-      stylelint: 17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+      stylelint: 17.14.0(@typescript/typescript6@6.0.2)
 
-  stylelint-config-standard@40.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)):
+  stylelint-config-standard@40.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)):
     dependencies:
-      stylelint: 17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
-      stylelint-config-recommended: 18.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0))
+      stylelint: 17.14.0(@typescript/typescript6@6.0.2)
+      stylelint-config-recommended: 18.0.0(stylelint@17.14.0(@typescript/typescript6@6.0.2))
 
-  stylelint-scss@7.2.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)):
+  stylelint-scss@7.2.0(stylelint@17.14.0(@typescript/typescript6@6.0.2)):
     dependencies:
       '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
@@ -25998,15 +25998,15 @@ snapshots:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.1.4
       postcss-value-parser: 4.2.0
-      stylelint: 17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+      stylelint: 17.14.0(@typescript/typescript6@6.0.2)
 
-  stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)):
+  stylelint-value-no-unknown-custom-properties@6.1.1(stylelint@17.14.0(@typescript/typescript6@6.0.2)):
     dependencies:
       postcss-value-parser: 4.2.0
       resolve: 1.22.12
-      stylelint: 17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+      stylelint: 17.14.0(@typescript/typescript6@6.0.2)
 
-  stylelint@17.14.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0):
+  stylelint@17.14.0(@typescript/typescript6@6.0.2):
     dependencies:
       '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
@@ -26241,7 +26241,7 @@ snapshots:
       glob: 7.2.3
       minimatch: 3.1.5
 
-  testcontainers@12.0.4(supports-color@7.2.0):
+  testcontainers@12.0.4:
     dependencies:
       '@balena/dockerignore': 1.0.2
       '@types/dockerode': 4.0.1
@@ -26250,10 +26250,10 @@ snapshots:
       byline: 5.0.0
       debug: 4.4.3(supports-color@7.2.0)
       docker-compose: 1.4.2
-      dockerode: 5.0.1(supports-color@7.2.0)
+      dockerode: 5.0.1
       get-port: 5.1.1
       proper-lockfile: 4.1.2
-      properties-reader: 3.0.1(supports-color@7.2.0)
+      properties-reader: 3.0.1
       ssh-remote-port-forward: 1.0.4
       tar-fs: 3.1.3
       tmp: 0.2.7
@@ -26383,7 +26383,7 @@ snapshots:
 
   tty-browserify@0.0.1: {}
 
-  tuf-js@6.0.0(supports-color@7.2.0):
+  tuf-js@6.0.0:
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@tufjs/models': 5.0.0
@@ -26961,7 +26961,7 @@ snapshots:
       js-yaml: 4.3.0
       json5: 2.2.3
       webpack-bundle-analyzer: 5.3.1
-      webpack-dev-server: 6.0.0(supports-color@7.2.0)(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4)
+      webpack-dev-server: 6.0.0(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4)
 
   webpack-dev-middleware@8.0.3(tslib@2.8.1)(webpack@5.108.4):
     dependencies:
@@ -26975,7 +26975,7 @@ snapshots:
     transitivePeerDependencies:
       - tslib
 
-  webpack-dev-server@6.0.0(supports-color@7.2.0)(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4):
+  webpack-dev-server@6.0.0(tslib@2.8.1)(webpack-cli@7.2.1)(webpack@5.108.4):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
@@ -26991,7 +26991,7 @@ snapshots:
       connect-history-api-fallback: 2.0.0
       express: 5.2.1
       graceful-fs: 4.2.11
-      http-proxy-middleware: 4.2.0(supports-color@7.2.0)
+      http-proxy-middleware: 4.2.0
       ipaddr.js: 2.4.0
       launch-editor: 2.14.1
       open: 11.0.0

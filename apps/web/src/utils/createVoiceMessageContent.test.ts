@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { describe, it, expect } from "vitest";
 import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
-import { createVoiceMessageContent } from "../../../src/utils/createVoiceMessageContent";
+import { createVoiceMessageContent } from "./createVoiceMessageContent";
 
 describe("createVoiceMessageContent", () => {
     it("should create a voice message content", () => {

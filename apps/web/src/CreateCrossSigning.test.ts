@@ -6,12 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { HTTPError, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
+// @vitest-environment happy-dom
 
-import { createCrossSigning } from "../src/CreateCrossSigning";
-import { createTestClient } from "./test-utils";
-import Modal from "../src/Modal";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { HTTPError, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { createTestClient } from "test-utils";
+
+import { createCrossSigning } from "./CreateCrossSigning";
+import Modal from "./Modal";
+
+vi.mock("./Modal");
 
 describe("CreateCrossSigning", () => {
     let client: MatrixClient;
@@ -29,7 +33,7 @@ describe("CreateCrossSigning", () => {
     });
 
     it("should upload", async () => {
-        client.uploadDeviceSigningKeys = jest.fn().mockRejectedValueOnce(
+        client.uploadDeviceSigningKeys = vi.fn().mockRejectedValueOnce(
             new MatrixError({
                 flows: [
                     {
@@ -41,20 +45,20 @@ describe("CreateCrossSigning", () => {
 
         await createCrossSigning(client);
 
-        const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
+        const { authUploadDeviceSigningKeys } = vi.mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
 
-        const makeRequest = jest.fn();
+        const makeRequest = vi.fn();
         await authUploadDeviceSigningKeys!(makeRequest);
         expect(makeRequest).toHaveBeenCalledWith(null);
     });
 
     it("should prompt user if upload failed with UIA", async () => {
-        const createDialog = jest.spyOn(Modal, "createDialog").mockReturnValue({
+        const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({
             finished: Promise.resolve([true]),
-            close: jest.fn(),
+            close: vi.fn(),
         });
 
-        client.uploadDeviceSigningKeys = jest.fn().mockRejectedValueOnce(
+        client.uploadDeviceSigningKeys = vi.fn().mockRejectedValueOnce(
             new MatrixError({
                 flows: [
                     {
@@ -66,9 +70,9 @@ describe("CreateCrossSigning", () => {
 
         await createCrossSigning(client);
 
-        const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
+        const { authUploadDeviceSigningKeys } = vi.mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
 
-        const makeRequest = jest.fn().mockRejectedValue(
+        const makeRequest = vi.fn().mockRejectedValue(
             new MatrixError({
                 flows: [
                     {
@@ -85,10 +89,10 @@ describe("CreateCrossSigning", () => {
     it("should throw error if server fails with something other than UIA", async () => {
         await createCrossSigning(client);
 
-        const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
+        const { authUploadDeviceSigningKeys } = vi.mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
 
         const error = new HTTPError("Internal Server Error", 500);
-        const makeRequest = jest.fn().mockRejectedValue(error);
+        const makeRequest = vi.fn().mockRejectedValue(error);
         await expect(authUploadDeviceSigningKeys!(makeRequest)).rejects.toThrow(error);
         expect(makeRequest).not.toHaveBeenCalledWith();
     });

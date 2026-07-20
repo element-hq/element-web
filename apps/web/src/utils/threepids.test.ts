@@ -6,12 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Mocked } from "jest-mock";
-import { type IIdentityServerProvider, type MatrixClient } from "matrix-js-sdk/src/matrix";
+// @vitest-environment happy-dom
 
-import { DirectoryMember, ThreepidMember } from "../../../src/utils/direct-messages";
-import { lookupThreePids, resolveThreePids } from "../../../src/utils/threepids";
-import { stubClient } from "../../test-utils";
+import { vi, describe, it, expect, beforeEach, type Mocked } from "vitest";
+import { type IIdentityServerProvider, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { stubClient } from "test-utils";
+
+import { DirectoryMember, ThreepidMember } from "./direct-messages";
+import { lookupThreePids, resolveThreePids } from "./threepids";
 
 describe("threepids", () => {
     let client: Mocked<MatrixClient>;
@@ -21,7 +23,7 @@ describe("threepids", () => {
     beforeEach(() => {
         client = stubClient() as Mocked<MatrixClient>;
         identityServer = {
-            getAccessToken: jest.fn().mockResolvedValue(accessToken),
+            getAccessToken: vi.fn().mockResolvedValue(accessToken),
         } as unknown as Mocked<IIdentityServerProvider>;
     });
 
