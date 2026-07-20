@@ -13,7 +13,7 @@ import dis from "../../dispatcher/dispatcher";
 import FontSizeController from "./FontSizeController";
 import { SettingLevel } from "../SettingLevel";
 
-const dispatchSpy = vi.spyOn(dis, "fire");
+const dispatchSpy = vi.spyOn(dis, "dispatch");
 
 describe("FontSizeController", () => {
     it("dispatches a font size action on change", () => {
@@ -21,6 +21,6 @@ describe("FontSizeController", () => {
 
         controller.onChange(SettingLevel.ACCOUNT, "$room:server", 12);
 
-        expect(dispatchSpy).toHaveBeenCalledWith(Action.MigrateBaseFontSize);
+        expect(dispatchSpy).toHaveBeenCalledWith({ action: Action.UpdateFontSizeDelta, delta: 12 });
     });
 });

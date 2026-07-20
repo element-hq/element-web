@@ -169,7 +169,6 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     };
 
     public render(): React.ReactNode {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { children, trackHorizontalOverflow, verticalScrollsHorizontally, className, ...otherProps } = this.props;
 
         const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };

@@ -10,10 +10,8 @@ import { type BrowserWindow } from "electron";
 import { type AppLocalization } from "../language-helper.js";
 
 // global type extensions need to use var for whatever reason
-/* eslint-disable no-var */
 declare global {
     var mainWindow: BrowserWindow | null;
     var appQuitting: boolean;
     var appLocalization: AppLocalization;
 }
-/* eslint-enable no-var */

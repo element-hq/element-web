@@ -13,7 +13,7 @@ import { type UserStatus } from "@element-hq/web-shared-components";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { useFeatureEnabled } from "./useSettings";
-import { fetchUserStatus, validateUserStatus } from "../utils/userStatus";
+import { fetchUserStatus, userStatusFromProfile } from "../utils/userStatus";
 
 const logger = rootLogger.getChild("useUserStatus");
 
@@ -34,7 +34,9 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
             return;
         }
 
-        setUserStatus(validateUserStatus(syncProfile["org.matrix.msc4426.status"]));
+        setUserStatus(
+            userStatusFromProfile(syncProfile["org.matrix.msc4426.status"], syncProfile["org.matrix.msc4426.call"]),
+        );
     });
     useEffect(() => {
         (async () => {

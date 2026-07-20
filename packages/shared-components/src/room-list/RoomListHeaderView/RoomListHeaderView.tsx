@@ -191,7 +191,7 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                     {canOnlyStartChat ? (
                         <IconButton
                             size="28px"
-                            style={{ padding: "4px" }}
+                            style={{ padding: "4px" }} // Work around miscalculated padding on 28px button: https://github.com/element-hq/compound/issues/409
                             onClick={(e) => vm.createChatRoom(e.nativeEvent)}
                             tooltip={_t("action|start_chat")}
                         >

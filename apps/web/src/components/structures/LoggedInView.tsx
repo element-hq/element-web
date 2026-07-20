@@ -84,7 +84,7 @@ interface IProps {
     // transitioned to PWLU)
     onRegistered: (this: void, credentials: IMatrixClientCreds) => Promise<MatrixClient>;
     hideToSRUsers: boolean;
-    // eslint-disable-next-line camelcase
+
     page_type?: string;
     threepidInvite?: IThreepidInvite;
     roomOobData?: IOOBData;
