@@ -149,7 +149,7 @@ export class RootCallTileViewModel extends BaseViewModel<RootCallTileViewSnapsho
             if (roomId === this.props.mxEvent.getRoomId() && eventId === this.props.mxEvent.getId()) {
                 this.recomputeSnapshot();
             }
-        }) as (...args: unknown[]) => void);
+        }));
     }
 
     private onCallStoreEvent = (_: unknown, roomId: string): void => {
