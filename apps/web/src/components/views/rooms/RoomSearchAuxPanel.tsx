@@ -45,7 +45,13 @@ const RoomSearchAuxPanel: React.FC<Props> = ({ searchInfo, isRoomEncrypted, onSe
                         ) : (
                             <InlineSpinner />
                         )}
-                        <SearchWarning kind={WarningKind.Search} isRoomEncrypted={isRoomEncrypted} showLogo={false} />
+                        <SearchWarning
+                            kind={WarningKind.Search}
+                            isRoomEncrypted={isRoomEncrypted}
+                            showLogo={false}
+                            scope={scope}
+                            roomId={searchInfo?.roomId}
+                        />
                     </div>
                 </div>
                 <div className="mx_RoomSearchAuxPanel_buttons">

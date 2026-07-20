@@ -2433,7 +2433,8 @@
         "warning_kind_files": "See %(brand)s versioon ei toeta mõnede krüptitud failide vaatatamist",
         "warning_kind_files_app": "Kõikide krüptitud failide vaatamiseks kasuta <a>Element Desktop</a> rakendust",
         "warning_kind_search": "See %(brand)s versioon ei toeta otsingut krüptitud sõnumite seast",
-        "warning_kind_search_app": "Otsinguks krüptitud sõnumite hulgast kasuta <a>Element Desktop</a> rakendust"
+        "warning_kind_search_app": "Otsinguks krüptitud sõnumite hulgast kasuta <a>Element Desktop</a> rakendust",
+        "warning_kind_search_partial": "Kuna sinu otsinguindeks on alles loomisel, siis tulemused võivad olla veel poolikud."
     },
     "setting": {
         "help_about": {
@@ -3826,6 +3827,9 @@
         "verification_unavailable": "Kasutaja verifitseerimine pole saadaval",
         "verify_button": "Verifitseeri kasutaja",
         "verify_explainer": "Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes."
+    },
+    "user_status": {
+        "on_a_call": "Kõne on pooleli"
     },
     "voip": {
         "already_in_call": "Kõne on juba pooleli",
