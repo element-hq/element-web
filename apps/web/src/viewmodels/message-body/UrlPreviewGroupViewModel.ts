@@ -49,8 +49,7 @@ export interface UrlPreviewGroupViewModelProps {
 
 export class UrlPreviewGroupViewModel
     extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
-    implements UrlPreviewGroupViewActions
-{
+    implements UrlPreviewGroupViewActions {
     /**
      * Determine if an anchor element can be rendered into a preview.
      * If it can, return the value of `href`
@@ -137,6 +136,7 @@ export class UrlPreviewGroupViewModel
         this.mediaVisible = props.mediaVisible;
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(this.storageKey) !== "1";
         this.fetcher = new UrlPreviewFetcher(props.client, props.mxEvent.getTs(), props.showTooltips);
+        this.disposables.track(() => this.fetcher.dispose());
     }
 
     /**
@@ -179,7 +179,6 @@ export class UrlPreviewGroupViewModel
 
         const content = this.props.mxEvent.getContent();
         const urlPreviewKind = this.props.urlPreviewKind;
-        console.log("wowee2", urlPreviewKind);
         if (
             content.msgtype === MsgType.Text &&
             (urlPreviewKind === "bundledonly" || urlPreviewKind === "preferbundled")
@@ -187,9 +186,9 @@ export class UrlPreviewGroupViewModel
             const messageContent = content as RoomMessageEventContent;
 
             if (messageContent[BUNDLED_LINK_PREVIEWS] !== undefined) {
-                previews = messageContent[BUNDLED_LINK_PREVIEWS]
+                previews = await Promise.all(messageContent[BUNDLED_LINK_PREVIEWS]
                     .slice(0, this.limitPreviews ? MAX_PREVIEWS_WHEN_LIMITED : undefined)
-                    .map((preview) => this.fetcher.previewFromBundle(preview));
+                    .map((preview) => this.fetcher.previewFromBundle(preview)));
             }
         }
 
