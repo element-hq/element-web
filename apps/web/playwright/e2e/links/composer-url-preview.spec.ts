@@ -19,7 +19,7 @@ test.describe("Composer URL preview", () => {
         },
     });
 
-    test.beforeEach(async ({ app }) => {
+    test.beforeEach(async ({ app, user /* trigger user fixture to load the app so mxSettingsStore exists */ }) => {
         // Composer URL previews are collapsed by default; expand so the preview links render
         await app.settings.setValue("composerUrlPreviewCollapsed", null, SettingLevel.DEVICE, false);
     });
