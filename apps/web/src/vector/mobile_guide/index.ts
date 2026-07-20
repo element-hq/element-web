@@ -15,8 +15,7 @@ import { getVectorConfig } from "../getconfig";
 import { MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";
 
 function onBackToElementClick(): void {
-    // Cookie should expire in 4 hours
-    document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
+    sessionStorage.setItem("skip_mobile_redirect", "true");
     window.location.href = "../";
 }
 

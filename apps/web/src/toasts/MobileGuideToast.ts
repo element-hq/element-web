@@ -16,7 +16,7 @@ const onAccept = (): void => {
 };
 
 const onReject = (): void => {
-    document.cookie = "element_mobile_redirect_to_guide=false;path=/;max-age=14400";
+    sessionStorage.setItem("skip_mobile_redirect", "true");
     hideToast();
 };
 
@@ -29,7 +29,7 @@ export const showToast = (): void => {
     if (!isIos && !isAndroid) {
         return;
     }
-    if (document.cookie.includes("element_mobile_redirect_to_guide=false")) {
+    if (sessionStorage.getItem("skip_mobile_redirect") === "true") {
         return;
     }
     ToastStore.sharedInstance().addOrReplaceToast({

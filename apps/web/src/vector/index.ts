@@ -152,7 +152,7 @@ async function start(): Promise<void> {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isAndroid = /Android/.test(navigator.userAgent);
             if (isIos || isAndroid) {
-                if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
+                if (sessionStorage.getItem("skip_mobile_redirect") !== "true") {
                     window.location.href = "mobile_guide/";
                     return;
                 }
