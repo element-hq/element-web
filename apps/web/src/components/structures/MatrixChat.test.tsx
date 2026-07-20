@@ -6,9 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+// @vitest-environment happy-dom
+
+import { vi, describe, it, expect, beforeEach, afterEach, type Mocked } from "vitest";
 import React, { type ComponentProps, createRef, type RefObject } from "react";
-import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
-import { type Mocked, mocked } from "jest-mock-vitest-adapter";
+import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "test-utils-rtl";
 import {
     ClientEvent,
     type MatrixClient,
@@ -29,14 +31,8 @@ import {
     UserVerificationStatus,
     type CryptoApi,
 } from "matrix-js-sdk/src/crypto-api";
-import fetchMock from "@fetch-mock/jest";
+import fetchMock from "@fetch-mock/vitest";
 import * as qrLogin from "matrix-js-sdk/src/rendezvous";
-
-import MatrixChat from "../../../../src/components/structures/MatrixChat";
-import * as StorageAccess from "../../../../src/utils/StorageAccess";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../src/dispatcher/actions";
-import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
 import {
     clearAllModals,
     createStubMatrixRTC,
@@ -49,65 +45,82 @@ import {
     mockPlatformPeg,
     resetJsDomAfterEach,
     unmockClientPeg,
-} from "../../../test-utils";
-import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
-import { OAuthClientError } from "../../../../src/utils/oauth/error";
-import { CallStore } from "../../../../src/stores/CallStore";
-import { type Call } from "../../../../src/models/Call";
-import { PosthogAnalytics } from "../../../../src/PosthogAnalytics";
-import PlatformPeg from "../../../../src/PlatformPeg";
-import EventIndexPeg from "../../../../src/indexing/EventIndexPeg";
-import * as Lifecycle from "../../../../src/Lifecycle";
-import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../../src/BasePlatform";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { ReleaseAnnouncementStore } from "../../../../src/stores/ReleaseAnnouncementStore";
-import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
-import { UIFeature } from "../../../../src/settings/UIFeature";
-import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
-import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
-import Modal from "../../../../src/Modal.tsx";
-import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
-import { ShareFormat } from "../../../../src/dispatcher/payloads/SharePayload.ts";
-import { clearStorage } from "../../../../src/Lifecycle";
-import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
-import { SDKContextClass } from "../../../../src/contexts/SDKContextClass";
-import { makeDelegatedAuthMetadata } from "../../../test-utils/auth.ts";
-import { type QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
-import { storeAuthContext } from "../../../../src/utils/oauth/persistOAuthSettings.ts";
+} from "test-utils";
+import { makeDelegatedAuthMetadata } from "test-utils/auth.ts";
+
+import MatrixChat from "../../components/structures/MatrixChat";
+import * as StorageAccess from "../../utils/StorageAccess";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
+import { UserTab } from "../../components/views/dialogs/UserTab";
+import * as leaveRoomUtils from "../../utils/leave-behaviour";
+import { OAuthClientError } from "../../utils/oauth/error";
+import { CallStore } from "../../stores/CallStore";
+import { type Call } from "../../models/Call";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
+import PlatformPeg from "../../PlatformPeg";
+import EventIndexPeg from "../../indexing/EventIndexPeg";
+import * as Lifecycle from "../../Lifecycle";
+import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../BasePlatform";
+import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
+import DMRoomMap from "../../utils/DMRoomMap";
+import { ReleaseAnnouncementStore } from "../../stores/ReleaseAnnouncementStore";
+import { DRAFT_LAST_CLEANUP_KEY } from "../../DraftCleaner";
+import { UIFeature } from "../../settings/UIFeature";
+import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
+import Modal from "../../Modal.tsx";
+import { SetupEncryptionStore } from "../../stores/SetupEncryptionStore.ts";
+import { ShareFormat } from "../../dispatcher/payloads/SharePayload.ts";
+import { clearStorage } from "../../Lifecycle";
+import UserSettingsDialog from "../../components/views/dialogs/UserSettingsDialog.tsx";
+import { SDKContextClass } from "../../contexts/SDKContextClass";
+import { type QrLoginCredentials } from "../../components/views/auth/LoginWithQR.tsx";
+import { storeAuthContext } from "../../utils/oauth/persistOAuthSettings.ts";
 
 // Stub out ThemeWatcher as the necessary bits for themes are done in element-web's index.html and thus are lacking here,
 // plus JSDOM's implementation of CSSStyleDeclaration has a bunch of differences to real browsers which cause issues.
-jest.mock("../../../../src/settings/watchers/ThemeWatcher");
-jest.mock("../../../../src/theme");
+vi.mock("../../settings/watchers/ThemeWatcher");
+vi.mock("../../theme");
+
+vi.mock("../../async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
+    __test: true,
+    __esModule: true,
+    default: () => <span>mocked dialog</span>,
+}));
+vi.mock("../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog", () => ({
+    __test: true,
+    __esModule: true,
+    default: () => <span>mocked dialog</span>,
+}));
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
 
 function createMockCrypto(): CryptoApi {
     return {
-        getVersion: jest.fn().mockReturnValue("Version 0"),
-        getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-        getUserDeviceInfo: jest.fn().mockReturnValue({
-            get: jest
+        getVersion: vi.fn().mockReturnValue("Version 0"),
+        getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+        getUserDeviceInfo: vi.fn().mockReturnValue({
+            get: vi
                 .fn()
                 .mockReturnValue(
                     new Map([
                         [
                             "devid",
-                            { deviceId: "devid", dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") },
+                            { deviceId: "devid", dehydrated: false, getIdentityKey: vi.fn().mockReturnValue("k") },
                         ],
                     ]),
                 ),
         }),
-        getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(true, true, false)),
-        setDeviceIsolationMode: jest.fn(),
-        isDehydrationSupported: jest.fn().mockReturnValue(false),
-        getDeviceVerificationStatus: jest.fn().mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
-        isCrossSigningReady: jest.fn().mockReturnValue(false),
-        requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
+        getUserVerificationStatus: vi.fn().mockResolvedValue(new UserVerificationStatus(true, true, false)),
+        setDeviceIsolationMode: vi.fn(),
+        isDehydrationSupported: vi.fn().mockReturnValue(false),
+        getDeviceVerificationStatus: vi.fn().mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
+        isCrossSigningReady: vi.fn().mockReturnValue(false),
+        requestOwnUserVerification: vi.fn().mockResolvedValue({ cancel: vi.fn(), on: vi.fn() }),
     } as any;
 }
 
@@ -121,7 +134,7 @@ describe("<MatrixChat />", () => {
     const getMockClientMethods = () => ({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsServer(),
-        getVersions: jest.fn().mockResolvedValue({ versions: SERVER_SUPPORTED_MATRIX_VERSIONS }),
+        getVersions: vi.fn().mockResolvedValue({ versions: SERVER_SUPPORTED_MATRIX_VERSIONS }),
         startClient: async function () {
             // This `sleep` is a horrible hack, for which I am sorry.
             //
@@ -136,67 +149,68 @@ describe("<MatrixChat />", () => {
             // @ts-ignore
             this.emit(ClientEvent.Sync, SyncState.Prepared, null);
         },
-        stopClient: jest.fn(),
-        setCanResetTimelineCallback: jest.fn(),
-        isInitialSyncComplete: jest.fn(),
-        getSyncState: jest.fn(),
-        getSsoLoginUrl: jest.fn(),
-        getSyncStateData: jest.fn().mockReturnValue(null),
-        getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
-        getClientWellKnown: jest.fn().mockReturnValue({}),
-        isVersionSupported: jest.fn().mockResolvedValue(false),
-        initRustCrypto: jest.fn(),
-        getRoom: jest.fn(),
-        getMediaHandler: jest.fn().mockReturnValue({
-            setVideoInput: jest.fn(),
-            setAudioInput: jest.fn(),
-            setAudioSettings: jest.fn(),
-            stopAllStreams: jest.fn(),
+        stopClient: vi.fn(),
+        setCanResetTimelineCallback: vi.fn(),
+        isInitialSyncComplete: vi.fn(),
+        getSyncState: vi.fn(),
+        getSsoLoginUrl: vi.fn(),
+        getSyncStateData: vi.fn().mockReturnValue(null),
+        getThirdpartyProtocols: vi.fn().mockResolvedValue({}),
+        getClientWellKnown: vi.fn().mockReturnValue({}),
+        isVersionSupported: vi.fn().mockResolvedValue(false),
+        initRustCrypto: vi.fn(),
+        getRoom: vi.fn(),
+        getMediaHandler: vi.fn().mockReturnValue({
+            setVideoInput: vi.fn(),
+            setAudioInput: vi.fn(),
+            setAudioSettings: vi.fn(),
+            stopAllStreams: vi.fn(),
         } as unknown as MediaHandler),
-        setAccountData: jest.fn(),
+        setAccountData: vi.fn(),
         store: {
-            destroy: jest.fn(),
-            startup: jest.fn(),
+            destroy: vi.fn(),
+            startup: vi.fn(),
         },
-        login: jest.fn(),
-        loginFlows: jest.fn().mockResolvedValue({ flows: [] }),
-        isGuest: jest.fn().mockReturnValue(false),
-        clearStores: jest.fn(),
-        setGuest: jest.fn(),
-        setNotifTimelineSet: jest.fn(),
-        getAccountData: jest.fn(),
-        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
-        getDevices: jest.fn().mockResolvedValue({ devices: [] }),
-        getProfileInfo: jest.fn().mockResolvedValue({
+        login: vi.fn(),
+        loginFlows: vi.fn().mockResolvedValue({ flows: [] }),
+        isGuest: vi.fn().mockReturnValue(false),
+        clearStores: vi.fn(),
+        setGuest: vi.fn(),
+        setNotifTimelineSet: vi.fn(),
+        getAccountData: vi.fn(),
+        doesServerSupportUnstableFeature: vi.fn().mockResolvedValue(false),
+        getDevices: vi.fn().mockResolvedValue({ devices: [] }),
+        getProfileInfo: vi.fn().mockResolvedValue({
             displayname: "Ernie",
         }),
-        getVisibleRooms: jest.fn().mockReturnValue([]),
-        getRooms: jest.fn().mockReturnValue([]),
-        getCrypto: jest.fn().mockReturnValue({
-            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-            isCrossSigningReady: jest.fn().mockReturnValue(false),
-            isDehydrationSupported: jest.fn().mockReturnValue(false),
-            getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
-            getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
-            getVersion: jest.fn().mockReturnValue("1"),
-            setDeviceIsolationMode: jest.fn(),
-            userHasCrossSigningKeys: jest.fn(),
-            getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
+        getVisibleRooms: vi.fn().mockReturnValue([]),
+        getRooms: vi.fn().mockReturnValue([]),
+        getCrypto: vi.fn().mockReturnValue({
+            getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+            isCrossSigningReady: vi.fn().mockReturnValue(false),
+            isDehydrationSupported: vi.fn().mockReturnValue(false),
+            getUserDeviceInfo: vi.fn().mockReturnValue(new Map()),
+            getUserVerificationStatus: vi.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
+            getVersion: vi.fn().mockReturnValue("1"),
+            setDeviceIsolationMode: vi.fn(),
+            userHasCrossSigningKeys: vi.fn(),
+            getActiveSessionBackupVersion: vi.fn().mockResolvedValue(null),
             globalBlacklistUnverifiedDevices: false,
             // This needs to not finish immediately because we need to test the screen appears
-            bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+            bootstrapCrossSigning: vi.fn().mockImplementation(() => bootstrapDeferred.promise),
+            getKeyBackupInfo: vi.fn().mockResolvedValue(null),
         }),
         secretStorage: {
-            isStored: jest.fn().mockReturnValue(null),
+            isStored: vi.fn().mockReturnValue(null),
         },
         matrixRTC: createStubMatrixRTC(),
-        getDehydratedDevice: jest.fn(),
-        whoami: jest.fn(),
-        logout: jest.fn(),
-        getDeviceId: jest.fn(),
+        getDehydratedDevice: vi.fn(),
+        whoami: vi.fn(),
+        logout: vi.fn(),
+        getDeviceId: vi.fn(),
         forget: () => Promise.resolve(),
-        getAuthMetadata: jest.fn().mockRejectedValue(new Error("Legacy auth")),
+        getAuthMetadata: vi.fn().mockRejectedValue(new Error("Legacy auth")),
+        deleteExtendedProfileProperty: vi.fn(),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -240,7 +254,7 @@ describe("<MatrixChat />", () => {
         Lifecycle.setSessionLockNotStolen();
 
         localStorage.clear();
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         defaultProps = {
             config: {
                 brand: "Test",
@@ -252,20 +266,20 @@ describe("<MatrixChat />", () => {
                 },
                 validated_server_config: serverConfig,
             },
-            onNewScreen: jest.fn(),
-            onTokenLoginCompleted: jest.fn(),
+            onNewScreen: vi.fn(),
+            onTokenLoginCompleted: vi.fn(),
             urlParams: {},
         };
 
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
-        jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
+        vi.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
 
-        jest.spyOn(defaultDispatcher, "dispatch").mockClear();
-        jest.spyOn(defaultDispatcher, "fire").mockClear();
+        vi.spyOn(defaultDispatcher, "dispatch").mockClear();
+        vi.spyOn(defaultDispatcher, "fire").mockClear();
 
         DMRoomMap.makeShared(mockClient);
 
-        jest.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(
+        vi.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(
             {} as ValidatedServerConfig,
         );
 
@@ -273,7 +287,7 @@ describe("<MatrixChat />", () => {
 
         await clearAllModals();
 
-        jest.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockImplementation(
+        vi.spyOn(OAuth2.prototype, "completeAuthorizationCodeGrant").mockImplementation(
             (code) => new Promise<BearerTokenResponse>(() => {}),
         );
     });
@@ -326,24 +340,24 @@ describe("<MatrixChat />", () => {
     it("should notify resizenotifier when left panel hidden", async () => {
         getComponent();
 
-        jest.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+        vi.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
 
         defaultDispatcher.dispatch({ action: "hide_left_panel" });
 
         await waitFor(() =>
-            expect(mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+            expect(vi.mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
     });
 
     it("should notify resizenotifier when left panel shown", async () => {
         getComponent();
 
-        jest.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
+        vi.spyOn(SDKContextClass.instance.resizeNotifier, "notifyLeftHandleResized");
 
         defaultDispatcher.dispatch({ action: "show_left_panel" });
 
         await waitFor(() =>
-            expect(mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
+            expect(vi.mocked(SDKContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
     });
 
@@ -353,7 +367,7 @@ describe("<MatrixChat />", () => {
             defaultProps.config.validated_server_config!.delegatedAuthentication = authConfig;
             fetchMock.post(authConfig.registration_endpoint!, { client_id: "abc123" });
             mockPlatformPeg({
-                getOAuthClientMetadata: jest.fn().mockReturnValue({
+                getOAuthClientMetadata: vi.fn().mockReturnValue({
                     client_name: "App name",
                     client_uri: "https://company",
                     redirect_uris: ["https://app"],
@@ -361,7 +375,7 @@ describe("<MatrixChat />", () => {
                     application_type: "web",
                 }),
             });
-            jest.spyOn(qrLogin, "signInByGeneratingQR").mockReturnValue(new Promise(() => {}));
+            vi.spyOn(qrLogin, "signInByGeneratingQR").mockReturnValue(new Promise(() => {}));
         });
 
         it("should open QrLoginDialog on ViewQrLogin action", async () => {
@@ -405,12 +419,12 @@ describe("<MatrixChat />", () => {
             mockClient.whoami.mockResolvedValue({ user_id: "@user:homeserver", device_id: qrCreds.deviceId });
             mockClient.getCrypto.mockReturnValue({
                 ...createMockCrypto(),
-                crossSignDevice: jest.fn().mockResolvedValue(undefined),
-                importSecretsBundle: jest.fn().mockResolvedValue(undefined),
+                crossSignDevice: vi.fn().mockResolvedValue(undefined),
+                importSecretsBundle: vi.fn().mockResolvedValue(undefined),
             });
             getComponent();
 
-            const createDialogSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+            const createDialogSpy = vi.spyOn(Modal, "createDialog").mockReturnValue({} as any);
 
             // Assert welcome screen
             await screen.findByText("Welcome to Test");
@@ -431,8 +445,8 @@ describe("<MatrixChat />", () => {
                 onLoggedIn(creds: QrLoginCredentials): Promise<void>;
             };
 
-            const configureFromCompletedSpy = jest.spyOn(Lifecycle, "configureFromCompletedOAuthLogin");
-            const restoreSessionSpy = jest.spyOn(Lifecycle, "restoreSessionFromStorage");
+            const configureFromCompletedSpy = vi.spyOn(Lifecycle, "configureFromCompletedOAuthLogin");
+            const restoreSessionSpy = vi.spyOn(Lifecycle, "restoreSessionFromStorage");
             const prom = onLoggedIn(qrCreds);
 
             await waitFor(() =>
@@ -494,14 +508,14 @@ describe("<MatrixChat />", () => {
         };
 
         beforeEach(() => {
-            mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockResolvedValue(tokenResponse);
+            vi.mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockResolvedValue(tokenResponse);
 
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
-            jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
 
-            jest.spyOn(logger, "error").mockClear();
-            jest.spyOn(logger, "log").mockClear();
+            vi.spyOn(logger, "error").mockClear();
+            vi.spyOn(logger, "log").mockClear();
 
             loginClient.whoami.mockResolvedValue({
                 user_id: userId,
@@ -577,7 +591,7 @@ describe("<MatrixChat />", () => {
         });
 
         it("should call onTokenLoginCompleted", async () => {
-            const onTokenLoginCompleted = jest.fn();
+            const onTokenLoginCompleted = vi.fn();
             getComponent({ urlParams, onTokenLoginCompleted });
 
             await waitFor(() => expect(onTokenLoginCompleted).toHaveBeenCalled());
@@ -585,14 +599,14 @@ describe("<MatrixChat />", () => {
 
         describe("when login fails", () => {
             beforeEach(() => {
-                mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockRejectedValue(
+                vi.mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockRejectedValue(
                     new Error(OAuth2Error.CodeExchangeFailed),
                 );
             });
 
             it("should log and return to welcome page with correct error when login state is not found", async () => {
                 sessionStorage.clear();
-                mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockRejectedValue(
+                vi.mocked(OAuth2.prototype.completeAuthorizationCodeGrant).mockRejectedValue(
                     new Error(OAuth2Error.MissingOrInvalidStoredState),
                 );
                 getComponent({ urlParams });
@@ -632,7 +646,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should not store clientId or issuer", async () => {
-                const sessionStorageSetSpy = jest.spyOn(sessionStorage.__proto__, "setItem");
+                const sessionStorageSetSpy = vi.spyOn(sessionStorage, "setItem");
                 getComponent({ urlParams });
 
                 await flushPromises();
@@ -680,7 +694,7 @@ describe("<MatrixChat />", () => {
                 await SettingsStore.setValue("language", null, SettingLevel.DEVICE, "en");
                 const languageBefore = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
 
-                jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
+                vi.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
 
                 getComponent({ urlParams });
                 await flushPromises();
@@ -694,7 +708,7 @@ describe("<MatrixChat />", () => {
                 await SettingsStore.setValue("language", null, SettingLevel.DEVICE, null);
                 const languageBefore = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
 
-                jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
+                vi.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
 
                 getComponent({ urlParams });
                 await flushPromises();
@@ -716,7 +730,7 @@ describe("<MatrixChat />", () => {
 
         beforeEach(async () => {
             await populateStorageForSession();
-            jest.spyOn(StorageAccess, "idbLoad").mockImplementation(async (table, key) => {
+            vi.spyOn(StorageAccess, "idbLoad").mockImplementation(async (table, key) => {
                 const safeKey = Array.isArray(key) ? key[0] : key;
                 return mockidb[table]?.[safeKey];
             });
@@ -746,9 +760,9 @@ describe("<MatrixChat />", () => {
             getComponent();
 
             // wait for logged in view to load
-            await screen.findByLabelText("User menu");
+            await expect(screen.findByLabelText("User menu")).resolves.toBeVisible();
 
-            await screen.findByRole("heading", { level: 1, name: "Welcome Ernie" });
+            await expect(screen.findByRole("heading", { level: 1, name: "Welcome Ernie" })).resolves.toBeVisible();
         });
 
         describe("clean up drafts", () => {
@@ -762,7 +776,7 @@ describe("<MatrixChat />", () => {
                 mockClient.getRoom.mockImplementation((id) => [room].find((room) => room.roomId === id) || null);
             });
             it("should clean up drafts", async () => {
-                Date.now = jest.fn(() => timestamp);
+                Date.now = vi.fn(() => timestamp);
                 localStorage.setItem(`mx_cider_state_${roomId}`, "fake_content");
                 localStorage.setItem(`mx_cider_state_${unknownRoomId}`, "fake_content");
                 await getComponentAndWaitForReady();
@@ -774,7 +788,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should clean up wysiwyg drafts", async () => {
-                Date.now = jest.fn(() => timestamp);
+                Date.now = vi.fn(() => timestamp);
                 localStorage.setItem(`mx_wysiwyg_state_${roomId}`, "fake_content");
                 localStorage.setItem(`mx_wysiwyg_state_${unknownRoomId}`, "fake_content");
                 await getComponentAndWaitForReady();
@@ -797,13 +811,13 @@ describe("<MatrixChat />", () => {
 
         describe("onAction()", () => {
             afterEach(() => {
-                jest.restoreAllMocks();
+                vi.restoreAllMocks();
             });
 
             it("ViewUserDeviceSettings should open user device settings", async () => {
                 await getComponentAndWaitForReady();
 
-                const createDialog = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+                const createDialog = vi.spyOn(Modal, "createDialog").mockReturnValue({} as any);
 
                 await act(async () => {
                     defaultDispatcher.dispatch({
@@ -832,9 +846,9 @@ describe("<MatrixChat />", () => {
                     mockClient.getRoom.mockImplementation(
                         (id) => [room, spaceRoom].find((room) => room.roomId === id) || null,
                     );
-                    jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
+                    vi.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
 
-                    jest.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
+                    vi.spyOn(ReleaseAnnouncementStore.instance, "getReleaseAnnouncement").mockReturnValue(null);
                     (room as any).client = mockClient;
                     (spaceRoom as any).client = mockClient;
                 });
@@ -845,7 +859,7 @@ describe("<MatrixChat />", () => {
                         await getComponentAndWaitForReady();
 
                         // Register a mock function to the dispatcher
-                        const fn = jest.fn();
+                        const fn = vi.fn();
                         defaultDispatcher.register(fn);
 
                         // Forge the room
@@ -869,7 +883,7 @@ describe("<MatrixChat />", () => {
                         await clearAllModals();
                         await getComponentAndWaitForReady();
                         // this is thoroughly unit tested elsewhere
-                        jest.spyOn(leaveRoomUtils, "leaveRoomBehaviour").mockClear().mockResolvedValue(undefined);
+                        vi.spyOn(leaveRoomUtils, "leaveRoomBehaviour").mockClear().mockResolvedValue(undefined);
                     });
                     const dispatchAction = () =>
                         defaultDispatcher.dispatch({
@@ -890,8 +904,8 @@ describe("<MatrixChat />", () => {
                     });
                     describe("for a room", () => {
                         beforeEach(() => {
-                            jest.spyOn(room.currentState, "getJoinedMemberCount").mockReturnValue(2);
-                            jest.spyOn(room.currentState, "getStateEvents").mockReturnValue(publicJoinRule);
+                            vi.spyOn(room.currentState, "getJoinedMemberCount").mockReturnValue(2);
+                            vi.spyOn(room.currentState, "getStateEvents").mockReturnValue(publicJoinRule);
                         });
                         it("should launch a confirmation modal", async () => {
                             dispatchAction();
@@ -899,7 +913,7 @@ describe("<MatrixChat />", () => {
                             expect(dialog).toMatchSnapshot();
                         });
                         it("should warn when room has only one joined member", async () => {
-                            jest.spyOn(room.currentState, "getJoinedMemberCount").mockReturnValue(1);
+                            vi.spyOn(room.currentState, "getJoinedMemberCount").mockReturnValue(1);
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
@@ -909,7 +923,7 @@ describe("<MatrixChat />", () => {
                             ).toBeInTheDocument();
                         });
                         it("should warn when room is not public", async () => {
-                            jest.spyOn(room.currentState, "getStateEvents").mockReturnValue(inviteJoinRule);
+                            vi.spyOn(room.currentState, "getStateEvents").mockReturnValue(inviteJoinRule);
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
@@ -919,11 +933,11 @@ describe("<MatrixChat />", () => {
                             ).toBeInTheDocument();
                         });
                         it("should warn when user is the last admin", async () => {
-                            jest.spyOn(room, "getJoinedMembers").mockReturnValue([
+                            vi.spyOn(room, "getJoinedMembers").mockReturnValue([
                                 { powerLevel: 100 } as unknown as MatrixJs.RoomMember,
                                 { powerLevel: 0 } as unknown as MatrixJs.RoomMember,
                             ]);
-                            jest.spyOn(room, "getMember").mockReturnValue({
+                            vi.spyOn(room, "getMember").mockReturnValue({
                                 powerLevel: 100,
                             } as unknown as MatrixJs.RoomMember);
                             dispatchAction();
@@ -969,7 +983,7 @@ describe("<MatrixChat />", () => {
                                 room_id: spaceId,
                             });
                         beforeEach(() => {
-                            jest.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(publicJoinRule);
+                            vi.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(publicJoinRule);
                         });
                         it("should launch a confirmation modal", async () => {
                             dispatchAction();
@@ -977,7 +991,7 @@ describe("<MatrixChat />", () => {
                             expect(dialog).toMatchSnapshot();
                         });
                         it("should warn when space is not public", async () => {
-                            jest.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(inviteJoinRule);
+                            vi.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(inviteJoinRule);
                             dispatchAction();
                             await screen.findByRole("dialog");
                             expect(
@@ -999,9 +1013,9 @@ describe("<MatrixChat />", () => {
                             permalinkCreator: null,
                         });
                     });
-                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
-                        ([call]) => call.action === Action.OpenForwardDialog,
-                    );
+                    const forwardCall = vi
+                        .mocked(defaultDispatcher.dispatch)
+                        .mock.calls.find(([call]) => call.action === Action.OpenForwardDialog);
 
                     const payload = forwardCall?.[0];
 
@@ -1021,9 +1035,9 @@ describe("<MatrixChat />", () => {
                             permalinkCreator: null,
                         });
                     });
-                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
-                        ([call]) => call.action === Action.OpenForwardDialog,
-                    );
+                    const forwardCall = vi
+                        .mocked(defaultDispatcher.dispatch)
+                        .mock.calls.find(([call]) => call.action === Action.OpenForwardDialog);
 
                     const payload = forwardCall?.[0];
 
@@ -1049,9 +1063,9 @@ describe("<MatrixChat />", () => {
                             permalinkCreator: null,
                         });
                     });
-                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
-                        ([call]) => call.action === Action.OpenForwardDialog,
-                    );
+                    const forwardCall = vi
+                        .mocked(defaultDispatcher.dispatch)
+                        .mock.calls.find(([call]) => call.action === Action.OpenForwardDialog);
 
                     const payload = forwardCall?.[0];
 
@@ -1077,9 +1091,9 @@ describe("<MatrixChat />", () => {
                             permalinkCreator: null,
                         });
                     });
-                    const forwardCall = mocked(defaultDispatcher.dispatch).mock.calls.find(
-                        ([call]) => call.action === Action.OpenForwardDialog,
-                    );
+                    const forwardCall = vi
+                        .mocked(defaultDispatcher.dispatch)
+                        .mock.calls.find(([call]) => call.action === Action.OpenForwardDialog);
 
                     const payload = forwardCall?.[0];
 
@@ -1094,8 +1108,8 @@ describe("<MatrixChat />", () => {
 
             describe("logout", () => {
                 let logoutClient!: ReturnType<typeof getMockClientWithEventEmitter>;
-                const call1 = { disconnect: jest.fn() } as unknown as Call;
-                const call2 = { disconnect: jest.fn() } as unknown as Call;
+                const call1 = { disconnect: vi.fn() } as unknown as Call;
+                const call2 = { disconnect: vi.fn() } as unknown as Call;
 
                 const dispatchLogoutAndWait = async (): Promise<void> => {
                     defaultDispatcher.dispatch({
@@ -1107,16 +1121,16 @@ describe("<MatrixChat />", () => {
 
                 beforeEach(() => {
                     // stub out various cleanup functions
-                    jest.spyOn(SDKContextClass.instance.legacyCallHandler, "hangupAllCalls")
+                    vi.spyOn(SDKContextClass.instance.legacyCallHandler, "hangupAllCalls")
                         .mockClear()
                         .mockImplementation(() => {});
-                    jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
-                    jest.spyOn(EventIndexPeg, "deleteEventIndex").mockImplementation(async () => {});
+                    vi.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
+                    vi.spyOn(EventIndexPeg, "deleteEventIndex").mockImplementation(async () => {});
 
-                    jest.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(new Set([call1, call2]));
+                    vi.spyOn(CallStore.instance, "connectedCalls", "get").mockReturnValue(new Set([call1, call2]));
 
                     mockPlatformPeg({
-                        destroyPickleKey: jest.fn(),
+                        destroyPickleKey: vi.fn(),
                     });
 
                     logoutClient = getMockClientWithEventEmitter(getMockClientMethods());
@@ -1124,9 +1138,9 @@ describe("<MatrixChat />", () => {
                     mockClient.logout.mockResolvedValue({});
                     mockClient.getDeviceId.mockReturnValue(deviceId);
                     // this is used to create a temporary client to cleanup after logout
-                    jest.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(logoutClient);
+                    vi.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(logoutClient);
 
-                    jest.spyOn(logger, "warn").mockClear();
+                    vi.spyOn(logger, "warn").mockClear();
                 });
 
                 it("should hangup all legacy calls", async () => {
@@ -1220,11 +1234,11 @@ describe("<MatrixChat />", () => {
 
                 // lostKeys returns false, meaning there are other devices to verify against
                 const realStore = SetupEncryptionStore.sharedInstance();
-                jest.spyOn(realStore, "lostKeys").mockReturnValue(false);
+                vi.spyOn(realStore, "lostKeys").mockReturnValue(false);
             });
 
             afterEach(() => {
-                jest.restoreAllMocks();
+                vi.restoreAllMocks();
                 // Reset things back to how they were before we started
                 defaultProps.config.force_verification = false;
                 localStorage.removeItem("must_verify_device");
@@ -1238,11 +1252,16 @@ describe("<MatrixChat />", () => {
                 getComponent();
 
                 // Then we are asked to verify our device
-                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
+                await expect(
+                    screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).resolves.toBeVisible();
 
                 // Sanity: we are not racing with another screen update, so this heading stays visible
-                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
+                await expect(
+                    screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).resolves.toBeVisible();
             });
+
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
                 // We used to allow bypassing force verification by choosing "Verify with
@@ -1267,7 +1286,9 @@ describe("<MatrixChat />", () => {
                 act(() => closeButton.click());
 
                 // Then we are not allowed in - we are still being asked to verify
-                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
+                await expect(
+                    screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).resolves.toBeVisible();
             });
 
             describe("when query params have a loginToken", () => {
@@ -1292,7 +1313,7 @@ describe("<MatrixChat />", () => {
                     localStorage.setItem("mx_sso_is_url", serverConfig.isUrl);
                     loginClient = getMockClientWithEventEmitter(getMockClientMethods());
                     // this is used to create a temporary client during login
-                    jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+                    vi.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
 
                     loginClient.login.mockClear().mockResolvedValue(clientLoginResponse);
                 });
@@ -1301,7 +1322,7 @@ describe("<MatrixChat />", () => {
                     // Given force_verification is on (outer describe)
                     // And we just logged in via OIDC (inner describe)
 
-                    mocked(loginClient.getCrypto()!.userHasCrossSigningKeys).mockResolvedValue(true);
+                    vi.mocked(loginClient.getCrypto()!.userHasCrossSigningKeys).mockResolvedValue(true);
 
                     // When we load the page
                     getComponent({ urlParams });
@@ -1345,7 +1366,7 @@ describe("<MatrixChat />", () => {
 
             mockClient.loginFlows.mockResolvedValue({ flows: [{ type: "m.login.password" }] });
 
-            jest.spyOn(StorageAccess, "idbLoad").mockImplementation(async (table, key) => {
+            vi.spyOn(StorageAccess, "idbLoad").mockImplementation(async (table, key) => {
                 const safeKey = Array.isArray(key) ? key[0] : key;
                 return mockidb[table]?.[safeKey];
             });
@@ -1357,12 +1378,13 @@ describe("<MatrixChat />", () => {
             // but as the exception was swallowed, the test was passing (see in `initClientCrypto`).
             // There are several uses of the peg in the app, so during all these tests you might end-up
             // with a real client instead of the mocked one. Not sure how reliable all these tests are.
-            jest.spyOn(MatrixClientPeg, "set");
-            jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+            vi.spyOn(MatrixClientPeg, "set");
+            vi.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
 
             const result = getComponent();
 
             await result.findByText("You're signed out");
+            await result.findByLabelText("Language Dropdown");
             expect(result.container).toMatchSnapshot();
         });
     });
@@ -1404,7 +1426,7 @@ describe("<MatrixChat />", () => {
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
             // FIXME: except it is *also* used as the permanent client for the rest of the test.
-            jest.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(loginClient);
+            vi.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(loginClient);
 
             loginClient.login.mockClear().mockResolvedValue({
                 access_token: "TOKEN",
@@ -1423,20 +1445,20 @@ describe("<MatrixChat />", () => {
         describe("post login setup", () => {
             beforeEach(() => {
                 const mockCrypto = {
-                    getVersion: jest.fn().mockReturnValue("Version 0"),
-                    getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-                    getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
-                    getUserVerificationStatus: jest
+                    getVersion: vi.fn().mockReturnValue("Version 0"),
+                    getVerificationRequestsToDeviceInProgress: vi.fn().mockReturnValue([]),
+                    getUserDeviceInfo: vi.fn().mockResolvedValue(new Map()),
+                    getUserVerificationStatus: vi
                         .fn()
                         .mockResolvedValue(new UserVerificationStatus(false, false, false)),
-                    setDeviceIsolationMode: jest.fn(),
-                    userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+                    setDeviceIsolationMode: vi.fn(),
+                    userHasCrossSigningKeys: vi.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
-                    bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
-                    resetKeyBackup: jest.fn(),
-                    isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
-                    checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
-                    isDehydrationSupported: jest.fn().mockReturnValue(false),
+                    bootstrapCrossSigning: vi.fn().mockImplementation(() => bootstrapDeferred.promise),
+                    resetKeyBackup: vi.fn(),
+                    isEncryptionEnabledInRoom: vi.fn().mockResolvedValue(false),
+                    checkKeyBackupAndEnable: vi.fn().mockResolvedValue(null),
+                    isDehydrationSupported: vi.fn().mockReturnValue(false),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
@@ -1454,7 +1476,7 @@ describe("<MatrixChat />", () => {
 
             describe("when user does not have cross signing set up", () => {
                 beforeEach(() => {
-                    jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
+                    vi.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(false);
                 });
 
                 describe("when encryption is force disabled", () => {
@@ -1471,8 +1493,8 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
-                        jest.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
-                            async (roomId) => {
+                        vi.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
+                            async (roomId: string) => {
                                 return roomId === encryptedRoom.roomId;
                             },
                         );
@@ -1483,14 +1505,14 @@ describe("<MatrixChat />", () => {
                         await getComponentAndLogin();
 
                         // logged in, did not set up keys
-                        await screen.findByLabelText("User menu");
+                        await expect(screen.findByLabelText("User menu")).resolves.toBeVisible();
                     });
 
                     it("should go to set up e2e screen when user is in encrypted rooms", async () => {
                         loginClient.getRooms.mockReturnValue([unencryptedRoom, encryptedRoom]);
                         await getComponentAndLogin();
                         // set up keys screen is rendered
-                        await screen.findByText("Setting up keys");
+                        await expect(screen.findByText("Setting up keys")).resolves.toBeVisible();
                     });
                 });
 
@@ -1505,7 +1527,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should show complete security screen when user has cross signing set up", async () => {
-                jest.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(true);
+                vi.spyOn(loginClient.getCrypto()!, "userHasCrossSigningKeys").mockResolvedValue(true);
 
                 await getComponentAndLogin();
 
@@ -1548,14 +1570,14 @@ describe("<MatrixChat />", () => {
             localStorage.setItem("mx_sso_is_url", serverConfig.isUrl);
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
-            jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+            vi.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
 
             loginClient.login.mockClear().mockResolvedValue(clientLoginResponse);
         });
 
         it("should show an error dialog when no homeserver is found in local storage", async () => {
             localStorage.removeItem("mx_sso_hs_url");
-            const localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem");
+            const localStorageGetSpy = vi.spyOn(localStorage, "getItem");
             getComponent({ urlParams });
             await flushPromises();
 
@@ -1584,7 +1606,7 @@ describe("<MatrixChat />", () => {
         });
 
         it("should call onTokenLoginCompleted", async () => {
-            const onTokenLoginCompleted = jest.fn();
+            const onTokenLoginCompleted = vi.fn();
             getComponent({ urlParams, onTokenLoginCompleted });
 
             await waitFor(() => expect(onTokenLoginCompleted).toHaveBeenCalled());
@@ -1620,7 +1642,7 @@ describe("<MatrixChat />", () => {
 
         describe("when login succeeds", () => {
             beforeEach(() => {
-                jest.spyOn(StorageAccess, "idbLoad").mockImplementation(
+                vi.spyOn(StorageAccess, "idbLoad").mockImplementation(
                     async (_table: string, key: string | string[]) => {
                         if (key === "mx_access_token") {
                             return accessToken as any;
@@ -1630,7 +1652,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should clear storage", async () => {
-                const localStorageClearSpy = jest.spyOn(localStorage.__proto__, "clear");
+                const localStorageClearSpy = vi.spyOn(localStorage, "clear");
 
                 getComponent({ urlParams });
 
@@ -1650,7 +1672,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should set fresh login flag in session storage", async () => {
-                const sessionStorageSetSpy = jest.spyOn(sessionStorage.__proto__, "setItem");
+                const sessionStorageSetSpy = vi.spyOn(sessionStorage, "setItem");
                 getComponent({ urlParams });
 
                 await waitFor(() => expect(sessionStorageSetSpy).toHaveBeenCalledWith("mx_fresh_login", "true"));
@@ -1686,21 +1708,21 @@ describe("<MatrixChat />", () => {
 
     describe("automatic SSO selection", () => {
         let ssoClient: ReturnType<typeof getMockClientWithEventEmitter>;
-        let hrefSetter: jest.Mock<void, [string]>;
+        let hrefSetter: Mocked<(href: string) => void>;
         beforeEach(() => {
             ssoClient = getMockClientWithEventEmitter({
                 ...getMockClientMethods(),
-                getHomeserverUrl: jest.fn().mockReturnValue("matrix.example.com"),
-                getIdentityServerUrl: jest.fn().mockReturnValue("ident.example.com"),
-                getSsoLoginUrl: jest.fn().mockReturnValue("http://my-sso-url"),
+                getHomeserverUrl: vi.fn().mockReturnValue("matrix.example.com"),
+                getIdentityServerUrl: vi.fn().mockReturnValue("ident.example.com"),
+                getSsoLoginUrl: vi.fn().mockReturnValue("http://my-sso-url"),
             });
             // this is used to create a temporary client to cleanup after logout
-            jest.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(ssoClient);
+            vi.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(ssoClient);
             mockPlatformPeg();
             // Ensure we don't have a client peg as we aren't logged in.
             unmockClientPeg();
 
-            hrefSetter = jest.fn();
+            hrefSetter = vi.fn();
             const originalHref = window.location.href.toString();
             Object.defineProperty(window, "location", {
                 value: {
@@ -1759,7 +1781,7 @@ describe("<MatrixChat />", () => {
 
         // Flaky test, see https://github.com/element-hq/element-web/issues/30337
         it("waits for other tab to stop during startup", async () => {
-            jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
+            vi.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
 
             // simulate an active window
             localStorage.setItem("react_sdk_session_lock_ping", String(Date.now()));
@@ -1790,6 +1812,7 @@ describe("<MatrixChat />", () => {
 
             // should just show the welcome screen
             await rendered.findByText("Welcome to Test");
+            await rendered.findByLabelText("Language Dropdown");
             expect(rendered.container).toMatchSnapshot();
         });
 
@@ -1812,7 +1835,7 @@ describe("<MatrixChat />", () => {
                 await populateStorageForSession();
 
                 const client = getMockClientWithEventEmitter(getMockClientMethods());
-                jest.spyOn(MatrixJs, "createClient").mockReturnValue(client);
+                vi.spyOn(MatrixJs, "createClient").mockReturnValue(client);
 
                 const rendered = getComponent({});
                 await rendered.findByText("Welcome Ernie");
@@ -1857,7 +1880,7 @@ describe("<MatrixChat />", () => {
                 const client = new MockClientWithEventEmitter({
                     ...getMockClientMethods(),
                 }) as unknown as Mocked<MatrixClient>;
-                jest.spyOn(MatrixJs, "createClient").mockReturnValue(client);
+                vi.spyOn(MatrixJs, "createClient").mockReturnValue(client);
 
                 // intercept initCrypto and have it block until we complete the deferred
                 const initCryptoCompleteDefer = Promise.withResolvers<void>();
@@ -1901,7 +1924,7 @@ describe("<MatrixChat />", () => {
         };
 
         const enabledMobileRegistration = (): void => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+            vi.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName === "Registration.mobileRegistrationHelper") return true;
                 if (settingName === UIFeature.Registration) return true;
             });
@@ -1910,7 +1933,7 @@ describe("<MatrixChat />", () => {
         it("should render welcome screen if mobile registration is not enabled in settings", async () => {
             await getComponentAndWaitForReady();
 
-            await screen.findByText("Powered by Matrix");
+            await expect(screen.findByText("Powered by Matrix")).resolves.toBeVisible();
         });
 
         it("should render mobile registration", async () => {
@@ -1925,13 +1948,8 @@ describe("<MatrixChat />", () => {
 
     describe("when key backup failed", () => {
         it("should show the new recovery method dialog", async () => {
-            const spy = jest.spyOn(Modal, "createDialog");
-            jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
-                __test: true,
-                __esModule: true,
-                default: () => <span>mocked dialog</span>,
-            }));
-            jest.spyOn(mockClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("version");
+            const spy = vi.spyOn(Modal, "createDialog");
+            vi.spyOn(mockClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("version");
 
             getComponent({});
             defaultDispatcher.dispatch({
@@ -1949,13 +1967,7 @@ describe("<MatrixChat />", () => {
         });
 
         it("should show the recovery method removed dialog", async () => {
-            const spy = jest.spyOn(Modal, "createDialog");
-            jest.mock("../../../../src/async-components/views/dialogs/security/RecoveryMethodRemovedDialog", () => ({
-                __test: true,
-                __esModule: true,
-                default: () => <span>mocked dialog</span>,
-            }));
-
+            const spy = vi.spyOn(Modal, "createDialog");
             getComponent({});
             defaultDispatcher.dispatch({
                 action: Action.WillStartClient,

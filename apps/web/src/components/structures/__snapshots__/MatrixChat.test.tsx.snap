@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens after a session is restored 1`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > shows the lockout page when a second tab opens > after a session is restored 1`] = `
 <div>
   <main
     class="mx_SessionLockStolenView mx_SplashPage"
@@ -15,7 +15,7 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
 </div>
 `;
 
-exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens during crypto init 1`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > shows the lockout page when a second tab opens > during crypto init 1`] = `
 <body
   style="--emoji-font-family: Twemoji;"
 >
@@ -34,7 +34,7 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
 </body>
 `;
 
-exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens while we are checking the sync store 1`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > shows the lockout page when a second tab opens > while we are checking the sync store 1`] = `
 <div>
   <main
     class="mx_SessionLockStolenView mx_SplashPage"
@@ -49,7 +49,7 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
 </div>
 `;
 
-exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second tab opens while we were waiting for the lock ourselves 1`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > shows the lockout page when a second tab opens > while we were waiting for the lock ourselves 1`] = `
 <div>
   <main
     class="mx_SessionLockStolenView mx_SplashPage"
@@ -64,7 +64,7 @@ exports[`<MatrixChat /> Multi-tab lockout shows the lockout page when a second t
 </div>
 `;
 
-exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during startup 1`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during startup 1`] = `
 <div>
   <div
     class="mx_ConfirmSessionLockTheftView"
@@ -87,7 +87,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
 </div>
 `;
 
-exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during startup 2`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during startup 2`] = `
 <div>
   <div
     class="mx_MatrixChat_splash"
@@ -118,14 +118,15 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
 </div>
 `;
 
-exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during startup 3`] = `
+exports[`<MatrixChat /> > Multi-tab lockout > waits for other tab to stop during startup 3`] = `
 <div>
   <div
     class="mx_AuthPage"
+    style="background: url("themes/element/img/backgrounds/lake.jpg") center center / cover fixed;"
   >
     <div
       class="mx_AuthPage_modal"
-      style="position: relative;"
+      style="position: relative; background: ;"
     >
       <main
         aria-live="polite"
@@ -269,7 +270,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
 </div>
 `;
 
-exports[`<MatrixChat /> qr login should fire ViewQrLogin action on 'qr_login' route 1`] = `
+exports[`<MatrixChat /> > qr login > should fire ViewQrLogin action on 'qr_login' route 1`] = `
 <div
   aria-label="Sign in with QR code"
   class=""
@@ -323,7 +324,7 @@ exports[`<MatrixChat /> qr login should fire ViewQrLogin action on 'qr_login' ro
 </div>
 `;
 
-exports[`<MatrixChat /> qr login should open QrLoginDialog on ViewQrLogin action 1`] = `
+exports[`<MatrixChat /> > qr login > should open QrLoginDialog on ViewQrLogin action 1`] = `
 <div
   aria-label="Sign in with QR code"
   class=""
@@ -377,7 +378,7 @@ exports[`<MatrixChat /> qr login should open QrLoginDialog on ViewQrLogin action
 </div>
 `;
 
-exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
+exports[`<MatrixChat /> > should render spinner while app is loading 1`] = `
 <div>
   <div
     class="mx_MatrixChat_splash"
@@ -408,18 +409,19 @@ exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
 </div>
 `;
 
-exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logout page 1`] = `
+exports[`<MatrixChat /> > with a soft-logged-out session > should show the soft-logout page 1`] = `
 <div>
   <div
     class="mx_AuthPage"
+    style="background: url("themes/element/img/backgrounds/lake.jpg") center center / cover fixed;"
   >
     <div
       class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
-      style="position: relative;"
+      style="position: relative; background: ;"
     >
       <div
         class="mx_AuthPage_modalBlur"
-        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px); background: url("themes/element/img/backgrounds/lake.jpg") center center / cover fixed;"
       />
       <main
         aria-live="polite"
@@ -575,7 +577,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
 </div>
 `;
 
-exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a room should launch a confirmation modal 1`] = `
+exports[`<MatrixChat /> > with an existing session > onAction() > room actions > leave_room > for a room > should launch a confirmation modal 1`] = `
 <div
   aria-describedby="mx_Dialog_content"
   aria-labelledby="mx_BaseDialog_title"
@@ -624,6 +626,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
     </span>
   </div>
   <div
+    aria-describedby="react-use-id-1"
     aria-label="Close dialog"
     class="mx_AccessibleButton mx_Dialog_cancelButton"
     role="button"
@@ -644,7 +647,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
 </div>
 `;
 
-exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a space should launch a confirmation modal 1`] = `
+exports[`<MatrixChat /> > with an existing session > onAction() > room actions > leave_room > for a space > should launch a confirmation modal 1`] = `
 <div
   aria-describedby="mx_Dialog_content"
   aria-labelledby="mx_BaseDialog_title"
@@ -693,6 +696,7 @@ exports[`<MatrixChat /> with an existing session onAction() room actions leave_r
     </span>
   </div>
   <div
+    aria-describedby="react-use-id-1"
     aria-label="Close dialog"
     class="mx_AccessibleButton mx_Dialog_cancelButton"
     role="button"

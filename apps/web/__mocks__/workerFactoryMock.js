@@ -9,5 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { vi } from "vitest";
 
 export default function workerFactory(options) {
-    return vi.fn;
+    return {
+        postMessage: vi.fn(),
+    };
 }
