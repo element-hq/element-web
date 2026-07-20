@@ -18,12 +18,14 @@ import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 import SdkConfig from "../SdkConfig";
 import { Call, CallEvent, ConnectionState } from "../models/Call";
-import { setUserOnCall } from "../utils/userStatus";
 
 export enum CallStoreEvent {
     // Signals a change in the call associated with a given room
     Call = "call",
     // Signals a change in the active calls
+    // Parameters:
+    // - Set<Call> The set of calls the user is currently connected to
+    // - Set<Call> The set of calls the user was connected to before this event
     ConnectedCalls = "connected_calls",
     // Signals a change in the configured RTC transports.
     TransportsUpdated = "transports_updated",
@@ -137,17 +139,9 @@ export class CallStore extends AsyncStoreWithClient<EmptyObject> {
         return this._connectedCalls;
     }
     private set connectedCalls(value: Set<Call>) {
-        const wasInCall = this._connectedCalls.size > 0;
-        const nowInCall = value.size > 0;
-
+        const prevValue = this._connectedCalls;
         this._connectedCalls = value;
-        this.emit(CallStoreEvent.ConnectedCalls, value);
-
-        if (wasInCall !== nowInCall && SettingsStore.getValue("feature_user_status") && this.matrixClient) {
-            setUserOnCall(this.matrixClient, nowInCall).catch((err) =>
-                logger.warn("Failed to update m.call profile field", err),
-            );
-        }
+        this.emit(CallStoreEvent.ConnectedCalls, value, prevValue);
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
         SettingsStore.setValue(
