@@ -453,7 +453,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
             // clear composer first so the user doesn't actually see the delay of attach URL preview image files
             clearComposerAndPushHistory();
-            attachUrlPreviews(urlPreviewSnapshot, content);
+            await attachUrlPreviews(this.props.mxClient, this.props.room, urlPreviewSnapshot, content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type IContent, type IMentions, type IEventRelation, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import {
     type MessageComposerUrlPreviewSnapshotEntryLoaded,
     type MessageComposerUrlPreviewSnapshot,
@@ -13,8 +13,10 @@ import {
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";
-import { type RoomMessageEventContent } from "../../@types/url-preview";
+import { UnstableBundledUrlPreviewSingle, type RoomMessageEventContent } from "../../@types/url-preview";
 import SettingsStore from "../settings/SettingsStore";
+import { uploadFile } from "../ContentMessages";
+import { mediaFromMxc } from "../customisations/Media";
 
 /**
  * Build the mentions information based on the editor model (and any related events):
@@ -115,28 +117,52 @@ export function attachRelation(content: IContent, relation?: IEventRelation): vo
 }
 
 // Attaches URL preview bundle to message event (MSC4095)
-export function attachUrlPreviews(
+export async function attachUrlPreviews(
+    client: MatrixClient,
+    room: Room,
     urlPreviewSnapshot: MessageComposerUrlPreviewSnapshot,
     content: RoomMessageEventContent,
-): void {
+): Promise<void> {
     if (!SettingsStore.getValue("feature_msc4095_url_preview_bundle")) return;
 
-    const bundle = urlPreviewSnapshot.entries
+    const bundle = await Promise.all(urlPreviewSnapshot.entries
         .filter((entry) => entry.include && entry.status === "loaded")
         .map((entry) => (entry as MessageComposerUrlPreviewSnapshotEntryLoaded).preview)
-        .map((preview) => {
-            return {
+        .map(async (preview) => {
+            let out: UnstableBundledUrlPreviewSingle = {
                 "matched_url": preview.link,
                 "og:url": preview.ogUrl,
                 "og:title": preview.title,
                 "og:description": preview.description,
-                "og:image": preview.image?.mxcImageFull,
                 "og:image:width": preview.image?.width,
                 "og:image:height": preview.image?.height,
                 "og:image:type": preview.image?.imageType,
-                "matrix:image:size": preview.image?.fileSize,
             };
-        });
+
+            if (preview.image?.mxcImageFull !== undefined) {
+                if (room.hasEncryptionStateEvent()) {
+                    try {
+                        // image url from homeserver assumed to not be malformed
+                        const httpUrl = mediaFromMxc(preview.image.mxcImageFull).srcHttp as string;
+                        const blob = await (await fetch(httpUrl)).blob();
+                        const { file, url } = await uploadFile(client, room.roomId, blob);
+
+                        if (file) {
+                            out["beeper:image:encryption"] = file;
+                        } else if (url) {
+                            console.error(`uploading file to room_id=${room.roomId}, expected EncryptedFile, got (unencrypted) URL instead`);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                } else {
+                    out["og:image"] = preview.image?.mxcImageFull;
+                    out["matrix:image:size"] = preview.image?.fileSize;
+                }
+            }
+
+            return out;
+        }));
 
     if (urlPreviewSnapshot.entries.length !== 0) {
         content["com.beeper.linkpreviews"] = bundle;
