@@ -29,7 +29,11 @@ import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../src/utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
-import { CHATS_TAG, CUSTOM_SECTION_TAG_PREFIX } from "../../../src/stores/room-list-v3/section";
+import {
+    CHATS_TAG,
+    CUSTOM_SECTION_TAG_PREFIX,
+    type SectionExpansionState,
+} from "../../../src/stores/room-list-v3/section";
 import { MetaSpace } from "../../../src/stores/spaces";
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { type RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
@@ -55,9 +59,27 @@ describe("RoomListViewModel", () => {
     let room2: Room;
     let room3: Room;
     let viewModel: RoomListViewModel;
+    // In-memory backing store for the persisted section expansion setting, reset each test so
+    // collapse state does not leak between tests and writes round-trip synchronously.
+    let sectionExpansionState: SectionExpansionState;
 
     beforeEach(() => {
         matrixClient = createTestClient();
+
+        sectionExpansionState = {};
+        const realGetValue = SettingsStore.getValue.bind(SettingsStore);
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, roomId, excludeDefault) => {
+            if (setting === "RoomList.SectionExpansionState") return sectionExpansionState;
+            return realGetValue(setting, roomId, excludeDefault);
+        });
+        const realSetValue = SettingsStore.setValue.bind(SettingsStore);
+        jest.spyOn(SettingsStore, "setValue").mockImplementation(async (setting, roomId, level, value) => {
+            if (setting === "RoomList.SectionExpansionState") {
+                sectionExpansionState = value as SectionExpansionState;
+                return;
+            }
+            return realSetValue(setting, roomId, level, value);
+        });
         sdkContext = new TestSDKContext();
         sdkContext._client = matrixClient;
         room1 = mkStubRoom("!room1:server", "Room 1", matrixClient);
@@ -428,6 +450,7 @@ describe("RoomListViewModel", () => {
                     if (setting === "RoomList.showSections") return showSections;
                     if (setting === "RoomList.CustomSectionData") return {};
                     if (setting === "RoomList.OrderedCustomSections") return [];
+                    if (setting === "RoomList.SectionExpansionState") return {};
                     return undefined as any;
                 });
             }
@@ -465,6 +488,7 @@ describe("RoomListViewModel", () => {
                     if (setting === "RoomList.showSections") return showSections;
                     if (setting === "RoomList.CustomSectionData") return {};
                     if (setting === "RoomList.OrderedCustomSections") return [];
+                    if (setting === "RoomList.SectionExpansionState") return {};
                     return undefined as any;
                 });
                 jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
