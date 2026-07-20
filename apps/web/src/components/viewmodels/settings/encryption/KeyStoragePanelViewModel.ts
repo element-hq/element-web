@@ -10,11 +10,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import {
-    DeviceListener,
-    ACCOUNT_DATA_KEY_M_KEY_BACKUP,
-    ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
-} from "../../../../device-listener";
+import { DeviceListener, ACCOUNT_DATA_KEY_M_KEY_BACKUP } from "../../../../device-listener";
 import { useEventEmitterAsyncState } from "../../../../hooks/useEventEmitter";
 import { resetKeyBackupAndWait } from "../../../../utils/crypto/resetKeyBackup";
 
@@ -118,9 +114,6 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
 
                         // Set the flag to say that the user wants backup enabled
                         await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: true });
-                        await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, {
-                            disabled: false,
-                        });
                     } else {
                         logger.info("User requested disabling key backup");
                         // This method will delete the key backup as well as server side recovery keys and other
@@ -129,9 +122,6 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
 
                         // Set the flag to say that the user wants backup disabled
                         await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: false });
-                        await matrixClient.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, {
-                            disabled: true,
-                        });
                     }
                 });
             } finally {

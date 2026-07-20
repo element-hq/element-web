@@ -33,7 +33,6 @@ const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
  * disable server side key backups.
  */
 export const ACCOUNT_DATA_KEY_M_KEY_BACKUP = "m.key_backup";
-export const ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE = "m.org.matrix.custom.backup_disabled";
 
 /**
  * Account data key to indicate whether the user has chosen to enable or disable recovery.
@@ -152,7 +151,6 @@ export class DeviceListenerCurrentDevice {
      */
     public async recordKeyBackupDisabled(): Promise<void> {
         await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: false });
-        await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, { disabled: true });
     }
 
     /**
@@ -394,12 +392,9 @@ export class DeviceListenerCurrentDevice {
         const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
         if (keyBackup) {
             return keyBackup.enabled === false;
+        } else {
+            return false;
         }
-
-        const keyBackupDisabledUnstable = await this.client.getAccountDataFromServer(
-            ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
-        );
-        return !!keyBackupDisabledUnstable?.disabled;
     }
 
     /**
@@ -449,7 +444,6 @@ export class DeviceListenerCurrentDevice {
             ev.getType().startsWith("m.cross_signing.") ||
             ev.getType() === "m.megolm_backup.v1" ||
             ev.getType() === ACCOUNT_DATA_KEY_M_KEY_BACKUP ||
-            ev.getType() === ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE ||
             ev.getType() === RECOVERY_ACCOUNT_DATA_KEY
         ) {
             this.deviceListener.recheck();
