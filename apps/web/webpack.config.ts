@@ -66,9 +66,7 @@ const cssThemes = {
 };
 
 // See docs/customisations.md
-let fileOverrides = {
-    /* {[file: string]: string} */
-};
+let fileOverrides = {/* {[file: string]: string} */};
 try {
     const customisationsFile = fs.readFileSync("./customisations.json", "utf-8");
     fileOverrides = JSON.parse(customisationsFile);

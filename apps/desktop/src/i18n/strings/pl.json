@@ -54,6 +54,11 @@
         "services": "Usługi",
         "unhide": "Odkryj"
     },
+    "renderer_crash": {
+        "detail": "Zamknij i uruchom ponownie aplikację, żeby kontynuować. Jeśli problem nie ustępuje, spróbuj wyczyścić pamięć podręczną i zresetować komputer.",
+        "message": "%(brand)s przestał próbować naprawić problem, który udało się ominąć lecz ciągle się ponawia.",
+        "title": "%(brand)s nie może przestać się zawieszać"
+    },
     "right_click_menu": {
         "add_to_dictionary": "Dodaj do słownika",
         "copy_email": "Kopiuj adres e-mail",
